@@ -17,6 +17,7 @@ from src.sources.google_scholar import GoogleScholarAdapter
 from src.sources.researchgate_import import ResearchGateImportAdapter
 from src.sources.wechat_rss import WeChatRSSAdapter
 from src.venues import classify_venue, venue_priority
+from src.catalog import paper_facets
 
 
 TOPICS = {
@@ -238,7 +239,7 @@ def run_pipeline(
     for index, record in enumerate(ranked):
         data = record.to_dict()
         data["id"] = record_id(record)
-        data["venue_group"] = classify_venue(record.venue)
+        data.update(paper_facets(data))
         data.update(summarize(record, allow_llm=index < max_core))
         papers.append(data)
     payload = {

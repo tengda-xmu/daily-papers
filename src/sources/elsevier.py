@@ -56,7 +56,7 @@ class ElsevierAdapter:
             cns_since = since - timedelta(days=cns_days)
             records = [r for r in records if (
                 in_date_window(r.published_at, since, until)
-                or (classify_venue(r.venue) and in_date_window(r.published_at, cns_since, until))
+                or (classify_venue(r.venue) in ('CNS 正刊', 'CNS 子刊') and in_date_window(r.published_at, cns_since, until))
             )]
             self._status = SourceStatus(self.name, "ok", len(records))
         except Exception as exc:

@@ -9,6 +9,7 @@ from src.sources.google_scholar import GoogleScholarAdapter
 from src.sources.researchgate_import import ResearchGateImportAdapter
 from src.sources.wechat_rss import WeChatRSSAdapter
 from src.venues import classify_venue
+from src.catalog import paper_facets
 
 
 FIXTURES = Path(__file__).parent / "fixtures"
@@ -57,4 +58,15 @@ def test_fallback_summary_without_abstract_mentions_title():
 def test_cns_venue_groups():
     assert classify_venue("Nature") == "CNS 正刊"
     assert classify_venue("Science Advances") == "CNS 子刊"
-    assert classify_venue("Journal of Structural Engineering") == ""
+    assert classify_venue("Journal of Structural Engineering") == "ASCE 工程期刊"
+
+
+def test_catalog_facets_keep_source_and_platform_filters():
+    facets = paper_facets({
+        "source": "Elsevier", "venue": "Engineering Structures",
+        "landing_url": "https://www.sciencedirect.com/science/article/pii/example",
+        "topic_tags": ["generative_design"],
+    })
+    assert "Elsevier" in facets["source_ids"]
+    assert "ScienceDirect" in facets["source_ids"]
+    assert facets["venue_group"] == "Elsevier 工程与材料期刊"

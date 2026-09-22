@@ -1,8 +1,30 @@
+# adapter = implemented collector; planned = awaiting integration;
+# platform = filters existing records by known journal or publisher URL.
 sources:
-  - Elsevier
-  - Google Scholar
-  - ResearchGate
-  - 微信公众号
+  - {id: Elsevier, label: Elsevier / Scopus, kind: adapter, url: 'https://www.scopus.com/', aliases: [Scopus]}
+  - {id: Google Scholar, label: Google Scholar, kind: adapter, url: 'https://scholar.google.com/'}
+  - {id: ResearchGate, label: ResearchGate, kind: adapter, url: 'https://www.researchgate.net/'}
+  - {id: 微信公众号, label: 微信公众号, kind: adapter, url: 'https://mp.weixin.qq.com/'}
+  - {id: arXiv, label: arXiv, kind: planned, url: 'https://arxiv.org/'}
+  - {id: Web of Science, label: Web of Science, kind: planned, url: 'https://www.webofscience.com/'}
+  - {id: OpenAlex, label: OpenAlex, kind: planned, url: 'https://openalex.org/'}
+  - {id: Crossref, label: Crossref, kind: planned, url: 'https://search.crossref.org/'}
+  - {id: Semantic Scholar, label: Semantic Scholar, kind: planned, url: 'https://www.semanticscholar.org/'}
+  - {id: PubMed, label: PubMed, kind: planned, url: 'https://pubmed.ncbi.nlm.nih.gov/'}
+  - {id: Nature Portfolio, label: Nature Portfolio（CNS）, kind: platform, url: 'https://www.nature.com/', domains: [nature.com]}
+  - {id: Science / AAAS, label: Science / AAAS（CNS）, kind: platform, url: 'https://www.science.org/', domains: [science.org, sciencemag.org]}
+  - {id: Cell Press, label: Cell Press（CNS）, kind: platform, url: 'https://www.cell.com/', domains: [cell.com]}
+  - {id: ScienceDirect, label: ScienceDirect, kind: platform, url: 'https://www.sciencedirect.com/', domains: [sciencedirect.com]}
+  - {id: Springer Nature Link, label: Springer Nature Link, kind: platform, url: 'https://link.springer.com/', domains: [link.springer.com]}
+  - {id: Wiley Online Library, label: Wiley Online Library, kind: platform, url: 'https://onlinelibrary.wiley.com/', domains: [onlinelibrary.wiley.com]}
+  - {id: IEEE Xplore, label: IEEE Xplore, kind: platform, url: 'https://ieeexplore.ieee.org/', domains: [ieeexplore.ieee.org]}
+  - {id: ACM Digital Library, label: ACM Digital Library, kind: platform, url: 'https://dl.acm.org/', domains: [dl.acm.org]}
+  - {id: ASME Digital Collection, label: ASME Digital Collection, kind: platform, url: 'https://asmedigitalcollection.asme.org/', domains: [asmedigitalcollection.asme.org]}
+  - {id: ASCE Library, label: ASCE Library, kind: platform, url: 'https://ascelibrary.org/', domains: [ascelibrary.org]}
+  - {id: AIAA Publications, label: AIAA Publications, kind: platform, url: 'https://arc.aiaa.org/', domains: [arc.aiaa.org]}
+  - {id: SAGE Journals, label: SAGE Journals, kind: platform, url: 'https://journals.sagepub.com/', domains: [journals.sagepub.com]}
+  - {id: Taylor & Francis, label: Taylor & Francis, kind: platform, url: 'https://www.tandfonline.com/', domains: [tandfonline.com]}
+  - {id: SIAM, label: SIAM, kind: platform, url: 'https://epubs.siam.org/', domains: [epubs.siam.org]}
 settings:
   max_core: 5
   max_extended: 5

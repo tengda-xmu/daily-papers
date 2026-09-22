@@ -6,7 +6,7 @@
 - AI 驱动结构生成式设计与可靠性优化
 - AI 驱动结构疲劳与可靠性设计
 
-系统接入 Elsevier/Scopus、Google Scholar、ResearchGate 和微信公众号 RSS，统一去重、打分、摘要，并部署到 GitHub Pages。
+系统接入 Elsevier/Scopus、Google Scholar、ResearchGate 和微信公众号 RSS，统一去重、打分、摘要，并部署到 GitHub Pages。网页同时提供 arXiv、Web of Science、OpenAlex、Crossref、Semantic Scholar、PubMed、ScienceDirect、Springer Nature、Wiley、IEEE、ACM、ASME、ASCE、AIAA、SAGE、Taylor & Francis、SIAM 等来源目录；尚未自动抓取的项目会明确标为“待接入”或“期刊平台筛选”。
 
 ## 本地运行
 
@@ -114,6 +114,10 @@ WECHAT_WORK_WEBHOOK_URL
 ```
 
 ResearchGate 会话目录、API 密钥和个人登录信息不能提交到 Git。缺失或失败的单个来源不会阻塞其他来源更新，页面会显示对应运行状态。
+
+## 来源与期刊目录
+
+网页的“全部来源”下拉框来自 `config/sources.yml`，“全部期刊组”和“全部具体期刊”来自 `config/venues.yml`。期刊目录按 CNS、Elsevier 工程与材料、Springer Nature、Wiley、IEEE、ACM、ASME、ASCE、AIAA、SAGE、Taylor & Francis、SIAM 等分组；文章若来自多个来源，会同时出现在对应来源筛选中。
 
 ## 发布到 GitHub
 
