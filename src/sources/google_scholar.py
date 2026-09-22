@@ -11,6 +11,7 @@ from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 from src.models import RawRecord, SourceStatus, in_date_window
+from src.venues import CNS_CORE_JOURNALS, CNS_SUBJOURNALS
 
 
 class SerpApiScholarAdapter:
@@ -20,11 +21,13 @@ class SerpApiScholarAdapter:
                  timeout: int = 30, cache_dir: str | Path = "data/cache/scholar"):
         self.api_key = api_key if api_key is not None else os.getenv("SERPAPI_API_KEY", "")
         configured_queries = [value.strip() for value in os.getenv("SCHOLAR_QUERIES", "").split("||") if value.strip()]
-        self.queries = queries or configured_queries or [
+        cns = " OR ".join(f'\"{journal}\"' for journal in CNS_CORE_JOURNALS + CNS_SUBJOURNALS)
+        topic_queries = queries or configured_queries or [
             "AI predictive maintenance",
             "generative structural design reliability",
             "AI structural fatigue reliability",
         ]
+        self.queries = topic_queries + [f"({cns}) {query}" for query in topic_queries]
         self.timeout = timeout
         self.cache_dir = Path(cache_dir)
         try:

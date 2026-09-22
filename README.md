@@ -36,6 +36,8 @@ ELSEVIER_INSTTOKEN=
 
 可用 `ELSEVIER_QUERIES` 覆盖默认查询，多个查询使用 `||` 分隔。
 
+系统还会自动执行 CNS 正刊（Nature、Science、Cell）和相关子刊专项查询；CNS 论文默认使用 30 天回溯窗口，避免因每日短窗口错过近期论文。可通过 `CNS_LOOKBACK_DAYS` 调整。
+
 ### Google Scholar
 
 默认通过 SerpApi 的 `google_scholar` 引擎查询，避免在 GitHub Actions 中直接高频访问 Scholar 页面：
@@ -45,6 +47,8 @@ SERPAPI_API_KEY=
 ```
 
 每次运行只执行三个主题查询，并通过 DOI、标题和作者与其他来源去重。
+
+除主题查询外，系统会执行 CNS 正刊和子刊专项查询；网页支持按 `CNS 正刊`、`CNS 子刊` 筛选。
 
 ### ResearchGate
 
@@ -89,6 +93,8 @@ LLM_MODEL=gpt-4o-mini
 ```text
 WECHAT_WORK_WEBHOOK_URL=
 ```
+
+企业微信配置方式：在企业微信群右上角 `…` → `群机器人` → `添加机器人`，复制机器人 Webhook 地址；在 GitHub 仓库 `Settings → Secrets and variables → Actions` 中新建 `WECHAT_WORK_WEBHOOK_URL`。本项目使用群机器人推送，不保存企业微信登录密码，也不需要把企业微信 Cookies 提交到仓库。
 
 工作流每天北京时间 07:00 运行，也支持 `workflow_dispatch` 手动触发。它会生成 `site/`、保存 `data/archive/` 历史数据、部署 GitHub Pages，并发送核心论文摘要。
 

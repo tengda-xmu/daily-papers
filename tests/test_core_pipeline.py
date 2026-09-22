@@ -8,6 +8,7 @@ from src.sources.elsevier import ElsevierAdapter
 from src.sources.google_scholar import GoogleScholarAdapter
 from src.sources.researchgate_import import ResearchGateImportAdapter
 from src.sources.wechat_rss import WeChatRSSAdapter
+from src.venues import classify_venue
 
 
 FIXTURES = Path(__file__).parent / "fixtures"
@@ -51,3 +52,9 @@ def test_run_pipeline_writes_publishable_payload(tmp_path):
 
 def test_fallback_summary_without_abstract_mentions_title():
     assert "title" in fallback_summary(RawRecord("x", "1", "title"))["summary"]
+
+
+def test_cns_venue_groups():
+    assert classify_venue("Nature") == "CNS 正刊"
+    assert classify_venue("Science Advances") == "CNS 子刊"
+    assert classify_venue("Journal of Structural Engineering") == ""

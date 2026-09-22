@@ -2,12 +2,13 @@ from __future__ import annotations
 
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 from urllib.parse import quote_plus
 from urllib.request import Request, urlopen
 import xml.etree.ElementTree as ET
 
 from src.models import RawRecord, SourceStatus, in_date_window
+from src.venues import classify_venue, cns_query
 
 
 class ElsevierAdapter:
@@ -17,10 +18,15 @@ class ElsevierAdapter:
                  queries: list[str] | None = None, timeout: int = 30):
         self.api_key = api_key if api_key is not None else os.getenv("ELSEVIER_API_KEY", "")
         self.insttoken = insttoken if insttoken is not None else os.getenv("ELSEVIER_INSTTOKEN", "")
-        self.queries = queries or [
+        cns = cns_query()
+        topic_queries = queries or [
             "TITLE-ABS-KEY((large language model OR LLM OR agent OR generative AI) AND (predictive maintenance OR fault diagnosis OR digital twin))",
             "TITLE-ABS-KEY((generative design OR topology optimization OR surrogate model) AND (structural OR reliability))",
             "TITLE-ABS-KEY((structural fatigue OR fatigue life OR fracture) AND (AI OR machine learning OR reliability))",
+        ]
+        self.queries = topic_queries + [
+            f"{query} AND {cns}" for query in topic_queries
+            if "SRCTITLE(" not in query
         ]
         self.timeout = timeout
         self._status = SourceStatus(self.name, "not_run")
@@ -43,7 +49,15 @@ class ElsevierAdapter:
                 with urlopen(req, timeout=self.timeout) as response:
                     body = response.read().decode("utf-8-sig")
                 records.extend(self.parse_body(body))
-            records = [r for r in records if in_date_window(r.published_at, since, until)]
+            try:
+                cns_days = max(0, int(os.getenv("CNS_LOOKBACK_DAYS", "30")))
+            except ValueError:
+                cns_days = 30
+            cns_since = since - timedelta(days=cns_days)
+            records = [r for r in records if (
+                in_date_window(r.published_at, since, until)
+                or (classify_venue(r.venue) and in_date_window(r.published_at, cns_since, until))
+            )]
             self._status = SourceStatus(self.name, "ok", len(records))
         except Exception as exc:
             self._status = SourceStatus(self.name, _error_status(exc), len(records), str(exc))
