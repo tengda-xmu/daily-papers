@@ -32,6 +32,9 @@ SETUP_HINTS = {
     "ResearchGate": "尚未导入本地连接器导出的论文。",
     "微信公众号": "尚未添加公众号订阅地址。",
 }
+AUTH_HINTS = {
+    "Web of Science": "Clarivate Web of Science 需要机构 API 授权。",
+}
 
 
 def read_json(path: Path, default):
@@ -153,6 +156,8 @@ def source_directory(statuses: dict, counts: Counter) -> str:
             state, message = source_state(item, statuses)
             if state == "configuration_missing":
                 message = SETUP_HINTS.get(item["id"], "该来源需要完成初始配置。")
+            elif state == "authorization_required":
+                message = AUTH_HINTS.get(item["id"], "该来源需要机构授权。")
             elif kind == "adapter":
                 message = {
                     "ok": "本轮采集完成。", "no_data": "本轮检索未返回论文。",
@@ -167,6 +172,8 @@ def source_directory(statuses: dict, counts: Counter) -> str:
   <div class="source-state"><span class="state {state_class}">{esc(STATE_LABELS.get(state, '状态待确认'))}</span>
   <button type="button" class="text-button" data-source-filter="{esc(item['id'])}">本期 {counts[item['id']]} 篇</button></div>
 </div>''')
+        if not rows:
+            continue
         sections.append(f'<details class="directory-group" {"open" if kind == "adapter" else ""}><summary>{label}<span>{len(rows)} 项</span></summary><p class="directory-description">{description}</p>{"".join(rows)}</details>')
     return "".join(sections)
 
@@ -198,7 +205,8 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
         for item in (s for s in SOURCE_CATALOG if s["kind"] == kind):
             state, _ = source_state(item, statuses)
             options.append(f'<option value="{esc(item["id"])}">{esc(item["label"])} · {counts[item["id"]]} 篇 · {esc(STATE_LABELS.get(state, state))}</option>')
-        source_options.append(f'<optgroup label="{label}">{"".join(options)}</optgroup>')
+        if options:
+            source_options.append(f'<optgroup label="{label}">{"".join(options)}</optgroup>')
     unknown_sources = sorted(set(counts) - set(SOURCE_LABELS))
     source_options.extend(f'<option value="{esc(s)}">{esc(s)} · {counts[s]} 篇</option>' for s in unknown_sources)
     topics = list(dict.fromkeys([*TOPIC_CATALOG, *(t for p in all_papers for t in string_list(p.get("topic_tags")))]))

@@ -1,7 +1,13 @@
+from datetime import datetime
+
 from src.sources.elsevier import ElsevierAdapter
 from src.sources.google_scholar import GoogleScholarAdapter
 from src.sources.researchgate_import import ResearchGateImportAdapter
 from src.sources.wechat_rss import WeChatRSSAdapter
+from src.sources.public_literature import (
+    ArxivAdapter, CrossrefAdapter, OpenAlexAdapter, PubMedAdapter,
+    SemanticScholarAdapter, WebOfScienceAdapter,
+)
 
 
 def test_elsevier_parse():
@@ -33,3 +39,15 @@ def test_researchgate_import_formats():
 def test_wechat_rss_parse():
     body = "<rss><channel><item><title>研究文章</title><link>https://x</link><description>摘要</description></item></channel></rss>"
     assert WeChatRSSAdapter.parse(body)[0].landing_url == "https://x"
+
+
+def test_public_source_parsers():
+    arxiv = '<feed xmlns="http://www.w3.org/2005/Atom"><entry><id>http://arxiv.org/abs/1</id><title>Paper</title><summary>Abstract</summary><published>2026-09-21T00:00:00Z</published><author><name>Author</name></author></entry></feed>'
+    assert ArxivAdapter.parse_xml(arxiv)[0].authors == ["Author"]
+    assert OpenAlexAdapter.parse_payload({"results": [{"id": "w1", "title": "Open", "abstract_inverted_index": {"paper": [1], "A": [0]}, "authorships": []}]})[0].abstract == "A paper"
+    assert CrossrefAdapter.parse_payload({"message": {"items": [{"DOI": "10/x", "title": ["Cross"], "container-title": ["Journal"]}]}})[0].doi == "10/x"
+    assert SemanticScholarAdapter.parse_payload({"data": [{"paperId": "p1", "title": "Semantic", "authors": [{"name": "A"}], "year": 2026}]})[0].published_at == "2026"
+    assert PubMedAdapter.parse_xml('<PubmedArticleSet><PubmedArticle><MedlineCitation><PMID>1</PMID><Article><ArticleTitle>PubMed paper</ArticleTitle><Journal><Title>Journal</Title></Journal><Abstract><AbstractText>Abstract</AbstractText></Abstract></Article></MedlineCitation></PubmedArticle></PubmedArticleSet>')[0].title == "PubMed paper"
+    adapter = WebOfScienceAdapter(api_key="")
+    adapter.fetch(datetime(2026, 1, 1), datetime(2026, 1, 2))
+    assert adapter.status.status == "authorization_required"

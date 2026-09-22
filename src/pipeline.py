@@ -16,6 +16,10 @@ from src.sources.elsevier import ElsevierAdapter
 from src.sources.google_scholar import GoogleScholarAdapter
 from src.sources.researchgate_import import ResearchGateImportAdapter
 from src.sources.wechat_rss import WeChatRSSAdapter
+from src.sources.public_literature import (
+    ArxivAdapter, CrossrefAdapter, OpenAlexAdapter, PubMedAdapter,
+    SemanticScholarAdapter, WebOfScienceAdapter,
+)
 from src.venues import classify_venue, venue_priority
 from src.catalog import paper_facets
 
@@ -193,6 +197,12 @@ def build_adapters() -> list:
         GoogleScholarAdapter(),
         ResearchGateImportAdapter(),
         WeChatRSSAdapter(),
+        ArxivAdapter(),
+        OpenAlexAdapter(),
+        CrossrefAdapter(),
+        SemanticScholarAdapter(),
+        PubMedAdapter(),
+        WebOfScienceAdapter(),
     ]
 
 

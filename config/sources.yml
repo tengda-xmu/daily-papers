@@ -1,16 +1,16 @@
-# adapter = implemented collector; planned = awaiting integration;
-# platform = filters existing records by known journal or publisher URL.
+# adapter = implemented collector; platform = filters existing records by
+# known journal or publisher URL. Public adapters need no API key.
 sources:
   - {id: Elsevier, label: Elsevier / Scopus, kind: adapter, url: 'https://www.scopus.com/', aliases: [Scopus]}
   - {id: Google Scholar, label: Google Scholar, kind: adapter, url: 'https://scholar.google.com/'}
   - {id: ResearchGate, label: ResearchGate, kind: adapter, url: 'https://www.researchgate.net/'}
   - {id: 微信公众号, label: 微信公众号, kind: adapter, url: 'https://mp.weixin.qq.com/'}
-  - {id: arXiv, label: arXiv, kind: planned, url: 'https://arxiv.org/'}
-  - {id: Web of Science, label: Web of Science, kind: planned, url: 'https://www.webofscience.com/'}
-  - {id: OpenAlex, label: OpenAlex, kind: planned, url: 'https://openalex.org/'}
-  - {id: Crossref, label: Crossref, kind: planned, url: 'https://search.crossref.org/'}
-  - {id: Semantic Scholar, label: Semantic Scholar, kind: planned, url: 'https://www.semanticscholar.org/'}
-  - {id: PubMed, label: PubMed, kind: planned, url: 'https://pubmed.ncbi.nlm.nih.gov/'}
+  - {id: arXiv, label: arXiv, kind: adapter, url: 'https://arxiv.org/'}
+  - {id: Web of Science, label: Web of Science, kind: adapter, url: 'https://www.webofscience.com/'}
+  - {id: OpenAlex, label: OpenAlex, kind: adapter, url: 'https://openalex.org/'}
+  - {id: Crossref, label: Crossref, kind: adapter, url: 'https://search.crossref.org/'}
+  - {id: Semantic Scholar, label: Semantic Scholar, kind: adapter, url: 'https://www.semanticscholar.org/'}
+  - {id: PubMed, label: PubMed, kind: adapter, url: 'https://pubmed.ncbi.nlm.nih.gov/'}
   - {id: Nature Portfolio, label: Nature Portfolio（CNS）, kind: platform, url: 'https://www.nature.com/', domains: [nature.com]}
   - {id: Science / AAAS, label: Science / AAAS（CNS）, kind: platform, url: 'https://www.science.org/', domains: [science.org, sciencemag.org]}
   - {id: Cell Press, label: Cell Press（CNS）, kind: platform, url: 'https://www.cell.com/', domains: [cell.com]}

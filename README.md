@@ -6,7 +6,7 @@
 - AI 驱动结构生成式设计与可靠性优化
 - AI 驱动结构疲劳与可靠性设计
 
-系统接入 Elsevier/Scopus、Google Scholar、ResearchGate 和微信公众号 RSS，统一去重、打分、摘要，并部署到 GitHub Pages。网页同时提供 arXiv、Web of Science、OpenAlex、Crossref、Semantic Scholar、PubMed、ScienceDirect、Springer Nature、Wiley、IEEE、ACM、ASME、ASCE、AIAA、SAGE、Taylor & Francis、SIAM 等来源目录；尚未自动抓取的项目会明确标为“待接入”或“期刊平台筛选”。
+系统接入 Elsevier/Scopus、Google Scholar、ResearchGate 和微信公众号 RSS，另外直接接入 arXiv、OpenAlex、Crossref、Semantic Scholar 和 PubMed 的公开元数据接口，统一去重、打分、摘要，并部署到 GitHub Pages。Web of Science 使用 Clarivate Starter API 适配器，需要机构 API Key；ScienceDirect、Springer Nature、Wiley、IEEE、ACM、ASME、ASCE、AIAA、SAGE、Taylor & Francis、SIAM 等出版平台按期刊和原文链接归类筛选，不再显示“待接入”状态。
 
 ## 本地运行
 
@@ -44,6 +44,9 @@ ELSEVIER_INSTTOKEN=
 
 ```text
 SERPAPI_API_KEY=
+WOS_API_KEY=
+OPENALEX_MAILTO=
+SEMANTIC_SCHOLAR_API_KEY=
 ```
 
 每次运行只执行三个主题查询，并通过 DOI、标题和作者与其他来源去重。
@@ -116,6 +119,8 @@ WECHAT_WORK_WEBHOOK_URL
 ```
 
 ResearchGate 会话目录、API 密钥和个人登录信息不能提交到 Git。缺失或失败的单个来源不会阻塞其他来源更新，页面会显示对应运行状态。
+
+arXiv、OpenAlex、Crossref、Semantic Scholar 和 PubMed 不需要登录即可运行；OpenAlex 的 `OPENALEX_MAILTO` 和 Semantic Scholar 的 `SEMANTIC_SCHOLAR_API_KEY` 是可选的礼貌访问/限额配置。Web of Science 需要在 Clarivate 开通 Starter API 后设置 `WOS_API_KEY`；Elsevier、Google Scholar、ResearchGate 和微信公众号仍分别需要各自的授权或连接器数据，系统不会伪造这些凭据。
 
 ## 来源与期刊目录
 

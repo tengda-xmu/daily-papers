@@ -8,6 +8,7 @@ from src.sources.elsevier import ElsevierAdapter
 from src.sources.google_scholar import GoogleScholarAdapter
 from src.sources.researchgate_import import ResearchGateImportAdapter
 from src.sources.wechat_rss import WeChatRSSAdapter
+from src.sources.public_literature import ArxivAdapter, OpenAlexAdapter, CrossrefAdapter, SemanticScholarAdapter, PubMedAdapter, WebOfScienceAdapter
 from src.venues import classify_venue
 from src.catalog import paper_facets
 
@@ -70,3 +71,8 @@ def test_catalog_facets_keep_source_and_platform_filters():
     assert "Elsevier" in facets["source_ids"]
     assert "ScienceDirect" in facets["source_ids"]
     assert facets["venue_group"] == "Elsevier 工程与材料期刊"
+
+
+def test_pipeline_builds_public_adapters_without_planned_sources():
+    names = [adapter.name for adapter in __import__("src.pipeline", fromlist=["build_adapters"]).build_adapters()]
+    assert names == ["Elsevier", "Google Scholar", "ResearchGate", "微信公众号", "arXiv", "OpenAlex", "Crossref", "Semantic Scholar", "PubMed", "Web of Science"]
