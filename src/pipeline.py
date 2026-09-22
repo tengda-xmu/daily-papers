@@ -10,7 +10,6 @@ from pathlib import Path
 from typing import Iterable, Sequence
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
-from zoneinfo import ZoneInfo
 
 from src.models import RawRecord, SourceStatus, parse_date
 from src.sources.elsevier import ElsevierAdapter
@@ -253,7 +252,10 @@ def run_pipeline(
         path.parent.mkdir(parents=True, exist_ok=True)
         encoded = json.dumps(payload, ensure_ascii=False, indent=2)
         path.write_text(encoded, encoding="utf-8")
-        archive_date = until.astimezone(ZoneInfo("Asia/Shanghai")).date().isoformat()
+        # Shanghai uses a fixed UTC+08:00 offset, so archive naming should not
+        # depend on the optional system timezone database (tzdata).
+        shanghai = timezone(timedelta(hours=8))
+        archive_date = until.astimezone(shanghai).date().isoformat()
         archive = path.parent / "archive" / f"{archive_date}.json"
         archive.parent.mkdir(parents=True, exist_ok=True)
         archive.write_text(encoded, encoding="utf-8")
