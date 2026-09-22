@@ -5,6 +5,7 @@ import os
 from datetime import datetime
 from urllib.parse import quote_plus
 from urllib.request import Request, urlopen
+import xml.etree.ElementTree as ET
 
 from src.models import RawRecord, SourceStatus, in_date_window
 
@@ -40,11 +41,12 @@ class ElsevierAdapter:
                 req = Request("https://api.elsevier.com/content/search/scopus?" + params,
                               headers=self._headers())
                 with urlopen(req, timeout=self.timeout) as response:
-                    records.extend(self.parse_payload(json.loads(response.read().decode("utf-8"))))
+                    body = response.read().decode("utf-8-sig")
+                records.extend(self.parse_body(body))
             records = [r for r in records if in_date_window(r.published_at, since, until)]
             self._status = SourceStatus(self.name, "ok", len(records))
         except Exception as exc:
-            self._status = SourceStatus(self.name, "error", len(records), str(exc))
+            self._status = SourceStatus(self.name, _error_status(exc), len(records), str(exc))
         return records
 
     def _headers(self) -> dict[str, str]:
@@ -74,6 +76,49 @@ class ElsevierAdapter:
             ))
         return result
 
+    @classmethod
+    def parse_body(cls, body: str) -> list[RawRecord]:
+        """Parse either the JSON or XML representation returned by Scopus."""
+        try:
+            return cls.parse_payload(json.loads(body))
+        except (json.JSONDecodeError, TypeError):
+            return cls.parse_xml(body)
+
+    @staticmethod
+    def parse_xml(body: str) -> list[RawRecord]:
+        root = ET.fromstring(body)
+        result: list[RawRecord] = []
+        for entry in root.iter():
+            if _local(entry.tag) != "entry":
+                continue
+            fields: dict[str, str] = {}
+            authors: list[str] = []
+            for child in entry:
+                key = _local(child.tag)
+                if key == "author":
+                    name = next((node.text for node in child.iter()
+                                 if _local(node.tag) in ("authname", "name") and node.text), "")
+                    if name:
+                        authors.append(name.strip())
+                elif child.text and child.text.strip():
+                    fields[key] = child.text.strip()
+            title = fields.get("title", "")
+            if not title:
+                continue
+            doi = fields.get("doi", "")
+            identifier = fields.get("identifier", "")
+            result.append(RawRecord(
+                source="Elsevier", source_id=doi or identifier or fields.get("eid", ""),
+                title=title, authors=authors,
+                venue=fields.get("publicationName", ""),
+                abstract=fields.get("description", ""),
+                published_at=fields.get("coverDate", ""), doi=doi,
+                landing_url=fields.get("url", ""),
+                citation_count=_int(fields.get("citedby-count")), source_score=0.9,
+                raw_metadata=fields,
+            ))
+        return result
+
 
 def _authors(item: dict) -> list[str]:
     creator = item.get("dc:creator")
@@ -91,3 +136,17 @@ def _int(value):
         return int(value)
     except (TypeError, ValueError):
         return None
+
+
+def _local(tag: str) -> str:
+    return tag.rsplit("}", 1)[-1]
+
+
+def _error_status(exc: Exception) -> str:
+    code = getattr(exc, "code", None)
+    message = str(exc).casefold()
+    if code == 429 or "quota" in message or "rate limit" in message:
+        return "quota_exhausted"
+    if code in (401, 403) or "unauthorized" in message or "forbidden" in message:
+        return "access_denied"
+    return "error"

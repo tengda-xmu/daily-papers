@@ -3,13 +3,14 @@ from __future__ import annotations
 import json
 import os
 import hashlib
+import re
 import time
 from datetime import datetime
 from pathlib import Path
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-from src.models import RawRecord, SourceStatus
+from src.models import RawRecord, SourceStatus, in_date_window
 
 
 class SerpApiScholarAdapter:
@@ -37,7 +38,6 @@ class SerpApiScholarAdapter:
         return self._status
 
     def fetch(self, since: datetime, until: datetime) -> list[RawRecord]:
-        del since, until
         if not self.api_key:
             self._status = SourceStatus(self.name, "configuration_missing",
                                         message="SERPAPI_API_KEY is not configured")
@@ -53,10 +53,13 @@ class SerpApiScholarAdapter:
                     with urlopen(req, timeout=self.timeout) as response:
                         cached = json.loads(response.read().decode("utf-8"))
                     self._write_cache(query, cached)
+                if cached.get("error"):
+                    raise RuntimeError(str(cached["error"]))
                 records.extend(self.parse_payload(cached))
+            records = [record for record in records if _in_window(record, since, until)]
             self._status = SourceStatus(self.name, "ok", len(records))
         except Exception as exc:
-            self._status = SourceStatus(self.name, "error", len(records), str(exc))
+            self._status = SourceStatus(self.name, _error_status(exc), len(records), str(exc))
         return records
 
     def _cache_path(self, query: str) -> Path:
@@ -93,11 +96,15 @@ class SerpApiScholarAdapter:
             inline = item.get("inline_links") or {}
             resources = item.get("resources") or []
             resource = resources[0] if resources and isinstance(resources[0], dict) else {}
+            summary = publication.get("summary", "")
+            year = str(publication.get("year") or _year(summary) or "")
+            link = item.get("link", "")
+            doi = _doi(link) or _doi(item.get("snippet", ""))
             result.append(RawRecord(
                 source="Google Scholar", source_id=str(item.get("result_id", "")),
                 title=item.get("title", ""), authors=authors,
-                venue=publication.get("summary", ""), abstract=item.get("snippet", ""),
-                landing_url=item.get("link", ""), oa_url=resource.get("link", ""),
+                venue=summary, abstract=item.get("snippet", ""), published_at=year,
+                doi=doi, landing_url=link, oa_url=resource.get("link", ""),
                 citation_count=_int((inline.get("cited_by") or {}).get("total")),
                 source_score=0.75, raw_metadata=item,
             ))
@@ -112,3 +119,32 @@ def _int(value):
         return int(value)
     except (TypeError, ValueError):
         return None
+
+
+def _year(text: str) -> str:
+    match = re.search(r"\b(19|20)\d{2}\b", str(text or ""))
+    return match.group(0) if match else ""
+
+
+def _doi(text: str) -> str:
+    match = re.search(r"(?:doi\.org/|\bdoi:\s*)(10\.\d{4,9}/[^\s<>\]\[\"']+)", str(text or ""), re.I)
+    return match.group(1).rstrip(".,;)") if match else ""
+
+
+def _error_status(exc: Exception) -> str:
+    code = getattr(exc, "code", None)
+    message = str(exc).casefold()
+    if code == 429 or "quota" in message or "rate limit" in message:
+        return "quota_exhausted"
+    if code in (401, 403) or "unauthorized" in message or "forbidden" in message:
+        return "access_denied"
+    return "error"
+
+
+def _in_window(record: RawRecord, since: datetime, until: datetime) -> bool:
+    # Scholar commonly exposes only a publication year. Treat that as a
+    # year-level match instead of interpreting it as January 1st and dropping
+    # otherwise relevant papers from a two-day run.
+    if record.published_at.isdigit() and len(record.published_at) == 4:
+        return since.year <= int(record.published_at) <= until.year
+    return in_date_window(record.published_at, since, until)

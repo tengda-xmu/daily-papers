@@ -67,10 +67,10 @@ class ResearchGateImportAdapter:
     @staticmethod
     def parse_bibtex(text: str) -> list[RawRecord]:
         result = []
-        for block in re.findall(r"@\w+\s*\{.*?(?=\n@|\Z)", text, flags=re.S | re.I):
+        for block in re.findall(r"@\w+\s*\{.*?(?=\n@|\Z)", text.strip(), flags=re.S | re.I):
             fields = {}
             for key, value in re.findall(
-                    r"(?im)^\s*([\w-]+)\s*=\s*[{\"]([\s\S]*?)[}\"]\s*,?", block):
+                    r"(?im)\b([\w-]+)\s*=\s*[{\"]([\s\S]*?)[}\"]\s*,?", block):
                 fields[key.lower()] = re.sub(r"\s+", " ", value).strip()
             record = _record(fields)
             if record.title:
@@ -80,6 +80,11 @@ class ResearchGateImportAdapter:
 
 def _record(item: dict) -> RawRecord:
     authors = item.get("authors", item.get("author", []))
+    if isinstance(authors, str):
+        # BibTeX uses ``and`` between authors; preserve each person as one
+        # value instead of splitting a person's ``family, given`` name.
+        authors = [part.strip() for part in re.split(r"\s+and\s+", authors, flags=re.I)
+                   if part.strip()]
     doi = item.get("doi", "")
     return RawRecord(
         source="ResearchGate",

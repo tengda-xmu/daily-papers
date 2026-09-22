@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
+import re
 from typing import Any, Mapping
 
 
@@ -127,4 +128,7 @@ def in_date_window(value: Any, since: datetime, until: datetime) -> bool:
         return True
     start = since if since.tzinfo else since.replace(tzinfo=timezone.utc)
     end = until if until.tzinfo else until.replace(tzinfo=timezone.utc)
+    text = str(value or "").strip()
+    if re.fullmatch(r"\d{4}", text):
+        return start.year <= int(text) <= end.year
     return start <= parsed <= end
