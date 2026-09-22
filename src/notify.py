@@ -5,6 +5,8 @@ import json
 import os
 from urllib.request import Request, urlopen
 
+from src.settings import load_env
+
 
 def _markdown(payload: dict, start: int = 0, end: int | None = None) -> str:
     papers = payload.get("core", [])[start:end]
@@ -53,5 +55,7 @@ def send_enterprise_wechat(payload: dict, webhook: str | None = None) -> bool:
 
 if __name__ == "__main__":
     from pathlib import Path
+    load_env()
     data = json.loads(Path(os.getenv("DAILY_JSON", "data/daily.json")).read_text(encoding="utf-8"))
-    send_enterprise_wechat(data)
+    sent = send_enterprise_wechat(data)
+    print("Enterprise WeChat: sent" if sent else "Enterprise WeChat: skipped (WECHAT_WORK_WEBHOOK_URL not configured)")

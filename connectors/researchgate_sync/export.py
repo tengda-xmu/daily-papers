@@ -21,7 +21,10 @@ def main():
     parser.add_argument("--output", default="data/inbox/researchgate.json")
     parser.add_argument("--session", default=os.getenv("RESEARCHGATE_SESSION_DIR", ".local/researchgate"))
     parser.add_argument("--headless", action="store_true")
+    parser.add_argument("--login", action="store_true", help="Wait for manual login before collecting")
     args = parser.parse_args()
+    if args.login and args.headless:
+        parser.error("--login requires a visible browser; omit --headless")
     urls = args.urls or [x.strip() for x in os.getenv("RESEARCHGATE_AUTHOR_URLS", "").split(",") if x.strip()]
     if not urls:
         raise SystemExit("Provide --url or RESEARCHGATE_AUTHOR_URLS")
@@ -33,6 +36,9 @@ def main():
     with sync_playwright() as pw:
         browser = pw.chromium.launch_persistent_context(args.session, headless=args.headless)
         page = browser.pages[0] if browser.pages else browser.new_page()
+        if args.login:
+            page.goto("https://www.researchgate.net/login", wait_until="domcontentloaded", timeout=60000)
+            input("Complete ResearchGate login in the browser, then press Enter here to collect metadata: ")
         seen = set()
         for target in urls:
             page.goto(target, wait_until="domcontentloaded", timeout=60000)
@@ -59,6 +65,8 @@ def main():
         browser.close()
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
+    if not records:
+        raise SystemExit("No publication metadata collected. Check login and URLs; previous export was preserved.")
     output.write_text(json.dumps(records, ensure_ascii=False, indent=2), encoding="utf-8")
 
 

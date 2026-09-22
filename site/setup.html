@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="聚焦 AI 驱动的智能运维、结构生成式设计与疲劳可靠性，每日追踪科研论文，提供中文摘要与精读要点。">
+  <meta name="theme-color" content="#103e6c">
+  <title>来源配置 | 每日论文推荐</title>
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./assets/site.css?v=301002f135">
+  <script>document.documentElement.classList.add('js');</script>
+  <script src="./assets/site.js?v=301002f135" defer></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main-content">跳至正文</a>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a class="wordmark" href="./"><span>腾达</span><span class="wordmark-divider" aria-hidden="true"></span>科研文献</a>
+      <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false">菜单 <span aria-hidden="true">☰</span></button>
+      <nav id="main-navigation" class="main-navigation" aria-label="主导航">
+        <a href="./" aria-current="page">每日推荐</a>
+        <a href="./#sources">来源与期刊</a>
+        <a href="./archive/" >历史归档</a>
+        <a href="https://tengda-xmu.github.io/">个人主页<span class="external" aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
+  </header>
+  <div class="site-shell">
+    <aside class="sidebar" aria-label="阅读导航与研究方向">
+      <a class="sidebar-brand" href="./">每日论文推荐<span lang="en">Daily Papers</span></a>
+      <p class="sidebar-intro">AI 驱动的工程可靠性<br>从前沿研究到设计与运维</p>
+      <nav class="reading-nav" aria-label="阅读导航">
+        <a href="./#reading">本期推荐</a>
+        <a href="./#core-section">核心推荐</a>
+        <a href="./#extended-section">扩展阅读</a>
+        <a href="./#journals">重点期刊目录</a>
+        <a href="./setup.html">来源授权与配置</a>
+      </nav>
+      <section class="sidebar-section">
+        <h2>关注方向</h2>
+        <div class="topic-links"><a href="./?topic=ai_maintenance#reading">AI 驱动智能运维</a><a href="./?topic=generative_design#reading">AI 驱动结构生成式设计与可靠性优化</a><a href="./?topic=fatigue_reliability#reading">AI 驱动结构疲劳与可靠性设计</a></div>
+        <a class="sidebar-more" href="https://tengda-xmu.github.io/research/">了解研究方向 <span aria-hidden="true">↗</span></a>
+      </section>
+      <div class="schedule"><span class="schedule-icon" aria-hidden="true">◷</span><div><strong>每日定时更新</strong><p>北京时间 07:00</p></div></div>
+      <a class="sidebar-repo" href="https://github.com/tengda-xmu/daily-papers" target="_blank" rel="noopener noreferrer">GitHub 项目 <span aria-hidden="true">↗</span></a>
+    </aside>
+    <main id="main-content" class="main-content" tabindex="-1">
+      <header class="page-heading"><div><h1>来源授权与配置</h1><p class="page-intro">公开接口自动采集；需要账号的来源完成一次授权后加入每日更新。</p></div></header>
+<p>所有状态以实际运行结果为准。保存密钥后，请在首页点击“手动更新”，运行完成后查看来源状态。</p>
+<p><a class="button-link" href="https://github.com/tengda-xmu/daily-papers/settings/secrets/actions" target="_blank" rel="noopener noreferrer">打开 GitHub 密钥设置</a> <a href="./">返回论文推荐</a></p>
+<section id="elsevier"><h2>Elsevier / Scopus</h2><p>在 <a href="https://dev.elsevier.com/" target="_blank" rel="noopener noreferrer">Elsevier 开发者门户</a>登录并创建 API Key，保存为 <code>ELSEVIER_API_KEY</code>。机构提供 Insttoken 时同时保存 <code>ELSEVIER_INSTTOKEN</code>。订阅与网络权限以机构授权为准。</p></section>
+<section id="scholar"><h2>Google Scholar</h2><p>在 <a href="https://serpapi.com/manage-api-key" target="_blank" rel="noopener noreferrer">SerpApi 控制台</a>获取密钥，保存为 <code>SERPAPI_API_KEY</code>。系统通过 SerpApi 检索 Google Scholar；可用额度以你的账号为准。</p></section>
+<section id="researchgate"><h2>ResearchGate</h2><p>在自己的电脑上运行连接器，首次打开浏览器后手动登录，再继续采集。导出的论文元数据需同步到仓库的 <code>connector-data</code> 分支，GitHub Actions 每日读取。</p><pre><code>python -m pip install -r connectors/researchgate_sync/requirements.txt
+playwright install chromium
+python connectors/researchgate_sync/export.py --login --url https://www.researchgate.net/profile/Da-Teng-6
+python -m tools.publish_researchgate</code></pre><p>发布工具只同步标题、作者、日期、期刊、DOI 和论文链接。浏览器登录会话保留在本机；详见<a href="https://github.com/tengda-xmu/daily-papers/tree/main/connectors/researchgate_sync" target="_blank" rel="noopener noreferrer">连接器说明</a>。</p></section>
+<section id="wechat"><h2>微信公众号</h2><p>部署 <a href="https://github.com/wufulin/wechat-mp-rss" target="_blank" rel="noopener noreferrer">WeRSS</a>，扫码授权并订阅目标公众号。把 GitHub Actions 可访问的 RSS 地址保存为 <code>WECHAT_RSS_URLS</code>，多个地址用英文逗号分隔；需要请求头时保存 JSON 格式的 <code>WECHAT_RSS_HEADERS</code>。</p><p>本机或局域网地址无法由 GitHub 托管运行器直接读取，需要使用可访问的服务地址。</p></section>
+<section id="wos"><h2>Web of Science</h2><p>在 <a href="https://developer.clarivate.com/apis/wos-starter" target="_blank" rel="noopener noreferrer">Clarivate 开发者门户</a>注册应用并申请 Starter API，把密钥保存为 <code>WOS_API_KEY</code>。可按账号情况申请试用或机构方案，不要求先购买新订阅。</p></section>
+<section id="public"><h2>公开接口与限流</h2><p>arXiv、Crossref、PubMed、OpenAlex 和 Semantic Scholar 已有采集代码。arXiv 检索接口受限时尝试官方每日 RSS；Semantic Scholar 使用支持日期范围的批量检索，遇到限流会等待后重试。</p><p>需要提高匿名访问额度时，可配置 <a href="https://openalex.org/settings/api" target="_blank" rel="noopener noreferrer">OpenAlex</a> 的 <code>OPENALEX_API_KEY</code> 或 <a href="https://www.semanticscholar.org/product/api" target="_blank" rel="noopener noreferrer">Semantic Scholar</a> 的 <code>SEMANTIC_SCHOLAR_API_KEY</code>。外部服务仍可能临时限流；其他来源会继续运行。</p></section>
+<section id="notifications"><h2>企业微信与中文精读</h2><p>企业微信群机器人地址保存为 <code>WECHAT_WORK_WEBHOOK_URL</code>。中文模型摘要需要 <code>LLM_API_KEY</code>，可同时设置 <code>LLM_BASE_URL</code> 和 <code>LLM_MODEL</code>；未配置时展示原始摘要并标明需要核查原文。</p></section>
+<section><h2>通过本地工具保存密钥</h2><p>也可在项目目录运行以下命令，按提示输入密钥。输入不会回显，工具直接保存到 GitHub Actions，不写入公开网页。</p><pre><code>python -m tools.configure --set SERPAPI_API_KEY</code></pre><p>本地运行使用被 Git 忽略的 <code>.env</code>；GitHub Actions 使用仓库 Secrets，两者分别配置。</p></section>
+
+      <footer class="site-footer"><p>论文元数据与摘要来自原始来源；完整内容请访问原文链接。</p><div><a href="https://tengda-xmu.github.io/">腾达 · 厦门大学</a><a href="./archive/">历史归档</a><a href="https://github.com/tengda-xmu/daily-papers" target="_blank" rel="noopener noreferrer">项目代码</a></div></footer>
+    </main>
+  </div>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <a class="back-to-top" href="#top" aria-label="返回页面顶部" hidden>回到顶部 ↑</a>
+</body>
+</html>

@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import json
 import os
+import html
+import re
 from datetime import datetime
 from urllib.request import Request, urlopen
 import xml.etree.ElementTree as ET
@@ -19,14 +21,20 @@ class WeChatRSSAdapter:
         self.urls = urls if urls is not None else [
             value.strip() for value in os.getenv("WECHAT_RSS_URLS", "").split(",") if value.strip()
         ]
+        self._configuration_error = ""
         if headers is not None:
             self.headers = headers
         else:
             raw_headers = os.getenv("WECHAT_RSS_HEADERS", "").strip()
             try:
                 configured_headers = json.loads(raw_headers) if raw_headers else {}
-            except json.JSONDecodeError:
+                if not isinstance(configured_headers, dict) or any(
+                    not isinstance(k, str) or not isinstance(v, str) for k, v in configured_headers.items()
+                ):
+                    raise ValueError("Headers must be a string mapping")
+            except (ValueError, TypeError):
                 configured_headers = {}
+                self._configuration_error = "WECHAT_RSS_HEADERS must be a JSON object with string values"
             self.headers = {"User-Agent": "daily-papers/1.0", **configured_headers}
         self.timeout = timeout
         self._status = SourceStatus(self.name, "not_run")
@@ -36,6 +44,9 @@ class WeChatRSSAdapter:
         return self._status
 
     def fetch(self, since: datetime, until: datetime) -> list[RawRecord]:
+        if self._configuration_error:
+            self._status = SourceStatus(self.name, "configuration_missing", message=self._configuration_error)
+            return []
         if not self.urls:
             self._status = SourceStatus(
                 self.name, "configuration_missing",
@@ -53,7 +64,11 @@ class WeChatRSSAdapter:
                       if in_date_window(record.published_at, since, until)]
             self._status = SourceStatus(self.name, "ok", len(result))
         except Exception as exc:
-            self._status = SourceStatus(self.name, "error", len(result), str(exc))
+            # Exceptions can contain the private feed URL. Publish only an
+            # error type/code, never authentication parameters.
+            code = getattr(exc, "code", None)
+            self._status = SourceStatus(self.name, "error", len(result),
+                                        f"HTTP {code}" if code else type(exc).__name__)
         return result
 
     @staticmethod
@@ -66,6 +81,7 @@ class WeChatRSSAdapter:
                     if isinstance(item, dict) and item.get("title")]
 
         root = ET.fromstring(body)
+        account = root.findtext("./channel/title") or root.findtext("{*}title") or "微信公众号"
         result: list[RawRecord] = []
         for item in root.iter():
             if _local(item.tag) not in ("item", "entry"):
@@ -84,12 +100,12 @@ class WeChatRSSAdapter:
                 source="微信公众号",
                 source_id=link or fields.get("guid", fields.get("id", fields.get("title", ""))),
                 title=fields.get("title", ""),
-                abstract=fields.get("description", fields.get("summary", "")),
+                abstract=_excerpt(fields.get("description", fields.get("summary", ""))),
                 published_at=fields.get("pubDate", fields.get("published", fields.get("updated", ""))),
                 landing_url=link,
-                venue="微信公众号",
+                venue=account,
                 source_score=0.4,
-                raw_metadata={"feed_url": feed_url, "item": fields},
+                raw_metadata={"provider": "WeRSS", "account": account},
             ))
         return [record for record in result if record.title]
 
@@ -98,16 +114,22 @@ def _local(tag: str) -> str:
     return tag.rsplit("}", 1)[-1]
 
 
+def _excerpt(value: str) -> str:
+    text = html.unescape(re.sub(r"<[^>]+>", " ", str(value or "")))
+    text = " ".join(text.split())
+    return text[:300] + ("…" if len(text) > 300 else "")
+
+
 def _item(item: dict, feed_url: str) -> RawRecord:
     link = item.get("url", item.get("link", ""))
     return RawRecord(
         source="微信公众号",
         source_id=link or item.get("id", item.get("title", "")),
         title=item.get("title", ""),
-        abstract=item.get("summary", item.get("description", "")),
+        abstract=_excerpt(item.get("summary", item.get("description", ""))),
         published_at=item.get("published", item.get("pubDate", "")),
         landing_url=link,
         venue=item.get("account", "微信公众号"),
         source_score=0.4,
-        raw_metadata={"feed_url": feed_url, **item},
+        raw_metadata={"provider": "WeRSS", "account": item.get("account", "微信公众号")},
     )

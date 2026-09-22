@@ -7,6 +7,9 @@ permissions:
   contents: write
   pages: write
   id-token: write
+concurrency:
+  group: daily-papers-update
+  cancel-in-progress: false
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -36,6 +39,7 @@ jobs:
           SCHOLAR_QUERIES: ${{ secrets.SCHOLAR_QUERIES }}
           WOS_API_KEY: ${{ secrets.WOS_API_KEY }}
           OPENALEX_MAILTO: ${{ secrets.OPENALEX_MAILTO }}
+          OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
           SEMANTIC_SCHOLAR_API_KEY: ${{ secrets.SEMANTIC_SCHOLAR_API_KEY }}
           ARXIV_CONTACT: ${{ secrets.ARXIV_CONTACT }}
           RESEARCHGATE_IMPORT_PATH: data/inbox/researchgate.json

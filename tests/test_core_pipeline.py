@@ -76,3 +76,37 @@ def test_catalog_facets_keep_source_and_platform_filters():
 def test_pipeline_builds_public_adapters_without_planned_sources():
     names = [adapter.name for adapter in __import__("src.pipeline", fromlist=["build_adapters"]).build_adapters()]
     assert names == ["Elsevier", "Google Scholar", "ResearchGate", "微信公众号", "arXiv", "OpenAlex", "Crossref", "Semantic Scholar", "PubMed", "Web of Science"]
+
+
+def test_irrelevant_ai_and_biological_design_are_not_recommended():
+    records = [RawRecord("fixture", "1", "Average results in marketing", abstract="An agent for chatbot usage"),
+               RawRecord("fixture", "2", "Generative protein structure design", abstract="Structural optimization for amyloid"),
+               RawRecord("fixture", "3", "Neural network for bearing fault diagnosis")]
+    assert [r.source_id for r in rank(records)] == ["3"]
+
+
+def test_empty_adapter_list_does_not_call_live_sources(monkeypatch):
+    def unexpected():
+        raise AssertionError("Should not build network adapters")
+    monkeypatch.setattr("src.pipeline.build_adapters", unexpected)
+    assert run_pipeline(adapters=[])["papers"] == []
+
+
+def test_llm_empty_optional_settings_use_defaults_and_invalid_url_falls_back(monkeypatch):
+    import io
+    import src.pipeline as pipeline
+    monkeypatch.setenv("LLM_API_KEY", "test-key")
+    monkeypatch.setenv("LLM_BASE_URL", "")
+    monkeypatch.setenv("LLM_MODEL", "")
+    calls = []
+    def respond(request, timeout):
+        calls.append(request)
+        result = {key: "Evidence" for key in ("summary", "method", "recommendation", "problem", "findings", "limitations", "connection")}
+        return io.BytesIO(json.dumps({"choices": [{"message": {"content": json.dumps(result)}}]}).encode())
+    monkeypatch.setattr(pipeline, "urlopen", respond)
+    paper = RawRecord("fixture", "1", "AI maintenance")
+    assert pipeline.summarize(paper)["summary"] == "Evidence"
+    assert calls[0].full_url == "https://api.openai.com/v1/chat/completions"
+    assert json.loads(calls[0].data)["model"]
+    monkeypatch.setenv("LLM_BASE_URL", "invalid")
+    assert pipeline.summarize(paper) == fallback_summary(paper)

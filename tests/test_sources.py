@@ -41,6 +41,20 @@ def test_wechat_rss_parse():
     assert WeChatRSSAdapter.parse(body)[0].landing_url == "https://x"
 
 
+def test_wechat_keeps_short_public_metadata_without_feed_credentials(monkeypatch):
+    import json
+    rows = WeChatRSSAdapter.parse(json.dumps({"items": [{
+        "title": "Paper", "url": "https://mp.weixin.qq.com/s/public", "summary": "<p>" + "x" * 900 + "</p>",
+        "cookies": "private-session", "content": "private-fulltext",
+    }]}), "https://rss.example/feed?token=private-token")
+    output = json.dumps(rows[0].to_dict())
+    assert "private-" not in output and len(rows[0].abstract) <= 301
+    monkeypatch.setenv("WECHAT_RSS_HEADERS", "[]")
+    adapter = WeChatRSSAdapter(urls=["https://rss.example/"])
+    assert adapter.fetch(datetime(2026, 1, 1), datetime(2026, 12, 31)) == []
+    assert adapter.status.status == "configuration_missing"
+
+
 def test_public_source_parsers():
     arxiv = '<feed xmlns="http://www.w3.org/2005/Atom"><entry><id>http://arxiv.org/abs/1</id><title>Paper</title><summary>Abstract</summary><published>2026-09-21T00:00:00Z</published><author><name>Author</name></author></entry></feed>'
     assert ArxivAdapter.parse_xml(arxiv)[0].authors == ["Author"]
@@ -51,3 +65,66 @@ def test_public_source_parsers():
     adapter = WebOfScienceAdapter(api_key="")
     adapter.fetch(datetime(2026, 1, 1), datetime(2026, 1, 2))
     assert adapter.status.status == "authorization_required"
+
+
+def test_arxiv_uses_official_rss_when_search_fails(monkeypatch):
+    from urllib.error import HTTPError
+    from datetime import timezone
+    calls = []
+    def response(url, headers=None):
+        calls.append(url)
+        if "export.arxiv.org" in url:
+            raise HTTPError(url, 406, "Unavailable", {}, None)
+        return '''<rss><channel><item><title>AI maintenance</title><guid>2609.1</guid>
+          <link>https://arxiv.org/abs/2609.1</link><description>Abstract: Data</description>
+          <pubDate>Tue, 22 Sep 2026 00:00:00 -0400</pubDate></item></channel></rss>'''
+    adapter = ArxivAdapter()
+    monkeypatch.setattr(adapter, "_get_text", response)
+    records = adapter.fetch(datetime(2026, 9, 20, tzinfo=timezone.utc), datetime(2026, 9, 23, tzinfo=timezone.utc))
+    assert adapter.status.status == "ok" and "RSS fallback" in adapter.status.message
+    assert records[0].source == "arXiv" and records[0].raw_metadata["method"] == "rss"
+    assert calls[-1].startswith("https://rss.arxiv.org/")
+
+
+def test_semantic_bulk_bounds_dates_and_recovers_from_one_rate_limit(monkeypatch):
+    from urllib.error import HTTPError
+    from urllib.parse import urlsplit, parse_qs
+    from datetime import timezone
+    import src.sources.public_literature as sources
+    requests, sleeps = [], []
+    def response(url, headers=None):
+        requests.append(url)
+        if len(requests) == 1:
+            raise HTTPError(url, 429, "rate limit", {"Retry-After": "6"}, None)
+        return {"data": [{"paperId": "1", "title": "AI fatigue", "publicationDate": "2026-09-21"},
+                          {"paperId": "2", "title": "Future paper", "publicationDate": "2027-01-01"}]}
+    a = SemanticScholarAdapter()
+    monkeypatch.setattr(a, "_get_json", response)
+    monkeypatch.setattr(sources.time, "sleep", sleeps.append)
+    rows = a.fetch(datetime(2026, 9, 20, tzinfo=timezone.utc), datetime(2026, 9, 23, tzinfo=timezone.utc))
+    query = parse_qs(urlsplit(requests[0]).query)
+    assert "/paper/search/bulk?" in requests[0]
+    assert query["publicationDateOrYear"] == ["2026-09-20:2026-09-23"]
+    assert len(rows) == 1 and sleeps[0] == 6
+
+
+def test_wos_maps_document_schema():
+    rows = WebOfScienceAdapter.parse_payload({"hits": [{
+        "uid": "WOS:1", "title": "Structural fatigue",
+        "source": {"sourceTitle": "International Journal of Fatigue", "publishYear": 2026},
+        "names": {"authors": [{"displayName": "Author"}]}, "identifiers": {"doi": "10.1000/test"},
+        "citations": [{"db": "WOS", "count": 3}], "links": {"record": "https://www.webofscience.com/1"},
+    }]})
+    assert rows[0].doi == "10.1000/test" and rows[0].authors == ["Author"]
+    assert rows[0].citation_count == 3 and rows[0].published_at == "2026"
+
+
+def test_crossref_and_pubmed_keep_date_and_nested_text():
+    from datetime import timezone
+    from src.models import in_date_window
+    row = CrossrefAdapter.parse_payload({"message": {"items": [{"title": ["Future"], "published": {"date-parts": [[2027, 1, 2]]}}]}})[0]
+    assert row.published_at == "2027-01-02"
+    assert not in_date_window(row.published_at, datetime(2026, 9, 1, tzinfo=timezone.utc), datetime(2026, 9, 23, tzinfo=timezone.utc))
+    row = PubMedAdapter.parse_xml('<PubmedArticleSet><PubmedArticle><Article><ArticleTitle>AI <i>fatigue</i> design</ArticleTitle><ArticleDate><Year>2026</Year><Month>09</Month><Day>22</Day></ArticleDate><Abstract><AbstractText>Mixed <b>text</b>.</AbstractText></Abstract></Article></PubmedArticle></PubmedArticleSet>')[0]
+    assert row.title == "AI fatigue design" and row.abstract == "Mixed text."
+    assert row.published_at == "2026-09-22"

@@ -33,8 +33,10 @@ SETUP_HINTS = {
     "微信公众号": "尚未添加公众号订阅地址。",
 }
 AUTH_HINTS = {
-    "Web of Science": "Clarivate Web of Science 需要机构 API 授权。",
+    "Web of Science": "需要 Clarivate Starter API 密钥，可申请试用或机构方案。",
 }
+SETUP_SECTIONS = {"Elsevier": "elsevier", "Google Scholar": "scholar", "ResearchGate": "researchgate",
+                  "微信公众号": "wechat", "Web of Science": "wos"}
 
 
 def read_json(path: Path, default):
@@ -144,7 +146,7 @@ def paper_card(paper: dict, tier: str, rank: int = 0) -> str:
 </article>'''
 
 
-def source_directory(statuses: dict, counts: Counter) -> str:
+def source_directory(statuses: dict, counts: Counter, root: str = "./") -> str:
     sections = []
     for kind, label, description in (
         ("adapter", "数据采集", "已实现来源及本轮采集状态；公开接口无需登录即可运行。"),
@@ -163,14 +165,19 @@ def source_directory(statuses: dict, counts: Counter) -> str:
                     "ok": "本轮采集完成。", "no_data": "本轮检索未返回论文。",
                     "not_run": "尚无本轮采集记录。", "error": "采集失败，请查看运行记录。",
                     "access_denied": "授权或访问受限，请检查来源设置。",
-                    "quota_exhausted": "检索额度已用尽，等待恢复或调整配额。",
+                    "quota_exhausted": "接口限流或配额受限，等待恢复或调整配额。",
                 }.get(state, "请查看运行记录了解详情。")
-            state_class = "ok" if state == "ok" else "pending" if state in ("planned", "platform", "not_run") else "warn"
+            if state in ("ok", "no_data") and "RSS fallback" in (source_state(item, statuses)[1] or ""):
+                message = "通过 arXiv 官方 RSS 获取；检索 API 本轮受限。"
+            if kind == "adapter" and state in ("ok", "no_data"):
+                message += f' 本轮获取 {(statuses.get(item["id"]) or {}).get("count", 0)} 条元数据。'
+            setup_link = f'<a href="{root}setup.html#{SETUP_SECTIONS.get(item["id"], "public")}">授权与配置</a>' if state in ("configuration_missing", "authorization_required", "quota_exhausted", "access_denied") else ""
+            state_class = "ok" if state in ("ok", "no_data") else "pending" if state in ("planned", "platform", "not_run") else "warn"
             rows.append(f'''
 <div class="source-row">
   <div><a class="source-name" href="{safe_url(item['url'])}" target="_blank" rel="noopener noreferrer">{esc(item['label'])}</a><p>{esc(message)}</p></div>
   <div class="source-state"><span class="state {state_class}">{esc(STATE_LABELS.get(state, '状态待确认'))}</span>
-  <button type="button" class="text-button" data-source-filter="{esc(item['id'])}">本期 {counts[item['id']]} 篇</button></div>
+  <button type="button" class="text-button" data-source-filter="{esc(item['id'])}">本期 {counts[item['id']]} 篇</button>{setup_link}</div>
 </div>''')
         if not rows:
             continue
@@ -220,12 +227,12 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
     root = "../" if archive_date else "./"
     core_html = "".join(paper_card(p, "core", i) for i, p in enumerate(core))
     extended_html = "".join(paper_card(p, "extended", i) for i, p in enumerate(extended))
-    missing = sum(source_state(s, statuses)[0] == "configuration_missing" for s in SOURCE_CATALOG if s["kind"] == "adapter")
-    ok = sum(source_state(s, statuses)[0] == "ok" for s in SOURCE_CATALOG if s["kind"] == "adapter")
+    missing = sum(source_state(s, statuses)[0] in ("configuration_missing", "authorization_required") for s in SOURCE_CATALOG if s["kind"] == "adapter")
+    ok = sum(source_state(s, statuses)[0] in ("ok", "no_data") for s in SOURCE_CATALOG if s["kind"] == "adapter")
     adapter_count = sum(s["kind"] == "adapter" for s in SOURCE_CATALOG)
     notice = ""
     if missing:
-        notice = f'<div class="notice"><span class="status-dot" aria-hidden="true"></span><p>{missing} 类数据来源尚未完成配置，完成后可生成对应推荐。</p><a href="#sources">查看接入状态</a></div>'
+        notice = f'<div class="notice"><span class="status-dot" aria-hidden="true"></span><p>{missing} 类来源尚待授权或连接器配置，其他来源继续采集。</p><a href="{root}setup.html">完成来源配置</a></div>'
     elif not all_papers:
         notice = '<div class="notice"><span class="status-dot" aria-hidden="true"></span><p>本期尚无符合条件的论文，请查看来源状态或历史归档。</p><a href="#sources">查看来源状态</a></div>'
     cns_children = sum(j["group"] == "CNS 子刊" for j in JOURNALS)
@@ -239,7 +246,8 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
         core_html=core_html, extended_html=extended_html,
         core_empty="hidden" if core else "", extended_empty="hidden" if extended else "",
         no_data="" if not all_papers else "hidden", no_match="hidden",
-        sources=source_directory(statuses, counts), journals=journal_directory(),
+        sources=source_directory(statuses, counts, root), journals=journal_directory(),
+        window_start=esc(display_time(payload.get("since"))[0]), window_end=esc(display_time(payload.get("until"))[0]),
         source_count=len(SOURCE_CATALOG), journal_count=len(JOURNALS), group_count=len(VENUE_GROUPS),
         cns_children=cns_children, adapter_count=adapter_count, ok_count=ok, root=root, repo=REPO_URL,
     )
@@ -268,6 +276,7 @@ def main() -> None:
     (OUT / "index.html").write_text(render(payload), encoding="utf-8")
     (OUT / "data.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     build_archive()
+    (OUT / "setup.html").write_text(document(template("setup.html"), title="来源配置 | 每日论文推荐"), encoding="utf-8")
 
 
 if __name__ == "__main__":

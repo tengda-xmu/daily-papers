@@ -6,7 +6,7 @@
 - AI 驱动结构生成式设计与可靠性优化
 - AI 驱动结构疲劳与可靠性设计
 
-系统接入 Elsevier/Scopus、Google Scholar、ResearchGate 和微信公众号 RSS，另外直接接入 arXiv、OpenAlex、Crossref、Semantic Scholar 和 PubMed 的公开元数据接口，统一去重、打分、摘要，并部署到 GitHub Pages。Web of Science 使用 Clarivate Starter API 适配器，需要机构 API Key；ScienceDirect、Springer Nature、Wiley、IEEE、ACM、ASME、ASCE、AIAA、SAGE、Taylor & Francis、SIAM 等出版平台按期刊和原文链接归类筛选，不再显示“待接入”状态。
+系统接入 Elsevier/Scopus、Google Scholar、ResearchGate 和微信公众号 RSS，另外直接接入 arXiv、OpenAlex、Crossref、Semantic Scholar 和 PubMed 的公开元数据接口，统一去重、打分、摘要，并部署到 GitHub Pages。Web of Science 使用 Clarivate Starter API 适配器，需要申请 API Key；ScienceDirect、Springer Nature、Wiley、IEEE、ACM、ASME、ASCE、AIAA、SAGE、Taylor & Francis、SIAM 等出版平台按期刊和原文链接归类筛选。
 
 ## 本地运行
 
@@ -21,7 +21,7 @@ python tools/build_site.py
 Start-Process site\index.html
 ```
 
-没有任何密钥时，程序仍会生成网页，并在页面上显示每个来源的 `configuration_missing` 状态。
+没有密钥时公开来源仍会运行；需要授权的来源保留明确的缺失状态，不影响其他来源生成日报。
 
 ## 四类来源
 
@@ -44,12 +44,9 @@ ELSEVIER_INSTTOKEN=
 
 ```text
 SERPAPI_API_KEY=
-WOS_API_KEY=
-OPENALEX_MAILTO=
-SEMANTIC_SCHOLAR_API_KEY=
 ```
 
-每次运行只执行三个主题查询，并通过 DOI、标题和作者与其他来源去重。
+默认每次运行执行三个主题查询和三个 CNS 专项查询，已有缓存时优先复用结果，并与其他来源去重。
 
 除主题查询外，系统会执行 CNS 正刊和子刊专项查询；网页支持按 `CNS 正刊`、`CNS 子刊` 筛选。
 
@@ -60,7 +57,8 @@ ResearchGate 采用本地 Playwright 连接器。首次运行会打开浏览器�
 ```powershell
 python -m pip install -r connectors/researchgate_sync/requirements.txt
 playwright install chromium
-python connectors/researchgate_sync/export.py --url https://www.researchgate.net/profile/YOUR_PROFILE
+python connectors/researchgate_sync/export.py --login --url https://www.researchgate.net/profile/YOUR_PROFILE
+python -m tools.publish_researchgate
 ```
 
 输出文件为 `data/inbox/researchgate.json`。生产环境可把它推送到 `connector-data` 分支，主工作流会在运行前读取该分支。
@@ -113,6 +111,7 @@ ELSEVIER_INSTTOKEN
 SERPAPI_API_KEY
 WOS_API_KEY
 OPENALEX_MAILTO
+OPENALEX_API_KEY
 SEMANTIC_SCHOLAR_API_KEY
 ARXIV_CONTACT
 WECHAT_RSS_URLS
@@ -124,7 +123,18 @@ WECHAT_WORK_WEBHOOK_URL
 
 ResearchGate 会话目录、API 密钥和个人登录信息不能提交到 Git。缺失或失败的单个来源不会阻塞其他来源更新，页面会显示对应运行状态。
 
-arXiv、OpenAlex、Crossref、Semantic Scholar 和 PubMed 不需要登录即可运行；OpenAlex 的 `OPENALEX_MAILTO` 和 Semantic Scholar 的 `SEMANTIC_SCHOLAR_API_KEY` 是可选的礼貌访问/限额配置。Web of Science 需要在 Clarivate 开通 Starter API 后设置 `WOS_API_KEY`；Elsevier、Google Scholar、ResearchGate 和微信公众号仍分别需要各自的授权或连接器数据，系统不会伪造这些凭据。
+arXiv、OpenAlex、Crossref、Semantic Scholar 和 PubMed 可使用公开接口；匿名访问可能受到服务商限流。OpenAlex 支持可选的 `OPENALEX_API_KEY` 与 `OPENALEX_MAILTO`，Semantic Scholar 支持 `SEMANTIC_SCHOLAR_API_KEY`。Web of Science 在 Clarivate 开通 Starter API 后设置 `WOS_API_KEY`，可申请试用或机构方案。Elsevier、Google Scholar、ResearchGate 和微信公众号仍分别需要授权或连接器数据。
+
+网页的[来源配置指南](https://tengda-xmu.github.io/daily-papers/setup.html)提供每个来源的授权入口和步骤，也可在本地安全输入一个 GitHub Secret：
+
+```powershell
+python -m tools.configure --set SERPAPI_API_KEY
+python -m tools.configure --check
+```
+
+`--set` 隐藏输入并通过标准输入交给 GitHub CLI，不写入仓库或日志；`--check` 只报告本地配置是否存在。项目会自动读取被 Git 忽略的 `.env`，已有环境变量优先。GitHub Actions 使用仓库 Secrets，无法反向读取它们的值。
+
+默认检索最近 30 天论文并每日更新，可通过 `LOOKBACK_DAYS` 或 `config/sources.yml` 调整。页面明确显示检索范围；相关性过滤要求工程应用与 AI 方法相结合，合格论文不足 10 篇时保留实际数量。arXiv 查询失败时尝试[官方每日 RSS](https://info.arxiv.org/help/rss.html)，并在来源状态注明该模式；Semantic Scholar 使用[官方批量检索](https://api.semanticscholar.org/api-docs/graph)并限制日期，避免反复调用相关性搜索导致限流。
 
 ## 来源与期刊目录
 

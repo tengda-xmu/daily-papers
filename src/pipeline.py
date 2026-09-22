@@ -22,6 +22,9 @@ from src.sources.public_literature import (
 )
 from src.venues import classify_venue, venue_priority
 from src.catalog import paper_facets
+from src.settings import load_env
+
+load_env()
 
 
 TOPICS = {
@@ -96,10 +99,32 @@ def deduplicate(records: Iterable[RawRecord]) -> list[RawRecord]:
 
 def classify(record: RawRecord) -> RawRecord:
     text = f"{record.title} {record.abstract} {record.venue}".casefold()
-    record.topic_tags = [
-        name for name, terms in TOPICS.items()
-        if any(term.casefold() in text for term in terms)
-    ]
+    def has(terms):
+        return any(re.search(r"(?<![a-z])" + re.escape(term) + r"(?![a-z])", text) for term in terms)
+
+    biological = has(("protein", "amyloid", "alzheimer", "blood testing", "clinical", "cancer", "patient"))
+    engineering = has(("steel", "aircraft", "aeroengine", "turbine", "bearing", "composite",
+                       "fatigue crack", "topology optimization", "structural health monitoring"))
+    if biological and not engineering:
+        record.topic_tags = []
+        return record
+
+    # Generic AI terminology is only relevant when it also has an engineering
+    # application. Word boundaries stop 'RAG' matching e.g. 'average'.
+    maintenance = has(("maintenance", "prognostics", "fault diagnosis", "fault detection",
+                       "remaining useful life", "condition monitoring", "health monitoring", "运维", "故障诊断"))
+    design = has(("structural", "structure", "topology optimization", "topological optimization",
+                  "mechanical design", "结构", "拓扑")) and has(TOPICS["generative_design"])
+    fatigue = has(("structural fatigue", "fatigue life", "fatigue crack", "fracture mechanics",
+                   "damage tolerance", "probabilistic fatigue", "structural reliability",
+                   "fatigue strength", "疲劳寿命", "结构疲劳", "疲劳可靠性"))
+    ai = has(("ai", "llm", "agent", "machine learning", "deep learning", "neural network",
+              "artificial intelligence", "large language model", "generative", "surrogate model",
+              "kriging", "bayesian", "physics-informed", "人工智能", "机器学习", "深度学习"))
+    record.topic_tags = [name for name, match in (
+        ("ai_maintenance", maintenance and ai), ("generative_design", design and ai),
+        ("fatigue_reliability", fatigue and (ai or has(("reliability", "probabilistic", "可靠性")))),
+    ) if match]
     return record
 
 
@@ -116,7 +141,7 @@ def _sort_key(record: RawRecord) -> tuple:
 
 
 def rank(records: Iterable[RawRecord]) -> list[RawRecord]:
-    return sorted((classify(record) for record in deduplicate(records)),
+    return sorted((record for record in map(classify, deduplicate(records)) if record.topic_tags),
                   key=_sort_key, reverse=True)
 
 
@@ -149,8 +174,8 @@ def _llm_summary(record: RawRecord) -> dict[str, object] | None:
     api_key = os.getenv("LLM_API_KEY", "").strip()
     if not api_key:
         return None
-    base = os.getenv("LLM_BASE_URL", "https://api.openai.com/v1").rstrip("/")
-    model = os.getenv("LLM_MODEL", "gpt-4o-mini")
+    base = (os.getenv("LLM_BASE_URL", "").strip() or "https://api.openai.com/v1").rstrip("/")
+    model = os.getenv("LLM_MODEL", "").strip() or "gpt-4o-mini"
     prompt = (
         "Using only the metadata and abstract below, return JSON in Chinese with fields "
         "summary, method, recommendation, problem, findings, limitations, connection. "
@@ -164,11 +189,11 @@ def _llm_summary(record: RawRecord) -> dict[str, object] | None:
         "response_format": {"type": "json_object"},
         "messages": [{"role": "user", "content": prompt}],
     }).encode("utf-8")
-    request = Request(
-        f"{base}/chat/completions", data=body,
-        headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-    )
     try:
+        request = Request(
+            f"{base}/chat/completions", data=body,
+            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+        )
         with urlopen(request, timeout=60) as response:
             payload = json.loads(response.read().decode("utf-8"))
         content = payload["choices"][0]["message"]["content"]
@@ -214,7 +239,7 @@ def _read_setting(name: str, default: int) -> int:
             pass
     configured = Path("config/sources.yml")
     if configured.exists():
-        key = name[4:].lower()
+        key = name.lower()
         for line in configured.read_text(encoding="utf-8").splitlines():
             if line.strip().startswith(f"{key}:"):
                 try:
@@ -231,10 +256,10 @@ def run_pipeline(
     output_path: str | Path | None = None,
 ) -> dict:
     until = until or datetime.now(timezone.utc)
-    since = since or (until - timedelta(days=2))
+    since = since or (until - timedelta(days=_read_setting("LOOKBACK_DAYS", 30)))
     all_records: list[RawRecord] = []
     statuses: dict[str, dict] = {}
-    for adapter in adapters or build_adapters():
+    for adapter in build_adapters() if adapters is None else adapters:
         try:
             all_records.extend(adapter.fetch(since, until))
             status = adapter.status
@@ -277,7 +302,10 @@ def run_pipeline(
 
 
 def main() -> None:
-    run_pipeline(output_path=Path("data/daily.json"))
+    payload = run_pipeline(output_path=Path("data/daily.json"))
+    for source, status in payload["source_status"].items():
+        print(f"{source}: {status['status']} ({status['count']} records)", flush=True)
+    print(f"Relevant: {len(payload['papers'])}; core: {len(payload['core'])}; extended: {len(payload['extended'])}")
 
 
 if __name__ == "__main__":
