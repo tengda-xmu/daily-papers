@@ -52,13 +52,19 @@ def normalize_title(title: str) -> str:
     return re.sub(r"[^a-z0-9\u4e00-\u9fff]+", "", str(title or "").casefold())
 
 
-def _identity(record: RawRecord) -> tuple[str, str]:
+def _identities(record: RawRecord) -> set[tuple[str, str]]:
+    keys = set()
     if record.doi:
-        return "doi", record.doi
+        keys.add(("doi", record.doi))
+    for value in (record.source_id, record.landing_url, record.oa_url):
+        match = re.search(r"arxiv\.org/(?:abs|pdf)/(\d{4}\.\d{4,5}|[a-z.-]+/\d{7})(?:v\d+)?", value, re.I)
+        if match:
+            keys.add(("arxiv", match.group(1).lower()))
     normalized = normalize_title(record.title)
     if normalized:
-        return "title", normalized
-    return "source_id", f"{record.source}:{record.source_id}".casefold()
+        authors = "|".join(sorted(normalize_title(name) for name in record.authors))
+        keys.add(("title_authors", normalized + "|" + authors))
+    return keys or {("source_id", f"{record.source}:{record.source_id}".casefold())}
 
 
 def _quality(record: RawRecord) -> tuple[int, int, int, float]:
@@ -71,30 +77,42 @@ def _quality(record: RawRecord) -> tuple[int, int, int, float]:
 
 
 def deduplicate(records: Iterable[RawRecord]) -> list[RawRecord]:
-    """Collapse DOI/title duplicates while retaining the richest metadata."""
-    merged: dict[tuple[str, str], RawRecord] = {}
-    order: list[tuple[str, str]] = []
+    """Join DOI, arXiv version and title+author aliases before merging metadata."""
+    groups: dict[int, list[RawRecord]] = {}
+    aliases: dict[tuple[str, str], int] = {}
     for item in records:
         if not isinstance(item, RawRecord) or not item.title.strip():
             continue
-        key = _identity(item)
-        if key not in merged:
-            merged[key] = item
-            order.append(key)
-            continue
-        current = merged[key]
-        best, other = (item, current) if _quality(item) > _quality(current) else (current, item)
-        for field in ("authors", "venue", "abstract", "published_at", "doi",
-                      "landing_url", "oa_url", "citation_count"):
-            if not getattr(best, field) and getattr(other, field):
-                setattr(best, field, getattr(other, field))
-        best.raw_metadata.update(other.raw_metadata)
-        best.source_score = max(best.source_score, other.source_score)
-        sources = set(best.raw_metadata.get("sources", [best.source]))
-        sources.add(other.source)
+        keys = _identities(item)
+        matches = {aliases[key] for key in keys if key in aliases}
+        group = min(matches) if matches else len(aliases)
+        groups.setdefault(group, []).append(item)
+        for other_group in matches - {group}:
+            groups[group].extend(groups.pop(other_group))
+            for alias, target in list(aliases.items()):
+                if target == other_group:
+                    aliases[alias] = group
+        for key in keys:
+            aliases[key] = group
+
+    result = []
+    for members in groups.values():
+        best = max(members, key=_quality)
+        sources = {name for item in members for name in
+                   [item.source, *item.raw_metadata.get("sources", [])]}
+        for other in members:
+            if other is best:
+                continue
+            for field in ("authors", "venue", "abstract", "published_at", "doi",
+                          "landing_url", "oa_url", "citation_count"):
+                if not getattr(best, field) and getattr(other, field):
+                    setattr(best, field, getattr(other, field))
+            for key, value in other.raw_metadata.items():
+                best.raw_metadata.setdefault(key, value)
+            best.source_score = max(best.source_score, other.source_score)
         best.raw_metadata["sources"] = sorted(sources)
-        merged[key] = best
-    return [merged[key] for key in order]
+        result.append(best)
+    return result
 
 
 def classify(record: RawRecord) -> RawRecord:

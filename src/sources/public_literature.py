@@ -183,15 +183,26 @@ class CrossrefAdapter(PublicLiteratureAdapter):
     def fetch(self, since: datetime, until: datetime) -> list[RawRecord]:
         records: list[RawRecord] = []
         try:
-            for query in self.queries:
+            for index, query in enumerate(self.queries):
+                if index:
+                    time.sleep(2)
                 params = {"query": query, "filter": f"from-pub-date:{since.date()},until-pub-date:{until.date()}",
                           "rows": 25, "select": "DOI,title,author,container-title,abstract,published,URL,is-referenced-by-count"}
-                payload = self._get_json("https://api.crossref.org/works?" + urlencode(params),
-                                         {"Accept": "application/json"})
+                url = "https://api.crossref.org/works?" + urlencode(params)
+                headers = {"Accept": "application/json",
+                           "User-Agent": "daily-papers/1.0 (https://github.com/tengda-xmu/daily-papers)"}
+                try:
+                    payload = self._get_json(url, headers)
+                except HTTPError as exc:
+                    delay = exc.headers.get("Retry-After", "10") if exc.headers else "10"
+                    if exc.code != 429 or not delay.isdigit() or int(delay) > 30:
+                        raise
+                    time.sleep(max(10, int(delay)))
+                    payload = self._get_json(url, headers)
                 records.extend(self.parse_payload(payload))
             return self._finish(records, since, until)
         except Exception as exc:
-            return self._fail(records, exc)
+            return self._fail(self._finish(records, since, until), exc)
 
     @staticmethod
     def parse_payload(payload: dict) -> list[RawRecord]:

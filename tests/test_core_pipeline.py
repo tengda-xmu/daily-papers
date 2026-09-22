@@ -32,6 +32,21 @@ def test_duplicate_keeps_richer_record_and_tracks_sources():
     assert "ResearchGate" in result[0].raw_metadata["sources"]
 
 
+def test_deduplicate_versions_and_cross_source_aliases_without_merging_other_authors():
+    rows = [RawRecord("OpenAlex", "1", "Fatigue models", authors=["Author A"], doi="10.1000/v1"),
+            RawRecord("Crossref", "2", "Fatigue models", authors=["Author A"], doi="10.1000/v2"),
+            RawRecord("Elsevier", "3", "Updated fatigue models", authors=["Author A"], doi="10.1000/v2", abstract="Details"),
+            RawRecord("OpenAlex", "4", "Fatigue models", authors=["Author B"], doi="10.1000/other"),
+            RawRecord("arXiv", "https://arxiv.org/abs/2609.12345v1", "Old title"),
+            RawRecord("ResearchGate", "6", "New title", oa_url="https://arxiv.org/pdf/2609.12345v2", abstract="Metadata")]
+    merged = deduplicate(rows)
+    assert len(merged) == 3
+    assert merged[0].abstract == "Details"
+    assert set(merged[0].raw_metadata["sources"]) == {"OpenAlex", "Crossref", "Elsevier"}
+    assert merged[1].authors == ["Author B"]
+    assert set(merged[2].raw_metadata["sources"]) == {"arXiv", "ResearchGate"}
+
+
 def test_run_pipeline_writes_publishable_payload(tmp_path):
     class Adapter:
         name = "fixture"

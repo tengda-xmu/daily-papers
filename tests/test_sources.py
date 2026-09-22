@@ -128,3 +128,24 @@ def test_crossref_and_pubmed_keep_date_and_nested_text():
     row = PubMedAdapter.parse_xml('<PubmedArticleSet><PubmedArticle><Article><ArticleTitle>AI <i>fatigue</i> design</ArticleTitle><ArticleDate><Year>2026</Year><Month>09</Month><Day>22</Day></ArticleDate><Abstract><AbstractText>Mixed <b>text</b>.</AbstractText></Abstract></Article></PubmedArticle></PubmedArticleSet>')[0]
     assert row.title == "AI fatigue design" and row.abstract == "Mixed text."
     assert row.published_at == "2026-09-22"
+
+
+def test_crossref_backs_off_and_keeps_only_in_window_partial_results(monkeypatch):
+    from urllib.error import HTTPError
+    import src.sources.public_literature as sources
+    calls, sleeps = [], []
+    def response(url, headers=None):
+        calls.append(url)
+        if len(calls) > 1:
+            raise HTTPError(url, 429, "rate limited", {"Retry-After": "15"}, None)
+        return {"message": {"items": [
+            {"title": ["Current"], "DOI": "10/current", "published": {"date-parts": [[2026, 9, 22]]}},
+            {"title": ["Future"], "DOI": "10/future", "published": {"date-parts": [[2027, 1, 1]]}},
+        ]}}
+    a = CrossrefAdapter(queries=["one", "two"])
+    monkeypatch.setattr(a, "_get_json", response)
+    monkeypatch.setattr(sources.time, "sleep", sleeps.append)
+    rows = a.fetch(datetime(2026, 9, 1), datetime(2026, 9, 23))
+    assert len(calls) == 3 and sleeps == [2, 15]
+    assert [r.title for r in rows] == ["Current"]
+    assert a.status.status == "quota_exhausted" and a.status.count == 1
