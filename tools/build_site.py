@@ -147,7 +147,7 @@ def paper_card(paper: dict, tier: str, rank: int = 0) -> str:
 def source_directory(statuses: dict, counts: Counter) -> str:
     sections = []
     for kind, label, description in (
-        ("adapter", "数据采集", "已实现的四类来源及本轮采集状态。"),
+        ("adapter", "数据采集", "已实现来源及本轮采集状态；公开接口无需登录即可运行。"),
         ("planned", "待接入来源", "已纳入目录，尚未启用自动采集。"),
         ("platform", "出版平台", "依据论文的期刊与原文链接归类，可筛选本期已有记录。"),
     ):
