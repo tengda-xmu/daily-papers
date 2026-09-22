@@ -150,7 +150,7 @@ def _llm_summary(record: RawRecord) -> dict[str, object] | None:
         "Using only the metadata and abstract below, return JSON in Chinese with fields "
         "summary, method, recommendation, problem, findings, limitations, connection. "
         "Do not invent results. If evidence is missing, write that the original paper must be checked.\n\n"
-        f"Title: {record.title}\nAuthors: {", ".join(record.authors)}\n"
+        f"Title: {record.title}\nAuthors: {', '.join(record.authors)}\n"
         f"Venue: {record.venue}\nAbstract: {record.abstract[:7000]}"
     )
     body = json.dumps({
