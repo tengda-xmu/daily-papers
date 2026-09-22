@@ -24,6 +24,7 @@ TEMPLATES = ROOT / "tools" / "templates"
 ASSETS = ROOT / "tools" / "assets"
 CHINA = timezone(timedelta(hours=8))
 REPO_URL = "https://github.com/tengda-xmu/daily-papers"
+MANUAL_UPDATE_URL = f"{REPO_URL}/actions/workflows/daily.yml"
 SOURCE_LABELS = {item["id"]: item["label"] for item in SOURCE_CATALOG}
 SETUP_HINTS = {
     "Elsevier": "尚未配置 Elsevier 检索授权。",
@@ -223,7 +224,8 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
     archive_notice = f'<p class="archive-notice">正在阅读 {esc(archive_date)} 归档。<a href="../">返回最新一期</a></p>' if archive_date else ""
     content = template(
         "daily.html", title="每日论文推荐", day=esc(issue), generated=esc(generated),
-        archive_notice=archive_notice, history_url="./" if archive_date else "archive/", notice=notice, source_options="".join(source_options),
+        archive_notice=archive_notice, history_url="./" if archive_date else "archive/", manual_update_url=MANUAL_UPDATE_URL,
+        notice=notice, source_options="".join(source_options),
         topic_options=topic_options, group_options=group_options, journal_options=journal_options,
         core_count=len(core), extended_count=len(extended), total=len(all_papers),
         core_html=core_html, extended_html=extended_html,

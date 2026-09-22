@@ -98,6 +98,8 @@ WECHAT_WORK_WEBHOOK_URL=
 
 工作流每天北京时间 07:00 运行，也支持 `workflow_dispatch` 手动触发。它会生成 `site/`、保存 `data/archive/` 历史数据、部署 GitHub Pages，并发送核心论文摘要。
 
+网页右上角的“手动更新”按钮会打开该 GitHub Actions 工作流页面。登录 GitHub 后点击 `Run workflow`，即可立即执行一轮抓取、生成日报、部署网页和企业微信推送；按钮不在公开网页中保存 GitHub Token。
+
 ## GitHub Actions Secrets
 
 在仓库 `Settings → Secrets and variables → Actions` 中按需配置：

@@ -10,3 +10,5 @@ def test_site_renders_complete_source_and_journal_catalog():
     assert "Nature Communications" in html
     assert "Engineering Structures" in html
     assert "id=\"journal\"" in html
+    assert "手动更新" in html
+    assert "actions/workflows/daily.yml" in html
