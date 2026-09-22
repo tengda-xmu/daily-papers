@@ -70,7 +70,11 @@ class ArxivAdapter(PublicLiteratureAdapter):
             query = " OR ".join(f'all:"{term}"' for term in self.queries)
             params = urlencode({"search_query": query, "start": 0, "max_results": 50,
                                 "sortBy": "submittedDate", "sortOrder": "descending"})
-            root = ET.fromstring(self._get_text("https://export.arxiv.org/api/query?" + params))
+            contact = os.getenv("ARXIV_CONTACT", "").strip() or "https://github.com/tengda-xmu/daily-papers"
+            root = ET.fromstring(self._get_text(
+                "https://export.arxiv.org/api/query?" + params,
+                {"Accept": "application/atom+xml", "User-Agent": f"daily-papers/1.0 ({contact})"},
+            ))
             for entry in root:
                 if _local(entry.tag) != "entry":
                     continue
