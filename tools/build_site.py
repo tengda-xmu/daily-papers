@@ -78,15 +78,12 @@ def document(content: str, *, title: str, root: str = "./", active: str = "daily
     version = hashlib.sha256(
         (ASSETS / "site.css").read_bytes() + (ASSETS / "site.js").read_bytes()
     ).hexdigest()[:10]
-    topic_links = "".join(
-        f'<a href="{root}?topic={esc(key)}#reading">{esc(item["label"])}</a>'
-        for key, item in TOPIC_CATALOG.items()
-    )
     return template(
         "page.html", content=content.lstrip(), title=esc(title), root=root, version=version,
-        topic_links=topic_links, repo=REPO_URL,
+        repo=REPO_URL,
         daily_current='aria-current="page"' if active == "daily" else "",
         archive_current='aria-current="page"' if active == "archive" else "",
+        setup_current='aria-current="page"' if active == "setup" else "",
     )
 
 
@@ -98,7 +95,9 @@ def paper_card(paper: dict, tier: str, rank: int = 0) -> str:
                    (f"https://doi.org/{doi}" if doi else ""))
     source = paper.get("source") or "来源待补充"
     venue = paper.get("venue") or ""
-    authors = ", ".join(string_list(paper.get("authors")))
+    author_names = string_list(paper.get("authors"))
+    authors = ", ".join(author_names)
+    short_authors = ", ".join(author_names[:3]) + (" 等" if len(author_names) > 3 else "")
     topics = string_list(paper.get("topic_tags"))
     tags = "".join(
         f'<span class="tag">{esc(TOPIC_CATALOG.get(topic, {}).get("label", topic))}</span>'
@@ -113,13 +112,14 @@ def paper_card(paper: dict, tier: str, rank: int = 0) -> str:
     ) if deep.get(key)]
     deep_html = ""
     if tier == "core" and deep_items:
-        deep_html = '<details class="deep-read"><summary>精读要点</summary><dl>' + "".join(
+        deep_html = '<dl class="reading-notes">' + "".join(
             f'<div><dt>{label}</dt><dd>{esc(value)}</dd></div>' for label, value in deep_items
-        ) + '</dl></details>'
+        ) + '</dl>'
     citation = ". ".join(value for value in (authors, title, venue,
                                             str(paper.get("published_at") or "")[:4],
                                             f"https://doi.org/{doi}" if doi else "") if value)
-    actions = f'<a href="{url}" target="_blank" rel="noopener noreferrer">阅读原文<span class="sr-only">（新窗口）</span></a>' if url != "#" else ""
+    primary_action = f'<a href="{url}" target="_blank" rel="noopener noreferrer">阅读原文<span class="sr-only">（新窗口）</span></a>' if url != "#" else ""
+    actions = ""
     if paper.get("oa_url"):
         oa_url = safe_url(paper["oa_url"])
         if oa_url != "#":
@@ -130,19 +130,27 @@ def paper_card(paper: dict, tier: str, rank: int = 0) -> str:
     title_html = f'<a href="{url}" target="_blank" rel="noopener noreferrer">{esc(title)}</a>' if url != "#" else esc(title)
     search = " ".join(str(value or "") for value in
                       (title, authors, venue, summary, paper.get("abstract"), doi))
-    venue_line = f'<p class="venue">{esc(venue)} <span class="venue-group">{esc(facets["venue_group"])}</span></p>' if venue else ""
-    recommendation_html = f'<p class="recommendation"><strong>推荐理由</strong>{esc(recommendation)}</p>' if recommendation else ""
+    venue_line = f'<span class="venue">{esc(venue)}</span>' if venue else ""
+    recommendation_html = f'<p class="recommendation"><strong>阅读建议</strong>{esc(recommendation)}</p>' if recommendation else ""
+    preview = str(summary)
+    if len(preview) > 230:
+        preview = preview[:230]
+        if " " in preview[-24:]:
+            preview = preview.rsplit(" ", 1)[0]
+        preview = preview.rstrip(" ,.;，。；") + "…"
+    panel_id = f"paper-details-{tier}-{rank}"
+    full_authors = f'<p class="full-authors"><strong>作者</strong>{esc(authors)}</p>' if len(author_names) > 3 else ""
     return f'''
-<article class="paper" data-sources="{esc(json.dumps(facets['source_ids'], ensure_ascii=False))}"
+<article class="paper {tier}" data-sources="{esc(json.dumps(facets['source_ids'], ensure_ascii=False))}"
  data-topics="{esc(json.dumps(topics, ensure_ascii=False))}" data-venue="{esc(facets['venue_group'])}"
  data-journal="{esc(facets['journal'])}" data-search="{esc(search)}" data-rank="{rank}"
  data-date="{esc(paper.get('published_at'))}">
   <div class="paper-meta"><span class="source">{esc(SOURCE_LABELS.get(source, source))}</span><span>{esc(str(paper.get('published_at') or '')[:10])}</span></div>
   <h3>{title_html}</h3>
-  <p class="authors">{esc(authors)}</p>{venue_line}
-  <p class="abstract">{esc(summary)}</p>{recommendation_html}
-  <div class="tags">{tags}</div>{deep_html}
-  <div class="paper-actions">{actions}</div>
+  <p class="bibliography"><span class="authors">{esc(short_authors)}</span>{venue_line}</p>
+  <p class="abstract">{esc(preview)}</p>
+  <div class="paper-tools">{primary_action}<button type="button" class="text-button paper-toggle" aria-expanded="false" aria-controls="{panel_id}">摘要与笔记<span aria-hidden="true">＋</span></button></div>
+  <div class="paper-detail-panel" id="{panel_id}" hidden><p class="detail-label">摘要</p><p class="full-abstract">{esc(summary)}</p>{recommendation_html}{full_authors}{deep_html}<div class="tags">{tags}</div><div class="paper-actions">{actions}</div></div>
 </article>'''
 
 
@@ -211,7 +219,7 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
         options = []
         for item in (s for s in SOURCE_CATALOG if s["kind"] == kind):
             state, _ = source_state(item, statuses)
-            options.append(f'<option value="{esc(item["id"])}">{esc(item["label"])} · {counts[item["id"]]} 篇 · {esc(STATE_LABELS.get(state, state))}</option>')
+            options.append(f'<option value="{esc(item["id"])}">{esc(item["label"])}（{counts[item["id"]]} 篇）</option>')
         if options:
             source_options.append(f'<optgroup label="{label}">{"".join(options)}</optgroup>')
     unknown_sources = sorted(set(counts) - set(SOURCE_LABELS))
@@ -240,7 +248,7 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
     content = template(
         "daily.html", title="每日论文推荐", day=esc(issue), generated=esc(generated),
         archive_notice=archive_notice, history_url="./" if archive_date else "archive/", manual_update_url=MANUAL_UPDATE_URL,
-        notice=notice, source_options="".join(source_options),
+        notice=notice, source_options="".join(source_options), health_label=f"{ok} / {adapter_count} 类来源正常",
         topic_options=topic_options, group_options=group_options, journal_options=journal_options,
         core_count=len(core), extended_count=len(extended), total=len(all_papers),
         core_html=core_html, extended_html=extended_html,
@@ -276,7 +284,7 @@ def main() -> None:
     (OUT / "index.html").write_text(render(payload), encoding="utf-8")
     (OUT / "data.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     build_archive()
-    (OUT / "setup.html").write_text(document(template("setup.html"), title="来源配置 | 每日论文推荐"), encoding="utf-8")
+    (OUT / "setup.html").write_text(document(template("setup.html"), title="来源配置 | 每日论文推荐", active="setup"), encoding="utf-8")
 
 
 if __name__ == "__main__":
