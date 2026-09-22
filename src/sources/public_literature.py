@@ -12,6 +12,7 @@ import re
 from datetime import datetime
 from email.utils import parsedate_to_datetime
 from urllib.parse import urlencode
+from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 import xml.etree.ElementTree as ET
 
@@ -71,10 +72,17 @@ class ArxivAdapter(PublicLiteratureAdapter):
             params = urlencode({"search_query": query, "start": 0, "max_results": 50,
                                 "sortBy": "submittedDate", "sortOrder": "descending"})
             contact = os.getenv("ARXIV_CONTACT", "").strip() or "https://github.com/tengda-xmu/daily-papers"
-            root = ET.fromstring(self._get_text(
-                "https://export.arxiv.org/api/query?" + params,
-                {"Accept": "application/atom+xml", "User-Agent": f"daily-papers/1.0 ({contact})"},
-            ))
+            query_url = "https://export.arxiv.org/api/query?" + params
+            headers = {"Accept": "application/atom+xml", "User-Agent": f"daily-papers/1.0 ({contact})"}
+            try:
+                body = self._get_text(query_url, headers)
+            except HTTPError as exc:
+                # Some institutional proxies return 406 for the HTTPS alias;
+                # arXiv documents the HTTP export endpoint as equivalent.
+                if exc.code != 406:
+                    raise
+                body = self._get_text(query_url.replace("https://", "http://", 1), headers)
+            root = ET.fromstring(body)
             for entry in root:
                 if _local(entry.tag) != "entry":
                     continue
