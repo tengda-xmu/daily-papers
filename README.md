@@ -119,6 +119,17 @@ ResearchGate 会话目录、API 密钥和个人登录信息不能提交到 Git�
 
 网页的“全部来源”下拉框来自 `config/sources.yml`，“全部期刊组”和“全部具体期刊”来自 `config/venues.yml`。期刊目录按 CNS、Elsevier 工程与材料、Springer Nature、Wiley、IEEE、ACM、ASME、ASCE、AIAA、SAGE、Taylor & Francis、SIAM 等分组；文章若来自多个来源，会同时出现在对应来源筛选中。
 
+## 网页界面
+
+网页沿用腾达个人主页的深蓝导航、左侧研究方向导航和白底学术排版。首页提供：
+
+- CNS 正刊、CNS 子刊快捷筛选，以及来源、主题、期刊组、具体期刊和全文检索；
+- 核心推荐与扩展阅读分区、发表时间排序、精读要点和一键复制引用；
+- 来源接入状态、每个来源的本期数量、重点期刊目录和历史归档阅读页；
+- 响应式导航、键盘跳转、空状态提示和适合打印的版式。
+
+界面模板与静态资源位于 `tools/templates/` 和 `tools/assets/`，运行 `python tools/build_site.py` 后会复制到 `site/`。
+
 ## 发布到 GitHub
 
 先在 `tengda-xmu` 账号下创建空仓库 `daily-papers`，然后在本地执行：

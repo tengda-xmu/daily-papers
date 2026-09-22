@@ -1,0 +1,48 @@
+$archive_notice
+<header class="page-heading">
+  <div><h1>$title</h1><p class="page-intro">追踪大模型、智能体与工程可靠性交叉领域的研究进展。</p></div>
+  <div class="issue-date"><span>本期日期</span><time>$day</time></div>
+</header>
+<p class="update-time">最后生成：$generated（北京时间）<a href="$history_url">浏览往期</a></p>
+<div class="coverage-summary"><span>$source_count 项来源目录</span><span>$group_count 个期刊组</span><span>$journal_count 本重点期刊</span></div>
+<section class="cns-focus" aria-label="CNS 重点期刊">
+  <div class="cns-heading"><h2>CNS 重点关注</h2><a href="#journals">完整期刊目录</a></div>
+  <div class="cns-line"><button type="button" data-group-filter="CNS 正刊" aria-pressed="false">CNS 正刊</button><span>Nature、Science、Cell</span></div>
+  <div class="cns-line"><button type="button" data-group-filter="CNS 子刊" aria-pressed="false">CNS 子刊</button><span>Nature Communications、Science Advances、Cell Reports 等 $cns_children 本</span></div>
+</section>
+$notice
+<section id="reading" class="reading-section" aria-labelledby="filter-heading" data-total="$total">
+  <div class="filter-heading"><h2 id="filter-heading">检索本期论文</h2><button type="button" id="reset" class="text-button">重置筛选</button></div>
+  <noscript><p class="notice">开启 JavaScript 后可使用筛选、排序与复制引用；论文与目录仍可直接阅读。</p></noscript>
+  <form id="filters" role="search" aria-label="筛选论文">
+    <label class="search-box" for="search"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><span class="sr-only">搜索标题、作者、期刊、摘要或 DOI</span><input id="search" type="search" placeholder="搜索标题、作者、期刊、摘要或 DOI" autocomplete="off"></label>
+    <div class="filter-grid">
+      <label for="source">论文来源<select id="source"><option value="">全部来源</option>$source_options</select></label>
+      <label for="topic">研究方向<select id="topic"><option value="">全部主题</option>$topic_options</select></label>
+      <label for="venue">期刊分组<select id="venue"><option value="">全部期刊组</option>$group_options</select></label>
+      <label for="journal">具体期刊<select id="journal"><option value="">全部具体期刊</option>$journal_options</select></label>
+    </div>
+  </form>
+  <div class="results-toolbar"><p id="result-count" role="status" aria-live="polite">本期共 $total 篇</p><label for="sort">排序<select id="sort"><option value="recommended">推荐顺序</option><option value="latest">发表时间</option></select></label></div>
+  <div id="no-data" class="empty-state" $no_data><svg width="38" height="38" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M5 6h9l2 2 2-2h9v21h-9l-2 2-2-2H5zM16 8v21M8 12h5m-5 5h5m6-5h5m-5 5h5"/></svg><h3>等待本期论文</h3><p>当前尚无推荐数据。可查看来源接入状态，或浏览历史归档。</p><div><a class="button-link" href="#sources">查看来源状态</a><a href="$history_url">浏览历史归档</a></div></div>
+  <div id="no-match" class="empty-state" $no_match><h3>没有符合条件的论文</h3><p>尝试减少筛选条件，或更换搜索关键词。</p><button type="button" class="button-link" data-reset>清除全部筛选</button></div>
+  <section id="core-section" class="paper-section" aria-labelledby="core-heading">
+    <div class="section-heading"><h2 id="core-heading">核心推荐 <span id="core-count">$core_count 篇</span></h2><span class="section-note">重点精读</span></div>
+    <div id="core">$core_html</div><p class="section-empty" id="core-empty" $core_empty>本期暂无核心推荐。</p>
+  </section>
+  <section id="extended-section" class="paper-section" aria-labelledby="extended-heading">
+    <div class="section-heading"><h2 id="extended-heading">扩展阅读 <span id="extended-count">$extended_count 篇</span></h2><span class="section-note">拓展研究视野</span></div>
+    <div id="extended">$extended_html</div><p class="section-empty" id="extended-empty" $extended_empty>本期暂无扩展阅读。</p>
+  </section>
+</section>
+<section id="sources" class="directory-section" aria-labelledby="sources-heading">
+  <div class="section-heading"><h2 id="sources-heading">来源接入状态</h2><span class="section-note">本轮 $ok_count / $adapter_count 类采集正常</span></div>
+  <p class="section-description">目录包含 $source_count 项来源及出版平台。采集状态与本期推荐数量分别展示。</p>
+  <div class="directory-actions"><a href="$repo#四类来源" target="_blank" rel="noopener noreferrer">来源配置指南</a><a href="$repo/actions/workflows/daily.yml" target="_blank" rel="noopener noreferrer">查看运行记录</a></div>
+  $sources
+</section>
+<section id="journals" class="directory-section" aria-labelledby="journals-heading">
+  <div class="section-heading"><h2 id="journals-heading">重点期刊目录</h2><span class="section-note">$journal_count 本期刊</span></div>
+  <p class="section-description">覆盖 CNS 正刊与子刊、工程、材料和计算领域。点击期刊可筛选本期论文；收录目录不代表本期有检索结果。</p>
+  $journals
+</section>

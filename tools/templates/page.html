@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="聚焦 AI 驱动的智能运维、结构生成式设计与疲劳可靠性，每日追踪科研论文，提供中文摘要与精读要点。">
+  <meta name="theme-color" content="#103e6c">
+  <title>$title</title>
+  <link rel="icon" href="${root}assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="${root}assets/site.css?v=$version">
+  <script>document.documentElement.classList.add('js');</script>
+  <script src="${root}assets/site.js?v=$version" defer></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main-content">跳至正文</a>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a class="wordmark" href="$root"><span>腾达</span><span class="wordmark-divider" aria-hidden="true"></span>科研文献</a>
+      <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false">菜单 <span aria-hidden="true">☰</span></button>
+      <nav id="main-navigation" class="main-navigation" aria-label="主导航">
+        <a href="$root" $daily_current>每日推荐</a>
+        <a href="${root}#sources">来源与期刊</a>
+        <a href="${root}archive/" $archive_current>历史归档</a>
+        <a href="https://tengda-xmu.github.io/">个人主页<span class="external" aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
+  </header>
+  <div class="site-shell">
+    <aside class="sidebar" aria-label="阅读导航与研究方向">
+      <a class="sidebar-brand" href="$root">每日论文推荐<span lang="en">Daily Papers</span></a>
+      <p class="sidebar-intro">AI 驱动的工程可靠性<br>从前沿研究到设计与运维</p>
+      <nav class="reading-nav" aria-label="阅读导航">
+        <a href="${root}#reading">本期推荐</a>
+        <a href="${root}#core-section">核心推荐</a>
+        <a href="${root}#extended-section">扩展阅读</a>
+        <a href="${root}#journals">重点期刊目录</a>
+      </nav>
+      <section class="sidebar-section">
+        <h2>关注方向</h2>
+        <div class="topic-links">$topic_links</div>
+        <a class="sidebar-more" href="https://tengda-xmu.github.io/research/">了解研究方向 <span aria-hidden="true">↗</span></a>
+      </section>
+      <div class="schedule"><span class="schedule-icon" aria-hidden="true">◷</span><div><strong>每日定时更新</strong><p>北京时间 07:00</p></div></div>
+      <a class="sidebar-repo" href="$repo" target="_blank" rel="noopener noreferrer">GitHub 项目 <span aria-hidden="true">↗</span></a>
+    </aside>
+    <main id="main-content" class="main-content" tabindex="-1">
+      $content
+      <footer class="site-footer"><p>论文元数据与摘要来自原始来源；完整内容请访问原文链接。</p><div><a href="https://tengda-xmu.github.io/">腾达 · 厦门大学</a><a href="${root}archive/">历史归档</a><a href="$repo" target="_blank" rel="noopener noreferrer">项目代码</a></div></footer>
+    </main>
+  </div>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <a class="back-to-top" href="#top" aria-label="返回页面顶部" hidden>回到顶部 ↑</a>
+</body>
+</html>
