@@ -16,7 +16,11 @@ class ElsevierAdapter:
                  queries: list[str] | None = None, timeout: int = 30):
         self.api_key = api_key if api_key is not None else os.getenv("ELSEVIER_API_KEY", "")
         self.insttoken = insttoken if insttoken is not None else os.getenv("ELSEVIER_INSTTOKEN", "")
-        self.queries = queries or ["TITLE-ABS-KEY(artificial intelligence AND predictive maintenance)"]
+        self.queries = queries or [
+            "TITLE-ABS-KEY((large language model OR LLM OR agent OR generative AI) AND (predictive maintenance OR fault diagnosis OR digital twin))",
+            "TITLE-ABS-KEY((generative design OR topology optimization OR surrogate model) AND (structural OR reliability))",
+            "TITLE-ABS-KEY((structural fatigue OR fatigue life OR fracture) AND (AI OR machine learning OR reliability))",
+        ]
         self.timeout = timeout
         self._status = SourceStatus(self.name, "not_run")
 

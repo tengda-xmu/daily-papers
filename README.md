@@ -109,6 +109,18 @@ WECHAT_WORK_WEBHOOK_URL
 
 ResearchGate 会话目录、API 密钥和个人登录信息不能提交到 Git。缺失或失败的单个来源不会阻塞其他来源更新，页面会显示对应运行状态。
 
+## 发布到 GitHub
+
+先在 `tengda-xmu` 账号下创建空仓库 `daily-papers`，然后在本地执行：
+
+```powershell
+git remote add origin https://github.com/tengda-xmu/daily-papers.git
+git branch -M main
+git push -u origin main
+```
+
+在仓库 `Settings → Pages` 中将发布方式设为 `GitHub Actions`。第一次工作流运行后，Pages 会显示实际访问地址。
+
 ## 目录
 
 ```text
