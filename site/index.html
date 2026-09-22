@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>每日论文推荐</title>
+<style>
+:root{--bg:#f5f7fb;--ink:#172033;--muted:#667085;--blue:#1463c3;--line:#e5e9f2;--card:#fff}
+*{box-sizing:border-box}body{font-family:system-ui,-apple-system,"Microsoft YaHei",sans-serif;max-width:1080px;margin:auto;padding:24px;background:var(--bg);color:var(--ink)}
+header{padding:20px 0 10px}h1{font-size:32px;margin:0 0 8px}h2{margin-top:30px;border-bottom:2px solid var(--line);padding-bottom:8px}h3{margin:9px 0;font-size:19px;line-height:1.4}a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+.subtitle,.meta,.authors,.status,.minor-link{color:var(--muted);font-size:13px}.statusbar{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}.status{background:#eef1f6;border-radius:6px;padding:5px 8px}.status.ok{color:#146b3a;background:#e9f8ef}.status.warn{color:#8b5e00;background:#fff5d6}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}input,select{padding:10px;border:1px solid #ccd3e0;border-radius:8px;background:#fff;min-width:190px}.paper{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin:12px 0;box-shadow:0 2px 9px #18284a0d}.paper[hidden]{display:none}.meta{display:flex;gap:10px;align-items:center}.source{background:#e8f1ff;color:#1757a6;border-radius:99px;padding:4px 8px}.tag{display:inline-block;font-size:12px;background:#eef0f4;border-radius:99px;padding:3px 8px;margin:3px 5px 3px 0}.recommendation{color:#374151;background:#f8fafc;border-left:3px solid #9db9e8;padding:8px 10px}details{margin-top:13px;border-top:1px solid var(--line);padding-top:10px}summary{cursor:pointer;color:var(--blue);font-weight:600}.empty{padding:24px;text-align:center;color:var(--muted)}.minor-link{margin-left:8px}footer{margin-top:35px;padding-top:15px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style></head><body>
+<header><h1>每日论文推荐</h1><div class="subtitle">面向 AI 智能运维、结构生成式设计、结构疲劳与可靠性设计 · 更新时间：2026-09-22T09:28:50.277685+00:00</div></header>
+<div class="statusbar"><span class="status warn"><b>Elsevier</b>：configuration_missing 0 条 ELSEVIER_API_KEY is not configured</span><span class="status warn"><b>Google Scholar</b>：configuration_missing 0 条 SERPAPI_API_KEY is not configured</span><span class="status warn"><b>ResearchGate</b>：configuration_missing 0 条 ResearchGate export is not available; run the local connector</span><span class="status warn"><b>微信公众号</b>：configuration_missing 0 条 WECHAT_RSS_URLS is not configured</span></div>
+<div class="controls"><input id="search" placeholder="搜索标题、作者或摘要"><select id="source"><option value="">全部来源</option><option value="Elsevier">Elsevier</option><option value="Google Scholar">Google Scholar</option><option value="ResearchGate">ResearchGate</option><option value="微信公众号">微信公众号</option></select><select id="topic"><option value="">全部主题</option></select></div>
+<section><h2>核心推荐（0）</h2><div id="core"><p class="empty">暂无核心推荐。</p></div></section>
+<section><h2>扩展阅读（0）</h2><div id="extended"><p class="empty">暂无扩展阅读。</p></div></section>
+<footer>论文标题、摘要和元数据来自原始来源；请通过原文链接访问完整内容。<a href="archive/">查看历史归档</a></footer>
+<script>const q=document.querySelector('#search'),s=document.querySelector('#source'),t=document.querySelector('#topic');function filter(){const text=q.value.toLowerCase(),source=s.value,topic=t.value;document.querySelectorAll('.paper').forEach(x=>{const okText=!text||x.dataset.search.includes(text),okSource=!source||x.dataset.source===source,okTopic=!topic||x.dataset.topics.includes(topic);x.hidden=!(okText&&okSource&&okTopic)})}q.oninput=filter;s.onchange=filter;t.onchange=filter;</script>
+</body></html>

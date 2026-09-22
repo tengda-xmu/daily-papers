@@ -1,0 +1,12 @@
+services:
+  werss:
+    image: ghcr.io/wufulin/werss:latest
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data/werss:/data
+    environment:
+      TZ: Asia/Shanghai
+    # Complete the first QR-code login on the local machine. Do not expose
+    # this service publicly without authentication or a reverse proxy.

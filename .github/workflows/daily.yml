@@ -1,0 +1,57 @@
+name: Daily papers
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 23 * * *" # 07:00 Asia/Shanghai (UTC)
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: pip install -r requirements.txt
+      - name: Import ResearchGate connector branch
+        shell: bash
+        run: |
+          if git fetch origin connector-data:refs/remotes/origin/connector-data; then
+            if git cat-file -e origin/connector-data:data/inbox/researchgate.json 2>/dev/null; then
+              git show origin/connector-data:data/inbox/researchgate.json > data/inbox/researchgate.json
+            fi
+          fi
+      - name: Run daily pipeline
+        env:
+          ELSEVIER_API_KEY: ${{ secrets.ELSEVIER_API_KEY }}
+          ELSEVIER_INSTTOKEN: ${{ secrets.ELSEVIER_INSTTOKEN }}
+          SERPAPI_API_KEY: ${{ secrets.SERPAPI_API_KEY }}
+          WECHAT_RSS_URLS: ${{ secrets.WECHAT_RSS_URLS }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
+          LLM_MODEL: ${{ secrets.LLM_MODEL }}
+          WECHAT_WORK_WEBHOOK_URL: ${{ secrets.WECHAT_WORK_WEBHOOK_URL }}
+        run: python -m src.pipeline
+      - run: python tools/build_site.py
+      - name: Publish GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with: {path: site}
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Send Enterprise WeChat digest
+        env:
+          WECHAT_WORK_WEBHOOK_URL: ${{ secrets.WECHAT_WORK_WEBHOOK_URL }}
+        run: python -m src.notify
+      - name: Commit data archive
+        run: |
+          git config user.name github-actions
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data site
+          git diff --cached --quiet || git commit -m "chore: update daily papers"
+          git push
