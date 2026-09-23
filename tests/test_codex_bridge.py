@@ -590,7 +590,7 @@ def test_full_translation_scans_are_sent_as_images(bridge, monkeypatch):
 
 
 def test_pdf_export_embeds_chinese_font_and_paginates_safely():
-    content = '### 第 1 部分 [P1]\n\n**原文**\n\nStructural reliability: σ = 10 MPa.\n\n**中文译文**\n\n结构可靠性分析。\n\n'
+    content = '### 第 1 部分 [P1]\n\n**原文**\n\nStructural reliability: σ = 10 MPa. Error 10⁻⁶, scientiﬁc.\n\n**中文译文**\n\n结构可靠性分析。\n\n'
     content += '<img src="http://127.0.0.1/private"/> <script>never execute</script>\n\n'
     content += ('长段落不得被裁掉。 ' * 1200) + '\n\n末尾校验文本 END-OF-TRANSLATION'
     data = export_pdf({'title': '科研论文中文导出', 'doi': '10.000/test'}, [{'role': 'assistant', 'content': content, 'status': 'interrupted', 'model': 'test-model'}])
@@ -598,6 +598,7 @@ def test_pdf_export_embeds_chinese_font_and_paginates_safely():
     reader = PdfReader(BytesIO(data)); text = '\n'.join(p.extract_text() for p in reader.pages)
     assert len(reader.pages) > 1
     assert '结构可靠性分析' in text and 'END-OF-TRANSLATION' in text
+    assert '10⁻⁶' in text and 'scientiﬁc' in text
     assert '未完成 / 部分内容' in text and 'never execute' in text
     fonts = reader.pages[0]['/Resources']['/Font'].get_object()
     assert any('/FontFile2' in f.get_object().get('/FontDescriptor', {}) for f in fonts.values())

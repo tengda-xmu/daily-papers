@@ -37,11 +37,42 @@ def register_font():
     raise ValueError("PDF 导出需要中文 TrueType 字体。Windows 请检查微软雅黑字体；其他系统安装 fonts-wqy-microhei，或用 PAPER_PDF_FONT 指定中文 TTF/TTC 文件。")
 
 
+def register_symbols():
+    name = "PaperReaderSymbols"
+    if name in pdfmetrics.getRegisteredFontNames():
+        return name
+    for path in (Path(os.environ.get("WINDIR", "C:/Windows")) / "Fonts/times.ttf",
+                 Path("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf")):
+        if path.is_file():
+            pdfmetrics.registerFont(TTFont(name, str(path)))
+            return name
+    return None
+
+
+def text_markup(text, primary, fallback):
+    glyphs = pdfmetrics.getFont(primary).face.charToGlyph
+    extra = pdfmetrics.getFont(fallback).face.charToGlyph if fallback else {}
+    clean = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f]", "", str(text))
+    runs, chars, active = [], [], primary
+    for char in clean:
+        font = fallback if ord(char) not in glyphs and ord(char) in extra else primary
+        if font != active and chars:
+            runs.append((active, "".join(chars)))
+            chars = []
+        active = font
+        chars.append(char)
+    if chars:
+        runs.append((active, "".join(chars)))
+    return "".join((f'<font name="{font}">{escape(value)}</font>' if font != primary else escape(value))
+                   for font, value in runs).replace("\n", "<br/>")
+
+
 def export_pdf(paper, messages):
     if not messages:
         raise ValueError("暂无可导出的对话。")
     with PDF_LOCK:
         font = register_font()
+        symbols = register_symbols()
         buffer = BytesIO()
         title = str(paper.get("title_zh") or paper.get("title") or "论文对话")
         pdf = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=46, leftMargin=46,
@@ -54,8 +85,7 @@ def export_pdf(paper, messages):
 
         def add(text, style=normal):
             # Treat all user/model/paper text as text, never ReportLab markup.
-            clean = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", "", str(text))
-            story.append(Paragraph(escape(clean).replace("\n", "<br/>"), style))
+            story.append(Paragraph(text_markup(text, font, symbols), style))
 
         add(title, ParagraphStyle("title", parent=heading, fontSize=17, leading=25))
         add(f"导出时间：{datetime.now():%Y-%m-%d %H:%M} · 本机论文助手", meta)
