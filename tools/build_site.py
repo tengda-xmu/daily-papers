@@ -219,7 +219,10 @@ def source_directory(statuses: dict, counts: Counter, root: str = "./") -> str:
                 message = "通过 arXiv 官方 RSS 获取；检索 API 本轮受限。"
             if item["id"] == "Elsevier" and state in ("ok", "no_data") and "STANDARD" in (source_state(item, statuses)[1] or ""):
                 message = "Scopus 标准元数据检索已接入；完整视图需额外授权。"
-            if kind == "adapter" and state in ("ok", "no_data"):
+            connector_message = source_state(item, statuses)[1] or ""
+            if item["id"] == "ResearchGate" and connector_message.startswith("本地连接器已导入"):
+                message = connector_message
+            elif kind == "adapter" and state in ("ok", "no_data"):
                 message += f' 本轮获取 {(statuses.get(item["id"]) or {}).get("count", 0)} 条元数据。'
             setup_link = f'<a href="{root}setup.html#{SETUP_SECTIONS.get(item["id"], "public")}">授权与配置</a>' if state in ("configuration_missing", "authorization_required", "quota_exhausted", "access_denied") else ""
             state_class = "ok" if state in ("ok", "no_data") else "pending" if state in ("planned", "platform", "not_run") else "warn"

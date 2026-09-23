@@ -2,7 +2,8 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
+from calendar import monthrange
 import re
 from typing import Any, Mapping
 
@@ -113,7 +114,7 @@ def parse_date(value: Any) -> datetime | None:
         except ValueError:
             pass
     for fmt in ("%a, %d %b %Y %H:%M:%S %z", "%a, %d %b %Y %H:%M:%S GMT",
-                "%Y-%m-%d", "%Y/%m/%d", "%Y.%m.%d", "%Y"):
+                "%Y-%m-%d", "%Y/%m/%d", "%Y.%m.%d", "%Y-%m", "%Y"):
         try:
             parsed = datetime.strptime(text[:30], fmt)
             return parsed if parsed.tzinfo else parsed.replace(tzinfo=timezone.utc)
@@ -131,4 +132,7 @@ def in_date_window(value: Any, since: datetime, until: datetime) -> bool:
     text = str(value or "").strip()
     if re.fullmatch(r"\d{4}", text):
         return start.year <= int(text) <= end.year
+    if re.fullmatch(r"\d{4}-\d{2}", text):
+        month_end = parsed + timedelta(days=monthrange(parsed.year, parsed.month)[1])
+        return parsed <= end and month_end > start
     return start <= parsed <= end

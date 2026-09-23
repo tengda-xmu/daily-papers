@@ -6,10 +6,12 @@ and arbitrary fields from the input are never written to the branch.
 import argparse
 import json
 import os
+from datetime import timezone
 from pathlib import Path
 import subprocess
 import tempfile
 from urllib.parse import urlsplit, urlunsplit
+from src.models import parse_date
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -38,6 +40,19 @@ def public_records(payload):
     return clean
 
 
+def public_export(payload):
+    """Keep publication metadata and validated collection health only."""
+    clean = {"records": public_records(payload)}
+    if isinstance(payload, dict):
+        exported_at = parse_date(payload.get("exported_at"))
+        if exported_at:
+            clean["exported_at"] = exported_at.astimezone(timezone.utc).isoformat()
+        failed_pages = payload.get("failed_pages", 0)
+        if type(failed_pages) is int and failed_pages >= 0:
+            clean["failed_pages"] = failed_pages
+    return clean
+
+
 def git(*args, data=None, env=None, check=True):
     result = subprocess.run(["git", *args], cwd=ROOT, input=data, encoding="utf-8",
                             capture_output=True, env=env)
@@ -50,7 +65,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("path", nargs="?", default="data/inbox/researchgate.json")
     args = parser.parse_args()
-    encoded = json.dumps(public_records(json.loads(Path(args.path).read_text(encoding="utf-8-sig"))), ensure_ascii=False, indent=2)
+    encoded = json.dumps(public_export(json.loads(Path(args.path).read_text(encoding="utf-8-sig"))), ensure_ascii=False, indent=2)
     refs = git("ls-remote", "--heads", "origin", "connector-data").stdout.strip()
     parent = None
     if refs:

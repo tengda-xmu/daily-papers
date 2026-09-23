@@ -20,3 +20,35 @@ query strings and excludes sessions, cookies and arbitrary raw fields.
 `--login` waits for your confirmation after you finish signing in. For later
 runs omit it and use `--headless` with your saved local browser profile.
 The publisher needs Git authentication and a configured Git author identity.
+
+The exporter loads the root `.env`. On Windows, set
+`RESEARCHGATE_BROWSER_CHANNEL=msedge` to use installed Microsoft Edge without
+downloading another browser. A local session directory outside the repository,
+such as `%LOCALAPPDATA%/daily-papers/researchgate-profile`, is recommended.
+`RESEARCHGATE_AUTHOR_URLS` is a comma-separated list of public profile or
+publication URLs. Login pages, private feeds and messages are not collected.
+
+The JSON envelope records `exported_at`, `failed_pages` and `records`.
+Month-only dates retain their precision, so a May paper is not treated as a
+September update. The import status distinguishes imported records from records
+inside the current date window and flags exports older than three days.
+Collection failures preserve the previous export and stop without retries.
+
+On Windows, after one successful login, export and publish:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/sync_researchgate.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/schedule_researchgate.ps1 -Enable
+```
+
+The task `DailyPapers-ResearchGate` runs daily at 06:30 local time, before the
+07:00 GitHub digest. The PC must be powered on and the Windows user signed in.
+Missed starts can run once the PC becomes available. Running the scheduling
+script without `-Enable` prepares a disabled task while login is unresolved.
+Logs stay in `.local/researchgate-sync.log`.
+
+If ResearchGate displays **Access restricted**, stop automated requests and
+use the site's **Log in** verification entry. If that is also restricted,
+wait for ResearchGate to restore access or contact its Help Center. Keep the
+task disabled until an ordinary login and one collection succeed; do not
+rotate proxies, use stealth patches or repeatedly retry a blocked page.

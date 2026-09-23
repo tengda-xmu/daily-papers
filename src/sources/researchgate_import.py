@@ -4,10 +4,10 @@ import csv
 import json
 import os
 import re
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from src.models import RawRecord, SourceStatus, in_date_window
+from src.models import RawRecord, SourceStatus, in_date_window, parse_date
 
 
 class ResearchGateImportAdapter:
@@ -24,6 +24,7 @@ class ResearchGateImportAdapter:
 
     def fetch(self, since: datetime, until: datetime) -> list[RawRecord]:
         records: list[RawRecord] = []
+        timestamps, failed_pages = [], 0
         try:
             for path in self.paths:
                 if not path.exists():
@@ -35,10 +36,32 @@ class ResearchGateImportAdapter:
                 elif suffix in (".bib", ".bibtex"):
                     records.extend(self.parse_bibtex(text))
                 else:
-                    records.extend(self.parse_json(json.loads(text)))
+                    payload = json.loads(text)
+                    records.extend(self.parse_json(payload))
+                    if isinstance(payload, dict):
+                        stamp = parse_date(payload.get("exported_at"))
+                        if stamp:
+                            timestamps.append(stamp)
+                        failures = payload.get("failed_pages", 0)
+                        if type(failures) is int and failures > 0:
+                            failed_pages += failures
+            imported = len(records)
             records = [r for r in records if in_date_window(r.published_at, since, until)]
-            if records:
-                self._status = SourceStatus(self.name, "ok", len(records))
+            if imported:
+                message = f"本地连接器已导入 {imported} 条元数据，本期符合日期范围 {len(records)} 条。"
+                status = "ok" if records else "no_data"
+                if timestamps:
+                    latest = max(timestamps)
+                    china = timezone(timedelta(hours=8))
+                    message += f" 最近同步：{latest.astimezone(china):%m-%d %H:%M}（北京时间）。"
+                    now = until if until.tzinfo else until.replace(tzinfo=timezone.utc)
+                    if now - latest > timedelta(days=3):
+                        status = "partial"
+                        message += " 导出已超过 3 天，请检查本机定时任务或重新登录。"
+                if failed_pages:
+                    status = "partial"
+                    message += f" {failed_pages} 个页面访问失败，已保留其余结果。"
+                self._status = SourceStatus(self.name, status, len(records), message)
             elif not any(path.exists() for path in self.paths):
                 self._status = SourceStatus(
                     self.name, "configuration_missing", 0,
