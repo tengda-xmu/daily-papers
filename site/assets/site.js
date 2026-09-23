@@ -112,7 +112,7 @@
     const open = button.getAttribute('aria-expanded') !== 'true';
     button.setAttribute('aria-expanded', String(open));
     panel.hidden = !open;
-    button.firstChild.nodeValue = open ? '收起详情' : '摘要与笔记';
+    button.firstChild.nodeValue = open ? '收起详情' : (button.dataset.label || '摘要与笔记');
     $('span', button).textContent = open ? '−' : '＋';
   }));
   function openAnchor(hash) {
