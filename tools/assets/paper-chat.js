@@ -24,7 +24,7 @@
   const dialog = document.createElement('dialog');
   dialog.className = 'paper-chat';
   dialog.setAttribute('aria-labelledby', 'chat-heading');
-  dialog.innerHTML = `<div class="chat-shell">
+  dialog.innerHTML = `<div class="chat-width-resizer" role="separator" tabindex="0" aria-orientation="vertical" aria-label="调整对话侧栏宽度" aria-controls="chat-shell" title="左右拖动调整宽度；双击恢复默认"></div><div class="chat-shell" id="chat-shell">
     <header class="chat-header"><div class="chat-heading-row"><h2 id="chat-heading">Codex 论文对话</h2><button class="chat-close" type="button" aria-label="关闭对话">×</button></div><p class="chat-paper-title"></p><p class="chat-status" role="status">未连接本机 Codex</p><div class="chat-model-row"><label for="chat-model">模型</label><select id="chat-model" aria-describedby="chat-model-help" disabled><option value="">连接后加载可用模型</option></select></div><p class="chat-model-help" id="chat-model-help">选择将用于下一次发送。</p></header>
     <section class="chat-connect"><p>先运行项目中的“启动论文助手.cmd”，再粘贴本次启动的配对码。</p><div class="chat-pair-row"><input type="password" autocomplete="off" aria-label="本机配对码" placeholder="本机配对码"><button class="chat-button" type="button" data-chat-action="connect">连接</button></div><p class="chat-local-help"><a class="chat-local-link" target="_blank" rel="noopener noreferrer">在本机打开论文助手</a> · 电脑须保持运行</p></section>
     <section class="chat-documents" aria-label="论文资料">
@@ -33,7 +33,10 @@
       <details><summary>阅读依据：摘要与本站解读</summary><p class="chat-document-note">文件仅保存在本机，最多 20 MB / 300 页。</p><button type="button" class="text-button" data-chat-action="fulltext">获取网页全文</button></details>
       <input type="file" accept="application/pdf,.pdf" hidden>
     </section>
-    <div class="chat-messages" aria-label="对话记录"></div>
+    <div class="chat-workspace">
+    <div class="chat-messages" id="chat-reading-pane" aria-label="对话记录"></div>
+    <div class="chat-height-resizer" role="separator" tabindex="0" aria-orientation="horizontal" aria-label="调整对话阅读区域高度" aria-controls="chat-reading-pane" title="上下拖动调整阅读区域；双击恢复默认"><span aria-hidden="true"></span><small aria-hidden="true">拖动调整阅读区域</small></div>
+    <div class="chat-bottom">
     <div class="chat-history-actions"><button class="text-button" type="button" data-chat-action="export">导出对话</button><button class="text-button" type="button" data-chat-action="export-pdf">导出 PDF</button><button class="text-button" type="button" data-chat-action="clear">清除本机记录</button></div>
     <form class="chat-composer">
       <div class="chat-shortcuts"><button class="chat-button" type="button" data-mode="summary">总结论文</button><button class="chat-button" type="button" data-mode="question" aria-pressed="true">深入提问</button><button class="chat-button" type="button" data-mode="translate">中英翻译</button><button class="chat-button" type="button" data-mode="figure">解释配图</button></div>
@@ -42,6 +45,7 @@
       <textarea aria-label="向 Codex 提问" aria-describedby="chat-mode-help" maxlength="12000"></textarea>
       <div class="chat-form-footer"><label class="chat-pages-label">PDF 页码 <input class="chat-pages" aria-label="PDF 页码" placeholder="如 1-3,5"></label><div><button class="chat-button" type="button" data-chat-action="stop" hidden>停止</button> <button class="chat-send" type="submit">发送问题</button></div></div><p class="chat-notice" role="status">回答使用你的 Codex 账号额度。</p>
     </form>
+    </div></div>
   </div>`;
   document.body.append(dialog);
   const $ = (selector) => dialog.querySelector(selector);
@@ -49,6 +53,95 @@
   const notice = (text) => { $('.chat-notice').textContent = text; };
   const documentNotice = (text, state = '') => { $('.chat-document-status').textContent = text; $('.chat-document-status').dataset.state = state; };
   const endpoint = (suffix = '') => `/api/papers/${paperId}${suffix}`;
+  const refreshLayout = setupLayout();
+  function setupLayout() {
+    const storageKey = 'daily-papers-chat-layout';
+    const widthHandle = $('.chat-width-resizer'), heightHandle = $('.chat-height-resizer');
+    const workspace = $('.chat-workspace'), reading = $('.chat-messages');
+    const layout = { width: null, ratio: null };
+    try {
+      const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
+      if (Number.isFinite(saved?.width) && saved.width > 0) layout.width = saved.width;
+      if (Number.isFinite(saved?.ratio) && saved.ratio > 0 && saved.ratio < 1) layout.ratio = saved.ratio;
+    } catch { /* A blocked or invalid preference must not prevent opening chat. */ }
+    const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+    const save = () => { try { localStorage.setItem(storageKey, JSON.stringify(layout)); } catch {} };
+    const bounds = (axis) => axis === 'width'
+      ? { min: Math.min(360, window.innerWidth), max: Math.min(1200, window.innerWidth) }
+      : { min: 100, max: Math.max(100, workspace.clientHeight - heightHandle.offsetHeight - 140) };
+    function refresh() {
+      if (!dialog.open) return;
+      const wide = window.innerWidth > 640;
+      const width = bounds('width');
+      if (layout.width !== null && wide) dialog.style.setProperty('--chat-width', `${clamp(layout.width, width.min, width.max)}px`);
+      else dialog.style.removeProperty('--chat-width');
+      widthHandle.tabIndex = wide ? 0 : -1;
+      const height = bounds('height');
+      if (layout.ratio !== null) {
+        const available = workspace.clientHeight - heightHandle.offsetHeight;
+        reading.style.flex = `0 0 ${clamp(available * layout.ratio, height.min, height.max)}px`;
+        $('.chat-bottom').style.flex = '1 1 0';
+      } else {
+        reading.style.removeProperty('flex');
+        $('.chat-bottom').style.removeProperty('flex');
+      }
+      for (const [handle, range, value] of [[widthHandle, width, dialog.getBoundingClientRect().width], [heightHandle, height, reading.getBoundingClientRect().height]]) {
+        handle.setAttribute('aria-valuemin', String(Math.round(range.min)));
+        handle.setAttribute('aria-valuemax', String(Math.round(range.max)));
+        handle.setAttribute('aria-valuenow', String(Math.round(value)));
+        handle.setAttribute('aria-valuetext', `${Math.round(value)} 像素`);
+      }
+    }
+    function change(axis, value) {
+      const range = bounds(axis);
+      value = clamp(value, range.min, range.max);
+      if (axis === 'width') layout.width = value;
+      else layout.ratio = value / (workspace.clientHeight - heightHandle.offsetHeight);
+      refresh();
+    }
+    let drag = null;
+    function finish(event) {
+      if (!drag || (event?.pointerId !== undefined && event.pointerId !== drag.pointerId)) return;
+      const previous = drag; drag = null;
+      dialog.classList.remove('chat-resizing-width', 'chat-resizing-height');
+      if (previous.handle.hasPointerCapture(previous.pointerId)) previous.handle.releasePointerCapture(previous.pointerId);
+      save();
+    }
+    for (const [handle, axis] of [[widthHandle, 'width'], [heightHandle, 'height']]) {
+      handle.addEventListener('pointerdown', event => {
+        if (event.button !== 0 || (axis === 'width' && window.innerWidth <= 640)) return;
+        event.preventDefault(); finish(); handle.focus({ preventScroll: true });
+        drag = { axis, handle, pointerId: event.pointerId, x: event.clientX, y: event.clientY,
+          start: axis === 'width' ? dialog.getBoundingClientRect().width : reading.getBoundingClientRect().height };
+        handle.setPointerCapture(event.pointerId);
+        dialog.classList.add(`chat-resizing-${axis}`);
+      });
+      handle.addEventListener('pointermove', event => {
+        if (!drag || drag.pointerId !== event.pointerId) return;
+        change(axis, drag.start + (axis === 'width' ? drag.x - event.clientX : event.clientY - drag.y));
+      });
+      for (const type of ['pointerup', 'pointercancel', 'lostpointercapture']) handle.addEventListener(type, finish);
+      const reset = () => { if (axis === 'width') layout.width = null; else layout.ratio = null; refresh(); save(); };
+      handle.addEventListener('dblclick', reset);
+      handle.addEventListener('keydown', event => {
+        const direction = axis === 'width' ? { ArrowLeft: 1, ArrowRight: -1 } : { ArrowDown: 1, ArrowUp: -1 };
+        if (!(event.key in direction) && !['Home', 'End', 'Enter'].includes(event.key)) return;
+        event.preventDefault();
+        if (event.key === 'Enter') { reset(); return; }
+        const range = bounds(axis), value = axis === 'width' ? dialog.getBoundingClientRect().width : reading.getBoundingClientRect().height;
+        change(axis, event.key === 'Home' ? range.min : event.key === 'End' ? range.max : value + direction[event.key] * (event.shiftKey ? 50 : 20));
+        save();
+      });
+    }
+    window.addEventListener('resize', () => { finish(); refresh(); });
+    window.addEventListener('blur', () => finish());
+    dialog.addEventListener('close', () => finish());
+    // Header wrapping, mode changes and browser zoom all change the free space.
+    const observer = new ResizeObserver(refresh);
+    observer.observe(workspace);
+    observer.observe(reading);
+    return refresh;
+  }
   function chosenModel() { return availableModels.find(m => m.id === $('#chat-model').value); }
   function updateModelHint() {
     const selected = chosenModel();
@@ -339,6 +432,7 @@
     $('.chat-paper-title').textContent = title || '选择一篇论文开始';
     $('.chat-local-link').href = `${base}/?paper=${encodeURIComponent(id || '')}`;
     if (!dialog.open) dialog.showModal();
+    refreshLayout();
     if (token) await connect();
     else { $('.chat-connect').hidden = false; $('.chat-messages').replaceChildren(); status('未连接本机 Codex'); }
   }
