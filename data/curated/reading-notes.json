@@ -244,6 +244,253 @@
         ],
         "analyzed_at": "2026-09-22T23:53:46.557522+00:00"
       }
+    },
+    {
+      "paper": {
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s41524-026-02175-x",
+        "doi": "10.1038/s41524-026-02175-x",
+        "title": "TrussGPT: large language model-driven inverse design framework for truss metamaterials",
+        "venue": "npj Computational Materials",
+        "authors": [
+          "Lin, Jiaoxuan",
+          "Zhang, Bowen",
+          "Ma, Teng",
+          "Dong, Hengji",
+          "Huang, Anfeng",
+          "Zhao, Tianhao",
+          "Yang, Hongwei",
+          "Zhang, Weizhe",
+          "Wang, Changguo",
+          "He, Hui",
+          "Liu, Yuanpeng"
+        ],
+        "published_at": "2026-06-04",
+        "landing_url": "https://www.nature.com/articles/s41524-026-02175-x",
+        "oa_url": "https://www.nature.com/articles/s41524-026-02175-x",
+        "abstract": "TrussGPT combines large language model interaction, graph tokenization and conditional structural generation for inverse design of truss metamaterials.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        }
+      },
+      "analysis": {
+        "title_zh": "TrussGPT：从自然语言需求到桁架超材料逆向设计",
+        "summary": "TrussGPT 将自然语言交互、桁架编码和条件生成连接起来。对结构设计研究，关键启发是把需求理解、候选生成和力学校核分别评价：语言回答正确、几何能够解码，并不意味着结构在目标工况下满足性能与可靠性约束。",
+        "recommendation": "与大模型驱动结构生成式设计直接相关。建议沿着“需求—结构表示—性能验证”三条线阅读，并单独检查分布外目标及多性能约束。",
+        "deep_read": {
+          "problem": "研究问题是如何让工程需求进入可计算的结构空间。论文以桁架超材料为对象，将语言交互与逆向生成结合。解读：真正需要验证的是需求能否被准确映射为目标、约束和结构参数，而不只是交互界面是否流畅。",
+          "method": "作者采用桁架与序列双向转换、条件 Transformer 生成以及语言交互模块。解读：可将其理解为语义层和结构生成层的分工；迁移到具体工程时，应先明确两层交换的数据契约，确保单位、载荷与边界条件完整。",
+          "innovation": "解读：把可解析的结构表示放在语言模型与几何之间，有助于让输出可检查、可重建。比较这类方法时，建议拆开考察语言理解、候选多样性与目标命中率，避免将聊天能力的改善混同为力学性能的提高。",
+          "findings": "论文报告较高的结构有效率，同时在全文讨论稀疏目标区域的偏差。解读：有效率描述生成表示是否可用，不能替代每个候选的力学验算；平均误差也会掩盖少量偏差较大的结构，应查看目标分区和误差尾部。",
+          "limitations": "解读：规则单元、预设节点及训练分布限定了问题边界。若应用于真实构件，还需检查连接细节、制造误差和失效模式；不能直接把理想几何上的性能匹配理解为疲劳寿命或失效概率已经得到保证。",
+          "connection": "建议在你的生成式设计平台中，将大模型用于整理需求，将结构生成器用于提出候选，将有限元和可靠性模块用于独立验收。每次生成保存目标、几何、模型版本与验证结果，便于复现成功和失败的设计。",
+          "next_steps": "建议先在固定材料用量和相同计算预算下比较传统优化与条件生成，再逐步加入制造偏差和载荷随机性。除最优解外，记录满足约束的候选比例、尾部误差和重复生成的稳定性，以判断工程收益。"
+        },
+        "analysis_status": "ready",
+        "analysis_basis": "full_text",
+        "analysis_kind": "editorial",
+        "analysis_sources": [
+          "https://www.nature.com/articles/s41524-026-02175-x"
+        ],
+        "analyzed_at": "2026-09-23T01:02:51.215289+00:00"
+      }
+    },
+    {
+      "paper": {
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s44387-026-00102-5",
+        "doi": "10.1038/s44387-026-00102-5",
+        "title": "AgenticSciML: collaborative multi-agent systems for emergent discovery in scientific machine learning",
+        "venue": "npj Artificial Intelligence",
+        "authors": [
+          "Jiang, Qile",
+          "Karniadakis, George"
+        ],
+        "published_at": "2026-04-30",
+        "landing_url": "https://www.nature.com/articles/s44387-026-00102-5",
+        "oa_url": "https://www.nature.com/articles/s44387-026-00102-5",
+        "abstract": "AgenticSciML uses LLM-based multi-agent collaboration, method retrieval and evolutionary evaluation to develop scientific machine learning models for physics-informed and operator learning problems.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        }
+      },
+      "analysis": {
+        "title_zh": "AgenticSciML：多智能体协作探索物理学习模型与求解策略",
+        "summary": "AgenticSciML 让多个智能体围绕建模方案开展提议、批评、实现和评价。它对结构分析的启发是将模型选择变成可追溯的计算实验；能否获得可靠收益，取决于评价指标、独立验证和总计算预算，而不取决于智能体数量本身。",
+        "recommendation": "适合作为智能体驱动物理代理模型开发的方法参考；论文以科学计算基准为主，迁移到结构疲劳与可靠性需要重新建立工程验证。",
+        "deep_read": {
+          "problem": "科学计算模型的构建通常需要反复选择网络结构、物理约束和训练策略。本文尝试让智能体协同探索这些组合。解读：它关注的是建模方法的搜索，可为结构代理模型开发提供启发，但不等于直接完成工程设计。",
+          "method": "框架将方案提出、批评、代码实现、结果评价和知识检索分为不同角色，并通过演化过程改进候选。解读：若移植到现有求解流程，应让数值验证的输出成为共同依据，避免角色之间只在语言层面相互认可。",
+          "innovation": "解读：可复用的研究记忆应同时保存失败方案、消融结果和误差分析。单纯积累成功提示词容易形成选择偏差；把未奏效的策略及适用条件保留下来，才能使后续检索真正减少重复试错。",
+          "findings": "文中在六类科学计算任务上比较演化方案与初始单智能体方案，改进量以损失比值表示。解读：误差下降倍数不是计算加速倍数；评估时还应计入候选训练和搜索成本，避免把更多预算的收益全归因于协作。",
+          "limitations": "作者讨论了知识库覆盖、推理可靠性和演化计算开销。解读：工程场景还需保留独立测试条件，防止搜索过程不断适应同一验证集；如果求解器本身存在误差，智能体可能优化到错误的数值目标。",
+          "connection": "建议用于组织结构代理模型、物理约束学习和失效边界采样的比较实验。让智能体解释试验结果并提出下一轮候选，但以独立有限元计算、概率校准和危险区域误差作为验收依据，而不是让模型自评。",
+          "next_steps": "建议先做单智能体、双角色和完整协作流程的等预算比较，再逐步增加检索与记忆模块。记录重复运行方差、失败成本和边界工况表现，检验协作收益是否稳定，再考虑用于更昂贵的多物理场问题。"
+        },
+        "analysis_status": "ready",
+        "analysis_basis": "full_text",
+        "analysis_kind": "editorial",
+        "analysis_sources": [
+          "https://www.nature.com/articles/s44387-026-00102-5"
+        ],
+        "analyzed_at": "2026-09-23T01:02:51.215289+00:00"
+      }
+    },
+    {
+      "paper": {
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s41378-026-01322-0",
+        "doi": "10.1038/s41378-026-01322-0",
+        "title": "Fine-tuned multimodal large language model for autonomous state cognition system of shape-recognition 6-bar tensegrity integrated with flexible sensors",
+        "venue": "Microsystems & Nanoengineering",
+        "authors": [
+          "Mao, Zebing",
+          "Wang, Jianhui",
+          "Zhang, Jianhua",
+          "Ohgi, Junji",
+          "Zheng, Yanqiu",
+          "Peng, Yanhong",
+          "Zhao, Luyang",
+          "Su, Qi",
+          "Huang, Weidi",
+          "Xu, Bing"
+        ],
+        "published_at": "2026-06-10",
+        "landing_url": "https://www.nature.com/articles/s41378-026-01322-0",
+        "oa_url": "https://www.nature.com/articles/s41378-026-01322-0",
+        "abstract": "Fine-tuned multimodal large language models combine flexible sensor observations and shape reconstruction for structural state monitoring and fault diagnosis in a six-bar tensegrity system.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        }
+      },
+      "analysis": {
+        "title_zh": "多模态大模型与柔性传感融合的张拉整体结构状态诊断",
+        "summary": "研究把传感、形状重建与大模型解释连接在一个张拉整体试验系统中。对智能运维，值得借鉴的是让自然语言解释建立在测量与状态估计之上；实际部署仍须分别评估测量误差、诊断漏报和解释是否忠实于证据。",
+        "recommendation": "与大模型驱动结构健康监测直接相关，建议重点检查物理状态如何进入语言模型，以及诊断置信度能否对应可校验的测量证据。",
+        "deep_read": {
+          "problem": "论文关注六杆张拉整体结构的状态感知，尝试连接形状重建、告警和语言交互。解读：运维系统不能止步于输出异常标签，还要说明异常发生在哪个部件、有哪些观测支持，以及何时应交由人员复核。",
+          "method": "系统以柔性传感和时序模型支撑形状重建，再由微调的多模态语言模型解释状态和故障。解读：两个环节需要分别验证；形状估计是否准确和文字解释是否正确，是不同的误差来源，应分别保留测试指标。",
+          "innovation": "解读：把物理状态转换为可查询、可解释的信息，是这项集成工作对运维的主要启发。进一步研究可围绕证据绑定展开，让每条诊断说明关联测点、时间和模型输出，并允许用户追查产生判断的具体依据。",
+          "findings": "文中断裂示例给出某类故障约 94% 的诊断置信度。解读：这是示例中的输出置信度，不能改写为整体测试准确率；可靠的结论仍需独立样本、混淆矩阵及概率校准，并区分传感器故障与结构损伤。",
+          "limitations": "解读：试验平台和故障演示不能自动代表桥梁、风机等长期服役结构。传感器漂移、温湿度变化、网络缺测及多故障并发都可能改变推断，应在迁移前分别评估，不能依靠一段自然语言解释消除不确定性。",
+          "connection": "建议将其作为你的智能运维系统的分层范例：测量和物理模型提供证据，大模型负责组织解释，诊断阈值与维护决策独立管理。对于高风险异常，保留人工复核和追加检测路径，并明确尚未证实的假设。",
+          "next_steps": "建议用已有监测平台做盲测：屏蔽部分传感器、加入环境变化，再比较仅信号模型和加入大模型解释后的效果。除分类表现外，统计无依据陈述、关键测量遗漏和故障漏报，评价解释层是否提供实际价值。"
+        },
+        "analysis_status": "ready",
+        "analysis_basis": "full_text",
+        "analysis_kind": "editorial",
+        "analysis_sources": [
+          "https://www.nature.com/articles/s41378-026-01322-0"
+        ],
+        "analyzed_at": "2026-09-23T01:02:51.215289+00:00"
+      }
+    },
+    {
+      "paper": {
+        "source": "arXiv",
+        "source_id": "https://arxiv.org/abs/2608.07978v1",
+        "doi": "10.48550/arxiv.2608.07978",
+        "title": "Verication-driven closed-loop multi-agent large language modelframework for code-compliant structural design",
+        "venue": "arXiv（预印本）",
+        "authors": [
+          "Jianbin Luo",
+          "Weibin Lin",
+          "Yiran Lin",
+          "Qing Wei",
+          "Wei Guo"
+        ],
+        "published_at": "2026-08-08",
+        "landing_url": "https://arxiv.org/abs/2608.07978v1",
+        "oa_url": "https://arxiv.org/html/2608.07978v1",
+        "abstract": "A multi-agent large language model workflow uses independent finite-element checks and code-compliance feedback to repair structural designs under fixed topology.",
+        "source_score": 0.62,
+        "raw_metadata": {
+          "provider": "arXiv",
+          "version": "2608.07978v1",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        }
+      },
+      "analysis": {
+        "title_zh": "用外部力学校核驱动多智能体结构设计的闭环修正",
+        "summary": "这篇预印本将结构计算和规范检查作为智能体修正设计的反馈。它适合与子刊中的生成模型对照阅读：生成候选只是起点，工程可信度还来自独立校核、约束处理及失败记录；文中的效果仅对应已测试的结构和规范范围。",
+        "recommendation": "作为智能体结构设计的扩展阅读，重点分析外部验证如何约束模型修改；本文为 arXiv 预印本，尚不能视作已完成同行评审的工程结论。",
+        "deep_read": {
+          "problem": "一次生成的结构方案可能在几何、参数或验算方面存在错误。本文尝试用外部计算结果推动修正。解读：智能体的作用更适合定位为组织设计迭代，最终验收仍要依赖可复算的模型、明确的约束和工程判断。",
+          "method": "方法结合有限元检查与双阶段反馈，先修复违规，再优化综合质量，并提供规范条款追踪。解读：每轮修改应保留输入、计算结果和变更原因，才能区分真正纠正问题与仅仅改变评价口径的情况。",
+          "innovation": "解读：生成端与验收端的分离可降低自我确认风险。研究时应让验证工具独立于语言解释，并用同一批未见算例比较开环生成、自我修正和外部反馈，检查提升是否来自可复核的约束信号。",
+          "findings": "预印本报告五类结构、四十四个算例上的规范符合率由 56.8% 提高至 98.6%。解读：这不是随机荷载下的可靠度，也不意味着覆盖所有规范条款；需要结合任务划分、失败项及独立验证理解该指标。",
+          "limitations": "作者将适用范围限定在若干平面线弹性体系及固定拓扑的参数修正。解读：若缺陷来自拓扑或非线性失效机制，调整截面未必有效；综合评价分数本身也不应同时充当唯一的优化目标和最终证据。",
+          "connection": "建议在你的结构生成式设计中建立独立验收器，统一检查几何、边界条件、结构响应与约束，再将失败项返回智能体。若研究可靠性优化，应额外引入随机变量和失效概率计算，而不是用规范通过率替代。",
+          "next_steps": "建议先在熟悉的梁或框架算例上验证闭环是否保留载荷、单位及约束，再故意加入无法修复的拓扑缺陷。评价修复成功率之外，也记录错误接受、无效迭代和失败退出，确认系统知道何时停止并请求复核。"
+        },
+        "analysis_status": "ready",
+        "analysis_basis": "full_text",
+        "analysis_kind": "editorial",
+        "analysis_sources": [
+          "https://arxiv.org/html/2608.07978v1"
+        ],
+        "analyzed_at": "2026-09-23T01:02:51.215289+00:00"
+      }
+    },
+    {
+      "paper": {
+        "source": "arXiv",
+        "source_id": "https://arxiv.org/abs/2605.23754v2",
+        "doi": "10.48550/arxiv.2605.23754",
+        "title": "LLM-driven design of physics-constrained constitutive models: two agents are better than one",
+        "venue": "arXiv（预印本）",
+        "authors": [
+          "Marius Tacke",
+          "Matthias Busch",
+          "Kian Abdolazizi",
+          "Jonas Eichinger",
+          "Kevin Linka",
+          "Roland Aydin",
+          "Christian Cyron"
+        ],
+        "published_at": "2026-05-22",
+        "landing_url": "https://arxiv.org/abs/2605.23754v2",
+        "oa_url": "https://arxiv.org/html/2605.23754v2",
+        "abstract": "LLM-based Creator and Inspector agents generate constitutive models and audit physical constraints, with tests on rubber and soft materials. Version 2 was revised on 2026-09-01.",
+        "source_score": 0.62,
+        "raw_metadata": {
+          "provider": "arXiv",
+          "version": "2605.23754v2",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        }
+      },
+      "analysis": {
+        "title_zh": "生成与审查双智能体协作构建满足物理约束的本构模型",
+        "summary": "这篇预印本将本构模型生成与物理约束审查分开，适合从模型层面思考结构分析自动化。对于疲劳可靠性研究，拟合数据、通过有限数值检查和适用于实际服役仍是不同层次，需要逐步增加独立加载路径和失效机制验证。",
+        "recommendation": "适合作为疲劳与可靠性方向的本构建模方法参考。解读依据 2026 年 9 月修订的 v2；首次投稿为 5 月，保留原始日期并明确预印本身份。",
+        "deep_read": {
+          "problem": "有限试验数据通常不能覆盖材料全部受力状态，生成模型可能拟合良好却违反物理要求。本文将模型提出和审查分为两个角色。解读：这使本构自动化的评价从单一拟合误差转向数据一致性与物理可接受性。",
+          "method": "Creator 提出本构模型，Inspector 审查九类物理约束并反馈修改；论文另用采样的变形、旋转和扰动进行数值验证。解读：语言审查与独立数值测试应区分，前者提出理由，后者提供可复核证据。",
+          "innovation": "解读：双角色设计的价值在于形成不同的检查目标，而非简单重复提问。对于本构模型，应把能量表达、参数约束和适用加载范围写成明确检查项，同时防止两个角色共享相同的错误前提。",
+          "findings": "作者报告两个模型配置的数值检查通过比例分别由 90% 到 95%、47% 到 60%。解读：改进幅度依赖模型和任务，也仍存在未通过的输出；有限状态采样通过不能解释为对全部连续状态的数学证明。",
+          "limitations": "解读：文中示例主要涉及橡胶及软材料，不能直接外推到金属循环塑性或疲劳损伤。若缺少路径依赖、耗散和损伤演化的验证，就不能把静态响应拟合或物理检查结果当作寿命预测精度。",
+          "connection": "建议在你的疲劳分析中借鉴生成与检查的分工，把数据适配、物理约束和数值稳定性分别验收。语言模型可协助整理候选表达式及检查报告，参数辨识和独立加载验证仍交给可重复的计算流程。",
+          "next_steps": "建议先从已有、具有明确物理约束的材料模型出发，对比单角色与双角色生成，再用未参与生成的加载路径验证。后续若扩展至循环损伤，应增加耗散、累积损伤及跨工况检验，并报告失效案例。"
+        },
+        "analysis_status": "ready",
+        "analysis_basis": "full_text",
+        "analysis_kind": "editorial",
+        "analysis_sources": [
+          "https://arxiv.org/html/2605.23754v2"
+        ],
+        "analyzed_at": "2026-09-23T01:02:51.215289+00:00"
+      }
     }
   ]
 }

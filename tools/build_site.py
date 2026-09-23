@@ -17,6 +17,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 from src.catalog import (JOURNALS, SOURCE_CATALOG, STATE_LABELS, TOPIC_CATALOG,
                          VENUE_GROUPS, paper_facets, source_state, string_list)
+from src.research_focus import focus_tags
 
 DATA = ROOT / "data"
 OUT = ROOT / "site"
@@ -151,12 +152,16 @@ def paper_card(paper: dict, tier: str, rank: int = 0) -> str:
                                 for i, link in enumerate(paper.get("analysis_sources") or []))
     provenance = f'<p class="analysis-provenance">{basis}。解读与建议不代表作者结论。 {evidence_links}</p>' if ready else ""
     journal_badge = '<span class="journal-priority">CNS 子刊</span>' if facets["venue_group"] == "CNS 子刊" else ""
+    if source == "arXiv" or str(doi).lower().startswith("10.48550/arxiv."):
+        journal_badge += '<span class="publication-type">预印本版本</span>'
+    method_badges = "".join(f'<span class="method-focus">{esc(tag)}</span>'
+                           for tag in focus_tags(title, paper.get("abstract", "")))
     return f'''
 <article class="paper {tier}" data-sources="{esc(json.dumps(facets['source_ids'], ensure_ascii=False))}"
  data-topics="{esc(json.dumps(topics, ensure_ascii=False))}" data-venue="{esc(facets['venue_group'])}"
  data-journal="{esc(facets['journal'])}" data-search="{esc(search)}" data-rank="{rank}"
  data-date="{esc(paper.get('published_at'))}">
-  <div class="paper-meta"><span class="source">{esc(SOURCE_LABELS.get(source, source))}</span><span>{esc(str(paper.get('published_at') or '')[:10])}</span>{journal_badge}</div>
+  <div class="paper-meta"><span class="source">{esc(SOURCE_LABELS.get(source, source))}</span><span>{esc(str(paper.get('published_at') or '')[:10])}</span>{journal_badge}{method_badges}</div>
   <h3 class="{translated_class.strip()}">{title_html}</h3>
   <p class="bibliography"><span class="authors">{esc(short_authors)}</span>{venue_line}</p>
   <p class="abstract">{esc(preview)}</p>
@@ -261,12 +266,14 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
     cns_window = ""
     if policy.get("core_requires_chinese_analysis"):
         days = int(policy.get("cns_lookback_days", 180))
-        reading_policy = f"CNS 子刊优先 · 精选近 {days} 天论文 · 点击“中文精读”查看详细分析"
-        cns_window = f" CNS 专项回溯 {days} 天，每日更新。"
+        focus = " · 侧重大模型与智能体" if policy.get("within_venue_priority") else ""
+        reading_policy = f"CNS 子刊优先{focus} · 精选近 {days} 天论文"
+        cns_window = f" CNS 专项与已有精读回溯 {days} 天，每日更新。"
     archive_notice = f'<p class="archive-notice">正在阅读 {esc(archive_date)} 归档。<a href="../">返回最新一期</a></p>' if archive_date else ""
     content = template(
         "daily.html", title="每日论文推荐", day=esc(issue), generated=esc(generated),
         reading_policy=esc(reading_policy), cns_window=esc(cns_window),
+        extended_policy="每篇均有完整中文精读，点击论文下方展开。" if policy.get("extended_requires_chinese_analysis") else "",
         archive_notice=archive_notice, history_url="./" if archive_date else "archive/", manual_update_url=MANUAL_UPDATE_URL,
         notice=notice, source_options="".join(source_options), health_label=f"{ok} / {adapter_count} 类来源正常",
         topic_options=topic_options, group_options=group_options, journal_options=journal_options,

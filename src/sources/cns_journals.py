@@ -29,11 +29,13 @@ class CNSJournalAdapter(CrossrefAdapter):
         start = until - timedelta(days=days)
         records, failures, completed = [], [], 0
         journals = self.config["journals"]
-        for index, journal in enumerate(journals):
+        queries = [*self.config.get("focus_queries", []), self.config["query"]]
+        searches = [(journal, query) for query in queries for journal in journals]
+        for index, (journal, query) in enumerate(searches):
             if index:
                 time.sleep(2)
             params = {"filter": f"issn:{journal['issn']},from-pub-date:{start.date()},until-pub-date:{until.date()}",
-                      "query": self.config["query"], "rows": 30}
+                      "query": query, "rows": 30}
             url = "https://api.crossref.org/works?" + urlencode(params)
             headers = {"User-Agent": "daily-papers/1.0 (https://github.com/tengda-xmu/daily-papers)"}
             try:
@@ -59,7 +61,7 @@ class CNSJournalAdapter(CrossrefAdapter):
         records = self._finish(records, start, until)
         if failures:
             self._status = SourceStatus(self.name, "partial" if records else "error", len(records),
-                                        f"{completed}/{len(journals)} journals; " + "; ".join(failures))
+                                        f"{completed}/{len(searches)} journal queries; " + "; ".join(failures))
         else:
-            self._status.message = f"Crossref ISSN queries: {completed} journals; window {days} days"
+            self._status.message = f"Crossref ISSN queries: {completed} searches across {len(journals)} journals; window {days} days"
         return records

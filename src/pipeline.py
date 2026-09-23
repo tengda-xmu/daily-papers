@@ -25,6 +25,7 @@ from src.venues import classify_venue, venue_priority
 from src.catalog import paper_facets
 from src.settings import load_env
 from src.reading_notes import cached_analysis, curated_records, valid_analysis, save_analysis
+from src.research_focus import focus_tags, focus_priority
 
 load_env()
 
@@ -135,11 +136,16 @@ def classify(record: RawRecord) -> RawRecord:
                        "remaining useful life", "condition monitoring", "health monitoring", "运维", "故障诊断"))
     design = has(("structural", "structure", "structures", "composite", "composites", "metamaterials", "topology optimization", "topological optimization",
                   "mechanical design", "结构", "拓扑")) and has(TOPICS["generative_design"])
+    mechanics_method = bool(focus_priority(record)) and has((
+        "scientific machine learning", "constitutive model", "constitutive models",
+        "finite element", "finite-element", "physics-informed neural networks",
+    ))
+    design = design or mechanics_method
     fatigue = has(("structural fatigue", "fatigue life", "fatigue crack", "fracture mechanics",
                    "damage tolerance", "probabilistic fatigue", "structural reliability",
                    "fatigue strength", "疲劳寿命", "结构疲劳", "疲劳可靠性"))
     fatigue = fatigue or (has(("fatigue",)) and has(("grain", "pores", "alloy", "microstructure", "microstructures", "steel", "crack")))
-    ai = has(("ai", "llm", "agent", "machine learning", "deep learning", "neural network", "neural networks",
+    ai = bool(focus_priority(record)) or has(("ai", "llm", "agent", "machine learning", "deep learning", "neural network", "neural networks",
               "artificial intelligence", "large language model", "generative", "surrogate model",
               "kriging", "bayesian", "physics-informed", "人工智能", "机器学习", "深度学习"))
     record.topic_tags = [name for name, match in (
@@ -153,6 +159,7 @@ def _sort_key(record: RawRecord) -> tuple:
     published = parse_date(record.published_at)
     return (
         venue_priority(record.venue),
+        focus_priority(record),
         len(record.topic_tags),
         bool(record.abstract),
         published or datetime.min.replace(tzinfo=timezone.utc),
@@ -312,34 +319,41 @@ def run_pipeline(
     max_core = _read_setting("MAX_CORE", 5)
     max_extended = _read_setting("MAX_EXTENDED", 5)
     papers: list[dict] = []
-    core: list[dict] = []
+    ready: list[dict] = []
+    target = max_core + max_extended
     llm_attempts = 0
     for record in ranked:
         data = record.to_dict()
         data["id"] = record_id(record)
         data.update(paper_facets(data))
+        data["focus_tags"] = focus_tags(record.title, record.abstract)
         analysis = cached_analysis(record)
-        if (not analysis and len(core) < max_core and llm_attempts < max_core
+        if (not analysis and len(ready) < target and llm_attempts < target
                 and os.getenv("LLM_API_KEY", "").strip() and len(record.abstract.strip()) >= 80):
             llm_attempts += 1
             analysis = _llm_summary(record)
         data.update(analysis or fallback_summary(record))
-        if len(core) < max_core and valid_analysis(data):
-            core.append(data)
+        if valid_analysis(data):
+            ready.append(data)
         papers.append(data)
-    core_ids = {paper["id"] for paper in core}
-    remaining = [paper for paper in papers if paper["id"] not in core_ids]
+    core = ready[:max_core]
+    extended = ready[max_core:target]
+    selected_ids = {paper["id"] for paper in core + extended}
+    remaining = [paper for paper in papers if paper["id"] not in selected_ids]
     payload = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "since": since.isoformat(),
         "until": until.isoformat(),
         "core": core,
-        "extended": remaining[:max_extended],
-        "papers": core + remaining,
+        "extended": extended,
+        "papers": core + extended + remaining,
         "source_status": statuses,
         "selection_policy": {"priority": "CNS 子刊 > CNS 正刊 > 其他相关期刊",
-                             "core_requires_chinese_analysis": True, "cns_lookback_days": cns_days},
+                             "within_venue_priority": "大模型与智能体优先",
+                             "core_requires_chinese_analysis": True,
+                             "extended_requires_chinese_analysis": True, "cns_lookback_days": cns_days},
         "analysis_status": {"ready_core": len(core), "target_core": max_core,
+                            "ready_extended": len(extended), "target_extended": max_extended,
                             "llm_configured": bool(os.getenv("LLM_API_KEY", "").strip()),
                             "llm_attempts": llm_attempts,
                             "pending": sum(not valid_analysis(paper) for paper in papers)},

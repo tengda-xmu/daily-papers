@@ -40,4 +40,19 @@ def test_partial_cns_failure_keeps_other_journal_results(monkeypatch):
     monkeypatch.setattr("src.sources.cns_journals.time.sleep", lambda _: None)
     records = a.fetch(datetime(2026, 8, 1), datetime(2026, 9, 23))
     assert len(records) == 1 and a.status.status == "partial"
-    assert "1/2 journals" in a.status.message and "HTTP 503" in a.status.message
+    assert "1/2 journal queries" in a.status.message and "HTTP 503" in a.status.message
+
+
+def test_cns_search_runs_agent_queries_before_general_queries(monkeypatch):
+    config = {"lookback_days": 180, "query": "structural fatigue",
+              "focus_queries": ["large language model multi-agent"],
+              "journals": [{"name": "npj Artificial Intelligence", "issn": "3005-1460"}]}
+    a = CNSJournalAdapter(config=config)
+    queries = []
+    def respond(url, headers):
+        queries.append(parse_qs(urlsplit(url).query)["query"][0])
+        return {"message": {"items": []}}
+    monkeypatch.setattr(a, "_get_json", respond)
+    monkeypatch.setattr("src.sources.cns_journals.time.sleep", lambda _: None)
+    a.fetch(datetime(2026, 8, 1), datetime(2026, 9, 23))
+    assert queries == ["large language model multi-agent", "structural fatigue"]

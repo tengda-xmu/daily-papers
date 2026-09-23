@@ -12,6 +12,7 @@ from urllib.request import Request, urlopen
 
 from src.models import RawRecord, SourceStatus, in_date_window
 from src.venues import CNS_CORE_JOURNALS, CNS_SUBJOURNALS
+from src.research_focus import FOCUS_QUERIES
 
 
 class SerpApiScholarAdapter:
@@ -22,11 +23,7 @@ class SerpApiScholarAdapter:
         self.api_key = api_key if api_key is not None else os.getenv("SERPAPI_API_KEY", "")
         configured_queries = [value.strip() for value in os.getenv("SCHOLAR_QUERIES", "").split("||") if value.strip()]
         cns = " OR ".join(f'\"{journal}\"' for journal in CNS_CORE_JOURNALS + CNS_SUBJOURNALS)
-        topic_queries = queries or configured_queries or [
-            "AI predictive maintenance",
-            "generative structural design reliability",
-            "AI structural fatigue reliability",
-        ]
+        topic_queries = queries or configured_queries or list(FOCUS_QUERIES)
         self.queries = topic_queries + [f"({cns}) {query}" for query in topic_queries]
         self.timeout = timeout
         self.cache_dir = Path(cache_dir)

@@ -63,7 +63,8 @@ def test_run_pipeline_writes_publishable_payload(tmp_path):
         output_path=output,
     )
     assert payload["core"] == []  # Unreviewed records cannot fill a core slot.
-    assert payload["extended"][0]["topic_tags"] == ["ai_maintenance"]
+    assert payload["extended"] == []  # Extended reading has the same quality gate.
+    assert payload["papers"][0]["topic_tags"] == ["ai_maintenance"]
     assert output.exists()
     assert json.loads(output.read_text(encoding="utf-8"))["papers"][0]["summary"]
 
@@ -144,10 +145,10 @@ def test_cns_family_precedes_main_journals_and_more_topic_matches():
 def test_curated_core_notes_are_detailed_chinese_and_match_real_papers():
     from src.reading_notes import curated_entries, curated_records, valid_analysis
     entries = curated_entries()
-    assert len(entries) == 5
+    assert len(entries) >= 10
     assert all(valid_analysis(row["analysis"]) for row in entries)
-    assert all(classify_venue(row["paper"]["venue"]) == "CNS 子刊" for row in entries)
-    assert len(curated_records(datetime(2026, 9, 23, tzinfo=timezone.utc), 180)) == 5
+    assert sum(classify_venue(row["paper"]["venue"]) == "CNS 子刊" for row in entries) >= 8
+    assert len(curated_records(datetime(2026, 9, 23, tzinfo=timezone.utc), 180)) >= 10
     assert curated_records(datetime(2027, 9, 23, tzinfo=timezone.utc), 180) == []
 
 
@@ -162,16 +163,21 @@ def test_core_keeps_complete_chinese_notes_when_live_source_fails(monkeypatch, t
     monkeypatch.delenv("LLM_API_KEY", raising=False)
     monkeypatch.setenv("CNS_LOOKBACK_DAYS", "180")
     monkeypatch.setenv("MAX_CORE", "5")
+    monkeypatch.setenv("MAX_EXTENDED", "5")
     result = run_pipeline(until=datetime(2026, 9, 23, tzinfo=timezone.utc), output_path=tmp_path / "daily.json")
     assert result["source_status"]["fixture failure"]["status"] == "error"
     assert len(result["core"]) == 5 and all(valid_analysis(p) for p in result["core"])
+    assert len(result["extended"]) == 5 and all(valid_analysis(p) for p in result["extended"])
+    assert all(p["focus_tags"] for p in result["core"][:3])
+    assert not ({p["id"] for p in result["core"]} & {p["id"] for p in result["extended"]})
     assert all(p["venue_group"] == "CNS 子刊" for p in result["core"])
     assert {tag for p in result["core"] for tag in p["topic_tags"]} == {"ai_maintenance", "generative_design", "fatigue_reliability"}
     assert result["analysis_status"]["llm_attempts"] == 0
     rendered = render(result)
-    assert rendered.count('class="reading-notes"') == 5
-    assert rendered.count('class="analysis-provenance"') == 5
-    assert rendered.count('class="original-title"') == 5
+    assert rendered.count('class="reading-notes"') == 10
+    assert rendered.count('class="analysis-provenance"') == 10
+    assert rendered.count('class="original-title"') == 10
+    assert rendered.count('class="publication-type"') == 2
     assert all(len(p["deep_read"]) == len(NOTE_FIELDS) for p in result["core"])
 
 

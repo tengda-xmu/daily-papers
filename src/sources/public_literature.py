@@ -19,12 +19,12 @@ from urllib.request import Request, urlopen
 import xml.etree.ElementTree as ET
 
 from src.models import RawRecord, SourceStatus, in_date_window
+from src.research_focus import FOCUS_QUERIES
 
 
 TOPIC_QUERIES = (
-    "machine learning predictive maintenance",
-    "generative structural design reliability",
-    "machine learning structural fatigue",
+    *FOCUS_QUERIES,
+    "machine learning structural fatigue reliability",
 )
 
 
@@ -70,6 +70,7 @@ class ArxivAdapter(PublicLiteratureAdapter):
     name = "arXiv"
 
     def __init__(self, queries=None, **kwargs):
+        self.include_focus = queries is None
         super().__init__(queries=queries or ["predictive maintenance", "fault diagnosis",
                          "generative design", "topology optimization", "structural fatigue"], **kwargs)
 
@@ -77,6 +78,10 @@ class ArxivAdapter(PublicLiteratureAdapter):
         records: list[RawRecord] = []
         try:
             query = " OR ".join(f'all:"{term}"' for term in self.queries)
+            if self.include_focus:
+                query += (' OR ((all:"large language model" OR all:LLM OR all:agentic OR all:"multi-agent")'
+                          ' AND (all:"structural design" OR all:constitutive OR all:"fault diagnosis"'
+                          ' OR all:"scientific machine learning"))')
             params = urlencode({"search_query": query, "start": 0, "max_results": 50,
                                 "sortBy": "submittedDate", "sortOrder": "descending"}, quote_via=quote)
             contact = os.getenv("ARXIV_CONTACT", "").strip() or "https://github.com/tengda-xmu/daily-papers"
