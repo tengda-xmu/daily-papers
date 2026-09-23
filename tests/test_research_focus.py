@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 
 from src.models import RawRecord, SourceStatus
 from src.pipeline import rank, run_pipeline
-from src.reading_notes import curated_entries
+from src.reading_notes import cached_analysis, curated_entries, valid_analysis
 from src.research_focus import focus_tags
 
 
@@ -30,6 +30,34 @@ def test_irrelevant_llms_do_not_enter_the_recommendation_pool():
                RawRecord("test", "network", "Structural analysis of language model neural networks"),
                RawRecord("test", "mechanics", "Multi-agent LLMs for physics-constrained constitutive models")]
     assert [r.source_id for r in rank(records)] == ["mechanics"]
+
+
+def test_scholar_excerpt_preserves_verified_metadata_and_reading_notes():
+    paper = next(row["paper"] for row in curated_entries()
+                 if row["paper"]["doi"] == "10.48550/arxiv.2608.07978")
+    verified = RawRecord.from_mapping(paper)
+    snippet = (
+        "… Trustworthiness is the key to bringing LLM-driven structural design into practice. "
+        "This paper proposes a closedloop multi-agent framework whose feedback comes not from the model’s …"
+    )
+    assert len(snippet) > len(verified.abstract)
+    scholar = RawRecord(
+        "Google Scholar", "scholar-id", verified.title,
+        authors=["J Luo", "W Lin"], abstract=snippet, published_at="2026",
+        venue="J Luo et al. - arXiv preprint, 2026 - arxiv.org",
+        landing_url="https://arxiv.org/abs/2608.07978",
+        oa_url="https://arxiv.org/pdf/2608.07978", source_score=.75,
+    )
+    result = rank([scholar, verified])
+    assert len(result) == 1
+    merged = result[0]
+    assert merged.abstract == paper["abstract"]
+    assert merged.authors == paper["authors"]
+    assert merged.published_at == paper["published_at"]
+    assert merged.venue == paper["venue"]
+    assert merged.topic_tags == ["generative_design"]
+    assert merged.raw_metadata["sources"] == ["Google Scholar", "arXiv"]
+    assert valid_analysis(cached_analysis(merged))
 
 
 def test_model_budget_covers_extended_and_does_not_retry_cached_notes(monkeypatch):

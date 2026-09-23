@@ -70,9 +70,14 @@ def _identities(record: RawRecord) -> set[tuple[str, str]]:
     return keys or {("source_id", f"{record.source}:{record.source_id}".casefold())}
 
 
-def _quality(record: RawRecord) -> tuple[int, int, int, float]:
+def _quality(record: RawRecord) -> tuple[int, int, int, int, int, float]:
+    # Scholar supplies query-dependent, truncated snippets. Their length does
+    # not make them more complete than a publisher abstract or verified notes.
+    search_excerpt = record.source == "Google Scholar"
     return (
-        bool(record.abstract) * len(record.abstract),
+        bool(record.abstract),
+        bool(record.abstract) and not search_excerpt,
+        len(record.abstract),
         bool(record.landing_url) + bool(record.oa_url),
         bool(record.authors) + bool(record.venue),
         record.source_score,
