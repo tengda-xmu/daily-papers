@@ -36,7 +36,9 @@ ELSEVIER_INSTTOKEN=
 
 可用 `ELSEVIER_QUERIES` 覆盖默认查询，多个查询使用 `||` 分隔。
 
-系统还会自动执行 CNS 正刊（Nature、Science、Cell）和相关子刊专项查询；CNS 论文默认使用 30 天回溯窗口，避免因每日短窗口错过近期论文。可通过 `CNS_LOOKBACK_DAYS` 调整。
+系统还会自动执行 CNS 正刊（Nature、Science、Cell）和相关子刊专项查询；CNS 论文默认使用 180 天回溯窗口，兼顾方向匹配与近期研究，可通过 `CNS_LOOKBACK_DAYS` 调整。常规来源仍检索近 30 天，每日更新不代表每篇论文都在当天发表。
+
+无需 Elsevier 密钥的 `CNS 子刊专项` 适配器通过 Crossref 按 ISSN 单独检索 Nature Communications、Communications Engineering、npj Computational Materials、Nature Machine Intelligence、Science Advances、Science Robotics 和 Cell Reports Physical Science。查询词与期刊列表位于 `config/cns-search.json`，单刊失败会保留其他期刊结果。
 
 ### Google Scholar
 
@@ -81,13 +83,19 @@ docker compose -f docker-compose.wechat.yml up -d
 
 ## 摘要与推送
 
-配置 OpenAI 兼容接口后，核心 5 篇会生成中文精读字段；没有模型密钥时自动退化为摘要规则：
+相关性筛选后，推荐顺序为 **CNS 子刊 → CNS 正刊 → 其他相关期刊**，同层级再比较方向匹配、资料完整性及发表时间。核心最多 5 篇、扩展最多 5 篇；核心必须具备完整中文解读，不用英文摘要或占位说明补足数量。
+
+每篇核心提供中文标题、导读与推荐理由，展开“中文精读”可阅读研究问题、方法路线、创新比较、证据发现、局限边界、方向关联和后续研究建议。解读注明原文链接及全文或摘要依据，并区分作者结果与分析建议。
+
+`data/curated/reading-notes.json` 保存已依据公开论文整理的 5 篇解读，按实际发表日期进入推荐窗口。为后续新论文自动生成中文精读，配置 OpenAI 兼容接口：
 
 ```text
 LLM_API_KEY=
 LLM_BASE_URL=https://api.openai.com/v1
 LLM_MODEL=gpt-4o-mini
 ```
+
+自动解读仅依据可取得的摘要，每次运行最多尝试 5 篇，通过中文与字段完整性检查后存入 `data/analyses/`，相同论文证据可复用缓存。资料变化会重新生成。未配置模型、响应不合格或生成失败时继续采集论文，保留已完成的精读，新论文作为扩展候选；因此未授权模型时，不能保证每天新增 5 篇中文精读。
 
 企业微信机器人配置：
 
@@ -145,7 +153,7 @@ python -m tools.configure --check
 网页沿用腾达个人主页的深蓝导航与白底学术排版，采用居中的单栏阅读布局。首页提供：
 
 - 搜索与 CNS 正刊、CNS 子刊快捷筛选；来源、主题、期刊组和具体期刊收在“筛选”中；
-- 核心推荐与扩展阅读分区，默认显示短摘要，“摘要与笔记”中可展开完整摘要、精读要点和复制引用；
+- 核心推荐与扩展阅读分区，默认显示短导读，核心的“中文精读”展开七部分分析、原始英文题名、依据与引用；
 - 来源接入状态与重点期刊目录默认折叠，点击展开；历史归档保持同样的阅读布局；
 - 响应式导航、键盘跳转、空状态提示和适合打印的版式。
 

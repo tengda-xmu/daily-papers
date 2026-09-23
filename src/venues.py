@@ -11,7 +11,7 @@ def classify_venue(value: str) -> str:
 
 
 def venue_priority(value: str) -> float:
-    return {'CNS 正刊': 1.0, 'CNS 子刊': 0.8}.get(classify_venue(value), 0.0)
+    return {'CNS 子刊': 3.0, 'CNS 正刊': 2.0}.get(classify_venue(value), 1.0 if classify_venue(value) else 0.0)
 
 
 def cns_query() -> str:

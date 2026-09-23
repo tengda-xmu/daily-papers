@@ -107,11 +107,11 @@ def paper_card(paper: dict, tier: str, rank: int = 0) -> str:
     recommendation = paper.get("recommendation") or ""
     deep = paper.get("deep_read") or {}
     deep_items = [(label, deep.get(key)) for key, label in (
-        ("problem", "研究问题"), ("method", "研究方法"), ("findings", "主要发现"),
-        ("limitations", "研究局限"), ("connection", "方向关联"),
+        ("problem", "研究问题"), ("method", "方法与路线"), ("innovation", "创新与比较"), ("findings", "证据与发现"),
+        ("limitations", "局限与边界"), ("connection", "方向关联"), ("next_steps", "后续研究建议"),
     ) if deep.get(key)]
     deep_html = ""
-    if tier == "core" and deep_items:
+    if deep_items and (tier == "core" or paper.get("analysis_status") == "ready"):
         deep_html = '<dl class="reading-notes">' + "".join(
             f'<div><dt>{label}</dt><dd>{esc(value)}</dd></div>' for label, value in deep_items
         ) + '</dl>'
@@ -127,9 +127,10 @@ def paper_card(paper: dict, tier: str, rank: int = 0) -> str:
     if doi:
         actions += f'<a href="https://doi.org/{esc(doi)}" target="_blank" rel="noopener noreferrer">DOI</a>'
     actions += f'<button type="button" class="text-button copy-citation" data-citation="{esc(citation)}">复制引用</button>'
-    title_html = f'<a href="{url}" target="_blank" rel="noopener noreferrer">{esc(title)}</a>' if url != "#" else esc(title)
+    display_title = paper.get("title_zh") or title
+    title_html = f'<a href="{url}" target="_blank" rel="noopener noreferrer">{esc(display_title)}</a>' if url != "#" else esc(display_title)
     search = " ".join(str(value or "") for value in
-                      (title, authors, venue, summary, paper.get("abstract"), doi))
+                      (title, display_title, authors, venue, summary, paper.get("abstract"), doi))
     venue_line = f'<span class="venue">{esc(venue)}</span>' if venue else ""
     recommendation_html = f'<p class="recommendation"><strong>阅读建议</strong>{esc(recommendation)}</p>' if recommendation else ""
     preview = str(summary)
@@ -140,17 +141,27 @@ def paper_card(paper: dict, tier: str, rank: int = 0) -> str:
         preview = preview.rstrip(" ,.;，。；") + "…"
     panel_id = f"paper-details-{tier}-{rank}"
     full_authors = f'<p class="full-authors"><strong>作者</strong>{esc(authors)}</p>' if len(author_names) > 3 else ""
+    ready = paper.get("analysis_status") == "ready"
+    summary_label = "中文导读" if ready else "摘要"
+    note_label = "中文精读" if ready else "摘要与笔记"
+    translated_class = " translated" if paper.get("title_zh") else ""
+    original = f'<p class="original-title" lang="en">{esc(title)}</p>' if paper.get("title_zh") else ""
+    basis = "依据公开全文整理" if paper.get("analysis_basis") == "full_text" else "依据公开摘要整理，未核验全文细节"
+    evidence_links = " · ".join(f'<a href="{safe_url(link)}" target="_blank" rel="noopener noreferrer">论文依据 {i + 1}</a>'
+                                for i, link in enumerate(paper.get("analysis_sources") or []))
+    provenance = f'<p class="analysis-provenance">{basis}。解读与建议不代表作者结论。 {evidence_links}</p>' if ready else ""
+    journal_badge = '<span class="journal-priority">CNS 子刊</span>' if facets["venue_group"] == "CNS 子刊" else ""
     return f'''
 <article class="paper {tier}" data-sources="{esc(json.dumps(facets['source_ids'], ensure_ascii=False))}"
  data-topics="{esc(json.dumps(topics, ensure_ascii=False))}" data-venue="{esc(facets['venue_group'])}"
  data-journal="{esc(facets['journal'])}" data-search="{esc(search)}" data-rank="{rank}"
  data-date="{esc(paper.get('published_at'))}">
-  <div class="paper-meta"><span class="source">{esc(SOURCE_LABELS.get(source, source))}</span><span>{esc(str(paper.get('published_at') or '')[:10])}</span></div>
-  <h3>{title_html}</h3>
+  <div class="paper-meta"><span class="source">{esc(SOURCE_LABELS.get(source, source))}</span><span>{esc(str(paper.get('published_at') or '')[:10])}</span>{journal_badge}</div>
+  <h3 class="{translated_class.strip()}">{title_html}</h3>
   <p class="bibliography"><span class="authors">{esc(short_authors)}</span>{venue_line}</p>
   <p class="abstract">{esc(preview)}</p>
-  <div class="paper-tools">{primary_action}<button type="button" class="text-button paper-toggle" aria-expanded="false" aria-controls="{panel_id}">摘要与笔记<span aria-hidden="true">＋</span></button></div>
-  <div class="paper-detail-panel" id="{panel_id}" hidden><p class="detail-label">摘要</p><p class="full-abstract">{esc(summary)}</p>{recommendation_html}{full_authors}{deep_html}<div class="tags">{tags}</div><div class="paper-actions">{actions}</div></div>
+  <div class="paper-tools">{primary_action}<button type="button" class="text-button paper-toggle" data-label="{note_label}" aria-expanded="false" aria-controls="{panel_id}">{note_label}<span aria-hidden="true">＋</span></button></div>
+  <div class="paper-detail-panel" id="{panel_id}" hidden>{original}{provenance}<p class="detail-label">{summary_label}</p><p class="full-abstract">{esc(summary)}</p>{recommendation_html}{full_authors}{deep_html}<div class="tags">{tags}</div><div class="paper-actions">{actions}</div></div>
 </article>'''
 
 
@@ -174,6 +185,7 @@ def source_directory(statuses: dict, counts: Counter, root: str = "./") -> str:
                     "not_run": "尚无本轮采集记录。", "error": "采集失败，请查看运行记录。",
                     "access_denied": "授权或访问受限，请检查来源设置。",
                     "quota_exhausted": "接口限流或配额受限，等待恢复或调整配额。",
+                    "partial": "部分期刊采集完成，其余请求失败；已有结果保留。",
                 }.get(state, "请查看运行记录了解详情。")
             if state in ("ok", "no_data") and "RSS fallback" in (source_state(item, statuses)[1] or ""):
                 message = "通过 arXiv 官方 RSS 获取；检索 API 本轮受限。"
@@ -244,9 +256,17 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
     elif not all_papers:
         notice = '<div class="notice"><span class="status-dot" aria-hidden="true"></span><p>本期尚无符合条件的论文，请查看来源状态或历史归档。</p><a href="#sources">查看来源状态</a></div>'
     cns_children = sum(j["group"] == "CNS 子刊" for j in JOURNALS)
+    policy = payload.get("selection_policy") or {}
+    reading_policy = "点击论文下方按钮展开摘要与阅读笔记。"
+    cns_window = ""
+    if policy.get("core_requires_chinese_analysis"):
+        days = int(policy.get("cns_lookback_days", 180))
+        reading_policy = f"CNS 子刊优先 · 精选近 {days} 天论文 · 点击“中文精读”查看详细分析"
+        cns_window = f" CNS 专项回溯 {days} 天，每日更新。"
     archive_notice = f'<p class="archive-notice">正在阅读 {esc(archive_date)} 归档。<a href="../">返回最新一期</a></p>' if archive_date else ""
     content = template(
         "daily.html", title="每日论文推荐", day=esc(issue), generated=esc(generated),
+        reading_policy=esc(reading_policy), cns_window=esc(cns_window),
         archive_notice=archive_notice, history_url="./" if archive_date else "archive/", manual_update_url=MANUAL_UPDATE_URL,
         notice=notice, source_options="".join(source_options), health_label=f"{ok} / {adapter_count} 类来源正常",
         topic_options=topic_options, group_options=group_options, journal_options=journal_options,

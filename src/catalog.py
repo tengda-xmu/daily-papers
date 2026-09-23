@@ -94,6 +94,7 @@ def paper_facets(paper: dict) -> dict:
 
 
 STATE_LABELS = {
+    'partial': '部分完成',
     'ok': '本轮正常', 'configuration_missing': '配置缺失', 'not_run': '本轮未运行',
     'no_data': '本轮无数据', 'error': '抓取失败', 'access_denied': '访问受限',
     'quota_exhausted': '限流或配额受限', 'authorization_required': '需要 API 授权',

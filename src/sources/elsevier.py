@@ -50,10 +50,10 @@ class ElsevierAdapter:
                     body = response.read().decode("utf-8-sig")
                 records.extend(self.parse_body(body))
             try:
-                cns_days = max(0, int(os.getenv("CNS_LOOKBACK_DAYS", "30")))
+                cns_days = max(0, int(os.getenv("CNS_LOOKBACK_DAYS", "180") or "180"))
             except ValueError:
-                cns_days = 30
-            cns_since = since - timedelta(days=cns_days)
+                cns_days = 180
+            cns_since = until - timedelta(days=cns_days)
             records = [r for r in records if (
                 in_date_window(r.published_at, since, until)
                 or (classify_venue(r.venue) in ('CNS 正刊', 'CNS 子刊') and in_date_window(r.published_at, cns_since, until))

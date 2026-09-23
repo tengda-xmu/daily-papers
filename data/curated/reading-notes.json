@@ -1,0 +1,249 @@
+{
+  "description": "Codex依据所列公开论文资料整理；推断和后续研究建议不代表作者结论。",
+  "entries": [
+    {
+      "paper": {
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s44172-026-00752-y",
+        "doi": "10.1038/s44172-026-00752-y",
+        "title": "Mechanics-informed risk-aware learning for multiaxial structural reliability with Bayesian calibration",
+        "venue": "Communications Engineering",
+        "authors": [
+          "Zhang, Gaofeng",
+          "Yu, Xuanrui",
+          "Song, Anxiang",
+          "Liu, Hanguang",
+          "Lin, Xinhong",
+          "Zhang, Xuyijin",
+          "Wang, Qianling",
+          "Wang, Wentao",
+          "Zhang, Pandeng"
+        ],
+        "published_at": "2026-08-14",
+        "landing_url": "https://www.nature.com/articles/s44172-026-00752-y",
+        "oa_url": "https://www.nature.com/articles/s44172-026-00752-y",
+        "abstract": "Machine learning with mechanics-informed features and Bayesian calibration links multiaxial structural response prediction, structural reliability and predictive maintenance.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        }
+      },
+      "analysis": {
+        "title_zh": "融合力学先验与风险感知学习的多轴结构可靠性评估",
+        "summary": "这项研究把力学特征、风险加权和贝叶斯标定串联起来，研究多轴载荷下连接结构的响应预测。值得关注的是：它把高风险样本单独纳入学习目标，并明确区分退化评分与经过标定的失效概率，为可靠性分析与维护决策建立接口。",
+        "recommendation": "与结构可靠性优化和智能运维直接相关。优先阅读风险加权、退化指标定义及概率标定部分，评估其能否接入现有有限元代理模型。",
+        "deep_read": {
+          "problem": "多轴载荷耦合与连接退化使结构响应难以用简单输入描述，而失效附近的样本通常又较少。论文以螺栓连接的转向节装配体为例，研究如何兼顾响应预测、危险状态识别及可靠性决策。",
+          "method": "作者利用动力学和有限元生成载荷与响应数据，以多项式及谐波特征表达载荷耦合，用风险加权提高关键样本的训练贡献，再将应力裕度和预紧力损失组合成退化指标，最后提出贝叶斯概率标定层。",
+          "innovation": "解读：最有借鉴价值的是明确区分三个任务：预测结构响应、排序危险状态、估计失效概率。力学特征改善的是表示能力，风险权重改变的是优化目标，概率标定则解决决策量的解释，三者不能相互替代。",
+          "findings": "作者的仿真测试中，多元线性回归的 R² 从 0.37 提高到 0.96，RMSE 降低约 67%。这一结果针对该数据集的响应预测，不能解释为失效概率估计已经具有同样精度，也不代表所有模型都有相同增益。",
+          "limitations": "原文明示验证主要来自单一装配体的仿真数据。解读：应特别检查高风险区域的覆盖和划分方式，并用真实试验检验概率校准。退化评分本身不是失效概率，多载荷情形的可靠性合成也需要说明相关性假设。",
+          "connection": "建议：在你的结构可靠性优化中，将这类风险加权代理与极限状态函数结合，重点控制失效边界附近的误差；在智能运维中，可让智能体负责组织载荷、模型和检测证据，但保留独立的概率标定与复核环节。",
+          "next_steps": "建议先比较原始特征、力学增强、风险加权三组消融试验，分别评估总体误差、危险区漏判和概率校准。随后用跨工况留出集检验泛化，再讨论是否适合接入可靠性约束优化，而不是仅凭平均拟合优度选择模型。"
+        },
+        "analysis_status": "ready",
+        "analysis_basis": "full_text",
+        "analysis_kind": "editorial",
+        "analysis_sources": [
+          "https://www.nature.com/articles/s44172-026-00752-y"
+        ],
+        "analyzed_at": "2026-09-22T23:53:46.555522+00:00"
+      }
+    },
+    {
+      "paper": {
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s44172-026-00756-8",
+        "doi": "10.1038/s44172-026-00756-8",
+        "title": "Machine learning–driven structural health monitoring of a high-rise building on thick sediments via seismic ambient noise",
+        "venue": "Communications Engineering",
+        "authors": [
+          "Qin, Linpeng",
+          "Guo, Zhen",
+          "Yuan, Tianran",
+          "Peng, Zhen",
+          "Huang, Yu",
+          "Wang, Yun"
+        ],
+        "published_at": "2026-08-14",
+        "landing_url": "https://www.nature.com/articles/s44172-026-00756-8",
+        "oa_url": "https://www.nature.com/articles/s44172-026-00756-8",
+        "abstract": "Interpretable machine learning predicts intermediate-floor dynamics for structural health monitoring using sparse ambient-vibration observations in a high-rise building.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        }
+      },
+      "analysis": {
+        "title_zh": "用环境振动与可解释机器学习实现高层建筑分楼层健康监测",
+        "summary": "论文利用上海一栋高层建筑的环境振动记录，尝试用地下室和屋顶的少量观测预测中间楼层动力特征。其价值在于兼顾监测成本与空间定位能力，但监测指标对楼层变化敏感，并不等于已经证明能够直接识别结构损伤。",
+        "recommendation": "适合智能运维方向关注，尤其是稀疏传感、环境影响解耦和可解释诊断。以下解读依据公开摘要，定量泛化能力仍需查阅完整实验。",
+        "deep_read": {
+          "problem": "建筑整体共振频率可以反映总体刚度变化，却难以定位楼层；逐层干涉分析具有空间信息，但运行和对比成本更高。摘要提出的研究问题是如何用少量传感点保留对中间楼层动态变化的敏感性。",
+          "method": "摘要报告以一栋二十一层建筑的二十二天记录开展分析，利用层间干涉结果建立参考，再用地下室与屋顶的共振、振动方位及极化参数训练 XGBoost，预测中间楼层的动力学特征并分析特征归因。",
+          "innovation": "解读：方法意义在于把较复杂分析得到的空间信息转移到低成本预测模型，而不是把简单模型包装成大模型。它提示运维系统可以把高精度离线分析和轻量在线推断分开设计，并保留中间物理量供工程人员复核。",
+          "findings": "公开摘要指出，两组楼层附近出现约百分之二的风相关速度变化，模型归因也在相应楼层发生转变。这支持空间敏感性的讨论；摘要未给出跨建筑测试或完整误差分布，不能据此断言已实现普适损伤定位。",
+          "limitations": "解读：本次仅取得摘要，无法核实详细训练划分、温度控制及损伤真值。风、温度和土体条件均可能影响响应，应区分环境变化、刚度差异与真实损伤，并检查归因分析是否在独立时间段稳定。",
+          "connection": "建议：你的智能运维框架可以把预测残差、环境信息和物理诊断结果组织成证据链，再由语言模型形成可追溯的巡检解释。语言解释应绑定测点、时间及模型输出，避免把统计异常直接描述为已确认的结构损伤。",
+          "next_steps": "建议以已有监测数据建立跨时间留出试验，比较密集传感与稀疏传感方案，并单独检查极端天气条件下的误报。若要迁移到桥梁或风机，还应重新验证模态特征与测点配置，不能直接复用建筑场景的结论。"
+        },
+        "analysis_status": "ready",
+        "analysis_basis": "abstract",
+        "analysis_kind": "editorial",
+        "analysis_sources": [
+          "https://www.nature.com/articles/s44172-026-00756-8"
+        ],
+        "analyzed_at": "2026-09-22T23:53:46.556523+00:00"
+      }
+    },
+    {
+      "paper": {
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s41467-026-76632-y",
+        "doi": "10.1038/s41467-026-76632-y",
+        "title": "Machine learning-driven optimization of high-velocity impact resistance for three-dimensional biphasic composites",
+        "venue": "Nature Communications",
+        "authors": [
+          "Bu, Lehu",
+          "Wang, Pengfei",
+          "Hao, Sida",
+          "Li, Shan",
+          "Wu, Yangfan",
+          "Wang, Deya",
+          "Liu, Mao",
+          "Luo, Tianzhi",
+          "Xu, Songlin"
+        ],
+        "published_at": "2026-08-15",
+        "landing_url": "https://www.nature.com/articles/s41467-026-76632-y",
+        "oa_url": "https://www.nature.com/articles/s41467-026-76632-y",
+        "abstract": "Machine learning uses a three-dimensional convolutional surrogate for inverse design of mechanical composite structures, with experimental and finite-element validation of dynamic response.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        }
+      },
+      "analysis": {
+        "title_zh": "以三维卷积代理模型优化双相复合结构的动态抗冲击性能",
+        "summary": "研究将实验、有限元和三维卷积网络结合，把软硬两相的空间构型映射到动态响应，并用于逆向设计。它与结构生成式设计的直接联系在于以快速代理探索结构空间，同时保留高保真验证；抗冲击增益仍需与疲劳寿命和失效概率区别对待。",
+        "recommendation": "优先关注结构表示、代理模型与高保真验证的衔接方式，可用于思考生成式设计如何从几何可行性进一步走向力学可行性。",
+        "deep_read": {
+          "problem": "软硬两相构型在动态载荷下会产生复杂的应力传播与局部集中，仅调整相比例不足以决定结构性能。论文研究如何利用空间构型信息，快速预测并改善复合材料的动态承载与应力分布。",
+          "method": "作者把三维构型体素化，以动态实验及有限元数据支撑三维卷积网络训练，再利用预测模型探索性能与构型之间的映射，实现逆向筛选。研究还讨论热输运表现，使结构连通性与多物理性能一并进入评价。",
+          "innovation": "解读：值得借鉴的是在同等相含量下比较空间组织，而非把材料用量增加造成的增益算作算法贡献。对于生成式结构设计，这意味着必须统一资源约束，再比较候选结构的性能、可制造性和高保真验证结果。",
+          "findings": "文中展示的应力均匀性指标由 21.54% 改善至 97.45%；相同硬相比例下，动态承载相对随机设计提高约 22% 至 57%。这些结果受构型、载荷和评价条件限定，不能直接外推为长期疲劳或整机可靠性增益。",
+          "limitations": "解读：应重点核查试样尺度、相材料模型、界面描述以及测试构型是否超出训练分布。代理在已知设计空间中的精度，并不能自动保证生成的新拓扑可信；动态承载能力也不等于循环载荷下的寿命。",
+          "connection": "建议：将生成模型用于提出结构候选，将三维代理用于初筛，再以有限元验证和不确定性估计决定是否接受。若目标是可靠性优化，应额外引入材料波动、制造缺陷及载荷不确定性，形成概率约束而非单一最优性能指标。",
+          "next_steps": "建议先复现固定相比例的比较基线，再检验随机结构、优化结构与生成结构在相同计算预算下的表现。随后使用独立高保真样本评估外推误差，并把疲劳指标作为新增目标，明确区分本文已验证结果与后续扩展。"
+        },
+        "analysis_status": "ready",
+        "analysis_basis": "full_text",
+        "analysis_kind": "editorial",
+        "analysis_sources": [
+          "https://www.nature.com/articles/s41467-026-76632-y"
+        ],
+        "analyzed_at": "2026-09-22T23:53:46.556523+00:00"
+      }
+    },
+    {
+      "paper": {
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s41524-026-02148-0",
+        "doi": "10.1038/s41524-026-02148-0",
+        "title": "Grain-level micromechanical modeling and assessment of fatigue-critical pores using graph neural networks",
+        "venue": "npj Computational Materials",
+        "authors": [
+          "Loiodice, Luca",
+          "Stopka, Krzysztof S.",
+          "Sun, Yixuan",
+          "Lin, Guang",
+          "Sangid, Michael D."
+        ],
+        "published_at": "2026-05-25",
+        "landing_url": "https://www.nature.com/articles/s41524-026-02148-0",
+        "oa_url": "https://www.nature.com/articles/s41524-026-02148-0",
+        "abstract": "Graph neural networks trained on crystal plasticity predict grain-level fatigue indicators and screen fatigue-critical pores in additively manufactured alloy microstructures.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        }
+      },
+      "analysis": {
+        "title_zh": "用晶粒图神经网络筛查增材制造合金中的疲劳关键孔隙",
+        "summary": "GFF-MAP 以晶体塑性数据训练图神经网络，预测晶粒尺度应力与塑性应变能，并据此筛查可能主导疲劳起裂的孔隙。它为昂贵微观计算提供代理方案，但热点筛查与寿命预测是不同任务，安全关键场景尤其需要关注危险孔隙的漏判。",
+        "recommendation": "与结构疲劳和可靠性设计最直接相关。建议重点阅读孔隙关键性判据、极值预测误差和漏判分析，而不只看平均回归指标。",
+        "deep_read": {
+          "problem": "晶体塑性模型能描述微观组织与疲劳起裂之间的联系，但计算代价较高，难以支撑大量缺陷的逐一筛查。论文针对含孔隙的增材制造 IN718 微观结构，研究如何快速识别疲劳相关的局部危险区域。",
+          "method": "作者以晶粒及其相互关系构建图表示，使用晶体塑性结果训练图神经网络代理，预测应力和累积塑性应变能等晶粒尺度量，再判断热点是否位于孔隙邻近晶粒，以评估孔隙的关键性。",
+          "innovation": "解读：从平均材料性能走向局部极值，是疲劳应用中更关键也更困难的一步。预测局部场有助于解释缺陷为什么危险，但它要求模型表达孔隙几何、邻域组织与局部塑性的耦合，不能只依赖孔径等少数统计特征。",
+          "findings": "论文指出，极端值及塑性相关量的预测更困难；孔隙关键性筛查仍可由预测的局部塑性应变能支持。讨论中将部分危险孔隙的漏判与局部量低估联系起来，说明总体拟合效果不能替代面向安全的误差分析。",
+          "limitations": "解读：晶体塑性结果在这里承担训练参考，并非对所有真实材料行为的无误差描述。需要另行检查不同制造过程、载荷路径和组织条件下的适用性；能识别起裂热点，也不代表已经建立了经试验验证的完整寿命模型。",
+          "connection": "建议：在疲劳可靠性设计中，将图代理用于缺陷初筛，并针对模型不确定性较高或预测接近危险边界的样本调用高保真计算。语言模型可以整理微观结构与判据说明，但不应替代局部力学场计算或直接给出寿命承诺。",
+          "next_steps": "建议把漏判率、危险区域召回率和保守性作为独立指标，比较回归后判别与直接分类两种路线。之后考虑风险加权或主动学习优先补充危险孔隙样本，再用独立疲劳试验校核关键性判据和概率校准效果。"
+        },
+        "analysis_status": "ready",
+        "analysis_basis": "full_text",
+        "analysis_kind": "editorial",
+        "analysis_sources": [
+          "https://www.nature.com/articles/s41524-026-02148-0"
+        ],
+        "analyzed_at": "2026-09-22T23:53:46.557522+00:00"
+      }
+    },
+    {
+      "paper": {
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s44172-026-00738-w",
+        "doi": "10.1038/s44172-026-00738-w",
+        "title": "Generative AI empowered inverse design of 3D energetic material structures for customizable combustion",
+        "venue": "Communications Engineering",
+        "authors": [
+          "Li, Wentao",
+          "Zhang, Yiyi",
+          "Zheng, Hanyun",
+          "He, Yunqin",
+          "Liang, Guozhu"
+        ],
+        "published_at": "2026-07-22",
+        "landing_url": "https://www.nature.com/articles/s44172-026-00738-w",
+        "oa_url": "https://www.nature.com/articles/s44172-026-00738-w",
+        "abstract": "Generative inverse design of three-dimensional structures combines a learned geometry representation with diffusion proposals and optimization-based constraint refinement.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        }
+      },
+      "analysis": {
+        "title_zh": "生成式 AI 辅助含能材料三维结构逆向设计的方法启示",
+        "summary": "论文在含能材料场景中讨论如何根据目标响应反求三维几何，将生成模型与优化修正结合。对你的研究更可迁移的是“快速生成候选，再检查约束与性能”的方法组织方式；以下仅依据公开摘要，其结果仍需在承载结构上重新验证。",
+        "recommendation": "作为生成式结构设计的方法参考，重点关注条件生成、几何表示与约束修正之间的分工；迁移到承载结构后，需要重新定义力学目标并完成独立验证。",
+        "deep_read": {
+          "problem": "在逆向设计中，满足目标响应的几何往往不唯一，搜索效率、性能匹配与约束可行性也可能相互冲突。论文用三维结构设计讨论这一矛盾，目标是把数据驱动生成的效率与优化方法的约束处理结合。",
+          "method": "公开摘要介绍了几何表示模型和扩散生成模型的组合，并以优化驱动的后续修正改善目标匹配。这里可确认的是双模型与修正机制的整体框架，具体训练配置、约束实现及实验细节不能由摘要直接推断。",
+          "innovation": "解读：生成网络负责探索多解，优化环节负责修正候选，这种分工比要求单个模型同时保证多样性、精度与可行性更容易审查。对于工程设计，关键应是建立可重复的评价闭环，而不只展示外观新颖的生成样本。",
+          "findings": "摘要称组合方法改善了目标匹配并维持关键约束，但本次可读摘要未提供足以复核的统一定量对比。不能据此填写加速倍数、成功率或结构可靠性提升，仍需查阅全文的评价条件及独立验证结果。",
+          "limitations": "解读：本文应用的物理目标与承载结构不同，不能直接把该场景的性能结论迁移为强度或疲劳优势。特别需要检查生成分布外的几何、约束修正对多样性的影响，以及几何可行和物理可行之间的差距。",
+          "connection": "建议：在梁、支架或机械超材料的生成式设计中借鉴条件生成与验证分工，以质量、刚度和制造约束组织候选评价。若加入可靠性目标，还需要将载荷与材料不确定性显式纳入评价，而非把确定性最优视作可靠设计。",
+          "next_steps": "建议在已有非敏感结构算例上比较单独生成、单独优化和两者结合的效果，使用相同计算预算与独立有限元验证。重点记录可行率、多样性及约束违约情况，再评估是否值得发展成由智能体协调的设计工作流。"
+        },
+        "analysis_status": "ready",
+        "analysis_basis": "abstract",
+        "analysis_kind": "editorial",
+        "analysis_sources": [
+          "https://www.nature.com/articles/s44172-026-00738-w"
+        ],
+        "analyzed_at": "2026-09-22T23:53:46.557522+00:00"
+      }
+    }
+  ]
+}

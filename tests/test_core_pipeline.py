@@ -62,7 +62,8 @@ def test_run_pipeline_writes_publishable_payload(tmp_path):
         adapters=[Adapter()],
         output_path=output,
     )
-    assert payload["core"][0]["topic_tags"] == ["ai_maintenance"]
+    assert payload["core"] == []  # Unreviewed records cannot fill a core slot.
+    assert payload["extended"][0]["topic_tags"] == ["ai_maintenance"]
     assert output.exists()
     assert json.loads(output.read_text(encoding="utf-8"))["papers"][0]["summary"]
 
@@ -90,7 +91,7 @@ def test_catalog_facets_keep_source_and_platform_filters():
 
 def test_pipeline_builds_public_adapters_without_planned_sources():
     names = [adapter.name for adapter in __import__("src.pipeline", fromlist=["build_adapters"]).build_adapters()]
-    assert names == ["Elsevier", "Google Scholar", "ResearchGate", "微信公众号", "arXiv", "OpenAlex", "Crossref", "Semantic Scholar", "PubMed", "Web of Science"]
+    assert names == ["CNS 子刊专项", "Elsevier", "Google Scholar", "ResearchGate", "微信公众号", "arXiv", "OpenAlex", "Crossref", "Semantic Scholar", "PubMed", "Web of Science"]
 
 
 def test_irrelevant_ai_and_biological_design_are_not_recommended():
@@ -107,21 +108,80 @@ def test_empty_adapter_list_does_not_call_live_sources(monkeypatch):
     assert run_pipeline(adapters=[])["papers"] == []
 
 
-def test_llm_empty_optional_settings_use_defaults_and_invalid_url_falls_back(monkeypatch):
+def test_llm_empty_optional_settings_use_defaults_and_invalid_url_falls_back(monkeypatch, tmp_path):
     import io
     import src.pipeline as pipeline
+    from src.reading_notes import NOTE_FIELDS
+    monkeypatch.setattr("src.reading_notes.CACHE", tmp_path)
     monkeypatch.setenv("LLM_API_KEY", "test-key")
     monkeypatch.setenv("LLM_BASE_URL", "")
     monkeypatch.setenv("LLM_MODEL", "")
     calls = []
     def respond(request, timeout):
         calls.append(request)
-        result = {key: "Evidence" for key in ("summary", "method", "recommendation", "problem", "findings", "limitations", "connection")}
+        result = {"title_zh": "基于监测证据的结构可靠性分析", "summary": "本研究关注利用监测数据分析结构响应及其不确定性，并明确区分论文结果与模型推断，应用时还需验证不同工况下的适用范围。",
+                  "recommendation": "适用于研究结构监测与可靠性，并对照原文核查适用条件。",
+                  "deep_read": {key: key + "：" + "这项分析依据公开摘要讨论结构响应与模型不确定性，具体数据、试验设置和跨工况泛化能力仍需结合论文原文进一步核查。" for key in NOTE_FIELDS}}
         return io.BytesIO(json.dumps({"choices": [{"message": {"content": json.dumps(result)}}]}).encode())
     monkeypatch.setattr(pipeline, "urlopen", respond)
-    paper = RawRecord("fixture", "1", "AI maintenance")
-    assert pipeline.summarize(paper)["summary"] == "Evidence"
+    paper = RawRecord("fixture", "1", "AI maintenance", abstract="An engineering study of machine learning and structural reliability with monitoring evidence and explicit uncertainties.", landing_url="https://example.org/paper")
+    result = pipeline.summarize(paper)
+    assert result["analysis_status"] == "ready" and "method" in result["deep_read"]
     assert calls[0].full_url == "https://api.openai.com/v1/chat/completions"
     assert json.loads(calls[0].data)["model"]
     monkeypatch.setenv("LLM_BASE_URL", "invalid")
+    paper.abstract += " Different evidence invalidates the automatic cache."
     assert pipeline.summarize(paper) == fallback_summary(paper)
+
+
+def test_cns_family_precedes_main_journals_and_more_topic_matches():
+    records = [RawRecord("fixture", "multi", "Machine learning structural reliability and generative design for predictive maintenance", venue="Engineering Structures"),
+               RawRecord("fixture", "main", "Neural network for bearing fault diagnosis", venue="Nature"),
+               RawRecord("fixture", "sub", "Neural network for bearing fault diagnosis", authors=["Different author"], venue="Nature Communications")]
+    assert [r.source_id for r in rank(records)] == ["sub", "main", "multi"]
+
+
+def test_curated_core_notes_are_detailed_chinese_and_match_real_papers():
+    from src.reading_notes import curated_entries, curated_records, valid_analysis
+    entries = curated_entries()
+    assert len(entries) == 5
+    assert all(valid_analysis(row["analysis"]) for row in entries)
+    assert all(classify_venue(row["paper"]["venue"]) == "CNS 子刊" for row in entries)
+    assert len(curated_records(datetime(2026, 9, 23, tzinfo=timezone.utc), 180)) == 5
+    assert curated_records(datetime(2027, 9, 23, tzinfo=timezone.utc), 180) == []
+
+
+def test_core_keeps_complete_chinese_notes_when_live_source_fails(monkeypatch, tmp_path):
+    from src.reading_notes import NOTE_FIELDS, valid_analysis
+    from tools.build_site import render
+    class Unavailable:
+        name = "fixture failure"
+        def fetch(self, since, until):
+            raise TimeoutError("fixture timeout")
+    monkeypatch.setattr("src.pipeline.build_adapters", lambda: [Unavailable()])
+    monkeypatch.delenv("LLM_API_KEY", raising=False)
+    monkeypatch.setenv("CNS_LOOKBACK_DAYS", "180")
+    monkeypatch.setenv("MAX_CORE", "5")
+    result = run_pipeline(until=datetime(2026, 9, 23, tzinfo=timezone.utc), output_path=tmp_path / "daily.json")
+    assert result["source_status"]["fixture failure"]["status"] == "error"
+    assert len(result["core"]) == 5 and all(valid_analysis(p) for p in result["core"])
+    assert all(p["venue_group"] == "CNS 子刊" for p in result["core"])
+    assert {tag for p in result["core"] for tag in p["topic_tags"]} == {"ai_maintenance", "generative_design", "fatigue_reliability"}
+    assert result["analysis_status"]["llm_attempts"] == 0
+    rendered = render(result)
+    assert rendered.count('class="reading-notes"') == 5
+    assert rendered.count('class="analysis-provenance"') == 5
+    assert rendered.count('class="original-title"') == 5
+    assert all(len(p["deep_read"]) == len(NOTE_FIELDS) for p in result["core"])
+
+
+def test_invalid_analysis_cannot_be_promoted_to_core():
+    from copy import deepcopy
+    from src.reading_notes import curated_entries, valid_analysis
+    sample = curated_entries()[0]["analysis"]
+    for field, value in [("deep_read", []), ("deep_read", "malformed"),
+                         ("summary", "English abstract only"), ("analysis_sources", ["javascript:alert(1)"]),
+                         ("recommendation", ""), ("analysis_sources", "https://example.org/paper")]:
+        malformed = deepcopy(sample)
+        malformed[field] = value
+        assert not valid_analysis(malformed)
