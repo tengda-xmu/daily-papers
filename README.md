@@ -58,7 +58,11 @@ Scholar 请求带发表年份范围，缓存同时区分查询与年份。GitHub
 
 ### ResearchGate
 
-ResearchGate 采用本地 Playwright 连接器。首次运行会打开浏览器，手动登录后保存本地会话；不会把 Cookies 提交到仓库。
+ResearchGate 支持两条元数据渠道：优先读取近期成功的本地 Playwright 导出；导出缺失、过期或本期无记录时，使用 SerpApi 的 Google Scholar 公开索引。配置已有的 `SERPAPI_API_KEY` 即可启用公开索引，无需新增密钥，也不要求 GitHub Actions 登录 ResearchGate。
+
+公开索引每天默认增加一次查询，覆盖大模型、智能体和三个研究方向，复用现有 Scholar 的 24 小时缓存。结果仅接受 ResearchGate 域名下的论文链接，将索引中的 PDF 地址转换为论文主页，不下载全文。来源状态明确标记“公开索引已接入”；保留索引来源、检索片段和年份精度，不把未知年份标成今日发表，也不把检索片段替代已核验摘要。该渠道不能保证覆盖 ResearchGate 全部内容，亦不表示本地账号已经登录。设 `RESEARCHGATE_PUBLIC_INDEX=0` 可仅使用本地导出。
+
+如需追踪指定作者主页，仍可使用本地连接器。首次运行会打开独立浏览器，手动登录后保存本地会话；普通 Chrome 的登录状态不会自动共享到连接器的 Edge，会话与 Cookies 不提交到仓库。
 
 ```powershell
 python -m pip install -r connectors/researchgate_sync/requirements.txt
@@ -137,7 +141,7 @@ WECHAT_WORK_WEBHOOK_URL
 
 ResearchGate 会话目录、API 密钥和个人登录信息不能提交到 Git。缺失或失败的单个来源不会阻塞其他来源更新，页面会显示对应运行状态。
 
-arXiv、OpenAlex、Crossref、Semantic Scholar 和 PubMed 可使用公开接口；匿名访问可能受到服务商限流。OpenAlex 支持可选的 `OPENALEX_API_KEY` 与 `OPENALEX_MAILTO`，Semantic Scholar 支持 `SEMANTIC_SCHOLAR_API_KEY`。Web of Science 在 Clarivate 开通 Starter API 后设置 `WOS_API_KEY`，可申请试用或机构方案。Elsevier、Google Scholar、ResearchGate 和微信公众号仍分别需要授权或连接器数据。
+arXiv、OpenAlex、Crossref、Semantic Scholar 和 PubMed 可使用公开接口；匿名访问可能受到服务商限流。OpenAlex 支持可选的 `OPENALEX_API_KEY` 与 `OPENALEX_MAILTO`，Semantic Scholar 支持 `SEMANTIC_SCHOLAR_API_KEY`。Web of Science 在 Clarivate 开通 Starter API 后设置 `WOS_API_KEY`，可申请试用或机构方案。Elsevier、Google Scholar 和微信公众号仍分别需要授权或连接器数据；ResearchGate 可复用 SerpApi 公开索引或读取本地导出。
 
 网页的[来源配置指南](https://tengda-xmu.github.io/daily-papers/setup.html)提供每个来源的授权入口和步骤，也可在本地安全输入一个 GitHub Secret：
 

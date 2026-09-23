@@ -20,12 +20,13 @@ class SerpApiScholarAdapter:
     name = "Google Scholar"
 
     def __init__(self, api_key: str | None = None, queries: list[str] | None = None,
-                 timeout: int = 30, cache_dir: str | Path = "data/cache/scholar"):
+                 timeout: int = 30, cache_dir: str | Path = "data/cache/scholar",
+                 include_cns: bool = True):
         self.api_key = api_key if api_key is not None else os.getenv("SERPAPI_API_KEY", "")
         configured_queries = [value.strip() for value in os.getenv("SCHOLAR_QUERIES", "").split("||") if value.strip()]
         cns = " OR ".join(f'\"{journal}\"' for journal in CNS_CORE_JOURNALS + CNS_SUBJOURNALS)
         topic_queries = queries or configured_queries or list(FOCUS_QUERIES)
-        self.queries = topic_queries + [f"({cns}) {query}" for query in topic_queries]
+        self.queries = topic_queries + ([f"({cns}) {query}" for query in topic_queries] if include_cns else [])
         self.timeout = timeout
         self.cache_dir = Path(cache_dir)
         try:
@@ -57,6 +58,11 @@ class SerpApiScholarAdapter:
                     with urlopen(req, timeout=self.timeout) as response:
                         cached = json.loads(response.read().decode("utf-8"))
                     cached = public_metadata(cached, (self.api_key,))
+                    # SerpApi reports a successful empty search in its error
+                    # field. Cache that outcome too, without hiding API errors.
+                    if (cached.get("search_metadata", {}).get("status") == "Success"
+                            and cached.get("error") == "Google hasn't returned any results for this query."):
+                        cached.pop("error")
                     if not cached.get("error"):
                         self._write_cache(cache_key, cached)
                 cached = public_metadata(cached, (self.api_key,))

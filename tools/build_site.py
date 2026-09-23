@@ -31,7 +31,7 @@ SOURCE_LABELS = {item["id"]: item["label"] for item in SOURCE_CATALOG}
 SETUP_HINTS = {
     "Elsevier": "尚未配置 Elsevier 检索授权。",
     "Google Scholar": "尚未配置 Google Scholar 检索服务。",
-    "ResearchGate": "尚未导入本地连接器导出的论文。",
+    "ResearchGate": "需要 SerpApi 公开索引密钥，或导入本地连接器的论文元数据。",
     "微信公众号": "尚未添加公众号订阅地址。",
 }
 AUTH_HINTS = {
@@ -220,7 +220,7 @@ def source_directory(statuses: dict, counts: Counter, root: str = "./") -> str:
             if item["id"] == "Elsevier" and state in ("ok", "no_data") and "STANDARD" in (source_state(item, statuses)[1] or ""):
                 message = "Scopus 标准元数据检索已接入；完整视图需额外授权。"
             connector_message = source_state(item, statuses)[1] or ""
-            if item["id"] == "ResearchGate" and connector_message.startswith("本地连接器已导入"):
+            if item["id"] == "ResearchGate" and connector_message.startswith(("本地连接器已导入", "公开索引已接入")):
                 message = connector_message
             elif kind == "adapter" and state in ("ok", "no_data"):
                 message += f' 本轮获取 {(statuses.get(item["id"]) or {}).get("count", 0)} 条元数据。'

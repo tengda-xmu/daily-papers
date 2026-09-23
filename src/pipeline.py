@@ -14,7 +14,7 @@ from urllib.request import Request, urlopen
 from src.models import RawRecord, SourceStatus, parse_date
 from src.sources.elsevier import ElsevierAdapter
 from src.sources.google_scholar import GoogleScholarAdapter
-from src.sources.researchgate_import import ResearchGateImportAdapter
+from src.sources.researchgate import ResearchGateAdapter
 from src.sources.wechat_rss import WeChatRSSAdapter
 from src.sources.cns_journals import CNSJournalAdapter
 from src.sources.public_literature import (
@@ -73,7 +73,7 @@ def _identities(record: RawRecord) -> set[tuple[str, str]]:
 def _quality(record: RawRecord) -> tuple[int, int, int, int, int, float]:
     # Scholar supplies query-dependent, truncated snippets. Their length does
     # not make them more complete than a publisher abstract or verified notes.
-    search_excerpt = record.source == "Google Scholar"
+    search_excerpt = record.source == "Google Scholar" or record.raw_metadata.get("abstract_kind") == "search_snippet"
     return (
         bool(record.abstract),
         bool(record.abstract) and not search_excerpt,
@@ -116,6 +116,10 @@ def deduplicate(records: Iterable[RawRecord]) -> list[RawRecord]:
                 if not getattr(best, field) and getattr(other, field):
                     setattr(best, field, getattr(other, field))
             for key, value in other.raw_metadata.items():
+                if key in ("abstract_kind", "access_mode", "provider", "date_precision", "publication_summary"):
+                    # These fields describe the chosen record, not every
+                    # index in which a duplicate was discovered.
+                    continue
                 best.raw_metadata.setdefault(key, value)
             best.source_score = max(best.source_score, other.source_score)
         best.raw_metadata["sources"] = sorted(sources)
@@ -269,7 +273,7 @@ def build_adapters() -> list:
         CNSJournalAdapter(),
         ElsevierAdapter(queries=queries or None),
         GoogleScholarAdapter(),
-        ResearchGateImportAdapter(),
+        ResearchGateAdapter(),
         WeChatRSSAdapter(),
         ArxivAdapter(),
         OpenAlexAdapter(),

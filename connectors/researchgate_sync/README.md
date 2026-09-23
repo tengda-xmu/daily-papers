@@ -1,5 +1,19 @@
 # ResearchGate connector
 
+The daily pipeline also supports a public-index fallback through the existing
+`SERPAPI_API_KEY`. It runs one Google Scholar query limited to ResearchGate,
+reuses the year-scoped 24-hour Scholar cache and labels its metadata as
+`public_index`. Indexed PDF URLs are converted to publication landing pages;
+this route never fetches ResearchGate pages or downloads PDFs. It is not an
+account login and is not limited to the author profiles configured below.
+Set `RESEARCHGATE_PUBLIC_INDEX=0` to use local exports only. A fresh successful
+local export takes precedence; absent, stale or empty current-period exports
+fall back to the public index. Missing dates remain unknown and excerpts are
+labelled search snippets, not verified abstracts.
+
+The local connector uses a separate browser profile. Logging into an ordinary
+Chrome window does not authenticate the connector's Edge/Chromium profile.
+
 This is an optional local/VPS collector. Run it interactively once to create a
 browser profile, then schedule low-frequency runs:
 
