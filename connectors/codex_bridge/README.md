@@ -1,0 +1,50 @@
+# 本机 Codex 论文助手
+
+直接使用本机 Codex 的 ChatGPT 登录和账号额度，不需要 `OPENAI_API_KEY`。连接器当前验证版本为 `codex-cli 0.154.0-alpha.6.2`；其他版本先拒绝连接，确认协议及权限兼容后再更新版本常量和测试。
+
+## Windows 使用
+
+1. 双击仓库根目录的 **启动论文助手.cmd**。首次启动会安装此连接器的 Python 依赖，随后打开本机页面并自动配对。
+2. 在本机页面选择论文，即可总结、提问、翻译或解释图片。关闭对话侧栏可看到“复制配对码”按钮。
+3. 如需在公开网站的侧栏使用，点击论文下方的 **Codex 对话**，粘贴本机页面的配对码。配对只对本次启动有效，浏览器会话最长八小时。首次访问可能需要允许浏览器连接本地网络。
+4. 若浏览器阻止在线网站连接本机，使用 **在本机打开论文助手**。此入口与公开页面连接的是同一份对话记录。
+5. 双击 **停止论文助手.cmd** 停止服务；不会退出 VS Code 中的 Codex 登录或终止正在开发网站的对话。
+
+本机入口是 `http://127.0.0.1:43127/`。电脑和连接程序必须运行，仅能从这台电脑使用；不自动向局域网或互联网开放端口。其他电脑/手机仍可正常阅读公开网站。
+
+脚本也可运行：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/start_codex.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/stop_codex.ps1
+```
+
+如登录过期，先在本机终端运行 `codex login`，再点击连接。不在网页里收集 ChatGPT 密码。若找不到 Codex，安装 CLI 或 VS Code 扩展；可用本机环境变量 `PAPER_CODEX_EXE` 指定可执行文件。
+
+## 资料及回答
+
+- 默认只提供摘要、元数据及本站解读；后者明确标为编辑整理，不等于论文原始证据。
+- “获取开放全文”仅访问已知来源的公开 HTTPS 地址；遇到登录墙、限流或不可确认的正文时返回提示，不绕过访问限制。
+- 上传 PDF 最大 20 MB、300 页。原始文件、逐页文本和扫描页图片仅存入 `.local/codex-bridge/documents/`。**分析时，相关文字和图片会交给你账号连接的 Codex 服务，并非离线模型。**
+- 扫描 PDF 总结分批提供全部页，每批最多四张；页数较多时耗时和账号额度使用量也增加。具体提问/翻译时可填写 `1-3,5` 等页码。
+- `P1` 是 PDF 第 1 页（不是排版中的印刷页号）；`S1` 是网页正文第 1 段。点击回答中的引用可对照提取原文；扫描页仍需对照 PDF，模型引文需要人工核查。
+- “解释配图”会发送当前论文的实际配图；也可上传 PDF 并指定最多四页。
+- 更换全文或 PDF 后，新问题建立新上下文，避免旧资料混入；此前对话仍显示在历史中。
+- 清除功能删除这篇论文在连接器中的记录和全部上传资料。Codex 自身的会话记录仍由 Codex 管理；不会声称已删除远端或 Codex 原生历史。
+
+## 实现及边界
+
+Python/FastAPI 仅监听回环地址，用短期 Bearer 会话验证访问并校验 Host/Origin。公开网站地址固定为 `https://tengda-xmu.github.io`。配对码存入被 Git 忽略的私有目录；Windows 启动脚本限制该目录的继承权限，仅授予当前用户和 SYSTEM。在线页面令牌保存在当前标签页；本机页面保存短期令牌以支持新窗口，服务重启或八小时后失效。令牌不进入公开 HTML、日志或仓库。
+
+连接器启动一个独立的 `codex app-server --listen stdio://` 子进程，共享官方登录缓存，但不读取或导出凭据。专用 `paper-reader` 权限仅允许读取空的工作目录、禁止执行工具网络访问；关闭命令、Code Mode、MCP、应用、插件、浏览器、子智能体及记忆等功能开关。线程创建时核验实际权限；所有来自模型的审批请求拒绝，检测到非阅读工具事件则中断。使用账号默认模型与 `medium` 推理强度，避免继承全局 `ultra` 的主动委派行为。浏览器不能指定 RPC 方法、Codex 会话 ID、本机路径或工具权限。
+
+每篇论文映射到自己的线程；连接器 SQLite 保存浏览器历史，Codex 提供连续对话与恢复。一次只生成一个回答；请求 ID 防止重复提交，断开或停止会中断生成并保留已收到的文字。重新启动后可恢复历史；本机论文数据需与网站同步。
+
+本地端点提供配对、连接状态、论文列表/历史、SSE 问答、PDF/开放全文、引用查看、停止和清除，不公开通用 Codex RPC。GitHub Actions 只验证代码和发布静态网页，不运行这个服务或获取本机登录缓存。
+
+```powershell
+python -m pip install -r connectors/codex_bridge/requirements.txt
+python -m pytest tests/test_codex_bridge.py -q
+```
+
+官方参考：[App Server](https://learn.chatgpt.com/docs/app-server)、[登录复用](https://learn.chatgpt.com/docs/auth)。App Server 是实验性接口，Codex 更新后可能需要适配。

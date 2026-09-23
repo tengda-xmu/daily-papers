@@ -79,7 +79,7 @@ def template(name: str, **values) -> str:
 
 def document(content: str, *, title: str, root: str = "./", active: str = "daily") -> str:
     version = hashlib.sha256(
-        (ASSETS / "site.css").read_bytes() + (ASSETS / "site.js").read_bytes()
+        b"".join((ASSETS / name).read_bytes() for name in ("site.css", "site.js", "paper-chat.css", "paper-chat.js"))
     ).hexdigest()[:10]
     return template(
         "page.html", content=content.lstrip(), title=esc(title), root=root, version=version,
@@ -179,6 +179,8 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./") -> str:
     method_badges = "".join(f'<span class="method-focus">{esc(tag)}</span>'
                            for tag in focus_tags(title, paper.get("abstract", "")))
     figure_html = paper_figure(paper, root) if tier == "core" else ""
+    chat_button = (f'<button type="button" class="text-button codex-entry" data-paper-id="{esc(paper["id"])}" '
+                   f'data-paper-title="{esc(display_title)}">Codex 对话</button>') if paper.get("id") else ""
     return f'''
 <article class="paper {tier}" data-sources="{esc(json.dumps(facets['source_ids'], ensure_ascii=False))}"
  data-topics="{esc(json.dumps(topics, ensure_ascii=False))}" data-venue="{esc(facets['venue_group'])}"
@@ -189,7 +191,7 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./") -> str:
   <p class="bibliography"><span class="authors">{esc(short_authors)}</span>{venue_line}</p>
   <p class="abstract">{esc(preview)}</p>
 {figure_html}
-  <div class="paper-tools">{primary_action}<button type="button" class="text-button paper-toggle" data-label="{note_label}" aria-expanded="false" aria-controls="{panel_id}">{note_label}<span aria-hidden="true">＋</span></button></div>
+  <div class="paper-tools">{primary_action}<button type="button" class="text-button paper-toggle" data-label="{note_label}" aria-expanded="false" aria-controls="{panel_id}">{note_label}<span aria-hidden="true">＋</span></button>{chat_button}</div>
   <div class="paper-detail-panel" id="{panel_id}" hidden>{original}{provenance}<p class="detail-label">{summary_label}</p><p class="full-abstract">{esc(summary)}</p>{recommendation_html}{full_authors}{deep_html}<div class="tags">{tags}</div><div class="paper-actions">{actions}</div></div>
 </article>'''
 

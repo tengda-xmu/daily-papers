@@ -245,3 +245,6 @@ tools/build_site.py          静态网页生成器
 .github/workflows/daily.yml  每日抓取、部署和推送
 tests/                       解析、去重和降级测试
 ```
+## 本机 Codex 论文对话
+
+双击根目录的 **启动论文助手.cmd**，即可连接本机已经登录的 Codex。网页每篇论文新增 **Codex 对话**，支持中文总结、追问、翻译、PDF 与配图解释；首次使用在线侧栏需要从本机页面复制配对码。电脑需要保持运行，使用现有 Codex 账号额度。详见 [连接器说明](connectors/codex_bridge/README.md)。
