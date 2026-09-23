@@ -11,6 +11,7 @@
   let paperId = '', mode = 'question', controller = null, busy = false, history = [], pairCode = '';
   let refreshTimer = null;
   let documentPending = false, remoteDocumentPending = false, uploadPaper = '';
+  let currentDocument = null, translationSource = 'text';
   let progressTimer = null;
   let lastTrigger = null;
   const drafts = new Map();
@@ -33,11 +34,11 @@
       <input type="file" accept="application/pdf,.pdf" hidden>
     </section>
     <div class="chat-messages" aria-label="对话记录"></div>
-    <div class="chat-history-actions"><button class="text-button" type="button" data-chat-action="export">导出对话</button><button class="text-button" type="button" data-chat-action="clear">清除本机记录</button></div>
+    <div class="chat-history-actions"><button class="text-button" type="button" data-chat-action="export">导出对话</button><button class="text-button" type="button" data-chat-action="export-pdf">导出 PDF</button><button class="text-button" type="button" data-chat-action="clear">清除本机记录</button></div>
     <form class="chat-composer">
       <div class="chat-shortcuts"><button class="chat-button" type="button" data-mode="summary">总结论文</button><button class="chat-button" type="button" data-mode="question" aria-pressed="true">深入提问</button><button class="chat-button" type="button" data-mode="translate">中英翻译</button><button class="chat-button" type="button" data-mode="figure">解释配图</button></div>
       <p class="chat-mode-help" id="chat-mode-help"></p>
-      <div class="chat-translation" hidden><label>方向 <select class="chat-translation-target"><option value="zh">英译中</option><option value="en">中译英</option></select></label><label>内容 <select class="chat-translation-source"><option value="text">粘贴原文</option><option value="document">论文章节 / 页码</option></select></label></div>
+      <div class="chat-translation" hidden><label>方向 <select class="chat-translation-target"><option value="zh">英译中</option><option value="en">中译英</option></select></label><label>内容 <select class="chat-translation-source"><option value="text">粘贴原文</option><option value="full">全文翻译</option><option value="document">论文章节 / 页码</option></select></label></div>
       <textarea aria-label="向 Codex 提问" aria-describedby="chat-mode-help" maxlength="12000"></textarea>
       <div class="chat-form-footer"><label class="chat-pages-label">PDF 页码 <input class="chat-pages" aria-label="PDF 页码" placeholder="如 1-3,5"></label><div><button class="chat-button" type="button" data-chat-action="stop" hidden>停止</button> <button class="chat-send" type="submit">发送问题</button></div></div><p class="chat-notice" role="status">回答使用你的 Codex 账号额度。</p>
     </form>
@@ -69,14 +70,15 @@
     select.value = wanted; select.disabled = busy;
     updateModelHint();
   }
-  const draftKey = () => `${paperId}:${mode}`;
+  const draftKey = () => `${paperId}:${mode}${mode === 'translate' ? ':' + translationSource : ''}`;
   function updateMode() {
     const config = modes[mode], translating = mode === 'translate';
     const documentTranslation = translating && $('.chat-translation-source').value === 'document';
+    const fullTranslation = translating && $('.chat-translation-source').value === 'full';
     $('.chat-translation').hidden = !translating;
-    $('.chat-mode-help').textContent = config.hint;
-    $('.chat-composer textarea').placeholder = documentTranslation ? '例如：翻译 Abstract；或在下方指定 PDF 页码。' : config.placeholder;
-    $('.chat-send').textContent = config.send;
+    $('.chat-mode-help').textContent = fullTranslation ? '覆盖已载入的全部正文，分批保存原文与译文。中断后再次开始可继续；完整翻译需要较长时间。' : config.hint;
+    $('.chat-composer textarea').placeholder = fullTranslation ? '可选：填写术语或表达偏好；留空即可开始全文翻译。' : documentTranslation ? '例如：翻译 Abstract；或在下方指定 PDF 页码。' : config.placeholder;
+    $('.chat-send').textContent = fullTranslation ? '开始全文翻译' : config.send;
     $('.chat-pages-label').hidden = translating && !documentTranslation;
     dialog.querySelectorAll('[data-mode]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === mode)));
   }
@@ -239,7 +241,7 @@
     }
   }
 
-  function message(role, text, state = 'completed', documentHash = '', error = '', model = '') {
+  function message(role, text, state = 'completed', documentHash = '', error = '', model = '', messageId = null) {
     const article = document.createElement('article'); article.className = 'chat-message'; article.dataset.role = role;
     article.dataset.documentHash = documentHash || '';
     const label = document.createElement('div'); label.className = 'chat-message-label';
@@ -254,6 +256,12 @@
         catch { notice('复制失败，可选中文字后复制。'); }
       };
       label.append(copy);
+      if (messageId && text) {
+        const pdf = document.createElement('button'); pdf.type = 'button'; pdf.className = 'text-button chat-answer-pdf'; pdf.textContent = '导出 PDF';
+        const exportPaper = paperId;
+        pdf.onclick = () => downloadPdf(exportPaper, messageId).catch(e => notice(e.message));
+        label.append(pdf);
+      }
     }
     format(body, text || (state === 'running' ? '正在等待 Codex 回复…' : state === 'interrupted' ? '本次生成已停止，尚未收到回答。可以重新发送问题。' : state === 'failed' ? '本次未生成回答，请根据下方提示重试。' : '本次没有返回可显示的内容，请重新提问。'));
     article.append(label, body); $('.chat-messages').append(article);
@@ -275,10 +283,11 @@
       p.textContent = '从一个具体问题开始。你可以先总结这篇论文，再追问方法、实验依据或研究启发。'; $('.chat-messages').append(p);
     }
     for (const row of history) {
-      const body = message(row.role, row.content, row.status, row.document_hash, row.error, row.model);
+      const body = message(row.role, row.content, row.status, row.document_hash, row.error, row.model, row.id);
       if (row.status === 'running') showProgress(body, data.progress || { started_at: row.created, message: '本次回答仍在生成' });
     }
     const doc = data.document;
+    currentDocument = doc;
     remoteDocumentPending = Boolean(data.preparing);
     $('.chat-documents summary').textContent = `阅读依据：${doc ? doc.name : '摘要与本站解读'}`;
     $('.chat-document-note').textContent = doc ? `${doc.kind === 'pdf' ? `${doc.page_count} 页，其中 ${doc.scan_pages} 页需图片识别。` : '正文按段落编号，可点击回答中的引用核查。'} 资料已更新时会建立新上下文；上传内容请与论文标题核对。` : '尚未读取全文。上传 PDF 仅保存在本机，最多 20 MB / 300 页。';
@@ -348,11 +357,13 @@
     event.preventDefault();
     const pages = $('.chat-pages').value.trim();
     const translatingText = mode === 'translate' && $('.chat-translation-source').value === 'text';
-    const text = $('.chat-composer textarea').value.trim() || (mode === 'translate' && !translatingText && pages ? '翻译指定 PDF 页码。' : '');
+    const fullTranslation = mode === 'translate' && $('.chat-translation-source').value === 'full';
+    const text = $('.chat-composer textarea').value.trim() || (fullTranslation ? '请完整翻译已载入论文的全部正文，保留原文顺序、术语、公式与引用。' : mode === 'translate' && !translatingText && pages ? '翻译指定 PDF 页码。' : '');
     if (busy || documentPending || remoteDocumentPending) { if (documentPending || remoteDocumentPending) notice('资料正在准备，请完成后再发送。'); return; }
     if (!text) { notice(mode === 'translate' ? '请粘贴待译原文，或选择“论文章节 / 页码”后指定翻译范围。' : '请先输入具体问题。'); return; }
     if (!token) { notice('请先配对并连接本机 Codex。'); return; }
     if (!paperId) { notice('请先选择一篇论文。'); return; }
+    if (fullTranslation && !currentDocument) { notice('请先上传 PDF、获取论文 PDF 或获取网页全文，再开始全文翻译。'); return; }
     const model = chosenModel();
     if (!model) { notice('请先选择当前可用的 Codex 模型。'); return; }
     if (mode === 'figure' && !model.images) { notice('所选模型仅支持文字，请切换支持图片的模型后解释配图。'); return; }
@@ -368,7 +379,7 @@
     const activeController = new AbortController(); controller = activeController;
     try {
       const response = await api('/api/ask', { method: 'POST', stream: true, signal: activeController.signal,
-        body: JSON.stringify({ paper_id: paperId, message: text, mode, model: model.id, pages: translatingText ? '' : pages,
+        body: JSON.stringify({ paper_id: paperId, message: text, mode, model: model.id, pages: translatingText || fullTranslation ? '' : pages,
           translation_target: $('.chat-translation-target').value, translation_source: $('.chat-translation-source').value, request_id: crypto.randomUUID() }) });
       $('.chat-composer textarea').value = '';
       const reader = response.body.getReader(), decoder = new TextDecoder(); let buffer = '';
@@ -391,7 +402,7 @@
           if (value.type === 'delta') {
             answer += value.text; body.textContent = answer;
             body.closest('.chat-message').querySelector('.text-button').disabled = !answer;
-            showProgress(body, { message: '正在生成回答，内容将逐步显示', model_activity_at: Date.now() / 1000 });
+            showProgress(body, { ...(value.translation ? {} : { message: '正在生成回答，内容将逐步显示' }), ...(value.model_activity === false ? {} : {model_activity_at: Date.now() / 1000}) });
             $('.chat-messages').scrollTop = $('.chat-messages').scrollHeight;
           }
           if (value.type === 'progress') { showProgress(body, value); notice(value.message); }
@@ -400,13 +411,13 @@
           if (value.type === 'error') { failure = value.message; status(value.message, value.state); notice(value.message); }
           if (value.type === 'done') {
             done = true; finished = value.status === 'completed';
-            notice(finished ? '已完成。可复制回答或继续提问。' : failure || '本次生成已停止，可重新发送问题。');
+            notice(finished ? '已完成，可复制或导出 PDF。' : failure || (fullTranslation ? '全文翻译已停止；已完成部分已保存，保持相同模型、方向和要求再次开始可继续。' : '本次生成已停止，可重新发送问题。'));
           }
         }
       }
       if (!done) { failure = activeController.signal.aborted ? '已停止生成，可以重新发送问题。' : '连接中断，已收到的内容已保留。可以重新发送问题。'; notice(failure); }
     } catch (error) {
-      failure = error.name === 'AbortError' ? '已停止生成，可以重新发送问题。' : error.message;
+      failure = error.name === 'AbortError' ? (fullTranslation ? '全文翻译已停止，已完成部分已保存；再次开始可继续。' : '已停止生成，可以重新发送问题。') : error.message;
       notice(failure);
     } finally {
       activeController.abort();
@@ -425,11 +436,23 @@
     }
   }
 
+  async function downloadPdf(targetPaper, messageId = null) {
+    notice('正在生成 PDF…');
+    const response = await api(`/api/papers/${targetPaper}/export-pdf${messageId ? '?message_id=' + messageId : ''}`, { stream: true });
+    const blob = await response.blob();
+    if (!blob.type.includes('application/pdf')) throw new Error('未取得 PDF 文件，请重试。');
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = `${targetPaper}-${messageId ? 'answer-' + messageId : 'conversation'}.pdf`;
+    a.click(); setTimeout(() => URL.revokeObjectURL(url), 60000);
+    notice('PDF 已生成并下载。');
+  }
+
   async function action(name) {
     try {
       if (name === 'connect') return await connect();
       if (name === 'stop') return await stop();
       if (!token || !paperId) { notice('请先连接并选择论文。'); return; }
+      if (name === 'export-pdf') return await downloadPdf(paperId);
       if (name === 'upload') { uploadPaper = paperId; return $('.chat-documents input[type="file"]').click(); }
       if (name === 'fetch-pdf') return prepareDocument('/fetch-pdf', null, '正在获取并解析论文 PDF…');
       if (name === 'fulltext') return prepareDocument('/fulltext', null, '正在获取网页全文…');
@@ -483,7 +506,9 @@
     await prepareDocument('/pdf', form, `正在上传并解析 ${file.name}…`);
   });
   $('.chat-composer').addEventListener('submit', send);
-  $('.chat-translation-source').addEventListener('change', updateMode);
+  $('.chat-translation-source').addEventListener('change', () => {
+    rememberDraft(); translationSource = $('.chat-translation-source').value; restoreDraft();
+  });
   $('#chat-model').addEventListener('change', () => {
     if (chosenModel()) localStorage.setItem(modelKey, $('#chat-model').value);
     updateModelHint();

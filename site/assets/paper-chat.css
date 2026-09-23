@@ -44,6 +44,8 @@
 .chat-empty { max-width: 32em; color: #454545; margin: 16px 0; }
 .chat-message { padding: 0 0 22px; margin: 0 0 20px; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
 .chat-message-label { display: flex; justify-content: space-between; gap: 12px; margin: 0 0 8px; font-size: 12px; color: #454545; }
+.chat-message-name { flex: 1; min-width: 0; }
+.chat-message-label .text-button { flex-shrink: 0; }
 .chat-message[data-role="user"] .chat-message-body { font-weight: 550; }
 .chat-message-body { white-space: pre-wrap; line-height: 1.85; }
 .chat-message-body h3 { margin: 16px 0 6px; font-size: 16px; line-height: 1.5; font-weight: 650; }
@@ -75,7 +77,7 @@
 .chat-send { padding: 7px 18px; border: 1px solid var(--blue); border-radius: 4px; background: var(--blue); color: #fff; }
 .chat-send:disabled { opacity: .5; }
 .chat-notice { min-height: 20px; margin: 5px 0 0; font-size: 12px; color: #454545; }
-.chat-history-actions { display: flex; gap: 16px; padding: 7px 26px; border-top: 1px solid var(--line); font-size: 12px; }
+.chat-history-actions { display: flex; flex-wrap: wrap; gap: 8px 16px; padding: 7px 26px; border-top: 1px solid var(--line); font-size: 12px; }
 .companion-home { max-width: 760px; padding: 48px 24px; margin: auto; }
 .companion-home select { display: block; max-width: 100%; width: 100%; margin: 14px 0; padding: 10px; }
 body:has(.paper-chat[open]) { overflow: hidden; }

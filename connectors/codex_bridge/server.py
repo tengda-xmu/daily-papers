@@ -14,7 +14,7 @@ import time
 import uuid
 
 from fastapi import FastAPI, HTTPException, Request, UploadFile
-from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
+from fastapi.responses import FileResponse, JSONResponse, StreamingResponse, Response
 from pydantic import BaseModel, Field
 
 from .documents import MAX_BYTES, fetch_fulltext, fetch_pdf, parse_pdf, reading_batches, render_scan, source_context
@@ -33,7 +33,7 @@ class Ask(BaseModel):
     mode: str = Field(default="question", pattern=r"^(question|summary|translate|figure)$")
     pages: str = Field(default="", max_length=160)
     translation_target: str = Field(default="zh", pattern=r"^(zh|en)$")
-    translation_source: str = Field(default="document", pattern=r"^(text|document)$")
+    translation_source: str = Field(default="document", pattern=r"^(text|document|full)$")
     model: str = Field(default="", max_length=160)
     request_id: uuid.UUID
 
@@ -190,6 +190,19 @@ def create_app(root=ROOT, runtime=None, rpc=None):
                     result.setdefault(p["id"], {"id": p["id"], "title": p.get("title_zh") or p.get("title")})
         return {"papers": list(result.values())}
 
+    @app.get("/api/papers/{paper_id}/export-pdf")
+    async def paper_pdf(paper_id: str, message_id: int = 0):
+        from .pdf_export import export_pdf
+        paper = store.paper(paper_id)
+        messages = store.history(paper_id)
+        if message_id:
+            messages = [m for m in messages if m["id"] == message_id]
+            if not messages:
+                raise HTTPException(404, "当前论文中没有这条回答。")
+        content = await asyncio.to_thread(export_pdf, paper, messages)
+        filename = f"{paper_id}-{'answer-' + str(message_id) if message_id else 'conversation'}.pdf"
+        return Response(content, media_type="application/pdf", headers={"Content-Disposition": f'attachment; filename="{filename}"'})
+
     @app.get("/api/papers/{paper_id}/source/{label}")
     async def source(paper_id: str, label: str, version: str = ""):
         store.paper(paper_id)
@@ -295,6 +308,21 @@ def create_app(root=ROOT, runtime=None, rpc=None):
             store.message(ask.paper_id, "user", user_text)
             message_id = store.message(ask.paper_id, "assistant", "", "running", model=ask.model)
             queue.put_nowait({"type": "model", "model": ask.model})
+            if ask.mode == "translate" and ask.translation_source == "full":
+                from .translation import translate_document
+                async for event in translate_document(client, store, ask, p):
+                    if event["type"] == "delta":
+                        answer += event["text"]
+                        queue.put_nowait({**event, "translation": True, "model_activity": event.get("model_activity", False)})
+                        if event.get("model_activity"):
+                            model_activity(notify=False)
+                        store.update(message_id, answer, "running")
+                    elif event["type"] == "progress":
+                        progress(event["stage"], event["message"])
+                    elif event["type"] == "activity":
+                        model_activity()
+                status = "completed"
+                return
             pasted_translation = ask.mode == "translate" and ask.translation_source == "text"
             if pasted_translation:
                 batches = [{"text": "[用户粘贴原文]\n" + ask.message, "scans": []}]
@@ -404,7 +432,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
             selected = client.resolve_model(data.model)
         except CodexError as exc:
             return JSONResponse(error_info(exc), status_code=503)
-        data = data.model_copy(update={"model": selected["id"]})
+        data = data.model_copy(update={"model": selected["id"], "pages": "" if data.mode == "translate" and data.translation_source == "full" else data.pages})
         if generation_lock.locked():
             raise HTTPException(409, "已有回答正在生成，请先停止或等待完成。")
         if not store.claim(str(data.request_id), data.paper_id):

@@ -1,6 +1,7 @@
 import asyncio
 from io import BytesIO
 import json
+import re
 from pathlib import Path
 from types import SimpleNamespace
 import uuid
@@ -8,12 +9,15 @@ import uuid
 import pytest
 from fastapi.testclient import TestClient
 from pypdf import PdfWriter
+from pypdf import PdfReader
 from pypdf.generic import DecodedStreamObject, DictionaryObject, NameObject
 
 from connectors.codex_bridge.documents import ArticleParser, fetch_pdf, pdf_candidates, page_selection, parse_pdf, reading_batches, source_context, validate_url
 from connectors.codex_bridge.rpc import CodexClient, CodexError, launch_args, subprocess_environment
 from connectors.codex_bridge.server import LOCAL_ORIGIN, PUBLIC_ORIGIN, create_app
 from tools.build_site import render
+from connectors.codex_bridge.translation import translation_batches
+from connectors.codex_bridge.pdf_export import export_pdf
 
 P1, P2 = '123456789abc', 'abcdef123456'
 
@@ -480,3 +484,135 @@ def test_rpc_interrupts_unexpected_tool_and_checks_turn_settings(tmp_path):
         assert methods == ['turn/start', 'turn/interrupt']
         assert not client.listeners
     asyncio.run(run())
+
+
+def translation_doc(count=3, kind='pdf', scan=False):
+    return {'kind': kind, 'name': '测试全文', 'hash': 'translation-test', 'page_count': count,
+            'scan_pages': count if scan else 0, 'file': 'source.pdf',
+            'pages': [{'label': f'{"P" if kind == "pdf" else "S"}{i}',
+                       'text': '' if scan else f'Original evidence on page {i}.', 'scan': scan} for i in range(1, count + 1)]}
+
+
+def test_full_translation_batches_cover_long_pdf_and_html_without_ranking():
+    for kind in ('pdf', 'html'):
+        doc = translation_doc(30, kind)
+        for part in doc['pages']:
+            part['text'] = (part['label'] + ' important original content.\n') * 350
+        batches = translation_batches(doc)
+        assert all(len(b['text']) <= 6000 for b in batches)
+        for part in doc['pages']:
+            pieces = [b['text'] for b in batches if part['label'] in b['labels']]
+            assert part['label'] in ''.join(pieces)
+        joined = ''.join(b['text'] for b in batches)
+        recovered = re.sub(r'\[[PS]\d+\]\n', '', joined)
+        assert ''.join(recovered.split()) == ''.join(''.join(p['text'] for p in doc['pages']).split())
+        assert joined.index(doc['pages'][0]['text'][:30]) < joined.index(doc['pages'][-1]['text'][:30])
+    with pytest.raises(ValueError, match='全文翻译需要'):
+        translation_batches(None)
+    scans = translation_batches(translation_doc(7, scan=True))
+    assert [b['scans'] for b in scans] == [[i] for i in range(1, 8)]
+
+
+def test_full_translation_covers_all_pages_and_cache_survives_restart(bridge):
+    from connectors.codex_bridge.store import Store
+    c, app, rpc = bridge; h = login(c, app)
+    app.state.store.set_document(P1, translation_doc())
+    response = ask(c, h, mode='translate', translation_source='full', pages='1')
+    assert '"status": "completed"' in response.text
+    assert len(rpc.inputs) == 3
+    assert all(f'Original evidence on page {i}.' in rpc.inputs[i-1][1] for i in range(1, 4))
+    assert all('本站解读' not in prompt and 'Editorial A' not in prompt for _, prompt, _ in rpc.inputs)
+    text = app.state.store.history(P1)[-1]['content']
+    assert '3/3' in text and '[P1]' in text and '[P3]' in text
+    assert '指定页码' not in app.state.store.history(P1)[0]['content']
+    store = app.state.store
+    restored = Store(store.runtime, store.root)
+    with restored.connect() as db:
+        saved = json.loads(db.execute('SELECT content FROM translations WHERE paper=?', (P1,)).fetchone()[0])
+    assert len(saved['parts']) == 3
+    response = ask(c, h, mode='translate', translation_source='full')
+    assert '无需重复调用模型' in response.text and len(rpc.inputs) == 3
+    assert app.state.store.history(P1)[-1]['content'] == text
+
+
+def test_full_translation_resumes_after_failure_and_invalidates_changed_source(bridge):
+    c, app, rpc = bridge; h = login(c, app)
+    doc = translation_doc()
+    app.state.store.set_document(P1, doc)
+    calls = []
+    async def unreliable(thread, text, images=(), *, model=None):
+        calls.append(text)
+        if len(calls) == 2:
+            yield {'type': 'delta', 'text': '未完成的片段'}
+            raise CodexError('network timeout')
+        yield {'type': 'delta', 'text': '该部分的完整中文译文。'}
+        yield {'type': 'completed', 'status': 'completed'}
+    rpc.turn = unreliable
+    ask(c, h, mode='translate', translation_source='full')
+    partial = app.state.store.history(P1)[-1]
+    assert partial['status'] == 'failed' and '未完成的片段' in partial['content']
+    response = ask(c, h, mode='translate', translation_source='full')
+    assert '"status": "completed"' in response.text
+    assert len(calls) == 4 and 'page 2.' in calls[2] and 'page 3.' in calls[3]
+    assert '未完成的片段' not in app.state.store.history(P1)[-1]['content']
+    changed = {**doc, 'hash': 'changed-document'}
+    app.state.store.set_document(P1, changed)
+    ask(c, h, mode='translate', translation_source='full')
+    assert len(calls) == 7
+    ask(c, h, mode='translate', translation_source='full', translation_target='en')
+    assert len(calls) == 10 and '目标语言：英文' in calls[-1]
+    app.state.store.clear(P1)
+    with app.state.store.connect() as db:
+        assert db.execute('SELECT count(*) FROM translations').fetchone()[0] == 0
+
+
+def test_full_translation_missing_source_and_empty_result_are_not_success(bridge):
+    c, app, rpc = bridge; h = login(c, app)
+    r = ask(c, h, mode='translate', translation_source='full')
+    assert '全文翻译需要' in r.text and not rpc.inputs
+    app.state.store.set_document(P1, translation_doc(1))
+    async def empty(thread, text, images=(), *, model=None):
+        yield {'type': 'completed', 'status': 'completed'}
+    rpc.turn = empty
+    r = ask(c, h, mode='translate', translation_source='full')
+    assert '未返回译文' in r.text
+    assert app.state.store.history(P1)[-1]['status'] == 'failed'
+
+
+def test_full_translation_scans_are_sent_as_images(bridge, monkeypatch):
+    c, app, rpc = bridge; h = login(c, app)
+    app.state.store.set_document(P1, translation_doc(2, scan=True))
+    monkeypatch.setattr('connectors.codex_bridge.translation.render_scan', lambda d, p, nums: [p / f'page-{n}.png' for n in nums])
+    r = ask(c, h, mode='translate', translation_source='full')
+    assert '"status": "completed"' in r.text
+    assert [len(images) for _, _, images in rpc.inputs] == [1, 1]
+    assert '扫描页' in rpc.inputs[0][1] and '无法辨认' in rpc.inputs[0][1]
+
+
+def test_pdf_export_embeds_chinese_font_and_paginates_safely():
+    content = '### 第 1 部分 [P1]\n\n**原文**\n\nStructural reliability: σ = 10 MPa.\n\n**中文译文**\n\n结构可靠性分析。\n\n'
+    content += '<img src="http://127.0.0.1/private"/> <script>never execute</script>\n\n'
+    content += ('长段落不得被裁掉。 ' * 1200) + '\n\n末尾校验文本 END-OF-TRANSLATION'
+    data = export_pdf({'title': '科研论文中文导出', 'doi': '10.000/test'}, [{'role': 'assistant', 'content': content, 'status': 'interrupted', 'model': 'test-model'}])
+    assert data.startswith(b'%PDF-')
+    reader = PdfReader(BytesIO(data)); text = '\n'.join(p.extract_text() for p in reader.pages)
+    assert len(reader.pages) > 1
+    assert '结构可靠性分析' in text and 'END-OF-TRANSLATION' in text
+    assert '未完成 / 部分内容' in text and 'never execute' in text
+    fonts = reader.pages[0]['/Resources']['/Font'].get_object()
+    assert any('/FontFile2' in f.get_object().get('/FontDescriptor', {}) for f in fonts.values())
+
+
+def test_pdf_download_requires_pairing_and_scopes_message_to_paper(bridge):
+    c, app, rpc = bridge
+    assert c.get(f'/api/papers/{P1}/export-pdf').status_code == 401
+    h = login(c, app)
+    assert c.get(f'/api/papers/{P1}/export-pdf', headers=h).status_code == 400
+    mid = app.state.store.message(P1, 'assistant', '中文全文译文 [P1]。')
+    app.state.store.message(P1, 'user', '后续无关的问题')
+    r = c.get(f'/api/papers/{P1}/export-pdf?message_id={mid}', headers=h)
+    assert r.status_code == 200 and r.headers['content-type'] == 'application/pdf'
+    assert 'attachment;' in r.headers['content-disposition']
+    text = ''.join(p.extract_text() for p in PdfReader(BytesIO(r.content)).pages)
+    assert '中文全文译文' in text and '后续无关' not in text
+    assert c.get(f'/api/papers/{P2}/export-pdf?message_id={mid}', headers=h).status_code == 404

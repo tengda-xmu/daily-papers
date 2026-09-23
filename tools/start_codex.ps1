@@ -14,7 +14,7 @@ try {
     $running = $health.service -eq 'daily-papers-codex'
 } catch { }
 if (-not $running) {
-    & python -c "import fastapi, uvicorn, pypdf, pypdfium2, multipart, fontTools"
+    & python -c "import fastapi, uvicorn, pypdf, pypdfium2, multipart, fontTools, reportlab"
     if ($LASTEXITCODE -ne 0) {
         & python -m pip install -r (Join-Path $projectDir 'connectors\codex_bridge\requirements.txt')
         if ($LASTEXITCODE -ne 0) { throw 'Could not install paper assistant dependencies.' }

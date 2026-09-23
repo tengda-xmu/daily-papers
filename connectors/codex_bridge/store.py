@@ -22,6 +22,9 @@ class Store:
                   id INTEGER PRIMARY KEY, paper TEXT NOT NULL, role TEXT NOT NULL,
                   content TEXT NOT NULL, status TEXT NOT NULL, created REAL NOT NULL);
                 CREATE TABLE IF NOT EXISTS requests (id TEXT PRIMARY KEY, paper TEXT NOT NULL);
+                CREATE TABLE IF NOT EXISTS translations (
+                  paper TEXT NOT NULL, cache_key TEXT NOT NULL, content TEXT NOT NULL,
+                  PRIMARY KEY(paper, cache_key));
                 UPDATE messages SET status='interrupted' WHERE status='running';
             """)
             columns = {r[1] for r in db.execute("PRAGMA table_info(messages)")}
@@ -92,9 +95,19 @@ class Store:
 
     def clear(self, paper_id):
         with self.connect() as db:
-            for table in ("messages", "requests"):
+            for table in ("messages", "requests", "translations"):
                 db.execute(f"DELETE FROM {table} WHERE paper=?", (paper_id,))
             db.execute("DELETE FROM papers WHERE id=?", (paper_id,))
+
+    def translation(self, paper_id, cache_key):
+        with self.connect() as db:
+            row = db.execute("SELECT content FROM translations WHERE paper=? AND cache_key=?", (paper_id, cache_key)).fetchone()
+        return json.loads(row[0]) if row else {}
+
+    def save_translation(self, paper_id, cache_key, data):
+        with self.connect() as db:
+            db.execute("INSERT INTO translations VALUES(?,?,?) ON CONFLICT(paper,cache_key) DO UPDATE SET content=excluded.content",
+                       (paper_id, cache_key, json.dumps(data, ensure_ascii=False)))
 
     def directory(self, paper_id):
         if not ID_PATTERN.fullmatch(paper_id):
