@@ -53,8 +53,9 @@ def curated_records(until, lookback_days=180):
 
 
 def _cache_path(record):
-    # Recompute automatic notes when title or available abstract changes.
-    value = "zh-v2|" + record.doi + "|" + record.title + "|" + record.abstract
+    # Bump this revision when editorial requirements change, so older model
+    # notes cannot override the current introduction standard. Curated notes win.
+    value = "zh-v3|" + record.doi + "|" + record.title + "|" + record.abstract
     return CACHE / (hashlib.sha256(value.encode()).hexdigest()[:24] + ".json")
 
 
