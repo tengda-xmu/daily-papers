@@ -98,6 +98,8 @@ def parse_pdf(content: bytes, directory: Path, name="上传 PDF"):
         reader = PdfReader(path)
         if reader.is_encrypted and not reader.decrypt(""):
             raise ValueError("PDF 已加密，请上传可直接打开的版本。")
+        if not reader.pages:
+            raise ValueError("PDF 没有可读取的页面。")
         if len(reader.pages) > MAX_PAGES:
             raise ValueError(f"PDF 超过 {MAX_PAGES} 页，请按章节拆分上传。")
         pages = []
@@ -137,6 +139,68 @@ def fetch_fulltext(paper, directory):
                   "page_count": 0, "scan_pages": 0}
     result["url"] = url
     return result
+
+
+class PDFLinkParser(HTMLParser):
+    """Only publisher-declared article PDF links, not arbitrary PDF attachments."""
+    def __init__(self):
+        super().__init__()
+        self.links = []
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == "meta" and attrs.get("name", "").lower() == "citation_pdf_url":
+            if attrs.get("content"):
+                self.links.append(attrs["content"])
+
+
+def pdf_candidates(paper):
+    urls = [paper.get(k) for k in ("pdf_url", "oa_url", "landing_url")]
+    doi = str(paper.get("doi") or "").lower()
+    if re.fullmatch(r"10\.1038/[a-z0-9.-]+", doi):
+        urls.append("https://www.nature.com/articles/" + doi.split("/", 1)[1])
+    arxiv = re.fullmatch(r"10\.48550/arxiv\.(\d{4}\.\d{4,5}(?:v\d+)?)", doi)
+    if arxiv:
+        urls.append("https://arxiv.org/abs/" + arxiv[1])
+    candidates = []
+    for url in urls:
+        if not url:
+            continue
+        p = urlsplit(url)
+        if p.scheme != "https" or p.hostname not in PUBLIC_HOSTS or p.username or p.password or p.port not in (None, 443):
+            continue
+        if p.hostname in ("arxiv.org", "export.arxiv.org") and p.path.startswith(("/abs/", "/html/", "/pdf/")):
+            identifier = p.path.split("/", 2)[2].removesuffix(".pdf")
+            candidates.append("https://arxiv.org/pdf/" + identifier)
+        elif p.hostname in ("nature.com", "www.nature.com") and re.fullmatch(r"/articles/[a-zA-Z0-9.-]+", p.path):
+            candidates.append("https://www.nature.com" + p.path + ("" if p.path.endswith(".pdf") else ".pdf"))
+        candidates.append(url)
+    return list(dict.fromkeys(candidates))
+
+
+def fetch_pdf(paper, directory):
+    candidates = pdf_candidates(paper)
+    if not candidates:
+        raise ValueError("这篇论文暂无可直接获取的公开 PDF 地址，请点击“上传 PDF”。")
+    visited = set()
+    while candidates and len(visited) < 4:
+        url = candidates.pop(0)
+        if url in visited:
+            continue
+        visited.add(url)
+        try:
+            content, final_url = download(url)
+            if content.startswith(b"%PDF-"):
+                result = parse_pdf(content, directory, "论文 PDF")
+                result["url"] = final_url
+                return result
+            parser = PDFLinkParser()
+            parser.feed(content.decode("utf-8", errors="replace"))
+            # download() validates each discovered URL and every redirect.
+            candidates[:0] = [urljoin(final_url, link) for link in parser.links[:2]]
+        except (ValueError, requests.RequestException):
+            continue
+    raise ValueError("未取得可读取的公开 PDF（可能需要机构访问或出版社暂不允许下载）。请上传 PDF；已有资料保持可用。")
 
 
 def page_selection(value, count):

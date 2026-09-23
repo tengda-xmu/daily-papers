@@ -33,7 +33,11 @@
 .chat-button:disabled { opacity: .5; }
 .chat-documents { padding: 10px 26px; border-bottom: 1px solid var(--line); font-size: 12px; }
 .chat-documents summary { cursor: pointer; color: #454545; }
-.chat-doc-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+.chat-doc-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; }
+.chat-document-status { color: #303030; line-height: 1.55; }
+.chat-document-status[data-state="ready"] { color: #23633e; }
+.chat-document-status[data-state="error"] { color: #9a3c16; }
+.chat-documents details { margin-top: 7px; }
 .chat-documents p { margin: 5px 0; overflow-wrap: anywhere; }
 .chat-documents input[type="file"] { max-width: 100%; font-size: 12px; }
 .chat-messages { flex: 1; min-height: 100px; padding: 22px 26px; overflow-y: auto; overscroll-behavior: contain; }

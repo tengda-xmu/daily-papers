@@ -10,6 +10,7 @@
   let availableModels = [];
   let paperId = '', mode = 'question', controller = null, busy = false, history = [], pairCode = '';
   let refreshTimer = null;
+  let documentPending = false, remoteDocumentPending = false, uploadPaper = '';
   let progressTimer = null;
   let lastTrigger = null;
   const drafts = new Map();
@@ -25,7 +26,12 @@
   dialog.innerHTML = `<div class="chat-shell">
     <header class="chat-header"><div class="chat-heading-row"><h2 id="chat-heading">Codex 论文对话</h2><button class="chat-close" type="button" aria-label="关闭对话">×</button></div><p class="chat-paper-title"></p><p class="chat-status" role="status">未连接本机 Codex</p><div class="chat-model-row"><label for="chat-model">模型</label><select id="chat-model" aria-describedby="chat-model-help" disabled><option value="">连接后加载可用模型</option></select></div><p class="chat-model-help" id="chat-model-help">选择将用于下一次发送。</p></header>
     <section class="chat-connect"><p>先运行项目中的“启动论文助手.cmd”，再粘贴本次启动的配对码。</p><div class="chat-pair-row"><input type="password" autocomplete="off" aria-label="本机配对码" placeholder="本机配对码"><button class="chat-button" type="button" data-chat-action="connect">连接</button></div><p class="chat-local-help"><a class="chat-local-link" target="_blank" rel="noopener noreferrer">在本机打开论文助手</a> · 电脑须保持运行</p></section>
-    <details class="chat-documents"><summary>阅读依据：摘要与本站解读</summary><div class="chat-doc-actions"><button type="button" class="chat-button" data-chat-action="fulltext">获取开放全文</button><button type="button" class="chat-button" data-chat-action="upload">上传 PDF</button></div><input type="file" accept="application/pdf,.pdf" hidden><p class="chat-document-note">尚未读取全文。上传 PDF 仅保存在本机，最多 20 MB / 300 页。</p></details>
+    <section class="chat-documents" aria-label="论文资料">
+      <div class="chat-doc-actions"><button type="button" class="chat-button" data-chat-action="upload">上传 PDF</button><button type="button" class="chat-button" data-chat-action="fetch-pdf">获取论文 PDF</button></div>
+      <p class="chat-document-status" role="status">未载入 PDF，可上传或直接获取。</p>
+      <details><summary>阅读依据：摘要与本站解读</summary><p class="chat-document-note">文件仅保存在本机，最多 20 MB / 300 页。</p><button type="button" class="text-button" data-chat-action="fulltext">获取网页全文</button></details>
+      <input type="file" accept="application/pdf,.pdf" hidden>
+    </section>
     <div class="chat-messages" aria-label="对话记录"></div>
     <div class="chat-history-actions"><button class="text-button" type="button" data-chat-action="export">导出对话</button><button class="text-button" type="button" data-chat-action="clear">清除本机记录</button></div>
     <form class="chat-composer">
@@ -40,12 +46,13 @@
   const $ = (selector) => dialog.querySelector(selector);
   const status = (text, state = '') => { $('.chat-status').textContent = text; $('.chat-status').dataset.state = state; };
   const notice = (text) => { $('.chat-notice').textContent = text; };
+  const documentNotice = (text, state = '') => { $('.chat-document-status').textContent = text; $('.chat-document-status').dataset.state = state; };
   const endpoint = (suffix = '') => `/api/papers/${paperId}${suffix}`;
   function chosenModel() { return availableModels.find(m => m.id === $('#chat-model').value); }
   function updateModelHint() {
     const selected = chosenModel();
     $('.chat-model-help').textContent = selected ? `${selected.images ? '支持文字与图片' : '仅支持文字'} · 用于下一次发送` : '此前所选模型当前不可用，请重新选择。';
-    $('.chat-send').disabled = busy || !selected;
+    $('.chat-send').disabled = busy || documentPending || remoteDocumentPending || !selected;
   }
   function loadModels(data) {
     availableModels = data.models || [{id: data.model, label: data.model, images: data.images, is_default: true}];
@@ -151,10 +158,12 @@
     busy = value;
     clearInterval(progressTimer);
     if (value) progressTimer = setInterval(tickProgress, 1000);
-    $('.chat-send').disabled = value || !chosenModel();
-    $('#chat-model').disabled = value || !availableModels.length;
+    const locked = value || documentPending || remoteDocumentPending;
+    $('.chat-documents').setAttribute('aria-busy', String(documentPending || remoteDocumentPending));
+    $('.chat-send').disabled = locked || !chosenModel();
+    $('#chat-model').disabled = locked || !availableModels.length;
     $('[data-chat-action="stop"]').hidden = !value;
-    dialog.querySelectorAll('[data-mode], .chat-translation select, [data-chat-action="fulltext"], [data-chat-action="upload"], [data-chat-action="clear"]').forEach(b => { b.disabled = value; });
+    dialog.querySelectorAll('[data-mode], .chat-translation select, [data-chat-action="fulltext"], [data-chat-action="fetch-pdf"], [data-chat-action="upload"], [data-chat-action="clear"]').forEach(b => { b.disabled = locked; });
   };
 
   async function api(path, options = {}) {
@@ -265,12 +274,17 @@
       if (row.status === 'running') showProgress(body, data.progress || { started_at: row.created, message: '本次回答仍在生成' });
     }
     const doc = data.document;
+    remoteDocumentPending = Boolean(data.preparing);
     $('.chat-documents summary').textContent = `阅读依据：${doc ? doc.name : '摘要与本站解读'}`;
     $('.chat-document-note').textContent = doc ? `${doc.kind === 'pdf' ? `${doc.page_count} 页，其中 ${doc.scan_pages} 页需图片识别。` : '正文按段落编号，可点击回答中的引用核查。'} 资料已更新时会建立新上下文；上传内容请与论文标题核对。` : '尚未读取全文。上传 PDF 仅保存在本机，最多 20 MB / 300 页。';
+    if (!documentPending) {
+      if (remoteDocumentPending) documentNotice('本机正在获取或解析资料，请稍候…', 'loading');
+      else documentNotice(doc ? (doc.kind === 'pdf' ? `已载入 PDF · ${doc.page_count} 页${doc.scan_pages ? ` · ${doc.scan_pages} 页需图片识别` : ''}` : '已载入网页全文；可继续获取 PDF 以按页阅读。') : '未载入 PDF，可上传或直接获取。', doc ? 'ready' : '');
+    }
     $('.chat-messages').scrollTop = $('.chat-messages').scrollHeight;
     if (!controller) {
       setBusy(data.busy);
-      if (data.busy && dialog.open) refreshTimer = setTimeout(() => loadPaper().catch(e => notice(e.message)), 3000);
+      if ((data.busy || data.preparing) && dialog.open) refreshTimer = setTimeout(() => loadPaper().catch(e => notice(e.message)), 3000);
     }
   }
 
@@ -306,6 +320,7 @@
     if (busy) await stop();
     rememberDraft();
     paperId = id; lastTrigger = trigger;
+    remoteDocumentPending = false;
     restoreDraft();
     $('.chat-paper-title').textContent = title || '选择一篇论文开始';
     $('.chat-local-link').href = `${base}/?paper=${encodeURIComponent(id || '')}`;
@@ -329,7 +344,7 @@
     const pages = $('.chat-pages').value.trim();
     const translatingText = mode === 'translate' && $('.chat-translation-source').value === 'text';
     const text = $('.chat-composer textarea').value.trim() || (mode === 'translate' && !translatingText && pages ? '翻译指定 PDF 页码。' : '');
-    if (busy) return;
+    if (busy || documentPending || remoteDocumentPending) { if (documentPending || remoteDocumentPending) notice('资料正在准备，请完成后再发送。'); return; }
     if (!text) { notice(mode === 'translate' ? '请粘贴待译原文，或选择“论文章节 / 页码”后指定翻译范围。' : '请先输入具体问题。'); return; }
     if (!token) { notice('请先配对并连接本机 Codex。'); return; }
     if (!paperId) { notice('请先选择一篇论文。'); return; }
@@ -409,8 +424,9 @@
       if (name === 'connect') return await connect();
       if (name === 'stop') return await stop();
       if (!token || !paperId) { notice('请先连接并选择论文。'); return; }
-      if (name === 'upload') return $('.chat-documents input[type="file"]').click();
-      if (name === 'fulltext') { notice('正在获取开放全文…'); const data = await api(endpoint('/fulltext'), { method: 'POST' }); await loadPaper(); notice(data.message); }
+      if (name === 'upload') { uploadPaper = paperId; return $('.chat-documents input[type="file"]').click(); }
+      if (name === 'fetch-pdf') return prepareDocument('/fetch-pdf', null, '正在获取并解析论文 PDF…');
+      if (name === 'fulltext') return prepareDocument('/fulltext', null, '正在获取网页全文…');
       if (name === 'clear' && window.confirm('清除这篇论文在本机助手中的资料和对话？Codex 自身会话历史仍由 Codex 管理。')) {
         const data = await api(endpoint(), { method: 'DELETE' }); await loadPaper(); notice(data.message);
       }
@@ -433,12 +449,32 @@
       input.focus();
     }
   });
+  async function prepareDocument(path, body, pendingText) {
+    if (busy || documentPending || remoteDocumentPending) return;
+    const targetPaper = paperId;
+    documentPending = true; setBusy(busy); documentNotice(pendingText, 'loading'); notice(pendingText);
+    let outcome = '', failed = false;
+    try {
+      const data = await api(`/api/papers/${targetPaper}${path}`, { method: 'POST', ...(body ? { body } : {}) });
+      outcome = data.message;
+    } catch (error) { outcome = error.message; failed = true; }
+    finally {
+      documentPending = false;
+      if (paperId === targetPaper) {
+        await loadPaper().catch(() => {});
+        if (!remoteDocumentPending) documentNotice(outcome, failed ? 'error' : 'ready');
+        notice(outcome);
+      }
+      setBusy(busy);
+    }
+  }
   $('.chat-documents input[type="file"]').addEventListener('change', async (event) => {
     const file = event.target.files[0]; if (!file) return;
-    if (file.size > 20 * 1024 * 1024) { notice('PDF 超过 20 MB。'); return; }
-    notice('正在解析 PDF…'); const form = new FormData(); form.append('file', file);
-    try { const data = await api(endpoint('/pdf'), { method: 'POST', body: form }); await loadPaper(); notice(data.message); }
-    catch (error) { notice(error.message); } finally { event.target.value = ''; }
+    event.target.value = '';
+    if (uploadPaper !== paperId) { notice('论文已切换，请在当前论文重新选择要上传的 PDF。'); return; }
+    if (file.size > 20 * 1024 * 1024) { documentNotice('PDF 超过 20 MB，请选择较小的文件。', 'error'); return; }
+    const form = new FormData(); form.append('file', file);
+    await prepareDocument('/pdf', form, `正在上传并解析 ${file.name}…`);
   });
   $('.chat-composer').addEventListener('submit', send);
   $('.chat-translation-source').addEventListener('change', updateMode);

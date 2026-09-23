@@ -17,7 +17,7 @@ from fastapi import FastAPI, HTTPException, Request, UploadFile
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from pydantic import BaseModel, Field
 
-from .documents import MAX_BYTES, fetch_fulltext, parse_pdf, reading_batches, render_scan, source_context
+from .documents import MAX_BYTES, fetch_fulltext, fetch_pdf, parse_pdf, reading_batches, render_scan, source_context
 from .rpc import CodexClient, CodexError
 from .store import Store
 
@@ -175,6 +175,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
                 "history": store.history(paper_id),
                 "document": {k: v for k, v in doc.items() if k not in ("pages", "file")} if doc else None,
                 "busy": paper_id in jobs,
+                "preparing": paper_id in preparing,
                 "progress": jobs.get(paper_id, {}).get("progress")}
 
     @app.get("/api/papers")
@@ -238,6 +239,22 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         finally:
             preparing.discard(paper_id)
         return {"message": "开放全文已载入，后续问题使用新资料。"}
+
+    @app.post("/api/papers/{paper_id}/fetch-pdf")
+    async def get_pdf(paper_id: str):
+        not_busy(paper_id)
+        preparing.add(paper_id)
+        try:
+            doc = await asyncio.to_thread(fetch_pdf, store.paper(paper_id), store.directory(paper_id))
+            store.set_document(paper_id, doc)
+        except ValueError:
+            raise
+        except Exception:
+            raise ValueError("PDF 暂时获取失败，请上传 PDF；已有资料保持可用。")
+        finally:
+            preparing.discard(paper_id)
+        return {"message": f"已获取并载入论文 PDF，共 {doc['page_count']} 页。后续问答使用该 PDF。",
+                "page_count": doc["page_count"], "scan_pages": doc["scan_pages"]}
 
     async def generate(ask, queue):
         message_id = None

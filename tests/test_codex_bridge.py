@@ -9,7 +9,7 @@ from fastapi.testclient import TestClient
 from pypdf import PdfWriter
 from pypdf.generic import DecodedStreamObject, DictionaryObject, NameObject
 
-from connectors.codex_bridge.documents import ArticleParser, page_selection, parse_pdf, reading_batches, source_context, validate_url
+from connectors.codex_bridge.documents import ArticleParser, fetch_pdf, pdf_candidates, page_selection, parse_pdf, reading_batches, source_context, validate_url
 from connectors.codex_bridge.rpc import CodexClient, CodexError, launch_args
 from connectors.codex_bridge.server import LOCAL_ORIGIN, PUBLIC_ORIGIN, create_app
 from tools.build_site import render
@@ -223,6 +223,51 @@ def test_unknown_paper_and_invalid_pdf_rejected(bridge):
     assert ask(c, h, paper='0'*12).status_code == 400
     assert ask(c, h, paper='../.env').status_code == 422
     assert c.post(f'/api/papers/{P1}/pdf', files={'file': ('x.pdf', b'not a pdf')}, headers=h).status_code == 400
+    assert not rpc.inputs
+
+
+def test_pdf_candidates_for_nature_arxiv_and_untrusted_urls():
+    assert pdf_candidates({'oa_url': 'https://www.nature.com/articles/s44387-026-00102-5'})[0] == 'https://www.nature.com/articles/s44387-026-00102-5.pdf'
+    assert pdf_candidates({'oa_url': 'https://arxiv.org/html/2608.07978v1'})[0] == 'https://arxiv.org/pdf/2608.07978v1'
+    assert pdf_candidates({'doi': '10.48550/arxiv.2608.07978'})[0] == 'https://arxiv.org/pdf/2608.07978'
+    assert not pdf_candidates({'pdf_url': 'file:///private.pdf', 'oa_url': 'https://attacker.example/paper.pdf'})
+
+
+def test_fetch_pdf_uses_publisher_pdf_metadata_and_rejects_html(monkeypatch, tmp_path):
+    calls = []
+    def download(url):
+        calls.append(url)
+        if url.endswith('.pdf'):
+            return pdf_bytes(), url
+        return b'<meta name="citation_pdf_url" content="/paper.pdf">', url
+    monkeypatch.setattr('connectors.codex_bridge.documents.download', download)
+    doc = fetch_pdf({'oa_url': 'https://journals.plos.org/article?id=test'}, tmp_path)
+    assert doc['kind'] == 'pdf' and doc['page_count'] == 1
+    assert calls[-1] == 'https://journals.plos.org/paper.pdf'
+    monkeypatch.setattr('connectors.codex_bridge.documents.download', lambda url: (b'<html>Sign in</html>', url))
+    with pytest.raises(ValueError, match='未取得'):
+        fetch_pdf({'oa_url': 'https://journals.plos.org/article?id=test'}, tmp_path)
+
+
+def test_fetch_pdf_api_requires_pairing_and_preserves_existing_document(bridge, monkeypatch):
+    c, app, rpc = bridge; h = login(c, app)
+    path = f'/api/papers/{P1}/fetch-pdf'
+    assert c.post(path).status_code == 401
+    def download(paper, directory):
+        assert c.get(f'/api/papers/{P1}', headers=h).json()['preparing']
+        assert c.post(path, headers=h).status_code == 409
+        return parse_pdf(pdf_bytes(), directory, '论文 PDF')
+    monkeypatch.setattr('connectors.codex_bridge.server.fetch_pdf', download)
+    response = c.post(path, headers=h)
+    assert response.status_code == 200 and response.json()['page_count'] == 1
+    original = app.state.store.document(P1)
+    def blocked(paper, directory):
+        raise ValueError('出版社暂不允许下载，请上传 PDF。')
+    monkeypatch.setattr('connectors.codex_bridge.server.fetch_pdf', blocked)
+    assert c.post(path, headers=h).status_code == 400
+    assert app.state.store.document(P1) == original
+    assert not c.get(f'/api/papers/{P1}', headers=h).json()['preparing']
+    assert c.get(f'/api/papers/{P1}/source/P1', headers=h).status_code == 200
     assert not rpc.inputs
 
 
