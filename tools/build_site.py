@@ -36,7 +36,7 @@ SETUP_HINTS = {
     "微信公众号": "需要 WeRSS 订阅地址，或完成本机扫码、添加订阅并同步文章。",
 }
 AUTH_HINTS = {
-    "Web of Science": "需要 Clarivate Starter API 密钥，可申请试用或机构方案。",
+    "Web of Science": "需要 Clarivate Starter API 密钥；可申请免费试用，网页登录不等于 API 授权。",
 }
 SETUP_SECTIONS = {"Elsevier": "elsevier", "Google Scholar": "scholar", "ResearchGate": "researchgate",
                   "微信公众号": "wechat", "Web of Science": "wos"}
@@ -224,6 +224,8 @@ def source_directory(statuses: dict, counts: Counter, root: str = "./", wechat_c
             if item["id"] == "ResearchGate" and connector_message.startswith(("本地连接器已导入", "公开索引已接入")):
                 message = connector_message
             elif item["id"] == "微信公众号" and connector_message.startswith(("WeRSS ", "公开索引已接入")):
+                message = connector_message
+            elif item["id"] == "Web of Science" and connector_message.startswith(("Clarivate ", "密钥")):
                 message = connector_message
             elif kind == "adapter" and state in ("ok", "no_data"):
                 message += f' 本轮获取 {(statuses.get(item["id"]) or {}).get("count", 0)} 条元数据。'

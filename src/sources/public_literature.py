@@ -338,31 +338,55 @@ class PubMedAdapter(PublicLiteratureAdapter):
 class WebOfScienceAdapter(PublicLiteratureAdapter):
     """Clarivate Starter API adapter; key is intentionally never bundled."""
     name = "Web of Science"
+    research_queries = (
+        '("large language model*" OR "multi-agent" OR agentic OR "machine learning") AND '
+        '("predictive maintenance" OR "fault diagnosis" OR "structural health monitoring")',
+        '("large language model*" OR "multi-agent" OR agentic OR "generative model*" OR "machine learning") AND '
+        '("structural design" OR "topology optimization" OR "generative design")',
+        '("large language model*" OR "multi-agent" OR agentic OR "machine learning") AND '
+        '("structural fatigue" OR "structural reliability" OR "fatigue life")',
+    )
 
-    def __init__(self, api_key: str | None = None, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, api_key: str | None = None, queries=None, limit=25, **kwargs):
+        super().__init__(queries=list(self.research_queries) if queries is None else queries, **kwargs)
         self.api_key = api_key if api_key is not None else os.getenv("WOS_API_KEY", "").strip()
+        self.limit = max(1, min(50, int(limit)))
 
     def fetch(self, since: datetime, until: datetime) -> list[RawRecord]:
         if not self.api_key:
             self._status = SourceStatus(self.name, "authorization_required", 0,
-                                        "Clarivate Web of Science API key is required")
+                                        "需要 Clarivate Starter API 密钥；Web of Science 网页登录不等于 API 授权。")
             return []
         # The endpoint is deliberately isolated so an institutional key can be
         # enabled without changing the public adapters.
         try:
             records: list[RawRecord] = []
-            for query in self.queries:
+            for number, query in enumerate(self.queries[:3]):
+                if number:
+                    time.sleep(1.1)  # Free Trial permits one request per second.
                 payload = self._get_json(
                     "https://api.clarivate.com/apis/wos-starter/v1/documents?" + urlencode({
-                        "q": f"TS=({query}) AND PY=({since.year}-{until.year})", "limit": 25}),
+                        "db": "WOS", "q": f"TS=({query})", "limit": self.limit, "page": 1,
+                        "sortField": "LD+D", "publishTimeSpan": f"{since:%Y-%m-%d}+{until:%Y-%m-%d}"}),
                     {"X-ApiKey": self.api_key, "Accept": "application/json"},
                 )
+                if not isinstance(payload, dict) or not isinstance(payload.get("hits"), list):
+                    raise ValueError("Unrecognized Clarivate response")
                 records.extend(self.parse_payload(payload))
-                time.sleep(1)
-            return self._finish(records, since, until)
+            records = self._finish(records, since, until)
+            self._status.message = f"Clarivate Starter API 已授权：检索 {min(3, len(self.queries))} 个方向，本期获取 {len(records)} 条元数据。"
+            return records
         except Exception as exc:
-            return self._fail(records, exc)
+            # Still apply deduplication/date bounds if a later query fails.
+            records = self._finish(records, since, until)
+            code = getattr(exc, "code", None)
+            state = "partial" if records else "authorization_required" if code == 401 else "access_denied" if code == 403 else "quota_exhausted" if code == 429 else "error"
+            message = {401: "密钥无效或已过期，请更新 WOS_API_KEY。", 403: "密钥未获 Starter API / WOS 数据库访问授权，请检查应用订阅。",
+                       429: "Clarivate 请求频率或当日配额受限，已停止后续检索。"}.get(code, "Clarivate 检索失败，请检查网络或 API 响应。")
+            if records:
+                message += f" 已保留 {len(records)} 条本期元数据。"
+            self._status = SourceStatus(self.name, state, len(records), message)
+            return records
 
     @staticmethod
     def parse_payload(payload: dict) -> list[RawRecord]:

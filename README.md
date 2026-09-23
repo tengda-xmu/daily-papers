@@ -110,6 +110,30 @@ docker compose -f docker-compose.wechat.yml up -d
 
 微信登录会话只保存在 WeRSS 的本地数据目录，不放进 GitHub Actions。
 
+### Web of Science
+
+在 [Clarivate Starter API 门户](https://developer.clarivate.com/apis/wos-starter) 登录并完成邮箱验证，
+进入 Applications 注册应用（例如名称 `Daily Papers`、ID `daily-papers-tengda-xmu`），
+再为应用订阅 Web of Science Starter API。Web of Science 网页访问权限不会自动生成 API Key。
+
+官方 Free Trial Plan 每天 50 次请求，不返回被引次数；符合条件的机构成员可申请
+Free Institutional Member Plan，每天 5,000 次请求。免费计划与授权以门户当前审批结果为准。
+
+密钥获批后，将其单独保存至项目根目录 `WOS_API_KEY.txt`（已被 Git 忽略），运行：
+
+```powershell
+python -m tools.connect_wos --check
+python -m tools.connect_wos --activate
+```
+
+`--check` 仅执行一次真实检索来验证权限，不保存密钥。`--activate` 验证通过后，
+通过 stdin 将密钥保存为 GitHub Actions Secret `WOS_API_KEY`，同时更新本机 `.env`，
+并触发 Daily papers。仅需激活时可直接运行第二条命令。工具不打印密钥，也不将密钥放入命令行参数。
+
+每日适配器按三个研究方向执行最多 3 次请求，间隔至少 1.1 秒，通过官方 `publishTimeSpan`
+参数筛选发布日期。Starter API 提供基础文献元数据；无被引次数时保留未知值，
+不把缺失值当成零，不将元数据当成全文解读。出现 401/403/429 时停止后续请求，保留已成功获得的记录。
+
 ## 摘要与推送
 
 相关性筛选后，推荐顺序为 **CNS 子刊 → CNS 正刊 → 其他相关期刊**；同层级优先考虑大模型和智能体，再比较方向匹配、资料完整性及发表时间。关键词必须同时符合工程方向，通用营销或聊天应用不会因提到大模型而进入推荐。科学机器学习和本构模型等方法论文会在解读中说明迁移到结构研究的条件。
