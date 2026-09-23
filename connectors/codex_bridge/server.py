@@ -262,12 +262,29 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         failure = ""
         status = "failed"
         started_at = time.time()
+        model_activity_at = None
+        retry_count = 0
         def progress(stage, message):
+            nonlocal model_activity_at, retry_count
+            if stage in {"analyzing", "compacting", "writing"}:
+                model_activity_at = time.time()
+            if stage == "retrying":
+                retry_count += 1
+                message = f"连接中断，正在第 {retry_count} 次重试；尚未收到新回答"
             event = {"type": "progress", "stage": stage, "message": message,
-                     "started_at": started_at, "updated_at": time.time()}
+                     "started_at": started_at, "updated_at": time.time(),
+                     "model_activity_at": model_activity_at, "retry_count": retry_count}
             if ask.paper_id in jobs:
-                jobs[ask.paper_id]["progress"] = event
+                jobs[ask.paper_id]["progress"] = dict(event)
             queue.put_nowait(event)
+        def model_activity(notify=True):
+            nonlocal model_activity_at
+            model_activity_at = time.time()
+            current = jobs.get(ask.paper_id, {}).get("progress")
+            if current:
+                current["model_activity_at"] = model_activity_at
+            if notify:
+                queue.put_nowait({"type": "activity", "model_activity_at": model_activity_at})
         try:
             progress("preparing", "已收到请求，正在准备论文资料")
             p = store.paper(ask.paper_id)
@@ -331,6 +348,8 @@ def create_app(root=ROOT, runtime=None, rpc=None):
                     answer += "\n\n"
                     queue.put_nowait({"type": "delta", "text": "\n\n"})
                 async for event in client.turn(thread, prompt, images, model=ask.model):
+                    if event["type"] in {"delta", "activity"}:
+                        model_activity(notify=event["type"] == "activity")
                     if event["type"] == "delta" and show:
                         if not answer:
                             progress("writing", "正在生成回答，内容将逐步显示")
@@ -338,7 +357,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
                         queue.put_nowait(event)
                         store.update(message_id, answer, "running")
                     elif event["type"] == "started":
-                        progress("waiting_model", f"Codex 已接收{batch_label}，等待模型输出")
+                        progress("waiting_model", f"请求已提交 Codex（{batch_label}），等待模型输出")
                     elif event["type"] == "progress":
                         progress(event["stage"], event["message"] + (f"（{batch_label}）" if multi else ""))
                     elif event["type"] == "completed" and event["status"] == "interrupted":
@@ -346,6 +365,8 @@ def create_app(root=ROOT, runtime=None, rpc=None):
             if len(batches) > 1 and ask.mode == "summary":
                 progress("synthesizing", "资料已逐批阅读，正在整理全文总结")
                 async for event in client.turn(thread, "所有资料批次现已提供。综合此前逐批阅读要点，回答最初问题：" + ask.message + "。保留可核对的原文引用标签，明确识别不清的页面或缺失证据。", model=ask.model):
+                    if event["type"] in {"delta", "activity"}:
+                        model_activity(notify=event["type"] == "activity")
                     if event["type"] == "delta":
                         answer += event["text"]
                         queue.put_nowait(event)

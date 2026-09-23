@@ -7,7 +7,9 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import time
 import tomllib
+from urllib.request import getproxies
 
 
 TESTED_VERSION = "0.154.0-alpha.6.2"
@@ -31,6 +33,28 @@ INSTRUCTIONS = """你是本人专用的科研论文阅读助手，默认用中�
 
 class CodexError(Exception):
     pass
+
+
+def subprocess_environment() -> dict[str, str]:
+    """Inherit Windows' configured proxy without changing the user's Codex config.
+
+    Pass proxy variables explicitly so Codex also uses the system proxy for
+    its streaming connection instead of repeatedly timing out on a direct route.
+    Keep explicit environment choices (including empty values) authoritative.
+    Never log this environment: a proxy URL may contain credentials.
+    """
+    env = dict(os.environ)
+    explicit = any(k.lower() in {"http_proxy", "https_proxy", "all_proxy"} for k in env)
+    if os.name == "nt" and not explicit:
+        for protocol, proxy in getproxies().items():
+            if protocol in {"http", "https"} and proxy:
+                env[f"{protocol.upper()}_PROXY"] = proxy
+    bypass = next((v for k, v in env.items() if k.lower() == "no_proxy"), "")
+    for key in list(env):
+        if key.lower() == "no_proxy":
+            del env[key]
+    env["NO_PROXY"] = ",".join(filter(None, [bypass, "localhost", "127.0.0.1", "::1"]))
+    return env
 
 
 def executable() -> str:
@@ -93,7 +117,7 @@ class CodexClient:
                 *launch_args(binary, self.workspace), cwd=self.workspace,
                 stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.DEVNULL, limit=8 * 1024 * 1024,
-                creationflags=flags,
+                creationflags=flags, env=subprocess_environment(),
             )
             self.loaded.clear()
             self.reader = asyncio.create_task(self._read())
@@ -221,6 +245,7 @@ class CodexClient:
         turn_id = None
         completed = False
         emitted = {}
+        last_activity = 0.0
         try:
             inputs = [{"type": "text", "text": text}]
             if images and not selected["images"]:
@@ -254,6 +279,13 @@ class CodexClient:
                     elif method == "item/started" and p.get("item", {}).get("type") == "reasoning":
                         # Expose activity only; never forward private reasoning text.
                         yield {"type": "progress", "stage": "analyzing", "message": "Codex 正在分析已提供资料"}
+                    elif method in ("item/reasoning/textDelta", "item/reasoning/summaryTextDelta"):
+                        # A heartbeat is not model activity. Report only the arrival
+                        # of real model events, throttled, without their contents.
+                        now = time.monotonic()
+                        if now - last_activity >= 2:
+                            last_activity = now
+                            yield {"type": "activity"}
                     elif method == "item/started" and p.get("item", {}).get("type") == "contextCompaction":
                         yield {"type": "progress", "stage": "compacting", "message": "Codex 正在整理较长的会话上下文"}
                     elif method == "item/completed" and p.get("item", {}).get("type") == "agentMessage":

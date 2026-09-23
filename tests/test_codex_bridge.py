@@ -2,6 +2,7 @@ import asyncio
 from io import BytesIO
 import json
 from pathlib import Path
+from types import SimpleNamespace
 import uuid
 
 import pytest
@@ -10,7 +11,7 @@ from pypdf import PdfWriter
 from pypdf.generic import DecodedStreamObject, DictionaryObject, NameObject
 
 from connectors.codex_bridge.documents import ArticleParser, fetch_pdf, pdf_candidates, page_selection, parse_pdf, reading_batches, source_context, validate_url
-from connectors.codex_bridge.rpc import CodexClient, CodexError, launch_args
+from connectors.codex_bridge.rpc import CodexClient, CodexError, launch_args, subprocess_environment
 from connectors.codex_bridge.server import LOCAL_ORIGIN, PUBLIC_ORIGIN, create_app
 from tools.build_site import render
 
@@ -301,6 +302,29 @@ def test_progress_precedes_answer_and_empty_result_is_not_success(bridge):
     assert row['status'] == 'failed' and '未返回' in row['error']
 
 
+def test_model_activity_is_distinct_from_request_ack_and_retries(bridge):
+    c, app, rpc = bridge; h = login(c, app)
+    async def active(thread, text, images=(), *, model=None):
+        yield {'type': 'started', 'turn_id': 'test'}
+        for _ in range(2):
+            yield {'type': 'progress', 'stage': 'retrying', 'message': '连接重试'}
+        yield {'type': 'activity'}
+        yield {'type': 'delta', 'text': '原文证据 [P1]'}
+        yield {'type': 'completed', 'status': 'completed'}
+    rpc.turn = active
+    response = ask(c, h)
+    events = [json.loads(line[6:]) for line in response.text.splitlines() if line.startswith('data: ')]
+    waiting = next(e for e in events if e.get('stage') == 'waiting_model')
+    assert waiting['model_activity_at'] is None
+    retry = [e for e in events if e.get('stage') == 'retrying']
+    assert [e['retry_count'] for e in retry] == [1, 2]
+    assert all(e['model_activity_at'] is None for e in retry)
+    activity = next(e for e in events if e['type'] == 'activity')
+    writing = next(e for e in events if e.get('stage') == 'writing')
+    assert writing['model_activity_at'] >= activity['model_activity_at'] > 0
+    assert events[-1]['status'] == 'completed'
+
+
 @pytest.mark.parametrize('target,language', [('zh', '中文'), ('en', '英文')])
 def test_pasted_translation_only_uses_pasted_text_and_selected_language(bridge, target, language):
     c, app, rpc = bridge; h = login(c, app)
@@ -347,9 +371,31 @@ def test_rpc_recovers_completed_message_and_only_exposes_activity(tmp_path):
         events = [e async for e in client.turn('test', 'test')]
         assert ''.join(e['text'] for e in events if e['type'] == 'delta') == '已收到完整回答仅终态消息'
         assert [e['stage'] for e in events if e['type'] == 'progress'] == ['analyzing', 'retrying']
+        assert {'type': 'activity'} in events
         assert 'private reasoning' not in json.dumps(events)
         assert not client.listeners
     asyncio.run(run())
+
+
+def test_codex_child_inherits_windows_proxy_without_changing_parent(monkeypatch):
+    original = {'PATH': 'preserved', 'NO_PROXY': 'internal.example'}
+    monkeypatch.setattr('connectors.codex_bridge.rpc.os', SimpleNamespace(name='nt', environ=original))
+    monkeypatch.setattr('connectors.codex_bridge.rpc.getproxies', lambda: {'http': 'http://127.0.0.1:7890', 'https': 'http://127.0.0.1:7890'})
+    child = subprocess_environment()
+    assert child['HTTP_PROXY'] == child['HTTPS_PROXY'] == 'http://127.0.0.1:7890'
+    assert child['PATH'] == 'preserved'
+    assert set(child['NO_PROXY'].split(',')) == {'internal.example', 'localhost', '127.0.0.1', '::1'}
+    assert original == {'PATH': 'preserved', 'NO_PROXY': 'internal.example'}
+
+
+@pytest.mark.parametrize('explicit', [{'https_proxy': 'http://configured.example:8080'}, {'ALL_PROXY': 'socks5://configured.example:1080'}, {'HTTPS_PROXY': ''}])
+def test_explicit_proxy_preferences_take_precedence(monkeypatch, explicit):
+    monkeypatch.setattr('connectors.codex_bridge.rpc.os', SimpleNamespace(name='nt', environ=explicit))
+    def unexpected_lookup():
+        raise AssertionError('Explicit configuration must not be replaced')
+    monkeypatch.setattr('connectors.codex_bridge.rpc.getproxies', unexpected_lookup)
+    child = subprocess_environment()
+    assert {k: v for k, v in child.items() if k != 'NO_PROXY'} == explicit
 
 
 def test_pdf_extraction_and_page_selection(tmp_path):

@@ -91,7 +91,11 @@
     dialog.querySelectorAll('.chat-progress').forEach(box => {
       const elapsed = Math.max(0, Math.floor(Date.now() / 1000 - Number(box.dataset.started)));
       const silence = Math.max(0, Math.floor((Date.now() - Number(box.dataset.received)) / 1000));
-      box.querySelector('.chat-progress-time').textContent = `已用时 ${Math.floor(elapsed / 60)}分${elapsed % 60}秒 · 上次响应 ${silence} 秒前${silence > 35 ? '；尚无新响应，可点击停止' : elapsed > 90 ? '；可继续等待，或停止后缩小问题范围' : ''}`;
+      const modelSilence = box.dataset.modelActivity ? Math.max(0, Math.floor(Date.now() / 1000 - Number(box.dataset.modelActivity))) : null;
+      const modelStatus = modelSilence === null ? '尚未收到模型输出' : `最近模型活动 ${modelSilence} 秒前`;
+      const connection = silence > 35 ? '本机连接无新响应' : '本机连接正常';
+      const hint = elapsed > 90 ? '；可继续等待或停止，重发会重新开始生成' : '';
+      box.querySelector('.chat-progress-time').textContent = `已用时 ${Math.floor(elapsed / 60)}分${elapsed % 60}秒 · ${connection} · ${modelStatus}${hint}`;
     });
   }
   function showProgress(body, progress = {}) {
@@ -105,7 +109,8 @@
     }
     box.dataset.received = String(Date.now());
     if (progress.started_at) box.dataset.started = String(progress.started_at);
-    const stage = progress.message || '请求已发出，等待本机连接程序接收';
+    if (progress.model_activity_at) box.dataset.modelActivity = String(progress.model_activity_at);
+    const stage = progress.message || box.querySelector('.chat-progress-stage').textContent || '请求已发出，等待本机连接程序接收';
     if (box.querySelector('.chat-progress-stage').textContent !== stage) {
       box.querySelector('.chat-progress-stage').textContent = stage;
       const entry = document.createElement('li'); entry.textContent = stage;
@@ -386,10 +391,11 @@
           if (value.type === 'delta') {
             answer += value.text; body.textContent = answer;
             body.closest('.chat-message').querySelector('.text-button').disabled = !answer;
-            showProgress(body, { message: '正在生成回答，内容将逐步显示' });
+            showProgress(body, { message: '正在生成回答，内容将逐步显示', model_activity_at: Date.now() / 1000 });
             $('.chat-messages').scrollTop = $('.chat-messages').scrollHeight;
           }
           if (value.type === 'progress') { showProgress(body, value); notice(value.message); }
+          if (value.type === 'activity') showProgress(body, value);
           if (value.type === 'heartbeat') showProgress(body, value.progress || {});
           if (value.type === 'error') { failure = value.message; status(value.message, value.state); notice(value.message); }
           if (value.type === 'done') {
