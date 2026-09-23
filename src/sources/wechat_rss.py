@@ -75,6 +75,8 @@ class WeChatRSSAdapter:
                 result = [_item(row, "") for row in public_records(payload["records"])]
                 timestamp = parse_date(payload.get("exported_at"))
                 mode = "WeRSS 本地同步已接入"
+                if any(row.raw_metadata.get("access_mode") == "public_index" for row in result):
+                    mode = "公开索引已接入"
                 value = payload.get("failed_feeds", 0)
                 imported_failures = value if type(value) is int and value > 0 else 0
             except Exception as exc:
@@ -85,12 +87,17 @@ class WeChatRSSAdapter:
         result = [r for r in result if in_date_window(r.published_at, since, until)]
         state = "ok" if result else "no_data"
         message = f"{mode}：读取 {imported} 条文章元数据，本期 {len(result)} 条。"
+        if mode == "公开索引已接入":
+            message += " 微信后台文章列表受限；已通过公开搜索获取线索，链接为检索入口，非已核验全文。"
         if timestamp:
             message += f" 最近同步：{timestamp.astimezone(timezone(timedelta(hours=8))):%m-%d %H:%M}（北京时间）。"
             now = until if until.tzinfo else until.replace(tzinfo=timezone.utc)
             if now - timestamp > timedelta(days=3):
                 state = "partial"
-                message += " 导出超过 3 天，请检查本机服务和微信授权。"
+                message += " 导出超过 3 天，请检查同步任务；将尝试公开索引。"
+            elif mode == "公开索引已接入" and now - timestamp > timedelta(hours=24):
+                state = "partial"
+                message += " 公开索引快照超过 24 小时，将尝试刷新。"
         elif mode == "WeRSS 本地同步已接入":
             state = "partial"
             message += " 导出缺少采集时间，请重新同步。"
@@ -117,7 +124,7 @@ class WeChatRSSAdapter:
                             pass
                     message += f"已配置 {len(accounts)} 个公众号订阅。"
                     if health["status"] == "quota_exhausted":
-                        message += " 微信返回 200013 限频，已停止本轮采集，等待下次定时同步。"
+                        message += " 微信后台列表返回 200013，已停止该接口采集；不能保证等待后恢复，将尝试公开索引。"
                     elif health["status"] == "access_denied":
                         message += " 请在本机 WeRSS 重新扫码。"
                     else:
@@ -193,5 +200,8 @@ def _item(item: dict, feed_url: str) -> RawRecord:
         landing_url=link,
         venue=account,
         source_score=0.4,
-        raw_metadata={"provider": "WeRSS", "account": account},
+        raw_metadata=({"provider": "Sogou WeChat public index", "account": account,
+                       "access_mode": "public_index", "abstract_kind": "search_snippet",
+                       "link_kind": "search_results", "account_verification": "index_label_only"}
+                      if item.get("access_mode") == "public_index" else {"provider": "WeRSS", "account": account}),
     )

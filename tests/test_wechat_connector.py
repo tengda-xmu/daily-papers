@@ -130,6 +130,7 @@ def test_health_reports_real_rate_limit_without_fake_articles(tmp_path):
 
 def test_rate_limit_stops_remaining_accounts_and_preserves_export(tmp_path, monkeypatch):
     import connectors.wechat_sync.export as connector
+    monkeypatch.setattr(connector, "ROOT", tmp_path)
     calls = []
     def api(path, token="", form=None, timeout=45):
         calls.append(path)

@@ -1,7 +1,24 @@
 # 微信公众号本机同步
 
-本机运行 WeRSS，微信扫码会话只留在电脑；每日把文章元数据和采集状态同步到
+本机 WeRSS 管理订阅，微信扫码会话只留在电脑；每日把文章元数据和采集状态同步到
 `connector-data`，GitHub Actions 07:00 读取。无需把本机服务暴露到公网。
+
+## 文章采集：公开索引
+
+微信后台跨账号列表持续返回 `200013`，已有[上游维护者报告核心接口关闭](https://github.com/wechat-article/wechat-article-exporter/issues/200)。
+当前默认 `article_mode=public_index` 停用这条受限路径，不再把“等待下次重试”当作解决办法。
+
+- 每日 06:35 轮换最多 3 次搜狗微信公开搜索，请求间隔至少 30 秒，缓存 24 小时；重复执行共享当天预算。
+- 根据已订阅账号名称及真实发布时间筛选近 30 天结果。公开账号标签未经独立身份核验，索引覆盖不等于全部订阅历史。
+- 仅保留标题、来源、短检索片段和稳定的公开检索入口，不自动跟随需验证的 `/link` 跳转，不声称取得原文。
+- 遇到验证码暂停公开请求至少 24 小时，仍可使用有效缓存；不更换网络或绕过验证。
+- 首页单独展示“微信公众号 · 科研线索”，不将检索片段送入论文精读、不占核心和扩展名额。
+- 公开采集不依赖本机 WeRSS 启动或扫码。云端每日优先读取最新导出；快照过期或缺失时尝试同样的公开索引。
+
+收到新结果时合并保留近 30 天旧记录；没有新结果或请求失败时保留原快照及其采集时间。
+原 WeRSS 后台限制与公开索引的可用状态分别记录，不能把公开采集成功理解为微信解除限制。
+
+## 本机服务与任务
 
 当前 Windows 安装使用 `wufulin/wechat-mp-rss` 的
 `4da70d790a44af8f3bcc72a76b7a141bd1715a1f`，独立 Python 环境与前端构建存放在
@@ -17,15 +34,13 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/sync_wechat.ps1
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/schedule_wechat.ps1 -Enable
 ```
 
-任务运行时电脑需要开机并登录 Windows；脚本会先启动本机服务，使用已保存的授权。
-本机安装开启 WeRSS 的已授权会话恢复，失效时仍需要重新扫码。
-默认仅抓取各订阅的第一页，关闭正文采集、全文 RSS、图片转存与其他通知任务。
-检索与推荐相关性由主项目的三个研究方向过滤。
+Windows 任务运行时电脑需要开机并登录。晚间账号发现使用本机服务和已保存的授权，
+失效时仍需重新扫码。WeRSS 关闭正文采集、全文 RSS、图片转存与其他通知任务。
 
 `tools/werss_compat.py` 针对固定版本做小范围兼容修正：微信 `200013` 限频错误
 向上返回、采集请求验证 TLS、请求前至少间隔 30 秒、接口等待当前页面采集完成。
 另修复重启恢复已授权会话后登录状态标记未更新的问题，仅在账户验证成功后更新。
-遇到限频立即终止剩余订阅，不轮换网络或连续重试。下次每日任务再尝试。
+原生模式遇到限频立即终止剩余订阅，不轮换网络或连续重试；目前该模式不用于每日文章采集。
 升级 WeRSS 时需要先复核这些补丁。
 
 ## 自动发现与扩展订阅
@@ -56,10 +71,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/schedule_wechat.ps1 -E
 《航空学报》的官方微信入口可见[期刊官网](https://hkxb.buaa.edu.cn/)，当前搜索名称为“航空学报CJA”。
 
 新增订阅通过本机 WeRSS 的 `fetch_articles=false` 扩展参数延迟首次采集，避免批量建号
-立即触发文章请求。每日 06:35 最多轮换更新 12 个账号，优先处理最久未尝试的订阅；
+立即触发受限文章请求。每日 06:35 公开索引按当前订阅目录筛选，
 07:00 云端日报读取最新已导出的内容。晚间新增的订阅目录在下次网站更新后可见。
 
-`data/inbox/wechat.json` 仅允许标题、公众号名、短摘要、发布日期与微信原文链接，
+`data/inbox/wechat.json` 仅允许标题、公众号名、短摘要、发布日期、原文或公开检索链接及对应类型标记，
 `wechat-status.json` 仅允许采集时间、状态、订阅名称及是否授权。
 无文章或采集失败时保留之前的数据；状态文件可以单独更新，避免把失败显示成成功。
 原文长链接只保留 `__biz`、`mid`、`idx`、`sn`，剔除登录和跟踪参数。
@@ -70,6 +85,9 @@ python connectors/wechat_sync/export.py
 python -m tools.publish_wechat
 # 仅发布一次实际采集状态，保留原来的文章快照：
 python -m tools.publish_wechat --status-only
+# 按当前配置采集公开索引，并发布成功结果：
+python connectors/wechat_sync/export.py --refresh
+python -m tools.publish_wechat
 ```
 
 微信公众号属于科研线索来源，不能因订阅号声称某结论就自动视作原论文结论。

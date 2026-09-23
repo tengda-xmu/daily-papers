@@ -4,7 +4,7 @@ from __future__ import annotations
 import html
 import re
 from datetime import timezone
-from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit, quote
 
 from src.models import RawRecord, parse_date
 
@@ -35,6 +35,11 @@ def excerpt(value: str) -> str:
     return text[:300] + ("…" if len(text) > 300 else "")
 
 
+def public_index_url(account: str, title: str) -> str:
+    # Rebuild a stable public search URL, never retain expiring redirect tokens.
+    return "https://weixin.sogou.com/weixin?type=2&query=" + quote(excerpt(account) + " " + excerpt(title), safe="")
+
+
 def public_records(records) -> list[dict]:
     clean = {}
     for row in records:
@@ -44,16 +49,23 @@ def public_records(records) -> list[dict]:
             continue
         url = article_url(row.get("landing_url", row.get("url", row.get("link", ""))))
         title = excerpt(row["title"])
+        metadata = row.get("raw_metadata") if isinstance(row.get("raw_metadata"), dict) else {}
+        indexed = row.get("access_mode") == "public_index" or metadata.get("access_mode") == "public_index"
+        account = row.get("venue", row.get("account", "微信公众号"))
+        if indexed:
+            url = public_index_url(account, title)
         if not url or not title:
             continue
         date = parse_date(row.get("published_at", row.get("published", "")))
-        account = row.get("venue", row.get("account", "微信公众号"))
         clean[url] = {
             "source": "微信公众号", "title": title, "account": excerpt(account),
             "published_at": date.isoformat() if date else "",
             "summary": excerpt(row.get("summary") or row.get("abstract") or row.get("description", "")),
             "landing_url": url,
         }
+        if indexed:
+            clean[url]["access_mode"] = "public_index"
+            clean[url]["link_kind"] = "search_results"
     return list(clean.values())
 
 
@@ -67,7 +79,8 @@ def public_export(payload: dict) -> dict:
     if not timestamp:
         raise ValueError("Collection timestamp is required")
     failed = payload.get("failed_feeds", 0)
-    return {"provider": "WeRSS", "exported_at": timestamp.astimezone(timezone.utc).isoformat(),
+    indexed = any(row.get("access_mode") == "public_index" for row in records)
+    return {"provider": "WeChat public index" if indexed else "WeRSS", "exported_at": timestamp.astimezone(timezone.utc).isoformat(),
             "failed_feeds": failed if type(failed) is int and failed >= 0 else 0, "records": records}
 
 

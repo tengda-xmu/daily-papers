@@ -6,10 +6,13 @@ $env:PYTHONIOENCODING = 'utf-8'
 $env:GIT_TERMINAL_PROMPT = '0'
 $logPath = Join-Path $repoRoot '.local\wechat-sync.log'
 try {
-    & (Join-Path $PSHOME 'powershell.exe') -NoProfile -NonInteractive -ExecutionPolicy Bypass -File (Join-Path $repoRoot 'tools\start_wechat.ps1') | Out-Null
-    for ($attempt = 0; $attempt -lt 15; $attempt++) {
-        try { $health = Invoke-RestMethod -Uri 'http://127.0.0.1:8001/api/health' -TimeoutSec 2; if ($health.status -eq 'ok') { break } } catch {}
-        Start-Sleep -Seconds 2
+    $policy = Get-Content -LiteralPath (Join-Path $repoRoot 'config\wechat_accounts.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    if ($policy.article_mode -ne 'public_index') {
+        & (Join-Path $PSHOME 'powershell.exe') -NoProfile -NonInteractive -ExecutionPolicy Bypass -File (Join-Path $repoRoot 'tools\start_wechat.ps1') | Out-Null
+        for ($attempt = 0; $attempt -lt 15; $attempt++) {
+            try { $health = Invoke-RestMethod -Uri 'http://127.0.0.1:8001/api/health' -TimeoutSec 2; if ($health.status -eq 'ok') { break } } catch {}
+            Start-Sleep -Seconds 2
+        }
     }
     # Windows PowerShell treats native stderr as an error record. Preserve
     # the exit code so a failed collection can still publish its health.
@@ -33,6 +36,6 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Metadata publishing failed' }
     exit 0
 } catch {
-    "[$(Get-Date -Format s)] Synchronization stopped; check WeRSS authorization and subscriptions. Previous export preserved." | Add-Content -LiteralPath $logPath -Encoding UTF8
+    "[$(Get-Date -Format s)] Synchronization stopped; check the configured article source. Previous export preserved." | Add-Content -LiteralPath $logPath -Encoding UTF8
     exit 1
 }

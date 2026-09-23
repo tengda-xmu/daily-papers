@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 from src.settings import load_env, read_env
 from src.sources.wechat_rss import WeChatRSSAdapter
+from src.sources.wechat_public_index import WeChatPublicIndexAdapter
 from src.wechat_metadata import public_export, public_health
 
 LOCAL_API = "http://127.0.0.1:8001/api/v1/wx"
@@ -151,16 +152,30 @@ def refresh_local_feeds(health_path: Path | None = None) -> int:
 def export(output: Path, refresh: bool = False) -> int:
     load_env()
     health_path = output.with_name("wechat-status.json")
-    failures = refresh_local_feeds(health_path) if refresh else 0
+    policy_path = ROOT / "config/wechat_accounts.json"
+    policy = json.loads(policy_path.read_text(encoding="utf-8")) if policy_path.is_file() else {}
+    use_index = refresh and policy.get("article_mode") == "public_index"
+    failures = refresh_local_feeds(health_path) if refresh and not use_index else 0
     urls = [u.strip() for u in os.getenv("WECHAT_RSS_URLS", "").split(",") if u.strip()]
     if not urls:
         urls = ["http://127.0.0.1:8001/feed/all.json?limit=100"]
-    adapter = WeChatRSSAdapter(urls=urls, import_path=ROOT / ".local/no-wechat-fallback.json")
+    adapter = WeChatPublicIndexAdapter() if use_index else WeChatRSSAdapter(urls=urls, import_path=ROOT / ".local/no-wechat-fallback.json")
     now = datetime.now(timezone.utc)
     records = adapter.fetch(now - timedelta(days=30), now)
     if adapter.status.status not in ("ok", "partial") or not records:
-        raise RuntimeError("No current WeRSS article metadata; authorize WeChat and add subscriptions")
-    payload = public_export({"exported_at": now.isoformat(), "failed_feeds": failures + (adapter.status.status == "partial"),
+        raise RuntimeError("No new public index metadata; previous export preserved" if use_index else
+                           "No current WeRSS article metadata; check the local service")
+    if use_index and output.is_file():
+        from src.wechat_metadata import public_records
+        from src.models import in_date_window
+        try:
+            old = json.loads(output.read_text(encoding="utf-8-sig"))
+        except (ValueError, OSError):
+            old = {}
+        preserved = [row for row in public_records(old.get("records", []))
+                     if in_date_window(row.get("published_at", ""), now - timedelta(days=30), now)]
+        records = [*preserved, *records]
+    payload = public_export({"exported_at": now.isoformat(), "failed_feeds": failures + int(adapter.status.status == "partial"),
                              "records": records})
     output.parent.mkdir(parents=True, exist_ok=True)
     temporary = output.with_suffix(".json.tmp")
@@ -171,14 +186,14 @@ def export(output: Path, refresh: bool = False) -> int:
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--refresh", action="store_true", help="Refresh subscribed accounts in the local WeRSS service first")
+    parser.add_argument("--refresh", action="store_true", help="Collect recent metadata using the configured article_mode")
     parser.add_argument("--output", type=Path, default=ROOT / "data/inbox/wechat.json")
     args = parser.parse_args()
     try:
         count = export(args.output, args.refresh)
     except Exception as exc:
         # Network exceptions may contain feed credentials. Do not print them.
-        raise SystemExit(f"WeChat export stopped ({type(exc).__name__}); check local WeRSS authorization and subscriptions. Previous export preserved.") from None
+        raise SystemExit(f"WeChat export stopped ({type(exc).__name__}); no new usable metadata. Check the configured article source. Previous export preserved.") from None
     print(f"Exported {count} WeChat article metadata records; no full text or sessions included.")
 
 

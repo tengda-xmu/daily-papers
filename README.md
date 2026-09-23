@@ -75,18 +75,24 @@ python -m tools.publish_researchgate
 
 ### 微信公众号
 
-已增加本机 WeRSS 同步连接器：扫码和订阅保留在电脑上，Windows 每天 06:35
-刷新订阅，把短摘要与原文链接发布到 `connector-data`，07:00 的 GitHub 日报读取。
+默认使用公开索引采集公众号文章线索：Windows 每天 06:35 轮换最多 3 次公开检索，
+按已订阅账号和近 30 天发布日期筛选，把标题、短片段和检索入口发布到 `connector-data`，
+07:00 的 GitHub 日报读取；快照缺失或超过 24 小时则由云端尝试公开检索。
+线索在首页“微信公众号 · 科研线索”单独展示，不占核心与扩展论文名额。
+WeRSS 继续管理订阅，扫码和会话保留在电脑上。
 本机管理地址为 `http://127.0.0.1:8001/`，不必配置公网地址或把扫码会话放进 Actions。
 参见 [安装与日常同步](connectors/wechat_sync/README.md)。
 
 另有每天 18:00 的公众号自动发现任务：轮换检索 AI、智能体、大模型、可靠性、航空航天等主题，
 每天最多 2 次检索、自动新增 3 个符合科研条件的账号，订阅上限 60 个；规则位于
-[`config/wechat_accounts.json`](config/wechat_accounts.json)。新增订阅延迟至早间采集，
-每天最多轮换更新 12 个账号；网站配置页可查看当前订阅目录与发现状态。
+[`config/wechat_accounts.json`](config/wechat_accounts.json)。新增账号加入后续公开结果的筛选目录；
+网站配置页可查看当前订阅目录与发现状态。搜索索引不保证覆盖每个账号的全部文章。
 
-微信返回 `200013` 时立即停止本轮采集，单独同步限频状态；已有文章不会被空结果覆盖。
-网页会显示真实状态及最近同步时间。Windows 任务需要电脑开机并登录，授权过期后需扫码。
+微信后台列表持续返回 `200013`；[上游维护者报告接口关闭](https://github.com/wechat-article/wechat-article-exporter/issues/200)，
+不能假定等待一天或重新扫码即可恢复。当前 `article_mode=public_index` 不再调用该受限列表接口。
+公开索引使用实际发布日期，链接明确标注为“公开检索入口”，不声称取得原文或核验全文。
+请求间隔至少 30 秒，结果缓存 24 小时；遇验证码停用网络请求至少 24 小时，保留成功数据。
+Windows 任务需要电脑开机并登录；晚间 WeRSS 账号发现仍依赖有效扫码授权。
 本机 `WECHAT_RSS_URLS` 指向文章地址 `/feed/all.json?limit=100`，主仓库另支持
 `WECHAT_IMPORT_PATH=data/inbox/wechat.json`。RSS 根目录并不是文章列表。
 
@@ -156,7 +162,7 @@ WECHAT_WORK_WEBHOOK_URL
 
 ResearchGate 会话目录、API 密钥和个人登录信息不能提交到 Git。缺失或失败的单个来源不会阻塞其他来源更新，页面会显示对应运行状态。
 
-arXiv、OpenAlex、Crossref、Semantic Scholar 和 PubMed 可使用公开接口；匿名访问可能受到服务商限流。OpenAlex 支持可选的 `OPENALEX_API_KEY` 与 `OPENALEX_MAILTO`，Semantic Scholar 支持 `SEMANTIC_SCHOLAR_API_KEY`。Web of Science 在 Clarivate 开通 Starter API 后设置 `WOS_API_KEY`，可申请试用或机构方案。Elsevier、Google Scholar 和微信公众号仍分别需要授权或连接器数据；ResearchGate 可复用 SerpApi 公开索引或读取本地导出。
+arXiv、OpenAlex、Crossref、Semantic Scholar 和 PubMed 可使用公开接口；匿名访问可能受到服务商限流。OpenAlex 支持可选的 `OPENALEX_API_KEY` 与 `OPENALEX_MAILTO`，Semantic Scholar 支持 `SEMANTIC_SCHOLAR_API_KEY`。Web of Science 在 Clarivate 开通 Starter API 后设置 `WOS_API_KEY`，可申请试用或机构方案。Elsevier、Google Scholar 仍分别需要 API 授权；微信公众号支持公开索引或连接器数据，ResearchGate 可复用 SerpApi 公开索引或读取本地导出。
 
 网页的[来源配置指南](https://tengda-xmu.github.io/daily-papers/setup.html)提供每个来源的授权入口和步骤，也可在本地安全输入一个 GitHub Secret：
 

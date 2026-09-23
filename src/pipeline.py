@@ -15,7 +15,7 @@ from src.models import RawRecord, SourceStatus, parse_date
 from src.sources.elsevier import ElsevierAdapter
 from src.sources.google_scholar import GoogleScholarAdapter
 from src.sources.researchgate import ResearchGateAdapter
-from src.sources.wechat_rss import WeChatRSSAdapter
+from src.sources.wechat import WeChatAdapter
 from src.sources.cns_journals import CNSJournalAdapter
 from src.sources.public_literature import (
     ArxivAdapter, CrossrefAdapter, OpenAlexAdapter, PubMedAdapter,
@@ -274,7 +274,7 @@ def build_adapters() -> list:
         ElsevierAdapter(queries=queries or None),
         GoogleScholarAdapter(),
         ResearchGateAdapter(),
-        WeChatRSSAdapter(),
+        WeChatAdapter(),
         ArxivAdapter(),
         OpenAlexAdapter(),
         CrossrefAdapter(),
@@ -324,7 +324,9 @@ def run_pipeline(
     if adapters is None:
         all_records.extend(curated_records(until, cns_days))
 
-    ranked = rank(all_records)
+    # Public-account posts are research leads, not peer-reviewed papers.
+    wechat_articles = [record.to_dict() for record in all_records if record.source == "微信公众号"]
+    ranked = rank(record for record in all_records if record.source != "微信公众号")
     max_core = _read_setting("MAX_CORE", 5)
     max_extended = _read_setting("MAX_EXTENDED", 5)
     papers: list[dict] = []
@@ -357,6 +359,7 @@ def run_pipeline(
         "extended": extended,
         "papers": core + extended + remaining,
         "source_status": statuses,
+        "wechat_articles": wechat_articles,
         "selection_policy": {"priority": "CNS 子刊 > CNS 正刊 > 其他相关期刊",
                              "within_venue_priority": "大模型与智能体优先",
                              "core_requires_chinese_analysis": True,

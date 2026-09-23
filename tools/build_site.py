@@ -194,7 +194,7 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./") -> str:
 </article>'''
 
 
-def source_directory(statuses: dict, counts: Counter, root: str = "./") -> str:
+def source_directory(statuses: dict, counts: Counter, root: str = "./", wechat_count: int = 0) -> str:
     sections = []
     for kind, label, description in (
         ("adapter", "数据采集", "已实现来源及本轮采集状态；公开接口无需登录即可运行。"),
@@ -223,17 +223,23 @@ def source_directory(statuses: dict, counts: Counter, root: str = "./") -> str:
             connector_message = source_state(item, statuses)[1] or ""
             if item["id"] == "ResearchGate" and connector_message.startswith(("本地连接器已导入", "公开索引已接入")):
                 message = connector_message
-            elif item["id"] == "微信公众号" and connector_message.startswith("WeRSS "):
+            elif item["id"] == "微信公众号" and connector_message.startswith(("WeRSS ", "公开索引已接入")):
                 message = connector_message
             elif kind == "adapter" and state in ("ok", "no_data"):
                 message += f' 本轮获取 {(statuses.get(item["id"]) or {}).get("count", 0)} 条元数据。'
             setup_link = f'<a href="{root}setup.html#{SETUP_SECTIONS.get(item["id"], "public")}">授权与配置</a>' if state in ("configuration_missing", "authorization_required", "quota_exhausted", "access_denied") else ""
             state_class = "ok" if state in ("ok", "no_data") else "pending" if state in ("planned", "platform", "not_run") else "warn"
+            state_label = STATE_LABELS.get(state, '状态待确认')
+            count_link = f'<button type="button" class="text-button" data-source-filter="{esc(item["id"])}">本期 {counts[item["id"]]} 篇</button>'
+            if item["id"] == "微信公众号" and wechat_count:
+                count_link = f'<a class="text-button" href="#wechat-articles">本期 {wechat_count} 条线索</a>'
+                if connector_message.startswith("公开索引已接入"):
+                    state_label = "公开索引可用" if state == "ok" else "公开索引部分可用"
             rows.append(f'''
 <div class="source-row">
   <div><a class="source-name" href="{safe_url(item['url'])}" target="_blank" rel="noopener noreferrer">{esc(item['label'])}</a><p>{esc(message)}</p></div>
-  <div class="source-state"><span class="state {state_class}">{esc(STATE_LABELS.get(state, '状态待确认'))}</span>
-  <button type="button" class="text-button" data-source-filter="{esc(item['id'])}">本期 {counts[item['id']]} 篇</button>{setup_link}</div>
+  <div class="source-state"><span class="state {state_class}">{esc(state_label)}</span>
+  {count_link}{setup_link}</div>
 </div>''')
         if not rows:
             continue
@@ -253,6 +259,21 @@ def journal_directory() -> str:
         )
         groups.append(f'<details class="directory-group" {"open" if group["id"].startswith("CNS") else ""}><summary>{esc(group["id"])}<span>{len(journals)} 本</span></summary><div class="journal-list">{buttons}</div></details>')
     return "".join(groups)
+
+
+def wechat_articles_panel(records: list[dict]) -> str:
+    if not records:
+        return ""
+    entries = []
+    for row in sorted(records, key=lambda r: r.get("published_at", ""), reverse=True)[:40]:
+        indexed = (row.get("raw_metadata") or {}).get("access_mode") == "public_index"
+        label = "公开检索入口" if indexed else "微信公众号原文"
+        entries.append(f'''<li class="archive-entry"><div><a href="{safe_url(row.get('landing_url'))}" target="_blank" rel="noopener noreferrer">{esc(row.get('title'))}</a>
+<p>{esc(row.get('venue'))} · {esc(display_time(row.get('published_at'))[0])} · {label}</p>
+<p>{esc(row.get('abstract', ''))}</p></div></li>''')
+    return f'''<details id="wechat-articles" class="reference-panel"><summary><span>微信公众号 · 科研线索</span><span class="reference-meta">{len(records)} 条</span></summary>
+<div class="reference-body"><p class="section-description">按已订阅的公众号筛选。标注“公开检索入口”的条目提供标题、来源和检索片段，点击标题可继续查找原文；文章内容及结论尚待核验。
+文章跳转若要求验证码，请在浏览器中手动完成。这些线索不占用核心与扩展论文名额。</p><ul>{''.join(entries)}</ul></div></details>'''
 
 
 def render(payload: dict, *, archive_date: str | None = None) -> str:
@@ -312,7 +333,8 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
         core_html=core_html, extended_html=extended_html,
         core_empty="hidden" if core else "", extended_empty="hidden" if extended else "",
         no_data="" if not all_papers else "hidden", no_match="hidden",
-        sources=source_directory(statuses, counts, root), journals=journal_directory(),
+        sources=source_directory(statuses, counts, root, len(payload.get("wechat_articles", []))), journals=journal_directory(),
+        wechat_articles=wechat_articles_panel(payload.get("wechat_articles", [])),
         window_start=esc(display_time(payload.get("since"))[0]), window_end=esc(display_time(payload.get("until"))[0]),
         source_count=len(SOURCE_CATALOG), journal_count=len(JOURNALS), group_count=len(VENUE_GROUPS),
         cns_children=cns_children, adapter_count=adapter_count, ok_count=ok, root=root, repo=REPO_URL,

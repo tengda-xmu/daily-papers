@@ -28,6 +28,13 @@ jobs:
           key: scholar-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
             scholar-${{ runner.os }}-
+      - name: Restore public WeChat index cache
+        uses: actions/cache@v4
+        with:
+          path: data/cache/wechat-public
+          key: wechat-public-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            wechat-public-${{ runner.os }}-
       - name: Import local connector metadata
         shell: bash
         run: |
