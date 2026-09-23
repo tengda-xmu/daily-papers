@@ -18,6 +18,7 @@ if str(ROOT) not in sys.path:
 from src.catalog import (JOURNALS, SOURCE_CATALOG, STATE_LABELS, TOPIC_CATALOG,
                          VENUE_GROUPS, paper_facets, source_state, string_list)
 from src.research_focus import focus_tags
+from src.figures import get_figure
 
 DATA = ROOT / "data"
 OUT = ROOT / "site"
@@ -88,7 +89,27 @@ def document(content: str, *, title: str, root: str = "./", active: str = "daily
     )
 
 
-def paper_card(paper: dict, tier: str, rank: int = 0) -> str:
+def paper_figure(paper: dict, root: str = "./") -> str:
+    figure = get_figure(paper.get("doi", ""))
+    if not figure:
+        return ""
+    image_url = esc(root + figure["image_path"])
+    title = f'{figure["figure_label"]} · {figure["title_zh"]}'
+    return f'''
+  <figure class="paper-figure">
+    <a class="figure-preview" href="{image_url}" target="_blank" rel="noopener noreferrer" aria-label="{esc(title)}，查看大图">
+      <img src="{image_url}" width="{figure['width']}" height="{figure['height']}" alt="{esc(figure['title_zh'])}，{esc(figure['figure_label'])}" loading="lazy" decoding="async">
+      <span class="figure-open">查看大图</span>
+    </a>
+    <figcaption>
+      <strong class="figure-title">{esc(title)}</strong>
+      <p class="figure-explanation">图解：{esc(figure['caption_zh'])}</p>
+      <p class="figure-credit">{esc(figure['credit'])}<br><a href="{safe_url(figure['source_url'])}" target="_blank" rel="noopener noreferrer">原文图页</a> · <a href="{safe_url(figure['license_url'])}" target="_blank" rel="noopener noreferrer">{esc(figure['license'])}</a><br>原图未改动，中文图解由本站整理。</p>
+    </figcaption>
+  </figure>'''
+
+
+def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./") -> str:
     facets = paper_facets(paper)
     title = paper.get("title") or "未命名论文"
     doi = paper.get("doi") or ""
@@ -156,6 +177,7 @@ def paper_card(paper: dict, tier: str, rank: int = 0) -> str:
         journal_badge += '<span class="publication-type">预印本版本</span>'
     method_badges = "".join(f'<span class="method-focus">{esc(tag)}</span>'
                            for tag in focus_tags(title, paper.get("abstract", "")))
+    figure_html = paper_figure(paper, root) if tier == "core" else ""
     return f'''
 <article class="paper {tier}" data-sources="{esc(json.dumps(facets['source_ids'], ensure_ascii=False))}"
  data-topics="{esc(json.dumps(topics, ensure_ascii=False))}" data-venue="{esc(facets['venue_group'])}"
@@ -165,6 +187,7 @@ def paper_card(paper: dict, tier: str, rank: int = 0) -> str:
   <h3 class="{translated_class.strip()}">{title_html}</h3>
   <p class="bibliography"><span class="authors">{esc(short_authors)}</span>{venue_line}</p>
   <p class="abstract">{esc(preview)}</p>
+{figure_html}
   <div class="paper-tools">{primary_action}<button type="button" class="text-button paper-toggle" data-label="{note_label}" aria-expanded="false" aria-controls="{panel_id}">{note_label}<span aria-hidden="true">＋</span></button></div>
   <div class="paper-detail-panel" id="{panel_id}" hidden>{original}{provenance}<p class="detail-label">{summary_label}</p><p class="full-abstract">{esc(summary)}</p>{recommendation_html}{full_authors}{deep_html}<div class="tags">{tags}</div><div class="paper-actions">{actions}</div></div>
 </article>'''
@@ -252,8 +275,8 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
     day, generated = display_time(payload.get("generated_at"))
     issue = archive_date or day
     root = "../" if archive_date else "./"
-    core_html = "".join(paper_card(p, "core", i) for i, p in enumerate(core))
-    extended_html = "".join(paper_card(p, "extended", i) for i, p in enumerate(extended))
+    core_html = "".join(paper_card(p, "core", i, root) for i, p in enumerate(core))
+    extended_html = "".join(paper_card(p, "extended", i, root) for i, p in enumerate(extended))
     missing = sum(source_state(s, statuses)[0] in ("configuration_missing", "authorization_required") for s in SOURCE_CATALOG if s["kind"] == "adapter")
     ok = sum(source_state(s, statuses)[0] in ("ok", "no_data") for s in SOURCE_CATALOG if s["kind"] == "adapter")
     adapter_count = sum(s["kind"] == "adapter" for s in SOURCE_CATALOG)

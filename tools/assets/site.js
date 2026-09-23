@@ -115,6 +115,51 @@
     button.firstChild.nodeValue = open ? '收起详情' : (button.dataset.label || '摘要与笔记');
     $('span', button).textContent = open ? '−' : '＋';
   }));
+  const previews = $$('.figure-preview');
+  let figureDialog;
+  let figureOpener;
+  if (previews.length && typeof HTMLDialogElement !== 'undefined') {
+    figureDialog = document.createElement('dialog');
+    figureDialog.className = 'figure-dialog';
+    figureDialog.setAttribute('aria-labelledby', 'figure-dialog-title');
+    figureDialog.innerHTML = '<div class="figure-dialog-header"><h2 id="figure-dialog-title"></h2><button type="button" class="figure-dialog-close" autofocus>关闭</button></div><img class="figure-dialog-image" alt=""><div class="figure-dialog-footer"><div class="figure-dialog-credit"></div><a class="figure-original-size" target="_blank" rel="noopener noreferrer">查看原尺寸</a></div>';
+    document.body.append(figureDialog);
+    $('.figure-dialog-close', figureDialog).addEventListener('click', () => figureDialog.close());
+    figureDialog.addEventListener('click', (event) => {
+      const box = figureDialog.getBoundingClientRect();
+      if (event.target === figureDialog && (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom)) figureDialog.close();
+    });
+    figureDialog.addEventListener('close', () => {
+      document.body.classList.remove('figure-opened');
+      figureOpener?.focus({ preventScroll: true });
+    });
+  }
+  previews.forEach((preview) => {
+    const image = $('img', preview);
+    const figure = preview.closest('figure');
+    function unavailable() {
+      image.hidden = true;
+      figure.classList.add('image-unavailable');
+      $('.figure-open', preview).textContent = '图片暂不可用，查看原文图表';
+      preview.href = $('.figure-credit a', figure).href;
+      preview.setAttribute('aria-label', '图片暂不可用，查看原文图表');
+    }
+    image.addEventListener('error', unavailable);
+    if (image.complete && image.naturalWidth === 0) unavailable();
+    preview.addEventListener('click', (event) => {
+      if (!figureDialog || image.hidden || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      figureOpener = preview;
+      $('#figure-dialog-title').textContent = $('.figure-title', figure).textContent;
+      const large = $('.figure-dialog-image', figureDialog);
+      large.src = image.currentSrc || image.src;
+      large.alt = image.alt;
+      $('.figure-dialog-credit', figureDialog).replaceChildren($('.figure-credit', figure).cloneNode(true));
+      $('.figure-original-size', figureDialog).href = preview.href;
+      figureDialog.showModal();
+      document.body.classList.add('figure-opened');
+    });
+  });
   function openAnchor(hash) {
     let target;
     try { target = document.getElementById(decodeURIComponent(hash.slice(1))); } catch (_) { return; }
