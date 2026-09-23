@@ -104,6 +104,18 @@ def test_pair_bruteforce_is_limited(bridge):
     assert c.post('/api/pair', json={'code': 'wrong'}).status_code == 429
 
 
+def test_pair_code_recovery_requires_session_and_local_origin(bridge):
+    c, app, _ = bridge
+    assert c.post('/api/pairing-code', headers={'Origin': LOCAL_ORIGIN}).status_code == 401
+    h = login(c, app)
+    assert c.post('/api/pairing-code', headers=h).status_code == 403
+    assert c.post('/api/pairing-code', headers={'Authorization': h['Authorization']}).status_code == 403
+    response = c.post('/api/pairing-code', headers={**h, 'Origin': LOCAL_ORIGIN})
+    assert response.status_code == 200
+    assert response.json()['code'] == app.state.pair_code
+    assert response.headers['cache-control'] == 'no-store'
+
+
 def test_conversations_are_scoped_resumable_and_idempotent(bridge):
     c, app, rpc = bridge; h = login(c, app)
     request_id = str(uuid.uuid4())

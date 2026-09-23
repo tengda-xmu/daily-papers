@@ -142,6 +142,14 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         sessions[token] = now + 8 * 3600
         return {"token": token, "expires_at": sessions[token]}
 
+    @app.post("/api/pairing-code")
+    async def pairing_code(request: Request):
+        # The middleware requires a valid session. Only the local page may
+        # recover the code after refresh; the public site cannot retrieve it.
+        if request.headers.get("origin") != LOCAL_ORIGIN:
+            raise HTTPException(403, "仅已配对的本机页面可读取配对码。")
+        return {"code": pair_code}
+
     @app.post("/api/connect")
     async def connect():
         try:

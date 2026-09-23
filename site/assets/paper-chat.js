@@ -24,6 +24,46 @@
   const status = (text, state = '') => { $('.chat-status').textContent = text; $('.chat-status').dataset.state = state; };
   const notice = (text) => { $('.chat-notice').textContent = text; };
   const endpoint = (suffix = '') => `/api/papers/${paperId}${suffix}`;
+  const pairControls = [];
+  function setPairCode(code) {
+    pairCode = code;
+    pairControls.forEach(control => {
+      control.querySelector('.pair-code-value').value = code;
+      control.querySelectorAll('button').forEach(button => { button.disabled = !code; });
+      control.querySelector('.pair-code-status').textContent = code ? '' : '请双击“启动论文助手.cmd”，在打开的本机页面获取配对码。';
+    });
+  }
+  function showPairCode(control, text) {
+    control.querySelector('.pair-code-manual').hidden = false;
+    const input = control.querySelector('.pair-code-value');
+    input.focus(); input.select();
+    control.querySelector('.pair-code-status').textContent = text;
+  }
+  async function copyPairCode(control) {
+    if (!pairCode) return;
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
+      await navigator.clipboard.writeText(pairCode);
+      control.querySelector('.pair-code-status').textContent = '已复制配对码，可粘贴到论文网站的连接框。';
+    } catch {
+      showPairCode(control, '浏览器未允许自动复制。已选中配对码，请按 Ctrl+C（Mac：⌘C），或长按复制。');
+    }
+  }
+  if (local) {
+    const sidebarPair = document.createElement('section');
+    sidebarPair.className = 'local-pair-controls';
+    $('.chat-header').append(sidebarPair);
+    pairControls.push(sidebarPair, document.getElementById('local-pair-help'));
+    pairControls.forEach(control => {
+      control.hidden = false;
+      control.setAttribute('aria-label', '连接在线论文网站');
+      control.innerHTML = `<div class="pair-code-actions"><button type="button" class="chat-button pair-code-copy">复制配对码</button><button type="button" class="text-button pair-code-show">手动复制</button></div><label class="pair-code-manual" hidden>本次启动的配对码<input class="pair-code-value" type="text" readonly autocomplete="off" spellcheck="false"></label><p class="pair-code-status" role="status" aria-live="polite"></p>`;
+      control.querySelector('.pair-code-copy').onclick = () => copyPairCode(control);
+      control.querySelector('.pair-code-show').onclick = () => showPairCode(control, '已选中配对码，请按 Ctrl+C（Mac：⌘C），或长按复制。');
+      control.querySelector('.pair-code-value').onclick = event => event.target.select();
+    });
+    setPairCode('');
+  }
   const setBusy = (value) => {
     busy = value;
     $('.chat-send').disabled = value;
@@ -149,6 +189,10 @@
         const data = await api('/api/pair', { method: 'POST', body: JSON.stringify({ code }) });
         token = data.token; session.setItem(key, token); $('.chat-pair-row input').value = '';
       }
+      if (local) {
+        const pairing = await api('/api/pairing-code', { method: 'POST' });
+        setPairCode(pairing.code);
+      }
       const data = await api('/api/connect', { method: 'POST' });
       status(`已连接 · ${data.model}`, 'connected'); $('.chat-connect').hidden = true;
       if (local) {
@@ -261,10 +305,9 @@
   dialog.addEventListener('cancel', () => { stop(); });
   document.addEventListener('click', event => { const button = event.target.closest('.codex-entry'); if (button) open(button.dataset.paperId, button.dataset.paperTitle, button); });
   if (local) {
-    const hash = new URLSearchParams(location.hash.slice(1)); pairCode = hash.get('pair') || '';
-    if (pairCode) { historyReplace(); $('.chat-pair-row input').value = pairCode; document.getElementById('local-pair-help').hidden = false; }
+    const hash = new URLSearchParams(location.hash.slice(1)); setPairCode(hash.get('pair') || '');
+    if (pairCode) { historyReplace(); $('.chat-pair-row input').value = pairCode; }
     paperId = new URLSearchParams(location.search).get('paper') || '';
-    document.getElementById('copy-pair-code').onclick = () => navigator.clipboard.writeText(pairCode);
     document.getElementById('local-open-chat').onclick = () => open(document.getElementById('local-paper-list').value || paperId, '', null);
     open(paperId, '', null).then(() => { if (pairCode && !token) connect(); });
   }
