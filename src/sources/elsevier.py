@@ -3,12 +3,14 @@ from __future__ import annotations
 import json
 import os
 from datetime import datetime, timedelta
-from urllib.parse import quote_plus
+from urllib.parse import urlencode
+from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 import xml.etree.ElementTree as ET
 
 from src.models import RawRecord, SourceStatus, in_date_window
 from src.venues import classify_venue, cns_query
+from src.redaction import public_metadata, safe_error
 
 
 class ElsevierAdapter:
@@ -20,9 +22,9 @@ class ElsevierAdapter:
         self.insttoken = insttoken if insttoken is not None else os.getenv("ELSEVIER_INSTTOKEN", "")
         cns = cns_query()
         topic_queries = queries or [
-            "TITLE-ABS-KEY((large language model OR LLM OR agent OR generative AI) AND (predictive maintenance OR fault diagnosis OR digital twin))",
-            "TITLE-ABS-KEY((generative design OR topology optimization OR surrogate model) AND (structural OR reliability))",
-            "TITLE-ABS-KEY((structural fatigue OR fatigue life OR fracture) AND (AI OR machine learning OR reliability))",
+            'TITLE-ABS-KEY(("large language model" OR LLM OR "multi-agent" OR "generative AI") AND ("predictive maintenance" OR "fault diagnosis" OR "digital twin"))',
+            'TITLE-ABS-KEY(("generative design" OR "topology optimization" OR "surrogate model") AND (structural OR reliability))',
+            'TITLE-ABS-KEY(("structural fatigue" OR "fatigue life" OR fracture) AND (AI OR "machine learning" OR reliability))',
         ]
         self.queries = topic_queries + [
             f"{query} AND {cns}" for query in topic_queries
@@ -41,26 +43,48 @@ class ElsevierAdapter:
                                         message="ELSEVIER_API_KEY is not configured")
             return []
         records: list[RawRecord] = []
+        view, restricted = "COMPLETE", False
+        error = None
+        try:
+            cns_days = max(0, int(os.getenv("CNS_LOOKBACK_DAYS", "180") or "180"))
+        except ValueError:
+            cns_days = 180
+        cns_since = until - timedelta(days=cns_days)
+        first_year = min(since, cns_since).year
+        years = str(until.year) if first_year == until.year else f"{first_year}-{until.year}"
         try:
             for query in self.queries:
-                params = f"query={quote_plus(query)}&count=25&view=COMPLETE"
-                req = Request("https://api.elsevier.com/content/search/scopus?" + params,
-                              headers=self._headers())
-                with urlopen(req, timeout=self.timeout) as response:
-                    body = response.read().decode("utf-8-sig")
+                def search(selected_view):
+                    params = urlencode({"query": query, "count": 25, "view": selected_view,
+                                        "date": years})
+                    req = Request("https://api.elsevier.com/content/search/scopus?" + params,
+                                  headers=self._headers())
+                    with urlopen(req, timeout=self.timeout) as response:
+                        return response.read().decode("utf-8-sig")
+                try:
+                    body = search(view)
+                except HTTPError as exc:
+                    if exc.code not in (401, 403) or view != "COMPLETE":
+                        raise
+                    # STANDARD is a separate, supported metadata view. Reuse
+                    # it for the rest of this run when COMPLETE is unavailable.
+                    view, restricted = "STANDARD", True
+                    body = search(view)
+                body = public_metadata(body, (self.api_key, self.insttoken))
                 records.extend(self.parse_body(body))
-            try:
-                cns_days = max(0, int(os.getenv("CNS_LOOKBACK_DAYS", "180") or "180"))
-            except ValueError:
-                cns_days = 180
-            cns_since = until - timedelta(days=cns_days)
-            records = [r for r in records if (
-                in_date_window(r.published_at, since, until)
-                or (classify_venue(r.venue) in ('CNS 正刊', 'CNS 子刊') and in_date_window(r.published_at, cns_since, until))
-            )]
-            self._status = SourceStatus(self.name, "ok", len(records))
         except Exception as exc:
-            self._status = SourceStatus(self.name, _error_status(exc), len(records), str(exc))
+            error = exc
+        records = list({(r.doi or r.source_id or r.title): r for r in records if (
+            in_date_window(r.published_at, since, until)
+            or (classify_venue(r.venue) in ('CNS 正刊', 'CNS 子刊') and in_date_window(r.published_at, cns_since, until))
+        )}.values())
+        message = f"Scopus {view} metadata"
+        if restricted:
+            message += "; COMPLETE unavailable under current authorization"
+        if error:
+            self._status = SourceStatus(self.name, _error_status(error), len(records), message + "; " + safe_error(error))
+        else:
+            self._status = SourceStatus(self.name, "ok" if records else "no_data", len(records), message)
         return records
 
     def _headers(self) -> dict[str, str]:
@@ -84,9 +108,9 @@ class ElsevierAdapter:
                 venue=item.get("prism:publicationName", ""),
                 abstract=item.get("dc:description", ""),
                 published_at=item.get("prism:coverDate", ""), doi=doi,
-                landing_url=item.get("prism:url", ""),
+                landing_url=f"https://doi.org/{doi}" if doi else item.get("prism:url", ""),
                 citation_count=_int(item.get("citedby-count")), source_score=0.9,
-                raw_metadata=item,
+                raw_metadata=public_metadata(item),
             ))
         return result
 
@@ -127,9 +151,9 @@ class ElsevierAdapter:
                 venue=fields.get("publicationName", ""),
                 abstract=fields.get("description", ""),
                 published_at=fields.get("coverDate", ""), doi=doi,
-                landing_url=fields.get("url", ""),
+                landing_url=f"https://doi.org/{doi}" if doi else fields.get("url", ""),
                 citation_count=_int(fields.get("citedby-count")), source_score=0.9,
-                raw_metadata=fields,
+                raw_metadata=public_metadata(fields),
             ))
         return result
 

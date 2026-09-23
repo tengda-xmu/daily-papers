@@ -21,6 +21,13 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: "3.11"}
       - run: pip install -r requirements.txt
+      - name: Restore Scholar query cache
+        uses: actions/cache@v4
+        with:
+          path: data/cache/scholar
+          key: scholar-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            scholar-${{ runner.os }}-
       - name: Import ResearchGate connector branch
         shell: bash
         run: |

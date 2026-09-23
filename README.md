@@ -36,6 +36,8 @@ ELSEVIER_INSTTOKEN=
 
 可用 `ELSEVIER_QUERIES` 覆盖默认查询，多个查询使用 `||` 分隔。
 
+采集先尝试 `COMPLETE` 视图；如果当前授权返回 401/403，则重试官方支持的 `STANDARD` 元数据视图，并在本轮余下查询中复用。网页会注明标准视图，完整摘要等字段仍受机构授权限制。请求按年份约束范围，返回结果再按实际日期筛选；单个来源失败时保留已获取且符合日期要求的记录。
+
 系统还会自动执行 CNS 正刊（Nature、Science、Cell）和相关子刊专项查询；CNS 论文默认使用 180 天回溯窗口，兼顾方向匹配与近期研究，可通过 `CNS_LOOKBACK_DAYS` 调整。常规来源仍检索近 30 天，每日更新不代表每篇论文都在当天发表。
 
 无需 Elsevier 密钥的 `CNS 子刊专项` 适配器通过 Crossref 按 ISSN 单独检索九本相关子刊，包括 npj Artificial Intelligence、Microsystems & Nanoengineering、Nature Communications 等。先执行大模型／智能体专项，再执行常规工程检索，默认共十八次查询。查询词与期刊列表位于 `config/cns-search.json`，单刊失败会保留其他期刊结果。
@@ -49,6 +51,8 @@ SERPAPI_API_KEY=
 ```
 
 默认每次运行执行三个主题查询和三个 CNS 专项查询，已有缓存时优先复用结果，并与其他来源去重。
+
+Scholar 请求带发表年份范围，缓存同时区分查询与年份。GitHub Actions 会保存并恢复缓存，默认 24 小时内的重复查询复用结果。导出数据与缓存会清除凭据字段，请求错误也不会把含密钥的 URL 写入公开运行状态。
 
 除主题查询外，系统会执行 CNS 正刊和子刊专项查询；网页支持按 `CNS 正刊`、`CNS 子刊` 筛选。
 

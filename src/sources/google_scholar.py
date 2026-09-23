@@ -13,6 +13,7 @@ from urllib.request import Request, urlopen
 from src.models import RawRecord, SourceStatus, in_date_window
 from src.venues import CNS_CORE_JOURNALS, CNS_SUBJOURNALS
 from src.research_focus import FOCUS_QUERIES
+from src.redaction import public_metadata, safe_error
 
 
 class SerpApiScholarAdapter:
@@ -43,23 +44,34 @@ class SerpApiScholarAdapter:
                                         message="SERPAPI_API_KEY is not configured")
             return []
         records: list[RawRecord] = []
+        error = None
         try:
             for query in self.queries:
                 params = urlencode({"engine": "google_scholar", "q": query,
-                                    "api_key": self.api_key, "num": 20})
-                cached = self._read_cache(query)
+                                    "api_key": self.api_key, "num": 20,
+                                    "as_ylo": since.year, "as_yhi": until.year})
+                cache_key = f"v2|{since.year}-{until.year}|{query}"
+                cached = self._read_cache(cache_key)
                 if cached is None:
                     req = Request("https://serpapi.com/search.json?" + params)
                     with urlopen(req, timeout=self.timeout) as response:
                         cached = json.loads(response.read().decode("utf-8"))
-                    self._write_cache(query, cached)
+                    cached = public_metadata(cached, (self.api_key,))
+                    if not cached.get("error"):
+                        self._write_cache(cache_key, cached)
+                cached = public_metadata(cached, (self.api_key,))
                 if cached.get("error"):
                     raise RuntimeError(str(cached["error"]))
                 records.extend(self.parse_payload(cached))
-            records = [record for record in records if _in_window(record, since, until)]
-            self._status = SourceStatus(self.name, "ok", len(records))
         except Exception as exc:
-            self._status = SourceStatus(self.name, _error_status(exc), len(records), str(exc))
+            error = exc
+        records = list({(record.doi or record.source_id or record.title): record for record in records
+                        if _in_window(record, since, until)}.values())
+        if error:
+            self._status = SourceStatus(self.name, _error_status(error), len(records), safe_error(error))
+        else:
+            self._status = SourceStatus(self.name, "ok" if records else "no_data", len(records),
+                                        f"SerpApi Scholar; year filter {since.year}-{until.year}")
         return records
 
     def _cache_path(self, query: str) -> Path:
@@ -106,7 +118,7 @@ class SerpApiScholarAdapter:
                 venue=summary, abstract=item.get("snippet", ""), published_at=year,
                 doi=doi, landing_url=link, oa_url=resource.get("link", ""),
                 citation_count=_int((inline.get("cited_by") or {}).get("total")),
-                source_score=0.75, raw_metadata=item,
+                source_score=0.75, raw_metadata=public_metadata(item),
             ))
         return result
 
