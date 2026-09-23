@@ -27,6 +27,8 @@ class Store:
             columns = {r[1] for r in db.execute("PRAGMA table_info(messages)")}
             if "document_hash" not in columns:
                 db.execute("ALTER TABLE messages ADD COLUMN document_hash TEXT")
+            if "error" not in columns:
+                db.execute("ALTER TABLE messages ADD COLUMN error TEXT NOT NULL DEFAULT ''")
 
     def connect(self):
         db = sqlite3.connect(self.db)
@@ -66,7 +68,7 @@ class Store:
 
     def history(self, paper_id):
         with self.connect() as db:
-            return [dict(r) for r in db.execute("SELECT id,role,content,status,created,document_hash FROM messages WHERE paper=? ORDER BY id", (paper_id,))]
+            return [dict(r) for r in db.execute("SELECT id,role,content,status,created,document_hash,error FROM messages WHERE paper=? ORDER BY id", (paper_id,))]
 
     def claim(self, request_id, paper_id):
         with self.connect() as db:
@@ -82,9 +84,9 @@ class Store:
             return db.execute("INSERT INTO messages(paper,role,content,status,created,document_hash) VALUES(?,?,?,?,?,?)",
                               (paper_id, role, content, status, time.time(), doc_hash)).lastrowid
 
-    def update(self, message_id, content, status):
+    def update(self, message_id, content, status, error=""):
         with self.connect() as db:
-            db.execute("UPDATE messages SET content=?,status=? WHERE id=?", (content, status, message_id))
+            db.execute("UPDATE messages SET content=?,status=?,error=? WHERE id=?", (content, status, error, message_id))
 
     def clear(self, paper_id):
         with self.connect() as db:

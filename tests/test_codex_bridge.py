@@ -170,6 +170,73 @@ def test_failed_model_preserves_question_and_partial_reply(bridge):
     rows = app.state.store.history(P1)
     assert rows[0]['role'] == 'user'
     assert rows[-1]['content'] == '已生成部分' and rows[-1]['status'] == 'failed'
+    assert '额度' in rows[-1]['error']
+
+
+def test_progress_precedes_answer_and_empty_result_is_not_success(bridge):
+    c, app, rpc = bridge; h = login(c, app)
+    async def empty(thread, text, images=()):
+        yield {'type': 'started', 'turn_id': 'test'}
+        yield {'type': 'progress', 'stage': 'analyzing', 'message': 'Codex 正在分析已提供资料'}
+        yield {'type': 'completed', 'status': 'completed'}
+    rpc.turn = empty
+    response = ask(c, h)
+    events = [json.loads(line[6:]) for line in response.text.splitlines() if line.startswith('data: ')]
+    assert events[0]['stage'] == 'preparing' and events[0]['started_at']
+    assert any(e.get('stage') == 'analyzing' for e in events)
+    assert events[-1]['status'] == 'failed'
+    row = app.state.store.history(P1)[-1]
+    assert row['status'] == 'failed' and '未返回' in row['error']
+
+
+@pytest.mark.parametrize('target,language', [('zh', '中文'), ('en', '英文')])
+def test_pasted_translation_only_uses_pasted_text_and_selected_language(bridge, target, language):
+    c, app, rpc = bridge; h = login(c, app)
+    app.state.store.set_document(P1, {'kind': 'pdf', 'hash': 'test', 'page_count': 300, 'scan_pages': 300,
+                                    'pages': [{'label': 'P1', 'text': '', 'scan': True}]})
+    response = ask(c, h, mode='translate', message='Material fatigue life is uncertain.',
+                   translation_target=target, translation_source='text')
+    assert '"status": "completed"' in response.text
+    prompt = rpc.inputs[-1][1]
+    assert f'目标语言：{language}' in prompt
+    assert '[用户粘贴原文]\nMaterial fatigue life is uncertain.' in prompt
+    assert 'Paper A evidence' not in prompt
+    assert not rpc.inputs[-1][2]
+
+
+def test_document_translation_requires_source_and_question_requests_evidence(bridge):
+    c, app, rpc = bridge; h = login(c, app)
+    response = ask(c, h, mode='translate', message='翻译摘要', translation_source='document')
+    assert '请先获取开放全文' in response.text and not rpc.inputs
+    response = ask(c, h, mode='question', message='证据是什么？')
+    assert '"status": "completed"' in response.text
+    assert '关键原文证据、分析依据与适用边界' in rpc.inputs[-1][1]
+
+
+def test_rpc_recovers_completed_message_and_only_exposes_activity(tmp_path):
+    async def run():
+        client = CodexClient(tmp_path)
+        async def call(method, params, timeout=45):
+            q = next(iter(client.listeners))
+            messages = [
+                ('item/started', {'item': {'id': 'r1', 'type': 'reasoning'}}),
+                ('item/reasoning/textDelta', {'delta': 'private reasoning should never appear'}),
+                ('error', {'willRetry': True, 'error': {'message': 'temporary failure'}}),
+                ('item/agentMessage/delta', {'itemId': 'm1', 'delta': '已收到'}),
+                ('item/completed', {'item': {'id': 'm1', 'type': 'agentMessage', 'text': '已收到完整回答'}}),
+                ('item/completed', {'item': {'id': 'm2', 'type': 'agentMessage', 'text': '仅终态消息'}}),
+                ('turn/completed', {'turn': {'id': 'turn-test', 'status': 'completed'}}),
+            ]
+            for method, data in messages:
+                q.put_nowait({'method': method, 'params': {'threadId': 'test', 'turnId': 'turn-test', **data}})
+            return {'turn': {'id': 'turn-test'}}
+        client.call = call
+        events = [e async for e in client.turn('test', 'test')]
+        assert ''.join(e['text'] for e in events if e['type'] == 'delta') == '已收到完整回答仅终态消息'
+        assert [e['stage'] for e in events if e['type'] == 'progress'] == ['analyzing', 'retrying']
+        assert 'private reasoning' not in json.dumps(events)
+        assert not client.listeners
+    asyncio.run(run())
 
 
 def test_pdf_extraction_and_page_selection(tmp_path):

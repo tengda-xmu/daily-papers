@@ -180,6 +180,7 @@ class CodexClient:
         self.listeners.add(queue)
         turn_id = None
         completed = False
+        emitted = {}
         try:
             inputs = [{"type": "text", "text": text}]
             if images and not self.images:
@@ -199,12 +200,28 @@ class CodexClient:
                         raise CodexError("Codex 连接中断；已收到的内容已保留。")
                     if p.get("threadId") != thread:
                         continue
+                    if p.get("turnId") and p["turnId"] != turn_id:
+                        continue
                     if method == "item/started" and p.get("item", {}).get("type") not in (
                         "userMessage", "agentMessage", "reasoning", "plan", "contextCompaction"
                     ):
                         raise CodexError("论文会话尝试使用未开放的工具，已停止本次生成。请仅根据已提供资料提问。")
                     if method == "item/agentMessage/delta":
-                        yield {"type": "delta", "text": p.get("delta", "")}
+                        text = p.get("delta", "")
+                        item_id = p.get("itemId", "")
+                        emitted[item_id] = emitted.get(item_id, "") + text
+                        yield {"type": "delta", "text": text}
+                    elif method == "item/started" and p.get("item", {}).get("type") == "reasoning":
+                        # Expose activity only; never forward private reasoning text.
+                        yield {"type": "progress", "stage": "analyzing", "message": "Codex 正在分析已提供资料"}
+                    elif method == "item/started" and p.get("item", {}).get("type") == "contextCompaction":
+                        yield {"type": "progress", "stage": "compacting", "message": "Codex 正在整理较长的会话上下文"}
+                    elif method == "item/completed" and p.get("item", {}).get("type") == "agentMessage":
+                        item = p["item"]
+                        text, prior = item.get("text", ""), emitted.get(item.get("id", ""), "")
+                        if text.startswith(prior) and len(text) > len(prior):
+                            yield {"type": "delta", "text": text[len(prior):]}
+                        emitted[item.get("id", "")] = text
                     elif method == "turn/completed" and p.get("turn", {}).get("id") == turn_id:
                         completed = True
                         turn = p["turn"]
@@ -213,8 +230,11 @@ class CodexClient:
                             raise CodexError(str(error.get("message", "Codex 生成失败")))
                         yield {"type": "completed", "status": turn.get("status", "completed")}
                         return
-                    elif method == "error" and not p.get("willRetry"):
-                        raise CodexError(str((p.get("error") or {}).get("message", "Codex 返回错误")))
+                    elif method == "error":
+                        if p.get("willRetry"):
+                            yield {"type": "progress", "stage": "retrying", "message": "连接暂时中断，Codex 正在重试"}
+                        else:
+                            raise CodexError(str((p.get("error") or {}).get("message", "Codex 返回错误")))
         finally:
             self.listeners.discard(queue)
             if turn_id and not completed:
