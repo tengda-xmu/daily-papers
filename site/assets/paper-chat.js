@@ -6,6 +6,8 @@
   const session = local ? localStorage : sessionStorage;
   let token = session.getItem(key) || '';
   let connectedModel = '';
+  const modelKey = 'daily-papers-codex-model';
+  let availableModels = [];
   let paperId = '', mode = 'question', controller = null, busy = false, history = [], pairCode = '';
   let refreshTimer = null;
   let progressTimer = null;
@@ -21,7 +23,7 @@
   dialog.className = 'paper-chat';
   dialog.setAttribute('aria-labelledby', 'chat-heading');
   dialog.innerHTML = `<div class="chat-shell">
-    <header class="chat-header"><div class="chat-heading-row"><h2 id="chat-heading">Codex 论文对话</h2><button class="chat-close" type="button" aria-label="关闭对话">×</button></div><p class="chat-paper-title"></p><p class="chat-status" role="status">未连接本机 Codex</p></header>
+    <header class="chat-header"><div class="chat-heading-row"><h2 id="chat-heading">Codex 论文对话</h2><button class="chat-close" type="button" aria-label="关闭对话">×</button></div><p class="chat-paper-title"></p><p class="chat-status" role="status">未连接本机 Codex</p><div class="chat-model-row"><label for="chat-model">模型</label><select id="chat-model" aria-describedby="chat-model-help" disabled><option value="">连接后加载可用模型</option></select></div><p class="chat-model-help" id="chat-model-help">选择将用于下一次发送。</p></header>
     <section class="chat-connect"><p>先运行项目中的“启动论文助手.cmd”，再粘贴本次启动的配对码。</p><div class="chat-pair-row"><input type="password" autocomplete="off" aria-label="本机配对码" placeholder="本机配对码"><button class="chat-button" type="button" data-chat-action="connect">连接</button></div><p class="chat-local-help"><a class="chat-local-link" target="_blank" rel="noopener noreferrer">在本机打开论文助手</a> · 电脑须保持运行</p></section>
     <details class="chat-documents"><summary>阅读依据：摘要与本站解读</summary><div class="chat-doc-actions"><button type="button" class="chat-button" data-chat-action="fulltext">获取开放全文</button><button type="button" class="chat-button" data-chat-action="upload">上传 PDF</button></div><input type="file" accept="application/pdf,.pdf" hidden><p class="chat-document-note">尚未读取全文。上传 PDF 仅保存在本机，最多 20 MB / 300 页。</p></details>
     <div class="chat-messages" aria-label="对话记录"></div>
@@ -39,6 +41,27 @@
   const status = (text, state = '') => { $('.chat-status').textContent = text; $('.chat-status').dataset.state = state; };
   const notice = (text) => { $('.chat-notice').textContent = text; };
   const endpoint = (suffix = '') => `/api/papers/${paperId}${suffix}`;
+  function chosenModel() { return availableModels.find(m => m.id === $('#chat-model').value); }
+  function updateModelHint() {
+    const selected = chosenModel();
+    $('.chat-model-help').textContent = selected ? `${selected.images ? '支持文字与图片' : '仅支持文字'} · 用于下一次发送` : '此前所选模型当前不可用，请重新选择。';
+    $('.chat-send').disabled = busy || !selected;
+  }
+  function loadModels(data) {
+    availableModels = data.models || [{id: data.model, label: data.model, images: data.images, is_default: true}];
+    const wanted = localStorage.getItem(modelKey) || data.model;
+    const select = $('#chat-model'); select.replaceChildren();
+    for (const item of availableModels) {
+      const option = document.createElement('option'); option.value = item.id;
+      option.textContent = `${item.label}${item.is_default ? '（账号默认）' : ''}`; select.append(option);
+    }
+    if (!availableModels.some(m => m.id === wanted)) {
+      const unavailable = document.createElement('option'); unavailable.value = wanted;
+      unavailable.textContent = `${wanted}（当前不可用，请重新选择）`; unavailable.disabled = true; select.prepend(unavailable);
+    }
+    select.value = wanted; select.disabled = busy;
+    updateModelHint();
+  }
   const draftKey = () => `${paperId}:${mode}`;
   function updateMode() {
     const config = modes[mode], translating = mode === 'translate';
@@ -128,7 +151,8 @@
     busy = value;
     clearInterval(progressTimer);
     if (value) progressTimer = setInterval(tickProgress, 1000);
-    $('.chat-send').disabled = value;
+    $('.chat-send').disabled = value || !chosenModel();
+    $('#chat-model').disabled = value || !availableModels.length;
     $('[data-chat-action="stop"]').hidden = !value;
     dialog.querySelectorAll('[data-mode], .chat-translation select, [data-chat-action="fulltext"], [data-chat-action="upload"], [data-chat-action="clear"]').forEach(b => { b.disabled = value; });
   };
@@ -201,11 +225,11 @@
     }
   }
 
-  function message(role, text, state = 'completed', documentHash = '', error = '') {
+  function message(role, text, state = 'completed', documentHash = '', error = '', model = '') {
     const article = document.createElement('article'); article.className = 'chat-message'; article.dataset.role = role;
     article.dataset.documentHash = documentHash || '';
     const label = document.createElement('div'); label.className = 'chat-message-label';
-    const name = document.createElement('span'); name.textContent = role === 'user' ? '你' : `Codex${state === 'interrupted' ? ' · 已停止' : state === 'failed' ? ' · 未完成' : ''}`;
+    const name = document.createElement('span'); name.className = 'chat-message-name'; name.textContent = role === 'user' ? '你' : `Codex${model ? ` · ${model}` : ''}${state === 'interrupted' ? ' · 已停止' : state === 'failed' ? ' · 未完成' : ''}`;
     label.append(name);
     const body = document.createElement('div'); body.className = 'chat-message-body';
     if (role === 'assistant') {
@@ -237,7 +261,7 @@
       p.textContent = '从一个具体问题开始。你可以先总结这篇论文，再追问方法、实验依据或研究启发。'; $('.chat-messages').append(p);
     }
     for (const row of history) {
-      const body = message(row.role, row.content, row.status, row.document_hash, row.error);
+      const body = message(row.role, row.content, row.status, row.document_hash, row.error, row.model);
       if (row.status === 'running') showProgress(body, data.progress || { started_at: row.created, message: '本次回答仍在生成' });
     }
     const doc = data.document;
@@ -265,7 +289,8 @@
       }
       const data = await api('/api/connect', { method: 'POST' });
       connectedModel = data.model;
-      status(`已连接 · ${data.model}`, 'connected'); $('.chat-connect').hidden = true;
+      loadModels(data);
+      status('已连接本机 Codex', 'connected'); $('.chat-connect').hidden = true;
       if (local) {
         const list = await api('/api/papers');
         const select = document.getElementById('local-paper-list'); select.replaceChildren();
@@ -308,6 +333,9 @@
     if (!text) { notice(mode === 'translate' ? '请粘贴待译原文，或选择“论文章节 / 页码”后指定翻译范围。' : '请先输入具体问题。'); return; }
     if (!token) { notice('请先配对并连接本机 Codex。'); return; }
     if (!paperId) { notice('请先选择一篇论文。'); return; }
+    const model = chosenModel();
+    if (!model) { notice('请先选择当前可用的 Codex 模型。'); return; }
+    if (mode === 'figure' && !model.images) { notice('所选模型仅支持文字，请切换支持图片的模型后解释配图。'); return; }
     const empty = $('.chat-empty'); if (empty) empty.remove();
     message('user', text); const body = message('assistant', '', 'running');
     showProgress(body);
@@ -320,7 +348,7 @@
     const activeController = new AbortController(); controller = activeController;
     try {
       const response = await api('/api/ask', { method: 'POST', stream: true, signal: activeController.signal,
-        body: JSON.stringify({ paper_id: paperId, message: text, mode, pages: translatingText ? '' : pages,
+        body: JSON.stringify({ paper_id: paperId, message: text, mode, model: model.id, pages: translatingText ? '' : pages,
           translation_target: $('.chat-translation-target').value, translation_source: $('.chat-translation-source').value, request_id: crypto.randomUUID() }) });
       $('.chat-composer textarea').value = '';
       const reader = response.body.getReader(), decoder = new TextDecoder(); let buffer = '';
@@ -336,6 +364,10 @@
           const frame = buffer.slice(0, end); buffer = buffer.slice(end + 2);
           if (!frame.startsWith('data: ')) continue;
           const value = JSON.parse(frame.slice(6));
+          if (value.type === 'model') {
+            connectedModel = value.model;
+            body.closest('.chat-message').querySelector('.chat-message-name').textContent = `Codex · ${value.model}`;
+          }
           if (value.type === 'delta') {
             answer += value.text; body.textContent = answer;
             body.closest('.chat-message').querySelector('.text-button').disabled = !answer;
@@ -359,7 +391,8 @@
       activeController.abort();
       if (controller === activeController) controller = null;
       setBusy(false);
-      if (finished || (!failure && done)) status(`已连接 · ${connectedModel}`, 'connected');
+      if (finished) status(`已连接 · 本次使用 ${connectedModel}`, 'connected');
+      else if (!failure && done) status('已连接本机 Codex', 'connected');
       else if (failure) status(failure, 'error');
       body.closest('.chat-message').querySelector('.chat-progress')?.remove();
       format(body, answer || failure || '本次未收到回答，可以重新发送问题。');
@@ -383,7 +416,7 @@
       }
       if (name === 'export') {
         const data = await api(endpoint());
-        const md = `# ${data.paper.title_zh || data.paper.title}\n\n` + data.history.map(m => `## ${m.role === 'user' ? '你' : 'Codex'}${m.status === 'completed' ? '' : '（未完成）'}\n\n${m.content}`).join('\n\n');
+        const md = `# ${data.paper.title_zh || data.paper.title}\n\n` + data.history.map(m => `## ${m.role === 'user' ? '你' : `Codex${m.model ? ` · ${m.model}` : ''}`}${m.status === 'completed' ? '' : '（未完成）'}\n\n${m.content}`).join('\n\n');
         const url = URL.createObjectURL(new Blob([md], { type: 'text/markdown;charset=utf-8' }));
         const a = document.createElement('a'); a.href = url; a.download = `${paperId}-Codex.md`; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
       }
@@ -409,6 +442,11 @@
   });
   $('.chat-composer').addEventListener('submit', send);
   $('.chat-translation-source').addEventListener('change', updateMode);
+  $('#chat-model').addEventListener('change', () => {
+    if (chosenModel()) localStorage.setItem(modelKey, $('#chat-model').value);
+    updateModelHint();
+    notice(`后续请求将使用 ${$('#chat-model').value}，当前论文的对话记录会保留。`);
+  });
   updateMode();
   $('.chat-composer textarea').addEventListener('keydown', event => { if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) { event.preventDefault(); $('.chat-composer').requestSubmit(); } });
   $('.chat-close').onclick = async () => { await stop(); dialog.close(); if (lastTrigger) lastTrigger.focus(); };

@@ -23,6 +23,14 @@ class FakeCodex:
     def __init__(self):
         self.inputs = []
         self.threads = []
+        self.model_inputs = []
+        self.models = [{'id': 'test-model', 'label': 'Test model', 'is_default': True, 'images': True},
+                       {'id': 'other-model', 'label': 'Other model', 'is_default': False, 'images': False}]
+
+    resolve_model = CodexClient.resolve_model
+
+    async def refresh_models(self):
+        pass
 
     async def start(self):
         pass
@@ -33,13 +41,14 @@ class FakeCodex:
     async def call(self, method, params):
         return {'account': {'type': 'chatgpt'}}
 
-    async def thread(self, existing=None):
+    async def thread(self, existing=None, *, model=None):
         value = existing or str(uuid.uuid4())
         self.threads.append(value)
         return value
 
-    async def turn(self, thread, text, images=()):
+    async def turn(self, thread, text, images=(), *, model=None):
         self.inputs.append((thread, text, images))
+        self.model_inputs.append(model)
         yield {'type': 'started', 'turn_id': 'turn-test'}
         yield {'type': 'delta', 'text': '根据原文，模型处理传感数据 [P1]。'}
         yield {'type': 'completed', 'status': 'completed'}
@@ -116,6 +125,64 @@ def test_pair_code_recovery_requires_session_and_local_origin(bridge):
     assert response.headers['cache-control'] == 'no-store'
 
 
+def test_model_selection_is_validated_pinned_and_saved_with_history(bridge):
+    c, app, rpc = bridge; h = login(c, app)
+    assert c.post('/api/connect').status_code == 401
+    data = c.post('/api/connect', headers=h).json()
+    assert [m['id'] for m in data['models']] == ['test-model', 'other-model']
+    assert ask(c, h, model='not-in-account').status_code == 400
+    assert not rpc.inputs and not app.state.store.history(P1)
+    ask(c, h, model='other-model')
+    ask(c, h)
+    assert rpc.model_inputs == ['other-model', 'test-model']
+    assert rpc.threads[0] == rpc.threads[1]
+    rows = c.get(f'/api/papers/{P1}', headers=h).json()['history']
+    assert [r['model'] for r in rows if r['role'] == 'assistant'] == ['other-model', 'test-model']
+
+
+def test_summary_batches_all_use_the_selected_model(bridge):
+    c, app, rpc = bridge; h = login(c, app)
+    app.state.store.set_document(P1, {'kind': 'html', 'hash': 'test', 'page_count': 0, 'scan_pages': 0,
+        'pages': [{'label': f'S{i}', 'text': 'evidence ' * 4000, 'scan': False} for i in (1, 2)]})
+    response = ask(c, h, mode='summary', model='other-model')
+    assert '"status": "completed"' in response.text
+    assert rpc.model_inputs == ['other-model'] * 3
+
+
+def test_rpc_model_catalog_pagination_and_image_capabilities(tmp_path):
+    async def run():
+        client = CodexClient(tmp_path)
+        calls = []
+        async def call(method, params, timeout=45):
+            calls.append((method, params))
+            if method == 'model/list':
+                if not params.get('cursor'):
+                    return {'data': [{'model': 'text-only', 'inputModalities': ['text']},
+                                     {'model': 'hidden', 'hidden': True}], 'nextCursor': 'page2'}
+                return {'data': [{'id': 'default', 'isDefault': True}], 'nextCursor': None}
+            if method == 'turn/start':
+                assert params['model'] == 'text-only'
+                assert params['effort'] == 'low'
+                next(iter(client.listeners)).put_nowait({'method': 'turn/completed', 'params': {
+                    'threadId': 'test', 'turn': {'id': 'turn-test', 'status': 'completed'}}})
+                return {'turn': {'id': 'turn-test'}}
+        client.call = call
+        await client.refresh_models()
+        assert [m['id'] for m in client.models] == ['text-only', 'default']
+        assert client.model == 'default' and client.images
+        assert calls[1][1]['cursor'] == 'page2'
+        assert not client.resolve_model('text-only')['images']
+        client.resolve_model('text-only')['efforts'] = ['low']
+        with pytest.raises(CodexError, match='不支持图片'):
+            async for _ in client.turn('test', 'test', [tmp_path/'image.png'], model='text-only'):
+                pass
+        assert all(method == 'model/list' for method, _ in calls)
+        assert not client.listeners
+        events = [e async for e in client.turn('test', 'test', model='text-only')]
+        assert events[-1]['status'] == 'completed'
+    asyncio.run(run())
+
+
 def test_conversations_are_scoped_resumable_and_idempotent(bridge):
     c, app, rpc = bridge; h = login(c, app)
     request_id = str(uuid.uuid4())
@@ -161,7 +228,7 @@ def test_unknown_paper_and_invalid_pdf_rejected(bridge):
 
 def test_failed_model_preserves_question_and_partial_reply(bridge):
     c, app, rpc = bridge; h = login(c, app)
-    async def fail(thread, text, images=()):
+    async def fail(thread, text, images=(), *, model=None):
         yield {'type': 'delta', 'text': '已生成部分'}
         raise CodexError('rate limit reached')
     rpc.turn = fail
@@ -175,7 +242,7 @@ def test_failed_model_preserves_question_and_partial_reply(bridge):
 
 def test_progress_precedes_answer_and_empty_result_is_not_success(bridge):
     c, app, rpc = bridge; h = login(c, app)
-    async def empty(thread, text, images=()):
+    async def empty(thread, text, images=(), *, model=None):
         yield {'type': 'started', 'turn_id': 'test'}
         yield {'type': 'progress', 'stage': 'analyzing', 'message': 'Codex 正在分析已提供资料'}
         yield {'type': 'completed', 'status': 'completed'}
@@ -216,6 +283,7 @@ def test_document_translation_requires_source_and_question_requests_evidence(bri
 def test_rpc_recovers_completed_message_and_only_exposes_activity(tmp_path):
     async def run():
         client = CodexClient(tmp_path)
+        client.models = FakeCodex().models; client.model = 'test-model'
         async def call(method, params, timeout=45):
             q = next(iter(client.listeners))
             messages = [
@@ -303,6 +371,7 @@ def test_nested_editorial_description_not_labeled_original_abstract():
 def test_rpc_interrupts_unexpected_tool_and_checks_turn_settings(tmp_path):
     async def run():
         client = CodexClient(tmp_path)
+        client.models = FakeCodex().models; client.model = 'test-model'
         methods = []
         async def call(method, params, timeout=45):
             methods.append(method)

@@ -34,6 +34,7 @@ class Ask(BaseModel):
     pages: str = Field(default="", max_length=160)
     translation_target: str = Field(default="zh", pattern=r"^(zh|en)$")
     translation_source: str = Field(default="document", pattern=r"^(text|document)$")
+    model: str = Field(default="", max_length=160)
     request_id: uuid.UUID
 
 
@@ -156,10 +157,13 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     async def connect():
         try:
             await client.start()
+            await client.refresh_models()
             account = await client.call("account/read", {"refreshToken": False})
             if (account.get("account") or {}).get("type") != "chatgpt":
                 raise CodexError("需要重新登录。")
-            return {"state": "connected", "model": client.model, "version": client.version, "images": client.images}
+            models = [{k: m[k] for k in ("id", "label", "images", "is_default")} for m in client.models]
+            return {"state": "connected", "model": client.model, "version": client.version,
+                    "images": client.images, "models": models}
         except Exception as exc:
             return JSONResponse(error_info(exc), status_code=503)
 
@@ -255,7 +259,8 @@ def create_app(root=ROOT, runtime=None, rpc=None):
             if ask.mode == "translate":
                 user_text = f"【{'英译中' if ask.translation_target == 'zh' else '中译英'}】\n" + user_text
             store.message(ask.paper_id, "user", user_text)
-            message_id = store.message(ask.paper_id, "assistant", "", "running")
+            message_id = store.message(ask.paper_id, "assistant", "", "running", model=ask.model)
+            queue.put_nowait({"type": "model", "model": ask.model})
             pasted_translation = ask.mode == "translate" and ask.translation_source == "text"
             if pasted_translation:
                 batches = [{"text": "[用户粘贴原文]\n" + ask.message, "scans": []}]
@@ -281,7 +286,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
                         raise ValueError("解释配图每次最多选择 4 页。")
                     figure_images = await asyncio.to_thread(render_scan, doc, store.directory(ask.paper_id), numbers)
             progress("connecting", "资料已准备，正在连接 Codex 论文会话")
-            thread = await client.thread(store.state(ask.paper_id)["thread"])
+            thread = await client.thread(store.state(ask.paper_id)["thread"], model=ask.model)
             store.set_thread(ask.paper_id, thread)
             context = "" if pasted_translation else source_context(p)
             for index, batch in enumerate(batches):
@@ -308,7 +313,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
                 if show and index:
                     answer += "\n\n"
                     queue.put_nowait({"type": "delta", "text": "\n\n"})
-                async for event in client.turn(thread, prompt, images):
+                async for event in client.turn(thread, prompt, images, model=ask.model):
                     if event["type"] == "delta" and show:
                         if not answer:
                             progress("writing", "正在生成回答，内容将逐步显示")
@@ -323,7 +328,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
                         raise asyncio.CancelledError
             if len(batches) > 1 and ask.mode == "summary":
                 progress("synthesizing", "资料已逐批阅读，正在整理全文总结")
-                async for event in client.turn(thread, "所有资料批次现已提供。综合此前逐批阅读要点，回答最初问题：" + ask.message + "。保留可核对的原文引用标签，明确识别不清的页面或缺失证据。"):
+                async for event in client.turn(thread, "所有资料批次现已提供。综合此前逐批阅读要点，回答最初问题：" + ask.message + "。保留可核对的原文引用标签，明确识别不清的页面或缺失证据。", model=ask.model):
                     if event["type"] == "delta":
                         answer += event["text"]
                         queue.put_nowait(event)
@@ -354,6 +359,14 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         store.paper(data.paper_id)
         if data.paper_id in preparing:
             raise HTTPException(409, "资料正在准备，请等待完成后提问。")
+        if generation_lock.locked():
+            raise HTTPException(409, "已有回答正在生成，请先停止或等待完成。")
+        try:
+            await client.start()
+            selected = client.resolve_model(data.model)
+        except CodexError as exc:
+            return JSONResponse(error_info(exc), status_code=503)
+        data = data.model_copy(update={"model": selected["id"]})
         if generation_lock.locked():
             raise HTTPException(409, "已有回答正在生成，请先停止或等待完成。")
         if not store.claim(str(data.request_id), data.paper_id):

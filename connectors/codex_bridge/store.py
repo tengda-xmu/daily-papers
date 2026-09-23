@@ -29,6 +29,8 @@ class Store:
                 db.execute("ALTER TABLE messages ADD COLUMN document_hash TEXT")
             if "error" not in columns:
                 db.execute("ALTER TABLE messages ADD COLUMN error TEXT NOT NULL DEFAULT ''")
+            if "model" not in columns:
+                db.execute("ALTER TABLE messages ADD COLUMN model TEXT NOT NULL DEFAULT ''")
 
     def connect(self):
         db = sqlite3.connect(self.db)
@@ -68,7 +70,7 @@ class Store:
 
     def history(self, paper_id):
         with self.connect() as db:
-            return [dict(r) for r in db.execute("SELECT id,role,content,status,created,document_hash,error FROM messages WHERE paper=? ORDER BY id", (paper_id,))]
+            return [dict(r) for r in db.execute("SELECT id,role,content,status,created,document_hash,error,model FROM messages WHERE paper=? ORDER BY id", (paper_id,))]
 
     def claim(self, request_id, paper_id):
         with self.connect() as db:
@@ -78,11 +80,11 @@ class Store:
             except sqlite3.IntegrityError:
                 return False
 
-    def message(self, paper_id, role, content, status="completed"):
+    def message(self, paper_id, role, content, status="completed", model=""):
         doc_hash = (self.document(paper_id) or {}).get("hash")
         with self.connect() as db:
-            return db.execute("INSERT INTO messages(paper,role,content,status,created,document_hash) VALUES(?,?,?,?,?,?)",
-                              (paper_id, role, content, status, time.time(), doc_hash)).lastrowid
+            return db.execute("INSERT INTO messages(paper,role,content,status,created,document_hash,model) VALUES(?,?,?,?,?,?,?)",
+                              (paper_id, role, content, status, time.time(), doc_hash, model)).lastrowid
 
     def update(self, message_id, content, status, error=""):
         with self.connect() as db:
