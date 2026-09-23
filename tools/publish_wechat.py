@@ -5,7 +5,7 @@ import os
 import tempfile
 from pathlib import Path
 
-from src.wechat_metadata import public_export, public_health
+from src.wechat_metadata import public_export, public_health, public_subscriptions
 from tools.publish_researchgate import ROOT, git
 
 
@@ -16,6 +16,9 @@ def publish(path: Path, status_only: bool = False):
     health_path = path.with_name("wechat-status.json")
     if health_path.is_file():
         outputs["data/inbox/wechat-status.json"] = public_health(json.loads(health_path.read_text(encoding="utf-8-sig")))
+    subscription_path = path.with_name("wechat-subscriptions.json")
+    if subscription_path.is_file():
+        outputs["data/inbox/wechat-subscriptions.json"] = public_subscriptions(json.loads(subscription_path.read_text(encoding="utf-8-sig")))
     if not outputs:
         raise ValueError("No validated WeRSS data or status to publish")
     refs = git("ls-remote", "--heads", "origin", "connector-data").stdout.strip()

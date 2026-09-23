@@ -86,3 +86,34 @@ def public_health(payload: dict) -> dict:
             "status": payload["status"], "authenticated": payload.get("authenticated") is True,
             "accounts": [excerpt(a) for a in accounts if isinstance(a, str)][:100],
             "platform_code": "200013" if str(payload.get("platform_code")) == "200013" else ""}
+
+
+def public_subscriptions(payload: dict) -> dict:
+    """Expose the subscription directory, never search caches or sessions."""
+    if not isinstance(payload, dict) or not parse_date(payload.get("updated_at")):
+        raise ValueError("Invalid WeRSS subscription snapshot")
+    if not isinstance(payload.get("accounts"), list):
+        raise ValueError("Missing WeRSS subscription accounts")
+    accounts = []
+    for row in payload["accounts"][:100]:
+        if not isinstance(row, dict) or not isinstance(row.get("name"), str):
+            continue
+        groups = row.get("groups") if isinstance(row.get("groups"), list) else []
+        added = parse_date(row.get("added_at"))
+        accounts.append({"name": excerpt(row["name"]), "alias": excerpt(row.get("alias", "")),
+                         "groups": [excerpt(group) for group in groups if isinstance(group, str)][:10],
+                         "added_at": added.isoformat() if added else ""})
+    discovery = payload.get("discovery") or {}
+    if not isinstance(discovery, dict):
+        raise ValueError("Invalid discovery status")
+    status = discovery.get("status", "not_run")
+    if status not in {"ok", "not_run", "disabled", "quota_exhausted", "access_denied", "error", "capacity_reached"}:
+        raise ValueError("Invalid discovery status")
+    last_run = parse_date(discovery.get("last_run_at"))
+    safe_discovery = {"enabled": discovery.get("enabled") is True, "status": status,
+                      "last_run_at": last_run.isoformat() if last_run else ""}
+    for field, maximum in (("daily_queries", 3), ("daily_additions", 5), ("max_subscriptions", 90), ("pending_candidates", 10000)):
+        value = discovery.get(field, 0)
+        safe_discovery[field] = min(value, maximum) if type(value) is int and value >= 0 else 0
+    return {"provider": "WeRSS", "updated_at": parse_date(payload["updated_at"]).isoformat(),
+            "accounts": accounts, "discovery": safe_discovery}

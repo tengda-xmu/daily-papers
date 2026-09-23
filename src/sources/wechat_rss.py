@@ -8,7 +8,7 @@ from urllib.request import Request, urlopen
 import xml.etree.ElementTree as ET
 
 from src.models import RawRecord, SourceStatus, in_date_window, parse_date
-from src.wechat_metadata import excerpt, public_records, public_health
+from src.wechat_metadata import excerpt, public_records, public_health, public_subscriptions
 
 
 class WeChatRSSAdapter:
@@ -106,7 +106,16 @@ class WeChatRSSAdapter:
                 if (not timestamp or checked >= timestamp) and health["status"] != "ok":
                     state = health["status"]
                     message = "WeRSS 微信授权已完成；" if health["authenticated"] else "WeRSS 微信授权需要更新；"
-                    message += f"已配置 {len(health['accounts'])} 个公众号订阅。"
+                    accounts = health["accounts"]
+                    directory = self.import_path.with_name("wechat-subscriptions.json")
+                    if directory.is_file():
+                        try:
+                            snapshot = public_subscriptions(json.loads(directory.read_text(encoding="utf-8-sig")))
+                            if parse_date(snapshot["updated_at"]) >= checked:
+                                accounts = [row["name"] for row in snapshot["accounts"]]
+                        except (ValueError, TypeError, OSError):
+                            pass
+                    message += f"已配置 {len(accounts)} 个公众号订阅。"
                     if health["status"] == "quota_exhausted":
                         message += " 微信返回 200013 限频，已停止本轮采集，等待下次定时同步。"
                     elif health["status"] == "access_denied":

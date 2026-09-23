@@ -10,6 +10,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import quote, urlencode
 from urllib.request import Request, urlopen
+from urllib.error import HTTPError
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
@@ -28,6 +29,10 @@ class WeChatAuthorizationRequired(RuntimeError):
     pass
 
 
+class WeChatCollectionPending(RuntimeError):
+    pass
+
+
 def save_health(status: str, authenticated: bool, accounts: list[str], output: Path):
     payload = public_health({"checked_at": datetime.now(timezone.utc).isoformat(), "status": status,
                              "authenticated": authenticated, "accounts": accounts,
@@ -36,20 +41,45 @@ def save_health(status: str, authenticated: bool, accounts: list[str], output: P
     output.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
-def local_api(path: str, token: str = "", form: dict | None = None, timeout: int = 45):
+def local_api(path: str, token: str = "", form: dict | None = None, timeout: int = 45,
+              json_body: dict | None = None):
     headers = {"Authorization": "Bearer " + token} if token else {}
     data = urlencode(form).encode() if form is not None else None
+    if json_body is not None:
+        data = json.dumps(json_body).encode()
+        headers["Content-Type"] = "application/json"
     request = Request(LOCAL_API + path, data=data, headers=headers)
-    with urlopen(request, timeout=timeout) as response:
-        payload = json.load(response)
+    try:
+        with urlopen(request, timeout=timeout) as response:
+            payload = json.load(response)
+    except HTTPError as exc:
+        try:
+            payload = json.load(exc)
+        except (ValueError, OSError):
+            raise RuntimeError("Local WeRSS request failed") from None
+    if isinstance(payload.get("detail"), dict):
+        payload = payload["detail"]
     if payload.get("code") != 0:
         details = str(payload.get("data", {}))
         if "200013" in details:
             raise WeChatRateLimited("WeChat rate limited this collection")
-        if payload.get("code") == 40101:
+        if payload.get("code") == 40101 or "Invalid Session" in details:
             raise WeChatAuthorizationRequired("WeChat authorization expired")
         raise RuntimeError("WeRSS rejected the request; inspect the local service")
     return payload.get("data") or {}
+
+
+def authenticated_session() -> str:
+    env = read_env(ROOT / ".local/werss-source/.env")
+    if not all(env.get(key) for key in ("WERSS_USERNAME", "WERSS_PASSWORD")):
+        raise RuntimeError("Local WeRSS service credentials are missing")
+    token = local_api("/auth/login", form={"username": env["WERSS_USERNAME"], "password": env["WERSS_PASSWORD"]})["access_token"]
+    for attempt in range(7):
+        if local_api("/auth/qr/status", token).get("login_status"):
+            return token
+        if attempt < 6:
+            time.sleep(5)
+    raise WeChatAuthorizationRequired("Complete the WeRSS WeChat QR authorization first")
 
 
 def refresh_local_feeds(health_path: Path | None = None) -> int:
@@ -76,14 +106,25 @@ def refresh_local_feeds(health_path: Path | None = None) -> int:
         raise WeChatAuthorizationRequired("Complete the WeRSS WeChat QR authorization first")
     if not feeds:
         raise RuntimeError("Add WeChat accounts in WeRSS before synchronizing")
+    policy_path = ROOT / "config/wechat_accounts.json"
+    policy = json.loads(policy_path.read_text(encoding="utf-8")) if policy_path.is_file() else {}
+    budget = max(1, min(int(policy.get("max_daily_article_feeds", 12)), 12))
+    # Oldest attempted subscriptions go first, so newly added accounts do
+    # not cause an unbounded morning run or starve existing subscriptions.
+    selected = sorted(feeds, key=lambda feed: (int(feed.get("sync_time") or 0), str(feed["id"])))[:budget]
+    deadline = time.monotonic() + 15 * 60
     failures = 0
-    for feed in feeds:
+    attempted = 0
+    for feed in selected:
+        if time.monotonic() + 180 > deadline:
+            break
+        attempted += 1
         try:
             result = local_api("/mps/update/" + quote(str(feed["id"]), safe=""), token, timeout=180)
             if result.get("status") == "processing":
                 # A background task is not a completed metadata collection.
                 # Preserve the previous export rather than dating it as new.
-                raise RuntimeError("WeRSS collection is still running")
+                raise WeChatCollectionPending("WeRSS collection is still running")
         except WeChatRateLimited:
             if health_path:
                 save_health("quota_exhausted", True, names, health_path)
@@ -92,9 +133,13 @@ def refresh_local_feeds(health_path: Path | None = None) -> int:
             if health_path:
                 save_health("access_denied", False, names, health_path)
             raise
+        except (WeChatCollectionPending, TimeoutError):
+            if health_path:
+                save_health("error", True, names, health_path)
+            raise  # Do not start another collection alongside a pending one.
         except Exception:
             failures += 1
-    if failures == len(feeds):
+    if failures == attempted:
         if health_path:
             save_health("error", True, names, health_path)
         raise RuntimeError("All subscriptions failed to refresh; previous export preserved")

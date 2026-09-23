@@ -80,6 +80,11 @@ python -m tools.publish_researchgate
 本机管理地址为 `http://127.0.0.1:8001/`，不必配置公网地址或把扫码会话放进 Actions。
 参见 [安装与日常同步](connectors/wechat_sync/README.md)。
 
+另有每天 18:00 的公众号自动发现任务：轮换检索 AI、智能体、大模型、可靠性、航空航天等主题，
+每天最多 2 次检索、自动新增 3 个符合科研条件的账号，订阅上限 60 个；规则位于
+[`config/wechat_accounts.json`](config/wechat_accounts.json)。新增订阅延迟至早间采集，
+每天最多轮换更新 12 个账号；网站配置页可查看当前订阅目录与发现状态。
+
 微信返回 `200013` 时立即停止本轮采集，单独同步限频状态；已有文章不会被空结果覆盖。
 网页会显示真实状态及最近同步时间。Windows 任务需要电脑开机并登录，授权过期后需扫码。
 本机 `WECHAT_RSS_URLS` 指向文章地址 `/feed/all.json?limit=100`，主仓库另支持

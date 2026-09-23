@@ -32,7 +32,7 @@ jobs:
         shell: bash
         run: |
           if git fetch origin connector-data:refs/remotes/origin/connector-data; then
-            for source in researchgate wechat wechat-status; do
+            for source in researchgate wechat wechat-status wechat-subscriptions; do
               path="data/inbox/${source}.json"
               if git cat-file -e "origin/connector-data:${path}" 2>/dev/null; then
                 git show "origin/connector-data:${path}" > "$path"

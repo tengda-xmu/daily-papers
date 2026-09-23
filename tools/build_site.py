@@ -19,6 +19,7 @@ from src.catalog import (JOURNALS, SOURCE_CATALOG, STATE_LABELS, TOPIC_CATALOG,
                          VENUE_GROUPS, paper_facets, source_state, string_list)
 from src.research_focus import focus_tags
 from src.figures import get_figure
+from src.wechat_metadata import public_subscriptions
 
 DATA = ROOT / "data"
 OUT = ROOT / "site"
@@ -334,6 +335,26 @@ def build_archive() -> None:
     (archive_out / "index.html").write_text(document(content, title="历史归档 | 每日论文推荐", root="../", active="archive"), encoding="utf-8")
 
 
+def wechat_directory() -> str:
+    try:
+        snapshot = public_subscriptions(read_json(DATA / "inbox/wechat-subscriptions.json", {}))
+    except (ValueError, TypeError):
+        return '<p>订阅目录将在本机连接器首次同步后显示。</p>'
+    accounts, discovery = snapshot["accounts"], snapshot["discovery"]
+    groups = {}
+    for account in accounts:
+        for group in account["groups"] or ["科研综合"]:
+            groups.setdefault(group, []).append(account["name"])
+    entries = "".join(f'<li><strong>{esc(group)}</strong>：{esc("、".join(names))}</li>' for group, names in groups.items())
+    state = {"ok": "正常运行", "not_run": "尚未运行", "disabled": "已停用", "quota_exhausted": "微信限频，等待下次运行",
+             "access_denied": "微信授权需要更新", "error": "本轮发现失败", "capacity_reached": "已达到订阅上限"}[discovery["status"]]
+    return f'''<details><summary>查看已订阅的 {len(accounts)} 个公众号与自动扩展状态</summary>
+<p>目录同步：{esc(display_time(snapshot["updated_at"])[1])}（北京时间）。自动发现：{esc(state)}。</p>
+<ul>{entries}</ul><p>每天最多检索 {discovery["daily_queries"]} 个主题、新增 {discovery["daily_additions"]} 个相关账号；
+订阅上限 {discovery["max_subscriptions"]} 个。达到上限后保留候选，需调整配置后继续扩展。
+领域标签按账号名称和简介匹配，不代表对账号或文章的质量背书。</p></details>'''
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     shutil.copytree(ASSETS, OUT / "assets", dirs_exist_ok=True)
@@ -341,7 +362,7 @@ def main() -> None:
     (OUT / "index.html").write_text(render(payload), encoding="utf-8")
     (OUT / "data.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     build_archive()
-    (OUT / "setup.html").write_text(document(template("setup.html"), title="来源配置 | 每日论文推荐", active="setup"), encoding="utf-8")
+    (OUT / "setup.html").write_text(document(template("setup.html", wechat_directory=wechat_directory()), title="来源配置 | 每日论文推荐", active="setup"), encoding="utf-8")
 
 
 if __name__ == "__main__":
