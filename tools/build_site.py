@@ -32,7 +32,7 @@ SETUP_HINTS = {
     "Elsevier": "尚未配置 Elsevier 检索授权。",
     "Google Scholar": "尚未配置 Google Scholar 检索服务。",
     "ResearchGate": "需要 SerpApi 公开索引密钥，或导入本地连接器的论文元数据。",
-    "微信公众号": "尚未添加公众号订阅地址。",
+    "微信公众号": "需要 WeRSS 订阅地址，或完成本机扫码、添加订阅并同步文章。",
 }
 AUTH_HINTS = {
     "Web of Science": "需要 Clarivate Starter API 密钥，可申请试用或机构方案。",
@@ -221,6 +221,8 @@ def source_directory(statuses: dict, counts: Counter, root: str = "./") -> str:
                 message = "Scopus 标准元数据检索已接入；完整视图需额外授权。"
             connector_message = source_state(item, statuses)[1] or ""
             if item["id"] == "ResearchGate" and connector_message.startswith(("本地连接器已导入", "公开索引已接入")):
+                message = connector_message
+            elif item["id"] == "微信公众号" and connector_message.startswith("WeRSS "):
                 message = connector_message
             elif kind == "adapter" and state in ("ok", "no_data"):
                 message += f' 本轮获取 {(statuses.get(item["id"]) or {}).get("count", 0)} 条元数据。'

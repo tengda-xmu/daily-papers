@@ -1,12 +1,22 @@
 services:
   werss:
-    image: ghcr.io/rachelos/we-mp-rss:latest
+    image: docker.io/franklin888/werss:latest
     restart: unless-stopped
     ports:
-      - "8001:8001"
+      - "127.0.0.1:8001:8001"
     volumes:
-      - ./data/werss:/data
+      - ./data/werss:/app/data
+    env_file:
+      - ./.local/werss-source/.env
     environment:
       TZ: Asia/Shanghai
+      DB: sqlite:///data/db.db
+      GATHER_CONTENT: "False"
+      GATHER_CONTENT_AUTO_CHECK: "False"
+      RSS_FULL_CONTEXT: "False"
+      RSS_ADD_COVER: "False"
+      MINIO_STORE_ARTICLE_IMAGES: "false"
+      SEND_CODE: "False"
+      THREADS: "1"
     # Complete the first QR-code login on the local machine. Do not expose
     # this service publicly without authentication or a reverse proxy.

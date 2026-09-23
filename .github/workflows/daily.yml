@@ -28,13 +28,16 @@ jobs:
           key: scholar-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
             scholar-${{ runner.os }}-
-      - name: Import ResearchGate connector branch
+      - name: Import local connector metadata
         shell: bash
         run: |
           if git fetch origin connector-data:refs/remotes/origin/connector-data; then
-            if git cat-file -e origin/connector-data:data/inbox/researchgate.json 2>/dev/null; then
-              git show origin/connector-data:data/inbox/researchgate.json > data/inbox/researchgate.json
-            fi
+            for source in researchgate wechat wechat-status; do
+              path="data/inbox/${source}.json"
+              if git cat-file -e "origin/connector-data:${path}" 2>/dev/null; then
+                git show "origin/connector-data:${path}" > "$path"
+              fi
+            done
           fi
       - name: Run daily pipeline
         env:
@@ -52,6 +55,7 @@ jobs:
           RESEARCHGATE_IMPORT_PATH: data/inbox/researchgate.json
           WECHAT_RSS_URLS: ${{ secrets.WECHAT_RSS_URLS }}
           WECHAT_RSS_HEADERS: ${{ secrets.WECHAT_RSS_HEADERS }}
+          WECHAT_IMPORT_PATH: data/inbox/wechat.json
           MAX_CORE: 5
           MAX_EXTENDED: 5
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}

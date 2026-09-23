@@ -75,6 +75,16 @@ python -m tools.publish_researchgate
 
 ### 微信公众号
 
+已增加本机 WeRSS 同步连接器：扫码和订阅保留在电脑上，Windows 每天 06:35
+刷新订阅，把短摘要与原文链接发布到 `connector-data`，07:00 的 GitHub 日报读取。
+本机管理地址为 `http://127.0.0.1:8001/`，不必配置公网地址或把扫码会话放进 Actions。
+参见 [安装与日常同步](connectors/wechat_sync/README.md)。
+
+微信返回 `200013` 时立即停止本轮采集，单独同步限频状态；已有文章不会被空结果覆盖。
+网页会显示真实状态及最近同步时间。Windows 任务需要电脑开机并登录，授权过期后需扫码。
+本机 `WECHAT_RSS_URLS` 指向文章地址 `/feed/all.json?limit=100`，主仓库另支持
+`WECHAT_IMPORT_PATH=data/inbox/wechat.json`。RSS 根目录并不是文章列表。
+
 在个人电脑、NAS 或 VPS 上运行 WeRSS，完成扫码和公众号订阅后，将 RSS/Atom/JSON 地址配置为：
 
 ```text
