@@ -78,12 +78,15 @@ class WeChatPublicIndexAdapter:
     name = "微信公众号"
 
     def __init__(self, directory=None, cache_dir=None, queries=None, timeout=25,
-                 subscribed_only=True):
+                 subscribed_only=True, page=1, manual_paging=False):
         self.directory = Path(directory or ROOT / "data/inbox/wechat-subscriptions.json")
         self.cache_dir = Path(cache_dir or ROOT / "data/cache/wechat-public")
         self.queries = queries
         self.timeout = timeout
         self.subscribed_only = subscribed_only
+        self.page = max(1, int(page))
+        self.manual_paging = manual_paging
+        self.has_more = False
         self._status = SourceStatus(self.name, "not_run")
 
     @property
@@ -115,7 +118,8 @@ class WeChatPublicIndexAdapter:
         if budget.get("day") != now.date().isoformat():
             budget = {"day": now.date().isoformat(), "count": 0, "blocked_until": budget.get("blocked_until", "")}
         for query in queries[:3]:
-            key = hashlib.sha256(query.encode()).hexdigest()
+            cache_query = query if self.page == 1 else f'{query}|page:{self.page}'
+            key = hashlib.sha256(cache_query.encode()).hexdigest()
             path = self.cache_dir / (key + ".json")
             rows = None
             if path.is_file():
@@ -124,6 +128,7 @@ class WeChatPublicIndexAdapter:
                     checked = parse_date(payload.get("checked_at"))
                     if checked and timedelta(0) <= now - checked < timedelta(hours=24):
                         rows = payload["rows"]
+                        self.has_more = payload.get('has_more', len(rows) >= 10)
                 except (ValueError, KeyError, TypeError):
                     pass
             if rows is None:
@@ -132,7 +137,7 @@ class WeChatPublicIndexAdapter:
                     failures += 1
                     challenge = True
                     continue  # Cached results remain usable during the cooldown.
-                if budget.get("count", 0) >= 3:
+                if not self.manual_paging and budget.get("count", 0) >= 3:
                     failures += 1
                     budget_exhausted = True
                     continue
@@ -143,10 +148,13 @@ class WeChatPublicIndexAdapter:
                 budget_path.write_text(json.dumps(budget), encoding="utf-8")
                 try:
                     url = "https://weixin.sogou.com/weixin?type=2&query=" + quote(query, safe="")
+                    if self.page > 1:
+                        url += '&page=' + str(self.page)
                     with urlopen(Request(url, headers={"User-Agent": "daily-papers/1.0"}), timeout=self.timeout) as response:
                         body = response.read().decode("utf-8", "replace")
                     rows = parse_search(body)
-                    path.write_text(json.dumps({"checked_at": now.isoformat(), "rows": rows}, ensure_ascii=False), encoding="utf-8")
+                    self.has_more = bool(re.search(r'id=["\']sogou_next["\']', body)) or len(rows) >= 10
+                    path.write_text(json.dumps({"checked_at": now.isoformat(), "rows": rows, 'has_more': self.has_more}, ensure_ascii=False), encoding="utf-8")
                 except PublicSearchChallenge:
                     failures += 1
                     challenge = True

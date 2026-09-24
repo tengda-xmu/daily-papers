@@ -20,7 +20,7 @@ from pydantic import BaseModel, Field
 from .documents import MAX_BYTES, fetch_fulltext, fetch_pdf, parse_pdf, reading_batches, render_scan, source_context
 from .rpc import CodexClient, CodexError
 from .store import Store
-from .search import SearchService, SearchRequest, SOURCES, SORT_OPTIONS
+from .search import SearchService, SearchRequest, MoreRequest, SOURCES, SORT_OPTIONS
 from .journals import JournalManager, JournalChange, Revision
 from .daily_update import DailyUpdater, UpdateRequest
 from .directions import DirectionManager, DirectionChange
@@ -262,7 +262,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
 
     @app.get("/api/search/sources")
     async def search_sources():
-        return {"sources": SOURCES, "sort_options": SORT_OPTIONS,
+        return {"sources": SOURCES, "sort_options": SORT_OPTIONS, "pagination": True,
                 "journals": (await asyncio.to_thread(journal_manager.snapshot))['journals']}
 
     @app.post('/api/recommendations/update')
@@ -308,6 +308,10 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     @app.get("/api/search/{identifier}")
     async def search_results(identifier: str):
         return search_service.snapshot(identifier)
+
+    @app.post("/api/search/{identifier}/more")
+    async def more_search(identifier: str, data: MoreRequest):
+        return {"id": search_service.more(identifier, data)}
 
     @app.post("/api/search/{identifier}/stop")
     async def stop_search(identifier: str):

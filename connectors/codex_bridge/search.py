@@ -17,7 +17,7 @@ from urllib.parse import urlsplit, unquote, urlencode
 from typing import Literal
 
 from fastapi import HTTPException
-from pydantic import BaseModel, Field, field_validator, model_validator
+from pydantic import BaseModel, Field, PrivateAttr, field_validator, model_validator
 
 from src.citations import reference, safe_link
 from src.manual_search import SOURCES
@@ -43,6 +43,8 @@ class SearchRequest(BaseModel):
     since: date
     until: date
     limit: int = Field(default=10, ge=5, le=25)
+    pagination: bool = False  # Older clients retain their bounded-request contract.
+    _continuation: dict = PrivateAttr(default_factory=dict)
     journal_issn: str = Field(default='', max_length=16)
     sort_by: Literal['relevance', 'latest', 'citations'] = 'relevance'
 
@@ -80,6 +82,15 @@ class SearchRequest(BaseModel):
         return self
 
 
+class MoreRequest(BaseModel):
+    round: int = Field(ge=1)
+    source: str = ''
+    retry: bool = False
+
+
+PAGE_OK = {'ok', 'no_data'}
+
+
 class SearchService:
     def __init__(self, root, runtime, worker=None):
         self.root = Path(root)
@@ -93,6 +104,8 @@ class SearchService:
 
     async def _worker(self, source, query):
         payload = query.model_dump(mode='json') | {'source': source, 'cache_dir': str(self.directory / 'provider-cache')}
+        if query.pagination:
+            payload['continuation'] = query._continuation
         env = {**os.environ, 'PYTHONIOENCODING': 'utf-8'}
         proc = await asyncio.create_subprocess_exec(sys.executable, '-m', 'src.manual_search',
             cwd=self.root, env=env, stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE,
@@ -119,8 +132,8 @@ class SearchService:
             if time.time() - job['created'] > 86400 or len(self.jobs) > 20:
                 self.jobs.pop(key)
         identifier = uuid.uuid4().hex
-        job = {'id': identifier, 'created': time.time(), 'state': 'running', 'request': query,
-               'sources': {s: {'state': 'queued', 'records': [], 'cached': False} for s in query.sources}}
+        job = {'id': identifier, 'created': time.time(), 'state': 'running', 'request': query, 'round': 1,
+               'sources': {s: {'state': 'queued', 'records': [], 'cached': False, 'next': {}, 'pages': 0} for s in query.sources}}
         self.jobs[identifier] = job
         job['task'] = asyncio.create_task(self._run(job))
         return identifier
@@ -130,6 +143,9 @@ class SearchService:
             result = job['sources'][source]
             result['state'] = 'running'
             query = job['request']
+            if query.pagination:
+                await self._page(job, source)
+                return
             cache_key = query.model_dump(mode='json') | {'sources': [source]}
             if query.sort_by == 'relevance':
                 cache_key.pop('sort_by')  # Preserve valid earlier relevance caches.
@@ -163,8 +179,67 @@ class SearchService:
             except Exception:
                 result['state'] = 'error'
 
-    async def _run(self, job):
-        tasks = [asyncio.create_task(self._one(job, s)) for s in job['sources']]
+    async def _page(self, job, source):
+        result = job['sources'][source]
+        query = job['request'].model_copy(deep=True)
+        query._continuation = copy.deepcopy(result['next'])
+        cache_key = query.model_dump(mode='json') | {'sources': [source], 'continuation': query._continuation, 'page_version': 1}
+        key = hashlib.sha256(json.dumps(cache_key, sort_keys=True).encode()).hexdigest()
+        path = self.directory / (key + '.json')
+        data, cached = None, False
+        try:
+            value = json.loads(path.read_text(encoding='utf-8'))
+            # Crossref continuation cursors expire; never reuse a stale first page.
+            ttl = 240 if source in ('Crossref', 'CNS 子刊专项') else 86400
+            if value['state'] in PAGE_OK and time.time() - path.stat().st_mtime < ttl:
+                data, cached = value, True
+        except (ValueError, OSError, KeyError):
+            pass
+        try:
+            if data is None:
+                data = await self.worker(source, query)
+                if data['state'] in PAGE_OK:
+                    path.write_text(json.dumps(data, ensure_ascii=False), encoding='utf-8')
+            previous = {r.get('doi') or r.get('source_id') or r['title']: r for r in result['records']}
+            for row in data.get('records', []):
+                previous[row.get('doi') or row.get('source_id') or row['title']] = row
+            result.update({k: v for k, v in data.items() if k not in ('records', 'next')})
+            result.update(records=list(previous.values()), cached=cached)
+            # Failed pages retain their cursor and all previously received records.
+            if data['state'] in PAGE_OK:
+                result['next'] = data.get('next')
+                result['pages'] += 1
+        except asyncio.CancelledError:
+            result['state'] = 'cancelled'
+            raise
+        except (TimeoutError, asyncio.TimeoutError):
+            result['state'] = 'timeout'
+        except Exception:
+            result['state'] = 'error'
+
+    def more(self, identifier, data):
+        job = self.get(identifier)
+        if not job['request'].pagination:
+            raise HTTPException(409, '请重新检索以启用分页。')
+        if data.source and data.source not in job['sources']:
+            raise HTTPException(422, '该来源不在本次检索中。')
+        if data.round < job['round']:
+            return identifier  # Retrying the same click never consumes another page.
+        if data.round != job['round']:
+            raise HTTPException(409, '检索状态已变化，请刷新结果。')
+        if any(j['state'] == 'running' for j in self.jobs.values()):
+            raise HTTPException(409, '检索仍在运行，请等待完成或先停止。')
+        sources = [s for s, value in job['sources'].items() if (not data.source or data.source == s)
+                   and value['next'] is not None and (value['state'] in PAGE_OK or data.retry)]
+        if sources:
+            job['round'] += 1; job['state'] = 'running'
+            for source in sources:
+                job['sources'][source]['state'] = 'queued'
+            job['task'] = asyncio.create_task(self._run(job, sources))
+        return identifier
+
+    async def _run(self, job, sources=None):
+        tasks = [asyncio.create_task(self._one(job, s)) for s in (sources or job['sources'])]
         try:
             await asyncio.gather(*tasks)
             job['state'] = 'completed'
@@ -239,12 +314,25 @@ class SearchService:
                 '_search_observations': [v for k, v in row.raw_metadata.items() if k.startswith('search_observation:')],
             })
         records = rank_results(records, job['request'].query, job['request'].sort_by)
+        if job['request'].pagination:
+            # Keep already viewed pages stable as more sources/pages arrive.
+            order = list(job.get('display_order', []))
+            known = set(order)
+            order.extend(row['id'] for row in records if row['id'] not in known)
+            positions = {key: n for n, key in enumerate(order)}
+            records.sort(key=lambda row: positions[row['id']])
+            if job['state'] != 'running':
+                job['display_order'] = order
         job['results'] = result_map
         return {'id': identifier, 'state': job['state'], 'query': job['request'].query,
+            'round': job['round'], 'pagination': job['request'].pagination,
             'request': job['request'].model_dump(mode='json'),
             'sources': [{'id': source, 'state': value['state'], 'label': STATE_MESSAGES.get(value['state'], '来源异常'),
                          'count': len(value['records']), 'cached': value['cached'],
                          'detail': value.get('message', ''),
+                         'has_more': job['request'].pagination and value['next'] is not None and value['state'] in PAGE_OK,
+                         'can_retry': job['request'].pagination and value['next'] is not None and value['state'] not in PAGE_OK | {'queued', 'running'},
+                         'pages': value['pages'],
                          'sort_note': value.get('sort_note') or sort_note(source, job['request'].sort_by),
                          'search_url': ('https://weixin.sogou.com/weixin?' + urlencode({'type': 2, 'query': job['request'].query})) if source == '微信公众号' else '',
                          'mode': next(s['mode'] for s in SOURCES if s['id'] == source)} for source, value in job['sources'].items()],

@@ -30,9 +30,9 @@ MODES = {
     'CNS 子刊专项': 'Crossref · 配置中的 CNS 子刊 ISSN 专项',
     'ResearchGate': 'SerpApi 公开索引 + 本机导出；不读取登录页面',
     '微信公众号': '订阅 RSS + 本机历史文章；不足时查询公开索引，不限已订阅公众号',
-    'Google Scholar': 'SerpApi Scholar · 一次查询；日期精度通常为年',
-    'Elsevier': 'Scopus STANDARD · 支持相关性、日期、被引排序，日期筛选后最多读取 3 页',
-    'Web of Science': 'Clarivate Starter API · 一次查询',
+    'Google Scholar': 'SerpApi Scholar · 支持翻页；日期精度通常为年',
+    'Elsevier': 'Scopus STANDARD · 支持相关性、日期、被引排序与翻页',
+    'Web of Science': 'Clarivate Starter API · 支持翻页',
 }
 for source in SOURCES:
     source['mode'] = MODES.get(source['id'], '公开文献检索 API')
@@ -170,15 +170,24 @@ def worker(data):
         order = data.get('sort_by', 'relevance')
         if order not in SORT_LABELS:
             raise ValueError('Invalid search order')
-        rows, status = fetch_source(source, data['query'],
-            datetime.fromisoformat(data['since']).replace(tzinfo=timezone.utc),
-            datetime.fromisoformat(data['until']).replace(hour=23, minute=59, second=59, tzinfo=timezone.utc), data['limit'], Path(data['cache_dir']),
-            **({'journal_issn': data['journal_issn']} if data.get('journal_issn') else {}),
-            **({'sort_by': order} if order != 'relevance' else {}))
+        page_mode = data.get('pagination', False)
+        options = {'journal_issn': data.get('journal_issn', ''), 'sort_by': order}
+        since = datetime.fromisoformat(data['since']).replace(tzinfo=timezone.utc)
+        until = datetime.fromisoformat(data['until']).replace(hour=23, minute=59, second=59, tzinfo=timezone.utc)
+        next_page = None
+        if page_mode:
+            from src.search_pages import fetch_page
+            rows, status, next_page = fetch_page(source, data['query'], since, until,
+                Path(data['cache_dir']), **options, continuation=data.get('continuation'))
+        else:
+            rows, status = fetch_source(source, data['query'], since, until, data['limit'], Path(data['cache_dir']),
+                **({'journal_issn': data['journal_issn']} if data.get('journal_issn') else {}),
+                **({'sort_by': order} if order != 'relevance' else {}))
         # Only whitelisted metadata crosses the worker boundary. No API URL,
         # headers, raw payload, cookie or exception text is exposed to the UI.
         clean = []
-        for row in order_candidates(rows, order)[:data['limit']]:
+        candidates = order_candidates(rows, order)
+        for row in (candidates if page_mode else candidates[:data['limit']]):
             raw = row.raw_metadata
             row.raw_metadata = {k: raw[k] for k in (
                 'sources', 'bibliography', 'pdf_link', 'link_kind', 'access_mode', 'abstract_kind') if k in raw}
@@ -201,13 +210,15 @@ def worker(data):
             diagnostic = 'HTTP ' + code[1] if code else next((kind for kind in ('SSLError', 'URLError', 'TimeoutError', 'JSONDecodeError') if kind in status.message), '')
         # WeChat/Scopus details are locally constructed counts/status text only;
         # never forward raw HTTP exception strings or provider request URLs.
-        message = status.message if source in ('微信公众号', 'Elsevier') else MODES.get(source, '公开 API 检索')
+        message = status.message if source in ('微信公众号', 'Elsevier') or page_mode else MODES.get(source, '公开 API 检索')
         return {'records': clean, 'state': status.status, 'message': message,
+                **({'next': next_page} if page_mode else {}),
                 'sort_note': sort_note(source, order), 'diagnostic': diagnostic}
     except Exception as exc:
         code = getattr(exc, 'code', None)
         state = 'quota_exhausted' if code == 429 else 'access_denied' if code in (401, 403) else 'error'
         return {'records': [], 'state': state, 'message': '该来源本次检索未完成，可稍后重试。',
+                **({'next': data.get('continuation', {})} if data.get('pagination') else {}),
                 'diagnostic': f'HTTP {code}' if isinstance(code, int) else type(exc).__name__}
 
 
