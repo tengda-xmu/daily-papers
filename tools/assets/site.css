@@ -44,7 +44,24 @@ button:disabled { cursor: default; }
 .manual-update:hover { background: var(--soft); text-decoration: none; border-color: var(--blue); }
 .manual-update:disabled { opacity: .65; }
 .main-content:has(> .daily-issue, > #manual-search, > #direction-manager, > #setup-heading, > .research-leads) { padding-top: 22px; }
-#setup-heading ~ .reference-panel { border-bottom: 1px solid var(--line); margin-bottom: 24px; }
+.settings-groups > .reference-panel > summary { min-height:72px; }
+.settings-groups > .reference-panel > summary > span:first-child { font-size:16px; font-weight:500; }
+.settings-groups > .reference-panel[open] > summary { color:var(--heading); }
+.settings-copy > p,.settings-copy > ol,.settings-copy > pre { max-width:88ch; }
+.settings-copy { overflow-wrap:anywhere; }
+.settings-copy h3 { margin:24px 0 12px; font-size:16px; }
+.settings-source { border-top:1px solid var(--line); }
+.settings-source > summary { display:flex; align-items:center; gap:12px; padding:16px 0; list-style:none; cursor:pointer; color:var(--link); font-size:15px; }
+.settings-source > summary::before { content:"＋"; color:var(--muted); }
+.settings-source[open] > summary::before { content:"−"; }
+.settings-source > .settings-copy { padding:2px 0 12px 27px; }
+@media (max-width:640px) {
+  .settings-groups > .reference-panel > summary { flex-wrap:wrap; position:relative; gap:2px 12px; padding-right:25px; }
+  .settings-groups > .reference-panel > summary > span:first-child { width:100%; font-size:15px; }
+  .settings-groups > .reference-panel > summary > .reference-meta { margin-left:0; }
+  .settings-groups > .reference-panel > summary::after { position:absolute; right:0; top:23px; }
+  .settings-source > .settings-copy { padding-left:0; }
+}
 .research-leads > .issue-meta { margin: 0 0 16px; }
 .research-leads > .issue-meta > a { margin-left: auto; }
 .research-leads .archive-entry > div { min-width: 0; overflow-wrap: anywhere; }

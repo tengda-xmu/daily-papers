@@ -202,7 +202,7 @@ ResearchGate 会话目录、API 密钥和个人登录信息不能提交到 Git�
 
 arXiv、OpenAlex、Crossref、Semantic Scholar 和 PubMed 可使用公开接口；匿名访问可能受到服务商限流。OpenAlex 支持可选的 `OPENALEX_API_KEY` 与 `OPENALEX_MAILTO`，Semantic Scholar 支持 `SEMANTIC_SCHOLAR_API_KEY`。Web of Science 在 Clarivate 开通 Starter API 后设置 `WOS_API_KEY`，可申请试用或机构方案。Elsevier、Google Scholar 仍分别需要 API 授权；微信公众号支持公开索引或连接器数据，ResearchGate 可复用 SerpApi 公开索引或读取本地导出。
 
-网页的[来源配置指南](https://tengda-xmu.github.io/daily-papers/setup.html)提供每个来源的授权入口和步骤，也可在本地安全输入一个 GitHub Secret：
+网页的[设置](https://tengda-xmu.github.io/daily-papers/setup.html)按来源状态、期刊目录、论文助手、文献库授权、公众号订阅、中文精读与推送、更新与密钥管理分组，默认收起，点击标题展开。文献库内部按来源单独展开；原有直达链接会自动展开对应分类。也可在本地安全输入一个 GitHub Secret：
 
 ```powershell
 python -m tools.configure --set SERPAPI_API_KEY

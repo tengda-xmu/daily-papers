@@ -188,6 +188,8 @@
     for (let node = target; node; node = node.parentElement) {
       if (node.tagName === 'DETAILS') node.open = true;
     }
+    // Expanding an ancestor changes the anchor's position after native scrolling.
+    if (target) requestAnimationFrame(() => target.scrollIntoView({block:'start', behavior:'instant'}));
   }
   $$('a[href*="#"]').forEach((link) => link.addEventListener('click', () => {
     const url = new URL(link.href);
