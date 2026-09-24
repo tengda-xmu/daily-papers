@@ -176,7 +176,9 @@ WECHAT_WORK_WEBHOOK_URL=
 
 企业微信配置方式：在企业微信群右上角 `…` → `群机器人` → `添加机器人`，复制机器人 Webhook 地址；在 GitHub 仓库 `Settings → Secrets and variables → Actions` 中新建 `WECHAT_WORK_WEBHOOK_URL`。本项目使用群机器人推送，不保存企业微信登录密码，也不需要把企业微信 Cookies 提交到仓库。
 
-工作流每天北京时间 07:00 运行，也支持 `workflow_dispatch` 手动触发。它会生成 `site/`、保存 `data/archive/` 历史数据、部署 GitHub Pages，并发送核心论文摘要。
+工作流每天北京时间 07:00 开始更新，采集、筛选和发布完成后显示新一期；也支持 `workflow_dispatch` 手动触发。GitHub 定时调度可能延迟，尤其在整点，因此另设 07:17、07:37 和 08:17 补漏检查。检查在同一更新队列中读取最新数据：当天 07:00 后已发布有效推荐就跳过，手动更新仍可随时执行。它会生成 `site/`、保存 `data/archive/` 历史数据、部署 GitHub Pages，并发送核心论文摘要。
+
+Windows 可增加独立的早间触发任务，减少对 GitHub 定时调度的依赖：运行 `powershell -NoProfile -ExecutionPolicy Bypass -File tools/schedule_daily_update.ps1 -Enable`。任务在同样的四个时间检查，电脑须开机、登录 Windows 且 `gh` 授权有效；不需要打开浏览器或论文助手。已更新或正在运行时自动跳过，网络失败会重试，错过时间后登录可补跑。云端定时任务保留，电脑关机时仍能运行。任务名称为 `DailyPapers-MorningUpdate`，日志在 `.local/daily-schedule.log`；去掉 `-Enable` 可重新注册为停用。各入口均需等待 GitHub 排队与采集完成，不保证整点立即发布。
 
 首页更新时间旁的“手动更新”会通过已配对的本机论文助手启动采集、重新筛选核心推荐和扩展阅读，并发布网页。需保持“启动论文助手.cmd”运行，本机 `gh` 已登录且有仓库 Actions 权限；记住浏览器后无需重复配对。页面展示排队、采集与发布状态，核对本次发布的数据后自动刷新；若论文对话正在打开，关闭对话后再刷新。刷新浏览器或重启助手后也能继续查看任务，不会重复提交。
 

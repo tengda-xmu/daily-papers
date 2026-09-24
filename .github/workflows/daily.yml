@@ -1,5 +1,5 @@
 name: Daily papers
-run-name: ${{ inputs.request_id && format('Manual papers {0}', inputs.request_id) || 'Daily papers' }}
+run-name: ${{ inputs.scheduled_check && format('Morning check {0}', inputs.request_id) || inputs.request_id && format('Manual papers {0}', inputs.request_id) || 'Daily papers' }}
 on:
   workflow_dispatch:
     inputs:
@@ -11,8 +11,14 @@ on:
         description: Send Enterprise WeChat digest
         type: boolean
         default: false
+      scheduled_check:
+        description: Only update when today's morning edition is missing
+        type: boolean
+        default: false
   schedule:
     - cron: "0 23 * * *" # 07:00 Asia/Shanghai (UTC)
+    - cron: "17,37 23 * * *" # 07:17 / 07:37 catch-up, away from the hourly peak
+    - cron: "17 0 * * *" # 08:17 final morning catch-up
 permissions:
   contents: write
   pages: write
@@ -21,13 +27,30 @@ concurrency:
   group: daily-papers-update
   cancel-in-progress: false
 jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      needed: ${{ steps.freshness.outputs.needed }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main} # Queued checks must see the preceding run's committed data.
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Check today's morning edition
+        id: freshness
+        env:
+          SCHEDULED_CHECK: ${{ inputs.scheduled_check }}
+        run: python -m tools.daily_schedule
   update:
+    needs: check
+    if: needs.check.outputs.needed == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+        with: {ref: main}
       - uses: actions/setup-python@v5
         with: {python-version: "3.11"}
       - run: pip install -r requirements.txt
@@ -86,7 +109,7 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
       - name: Send Enterprise WeChat digest
-        if: github.event_name == 'schedule' || inputs.send_digest
+        if: github.event_name == 'schedule' || inputs.scheduled_check || inputs.send_digest
         env:
           WECHAT_WORK_WEBHOOK_URL: ${{ secrets.WECHAT_WORK_WEBHOOK_URL }}
         run: python -m src.notify
