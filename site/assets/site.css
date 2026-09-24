@@ -1,6 +1,6 @@
 :root {
-  --blue: #153e64; --blue-dark: #102e4c; --blue-text: #4a90c4;
-  --link: var(--blue-text); --link-hover: #327baa;
+  --blue: #153e64; --blue-dark: #102e4c; --blue-text: #1976d2;
+  --link: var(--blue-text); --link-hover: #125ba6;
   --heading: #111111; --ink: #202020; --muted: #454545; --line: #e3e9ef; --soft: #f4f7fa; --paper: #fff;
   --font: "PingFang SC", "Microsoft YaHei", "Microsoft YaHei UI", system-ui, sans-serif;
   --title-font: Georgia, Cambria, "Songti SC", "SimSun", serif;
@@ -46,13 +46,13 @@ button:disabled { cursor: default; }
 .manual-update:disabled { opacity: .65; }
 .main-content:has(> .daily-issue, > #manual-search, > #direction-manager, > #setup-heading, > .research-leads) { padding-top: 22px; }
 .settings-groups > .reference-panel > summary { min-height:72px; }
-.settings-groups > .reference-panel > summary > span:first-child { font-size:16px; font-weight:500; }
+.settings-groups > .reference-panel > summary > span:first-child { font-size:16px; font-weight:600; }
 .settings-groups > .reference-panel[open] > summary { color:var(--heading); }
 .settings-copy > p,.settings-copy > ol,.settings-copy > pre { max-width:88ch; }
 .settings-copy { overflow-wrap:anywhere; }
 .settings-copy h3 { margin:24px 0 12px; font-size:16px; }
 .settings-source { border-top:1px solid var(--line); }
-.settings-source > summary { display:flex; align-items:center; gap:12px; padding:16px 0; list-style:none; cursor:pointer; color:var(--link); font-size:15px; }
+.settings-source > summary { display:flex; align-items:center; gap:12px; padding:16px 0; list-style:none; cursor:pointer; color:var(--link); font-size:15px; font-weight:600; }
 .settings-source > summary::before { content:"＋"; color:var(--muted); }
 .settings-source[open] > summary::before { content:"−"; }
 .settings-source > .settings-copy { padding:2px 0 12px 27px; }
@@ -120,19 +120,20 @@ select { width: 100%; min-width: 0; padding: 9px 10px; border: 1px solid #ced8e2
 .paper { padding: 29px 0 31px; border-bottom: 1px solid var(--line); }
 .paper:last-child { border-bottom: 0; }
 .paper-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-bottom: 10px; color: var(--muted); font-size: 13px; }
-.source { color: var(--link); }
+.source { color: var(--link); font-weight:600; }
 .paper h3 { max-width: 76ch; margin: 0 0 10px; font: 500 23px/1.42 var(--title-font); letter-spacing: -.012em; overflow-wrap: anywhere; }
 .paper h3 a { color: var(--heading); }
 .paper.extended h3 { font-size: 21px; }
 .paper h3.translated { font-family: var(--font); font-size: 21px; line-height: 1.6; font-weight: 600; }
 .reading-policy { margin: 13px 0 0; font-size: 12px; color: var(--muted); }
-.journal-priority { color: var(--blue-text); }
+.journal-priority { color: var(--blue-text); font-weight:600; }
 .original-title { font: 17px/1.6 var(--title-font); color: var(--heading); }
 .analysis-provenance { margin-bottom: 24px; color: var(--muted); font-size: 13px; }
 .bibliography { display: flex; flex-wrap: wrap; column-gap: 16px; row-gap: 2px; margin-bottom: 13px; color: var(--muted); font-size: 13px; }
 .venue { color: var(--muted); }
 .abstract { max-width: 76em; margin-bottom: 14px; color: var(--ink); font-size: 16px; line-height: 1.8; overflow-wrap: anywhere; }
 .paper-tools { display: flex; align-items: center; gap: 22px; font-size: 12px; }
+.paper-tools > a, .paper-tools > .codex-entry, .paper-direction { font-weight:600; }
 .paper-figure { display: grid; grid-template-columns: fit-content(48%) minmax(0, 1fr); align-items: center; gap: 28px; margin: 24px 0; }
 .figure-preview { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; color: var(--muted); cursor: zoom-in; }
 .figure-preview img { display: block; width: auto; height: auto; max-width: 100%; max-height: 310px; object-fit: contain; object-position: left center; }
@@ -140,6 +141,7 @@ select { width: 100%; min-width: 0; padding: 9px 10px; border: 1px solid #ced8e2
 .figure-title { display: block; margin-bottom: 10px; color: var(--heading); font-size: 15px; font-weight: 600; }
 .figure-explanation { margin-bottom: 12px; color: var(--ink); font-size: 15px; line-height: 1.9; }
 .figure-credit { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.9; overflow-wrap: anywhere; }
+.figure-credit a { font-weight:600; }
 .paper-figure.image-unavailable { display: block; }
 .image-unavailable .figure-preview { align-items: flex-start; margin-bottom: 12px; cursor: pointer; }
 .figure-dialog { width: min(1120px, calc(100% - 32px)); max-width: none; max-height: calc(100dvh - 32px); padding: 22px; border: 0; border-radius: 6px; color: var(--ink); background: #fff; }
