@@ -5,11 +5,12 @@ const bounded = n => Math.max(0, Math.min(1, n));
 
 export function createReader({dialog, assets, api, onSelection, onDocument, onLayout}) {
   const root = document.createElement('section'); root.className = 'reader-pane'; root.setAttribute('aria-label', '论文 PDF 阅读器');
-  root.innerHTML = `<header class="reader-header"><div class="reader-title-row"><strong>论文阅读</strong><span class="reader-name"></span><button type="button" data-read="hide" aria-label="收起原文阅读区">收起</button></div>
+  root.innerHTML = `<header class="reader-header"><div class="reader-title-row"><strong>论文阅读</strong><span class="reader-name"></span><button type="button" data-read="toggle-toolbar" aria-expanded="true" aria-controls="reader-toolbar" title="记住工具栏的展开状态">收起工具栏</button><button type="button" data-read="hide" aria-label="隐藏原文阅读区">隐藏阅读区</button></div>
+    <div class="reader-toolbar" id="reader-toolbar">
     <div class="reader-version-row"><label>PDF 版本 <select class="reader-version" aria-label="选择 PDF 版本"><option value="">原文 PDF</option></select></label><button type="button" data-read="download" disabled>下载当前 PDF</button></div>
     <div class="reader-tools"><button type="button" data-read="prev" aria-label="上一页">‹</button><label>页 <input class="reader-page-number" type="number" min="1" value="1" aria-label="PDF 页码"></label><span class="reader-page-count">/ 0</span><button type="button" data-read="next" aria-label="下一页">›</button><label class="reader-zoom-label">缩放 <select class="reader-zoom"><option value="fit">适合宽度</option><option value=".75">75%</option><option value="1">100%</option><option value="1.25">125%</option><option value="1.5">150%</option><option value="2">200%</option></select></label><button type="button" data-read="upload">上传 PDF</button><button type="button" data-read="fetch-pdf">获取 PDF</button></div>
     <div class="reader-tools reader-mark-tools"><button type="button" data-tool="select" aria-pressed="true">选择文字</button><button type="button" data-tool="line">画线</button><button type="button" data-tool="ink">画笔</button><button type="button" data-tool="note">笔记</button><label>颜色 <select class="reader-color" aria-label="标记颜色"><option value="yellow">黄色</option><option value="blue">蓝色</option><option value="red">红色</option><option value="green">绿色</option></select></label><button type="button" data-read="undo" disabled>撤销</button><button type="button" data-read="redo" disabled>重做</button><button type="button" data-read="notes" aria-expanded="false">批注 <span class="reader-note-count">0</span></button><button type="button" data-read="export" disabled>导出批注 PDF</button></div>
-    <div class="reader-selection" hidden><span class="reader-selection-label"></span><button type="button" data-read="translate">英译中</button><button type="button" data-read="translate-en">中译英</button><button type="button" data-read="question">就此提问</button><button type="button" data-read="highlight">高亮</button><button type="button" data-read="underline">下划线</button><button type="button" data-read="strikeout">删除线</button><button type="button" data-read="dismiss-selection" aria-label="收起划词工具">×</button></div>
+    </div><div class="reader-selection" hidden><span class="reader-selection-label"></span><button type="button" data-read="translate">英译中</button><button type="button" data-read="translate-en">中译英</button><button type="button" data-read="question">就此提问</button><button type="button" data-read="highlight">高亮</button><button type="button" data-read="underline">下划线</button><button type="button" data-read="strikeout">删除线</button><button type="button" data-read="dismiss-selection" aria-label="收起划词工具">×</button></div>
     <p class="reader-status" role="status">上传或获取 PDF 后可在这里阅读、标记和划词翻译。</p></header>
     <div class="reader-body"><div class="reader-pages" tabindex="0" aria-label="原文页面"></div><aside class="reader-notes" aria-label="批注与笔记" hidden><div class="reader-notes-heading"><strong>批注与笔记</strong><button type="button" data-read="backup">备份批注</button><button type="button" data-read="reload">重新载入</button></div><div class="reader-note-list"></div></aside></div>`;
   const splitter = document.createElement('div'); splitter.className = 'reader-splitter'; splitter.setAttribute('role','separator'); splitter.setAttribute('aria-label','调整原文与对话宽度'); splitter.setAttribute('aria-orientation','vertical'); splitter.tabIndex = 0;
@@ -21,6 +22,7 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
   let items = [], revision = 0, dirty = false, saving = null, saveTimer = null, saveError = false, undo = [], redo = [];
   let selection = null, tool = 'select', observer = null, rendering = false, queue = [], drawing = null, documentLoading = false;
   let visible = true; try { visible = localStorage.getItem('paper-reader-visible') !== 'off'; } catch {}
+  let toolbarExpanded = true; try { toolbarExpanded = localStorage.getItem('paper-reader-toolbar') !== 'off'; } catch {}
   const state = (text, error=false) => { $('.reader-status').textContent=text; $('.reader-status').classList.toggle('reader-error', error); };
   const url = suffix => `/api/papers/${paper}${suffix}`;
   const version = () => `?version=${encodeURIComponent(doc?.hash || '')}`;
@@ -42,6 +44,16 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
     visible=value; dialog.classList.toggle('reader-open', value);
     if (remember) { try { localStorage.setItem('paper-reader-visible', value ? 'on' : 'off'); } catch {} }
     onLayout(); if (value && pdf) resize();
+  }
+  function setToolbarExpanded(value, remember=true) {
+    toolbarExpanded=value;
+    $('.reader-toolbar').hidden=!value;
+    root.classList.toggle('reader-toolbar-collapsed', !value);
+    const button=$('[data-read="toggle-toolbar"]');
+    button.textContent=value ? '收起工具栏' : '展开工具栏';
+    button.setAttribute('aria-expanded', String(value));
+    if (remember) { try { localStorage.setItem('paper-reader-toolbar', value ? 'on' : 'off'); } catch {} }
+    onLayout();
   }
   function tab(name) { dialog.dataset.readerTab=name; tabs.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.tab===name))); if(name==='pdf') resize(); onLayout(); }
   dialog.dataset.readerTab='chat';
@@ -238,6 +250,7 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
     const action=b.dataset.read;if(!action)return;
     try {
       if(action==='hide'){await flush();return setVisible(false);}
+      if(action==='toggle-toolbar')return setToolbarExpanded(!toolbarExpanded);
       if(action==='dismiss-selection'){selection=null;$('.reader-selection').hidden=true;window.getSelection()?.removeAllRanges();return;}
       if(action==='upload' || action==='fetch-pdf')return onDocument(action);
       if(action==='prev' || action==='next')return go(displayPage(sourcePage(current)+(action==='prev'?-1:1)));
@@ -264,7 +277,7 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
   splitter.onpointercancel=()=>{drag=null;};splitter.ondblclick=()=>{dialog.style.removeProperty('--reader-chat-width');resize();};
   splitter.onkeydown=e=>{if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();width(dialog.querySelector('.chat-shell').clientWidth+(e.key==='ArrowLeft'?40:-40));}};
   window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
-  setVisible(visible,false);controls();
+  setVisible(visible,false);setToolbarExpanded(toolbarExpanded,false);controls();
   return {update,flush,open:()=>{setVisible(true);tab('pdf');},
     showPage:async number=>{setVisible(true);tab('pdf');await selectVersion(sourceDoc?.hash);go(number);},
     showTranslation:async (messageId,view='translated')=>{const item=versions.find(v=>(v.message_id===messageId||v.message_ids?.includes(messageId))&&v.view===view);if(!item)return;setVisible(true);tab('pdf');await selectVersion(item.hash);},
