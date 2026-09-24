@@ -73,7 +73,7 @@ def reference(paper, accessed=None):
         marker = 'EB'
         notes.append('文献类型未确定，暂按网络文献著录')
     online = bool(url or doi)
-    head = (names + '. ' if names else '') + title + '[' + marker + ('/OL' if online else '') + ']'
+    head = (names.rstrip('. ') + '. ' if names else '') + title + '[' + marker + ('/OL' if online else '') + ']'
     volume, issue, page = (plain(b.get(k)) for k in ('volume', 'issue', 'page'))
     if marker == 'J':
         if not venue:

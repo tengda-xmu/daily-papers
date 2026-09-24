@@ -186,6 +186,8 @@ def test_unknown_and_preprint_citations_never_invent_bibliography():
     preprint = reference({'title': 'A preprint', 'source': 'arXiv', 'published_at': '2025-01-02',
                           'landing_url': 'https://arxiv.org/abs/2501.00001'}, date(2026, 9, 24))
     assert '[PP/OL]' in preprint['text'] and 'arXiv (2025-01-02)' in preprint['text']
+    many = reference({'title': 'A paper', 'authors': ['Smith J', 'Jones A', 'Taylor B', 'Walker C']})
+    assert 'et al. A paper' in many['text'] and 'et al..' not in many['text']
 
 
 def test_pdf_only_downloads_result_metadata_and_validates_cached_path(tmp_path, monkeypatch):
