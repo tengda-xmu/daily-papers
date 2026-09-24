@@ -53,7 +53,7 @@
     <div class="chat-workspace">
     <div class="chat-messages" id="chat-reading-pane" aria-label="对话记录"></div>
     <button class="chat-scroll-latest text-button" type="button" data-chat-action="latest" hidden>↓ 回到最新回复</button>
-    <div class="chat-history-actions"><button class="chat-button chat-translation-export" type="button" data-chat-action="export-translation" hidden>导出译文 PDF</button><button class="text-button" type="button" data-chat-action="export-pdf">对话 PDF</button><button class="text-button" type="button" data-chat-action="export">对话文本</button><button class="text-button" type="button" data-chat-action="clear">清除记录</button></div>
+    <div class="chat-history-actions"><button class="text-button" type="button" data-chat-action="export-pdf">导出对话 PDF</button><button class="text-button" type="button" data-chat-action="export">对话文本</button><button class="text-button" type="button" data-chat-action="clear">清除记录</button></div>
     <div class="chat-height-resizer" role="separator" tabindex="0" aria-orientation="horizontal" aria-label="调整对话阅读区域高度" aria-controls="chat-reading-pane" title="上下拖动调整阅读区域；双击恢复默认"><span aria-hidden="true"></span><small aria-hidden="true">拖动调整阅读区域</small></div>
     <div class="chat-bottom">
     <form class="chat-composer">
@@ -99,13 +99,26 @@
   const bilingualTranslation = row => row?.artifact?.preferred_view === 'bilingual';
   const pdfLabel = row => bilingualTranslation(row) ? '下载中英对照 PDF' : '下载原版式译文 PDF';
   const latestTranslation = () => history.filter(fullTranslation).at(-1);
-  function updateTranslationExport() {
-    const row = latestTranslation(), button = $('[data-chat-action="export-translation"]');
-    button.hidden = !row;
-    button.disabled = busy || !row || row.status === 'running' || (layoutTranslation(row) && !row.artifact?.filename);
-    button.textContent = row?.status === 'completed' ? '导出译文 PDF' : row?.status === 'running' ? '译文生成中…' : '导出部分译文 PDF';
-    if (layoutTranslation(row)) button.textContent = row?.artifact?.filename ? pdfLabel(row) : row?.status === 'running' ? '译文 PDF 生成中…' : '译文 PDF 尚未完成';
-    button.title = layoutTranslation(row) ? (bilingualTranslation(row) ? '下载原文与译文交替成对的 PDF，各页保持原尺寸' : '下载已生成的译文 PDF，沿用原文件页数与版式') : '仅导出这篇论文最近一次全文翻译，保留原文、译文及页码标记';
+  const fullTranslationPrompt = '请完整翻译已载入论文的全部正文，保留原文顺序、术语、公式与引用。';
+  function existingPdf() {
+    const source = $('.chat-translation-source').value;
+    if (mode !== 'translate' || !['layout', 'layout-bilingual'].includes(source) || currentDocument?.kind !== 'pdf' || screenshots.length) return null;
+    const view = source === 'layout-bilingual' ? 'bilingual' : 'translated';
+    const prompt = $('.chat-composer textarea').value.trim() || fullTranslationPrompt;
+    const row = history.findLast(row => row.role === 'assistant' && row.status === 'completed'
+      && row.artifact?.kind === 'layout-pdf' && row.artifact.source_hash === currentDocument.hash
+      && row.artifact.target === $('.chat-translation-target').value && row.model === chosenModel()?.id
+      && row.request?.message === prompt
+      && pdfVersions.some(v => v.view === view && (v.message_id === row.id || v.message_ids?.includes(row.id))));
+    return row ? {row, view} : null;
+  }
+  async function previewPdf(row, view = row.artifact?.preferred_view || 'translated') {
+    const targetPaper = paperId;
+    if (!pdfVersions.some(v => v.view === view && (v.message_id === row.id || v.message_ids?.includes(row.id)))) throw new Error('此 PDF 版本已不可预览，请检查当前论文资料。');
+    const reader = await ensureReader();
+    if (targetPaper !== paperId) return;
+    await reader.update(targetPaper, currentDocument, pdfVersions);
+    if (targetPaper === paperId) await reader.showTranslation(row.id, view);
   }
   function updateRemembered() {
     remembered.hidden = !deviceToken;
@@ -258,6 +271,7 @@
     }
     select.value = wanted; select.disabled = busy;
     updateModelHint();
+    updateMode();
   }
   const draftKey = () => `${paperId}:${mode}${mode === 'translate' ? ':' + translationSource : ''}`;
   function updateMode() {
@@ -267,10 +281,17 @@
     const layoutTranslation = translating && ['layout', 'layout-bilingual'].includes($('.chat-translation-source').value);
     const bilingual = translating && $('.chat-translation-source').value === 'layout-bilingual';
     const imageTranslation = translating && $('.chat-translation-source').value === 'image';
+    const existing = existingPdf();
     $('.chat-translation').hidden = !translating;
     $('.chat-mode-help').textContent = layoutTranslation ? (bilingual ? '原文与译文逐页配对，保留各页尺寸、分栏及图表；左侧并排阅读，可选择文字。' : '译文在原 PDF 文字框内排版，保留页数、尺寸、分栏和图表；完成后左侧可切换阅读。') + ' 译文字体与换行可能调整；放不下会提示，绝不截断。' : fullTranslation ? '按原文顺序分批翻译，导出重新排版的文本对照 PDF；保留原版式请选择上方 PDF 选项。' : imageTranslation ? '翻译截图中的文字，保留公式和术语，标注识别不清处。' : config.hint;
     $('.chat-composer textarea').placeholder = fullTranslation ? '可选：填写术语或表达偏好；留空即可开始全文翻译。' : imageTranslation ? '可选：填写术语偏好或需要翻译的区域…' : documentTranslation ? '例如：翻译 Abstract 或 Methods 章节。' : config.placeholder;
     $('.chat-composer .chat-send').textContent = bilingual ? '生成中英对照 PDF' : layoutTranslation ? '翻译并生成 PDF' : fullTranslation ? '开始全文翻译' : config.send;
+    if (layoutTranslation && busy) $('.chat-composer .chat-send').textContent = '正在生成 PDF…';
+    else if (existing) {
+      $('.chat-composer .chat-send').textContent = '查看已生成 PDF';
+      $('.chat-mode-help').textContent = `已有相同模型、方向和要求的${bilingual ? '中英对照' : '译文'} PDF，可直接查看与下载。填写新要求后可生成新译文；需要重译时，点击结果下的“重新翻译”。`;
+    }
+    $('.chat-composer .chat-send').title = existing && !busy ? '打开已生成的文件，不提交翻译任务' : '';
     dialog.querySelectorAll('[data-mode]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === mode)));
   }
   function rememberDraft() { drafts.set(draftKey(), { text: $('.chat-composer textarea').value }); }
@@ -363,7 +384,7 @@
     dialog.querySelectorAll('.chat-revise, .chat-version-button').forEach(b => { b.disabled = locked || b.dataset.unavailable === 'true'; });
     $('.chat-composer .chat-send').disabled = locked || !chosenModel() || Boolean(editing);
     $('[data-chat-action="forget-browser"]').disabled = locked || connecting || Boolean(editing);
-    updateTranslationExport();
+    updateMode();
   };
 
   async function restoreSession() {
@@ -576,7 +597,8 @@
       actions.append(copy);
       if (row && row.parent_id) {
         const regenerate = document.createElement('button'); regenerate.type = 'button'; regenerate.className = 'text-button chat-revise chat-regenerate';
-        regenerate.textContent = state === 'completed' ? '重新生成' : '重试'; regenerate.disabled = busy || state === 'running';
+        regenerate.textContent = state === 'completed' ? layoutTranslation(row) ? '重新翻译' : '重新生成' : '重试'; regenerate.disabled = busy || state === 'running';
+        if (layoutTranslation(row)) regenerate.title = '重新调用模型翻译，生成新版本；旧版 PDF 保留';
         regenerate.onclick = () => send(null, {kind:'regenerate', row}); actions.append(regenerate);
       }
       if (messageId && text) {
@@ -588,20 +610,19 @@
         if (layout) pdf.textContent = artifact.filename ? pdfLabel({artifact}) : '译文 PDF 尚未完成';
         pdf.disabled = state === 'running' || (layout && !artifact.filename);
         pdf.onclick = () => downloadPdf(exportPaper, messageId, translation, pdf).catch(e => notice(e.message));
-        actions.append(pdf);
+        if (!translation) actions.append(pdf);
         if (translation && state !== 'running') {
           const footer = document.createElement('div'); footer.className = 'chat-translation-download';
           const note = document.createElement('span'); note.textContent = state === 'completed' ? '全文译文已保存，可导出原文与译文。' : '本次翻译尚未完成，可导出已保存内容。';
-          if (layout) note.textContent = artifact.filename ? `原版式译文 · ${artifact.pages} 页 · 左侧可切换中英对照` : '已完成的翻译已保存，再次开始可继续生成 PDF。';
-          const download = document.createElement('button'); download.type = 'button'; download.className = 'chat-button'; download.textContent = pdf.textContent;
-          download.disabled = pdf.disabled;
-          download.onclick = () => downloadPdf(exportPaper, messageId, true, download).catch(e => notice(e.message));
-          footer.append(note, download); article.append(footer);
+          if (layout) note.textContent = artifact.filename ? (bilingualTranslation({artifact}) ? `中英对照 PDF · ${artifact.pages} 对页（${artifact.pages * 2} 页）` : `原版式译文 PDF · ${artifact.pages} 页`) : '已完成的翻译已保存，再次开始可继续生成 PDF。';
+          const fileActions = document.createElement('div'); fileActions.className = 'chat-translation-file-actions';
+          footer.append(note, fileActions); article.append(footer);
           if (layout && artifact.filename && state === 'completed' && documentHash === currentDocument?.hash) {
             const preview=document.createElement('button');preview.type='button';preview.className='chat-button';preview.textContent='在左侧阅读';
-            preview.onclick=async()=>{try{const view=await ensureReader();await view.update(paperId,currentDocument,pdfVersions);await view.showTranslation(messageId,artifact.preferred_view || 'translated');}catch(e){notice(e.message);}};
-            footer.append(preview);
+            preview.onclick=()=>previewPdf({id:messageId,artifact}).catch(e=>notice(e.message));
+            fileActions.append(preview);
           }
+          if (!layout || artifact.filename) { pdf.className = 'chat-button chat-answer-pdf'; fileActions.append(pdf); }
         }
       }
     }
@@ -665,7 +686,7 @@
     closeEditor();
     $('.chat-paper-title').textContent = data.paper.title_zh || data.paper.title;
     $('.chat-paper-title').title = $('.chat-paper-title').textContent;
-    updateTranslationExport();
+    updateMode();
     $('.chat-messages').replaceChildren();
     if (!history.length) {
       const p = document.createElement('p'); p.className = 'chat-empty';
@@ -770,8 +791,8 @@
     if (busy) await stop();
     rememberDraft();
     if (paperId !== id) {
-      releasePreviews(); screenshots = []; drawScreenshots(); history = []; currentDocument = null;
-      updateTranslationExport(); $('.chat-settings-toggle').textContent = '模型与资料';
+      releasePreviews(); screenshots = []; drawScreenshots(); history = []; currentDocument = null; pdfVersions = [];
+      updateMode(); $('.chat-settings-toggle').textContent = '模型与资料';
     }
     closeEditor(); followLatest = true;
     paperId = id; lastTrigger = trigger;
@@ -807,11 +828,24 @@
     const fullTranslation = taskMode === 'translate' && ['full', 'layout', 'layout-bilingual'].includes(taskSource);
     const layoutPdf = taskMode === 'translate' && ['layout', 'layout-bilingual'].includes(taskSource);
     const imageTranslation = taskMode === 'translate' && taskSource === 'image';
-    const text = revision ? (revision.text || task.message || user?.content || '') : $('.chat-composer textarea').value.trim() || (fullTranslation ? '请完整翻译已载入论文的全部正文，保留原文顺序、术语、公式与引用。' : attached.length ? imageTranslation ? '请逐段翻译上传截图中的全部可见文字。' : '请分析上传截图，说明其中的关键信息与含义。' : '');
+    const text = revision ? (revision.text || task.message || user?.content || '') : $('.chat-composer textarea').value.trim() || (fullTranslation ? fullTranslationPrompt : attached.length ? imageTranslation ? '请逐段翻译上传截图中的全部可见文字。' : '请分析上传截图，说明其中的关键信息与含义。' : '');
     if (busy || documentPending || remoteDocumentPending || screenshotPending) { if (documentPending || remoteDocumentPending || screenshotPending) notice('资料正在准备，请完成后再发送。'); return; }
     if (!text) { notice(imageTranslation ? '请先上传或粘贴待译截图。' : mode === 'translate' ? '请粘贴待译原文，或选择“论文章节”后指定翻译范围。' : '请输入问题，或上传截图。'); return; }
     if (!token) { notice('请先配对并连接本机 Codex。'); return; }
     if (!paperId) { notice('请先选择一篇论文。'); return; }
+    if (!revision && existingPdf()) {
+      const targetPaper = paperId;
+      try {
+        // Revalidate local files before opening; never turn a stale download into a new model request.
+        await loadPaper();
+        if (targetPaper !== paperId) return;
+        const existing = existingPdf();
+        if (!existing) { notice('资料或翻译要求已变化，请确认后再生成 PDF。'); return; }
+        await previewPdf(existing.row, existing.view);
+        notice('已打开现有 PDF，未提交翻译任务；可在左侧下载当前版本。');
+      } catch (error) { notice(error.message); }
+      return;
+    }
     if (imageTranslation && !attached.length) { notice('请先上传或粘贴待译截图。'); return; }
     if (taskMode === 'translate' && attached.length && !imageTranslation) { notice('已附加截图，请选择“截图翻译”；翻译全文前请先移除截图。'); return; }
     if (fullTranslation && !currentDocument) { notice('请先上传 PDF、获取论文 PDF 或获取网页全文，再开始全文翻译。'); return; }
@@ -838,7 +872,7 @@
           pages:task.pages || '', translation_target:task.translation_target || 'zh', translation_source:taskSource, expected_leaf:activeLeaf,
           edit_message_id:revision?.kind === 'edit' ? revision.row.id : 0, regenerate_message_id:revision?.kind === 'regenerate' ? revision.row.id : 0,
           request_id: crypto.randomUUID() }) });
-      if (!revision) $('.chat-composer textarea').value = '';
+      if (!revision && !layoutPdf) $('.chat-composer textarea').value = '';
       submitted = true;
       if (!revision) { screenshots = []; drawScreenshots(); }
       const reader = response.body.getReader(), decoder = new TextDecoder(); let buffer = '';
@@ -895,7 +929,7 @@
         if (finished && layoutPdf) {
           const row = latestTranslation();
           if (row?.artifact?.kind === 'layout-pdf') {
-            const view=await ensureReader();await view.update(paperId,currentDocument,pdfVersions);await view.showTranslation(row.id,row.artifact.preferred_view || 'translated');
+            await previewPdf(row).catch(e => notice(e.message));
             await downloadPdf(sentPaper, row.id, true).catch(e => notice(e.message + ' 可在左侧点击“下载当前 PDF”重试。'));
           }
         }
@@ -913,7 +947,7 @@
     const title = ($('.chat-paper-title').textContent || targetPaper).replace(/[<>:"/\\|?*\x00-\x1f]/g, '_').slice(0, 70).trim();
     const paired=translation && bilingualTranslation(history.find(row=>row.id===messageId));
     try {
-      notice('正在生成 PDF…');
+      notice(translation && layoutTranslation(history.find(row => row.id === messageId)) ? '正在下载已生成的 PDF…' : '正在导出 PDF…');
       const response = await api(`/api/papers/${targetPaper}/export-pdf${messageId ? '?message_id=' + messageId : ''}`, { stream: true });
       const blob = await response.blob();
       if (!blob.type.includes('application/pdf')) throw new Error('未取得 PDF 文件，请重试。');
@@ -921,7 +955,7 @@
       const a = document.createElement('a'); a.href = url; a.download = `${title}-${paired ? '中英对照' : translation ? '全文翻译' : messageId ? '回答-' + messageId : '对话记录'}.pdf`;
       a.click(); setTimeout(() => URL.revokeObjectURL(url), 60000);
       notice(paired ? '中英对照 PDF 已下载。' : translation ? '译文 PDF 已下载。' : 'PDF 已生成并下载。');
-    } finally { if (button) button.disabled = false; updateTranslationExport(); }
+    } finally { if (button) button.disabled = false; }
   }
 
   async function action(name) {
@@ -934,11 +968,6 @@
       if (name === 'forget-browser') return await forgetBrowser();
       if (!token || !paperId) { notice('请先连接并选择论文。'); return; }
       if (name === 'export-pdf') return await downloadPdf(paperId, null, false, $('[data-chat-action="export-pdf"]'));
-      if (name === 'export-translation') {
-        const row = latestTranslation();
-        if (!row || row.status === 'running') { notice('全文翻译完成后可导出 PDF；中断的译文也可导出已有部分。'); return; }
-        return await downloadPdf(paperId, row.id, true, $('[data-chat-action="export-translation"]'));
-      }
       if (name === 'upload') { uploadPaper = paperId; return $('.chat-documents input[type="file"]').click(); }
       if (name === 'screenshot') { screenshotPaper = paperId; return $('.chat-image-input').click(); }
       if (name === 'fetch-pdf') return prepareDocument('/fetch-pdf', null, '正在获取并解析论文 PDF…');
@@ -1031,9 +1060,12 @@
   $('.chat-translation-source').addEventListener('change', () => {
     rememberDraft(); translationSource = $('.chat-translation-source').value; restoreDraft();
   });
+  $('.chat-translation-target').addEventListener('change', updateMode);
+  $('.chat-composer textarea').addEventListener('input', updateMode);
   $('#chat-model').addEventListener('change', () => {
     if (chosenModel()) writeStorage('localStorage', modelKey, $('#chat-model').value);
     updateModelHint();
+    updateMode();
     notice(`后续请求将使用 ${$('#chat-model').value}，当前论文的对话记录会保留。`);
   });
   updateMode();
