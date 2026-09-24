@@ -24,6 +24,7 @@ from .search import SearchService, SearchRequest, MoreRequest, SOURCES, SORT_OPT
 from .journals import JournalManager, JournalChange, Revision
 from .daily_update import DailyUpdater, UpdateRequest
 from .directions import DirectionManager, DirectionChange
+from .wechat_subscriptions import SubscriptionManager, SubscriptionChange
 from .screenshots import MAX_IMAGE_BYTES, MAX_SCREENSHOTS, save_screenshot
 from .conversations import REQUEST_FIELDS, saved_request, dialogue_context
 from .annotations import AnnotationSet, current_pdf, read_annotations, save_annotations, export_annotated_pdf
@@ -93,6 +94,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     journal_manager = JournalManager(root)
     daily_updater = DailyUpdater(runtime)
     direction_manager = DirectionManager(root)
+    subscription_manager = SubscriptionManager(root)
 
     @asynccontextmanager
     async def lifespan(app):
@@ -119,6 +121,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     app.state.journals = journal_manager
     app.state.daily_updater = daily_updater
     app.state.directions = direction_manager
+    app.state.wechat_subscriptions = subscription_manager
 
     @app.middleware("http")
     async def local_only(request: Request, next_handler):
@@ -304,6 +307,22 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     @app.post("/api/search")
     async def start_search(data: SearchRequest):
         return {"id": search_service.start(data)}
+
+    @app.get('/api/wechat-subscriptions')
+    async def subscription_list():
+        return await asyncio.to_thread(subscription_manager.snapshot)
+
+    @app.post('/api/wechat-subscriptions')
+    async def save_subscription(data: SubscriptionChange):
+        return await asyncio.to_thread(subscription_manager.save, data)
+
+    @app.delete('/api/wechat-subscriptions/{identifier}')
+    async def remove_subscription(identifier: str, data: Revision):
+        return await asyncio.to_thread(subscription_manager.remove, identifier, data.revision)
+
+    @app.post('/api/wechat-subscriptions/sync')
+    async def sync_subscriptions(data: Revision):
+        return await asyncio.to_thread(subscription_manager.sync, data.revision)
 
     @app.get("/api/search/{identifier}")
     async def search_results(identifier: str):
@@ -816,7 +835,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
 
     @app.get("/assets/{name}")
     async def asset(name: str):
-        if name not in ("paper-reader.js", "paper-reader.css", "paper-chat.js", "paper-chat.css", "site.css", "site.js", "daily-update.js", "manual-search.js", "manual-search.css", "journal-manager.js", "journal-manager.css", "research-directions.js", "research-directions.css", "favicon.svg"):
+        if name not in ("paper-reader.js", "paper-reader.css", "paper-chat.js", "paper-chat.css", "site.css", "site.js", "daily-update.js", "manual-search.js", "manual-search.css", "journal-manager.js", "journal-manager.css", "research-directions.js", "research-directions.css", "wechat-subscriptions.js", "wechat-subscriptions.css", "favicon.svg"):
             raise HTTPException(404)
         return FileResponse(root / "tools/assets" / name)
 
@@ -844,6 +863,10 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     @app.get("/journals.html")
     async def journal_page():
         return FileResponse(root / "site/journals.html", media_type="text/html")
+
+    @app.get('/setup.html')
+    async def setup_page():
+        return FileResponse(root / 'site/setup.html', media_type='text/html')
 
     @app.get('/recommendations.html')
     async def recommendations_page():

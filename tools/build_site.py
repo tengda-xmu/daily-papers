@@ -20,6 +20,7 @@ from src.catalog import (JOURNALS, SOURCE_CATALOG, STATE_LABELS, TOPIC_CATALOG,
 from src.research_focus import focus_tags
 from src.figures import get_figure
 from src.wechat_metadata import public_subscriptions
+from src.wechat_subscriptions import effective_accounts, published_accounts
 from src.research_directions import load_profile, active_directions, profile_revision
 
 DATA = ROOT / "data"
@@ -33,7 +34,7 @@ SETUP_HINTS = {
     "Elsevier": "尚未配置 Elsevier 检索授权。",
     "Google Scholar": "尚未配置 Google Scholar 检索服务。",
     "ResearchGate": "需要 SerpApi 公开索引密钥，或导入本地连接器的论文元数据。",
-    "微信公众号": "需要 WeRSS 订阅地址，或完成本机扫码、添加订阅并同步文章。",
+    "微信公众号": "可在设置中手动添加公众号，按订阅目录收集公开文章线索。",
 }
 AUTH_HINTS = {
     "Web of Science": "需要 Clarivate Starter API 密钥；可申请免费试用，网页登录不等于 API 授权。",
@@ -79,7 +80,7 @@ def template(name: str, **values) -> str:
 
 def document(content: str, *, title: str, root: str = "./", active: str = "daily") -> str:
     version = hashlib.sha256(
-        b"".join((ASSETS / name).read_bytes() for name in ("site.css", "site.js", "daily-update.js", "paper-chat.css", "paper-chat.js", "paper-reader.css", "paper-reader.js", "manual-search.css", "manual-search.js", "journal-manager.css", "journal-manager.js", "research-directions.css", "research-directions.js"))
+        b"".join((ASSETS / name).read_bytes() for name in ("site.css", "site.js", "daily-update.js", "paper-chat.css", "paper-chat.js", "paper-reader.css", "paper-reader.js", "manual-search.css", "manual-search.js", "journal-manager.css", "journal-manager.js", "research-directions.css", "research-directions.js", "wechat-subscriptions.css", "wechat-subscriptions.js"))
     ).hexdigest()[:10]
     return template(
         "page.html", content=content.lstrip(), title=esc(title), root=root, version=version,
@@ -95,6 +96,8 @@ def document(content: str, *, title: str, root: str = "./", active: str = "daily
                        f'<script src="{root}assets/journal-manager.js?v={version}" defer></script>') if active == 'journals' else
                       (f'<link rel="stylesheet" href="{root}assets/research-directions.css?v={version}">'
                        f'<script src="{root}assets/research-directions.js?v={version}" defer></script>') if active == 'directions' else
+                      (f'<link rel="stylesheet" href="{root}assets/wechat-subscriptions.css?v={version}">'
+                       f'<script src="{root}assets/wechat-subscriptions.js?v={version}" defer></script>') if active == 'setup' else
                       f'<script src="{root}assets/daily-update.js?v={version}" defer></script>' if active == 'daily' else '',
     )
 
@@ -422,8 +425,10 @@ def wechat_directory() -> str:
     try:
         snapshot = public_subscriptions(read_json(DATA / "inbox/wechat-subscriptions.json", {}))
     except (ValueError, TypeError):
-        return '<p>订阅目录将在本机连接器首次同步后显示。</p>'
-    accounts, discovery = snapshot["accounts"], snapshot["discovery"]
+        snapshot = {'updated_at': '', 'discovery': {'status': 'not_run', 'daily_queries': 0,
+            'daily_additions': 0, 'max_subscriptions': 0}}
+    accounts = [row for row in effective_accounts(ROOT, manual=published_accounts(ROOT)) if row['enabled']]
+    discovery = snapshot['discovery']
     groups = {}
     for account in accounts:
         for group in account["groups"] or ["科研综合"]:
@@ -434,7 +439,7 @@ def wechat_directory() -> str:
     return f'''<details><summary>查看已订阅的 {len(accounts)} 个公众号与自动扩展状态</summary>
 <p>目录同步：{esc(display_time(snapshot["updated_at"])[1])}（北京时间）。自动发现：{esc(state)}。</p>
 <ul>{entries}</ul><p>每天最多检索 {discovery["daily_queries"]} 个主题、新增 {discovery["daily_additions"]} 个相关账号；
-订阅上限 {discovery["max_subscriptions"]} 个。达到上限后保留候选，需调整配置后继续扩展。
+自动发现订阅上限 {discovery["max_subscriptions"]} 个。达到上限后保留候选，需调整配置后继续扩展。
 领域标签按账号名称和简介匹配，不代表对账号或文章的质量背书。</p></details>'''
 
 
@@ -445,7 +450,7 @@ def main() -> None:
     (OUT / "index.html").write_text(render(payload), encoding="utf-8")
     (OUT / "data.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     build_archive()
-    (OUT / "setup.html").write_text(document(template("setup.html", wechat_directory=wechat_directory(),
+    (OUT / "setup.html").write_text(document(template("setup.html", wechat_directory=wechat_directory(), wechat_manager=template('wechat-manager.html'),
         sources_panel=source_status_panel(payload, reading_url='./'),
         journals=journal_directory(), journal_count=len(JOURNALS), group_count=len({j['group'] for j in JOURNALS})),
         title="设置 | 每日论文推荐", active="setup"), encoding="utf-8")

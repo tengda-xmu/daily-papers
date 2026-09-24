@@ -14,6 +14,7 @@ from urllib.request import Request, urlopen
 
 from src.models import RawRecord, SourceStatus, in_date_window, parse_date
 from src.wechat_metadata import excerpt, public_index_url
+from src.wechat_subscriptions import effective_accounts, manual_queries, name_key
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -94,18 +95,20 @@ class WeChatPublicIndexAdapter:
         return self._status
 
     def fetch(self, since, until):
-        policy, names = {}, set()
+        policy, names, accounts = {}, set(), []
         if self.subscribed_only or self.queries is None:
             policy = json.loads((ROOT / "config/wechat_accounts.json").read_text(encoding="utf-8"))
         if self.subscribed_only:
-            snapshot = json.loads(self.directory.read_text(encoding="utf-8-sig")) if self.directory.is_file() else {}
-            names = {row["name"] for row in snapshot.get("accounts", [])} or set(policy["seed_names"])
+            accounts = effective_accounts(ROOT, self.directory)
+            names = {name_key(row['name']) for row in accounts if row['enabled']}
         queries = self.queries
         if queries is None:
             pool = policy["public_article_queries"]
             offset = (until.date().toordinal() % len(pool))
             queries = [pool[(offset + i) % len(pool)].format(year=until.year, month=until.month)
                        for i in range(min(3, policy.get("public_daily_queries", 3)))]
+            targeted = manual_queries(accounts, until)
+            queries = list(dict.fromkeys([*targeted, *queries]))[:min(3, policy.get('public_daily_queries', 3))]
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         records, failures, indexed_count = {}, 0, 0
         last_request, challenge, budget_exhausted = None, False, False
@@ -174,7 +177,7 @@ class WeChatPublicIndexAdapter:
                 continue
             indexed_count += len(rows)
             for row in rows:
-                if self.subscribed_only and row.get("account") not in names:
+                if self.subscribed_only and name_key(row.get('account', '')) not in names:
                     continue
                 if not in_date_window(row.get("published_at", ""), since, until):
                     continue

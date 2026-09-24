@@ -55,13 +55,13 @@ def merge_journals(base, local, remote):
     return clean_journals(list(merged.values()))
 
 
-def github(method, body=None):
+def github(method, body=None, *, endpoint=ENDPOINT):
     executable = shutil.which('gh') or r'C:\Program Files\GitHub CLI\gh.exe'
     env = dict(os.environ)
     for scheme, proxy in getproxies().items():
         if scheme in ('http', 'https'):
             env.setdefault(scheme.upper() + '_PROXY', proxy)
-    args = [executable, 'api', '--method', method, ENDPOINT + ('?ref=main' if method == 'GET' else '')]
+    args = [executable, 'api', '--method', method, endpoint + ('?ref=main' if method == 'GET' else '')]
     if body is not None:
         args += ['--input', '-']
     try:
@@ -69,7 +69,7 @@ def github(method, body=None):
             capture_output=True, timeout=45, env=env,
             **({'creationflags': 0x08000000} if os.name == 'nt' else {}))
     except (OSError, subprocess.TimeoutExpired):
-        raise HTTPException(503, '无法连接 GitHub CLI。请确认本机 GitHub 已登录且网络可用；本机期刊仍然保留。')
+        raise HTTPException(503, '无法连接 GitHub CLI。请确认本机 GitHub 已登录且网络可用；本机修改仍然保留。')
     if result.returncode:
         # Do not return command output: it can contain account or proxy details.
         raise HTTPException(503, 'GitHub 同步未完成，请检查登录、仓库写入权限和网络后重试。')

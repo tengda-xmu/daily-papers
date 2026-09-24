@@ -45,10 +45,13 @@ python -m tools.publish_researchgate</code></pre><p>Windows 可直接使用已�
 <details id="wechat" class="reference-panel">
   <summary><span>公众号订阅与科研线索</span><span class="reference-meta">订阅、采集与同步</span></summary>
   <div class="reference-body settings-copy">
+$wechat_manager
+$wechat_directory
+<details class="settings-source"><summary>采集与同步说明</summary><div class="settings-copy">
     <p><strong>公开文章索引：</strong>每日 06:35 按订阅目录低频检索近期文章，07:00 日报读取成功同步的标题、来源、日期、短片段和公开检索入口。快照缺失或超过 24 小时时，云端尝试补充公开检索。这些内容在<a href="leads.html">科研线索</a>页单独展示。</p><p>微信后台文章列表持续返回 <code>200013</code>，<a href="https://github.com/wechat-article/wechat-article-exporter/issues/200" target="_blank" rel="noopener noreferrer">上游维护者已有接口关闭报告</a>；当前停止调用受限列表接口，公开索引可用不代表微信已解除限制。每天最多 3 次公开查询，缓存 24 小时；遇验证码暂停请求至少 24 小时。</p><p>索引不保证覆盖所有订阅的全部文章，检索片段也不等于全文。链接明确标注“公开检索入口”，需人工验证的跳转请在浏览器中完成；公众号线索不占核心和扩展论文名额。</p><p><strong>WeRSS 订阅管理：</strong>本机管理地址为 <code>http://127.0.0.1:8001/</code>，微信扫码会话与管理密码只保存在本机。网站通过 <code>connector-data</code> 读取元数据，无需开放公网端口；本机定时任务需要电脑开机并登录 Windows。</p><pre><code>powershell -NoProfile -ExecutionPolicy Bypass -File tools/start_wechat.ps1
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/sync_wechat.ps1</code></pre><p><strong>持续扩展订阅：</strong>本机每天 18:00 轮换检索人工智能、智能体、大模型、可靠性、航空航天、结构材料和智能运维主题，筛选后自动添加新账号。排除营销、招聘、中小学教育和会员事务账号；同名歧义账号保留待核验。新增账号进入公开索引筛选目录，账号发现仍依赖有效微信扫码授权。</p>
-$wechat_directory
 <p><a href="https://github.com/tengda-xmu/daily-papers/tree/main/connectors/wechat_sync" target="_blank" rel="noopener noreferrer">本机连接器说明</a> · <a href="https://github.com/tengda-xmu/daily-papers/blob/main/config/wechat_accounts.json" target="_blank" rel="noopener noreferrer">订阅领域与筛选配置</a></p><p><strong>已有远程 WeRSS：</strong>也可把 GitHub Actions 可访问的文章 RSS、Atom 或 JSON 地址保存为 <code>WECHAT_RSS_URLS</code>，需要请求头时配置 <code>WECHAT_RSS_HEADERS</code>。WeRSS 的 <code>/feed/all.json</code> 返回文章，根路径 <code>/rss</code> 是订阅目录；本机地址使用上述同步连接器。</p>
+  </div></details>
   </div>
 </details>
 <details id="notifications" class="reference-panel">

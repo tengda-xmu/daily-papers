@@ -1,0 +1,19 @@
+<section id="wechat-manager" aria-label="手动管理公众号订阅">
+  <div class="wechat-connection"><span id="wechat-connection" role="status">正在连接本机…</span><a href="http://127.0.0.1:43127/setup.html#wechat" target="_blank" rel="noopener noreferrer">在本机管理</a></div>
+  <details id="wechat-pairing" hidden><summary>连接本机论文助手</summary><p>运行“启动论文助手.cmd”。首次使用时，填写本机页面上的配对码。</p><form id="wechat-pair-form"><label for="wechat-code" class="sr-only">本机配对码</label><input id="wechat-code" type="password" autocomplete="off" placeholder="粘贴配对码" required><button type="submit">连接</button><label><input id="wechat-remember" type="checkbox" checked>记住此浏览器</label></form></details>
+  <h2 id="wechat-editor-title">添加公众号</h2>
+  <p class="wechat-help">填写公众号的完整名称，按名称收集公开文章线索。保存后参与本机采集；同步后参与每日更新。</p>
+  <form id="wechat-form"><fieldset id="wechat-fields" disabled><legend class="sr-only">公众号资料</legend>
+    <div class="wechat-form-grid">
+      <label>公众号名称 <input id="wechat-name" required maxlength="100" placeholder="例如：机器之心"></label>
+      <label>微信号（可选）<input id="wechat-alias" maxlength="80" placeholder="填写账号的微信号"></label>
+      <label>分组（可自定义）<input id="wechat-group" maxlength="60" value="科研综合" list="wechat-groups" required><datalist id="wechat-groups"></datalist></label>
+    </div>
+    <div class="wechat-form-actions"><label><input id="wechat-enabled" type="checkbox" checked>启用订阅</label><button id="wechat-save" type="submit">保存订阅</button><button id="wechat-cancel" type="button" hidden>取消编辑</button></div>
+  </fieldset></form>
+  <div class="wechat-list-heading"><h3>手动订阅 <span id="wechat-count"></span></h3><button id="wechat-refresh" type="button" class="text-button">刷新列表</button></div>
+  <div id="wechat-list"><p class="wechat-help">连接本机后，可查看和管理手动添加的公众号。</p></div>
+  <div class="wechat-sync"><div><p id="wechat-sync-state">本机保存与每日更新的订阅目录分别管理。</p><p class="wechat-help">同步会将公众号名称、微信号和分组保存到公开网站的订阅目录；未同步的修改只在本机生效。</p></div><button id="wechat-sync" type="button" disabled>同步到每日更新</button></div>
+  <p class="wechat-help">按公开索引轮换采集，不代表已在微信中关注或已获取全部历史文章。暂停订阅后不再安排该账号的定向采集，已收集的文章仍保留。</p>
+  <p id="wechat-status" role="status" aria-live="polite"></p>
+</section>
