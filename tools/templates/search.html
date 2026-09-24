@@ -6,6 +6,7 @@
     <label for="literature-query" class="sr-only">检索关键词或论文标题</label>
     <div class="literature-query-row"><input id="literature-query" type="search" required minlength="2" maxlength="200" placeholder="输入关键词或论文标题，例如 agentic scientific machine learning" autocomplete="off"><button id="literature-submit" type="submit">检索文献</button></div>
     <div class="search-options"><label>起始日期 <input id="search-since" type="date" required></label><label>结束日期 <input id="search-until" type="date" required></label><label>每来源最多 <select id="search-limit"><option value="10">10 篇</option><option value="25">25 篇</option><option value="5">5 篇</option></select></label></div>
+    <div class="search-journal-scope"><label for="search-journal">限定期刊</label><select id="search-journal"><option value="">不限期刊</option></select><a href="journals.html">添加期刊</a></div><p id="search-journal-help" class="search-help" hidden>按 ISSN 在 Crossref 内精确限定期刊。关键词留空可浏览所选日期内的新文章；仍可下载公开 PDF 和复制引用。</p>
     <details class="search-library-panel"><summary><span id="selected-libraries">全部 11 类来源</span><span>选择来源</span></summary><fieldset id="search-libraries"><legend class="sr-only">检索来源</legend>$sources</fieldset><div class="search-selection"><button type="button" class="text-button" id="select-libraries">全选</button><button type="button" class="text-button" id="clear-libraries">清空</button></div><p>ResearchGate 使用公开索引及本机导出；公众号优先查已订阅文章，缺少结果时尝试公开索引。各库按自身规则匹配关键词，部分来源仅提供年份。</p></details>
     <p class="search-help">相同检索缓存 24 小时。关键词不会交给模型，检索不占用 Codex 对话额度；付费来源按你的 API 额度计费。</p>
   </form>

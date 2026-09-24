@@ -21,6 +21,7 @@ from .documents import MAX_BYTES, fetch_fulltext, fetch_pdf, parse_pdf, reading_
 from .rpc import CodexClient, CodexError
 from .store import Store
 from .search import SearchService, SearchRequest, SOURCES
+from .journals import JournalManager, JournalChange, Revision
 
 ROOT = Path(__file__).resolve().parents[2]
 PORT = 43127
@@ -73,6 +74,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     preparing = set()
     generation_lock = asyncio.Lock()
     search_service = SearchService(root, runtime)
+    journal_manager = JournalManager(root)
 
     @asynccontextmanager
     async def lifespan(app):
@@ -96,6 +98,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     app.state.pair_code = pair_code
     app.state.shutdown = lambda: None
     app.state.search = search_service
+    app.state.journals = journal_manager
 
     @app.middleware("http")
     async def local_only(request: Request, next_handler):
@@ -235,7 +238,27 @@ def create_app(root=ROOT, runtime=None, rpc=None):
 
     @app.get("/api/search/sources")
     async def search_sources():
-        return {"sources": SOURCES}
+        return {"sources": SOURCES, "journals": (await asyncio.to_thread(journal_manager.snapshot))['journals']}
+
+    @app.get("/api/journals")
+    async def journal_list():
+        return await asyncio.to_thread(journal_manager.snapshot)
+
+    @app.get("/api/journals/lookup/{issn}")
+    async def journal_lookup(issn: str):
+        return await asyncio.to_thread(journal_manager.lookup, issn)
+
+    @app.post("/api/journals")
+    async def save_journal(data: JournalChange):
+        return await asyncio.to_thread(journal_manager.save, data)
+
+    @app.delete("/api/journals/{issn}")
+    async def remove_journal(issn: str, data: Revision):
+        return await asyncio.to_thread(journal_manager.remove, issn, data.revision)
+
+    @app.post("/api/journals/sync")
+    async def sync_journals(data: Revision):
+        return await asyncio.to_thread(journal_manager.sync, data.revision)
 
     @app.post("/api/search")
     async def start_search(data: SearchRequest):
@@ -586,13 +609,17 @@ def create_app(root=ROOT, runtime=None, rpc=None):
 
     @app.get("/assets/{name}")
     async def asset(name: str):
-        if name not in ("paper-chat.js", "paper-chat.css", "site.css", "site.js", "manual-search.js", "manual-search.css", "favicon.svg"):
+        if name not in ("paper-chat.js", "paper-chat.css", "site.css", "site.js", "manual-search.js", "manual-search.css", "journal-manager.js", "journal-manager.css", "favicon.svg"):
             raise HTTPException(404)
         return FileResponse(root / "tools/assets" / name)
 
     @app.get("/search.html")
     async def manual_search_page():
         return FileResponse(root / "site/search.html", media_type="text/html")
+
+    @app.get("/journals.html")
+    async def journal_page():
+        return FileResponse(root / "site/journals.html", media_type="text/html")
 
     return app
 

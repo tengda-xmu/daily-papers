@@ -20,6 +20,7 @@ from pydantic import BaseModel, Field, field_validator, model_validator
 
 from src.citations import reference, safe_link
 from src.manual_search import SOURCES
+from src.custom_journals import normalize_issn
 from src.models import RawRecord
 from src.pipeline import deduplicate
 from .documents import fetch_pdf, pdf_candidates
@@ -35,20 +36,26 @@ STATE_MESSAGES = {
 
 
 class SearchRequest(BaseModel):
-    query: str = Field(min_length=2, max_length=200)
+    query: str = Field(default='', max_length=200)
     sources: list[str] = Field(min_length=1, max_length=11)
     since: date
     until: date
     limit: int = Field(default=10, ge=5, le=25)
+    journal_issn: str = Field(default='', max_length=16)
+
+    @field_validator('journal_issn')
+    @classmethod
+    def valid_issn(cls, value):
+        return normalize_issn(value) if value else ''
 
     @field_validator('query')
     @classmethod
     def clean_query(cls, value):
         value = ' '.join(value.split())
-        if len(value) < 2 or any(ord(c) < 32 for c in value):
+        if value and (len(value) < 2 or any(ord(c) < 32 for c in value)):
             raise ValueError('请输入至少两个字符的关键词')
         # This is keyword search; reserved engine syntax has no common semantics.
-        if not any(c.isalnum() for c in value):
+        if value and not any(c.isalnum() for c in value):
             raise ValueError('请输入有效关键词')
         return value
 
@@ -61,6 +68,10 @@ class SearchRequest(BaseModel):
 
     @model_validator(mode='after')
     def date_range(self):
+        if not self.query and not self.journal_issn:
+            raise ValueError('请输入关键词或选择期刊')
+        if self.journal_issn:
+            self.sources = ['Crossref']
         if self.since > self.until or self.since.year < 1900 or self.until > date.today():
             raise ValueError('日期范围应在 1900 年至今天之间，起始日期不晚于结束日期')
         return self

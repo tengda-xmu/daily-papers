@@ -7,6 +7,7 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 import yaml
+from src.custom_journals import journal_groups
 
 CONFIG = Path(__file__).resolve().parents[1] / 'config'
 
@@ -16,7 +17,7 @@ def read_config(name: str) -> dict:
 
 
 SOURCE_CATALOG = read_config('sources.yml')['sources']
-VENUE_GROUPS = read_config('venues.yml')['groups']
+VENUE_GROUPS = journal_groups(CONFIG.parent)
 TOPIC_CATALOG = read_config('topics.yml')['topics']
 JOURNALS = []
 for group in VENUE_GROUPS:
@@ -34,15 +35,15 @@ def match_journal(value: str) -> dict | None:
     venue = normalized(value)
     # Longer names win (Cell Reports Physical Science before Cell Reports).
     for item in sorted(JOURNALS, key=lambda entry: len(entry['name']), reverse=True):
-        title = normalized(item['name'])
+        titles = {normalized(item['name']), normalized(item.get('canonical_name', item['name']))}
         if item['group'] == 'CNS 正刊':
             # Scholar summaries contain author/year/venue segments. A prefix
             # such as "Science of the Total Environment" is not Science.
             segments = re.split(r'\s+[-–—]\s+', venue)
             if any(part == title or part in (title + ' (london)', title + ' (new york, n.y.)')
-                   for part in segments):
+                   for part in segments for title in titles):
                 return item
-        elif re.search(r'(?<!\w)' + re.escape(title) + r'(?!\w)', venue):
+        elif any(re.search(r'(?<!\w)' + re.escape(title) + r'(?!\w)', venue) for title in titles):
             return item
     return None
 

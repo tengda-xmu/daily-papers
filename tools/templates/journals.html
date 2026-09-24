@@ -1,0 +1,27 @@
+<section id="journal-manager" aria-labelledby="journals-heading">
+  <header class="page-heading"><div><h1 id="journals-heading">管理期刊</h1><p class="page-intro">把关注的期刊，加入每天的论文检索。</p></div><a href="./#journals">返回期刊目录</a></header>
+  <div class="journal-connection"><span id="journal-connection" role="status">正在检查本机连接…</span><a href="http://127.0.0.1:43127/journals.html" target="_blank" rel="noopener noreferrer">在本机打开</a></div>
+  <details id="journal-pairing" hidden><summary>连接本机论文助手</summary><p>运行“启动论文助手.cmd”。首次使用填写配对码，已记住的浏览器会自动连接。管理期刊无需开启 Codex 模型。</p><form id="journal-pair-form"><label class="sr-only" for="journal-code">本机配对码</label><input id="journal-code" type="password" autocomplete="off" placeholder="粘贴配对码" required><button type="submit">连接</button><label><input id="journal-remember" type="checkbox" checked> 记住此浏览器</label></form></details>
+  <section class="journal-editor" aria-labelledby="journal-editor-title">
+    <h2 id="journal-editor-title">添加期刊</h2>
+    <p class="journal-help">输入期刊的纸质版或电子版 ISSN，验证后自动填写刊名。支持 Crossref 收录的期刊。</p>
+    <form id="journal-form">
+      <fieldset id="journal-fields" disabled>
+        <label for="journal-issn">ISSN</label><div class="journal-verify-row"><input id="journal-issn" placeholder="例如 2041-1723" maxlength="16" required autocomplete="off"><button id="journal-verify" type="button">验证期刊</button></div>
+        <p id="journal-verification" role="status" class="journal-help"></p>
+        <div class="journal-form-grid"><label>期刊名称<input id="journal-name" required minlength="2" maxlength="180" placeholder="验证后自动填写，可调整显示名称"></label><label>分组<input id="journal-group" list="journal-groups" required maxlength="60" value="自定义期刊" placeholder="选择现有分组或填写新分组"><datalist id="journal-groups"></datalist></label></div>
+        <label class="journal-enabled"><input id="journal-enabled" type="checkbox" checked> 每日定向检索此刊</label>
+        <div class="journal-editor-actions"><button id="journal-save" type="submit">保存到本机</button><button id="journal-cancel" type="button" hidden>取消编辑</button></div>
+      </fieldset>
+    </form>
+  </section>
+  <section class="journal-subscriptions" aria-labelledby="journal-list-title">
+    <div class="journal-list-heading"><h2 id="journal-list-title">我的期刊 <span id="journal-count">0</span></h2><button id="journal-refresh" type="button" disabled>刷新本机列表</button></div>
+    <div id="journal-list"><p class="journal-help">连接后显示你添加的期刊。</p></div>
+    <div class="journal-sync"><div><strong id="journal-sync-state">尚未连接</strong><p class="journal-help">保存后可立即手动检索；同步 GitHub 后，线上目录自动更新，下次每日任务开始按 ISSN 检索。仍按研究方向筛选，不保证每期入选。</p></div><button id="journal-sync" type="button" disabled>同步 GitHub</button></div>
+    <p class="journal-help">最多管理 25 本自定义期刊；原有重点期刊目录继续保留。暂停后保留目录条目，移除后取消自定义配置。</p>
+    <a id="journal-commit" hidden target="_blank" rel="noopener noreferrer">查看同步记录</a>
+  </section>
+  <p id="journal-status" role="status" aria-live="polite"></p>
+  <noscript><p>请启用 JavaScript 后管理期刊。</p></noscript>
+</section>

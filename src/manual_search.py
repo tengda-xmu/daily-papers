@@ -61,18 +61,21 @@ def crossref_rows(payload):
     return rows
 
 
-def fetch_source(source, query, since, until, limit, cache_dir):
+def fetch_source(source, query, since, until, limit, cache_dir, journal_issn=''):
     """One bounded query per source (plus Scopus authorization fallback / PubMed fetch)."""
     kwargs = {'queries': [query], 'timeout': 18}
     if source in ('Crossref', 'CNS 子刊专项'):
         adapter = CrossrefAdapter(**kwargs)
         filters = [f'from-pub-date:{since.date()}', f'until-pub-date:{until.date()}']
+        if journal_issn:
+            from src.custom_journals import normalize_issn
+            filters.append('issn:' + normalize_issn(journal_issn))
         if source == 'CNS 子刊专项':
             config = json.loads((ROOT / 'config/cns-search.json').read_text(encoding='utf-8'))
             filters.extend('issn:' + j['issn'] for j in config['journals'])
-        payload = adapter._get_json('https://api.crossref.org/works?' + urlencode({
-            'query.bibliographic': query, 'filter': ','.join(filters), 'rows': limit,
-        }))
+        params = {'filter': ','.join(filters), 'rows': limit}
+        params.update({'query.bibliographic': query} if query else {'sort': 'published', 'order': 'desc'})
+        payload = adapter._get_json('https://api.crossref.org/works?' + urlencode(params))
         rows = crossref_rows(payload)
         for row in rows:
             row.source = source
@@ -143,7 +146,8 @@ def worker(data):
     try:
         rows, status = fetch_source(source, data['query'],
             datetime.fromisoformat(data['since']).replace(tzinfo=timezone.utc),
-            datetime.fromisoformat(data['until']).replace(hour=23, minute=59, second=59, tzinfo=timezone.utc), data['limit'], Path(data['cache_dir']))
+            datetime.fromisoformat(data['until']).replace(hour=23, minute=59, second=59, tzinfo=timezone.utc), data['limit'], Path(data['cache_dir']),
+            **({'journal_issn': data['journal_issn']} if data.get('journal_issn') else {}))
         # Only whitelisted metadata crosses the worker boundary. No API URL,
         # headers, raw payload, cookie or exception text is exposed to the UI.
         clean = []

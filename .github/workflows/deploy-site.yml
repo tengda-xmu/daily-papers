@@ -1,6 +1,9 @@
 name: Publish website
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['config/custom-journals.json']
 permissions:
   contents: read
   pages: write

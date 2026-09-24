@@ -258,6 +258,20 @@ tests/                       解析、去重和降级测试
 
 标准版本依据：[全国标准信息公共服务平台](https://std.samr.gov.cn/gb/search/gbDetailedCNF?id=4507EFE13D37CB6AE06397BE0A0A601F)（2025 版于 2026-07-01 实施，代替 2015 版）。检索缓存及 PDF 保存在 `.local/codex-bridge/manual-search/`，不随 GitHub 网站发布。重启后重新提交相同查询会复用缓存。
 
+## 手动添加期刊
+
+展开首页 **重点期刊目录 → 添加期刊 / 管理期刊**，或打开 [管理页](https://tengda-xmu.github.io/daily-papers/journals.html)。运行本机论文助手后，页面复用已有浏览器配对，无需模型对话。
+
+1. 输入纸质版或电子版 ISSN，点击 **验证期刊**。Crossref 返回正式刊名，可调整显示名称，并选择已有分组或创建新分组。
+2. 点击 **保存到本机**。支持编辑、暂停、启用和移除；同一期刊的纸质版与电子版 ISSN 会去重。保存后可用 **检索此刊** 按 ISSN 查询，关键词留空时浏览指定日期范围内的新论文；结果沿用 PDF、原文及 GB/T 7714 引用功能。
+3. 点击 **同步 GitHub**。通过本机已登录的 GitHub CLI，只更新仓库 `main` 的 `config/custom-journals.json`。线上目录自动部署，下次每日任务纳入定向检索；本次同步不立即发送企业微信日报。
+
+最多管理 25 本自定义期刊，需要 Crossref 收录其 ISSN。每个启用期刊每日增加一次 Crossref 查询（上限 25 条，沿用日报时间范围与研究方向排序），计入现有 Crossref 来源。刊名与目录分组不等于 API 来源；来源总数仍为 11。未匹配研究方向、无新文章或评分未入选时，不保证进入核心或扩展推荐。
+
+本机待同步配置在忽略的 `.local/journals/state.json`；首次使用以公开配置为基准。同步采用三方合并和 GitHub 文件 SHA 校验，保留远程独立新增；同一期刊并发修改时保留本机数据并提示冲突。只有认证并配对的本站/本机页面能修改；公开配置不包含令牌、密钥或会话。退出/重启助手不会丢失期刊列表；公共网站编辑仍需本机助手运行。
+
+接口依据：[Crossref REST API](https://www.crossref.org/documentation/retrieve-metadata/rest-api/)、[GitHub Contents API](https://docs.github.com/en/rest/repos/contents)。
+
 ## 本机 Codex 论文对话
 
 双击根目录的 **启动论文助手.cmd**，即可连接本机已经登录的 Codex。网页每篇论文新增 **Codex 对话**，支持中文总结、追问、翻译、PDF 与配图解释；首次使用在线侧栏需要从本机页面复制配对码，默认记住当前浏览器，后续打开网页或重启助手会自动恢复连接，也可随时取消记住。电脑需要保持运行，使用现有 Codex 账号额度。详见 [连接器说明](connectors/codex_bridge/README.md)。

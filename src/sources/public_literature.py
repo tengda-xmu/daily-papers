@@ -190,7 +190,46 @@ class OpenAlexAdapter(PublicLiteratureAdapter):
 class CrossrefAdapter(PublicLiteratureAdapter):
     name = "Crossref"
 
+    def __init__(self, queries=None, custom_journals=None, **kwargs):
+        super().__init__(queries=queries, **kwargs)
+        from src.custom_journals import load_custom_journals
+        self.custom_journals = (load_custom_journals() if queries is None else []) if custom_journals is None else custom_journals
+
     def fetch(self, since: datetime, until: datetime) -> list[RawRecord]:
+        records = self._fetch_general(since, until)
+        previous = self.status
+        journals = [j for j in self.custom_journals if j.get('enabled', True)]
+        if not journals or previous.status == 'quota_exhausted':
+            if journals:
+                self._status.message += f'；Crossref 限频，本轮未执行 {len(journals)} 本自定义期刊检索。'
+            return records
+        completed, failures, quota_limited = 0, [], False
+        for journal in journals:
+            time.sleep(2)
+            filters = [f'from-pub-date:{since.date()}', f'until-pub-date:{until.date()}']
+            filters.extend('issn:' + issn for issn in journal.get('issns', [journal['issn']]))
+            try:
+                payload = self._get_json('https://api.crossref.org/works?' + urlencode({
+                    'filter': ','.join(filters), 'query': ' '.join(self.queries), 'rows': 25}))
+                rows = self.parse_payload(payload)
+                for row in rows:
+                    row.raw_metadata['subscribed_journal'] = journal['name']
+                records.extend(rows)
+                completed += 1
+            except Exception as exc:
+                failures.append(journal['name'])
+                if getattr(exc, 'code', None) == 429:
+                    quota_limited = True
+                    break
+        records = self._finish(records, since, until)
+        if failures or previous.status not in ('ok', 'no_data'):
+            self._status.status = 'partial' if records else 'quota_exhausted' if quota_limited else 'error'
+        self._status.message = f'常规检索：{previous.status}；自定义期刊 {completed}/{len(journals)} 本完成 ISSN 定向检索。'
+        if quota_limited:
+            self._status.message += 'Crossref 限频，已停止后续请求。'
+        return records
+
+    def _fetch_general(self, since: datetime, until: datetime) -> list[RawRecord]:
         records: list[RawRecord] = []
         try:
             for index, query in enumerate(self.queries):

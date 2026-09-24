@@ -79,7 +79,7 @@ def template(name: str, **values) -> str:
 
 def document(content: str, *, title: str, root: str = "./", active: str = "daily") -> str:
     version = hashlib.sha256(
-        b"".join((ASSETS / name).read_bytes() for name in ("site.css", "site.js", "paper-chat.css", "paper-chat.js", "manual-search.css", "manual-search.js"))
+        b"".join((ASSETS / name).read_bytes() for name in ("site.css", "site.js", "paper-chat.css", "paper-chat.js", "manual-search.css", "manual-search.js", "journal-manager.css", "journal-manager.js"))
     ).hexdigest()[:10]
     return template(
         "page.html", content=content.lstrip(), title=esc(title), root=root, version=version,
@@ -89,7 +89,9 @@ def document(content: str, *, title: str, root: str = "./", active: str = "daily
         setup_current='aria-current="page"' if active == "setup" else "",
         search_current='aria-current="page"' if active == "search" else "",
         search_assets=(f'<link rel="stylesheet" href="{root}assets/manual-search.css?v={version}">'
-                       f'<script src="{root}assets/manual-search.js?v={version}" defer></script>') if active == 'search' else '',
+                       f'<script src="{root}assets/manual-search.js?v={version}" defer></script>') if active == 'search' else
+                      (f'<link rel="stylesheet" href="{root}assets/journal-manager.css?v={version}">'
+                       f'<script src="{root}assets/journal-manager.js?v={version}" defer></script>') if active == 'journals' else '',
     )
 
 
@@ -396,6 +398,8 @@ def main() -> None:
     choices = ''.join(f'<label title="{esc(s["mode"])}"><input type="checkbox" name="library" value="{esc(s["id"])}" checked> {esc(s["label"])}</label>' for s in SOURCES)
     (OUT / "search.html").write_text(document(template("search.html", sources=choices),
         title="手动检索文献 | 每日论文推荐", active="search"), encoding="utf-8")
+    (OUT / "journals.html").write_text(document(template("journals.html"),
+        title="管理期刊 | 每日论文推荐", active="journals"), encoding="utf-8")
 
 
 if __name__ == "__main__":
