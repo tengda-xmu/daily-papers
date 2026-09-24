@@ -88,6 +88,7 @@ def document(content: str, *, title: str, root: str = "./", active: str = "daily
         archive_current='aria-current="page"' if active == "archive" else "",
         setup_current='aria-current="page"' if active in ("setup", "journals") else "",
         search_current='aria-current="page"' if active == "search" else "",
+        leads_current='aria-current="page"' if active == "leads" else "",
         search_assets=(f'<link rel="stylesheet" href="{root}assets/manual-search.css?v={version}">'
                        f'<script src="{root}assets/manual-search.js?v={version}" defer></script>') if active == 'search' else
                       (f'<link rel="stylesheet" href="{root}assets/journal-manager.css?v={version}">'
@@ -207,7 +208,7 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
 </article>'''
 
 
-def source_directory(statuses: dict, counts: Counter, root: str = "./", wechat_count: int = 0) -> str:
+def source_directory(statuses: dict, counts: Counter, root: str = "./", wechat_count: int = 0, *, reading_url: str | None = None) -> str:
     sections = []
     for kind, label, description in (
         ("adapter", "数据采集", "已实现来源及本轮采集状态；公开接口无需登录即可运行。"),
@@ -246,8 +247,11 @@ def source_directory(statuses: dict, counts: Counter, root: str = "./", wechat_c
             state_class = "ok" if state in ("ok", "no_data") else "pending" if state in ("planned", "platform", "not_run") else "warn"
             state_label = STATE_LABELS.get(state, '状态待确认')
             count_link = f'<button type="button" class="text-button" data-source-filter="{esc(item["id"])}">本期 {counts[item["id"]]} 篇</button>'
-            if item["id"] == "微信公众号" and wechat_count:
-                count_link = f'<a class="text-button" href="#wechat-articles">本期 {wechat_count} 条线索</a>'
+            if reading_url is not None:
+                count_link = f'<a class="text-button" href="{esc(reading_url)}?source={quote(item["id"], safe="")}#reading">本期 {counts[item["id"]]} 篇</a>'
+            if item["id"] == "微信公众号" and (wechat_count or reading_url is not None):
+                target = root + 'leads.html' if reading_url is not None else '#wechat-articles'
+                count_link = f'<a class="text-button" href="{esc(target)}">本期 {wechat_count} 条线索</a>'
                 if connector_message.startswith("公开索引已接入"):
                     state_label = "公开索引可用" if state == "ok" else "公开索引部分可用"
             rows.append(f'''
@@ -260,6 +264,29 @@ def source_directory(statuses: dict, counts: Counter, root: str = "./", wechat_c
             continue
         sections.append(f'<details class="directory-group" {"open" if kind == "adapter" else ""}><summary>{label}<span>{len(rows)} 项</span></summary><p class="directory-description">{description}</p>{"".join(rows)}</details>')
     return "".join(sections)
+
+
+def source_status_panel(payload: dict, root: str = './', *, reading_url: str | None = None) -> str:
+    statuses = payload.get('source_status') or {}
+    papers = (payload.get('core') or []) + (payload.get('extended') or [])
+    counts = Counter(source for paper in papers for source in paper_facets(paper)['source_ids'])
+    adapters = [source for source in SOURCE_CATALOG if source['kind'] == 'adapter']
+    ok = sum(source_state(source, statuses)[0] in ('ok', 'no_data') for source in adapters)
+    missing = sum(source_state(source, statuses)[0] in ('configuration_missing', 'authorization_required') for source in adapters)
+    notice = ''
+    if missing:
+        notice = f'<p class="notice">{missing} 类来源尚待授权或连接器配置，其他来源继续采集。可通过下方“授权与配置”完成接入。</p>'
+    elif not papers:
+        notice = '<p class="notice">本期尚无符合条件的论文，请查看下方来源状态或浏览历史归档。</p>'
+    policy = payload.get('selection_policy') or {}
+    cns_window = f'CNS 专项与已有精读回溯 {int(policy.get("cns_lookback_days", 180))} 天，每日更新。' if policy.get('core_requires_chinese_analysis') else ''
+    run_id = str(payload.get('update_run_id', ''))
+    run_url = f'{REPO_URL}/actions/runs/{run_id}' if run_id.isdigit() else f'{REPO_URL}/actions/workflows/daily.yml'
+    return template('source-status.html', ok_count=ok, adapter_count=len(adapters), notice=notice,
+        generated=esc(display_time(payload.get('generated_at'))[1]),
+        window_start=esc(display_time(payload.get('since'))[0]), window_end=esc(display_time(payload.get('until'))[0]),
+        cns_window=esc(cns_window), root=root, run_url=run_url,
+        sources=source_directory(statuses, counts, root, len(payload.get('wechat_articles') or []), reading_url=reading_url))
 
 
 def journal_directory() -> str:
@@ -276,19 +303,30 @@ def journal_directory() -> str:
     return "".join(groups)
 
 
-def wechat_articles_panel(records: list[dict]) -> str:
-    if not records:
-        return ""
+def wechat_entries(records: list[dict]) -> str:
     entries = []
-    for row in sorted(records, key=lambda r: r.get("published_at", ""), reverse=True)[:40]:
+    for row in sorted(records, key=lambda r: r.get("published_at") or "", reverse=True):
         indexed = (row.get("raw_metadata") or {}).get("access_mode") == "public_index"
         label = "公开检索入口" if indexed else "微信公众号原文"
         entries.append(f'''<li class="archive-entry"><div><a href="{safe_url(row.get('landing_url'))}" target="_blank" rel="noopener noreferrer">{esc(row.get('title'))}</a>
 <p>{esc(row.get('venue'))} · {esc(display_time(row.get('published_at'))[0])} · {label}</p>
-<p>{esc(row.get('abstract', ''))}</p></div></li>''')
+<p>{esc(row.get('abstract', ''))}</p><a class="text-link" href="{safe_url(row.get('landing_url'))}" target="_blank" rel="noopener noreferrer">{label}</a></div></li>''')
+    return ''.join(entries)
+
+
+def wechat_articles_panel(records: list[dict]) -> str:
+    if not records:
+        return ''
     return f'''<details id="wechat-articles" class="reference-panel"><summary><span>微信公众号 · 科研线索</span><span class="reference-meta">{len(records)} 条</span></summary>
 <div class="reference-body"><p class="section-description">按已订阅的公众号筛选。标注“公开检索入口”的条目提供标题、来源和检索片段，点击标题可继续查找原文；文章内容及结论尚待核验。
-文章跳转若要求验证码，请在浏览器中手动完成。这些线索不占用核心与扩展论文名额。</p><ul>{''.join(entries)}</ul></div></details>'''
+文章跳转若要求验证码，请在浏览器中手动完成。这些线索不占用核心与扩展论文名额。</p><ul>{wechat_entries(records)}</ul></div></details>'''
+
+
+def render_leads(payload: dict) -> str:
+    records = payload.get('wechat_articles') or []
+    entries = f'<ul class="archive-list">{wechat_entries(records)}</ul>' if records else '<p class="empty">本期暂无公众号线索，可在设置中查看订阅与采集状态。</p>'
+    return document(template('leads.html', count=len(records), entries=entries,
+        generated=esc(display_time(payload.get('generated_at'))[1])), title='科研线索 | 每日论文推荐', active='leads')
 
 
 def render(payload: dict, *, archive_date: str | None = None) -> str:
@@ -336,23 +374,15 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
         counts = Counter(p.get('recommended_direction') for p in papers)
         parts = [f'{d["name"]} {counts[d["id"]]} 篇' for d in active_directions(profile, tier)]
         return '<p class="direction-coverage">方向覆盖：' + esc(' · '.join(parts) if parts else '本期未启用此分区的研究方向') + '</p>'
-    missing = sum(source_state(s, statuses)[0] in ("configuration_missing", "authorization_required") for s in SOURCE_CATALOG if s["kind"] == "adapter")
     ok = sum(source_state(s, statuses)[0] in ("ok", "no_data") for s in SOURCE_CATALOG if s["kind"] == "adapter")
     adapter_count = sum(s["kind"] == "adapter" for s in SOURCE_CATALOG)
-    notice = ""
-    if missing:
-        notice = f'<div class="notice"><span class="status-dot" aria-hidden="true"></span><p>{missing} 类来源尚待授权或连接器配置，其他来源继续采集。</p><a href="{root}setup.html">完成来源配置</a></div>'
-    elif not all_papers:
-        notice = '<div class="notice"><span class="status-dot" aria-hidden="true"></span><p>本期尚无符合条件的论文，请查看来源状态或历史归档。</p><a href="#sources">查看来源状态</a></div>'
     cns_children = sum(j["group"] == "CNS 子刊" for j in JOURNALS)
     policy = payload.get("selection_policy") or {}
     reading_policy = "点击论文下方按钮展开摘要与阅读笔记。"
-    cns_window = ""
     if policy.get("core_requires_chinese_analysis"):
         days = int(policy.get("cns_lookback_days", 180))
         focus = " · 侧重大模型与智能体" if policy.get("within_venue_priority") else ""
         reading_policy = f"CNS 子刊优先{focus} · 精选近 {days} 天论文"
-        cns_window = f" CNS 专项与已有精读回溯 {days} 天，每日更新。"
     archive_notice = f'<p class="archive-notice">正在阅读 {esc(archive_date)} 归档。<a href="../">返回最新一期</a></p>' if archive_date else ""
     update_control = '<button class="manual-update" id="manual-update" type="button">手动更新</button>' if not archive_date else ''
     update_panel = '''<div id="daily-update-panel" class="daily-update-panel" hidden>
@@ -364,25 +394,25 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
   </form>
   <div class="update-links"><a id="daily-update-run" target="_blank" rel="noopener noreferrer" hidden>查看更新进度</a><a id="daily-update-local" href="http://127.0.0.1:43127/recommendations.html" target="_blank" rel="noopener noreferrer" hidden>在本机更新推荐</a></div>
 </div>''' if not archive_date else ''
+    reference_panels = ''
+    if archive_date:
+        reference_panels = '<div class="reference-area">' + wechat_articles_panel(payload.get('wechat_articles') or []) + source_status_panel(payload, root) + '</div>'
     content = template(
         "daily.html", title="每日论文推荐", day=esc(issue), generated=esc(generated),
-        reading_policy=esc(reading_policy), cns_window=esc(cns_window),
+        reading_policy=esc(reading_policy),
         extended_policy="每篇均有完整中文精读，点击论文下方展开。" if policy.get("extended_requires_chinese_analysis") else "",
         archive_notice=archive_notice, history_url="./" if archive_date else "archive/",
         update_control=update_control, update_panel=update_panel,
         direction_bar=direction_bar, core_coverage=coverage('core', core), extended_coverage=coverage('extended', extended),
         generated_at=esc(payload.get('generated_at', '')), update_run_id=esc(payload.get('update_run_id', '')),
-        notice=notice, source_options="".join(source_options), health_label=f"{ok} / {adapter_count} 类来源正常",
+        source_options="".join(source_options), health_label=f"{ok} / {adapter_count} 类来源正常",
+        sources_url='#sources' if archive_date else root + 'setup.html#sources', reference_panels=reference_panels,
         topic_options=topic_options, group_options=group_options, journal_options=journal_options,
         core_count=len(core), extended_count=len(extended), total=len(all_papers),
         core_html=core_html, extended_html=extended_html,
         core_empty="hidden" if core else "", extended_empty="hidden" if extended else "",
         no_data="" if not all_papers else "hidden", no_match="hidden",
-        sources=source_directory(statuses, counts, root, len(payload.get("wechat_articles", []))),
-        wechat_articles=wechat_articles_panel(payload.get("wechat_articles", [])),
-        window_start=esc(display_time(payload.get("since"))[0]), window_end=esc(display_time(payload.get("until"))[0]),
-        source_count=len(SOURCE_CATALOG),
-        cns_children=cns_children, adapter_count=adapter_count, ok_count=ok, root=root, repo=REPO_URL,
+        cns_children=cns_children, root=root,
     )
     return document(content, title=f"{issue} · 每日论文推荐" if archive_date else "每日论文推荐 | 腾达", root=root,
                     active="archive" if archive_date else "daily")
@@ -430,8 +460,10 @@ def main() -> None:
     (OUT / "data.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     build_archive()
     (OUT / "setup.html").write_text(document(template("setup.html", wechat_directory=wechat_directory(),
+        sources_panel=source_status_panel(payload, reading_url='./'),
         journals=journal_directory(), journal_count=len(JOURNALS), group_count=len({j['group'] for j in JOURNALS})),
         title="设置 | 每日论文推荐", active="setup"), encoding="utf-8")
+    (OUT / 'leads.html').write_text(render_leads(payload), encoding='utf-8')
     from src.manual_search import SOURCES
     choices = ''.join(f'<label title="{esc(s["mode"])}"><input type="checkbox" name="library" value="{esc(s["id"])}" checked> {esc(s["label"])}</label>' for s in SOURCES)
     (OUT / "search.html").write_text(document(template("search.html", sources=choices),

@@ -43,8 +43,12 @@ button:disabled { cursor: default; }
 .manual-update { display: inline-flex; align-items: center; justify-content: center; gap: 8px; flex-shrink: 0; min-height: 38px; padding: 7px 13px; border: 1px solid #cbd6e0; border-radius: 5px; background: #fff; color: var(--blue); font-size: 12px; }
 .manual-update:hover { background: var(--soft); text-decoration: none; border-color: var(--blue); }
 .manual-update:disabled { opacity: .65; }
-.main-content:has(> .daily-issue, > #manual-search, > #direction-manager, > #setup-heading) { padding-top: 22px; }
-#setup-heading + .reference-panel { border-bottom: 1px solid var(--line); margin-bottom: 24px; }
+.main-content:has(> .daily-issue, > #manual-search, > #direction-manager, > #setup-heading, > .research-leads) { padding-top: 22px; }
+#setup-heading ~ .reference-panel { border-bottom: 1px solid var(--line); margin-bottom: 24px; }
+.research-leads > .issue-meta { margin: 0 0 16px; }
+.research-leads > .issue-meta > a { margin-left: auto; }
+.research-leads .archive-entry > div { min-width: 0; overflow-wrap: anywhere; }
+.research-leads .archive-entry > div > a:first-child { font-size: 18px; font-weight: 500; }
 .daily-issue > .issue-meta { margin: 0 0 20px; }
 .daily-update-panel { margin: 0 0 20px; padding: 12px 16px; border-left: 2px solid var(--blue); background: var(--soft); font-size: 13px; }
 .daily-update-panel p { margin-bottom: 8px; }

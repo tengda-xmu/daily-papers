@@ -212,7 +212,7 @@ def test_public_collection_never_calls_restricted_native_endpoint_and_preserves_
 
 def test_wechat_leads_are_visible_but_never_promoted_to_paper_analysis(monkeypatch):
     from src.pipeline import run_pipeline
-    from tools.build_site import render
+    from tools.build_site import render, render_leads, source_status_panel
     def forbidden(*args):
         raise AssertionError("Do not analyze search snippets as papers")
     monkeypatch.setattr("src.pipeline._llm_summary", forbidden)
@@ -227,6 +227,13 @@ def test_wechat_leads_are_visible_but_never_promoted_to_paper_analysis(monkeypat
     assert len(payload["wechat_articles"]) == 1
     assert payload["core"] == payload["extended"] == payload["papers"] == []
     html = render(payload)
-    assert 'id="wechat-articles"' in html and "本期 1 条线索" in html and "公开索引可用" in html
-    assert '<summary>数据采集<span>' in html
-    assert "公开检索入口" in html and "LLM agents for structural fatigue reliability" in html
+    assert 'id="wechat-articles"' not in html and 'id="sources"' not in html
+    assert 'leads.html' in html and 'setup.html#sources' in html
+    leads = render_leads(payload)
+    assert 'id="wechat-articles"' in leads and '1 条线索' in leads
+    assert "公开检索入口" in leads and "LLM agents for structural fatigue reliability" in leads
+    sources = source_status_panel(payload, reading_url='./')
+    assert "本期 1 条线索" in sources and "公开索引可用" in sources
+    assert '<summary>数据采集<span>' in sources and 'href="./leads.html"' in sources
+    archive = render(payload, archive_date='2026-09-24')
+    assert 'id="wechat-articles"' in archive and 'id="sources"' in archive

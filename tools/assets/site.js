@@ -5,15 +5,17 @@
   if (location.origin === 'http://127.0.0.1:43127') {
     $$('a[href]').forEach((link) => {
       const url = new URL(link.href);
-      if (url.origin === location.origin && url.pathname === '/setup.html') {
-        link.href = 'https://tengda-xmu.github.io/daily-papers/setup.html' + url.search + url.hash;
+      if (url.origin === location.origin && ['/setup.html', '/leads.html'].includes(url.pathname)) {
+        link.href = 'https://tengda-xmu.github.io/daily-papers' + url.pathname + url.search + url.hash;
       }
     });
   }
-  // Keep old bookmarks working after moving the directory to settings.
-  if (location.hash === '#journals' && !$('#journals') && $('#reading')) {
-    const settings = $('#main-navigation a[href$="setup.html"]');
-    if (settings) { location.replace(settings.href + '#journals'); return; }
+  // Keep old homepage bookmarks working after moving supporting content.
+  const movedSections = {'#journals': 'setup.html', '#sources': 'setup.html', '#wechat-articles': 'leads.html'};
+  const movedPage = movedSections[location.hash];
+  if (movedPage && !$(location.hash) && $('#reading')) {
+    const destination = $(`#main-navigation a[href$="${movedPage}"]`);
+    if (destination) { location.replace(destination.href + location.hash); return; }
   }
   const menu = $('.menu-toggle');
   const nav = $('#main-navigation');
@@ -200,6 +202,9 @@
   const top = $('.back-to-top');
   window.addEventListener('scroll', () => { if (top) top.hidden = window.scrollY < 480; }, { passive: true });
   const params = new URLSearchParams(window.location.search);
+  if (params.get('source') && source && Array.from(source.options).some(option => option.value === params.get('source'))) {
+    source.value = params.get('source'); showFilters(true);
+  }
   if (params.get('topic') && topic) { topic.value = params.get('topic'); showFilters(true); }
   if (params.get('journal') && journal) {
     const value = params.get('journal');

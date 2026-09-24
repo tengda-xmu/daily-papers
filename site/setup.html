@@ -7,10 +7,10 @@
   <meta name="theme-color" content="#153e64">
   <title>设置 | 每日论文推荐</title>
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./assets/site.css?v=d0f9b443c1">
-  <link rel="stylesheet" href="./assets/paper-chat.css?v=d0f9b443c1">
-  <script src="./assets/site.js?v=d0f9b443c1" defer></script>
-  <script src="./assets/paper-chat.js?v=d0f9b443c1" defer></script>
+  <link rel="stylesheet" href="./assets/site.css?v=cdbe1ac7ed">
+  <link rel="stylesheet" href="./assets/paper-chat.css?v=cdbe1ac7ed">
+  <script src="./assets/site.js?v=cdbe1ac7ed" defer></script>
+  <script src="./assets/paper-chat.js?v=cdbe1ac7ed" defer></script>
 
 </head>
 <body id="top">
@@ -22,6 +22,7 @@
       <nav id="main-navigation" class="main-navigation" aria-label="主导航">
         <a href="./" >每日推荐</a>
         <a href="./search.html" >手动检索</a>
+        <a href="./leads.html" >科研线索</a>
         <a href="./archive/" >历史归档</a>
         <a href="./setup.html" aria-current="page">设置</a>
       </nav>
@@ -30,6 +31,141 @@
   <div class="site-shell">
     <main id="main-content" class="main-content" tabindex="-1">
       <h1 id="setup-heading" class="sr-only">设置</h1>
+<details id="sources" class="reference-panel">
+  <summary><span>来源与采集状态</span><span class="reference-meta">11 / 11 类正常</span></summary>
+  <div class="reference-body">
+
+    <p class="section-description">2026-09-24 15:30 更新。常规检索：2026-08-25 至 2026-09-24。CNS 专项与已有精读回溯 180 天，每日更新。</p>
+    <div class="directory-actions"><a href="https://github.com/tengda-xmu/daily-papers/actions/runs/35969854037" target="_blank" rel="noopener noreferrer">查看运行记录</a><a href="./setup.html#public">来源配置说明</a></div>
+    <details class="directory-group" open><summary>数据采集<span>11 项</span></summary><p class="directory-description">已实现来源及本轮采集状态；公开接口无需登录即可运行。</p>
+<div class="source-row">
+  <div><a class="source-name" href="https://search.crossref.org/" target="_blank" rel="noopener noreferrer">CNS 子刊专项（Crossref）</a><p>本轮采集完成。 本轮获取 166 条元数据。</p></div>
+  <div class="source-state"><span class="state ok">本轮正常</span>
+  <a class="text-button" href="./?source=CNS%20%E5%AD%90%E5%88%8A%E4%B8%93%E9%A1%B9#reading">本期 4 篇</a></div>
+</div>
+<div class="source-row">
+  <div><a class="source-name" href="https://www.scopus.com/" target="_blank" rel="noopener noreferrer">Elsevier / Scopus</a><p>Scopus 标准元数据检索已接入；完整视图需额外授权。 本轮获取 19 条元数据。</p></div>
+  <div class="source-state"><span class="state ok">本轮正常</span>
+  <a class="text-button" href="./?source=Elsevier#reading">本期 0 篇</a></div>
+</div>
+<div class="source-row">
+  <div><a class="source-name" href="https://scholar.google.com/" target="_blank" rel="noopener noreferrer">Google Scholar</a><p>本轮采集完成。 本轮获取 83 条元数据。</p></div>
+  <div class="source-state"><span class="state ok">本轮正常</span>
+  <a class="text-button" href="./?source=Google%20Scholar#reading">本期 0 篇</a></div>
+</div>
+<div class="source-row">
+  <div><a class="source-name" href="https://www.researchgate.net/" target="_blank" rel="noopener noreferrer">ResearchGate</a><p>公开索引已接入：Google Scholar / SerpApi 本轮返回 59 条 ResearchGate 元数据。 按发表年份检索；摘要为检索片段，未注明年份的记录保留为待核验线索。 当前使用公开索引，本地浏览器采集尚未产出本期记录。</p></div>
+  <div class="source-state"><span class="state ok">本轮正常</span>
+  <a class="text-button" href="./?source=ResearchGate#reading">本期 0 篇</a></div>
+</div>
+<div class="source-row">
+  <div><a class="source-name" href="https://mp.weixin.qq.com/" target="_blank" rel="noopener noreferrer">微信公众号</a><p>公开索引已接入：读取 6 条文章元数据，本期 6 条。 微信后台文章列表受限；已通过公开搜索获取线索，链接为检索入口，非已核验全文。 最近同步：09-24 06:35（北京时间）。</p></div>
+  <div class="source-state"><span class="state ok">公开索引可用</span>
+  <a class="text-button" href="./leads.html">本期 6 条线索</a></div>
+</div>
+<div class="source-row">
+  <div><a class="source-name" href="https://arxiv.org/" target="_blank" rel="noopener noreferrer">arXiv</a><p>通过 arXiv 官方 RSS 获取；检索 API 本轮受限。 本轮获取 539 条元数据。</p></div>
+  <div class="source-state"><span class="state ok">本轮正常</span>
+  <a class="text-button" href="./?source=arXiv#reading">本期 2 篇</a></div>
+</div>
+<div class="source-row">
+  <div><a class="source-name" href="https://www.webofscience.com/" target="_blank" rel="noopener noreferrer">Web of Science</a><p>Clarivate Starter API 已授权：检索 3 个方向，本期获取 62 条元数据。</p></div>
+  <div class="source-state"><span class="state ok">本轮正常</span>
+  <a class="text-button" href="./?source=Web%20of%20Science#reading">本期 0 篇</a></div>
+</div>
+<div class="source-row">
+  <div><a class="source-name" href="https://openalex.org/" target="_blank" rel="noopener noreferrer">OpenAlex</a><p>本轮采集完成。 本轮获取 126 条元数据。</p></div>
+  <div class="source-state"><span class="state ok">本轮正常</span>
+  <a class="text-button" href="./?source=OpenAlex#reading">本期 0 篇</a></div>
+</div>
+<div class="source-row">
+  <div><a class="source-name" href="https://search.crossref.org/" target="_blank" rel="noopener noreferrer">Crossref</a><p>本轮采集完成。 本轮获取 126 条元数据。</p></div>
+  <div class="source-state"><span class="state ok">本轮正常</span>
+  <a class="text-button" href="./?source=Crossref#reading">本期 4 篇</a></div>
+</div>
+<div class="source-row">
+  <div><a class="source-name" href="https://www.semanticscholar.org/" target="_blank" rel="noopener noreferrer">Semantic Scholar</a><p>本轮采集完成。 本轮获取 173 条元数据。</p></div>
+  <div class="source-state"><span class="state ok">本轮正常</span>
+  <a class="text-button" href="./?source=Semantic%20Scholar#reading">本期 0 篇</a></div>
+</div>
+<div class="source-row">
+  <div><a class="source-name" href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noopener noreferrer">PubMed</a><p>本轮采集完成。 本轮获取 13 条元数据。</p></div>
+  <div class="source-state"><span class="state ok">本轮正常</span>
+  <a class="text-button" href="./?source=PubMed#reading">本期 0 篇</a></div>
+</div></details><details class="directory-group" ><summary>出版平台<span>14 项</span></summary><p class="directory-description">依据论文的期刊与原文链接归类，可筛选本期已有记录。</p>
+<div class="source-row">
+  <div><a class="source-name" href="https://www.nature.com/" target="_blank" rel="noopener noreferrer">Nature Portfolio（CNS）</a><p>按期刊名称或原文链接筛选已有记录；未独立抓取此平台。</p></div>
+  <div class="source-state"><span class="state pending">期刊平台筛选</span>
+  <a class="text-button" href="./?source=Nature%20Portfolio#reading">本期 8 篇</a></div>
+</div>
+<div class="source-row">
+  <div><a class="source-name" href="https://www.science.org/" target="_blank" rel="noopener noreferrer">Science / AAAS（CNS）</a><p>按期刊名称或原文链接筛选已有记录；未独立抓取此平台。</p></div>
+  <div class="source-state"><span class="state pending">期刊平台筛选</span>
+  <a class="text-button" href="./?source=Science%20%2F%20AAAS#reading">本期 0 篇</a></div>
+</div>
+<div class="source-row">
+  <div><a class="source-name" href="https://www.cell.com/" target="_blank" rel="noopener noreferrer">Cell Press（CNS）</a><p>按期刊名称或原文链接筛选已有记录；未独立抓取此平台。</p></div>
+  <div class="source-state"><span class="state pending">期刊平台筛选</span>
+  <a class="text-button" href="./?source=Cell%20Press#reading">本期 0 篇</a></div>
+</div>
+<div class="source-row">
+  <div><a class="source-name" href="https://www.sciencedirect.com/" target="_blank" rel="noopener noreferrer">ScienceDirect</a><p>按期刊名称或原文链接筛选已有记录；未独立抓取此平台。</p></div>
+  <div class="source-state"><span class="state pending">期刊平台筛选</span>
+  <a class="text-button" href="./?source=ScienceDirect#reading">本期 0 篇</a></div>
+</div>
+<div class="source-row">
+  <div><a class="source-name" href="https://link.springer.com/" target="_blank" rel="noopener noreferrer">Springer Nature Link</a><p>按期刊名称或原文链接筛选已有记录；未独立抓取此平台。</p></div>
+  <div class="source-state"><span class="state pending">期刊平台筛选</span>
+  <a class="text-button" href="./?source=Springer%20Nature%20Link#reading">本期 0 篇</a></div>
+</div>
+<div class="source-row">
+  <div><a class="source-name" href="https://onlinelibrary.wiley.com/" target="_blank" rel="noopener noreferrer">Wiley Online Library</a><p>按期刊名称或原文链接筛选已有记录；未独立抓取此平台。</p></div>
+  <div class="source-state"><span class="state pending">期刊平台筛选</span>
+  <a class="text-button" href="./?source=Wiley%20Online%20Library#reading">本期 0 篇</a></div>
+</div>
+<div class="source-row">
+  <div><a class="source-name" href="https://ieeexplore.ieee.org/" target="_blank" rel="noopener noreferrer">IEEE Xplore</a><p>按期刊名称或原文链接筛选已有记录；未独立抓取此平台。</p></div>
+  <div class="source-state"><span class="state pending">期刊平台筛选</span>
+  <a class="text-button" href="./?source=IEEE%20Xplore#reading">本期 0 篇</a></div>
+</div>
+<div class="source-row">
+  <div><a class="source-name" href="https://dl.acm.org/" target="_blank" rel="noopener noreferrer">ACM Digital Library</a><p>按期刊名称或原文链接筛选已有记录；未独立抓取此平台。</p></div>
+  <div class="source-state"><span class="state pending">期刊平台筛选</span>
+  <a class="text-button" href="./?source=ACM%20Digital%20Library#reading">本期 0 篇</a></div>
+</div>
+<div class="source-row">
+  <div><a class="source-name" href="https://asmedigitalcollection.asme.org/" target="_blank" rel="noopener noreferrer">ASME Digital Collection</a><p>按期刊名称或原文链接筛选已有记录；未独立抓取此平台。</p></div>
+  <div class="source-state"><span class="state pending">期刊平台筛选</span>
+  <a class="text-button" href="./?source=ASME%20Digital%20Collection#reading">本期 0 篇</a></div>
+</div>
+<div class="source-row">
+  <div><a class="source-name" href="https://ascelibrary.org/" target="_blank" rel="noopener noreferrer">ASCE Library</a><p>按期刊名称或原文链接筛选已有记录；未独立抓取此平台。</p></div>
+  <div class="source-state"><span class="state pending">期刊平台筛选</span>
+  <a class="text-button" href="./?source=ASCE%20Library#reading">本期 0 篇</a></div>
+</div>
+<div class="source-row">
+  <div><a class="source-name" href="https://arc.aiaa.org/" target="_blank" rel="noopener noreferrer">AIAA Publications</a><p>按期刊名称或原文链接筛选已有记录；未独立抓取此平台。</p></div>
+  <div class="source-state"><span class="state pending">期刊平台筛选</span>
+  <a class="text-button" href="./?source=AIAA%20Publications#reading">本期 0 篇</a></div>
+</div>
+<div class="source-row">
+  <div><a class="source-name" href="https://journals.sagepub.com/" target="_blank" rel="noopener noreferrer">SAGE Journals</a><p>按期刊名称或原文链接筛选已有记录；未独立抓取此平台。</p></div>
+  <div class="source-state"><span class="state pending">期刊平台筛选</span>
+  <a class="text-button" href="./?source=SAGE%20Journals#reading">本期 0 篇</a></div>
+</div>
+<div class="source-row">
+  <div><a class="source-name" href="https://www.tandfonline.com/" target="_blank" rel="noopener noreferrer">Taylor &amp; Francis</a><p>按期刊名称或原文链接筛选已有记录；未独立抓取此平台。</p></div>
+  <div class="source-state"><span class="state pending">期刊平台筛选</span>
+  <a class="text-button" href="./?source=Taylor%20%26%20Francis#reading">本期 0 篇</a></div>
+</div>
+<div class="source-row">
+  <div><a class="source-name" href="https://epubs.siam.org/" target="_blank" rel="noopener noreferrer">SIAM</a><p>按期刊名称或原文链接筛选已有记录；未独立抓取此平台。</p></div>
+  <div class="source-state"><span class="state pending">期刊平台筛选</span>
+  <a class="text-button" href="./?source=SIAM#reading">本期 0 篇</a></div>
+</div></details>
+  </div>
+</details>
+
 <details id="journals" class="reference-panel">
   <summary><span>重点期刊目录</span><span class="reference-meta">13 组 / 70 本</span></summary>
   <div class="reference-body">
@@ -46,7 +182,7 @@
 <section id="researchgate"><h2>ResearchGate</h2><p><strong>公开索引：</strong>复用已配置的 <code>SERPAPI_API_KEY</code>，每天检索 Google Scholar 收录的 ResearchGate 论文。默认一次查询，优先复用 24 小时缓存；只保留论文元数据和 ResearchGate 论文主页链接。页面会明确标注“公开索引已接入”，该状态不代表浏览器账号已经登录。</p><p>检索侧重大模型、智能体与三个研究方向；年份缺失的结果作为待核验线索保留，检索片段不作为完整摘要或全文解读依据。Google Scholar 的索引范围也不等于 ResearchGate 的全部论文。</p><p><strong>指定作者主页：</strong>在自己的电脑上运行连接器，首次在它打开的独立浏览器窗口中手动登录，再继续采集。日常 Chrome 的登录不会自动同步到连接器的 Edge 会话。导出的论文元数据同步到 <code>connector-data</code> 分支后，GitHub Actions 优先读取近期成功导出的记录；导出缺失、过期或本期无记录时使用公开索引。</p><pre><code>python -m pip install -r connectors/researchgate_sync/requirements.txt
 python connectors/researchgate_sync/export.py --login --channel msedge --url https://www.researchgate.net/profile/Da-Teng-6
 python -m tools.publish_researchgate</code></pre><p>Windows 可直接使用已安装的 Edge。发布工具只同步论文元数据和采集时间；浏览器登录会话保留在本机。完成一次成功采集后，可启用每天北京时间 06:30 的本机同步任务，为 07:00 日报准备数据；电脑需要开机并登录 Windows。详见<a href="https://github.com/tengda-xmu/daily-papers/tree/main/connectors/researchgate_sync" target="_blank" rel="noopener noreferrer">连接器说明</a>。</p><p>若出现 <strong>Access restricted</strong>，表示 ResearchGate 当前限制了访问。先暂停采集，使用页面的 <strong>Log in</strong> 完成验证；若登录入口也受限，请等待恢复或联系<a href="https://help.researchgate.net/" target="_blank" rel="noopener noreferrer">ResearchGate 帮助中心</a>。恢复普通访问并成功采集前，保持定时任务停用。</p></section>
-<section id="wechat"><h2>微信公众号</h2><p><strong>公开文章索引：</strong>每日 06:35 按订阅目录低频检索近期文章，07:00 日报读取成功同步的标题、来源、日期、短片段和公开检索入口。快照缺失或超过 24 小时时，云端尝试补充公开检索。首页“微信公众号 · 科研线索”单独展示这些内容。</p><p>微信后台文章列表持续返回 <code>200013</code>，<a href="https://github.com/wechat-article/wechat-article-exporter/issues/200" target="_blank" rel="noopener noreferrer">上游维护者已有接口关闭报告</a>；当前停止调用受限列表接口，公开索引可用不代表微信已解除限制。每天最多 3 次公开查询，缓存 24 小时；遇验证码暂停请求至少 24 小时。</p><p>索引不保证覆盖所有订阅的全部文章，检索片段也不等于全文。链接明确标注“公开检索入口”，需人工验证的跳转请在浏览器中完成；公众号线索不占核心和扩展论文名额。</p><p><strong>WeRSS 订阅管理：</strong>本机管理地址为 <code>http://127.0.0.1:8001/</code>，微信扫码会话与管理密码只保存在本机。网站通过 <code>connector-data</code> 读取元数据，无需开放公网端口；本机定时任务需要电脑开机并登录 Windows。</p><pre><code>powershell -NoProfile -ExecutionPolicy Bypass -File tools/start_wechat.ps1
+<section id="wechat"><h2>微信公众号</h2><p><strong>公开文章索引：</strong>每日 06:35 按订阅目录低频检索近期文章，07:00 日报读取成功同步的标题、来源、日期、短片段和公开检索入口。快照缺失或超过 24 小时时，云端尝试补充公开检索。这些内容在<a href="leads.html">科研线索</a>页单独展示。</p><p>微信后台文章列表持续返回 <code>200013</code>，<a href="https://github.com/wechat-article/wechat-article-exporter/issues/200" target="_blank" rel="noopener noreferrer">上游维护者已有接口关闭报告</a>；当前停止调用受限列表接口，公开索引可用不代表微信已解除限制。每天最多 3 次公开查询，缓存 24 小时；遇验证码暂停请求至少 24 小时。</p><p>索引不保证覆盖所有订阅的全部文章，检索片段也不等于全文。链接明确标注“公开检索入口”，需人工验证的跳转请在浏览器中完成；公众号线索不占核心和扩展论文名额。</p><p><strong>WeRSS 订阅管理：</strong>本机管理地址为 <code>http://127.0.0.1:8001/</code>，微信扫码会话与管理密码只保存在本机。网站通过 <code>connector-data</code> 读取元数据，无需开放公网端口；本机定时任务需要电脑开机并登录 Windows。</p><pre><code>powershell -NoProfile -ExecutionPolicy Bypass -File tools/start_wechat.ps1
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/sync_wechat.ps1</code></pre><p><strong>持续扩展订阅：</strong>本机每天 18:00 轮换检索人工智能、智能体、大模型、可靠性、航空航天、结构材料和智能运维主题，筛选后自动添加新账号。排除营销、招聘、中小学教育和会员事务账号；同名歧义账号保留待核验。新增账号进入公开索引筛选目录，账号发现仍依赖有效微信扫码授权。</p>
 <details><summary>查看已订阅的 32 个公众号与自动扩展状态</summary>
 <p>目录同步：2026-09-23 12:46（北京时间）。自动发现：正常运行。</p>
