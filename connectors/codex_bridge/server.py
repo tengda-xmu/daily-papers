@@ -28,7 +28,7 @@ from .directions import DirectionManager, DirectionChange
 from .wechat_subscriptions import SubscriptionManager, SubscriptionChange
 from .screenshots import MAX_IMAGE_BYTES, MAX_SCREENSHOTS, save_screenshot
 from .conversations import REQUEST_FIELDS, saved_request, dialogue_context
-from .annotations import AnnotationSet, current_pdf, read_annotations, save_annotations, export_annotated_pdf
+from .annotations import AnnotationDraft, AnnotationSet, annotation_source, current_pdf, read_annotations, save_annotations, export_annotated_pdf
 from .pdf_versions import pdf_versions, artifact_path
 from .library import RatingChange, ReadingPosition
 from .library_backup import MAX_ARCHIVE, export_library, inspect_backup, restore_library
@@ -149,7 +149,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         max_body = MAX_BYTES + 65536 if request.url.path.endswith("/pdf") else 65536
         if request.url.path.endswith('/screenshots'):
             max_body = MAX_IMAGE_BYTES + 65536
-        if request.url.path.endswith('/annotations'):
+        if request.url.path.endswith(('/annotations', '/annotated-pdf')):
             max_body = 2 * 1024 * 1024
         if request.url.path == '/api/library/restore/preview':
             max_body = MAX_ARCHIVE + 65536
@@ -544,6 +544,13 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         data = read_annotations(store, paper_id, version)
         content = await asyncio.to_thread(export_annotated_pdf, path, data['items'])
         return Response(content, media_type='application/pdf', headers={'Content-Disposition':'attachment; filename="annotated.pdf"'})
+
+    @app.post('/api/papers/{paper_id}/annotated-pdf')
+    async def export_annotation_draft(paper_id: str, data: AnnotationDraft):
+        path = await asyncio.to_thread(annotation_source, store, paper_id, data)
+        content = await asyncio.to_thread(export_annotated_pdf, path, [item.model_dump() for item in data.items])
+        return Response(content, media_type='application/pdf', headers={
+            'Content-Disposition':'attachment; filename="annotated.pdf"', 'Cache-Control':'no-store'})
 
     @app.get('/api/papers/{paper_id}/reading-text')
     async def reading_text(paper_id: str, version: str = ''):

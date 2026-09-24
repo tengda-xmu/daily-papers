@@ -34,9 +34,8 @@ class Annotation(BaseModel):
         return self
 
 
-class AnnotationSet(BaseModel):
+class AnnotationDraft(BaseModel):
     document_hash: str = Field(pattern=r'^[a-f0-9]{16}$')
-    revision: int = Field(ge=0)
     items: list[Annotation] = Field(max_length=500)
 
     @model_validator(mode='after')
@@ -46,6 +45,10 @@ class AnnotationSet(BaseModel):
         if sum(len(a.points) + 4 * len(a.rects) for a in self.items) > 30000:
             raise ValueError('标记过多，请导出当前批注后分批整理。')
         return self
+
+
+class AnnotationSet(AnnotationDraft):
+    revision: int = Field(ge=0)
 
 
 COLORS = {'yellow':(1, .8, .12), 'blue':(.12, .48, .9), 'red':(.86, .19, .16), 'green':(.14, .63, .32)}
@@ -76,10 +79,15 @@ def read_annotations(store, paper_id, version):
     return {'document_hash':version, 'revision':row['revision'] if row else 0, 'items':json.loads(row['items']) if row else []}
 
 
-def save_annotations(store, paper_id, data):
-    doc, _ = current_pdf(store, paper_id, data.document_hash)
+def annotation_source(store, paper_id, data):
+    doc, path = current_pdf(store, paper_id, data.document_hash)
     if any(item.page > doc['page_count'] for item in data.items):
         raise HTTPException(400, '标记页码超出 PDF 范围。')
+    return path
+
+
+def save_annotations(store, paper_id, data):
+    annotation_source(store, paper_id, data)
     with store.connect() as db:
         db.execute('BEGIN IMMEDIATE')
         row = db.execute('SELECT revision FROM annotations WHERE paper=? AND document_hash=?', (paper_id, data.document_hash)).fetchone()

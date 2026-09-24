@@ -12,6 +12,7 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
     <div class="reader-tools"><button type="button" data-read="prev" aria-label="上一页">‹</button><label>页 <input class="reader-page-number" type="number" min="1" value="1" aria-label="PDF 页码"></label><span class="reader-page-count">/ 0</span><button type="button" data-read="next" aria-label="下一页">›</button><button type="button" data-read="upload">上传 PDF</button><button type="button" data-read="fetch-pdf">获取 PDF</button></div>
     <div class="reader-tools reader-mark-tools"><button type="button" data-tool="select" aria-pressed="true">选择文字</button><button type="button" data-tool="line">画线</button><button type="button" data-tool="ink">画笔</button><button type="button" data-tool="note">笔记</button><label>颜色 <select class="reader-color" aria-label="标记颜色"><option value="yellow">黄色</option><option value="blue">蓝色</option><option value="red">红色</option><option value="green">绿色</option></select></label><button type="button" data-read="undo" disabled>撤销</button><button type="button" data-read="redo" disabled>重做</button><button type="button" data-read="notes" aria-expanded="false">批注 <span class="reader-note-count">0</span></button><button type="button" data-read="export" disabled>导出批注 PDF</button></div>
     </div><div class="reader-selection" hidden><span class="reader-selection-label"></span><button type="button" data-read="translate">英译中</button><button type="button" data-read="translate-en">中译英</button><button type="button" data-read="question">就此提问</button><button type="button" data-read="highlight">高亮</button><button type="button" data-read="underline">下划线</button><button type="button" data-read="strikeout">删除线</button><button type="button" data-read="dismiss-selection" aria-label="收起划词工具">×</button></div>
+    <div class="reader-savebar" hidden><p class="reader-annotation-status" role="status" aria-live="polite"></p><div><button type="button" data-read="save" disabled>保存批注</button><button type="button" data-read="discard" disabled>放弃修改</button></div></div>
     <p class="reader-status" role="status">上传或获取 PDF 后可在这里阅读、标记和划词翻译。</p></header>
     <div class="reader-body"><div class="reader-pages" tabindex="0" aria-label="原文页面"></div><aside class="reader-notes" aria-label="批注与笔记" hidden><div class="reader-notes-heading"><strong>批注与笔记</strong><button type="button" data-read="backup">备份批注</button><button type="button" data-read="reload">重新载入</button></div><div class="reader-note-list"></div></aside><div class="reader-zoom-controls" role="group" aria-label="PDF 独立缩放" title="仅缩放 PDF · Ctrl / ⌘ + 滚轮 · 阅读区内 Ctrl / ⌘ + 0 适合宽度"><span>PDF</span><button type="button" data-read="zoom-out" aria-label="缩小 PDF">−</button><select class="reader-zoom" aria-label="PDF 缩放比例"><option value="fit">适合宽度</option><option value=".25">25%</option><option value=".5">50%</option><option value=".75">75%</option><option value="1">100%</option><option value="1.25">125%</option><option value="1.5">150%</option><option value="2">200%</option><option value="2.5">250%</option><option value="3">300%</option></select><button type="button" data-read="zoom-in" aria-label="放大 PDF">＋</button></div></div>`;
   const splitter = document.createElement('div'); splitter.className = 'reader-splitter'; splitter.setAttribute('role','separator'); splitter.setAttribute('aria-label','调整原文与对话宽度'); splitter.setAttribute('aria-orientation','vertical'); splitter.tabIndex = 0;
@@ -23,7 +24,7 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
   let remembered = {last_version:'',positions:{}}, rememberedPaper='', positionTimer, positionSaving, positionDirty=false, updateRequest=0;
   const pageSizes = new Map();
   let zoomTimer = null, wheelZoom = null;
-  let items = [], revision = 0, dirty = false, saving = null, saveTimer = null, saveError = false, undo = [], redo = [];
+  let items = [], savedItems = [], revision = 0, dirty = false, saving = null, annotationError = '', leaving = false, undo = [], redo = [];
   let selection = null, tool = 'select', observer = null, rendering = false, queue = [], drawing = null, documentLoading = false;
   let visible = true; try { visible = localStorage.getItem('paper-reader-visible') !== 'off'; } catch {}
   let toolbarExpanded = true; try { toolbarExpanded = localStorage.getItem('paper-reader-toolbar') !== 'off'; } catch {}
@@ -76,30 +77,71 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
     $('.reader-note-count').textContent=items.length;
     root.querySelectorAll('[data-tool],.reader-color').forEach(b=>b.disabled=!pdf || documentLoading);
     $('.reader-mark-tools').hidden=Boolean(doc && doc.kind!=='pdf');
+    $('.reader-savebar').hidden=!pdf || documentLoading;
+    $('[data-read="save"]').disabled=!dirty || Boolean(saving) || !pdf || documentLoading;
+    $('[data-read="discard"]').disabled=!dirty || Boolean(saving) || !pdf || documentLoading;
+    const label=$('.reader-annotation-status');
+    label.textContent=annotationError || (saving?'正在保存批注…':dirty?'有未保存的批注':revision?'批注已保存到本机':'批注采用手动保存');
+    label.classList.toggle('reader-error',Boolean(annotationError));
     zoomControls();
   }
   function changed(next, keepUndo=true, redrawNotes=true) {
     if(keepUndo) { undo.push(clone(items)); if(undo.length>40)undo.shift(); redo=[]; }
-    items=next;dirty=true;saveError=false;drawAll();if(redrawNotes)renderNotes();controls();state('正在保存批注…');
-    clearTimeout(saveTimer);saveTimer=setTimeout(()=>flush().catch(()=>{}),300);
+    items=next;dirty=JSON.stringify(items)!==JSON.stringify(savedItems);annotationError='';drawAll();if(redrawNotes)renderNotes();controls();
   }
-  async function flush() {
-    clearTimeout(saveTimer);
+  async function saveAnnotations() {
     if(saving) return saving;
     if(!dirty) return;
-    const targetPaper=paper, hash=doc?.hash;
+    const targetPaper=paper, hash=doc?.hash, snapshot=clone(items), payload={document_hash:hash,revision,items:snapshot};
+    annotationError='';
     saving=(async()=>{
       try {
-        while(dirty) {
-          const snapshot=clone(items), payload={document_hash:hash,revision,items:snapshot};
-          const data=await api(`/api/papers/${targetPaper}/annotations`,{method:'POST',body:JSON.stringify(payload)});
-          if(paper!==targetPaper || doc?.hash!==hash)return;
-          revision=data.revision;dirty=JSON.stringify(items)!==JSON.stringify(snapshot);saveError=false;
-          state(dirty?'正在保存新批注…':'批注已保存到本机');
-        }
-      } catch(error) {saveError=true;state(error.message+' 未保存的修改仍保留在本页，可备份批注。',true);throw error;}
+        const data=await api(`/api/papers/${targetPaper}/annotations`,{method:'POST',body:JSON.stringify(payload)});
+        if(paper!==targetPaper || doc?.hash!==hash)return;
+        revision=data.revision;savedItems=snapshot;dirty=JSON.stringify(items)!==JSON.stringify(savedItems);
+      } catch(error) {annotationError=error.message+' 未保存的修改仍保留在本页，可备份批注。';throw error;}
     })();
-    try {await saving;} finally {saving=null;}
+    controls();
+    try {await saving;} finally {saving=null;controls();}
+  }
+  function discardChanges() {
+    items=clone(savedItems);dirty=false;annotationError='';undo=[];redo=[];drawAll();renderNotes();controls();
+  }
+  async function prepareLeave() {
+    // Only one navigation may await the user's decision at a time.
+    if(leaving)return false;
+    leaving=true;
+    try {
+      if(saving)await saving.catch(()=>{});
+      if(dirty) {
+        const proceed=await new Promise(resolve=>{
+          const prompt=document.createElement('dialog'),opener=document.activeElement;
+          prompt.className='reader-unsaved-dialog';prompt.setAttribute('aria-labelledby','reader-unsaved-title');
+          prompt.innerHTML='<h2 id="reader-unsaved-title">有未保存的批注</h2><p>是否保存当前 PDF 的批注后继续？</p><p class="reader-leave-error" role="status"></p><div><button type="button" data-leave="save">保存并继续</button><button type="button" data-leave="discard">不保存并继续</button><button type="button" data-leave="cancel" autofocus>取消</button></div>';
+          let finished=false,pending=false;
+          const finish=value=>{if(finished)return;finished=true;prompt.close();prompt.remove();if(opener?.isConnected)opener.focus();resolve(value);};
+          prompt.addEventListener('cancel',event=>{event.preventDefault();if(!pending)finish(false);});
+          prompt.addEventListener('close',()=>{if(!finished)finish(false);});
+          prompt.addEventListener('click',async event=>{
+            const choice=event.target.closest('[data-leave]')?.dataset.leave;if(!choice || pending)return;
+            if(choice==='cancel')return finish(false);
+            if(choice==='discard'){discardChanges();return finish(true);}
+            pending=true;prompt.querySelectorAll('button').forEach(b=>b.disabled=true);
+            try {
+              await saveAnnotations();
+              if(!dirty)finish(true);
+              else prompt.querySelector('.reader-leave-error').textContent='还有新批注未保存，请再次保存或取消。';
+            } catch(error) {prompt.querySelector('.reader-leave-error').textContent=error.message+' 修改仍保留，请重试或取消。';}
+            finally {pending=false;prompt.querySelectorAll('button').forEach(b=>b.disabled=false);}
+          });
+          document.body.append(prompt);prompt.showModal();
+        });
+        if(!proceed)return false;
+      }
+      // Reading progress remains automatic and must not force annotation saves.
+      await savePosition().catch(()=>{});
+      return true;
+    } finally {leaving=false;}
   }
   async function savePosition() {
     clearTimeout(positionTimer);
@@ -114,7 +156,6 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
     try{await positionSaving;}finally{positionSaving=null;}
   }
   function schedulePosition(){if(!pdf || documentLoading || !dialog.open)return;positionDirty=true;clearTimeout(positionTimer);positionTimer=setTimeout(()=>savePosition().catch(()=>{}),700);}
-  async function flushAll(){await flush();await savePosition();}
   function svg(tag, attrs) {const el=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const[k,v]of Object.entries(attrs))el.setAttribute(k,String(v));return el;}
   function draw(view, preview=null) {
     const layer=view.overlay;layer.replaceChildren();
@@ -297,26 +338,33 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
   $('.reader-page-number').onchange=e=>go(displayPage(Number(e.target.value)));$('.reader-zoom').onchange=e=>setZoom(e.target.value);
   $('.reader-version').onchange=async e=>{try{await selectVersion(e.target.value);}catch(error){versionMenu();state(error.message,true);}};
   async function selectVersion(hash){
-    if(switching)return;switching=true;controls();
-    try{await update(paper,sourceDoc,versions,hash);schedulePosition();await savePosition();}
+    if(switching)return false;switching=true;controls();
+    try{if(await update(paper,sourceDoc,versions,hash)===false)return false;schedulePosition();await savePosition();return true;}
     finally{switching=false;controls();}
   }
   async function update(nextPaper,nextSource,nextVersions=null,preferred='',reading=null){
-    const request=++updateRequest;
     const sameSource=nextPaper===paper && (nextSource?.hash || '')===(sourceDoc?.hash || '');
     const available=nextVersions || (sameSource?versions:[]);
-    if(reading){remembered=reading;rememberedPaper=nextPaper;}
-    else if(nextPaper && rememberedPaper!==nextPaper){const saved=await api(`/api/library/papers/${nextPaper}/reading`);if(request!==updateRequest)return;remembered=saved;rememberedPaper=nextPaper;}
-    let chosen=preferred || (sameSource?doc?.hash:'');
-    if(!chosen)chosen=remembered.last_version;
+    // Metadata refreshes (including clearing chat) must not cancel a pending
+    // user-approved switch or replace the current annotation draft.
+    if(sameSource && doc && (!preferred || preferred===doc.hash)) {
+      sourceDoc=nextSource;versions=available;if(!switching)versionMenu();return;
+    }
+    const request=++updateRequest;
+    let nextRemembered=reading || remembered;
+    if(!reading && nextPaper && rememberedPaper!==nextPaper){nextRemembered=await api(`/api/library/papers/${nextPaper}/reading`);if(request!==updateRequest)return false;}
+    const sourceChanged=nextPaper===paper && Boolean(sourceDoc) && !sameSource;
+    let chosen=preferred || (sameSource?doc?.hash:sourceChanged?nextSource?.hash:'');
+    if(!chosen && !sourceChanged)chosen=nextRemembered.last_version;
     const nextDoc=available.find(v=>v.hash===chosen && v.available!==false) || (nextSource?{...nextSource,view:'original'}:null);
     if(nextPaper===paper && (nextDoc?.hash || '')===(doc?.hash || '')){sourceDoc=nextSource;versions=available;versionMenu();return;}
-    await flushAll();if(request!==updateRequest)return;
+    if(!await prepareLeave()){versionMenu();return false;}if(request!==updateRequest)return false;
     if(nextDoc?.source_hash && nextDoc.source_hash!==nextSource?.hash && onSource){nextSource=await onSource(nextDoc.source_hash);if(request!==updateRequest)return;}
+    remembered=nextRemembered;rememberedPaper=nextPaper;
     const position=nextDoc ? remembered.positions[nextDoc.hash] : null;
     const keepPage=sameSource?sourcePage(current):1;
     const generation=++epoch;clearTimeout(zoomTimer);wheelZoom=null;pageSizes.clear();observer?.disconnect();views.forEach(clearView);views=[];queue=[];task?.destroy();task=null;pdf=null;
-    paper=nextPaper;sourceDoc=nextSource;versions=available;doc=nextDoc;items=[];revision=0;undo=[];redo=[];selection=null;documentLoading=false;positionDirty=false;$('.reader-selection').hidden=true;setTool('select');renderNotes();pages.replaceChildren();current=position?.page || displayPage(keepPage);versionMenu();controls();
+    paper=nextPaper;sourceDoc=nextSource;versions=available;doc=nextDoc;items=[];savedItems=[];dirty=false;annotationError='';revision=0;undo=[];redo=[];selection=null;documentLoading=false;positionDirty=false;$('.reader-selection').hidden=true;setTool('select');renderNotes();pages.replaceChildren();current=position?.page || displayPage(keepPage);versionMenu();controls();
     const zoom=$('.reader-zoom'),value=position?.zoom || 'fit';if(![...zoom.options].some(o=>o.value===value)){const option=new Option(`${Math.round(Number(value)*100)}%`,value);option.dataset.customZoom='true';zoom.append(option);}zoom.value=value;
     $('.reader-name').textContent=doc?.name || '尚未载入全文';$('.reader-name').title=doc?.name || '';
     $('.reader-page-count').textContent=`/ ${sourcePage(doc?.page_count || 0)}${paired()?' 对页':''}`;
@@ -328,7 +376,7 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
         for(const [index,row]of data.pages.entries()){const section=document.createElement('section');section.className='reader-page reader-web-text';section.dataset.page=index+1;section.dataset.label=row.label;const label=document.createElement('small');label.textContent=row.label;const p=document.createElement('p');p.textContent=row.text;section.append(label,p);pages.append(section);}state('网页正文 · 选中文字可翻译或提问；PDF 支持画线批注。');return;
       }
       const [module,response,annotations]=await Promise.all([library(),api(url('/pdf')+version(),{stream:true}),api(url('/annotations')+version())]);
-      if(generation!==epoch)return;pdfjs=module;items=annotations.items;revision=annotations.revision;
+      if(generation!==epoch)return;pdfjs=module;items=annotations.items;savedItems=clone(items);revision=annotations.revision;
       const bytes=new Uint8Array(await response.arrayBuffer());if(generation!==epoch)return;
       task=pdfjs.getDocument({data:bytes,isEvalSupported:false,enableXfa:false,cMapUrl:new URL('vendor/pdfjs/web/cmaps/',assets).href,cMapPacked:true,standardFontDataUrl:new URL('vendor/pdfjs/web/standard_fonts/',assets).href,wasmUrl:new URL('vendor/pdfjs/web/wasm/',assets).href});
       const loaded=await task.promise;if(generation!==epoch){loaded.destroy();return;}
@@ -343,7 +391,9 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
     if(b.dataset.tool){setTool(b.dataset.tool);return;}
     const action=b.dataset.read;if(!action)return;
     try {
-      if(action==='hide'){await flush();return setVisible(false);}
+      if(action==='hide')return setVisible(false);
+      if(action==='save')return await saveAnnotations();
+      if(action==='discard')return discardChanges();
       if(action==='toggle-toolbar')return setToolbarExpanded(!toolbarExpanded);
       if(action==='zoom-in' || action==='zoom-out')return stepZoom(action==='zoom-in'?1:-1);
       if(action==='dismiss-selection'){selection=null;$('.reader-selection').hidden=true;window.getSelection()?.removeAllRanges();return;}
@@ -351,9 +401,16 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
       if(action==='prev' || action==='next')return go(displayPage(sourcePage(current)+(action==='prev'?-1:1)));
       if(action==='notes')return showNotes($('.reader-notes').hidden);
       if(action==='backup')return download(new Blob([JSON.stringify({document_hash:doc?.hash,items},null,2)],{type:'application/json'}),'paper-annotations.json');
-      if(action==='reload'){if(dirty&&!confirm('本页有未保存的修改。请先备份批注；继续将载入本机已保存的版本。'))return;dirty=false;const hash=doc?.hash;doc=null;return update(paper,sourceDoc,versions,hash);}
+      if(action==='reload'){if(!await prepareLeave())return;const hash=doc?.hash;doc=null;return update(paper,sourceDoc,versions,hash);}
       if(action==='undo' || action==='redo'){const from=action==='undo'?undo:redo,to=action==='undo'?redo:undo;if(from.length){to.push(clone(items));changed(from.pop(),false);}return;}
-      if(action==='export'){b.disabled=true;await flush();const response=await api(url('/annotated-pdf')+version(),{stream:true});download(await response.blob(),(doc.name || '论文').replace(/\.pdf$/i,'')+'-批注.pdf');state('已导出批注副本，原始 PDF 保留。');return;}
+      if(action==='export'){
+        b.disabled=true;const pid=paper,hash=doc.hash,name=doc.name;
+        let response;
+        try{response=await api(url('/annotated-pdf'),{method:'POST',body:JSON.stringify({document_hash:hash,items:clone(items)}),stream:true});}
+        catch(error){if(error.status===405 || (error.status===404 && error.message==='Not Found'))throw new Error('本机助手需要更新并重启，才能导出未保存的批注。当前修改仍保留，未自动保存。');throw error;}
+        download(await response.blob(),(name || '论文').replace(/\.pdf$/i,'')+'-批注.pdf');
+        if(pid===paper && hash===doc?.hash)state('已导出当前批注 PDF，未写入本机批注记录。');return;
+      }
       if(action==='download'){b.disabled=true;const response=await api(url('/pdf')+version(),{stream:true});download(await response.blob(),(doc.name || '论文').replace(/\.pdf$/i,'')+'.pdf');state('已下载当前 PDF。');return;}
       if(!selection){state('请先在原文页内选中文字。');return;}
       if(['highlight','underline','strikeout'].includes(action)){add(action,selection.rects,[],selection.text,selection.page);window.getSelection()?.removeAllRanges();selection=null;$('.reader-selection').hidden=true;return;}
@@ -361,7 +418,7 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
         if(selection.text.length>11000){state('选中文字过长，请分段翻译或使用全文翻译。',true);return;}
         const accepted=await onSelection({...selection,action,documentHash:sourceDoc.hash,translated:doc.view==='translated'||(paired()&&selection.page%2===0)});if(accepted){tab('chat');state(action==='question'?'选段已放入右侧提问框，可补充问题后发送。':'已发送选段翻译，请在右侧查看回答和进度。');}
       }
-    }catch(error){state(error.message,true);}finally{controls();}
+    }catch(error){if(action!=='save')state(error.message,true);}finally{controls();}
   });
   let drag=null;
   function width(value){const max=Math.max(350,dialog.clientWidth-360);dialog.style.setProperty('--reader-chat-width',`${Math.max(350,Math.min(max,value))}px`);onLayout();}
@@ -371,13 +428,13 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
   splitter.onpointerup=()=>{drag=null;try{localStorage.setItem('paper-reader-chat-width',String(dialog.querySelector('.chat-shell').clientWidth));}catch{}};
   splitter.onpointercancel=()=>{drag=null;};splitter.ondblclick=()=>{dialog.style.removeProperty('--reader-chat-width');resize();};
   splitter.onkeydown=e=>{if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();width(dialog.querySelector('.chat-shell').clientWidth+(e.key==='ArrowLeft'?40:-40));}};
-  window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
+  window.addEventListener('beforeunload',e=>{if(dirty || saving){e.preventDefault();e.returnValue='';}});
   document.addEventListener('visibilitychange',()=>{if(document.hidden)savePosition().catch(()=>{});});
   window.addEventListener('pagehide',()=>savePosition().catch(()=>{}));
   setVisible(visible,false);setToolbarExpanded(toolbarExpanded,false);controls();
-  return {update,flush:flushAll,open:()=>{setVisible(true);tab('pdf');},
+  return {update,prepareLeave,savePosition,open:()=>{setVisible(true);tab('pdf');},
     showVersion:async hash=>{setVisible(true);tab('pdf');await selectVersion(hash);},
-    showPage:async number=>{setVisible(true);tab('pdf');await selectVersion(sourceDoc?.hash);go(number);},
+    showPage:async number=>{setVisible(true);tab('pdf');if(await selectVersion(sourceDoc?.hash)!==false)go(number);},
     showTranslation:async (messageId,view='translated')=>{const item=versions.find(v=>(v.message_id===messageId||v.message_ids?.includes(messageId))&&v.view===view);if(!item)return;setVisible(true);tab('pdf');await selectVersion(item.hash);},
-    showChat:()=>tab('chat'),discardChanges:()=>{dirty=false;clearTimeout(saveTimer);},hasUnsaved:()=>dirty};
+    showChat:()=>tab('chat'),hasUnsaved:()=>dirty};
 }

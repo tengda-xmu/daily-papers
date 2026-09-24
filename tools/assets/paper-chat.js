@@ -440,6 +440,7 @@
       if (response.status === 401 && protectedRoute) { clearSession(); $('.chat-connect').hidden = false; }
       const err = new Error(data.message || (typeof data.detail === 'string' ? data.detail : '请求未完成，请重试。'));
       err.state = data.state;
+      err.status = response.status;
       throw err;
     }
     return options.stream ? response : response.json();
@@ -803,8 +804,7 @@
   }
 
   async function open(id, title, trigger) {
-    if(reader) {try{await reader.flush();}catch{notice('阅读进度或批注尚未保存，请重试后切换论文。');return;}}
-    if (reader?.hasUnsaved()) { try { await reader.flush(); } catch { notice('批注尚未保存，请在左侧重试或备份后再切换论文。'); return; } }
+    if(reader && paperId!==id && !await reader.prepareLeave())return;
     if (busy) await stop();
     rememberDraft();
     if (paperId !== id) {
@@ -994,7 +994,7 @@
       if (name === 'fetch-pdf') return prepareDocument('/fetch-pdf', null, '正在获取并解析论文 PDF…');
       if (name === 'fulltext') return prepareDocument('/fulltext', null, '正在获取网页全文…');
       if (name === 'clear' && window.confirm('清除这篇论文的本机对话？星级、原文、译文、翻译进度和批注会保留。')) {
-        await reader?.flush();const data = await api(endpoint(), { method: 'DELETE' }); releasePreviews(); screenshots = []; drawScreenshots(); await loadPaper(); notice(data.message);
+        const data = await api(endpoint(), { method: 'DELETE' }); releasePreviews(); screenshots = []; drawScreenshots(); await loadPaper(); notice(data.message);
       }
       if (name === 'export') {
         const data = await api(endpoint());
@@ -1006,7 +1006,7 @@
   }
   async function forgetBrowser() {
     if (busy || documentPending || remoteDocumentPending || screenshotPending) return;
-    await reader?.flush();
+    await reader?.savePosition().catch(()=>{});
     if (deviceToken) await api('/api/session/forget', { method: 'POST', body: JSON.stringify({ device_token: deviceToken }) }, false);
     clearTimeout(reconnectTimer);
     deviceToken = ''; writeStorage('localStorage', browserKey, ''); clearSession();
@@ -1037,7 +1037,7 @@
   });
   async function prepareDocument(path, body, pendingText) {
     if (busy || documentPending || remoteDocumentPending || screenshotPending) return;
-    try { await reader?.flush(); } catch { notice('请先保存或备份原 PDF 的批注，再更换资料。'); return; }
+    if(reader && !await reader.prepareLeave())return;
     const targetPaper = paperId;
     documentPending = true; setBusy(busy); documentNotice(pendingText, 'loading'); notice(pendingText);
     let outcome = '', failed = false;
@@ -1096,7 +1096,12 @@
       event.preventDefault(); $('.chat-composer').requestSubmit();
     }
   });
-  $('.chat-close').onclick = async () => { try { await reader?.flush(); } catch { notice('批注尚未保存，请先重试或备份。'); return; } clearTimeout(reconnectTimer); await stop(); dialog.close(); if (lastTrigger) lastTrigger.focus(); };
+  let closing=false;
+  $('.chat-close').onclick = async () => {
+    if(closing)return;closing=true;
+    try {if(reader && !await reader.prepareLeave())return;clearTimeout(reconnectTimer);await stop();dialog.close();if(lastTrigger)lastTrigger.focus();}
+    finally {closing=false;}
+  };
   dialog.addEventListener('cancel', event => { event.preventDefault(); $('.chat-close').click(); });
   function reconnectWhenVisible() {
     if (dialog.open && !document.hidden && !busy && (token || deviceToken) && $('.chat-status').dataset.state === 'offline') connect();
