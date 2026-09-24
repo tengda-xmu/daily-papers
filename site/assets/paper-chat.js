@@ -38,24 +38,25 @@
   dialog.className = 'paper-chat';
   dialog.setAttribute('aria-labelledby', 'chat-heading');
   dialog.innerHTML = `<div class="chat-width-resizer" role="separator" tabindex="0" aria-orientation="vertical" aria-label="调整对话侧栏宽度" aria-controls="chat-shell" title="左右拖动调整宽度；双击恢复默认"></div><div class="chat-shell" id="chat-shell">
-    <header class="chat-header"><div class="chat-heading-row"><h2 id="chat-heading">Codex 论文对话</h2><button class="chat-close" type="button" aria-label="关闭对话">×</button></div><p class="chat-paper-title"></p><p class="chat-status" role="status">未连接本机 Codex</p><div class="chat-model-row"><label for="chat-model">模型</label><select id="chat-model" aria-describedby="chat-model-help" disabled><option value="">连接后加载可用模型</option></select></div><p class="chat-model-help" id="chat-model-help">选择将用于下一次发送。</p></header>
-    <section class="chat-connect"><p>先运行“启动论文助手.cmd”。首次连接请粘贴配对码，记住浏览器后可自动连接。</p><div class="chat-pair-row"><input type="password" autocomplete="off" aria-label="本机配对码" placeholder="首次连接的配对码"><button class="chat-button" type="button" data-chat-action="connect">连接</button></div><label class="chat-remember"><input type="checkbox" checked>记住此浏览器，下次自动连接</label><p class="chat-local-help"><a class="chat-local-link" target="_blank" rel="noopener noreferrer">在本机打开论文助手</a> · 电脑须保持运行</p></section>
+    <header class="chat-header"><div class="chat-heading-row"><h2 id="chat-heading">Codex 论文对话</h2><button class="chat-close" type="button" aria-label="关闭对话">×</button></div><p class="chat-paper-title"></p><div class="chat-status-row"><p class="chat-status" role="status">未连接本机 Codex</p><button class="text-button chat-settings-toggle" type="button" data-chat-action="settings" aria-expanded="false" aria-controls="chat-settings">模型与资料</button></div>
+    <div class="chat-settings" id="chat-settings" hidden><div class="chat-model-row"><label for="chat-model">模型</label><select id="chat-model" aria-describedby="chat-model-help" disabled><option value="">连接后加载可用模型</option></select></div><p class="chat-model-help" id="chat-model-help">选择将用于下一次发送。</p>
     <section class="chat-documents" aria-label="论文资料">
       <div class="chat-doc-actions"><button type="button" class="chat-button" data-chat-action="upload">上传 PDF</button><button type="button" class="chat-button" data-chat-action="fetch-pdf">获取论文 PDF</button></div>
       <p class="chat-document-status" role="status">未载入 PDF，可上传或直接获取。</p>
       <details><summary>阅读依据：摘要与本站解读</summary><p class="chat-document-note">文件仅保存在本机，最多 20 MB / 300 页。</p><button type="button" class="text-button" data-chat-action="fulltext">获取网页全文</button></details>
       <input type="file" accept="application/pdf,.pdf" hidden>
-    </section>
+    </section></div></header>
+    <section class="chat-connect"><p>先运行“启动论文助手.cmd”。首次连接请粘贴配对码，记住浏览器后可自动连接。</p><div class="chat-pair-row"><input type="password" autocomplete="off" aria-label="本机配对码" placeholder="首次连接的配对码"><button class="chat-button" type="button" data-chat-action="connect">连接</button></div><label class="chat-remember"><input type="checkbox" checked>记住此浏览器，下次自动连接</label><p class="chat-local-help"><a class="chat-local-link" target="_blank" rel="noopener noreferrer">在本机打开论文助手</a> · 电脑须保持运行</p></section>
     <div class="chat-workspace">
     <div class="chat-messages" id="chat-reading-pane" aria-label="对话记录"></div>
+    <div class="chat-history-actions"><button class="chat-button chat-translation-export" type="button" data-chat-action="export-translation" hidden>导出译文 PDF</button><button class="text-button" type="button" data-chat-action="export-pdf">对话 PDF</button><button class="text-button" type="button" data-chat-action="export">对话文本</button><button class="text-button" type="button" data-chat-action="clear">清除记录</button></div>
     <div class="chat-height-resizer" role="separator" tabindex="0" aria-orientation="horizontal" aria-label="调整对话阅读区域高度" aria-controls="chat-reading-pane" title="上下拖动调整阅读区域；双击恢复默认"><span aria-hidden="true"></span><small aria-hidden="true">拖动调整阅读区域</small></div>
     <div class="chat-bottom">
-    <div class="chat-history-actions"><button class="text-button" type="button" data-chat-action="export">导出对话</button><button class="text-button" type="button" data-chat-action="export-pdf">导出 PDF</button><button class="text-button" type="button" data-chat-action="clear">清除本机记录</button></div>
     <form class="chat-composer">
       <div class="chat-shortcuts"><button class="chat-button" type="button" data-mode="summary">总结论文</button><button class="chat-button" type="button" data-mode="question" aria-pressed="true">深入提问</button><button class="chat-button" type="button" data-mode="translate">中英翻译</button><button class="chat-button" type="button" data-mode="figure">解释配图</button></div>
       <p class="chat-mode-help" id="chat-mode-help"></p>
       <div class="chat-translation" hidden><label>方向 <select class="chat-translation-target"><option value="zh">英译中</option><option value="en">中译英</option></select></label><label>内容 <select class="chat-translation-source"><option value="text">粘贴原文</option><option value="image">截图翻译</option><option value="full">全文翻译</option><option value="document">论文章节</option></select></label></div>
-      <textarea aria-label="向 Codex 提问" aria-describedby="chat-mode-help" maxlength="12000"></textarea>
+      <textarea rows="2" aria-label="向 Codex 提问" aria-describedby="chat-mode-help" maxlength="12000"></textarea>
       <div class="chat-attachments" aria-label="待发送截图" hidden></div>
       <input class="chat-image-input" type="file" accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp" multiple hidden>
       <div class="chat-form-footer"><button class="chat-button" type="button" data-chat-action="screenshot" title="支持 PNG、JPEG、WebP，每张最多 8 MB，每次最多 4 张">上传截图</button><span class="chat-paste-hint">也可 Ctrl+V 粘贴</span><div><button class="chat-button" type="button" data-chat-action="stop" hidden>停止</button> <button class="chat-send" type="submit">发送问题</button></div></div><p class="chat-notice" role="status"></p>
@@ -71,7 +72,21 @@
   $('.chat-remember input').checked = readStorage('localStorage', rememberKey) !== 'off';
   const remembered = document.createElement('p'); remembered.className = 'chat-remembered'; remembered.hidden = true;
   remembered.innerHTML = '<span>已记住此浏览器 · 自动连接</span><button type="button" class="text-button" data-chat-action="forget-browser">取消记住</button>';
-  $('.chat-header').append(remembered);
+  $('.chat-settings').append(remembered);
+  function toggleSettings(open = $('.chat-settings').hidden) {
+    $('.chat-settings').hidden = !open;
+    $('.chat-settings-toggle').setAttribute('aria-expanded', String(open));
+    refreshLayout();
+  }
+  const fullTranslation = row => row.role === 'assistant' && /^## 全文翻译 · (中文|英文)\s/.test(row.content || '');
+  const latestTranslation = () => history.filter(fullTranslation).at(-1);
+  function updateTranslationExport() {
+    const row = latestTranslation(), button = $('[data-chat-action="export-translation"]');
+    button.hidden = !row;
+    button.disabled = busy || !row || row.status === 'running';
+    button.textContent = row?.status === 'completed' ? '导出译文 PDF' : row?.status === 'running' ? '译文生成中…' : '导出部分译文 PDF';
+    button.title = '仅导出这篇论文最近一次全文翻译，保留原文、译文及页码标记';
+  }
   function updateRemembered() {
     remembered.hidden = !deviceToken;
     remembered.querySelector('span').textContent = devicePersisted ? '已记住此浏览器 · 自动连接' : '自动连接仅在当前页面有效';
@@ -90,6 +105,7 @@
     const storageKey = 'daily-papers-chat-layout';
     const widthHandle = $('.chat-width-resizer'), heightHandle = $('.chat-height-resizer');
     const workspace = $('.chat-workspace'), reading = $('.chat-messages');
+    const availableHeight = () => workspace.clientHeight - heightHandle.offsetHeight - $('.chat-history-actions').offsetHeight;
     const layout = { width: null, ratio: null };
     try {
       const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
@@ -100,7 +116,7 @@
     const save = () => { try { localStorage.setItem(storageKey, JSON.stringify(layout)); } catch {} };
     const bounds = (axis) => axis === 'width'
       ? { min: Math.min(360, window.innerWidth), max: Math.min(1200, window.innerWidth) }
-      : { min: 100, max: Math.max(100, workspace.clientHeight - heightHandle.offsetHeight - 140) };
+      : { min: 100, max: Math.max(100, availableHeight() - 140) };
     function refresh() {
       if (!dialog.open) return;
       const wide = window.innerWidth > 640;
@@ -110,12 +126,14 @@
       widthHandle.tabIndex = wide ? 0 : -1;
       const height = bounds('height');
       if (layout.ratio !== null) {
-        const available = workspace.clientHeight - heightHandle.offsetHeight;
+        const available = availableHeight();
         reading.style.flex = `0 0 ${clamp(available * layout.ratio, height.min, height.max)}px`;
         $('.chat-bottom').style.flex = '1 1 0';
+        $('.chat-bottom').style.maxHeight = 'none';
       } else {
         reading.style.removeProperty('flex');
         $('.chat-bottom').style.removeProperty('flex');
+        $('.chat-bottom').style.removeProperty('max-height');
       }
       for (const [handle, range, value] of [[widthHandle, width, dialog.getBoundingClientRect().width], [heightHandle, height, reading.getBoundingClientRect().height]]) {
         handle.setAttribute('aria-valuemin', String(Math.round(range.min)));
@@ -128,7 +146,7 @@
       const range = bounds(axis);
       value = clamp(value, range.min, range.max);
       if (axis === 'width') layout.width = value;
-      else layout.ratio = value / (workspace.clientHeight - heightHandle.offsetHeight);
+      else layout.ratio = value / Math.max(1, availableHeight());
       refresh();
     }
     let drag = null;
@@ -202,7 +220,7 @@
     const fullTranslation = translating && $('.chat-translation-source').value === 'full';
     const imageTranslation = translating && $('.chat-translation-source').value === 'image';
     $('.chat-translation').hidden = !translating;
-    $('.chat-mode-help').textContent = fullTranslation ? '覆盖已载入的全部正文，分批保存原文与译文。中断后再次开始可继续；完整翻译需要较长时间。' : imageTranslation ? '翻译上传截图中的可见文字，保留公式和术语；识别不清处会标注。' : config.hint;
+    $('.chat-mode-help').textContent = fullTranslation ? '按原文顺序分批翻译，中断可继续；完成后可导出原文与译文 PDF。' : imageTranslation ? '翻译截图中的文字，保留公式和术语，标注识别不清处。' : config.hint;
     $('.chat-composer textarea').placeholder = fullTranslation ? '可选：填写术语或表达偏好；留空即可开始全文翻译。' : imageTranslation ? '可选：填写术语偏好或需要翻译的区域…' : documentTranslation ? '例如：翻译 Abstract 或 Methods 章节。' : config.placeholder;
     $('.chat-send').textContent = fullTranslation ? '开始全文翻译' : config.send;
     dialog.querySelectorAll('[data-mode]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === mode)));
@@ -273,7 +291,7 @@
   if (local) {
     const sidebarPair = document.createElement('section');
     sidebarPair.className = 'local-pair-controls';
-    $('.chat-header').append(sidebarPair);
+    $('.chat-settings').append(sidebarPair);
     pairControls.push(sidebarPair, document.getElementById('local-pair-help'));
     pairControls.forEach(control => {
       control.hidden = false;
@@ -296,6 +314,7 @@
     $('[data-chat-action="stop"]').hidden = !value;
     dialog.querySelectorAll('[data-mode], .chat-translation select, [data-chat-action="fulltext"], [data-chat-action="fetch-pdf"], [data-chat-action="upload"], [data-chat-action="screenshot"], .chat-attachment-remove, [data-chat-action="clear"], [data-chat-action="forget-browser"]').forEach(b => { b.disabled = locked; });
     $('[data-chat-action="forget-browser"]').disabled = locked || connecting;
+    updateTranslationExport();
   };
 
   async function restoreSession() {
@@ -488,12 +507,22 @@
       if (messageId && text) {
         const pdf = document.createElement('button'); pdf.type = 'button'; pdf.className = 'text-button chat-answer-pdf'; pdf.textContent = '导出 PDF';
         const exportPaper = paperId;
-        pdf.onclick = () => downloadPdf(exportPaper, messageId).catch(e => notice(e.message));
+        const translation = fullTranslation({role, content: text});
+        if (translation) pdf.textContent = state === 'completed' ? '导出译文 PDF' : '导出部分译文 PDF';
+        pdf.disabled = state === 'running';
+        pdf.onclick = () => downloadPdf(exportPaper, messageId, translation, pdf).catch(e => notice(e.message));
         label.append(pdf);
+        if (translation && state !== 'running') {
+          const footer = document.createElement('div'); footer.className = 'chat-translation-download';
+          const note = document.createElement('span'); note.textContent = state === 'completed' ? '全文译文已保存，可导出原文与译文。' : '本次翻译尚未完成，可导出已保存内容。';
+          const download = document.createElement('button'); download.type = 'button'; download.className = 'chat-button'; download.textContent = pdf.textContent;
+          download.onclick = () => downloadPdf(exportPaper, messageId, true, download).catch(e => notice(e.message));
+          footer.append(note, download); article.append(footer);
+        }
       }
     }
     format(body, text || (state === 'running' ? '正在等待 Codex 回复…' : state === 'interrupted' ? '本次生成已停止，尚未收到回答。可以重新发送问题。' : state === 'failed' ? '本次未生成回答，请根据下方提示重试。' : '本次没有返回可显示的内容，请重新提问。'));
-    article.append(label, body); $('.chat-messages').append(article);
+    article.prepend(label, body); $('.chat-messages').append(article);
     if (attachments.length) {
       const previews = document.createElement('div'); previews.className = 'chat-message-attachments';
       article.append(previews); renderScreenshots(previews, attachments, paperId, false);
@@ -510,6 +539,8 @@
     if (currentPaper !== paperId) return;
     history = data.history;
     $('.chat-paper-title').textContent = data.paper.title_zh || data.paper.title;
+    $('.chat-paper-title').title = $('.chat-paper-title').textContent;
+    updateTranslationExport();
     $('.chat-messages').replaceChildren();
     if (!history.length) {
       const p = document.createElement('p'); p.className = 'chat-empty';
@@ -521,6 +552,7 @@
     }
     const doc = data.document;
     currentDocument = doc;
+    $('.chat-settings-toggle').textContent = '模型与资料' + (doc ? doc.kind === 'pdf' ? ` · PDF ${doc.page_count} 页` : ' · 已载入全文' : '');
     if (!screenshotPending) { screenshots = data.screenshots || []; drawScreenshots(); }
     remoteDocumentPending = Boolean(data.preparing);
     $('.chat-documents summary').textContent = `阅读依据：${doc ? doc.name : '摘要与本站解读'}`;
@@ -603,11 +635,15 @@
   async function open(id, title, trigger) {
     if (busy) await stop();
     rememberDraft();
-    if (paperId !== id) { releasePreviews(); screenshots = []; drawScreenshots(); }
+    if (paperId !== id) {
+      releasePreviews(); screenshots = []; drawScreenshots(); history = []; currentDocument = null;
+      updateTranslationExport(); $('.chat-settings-toggle').textContent = '模型与资料';
+    }
     paperId = id; lastTrigger = trigger;
     remoteDocumentPending = false;
     restoreDraft();
     $('.chat-paper-title').textContent = title || '选择一篇论文开始';
+    $('.chat-paper-title').title = $('.chat-paper-title').textContent;
     $('.chat-local-link').href = `${base}/?paper=${encodeURIComponent(id || '')}`;
     if (!dialog.open) dialog.showModal();
     refreshLayout();
@@ -716,24 +752,35 @@
     }
   }
 
-  async function downloadPdf(targetPaper, messageId = null) {
-    notice('正在生成 PDF…');
-    const response = await api(`/api/papers/${targetPaper}/export-pdf${messageId ? '?message_id=' + messageId : ''}`, { stream: true });
-    const blob = await response.blob();
-    if (!blob.type.includes('application/pdf')) throw new Error('未取得 PDF 文件，请重试。');
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = `${targetPaper}-${messageId ? 'answer-' + messageId : 'conversation'}.pdf`;
-    a.click(); setTimeout(() => URL.revokeObjectURL(url), 60000);
-    notice('PDF 已生成并下载。');
+  async function downloadPdf(targetPaper, messageId = null, translation = false, button = null) {
+    if (button?.disabled) return;
+    if (button) button.disabled = true;
+    const title = ($('.chat-paper-title').textContent || targetPaper).replace(/[<>:"/\\|?*\x00-\x1f]/g, '_').slice(0, 70).trim();
+    try {
+      notice('正在生成 PDF…');
+      const response = await api(`/api/papers/${targetPaper}/export-pdf${messageId ? '?message_id=' + messageId : ''}`, { stream: true });
+      const blob = await response.blob();
+      if (!blob.type.includes('application/pdf')) throw new Error('未取得 PDF 文件，请重试。');
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = `${title}-${translation ? '全文翻译' : messageId ? '回答-' + messageId : '对话记录'}.pdf`;
+      a.click(); setTimeout(() => URL.revokeObjectURL(url), 60000);
+      notice(translation ? '译文 PDF 已下载，包含原文、译文及页码标记。' : 'PDF 已生成并下载。');
+    } finally { if (button) button.disabled = false; updateTranslationExport(); }
   }
 
   async function action(name) {
     try {
+      if (name === 'settings') return toggleSettings();
       if (name === 'connect') return await connect();
       if (name === 'stop') return await stop();
       if (name === 'forget-browser') return await forgetBrowser();
       if (!token || !paperId) { notice('请先连接并选择论文。'); return; }
-      if (name === 'export-pdf') return await downloadPdf(paperId);
+      if (name === 'export-pdf') return await downloadPdf(paperId, null, false, $('[data-chat-action="export-pdf"]'));
+      if (name === 'export-translation') {
+        const row = latestTranslation();
+        if (!row || row.status === 'running') { notice('全文翻译完成后可导出 PDF；中断的译文也可导出已有部分。'); return; }
+        return await downloadPdf(paperId, row.id, true, $('[data-chat-action="export-translation"]'));
+      }
       if (name === 'upload') { uploadPaper = paperId; return $('.chat-documents input[type="file"]').click(); }
       if (name === 'screenshot') { screenshotPaper = paperId; return $('.chat-image-input').click(); }
       if (name === 'fetch-pdf') return prepareDocument('/fetch-pdf', null, '正在获取并解析论文 PDF…');

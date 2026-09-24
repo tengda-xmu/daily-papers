@@ -818,3 +818,20 @@ def test_pdf_download_requires_pairing_and_scopes_message_to_paper(bridge):
     text = ''.join(p.extract_text() for p in PdfReader(BytesIO(r.content)).pages)
     assert '中文全文译文' in text and '后续无关' not in text
     assert c.get(f'/api/papers/{P2}/export-pdf?message_id={mid}', headers=h).status_code == 404
+
+
+def test_completed_translation_pdf_keeps_every_part_after_followup(bridge):
+    c, app, rpc = bridge; h = login(c, app)
+    app.state.store.set_document(P1, translation_doc(3))
+    ask(c, h, mode='translate', translation_source='full')
+    translated = app.state.store.history(P1)[-1]
+    assert translated['status'] == 'completed'
+    app.state.store.message(P1, 'assistant', 'UNRELATED-FOLLOWUP-NOT-TRANSLATION')
+    count = len(rpc.inputs)
+    response = c.get(f"/api/papers/{P1}/export-pdf?message_id={translated['id']}", headers=h)
+    assert response.status_code == 200 and len(rpc.inputs) == count
+    text = ''.join(p.extract_text() for p in PdfReader(BytesIO(response.content)).pages)
+    for number in range(1, 4):
+        assert f'Original evidence on page {number}.' in text and f'[P{number}]' in text
+    assert '全文翻译已完成' in text and '根据原文' in text
+    assert 'UNRELATED-FOLLOWUP' not in text
