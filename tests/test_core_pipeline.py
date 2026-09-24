@@ -168,7 +168,9 @@ def test_core_keeps_complete_chinese_notes_when_live_source_fails(monkeypatch, t
     assert result["source_status"]["fixture failure"]["status"] == "error"
     assert len(result["core"]) == 5 and all(valid_analysis(p) for p in result["core"])
     assert len(result["extended"]) == 5 and all(valid_analysis(p) for p in result["extended"])
-    assert all(p["focus_tags"] for p in result["core"][:3])
+    # The first pass now covers all configured directions, including fatigue
+    # studies without an LLM; focus still breaks ties within each direction.
+    assert len({p['recommended_direction'] for p in result['core'][:3]}) == 3
     assert not ({p["id"] for p in result["core"]} & {p["id"] for p in result["extended"]})
     assert all(p["venue_group"] == "CNS 子刊" for p in result["core"])
     assert {tag for p in result["core"] for tag in p["topic_tags"]} == {"ai_maintenance", "generative_design", "fatigue_reliability"}

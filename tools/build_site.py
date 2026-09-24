@@ -20,6 +20,7 @@ from src.catalog import (JOURNALS, SOURCE_CATALOG, STATE_LABELS, TOPIC_CATALOG,
 from src.research_focus import focus_tags
 from src.figures import get_figure
 from src.wechat_metadata import public_subscriptions
+from src.research_directions import load_profile, active_directions, profile_revision
 
 DATA = ROOT / "data"
 OUT = ROOT / "site"
@@ -78,7 +79,7 @@ def template(name: str, **values) -> str:
 
 def document(content: str, *, title: str, root: str = "./", active: str = "daily") -> str:
     version = hashlib.sha256(
-        b"".join((ASSETS / name).read_bytes() for name in ("site.css", "site.js", "daily-update.js", "paper-chat.css", "paper-chat.js", "manual-search.css", "manual-search.js", "journal-manager.css", "journal-manager.js"))
+        b"".join((ASSETS / name).read_bytes() for name in ("site.css", "site.js", "daily-update.js", "paper-chat.css", "paper-chat.js", "manual-search.css", "manual-search.js", "journal-manager.css", "journal-manager.js", "research-directions.css", "research-directions.js"))
     ).hexdigest()[:10]
     return template(
         "page.html", content=content.lstrip(), title=esc(title), root=root, version=version,
@@ -91,6 +92,8 @@ def document(content: str, *, title: str, root: str = "./", active: str = "daily
                        f'<script src="{root}assets/manual-search.js?v={version}" defer></script>') if active == 'search' else
                       (f'<link rel="stylesheet" href="{root}assets/journal-manager.css?v={version}">'
                        f'<script src="{root}assets/journal-manager.js?v={version}" defer></script>') if active == 'journals' else
+                      (f'<link rel="stylesheet" href="{root}assets/research-directions.css?v={version}">'
+                       f'<script src="{root}assets/research-directions.js?v={version}" defer></script>') if active == 'directions' else
                       f'<script src="{root}assets/daily-update.js?v={version}" defer></script>' if active == 'daily' else '',
     )
 
@@ -115,7 +118,8 @@ def paper_figure(paper: dict, root: str = "./") -> str:
   </figure>'''
 
 
-def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./") -> str:
+def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_labels=None) -> str:
+    topic_labels = topic_labels or {k: v['label'] for k, v in TOPIC_CATALOG.items()}
     facets = paper_facets(paper)
     title = paper.get("title") or "未命名论文"
     doi = paper.get("doi") or ""
@@ -128,7 +132,7 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./") -> str:
     short_authors = ", ".join(author_names[:3]) + (" 等" if len(author_names) > 3 else "")
     topics = string_list(paper.get("topic_tags"))
     tags = "".join(
-        f'<span class="tag">{esc(TOPIC_CATALOG.get(topic, {}).get("label", topic))}</span>'
+        f'<span class="tag">{esc(topic_labels.get(topic, topic))}</span>'
         for topic in topics
     )
     summary = paper.get("summary") or paper.get("abstract") or "暂无摘要，请查看原文。"
@@ -183,6 +187,8 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./") -> str:
         journal_badge += '<span class="publication-type">预印本版本</span>'
     method_badges = "".join(f'<span class="method-focus">{esc(tag)}</span>'
                            for tag in focus_tags(title, paper.get("abstract", "")))
+    direction = paper.get('recommended_direction') or next(iter(topics), '')
+    direction_badge = f'<button type="button" class="text-button paper-direction" data-topic-filter="{esc(direction)}">{esc(topic_labels.get(direction, direction))}</button>' if direction else ''
     figure_html = paper_figure(paper, root) if tier == "core" else ""
     chat_button = (f'<button type="button" class="text-button codex-entry" data-paper-id="{esc(paper["id"])}" '
                    f'data-paper-title="{esc(display_title)}">Codex 对话</button>') if paper.get("id") else ""
@@ -191,7 +197,7 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./") -> str:
  data-topics="{esc(json.dumps(topics, ensure_ascii=False))}" data-venue="{esc(facets['venue_group'])}"
  data-journal="{esc(facets['journal'])}" data-search="{esc(search)}" data-rank="{rank}"
  data-date="{esc(paper.get('published_at'))}">
-  <div class="paper-meta"><span class="source">{esc(SOURCE_LABELS.get(source, source))}</span><span>{esc(str(paper.get('published_at') or '')[:10])}</span>{journal_badge}{method_badges}</div>
+  <div class="paper-meta"><span class="source">{esc(SOURCE_LABELS.get(source, source))}</span><span>{esc(str(paper.get('published_at') or '')[:10])}</span>{journal_badge}{method_badges}{direction_badge}</div>
   <h3 class="{translated_class.strip()}">{title_html}</h3>
   <p class="bibliography"><span class="authors">{esc(short_authors)}</span>{venue_line}</p>
   <p class="abstract">{esc(preview)}</p>
@@ -289,6 +295,12 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
     core = payload.get("core") or []
     extended = payload.get("extended") or []
     all_papers = core + extended
+    current_profile = load_profile()
+    profile = payload.get('research_profile')
+    topic_labels = ({d['id']: d['name'] for d in profile['directions']} if profile else
+                    {k: v['label'] for k, v in TOPIC_CATALOG.items()})
+    shown_directions = active_directions(profile) if profile else [
+        {'id': k, 'name': v} for k, v in topic_labels.items()]
     statuses = payload.get("source_status") or {}
     facets_list = [paper_facets(p) for p in all_papers]
     counts = Counter(source for f in facets_list for source in f["source_ids"])
@@ -302,8 +314,8 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
             source_options.append(f'<optgroup label="{label}">{"".join(options)}</optgroup>')
     unknown_sources = sorted(set(counts) - set(SOURCE_LABELS))
     source_options.extend(f'<option value="{esc(s)}">{esc(s)} · {counts[s]} 篇</option>' for s in unknown_sources)
-    topics = list(dict.fromkeys([*TOPIC_CATALOG, *(t for p in all_papers for t in string_list(p.get("topic_tags")))]))
-    topic_options = "".join(f'<option value="{esc(t)}">{esc(TOPIC_CATALOG.get(t, {}).get("label", t))}</option>' for t in topics)
+    topics = list(dict.fromkeys([*(d['id'] for d in shown_directions), *(t for p in all_papers for t in string_list(p.get("topic_tags")))]))
+    topic_options = "".join(f'<option value="{esc(t)}">{esc(topic_labels.get(t, t))}</option>' for t in topics)
     group_options = "".join(f'<option value="{esc(g["id"])}">{esc(g["id"])}</option>' for g in VENUE_GROUPS)
     journals = {j["name"]: j["group"] for j in JOURNALS}
     journals.update({f["journal"]: f["venue_group"] for f in facets_list if f["journal"]})
@@ -311,8 +323,19 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
     day, generated = display_time(payload.get("generated_at"))
     issue = archive_date or day
     root = "../" if archive_date else "./"
-    core_html = "".join(paper_card(p, "core", i, root) for i, p in enumerate(core))
-    extended_html = "".join(paper_card(p, "extended", i, root) for i, p in enumerate(extended))
+    core_html = "".join(paper_card(p, "core", i, root, topic_labels) for i, p in enumerate(core))
+    extended_html = "".join(paper_card(p, "extended", i, root, topic_labels) for i, p in enumerate(extended))
+    direction_chips = ''.join(f'<button type="button" data-topic-filter="{esc(d["id"])}" aria-pressed="false">{esc(d["name"])}<span>{sum(d["id"] in p.get("topic_tags", []) for p in all_papers)}</span></button>' for d in shown_directions)
+    direction_bar = f'<div class="direction-bar"><span>本期方向</span><div class="direction-chips">{direction_chips}</div>'
+    direction_bar += f'<a href="{root}directions.html">管理方向</a></div>'
+    if not archive_date and profile and profile_revision(profile) != profile_revision(current_profile):
+        direction_bar += '<p class="direction-pending">方向设置已变更，点击“手动更新”后按新设置生成推荐。</p>'
+    def coverage(tier, papers):
+        if not profile:
+            return ''
+        counts = Counter(p.get('recommended_direction') for p in papers)
+        parts = [f'{d["name"]} {counts[d["id"]]} 篇' for d in active_directions(profile, tier)]
+        return '<p class="direction-coverage">方向覆盖：' + esc(' · '.join(parts) if parts else '本期未启用此分区的研究方向') + '</p>'
     missing = sum(source_state(s, statuses)[0] in ("configuration_missing", "authorization_required") for s in SOURCE_CATALOG if s["kind"] == "adapter")
     ok = sum(source_state(s, statuses)[0] in ("ok", "no_data") for s in SOURCE_CATALOG if s["kind"] == "adapter")
     adapter_count = sum(s["kind"] == "adapter" for s in SOURCE_CATALOG)
@@ -347,6 +370,7 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
         extended_policy="每篇均有完整中文精读，点击论文下方展开。" if policy.get("extended_requires_chinese_analysis") else "",
         archive_notice=archive_notice, history_url="./" if archive_date else "archive/",
         update_control=update_control, update_panel=update_panel,
+        direction_bar=direction_bar, core_coverage=coverage('core', core), extended_coverage=coverage('extended', extended),
         generated_at=esc(payload.get('generated_at', '')), update_run_id=esc(payload.get('update_run_id', '')),
         notice=notice, source_options="".join(source_options), health_label=f"{ok} / {adapter_count} 类来源正常",
         topic_options=topic_options, group_options=group_options, journal_options=journal_options,
@@ -412,6 +436,9 @@ def main() -> None:
         title="手动检索文献 | 每日论文推荐", active="search"), encoding="utf-8")
     (OUT / "journals.html").write_text(document(template("journals.html"),
         title="管理期刊 | 每日论文推荐", active="journals"), encoding="utf-8")
+    (OUT / 'directions.html').write_text(document(template('directions.html',
+        profile=esc(json.dumps(load_profile(), ensure_ascii=False))),
+        title='研究方向 | 每日论文推荐', active='directions'), encoding='utf-8')
 
 
 if __name__ == "__main__":

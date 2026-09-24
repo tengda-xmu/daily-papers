@@ -70,6 +70,7 @@
     if (filterCount) { filterCount.textContent = String(activeFilters); filterCount.hidden = activeFilters === 0; }
     $$('.clear-filters').forEach((button) => { button.hidden = !filtering; });
     $$('[data-group-filter]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.groupFilter === selectedVenue)));
+    $$('[data-topic-filter]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.topicFilter === selectedTopic)));
     $$('[data-journal-filter]').forEach((button) => button.classList.toggle('active', button.dataset.journalFilter === selectedJournal));
     if (noData) noData.hidden = cards.length > 0;
     if (noMatch) noMatch.hidden = cards.length === 0 || visible > 0;
@@ -95,6 +96,11 @@
     reset();
     if (journal) journal.value = button.dataset.journalFilter || '';
     showFilters(true); filter(); scrollToReading();
+  }));
+  $$('[data-topic-filter]').forEach((button) => button.addEventListener('click', () => {
+    if (topic) topic.value = topic.value === button.dataset.topicFilter ? '' : button.dataset.topicFilter;
+    filter();
+    if (button.classList.contains('paper-direction')) scrollToReading();
   }));
   $$('[data-group-filter]').forEach((button) => button.addEventListener('click', () => {
     const active = button.getAttribute('aria-pressed') === 'true';

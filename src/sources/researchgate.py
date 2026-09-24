@@ -35,10 +35,10 @@ def publication_url(value: str) -> str:
 class ResearchGateIndexAdapter(GoogleScholarAdapter):
     name = "ResearchGate"
 
-    def __init__(self, api_key: str | None = None, **kwargs):
+    def __init__(self, api_key: str | None = None, queries=None, **kwargs):
         # One bounded query per run; the shared year-scoped 24 h Scholar cache
         # is restored by GitHub Actions, including manual reruns.
-        super().__init__(api_key=api_key, queries=[INDEX_QUERY], include_cns=False, **kwargs)
+        super().__init__(api_key=api_key, queries=queries or [INDEX_QUERY], include_cns=False, **kwargs)
 
     @staticmethod
     def parse_payload(payload: dict) -> list[RawRecord]:

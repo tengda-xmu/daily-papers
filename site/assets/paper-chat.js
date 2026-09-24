@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  if (document.getElementById('manual-search') || document.getElementById('journal-manager')) return;
+  if (document.getElementById('manual-search') || document.getElementById('journal-manager') || document.getElementById('direction-manager')) return;
   const base = 'http://127.0.0.1:43127';
   const local = document.body.dataset.codexLocal === 'true';
   const key = 'daily-papers-codex-session';

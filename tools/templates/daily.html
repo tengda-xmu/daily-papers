@@ -3,6 +3,7 @@ $archive_notice
 <h1 class="sr-only">$title</h1>
 <div class="issue-meta"><span><time>$generated</time> 更新</span><span>每日 07:00 · 北京时间</span>$update_control<a class="source-health" href="#sources">$health_label</a></div>
 $update_panel
+$direction_bar
 <section id="reading" class="reading-section" aria-labelledby="filter-heading" data-total="$total">
   <h2 id="filter-heading" class="sr-only">检索本期论文</h2>
   <noscript><p class="notice">开启 JavaScript 后可使用筛选与排序。论文与目录可直接阅读。</p></noscript>
@@ -30,11 +31,13 @@ $update_panel
   <section id="core-section" class="paper-section" aria-labelledby="core-heading">
     <div class="section-heading"><h2 id="core-heading">核心推荐 <span id="core-count">$core_count 篇</span></h2><a class="section-note" href="#extended-section">扩展阅读</a></div>
     <p class="reading-policy">$reading_policy</p>
+$core_coverage
     <div id="core">$core_html</div><p class="section-empty" id="core-empty" $core_empty>本期尚无完成中文精读的核心论文，可先浏览扩展阅读。</p>
   </section>
   <section id="extended-section" class="paper-section" aria-labelledby="extended-heading">
     <div class="section-heading"><h2 id="extended-heading">扩展阅读 <span id="extended-count">$extended_count 篇</span></h2><a class="section-note" href="$history_url">浏览往期</a></div>
     <p class="reading-policy">$extended_policy</p>
+$extended_coverage
     <div id="extended">$extended_html</div><p class="section-empty" id="extended-empty" $extended_empty>本期暂无扩展阅读。</p>
   </section>
 </section>

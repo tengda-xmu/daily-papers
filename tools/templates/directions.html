@@ -1,0 +1,20 @@
+<section id="direction-manager" data-profile="$profile" aria-labelledby="directions-heading">
+  <header class="page-heading"><div><h1 id="directions-heading">我的研究方向</h1><p class="page-intro">让每日推荐覆盖你正在研究的多个问题。</p></div><a href="./">返回每日推荐</a></header>
+  <div class="direction-connection"><span id="directions-connection">正在连接本机助手…</span><a href="http://127.0.0.1:43127/directions.html" target="_blank" rel="noopener noreferrer">在本机管理</a></div>
+  <details id="directions-pairing" hidden><summary>连接本机论文助手</summary><p>运行“启动论文助手.cmd”，首次粘贴配对码。已记住的浏览器会自动连接。</p><form id="directions-pair-form"><label class="sr-only" for="directions-code">配对码</label><input type="password" id="directions-code" placeholder="粘贴配对码" autocomplete="off" required><button type="submit">连接</button><label><input type="checkbox" id="directions-remember" checked> 记住浏览器</label></form></details>
+  <div class="direction-plan"><div><h2>每日推荐安排</h2><p>优先兼顾各方向，再按方向优先级分配。核心与扩展不重复；不足时保留空缺。</p></div><div class="direction-counts"><label>核心推荐 <input id="directions-core-count" type="number" min="1" max="20" value="5"> 篇</label><label>扩展阅读 <input id="directions-extended-count" type="number" min="1" max="20" value="5"> 篇</label></div></div>
+  <div class="direction-list-heading"><h2>方向列表 <span id="directions-count"></span></h2><div><button id="directions-reload" type="button">刷新配置</button><button id="direction-new" type="button">＋ 添加方向</button></div></div>
+  <p class="direction-help">可分别选择参与核心推荐、扩展阅读或两者。暂停会保留关键词；修改后点击底部“保存并应用”。</p>
+  <div id="directions-list"></div>
+  <section id="direction-editor" hidden aria-labelledby="direction-editor-title">
+    <h2 id="direction-editor-title">添加方向</h2>
+    <form id="direction-form">
+      <label>方向名称<input id="direction-name" required minlength="2" maxlength="60" placeholder="例如：航空结构可靠性"></label>
+      <div class="direction-form-grid"><label>主题关键词<textarea id="direction-keywords" required rows="4" placeholder="每行一个术语或短语，例如：&#10;structural reliability&#10;结构可靠性"></textarea><small>匹配任一主题词；常用英文术语建议放在前面。</small></label><label>限定关键词（可留空）<textarea id="direction-require" rows="4" placeholder="例如仅关注 AI 方法：&#10;machine learning&#10;large language model"></textarea><small>填写后，还需匹配任一限定词；留空表示不限方法。</small></label></div>
+      <label>排除关键词（可留空）<textarea id="direction-exclude" rows="2" placeholder="每行一个；含这些词的文献不进入此方向。"></textarea></label>
+      <div class="direction-editor-actions"><button type="submit" class="primary">加入配置</button><button id="direction-cancel" type="button">取消</button></div>
+    </form>
+  </section>
+  <p class="direction-help">最多 12 个方向，每组最多 24 个关键词。分区只收录符合方向且已完成中文精读的论文；新方向暂缺文献时，会在本期覆盖情况中显示 0 篇。</p>
+  <div class="direction-save"><div><strong id="directions-state">尚未连接</strong><p id="directions-status" role="status" aria-live="polite"></p></div><button id="directions-save" class="primary" type="button" disabled>保存并应用</button><a id="directions-update" href="./#manual-update" hidden>返回首页更新推荐</a></div>
+</section>
