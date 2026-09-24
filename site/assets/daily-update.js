@@ -1,5 +1,6 @@
 (() => {
   'use strict';
+  if (document.documentElement.classList.contains('mobile-public')) return;
   const $ = selector => document.querySelector(selector);
   const button = $('#manual-update');
   if (!button) return;

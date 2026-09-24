@@ -1,6 +1,6 @@
 <h1 id="setup-heading" class="sr-only">设置</h1>
 <div class="settings-groups">
-<details id="library-backup" class="reference-panel">
+<details id="library-backup" class="reference-panel" data-local-only>
   <summary><span>文献库备份与恢复</span><span class="reference-meta">星级、PDF、批注、阅读进度</span></summary>
   <div class="reference-body" id="library-backup-controls">
     <p>文献自动保存在本机。备份可用于迁移到另一台电脑；恢复时保留本机已有评分、批注和阅读进度。</p>
@@ -14,17 +14,17 @@ $sources_panel
   <summary><span>重点期刊目录</span><span class="reference-meta">$group_count 组 / $journal_count 本</span></summary>
   <div class="reference-body">
     <p class="section-description">按出版平台与学科浏览关注期刊。点击期刊可查看当期推荐中的匹配文献；目录收录不代表本期一定有推荐。</p>
-    <div class="directory-actions"><a href="journals.html">＋ 添加期刊 / 管理期刊</a></div>
+    <div class="directory-actions" data-local-only><a href="journals.html">＋ 添加期刊 / 管理期刊</a></div>
     $journals
   </div>
 </details>
-<details id="codex" class="reference-panel">
+<details id="codex" class="reference-panel" data-local-only>
   <summary><span>论文助手 · Codex</span><span class="reference-meta">连接、阅读与翻译</span></summary>
   <div class="reference-body settings-copy">
     <p>双击项目中的 <strong>启动论文助手.cmd</strong>，自动打开本机助手并连接已登录的 Codex。每篇论文下方的“Codex 对话”可用于总结、追问、翻译和配图解释；首次在在线网页使用时，从本机页面复制配对码并粘贴连接。</p><p>电脑和连接程序须保持运行，仅供当前电脑使用。浏览器限制本地连接时，可<a href="http://127.0.0.1:43127/" target="_blank" rel="noopener noreferrer">在本机打开论文助手</a>。无需新增模型 API 密钥，使用你的 Codex 账号额度；相关论文内容会发送给 Codex 分析。结束时双击 <strong>停止论文助手.cmd</strong>。<a href="https://github.com/tengda-xmu/daily-papers/tree/main/connectors/codex_bridge" target="_blank" rel="noopener noreferrer">使用说明</a></p>
   </div>
 </details>
-<details id="libraries" class="reference-panel">
+<details id="libraries" class="reference-panel" data-local-only>
   <summary><span>文献库授权与接口</span><span class="reference-meta">API 密钥与访问权限</span></summary>
   <div class="reference-body settings-copy">
     <details id="elsevier" class="settings-source">
@@ -56,20 +56,20 @@ python -m tools.publish_researchgate</code></pre><p>Windows 可直接使用已�
   <div class="reference-body settings-copy">
 $wechat_manager
 $wechat_directory
-<details class="settings-source"><summary>采集与同步说明</summary><div class="settings-copy">
+<details class="settings-source" data-local-only><summary>采集与同步说明</summary><div class="settings-copy">
     <p><strong>公开文章索引：</strong>每日 06:35 按订阅目录低频检索近期文章，07:00 日报读取成功同步的标题、来源、日期、短片段和公开检索入口。快照缺失或超过 24 小时时，云端尝试补充公开检索。这些内容在<a href="leads.html">科研线索</a>页单独展示。</p><p>微信后台文章列表持续返回 <code>200013</code>，<a href="https://github.com/wechat-article/wechat-article-exporter/issues/200" target="_blank" rel="noopener noreferrer">上游维护者已有接口关闭报告</a>；当前停止调用受限列表接口，公开索引可用不代表微信已解除限制。每天最多 3 次公开查询，缓存 24 小时；遇验证码暂停请求至少 24 小时。</p><p>索引不保证覆盖所有订阅的全部文章，检索片段也不等于全文。链接明确标注“公开检索入口”，需人工验证的跳转请在浏览器中完成；公众号线索不占核心和扩展论文名额。</p><p><strong>WeRSS 订阅管理：</strong>本机管理地址为 <code>http://127.0.0.1:8001/</code>，微信扫码会话与管理密码只保存在本机。网站通过 <code>connector-data</code> 读取元数据，无需开放公网端口；本机定时任务需要电脑开机并登录 Windows。</p><pre><code>powershell -NoProfile -ExecutionPolicy Bypass -File tools/start_wechat.ps1
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/sync_wechat.ps1</code></pre><p><strong>持续扩展订阅：</strong>本机每天 18:00 轮换检索人工智能、智能体、大模型、可靠性、航空航天、结构材料和智能运维主题，筛选后自动添加新账号。排除营销、招聘、中小学教育和会员事务账号；同名歧义账号保留待核验。新增账号进入公开索引筛选目录，账号发现仍依赖有效微信扫码授权。</p>
 <p><a href="https://github.com/tengda-xmu/daily-papers/tree/main/connectors/wechat_sync" target="_blank" rel="noopener noreferrer">本机连接器说明</a> · <a href="https://github.com/tengda-xmu/daily-papers/blob/main/config/wechat_accounts.json" target="_blank" rel="noopener noreferrer">订阅领域与筛选配置</a></p><p><strong>已有远程 WeRSS：</strong>也可把 GitHub Actions 可访问的文章 RSS、Atom 或 JSON 地址保存为 <code>WECHAT_RSS_URLS</code>，需要请求头时配置 <code>WECHAT_RSS_HEADERS</code>。WeRSS 的 <code>/feed/all.json</code> 返回文章，根路径 <code>/rss</code> 是订阅目录；本机地址使用上述同步连接器。</p>
   </div></details>
   </div>
 </details>
-<details id="notifications" class="reference-panel">
+<details id="notifications" class="reference-panel" data-local-only>
   <summary><span>中文精读与消息推送</span><span class="reference-meta">解读模型、企业微信</span></summary>
   <div class="reference-body settings-copy">
     <p>企业微信群机器人地址保存为 <code>WECHAT_WORK_WEBHOOK_URL</code>。推荐优先选择 CNS 子刊，同层级侧重大模型与智能体；核心和扩展阅读均须具备七部分中文精读，并注明依据全文还是摘要。</p><p>已整理的精读会持续复用。为后续新论文自动生成精读，请设置 <code>LLM_API_KEY</code>，可同时设置 <code>LLM_BASE_URL</code> 和 <code>LLM_MODEL</code>。每次运行最多尝试生成核心与扩展名额总数的解读，默认十篇。未配置模型、生成失败或资料不足的论文保留在数据候选库，不用占位文字补足推荐数量。</p>
   </div>
 </details>
-<details id="updates" class="reference-panel">
+<details id="updates" class="reference-panel" data-local-only>
   <summary><span>更新与密钥管理</span><span class="reference-meta">手动更新、本机与云端</span></summary>
   <div class="reference-body settings-copy">
     <p>所有状态以实际运行结果为准。保存密钥后，请在首页点击“手动更新”，运行完成后查看来源状态。推荐主题可在<a href="directions.html">研究方向</a>中管理。</p>

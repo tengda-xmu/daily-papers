@@ -195,7 +195,7 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
     direction = paper.get('recommended_direction') or next(iter(topics), '')
     direction_badge = f'<button type="button" class="text-button paper-direction" data-topic-filter="{esc(direction)}">{esc(topic_labels.get(direction, direction))}</button>' if direction else ''
     figure_html = paper_figure(paper, root) if tier == "core" else ""
-    chat_button = (f'<button type="button" class="text-button codex-entry" data-paper-id="{esc(paper["id"])}" '
+    chat_button = (f'<button type="button" class="text-button codex-entry" data-local-only data-paper-id="{esc(paper["id"])}" '
                    f'data-paper-title="{esc(display_title)}">Codex 对话</button>') if paper.get("id") else ""
     return f'''
 <article class="paper {tier}" data-paper-id="{esc(paper.get('id', ''))}" data-sources="{esc(json.dumps(facets['source_ids'], ensure_ascii=False))}"
@@ -249,7 +249,7 @@ def source_directory(statuses: dict, counts: Counter, root: str = "./", wechat_c
                 message = connector_message
             elif kind == "adapter" and state in ("ok", "no_data"):
                 message += f' 本轮获取 {(statuses.get(item["id"]) or {}).get("count", 0)} 条元数据。'
-            setup_link = f'<a href="{root}setup.html#{SETUP_SECTIONS.get(item["id"], "public")}">授权与配置</a>' if state in ("configuration_missing", "authorization_required", "quota_exhausted", "access_denied") else ""
+            setup_link = f'<a href="{root}setup.html#{SETUP_SECTIONS.get(item["id"], "public")}" data-local-only>授权与配置</a>' if state in ("configuration_missing", "authorization_required", "quota_exhausted", "access_denied") else ""
             state_class = "ok" if state in ("ok", "no_data") else "pending" if state in ("planned", "platform", "not_run") else "warn"
             state_label = STATE_LABELS.get(state, '状态待确认')
             count_link = f'<button type="button" class="text-button" data-source-filter="{esc(item["id"])}">本期 {counts[item["id"]]} 篇</button>'
@@ -409,15 +409,15 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
     extended_html = "".join(paper_card(p, "extended", i, root, topic_labels) for i, p in enumerate(extended))
     direction_chips = ''.join(f'<button type="button" data-topic-filter="{esc(d["id"])}" aria-pressed="false">{esc(d["name"])}<span>{sum(d["id"] in p.get("topic_tags", []) for p in all_papers)}</span></button>' for d in shown_directions)
     direction_bar = f'<div class="direction-bar"><span>本期方向</span><div class="direction-chips">{direction_chips}</div>'
-    direction_bar += f'<a href="{root}directions.html">管理方向</a></div>'
+    direction_bar += f'<a href="{root}directions.html" data-local-only>管理方向</a></div>'
     if not archive_date and profile and profile_revision(profile) != profile_revision(current_profile):
-        direction_bar += '<p class="direction-pending">方向设置已变更，点击“手动更新”后按新设置生成推荐。</p>'
+        direction_bar += '<p class="direction-pending" data-local-only>方向设置已变更，点击“手动更新”后按新设置生成推荐。</p>'
     ok = sum(source_state(s, statuses)[0] in ("ok", "no_data") for s in SOURCE_CATALOG if s["kind"] == "adapter")
     adapter_count = sum(s["kind"] == "adapter" for s in SOURCE_CATALOG)
     cns_children = sum(j["group"] == "CNS 子刊" for j in JOURNALS)
     archive_notice = f'<p class="archive-notice">正在阅读 {esc(archive_date)} 归档。<a href="../">返回最新一期</a></p>' if archive_date else ""
-    update_control = '<button class="manual-update" id="manual-update" type="button">手动更新</button>' if not archive_date else ''
-    update_panel = '''<div id="daily-update-panel" class="daily-update-panel" hidden>
+    update_control = '<button class="manual-update" id="manual-update" type="button" data-local-only>手动更新</button>' if not archive_date else ''
+    update_panel = '''<div id="daily-update-panel" class="daily-update-panel" data-local-only hidden>
   <p id="daily-update-status" role="status" aria-live="polite"></p>
   <form id="daily-update-pair" hidden>
     <p>请启动本机论文助手，首次使用粘贴配对码；记住浏览器后可直接更新。</p>

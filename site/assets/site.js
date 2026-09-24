@@ -2,6 +2,25 @@
   document.documentElement.classList.add('js');
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+  // A phone's loopback address cannot reach the assistant running on the user's PC.
+  // Detect the device, not viewport width: a narrow desktop window still supports it.
+  const mobileDevice = navigator.userAgentData?.mobile || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const mobilePublic = mobileDevice && location.origin !== 'http://127.0.0.1:43127';
+  document.documentElement.classList.toggle('mobile-public', Boolean(mobilePublic));
+  if (mobilePublic) {
+    $$('option[data-local-only]').forEach(option => option.remove());
+    if ($('[data-local-page]')) {
+      const note = document.createElement('section'); note.className = 'mobile-reading-notice';
+      const message = document.createElement('p');
+      message.textContent = '此功能需要在运行论文助手的电脑上使用。手机可直接浏览公开内容，无需配对。';
+      const links = document.createElement('div');
+      $$('#main-navigation a:not([data-local-only])').forEach(link => {
+        const copy = link.cloneNode(true); copy.removeAttribute('aria-current'); links.append(copy);
+      });
+      note.append(message, links); $('#main-content').prepend(note);
+    }
+  }
   if (location.origin === 'http://127.0.0.1:43127') {
     $$('a[href]').forEach((link) => {
       const url = new URL(link.href);

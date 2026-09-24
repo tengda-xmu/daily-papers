@@ -1,5 +1,6 @@
 (() => {
   'use strict';
+  if (document.documentElement.classList.contains('mobile-public')) return;
   const chatScript = new URL(document.currentScript.src), readerAsset = name => new URL(name + chatScript.search, chatScript).href;
   if (document.getElementById('manual-search') || document.getElementById('journal-manager') || document.getElementById('direction-manager')) return;
   const base = 'http://127.0.0.1:43127';

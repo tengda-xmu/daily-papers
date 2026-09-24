@@ -1,5 +1,6 @@
 (() => {
   'use strict';
+  if (document.documentElement.classList.contains('mobile-public')) return;
   const $ = (s) => document.querySelector(s);
   if (!$('#manual-search')) return;
   const base = 'http://127.0.0.1:43127';

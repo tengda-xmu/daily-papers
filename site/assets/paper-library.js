@@ -1,5 +1,6 @@
 (() => {
   'use strict';
+  if (document.documentElement.classList.contains('mobile-public')) return;
   const $ = s => document.querySelector(s), base = 'http://127.0.0.1:43127';
   const library = $('#paper-library'), backup = $('#library-backup-controls');
   const cards = [...document.querySelectorAll('.paper[data-paper-id]')].filter(c=>/^[a-f0-9]{12}$/.test(c.dataset.paperId));
