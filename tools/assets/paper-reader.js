@@ -108,7 +108,7 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
     const anchor=readingAnchor();if(!anchor)return;
     const pid=paper, hash=doc.hash, payload={version:hash,page:anchor.number,rx:anchor.rx,ry:anchor.ry,zoom:$('.reader-zoom').value};
     positionDirty=false;
-    positionSaving=api(`/api/library/papers/${pid}/reading`,{method:'POST',body:JSON.stringify(payload)})
+    positionSaving=api(`/api/library/papers/${pid}/reading`,{method:'POST',body:JSON.stringify(payload),keepalive:true})
       .then(data=>{if(pid===rememberedPaper){remembered.last_version=hash;remembered.positions[hash]=data;}})
       .catch(error=>{if(pid===paper){positionDirty=true;state('阅读进度尚未保存：'+error.message,true);}throw error;});
     try{await positionSaving;}finally{positionSaving=null;}
@@ -285,12 +285,11 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
     observer=new IntersectionObserver(entries=>{for(const e of entries)if(e.isIntersecting){const v=views[Number(e.target.dataset.page)-1];if(v&&!queue.includes(v))queue.push(v);}drain();},{root:pages,rootMargin:'600px 0px'});
     views.forEach(v=>observer.observe(v.node));drawAll();if(anchor)restoreAnchor(anchor);else go(Math.min(current,views.length));zoomControls();
   }
-  function go(number){current=Math.max(1,Math.min(Number(number)||1,views.length || 1));const v=views[current-1];if(v){pages.scrollTop+=v.node.getBoundingClientRect().top-pages.getBoundingClientRect().top-(paired()?26:0);queue.unshift(v);drain();}$('.reader-page-number').value=sourcePage(current);}
+  function go(number){current=Math.max(1,Math.min(Number(number)||1,views.length || 1));const v=views[current-1];if(v){pages.scrollTop+=v.node.getBoundingClientRect().top-pages.getBoundingClientRect().top-(paired()?26:0);queue.unshift(v);drain();}$('.reader-page-number').value=sourcePage(current);schedulePosition();}
   let scrollFrame;
-  pages.onscroll=()=>{cancelAnimationFrame(scrollFrame);scrollFrame=requestAnimationFrame(()=>{
+  pages.onscroll=()=>{schedulePosition();cancelAnimationFrame(scrollFrame);scrollFrame=requestAnimationFrame(()=>{
     if(!views.length)return;const y=pages.getBoundingClientRect().top+Math.min(pages.clientHeight/3,160);let best=views[0];for(const v of views){if(paired()&&v.number%2===0)continue;if(v.node.getBoundingClientRect().top<=y)best=v;else break;}current=best.number;if(document.activeElement!==$('.reader-page-number'))$('.reader-page-number').value=sourcePage(current);
     for(const v of views)if(v.rendered && Math.abs(v.number-current)>5)clearView(v);
-    schedulePosition();
   });};
   let resizeTimer,lastWidth=0;
   function resize(){clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(!visible || !pdf || pages.clientWidth<100)return;if($('.reader-zoom').value==='fit' && Math.abs(lastWidth-pages.clientWidth)>2){lastWidth=pages.clientWidth;epoch++;buildPages(readingAnchor());}},160);}
@@ -374,6 +373,7 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
   splitter.onkeydown=e=>{if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();width(dialog.querySelector('.chat-shell').clientWidth+(e.key==='ArrowLeft'?40:-40));}};
   window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
   document.addEventListener('visibilitychange',()=>{if(document.hidden)savePosition().catch(()=>{});});
+  window.addEventListener('pagehide',()=>savePosition().catch(()=>{}));
   setVisible(visible,false);setToolbarExpanded(toolbarExpanded,false);controls();
   return {update,flush:flushAll,open:()=>{setVisible(true);tab('pdf');},
     showVersion:async hash=>{setVisible(true);tab('pdf');await selectVersion(hash);},
