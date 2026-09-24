@@ -257,6 +257,8 @@ async def translate_pdf(client, store, ask, paper):
     source = source_path(document, directory)
     target = '中文' if ask.translation_target == 'zh' else '英文'
     signature = {'version':2, 'hash':document['hash'], 'target':ask.translation_target, 'model':ask.model, 'instructions':ask.message}
+    if getattr(ask, 'translation_revision', ''):
+        signature['revision'] = ask.translation_revision
     key = hashlib.sha256(json.dumps(signature, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
     work = directory / ('layout-' + key[:24])
     yield {'type':'delta', 'text':f'## PDF 全文翻译 · {target}\n\n正在按原 PDF 的文字位置翻译并生成文件。\n\n'}

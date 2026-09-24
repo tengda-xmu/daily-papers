@@ -48,6 +48,21 @@ class Store:
                 db.execute("ALTER TABLE messages ADD COLUMN attachments TEXT NOT NULL DEFAULT '[]'")
             if "artifact" not in columns:
                 db.execute("ALTER TABLE messages ADD COLUMN artifact TEXT NOT NULL DEFAULT '{}'")
+            if 'request' not in columns:
+                db.execute("ALTER TABLE messages ADD COLUMN request TEXT NOT NULL DEFAULT '{}'")
+            if 'parent_id' not in columns:
+                db.execute('ALTER TABLE messages ADD COLUMN parent_id INTEGER NOT NULL DEFAULT 0')
+                previous = {}
+                for row in db.execute('SELECT id,paper FROM messages ORDER BY id').fetchall():
+                    db.execute('UPDATE messages SET parent_id=? WHERE id=?', (previous.get(row['paper'], 0), row['id']))
+                    previous[row['paper']] = row['id']
+            paper_columns = {r[1] for r in db.execute('PRAGMA table_info(papers)')}
+            if 'active_leaf' not in paper_columns:
+                db.execute('ALTER TABLE papers ADD COLUMN active_leaf INTEGER NOT NULL DEFAULT 0')
+                for row in db.execute('SELECT paper,MAX(id) AS leaf FROM messages GROUP BY paper').fetchall():
+                    db.execute('INSERT INTO papers(id,active_leaf) VALUES(?,?) ON CONFLICT(id) DO UPDATE SET active_leaf=excluded.active_leaf', (row['paper'], row['leaf']))
+            db.execute('CREATE TABLE IF NOT EXISTS branch_choices (paper TEXT NOT NULL,parent_id INTEGER NOT NULL,child_id INTEGER NOT NULL,PRIMARY KEY(paper,parent_id))')
+            db.execute('CREATE INDEX IF NOT EXISTS message_parent ON messages(paper,parent_id)')
 
     @contextmanager
     def connect(self):
@@ -116,7 +131,7 @@ class Store:
     def state(self, paper_id):
         with self.connect() as db:
             row = db.execute("SELECT * FROM papers WHERE id=?", (paper_id,)).fetchone()
-        return dict(row) if row else {"id": paper_id, "thread": None, "document": None}
+        return dict(row) if row else {"id": paper_id, "thread": None, "document": None, 'active_leaf':0}
 
     def set_thread(self, paper_id, thread):
         with self.connect() as db:
@@ -130,13 +145,53 @@ class Store:
         value = self.state(paper_id)["document"]
         return json.loads(value) if value else None
 
-    def history(self, paper_id):
+    def history(self, paper_id, *, leaf=None, all_versions=False):
         with self.connect() as db:
-            rows = [dict(r) for r in db.execute("SELECT id,role,content,status,created,document_hash,error,model,attachments,artifact FROM messages WHERE paper=? ORDER BY id", (paper_id,))]
+            rows = [dict(r) for r in db.execute("SELECT id,role,content,status,created,document_hash,error,model,attachments,artifact,parent_id,request FROM messages WHERE paper=? ORDER BY id", (paper_id,))]
         for row in rows:
             row['attachments'] = json.loads(row['attachments'])
             row['artifact'] = json.loads(row['artifact'])
-        return rows
+            row['request'] = json.loads(row['request'])
+        if all_versions:
+            return rows
+        siblings = {}
+        for row in rows:
+            siblings.setdefault((row['parent_id'], row['role']), []).append(row['id'])
+        current = self.state(paper_id)['active_leaf'] if leaf is None else leaf
+        by_id = {row['id']:row for row in rows}
+        chain, seen = [], set()
+        while current in by_id and current not in seen:
+            seen.add(current)
+            row = by_id[current]
+            row['versions'] = siblings[(row['parent_id'], row['role'])]
+            chain.append(row)
+            current = row['parent_id']
+        return list(reversed(chain))
+
+    def fork(self, paper_id, parent_id):
+        with self.connect() as db:
+            if parent_id and not db.execute('SELECT 1 FROM messages WHERE paper=? AND id=?', (paper_id, parent_id)).fetchone():
+                raise ValueError('找不到此论文的对话位置。')
+            db.execute('UPDATE papers SET active_leaf=?,thread=NULL WHERE id=?', (parent_id, paper_id))
+
+    def select_version(self, paper_id, message_id):
+        rows = {r['id']:r for r in self.history(paper_id, all_versions=True)}
+        if message_id not in rows:
+            raise ValueError('找不到此论文的对话版本。')
+        row = rows[message_id]
+        current = message_id
+        with self.connect() as db:
+            db.execute('INSERT INTO branch_choices VALUES(?,?,?) ON CONFLICT(paper,parent_id) DO UPDATE SET child_id=excluded.child_id', (paper_id, row['parent_id'], message_id))
+            seen = set()
+            while current not in seen:
+                seen.add(current)
+                children = [r['id'] for r in rows.values() if r['parent_id'] == current]
+                if not children:
+                    break
+                selected = db.execute('SELECT child_id FROM branch_choices WHERE paper=? AND parent_id=?', (paper_id, current)).fetchone()
+                current = selected['child_id'] if selected and selected['child_id'] in children else max(children)
+            db.execute('UPDATE papers SET active_leaf=?,thread=NULL WHERE id=?', (current, paper_id))
+        return current
 
     def set_artifact(self, message_id, artifact):
         with self.connect() as db:
@@ -175,13 +230,18 @@ class Store:
             except sqlite3.IntegrityError:
                 return False
 
-    def message(self, paper_id, role, content, status="completed", model="", attachments=()):
+    def message(self, paper_id, role, content, status="completed", model="", attachments=(), request=None):
         doc_hash = (self.document(paper_id) or {}).get("hash")
         with self.connect() as db:
             for attachment in attachments:
                 db.execute('UPDATE screenshots SET used=1 WHERE id=? AND paper=?', (attachment['id'], paper_id))
-            return db.execute("INSERT INTO messages(paper,role,content,status,created,document_hash,model,attachments) VALUES(?,?,?,?,?,?,?,?)",
-                              (paper_id, role, content, status, time.time(), doc_hash, model, json.dumps(list(attachments), ensure_ascii=False))).lastrowid
+            db.execute('INSERT OR IGNORE INTO papers(id) VALUES(?)', (paper_id,))
+            parent = db.execute('SELECT active_leaf FROM papers WHERE id=?', (paper_id,)).fetchone()['active_leaf']
+            identifier = db.execute("INSERT INTO messages(paper,role,content,status,created,document_hash,model,attachments,parent_id,request) VALUES(?,?,?,?,?,?,?,?,?,?)",
+                              (paper_id, role, content, status, time.time(), doc_hash, model, json.dumps(list(attachments), ensure_ascii=False), parent, json.dumps(request or {}, ensure_ascii=False))).lastrowid
+            db.execute('UPDATE papers SET active_leaf=? WHERE id=?', (identifier, paper_id))
+            db.execute('INSERT INTO branch_choices VALUES(?,?,?) ON CONFLICT(paper,parent_id) DO UPDATE SET child_id=excluded.child_id', (paper_id, parent, identifier))
+            return identifier
 
     def update(self, message_id, content, status, error=""):
         with self.connect() as db:
@@ -189,7 +249,7 @@ class Store:
 
     def clear(self, paper_id):
         with self.connect() as db:
-            for table in ("messages", "requests", "translations", "screenshots"):
+            for table in ("messages", "requests", "translations", "screenshots", 'branch_choices'):
                 db.execute(f"DELETE FROM {table} WHERE paper=?", (paper_id,))
             db.execute("DELETE FROM papers WHERE id=?", (paper_id,))
 

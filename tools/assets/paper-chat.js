@@ -27,6 +27,7 @@
   let screenshotPending = false, screenshotPaper = '', screenshots = [];
   const imageUrls = new Map();
   let previewEpoch = 0;
+  let activeLeaf = 0, followLatest = true, editing = null;
   const drafts = new Map();
   const modes = {
     question: { prompt: '', hint: '围绕这篇论文提出具体问题，回答会附关键证据、分析依据和适用边界。', placeholder: '例如：作者如何验证可靠性？哪些证据支持这一结论？', send: '发送问题' },
@@ -49,6 +50,7 @@
     <section class="chat-connect"><p>先运行“启动论文助手.cmd”。首次连接请粘贴配对码，记住浏览器后可自动连接。</p><div class="chat-pair-row"><input type="password" autocomplete="off" aria-label="本机配对码" placeholder="首次连接的配对码"><button class="chat-button" type="button" data-chat-action="connect">连接</button></div><label class="chat-remember"><input type="checkbox" checked>记住此浏览器，下次自动连接</label><p class="chat-local-help"><a class="chat-local-link" target="_blank" rel="noopener noreferrer">在本机打开论文助手</a> · 电脑须保持运行</p></section>
     <div class="chat-workspace">
     <div class="chat-messages" id="chat-reading-pane" aria-label="对话记录"></div>
+    <button class="chat-scroll-latest text-button" type="button" data-chat-action="latest" hidden>↓ 回到最新回复</button>
     <div class="chat-history-actions"><button class="chat-button chat-translation-export" type="button" data-chat-action="export-translation" hidden>导出译文 PDF</button><button class="text-button" type="button" data-chat-action="export-pdf">对话 PDF</button><button class="text-button" type="button" data-chat-action="export">对话文本</button><button class="text-button" type="button" data-chat-action="clear">清除记录</button></div>
     <div class="chat-height-resizer" role="separator" tabindex="0" aria-orientation="horizontal" aria-label="调整对话阅读区域高度" aria-controls="chat-reading-pane" title="上下拖动调整阅读区域；双击恢复默认"><span aria-hidden="true"></span><small aria-hidden="true">拖动调整阅读区域</small></div>
     <div class="chat-bottom">
@@ -69,6 +71,18 @@
   const notice = (text) => { $('.chat-notice').textContent = text; };
   const documentNotice = (text, state = '') => { $('.chat-document-status').textContent = text; $('.chat-document-status').dataset.state = state; };
   const endpoint = (suffix = '') => `/api/papers/${paperId}${suffix}`;
+  function scrollLatest(force = false) {
+    if (force || followLatest) {
+      followLatest = true;
+      $('.chat-messages').scrollTop = $('.chat-messages').scrollHeight;
+    }
+    $('.chat-scroll-latest').hidden = followLatest;
+  }
+  $('.chat-messages').addEventListener('scroll', () => {
+    const pane = $('.chat-messages');
+    followLatest = pane.scrollHeight - pane.scrollTop - pane.clientHeight < 64;
+    $('.chat-scroll-latest').hidden = followLatest;
+  });
   $('.chat-remember input').checked = readStorage('localStorage', rememberKey) !== 'off';
   const remembered = document.createElement('p'); remembered.className = 'chat-remembered'; remembered.hidden = true;
   remembered.innerHTML = '<span>已记住此浏览器 · 自动连接</span><button type="button" class="text-button" data-chat-action="forget-browser">取消记住</button>';
@@ -198,7 +212,7 @@
   function updateModelHint() {
     const selected = chosenModel();
     $('.chat-model-help').textContent = selected ? `${selected.images ? '支持文字与图片' : '仅支持文字'} · 用于下一次发送` : '此前所选模型当前不可用，请重新选择。';
-    $('.chat-send').disabled = busy || documentPending || remoteDocumentPending || screenshotPending || !selected;
+    $('.chat-composer .chat-send').disabled = busy || documentPending || remoteDocumentPending || screenshotPending || !selected || Boolean(editing);
   }
   function loadModels(data) {
     availableModels = data.models || [{id: data.model, label: data.model, images: data.images, is_default: true}];
@@ -225,7 +239,7 @@
     $('.chat-translation').hidden = !translating;
     $('.chat-mode-help').textContent = layoutTranslation ? '直接生成译文 PDF，保留页数、分栏、图片和公式；译文适配原文字区域。需载入带文字层的 PDF。' : fullTranslation ? '按原文顺序分批翻译，中断可继续；完成后可导出原文与译文 PDF。' : imageTranslation ? '翻译截图中的文字，保留公式和术语，标注识别不清处。' : config.hint;
     $('.chat-composer textarea').placeholder = fullTranslation ? '可选：填写术语或表达偏好；留空即可开始全文翻译。' : imageTranslation ? '可选：填写术语偏好或需要翻译的区域…' : documentTranslation ? '例如：翻译 Abstract 或 Methods 章节。' : config.placeholder;
-    $('.chat-send').textContent = layoutTranslation ? '翻译并生成 PDF' : fullTranslation ? '开始全文翻译' : config.send;
+    $('.chat-composer .chat-send').textContent = layoutTranslation ? '翻译并生成 PDF' : fullTranslation ? '开始全文翻译' : config.send;
     dialog.querySelectorAll('[data-mode]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === mode)));
   }
   function rememberDraft() { drafts.set(draftKey(), { text: $('.chat-composer textarea').value }); }
@@ -312,11 +326,12 @@
     if (value) progressTimer = setInterval(tickProgress, 1000);
     const locked = value || documentPending || remoteDocumentPending || screenshotPending;
     $('.chat-documents').setAttribute('aria-busy', String(documentPending || remoteDocumentPending));
-    $('.chat-send').disabled = locked || !chosenModel();
     $('#chat-model').disabled = locked || !availableModels.length;
     $('[data-chat-action="stop"]').hidden = !value;
-    dialog.querySelectorAll('[data-mode], .chat-translation select, [data-chat-action="fulltext"], [data-chat-action="fetch-pdf"], [data-chat-action="upload"], [data-chat-action="screenshot"], .chat-attachment-remove, [data-chat-action="clear"], [data-chat-action="forget-browser"]').forEach(b => { b.disabled = locked; });
-    $('[data-chat-action="forget-browser"]').disabled = locked || connecting;
+    dialog.querySelectorAll('[data-mode], .chat-translation select, [data-chat-action="fulltext"], [data-chat-action="fetch-pdf"], [data-chat-action="upload"], [data-chat-action="screenshot"], .chat-attachment-remove, [data-chat-action="clear"], [data-chat-action="forget-browser"]').forEach(b => { b.disabled = locked || Boolean(editing); });
+    dialog.querySelectorAll('.chat-revise, .chat-version-button').forEach(b => { b.disabled = locked || b.dataset.unavailable === 'true'; });
+    $('.chat-composer .chat-send').disabled = locked || !chosenModel() || Boolean(editing);
+    $('[data-chat-action="forget-browser"]').disabled = locked || connecting || Boolean(editing);
     updateTranslationExport();
   };
 
@@ -492,13 +507,33 @@
     }
   }
 
-  function message(role, text, state = 'completed', documentHash = '', error = '', model = '', messageId = null, attachments = [], artifact = {}) {
+  function message(role, text, state = 'completed', documentHash = '', error = '', model = '', messageId = null, attachments = [], artifact = {}, row = null) {
     const article = document.createElement('article'); article.className = 'chat-message'; article.dataset.role = role;
+    if (messageId) article.dataset.messageId = messageId;
     article.dataset.documentHash = documentHash || '';
     const label = document.createElement('div'); label.className = 'chat-message-label';
     const name = document.createElement('span'); name.className = 'chat-message-name'; name.textContent = role === 'user' ? '你' : `Codex${model ? ` · ${model}` : ''}${state === 'interrupted' ? ' · 已停止' : state === 'failed' ? ' · 未完成' : ''}`;
     label.append(name);
     const body = document.createElement('div'); body.className = 'chat-message-body';
+    const actions = document.createElement('div'); actions.className = 'chat-message-actions';
+    if (row?.versions?.length > 1) {
+      const position = row.versions.indexOf(row.id);
+      const versions = document.createElement('span'); versions.className = 'chat-versions';
+      for (const [offset, title, glyph] of [[-1, '上一个版本', '‹'], [1, '下一个版本', '›']]) {
+        const button = document.createElement('button'); button.type = 'button'; button.className = 'text-button chat-version-button';
+        button.textContent = glyph; button.setAttribute('aria-label', title);
+        button.dataset.unavailable = String(position + offset < 0 || position + offset >= row.versions.length);
+        button.disabled = busy || button.dataset.unavailable === 'true';
+        button.onclick = () => switchVersion(row.versions[position + offset]);
+        if (offset === 1) { const count = document.createElement('span'); count.textContent = `${position + 1} / ${row.versions.length}`; count.setAttribute('aria-label', `版本 ${position + 1}，共 ${row.versions.length} 个`); versions.append(count); }
+        versions.append(button);
+      }
+      actions.append(versions);
+    }
+    if (role === 'user' && row) {
+      const edit = document.createElement('button'); edit.type = 'button'; edit.className = 'text-button chat-revise chat-edit'; edit.textContent = '编辑'; edit.disabled = busy;
+      edit.onclick = () => editQuestion(row); actions.append(edit);
+    }
     if (role === 'assistant') {
       const copy = document.createElement('button'); copy.type = 'button'; copy.className = 'text-button'; copy.textContent = '复制';
       copy.disabled = !text;
@@ -506,7 +541,12 @@
         try { await navigator.clipboard.writeText(body.innerText); notice('已复制回答。'); }
         catch { notice('复制失败，可选中文字后复制。'); }
       };
-      label.append(copy);
+      actions.append(copy);
+      if (row && row.parent_id) {
+        const regenerate = document.createElement('button'); regenerate.type = 'button'; regenerate.className = 'text-button chat-revise chat-regenerate';
+        regenerate.textContent = state === 'completed' ? '重新生成' : '重试'; regenerate.disabled = busy || state === 'running';
+        regenerate.onclick = () => send(null, {kind:'regenerate', row}); actions.append(regenerate);
+      }
       if (messageId && text) {
         const pdf = document.createElement('button'); pdf.type = 'button'; pdf.className = 'text-button chat-answer-pdf'; pdf.textContent = '导出 PDF';
         const exportPaper = paperId;
@@ -516,7 +556,7 @@
         if (layout) pdf.textContent = artifact.filename ? '下载原版式译文 PDF' : '译文 PDF 尚未完成';
         pdf.disabled = state === 'running' || (layout && !artifact.filename);
         pdf.onclick = () => downloadPdf(exportPaper, messageId, translation, pdf).catch(e => notice(e.message));
-        label.append(pdf);
+        actions.append(pdf);
         if (translation && state !== 'running') {
           const footer = document.createElement('div'); footer.className = 'chat-translation-download';
           const note = document.createElement('span'); note.textContent = state === 'completed' ? '全文译文已保存，可导出原文与译文。' : '本次翻译尚未完成，可导出已保存内容。';
@@ -529,7 +569,7 @@
       }
     }
     format(body, text || (state === 'running' ? '正在等待 Codex 回复…' : state === 'interrupted' ? '本次生成已停止，尚未收到回答。可以重新发送问题。' : state === 'failed' ? '本次未生成回答，请根据下方提示重试。' : '本次没有返回可显示的内容，请重新提问。'));
-    article.prepend(label, body); $('.chat-messages').append(article);
+    article.prepend(label, body, actions); $('.chat-messages').append(article);
     if (attachments.length) {
       const previews = document.createElement('div'); previews.className = 'chat-message-attachments';
       article.append(previews); renderScreenshots(previews, attachments, paperId, false);
@@ -538,13 +578,53 @@
     return body;
   }
 
-  async function loadPaper() {
+  function drawHistory(rows) {
+    $('.chat-messages').replaceChildren();
+    for (const row of rows) message(row.role, row.content, row.status, row.document_hash, row.error, row.model, row.id, row.attachments || [], row.artifact || {}, row);
+  }
+  function closeEditor() {
+    if (!editing) return;
+    const article = $(`[data-message-id="${editing.id}"]`);
+    article?.querySelector('.chat-inline-editor')?.remove();
+    if (article) { article.querySelector('.chat-message-body').hidden = false; article.querySelector('.chat-message-actions').hidden = false; }
+    editing = null; setBusy(busy);
+  }
+  function editQuestion(row, value = row.request?.message || row.content) {
+    if (busy || documentPending || screenshotPending) return;
+    closeEditor(); editing = row;
+    const article = $(`[data-message-id="${row.id}"]`); if (!article) { editing = null; return; }
+    article.querySelector('.chat-message-body').hidden = true; article.querySelector('.chat-message-actions').hidden = true;
+    const form = document.createElement('form'); form.className = 'chat-inline-editor';
+    const input = document.createElement('textarea'); input.value = value; input.maxLength = 12000; input.rows = 4; input.required = true; input.setAttribute('aria-label', '编辑已发送的问题');
+    const hint = document.createElement('p'); hint.textContent = '保存后从此处重新回答；原版本及后续对话会保留。截图和翻译范围沿用原问题。';
+    const controls = document.createElement('div');
+    const cancel = document.createElement('button'); cancel.type = 'button'; cancel.className = 'chat-button'; cancel.textContent = '取消'; cancel.onclick = closeEditor;
+    const save = document.createElement('button'); save.type = 'submit'; save.className = 'chat-send'; save.textContent = '保存并重新发送';
+    controls.append(cancel, save); form.append(input, hint, controls); article.append(form);
+    form.onsubmit = event => { event.preventDefault(); if (input.value.trim()) send(null, {kind:'edit', row, text:input.value.trim()}); };
+    input.onkeydown = event => { if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closeEditor(); } else if (event.key === 'Enter' && (event.ctrlKey || event.metaKey) && !event.isComposing) { event.preventDefault(); form.requestSubmit(); } };
+    setBusy(false); save.disabled = false; input.focus();
+  }
+  async function switchVersion(messageId) {
+    if (busy || !messageId) return;
+    closeEditor(); setBusy(true);
+    try {
+      await api(endpoint('/branch'), {method:'POST', body:JSON.stringify({message_id:messageId, expected_leaf:activeLeaf})});
+      await loadPaper({anchor:messageId}); notice('已切换对话版本，可从此处继续提问。');
+    } catch (error) { notice(error.message); }
+    finally { setBusy(false); }
+  }
+
+  async function loadPaper({anchor = 0} = {}) {
     if (!paperId) return;
     clearTimeout(refreshTimer);
     const currentPaper = paperId;
     const data = await api(endpoint());
     if (currentPaper !== paperId) return;
     history = data.history;
+    activeLeaf = data.active_leaf || history.at(-1)?.id || 0;
+    const oldScroll = $('.chat-messages').scrollTop, stick = followLatest;
+    closeEditor();
     $('.chat-paper-title').textContent = data.paper.title_zh || data.paper.title;
     $('.chat-paper-title').title = $('.chat-paper-title').textContent;
     updateTranslationExport();
@@ -554,7 +634,7 @@
       p.textContent = '从一个具体问题开始。你可以先总结这篇论文，再追问方法、实验依据或研究启发。'; $('.chat-messages').append(p);
     }
     for (const row of history) {
-      const body = message(row.role, row.content, row.status, row.document_hash, row.error, row.model, row.id, row.attachments || [], row.artifact || {});
+      const body = message(row.role, row.content, row.status, row.document_hash, row.error, row.model, row.id, row.attachments || [], row.artifact || {}, row);
       if (row.status === 'running') showProgress(body, data.progress || { started_at: row.created, message: '本次回答仍在生成' });
     }
     const doc = data.document;
@@ -568,7 +648,14 @@
       if (remoteDocumentPending) documentNotice('本机正在获取或解析资料，请稍候…', 'loading');
       else documentNotice(doc ? (doc.kind === 'pdf' ? `已载入 PDF · ${doc.page_count} 页${doc.scan_pages ? ` · ${doc.scan_pages} 页需图片识别` : ''}` : '已载入网页全文；可继续获取 PDF 以按页阅读。') : '未载入 PDF，可上传或直接获取。', doc ? 'ready' : '');
     }
-    $('.chat-messages').scrollTop = $('.chat-messages').scrollHeight;
+    followLatest = stick;
+    if (anchor) {
+      const article = $(`[data-message-id="${anchor}"]`), pane = $('.chat-messages');
+      if (article) pane.scrollTop += article.getBoundingClientRect().top - pane.getBoundingClientRect().top - 8;
+      followLatest = pane.scrollHeight - pane.scrollTop - pane.clientHeight < 64;
+    } else if (stick) scrollLatest(true);
+    else $('.chat-messages').scrollTop = oldScroll;
+    $('.chat-scroll-latest').hidden = followLatest;
     if (!controller) {
       setBusy(data.busy);
       if ((data.busy || data.preparing) && dialog.open) refreshTimer = setTimeout(() => loadPaper().catch(e => notice(e.message)), 3000);
@@ -646,6 +733,7 @@
       releasePreviews(); screenshots = []; drawScreenshots(); history = []; currentDocument = null;
       updateTranslationExport(); $('.chat-settings-toggle').textContent = '模型与资料';
     }
+    closeEditor(); followLatest = true;
     paperId = id; lastTrigger = trigger;
     remoteDocumentPending = false;
     restoreDraft();
@@ -668,28 +756,35 @@
     }
   }
 
-  async function send(event) {
-    event.preventDefault();
-    const fullTranslation = mode === 'translate' && ['full', 'layout'].includes($('.chat-translation-source').value);
-    const layoutPdf = mode === 'translate' && $('.chat-translation-source').value === 'layout';
-    const imageTranslation = mode === 'translate' && $('.chat-translation-source').value === 'image';
-    const text = $('.chat-composer textarea').value.trim() || (fullTranslation ? '请完整翻译已载入论文的全部正文，保留原文顺序、术语、公式与引用。' : screenshots.length ? imageTranslation ? '请逐段翻译上传截图中的全部可见文字。' : '请分析上传截图，说明其中的关键信息与含义。' : '');
+  async function send(event, revision = null) {
+    event?.preventDefault();
+    if (editing && !revision) { notice('请先保存或取消正在编辑的问题。'); return; }
+    const user = revision ? (revision.row.role === 'user' ? revision.row : history.find(row => row.id === revision.row.parent_id)) : null;
+    const task = revision ? (Object.keys(revision.row.request || {}).length ? revision.row.request : user?.request || {}) : {mode, translation_source:$('.chat-translation-source').value, translation_target:$('.chat-translation-target').value};
+    const taskMode = task.mode || 'question', taskSource = task.translation_source || 'document';
+    const attached = revision ? user?.attachments || [] : screenshots;
+    const fullTranslation = taskMode === 'translate' && ['full', 'layout'].includes(taskSource);
+    const layoutPdf = taskMode === 'translate' && taskSource === 'layout';
+    const imageTranslation = taskMode === 'translate' && taskSource === 'image';
+    const text = revision ? (revision.text || task.message || user?.content || '') : $('.chat-composer textarea').value.trim() || (fullTranslation ? '请完整翻译已载入论文的全部正文，保留原文顺序、术语、公式与引用。' : attached.length ? imageTranslation ? '请逐段翻译上传截图中的全部可见文字。' : '请分析上传截图，说明其中的关键信息与含义。' : '');
     if (busy || documentPending || remoteDocumentPending || screenshotPending) { if (documentPending || remoteDocumentPending || screenshotPending) notice('资料正在准备，请完成后再发送。'); return; }
     if (!text) { notice(imageTranslation ? '请先上传或粘贴待译截图。' : mode === 'translate' ? '请粘贴待译原文，或选择“论文章节”后指定翻译范围。' : '请输入问题，或上传截图。'); return; }
     if (!token) { notice('请先配对并连接本机 Codex。'); return; }
     if (!paperId) { notice('请先选择一篇论文。'); return; }
-    if (imageTranslation && !screenshots.length) { notice('请先上传或粘贴待译截图。'); return; }
-    if (mode === 'translate' && screenshots.length && !imageTranslation) { notice('已附加截图，请选择“截图翻译”；翻译全文前请先移除截图。'); return; }
+    if (imageTranslation && !attached.length) { notice('请先上传或粘贴待译截图。'); return; }
+    if (taskMode === 'translate' && attached.length && !imageTranslation) { notice('已附加截图，请选择“截图翻译”；翻译全文前请先移除截图。'); return; }
     if (fullTranslation && !currentDocument) { notice('请先上传 PDF、获取论文 PDF 或获取网页全文，再开始全文翻译。'); return; }
     if (layoutPdf && currentDocument?.kind !== 'pdf') { notice('保留版式翻译需要原 PDF，请先上传 PDF 或点击“获取论文 PDF”。'); return; }
     const model = chosenModel();
     if (!model) { notice('请先选择当前可用的 Codex 模型。'); return; }
-    if ((mode === 'figure' || screenshots.length) && !model.images) { notice('所选模型仅支持文字，请切换支持图片的模型后发送截图或解释配图。'); return; }
-    const sentScreenshots = [...screenshots];
+    if ((taskMode === 'figure' || attached.length) && !model.images) { notice('所选模型仅支持文字，请切换支持图片的模型后发送截图或解释配图。'); return; }
+    const sentScreenshots = [...attached];
     const empty = $('.chat-empty'); if (empty) empty.remove();
-    message('user', text, 'completed', '', '', '', null, sentScreenshots); const body = message('assistant', '', 'running');
+    if (revision) { closeEditor(); drawHistory(history.slice(0, history.findIndex(row => row.id === revision.row.id))); }
+    if (revision?.kind !== 'regenerate') message('user', text, 'completed', '', '', '', null, sentScreenshots);
+    const body = message('assistant', '', 'running');
     showProgress(body);
-    $('.chat-messages').scrollTop = $('.chat-messages').scrollHeight;
+    scrollLatest(true);
     let answer = '', done = false, finished = false, failure = '', submitted = false;
     const sentPaper = paperId;
     const sentDraft = draftKey();
@@ -698,11 +793,13 @@
     const activeController = new AbortController(); controller = activeController;
     try {
       const response = await api('/api/ask', { method: 'POST', stream: true, signal: activeController.signal,
-        body: JSON.stringify({ paper_id: paperId, message: text, mode, model: model.id, attachment_ids: sentScreenshots.map(x => x.id),
-          translation_target: $('.chat-translation-target').value, translation_source: $('.chat-translation-source').value, request_id: crypto.randomUUID() }) });
-      $('.chat-composer textarea').value = '';
+        body: JSON.stringify({ paper_id: paperId, message: text, mode:taskMode, model: model.id, attachment_ids: sentScreenshots.map(x => x.id),
+          pages:task.pages || '', translation_target:task.translation_target || 'zh', translation_source:taskSource, expected_leaf:activeLeaf,
+          edit_message_id:revision?.kind === 'edit' ? revision.row.id : 0, regenerate_message_id:revision?.kind === 'regenerate' ? revision.row.id : 0,
+          request_id: crypto.randomUUID() }) });
+      if (!revision) $('.chat-composer textarea').value = '';
       submitted = true;
-      screenshots = []; drawScreenshots();
+      if (!revision) { screenshots = []; drawScreenshots(); }
       const reader = response.body.getReader(), decoder = new TextDecoder(); let buffer = '';
       while (true) {
         let timeout;
@@ -724,7 +821,7 @@
             answer += value.text; body.textContent = answer;
             body.closest('.chat-message').querySelector('.text-button').disabled = !answer;
             showProgress(body, { ...(value.translation ? {} : { message: '正在生成回答，内容将逐步显示' }), ...(value.model_activity === false ? {} : {model_activity_at: Date.now() / 1000}) });
-            $('.chat-messages').scrollTop = $('.chat-messages').scrollHeight;
+            scrollLatest();
           }
           if (value.type === 'progress') { showProgress(body, value); notice(value.message); }
           if (value.type === 'activity') showProgress(body, value);
@@ -750,18 +847,19 @@
       body.closest('.chat-message').querySelector('.chat-progress')?.remove();
       format(body, answer || failure || '本次未收到回答，可以重新发送问题。');
       if (sentPaper === paperId) {
-        if (!finished && !$('.chat-composer textarea').value) $('.chat-composer textarea').value = text;
-        rememberDraft();
+        if (!revision && !finished && !$('.chat-composer textarea').value) $('.chat-composer textarea').value = text;
+        if (!revision) rememberDraft();
         await loadPaper().catch(() => {});
+        if (revision?.kind === 'edit' && !submitted) editQuestion(revision.row, text);
         if (finished && layoutPdf) {
           const row = latestTranslation();
           if (row?.artifact?.kind === 'layout-pdf') await downloadPdf(sentPaper, row.id, true).catch(e => notice(e.message + ' 可点击“下载原版式译文 PDF”重试。'));
         }
-        if (!finished && sentScreenshots.length) {
+        if (!revision && !finished && sentScreenshots.length) {
           const pendingIds = new Set(screenshots.map(x => x.id));
           screenshots = sentScreenshots.map(x => ({...x, sent: x.sent || (submitted && !pendingIds.has(x.id))})); drawScreenshots();
         }
-      } else drafts.set(sentDraft, { text: finished ? '' : text });
+      } else if (!revision) drafts.set(sentDraft, { text: finished ? '' : text });
     }
   }
 
@@ -783,6 +881,7 @@
 
   async function action(name) {
     try {
+      if (name === 'latest') return scrollLatest(true);
       if (name === 'settings') return toggleSettings();
       if (name === 'connect') return await connect();
       if (name === 'stop') return await stop();
@@ -890,7 +989,12 @@
     notice(`后续请求将使用 ${$('#chat-model').value}，当前论文的对话记录会保留。`);
   });
   updateMode();
-  $('.chat-composer textarea').addEventListener('keydown', event => { if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) { event.preventDefault(); $('.chat-composer').requestSubmit(); } });
+  $('.chat-paste-hint').textContent = 'Enter 发送 · Shift+Enter 换行';
+  $('.chat-composer textarea').addEventListener('keydown', event => {
+    if (event.key === 'Enter' && !event.isComposing && event.keyCode !== 229 && (!event.shiftKey || event.ctrlKey || event.metaKey)) {
+      event.preventDefault(); $('.chat-composer').requestSubmit();
+    }
+  });
   $('.chat-close').onclick = async () => { clearTimeout(reconnectTimer); await stop(); dialog.close(); if (lastTrigger) lastTrigger.focus(); };
   dialog.addEventListener('cancel', () => { clearTimeout(reconnectTimer); stop(); });
   function reconnectWhenVisible() {

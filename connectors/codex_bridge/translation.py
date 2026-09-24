@@ -59,8 +59,11 @@ async def translate_document(client, store, ask, paper):
     document = store.document(ask.paper_id)
     batches = translation_batches(document)
     target = "中文" if ask.translation_target == "zh" else "英文"
-    signature = json.dumps({"version": 1, "hash": document["hash"], "target": ask.translation_target, "model": ask.model,
-                            "instructions": ask.message, "batches": batches}, ensure_ascii=False, sort_keys=True)
+    settings = {"version": 1, "hash": document["hash"], "target": ask.translation_target, "model": ask.model,
+                "instructions": ask.message, "batches": batches}
+    if getattr(ask, 'translation_revision', ''):
+        settings['revision'] = ask.translation_revision
+    signature = json.dumps(settings, ensure_ascii=False, sort_keys=True)
     cache_key = hashlib.sha256(signature.encode()).hexdigest()
     saved = store.translation(ask.paper_id, cache_key)
     completed = saved.get("parts", [])
