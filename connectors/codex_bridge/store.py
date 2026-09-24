@@ -63,6 +63,7 @@ class Store:
                     db.execute('INSERT INTO papers(id,active_leaf) VALUES(?,?) ON CONFLICT(id) DO UPDATE SET active_leaf=excluded.active_leaf', (row['paper'], row['leaf']))
             db.execute('CREATE TABLE IF NOT EXISTS branch_choices (paper TEXT NOT NULL,parent_id INTEGER NOT NULL,child_id INTEGER NOT NULL,PRIMARY KEY(paper,parent_id))')
             db.execute('CREATE INDEX IF NOT EXISTS message_parent ON messages(paper,parent_id)')
+            db.execute('CREATE TABLE IF NOT EXISTS annotations (paper TEXT NOT NULL,document_hash TEXT NOT NULL,revision INTEGER NOT NULL,items TEXT NOT NULL,PRIMARY KEY(paper,document_hash))')
 
     @contextmanager
     def connect(self):
@@ -249,7 +250,7 @@ class Store:
 
     def clear(self, paper_id):
         with self.connect() as db:
-            for table in ("messages", "requests", "translations", "screenshots", 'branch_choices'):
+            for table in ("messages", "requests", "translations", "screenshots", 'branch_choices', 'annotations'):
                 db.execute(f"DELETE FROM {table} WHERE paper=?", (paper_id,))
             db.execute("DELETE FROM papers WHERE id=?", (paper_id,))
 

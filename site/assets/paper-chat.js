@@ -1,5 +1,6 @@
 (() => {
   'use strict';
+  const chatScript = new URL(document.currentScript.src), readerAsset = name => new URL(name + chatScript.search, chatScript).href;
   if (document.getElementById('manual-search') || document.getElementById('journal-manager') || document.getElementById('direction-manager')) return;
   const base = 'http://127.0.0.1:43127';
   const local = document.body.dataset.codexLocal === 'true';
@@ -28,6 +29,7 @@
   const imageUrls = new Map();
   let previewEpoch = 0;
   let activeLeaf = 0, followLatest = true, editing = null;
+  let reader = null, readerPromise = null;
   const drafts = new Map();
   const modes = {
     question: { prompt: '', hint: '围绕这篇论文提出具体问题，回答会附关键证据、分析依据和适用边界。', placeholder: '例如：作者如何验证可靠性？哪些证据支持这一结论？', send: '发送问题' },
@@ -39,7 +41,7 @@
   dialog.className = 'paper-chat';
   dialog.setAttribute('aria-labelledby', 'chat-heading');
   dialog.innerHTML = `<div class="chat-width-resizer" role="separator" tabindex="0" aria-orientation="vertical" aria-label="调整对话侧栏宽度" aria-controls="chat-shell" title="左右拖动调整宽度；双击恢复默认"></div><div class="chat-shell" id="chat-shell">
-    <header class="chat-header"><div class="chat-heading-row"><h2 id="chat-heading">Codex 论文对话</h2><button class="chat-close" type="button" aria-label="关闭对话">×</button></div><p class="chat-paper-title"></p><div class="chat-status-row"><p class="chat-status" role="status">未连接本机 Codex</p><button class="text-button chat-settings-toggle" type="button" data-chat-action="settings" aria-expanded="false" aria-controls="chat-settings">模型与资料</button></div>
+    <header class="chat-header"><div class="chat-heading-row"><h2 id="chat-heading">Codex 论文对话</h2><button class="chat-close" type="button" aria-label="关闭对话">×</button></div><p class="chat-paper-title"></p><div class="chat-status-row"><p class="chat-status" role="status">未连接本机 Codex</p><button class="text-button" type="button" data-chat-action="reader">原文阅读</button><button class="text-button chat-settings-toggle" type="button" data-chat-action="settings" aria-expanded="false" aria-controls="chat-settings">模型与资料</button></div>
     <div class="chat-settings" id="chat-settings" hidden><div class="chat-model-row"><label for="chat-model">模型</label><select id="chat-model" aria-describedby="chat-model-help" disabled><option value="">连接后加载可用模型</option></select></div><p class="chat-model-help" id="chat-model-help">选择将用于下一次发送。</p>
     <section class="chat-documents" aria-label="论文资料">
       <div class="chat-doc-actions"><button type="button" class="chat-button" data-chat-action="upload">上传 PDF</button><button type="button" class="chat-button" data-chat-action="fetch-pdf">获取论文 PDF</button></div>
@@ -117,6 +119,32 @@
     updateRemembered();
   }
   const refreshLayout = setupLayout();
+  async function ensureReader() {
+    if (!readerPromise) readerPromise = (async () => {
+      const link = document.createElement('link'); link.rel='stylesheet'; link.href=readerAsset('paper-reader.css'); document.head.append(link);
+      const module = await import(readerAsset('paper-reader.js'));
+      reader = module.createReader({dialog, assets:new URL('.',chatScript), api, onDocument:action, onLayout:refreshLayout,
+        onSelection:async selected => {
+          if (busy || editing || documentPending || screenshotPending) { notice('请先完成当前操作，再翻译或提问。'); return false; }
+          if (selected.documentHash !== currentDocument?.hash) { notice('原文已更换，请重新选择文字。'); return false; }
+          if (screenshots.length) { notice('请先发送或移除待发送截图，再处理原文选段。'); return false; }
+          rememberDraft();
+          if (selected.action === 'question') {
+            mode='question'; restoreDraft();
+            const input=$('.chat-composer textarea'), quote=`关于原文 [${selected.label}]：\n“${selected.text}”\n\n`;
+            if (input.value.length + quote.length > input.maxLength) { notice('当前草稿和选段过长，请先整理草稿。'); return false; }
+            input.value=quote+input.value;rememberDraft();input.focus();return true;
+          }
+          mode='translate'; translationSource='text';$('.chat-translation-source').value='text';$('.chat-translation-target').value=selected.action==='translate-en'?'en':'zh';restoreDraft();
+          const previous=$('.chat-composer textarea').value;$('.chat-composer textarea').value=selected.text;rememberDraft();
+          const key=draftKey();reader.showChat();await send(null);
+          if (previous) {drafts.set(key,{text:previous});if(draftKey()===key){$('.chat-composer textarea').value=previous;rememberDraft();}}
+          return true;
+        }});
+      return reader;
+    })().catch(error=>{readerPromise=null;notice('原文阅读器加载失败：'+error.message);throw error;});
+    return readerPromise;
+  }
   function setupLayout() {
     const storageKey = 'daily-papers-chat-layout';
     const widthHandle = $('.chat-width-resizer'), heightHandle = $('.chat-height-resizer');
@@ -486,6 +514,7 @@
             const version = parent.closest('.chat-message').dataset.documentHash;
             if (!version) throw new Error('此回答未关联全文资料版本，请对照原始资料核查引用。');
             const src = await api(endpoint(`/source/${piece.slice(1,-1)}?version=${encodeURIComponent(version)}`));
+            if (/^\[P\d+\]$/.test(piece) && currentDocument?.kind === 'pdf' && version === currentDocument.hash) reader?.showPage(Number(piece.slice(2,-1)));
             box.textContent = `${piece}\n${src.scan ? '此页为扫描图片，需对照原 PDF 核查。' : src.text}`;
           }
           catch (e) { box.textContent = e.message; }
@@ -639,6 +668,7 @@
     }
     const doc = data.document;
     currentDocument = doc;
+    if (dialog.open) ensureReader().then(view => view.update(currentPaper, doc)).catch(error => notice(error.message));
     $('.chat-settings-toggle').textContent = '模型与资料' + (doc ? doc.kind === 'pdf' ? ` · PDF ${doc.page_count} 页` : ' · 已载入全文' : '');
     if (!screenshotPending) { screenshots = data.screenshots || []; drawScreenshots(); }
     remoteDocumentPending = Boolean(data.preparing);
@@ -727,6 +757,7 @@
   }
 
   async function open(id, title, trigger) {
+    if (reader?.hasUnsaved()) { try { await reader.flush(); } catch { notice('批注尚未保存，请在左侧重试或备份后再切换论文。'); return; } }
     if (busy) await stop();
     rememberDraft();
     if (paperId !== id) {
@@ -741,6 +772,7 @@
     $('.chat-paper-title').title = $('.chat-paper-title').textContent;
     $('.chat-local-link').href = `${base}/?paper=${encodeURIComponent(id || '')}`;
     if (!dialog.open) dialog.showModal();
+    ensureReader().then(view=>view.update(id,currentDocument)).catch(error=>notice(error.message));
     refreshLayout();
     if (token || deviceToken || $('.chat-pair-row input').value.trim()) await connect();
     else { $('.chat-connect').hidden = false; $('.chat-messages').replaceChildren(); status('未连接本机 Codex'); }
@@ -881,6 +913,7 @@
 
   async function action(name) {
     try {
+      if (name === 'reader') { const view=await ensureReader();view.open();await view.update(paperId,currentDocument);return; }
       if (name === 'latest') return scrollLatest(true);
       if (name === 'settings') return toggleSettings();
       if (name === 'connect') return await connect();
@@ -898,7 +931,7 @@
       if (name === 'fetch-pdf') return prepareDocument('/fetch-pdf', null, '正在获取并解析论文 PDF…');
       if (name === 'fulltext') return prepareDocument('/fulltext', null, '正在获取网页全文…');
       if (name === 'clear' && window.confirm('清除这篇论文在本机助手中的资料和对话？Codex 自身会话历史仍由 Codex 管理。')) {
-        const data = await api(endpoint(), { method: 'DELETE' }); releasePreviews(); screenshots = []; drawScreenshots(); await loadPaper(); notice(data.message);
+        const data = await api(endpoint(), { method: 'DELETE' }); reader?.discardChanges(); releasePreviews(); screenshots = []; drawScreenshots(); await loadPaper(); notice(data.message);
       }
       if (name === 'export') {
         const data = await api(endpoint());
@@ -910,6 +943,7 @@
   }
   async function forgetBrowser() {
     if (busy || documentPending || remoteDocumentPending || screenshotPending) return;
+    await reader?.flush();
     if (deviceToken) await api('/api/session/forget', { method: 'POST', body: JSON.stringify({ device_token: deviceToken }) }, false);
     clearTimeout(reconnectTimer);
     deviceToken = ''; writeStorage('localStorage', browserKey, ''); clearSession();
@@ -940,6 +974,7 @@
   });
   async function prepareDocument(path, body, pendingText) {
     if (busy || documentPending || remoteDocumentPending || screenshotPending) return;
+    try { await reader?.flush(); } catch { notice('请先保存或备份原 PDF 的批注，再更换资料。'); return; }
     const targetPaper = paperId;
     documentPending = true; setBusy(busy); documentNotice(pendingText, 'loading'); notice(pendingText);
     let outcome = '', failed = false;
@@ -995,8 +1030,8 @@
       event.preventDefault(); $('.chat-composer').requestSubmit();
     }
   });
-  $('.chat-close').onclick = async () => { clearTimeout(reconnectTimer); await stop(); dialog.close(); if (lastTrigger) lastTrigger.focus(); };
-  dialog.addEventListener('cancel', () => { clearTimeout(reconnectTimer); stop(); });
+  $('.chat-close').onclick = async () => { try { await reader?.flush(); } catch { notice('批注尚未保存，请先重试或备份。'); return; } clearTimeout(reconnectTimer); await stop(); dialog.close(); if (lastTrigger) lastTrigger.focus(); };
+  dialog.addEventListener('cancel', event => { event.preventDefault(); $('.chat-close').click(); });
   function reconnectWhenVisible() {
     if (dialog.open && !document.hidden && !busy && (token || deviceToken) && $('.chat-status').dataset.state === 'offline') connect();
   }

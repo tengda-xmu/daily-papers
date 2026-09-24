@@ -26,6 +26,7 @@ from .daily_update import DailyUpdater, UpdateRequest
 from .directions import DirectionManager, DirectionChange
 from .screenshots import MAX_IMAGE_BYTES, MAX_SCREENSHOTS, save_screenshot
 from .conversations import REQUEST_FIELDS, saved_request, dialogue_context
+from .annotations import AnnotationSet, current_pdf, read_annotations, save_annotations, export_annotated_pdf
 
 ROOT = Path(__file__).resolve().parents[2]
 PORT = 43127
@@ -131,6 +132,8 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         max_body = MAX_BYTES + 65536 if request.url.path.endswith("/pdf") else 65536
         if request.url.path.endswith('/screenshots'):
             max_body = MAX_IMAGE_BYTES + 65536
+        if request.url.path.endswith('/annotations'):
+            max_body = 2 * 1024 * 1024
         if request.url.path == "/api/pair" or request.url.path.startswith("/api/session/"):
             max_body = 1024
         try:
@@ -155,7 +158,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         response.headers["Cache-Control"] = "no-store"
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["Referrer-Policy"] = "no-referrer"
-        response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
+        response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'self'; font-src 'self' data: blob:; img-src 'self' data: blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
         return response
 
     @app.exception_handler(ValueError)
@@ -377,6 +380,35 @@ def create_app(root=ROOT, runtime=None, rpc=None):
             content = await asyncio.to_thread(export_pdf, paper, messages)
         filename = f"{paper_id}-{'answer-' + str(message_id) if message_id else 'conversation'}.pdf"
         return Response(content, media_type="application/pdf", headers={"Content-Disposition": f'attachment; filename="{filename}"'})
+
+    @app.get('/api/papers/{paper_id}/pdf')
+    async def original_pdf(paper_id: str, version: str = ''):
+        _, path = current_pdf(store, paper_id, version)
+        return FileResponse(path, media_type='application/pdf', filename='original.pdf', content_disposition_type='inline')
+
+    @app.get('/api/papers/{paper_id}/annotations')
+    async def annotations(paper_id: str, version: str = ''):
+        current_pdf(store, paper_id, version)
+        return read_annotations(store, paper_id, version)
+
+    @app.post('/api/papers/{paper_id}/annotations')
+    async def annotate(paper_id: str, data: AnnotationSet):
+        return save_annotations(store, paper_id, data)
+
+    @app.get('/api/papers/{paper_id}/annotated-pdf')
+    async def annotated_pdf(paper_id: str, version: str = ''):
+        _, path = current_pdf(store, paper_id, version)
+        data = read_annotations(store, paper_id, version)
+        content = await asyncio.to_thread(export_annotated_pdf, path, data['items'])
+        return Response(content, media_type='application/pdf', headers={'Content-Disposition':'attachment; filename="annotated.pdf"'})
+
+    @app.get('/api/papers/{paper_id}/reading-text')
+    async def reading_text(paper_id: str, version: str = ''):
+        store.paper(paper_id)
+        doc = store.document(paper_id)
+        if not doc or version != doc['hash']:
+            raise HTTPException(409, '原文已更换，请重新打开阅读区。')
+        return {'pages':doc['pages']}
 
     @app.get("/api/papers/{paper_id}/source/{label}")
     async def source(paper_id: str, label: str, version: str = ""):
@@ -779,9 +811,18 @@ def create_app(root=ROOT, runtime=None, rpc=None):
 
     @app.get("/assets/{name}")
     async def asset(name: str):
-        if name not in ("paper-chat.js", "paper-chat.css", "site.css", "site.js", "daily-update.js", "manual-search.js", "manual-search.css", "journal-manager.js", "journal-manager.css", "research-directions.js", "research-directions.css", "favicon.svg"):
+        if name not in ("paper-reader.js", "paper-reader.css", "paper-chat.js", "paper-chat.css", "site.css", "site.js", "daily-update.js", "manual-search.js", "manual-search.css", "journal-manager.js", "journal-manager.css", "research-directions.js", "research-directions.css", "favicon.svg"):
             raise HTTPException(404)
         return FileResponse(root / "tools/assets" / name)
+
+    @app.get('/assets/vendor/pdfjs/{name:path}')
+    async def pdfjs_asset(name: str):
+        directory = (root/'tools/assets/vendor/pdfjs').resolve()
+        path = (directory/name).resolve()
+        if not path.is_relative_to(directory) or not path.is_file() or path.suffix not in ('.mjs', '.css', '.bcmap', '.pfb', '.ttf', '.wasm', '.bin'):
+            raise HTTPException(404)
+        mime = 'text/javascript' if path.suffix == '.mjs' else 'application/wasm' if path.suffix == '.wasm' else None
+        return FileResponse(path, media_type=mime)
 
     @app.get('/assets/figures/{name}')
     async def recommendation_figure(name: str):
