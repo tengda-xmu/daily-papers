@@ -96,6 +96,100 @@ def pdf_bytes():
     return output.getvalue()
 
 
+def screenshot_bytes(format='PNG'):
+    from PIL import Image
+    from PIL.PngImagePlugin import PngInfo
+    output = BytesIO()
+    metadata = PngInfo(); metadata.add_text('private-metadata', 'must not be retained')
+    Image.new('RGB', (96, 64), '#17496f').save(output, format=format, pnginfo=metadata)
+    return output.getvalue()
+
+
+def upload_image(client, headers, paper=P1, **changes):
+    file = changes.pop('file', ('screenshot.png', screenshot_bytes(), 'image/png'))
+    return client.post(f'/api/papers/{paper}/screenshots', files={'file': file}, headers=headers, **changes)
+
+
+def test_screenshot_upload_is_private_paper_scoped_and_persistent(bridge):
+    from PIL import Image
+    from connectors.codex_bridge.store import Store
+    c, app, _ = bridge
+    assert upload_image(c, {}).status_code == 401
+    h = login(c, app)
+    assert upload_image(c, {**h, 'Origin': 'https://evil.example'}).status_code == 403
+    response = upload_image(c, h, file=('../../secret.png', screenshot_bytes(), 'image/png'))
+    assert response.status_code == 200
+    item = response.json()
+    assert item['name'] == 'secret.png' and set(item) == {'id', 'name', 'width', 'height'}
+    url = f'/api/papers/{P1}/screenshots/{item["id"]}'
+    assert c.get(url).status_code == 401
+    preview = c.get(url, headers=h)
+    assert preview.status_code == 200 and preview.headers['content-type'] == 'image/png'
+    assert not Image.open(BytesIO(preview.content)).info
+    assert c.get(f'/api/papers/{P2}/screenshots/{item["id"]}', headers=h).status_code == 400
+    assert c.get(f'/api/papers/{P1}', headers=h).json()['screenshots'] == [item]
+    assert Store(app.state.store.runtime, app.state.store.root).screenshots(P1, pending=True) == [item]
+    assert c.delete(url, headers=h).status_code == 200
+    assert c.get(url, headers=h).status_code == 400
+
+
+def test_screenshot_validation_limits_and_non_image_payloads(bridge, monkeypatch):
+    c, app, _ = bridge; h = login(c, app)
+    for data in (b'<svg onload="alert(1)"></svg>', b'not an image', b''):
+        assert upload_image(c, h, file=('fake.png', data, 'image/png')).status_code == 400
+    from connectors.codex_bridge.screenshots import MAX_IMAGE_BYTES
+    assert upload_image(c, h, file=('large.png', b'x' * (MAX_IMAGE_BYTES + 1), 'image/png')).status_code == 400
+    monkeypatch.setattr('connectors.codex_bridge.screenshots.MAX_IMAGE_PIXELS', 1)
+    assert upload_image(c, h).status_code == 400
+    monkeypatch.setattr('connectors.codex_bridge.screenshots.MAX_IMAGE_PIXELS', 16_000_000)
+    for _ in range(4): assert upload_image(c, h).status_code == 200
+    assert upload_image(c, h).status_code == 400
+    assert len(app.state.store.screenshots(P1, pending=True)) == 4
+
+
+def test_screenshots_sent_as_real_images_and_saved_with_message(bridge):
+    c, app, rpc = bridge; h = login(c, app)
+    items = [upload_image(c, h).json() for _ in range(2)]
+    response = ask(c, h, attachment_ids=[x['id'] for x in items], mode='figure')
+    assert response.status_code == 200 and '"status": "completed"' in response.text
+    assert len(rpc.inputs[-1][2]) == 2
+    assert all(path.is_file() and path.suffix == '.png' for path in rpc.inputs[-1][2])
+    assert '[上传截图1]' in rpc.inputs[-1][1]
+    history = c.get(f'/api/papers/{P1}', headers=h).json()
+    assert history['history'][0]['attachments'] == items and history['screenshots'] == []
+    assert c.delete(f'/api/papers/{P1}/screenshots/{items[0]["id"]}', headers=h).status_code == 400
+    paths = list(rpc.inputs[-1][2])
+    assert c.delete(f'/api/papers/{P1}', headers=h).status_code == 200
+    assert not any(path.exists() for path in paths)
+    assert not app.state.store.screenshots(P1)
+
+
+def test_screenshot_translation_needs_no_pdf_and_never_silently_ignored(bridge):
+    c, app, rpc = bridge; h = login(c, app)
+    item = upload_image(c, h).json()
+    assert ask(c, h, mode='translate', translation_source='image').status_code == 400
+    assert ask(c, h, mode='translate', translation_source='full', attachment_ids=[item['id']]).status_code == 400
+    assert ask(c, h, mode='translate', translation_source='text', attachment_ids=[item['id']]).status_code == 400
+    result = ask(c, h, mode='translate', translation_source='image', attachment_ids=[item['id']], message='翻译截图中的文字')
+    assert '"status": "completed"' in result.text
+    assert len(rpc.inputs[-1][2]) == 1 and '本轮上传截图中的可见文字' in rpc.inputs[-1][1]
+    assert app.state.store.document(P1) is None
+
+
+def test_screenshot_checks_before_model_use_and_does_not_replace_pdf(bridge):
+    c, app, rpc = bridge; h = login(c, app)
+    app.state.store.set_document(P1, {'kind': 'html', 'name':'Article', 'hash':'abc', 'pages':[], 'page_count':0, 'scan_pages':0})
+    item = upload_image(c, h).json()
+    assert ask(c, h, paper=P2, attachment_ids=[item['id']]).status_code == 400
+    assert ask(c, h, attachment_ids=['../.env']).status_code == 400
+    assert ask(c, h, attachment_ids=[item['id']] * 2).status_code == 400
+    assert ask(c, h, attachment_ids=[item['id']] * 5).status_code == 422
+    assert ask(c, h, attachment_ids=[item['id']], model='other-model').status_code == 400
+    assert not rpc.inputs and not app.state.store.history(P1)
+    assert app.state.store.document(P1)['hash'] == 'abc'
+    assert len(app.state.store.screenshots(P1, pending=True)) == 1
+
+
 def test_private_routes_pairing_origin_host_and_preflight(bridge):
     c, app, _ = bridge
     assert c.get('/api/health').json()['service'] == 'daily-papers-codex'

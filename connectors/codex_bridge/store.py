@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from contextlib import contextmanager
 import json
 import hashlib
 from pathlib import Path
@@ -31,6 +32,9 @@ class Store:
                 CREATE TABLE IF NOT EXISTS trusted_browsers (
                   token_hash TEXT PRIMARY KEY, origin TEXT NOT NULL,
                   created REAL NOT NULL, expires REAL NOT NULL);
+                CREATE TABLE IF NOT EXISTS screenshots (
+                  id TEXT PRIMARY KEY, paper TEXT NOT NULL, metadata TEXT NOT NULL,
+                  used INTEGER NOT NULL DEFAULT 0);
                 UPDATE messages SET status='interrupted' WHERE status='running';
             """)
             columns = {r[1] for r in db.execute("PRAGMA table_info(messages)")}
@@ -40,11 +44,18 @@ class Store:
                 db.execute("ALTER TABLE messages ADD COLUMN error TEXT NOT NULL DEFAULT ''")
             if "model" not in columns:
                 db.execute("ALTER TABLE messages ADD COLUMN model TEXT NOT NULL DEFAULT ''")
+            if "attachments" not in columns:
+                db.execute("ALTER TABLE messages ADD COLUMN attachments TEXT NOT NULL DEFAULT '[]'")
 
+    @contextmanager
     def connect(self):
         db = sqlite3.connect(self.db)
         db.row_factory = sqlite3.Row
-        return db
+        try:
+            with db:
+                yield db
+        finally:
+            db.close()
 
     @staticmethod
     def browser_hash(credential):
@@ -114,7 +125,35 @@ class Store:
 
     def history(self, paper_id):
         with self.connect() as db:
-            return [dict(r) for r in db.execute("SELECT id,role,content,status,created,document_hash,error,model FROM messages WHERE paper=? ORDER BY id", (paper_id,))]
+            rows = [dict(r) for r in db.execute("SELECT id,role,content,status,created,document_hash,error,model,attachments FROM messages WHERE paper=? ORDER BY id", (paper_id,))]
+        for row in rows:
+            row['attachments'] = json.loads(row['attachments'])
+        return rows
+
+    def screenshots(self, paper_id, *, pending=False):
+        with self.connect() as db:
+            return [json.loads(r['metadata']) for r in db.execute(
+                'SELECT metadata FROM screenshots WHERE paper=?' + (' AND used=0' if pending else '') + ' ORDER BY rowid', (paper_id,))]
+
+    def screenshot(self, paper_id, identifier):
+        from .screenshots import screenshot_path
+        path = screenshot_path(self.directory(paper_id), identifier)
+        found = next((r for r in self.screenshots(paper_id) if r['id'] == identifier), None)
+        if not found or not path.is_file():
+            raise ValueError('截图不存在或已清除，请重新上传。')
+        return found, path
+
+    def add_screenshot(self, paper_id, metadata):
+        with self.connect() as db:
+            db.execute('INSERT INTO screenshots(id,paper,metadata) VALUES(?,?,?)',
+                       (metadata['id'], paper_id, json.dumps(metadata, ensure_ascii=False)))
+
+    def remove_screenshot(self, paper_id, identifier):
+        _, path = self.screenshot(paper_id, identifier)
+        with self.connect() as db:
+            if not db.execute('DELETE FROM screenshots WHERE id=? AND paper=? AND used=0', (identifier, paper_id)).rowcount:
+                raise ValueError('截图已用于对话；如需删除，请清除该论文的本机记录。')
+        path.unlink(missing_ok=True)
 
     def claim(self, request_id, paper_id):
         with self.connect() as db:
@@ -124,11 +163,13 @@ class Store:
             except sqlite3.IntegrityError:
                 return False
 
-    def message(self, paper_id, role, content, status="completed", model=""):
+    def message(self, paper_id, role, content, status="completed", model="", attachments=()):
         doc_hash = (self.document(paper_id) or {}).get("hash")
         with self.connect() as db:
-            return db.execute("INSERT INTO messages(paper,role,content,status,created,document_hash,model) VALUES(?,?,?,?,?,?,?)",
-                              (paper_id, role, content, status, time.time(), doc_hash, model)).lastrowid
+            for attachment in attachments:
+                db.execute('UPDATE screenshots SET used=1 WHERE id=? AND paper=?', (attachment['id'], paper_id))
+            return db.execute("INSERT INTO messages(paper,role,content,status,created,document_hash,model,attachments) VALUES(?,?,?,?,?,?,?,?)",
+                              (paper_id, role, content, status, time.time(), doc_hash, model, json.dumps(list(attachments), ensure_ascii=False))).lastrowid
 
     def update(self, message_id, content, status, error=""):
         with self.connect() as db:
@@ -136,7 +177,7 @@ class Store:
 
     def clear(self, paper_id):
         with self.connect() as db:
-            for table in ("messages", "requests", "translations"):
+            for table in ("messages", "requests", "translations", "screenshots"):
                 db.execute(f"DELETE FROM {table} WHERE paper=?", (paper_id,))
             db.execute("DELETE FROM papers WHERE id=?", (paper_id,))
 
