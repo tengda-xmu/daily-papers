@@ -237,7 +237,7 @@ def test_scopus_old_date_sorted_empty_cache_is_not_reused(tmp_path):
     asyncio.run(run())
 
 
-def test_journal_gbt_structured_names_volume_issue_pages_and_doi():
+def test_journal_gbt_structured_names_volume_issue_pages_without_online_suffix():
     row = crossref_rows({'message': {'items': [{
         'DOI': '10.1234/xyz', 'title': ['Evidence and models'], 'container-title': ['Test Journal'],
         'published': {'date-parts': [[2025, 4, 3]]}, 'author': [
@@ -245,19 +245,50 @@ def test_journal_gbt_structured_names_volume_issue_pages_and_doi():
         'type': 'journal-article', 'volume': '12', 'issue': '3', 'page': '101-110',
     }]}})[0]
     citation = reference(asdict(row), date(2026, 9, 24))
-    assert citation['text'] == 'Smith J A, 王明. Evidence and models[J/OL]. Test Journal, 2025, 12(3): 101-110[2026-09-24]. DOI:10.1234/xyz.'
+    assert citation['text'] == 'Smith J A, 王明. Evidence and models[J]. Test Journal, 2025, 12(3): 101-110.'
     assert citation['notes'] == []
+    assert row.doi == '10.1234/xyz'  # Retain identifiers for original/PDF links.
+
+
+def test_journal_citation_matches_requested_article_number_example():
+    row = crossref_rows({'message': {'items': [{
+        'DOI': '10.1234/example',
+        'URL': 'https://example.org/paper',
+        'title': ['Kriging-assisted hybrid reliability design and optimization of offshore wind turbine support structure based on a portfolio allocation strategy'],
+        'container-title': ['Ocean Engineering'],
+        'published': {'date-parts': [[2024, 3, 1]]},
+        'author': [{'family': 'Meng', 'given': 'D'}, {'family': 'Yang', 'given': 'H'},
+                   {'family': 'Yang', 'given': 'S'}, {'family': 'Another', 'given': 'Author'}],
+        'type': 'journal-article', 'volume': '295', 'article-number': '116842',
+    }]}})[0]
+    citation = reference(asdict(row), date(2026, 9, 24))
+    assert citation['text'] == ('Meng D, Yang H, Yang S, et al. Kriging-assisted hybrid reliability design '
+        'and optimization of offshore wind turbine support structure based on a portfolio allocation '
+        'strategy[J]. Ocean Engineering, 2024, 295: 116842.')
+    assert citation['notes'] == []
+
+
+def test_incomplete_journal_citation_uses_year_and_reports_missing_fields():
+    paper = {'title': 'An early article', 'authors': ['Smith J'], 'venue': 'Test Journal',
+             'published_at': '2025-04-03', 'doi': '10.1234/early',
+             'landing_url': 'https://example.org/early',
+             'raw_metadata': {'bibliography': {'type': 'journal-article'}}}
+    citation = reference(paper, date(2026, 9, 24))
+    assert citation['text'] == 'Smith J. An early article[J]. Test Journal, 2025.'
+    assert any('页码/文章号不全' in note for note in citation['notes'])
 
 
 def test_unknown_and_preprint_citations_never_invent_bibliography():
     unknown = reference({'title': 'Unknown paper', 'source': 'Google Scholar', 'venue': 'Smith - 2025 - website',
                          'landing_url': 'https://example.org/paper'}, date(2026, 9, 24))
     assert '[EB/OL]' in unknown['text'] and 'Smith - 2025' not in unknown['text']
+    assert '[2026-09-24]. https://example.org/paper.' in unknown['text']
     assert '2025' not in unknown['text']
     assert len(unknown['notes']) >= 3
     preprint = reference({'title': 'A preprint', 'source': 'arXiv', 'published_at': '2025-01-02',
                           'landing_url': 'https://arxiv.org/abs/2501.00001'}, date(2026, 9, 24))
     assert '[PP/OL]' in preprint['text'] and 'arXiv (2025-01-02)' in preprint['text']
+    assert '[2026-09-24]. https://arxiv.org/abs/2501.00001.' in preprint['text']
     many = reference({'title': 'A paper', 'authors': ['Smith J', 'Jones A', 'Taylor B', 'Walker C']})
     assert 'et al. A paper' in many['text'] and 'et al..' not in many['text']
 

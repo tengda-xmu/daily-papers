@@ -3,6 +3,8 @@
 Supported templates: journal articles, proceedings papers, preprints and web
 articles. This is not a replacement for a full reference manager's CSL engine.
 Never infer volume/page numbers or silently treat search snippets as journals.
+Journal references use the requested compact print-style template: [J], year,
+volume(issue), pages/article number, without access dates, URLs or DOI suffixes.
 """
 from datetime import date
 import re
@@ -72,7 +74,9 @@ def reference(paper, accessed=None):
     else:
         marker = 'EB'
         notes.append('文献类型未确定，暂按网络文献著录')
-    online = bool(url or doi)
+    # A DOI or landing page does not make a journal article a web reference.
+    # Keep identifiers in the result metadata, outside its compact citation.
+    online = marker != 'J' and bool(url or doi)
     head = (names.rstrip('. ') + '. ' if names else '') + title + '[' + marker + ('/OL' if online else '') + ']'
     volume, issue, page = (plain(b.get(k)) for k in ('volume', 'issue', 'page'))
     if marker == 'J':
@@ -80,7 +84,7 @@ def reference(paper, accessed=None):
             notes.append('缺期刊名')
         if not volume or not page:
             notes.append('卷期或页码/文章号不全，可能为在线优先出版')
-        details = ', '.join(x for x in (venue, year if volume or issue else published, volume) if x)
+        details = ', '.join(x for x in (venue, year, volume) if x)
         details += '(' + issue + ')' if issue else ''
         details += ': ' + page if page else ''
         text = head + ('. ' + details if details else '')
@@ -102,8 +106,8 @@ def reference(paper, accessed=None):
     if online:
         text += '[' + str(accessed or date.today()) + ']'
     text = text.rstrip('. ') + '.'
-    if url and not (doi and url.rstrip('/').casefold() == 'https://doi.org/' + doi.casefold()):
+    if online and url and not (doi and url.rstrip('/').casefold() == 'https://doi.org/' + doi.casefold()):
         text += ' ' + url.rstrip('.') + '.'
-    if doi:
+    if online and doi:
         text += ' DOI:' + doi + '.'
     return {'text': text, 'notes': notes, 'standard': 'GB/T 7714-2025'}
