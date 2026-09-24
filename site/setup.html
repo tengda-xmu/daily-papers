@@ -7,11 +7,11 @@
   <meta name="theme-color" content="#153e64">
   <title>设置 | 每日论文推荐</title>
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./assets/site.css?v=d37b3655f9">
-  <link rel="stylesheet" href="./assets/paper-chat.css?v=d37b3655f9">
-  <script src="./assets/site.js?v=d37b3655f9" defer></script>
-  <script src="./assets/paper-chat.js?v=d37b3655f9" defer></script>
-<link rel="stylesheet" href="./assets/wechat-subscriptions.css?v=d37b3655f9"><script src="./assets/wechat-subscriptions.js?v=d37b3655f9" defer></script>
+  <link rel="stylesheet" href="./assets/site.css?v=69d5a0f4c8">
+  <link rel="stylesheet" href="./assets/paper-chat.css?v=69d5a0f4c8">
+  <script src="./assets/site.js?v=69d5a0f4c8" defer></script>
+  <script src="./assets/paper-chat.js?v=69d5a0f4c8" defer></script>
+<link rel="stylesheet" href="./assets/wechat-subscriptions.css?v=69d5a0f4c8"><script src="./assets/wechat-subscriptions.js?v=69d5a0f4c8" defer></script>
 </head>
 <body id="top">
   <a class="skip-link" href="#main-content">跳至正文</a>
@@ -220,10 +220,18 @@ python -m tools.publish_researchgate</code></pre><p>Windows 可直接使用已�
     <div class="wechat-form-grid">
       <label>公众号名称 <input id="wechat-name" required maxlength="100" placeholder="例如：机器之心"></label>
       <label>微信号（可选）<input id="wechat-alias" maxlength="80" placeholder="填写账号的微信号"></label>
-      <label>分组（可自定义）<input id="wechat-group" maxlength="60" value="科研综合" list="wechat-groups" required><datalist id="wechat-groups"></datalist></label>
+      <div class="wechat-group-field"><label for="wechat-group">分组</label><select id="wechat-group" aria-describedby="wechat-group-help" required><option value="人工智能与机器学习">人工智能与机器学习（13 个）</option><option value="智能体与大模型">智能体与大模型（6 个）</option><option value="可靠性与疲劳">可靠性与疲劳（7 个）</option><option value="航空航天">航空航天（7 个）</option><option value="结构与材料设计">结构与材料设计（6 个）</option><option value="智能运维与健康监测">智能运维与健康监测（5 个）</option><option value="科研综合" selected>科研综合（0 个）</option><option value="">＋ 自定义分组…</option></select>
+        <label id="wechat-custom-group-field" hidden>自定义分组名称<input id="wechat-custom-group" maxlength="60" placeholder="例如：概率统计与数据分析" disabled></label>
+        <p id="wechat-group-help" class="wechat-help">跨学科科研资讯、学术资源及暂未细分的研究方向</p>
+      </div>
     </div>
     <div class="wechat-form-actions"><label><input id="wechat-enabled" type="checkbox" checked>启用订阅</label><button id="wechat-save" type="submit">保存订阅</button><button id="wechat-cancel" type="button" hidden>取消编辑</button></div>
   </fieldset></form>
+  <details id="wechat-group-statistics" class="wechat-group-statistics"><summary>分组类型与统计 <span id="wechat-group-total">7 类 · 32 个公众号</span></summary>
+    <p class="wechat-help" id="wechat-group-statistics-note">已发布目录：共 32 个公众号，启用 32 个，9 个归入多个分组。</p>
+    <table class="wechat-group-table"><caption class="sr-only">公众号分组统计</caption><thead><tr><th scope="col">分组</th><th scope="col">涵盖内容</th><th scope="col">订阅</th><th scope="col">启用</th></tr></thead><tbody id="wechat-group-rows"><tr><th scope="row">人工智能与机器学习</th><td>机器学习、深度学习算法与人工智能综合研究</td><td>13</td><td>13</td></tr><tr><th scope="row">智能体与大模型</th><td>大语言模型、智能体、多模态与生成式人工智能</td><td>6</td><td>6</td></tr><tr><th scope="row">可靠性与疲劳</th><td>可靠性分析、疲劳断裂、寿命预测与不确定性</td><td>7</td><td>7</td></tr><tr><th scope="row">航空航天</th><td>航空航天工程、飞行器及相关学术期刊</td><td>7</td><td>7</td></tr><tr><th scope="row">结构与材料设计</th><td>结构力学、复合材料、拓扑优化与有限元设计</td><td>6</td><td>6</td></tr><tr><th scope="row">智能运维与健康监测</th><td>状态监测、故障诊断、预测维护与数字孪生</td><td>5</td><td>5</td></tr><tr><th scope="row">科研综合</th><td>跨学科科研资讯、学术资源及暂未细分的研究方向</td><td>0</td><td>0</td></tr></tbody></table>
+    <p class="wechat-help">按公众号去重统计。同一公众号在已有目录中可属于多个分组，各组数量不能直接相加。连接后显示本机最新统计。</p>
+  </details>
   <div class="wechat-list-heading"><h3>手动订阅 <span id="wechat-count"></span></h3><button id="wechat-refresh" type="button" class="text-button">刷新列表</button></div>
   <div id="wechat-list"><p class="wechat-help">连接本机后，可查看和管理手动添加的公众号。</p></div>
   <div class="wechat-sync"><div><p id="wechat-sync-state">本机保存与每日更新的订阅目录分别管理。</p><p class="wechat-help">同步会将公众号名称、微信号和分组保存到公开网站的订阅目录；未同步的修改只在本机生效。</p></div><button id="wechat-sync" type="button" disabled>同步到每日更新</button></div>

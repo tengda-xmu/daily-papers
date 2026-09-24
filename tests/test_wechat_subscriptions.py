@@ -10,7 +10,7 @@ import pytest
 from connectors.codex_bridge.server import create_app, LOCAL_ORIGIN, PUBLIC_ORIGIN
 from connectors.codex_bridge.wechat_subscriptions import SubscriptionManager, SubscriptionChange, merge_accounts
 from src.wechat_subscriptions import (LOCAL_PATH, PUBLIC_PATH, clean_accounts, effective_accounts,
-    load_manual_accounts, manual_queries, published_accounts)
+    group_overview, load_manual_accounts, manual_queries, published_accounts)
 from src.sources import wechat_public_index as index
 
 
@@ -130,6 +130,55 @@ def test_manual_rotation_reaches_all_accounts_within_budget():
         assert len(queries) == 2
         seen.update(q.split()[0] for q in queries)
     assert seen == {str(i) for i in range(5)}
+
+
+def test_group_overview_counts_overlap_once_and_tracks_custom_pause_remove(tmp_path):
+    manager = setup(tmp_path)
+    directory = tmp_path / 'data/inbox/wechat-subscriptions.json'
+    directory.parent.mkdir(parents=True)
+    directory.write_text(json.dumps({'accounts': [
+        {'name': '跨学科号', 'groups': ['可靠性与疲劳', '人工智能', '人工智能']},
+        {'name': '未分组号', 'groups': []}]}), encoding='utf-8')
+    before = group_overview(tmp_path)
+    assert before['total'] == 2 and before['enabled'] == 2 and before['multi_group'] == 1
+    groups = {row['name']: row for row in before['groups']}
+    assert groups['人工智能']['total'] == 1 and groups['科研综合']['total'] == 1
+    state = save(manager, group='自定义方向', enabled=False)
+    overview = state['group_overview']
+    assert overview['total'] == 3 and overview['enabled'] == 2
+    custom = next(row for row in overview['groups'] if row['name'] == '自定义方向')
+    assert custom['custom'] and custom['total'] == 1 and custom['enabled'] == 0
+    # Private additions are excluded from the pre-rendered public overview.
+    assert group_overview(tmp_path, manual=published_accounts(tmp_path)) == before
+    row = state['accounts'][0]
+    state = manager.save(SubscriptionChange(revision=state['revision'], **{**row, 'group': '可靠性与疲劳', 'enabled': True}))
+    assert '自定义方向' not in state['groups']
+    assert next(g for g in state['group_overview']['groups'] if g['name'] == '可靠性与疲劳')['total'] == 2
+    assert manager.remove(row['id'], state['revision'])['group_overview'] == before
+
+
+def test_custom_group_names_reuse_normalized_existing_name(tmp_path):
+    manager = setup(tmp_path)
+    state = save(manager, group='My Lab')
+    state = manager.save(SubscriptionChange(revision=state['revision'], name='另一个研究号', group='Ｍｙ  Ｌａｂ'))
+    assert [r['group'] for r in state['accounts']] == ['My Lab', 'My Lab']
+    assert next(g for g in state['group_overview']['groups'] if g['name'] == 'My Lab')['total'] == 2
+
+
+def test_group_summary_without_bridge_and_escapes_public_metadata(tmp_path, monkeypatch):
+    from tools import build_site
+    manager = setup(tmp_path)
+    save(manager, group='尚未同步的私有分组')
+    directory = tmp_path / 'data/inbox/wechat-subscriptions.json'
+    directory.parent.mkdir(parents=True)
+    directory.write_text(json.dumps({'accounts': [
+        {'name': '示例号', 'groups': ['<script>example</script>']}]}), encoding='utf-8')
+    monkeypatch.setattr(build_site, 'ROOT', tmp_path)
+    rendered = build_site.wechat_manager()
+    assert '自定义分组' in rendered
+    assert '3 类 · 1 个公众号' in rendered
+    assert '&lt;script&gt;example&lt;/script&gt;' in rendered and '<script>example</script>' not in rendered
+    assert '尚未同步的私有分组' not in rendered
 
 
 def test_subscription_routes_auth_validation_and_fixed_sync_target(tmp_path, monkeypatch):

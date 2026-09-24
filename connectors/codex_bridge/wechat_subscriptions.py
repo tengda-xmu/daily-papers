@@ -10,7 +10,7 @@ from fastapi import HTTPException
 from pydantic import BaseModel, ConfigDict, Field, StrictBool
 
 from src.wechat_subscriptions import (LOCAL_PATH, PUBLIC_PATH, MAX_ACCOUNTS, clean_accounts,
-    effective_accounts, name_key, published_accounts)
+    effective_accounts, group_overview, name_key, published_accounts)
 from .journals import github, REPO
 
 
@@ -76,12 +76,11 @@ class SubscriptionManager:
     def snapshot(self):
         with self.lock:
             state = self._read()
-            policy = self.root / 'config/wechat_accounts.json'
-            groups = json.loads(policy.read_text(encoding='utf-8')).get('groups', []) if policy.exists() else []
+            overview = group_overview(self.root, manual=state['accounts'])
             return {'accounts': state['accounts'], 'revision': self.revision(state),
                 'pending': state['base'] != state['accounts'], 'max_accounts': MAX_ACCOUNTS,
                 'existing': [row for row in effective_accounts(self.root, manual=[])],
-                'groups': [row['name'] for row in groups] + ['科研综合'],
+                'groups': [row['name'] for row in overview['groups']], 'group_overview': overview,
                 'commit_url': state.get('commit_url', '')}
 
     def save(self, data):
@@ -92,6 +91,10 @@ class SubscriptionManager:
             row = data.model_dump(exclude={'revision'})
             row['id'] = row['id'] or uuid.uuid4().hex
             row = clean_accounts([row])[0]
+            for group in group_overview(self.root, manual=state['accounts'])['groups']:
+                if name_key(row['group']) == name_key(group['name']):
+                    row['group'] = group['name']
+                    break
             previous = next((r for r in state['accounts'] if r['id'] == data.id), None)
             for existing in effective_accounts(self.root, manual=[]):
                 # An automatic discovery can later identify the same manual

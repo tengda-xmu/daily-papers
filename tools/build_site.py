@@ -20,7 +20,7 @@ from src.catalog import (JOURNALS, SOURCE_CATALOG, STATE_LABELS, TOPIC_CATALOG,
 from src.research_focus import focus_tags
 from src.figures import get_figure
 from src.wechat_metadata import public_subscriptions
-from src.wechat_subscriptions import effective_accounts, published_accounts
+from src.wechat_subscriptions import effective_accounts, group_overview, published_accounts
 from src.research_directions import load_profile, active_directions, profile_revision
 
 DATA = ROOT / "data"
@@ -443,6 +443,19 @@ def wechat_directory() -> str:
 领域标签按账号名称和简介匹配，不代表对账号或文章的质量背书。</p></details>'''
 
 
+def wechat_manager() -> str:
+    overview = group_overview(ROOT, manual=published_accounts(ROOT))
+    options = ''.join(f'<option value="{esc(group["name"])}"'
+        + (' selected' if group['name'] == '科研综合' else '')
+        + f'>{esc(group["name"])}（{group["total"]} 个）</option>' for group in overview['groups'])
+    rows = ''.join(f'<tr><th scope="row">{esc(group["name"])}</th><td>{esc(group["description"])}</td>'
+        f'<td>{group["total"]}</td><td>{group["enabled"]}</td></tr>' for group in overview['groups'])
+    return template('wechat-manager.html', group_options=options, group_rows=rows,
+        group_total=f'{len(overview["groups"])} 类 · {overview["total"]} 个公众号',
+        group_note=f'已发布目录：共 {overview["total"]} 个公众号，启用 {overview["enabled"]} 个，'
+            f'{overview["multi_group"]} 个归入多个分组。')
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     shutil.copytree(ASSETS, OUT / "assets", dirs_exist_ok=True)
@@ -450,7 +463,7 @@ def main() -> None:
     (OUT / "index.html").write_text(render(payload), encoding="utf-8")
     (OUT / "data.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     build_archive()
-    (OUT / "setup.html").write_text(document(template("setup.html", wechat_directory=wechat_directory(), wechat_manager=template('wechat-manager.html'),
+    (OUT / "setup.html").write_text(document(template("setup.html", wechat_directory=wechat_directory(), wechat_manager=wechat_manager(),
         sources_panel=source_status_panel(payload, reading_url='./'),
         journals=journal_directory(), journal_count=len(JOURNALS), group_count=len({j['group'] for j in JOURNALS})),
         title="设置 | 每日论文推荐", active="setup"), encoding="utf-8")

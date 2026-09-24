@@ -78,6 +78,29 @@ def effective_accounts(root=ROOT, directory=None, *, manual=None):
     return list(merged.values())
 
 
+def group_overview(root=ROOT, *, manual=None):
+    """Count unique accounts per group, retaining overlapping group memberships."""
+    policy = Path(root) / 'config/wechat_accounts.json'
+    configured = json.loads(policy.read_text(encoding='utf-8')).get('groups', []) if policy.exists() else []
+    groups = {}
+    for row in [*configured, {'name': '科研综合', 'description': '跨学科科研资讯、学术资源及暂未细分的研究方向'}]:
+        key = name_key(row['name'])
+        groups.setdefault(key, {'name': row['name'], 'description': row.get('description', ''),
+            'total': 0, 'enabled': 0, 'custom': False})
+    accounts = effective_accounts(root, manual=manual)
+    multiple = 0
+    for account in accounts:
+        memberships = {name_key(group): group for group in account['groups']}
+        multiple += len(memberships) > 1
+        for key, name in memberships.items():
+            group = groups.setdefault(key, {'name': name, 'description': '自定义研究方向',
+                'total': 0, 'enabled': 0, 'custom': True})
+            group['total'] += 1
+            group['enabled'] += int(account['enabled'])
+    return {'groups': list(groups.values()), 'total': len(accounts),
+        'enabled': sum(row['enabled'] for row in accounts), 'multi_group': multiple}
+
+
 def manual_queries(accounts, until):
     """Rotate up to two names per day, reserving capacity for topic queries."""
     names = sorted({row['name'] for row in accounts if row.get('manual') and row['enabled']}, key=name_key)

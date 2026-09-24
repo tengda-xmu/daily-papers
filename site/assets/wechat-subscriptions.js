@@ -45,13 +45,46 @@
     return result;
   }
   function node(tag, text) { const el = document.createElement(tag); if (text !== undefined) el.textContent = text; return el; }
+  function groupInput(focus = false) {
+    const custom = $('#wechat-group').value === '';
+    $('#wechat-custom-group-field').hidden = !custom;
+    $('#wechat-custom-group').disabled = !custom;
+    $('#wechat-custom-group').required = custom;
+    $('#wechat-group').required = !custom;
+    const group = state?.group_overview?.groups.find(row => row.name === $('#wechat-group').value);
+    $('#wechat-group-help').textContent = custom ? '填写一个新分组；保存订阅后可在列表中重复选择。' : group?.description || '选择适合这个公众号的研究方向。';
+    if (custom && focus) $('#wechat-custom-group').focus();
+  }
+  function setGroup(value) {
+    const select = $('#wechat-group');
+    if (value && ![...select.options].some(option => option.value === value)) {
+      select.add(new Option(value, value), select.options.length - 1);
+    }
+    select.value = value; groupInput();
+  }
+  function drawGroups(overview) {
+    const selected = $('#wechat-group').value;
+    $('#wechat-group').replaceChildren(...overview.groups.map(row =>
+      new Option(`${row.name}（${row.total} 个）`, row.name, row.name === '科研综合')),
+      new Option('＋ 自定义分组…', ''));
+    setGroup(selected);
+    $('#wechat-group-total').textContent = `${overview.groups.length} 类 · ${overview.total} 个公众号`;
+    $('#wechat-group-statistics-note').textContent = `本机当前目录：共 ${overview.total} 个公众号，启用 ${overview.enabled} 个，${overview.multi_group} 个归入多个分组。`;
+    $('#wechat-group-rows').replaceChildren(...overview.groups.map(group => {
+      const row = node('tr'), name = node('th', group.name); name.scope = 'row';
+      row.append(name, node('td', group.description), node('td', group.total), node('td', group.enabled));
+      return row;
+    }));
+  }
   function reset() {
     editing = ''; $('#wechat-form').reset(); $('#wechat-editor-title').textContent = '添加公众号';
     $('#wechat-save').textContent = '保存订阅'; $('#wechat-cancel').hidden = true;
+    setGroup('科研综合');
   }
   function edit(row) {
     editing = row.id;
-    for (const field of ['name', 'alias', 'group']) $('#wechat-' + field).value = row[field];
+    for (const field of ['name', 'alias']) $('#wechat-' + field).value = row[field];
+    setGroup(row.group);
     $('#wechat-enabled').checked = row.enabled;
     $('#wechat-editor-title').textContent = '编辑公众号'; $('#wechat-save').textContent = '保存修改';
     $('#wechat-cancel').hidden = false; $('#wechat-name').focus();
@@ -59,7 +92,7 @@
   function draw(data) {
     state = data;
     $('#wechat-count').textContent = `${data.accounts.length} 个`;
-    $('#wechat-groups').replaceChildren(...[...new Set([...data.groups, ...data.accounts.map(row => row.group)])].map(value => new Option(value, value)));
+    drawGroups(data.group_overview);
     $('#wechat-sync-state').textContent = data.pending ? '本机已保存 · 有修改尚未同步到每日更新' : '本机订阅与已载入的云端版本一致';
     const rows = data.accounts.map(row => {
       const article = node('article'); article.className = 'wechat-row';
@@ -77,7 +110,9 @@
   }
   async function refresh() {
     if (!token) await restore();
-    draw(await api('/api/wechat-subscriptions')); connection(true, '已连接本机 · 可管理公众号订阅');
+    const data = await api('/api/wechat-subscriptions');
+    if (!data.group_overview) throw new Error('请重新启动论文助手，以载入分组统计功能。');
+    draw(data); connection(true, '已连接本机 · 可管理公众号订阅');
   }
   async function mutate(path, method, payload, message, clear = false) {
     if (busy) return;
@@ -89,10 +124,12 @@
   $('#wechat-form').onsubmit = event => {
     event.preventDefault();
     mutate('/api/wechat-subscriptions', 'POST', {revision: state.revision, id: editing,
-      name: $('#wechat-name').value.trim(), alias: $('#wechat-alias').value.trim(), group: $('#wechat-group').value.trim(),
+      name: $('#wechat-name').value.trim(), alias: $('#wechat-alias').value.trim(),
+      group: $('#wechat-group').value || $('#wechat-custom-group').value.trim(),
       enabled: $('#wechat-enabled').checked}, '订阅已保存到本机。点击“同步到每日更新”后，云端将按新目录采集。', true);
   };
   $('#wechat-cancel').onclick = reset;
+  $('#wechat-group').onchange = () => groupInput(true);
   $('#wechat-refresh').onclick = async () => { lock(true); try { await refresh(); status('订阅列表已刷新。'); } catch (error) { status(error.message); } finally { lock(false); } };
   $('#wechat-sync').onclick = () => mutate('/api/wechat-subscriptions/sync', 'POST', {revision: state.revision}, '已同步到每日更新。下次采集将使用新目录，线上目录正在更新。');
   $('#wechat-pair-form').onsubmit = async event => {
