@@ -30,14 +30,19 @@
 .reader-tools label { display:inline-flex; flex:none; white-space:nowrap; align-items:center; gap:5px; }
 .reader-pane select { width:auto; }
 .reader-page-number { width:50px; }
-.reader-zoom-label { margin-right:auto; }
+.reader-tools [data-read="upload"] { margin-left:auto; }
+.reader-zoom-controls { position:absolute; bottom:14px; left:50%; transform:translateX(-50%); z-index:4; display:flex; align-items:center; gap:6px; max-width:calc(100% - 24px); padding:6px 8px; border:1px solid #c5d1da; border-radius:6px; background:#fff; box-shadow:0 2px 8px #0002; white-space:nowrap; font-size:12px; }
+.reader-zoom-controls[hidden] { display:none; }
+.reader-zoom-controls > span { color:#49535b; padding-inline:3px; }
+.reader-zoom-controls button { min-width:32px; min-height:32px; font-size:18px; line-height:1; }
+.reader-zoom-controls .reader-zoom { min-height:32px; width:114px; }
 .reader-status { margin:5px 0 1px; min-height:18px; color:#49535b; font-size:12px; overflow-wrap:anywhere; }
 .reader-error { color:#a03020; }
 .reader-selection { position:absolute; top:100%; left:14px; right:14px; z-index:6; display:flex; flex-wrap:wrap; align-items:center; gap:6px; padding:8px; border:1px solid #c5d1da; border-radius:4px; background:#fff; box-shadow:0 2px 6px #0001; }
 .reader-selection-label { margin-right:auto; }
 .reader-selection[hidden],.reader-notes[hidden],.reader-mark-tools[hidden] { display:none; }
 .reader-body { flex:1; min-height:0; display:flex; position:relative; background:#e6e8eb; }
-.reader-pages { overflow:auto; flex:1; min-width:0; padding:16px; position:relative; overscroll-behavior:contain; }
+.reader-pages { overflow:auto; flex:1; min-width:0; padding:16px 16px 72px; position:relative; overscroll-behavior:contain; overflow-anchor:none; }
 .reader-empty { max-width:34em; margin:15vh auto; padding:24px; background:#fff; line-height:1.9; }
 .reader-empty h3 { font-size:19px; margin:0 0 10px; }
 .reader-page { --scale-round-x:1px; --scale-round-y:1px; position:relative; margin:0 auto 16px; background:#fff; box-shadow:0 1px 4px #0002; flex:none; overflow:hidden; }
