@@ -10,7 +10,7 @@ from collections import Counter
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from string import Template
-from urllib.parse import urlsplit
+from urllib.parse import quote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -86,7 +86,7 @@ def document(content: str, *, title: str, root: str = "./", active: str = "daily
         repo=REPO_URL,
         daily_current='aria-current="page"' if active == "daily" else "",
         archive_current='aria-current="page"' if active == "archive" else "",
-        setup_current='aria-current="page"' if active == "setup" else "",
+        setup_current='aria-current="page"' if active in ("setup", "journals") else "",
         search_current='aria-current="page"' if active == "search" else "",
         search_assets=(f'<link rel="stylesheet" href="{root}assets/manual-search.css?v={version}">'
                        f'<script src="{root}assets/manual-search.js?v={version}" defer></script>') if active == 'search' else
@@ -268,11 +268,11 @@ def journal_directory() -> str:
         journals = [j for j in JOURNALS if j["group"] == group["id"]]
         if not journals:
             continue
-        buttons = "".join(
-            f'<button type="button" class="journal-button" data-journal-filter="{esc(j["name"])}" data-group="{esc(group["id"])}">{esc(j["name"])}</button>'
+        links = "".join(
+            f'<a class="journal-button" href="./?journal={quote(j["name"], safe="")}#reading" title="查看当期推荐：{esc(j["name"])}">{esc(j["name"])}</a>'
             for j in journals
         )
-        groups.append(f'<details class="directory-group" {"open" if group["id"].startswith("CNS") else ""}><summary>{esc(group["id"])}<span>{len(journals)} 本</span></summary><div class="journal-list">{buttons}</div></details>')
+        groups.append(f'<details class="directory-group" {"open" if group["id"].startswith("CNS") else ""}><summary>{esc(group["id"])}<span>{len(journals)} 本</span></summary><div class="journal-list">{links}</div></details>')
     return "".join(groups)
 
 
@@ -378,10 +378,10 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
         core_html=core_html, extended_html=extended_html,
         core_empty="hidden" if core else "", extended_empty="hidden" if extended else "",
         no_data="" if not all_papers else "hidden", no_match="hidden",
-        sources=source_directory(statuses, counts, root, len(payload.get("wechat_articles", []))), journals=journal_directory(),
+        sources=source_directory(statuses, counts, root, len(payload.get("wechat_articles", []))),
         wechat_articles=wechat_articles_panel(payload.get("wechat_articles", [])),
         window_start=esc(display_time(payload.get("since"))[0]), window_end=esc(display_time(payload.get("until"))[0]),
-        source_count=len(SOURCE_CATALOG), journal_count=len(JOURNALS), group_count=len(VENUE_GROUPS),
+        source_count=len(SOURCE_CATALOG),
         cns_children=cns_children, adapter_count=adapter_count, ok_count=ok, root=root, repo=REPO_URL,
     )
     return document(content, title=f"{issue} · 每日论文推荐" if archive_date else "每日论文推荐 | 腾达", root=root,
@@ -429,7 +429,9 @@ def main() -> None:
     (OUT / "index.html").write_text(render(payload), encoding="utf-8")
     (OUT / "data.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     build_archive()
-    (OUT / "setup.html").write_text(document(template("setup.html", wechat_directory=wechat_directory()), title="来源配置 | 每日论文推荐", active="setup"), encoding="utf-8")
+    (OUT / "setup.html").write_text(document(template("setup.html", wechat_directory=wechat_directory(),
+        journals=journal_directory(), journal_count=len(JOURNALS), group_count=len({j['group'] for j in JOURNALS})),
+        title="设置 | 每日论文推荐", active="setup"), encoding="utf-8")
     from src.manual_search import SOURCES
     choices = ''.join(f'<label title="{esc(s["mode"])}"><input type="checkbox" name="library" value="{esc(s["id"])}" checked> {esc(s["label"])}</label>' for s in SOURCES)
     (OUT / "search.html").write_text(document(template("search.html", sources=choices),

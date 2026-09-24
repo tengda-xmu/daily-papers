@@ -2,6 +2,19 @@
   document.documentElement.classList.add('js');
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+  if (location.origin === 'http://127.0.0.1:43127') {
+    $$('a[href]').forEach((link) => {
+      const url = new URL(link.href);
+      if (url.origin === location.origin && url.pathname === '/setup.html') {
+        link.href = 'https://tengda-xmu.github.io/daily-papers/setup.html' + url.search + url.hash;
+      }
+    });
+  }
+  // Keep old bookmarks working after moving the directory to settings.
+  if (location.hash === '#journals' && !$('#journals') && $('#reading')) {
+    const settings = $('#main-navigation a[href$="setup.html"]');
+    if (settings) { location.replace(settings.href + '#journals'); return; }
+  }
   const menu = $('.menu-toggle');
   const nav = $('#main-navigation');
   if (menu && nav) {
@@ -188,6 +201,12 @@
   window.addEventListener('scroll', () => { if (top) top.hidden = window.scrollY < 480; }, { passive: true });
   const params = new URLSearchParams(window.location.search);
   if (params.get('topic') && topic) { topic.value = params.get('topic'); showFilters(true); }
+  if (params.get('journal') && journal) {
+    const value = params.get('journal');
+    if (Array.from(journal.options).some(option => option.value === value)) {
+      journal.value = value; showFilters(true);
+    }
+  }
   openAnchor(location.hash);
   filter();
 }());
