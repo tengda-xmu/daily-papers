@@ -14,7 +14,7 @@ try {
     $running = $health.service -eq 'daily-papers-codex'
 } catch { }
 if (-not $running) {
-    & python -c "import fastapi, uvicorn, pypdf, pypdfium2, multipart, fontTools, reportlab, yaml, requests, PIL"
+    & python -c "import fastapi, uvicorn, pypdf, pypdfium2, multipart, fontTools, reportlab, pymupdf, yaml, requests, PIL; assert pymupdf.VersionBind == '1.27.2.3'"
     if ($LASTEXITCODE -ne 0) {
         & python -m pip install -r (Join-Path $projectDir 'connectors\codex_bridge\requirements.txt')
         if ($LASTEXITCODE -ne 0) { throw 'Could not install paper assistant dependencies.' }

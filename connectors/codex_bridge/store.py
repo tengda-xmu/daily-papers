@@ -46,6 +46,8 @@ class Store:
                 db.execute("ALTER TABLE messages ADD COLUMN model TEXT NOT NULL DEFAULT ''")
             if "attachments" not in columns:
                 db.execute("ALTER TABLE messages ADD COLUMN attachments TEXT NOT NULL DEFAULT '[]'")
+            if "artifact" not in columns:
+                db.execute("ALTER TABLE messages ADD COLUMN artifact TEXT NOT NULL DEFAULT '{}'")
 
     @contextmanager
     def connect(self):
@@ -130,10 +132,15 @@ class Store:
 
     def history(self, paper_id):
         with self.connect() as db:
-            rows = [dict(r) for r in db.execute("SELECT id,role,content,status,created,document_hash,error,model,attachments FROM messages WHERE paper=? ORDER BY id", (paper_id,))]
+            rows = [dict(r) for r in db.execute("SELECT id,role,content,status,created,document_hash,error,model,attachments,artifact FROM messages WHERE paper=? ORDER BY id", (paper_id,))]
         for row in rows:
             row['attachments'] = json.loads(row['attachments'])
+            row['artifact'] = json.loads(row['artifact'])
         return rows
+
+    def set_artifact(self, message_id, artifact):
+        with self.connect() as db:
+            db.execute('UPDATE messages SET artifact=? WHERE id=?', (json.dumps(artifact), message_id))
 
     def screenshots(self, paper_id, *, pending=False):
         with self.connect() as db:

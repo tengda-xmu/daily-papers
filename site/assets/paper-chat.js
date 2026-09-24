@@ -55,7 +55,7 @@
     <form class="chat-composer">
       <div class="chat-shortcuts"><button class="chat-button" type="button" data-mode="summary">总结论文</button><button class="chat-button" type="button" data-mode="question" aria-pressed="true">深入提问</button><button class="chat-button" type="button" data-mode="translate">中英翻译</button><button class="chat-button" type="button" data-mode="figure">解释配图</button></div>
       <p class="chat-mode-help" id="chat-mode-help"></p>
-      <div class="chat-translation" hidden><label>方向 <select class="chat-translation-target"><option value="zh">英译中</option><option value="en">中译英</option></select></label><label>内容 <select class="chat-translation-source"><option value="text">粘贴原文</option><option value="image">截图翻译</option><option value="full">全文翻译</option><option value="document">论文章节</option></select></label></div>
+      <div class="chat-translation" hidden><label>方向 <select class="chat-translation-target"><option value="zh">英译中</option><option value="en">中译英</option></select></label><label>内容 <select class="chat-translation-source"><option value="text">粘贴原文</option><option value="image">截图翻译</option><option value="layout">全文翻译（保留 PDF 版式）</option><option value="full">全文翻译（文本对照）</option><option value="document">论文章节</option></select></label></div>
       <textarea rows="2" aria-label="向 Codex 提问" aria-describedby="chat-mode-help" maxlength="12000"></textarea>
       <div class="chat-attachments" aria-label="待发送截图" hidden></div>
       <input class="chat-image-input" type="file" accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp" multiple hidden>
@@ -78,14 +78,16 @@
     $('.chat-settings-toggle').setAttribute('aria-expanded', String(open));
     refreshLayout();
   }
-  const fullTranslation = row => row.role === 'assistant' && /^## 全文翻译 · (中文|英文)\s/.test(row.content || '');
+  const fullTranslation = row => row.role === 'assistant' && /^## (?:PDF )?全文翻译 · (中文|英文)\s/.test(row.content || '');
+  const layoutTranslation = row => /^## PDF 全文翻译 ·/.test(row?.content || '');
   const latestTranslation = () => history.filter(fullTranslation).at(-1);
   function updateTranslationExport() {
     const row = latestTranslation(), button = $('[data-chat-action="export-translation"]');
     button.hidden = !row;
-    button.disabled = busy || !row || row.status === 'running';
+    button.disabled = busy || !row || row.status === 'running' || (layoutTranslation(row) && !row.artifact?.filename);
     button.textContent = row?.status === 'completed' ? '导出译文 PDF' : row?.status === 'running' ? '译文生成中…' : '导出部分译文 PDF';
-    button.title = '仅导出这篇论文最近一次全文翻译，保留原文、译文及页码标记';
+    if (layoutTranslation(row)) button.textContent = row?.artifact?.filename ? '下载原版式译文 PDF' : row?.status === 'running' ? '译文 PDF 生成中…' : '译文 PDF 尚未完成';
+    button.title = layoutTranslation(row) ? '下载已生成的译文 PDF，沿用原文件页数与版式' : '仅导出这篇论文最近一次全文翻译，保留原文、译文及页码标记';
   }
   function updateRemembered() {
     remembered.hidden = !deviceToken;
@@ -217,12 +219,13 @@
   function updateMode() {
     const config = modes[mode], translating = mode === 'translate';
     const documentTranslation = translating && $('.chat-translation-source').value === 'document';
-    const fullTranslation = translating && $('.chat-translation-source').value === 'full';
+    const fullTranslation = translating && ['full', 'layout'].includes($('.chat-translation-source').value);
+    const layoutTranslation = translating && $('.chat-translation-source').value === 'layout';
     const imageTranslation = translating && $('.chat-translation-source').value === 'image';
     $('.chat-translation').hidden = !translating;
-    $('.chat-mode-help').textContent = fullTranslation ? '按原文顺序分批翻译，中断可继续；完成后可导出原文与译文 PDF。' : imageTranslation ? '翻译截图中的文字，保留公式和术语，标注识别不清处。' : config.hint;
+    $('.chat-mode-help').textContent = layoutTranslation ? '直接生成译文 PDF，保留页数、分栏、图片和公式；译文适配原文字区域。需载入带文字层的 PDF。' : fullTranslation ? '按原文顺序分批翻译，中断可继续；完成后可导出原文与译文 PDF。' : imageTranslation ? '翻译截图中的文字，保留公式和术语，标注识别不清处。' : config.hint;
     $('.chat-composer textarea').placeholder = fullTranslation ? '可选：填写术语或表达偏好；留空即可开始全文翻译。' : imageTranslation ? '可选：填写术语偏好或需要翻译的区域…' : documentTranslation ? '例如：翻译 Abstract 或 Methods 章节。' : config.placeholder;
-    $('.chat-send').textContent = fullTranslation ? '开始全文翻译' : config.send;
+    $('.chat-send').textContent = layoutTranslation ? '翻译并生成 PDF' : fullTranslation ? '开始全文翻译' : config.send;
     dialog.querySelectorAll('[data-mode]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === mode)));
   }
   function rememberDraft() { drafts.set(draftKey(), { text: $('.chat-composer textarea').value }); }
@@ -489,7 +492,7 @@
     }
   }
 
-  function message(role, text, state = 'completed', documentHash = '', error = '', model = '', messageId = null, attachments = []) {
+  function message(role, text, state = 'completed', documentHash = '', error = '', model = '', messageId = null, attachments = [], artifact = {}) {
     const article = document.createElement('article'); article.className = 'chat-message'; article.dataset.role = role;
     article.dataset.documentHash = documentHash || '';
     const label = document.createElement('div'); label.className = 'chat-message-label';
@@ -508,14 +511,18 @@
         const pdf = document.createElement('button'); pdf.type = 'button'; pdf.className = 'text-button chat-answer-pdf'; pdf.textContent = '导出 PDF';
         const exportPaper = paperId;
         const translation = fullTranslation({role, content: text});
+        const layout = layoutTranslation({content: text});
         if (translation) pdf.textContent = state === 'completed' ? '导出译文 PDF' : '导出部分译文 PDF';
-        pdf.disabled = state === 'running';
+        if (layout) pdf.textContent = artifact.filename ? '下载原版式译文 PDF' : '译文 PDF 尚未完成';
+        pdf.disabled = state === 'running' || (layout && !artifact.filename);
         pdf.onclick = () => downloadPdf(exportPaper, messageId, translation, pdf).catch(e => notice(e.message));
         label.append(pdf);
         if (translation && state !== 'running') {
           const footer = document.createElement('div'); footer.className = 'chat-translation-download';
           const note = document.createElement('span'); note.textContent = state === 'completed' ? '全文译文已保存，可导出原文与译文。' : '本次翻译尚未完成，可导出已保存内容。';
+          if (layout) note.textContent = artifact.filename ? `译文 PDF 已生成 · ${artifact.pages} 页 · 沿用原版式` : '已完成的翻译已保存，再次开始可继续生成 PDF。';
           const download = document.createElement('button'); download.type = 'button'; download.className = 'chat-button'; download.textContent = pdf.textContent;
+          download.disabled = pdf.disabled;
           download.onclick = () => downloadPdf(exportPaper, messageId, true, download).catch(e => notice(e.message));
           footer.append(note, download); article.append(footer);
         }
@@ -547,7 +554,7 @@
       p.textContent = '从一个具体问题开始。你可以先总结这篇论文，再追问方法、实验依据或研究启发。'; $('.chat-messages').append(p);
     }
     for (const row of history) {
-      const body = message(row.role, row.content, row.status, row.document_hash, row.error, row.model, row.id, row.attachments || []);
+      const body = message(row.role, row.content, row.status, row.document_hash, row.error, row.model, row.id, row.attachments || [], row.artifact || {});
       if (row.status === 'running') showProgress(body, data.progress || { started_at: row.created, message: '本次回答仍在生成' });
     }
     const doc = data.document;
@@ -663,7 +670,8 @@
 
   async function send(event) {
     event.preventDefault();
-    const fullTranslation = mode === 'translate' && $('.chat-translation-source').value === 'full';
+    const fullTranslation = mode === 'translate' && ['full', 'layout'].includes($('.chat-translation-source').value);
+    const layoutPdf = mode === 'translate' && $('.chat-translation-source').value === 'layout';
     const imageTranslation = mode === 'translate' && $('.chat-translation-source').value === 'image';
     const text = $('.chat-composer textarea').value.trim() || (fullTranslation ? '请完整翻译已载入论文的全部正文，保留原文顺序、术语、公式与引用。' : screenshots.length ? imageTranslation ? '请逐段翻译上传截图中的全部可见文字。' : '请分析上传截图，说明其中的关键信息与含义。' : '');
     if (busy || documentPending || remoteDocumentPending || screenshotPending) { if (documentPending || remoteDocumentPending || screenshotPending) notice('资料正在准备，请完成后再发送。'); return; }
@@ -673,6 +681,7 @@
     if (imageTranslation && !screenshots.length) { notice('请先上传或粘贴待译截图。'); return; }
     if (mode === 'translate' && screenshots.length && !imageTranslation) { notice('已附加截图，请选择“截图翻译”；翻译全文前请先移除截图。'); return; }
     if (fullTranslation && !currentDocument) { notice('请先上传 PDF、获取论文 PDF 或获取网页全文，再开始全文翻译。'); return; }
+    if (layoutPdf && currentDocument?.kind !== 'pdf') { notice('保留版式翻译需要原 PDF，请先上传 PDF 或点击“获取论文 PDF”。'); return; }
     const model = chosenModel();
     if (!model) { notice('请先选择当前可用的 Codex 模型。'); return; }
     if ((mode === 'figure' || screenshots.length) && !model.images) { notice('所选模型仅支持文字，请切换支持图片的模型后发送截图或解释配图。'); return; }
@@ -744,6 +753,10 @@
         if (!finished && !$('.chat-composer textarea').value) $('.chat-composer textarea').value = text;
         rememberDraft();
         await loadPaper().catch(() => {});
+        if (finished && layoutPdf) {
+          const row = latestTranslation();
+          if (row?.artifact?.kind === 'layout-pdf') await downloadPdf(sentPaper, row.id, true).catch(e => notice(e.message + ' 可点击“下载原版式译文 PDF”重试。'));
+        }
         if (!finished && sentScreenshots.length) {
           const pendingIds = new Set(screenshots.map(x => x.id));
           screenshots = sentScreenshots.map(x => ({...x, sent: x.sent || (submitted && !pendingIds.has(x.id))})); drawScreenshots();
@@ -764,7 +777,7 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a'); a.href = url; a.download = `${title}-${translation ? '全文翻译' : messageId ? '回答-' + messageId : '对话记录'}.pdf`;
       a.click(); setTimeout(() => URL.revokeObjectURL(url), 60000);
-      notice(translation ? '译文 PDF 已下载，包含原文、译文及页码标记。' : 'PDF 已生成并下载。');
+      notice(translation ? '译文 PDF 已下载。' : 'PDF 已生成并下载。');
     } finally { if (button) button.disabled = false; updateTranslationExport(); }
   }
 
