@@ -17,7 +17,7 @@ ACTIVE = {'queued', 'in_progress', 'waiting', 'pending', 'requested'}
 
 def update_needed(payload, now=None):
     now = (now or datetime.now(timezone.utc)).astimezone(BEIJING)
-    start = now.replace(hour=7, minute=0, second=0, microsecond=0)
+    start = now.replace(hour=6, minute=0, second=0, microsecond=0)
     if now < start:
         return False, 'before_morning_update'
     try:
@@ -45,7 +45,7 @@ def dispatch_if_needed(remote, now=None):
     from connectors.codex_bridge.daily_update import API, REPO
 
     now = now or datetime.now(timezone.utc)
-    if now.astimezone(BEIJING).hour < 7:
+    if now.astimezone(BEIJING).hour < 6:
         return {'state': 'before_morning_update'}
     # The daily workflow commits data only after deployment, so a current record
     # also confirms that a completed update has passed the publication step.

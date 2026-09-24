@@ -8,27 +8,27 @@ import yaml
 
 from tools.daily_schedule import dispatch_if_needed, update_needed, workflow_gate
 
-NOW = datetime.fromisoformat('2026-09-25T07:20:00+08:00')
+NOW = datetime.fromisoformat('2026-09-25T06:20:00+08:00')
 
 
-def edition(timestamp='2026-09-24T23:02:00Z'):
+def edition(timestamp='2026-09-24T22:02:00Z'):
     return {'generated_at': timestamp, 'core': [{'id': '111111111111'}], 'extended': []}
 
 
 def test_beijing_morning_boundary_and_manual_updates():
-    assert update_needed({}, datetime.fromisoformat('2026-09-24T22:59:59Z')) == (False, 'before_morning_update')
-    assert update_needed(edition('2026-09-24T22:59:00Z'), NOW)[0]
+    assert update_needed({}, datetime.fromisoformat('2026-09-24T21:59:59Z')) == (False, 'before_morning_update')
+    assert update_needed(edition('2026-09-24T21:59:00Z'), NOW)[0]
     assert update_needed(edition(), NOW) == (False, 'already_updated_today')
     assert workflow_gate(edition(), 'schedule', now=NOW)[0] is False
     assert workflow_gate(edition(), 'workflow_dispatch', scheduled_check=True, now=NOW)[0] is False
     assert workflow_gate(edition(), 'workflow_dispatch', now=NOW) == (True, 'manual_update')
-    tomorrow = datetime.fromisoformat('2026-09-26T07:00:00+08:00')
+    tomorrow = datetime.fromisoformat('2026-09-26T06:00:00+08:00')
     assert update_needed(edition(), tomorrow)[0]
 
 
 @pytest.mark.parametrize('payload', [
     {}, {'generated_at': 'invalid'}, edition('2026-09-25T12:00:00Z'),
-    edition('2026-09-25T07:02:00'), {**edition(), 'core': []},
+    edition('2026-09-25T06:02:00'), {**edition(), 'core': []},
     {**edition(), 'extended': None}, None,
 ])
 def test_incomplete_invalid_or_future_data_cannot_skip_update(payload):
@@ -95,7 +95,7 @@ def test_dispatch_failure_is_not_blindly_retried():
 def test_workflow_serializes_checks_and_uses_current_main():
     root = Path(__file__).resolve().parents[1]
     workflow = yaml.load((root / '.github/workflows/daily.yml').read_text(encoding='utf-8'), Loader=yaml.BaseLoader)
-    assert [entry['cron'] for entry in workflow['on']['schedule']] == ['0 23 * * *', '17,37 23 * * *', '17 0 * * *']
+    assert [entry['cron'] for entry in workflow['on']['schedule']] == ['0 22 * * *', '17,37 22 * * *', '17 23 * * *']
     assert workflow['concurrency']['cancel-in-progress'] == 'false'
     assert workflow['jobs']['update']['needs'] == 'check'
     assert "needed == 'true'" in workflow['jobs']['update']['if']

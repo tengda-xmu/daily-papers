@@ -55,8 +55,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/sync_researchgate.ps1
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/schedule_researchgate.ps1 -Enable
 ```
 
-The task `DailyPapers-ResearchGate` runs daily at 06:30 local time, before the
-07:00 GitHub digest. The PC must be powered on and the Windows user signed in.
+The task `DailyPapers-ResearchGate` runs daily at 05:30 local time, before the
+06:00 GitHub digest. The PC must be powered on and the Windows user signed in.
 Missed starts can run once the PC becomes available. Running the scheduling
 script without `-Enable` prepares a disabled task while login is unresolved.
 Logs stay in `.local/researchgate-sync.log`.
