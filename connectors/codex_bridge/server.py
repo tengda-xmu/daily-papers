@@ -22,6 +22,7 @@ from .rpc import CodexClient, CodexError
 from .store import Store
 from .search import SearchService, SearchRequest, SOURCES, SORT_OPTIONS
 from .journals import JournalManager, JournalChange, Revision
+from .daily_update import DailyUpdater, UpdateRequest
 from .screenshots import MAX_IMAGE_BYTES, MAX_SCREENSHOTS, save_screenshot
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -77,6 +78,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     generation_lock = asyncio.Lock()
     search_service = SearchService(root, runtime)
     journal_manager = JournalManager(root)
+    daily_updater = DailyUpdater(runtime)
 
     @asynccontextmanager
     async def lifespan(app):
@@ -101,6 +103,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     app.state.shutdown = lambda: None
     app.state.search = search_service
     app.state.journals = journal_manager
+    app.state.daily_updater = daily_updater
 
     @app.middleware("http")
     async def local_only(request: Request, next_handler):
@@ -245,6 +248,14 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         return {"sources": SOURCES, "sort_options": SORT_OPTIONS,
                 "journals": (await asyncio.to_thread(journal_manager.snapshot))['journals']}
 
+    @app.post('/api/recommendations/update')
+    async def update_recommendations(data: UpdateRequest):
+        return await asyncio.to_thread(daily_updater.start, data.request_id)
+
+    @app.get('/api/recommendations/update')
+    async def recommendation_progress():
+        return await asyncio.to_thread(daily_updater.snapshot)
+
     @app.get("/api/journals")
     async def journal_list():
         return await asyncio.to_thread(journal_manager.snapshot)
@@ -297,7 +308,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     @app.get("/api/papers")
     async def papers():
         result = {}
-        for path in [root / "data/daily.json", *sorted((root / "data/archive").glob("*.json"), reverse=True)]:
+        for path in store.paper_paths():
             if not path.exists():
                 continue
             payload = json.loads(path.read_text(encoding="utf-8"))
@@ -671,9 +682,17 @@ def create_app(root=ROOT, runtime=None, rpc=None):
 
     @app.get("/assets/{name}")
     async def asset(name: str):
-        if name not in ("paper-chat.js", "paper-chat.css", "site.css", "site.js", "manual-search.js", "manual-search.css", "journal-manager.js", "journal-manager.css", "favicon.svg"):
+        if name not in ("paper-chat.js", "paper-chat.css", "site.css", "site.js", "daily-update.js", "manual-search.js", "manual-search.css", "journal-manager.js", "journal-manager.css", "favicon.svg"):
             raise HTTPException(404)
         return FileResponse(root / "tools/assets" / name)
+
+    @app.get('/assets/figures/{name}')
+    async def recommendation_figure(name: str):
+        directory = (root / 'tools/assets/figures').resolve()
+        path = (directory / name).resolve()
+        if not re.fullmatch(r'[A-Za-z0-9_.-]+\.(?:png|jpg|jpeg|webp)', name) or path.parent != directory or not path.is_file():
+            raise HTTPException(404)
+        return FileResponse(path)
 
     @app.get("/search.html")
     async def manual_search_page():
@@ -682,6 +701,15 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     @app.get("/journals.html")
     async def journal_page():
         return FileResponse(root / "site/journals.html", media_type="text/html")
+
+    @app.get('/recommendations.html')
+    async def recommendations_page():
+        from tools.build_site import render
+        path = runtime / 'recommendations.json'
+        if not path.exists():
+            path = root / 'data/daily.json'
+        payload = json.loads(path.read_text(encoding='utf-8')) if path.exists() else {}
+        return Response(render(payload), media_type='text/html')
 
     return app
 

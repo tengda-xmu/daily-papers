@@ -1,6 +1,16 @@
 name: Daily papers
+run-name: ${{ inputs.request_id && format('Manual papers {0}', inputs.request_id) || 'Daily papers' }}
 on:
   workflow_dispatch:
+    inputs:
+      request_id:
+        description: Browser update request identifier
+        type: string
+        default: ''
+      send_digest:
+        description: Send Enterprise WeChat digest
+        type: boolean
+        default: false
   schedule:
     - cron: "0 23 * * *" # 07:00 Asia/Shanghai (UTC)
 permissions:
@@ -78,6 +88,7 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
       - name: Send Enterprise WeChat digest
+        if: github.event_name == 'schedule' || inputs.send_digest
         env:
           WECHAT_WORK_WEBHOOK_URL: ${{ secrets.WECHAT_WORK_WEBHOOK_URL }}
         run: python -m src.notify

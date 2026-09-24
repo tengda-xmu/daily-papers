@@ -363,6 +363,7 @@ def run_pipeline(
     remaining = [paper for paper in papers if paper["id"] not in selected_ids]
     payload = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
+        "update_run_id": os.getenv("GITHUB_RUN_ID", ""),
         "since": since.isoformat(),
         "until": until.isoformat(),
         "core": core,

@@ -164,7 +164,9 @@ WECHAT_WORK_WEBHOOK_URL=
 
 工作流每天北京时间 07:00 运行，也支持 `workflow_dispatch` 手动触发。它会生成 `site/`、保存 `data/archive/` 历史数据、部署 GitHub Pages，并发送核心论文摘要。
 
-网页右上角的“手动更新”按钮会打开该 GitHub Actions 工作流页面。登录 GitHub 后点击 `Run workflow`，即可立即执行一轮抓取、生成日报、部署网页和企业微信推送；按钮不在公开网页中保存 GitHub Token。
+首页更新时间旁的“手动更新”会通过已配对的本机论文助手启动采集、重新筛选核心推荐和扩展阅读，并发布网页。需保持“启动论文助手.cmd”运行，本机 `gh` 已登录且有仓库 Actions 权限；记住浏览器后无需重复配对。页面展示排队、采集与发布状态，核对本次发布的数据后自动刷新；若论文对话正在打开，关闭对话后再刷新。刷新浏览器或重启助手后也能继续查看任务，不会重复提交。
+
+没有更合适的新论文时保留现有推荐，不为换新而降低筛选要求。手动更新默认不推送企业微信，每日定时推送保留；可在 GitHub 手动运行工作流时勾选 `send_digest`。GitHub 凭据只由本机 CLI 使用，不进入公开网页。浏览器限制本地连接时，使用“在本机更新推荐”入口。任务启动与跟踪使用 [GitHub 官方工作流接口](https://docs.github.com/en/rest/actions/workflows#create-a-workflow-dispatch-event)。
 
 ## GitHub Actions Secrets
 

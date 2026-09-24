@@ -92,10 +92,15 @@ class Store:
                 db.execute("DELETE FROM trusted_browsers WHERE token_hash=? AND origin=?", (token_hash, origin))
         return token_hash
 
+    def paper_paths(self):
+        return [self.runtime / 'recommendations.json', self.root / 'data/daily.json',
+                *sorted((self.runtime / 'recommendation-history').glob('*.json'), reverse=True),
+                *sorted((self.root / 'data/archive').glob('*.json'), reverse=True)]
+
     def paper(self, paper_id):
         if not ID_PATTERN.fullmatch(paper_id):
             raise ValueError("无效的论文编号。")
-        paths = [self.root / "data/daily.json", *sorted((self.root / "data/archive").glob("*.json"), reverse=True)]
+        paths = self.paper_paths()
         for path in paths:
             try:
                 payload = json.loads(path.read_text(encoding="utf-8"))

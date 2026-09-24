@@ -27,7 +27,6 @@ TEMPLATES = ROOT / "tools" / "templates"
 ASSETS = ROOT / "tools" / "assets"
 CHINA = timezone(timedelta(hours=8))
 REPO_URL = "https://github.com/tengda-xmu/daily-papers"
-MANUAL_UPDATE_URL = f"{REPO_URL}/actions/workflows/daily.yml"
 SOURCE_LABELS = {item["id"]: item["label"] for item in SOURCE_CATALOG}
 SETUP_HINTS = {
     "Elsevier": "尚未配置 Elsevier 检索授权。",
@@ -79,7 +78,7 @@ def template(name: str, **values) -> str:
 
 def document(content: str, *, title: str, root: str = "./", active: str = "daily") -> str:
     version = hashlib.sha256(
-        b"".join((ASSETS / name).read_bytes() for name in ("site.css", "site.js", "paper-chat.css", "paper-chat.js", "manual-search.css", "manual-search.js", "journal-manager.css", "journal-manager.js"))
+        b"".join((ASSETS / name).read_bytes() for name in ("site.css", "site.js", "daily-update.js", "paper-chat.css", "paper-chat.js", "manual-search.css", "manual-search.js", "journal-manager.css", "journal-manager.js"))
     ).hexdigest()[:10]
     return template(
         "page.html", content=content.lstrip(), title=esc(title), root=root, version=version,
@@ -91,7 +90,8 @@ def document(content: str, *, title: str, root: str = "./", active: str = "daily
         search_assets=(f'<link rel="stylesheet" href="{root}assets/manual-search.css?v={version}">'
                        f'<script src="{root}assets/manual-search.js?v={version}" defer></script>') if active == 'search' else
                       (f'<link rel="stylesheet" href="{root}assets/journal-manager.css?v={version}">'
-                       f'<script src="{root}assets/journal-manager.js?v={version}" defer></script>') if active == 'journals' else '',
+                       f'<script src="{root}assets/journal-manager.js?v={version}" defer></script>') if active == 'journals' else
+                      f'<script src="{root}assets/daily-update.js?v={version}" defer></script>' if active == 'daily' else '',
     )
 
 
@@ -331,11 +331,23 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
         reading_policy = f"CNS 子刊优先{focus} · 精选近 {days} 天论文"
         cns_window = f" CNS 专项与已有精读回溯 {days} 天，每日更新。"
     archive_notice = f'<p class="archive-notice">正在阅读 {esc(archive_date)} 归档。<a href="../">返回最新一期</a></p>' if archive_date else ""
+    update_control = '<button class="manual-update" id="manual-update" type="button">手动更新</button>' if not archive_date else ''
+    update_panel = '''<div id="daily-update-panel" class="daily-update-panel" hidden>
+  <p id="daily-update-status" role="status" aria-live="polite"></p>
+  <form id="daily-update-pair" hidden>
+    <p>请启动本机论文助手，首次使用粘贴配对码；记住浏览器后可直接更新。</p>
+    <div class="update-pair-fields"><label for="daily-pair-code" class="sr-only">配对码</label><input id="daily-pair-code" type="password" placeholder="粘贴配对码" autocomplete="off" required><button type="submit" class="manual-update">连接并更新</button></div>
+    <label><input id="daily-remember" type="checkbox" checked> 记住此浏览器</label>
+  </form>
+  <div class="update-links"><a id="daily-update-run" target="_blank" rel="noopener noreferrer" hidden>查看更新进度</a><a id="daily-update-local" href="http://127.0.0.1:43127/recommendations.html" target="_blank" rel="noopener noreferrer" hidden>在本机更新推荐</a></div>
+</div>''' if not archive_date else ''
     content = template(
         "daily.html", title="每日论文推荐", day=esc(issue), generated=esc(generated),
         reading_policy=esc(reading_policy), cns_window=esc(cns_window),
         extended_policy="每篇均有完整中文精读，点击论文下方展开。" if policy.get("extended_requires_chinese_analysis") else "",
-        archive_notice=archive_notice, history_url="./" if archive_date else "archive/", manual_update_url=MANUAL_UPDATE_URL,
+        archive_notice=archive_notice, history_url="./" if archive_date else "archive/",
+        update_control=update_control, update_panel=update_panel,
+        generated_at=esc(payload.get('generated_at', '')), update_run_id=esc(payload.get('update_run_id', '')),
         notice=notice, source_options="".join(source_options), health_label=f"{ok} / {adapter_count} 类来源正常",
         topic_options=topic_options, group_options=group_options, journal_options=journal_options,
         core_count=len(core), extended_count=len(extended), total=len(all_papers),
