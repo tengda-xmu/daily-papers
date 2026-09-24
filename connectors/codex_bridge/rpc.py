@@ -12,7 +12,10 @@ import tomllib
 from urllib.request import getproxies
 
 
-TESTED_VERSION = "0.154.0-alpha.6.2"
+# Exact builds verified against their generated experimental schemas and live
+# paper-reader sessions. Do not accept a version prefix: alpha builds may change
+# permissions or streaming semantics even when their major/minor version matches.
+TESTED_VERSIONS = ("0.155.0-alpha.16.3", "0.155.0-alpha.16", "0.154.0-alpha.6.2")
 DISABLED_FEATURES = (
     "shell_tool", "unified_exec", "code_mode", "code_mode_host", "apps", "plugins",
     "browser_use", "browser_use_external", "computer_use", "image_generation",
@@ -111,8 +114,9 @@ class CodexClient:
             version_proc = await asyncio.create_subprocess_exec(binary, "--version", stdout=asyncio.subprocess.PIPE, creationflags=flags)
             stdout, _ = await asyncio.wait_for(version_proc.communicate(), 15)
             self.version = stdout.decode().strip().removeprefix("codex-cli ")
-            if self.version != TESTED_VERSION:
-                raise CodexError(f"Codex 版本 {self.version} 尚未验证；当前连接器支持 {TESTED_VERSION}，需先做协议兼容验证。")
+            if self.version not in TESTED_VERSIONS:
+                supported = "、".join(TESTED_VERSIONS)
+                raise CodexError(f"Codex 版本 {self.version} 尚未验证，请更新本机论文助手连接器。已验证版本：{supported}。")
             self.process = await asyncio.create_subprocess_exec(
                 *launch_args(binary, self.workspace), cwd=self.workspace,
                 stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE,
@@ -224,8 +228,10 @@ class CodexClient:
         result = await self.call(method, params)
         if (result.get("activePermissionProfile") or {}).get("id") != "paper-reader":
             raise CodexError("论文专用权限未生效，已停止连接。")
-        sandbox = result.get("sandbox", {})
-        if sandbox and sandbox.get("type") not in ("readOnly", "read-only"):
+        sandbox = result.get("sandbox") or {}
+        if (sandbox.get("type") not in ("readOnly", "read-only")
+                or sandbox.get("networkAccess", False)
+                or result.get("approvalPolicy") != "never"):
             raise CodexError("无法建立只读论文会话，已停止连接。")
         thread = result["thread"]["id"]
         self.loaded.add(thread)

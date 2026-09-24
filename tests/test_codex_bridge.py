@@ -188,6 +188,113 @@ def test_rpc_model_catalog_pagination_and_image_capabilities(tmp_path):
     asyncio.run(run())
 
 
+@pytest.mark.parametrize('version,supported', [
+    ('0.154.0-alpha.6.2', True),
+    ('0.155.0-alpha.16', True),
+    ('0.155.0-alpha.16.3', True),
+    ('0.155.0-alpha.16.4', False),
+    ('0.155.0-alpha.16.3-unverified', False),
+    ('0.156.0', False),
+    ('', False),
+])
+def test_rpc_start_only_launches_verified_builds(tmp_path, monkeypatch, version, supported):
+    # Exercise the startup boundary: an unknown binary must never start the
+    # app-server or read the account, even if its version has a known prefix.
+    spawns, calls = [], []
+
+    class Process:
+        returncode = None
+        stdin = SimpleNamespace(write=lambda _: None)
+
+        async def communicate(self):
+            return f'codex-cli {version}\n'.encode(), b''
+
+        def terminate(self):
+            self.returncode = 0
+
+        async def wait(self):
+            return self.returncode
+
+    async def spawn(*args, **kwargs):
+        spawns.append(args)
+        return Process()
+
+    async def call(method, params, timeout=45):
+        calls.append(method)
+        if method == 'account/read':
+            return {'account': {'type': 'chatgpt'}}
+        if method == 'model/list':
+            return {'data': [{'model': 'test-model', 'isDefault': True}]}
+        return {}
+
+    async def read():
+        pass
+
+    monkeypatch.setenv('CODEX_HOME', str(tmp_path))
+    monkeypatch.setattr('connectors.codex_bridge.rpc.executable', lambda: 'codex-test')
+    monkeypatch.setattr('connectors.codex_bridge.rpc.asyncio.create_subprocess_exec', spawn)
+
+    async def run():
+        client = CodexClient(tmp_path)
+        client.call, client._read = call, read
+        if not supported:
+            with pytest.raises(CodexError, match='尚未验证'):
+                await client.start()
+            assert len(spawns) == 1 and spawns[0] == ('codex-test', '--version')
+            assert not calls and client.process is None
+            return
+        try:
+            await client.start()
+            assert client.version == version and client.model == 'test-model'
+            assert calls == ['initialize', 'account/read', 'model/list']
+            assert len(spawns) == 2
+            assert 'default_permissions="paper-reader"' in spawns[1]
+            assert 'permissions.paper-reader.network.enabled=false' in spawns[1]
+            await client.start()
+            assert len(spawns) == 2
+        finally:
+            await client.close()
+            await client.reader
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize('existing', [None, 'existing-thread'])
+@pytest.mark.parametrize('changes,valid', [
+    ({}, True),
+    ({'activePermissionProfile': {'id': 'other'}}, False),
+    ({'activePermissionProfile': None}, False),
+    ({'sandbox': None}, False),
+    ({'sandbox': {'type': 'workspaceWrite'}}, False),
+    ({'sandbox': {'type': 'readOnly', 'networkAccess': True}}, False),
+    ({'approvalPolicy': 'on-request'}, False),
+])
+def test_thread_start_and_resume_require_effective_reader_permissions(tmp_path, existing, changes, valid):
+    async def run():
+        client = CodexClient(tmp_path)
+        client.models = FakeCodex().models; client.model = 'test-model'
+
+        async def start():
+            pass
+
+        async def call(method, params, timeout=45):
+            assert method == ('thread/resume' if existing else 'thread/start')
+            assert params['permissions'] == 'paper-reader'
+            assert params['approvalPolicy'] == 'never'
+            return {'thread': {'id': 'existing-thread'},
+                    'activePermissionProfile': {'id': 'paper-reader'},
+                    'sandbox': {'type': 'readOnly', 'networkAccess': False},
+                    'approvalPolicy': 'never', **changes}
+
+        client.start, client.call = start, call
+        if valid:
+            assert await client.thread(existing) == 'existing-thread'
+        else:
+            with pytest.raises(CodexError):
+                await client.thread(existing)
+            assert not client.loaded
+    asyncio.run(run())
+
+
 def test_conversations_are_scoped_resumable_and_idempotent(bridge):
     c, app, rpc = bridge; h = login(c, app)
     request_id = str(uuid.uuid4())
