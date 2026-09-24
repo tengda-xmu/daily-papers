@@ -7,10 +7,10 @@
   <meta name="theme-color" content="#153e64">
   <title>来源配置 | 每日论文推荐</title>
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./assets/site.css?v=4e0a02cab9">
-  <link rel="stylesheet" href="./assets/paper-chat.css?v=4e0a02cab9">
-  <script src="./assets/site.js?v=4e0a02cab9" defer></script>
-  <script src="./assets/paper-chat.js?v=4e0a02cab9" defer></script>
+  <link rel="stylesheet" href="./assets/site.css?v=68d945f316">
+  <link rel="stylesheet" href="./assets/paper-chat.css?v=68d945f316">
+  <script src="./assets/site.js?v=68d945f316" defer></script>
+  <script src="./assets/paper-chat.js?v=68d945f316" defer></script>
 
 </head>
 <body id="top">
@@ -29,10 +29,10 @@
   </header>
   <div class="site-shell">
     <main id="main-content" class="main-content" tabindex="-1">
-      <header class="page-heading"><div><h1>来源授权与配置</h1><p class="page-intro">公开接口自动采集；需要账号的来源完成一次授权后加入每日更新。</p></div></header>
+      <h1 id="setup-heading" class="sr-only">来源授权与配置</h1>
 <section id="codex"><h2>本机 Codex 论文对话</h2><p>双击项目中的 <strong>启动论文助手.cmd</strong>，自动打开本机助手并连接已登录的 Codex。每篇论文下方的“Codex 对话”可用于总结、追问、翻译和配图解释；首次在在线网页使用时，从本机页面复制配对码并粘贴连接。</p><p>电脑和连接程序须保持运行，仅供当前电脑使用。浏览器限制本地连接时，可<a href="http://127.0.0.1:43127/" target="_blank" rel="noopener noreferrer">在本机打开论文助手</a>。无需新增模型 API 密钥，使用你的 Codex 账号额度；相关论文内容会发送给 Codex 分析。结束时双击 <strong>停止论文助手.cmd</strong>。<a href="https://github.com/tengda-xmu/daily-papers/tree/main/connectors/codex_bridge" target="_blank" rel="noopener noreferrer">使用说明</a></p></section>
 <p>所有状态以实际运行结果为准。保存密钥后，请在首页点击“手动更新”，运行完成后查看来源状态。推荐主题可在<a href="directions.html">研究方向</a>中管理。</p>
-<p><a class="button-link" href="https://github.com/tengda-xmu/daily-papers/settings/secrets/actions" target="_blank" rel="noopener noreferrer">打开 GitHub 密钥设置</a> <a href="./">返回论文推荐</a></p>
+<p><a class="button-link" href="https://github.com/tengda-xmu/daily-papers/settings/secrets/actions" target="_blank" rel="noopener noreferrer">打开 GitHub 密钥设置</a></p>
 <section id="elsevier"><h2>Elsevier / Scopus</h2><p>在 <a href="https://dev.elsevier.com/" target="_blank" rel="noopener noreferrer">Elsevier 开发者门户</a>登录并创建 API Key，保存为 <code>ELSEVIER_API_KEY</code>。机构提供 Insttoken 时同时保存 <code>ELSEVIER_INSTTOKEN</code>。订阅与网络权限以机构授权为准。</p></section>
 <section id="scholar"><h2>Google Scholar</h2><p>在 <a href="https://serpapi.com/manage-api-key" target="_blank" rel="noopener noreferrer">SerpApi 控制台</a>获取密钥，保存为 <code>SERPAPI_API_KEY</code>。系统通过 SerpApi 检索 Google Scholar；可用额度以你的账号为准。</p></section>
 <section id="researchgate"><h2>ResearchGate</h2><p><strong>公开索引：</strong>复用已配置的 <code>SERPAPI_API_KEY</code>，每天检索 Google Scholar 收录的 ResearchGate 论文。默认一次查询，优先复用 24 小时缓存；只保留论文元数据和 ResearchGate 论文主页链接。页面会明确标注“公开索引已接入”，该状态不代表浏览器账号已经登录。</p><p>检索侧重大模型、智能体与三个研究方向；年份缺失的结果作为待核验线索保留，检索片段不作为完整摘要或全文解读依据。Google Scholar 的索引范围也不等于 ResearchGate 的全部论文。</p><p><strong>指定作者主页：</strong>在自己的电脑上运行连接器，首次在它打开的独立浏览器窗口中手动登录，再继续采集。日常 Chrome 的登录不会自动同步到连接器的 Edge 会话。导出的论文元数据同步到 <code>connector-data</code> 分支后，GitHub Actions 优先读取近期成功导出的记录；导出缺失、过期或本期无记录时使用公开索引。</p><pre><code>python -m pip install -r connectors/researchgate_sync/requirements.txt
