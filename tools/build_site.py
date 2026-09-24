@@ -202,9 +202,11 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
  data-topics="{esc(json.dumps(topics, ensure_ascii=False))}" data-venue="{esc(facets['venue_group'])}"
  data-journal="{esc(facets['journal'])}" data-search="{esc(search)}" data-rank="{rank}"
  data-date="{esc(paper.get('published_at'))}">
+  <div class="paper-heading"><div class="paper-heading-main">
   <div class="paper-meta"><span class="source">{esc(SOURCE_LABELS.get(source, source))}</span><span>{esc(str(paper.get('published_at') or '')[:10])}</span>{journal_badge}{method_badges}{direction_badge}</div>
   <h3 class="{translated_class.strip()}">{title_html}</h3>
   <p class="bibliography"><span class="authors">{esc(short_authors)}</span>{venue_line}</p>
+  </div><div class="paper-rating-slot"></div></div>
   <p class="abstract">{esc(preview)}</p>
 {figure_html}
   <div class="paper-tools">{primary_action}<button type="button" class="text-button paper-toggle" data-label="{note_label}" aria-expanded="false" aria-controls="{panel_id}">{note_label}<span aria-hidden="true">＋</span></button>{chat_button}</div>

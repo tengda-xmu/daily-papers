@@ -59,7 +59,7 @@
     const ids=[...controls.keys()];if(!ids.length)return;
     const data=await api('/api/library/ratings?ids='+ids.join(','));for(const[id,value]of Object.entries(data.ratings)){ratings.set(id,value);drawRating(id);}notifyRatings();
   }
-  cards.forEach(card=>addRating(card.querySelector('.paper-tools'),card.dataset.paperId));
+  cards.forEach(card=>addRating(card.querySelector('.paper-rating-slot'),card.dataset.paperId));
   function element(tag,className,text){const node=document.createElement(tag);if(className)node.className=className;if(text!==undefined)node.textContent=text;return node;}
   async function refresh(){
     if(!library){await refreshRatings();if(backup && !cards.length)await api('/api/library/ratings');return;}
@@ -75,7 +75,8 @@
       const description=[item.has_translation?'译文已保存':item.pdf_count?'原文已保存':'尚未载入 PDF',item.incomplete_translation?'有未完成翻译，可继续':'',item.missing_files?`${item.missing_files} 个文件缺失，可从备份恢复`:'',...item.topics.map(t=>data.topic_labels?.[t]||t)].filter(Boolean).join(' · ');
       const actions=element('div','paper-tools'),open=element('button','text-button codex-entry',item.pdf_count?'继续阅读':'打开论文对话');open.type='button';open.dataset.paperId=item.id;open.dataset.paperTitle=item.title_zh||item.title;open.dataset.openReader=String(Boolean(item.pdf_count));actions.append(open);
       const remove=element('button','text-button library-delete','删除本机资料');remove.type='button';remove.onclick=async()=>{if(!confirm('删除这篇论文的本机星级、所有 PDF、批注和对话？此操作无法撤销，建议先备份。'))return;remove.disabled=true;try{await api('/api/library/papers/'+item.id,{method:'DELETE'});await refresh();status('本机资料已删除');}catch(error){status(error.message,true);remove.disabled=false;}};
-      actions.append(remove);addRating(actions,item.id);card.append(title,meta,element('p','library-paper-status',description),actions);$('#library-list').append(card);
+      const heading=element('div','paper-heading'),main=element('div','paper-heading-main'),rating=element('div','paper-rating-slot');
+      main.append(title,meta);heading.append(main,rating);actions.append(remove);card.append(heading,element('p','library-paper-status',description),actions);addRating(rating,item.id);$('#library-list').append(card);
     }
   }
   connection.querySelector('.library-connect').onclick=()=>refresh().catch(error=>{connection.querySelector('form').hidden=false;status(error.message,true);});
