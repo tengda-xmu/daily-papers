@@ -1,13 +1,16 @@
 from __future__ import annotations
 
 import json
+import hashlib
 from pathlib import Path
 import re
+import secrets
 import sqlite3
 import time
 
 
 ID_PATTERN = re.compile(r"^[a-f0-9]{12}$")
+BROWSER_LIFETIME = 90 * 24 * 3600
 
 
 class Store:
@@ -25,6 +28,9 @@ class Store:
                 CREATE TABLE IF NOT EXISTS translations (
                   paper TEXT NOT NULL, cache_key TEXT NOT NULL, content TEXT NOT NULL,
                   PRIMARY KEY(paper, cache_key));
+                CREATE TABLE IF NOT EXISTS trusted_browsers (
+                  token_hash TEXT PRIMARY KEY, origin TEXT NOT NULL,
+                  created REAL NOT NULL, expires REAL NOT NULL);
                 UPDATE messages SET status='interrupted' WHERE status='running';
             """)
             columns = {r[1] for r in db.execute("PRAGMA table_info(messages)")}
@@ -39,6 +45,41 @@ class Store:
         db = sqlite3.connect(self.db)
         db.row_factory = sqlite3.Row
         return db
+
+    @staticmethod
+    def browser_hash(credential):
+        if not isinstance(credential, str) or not re.fullmatch(r"[A-Za-z0-9_-]{43}", credential):
+            return None
+        return hashlib.sha256(credential.encode("ascii")).hexdigest()
+
+    def remember_browser(self, origin):
+        credential = secrets.token_urlsafe(32)
+        token_hash = self.browser_hash(credential)
+        now = time.time()
+        expires = now + BROWSER_LIFETIME
+        with self.connect() as db:
+            db.execute("DELETE FROM trusted_browsers WHERE expires<=?", (now,))
+            db.execute("INSERT INTO trusted_browsers VALUES(?,?,?,?)", (token_hash, origin, now, expires))
+        # The raw credential is returned once; only its hash is stored locally.
+        return credential, token_hash, expires
+
+    def restore_browser(self, credential, origin):
+        token_hash = self.browser_hash(credential)
+        if not token_hash:
+            return None
+        now = time.time()
+        expires = now + BROWSER_LIFETIME
+        with self.connect() as db:
+            changed = db.execute("UPDATE trusted_browsers SET expires=? WHERE token_hash=? AND origin=? AND expires>?",
+                                 (expires, token_hash, origin, now)).rowcount
+        return (token_hash, expires) if changed else None
+
+    def forget_browser(self, credential, origin):
+        token_hash = self.browser_hash(credential)
+        if token_hash:
+            with self.connect() as db:
+                db.execute("DELETE FROM trusted_browsers WHERE token_hash=? AND origin=?", (token_hash, origin))
+        return token_hash
 
     def paper(self, paper_id):
         if not ID_PATTERN.fullmatch(paper_id):

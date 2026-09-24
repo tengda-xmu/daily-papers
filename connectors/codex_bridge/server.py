@@ -38,6 +38,15 @@ class Ask(BaseModel):
     request_id: uuid.UUID
 
 
+class PairRequest(BaseModel):
+    code: str = Field(max_length=128)
+    remember: bool = False
+
+
+class RestoreRequest(BaseModel):
+    device_token: str = Field(min_length=1, max_length=128)
+
+
 def error_info(exc):
     text = str(exc)
     state = "error"
@@ -59,6 +68,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     client = rpc or CodexClient(runtime / "workspace")
     pair_code = secrets.token_urlsafe(24)
     sessions, failed_pairs, jobs = {}, [], {}
+    session_devices = {}
     preparing = set()
     generation_lock = asyncio.Lock()
 
@@ -94,6 +104,8 @@ def create_app(root=ROOT, runtime=None, rpc=None):
             return JSONResponse({"message": "仅限本机访问。"}, status_code=403)
         cors = {"Access-Control-Allow-Origin": origin, "Vary": "Origin"} if origin else {}
         max_body = MAX_BYTES + 65536 if request.url.path.endswith("/pdf") else 65536
+        if request.url.path == "/api/pair" or request.url.path.startswith("/api/session/"):
+            max_body = 1024
         try:
             too_large = int(request.headers.get("content-length", "0")) > max_body
         except ValueError:
@@ -105,7 +117,9 @@ def create_app(root=ROOT, runtime=None, rpc=None):
                          "Access-Control-Allow-Headers": "Authorization,Content-Type",
                          "Access-Control-Allow-Private-Network": "true", "Access-Control-Max-Age": "600"})
             return JSONResponse({}, headers=cors)
-        if request.url.path.startswith("/api/") and request.url.path not in ("/api/health", "/api/pair"):
+        if request.url.path.startswith("/api/") and request.url.path not in (
+            "/api/health", "/api/pair", "/api/session/restore", "/api/session/forget"
+        ):
             token = request.headers.get("authorization", "").removeprefix("Bearer ")
             if sessions.get(token, 0) < time.time():
                 return JSONResponse({"message": "请先连接并配对本机 Codex。", "state": "unpaired"}, status_code=401, headers=cors)
@@ -125,25 +139,73 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     async def health():
         return {"service": "daily-papers-codex", "protocol": 1}
 
-    @app.post("/api/pair")
-    async def pair(request: Request):
+    def check_pair_limit():
         now = time.time()
         failed_pairs[:] = [t for t in failed_pairs if now - t < 60]
         if len(failed_pairs) >= 8:
             raise HTTPException(429, "配对尝试过多，请一分钟后重试。")
-        if int(request.headers.get("content-length", "0")) > 1024:
-            raise HTTPException(413, "配对请求过大。")
-        data = await request.json()
-        code = data.get("code", "")
-        if not isinstance(code, str) or not secrets.compare_digest(code, pair_code):
-            failed_pairs.append(now)
-            raise HTTPException(403, "配对码不正确；请使用本次启动时的配对码。")
+
+    def browser_origin(request):
+        origin = request.headers.get("origin")
+        if origin not in (LOCAL_ORIGIN, PUBLIC_ORIGIN):
+            raise HTTPException(403, "自动连接需要来自已授权页面的请求。")
+        return origin
+
+    def new_session(device=None):
+        now = time.time()
         expired = [k for k, v in sessions.items() if v < now]
         for k in expired:
             sessions.pop(k, None)
+            session_devices.pop(k, None)
         token = secrets.token_urlsafe(32)
         sessions[token] = now + 8 * 3600
+        if device:
+            session_devices[token] = device
         return {"token": token, "expires_at": sessions[token]}
+
+    @app.post("/api/pair")
+    async def pair(request: Request, data: PairRequest):
+        check_pair_limit()
+        if not data.code.isascii() or not secrets.compare_digest(data.code, pair_code):
+            failed_pairs.append(time.time())
+            raise HTTPException(403, "配对码不正确；请使用本次启动时的配对码。")
+        if data.remember:
+            origin = browser_origin(request)
+            credential, token_hash, expires = store.remember_browser(origin)
+            return {**new_session((token_hash, origin)), "device_token": credential, "device_expires_at": expires}
+        return new_session()
+
+    @app.post("/api/session/restore")
+    async def restore_session(request: Request, data: RestoreRequest):
+        origin = browser_origin(request)
+        check_pair_limit()
+        remembered = store.restore_browser(data.device_token, origin)
+        if not remembered:
+            failed_pairs.append(time.time())
+            return JSONResponse({"state": "unpaired", "message": "浏览器配对已失效，请使用本次启动的配对码重新连接。"}, status_code=401)
+        token_hash, expires = remembered
+        return {**new_session((token_hash, origin)), "device_expires_at": expires}
+
+    @app.post("/api/session/remember")
+    async def remember_session(request: Request):
+        # Upgrade an already paired browser without asking for the code again.
+        origin = browser_origin(request)
+        token = request.headers.get("authorization", "").removeprefix("Bearer ")
+        credential, token_hash, expires = store.remember_browser(origin)
+        session_devices[token] = (token_hash, origin)
+        return {"device_token": credential, "device_expires_at": expires}
+
+    @app.post("/api/session/forget")
+    async def forget_session(request: Request, data: RestoreRequest):
+        origin = browser_origin(request)
+        token_hash = store.forget_browser(data.device_token, origin)
+        # Also revoke every short session restored by this browser, including
+        # other open tabs. Never revoke a different origin's browser record.
+        for token, device in list(session_devices.items()):
+            if device == (token_hash, origin):
+                sessions.pop(token, None)
+                session_devices.pop(token, None)
+        return {"message": "已取消记住此浏览器；下次连接需要重新配对。"}
 
     @app.post("/api/pairing-code")
     async def pairing_code(request: Request):

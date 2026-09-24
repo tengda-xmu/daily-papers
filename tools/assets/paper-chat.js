@@ -3,8 +3,17 @@
   const base = 'http://127.0.0.1:43127';
   const local = document.body.dataset.codexLocal === 'true';
   const key = 'daily-papers-codex-session';
-  const session = local ? localStorage : sessionStorage;
-  let token = session.getItem(key) || '';
+  const session = local ? 'localStorage' : 'sessionStorage';
+  const browserKey = 'daily-papers-codex-browser', rememberKey = 'daily-papers-codex-remember';
+  function readStorage(storage, name) { try { return window[storage].getItem(name) || ''; } catch { return ''; } }
+  function writeStorage(storage, name, value) {
+    try { if (value) window[storage].setItem(name, value); else window[storage].removeItem(name); return true; } catch { return false; }
+  }
+  let token = readStorage(session, key);
+  let deviceToken = readStorage('localStorage', browserKey);
+  if (!/^[A-Za-z0-9_-]{43}$/.test(deviceToken)) deviceToken = '';
+  let devicePersisted = Boolean(deviceToken);
+  let restorePromise = null, connectPromise = null, reconnectTimer = null, connecting = false;
   let connectedModel = '';
   const modelKey = 'daily-papers-codex-model';
   let availableModels = [];
@@ -26,7 +35,7 @@
   dialog.setAttribute('aria-labelledby', 'chat-heading');
   dialog.innerHTML = `<div class="chat-width-resizer" role="separator" tabindex="0" aria-orientation="vertical" aria-label="调整对话侧栏宽度" aria-controls="chat-shell" title="左右拖动调整宽度；双击恢复默认"></div><div class="chat-shell" id="chat-shell">
     <header class="chat-header"><div class="chat-heading-row"><h2 id="chat-heading">Codex 论文对话</h2><button class="chat-close" type="button" aria-label="关闭对话">×</button></div><p class="chat-paper-title"></p><p class="chat-status" role="status">未连接本机 Codex</p><div class="chat-model-row"><label for="chat-model">模型</label><select id="chat-model" aria-describedby="chat-model-help" disabled><option value="">连接后加载可用模型</option></select></div><p class="chat-model-help" id="chat-model-help">选择将用于下一次发送。</p></header>
-    <section class="chat-connect"><p>先运行项目中的“启动论文助手.cmd”，再粘贴本次启动的配对码。</p><div class="chat-pair-row"><input type="password" autocomplete="off" aria-label="本机配对码" placeholder="本机配对码"><button class="chat-button" type="button" data-chat-action="connect">连接</button></div><p class="chat-local-help"><a class="chat-local-link" target="_blank" rel="noopener noreferrer">在本机打开论文助手</a> · 电脑须保持运行</p></section>
+    <section class="chat-connect"><p>先运行“启动论文助手.cmd”。首次连接请粘贴配对码，记住浏览器后可自动连接。</p><div class="chat-pair-row"><input type="password" autocomplete="off" aria-label="本机配对码" placeholder="首次连接的配对码"><button class="chat-button" type="button" data-chat-action="connect">连接</button></div><label class="chat-remember"><input type="checkbox" checked>记住此浏览器，下次自动连接</label><p class="chat-local-help"><a class="chat-local-link" target="_blank" rel="noopener noreferrer">在本机打开论文助手</a> · 电脑须保持运行</p></section>
     <section class="chat-documents" aria-label="论文资料">
       <div class="chat-doc-actions"><button type="button" class="chat-button" data-chat-action="upload">上传 PDF</button><button type="button" class="chat-button" data-chat-action="fetch-pdf">获取论文 PDF</button></div>
       <p class="chat-document-status" role="status">未载入 PDF，可上传或直接获取。</p>
@@ -53,6 +62,23 @@
   const notice = (text) => { $('.chat-notice').textContent = text; };
   const documentNotice = (text, state = '') => { $('.chat-document-status').textContent = text; $('.chat-document-status').dataset.state = state; };
   const endpoint = (suffix = '') => `/api/papers/${paperId}${suffix}`;
+  $('.chat-remember input').checked = readStorage('localStorage', rememberKey) !== 'off';
+  const remembered = document.createElement('p'); remembered.className = 'chat-remembered'; remembered.hidden = true;
+  remembered.innerHTML = '<span>已记住此浏览器 · 自动连接</span><button type="button" class="text-button" data-chat-action="forget-browser">取消记住</button>';
+  $('.chat-header').append(remembered);
+  function updateRemembered() {
+    remembered.hidden = !deviceToken;
+    remembered.querySelector('span').textContent = devicePersisted ? '已记住此浏览器 · 自动连接' : '自动连接仅在当前页面有效';
+  }
+  function saveSession(data) { token = data.token; writeStorage(session, key, token); }
+  function clearSession() { token = ''; writeStorage(session, key, ''); }
+  function saveBrowser(data) {
+    if (!data.device_token) return;
+    deviceToken = data.device_token;
+    devicePersisted = writeStorage('localStorage', browserKey, deviceToken);
+    if (!devicePersisted) notice('浏览器禁止保存数据；本次可以使用，关闭页面后需重新配对。');
+    updateRemembered();
+  }
   const refreshLayout = setupLayout();
   function setupLayout() {
     const storageKey = 'daily-papers-chat-layout';
@@ -150,7 +176,7 @@
   }
   function loadModels(data) {
     availableModels = data.models || [{id: data.model, label: data.model, images: data.images, is_default: true}];
-    const wanted = localStorage.getItem(modelKey) || data.model;
+    const wanted = readStorage('localStorage', modelKey) || data.model;
     const select = $('#chat-model'); select.replaceChildren();
     for (const item of availableModels) {
       const option = document.createElement('option'); option.value = item.id;
@@ -263,21 +289,49 @@
     $('.chat-send').disabled = locked || !chosenModel();
     $('#chat-model').disabled = locked || !availableModels.length;
     $('[data-chat-action="stop"]').hidden = !value;
-    dialog.querySelectorAll('[data-mode], .chat-translation select, [data-chat-action="fulltext"], [data-chat-action="fetch-pdf"], [data-chat-action="upload"], [data-chat-action="clear"]').forEach(b => { b.disabled = locked; });
+    dialog.querySelectorAll('[data-mode], .chat-translation select, [data-chat-action="fulltext"], [data-chat-action="fetch-pdf"], [data-chat-action="upload"], [data-chat-action="clear"], [data-chat-action="forget-browser"]').forEach(b => { b.disabled = locked; });
+    $('[data-chat-action="forget-browser"]').disabled = locked || connecting;
   };
 
-  async function api(path, options = {}) {
+  async function restoreSession() {
+    if (!deviceToken) return;
+    if (restorePromise) return restorePromise;
+    restorePromise = (async () => {
+      try {
+        const data = await api('/api/session/restore', { method: 'POST', body: JSON.stringify({ device_token: deviceToken }) }, false);
+        saveSession(data);
+      } catch (error) {
+        if (error.state === 'unpaired') {
+          deviceToken = ''; writeStorage('localStorage', browserKey, ''); clearSession(); updateRemembered();
+        }
+        throw error;
+      }
+    })().finally(() => { restorePromise = null; });
+    return restorePromise;
+  }
+
+  async function api(path, options = {}, retryAuth = true) {
+    const sentToken = token;
     const headers = { Authorization: `Bearer ${token}`, ...options.headers };
     if (options.body && !(options.body instanceof FormData)) headers['Content-Type'] = 'application/json';
     let response;
     try { response = await fetch(base + path, { ...options, headers, signal: options.signal || AbortSignal.timeout(120000) }); }
     catch (error) {
       if (error.name === 'AbortError') throw error;
-      throw new Error('无法连接本机。请启动论文助手、允许浏览器访问本地网络，或使用“在本机打开”入口。');
+      const offline = new Error('无法连接本机。请启动论文助手、允许浏览器访问本地网络，或使用“在本机打开”入口。');
+      offline.state = 'offline'; throw offline;
     }
     if (!response.ok) {
       const data = await response.json().catch(() => ({}));
-      if (response.status === 401) { token = ''; session.removeItem(key); $('.chat-connect').hidden = false; }
+      const protectedRoute = path !== '/api/pair' && !path.startsWith('/api/session/');
+      // Only replay a request explicitly rejected before authentication. Never
+      // replay a timed-out/disconnected generation or any non-401 response.
+      if (response.status === 401 && protectedRoute && retryAuth && deviceToken) {
+        if (token === sentToken) { clearSession(); await restoreSession(); }
+        else if (!token) await restoreSession();
+        return api(path, options, false);
+      }
+      if (response.status === 401 && protectedRoute) { clearSession(); $('.chat-connect').hidden = false; }
       const err = new Error(data.message || (typeof data.detail === 'string' ? data.detail : '请求未完成，请重试。'));
       err.state = data.state;
       throw err;
@@ -395,23 +449,50 @@
     }
   }
 
-  async function connect() {
+  function connect() {
+    if (connectPromise) return connectPromise;
+    clearTimeout(reconnectTimer);
+    connectPromise = performConnect().finally(() => { connectPromise = null; });
+    return connectPromise;
+  }
+  async function pairWithCode(code) {
+    const data = await api('/api/pair', { method: 'POST', body: JSON.stringify({ code, remember: $('.chat-remember input').checked }) }, false);
+    saveSession(data); saveBrowser(data); $('.chat-pair-row input').value = '';
+  }
+  async function performConnect() {
+    connecting = true;
     status('正在连接本机 Codex…');
+    $('[data-chat-action="connect"]').disabled = true;
+    $('[data-chat-action="forget-browser"]').disabled = true;
+    $('.chat-remember input').disabled = true;
+    const code = $('.chat-pair-row input').value.trim();
     try {
+      if (!token && deviceToken) {
+        try { await restoreSession(); } catch (error) { if (error.state !== 'unpaired' || !code) throw error; }
+      }
       if (!token) {
-        const code = $('.chat-pair-row input').value.trim();
         if (!code) throw new Error('请先运行启动脚本，复制本机页面中的配对码。');
-        const data = await api('/api/pair', { method: 'POST', body: JSON.stringify({ code }) });
-        token = data.token; session.setItem(key, token); $('.chat-pair-row input').value = '';
+        await pairWithCode(code);
+      }
+      let data;
+      try { data = await api('/api/connect', { method: 'POST' }); }
+      catch (error) {
+        // Startup links contain a fresh one-time code. Recover old short
+        // sessions from versions that did not support remembered browsers.
+        if (error.state !== 'unpaired' || !code) throw error;
+        await pairWithCode(code); data = await api('/api/connect', { method: 'POST' });
+      }
+      if ($('.chat-remember input').checked && !deviceToken) {
+        try { saveBrowser(await api('/api/session/remember', { method: 'POST' })); }
+        catch { notice('本次连接可用；记住浏览器未完成，请更新并重启本机论文助手。'); }
       }
       if (local) {
         const pairing = await api('/api/pairing-code', { method: 'POST' });
         setPairCode(pairing.code);
       }
-      const data = await api('/api/connect', { method: 'POST' });
       connectedModel = data.model;
       loadModels(data);
-      status('已连接本机 Codex', 'connected'); $('.chat-connect').hidden = true;
+      status('已连接本机 Codex', 'connected'); $('.chat-connect').hidden = true; $('.chat-pair-row input').value = ''; updateRemembered();
       if (local) {
         const list = await api('/api/papers');
         const select = document.getElementById('local-paper-list'); select.replaceChildren();
@@ -420,7 +501,16 @@
         select.value = paperId;
       }
       await loadPaper();
-    } catch (error) { status(error.message, error.state || 'error'); $('.chat-connect').hidden = false; }
+    } catch (error) {
+      status(error.message, error.state || 'error'); $('.chat-connect').hidden = false;
+      if (error.state === 'offline' && (token || deviceToken || code) && dialog.open) {
+        status('等待本机助手启动，将自动重连。若浏览器提示，请允许访问本地网络。', 'offline');
+        reconnectTimer = setTimeout(() => { if (dialog.open && !busy && !document.hidden) connect(); }, 8000);
+      }
+    } finally {
+      connecting = false; $('[data-chat-action="connect"]').disabled = false; $('.chat-remember input').disabled = false;
+      $('[data-chat-action="forget-browser"]').disabled = busy || documentPending || remoteDocumentPending;
+    }
   }
 
   async function open(id, title, trigger) {
@@ -433,7 +523,7 @@
     $('.chat-local-link').href = `${base}/?paper=${encodeURIComponent(id || '')}`;
     if (!dialog.open) dialog.showModal();
     refreshLayout();
-    if (token) await connect();
+    if (token || deviceToken || $('.chat-pair-row input').value.trim()) await connect();
     else { $('.chat-connect').hidden = false; $('.chat-messages').replaceChildren(); status('未连接本机 Codex'); }
   }
 
@@ -545,6 +635,7 @@
     try {
       if (name === 'connect') return await connect();
       if (name === 'stop') return await stop();
+      if (name === 'forget-browser') return await forgetBrowser();
       if (!token || !paperId) { notice('请先连接并选择论文。'); return; }
       if (name === 'export-pdf') return await downloadPdf(paperId);
       if (name === 'upload') { uploadPaper = paperId; return $('.chat-documents input[type="file"]').click(); }
@@ -561,6 +652,24 @@
       }
     } catch (error) { notice(error.message); }
   }
+  async function forgetBrowser() {
+    if (busy || documentPending || remoteDocumentPending) return;
+    if (deviceToken) await api('/api/session/forget', { method: 'POST', body: JSON.stringify({ device_token: deviceToken }) }, false);
+    clearTimeout(reconnectTimer);
+    deviceToken = ''; writeStorage('localStorage', browserKey, ''); clearSession();
+    writeStorage('localStorage', rememberKey, 'off'); $('.chat-remember input').checked = false;
+    $('.chat-pair-row input').value = ''; if (local) setPairCode('');
+    availableModels = []; $('#chat-model').replaceChildren(new Option('连接后加载可用模型', '')); setBusy(false);
+    updateRemembered(); $('.chat-connect').hidden = false;
+    status('已取消自动连接；下次使用时请重新配对。', 'unpaired');
+  }
+  $('.chat-remember input').addEventListener('change', async event => {
+    const checked = event.target.checked;
+    try {
+      if (!checked && deviceToken) await forgetBrowser();
+      else writeStorage('localStorage', rememberKey, checked ? 'on' : 'off');
+    } catch (error) { event.target.checked = true; notice(error.message); }
+  });
   dialog.addEventListener('click', event => {
     const button = event.target.closest('[data-chat-action]'); if (button) action(button.dataset.chatAction);
     const shortcut = event.target.closest('[data-mode]');
@@ -604,21 +713,35 @@
     rememberDraft(); translationSource = $('.chat-translation-source').value; restoreDraft();
   });
   $('#chat-model').addEventListener('change', () => {
-    if (chosenModel()) localStorage.setItem(modelKey, $('#chat-model').value);
+    if (chosenModel()) writeStorage('localStorage', modelKey, $('#chat-model').value);
     updateModelHint();
     notice(`后续请求将使用 ${$('#chat-model').value}，当前论文的对话记录会保留。`);
   });
   updateMode();
   $('.chat-composer textarea').addEventListener('keydown', event => { if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) { event.preventDefault(); $('.chat-composer').requestSubmit(); } });
-  $('.chat-close').onclick = async () => { await stop(); dialog.close(); if (lastTrigger) lastTrigger.focus(); };
-  dialog.addEventListener('cancel', () => { stop(); });
+  $('.chat-close').onclick = async () => { clearTimeout(reconnectTimer); await stop(); dialog.close(); if (lastTrigger) lastTrigger.focus(); };
+  dialog.addEventListener('cancel', () => { clearTimeout(reconnectTimer); stop(); });
+  function reconnectWhenVisible() {
+    if (dialog.open && !document.hidden && !busy && (token || deviceToken) && $('.chat-status').dataset.state === 'offline') connect();
+  }
+  window.addEventListener('online', reconnectWhenVisible);
+  window.addEventListener('focus', reconnectWhenVisible);
+  document.addEventListener('visibilitychange', reconnectWhenVisible);
+  window.addEventListener('storage', event => {
+    if (event.key !== browserKey) return;
+    deviceToken = readStorage('localStorage', browserKey);
+    if (!/^[A-Za-z0-9_-]{43}$/.test(deviceToken)) deviceToken = '';
+    devicePersisted = Boolean(deviceToken); clearSession(); updateRemembered();
+    if (!deviceToken) { status('浏览器授权已在其他标签页取消，请重新配对。', 'unpaired'); $('.chat-connect').hidden = false; }
+    else if (dialog.open && !busy) connect();
+  });
   document.addEventListener('click', event => { const button = event.target.closest('.codex-entry'); if (button) open(button.dataset.paperId, button.dataset.paperTitle, button); });
   if (local) {
     const hash = new URLSearchParams(location.hash.slice(1)); setPairCode(hash.get('pair') || '');
     if (pairCode) { historyReplace(); $('.chat-pair-row input').value = pairCode; }
     paperId = new URLSearchParams(location.search).get('paper') || '';
     document.getElementById('local-open-chat').onclick = () => open(document.getElementById('local-paper-list').value || paperId, '', null);
-    open(paperId, '', null).then(() => { if (pairCode && !token) connect(); });
+    open(paperId, '', null);
   }
   function historyReplace() { window.history.replaceState(null, '', location.pathname + location.search); }
 })();

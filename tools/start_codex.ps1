@@ -33,4 +33,4 @@ if (-not $running) {
 $connection = Get-Content -LiteralPath (Join-Path $runtimeDir 'connection.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 if (-not $NoBrowser) { Start-Process "$baseUrl/#pair=$($connection.pair_code)" }
 Write-Output "Paper assistant is running at $baseUrl/"
-Write-Output 'The local page connects automatically. Copy its pairing code when using the public website.'
+Write-Output 'The local page connects automatically. Pair the public website once and keep Remember this browser checked.'
