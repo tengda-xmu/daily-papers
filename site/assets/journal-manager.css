@@ -1,8 +1,8 @@
 #journal-manager { max-width: 980px; }
-#journal-manager button, #journal-manager input:not([type=checkbox]) { font: inherit; font-size: 14px; border: 1px solid #c5d3df; border-radius: 5px; padding: 10px 14px; background: #fff; color: #111; }
+#journal-manager button, #journal-manager input:not([type=checkbox]), #journal-manager select { font: inherit; font-size: 14px; border: 1px solid #c5d3df; border-radius: 5px; padding: 10px 14px; background: #fff; color: #111; }
 #journal-manager button { color: #153e64; cursor: pointer; white-space: nowrap; }
 #journal-manager button:disabled { cursor: default; opacity: .5; }
-#journal-manager input:not([type=checkbox]) { width: 100%; min-width: 0; }
+#journal-manager input:not([type=checkbox]), #journal-manager select { width: 100%; min-width: 0; }
 #journal-manager :focus-visible { outline: 2px solid #153e64; outline-offset: 3px; }
 #journal-manager h2 { margin: 0; font-size: 22px; }
 #journal-manager p { margin: 10px 0; }
@@ -18,7 +18,9 @@
 #journal-fields > label, .journal-form-grid label { font-size: 14px; }
 .journal-verify-row { display: flex; gap: 12px; max-width: 470px; margin-top: 7px; }
 .journal-form-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 24px; margin: 20px 0; }
-.journal-form-grid input { display: block; margin-top: 7px; }
+.journal-form-grid > * { min-width: 0; }
+.journal-form-grid input, .journal-form-grid select { display: block; margin-top: 7px; }
+#journal-new-group-field { display: block; margin-top: 12px; }
 .journal-enabled { display: inline-flex; align-items: center; gap: 7px; }
 .journal-editor-actions { display: flex; gap: 12px; margin-top: 22px; }
 #journal-manager #journal-save, #journal-manager #journal-sync { color: #fff; background: #153e64; border-color: #153e64; }

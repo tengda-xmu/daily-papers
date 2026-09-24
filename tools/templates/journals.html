@@ -9,7 +9,14 @@
       <fieldset id="journal-fields" disabled>
         <label for="journal-issn">ISSN</label><div class="journal-verify-row"><input id="journal-issn" placeholder="例如 2041-1723" maxlength="16" required autocomplete="off"><button id="journal-verify" type="button">验证期刊</button></div>
         <p id="journal-verification" role="status" class="journal-help"></p>
-        <div class="journal-form-grid"><label>期刊名称<input id="journal-name" required minlength="2" maxlength="180" placeholder="验证后自动填写，可调整显示名称"></label><label>分组<input id="journal-group" list="journal-groups" required maxlength="60" value="自定义期刊" placeholder="选择现有分组或填写新分组"><datalist id="journal-groups"></datalist></label></div>
+        <div class="journal-form-grid">
+          <label>期刊名称<input id="journal-name" required minlength="2" maxlength="180" placeholder="验证后自动填写，可调整显示名称"></label>
+          <div class="journal-group-field">
+            <label for="journal-group">分组</label>
+            <select id="journal-group" required aria-controls="journal-new-group-field"><option value="自定义期刊" selected>自定义期刊</option></select>
+            <label id="journal-new-group-field" for="journal-new-group" hidden>新分组名称<input id="journal-new-group" maxlength="60" placeholder="例如：结构可靠性期刊" disabled></label>
+          </div>
+        </div>
         <label class="journal-enabled"><input id="journal-enabled" type="checkbox" checked> 每日定向检索此刊</label>
         <div class="journal-editor-actions"><button id="journal-save" type="submit">保存到本机</button><button id="journal-cancel" type="button" hidden>取消编辑</button></div>
       </fieldset>

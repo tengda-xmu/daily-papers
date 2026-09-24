@@ -44,10 +44,26 @@
     return result;
   }
   function node(tag, text) { const el = document.createElement(tag); if (text !== undefined) el.textContent = text; return el; }
+  function groupInput(focus = false) {
+    const creating = $('#journal-group').value === '';
+    $('#journal-new-group-field').hidden = !creating;
+    $('#journal-new-group').disabled = !creating;
+    $('#journal-new-group').required = creating;
+    $('#journal-group').required = !creating;
+    if (creating && focus) $('#journal-new-group').focus();
+  }
+  function drawGroups(data) {
+    const select = $('#journal-group'), selected = select.value;
+    const groups = new Set([...data.groups, ...data.journals.map(journal => journal.group), '自定义期刊']);
+    if (selected) groups.add(selected);
+    select.replaceChildren(...[...groups].map(group => new Option(group, group, group === '自定义期刊')), new Option('＋ 新建分组…', ''));
+    select.value = selected;
+    groupInput();
+  }
   function draw(data) {
     state = data;
     $('#journal-count').textContent = `${data.journals.length} / ${data.max_journals} 本`;
-    $('#journal-groups').replaceChildren(...[...new Set([...data.groups, '自定义期刊'])].map(x => new Option(x, x)));
+    drawGroups(data);
     $('#journal-sync-state').textContent = data.pending ? '已保存到本机 · 有修改尚未同步' : data.commit_url ? '已同步 GitHub' : '本机配置与已载入的仓库版本一致';
     const commit = $('#journal-commit'); commit.hidden = !/^https:\/\/github\.com\/tengda-xmu\/daily-papers\/commit\/[a-f0-9]+$/.test(data.commit_url || '');
     if (!commit.hidden) commit.href = data.commit_url;
@@ -80,10 +96,12 @@
   function reset() {
     editing = ''; $('#journal-form').reset(); $('#journal-issn').readOnly = false; $('#journal-cancel').hidden = true;
     $('#journal-editor-title').textContent = '添加期刊'; $('#journal-verification').textContent = ''; $('#journal-verify').hidden = false;
+    $('#journal-new-group').setCustomValidity(''); groupInput();
   }
   function edit(journal) {
     editing = journal.issn; $('#journal-issn').value = journal.issn; $('#journal-issn').readOnly = true;
     $('#journal-name').value = journal.name; $('#journal-group').value = journal.group; $('#journal-enabled').checked = journal.enabled;
+    $('#journal-new-group').setCustomValidity(''); groupInput();
     $('#journal-cancel').hidden = false; $('#journal-verify').hidden = true; $('#journal-editor-title').textContent = '编辑期刊';
     $('#journal-verification').textContent = 'ISSN 保持不变；可调整刊名、分组和每日检索状态。'; $('#journal-name').focus();
   }
@@ -91,8 +109,14 @@
   $('#journal-form').onsubmit = (event) => {
     event.preventDefault();
     if (!state || pending) return;
-    change({issn: editing || $('#journal-issn').value.trim(), name: $('#journal-name').value.trim(), group: $('#journal-group').value.trim(), enabled: $('#journal-enabled').checked});
+    const group = ($('#journal-group').value || $('#journal-new-group').value).trim();
+    if (!group) {
+      $('#journal-new-group').setCustomValidity('请填写新分组名称。'); $('#journal-new-group').reportValidity(); return;
+    }
+    change({issn: editing || $('#journal-issn').value.trim(), name: $('#journal-name').value.trim(), group, enabled: $('#journal-enabled').checked});
   };
+  $('#journal-group').onchange = () => { $('#journal-new-group').setCustomValidity(''); groupInput(true); };
+  $('#journal-new-group').oninput = () => $('#journal-new-group').setCustomValidity('');
   $('#journal-verify').onclick = async () => {
     lock(true); $('#journal-verification').textContent = '正在验证 ISSN…';
     try {
