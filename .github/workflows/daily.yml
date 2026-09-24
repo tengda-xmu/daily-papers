@@ -76,6 +76,8 @@ jobs:
           LLM_MODEL: ${{ secrets.LLM_MODEL }}
           WECHAT_WORK_WEBHOOK_URL: ${{ secrets.WECHAT_WORK_WEBHOOK_URL }}
         run: python -m src.pipeline
+      - name: Update official research leads
+        run: python -m src.research_leads
       - run: python tools/build_site.py
       - name: Publish GitHub Pages
         uses: actions/upload-pages-artifact@v3

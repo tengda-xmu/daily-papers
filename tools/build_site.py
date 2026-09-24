@@ -326,11 +326,49 @@ def wechat_articles_panel(records: list[dict]) -> str:
 文章跳转若要求验证码，请在浏览器中手动完成。这些线索不占用核心与扩展论文名额。</p><ul>{wechat_entries(records)}</ul></div></details>'''
 
 
-def render_leads(payload: dict) -> str:
-    records = payload.get('wechat_articles') or []
-    entries = f'<ul class="archive-list">{wechat_entries(records)}</ul>' if records else '<p class="empty">本期暂无公众号线索，可在设置中查看订阅与采集状态。</p>'
-    return document(template('leads.html', count=len(records), entries=entries,
-        generated=esc(display_time(payload.get('generated_at'))[1])), title='科研线索 | 每日论文推荐', active='leads')
+def render_leads(payload: dict, collection=None) -> str:
+    from src.research_leads import KINDS, state, wechat_leads
+    collection = collection or {'entries': wechat_leads(payload.get('wechat_articles') or []),
+                                'directions': active_directions(load_profile()), 'sources': [], 'days': 90}
+    records, entries = collection['entries'], []
+    topic_labels = {d['id']: d['name'] for d in collection['directions']}
+    now = datetime.now(timezone.utc)
+    for index, row in enumerate(records):
+        status, status_label = state(row, now)
+        provider = row.get('provider', 'official')
+        kind = row['kind']
+        label = ('公开检索入口' if row.get('indexed') else '公众号原文') if provider == 'wechat' else {
+            'conference': '官网与日程', 'call': '查看专题' if row.get('resource_type') else '查看征稿要求',
+            'resource': '查看资源', 'news': '阅读官方公告'}[kind]
+        when = ''
+        if row.get('start'):
+            when = f"会期 {row['start']} 至 {row.get('end', row['start'])}（当地日期）"
+        elif row.get('deadline'):
+            when = f"截止 {row['deadline']} {row.get('deadline_zone', '（时区见官网）')}"
+        elif row.get('published_at'):
+            when = f"发布 {display_time(row['published_at'])[0]}"
+        meta = ' · '.join(esc(v) for v in [row.get('source'), when, row.get('location')] if v)
+        tags = ''.join(f'<span>{esc(topic_labels[t])}</span>' for t in row.get('topics', []) if t in topic_labels)
+        checked = f'<span class="lead-verified">信息核对 {esc(row["verified_at"])}</span>' if row.get('verified_at') else ''
+        entries.append(f'''<li class="lead-entry" data-kind="{kind}" data-provider="{provider}" data-state="{status}"
+data-topics="{esc(' '.join(row.get('topics', [])))}" data-start="{esc(row.get('start', row.get('deadline', '')))}"
+data-published="{esc(row.get('published_at', ''))}" data-rank="{index}">
+<div class="lead-heading"><h2><a href="{safe_url(row.get('url'))}" target="_blank" rel="noopener noreferrer">{esc(row['title'])}</a></h2>
+<span class="lead-state" data-state="{status}">{esc(status_label)}</span></div>
+<p class="lead-meta">{esc(KINDS[kind])} · {meta}</p><p class="lead-summary">{esc(row.get('summary', ''))}</p>
+<div class="lead-footer"><a href="{safe_url(row.get('url'))}" target="_blank" rel="noopener noreferrer">{label}</a>{tags}{checked}</div></li>''')
+    counts = Counter(r['kind'] for r in records)
+    categories = ''.join(f'<button type="button" data-lead-kind="{kind}" aria-pressed="false">{label} <span>{counts[kind]}</span></button>' for kind, label in KINDS.items())
+    options = ''.join(f'<option value="{esc(key)}">{esc(label)}</option>' for key, label in topic_labels.items())
+    statuses = []
+    for source in collection['sources']:
+        status_label = {'ok': '更新成功', 'no_data': '暂无近期公告', 'error': '本轮获取失败，保留已有条目'}.get(source['status'], '尚未获取')
+        statuses.append(f'<li>{esc(source["name"])}：{status_label}；最近检查 {esc(display_time(source.get("checked_at"))[1])}</li>')
+    source_status = f'<details class="leads-source-status"><summary>来源与更新说明</summary><p>公众号汇总近 {collection["days"]} 天已发布线索，官方公告随每日更新采集。会议目录显示人工核对日期，会期状态按当前日期计算；投稿与报名要求请以官网为准。</p><ul>{"".join(statuses)}</ul></details>'
+    return document(template('leads.html', count=len(records), entries=''.join(entries), categories=categories,
+        topics=options, source_status=source_status, days=collection['days'],
+        generated=esc(display_time(collection.get('checked_at') or payload.get('generated_at'))[1])),
+        title='科研线索 | 每日论文推荐', active='leads')
 
 
 def render(payload: dict, *, archive_date: str | None = None) -> str:
@@ -470,7 +508,8 @@ def main() -> None:
         sources_panel=source_status_panel(payload, reading_url='./'),
         journals=journal_directory(), journal_count=len(JOURNALS), group_count=len({j['group'] for j in JOURNALS})),
         title="设置 | 每日论文推荐", active="setup"), encoding="utf-8")
-    (OUT / 'leads.html').write_text(render_leads(payload), encoding='utf-8')
+    from src.research_leads import collect
+    (OUT / 'leads.html').write_text(render_leads(payload, collect(payload, ROOT)), encoding='utf-8')
     from src.manual_search import SOURCES
     choices = ''.join(f'<label title="{esc(s["mode"])}"><input type="checkbox" name="library" value="{esc(s["id"])}" checked> {esc(s["label"])}</label>' for s in SOURCES)
     (OUT / "search.html").write_text(document(template("search.html", sources=choices),

@@ -67,6 +67,46 @@ button:disabled { cursor: default; }
 .research-leads > .issue-meta > a { margin-left: auto; }
 .research-leads .archive-entry > div { min-width: 0; overflow-wrap: anywhere; }
 .research-leads .archive-entry > div > a:first-child { font-size: 18px; font-weight: 500; }
+.lead-categories { display:flex; flex-wrap:wrap; gap:8px; margin:20px 0 18px; }
+.lead-categories button { padding:8px 14px; border:1px solid var(--line); border-radius:5px; background:var(--paper); color:var(--link); font-size:14px; font-weight:600; }
+.lead-categories button span { margin-left:7px; font-size:12px; }
+.lead-categories button[aria-pressed="true"] { background:var(--blue); border-color:var(--blue); color:#fff; }
+.lead-filters { display:flex; flex-wrap:wrap; align-items:end; gap:12px 16px; }
+.lead-filters label { display:grid; gap:5px; font-size:12px; color:var(--muted); flex:1 1 145px; }
+.lead-filters .lead-query { flex:3 1 280px; }
+.lead-filters input { min-width:0; width:100%; height:42px; padding:8px 12px; border:1px solid #ced8e2; border-radius:4px; font-size:14px; background:var(--soft); }
+.lead-filters select { height:42px; }
+.lead-results { display:flex; justify-content:space-between; align-items:center; gap:12px; margin:20px 0 8px; font-size:12px; color:var(--muted); }
+.lead-list { list-style:none; margin:0; padding:0; }
+.lead-entry { padding:24px 0; border-top:1px solid var(--line); overflow-wrap:anywhere; }
+.lead-heading { display:flex; align-items:baseline; justify-content:space-between; gap:16px; }
+.lead-heading h2 { font-size:18px; line-height:1.55; margin:0 0 8px; }
+.lead-heading h2 a { font-weight:600; }
+.lead-state { flex-shrink:0; color:var(--muted); font-size:12px; }
+.lead-state[data-state="upcoming"], .lead-state[data-state="ongoing"] { color:var(--blue); font-weight:600; }
+.lead-meta { font-size:12px; color:var(--muted); margin-bottom:8px; }
+.lead-summary { max-width:110ch; font-size:14px; margin-bottom:12px; }
+.lead-footer { display:flex; align-items:baseline; flex-wrap:wrap; gap:6px 18px; font-size:12px; }
+.lead-footer a { font-weight:600; }
+.lead-footer span { color:var(--muted); }
+.lead-footer .lead-verified { margin-left:auto; }
+.lead-pagination { display:flex; justify-content:flex-end; align-items:center; flex-wrap:wrap; gap:14px; margin:16px 0 28px; font-size:13px; }
+.lead-pagination label { display:flex; align-items:center; gap:8px; margin-right:auto; }
+.lead-pagination select { width:auto; }
+.lead-pagination button { border:1px solid #ced8e2; border-radius:4px; padding:8px 12px; background:var(--paper); color:var(--link); }
+.lead-pagination button:disabled { color:var(--muted); opacity:.6; }
+.leads-source-status { margin:24px 0 16px; font-size:13px; border-top:1px solid var(--line); padding-top:16px; color:var(--muted); }
+.leads-source-status summary { cursor:pointer; color:var(--link); font-weight:600; margin-bottom:10px; }
+@media (max-width:640px) {
+  .lead-heading { display:block; }
+  .lead-heading h2 { font-size:17px; margin-bottom:4px; }
+  .lead-state { display:block; margin-bottom:8px; }
+  .lead-footer .lead-verified { width:100%; margin-left:0; }
+  .lead-categories { gap:6px; }
+  .lead-categories button { padding:7px 10px; font-size:13px; }
+  .lead-pagination { gap:10px; }
+  .lead-filters label { flex-basis:135px; }
+}
 .daily-issue > .issue-meta { margin: 0 0 20px; }
 .daily-update-panel { margin: 0 0 20px; padding: 12px 16px; border-left: 2px solid var(--blue); background: var(--soft); font-size: 13px; }
 .daily-update-panel p { margin-bottom: 8px; }

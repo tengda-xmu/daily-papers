@@ -223,3 +223,76 @@
   openAnchor(location.hash);
   filter();
 }());
+
+// Research leads have their own filters; paper ranking is intentionally separate.
+(function () {
+  const root = document.querySelector('.research-leads');
+  if (!root) return;
+  const get = id => root.querySelector('#' + id);
+  const list = get('lead-list'), rows = Array.from(list.children);
+  const fields = ['query', 'topic', 'provider', 'state', 'sort', 'page-size'];
+  const controls = Object.fromEntries(fields.map(name => [name, get('lead-' + name)]));
+  const categories = Array.from(root.querySelectorAll('[data-lead-kind]'));
+  let category = 'all', page = 1;
+  // Preserve a shareable view, including browser Back / Forward navigation.
+  function restore() {
+    const params = new URLSearchParams(location.search);
+    category = categories.some(b => b.dataset.leadKind === params.get('kind')) ? params.get('kind') : 'all';
+    for (const [name, field] of Object.entries(controls)) {
+      const value = params.get(name);
+      if (name === 'query') field.value = value || '';
+      else field.value = Array.from(field.options).some(o => o.value === value) ? value : field.options[0].value;
+    }
+    page = Math.max(1, parseInt(params.get('page'), 10) || 1);
+    draw();
+  }
+  function draw(save = false) {
+    const query = controls.query.value.trim().toLocaleLowerCase(), topic = controls.topic.value;
+    const provider = controls.provider.value, state = controls.state.value;
+    const matches = rows.filter(row => (category === 'all' || row.dataset.kind === category)
+      && (!query || row.textContent.toLocaleLowerCase().includes(query))
+      && (!topic || row.dataset.topics.split(' ').includes(topic))
+      && (!provider || row.dataset.provider === provider)
+      && (!state || (state === 'active' ? row.dataset.state !== 'ended' : row.dataset.state === state)));
+    matches.sort((a, b) => {
+      if (controls.sort.value === 'date') return (a.dataset.start || '9999').localeCompare(b.dataset.start || '9999') || +a.dataset.rank - +b.dataset.rank;
+      if (controls.sort.value === 'latest') return b.dataset.published.localeCompare(a.dataset.published) || +a.dataset.rank - +b.dataset.rank;
+      return +a.dataset.rank - +b.dataset.rank;
+    });
+    const size = Number(controls['page-size'].value), pages = Math.max(1, Math.ceil(matches.length / size));
+    page = Math.min(page, pages);
+    rows.forEach(row => { row.hidden = true; });
+    matches.slice((page - 1) * size, page * size).forEach(row => { row.hidden = false; list.append(row); });
+    categories.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.leadKind === category)));
+    get('lead-count').textContent = matches.length ? `共 ${matches.length} 条，显示 ${(page - 1) * size + 1}–${Math.min(page * size, matches.length)} 条` : '共 0 条';
+    get('lead-empty').hidden = matches.length > 0;
+    get('lead-pagination').hidden = matches.length === 0;
+    get('lead-page').textContent = `${page} / ${pages} 页`;
+    get('lead-prev').disabled = page === 1;
+    get('lead-next').disabled = page === pages;
+    if (save) {
+      const url = new URL(location.href);
+      for (const name of ['kind', ...fields, 'page']) url.searchParams.delete(name);
+      if (category !== 'all') url.searchParams.set('kind', category);
+      for (const [name, field] of Object.entries(controls)) {
+        const value = field.value;
+        if (value && value !== (field.options?.[0]?.value || '')) url.searchParams.set(name, value);
+      }
+      if (page > 1) url.searchParams.set('page', String(page));
+      history.replaceState(null, '', url);
+    }
+  }
+  categories.forEach(button => button.addEventListener('click', () => { category = button.dataset.leadKind; page = 1; draw(true); }));
+  for (const [name, field] of Object.entries(controls)) field.addEventListener(name === 'query' ? 'input' : 'change', () => { page = 1; draw(true); });
+  get('lead-filters').addEventListener('submit', event => event.preventDefault());
+  get('lead-reset').addEventListener('click', () => {
+    category = 'all'; page = 1;
+    for (const [name, field] of Object.entries(controls)) field.value = name === 'query' ? '' : field.options[0].value;
+    draw(true);
+  });
+  for (const [id, step] of [['lead-prev', -1], ['lead-next', 1]]) get(id).addEventListener('click', () => {
+    page += step; draw(true); get('lead-count').scrollIntoView({block: 'start'});
+  });
+  window.addEventListener('popstate', restore);
+  restore();
+}());
