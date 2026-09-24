@@ -4,6 +4,7 @@
   --font: "PingFang SC", "Microsoft YaHei", "Microsoft YaHei UI", system-ui, sans-serif;
   --title-font: Georgia, Cambria, "Songti SC", "SimSun", serif;
   --header: 64px;
+  --content-width: min(1800px, calc(100% - clamp(40px, 8vw, 160px)));
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 90px; }
@@ -25,7 +26,7 @@ button:disabled { cursor: default; }
 .skip-link { position: fixed; z-index: 30; top: -60px; left: 20px; padding: 8px 14px; color: #fff; background: var(--blue); }
 .skip-link:focus { top: 10px; }
 .site-header { position: sticky; top: 0; z-index: 10; min-height: var(--header); background: var(--blue); }
-.nav-inner { display: flex; align-items: center; justify-content: space-between; width: min(1120px, calc(100% - 64px)); min-height: var(--header); margin: auto; }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; width: var(--content-width); min-height: var(--header); margin: auto; }
 .wordmark { display: flex; align-items: center; gap: 13px; color: #fff; font-size: 15px; font-weight: 500; white-space: nowrap; }
 .wordmark span:first-child { font-weight: 600; font-size: 17px; }
 .wordmark:hover { color: #fff; text-decoration: none; }
@@ -35,7 +36,7 @@ button:disabled { cursor: default; }
 .main-navigation a:hover, .main-navigation a[aria-current="page"] { color: #fff; text-decoration: none; }
 .main-navigation a[aria-current="page"]::after { content: ""; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: #c8d9e8; }
 .menu-toggle { display: none; padding: 6px 10px; border: 1px solid #ffffff60; border-radius: 4px; color: #fff; background: transparent; font-size: 13px; }
-.site-shell { width: min(920px, calc(100% - 64px)); min-height: calc(100vh - var(--header)); margin: auto; }
+.site-shell { width: var(--content-width); min-height: calc(100vh - var(--header)); margin: auto; }
 .main-content { min-width: 0; padding: 56px 0 30px; }
 .page-heading { display: flex; justify-content: space-between; align-items: center; gap: 28px; }
 .page-intro { margin-bottom: 0; color: var(--muted); font-size: 14px; }
@@ -89,7 +90,7 @@ select { width: 100%; min-width: 0; padding: 9px 10px; border: 1px solid #ced8e2
 .analysis-provenance { margin-bottom: 24px; color: var(--muted); font-size: 13px; }
 .bibliography { display: flex; flex-wrap: wrap; column-gap: 16px; row-gap: 2px; margin-bottom: 13px; color: var(--muted); font-size: 13px; }
 .venue { color: var(--muted); }
-.abstract { max-width: 82ch; margin-bottom: 14px; color: var(--ink); font-size: 16px; line-height: 1.8; overflow-wrap: anywhere; }
+.abstract { max-width: 76em; margin-bottom: 14px; color: var(--ink); font-size: 16px; line-height: 1.8; overflow-wrap: anywhere; }
 .paper-tools { display: flex; align-items: center; gap: 22px; font-size: 12px; }
 .paper-figure { display: grid; grid-template-columns: fit-content(48%) minmax(0, 1fr); align-items: center; gap: 28px; margin: 24px 0; }
 .figure-preview { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; color: var(--muted); cursor: zoom-in; }
