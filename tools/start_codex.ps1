@@ -30,7 +30,41 @@ if (-not $running) {
     }
     if (-not $running) { throw "Paper assistant did not start. See $runtimeDir\stderr.log" }
 }
-$connection = Get-Content -LiteralPath (Join-Path $runtimeDir 'connection.json') -Raw -Encoding UTF8 | ConvertFrom-Json
-if (-not $NoBrowser) { Start-Process "$baseUrl/#pair=$($connection.pair_code)" }
+if (-not $NoBrowser) {
+    $connection = Get-Content -LiteralPath (Join-Path $runtimeDir 'connection.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    $localPageUrl = "$baseUrl/#pair=$($connection.pair_code)"
+    $edgeExe = $null
+    foreach ($installRoot in @(${env:ProgramFiles(x86)}, $env:ProgramFiles, $env:LOCALAPPDATA)) {
+        if (-not $installRoot) { continue }
+        $candidate = Join-Path $installRoot 'Microsoft\Edge\Application\msedge.exe'
+        if (Test-Path -LiteralPath $candidate -PathType Leaf) {
+            $edgeExe = $candidate
+            break
+        }
+    }
+    if (-not $edgeExe) {
+        foreach ($registryPath in @(
+            'HKCU:\Software\Microsoft\Windows\CurrentVersion\App Paths\msedge.exe',
+            'HKLM:\Software\Microsoft\Windows\CurrentVersion\App Paths\msedge.exe'
+        )) {
+            $candidate = (Get-ItemProperty -LiteralPath $registryPath -ErrorAction SilentlyContinue).'(default)'
+            if ($candidate -and (Test-Path -LiteralPath $candidate -PathType Leaf)) {
+                $edgeExe = $candidate
+                break
+            }
+        }
+    }
+    if (-not $edgeExe) {
+        $edgeCommand = Get-Command msedge.exe -CommandType Application -ErrorAction SilentlyContinue
+        if ($edgeCommand) { $edgeExe = $edgeCommand.Source }
+    }
+    if ($edgeExe) {
+        Start-Process -FilePath $edgeExe -ArgumentList $localPageUrl | Out-Null
+        Write-Output 'Opened the local paper assistant in Microsoft Edge.'
+    } else {
+        Write-Warning 'Microsoft Edge is not installed. Opening the local paper assistant in your default browser.'
+        Start-Process -FilePath $localPageUrl | Out-Null
+    }
+}
 Write-Output "Paper assistant is running at $baseUrl/"
 Write-Output 'The local page connects automatically. Pair the public website once and keep Remember this browser checked.'
