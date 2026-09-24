@@ -368,21 +368,9 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
     direction_bar += f'<a href="{root}directions.html">管理方向</a></div>'
     if not archive_date and profile and profile_revision(profile) != profile_revision(current_profile):
         direction_bar += '<p class="direction-pending">方向设置已变更，点击“手动更新”后按新设置生成推荐。</p>'
-    def coverage(tier, papers):
-        if not profile:
-            return ''
-        counts = Counter(p.get('recommended_direction') for p in papers)
-        parts = [f'{d["name"]} {counts[d["id"]]} 篇' for d in active_directions(profile, tier)]
-        return '<p class="direction-coverage">方向覆盖：' + esc(' · '.join(parts) if parts else '本期未启用此分区的研究方向') + '</p>'
     ok = sum(source_state(s, statuses)[0] in ("ok", "no_data") for s in SOURCE_CATALOG if s["kind"] == "adapter")
     adapter_count = sum(s["kind"] == "adapter" for s in SOURCE_CATALOG)
     cns_children = sum(j["group"] == "CNS 子刊" for j in JOURNALS)
-    policy = payload.get("selection_policy") or {}
-    reading_policy = "点击论文下方按钮展开摘要与阅读笔记。"
-    if policy.get("core_requires_chinese_analysis"):
-        days = int(policy.get("cns_lookback_days", 180))
-        focus = " · 侧重大模型与智能体" if policy.get("within_venue_priority") else ""
-        reading_policy = f"CNS 子刊优先{focus} · 精选近 {days} 天论文"
     archive_notice = f'<p class="archive-notice">正在阅读 {esc(archive_date)} 归档。<a href="../">返回最新一期</a></p>' if archive_date else ""
     update_control = '<button class="manual-update" id="manual-update" type="button">手动更新</button>' if not archive_date else ''
     update_panel = '''<div id="daily-update-panel" class="daily-update-panel" hidden>
@@ -399,11 +387,9 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
         reference_panels = '<div class="reference-area">' + wechat_articles_panel(payload.get('wechat_articles') or []) + source_status_panel(payload, root) + '</div>'
     content = template(
         "daily.html", title="每日论文推荐", day=esc(issue), generated=esc(generated),
-        reading_policy=esc(reading_policy),
-        extended_policy="每篇均有完整中文精读，点击论文下方展开。" if policy.get("extended_requires_chinese_analysis") else "",
         archive_notice=archive_notice, history_url="./" if archive_date else "archive/",
         update_control=update_control, update_panel=update_panel,
-        direction_bar=direction_bar, core_coverage=coverage('core', core), extended_coverage=coverage('extended', extended),
+        direction_bar=direction_bar,
         generated_at=esc(payload.get('generated_at', '')), update_run_id=esc(payload.get('update_run_id', '')),
         source_options="".join(source_options), health_label=f"{ok} / {adapter_count} 类来源正常",
         sources_url='#sources' if archive_date else root + 'setup.html#sources', reference_panels=reference_panels,

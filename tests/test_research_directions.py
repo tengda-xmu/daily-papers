@@ -86,7 +86,8 @@ def test_pipeline_custom_fields_and_analysis_budget_are_balanced(monkeypatch):
     assert len(calls) == 4
     assert all('offtopic' != p['source_id'] for p in result['papers'])
     html = render(result, archive_date='2026-09-24')
-    assert 'climate' in html and '本期方向' in html and '方向覆盖' in html
+    assert 'climate' in html and '本期方向' in html
+    assert '方向覆盖' not in html and 'reading-policy' not in html
     assert result['research_profile_revision'] == profile_revision(settings)
 
 

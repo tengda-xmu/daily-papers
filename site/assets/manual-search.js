@@ -18,6 +18,7 @@
   function write(kind, key, value) { try { if (value) window[kind].setItem(key, value); else window[kind].removeItem(key); return true; } catch { return false; } }
   let token = read(storage, sessionKey), restorePromise, connected = false, job = '', snapshot = null, timer, signature = '';
   let searching = false, restoreForm = false;
+  let journalIssn = new URLSearchParams(location.search).get('journal') || '', journalNames = new Map();
   const action = (text) => { $('#search-action-status').textContent = text; };
   function setConnection(ok, message) {
     connected = ok;
@@ -59,9 +60,8 @@
     if (!token) await restore();
     const libraries = await api('/api/search/sources');
     if (!libraries.sort_options) throw new Error('本机助手需要更新：请停止后重新运行“启动论文助手.cmd”，以启用检索排序。');
-    const selected = $('#search-journal').value || new URLSearchParams(location.search).get('journal') || '';
-    $('#search-journal').replaceChildren(new Option('不限期刊', ''), ...(libraries.journals || []).map(j => new Option(j.name + ' · ' + j.issn, j.issn)));
-    setJournal(selected);
+    journalNames = new Map((libraries.journals || []).map(j => [j.issn, j.name]));
+    applyJournal();
     setConnection(true, '已连接本机 · 可检索 11 类来源');
   }
   $('#search-pair-form').addEventListener('submit', async (event) => {
@@ -91,21 +91,29 @@
   const sourceBoxes = [...document.querySelectorAll('[name=library]')];
   let previousSources = null;
   function setJournal(value) {
-    if (value && ![...$('#search-journal').options].some(o => o.value === value)) $('#search-journal').add(new Option('ISSN ' + value, value));
-    $('#search-journal').value = value;
+    journalIssn = value;
     applyJournal();
   }
   function applyJournal() {
-    const scoped = Boolean($('#search-journal').value);
+    const scoped = Boolean(journalIssn);
     if (scoped && previousSources === null) previousSources = sourceBoxes.filter(x => x.checked).map(x => x.value);
     sourceBoxes.forEach(x => { x.disabled = scoped; if (scoped) x.checked = x.value === 'Crossref'; else if (previousSources !== null) x.checked = previousSources.includes(x.value); });
     if (!scoped) previousSources = null;
     $('#select-libraries').disabled = scoped; $('#clear-libraries').disabled = scoped;
     $('#literature-query').required = !scoped;
-    $('#search-journal-help').hidden = !scoped;
+    $('#search-journal-scope').hidden = !scoped;
+    $('#search-journal-name').textContent = scoped ? (journalNames.get(journalIssn) || 'ISSN ' + journalIssn) : '';
     sourceCount();
   }
-  $('#search-journal').onchange = applyJournal;
+  $('#clear-journal').onclick = () => {
+    setJournal('');
+    const url = new URL(location.href); url.searchParams.delete('journal');
+    history.replaceState(null, '', url);
+    write('sessionStorage', jobKey, '');
+    if (snapshot) action('已取消期刊限定，点击“检索文献”获取新结果；下方仍是上次结果。');
+    $('#literature-query').focus();
+  };
+  applyJournal();
   function sourceCount() { const n = sourceBoxes.filter(x => x.checked).length; $('#selected-libraries').textContent = n === 11 ? '全部 11 类来源' : `已选 ${n} / 11 类来源`; }
   $('#search-libraries').addEventListener('change', sourceCount);
   $('#select-libraries').onclick = () => { sourceBoxes.forEach(x => { x.checked = true; }); sourceCount(); };
@@ -124,7 +132,7 @@
     $('#literature-status').textContent = '正在提交检索请求…';
     try {
       if (!connected) await connect();
-      const result = await api('/api/search', {method: 'POST', body: JSON.stringify({query: $('#literature-query').value.trim(), sources, since: $('#search-since').value, until: $('#search-until').value, limit: Number($('#search-limit').value), journal_issn: $('#search-journal').value, sort_by: $('#search-order').value})});
+      const result = await api('/api/search', {method: 'POST', body: JSON.stringify({query: $('#literature-query').value.trim(), sources, since: $('#search-since').value, until: $('#search-until').value, limit: Number($('#search-limit').value), journal_issn: journalIssn, sort_by: $('#search-order').value})});
       job = result.id; write('sessionStorage', jobKey, job); signature = ''; snapshot = null;
       $('#literature-results').replaceChildren(); $('#search-output').hidden = true;
       $('#search-result-source').value = '';
@@ -141,7 +149,7 @@
         $('#search-since').value = saved.since; $('#search-until').value = saved.until;
         $('#search-limit').value = String(saved.limit);
         $('#search-order').value = saved.sort_by || 'relevance'; orderDescription();
-        sourceBoxes.forEach(box => { box.checked = saved.sources.includes(box.value); });
+        sourceBoxes.forEach(box => { box.checked = saved.journal_issn ? true : saved.sources.includes(box.value); });
         previousSources = null; setJournal(saved.journal_issn || '');
         sourceCount(); restoreForm = false;
       }
@@ -260,7 +268,7 @@
   }
   connect().then(async () => {
     job = read('sessionStorage', jobKey);
-    if (job) { restoreForm = true; await poll(); }
+    if (job && !journalIssn) { restoreForm = true; await poll(); }
   }).catch(error => { setConnection(false, error.message); });
   window.addEventListener('focus', () => { if (!connected) connect().catch(() => {}); });
 })();
