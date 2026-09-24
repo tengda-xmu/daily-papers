@@ -214,6 +214,29 @@ def test_wechat_fixed_scope_invalidates_only_old_wechat_cache(tmp_path):
     asyncio.run(run())
 
 
+def test_scopus_old_date_sorted_empty_cache_is_not_reused(tmp_path):
+    import hashlib
+    async def run():
+        calls = []
+        async def fake(source, query):
+            calls.append(source)
+            return {'state': 'ok', 'records': [record(source)], 'message': 'Scopus STANDARD：按相关性读取 1 页。'}
+        service = SearchService(tmp_path, tmp_path, fake)
+        req = request(['Elsevier', 'Google Scholar'])
+        for source in req.sources:
+            key = hashlib.sha256(json.dumps(req.model_dump(mode='json') | {'sources': [source]}, sort_keys=True).encode()).hexdigest()
+            (service.directory / (key + '.json')).write_text(json.dumps({'state': 'no_data', 'records': []}))
+        identifier = service.start(req)
+        await service.get(identifier)['task']
+        assert calls == ['Elsevier']
+        assert len(service.snapshot(identifier)['records']) == 1
+        identifier = service.start(req)
+        await service.get(identifier)['task']
+        assert calls == ['Elsevier']  # Fixed successful requests now reuse the new cache.
+        assert all(s['cached'] for s in service.snapshot(identifier)['sources'])
+    asyncio.run(run())
+
+
 def test_journal_gbt_structured_names_volume_issue_pages_and_doi():
     row = crossref_rows({'message': {'items': [{
         'DOI': '10.1234/xyz', 'title': ['Evidence and models'], 'container-title': ['Test Journal'],

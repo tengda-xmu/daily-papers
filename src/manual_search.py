@@ -30,7 +30,7 @@ MODES = {
     'ResearchGate': 'SerpApi 公开索引 + 本机导出；不读取登录页面',
     '微信公众号': '订阅 RSS + 本机历史文章；不足时查询公开索引，不限已订阅公众号',
     'Google Scholar': 'SerpApi Scholar · 一次查询；日期精度通常为年',
-    'Elsevier': 'Scopus API · 按当前机构授权返回元数据',
+    'Elsevier': 'Scopus STANDARD · 按相关性检索，日期筛选后按需翻页（最多 3 页）',
     'Web of Science': 'Clarivate Starter API · 一次查询',
 }
 for source in SOURCES:
@@ -62,7 +62,7 @@ def crossref_rows(payload):
 
 
 def fetch_source(source, query, since, until, limit, cache_dir, journal_issn=''):
-    """One bounded query per source (plus Scopus authorization fallback / PubMed fetch)."""
+    """Bounded source queries; Scopus can read up to three pages after date filtering."""
     kwargs = {'queries': [query], 'timeout': 18}
     if source in ('Crossref', 'CNS 子刊专项'):
         adapter = CrossrefAdapter(**kwargs)
@@ -127,8 +127,8 @@ def fetch_source(source, query, since, until, limit, cache_dir, journal_issn='')
     if source == 'Elsevier':
         # Wrap literal terms: user text cannot inject Scopus fields/operators.
         literal = re.sub(r'["{}()\\]', ' ', query)
-        adapter = ElsevierAdapter(queries=[f'TITLE-ABS-KEY("{literal}")'], timeout=18)
-        adapter.queries = adapter.queries[:1]
+        adapter = ElsevierAdapter(queries=[f'TITLE-ABS-KEY("{literal}")'], timeout=12,
+                                  manual=True, limit=limit)
     elif source == 'Google Scholar':
         adapter = GoogleScholarAdapter(**kwargs, include_cns=False, cache_dir=cache_dir / 'scholar')
     elif source == 'arXiv':
@@ -187,9 +187,9 @@ def worker(data):
         if status.status not in ('ok', 'no_data'):
             code = re.search(r'HTTP(?: Error)?\s+(\d{3})', status.message)
             diagnostic = 'HTTP ' + code[1] if code else next((kind for kind in ('SSLError', 'URLError', 'TimeoutError', 'JSONDecodeError') if kind in status.message), '')
-        # WeChat details are locally constructed counts/status text only;
+        # WeChat/Scopus details are locally constructed counts/status text only;
         # never forward raw HTTP exception strings or provider request URLs.
-        message = status.message if source == '微信公众号' else MODES.get(source, '公开 API 检索')
+        message = status.message if source in ('微信公众号', 'Elsevier') else MODES.get(source, '公开 API 检索')
         return {'records': clean, 'state': status.status, 'message': message, 'diagnostic': diagnostic}
     except Exception as exc:
         code = getattr(exc, 'code', None)

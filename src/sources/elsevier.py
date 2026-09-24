@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import json
 import os
+import time
 from datetime import datetime, timedelta
 from urllib.parse import urlencode
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 import xml.etree.ElementTree as ET
 
@@ -17,7 +18,8 @@ class ElsevierAdapter:
     name = "Elsevier"
 
     def __init__(self, api_key: str | None = None, insttoken: str | None = None,
-                 queries: list[str] | None = None, timeout: int = 30):
+                 queries: list[str] | None = None, timeout: int = 30,
+                 manual: bool = False, limit: int = 25):
         self.api_key = api_key if api_key is not None else os.getenv("ELSEVIER_API_KEY", "")
         self.insttoken = insttoken if insttoken is not None else os.getenv("ELSEVIER_INSTTOKEN", "")
         cns = cns_query()
@@ -26,11 +28,13 @@ class ElsevierAdapter:
             'TITLE-ABS-KEY(("generative design" OR "topology optimization" OR "surrogate model") AND (structural OR reliability))',
             'TITLE-ABS-KEY(("structural fatigue" OR "fatigue life" OR fracture) AND (AI OR "machine learning" OR reliability))',
         ]
-        self.queries = topic_queries + [
+        self.queries = topic_queries + ([] if manual else [
             f"{query} AND {cns}" for query in topic_queries
             if "SRCTITLE(" not in query
-        ]
+        ])
         self.timeout = timeout
+        self.manual = manual
+        self.limit = max(1, min(25, limit))
         self._status = SourceStatus(self.name, "not_run")
 
     @property
@@ -42,6 +46,8 @@ class ElsevierAdapter:
             self._status = SourceStatus(self.name, "configuration_missing",
                                         message="ELSEVIER_API_KEY is not configured")
             return []
+        if self.manual:
+            return self._fetch_manual(since, until)
         records: list[RawRecord] = []
         view, restricted = "COMPLETE", False
         error = None
@@ -86,6 +92,91 @@ class ElsevierAdapter:
         else:
             self._status = SourceStatus(self.name, "ok" if records else "no_data", len(records), message)
         return records
+
+    def _fetch_manual(self, since: datetime, until: datetime) -> list[RawRecord]:
+        """Rank by relevance and fill the requested count after exact-date filtering.
+
+        Scopus's date parameter only supports years; coverDate can be a future
+        issue date. A date-sorted first page must not become a false no_data.
+        Bound this interactive operation to three pages and one transport retry.
+        """
+        years = str(until.year) if since.year == until.year else f"{since.year}-{until.year}"
+        records, scanned, pages, start = {}, 0, 0, 0
+        more, total, error, retries = False, None, None, 1
+        deadline = time.monotonic() + 42
+        try:
+            for _ in range(3):
+                params = urlencode({'query': self.queries[0], 'count': 25, 'start': start,
+                                    'view': 'STANDARD', 'date': years, 'sort': 'relevancy'})
+                request = Request('https://api.elsevier.com/content/search/scopus?' + params,
+                                  headers=self._headers())
+                while True:
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        raise TimeoutError()
+                    try:
+                        with urlopen(request, timeout=min(self.timeout, remaining)) as response:
+                            payload = json.loads(response.read().decode('utf-8-sig'))
+                        break
+                    except HTTPError:
+                        # Authorization and quota errors must not be retried.
+                        raise
+                    except (URLError, TimeoutError, ConnectionError):
+                        if not retries:
+                            raise
+                        retries -= 1
+                payload = public_metadata(payload, (self.api_key, self.insttoken))
+                service_error = payload.get('service-error', {}).get('status', {})
+                if service_error:
+                    code = {'AUTHORIZATION_ERROR': 403, 'AUTHENTICATION_ERROR': 401,
+                            'QUOTA_EXCEEDED': 429, 'INVALID_INPUT': 400}.get(service_error.get('statusCode'), 502)
+                    raise HTTPError('https://api.elsevier.com/content/search/scopus', code, 'Scopus API error', {}, None)
+                results = payload.get('search-results')
+                if not isinstance(results, dict):
+                    raise ValueError('Missing Scopus search results')
+                entries = results.get('entry', [])
+                if not isinstance(entries, list):
+                    raise ValueError('Invalid Scopus entries')
+                total = _int(results.get('opensearch:totalResults'))
+                pages += 1
+                # RESULT_NOT_FOUND is Scopus's documented empty-search entry.
+                if any(item.get('error') and item.get('error') != 'RESULT_NOT_FOUND' for item in entries):
+                    raise ValueError('Scopus returned an error entry')
+                items = [item for item in entries if item.get('dc:title')]
+                scanned += len(items)
+                for row in self.parse_payload(payload):
+                    if in_date_window(row.published_at, since, until):
+                        records.setdefault(row.doi or row.source_id or row.title, row)
+                start += len(entries)
+                more = start < total if total is not None else len(entries) == 25
+                if not items and more:
+                    raise ValueError('Scopus returned no usable entries for a nonempty result set')
+                if len(records) >= self.limit or not more:
+                    break
+        except Exception as exc:
+            error = exc
+        rows = list(records.values())[:self.limit]
+        message = f'Scopus STANDARD：按相关性读取 {pages} 页、{scanned} 条记录，所选日期内返回 {len(rows)} 条。'
+        if total is not None:
+            message += f' 年份范围共匹配 {total} 条，未逐条扫描全部结果。'
+        message += ' 日期按 Scopus 期刊日期筛选；标准视图的摘要、作者字段可能不完整。'
+        if error:
+            state = 'partial' if rows else _error_status(error)
+            detail = safe_error(error)
+            if state == 'access_denied' or getattr(error, 'code', None) in (401, 403):
+                message += ' 标准视图访问被拒绝，请检查 API Key 和机构授权。'
+            elif state == 'quota_exhausted' or getattr(error, 'code', None) == 429:
+                message += ' Scopus 请求限频或额度已用完，已有结果保留。'
+            else:
+                message += ' 请求未完成，已有结果保留；可重试。'
+            message += f'（{detail}）'
+        elif more and len(rows) < self.limit:
+            state = 'partial'
+            message += ' 已达本次 3 页检索上限；日期筛选后不足所选数量，不代表全库没有更多匹配。'
+        else:
+            state = 'ok' if rows else 'no_data'
+        self._status = SourceStatus(self.name, state, len(rows), message)
+        return rows
 
     def _headers(self) -> dict[str, str]:
         headers = {"X-ELS-APIKey": self.api_key, "Accept": "application/json"}

@@ -132,6 +132,8 @@ class SearchService:
                 # Discard old empty results produced by the daily account
                 # allowlist without invalidating paid searches of other sources.
                 cache_key['wechat_scope'] = 'all-accounts-v2'
+            elif source == 'Elsevier':
+                cache_key['scopus_search'] = 'relevance-paging-v2'
             key = hashlib.sha256(json.dumps(cache_key, sort_keys=True).encode()).hexdigest()
             path = self.directory / (key + '.json')
             try:
