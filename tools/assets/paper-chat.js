@@ -22,7 +22,7 @@
   let paperId = '', mode = 'question', controller = null, busy = false, history = [], pairCode = '';
   let refreshTimer = null;
   let documentPending = false, remoteDocumentPending = false, uploadPaper = '';
-  let currentDocument = null, translationSource = 'text';
+  let currentDocument = null, pdfVersions = [], translationSource = 'text';
   let progressTimer = null;
   let lastTrigger = null;
   let screenshotPending = false, screenshotPaper = '', screenshots = [];
@@ -59,7 +59,7 @@
     <form class="chat-composer">
       <div class="chat-shortcuts"><button class="chat-button" type="button" data-mode="summary">总结论文</button><button class="chat-button" type="button" data-mode="question" aria-pressed="true">深入提问</button><button class="chat-button" type="button" data-mode="translate">中英翻译</button><button class="chat-button" type="button" data-mode="figure">解释配图</button></div>
       <p class="chat-mode-help" id="chat-mode-help"></p>
-      <div class="chat-translation" hidden><label>方向 <select class="chat-translation-target"><option value="zh">英译中</option><option value="en">中译英</option></select></label><label>内容 <select class="chat-translation-source"><option value="text">粘贴原文</option><option value="image">截图翻译</option><option value="layout">全文翻译（保留 PDF 版式）</option><option value="full">全文翻译（文本对照）</option><option value="document">论文章节</option></select></label></div>
+      <div class="chat-translation" hidden><label>方向 <select class="chat-translation-target"><option value="zh">英译中</option><option value="en">中译英</option></select></label><label>内容 <select class="chat-translation-source"><option value="text">粘贴原文</option><option value="image">截图翻译</option><option value="layout">全文译文 PDF（原版式）</option><option value="layout-bilingual">中英对照 PDF（原版式）</option><option value="full">全文文本对照（重新排版）</option><option value="document">论文章节</option></select></label></div>
       <textarea rows="2" aria-label="向 Codex 提问" aria-describedby="chat-mode-help" maxlength="12000"></textarea>
       <div class="chat-attachments" aria-label="待发送截图" hidden></div>
       <input class="chat-image-input" type="file" accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp" multiple hidden>
@@ -96,14 +96,16 @@
   }
   const fullTranslation = row => row.role === 'assistant' && /^## (?:PDF )?全文翻译 · (中文|英文)\s/.test(row.content || '');
   const layoutTranslation = row => /^## PDF 全文翻译 ·/.test(row?.content || '');
+  const bilingualTranslation = row => row?.artifact?.preferred_view === 'bilingual';
+  const pdfLabel = row => bilingualTranslation(row) ? '下载中英对照 PDF' : '下载原版式译文 PDF';
   const latestTranslation = () => history.filter(fullTranslation).at(-1);
   function updateTranslationExport() {
     const row = latestTranslation(), button = $('[data-chat-action="export-translation"]');
     button.hidden = !row;
     button.disabled = busy || !row || row.status === 'running' || (layoutTranslation(row) && !row.artifact?.filename);
     button.textContent = row?.status === 'completed' ? '导出译文 PDF' : row?.status === 'running' ? '译文生成中…' : '导出部分译文 PDF';
-    if (layoutTranslation(row)) button.textContent = row?.artifact?.filename ? '下载原版式译文 PDF' : row?.status === 'running' ? '译文 PDF 生成中…' : '译文 PDF 尚未完成';
-    button.title = layoutTranslation(row) ? '下载已生成的译文 PDF，沿用原文件页数与版式' : '仅导出这篇论文最近一次全文翻译，保留原文、译文及页码标记';
+    if (layoutTranslation(row)) button.textContent = row?.artifact?.filename ? pdfLabel(row) : row?.status === 'running' ? '译文 PDF 生成中…' : '译文 PDF 尚未完成';
+    button.title = layoutTranslation(row) ? (bilingualTranslation(row) ? '下载原文与译文交替成对的 PDF，各页保持原尺寸' : '下载已生成的译文 PDF，沿用原文件页数与版式') : '仅导出这篇论文最近一次全文翻译，保留原文、译文及页码标记';
   }
   function updateRemembered() {
     remembered.hidden = !deviceToken;
@@ -131,7 +133,7 @@
           rememberDraft();
           if (selected.action === 'question') {
             mode='question'; restoreDraft();
-            const input=$('.chat-composer textarea'), quote=`关于原文 [${selected.label}]：\n“${selected.text}”\n\n`;
+            const input=$('.chat-composer textarea'), quote=`关于${selected.translated?'译文（请对照原文核查）':'原文'} [${selected.label}]：\n“${selected.text}”\n\n`;
             if (input.value.length + quote.length > input.maxLength) { notice('当前草稿和选段过长，请先整理草稿。'); return false; }
             input.value=quote+input.value;rememberDraft();input.focus();return true;
           }
@@ -261,13 +263,14 @@
   function updateMode() {
     const config = modes[mode], translating = mode === 'translate';
     const documentTranslation = translating && $('.chat-translation-source').value === 'document';
-    const fullTranslation = translating && ['full', 'layout'].includes($('.chat-translation-source').value);
-    const layoutTranslation = translating && $('.chat-translation-source').value === 'layout';
+    const fullTranslation = translating && ['full', 'layout', 'layout-bilingual'].includes($('.chat-translation-source').value);
+    const layoutTranslation = translating && ['layout', 'layout-bilingual'].includes($('.chat-translation-source').value);
+    const bilingual = translating && $('.chat-translation-source').value === 'layout-bilingual';
     const imageTranslation = translating && $('.chat-translation-source').value === 'image';
     $('.chat-translation').hidden = !translating;
-    $('.chat-mode-help').textContent = layoutTranslation ? '直接生成译文 PDF，保留页数、分栏、图片和公式；译文适配原文字区域。需载入带文字层的 PDF。' : fullTranslation ? '按原文顺序分批翻译，中断可继续；完成后可导出原文与译文 PDF。' : imageTranslation ? '翻译截图中的文字，保留公式和术语，标注识别不清处。' : config.hint;
+    $('.chat-mode-help').textContent = layoutTranslation ? (bilingual ? '原文与译文逐页配对，保留各页尺寸、分栏及图表；左侧并排阅读，可选择文字。' : '译文在原 PDF 文字框内排版，保留页数、尺寸、分栏和图表；完成后左侧可切换阅读。') + ' 译文字体与换行可能调整；放不下会提示，绝不截断。' : fullTranslation ? '按原文顺序分批翻译，导出重新排版的文本对照 PDF；保留原版式请选择上方 PDF 选项。' : imageTranslation ? '翻译截图中的文字，保留公式和术语，标注识别不清处。' : config.hint;
     $('.chat-composer textarea').placeholder = fullTranslation ? '可选：填写术语或表达偏好；留空即可开始全文翻译。' : imageTranslation ? '可选：填写术语偏好或需要翻译的区域…' : documentTranslation ? '例如：翻译 Abstract 或 Methods 章节。' : config.placeholder;
-    $('.chat-composer .chat-send').textContent = layoutTranslation ? '翻译并生成 PDF' : fullTranslation ? '开始全文翻译' : config.send;
+    $('.chat-composer .chat-send').textContent = bilingual ? '生成中英对照 PDF' : layoutTranslation ? '翻译并生成 PDF' : fullTranslation ? '开始全文翻译' : config.send;
     dialog.querySelectorAll('[data-mode]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === mode)));
   }
   function rememberDraft() { drafts.set(draftKey(), { text: $('.chat-composer textarea').value }); }
@@ -582,18 +585,23 @@
         const translation = fullTranslation({role, content: text});
         const layout = layoutTranslation({content: text});
         if (translation) pdf.textContent = state === 'completed' ? '导出译文 PDF' : '导出部分译文 PDF';
-        if (layout) pdf.textContent = artifact.filename ? '下载原版式译文 PDF' : '译文 PDF 尚未完成';
+        if (layout) pdf.textContent = artifact.filename ? pdfLabel({artifact}) : '译文 PDF 尚未完成';
         pdf.disabled = state === 'running' || (layout && !artifact.filename);
         pdf.onclick = () => downloadPdf(exportPaper, messageId, translation, pdf).catch(e => notice(e.message));
         actions.append(pdf);
         if (translation && state !== 'running') {
           const footer = document.createElement('div'); footer.className = 'chat-translation-download';
           const note = document.createElement('span'); note.textContent = state === 'completed' ? '全文译文已保存，可导出原文与译文。' : '本次翻译尚未完成，可导出已保存内容。';
-          if (layout) note.textContent = artifact.filename ? `译文 PDF 已生成 · ${artifact.pages} 页 · 沿用原版式` : '已完成的翻译已保存，再次开始可继续生成 PDF。';
+          if (layout) note.textContent = artifact.filename ? `原版式译文 · ${artifact.pages} 页 · 左侧可切换中英对照` : '已完成的翻译已保存，再次开始可继续生成 PDF。';
           const download = document.createElement('button'); download.type = 'button'; download.className = 'chat-button'; download.textContent = pdf.textContent;
           download.disabled = pdf.disabled;
           download.onclick = () => downloadPdf(exportPaper, messageId, true, download).catch(e => notice(e.message));
           footer.append(note, download); article.append(footer);
+          if (layout && artifact.filename && state === 'completed' && documentHash === currentDocument?.hash) {
+            const preview=document.createElement('button');preview.type='button';preview.className='chat-button';preview.textContent='在左侧阅读';
+            preview.onclick=async()=>{try{const view=await ensureReader();await view.update(paperId,currentDocument,pdfVersions);await view.showTranslation(messageId,artifact.preferred_view || 'translated');}catch(e){notice(e.message);}};
+            footer.append(preview);
+          }
         }
       }
     }
@@ -651,6 +659,7 @@
     const data = await api(endpoint());
     if (currentPaper !== paperId) return;
     history = data.history;
+    currentDocument = data.document; pdfVersions = data.pdf_versions || [];
     activeLeaf = data.active_leaf || history.at(-1)?.id || 0;
     const oldScroll = $('.chat-messages').scrollTop, stick = followLatest;
     closeEditor();
@@ -668,7 +677,7 @@
     }
     const doc = data.document;
     currentDocument = doc;
-    if (dialog.open) ensureReader().then(view => view.update(currentPaper, doc)).catch(error => notice(error.message));
+    if (dialog.open) ensureReader().then(view => view.update(currentPaper, doc, data.pdf_versions || [])).catch(error => notice(error.message));
     $('.chat-settings-toggle').textContent = '模型与资料' + (doc ? doc.kind === 'pdf' ? ` · PDF ${doc.page_count} 页` : ' · 已载入全文' : '');
     if (!screenshotPending) { screenshots = data.screenshots || []; drawScreenshots(); }
     remoteDocumentPending = Boolean(data.preparing);
@@ -795,8 +804,8 @@
     const task = revision ? (Object.keys(revision.row.request || {}).length ? revision.row.request : user?.request || {}) : {mode, translation_source:$('.chat-translation-source').value, translation_target:$('.chat-translation-target').value};
     const taskMode = task.mode || 'question', taskSource = task.translation_source || 'document';
     const attached = revision ? user?.attachments || [] : screenshots;
-    const fullTranslation = taskMode === 'translate' && ['full', 'layout'].includes(taskSource);
-    const layoutPdf = taskMode === 'translate' && taskSource === 'layout';
+    const fullTranslation = taskMode === 'translate' && ['full', 'layout', 'layout-bilingual'].includes(taskSource);
+    const layoutPdf = taskMode === 'translate' && ['layout', 'layout-bilingual'].includes(taskSource);
     const imageTranslation = taskMode === 'translate' && taskSource === 'image';
     const text = revision ? (revision.text || task.message || user?.content || '') : $('.chat-composer textarea').value.trim() || (fullTranslation ? '请完整翻译已载入论文的全部正文，保留原文顺序、术语、公式与引用。' : attached.length ? imageTranslation ? '请逐段翻译上传截图中的全部可见文字。' : '请分析上传截图，说明其中的关键信息与含义。' : '');
     if (busy || documentPending || remoteDocumentPending || screenshotPending) { if (documentPending || remoteDocumentPending || screenshotPending) notice('资料正在准备，请完成后再发送。'); return; }
@@ -885,7 +894,10 @@
         if (revision?.kind === 'edit' && !submitted) editQuestion(revision.row, text);
         if (finished && layoutPdf) {
           const row = latestTranslation();
-          if (row?.artifact?.kind === 'layout-pdf') await downloadPdf(sentPaper, row.id, true).catch(e => notice(e.message + ' 可点击“下载原版式译文 PDF”重试。'));
+          if (row?.artifact?.kind === 'layout-pdf') {
+            const view=await ensureReader();await view.update(paperId,currentDocument,pdfVersions);await view.showTranslation(row.id,row.artifact.preferred_view || 'translated');
+            await downloadPdf(sentPaper, row.id, true).catch(e => notice(e.message + ' 可在左侧点击“下载当前 PDF”重试。'));
+          }
         }
         if (!revision && !finished && sentScreenshots.length) {
           const pendingIds = new Set(screenshots.map(x => x.id));
@@ -899,21 +911,22 @@
     if (button?.disabled) return;
     if (button) button.disabled = true;
     const title = ($('.chat-paper-title').textContent || targetPaper).replace(/[<>:"/\\|?*\x00-\x1f]/g, '_').slice(0, 70).trim();
+    const paired=translation && bilingualTranslation(history.find(row=>row.id===messageId));
     try {
       notice('正在生成 PDF…');
       const response = await api(`/api/papers/${targetPaper}/export-pdf${messageId ? '?message_id=' + messageId : ''}`, { stream: true });
       const blob = await response.blob();
       if (!blob.type.includes('application/pdf')) throw new Error('未取得 PDF 文件，请重试。');
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = `${title}-${translation ? '全文翻译' : messageId ? '回答-' + messageId : '对话记录'}.pdf`;
+      const a = document.createElement('a'); a.href = url; a.download = `${title}-${paired ? '中英对照' : translation ? '全文翻译' : messageId ? '回答-' + messageId : '对话记录'}.pdf`;
       a.click(); setTimeout(() => URL.revokeObjectURL(url), 60000);
-      notice(translation ? '译文 PDF 已下载。' : 'PDF 已生成并下载。');
+      notice(paired ? '中英对照 PDF 已下载。' : translation ? '译文 PDF 已下载。' : 'PDF 已生成并下载。');
     } finally { if (button) button.disabled = false; updateTranslationExport(); }
   }
 
   async function action(name) {
     try {
-      if (name === 'reader') { const view=await ensureReader();view.open();await view.update(paperId,currentDocument);return; }
+      if (name === 'reader') { const view=await ensureReader();view.open();await view.update(paperId,currentDocument,pdfVersions);return; }
       if (name === 'latest') return scrollLatest(true);
       if (name === 'settings') return toggleSettings();
       if (name === 'connect') return await connect();

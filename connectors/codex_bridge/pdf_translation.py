@@ -251,6 +251,49 @@ def render_pdf(source, output, layout, translations, work):
     return {'pages':len(layout['pages']), 'regions':len(translations), 'scaled_regions':len(scaled)}
 
 
+def render_bilingual(source, translated, output):
+    """Pair original/translated pages without scaling, rasterizing or reflowing either."""
+    with PDF_LOCK, fitz.open(source) as original, fitz.open(translated) as target, fitz.open() as result:
+        if len(original) != len(target):
+            raise ValueError('原文与译文页数不一致，无法生成逐页对照 PDF。')
+        for a, b in zip(original, target):
+            if (a.mediabox != b.mediabox or a.cropbox != b.cropbox or a.rotation != b.rotation):
+                raise ValueError(f'第 {a.number + 1} 页的译文尺寸与原文不一致，未生成对照 PDF。')
+        # Copy whole documents first, so internal links survive page remapping.
+        result.insert_pdf(original)
+        result.insert_pdf(target)
+        count = len(original)
+        result.select([page for i in range(count) for page in (i, count + i)])
+        result.set_pagelayout('TwoPageLeft')
+        result.set_metadata({**original.metadata, 'subject':'Original and translated pages paired at original size; no page content resized.'})
+        result.set_page_labels([{'startpage':i * 2 + side, 'prefix':f'P{i + 1}-' + ('original' if side == 0 else 'translation')}
+                               for i in range(count) for side in (0, 1)])
+        toc = []
+        for level, title, page in original.get_toc():
+            toc.append([level, title, page * 2 - 1 if page > 0 else page])
+        if toc:
+            result.set_toc(toc)
+        temp = Path(output).with_suffix('.tmp.pdf')
+        try:
+            result.save(temp, garbage=4, deflate=True)
+            temp.replace(output)
+        finally:
+            temp.unlink(missing_ok=True)
+    return {'pages':count * 2, 'pairs':count}
+
+
+def bilingual_file(source, directory, artifact):
+    name = artifact.get('filename', '')
+    if not re.fullmatch(r'layout-[a-f0-9]{24}\.pdf', name):
+        raise ValueError('译文 PDF 文件无效，请重新生成。')
+    directory = Path(directory)
+    output = directory / name.replace('.pdf', '-bilingual.pdf')
+    with PDF_LOCK:
+        if not output.is_file():
+            render_bilingual(source, directory / name, output)
+    return output
+
+
 async def translate_pdf(client, store, ask, paper):
     document = store.document(ask.paper_id)
     directory = store.directory(ask.paper_id)
@@ -264,10 +307,12 @@ async def translate_pdf(client, store, ask, paper):
     yield {'type':'delta', 'text':f'## PDF 全文翻译 · {target}\n\n正在按原 PDF 的文字位置翻译并生成文件。\n\n'}
     saved = store.translation(ask.paper_id, key)
     filename = f'layout-{key[:24]}.pdf'
+    preferred = 'bilingual' if getattr(ask, 'translation_source', '') == 'layout-bilingual' else 'translated'
     cached = saved.get('artifact', {})
     if cached.get('filename') == filename and (directory / filename).is_file():
-        yield {'type':'artifact', 'artifact':cached}
-        yield {'type':'delta', 'text':f'已恢复此前生成的原版式译文 PDF，共 {cached["pages"]} 页。可直接下载，无需重复翻译。'}
+        paired = await asyncio.to_thread(bilingual_file, source, directory, cached)
+        yield {'type':'artifact', 'artifact':{**cached, 'bilingual_filename':paired.name, 'preferred_view':preferred}}
+        yield {'type':'delta', 'text':f'已恢复译文 PDF（{cached["pages"]} 页）和中英对照 PDF（{cached["pages"]} 对页）。左侧可切换阅读和下载，无需重复翻译。'}
         return
     yield {'type':'progress', 'stage':'translation', 'message':'正在识别原 PDF 的分栏、文字区域和公式…'}
     layout = await asyncio.to_thread(extract_layout, source, work)
@@ -311,6 +356,10 @@ async def translate_pdf(client, store, ask, paper):
     yield {'type':'progress', 'stage':'translation', 'message':'翻译完成，正在回填原版式并检查文字是否溢出…'}
     result = await asyncio.to_thread(render_pdf, source, directory / filename, layout, translated, work)
     artifact = {'kind':'layout-pdf', 'filename':filename, 'source_hash':document['hash'], 'target':ask.translation_target, **result}
+    # Save the translation before pairing so a failed export never repeats model work.
+    store.save_translation(ask.paper_id, key, {'regions':translated, 'source_hash':document['hash'], 'artifact':artifact})
+    paired = await asyncio.to_thread(bilingual_file, source, directory, artifact)
+    artifact.update(bilingual_filename=paired.name, preferred_view=preferred)
     store.save_translation(ask.paper_id, key, {'regions':translated, 'source_hash':document['hash'], 'artifact':artifact})
     yield {'type':'artifact', 'artifact':artifact}
-    yield {'type':'delta', 'text':f'译文 PDF 已生成，共 {result["pages"]} 页，已翻译 {result["regions"]} 个文字区域。页面尺寸、分栏与图表位置沿用原 PDF；图片内部文字、公式及书目信息保留原样。\n\n可直接下载“原版式译文 PDF”。'}
+    yield {'type':'delta', 'text':f'译文 PDF 已生成，共 {result["pages"]} 页，已翻译 {result["regions"]} 个文字区域。中英对照 PDF 按原文、译文交替保存，共 {result["pages"] * 2} 页，可在左侧并排阅读。\n\n两种文件保留各页尺寸、分栏、图表位置；图片内部文字、公式及书目信息保留原样。译文在原文字框内排版，字体与换行可能不同于原文。左侧“PDF 版本”可切换、选择文字并下载。'}

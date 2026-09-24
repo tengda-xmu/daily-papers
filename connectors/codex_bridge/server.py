@@ -27,6 +27,7 @@ from .directions import DirectionManager, DirectionChange
 from .screenshots import MAX_IMAGE_BYTES, MAX_SCREENSHOTS, save_screenshot
 from .conversations import REQUEST_FIELDS, saved_request, dialogue_context
 from .annotations import AnnotationSet, current_pdf, read_annotations, save_annotations, export_annotated_pdf
+from .pdf_versions import pdf_versions, artifact_path
 
 ROOT = Path(__file__).resolve().parents[2]
 PORT = 43127
@@ -40,7 +41,7 @@ class Ask(BaseModel):
     mode: str = Field(default="question", pattern=r"^(question|summary|translate|figure)$")
     pages: str = Field(default="", max_length=160)
     translation_target: str = Field(default="zh", pattern=r"^(zh|en)$")
-    translation_source: str = Field(default="document", pattern=r"^(text|document|full|layout|image)$")
+    translation_source: str = Field(default="document", pattern=r"^(text|document|full|layout|layout-bilingual|image)$")
     attachment_ids: list[str] = Field(default_factory=list, max_length=MAX_SCREENSHOTS)
     model: str = Field(default="", max_length=160)
     request_id: uuid.UUID
@@ -328,6 +329,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         return {"paper": {k: data.get(k) for k in ("id", "title", "title_zh", "doi", "venue")},
                 "history": history, 'active_leaf':store.state(paper_id)['active_leaf'],
                 "document": {k: v for k, v in doc.items() if k not in ("pages", "file")} if doc else None,
+                "pdf_versions": pdf_versions(store, paper_id),
                 "busy": paper_id in jobs,
                 "preparing": paper_id in preparing,
                 "screenshots": store.screenshots(paper_id, pending=True),
@@ -357,7 +359,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         return {"papers": list(result.values())}
 
     @app.get("/api/papers/{paper_id}/export-pdf")
-    async def paper_pdf(paper_id: str, message_id: int = 0):
+    async def paper_pdf(paper_id: str, message_id: int = 0, view: str = ''):
         from .pdf_export import export_pdf
         paper = store.paper(paper_id)
         messages = store.history(paper_id, all_versions=bool(message_id))
@@ -366,13 +368,12 @@ def create_app(root=ROOT, runtime=None, rpc=None):
             if not messages:
                 raise HTTPException(404, "当前论文中没有这条回答。")
         artifact = messages[0].get('artifact', {}) if message_id else {}
+        if view not in ('', 'translated', 'bilingual'):
+            raise HTTPException(400, '未知的 PDF 版本。')
         if artifact.get('kind') == 'layout-pdf':
-            name = artifact.get('filename', '')
-            if not re.fullmatch(r'layout-[a-f0-9]{24}\.pdf', name):
-                raise HTTPException(404, '译文 PDF 文件无效，请重新生成。')
-            path = store.directory(paper_id) / name
-            if messages[0]['status'] != 'completed' or not path.is_file():
+            if messages[0]['status'] != 'completed':
                 raise HTTPException(409, '译文 PDF 尚未生成完成，请等待或重新开始翻译。')
+            path = await asyncio.to_thread(artifact_path, store, paper_id, artifact, view or artifact.get('preferred_view', 'translated'))
             content = await asyncio.to_thread(path.read_bytes)
         elif message_id and messages[0]['content'].startswith('## PDF 全文翻译'):
             raise HTTPException(409, '本次原版式译文 PDF 尚未完成；再次开始可恢复已完成的翻译。')
@@ -383,12 +384,12 @@ def create_app(root=ROOT, runtime=None, rpc=None):
 
     @app.get('/api/papers/{paper_id}/pdf')
     async def original_pdf(paper_id: str, version: str = ''):
-        _, path = current_pdf(store, paper_id, version)
+        _, path = await asyncio.to_thread(current_pdf, store, paper_id, version)
         return FileResponse(path, media_type='application/pdf', filename='original.pdf', content_disposition_type='inline')
 
     @app.get('/api/papers/{paper_id}/annotations')
     async def annotations(paper_id: str, version: str = ''):
-        current_pdf(store, paper_id, version)
+        await asyncio.to_thread(current_pdf, store, paper_id, version)
         return read_annotations(store, paper_id, version)
 
     @app.post('/api/papers/{paper_id}/annotations')
@@ -556,13 +557,13 @@ def create_app(root=ROOT, runtime=None, rpc=None):
                 store.message(ask.paper_id, "user", user_text, attachments=[metadata for metadata, _ in screenshots], request=task_settings)
             message_id = store.message(ask.paper_id, "assistant", "", "running", model=ask.model, request=task_settings)
             queue.put_nowait({"type": "model", "model": ask.model})
-            if ask.mode == "translate" and ask.translation_source in ("full", "layout"):
+            if ask.mode == "translate" and ask.translation_source in ("full", "layout", "layout-bilingual"):
                 # Translation uses separate threads; the next question rebuilds
                 # the selected history even if translation is interrupted.
                 store.set_thread(ask.paper_id, None)
                 from .translation import translate_document
                 from .pdf_translation import translate_pdf
-                translate = translate_pdf if ask.translation_source == 'layout' else translate_document
+                translate = translate_pdf if ask.translation_source in ('layout', 'layout-bilingual') else translate_document
                 async for event in translate(client, store, ask, p):
                     if event["type"] == "delta":
                         answer += event["text"]
@@ -737,7 +738,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
             selected = client.resolve_model(data.model)
         except CodexError as exc:
             return JSONResponse(error_info(exc), status_code=503)
-        data = data.model_copy(update={"model": selected["id"], "pages": "" if data.mode == "translate" and data.translation_source in ("full", "layout") else data.pages})
+        data = data.model_copy(update={"model": selected["id"], "pages": "" if data.mode == "translate" and data.translation_source in ("full", "layout", "layout-bilingual") else data.pages})
         if data.attachment_ids and not selected['images']:
             raise HTTPException(400, '所选模型仅支持文字，请选择支持图片的模型后发送截图。')
         if data.paper_id in preparing:

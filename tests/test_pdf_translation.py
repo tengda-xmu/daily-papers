@@ -8,7 +8,7 @@ import pymupdf as fitz
 import pytest
 
 from connectors.codex_bridge.documents import parse_pdf
-from connectors.codex_bridge.pdf_translation import extract_layout, layout_batches, parse_translations, render_pdf, translate_pdf
+from connectors.codex_bridge.pdf_translation import extract_layout, layout_batches, parse_translations, render_pdf, render_bilingual, translate_pdf
 from tests.test_codex_bridge import bridge, login, ask, P1, P2
 
 
@@ -132,3 +132,75 @@ def test_failed_layout_job_is_not_exported_as_a_fake_translated_pdf(bridge):
     row = app.state.store.history(P1)[-1]
     assert not row['artifact']
     assert c.get(f'/api/papers/{P1}/export-pdf?message_id={row["id"]}', headers=h).status_code == 409
+
+
+def test_bilingual_keeps_exact_pages_text_artwork_crop_rotation_and_links(tmp_path):
+    original = tmp_path/'original.pdf'
+    with fitz.open(stream=paper_pdf()) as pdf:
+        pdf[0].set_rotation(90)
+        pdf[1].set_cropbox(fitz.Rect(15, 20, 585, 760))
+        pdf[0].insert_link({'kind':fitz.LINK_GOTO, 'from':fitz.Rect(40, 20, 150, 35), 'page':1, 'to':fitz.Point(20, 20)})
+        pdf.set_toc([[1, 'Validation', 2]])
+        pdf.save(original)
+    work=tmp_path/'work';layout=extract_layout(original,work)
+    values={r['id']:'科学模型验证与独立测量。' for p in layout['pages'] for r in p}
+    translated=tmp_path/'translated.pdf'; render_pdf(original,translated,layout,values,work)
+    output=tmp_path/'paired.pdf';render_bilingual(original,translated,output)
+    with fitz.open(original) as a, fitz.open(translated) as b, fitz.open(output) as paired:
+        assert len(paired)==4 and paired.pagelayout=='TwoPageLeft'
+        assert paired.get_toc()==[[1,'Validation',3]]
+        for i in range(2):
+            for source,copy in ((a[i],paired[i*2]),(b[i],paired[i*2+1])):
+                assert (source.mediabox,source.cropbox,source.rotation)==(copy.mediabox,copy.cropbox,copy.rotation)
+                assert source.get_text()==copy.get_text()
+                assert source.get_pixmap().samples==copy.get_pixmap().samples
+                assert any(link.get('uri')=='https://example.org/paper' for link in copy.get_links())
+        assert next(link for link in paired[0].get_links() if link['kind']==fitz.LINK_GOTO)['page']==2
+        assert next(link for link in paired[1].get_links() if link['kind']==fitz.LINK_GOTO)['page']==3
+
+
+def test_bilingual_rejects_changed_geometry(tmp_path):
+    a=tmp_path/'a.pdf';a.write_bytes(paper_pdf())
+    b=tmp_path/'b.pdf'
+    with fitz.open(a) as pdf:
+        pdf[0].set_rotation(90);pdf.save(b)
+    with pytest.raises(ValueError,match='尺寸'):
+        render_bilingual(a,b,tmp_path/'fail.pdf')
+    assert not (tmp_path/'fail.pdf').exists()
+
+
+def test_versions_share_translation_but_keep_separate_annotations_and_source_scope(bridge):
+    from tests.test_pdf_annotations import mark
+    c,app,rpc=bridge;h=login(c,app);store=app.state.store;base=f'/api/papers/{P1}'
+    doc=parse_pdf(paper_pdf(),store.directory(P1));store.set_document(P1,doc);rpc.turn=translated_turn(rpc)
+    assert '"status": "completed"' in ask(c,h,mode='translate',translation_source='layout-bilingual').text
+    row=store.history(P1)[-1];assert row['artifact']['preferred_view']=='bilingual'
+    count=len(rpc.inputs)
+    default=c.get(base+f'/export-pdf?message_id={row["id"]}',headers=h)
+    assert len(fitz.open(stream=default.content))==4
+    assert len(fitz.open(stream=c.get(base+f'/export-pdf?message_id={row["id"]}&view=translated',headers=h).content))==2
+    versions=c.get(base,headers=h).json()['pdf_versions']
+    assert [v['view'] for v in versions]==['original','translated','bilingual']
+    for v in versions:
+        url=base+'/pdf?version='+v['hash']
+        assert c.get(url).status_code==401
+        assert c.get(url,headers={**h,'Origin':'https://untrusted.example'}).status_code==403
+        assert c.get(f'/api/papers/{P2}/pdf?version='+v['hash'],headers=h).status_code==409
+        response=c.get(url,headers=h);assert response.status_code==200
+        assert len(fitz.open(stream=response.content))==v['page_count']
+    translated,paired=versions[1:]
+    payload={'document_hash':translated['hash'],'revision':0,'items':[mark(note='译文批注')]}
+    assert c.post(base+'/annotations',headers=h,json=payload).status_code==200
+    assert c.get(base+'/annotations?version='+paired['hash'],headers=h).json()['items']==[]
+    assert c.get(base+'/annotations?version='+doc['hash'],headers=h).json()['items']==[]
+    response=c.get(base+'/annotated-pdf?version='+translated['hash'],headers=h)
+    with fitz.open(stream=response.content) as pdf:
+        assert next(pdf[0].annots()).info['content']=='译文批注'
+    assert '"status": "completed"' in ask(c,h,mode='translate',translation_source='layout').text
+    assert len(rpc.inputs)==count  # Switching output format consumes no model calls.
+    assert len(c.get(base,headers=h).json()['pdf_versions'])==3
+    store.set_document(P1,{**doc,'hash':'f'*16})
+    assert len(c.get(base,headers=h).json()['pdf_versions'])==1
+    assert c.get(base+'/pdf?version='+translated['hash'],headers=h).status_code==409
+    assert c.post(base+'/annotations',headers=h,json={**payload,'revision':1}).status_code==409
+    assert c.get(base+f'/export-pdf?message_id={row["id"]}&view=bilingual',headers=h).content==default.content

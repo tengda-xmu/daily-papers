@@ -14,7 +14,7 @@ Rect = tuple[Coordinate, Coordinate, Coordinate, Coordinate]
 
 class Annotation(BaseModel):
     id: str = Field(pattern=r'^[a-f0-9-]{36}$')
-    page: int = Field(ge=1, le=300)
+    page: int = Field(ge=1, le=600)
     kind: Literal['highlight', 'underline', 'strikeout', 'ink', 'line', 'note']
     color: Literal['yellow', 'blue', 'red', 'green'] = 'yellow'
     rects: list[Rect] = Field(default_factory=list, max_length=200)
@@ -56,8 +56,11 @@ def current_pdf(store, paper_id, version):
     doc = store.document(paper_id)
     if not doc or doc['kind'] != 'pdf':
         raise HTTPException(409, '请先上传或获取论文 PDF。')
-    if not version or version != doc['hash']:
+    if not version:
         raise HTTPException(409, '原文已更换，请重新打开阅读区后再操作。')
+    if version != doc['hash']:
+        from .pdf_versions import translated_pdf
+        return translated_pdf(store, paper_id, version)
     directory = store.directory(paper_id)
     path = (directory / doc['file']).resolve()
     if path.parent != directory.resolve() or not path.is_file():
