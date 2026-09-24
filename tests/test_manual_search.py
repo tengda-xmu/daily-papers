@@ -165,6 +165,55 @@ def test_worker_redacts_raw_metadata_and_includes_final_day(monkeypatch, tmp_pat
     assert data['records'][0]['raw_metadata']['bibliography']['volume'] == '1'
 
 
+def test_wechat_manual_search_fills_from_all_accounts_and_surfaces_limits(monkeypatch, tmp_path):
+    import src.manual_search as manual
+    seen = []
+    def local_fetch(self, since, until):
+        assert self.merge_import
+        self._status = SourceStatus('微信公众号', 'ok')
+        return [RawRecord('微信公众号', 'local', 'Kriging local', venue='历史号',
+                          landing_url='https://mp.weixin.qq.com/s/local', published_at='2026-09-20')]
+    def public_fetch(self, since, until):
+        seen.append(self.subscribed_only)
+        assert self.queries == ['Kriging']
+        self._status = SourceStatus('微信公众号', 'quota_exhausted', 0, '当日公开检索预算已用完，缓存结果保留，次日继续。')
+        return []
+    monkeypatch.setattr(manual.WeChatRSSAdapter, 'fetch', local_fetch)
+    monkeypatch.setattr(manual.WeChatPublicIndexAdapter, 'fetch', public_fetch)
+    data = worker({'query': 'Kriging', 'source': '微信公众号', 'since': '2021-09-24',
+                   'until': '2026-09-24', 'limit': 10, 'cache_dir': str(tmp_path)})
+    assert seen == [False] and data['state'] == 'partial'
+    assert len(data['records']) == 1 and '预算已用完' in data['message']
+    assert '历史文章匹配 1 条' in data['message']
+
+
+def test_wechat_fixed_scope_invalidates_only_old_wechat_cache(tmp_path):
+    import hashlib
+    async def run():
+        calls = []
+        async def fake(source, query):
+            calls.append(source)
+            return {'state': 'ok', 'records': [record(source)], 'message': '不限已订阅公众号'}
+        service = SearchService(tmp_path, tmp_path, fake)
+        req = request(['微信公众号', 'Crossref'])
+        # This is the old cache format which recorded false no_data for WeChat.
+        for source in req.sources:
+            key = hashlib.sha256(json.dumps(req.model_dump(mode='json') | {'sources': [source]}, sort_keys=True).encode()).hexdigest()
+            (service.directory / (key + '.json')).write_text(json.dumps({'state': 'no_data', 'records': []}))
+        identifier = service.start(req)
+        await service.get(identifier)['task']
+        assert calls == ['微信公众号']  # Other sources do not incur a new paid request.
+        snapshot = service.snapshot(identifier)
+        state = next(s for s in snapshot['sources'] if s['id'] == '微信公众号')
+        assert state['detail'] == '不限已订阅公众号'
+        assert state['search_url'].startswith('https://weixin.sogou.com/weixin?')
+        next_id = service.start(req)
+        await service.get(next_id)['task']
+        assert calls == ['微信公众号']
+        assert all(s['cached'] for s in service.snapshot(next_id)['sources'])
+    asyncio.run(run())
+
+
 def test_journal_gbt_structured_names_volume_issue_pages_and_doi():
     row = crossref_rows({'message': {'items': [{
         'DOI': '10.1234/xyz', 'title': ['Evidence and models'], 'container-title': ['Test Journal'],

@@ -13,7 +13,7 @@ from pathlib import Path
 import sys
 import time
 import uuid
-from urllib.parse import urlsplit, unquote
+from urllib.parse import urlsplit, unquote, urlencode
 
 from fastapi import HTTPException
 from pydantic import BaseModel, Field, field_validator, model_validator
@@ -127,7 +127,12 @@ class SearchService:
             result = job['sources'][source]
             result['state'] = 'running'
             query = job['request']
-            key = hashlib.sha256(json.dumps(query.model_dump(mode='json') | {'sources': [source]}, sort_keys=True).encode()).hexdigest()
+            cache_key = query.model_dump(mode='json') | {'sources': [source]}
+            if source == '微信公众号':
+                # Discard old empty results produced by the daily account
+                # allowlist without invalidating paid searches of other sources.
+                cache_key['wechat_scope'] = 'all-accounts-v2'
+            key = hashlib.sha256(json.dumps(cache_key, sort_keys=True).encode()).hexdigest()
             path = self.directory / (key + '.json')
             try:
                 cached = json.loads(path.read_text(encoding='utf-8'))
@@ -221,6 +226,8 @@ class SearchService:
             'request': job['request'].model_dump(mode='json'),
             'sources': [{'id': source, 'state': value['state'], 'label': STATE_MESSAGES.get(value['state'], '来源异常'),
                          'count': len(value['records']), 'cached': value['cached'],
+                         'detail': value.get('message', ''),
+                         'search_url': ('https://weixin.sogou.com/weixin?' + urlencode({'type': 2, 'query': job['request'].query})) if source == '微信公众号' else '',
                          'mode': next(s['mode'] for s in SOURCES if s['id'] == source)} for source, value in job['sources'].items()],
             'records': records, 'created_at': datetime.fromtimestamp(job['created'], timezone.utc).isoformat()}
 

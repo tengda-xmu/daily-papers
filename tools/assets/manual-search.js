@@ -104,6 +104,7 @@
     if (!sources.length) { action('请至少选择一个来源。'); return; }
     if ($('#search-since').value > $('#search-until').value) { action('起始日期不能晚于结束日期。'); return; }
     busy(true); action(''); clearTimeout(timer);
+    $('#literature-status').textContent = '正在提交检索请求…';
     try {
       if (!connected) await connect();
       const result = await api('/api/search', {method: 'POST', body: JSON.stringify({query: $('#literature-query').value.trim(), sources, since: $('#search-since').value, until: $('#search-until').value, limit: Number($('#search-limit').value), journal_issn: $('#search-journal').value})});
@@ -149,10 +150,13 @@
     const failed = snapshot.sources.filter(s => !['ok', 'no_data', 'queued', 'running'].includes(s.state)).length;
     $('#literature-status').textContent = `${snapshot.state === 'running' ? '正在检索' : snapshot.state === 'cancelled' ? '已停止检索' : '检索完成'} · ${done} / ${snapshot.sources.length} 类来源完成 · ${snapshot.records.length} 篇去重结果${failed ? ` · ${failed} 类来源未完整返回` : ''}`;
     $('#search-source-report').hidden = false;
+    if (failed && !snapshot.records.length) $('#search-source-report').open = true;
     $('#search-source-states').replaceChildren(...snapshot.sources.map(s => {
       const row = node('div', undefined, 'search-source-state'); row.dataset.state = s.state;
       row.append(node('strong', s.id)); const detail = node('div', `${s.label} · ${s.count} 条${s.cached ? ' · 缓存' : ''}`);
-      detail.append(node('small', s.mode)); row.append(detail); return row;
+      detail.append(node('small', s.detail || s.mode));
+      if (s.search_url) detail.append(link('在搜狗微信继续检索', s.search_url));
+      row.append(detail); return row;
     }));
     const source = $('#search-result-source').value;
     $('#search-result-source').replaceChildren(new Option('全部来源', ''), ...snapshot.sources.map(s => new Option(s.id, s.id)));
@@ -200,7 +204,11 @@
       if (p.citation.notes.length) details.append(node('p', '待核对：' + p.citation.notes.join('；') + '。'));
       article.append(actions, details); return article;
     });
-    $('#literature-results').replaceChildren(...(elements.length ? elements : [node('p', searching ? '结果正在返回，请稍候。' : '没有符合条件的结果。可扩大时间范围、减少关键词，或查看来源状态。', 'empty-state')]));
+    const incomplete = (snapshot?.sources || []).some(s => !['ok', 'no_data', 'queued', 'running'].includes(s.state));
+    const empty = searching ? '结果正在返回，请稍候。' : incomplete && !snapshot.records.length
+      ? '部分来源未完成检索，暂未取得结果。请查看上方具体原因；这不代表没有相关文章。'
+      : '没有符合条件的结果。可扩大时间范围、减少关键词，或查看来源状态。';
+    $('#literature-results').replaceChildren(...(elements.length ? elements : [node('p', empty, 'empty-state')]));
   }
   for (const id of ['#search-result-source', '#search-result-sort']) $(id).addEventListener('change', () => { signature = ''; drawResults(); });
   function save(blob, filename) { const url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = filename; a.click(); setTimeout(() => URL.revokeObjectURL(url), 10000); }

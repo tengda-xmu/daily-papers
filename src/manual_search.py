@@ -28,7 +28,7 @@ SOURCES = [dict(id=s['id'], label=s['label']) for s in SOURCE_CATALOG if s['kind
 MODES = {
     'CNS 子刊专项': 'Crossref · 配置中的 CNS 子刊 ISSN 专项',
     'ResearchGate': 'SerpApi 公开索引 + 本机导出；不读取登录页面',
-    '微信公众号': '已订阅公众号 RSS / 本机同步文章，缺结果时查询公开索引（共享每日限额）',
+    '微信公众号': '订阅 RSS + 本机历史文章；不足时查询公开索引，不限已订阅公众号',
     'Google Scholar': 'SerpApi Scholar · 一次查询；日期精度通常为年',
     'Elsevier': 'Scopus API · 按当前机构授权返回元数据',
     'Web of Science': 'Clarivate Starter API · 一次查询',
@@ -93,22 +93,37 @@ def fetch_source(source, query, since, until, limit, cache_dir, journal_issn='')
             state = 'ok'
         return rows, SourceStatus(source, state, len(rows), MODES[source])
     if source == '微信公众号':
-        adapter = WeChatRSSAdapter(timeout=12)
+        adapter = WeChatRSSAdapter(timeout=6, merge_import=True)
         # Limit subscribed feed requests; no private WeChat API or login is touched.
         omitted = len(adapter.urls) > 3
         adapter.urls = adapter.urls[:3]
         rows = [r for r in adapter.fetch(since, until) if matches(r, query)]
-        state = adapter.status.status
-        if state in ('ok', 'no_data'):
-            state = 'ok' if rows else 'no_data'
-        if omitted:
-            state = 'partial'
-        if not rows:
-            index = WeChatPublicIndexAdapter(queries=[query], timeout=18)
-            rows = index.fetch(since, until)
+        message = f'订阅 RSS 与本机历史文章匹配 {len(rows)} 条。'
+        local_state = adapter.status.status
+        state = 'ok' if rows else 'no_data'
+        if len(rows) < limit:
+            # Manual keywords search all indexed accounts. The daily adapter
+            # still defaults to the subscription allowlist. Reuse the raw
+            # query cache and shared cooldown, not the daily filtered results.
+            index = WeChatPublicIndexAdapter(queries=[query], timeout=18, subscribed_only=False)
+            rows.extend(index.fetch(since, until))
             state = index.status.status
-        return rows, SourceStatus(source, state, len(rows), MODES[source] +
-                                 ('；本次读取前 3 个 RSS 地址及本机导出' if omitted else ''))
+            if rows:
+                state = 'ok' if state in ('ok', 'no_data') else 'partial'
+            message += ' ' + index.status.message
+        if local_state not in ('ok', 'no_data') or omitted:
+            if state == 'ok':
+                state = 'partial'
+            message += ' 订阅数据未完整刷新，已有历史数据保留。'
+        if omitted:
+            message += ' 本次最多读取 3 个 RSS 地址及本机历史导出。'
+        # Prefer original article links when an RSS record is also indexed.
+        unique = {}
+        for row in rows:
+            identity = (row.venue.casefold(), row.title.casefold())
+            unique.setdefault(identity, row)
+        rows = list(unique.values())
+        return rows, SourceStatus(source, state, len(rows), message)
     if source == 'Elsevier':
         # Wrap literal terms: user text cannot inject Scopus fields/operators.
         literal = re.sub(r'["{}()\\]', ' ', query)
@@ -172,7 +187,10 @@ def worker(data):
         if status.status not in ('ok', 'no_data'):
             code = re.search(r'HTTP(?: Error)?\s+(\d{3})', status.message)
             diagnostic = 'HTTP ' + code[1] if code else next((kind for kind in ('SSLError', 'URLError', 'TimeoutError', 'JSONDecodeError') if kind in status.message), '')
-        return {'records': clean, 'state': status.status, 'message': MODES.get(source, '公开 API 检索'), 'diagnostic': diagnostic}
+        # WeChat details are locally constructed counts/status text only;
+        # never forward raw HTTP exception strings or provider request URLs.
+        message = status.message if source == '微信公众号' else MODES.get(source, '公开 API 检索')
+        return {'records': clean, 'state': status.status, 'message': message, 'diagnostic': diagnostic}
     except Exception as exc:
         code = getattr(exc, 'code', None)
         state = 'quota_exhausted' if code == 429 else 'access_denied' if code in (401, 403) else 'error'

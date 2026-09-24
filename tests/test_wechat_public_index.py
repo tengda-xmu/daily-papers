@@ -73,8 +73,51 @@ def test_daily_request_budget_survives_repeated_runs(adapter, monkeypatch):
     adapter.queries = ["four", "five", "six"]
     assert not adapter.fetch(*WINDOW)
     assert len(calls) == 3 and "预算已用完" in adapter.status.message
+    assert adapter.status.status == "quota_exhausted"
     adapter.queries = ["one"]
     assert adapter.fetch(*WINDOW) and len(calls) == 3
+
+
+def test_manual_scope_reuses_raw_cache_without_subscription_allowlist(adapter, monkeypatch):
+    calls = []
+    def respond(request, **kwargs):
+        calls.append(request.full_url)
+        return io.BytesIO((result_html(account="未订阅的可靠性公众号") +
+                           result_html(account="未订阅的可靠性公众号", date=NOW - timedelta(days=60))).encode())
+    monkeypatch.setattr(index, "urlopen", respond)
+    # The daily request still filters to subscribed accounts, caching all raw rows.
+    assert adapter.fetch(*WINDOW) == []
+    manual = index.WeChatPublicIndexAdapter(queries=adapter.queries,
+        cache_dir=adapter.cache_dir, subscribed_only=False)
+    rows = manual.fetch(*WINDOW)
+    assert len(rows) == 1 and rows[0].venue == "未订阅的可靠性公众号"
+    assert len(calls) == 1  # No extra network request or budget charge.
+    assert "返回 2 条" in manual.status.message and "日期内 1 条" in manual.status.message
+    assert "不限已订阅" in manual.status.message
+    assert adapter.fetch(*WINDOW) == []  # Manual scope does not alter daily scope.
+
+
+def test_manual_scope_does_not_require_subscription_files(tmp_path, monkeypatch):
+    monkeypatch.setattr(index, "ROOT", tmp_path)
+    monkeypatch.setattr(index, "urlopen", lambda *a, **kw: io.BytesIO(result_html().encode()))
+    manual = index.WeChatPublicIndexAdapter(queries=["Kriging"],
+        cache_dir=tmp_path / "cache", subscribed_only=False)
+    assert len(manual.fetch(*WINDOW)) == 1
+
+
+def test_manual_merge_keeps_historical_export_when_live_feed_has_new_articles(tmp_path, monkeypatch):
+    from src.sources import wechat_rss
+    export = tmp_path / 'wechat.json'
+    export.write_text(json.dumps({'exported_at': NOW.isoformat(), 'records': [
+        {'title': 'Kriging surrogate', 'account': '历史号', 'published_at': (NOW - timedelta(days=10)).isoformat(),
+         'landing_url': 'https://mp.weixin.qq.com/s/history'}]}), encoding='utf-8')
+    live = json.dumps({'items': [{'title': 'Other research', 'published_at': NOW.isoformat(),
+        'landing_url': 'https://mp.weixin.qq.com/s/current', 'account': '今日号'}]})
+    monkeypatch.setattr(wechat_rss, 'urlopen', lambda *a, **kw: io.BytesIO(live.encode()))
+    manual = WeChatRSSAdapter(urls=['https://rss.example/feed'], import_path=export, merge_import=True)
+    assert {r.title for r in manual.fetch(*WINDOW)} == {'Kriging surrogate', 'Other research'}
+    daily = WeChatRSSAdapter(urls=['https://rss.example/feed'], import_path=export)
+    assert {r.title for r in daily.fetch(*WINDOW)} == {'Other research'}
 
 
 def test_captcha_cooldown_persists_across_processes(adapter, monkeypatch):

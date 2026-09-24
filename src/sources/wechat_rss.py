@@ -18,7 +18,7 @@ class WeChatRSSAdapter:
 
     def __init__(self, urls: list[str] | None = None,
                  headers: dict[str, str] | None = None, timeout: int = 30,
-                 import_path: str | Path | None = None):
+                 import_path: str | Path | None = None, merge_import: bool = False):
         self.urls = urls if urls is not None else [
             value.strip() for value in os.getenv("WECHAT_RSS_URLS", "").split(",") if value.strip()
         ]
@@ -38,6 +38,7 @@ class WeChatRSSAdapter:
                 self._configuration_error = "WECHAT_RSS_HEADERS must be a JSON object with string values"
             self.headers = {"User-Agent": "daily-papers/1.0", **configured_headers}
         self.timeout = timeout
+        self.merge_import = merge_import
         self.import_path = Path(import_path or os.getenv("WECHAT_IMPORT_PATH", "data/inbox/wechat.json"))
         self.health_path = self.import_path.with_name("wechat-status.json")
         self._status = SourceStatus(self.name, "not_run")
@@ -67,16 +68,18 @@ class WeChatRSSAdapter:
             except Exception as exc:
                 code = getattr(exc, "code", None)
                 failures.append(f"HTTP {code}" if code else type(exc).__name__)
-        if not result and self.import_path.is_file():
+        if (not result or self.merge_import) and self.import_path.is_file():
             try:
                 payload = json.loads(self.import_path.read_text(encoding="utf-8-sig"))
                 if not isinstance(payload, dict) or not isinstance(payload.get("records"), list):
                     raise ValueError("Invalid WeRSS export")
-                result = [_item(row, "") for row in public_records(payload["records"])]
+                has_feed_records = bool(result)
+                result.extend(_item(row, "") for row in public_records(payload["records"]))
                 timestamp = parse_date(payload.get("exported_at"))
-                mode = "WeRSS 本地同步已接入"
-                if any(row.raw_metadata.get("access_mode") == "public_index" for row in result):
-                    mode = "公开索引已接入"
+                if not has_feed_records:
+                    mode = "WeRSS 本地同步已接入"
+                    if any(row.raw_metadata.get("access_mode") == "public_index" for row in result):
+                        mode = "公开索引已接入"
                 value = payload.get("failed_feeds", 0)
                 imported_failures = value if type(value) is int and value > 0 else 0
             except Exception as exc:

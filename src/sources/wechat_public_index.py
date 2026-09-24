@@ -77,11 +77,13 @@ def parse_search(body: str) -> list[dict]:
 class WeChatPublicIndexAdapter:
     name = "微信公众号"
 
-    def __init__(self, directory=None, cache_dir=None, queries=None, timeout=25):
+    def __init__(self, directory=None, cache_dir=None, queries=None, timeout=25,
+                 subscribed_only=True):
         self.directory = Path(directory or ROOT / "data/inbox/wechat-subscriptions.json")
         self.cache_dir = Path(cache_dir or ROOT / "data/cache/wechat-public")
         self.queries = queries
         self.timeout = timeout
+        self.subscribed_only = subscribed_only
         self._status = SourceStatus(self.name, "not_run")
 
     @property
@@ -89,9 +91,12 @@ class WeChatPublicIndexAdapter:
         return self._status
 
     def fetch(self, since, until):
-        policy = json.loads((ROOT / "config/wechat_accounts.json").read_text(encoding="utf-8"))
-        snapshot = json.loads(self.directory.read_text(encoding="utf-8-sig")) if self.directory.is_file() else {}
-        names = {row["name"] for row in snapshot.get("accounts", [])} or set(policy["seed_names"])
+        policy, names = {}, set()
+        if self.subscribed_only or self.queries is None:
+            policy = json.loads((ROOT / "config/wechat_accounts.json").read_text(encoding="utf-8"))
+        if self.subscribed_only:
+            snapshot = json.loads(self.directory.read_text(encoding="utf-8-sig")) if self.directory.is_file() else {}
+            names = {row["name"] for row in snapshot.get("accounts", [])} or set(policy["seed_names"])
         queries = self.queries
         if queries is None:
             pool = policy["public_article_queries"]
@@ -99,7 +104,7 @@ class WeChatPublicIndexAdapter:
             queries = [pool[(offset + i) % len(pool)].format(year=until.year, month=until.month)
                        for i in range(min(3, policy.get("public_daily_queries", 3)))]
         self.cache_dir.mkdir(parents=True, exist_ok=True)
-        records, failures = {}, 0
+        records, failures, indexed_count = {}, 0, 0
         last_request, challenge, budget_exhausted = None, False, False
         now = datetime.now(timezone.utc)
         budget_path = self.cache_dir / "request-budget.json"
@@ -159,8 +164,11 @@ class WeChatPublicIndexAdapter:
                     continue
             if rows is None:
                 continue
+            indexed_count += len(rows)
             for row in rows:
-                if row.get("account") not in names or not in_date_window(row.get("published_at", ""), since, until):
+                if self.subscribed_only and row.get("account") not in names:
+                    continue
+                if not in_date_window(row.get("published_at", ""), since, until):
                     continue
                 title, account = row["title"], row["account"]
                 identity = hashlib.sha256((account + "|" + title + "|" + row["published_at"]).encode()).hexdigest()[:20]
@@ -170,9 +178,14 @@ class WeChatPublicIndexAdapter:
                     raw_metadata={"provider": "Sogou WeChat public index", "access_mode": "public_index",
                                   "abstract_kind": "search_snippet", "link_kind": "search_results",
                                   "account_verification": "index_label_only"})
-        state = ("partial" if failures else "ok") if records else ("access_denied" if challenge else "error" if failures else "no_data")
-        message = f"公开索引已接入：本期读取 {len(records)} 条公众号文章线索，按 {len(names)} 个订阅筛选。"
-        message += " 微信后台文章列表受限；线索提供公开检索入口，非已核验全文。"
+        state = ("partial" if failures else "ok") if records else (
+            "access_denied" if challenge else "quota_exhausted" if budget_exhausted else "error" if failures else "no_data")
+        if self.subscribed_only:
+            message = f"公开索引已接入：本期读取 {len(records)} 条公众号文章线索，按 {len(names)} 个订阅筛选。"
+            message += " 微信后台文章列表受限；线索提供公开检索入口，非已核验全文。"
+        else:
+            message = f"公开索引返回 {indexed_count} 条线索，所选日期内 {len(records)} 条；不限已订阅公众号。"
+            message += " 结果为索引片段，提供公开检索入口；不代表公众号全量历史。"
         if failures:
             message += " 部分公开查询失败，已保留成功结果。"
         if challenge:
