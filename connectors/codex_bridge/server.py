@@ -20,7 +20,7 @@ from pydantic import BaseModel, Field
 from .documents import MAX_BYTES, fetch_fulltext, fetch_pdf, parse_pdf, reading_batches, render_scan, source_context
 from .rpc import CodexClient, CodexError
 from .store import Store
-from .search import SearchService, SearchRequest, SOURCES
+from .search import SearchService, SearchRequest, SOURCES, SORT_OPTIONS
 from .journals import JournalManager, JournalChange, Revision
 from .screenshots import MAX_IMAGE_BYTES, MAX_SCREENSHOTS, save_screenshot
 
@@ -242,7 +242,8 @@ def create_app(root=ROOT, runtime=None, rpc=None):
 
     @app.get("/api/search/sources")
     async def search_sources():
-        return {"sources": SOURCES, "journals": (await asyncio.to_thread(journal_manager.snapshot))['journals']}
+        return {"sources": SOURCES, "sort_options": SORT_OPTIONS,
+                "journals": (await asyncio.to_thread(journal_manager.snapshot))['journals']}
 
     @app.get("/api/journals")
     async def journal_list():

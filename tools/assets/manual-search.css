@@ -20,6 +20,8 @@
 #manual-search #literature-query { flex: 1; background: #f5f7fa; color: #111; padding: 14px 18px; }
 .search-options { display: flex; gap: 16px 24px; flex-wrap: wrap; margin: 20px 0; font-size: 13px; }
 .search-options label { display: flex; gap: 10px; align-items: center; }
+#search-order-help { margin: -6px 0 18px; max-width: 78ch; }
+.search-result-citations { cursor: help; }
 .search-library-panel { border-block: 1px solid #dde5ec; padding: 15px 0; }
 .search-library-panel summary { display: flex; justify-content: space-between; cursor: pointer; font-size: 14px; }
 .search-library-panel summary span:last-child { color: #153e64; }
@@ -40,6 +42,7 @@
 .search-results-toolbar h2 { margin: 0; font-size: 21px; }
 .search-results-toolbar h2 span { margin-left: 10px; font-weight: 400; font-size: 14px; }
 .search-results-toolbar > div { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; font-size: 13px; }
+.search-rerank { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
 .search-result { padding: 28px 0; border-bottom: 1px solid #dce4eb; overflow-wrap: anywhere; }
 .search-result-meta { display: flex; flex-wrap: wrap; gap: 6px 18px; color: #414141; font-size: 12px; margin-bottom: 8px; }
 .search-result h3 { font-size: 20px; font-weight: 600; line-height: 1.5; margin: 0 0 10px; color: #000; }
@@ -64,6 +67,8 @@
   .search-options input, .search-options select { width: 170px; }
   .search-results-toolbar > div { width: 100%; gap: 12px; }
   #manual-search .search-results-toolbar select { max-width: 100%; flex: 1; }
+  .search-rerank { order: 1; width: 100%; justify-content: space-between; }
+  #manual-search #search-result-sort { flex: 0 1 auto; min-width: 185px; max-width: calc(100% - 100px); }
   .search-source-state { grid-template-columns: 1fr; gap: 0; }
   #manual-search .page-heading { align-items: start; }
   .search-result h3 { font-size: 18px; }

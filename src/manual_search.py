@@ -1,4 +1,4 @@
-"""On-demand searches. No ranking, publishing, or daily connector mutations."""
+"""On-demand retrieval and candidate ordering, isolated from daily recommendations."""
 from __future__ import annotations
 
 from dataclasses import asdict
@@ -12,6 +12,7 @@ from urllib.parse import urlencode
 from src.catalog import SOURCE_CATALOG
 from src.models import RawRecord, SourceStatus, in_date_window
 from src.settings import load_env
+from src.search_ranking import SORT_LABELS, order_candidates, sort_note
 from src.sources.google_scholar import GoogleScholarAdapter
 from src.sources.elsevier import ElsevierAdapter
 from src.sources.public_literature import (
@@ -30,7 +31,7 @@ MODES = {
     'ResearchGate': 'SerpApi 公开索引 + 本机导出；不读取登录页面',
     '微信公众号': '订阅 RSS + 本机历史文章；不足时查询公开索引，不限已订阅公众号',
     'Google Scholar': 'SerpApi Scholar · 一次查询；日期精度通常为年',
-    'Elsevier': 'Scopus STANDARD · 按相关性检索，日期筛选后按需翻页（最多 3 页）',
+    'Elsevier': 'Scopus STANDARD · 支持相关性、日期、被引排序，日期筛选后最多读取 3 页',
     'Web of Science': 'Clarivate Starter API · 一次查询',
 }
 for source in SOURCES:
@@ -61,7 +62,7 @@ def crossref_rows(payload):
     return rows
 
 
-def fetch_source(source, query, since, until, limit, cache_dir, journal_issn=''):
+def fetch_source(source, query, since, until, limit, cache_dir, journal_issn='', sort_by='relevance'):
     """Bounded source queries; Scopus can read up to three pages after date filtering."""
     kwargs = {'queries': [query], 'timeout': 18}
     if source in ('Crossref', 'CNS 子刊专项'):
@@ -74,7 +75,11 @@ def fetch_source(source, query, since, until, limit, cache_dir, journal_issn='')
             config = json.loads((ROOT / 'config/cns-search.json').read_text(encoding='utf-8'))
             filters.extend('issn:' + j['issn'] for j in config['journals'])
         params = {'filter': ','.join(filters), 'rows': limit}
-        params.update({'query.bibliographic': query} if query else {'sort': 'published', 'order': 'desc'})
+        if query:
+            params['query.bibliographic'] = query
+        field = {'relevance': 'relevance' if query else 'published', 'latest': 'published',
+                 'citations': 'is-referenced-by-count'}[sort_by]
+        params.update(sort=field, order='desc')
         payload = adapter._get_json('https://api.crossref.org/works?' + urlencode(params))
         rows = crossref_rows(payload)
         for row in rows:
@@ -128,7 +133,7 @@ def fetch_source(source, query, since, until, limit, cache_dir, journal_issn='')
         # Wrap literal terms: user text cannot inject Scopus fields/operators.
         literal = re.sub(r'["{}()\\]', ' ', query)
         adapter = ElsevierAdapter(queries=[f'TITLE-ABS-KEY("{literal}")'], timeout=12,
-                                  manual=True, limit=limit)
+                                  manual=True, limit=limit, sort_by=sort_by)
     elif source == 'Google Scholar':
         adapter = GoogleScholarAdapter(**kwargs, include_cns=False, cache_dir=cache_dir / 'scholar')
     elif source == 'arXiv':
@@ -139,7 +144,8 @@ def fetch_source(source, query, since, until, limit, cache_dir, journal_issn='')
         expr = ' AND '.join(f'all:"{term}"' for term in terms)
         expr += f' AND submittedDate:[{since:%Y%m%d}0000 TO {until:%Y%m%d}2359]'
         payload = adapter._get_text('https://export.arxiv.org/api/query?' + urlencode({
-            'search_query': expr, 'start': 0, 'max_results': limit, 'sortBy': 'relevance',
+            'search_query': expr, 'start': 0, 'max_results': limit,
+            'sortBy': 'submittedDate' if sort_by == 'latest' else 'relevance', 'sortOrder': 'descending',
         }))
         rows = adapter.parse_xml(payload)
         for row in rows:
@@ -150,6 +156,8 @@ def fetch_source(source, query, since, until, limit, cache_dir, journal_issn='')
         factories = {'OpenAlex': OpenAlexAdapter, 'PubMed': PubMedAdapter,
                      'Semantic Scholar': SemanticScholarAdapter, 'Web of Science': WebOfScienceAdapter}
         adapter = factories[source](**kwargs)
+        if source in ('OpenAlex', 'Semantic Scholar', 'PubMed'):
+            adapter.sort_by = sort_by
     rows = adapter.fetch(since, until)
     rows = [r for r in rows if in_date_window(r.published_at, since, until)]
     return rows, adapter.status
@@ -159,14 +167,18 @@ def worker(data):
     load_env()
     source = data['source']
     try:
+        order = data.get('sort_by', 'relevance')
+        if order not in SORT_LABELS:
+            raise ValueError('Invalid search order')
         rows, status = fetch_source(source, data['query'],
             datetime.fromisoformat(data['since']).replace(tzinfo=timezone.utc),
             datetime.fromisoformat(data['until']).replace(hour=23, minute=59, second=59, tzinfo=timezone.utc), data['limit'], Path(data['cache_dir']),
-            **({'journal_issn': data['journal_issn']} if data.get('journal_issn') else {}))
+            **({'journal_issn': data['journal_issn']} if data.get('journal_issn') else {}),
+            **({'sort_by': order} if order != 'relevance' else {}))
         # Only whitelisted metadata crosses the worker boundary. No API URL,
         # headers, raw payload, cookie or exception text is exposed to the UI.
         clean = []
-        for row in rows[:data['limit']]:
+        for row in order_candidates(rows, order)[:data['limit']]:
             raw = row.raw_metadata
             row.raw_metadata = {k: raw[k] for k in (
                 'sources', 'bibliography', 'pdf_link', 'link_kind', 'access_mode', 'abstract_kind') if k in raw}
@@ -190,7 +202,8 @@ def worker(data):
         # WeChat/Scopus details are locally constructed counts/status text only;
         # never forward raw HTTP exception strings or provider request URLs.
         message = status.message if source in ('微信公众号', 'Elsevier') else MODES.get(source, '公开 API 检索')
-        return {'records': clean, 'state': status.status, 'message': message, 'diagnostic': diagnostic}
+        return {'records': clean, 'state': status.status, 'message': message,
+                'sort_note': sort_note(source, order), 'diagnostic': diagnostic}
     except Exception as exc:
         code = getattr(exc, 'code', None)
         state = 'quota_exhausted' if code == 429 else 'access_denied' if code in (401, 403) else 'error'

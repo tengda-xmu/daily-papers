@@ -35,6 +35,7 @@ class PublicLiteratureAdapter:
     def __init__(self, queries: list[str] | None = None, timeout: int = 25):
         self.queries = queries or list(TOPIC_QUERIES)
         self.timeout = timeout
+        self.sort_by = None  # Only manual searches opt into user-selected ordering.
         self._status = SourceStatus(self.name, "not_run")
 
     @property
@@ -151,6 +152,9 @@ class OpenAlexAdapter(PublicLiteratureAdapter):
             for query in self.queries:
                 params = {"search": query, "filter": f"from_publication_date:{since.date()},to_publication_date:{until.date()}",
                           "per-page": 25, "mailto": os.getenv("OPENALEX_MAILTO", "")}
+                if self.sort_by:
+                    params['sort'] = {'relevance': 'relevance_score:desc', 'latest': 'publication_date:desc',
+                                      'citations': 'cited_by_count:desc'}[self.sort_by]
                 headers = {"Authorization": "Bearer " + os.environ["OPENALEX_API_KEY"]} if os.getenv("OPENALEX_API_KEY") else {}
                 payload = self._get_json("https://api.openalex.org/works?" + urlencode({k: v for k, v in params.items() if v}), headers)
                 records.extend(self.parse_payload(payload))
@@ -292,6 +296,13 @@ class SemanticScholarAdapter(PublicLiteratureAdapter):
                 if os.getenv("SEMANTIC_SCHOLAR_API_KEY", "").strip():
                     headers["x-api-key"] = os.environ["SEMANTIC_SCHOLAR_API_KEY"].strip()
                 url = "https://api.semanticscholar.org/graph/v1/paper/search/bulk?" + urlencode(params)
+                if self.sort_by == 'relevance':
+                    params.pop('sort')
+                    params['limit'] = 25
+                    url = 'https://api.semanticscholar.org/graph/v1/paper/search?' + urlencode(params)
+                elif self.sort_by:
+                    params['sort'] = 'citationCount:desc' if self.sort_by == 'citations' else 'publicationDate:desc'
+                    url = 'https://api.semanticscholar.org/graph/v1/paper/search/bulk?' + urlencode(params)
                 try:
                     payload = self._get_json(url, headers)
                 except HTTPError as exc:
@@ -334,6 +345,8 @@ class PubMedAdapter(PublicLiteratureAdapter):
             params = {"db": "pubmed", "term": term, "retmode": "json", "retmax": 50,
                       "mindate": since.strftime("%Y/%m/%d"), "maxdate": until.strftime("%Y/%m/%d"),
                       "datetype": "pdat"}
+            if self.sort_by:
+                params['sort'] = 'pub_date' if self.sort_by == 'latest' else 'relevance'
             found = self._get_json("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?" + urlencode(params))
             ids = (found.get("esearchresult") or {}).get("idlist", [])
             if ids:

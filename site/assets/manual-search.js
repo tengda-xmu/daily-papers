@@ -7,6 +7,13 @@
   const storage = local ? 'localStorage' : 'sessionStorage';
   const sessionKey = 'daily-papers-codex-session', browserKey = 'daily-papers-codex-browser';
   const jobKey = 'daily-papers-manual-search';
+  const orderKey = 'daily-papers-search-order';
+  const orderLabels = {relevance: '相关性优先', latest: '最新发表', citations: '热度（被引次数）'};
+  const orderHelp = {
+    relevance: '优先匹配研究主题。更改排序后点击“检索文献”，会按新条件查询来源。',
+    latest: '优先查找近期发表的文献；以来源提供的日期为准，只有年份的记录不推定具体日期。',
+    citations: '按被引次数衡量热度，不代表阅读量或近期关注度。缺少被引数据的记录置后，不当作 0 次。'
+  };
   function read(kind, key) { try { return window[kind].getItem(key) || ''; } catch { return ''; } }
   function write(kind, key, value) { try { if (value) window[kind].setItem(key, value); else window[kind].removeItem(key); return true; } catch { return false; } }
   let token = read(storage, sessionKey), restorePromise, connected = false, job = '', snapshot = null, timer, signature = '';
@@ -51,6 +58,7 @@
   async function connect() {
     if (!token) await restore();
     const libraries = await api('/api/search/sources');
+    if (!libraries.sort_options) throw new Error('本机助手需要更新：请停止后重新运行“启动论文助手.cmd”，以启用检索排序。');
     const selected = $('#search-journal').value || new URLSearchParams(location.search).get('journal') || '';
     $('#search-journal').replaceChildren(new Option('不限期刊', ''), ...(libraries.journals || []).map(j => new Option(j.name + ' · ' + j.issn, j.issn)));
     setJournal(selected);
@@ -72,6 +80,14 @@
   const today = new Date(), start = new Date(today); start.setFullYear(start.getFullYear() - 5);
   $('#search-until').value = dateString(today); $('#search-since').value = dateString(start);
   for (const input of [$('#search-since'), $('#search-until')]) { input.min = '1900-01-01'; input.max = dateString(today); }
+  const savedOrder = read('localStorage', orderKey);
+  if (orderLabels[savedOrder]) $('#search-order').value = savedOrder;
+  function orderDescription() { $('#search-order-help').textContent = orderHelp[$('#search-order').value]; }
+  orderDescription();
+  $('#search-order').onchange = () => {
+    orderDescription(); write('localStorage', orderKey, $('#search-order').value);
+    if (snapshot) action('检索排序已修改，点击“检索文献”获取新结果；下方仍是上次结果。');
+  };
   const sourceBoxes = [...document.querySelectorAll('[name=library]')];
   let previousSources = null;
   function setJournal(value) {
@@ -96,6 +112,7 @@
   $('#clear-libraries').onclick = () => { sourceBoxes.forEach(x => { x.checked = false; }); sourceCount(); };
   function busy(value) {
     searching = value; $('#literature-submit').disabled = value; $('#search-stop').hidden = !value;
+    $('#search-order').disabled = value;
     $('#literature-submit').textContent = value ? '检索中…' : '检索文献';
   }
   $('#literature-form').addEventListener('submit', async (event) => {
@@ -107,10 +124,11 @@
     $('#literature-status').textContent = '正在提交检索请求…';
     try {
       if (!connected) await connect();
-      const result = await api('/api/search', {method: 'POST', body: JSON.stringify({query: $('#literature-query').value.trim(), sources, since: $('#search-since').value, until: $('#search-until').value, limit: Number($('#search-limit').value), journal_issn: $('#search-journal').value})});
+      const result = await api('/api/search', {method: 'POST', body: JSON.stringify({query: $('#literature-query').value.trim(), sources, since: $('#search-since').value, until: $('#search-until').value, limit: Number($('#search-limit').value), journal_issn: $('#search-journal').value, sort_by: $('#search-order').value})});
       job = result.id; write('sessionStorage', jobKey, job); signature = ''; snapshot = null;
       $('#literature-results').replaceChildren(); $('#search-output').hidden = true;
       $('#search-result-source').value = '';
+      $('#search-result-sort').value = 'retrieved';
       await poll();
     } catch (error) { busy(false); action(error.message); }
   });
@@ -122,6 +140,7 @@
         $('#literature-query').value = saved.query;
         $('#search-since').value = saved.since; $('#search-until').value = saved.until;
         $('#search-limit').value = String(saved.limit);
+        $('#search-order').value = saved.sort_by || 'relevance'; orderDescription();
         sourceBoxes.forEach(box => { box.checked = saved.sources.includes(box.value); });
         previousSources = null; setJournal(saved.journal_issn || '');
         sourceCount(); restoreForm = false;
@@ -142,7 +161,8 @@
   function filtered() {
     const source = $('#search-result-source').value;
     const rows = (snapshot?.records || []).filter(p => !source || p.sources.includes(source));
-    if ($('#search-result-sort').value === 'latest') rows.sort((a, b) => (b.published_at || '').localeCompare(a.published_at || ''));
+    const mode = $('#search-result-sort').value;
+    if (mode !== 'retrieved') rows.sort((a, b) => (a.ranks?.[mode] ?? Infinity) - (b.ranks?.[mode] ?? Infinity));
     return rows;
   }
   function draw() {
@@ -155,6 +175,7 @@
       const row = node('div', undefined, 'search-source-state'); row.dataset.state = s.state;
       row.append(node('strong', s.id)); const detail = node('div', `${s.label} · ${s.count} 条${s.cached ? ' · 缓存' : ''}`);
       detail.append(node('small', s.detail || s.mode));
+      if (s.sort_note) detail.append(node('small', s.sort_note));
       if (s.search_url) detail.append(link('在搜狗微信继续检索', s.search_url));
       row.append(detail); return row;
     }));
@@ -166,6 +187,15 @@
   }
   function drawResults() {
     const rows = filtered(); $('#search-result-count').textContent = rows.length + ' 篇';
+    const mode = $('#search-result-sort').value;
+    const applied = snapshot?.request?.sort_by || 'relevance';
+    $('#search-result-sort').options[0].textContent = '检索顺序 · ' + orderLabels[applied];
+    const citationMode = (mode === 'retrieved' ? applied : mode) === 'citations';
+    const missing = rows.filter(p => p.citation_count == null).length;
+    $('#search-result-order-help').textContent = (mode === 'retrieved'
+      ? `本次检索：${orderLabels[applied]}。各来源实际排序方式见“来源检索状态”。`
+      : `仅重排已返回的 ${rows.length} 条结果，不发起新检索、不增加 API 请求。`) + (citationMode
+      ? ` 同篇文献取各来源报告的最高被引次数，不相加；不同数据库口径有差异。${missing ? ` ${missing} 条未提供被引数据，排在最后。` : ''}` : '');
     $('#export-references').disabled = !rows.length;
     const next = JSON.stringify([rows, searching]);
     if (next === signature) return;
@@ -175,6 +205,10 @@
       const article = node('article', undefined, 'search-result');
       const meta = node('div', undefined, 'search-result-meta');
       meta.append(node('span', p.sources.join(' / ')), node('time', p.published_at || '日期未提供'));
+      const counts = p.citation_counts || [];
+      const citations = node('span', p.citation_count == null ? '被引数据未提供' : `被引 ${p.citation_count.toLocaleString('zh-CN')} 次`, 'search-result-citations');
+      citations.title = counts.length ? counts.map(c => `${c.source}：${c.count} 次`).join('；') : '来源未提供可比的被引次数，不表示 0 次。';
+      meta.append(citations);
       article.append(meta);
       const heading = node('h3'); heading.append(p.landing_url ? link(p.title, p.landing_url) : node('span', p.title)); article.append(heading);
       article.append(node('p', [p.authors.slice(0, 4).join(', ') + (p.authors.length > 4 ? ' 等' : ''), p.venue].filter(Boolean).join(' · '), 'search-result-authors'));

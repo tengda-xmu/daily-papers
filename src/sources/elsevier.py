@@ -12,6 +12,7 @@ import xml.etree.ElementTree as ET
 from src.models import RawRecord, SourceStatus, in_date_window
 from src.venues import classify_venue, cns_query
 from src.redaction import public_metadata, safe_error
+from src.search_ranking import SORT_LABELS, order_candidates
 
 
 class ElsevierAdapter:
@@ -19,7 +20,7 @@ class ElsevierAdapter:
 
     def __init__(self, api_key: str | None = None, insttoken: str | None = None,
                  queries: list[str] | None = None, timeout: int = 30,
-                 manual: bool = False, limit: int = 25):
+                 manual: bool = False, limit: int = 25, sort_by: str = 'relevance'):
         self.api_key = api_key if api_key is not None else os.getenv("ELSEVIER_API_KEY", "")
         self.insttoken = insttoken if insttoken is not None else os.getenv("ELSEVIER_INSTTOKEN", "")
         cns = cns_query()
@@ -35,6 +36,7 @@ class ElsevierAdapter:
         self.timeout = timeout
         self.manual = manual
         self.limit = max(1, min(25, limit))
+        self.sort_by = sort_by if sort_by in SORT_LABELS else 'relevance'
         self._status = SourceStatus(self.name, "not_run")
 
     @property
@@ -103,11 +105,18 @@ class ElsevierAdapter:
         years = str(until.year) if since.year == until.year else f"{since.year}-{until.year}"
         records, scanned, pages, start = {}, 0, 0, 0
         more, total, error, retries = False, None, None, 1
+        fallback = False
+        ordering = {'relevance': 'relevancy', 'latest': '-coverDate', 'citations': '-citedby-count'}[self.sort_by]
         deadline = time.monotonic() + 42
         try:
-            for _ in range(3):
+            for page in range(3):
+                if self.sort_by == 'latest' and page == 2 and len(records) < self.limit:
+                    # Future issue dates can fill all top chronological pages.
+                    # Use the final bounded request for relevant candidates,
+                    # and disclose that the merged result is a partial scan.
+                    ordering, start, fallback = 'relevancy', 0, True
                 params = urlencode({'query': self.queries[0], 'count': 25, 'start': start,
-                                    'view': 'STANDARD', 'date': years, 'sort': 'relevancy'})
+                                    'view': 'STANDARD', 'date': years, 'sort': ordering})
                 request = Request('https://api.elsevier.com/content/search/scopus?' + params,
                                   headers=self._headers())
                 while True:
@@ -155,8 +164,8 @@ class ElsevierAdapter:
                     break
         except Exception as exc:
             error = exc
-        rows = list(records.values())[:self.limit]
-        message = f'Scopus STANDARD：按相关性读取 {pages} 页、{scanned} 条记录，所选日期内返回 {len(rows)} 条。'
+        rows = order_candidates(list(records.values()), self.sort_by)[:self.limit]
+        message = f'Scopus STANDARD：按{SORT_LABELS[self.sort_by]}读取 {pages} 页、{scanned} 条记录，所选日期内返回 {len(rows)} 条。'
         if total is not None:
             message += f' 年份范围共匹配 {total} 条，未逐条扫描全部结果。'
         message += ' 日期按 Scopus 期刊日期筛选；标准视图的摘要、作者字段可能不完整。'
@@ -170,11 +179,13 @@ class ElsevierAdapter:
             else:
                 message += ' 请求未完成，已有结果保留；可重试。'
             message += f'（{detail}）'
-        elif more and len(rows) < self.limit:
+        elif fallback or (more and len(rows) < self.limit):
             state = 'partial'
-            message += ' 已达本次 3 页检索上限；日期筛选后不足所选数量，不代表全库没有更多匹配。'
+            message += ' 已达本次 3 页检索上限，不代表全库没有更多匹配。'
         else:
             state = 'ok' if rows else 'no_data'
+        if fallback:
+            message += ' 日期排序候选不足，末页以相关性检索补充，再按日期重排；不是全库最新排名。'
         self._status = SourceStatus(self.name, state, len(rows), message)
         return rows
 

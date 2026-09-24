@@ -14,6 +14,7 @@ import sys
 import time
 import uuid
 from urllib.parse import urlsplit, unquote, urlencode
+from typing import Literal
 
 from fastapi import HTTPException
 from pydantic import BaseModel, Field, field_validator, model_validator
@@ -22,6 +23,7 @@ from src.citations import reference, safe_link
 from src.manual_search import SOURCES
 from src.custom_journals import normalize_issn
 from src.models import RawRecord
+from src.search_ranking import SORT_OPTIONS, rank_results, sort_note
 from src.pipeline import deduplicate
 from .documents import fetch_pdf, pdf_candidates
 
@@ -42,6 +44,7 @@ class SearchRequest(BaseModel):
     until: date
     limit: int = Field(default=10, ge=5, le=25)
     journal_issn: str = Field(default='', max_length=16)
+    sort_by: Literal['relevance', 'latest', 'citations'] = 'relevance'
 
     @field_validator('journal_issn')
     @classmethod
@@ -128,6 +131,10 @@ class SearchService:
             result['state'] = 'running'
             query = job['request']
             cache_key = query.model_dump(mode='json') | {'sources': [source]}
+            if query.sort_by == 'relevance':
+                cache_key.pop('sort_by')  # Preserve valid earlier relevance caches.
+            if source in ('Semantic Scholar', 'PubMed'):
+                cache_key['native_sort_version'] = 1
             if source == '微信公众号':
                 # Discard old empty results produced by the daily account
                 # allowlist without invalidating paid searches of other sources.
@@ -177,7 +184,14 @@ class SearchService:
 
     def snapshot(self, identifier):
         job = self.get(identifier)
-        rows = [RawRecord(**copy.deepcopy(r)) for value in job['sources'].values() for r in value['records']]
+        rows = []
+        for source, value in job['sources'].items():
+            for rank, record in enumerate(value['records'], 1):
+                row = RawRecord(**copy.deepcopy(record))
+                # Per-source keys survive metadata deduplication without summing counts.
+                row.raw_metadata['search_observation:' + source] = {
+                    'source': source, 'rank': rank, 'citation_count': row.citation_count}
+                rows.append(row)
         for row in rows:
             # Scholar often omits the DOI but links to the very same publisher
             # article. Recover identifiers only from known publisher URL forms.
@@ -222,13 +236,16 @@ class SearchService:
                 'sources': row.raw_metadata.get('sources', [row.source]),
                 'link_kind': row.raw_metadata.get('link_kind', 'article'),
                 'can_download': bool(pdf_candidates(paper)), 'citation': reference(paper),
+                '_search_observations': [v for k, v in row.raw_metadata.items() if k.startswith('search_observation:')],
             })
+        records = rank_results(records, job['request'].query, job['request'].sort_by)
         job['results'] = result_map
         return {'id': identifier, 'state': job['state'], 'query': job['request'].query,
             'request': job['request'].model_dump(mode='json'),
             'sources': [{'id': source, 'state': value['state'], 'label': STATE_MESSAGES.get(value['state'], '来源异常'),
                          'count': len(value['records']), 'cached': value['cached'],
                          'detail': value.get('message', ''),
+                         'sort_note': value.get('sort_note') or sort_note(source, job['request'].sort_by),
                          'search_url': ('https://weixin.sogou.com/weixin?' + urlencode({'type': 2, 'query': job['request'].query})) if source == '微信公众号' else '',
                          'mode': next(s['mode'] for s in SOURCES if s['id'] == source)} for source, value in job['sources'].items()],
             'records': records, 'created_at': datetime.fromtimestamp(job['created'], timezone.utc).isoformat()}

@@ -198,7 +198,7 @@ def test_wechat_fixed_scope_invalidates_only_old_wechat_cache(tmp_path):
         req = request(['微信公众号', 'Crossref'])
         # This is the old cache format which recorded false no_data for WeChat.
         for source in req.sources:
-            key = hashlib.sha256(json.dumps(req.model_dump(mode='json') | {'sources': [source]}, sort_keys=True).encode()).hexdigest()
+            key = hashlib.sha256(json.dumps(req.model_dump(mode='json', exclude={'sort_by'}) | {'sources': [source]}, sort_keys=True).encode()).hexdigest()
             (service.directory / (key + '.json')).write_text(json.dumps({'state': 'no_data', 'records': []}))
         identifier = service.start(req)
         await service.get(identifier)['task']
@@ -224,7 +224,7 @@ def test_scopus_old_date_sorted_empty_cache_is_not_reused(tmp_path):
         service = SearchService(tmp_path, tmp_path, fake)
         req = request(['Elsevier', 'Google Scholar'])
         for source in req.sources:
-            key = hashlib.sha256(json.dumps(req.model_dump(mode='json') | {'sources': [source]}, sort_keys=True).encode()).hexdigest()
+            key = hashlib.sha256(json.dumps(req.model_dump(mode='json', exclude={'sort_by'}) | {'sources': [source]}, sort_keys=True).encode()).hexdigest()
             (service.directory / (key + '.json')).write_text(json.dumps({'state': 'no_data', 'records': []}))
         identifier = service.start(req)
         await service.get(identifier)['task']
