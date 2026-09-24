@@ -20,6 +20,7 @@ from pydantic import BaseModel, Field
 from .documents import MAX_BYTES, fetch_fulltext, fetch_pdf, parse_pdf, reading_batches, render_scan, source_context
 from .rpc import CodexClient, CodexError
 from .store import Store
+from .search import SearchService, SearchRequest, SOURCES
 
 ROOT = Path(__file__).resolve().parents[2]
 PORT = 43127
@@ -71,6 +72,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     session_devices = {}
     preparing = set()
     generation_lock = asyncio.Lock()
+    search_service = SearchService(root, runtime)
 
     @asynccontextmanager
     async def lifespan(app):
@@ -82,6 +84,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         if jobs:
             await asyncio.gather(*(j["task"] for j in jobs.values()), return_exceptions=True)
         await client.close()
+        await search_service.close()
         try:
             if json.loads(info.read_text()).get("pid") == os.getpid():
                 info.unlink()
@@ -92,6 +95,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     app.state.store, app.state.client = store, client
     app.state.pair_code = pair_code
     app.state.shutdown = lambda: None
+    app.state.search = search_service
 
     @app.middleware("http")
     async def local_only(request: Request, next_handler):
@@ -228,6 +232,27 @@ def create_app(root=ROOT, runtime=None, rpc=None):
                     "images": client.images, "models": models}
         except Exception as exc:
             return JSONResponse(error_info(exc), status_code=503)
+
+    @app.get("/api/search/sources")
+    async def search_sources():
+        return {"sources": SOURCES}
+
+    @app.post("/api/search")
+    async def start_search(data: SearchRequest):
+        return {"id": search_service.start(data)}
+
+    @app.get("/api/search/{identifier}")
+    async def search_results(identifier: str):
+        return search_service.snapshot(identifier)
+
+    @app.post("/api/search/{identifier}/stop")
+    async def stop_search(identifier: str):
+        return await search_service.stop(identifier)
+
+    @app.get("/api/search/{identifier}/{result_id}/pdf")
+    async def download_search_pdf(identifier: str, result_id: str):
+        file = await search_service.pdf(identifier, result_id)
+        return FileResponse(file, media_type="application/pdf", filename=f"paper-{result_id}.pdf")
 
     @app.get("/api/papers/{paper_id}")
     async def paper(paper_id: str):
@@ -561,9 +586,13 @@ def create_app(root=ROOT, runtime=None, rpc=None):
 
     @app.get("/assets/{name}")
     async def asset(name: str):
-        if name not in ("paper-chat.js", "paper-chat.css", "site.css"):
+        if name not in ("paper-chat.js", "paper-chat.css", "site.css", "site.js", "manual-search.js", "manual-search.css", "favicon.svg"):
             raise HTTPException(404)
         return FileResponse(root / "tools/assets" / name)
+
+    @app.get("/search.html")
+    async def manual_search_page():
+        return FileResponse(root / "site/search.html", media_type="text/html")
 
     return app
 

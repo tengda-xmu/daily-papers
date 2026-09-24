@@ -177,7 +177,12 @@ class OpenAlexAdapter(PublicLiteratureAdapter):
                 landing_url=item.get("doi") or item.get("id", ""),
                 oa_url=(item.get("open_access") or {}).get("oa_url", ""),
                 citation_count=item.get("cited_by_count"), source_score=.68,
-                raw_metadata={"provider": "OpenAlex", "id": item.get("id", "")},
+                raw_metadata={"provider": "OpenAlex", "id": item.get("id", ""), "bibliography": {
+                    "type": "journal-article" if source.get("type") == "journal" else "",
+                    "volume": (item.get("biblio") or {}).get("volume", ""),
+                    "issue": (item.get("biblio") or {}).get("issue", ""),
+                    "page": "-".join(dict.fromkeys(str(p) for p in ((item.get("biblio") or {}).get("first_page"), (item.get("biblio") or {}).get("last_page")) if p)),
+                }},
             ))
         return result
 
@@ -331,7 +336,13 @@ class PubMedAdapter(PublicLiteratureAdapter):
             result.append(RawRecord(source="PubMed", source_id=pmid, title=title, authors=authors, venue=journal,
                                     abstract=abstract, published_at=published, doi=doi,
                                     landing_url=f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/" if pmid else "",
-                                    source_score=.55, raw_metadata={"provider": "PubMed", "pmid": pmid}))
+                                    source_score=.55, raw_metadata={"provider": "PubMed", "pmid": pmid, "bibliography": {
+                                        "type": "journal-article",
+                                        "authors": [{"family": a.findtext("LastName", ""), "given": a.findtext("ForeName", ""), "name": a.findtext("CollectiveName", "")} for a in article.findall(".//Author")],
+                                        "volume": article.findtext(".//JournalIssue/Volume", ""),
+                                        "issue": article.findtext(".//JournalIssue/Issue", ""),
+                                        "page": article.findtext(".//Pagination/MedlinePgn", ""),
+                                    }}))
         return result
 
 

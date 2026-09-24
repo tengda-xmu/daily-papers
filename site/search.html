@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="聚焦 AI 驱动的智能运维、结构生成式设计与疲劳可靠性，每日追踪科研论文，提供中文摘要与精读要点。">
+  <meta name="theme-color" content="#153e64">
+  <title>手动检索文献 | 每日论文推荐</title>
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./assets/site.css?v=6939e38e62">
+  <link rel="stylesheet" href="./assets/paper-chat.css?v=6939e38e62">
+  <script src="./assets/site.js?v=6939e38e62" defer></script>
+  <script src="./assets/paper-chat.js?v=6939e38e62" defer></script>
+<link rel="stylesheet" href="./assets/manual-search.css?v=6939e38e62"><script src="./assets/manual-search.js?v=6939e38e62" defer></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main-content">跳至正文</a>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a class="wordmark" href="./"><span>腾达</span><span class="wordmark-divider" aria-hidden="true"></span>科研文献</a>
+      <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false">菜单 <span aria-hidden="true">☰</span></button>
+      <nav id="main-navigation" class="main-navigation" aria-label="主导航">
+        <a href="./" >每日推荐</a>
+        <a href="./search.html" aria-current="page">手动检索</a>
+        <a href="./archive/" >历史归档</a>
+        <a href="./setup.html" >来源设置</a>
+      </nav>
+    </div>
+  </header>
+  <div class="site-shell">
+    <main id="main-content" class="main-content" tabindex="-1">
+      <section id="manual-search" aria-labelledby="search-heading">
+  <header class="page-heading"><div><h1 id="search-heading">手动检索文献</h1><p class="page-intro">跨来源查找论文，获取全文入口与参考文献。</p></div><a class="search-back" href="./">返回每日推荐</a></header>
+  <div class="search-connection"><span id="search-connection-state" role="status">正在检查本机连接…</span><a href="http://127.0.0.1:43127/search.html" target="_blank" rel="noopener noreferrer">在本机打开</a></div>
+  <details id="search-pairing" class="search-pairing" hidden><summary>连接本机论文助手</summary><p>运行“启动论文助手.cmd”。首次使用请填写配对码；已记住的浏览器可自动连接，无需启动模型对话。</p><form id="search-pair-form"><label class="sr-only" for="search-pair-code">本机配对码</label><input id="search-pair-code" type="password" autocomplete="off" placeholder="粘贴本次启动的配对码"><button type="submit">连接</button><label class="remember-search"><input id="search-remember" type="checkbox" checked>记住此浏览器</label></form></details>
+  <form id="literature-form" role="search" aria-label="跨来源检索文献">
+    <label for="literature-query" class="sr-only">检索关键词或论文标题</label>
+    <div class="literature-query-row"><input id="literature-query" type="search" required minlength="2" maxlength="200" placeholder="输入关键词或论文标题，例如 agentic scientific machine learning" autocomplete="off"><button id="literature-submit" type="submit">检索文献</button></div>
+    <div class="search-options"><label>起始日期 <input id="search-since" type="date" required></label><label>结束日期 <input id="search-until" type="date" required></label><label>每来源最多 <select id="search-limit"><option value="10">10 篇</option><option value="25">25 篇</option><option value="5">5 篇</option></select></label></div>
+    <details class="search-library-panel"><summary><span id="selected-libraries">全部 11 类来源</span><span>选择来源</span></summary><fieldset id="search-libraries"><legend class="sr-only">检索来源</legend><label title="Crossref · 配置中的 CNS 子刊 ISSN 专项"><input type="checkbox" name="library" value="CNS 子刊专项" checked> CNS 子刊专项（Crossref）</label><label title="Scopus API · 按当前机构授权返回元数据"><input type="checkbox" name="library" value="Elsevier" checked> Elsevier / Scopus</label><label title="SerpApi Scholar · 一次查询；日期精度通常为年"><input type="checkbox" name="library" value="Google Scholar" checked> Google Scholar</label><label title="SerpApi 公开索引 + 本机导出；不读取登录页面"><input type="checkbox" name="library" value="ResearchGate" checked> ResearchGate</label><label title="已订阅公众号 RSS / 本机同步文章，缺结果时查询公开索引（共享每日限额）"><input type="checkbox" name="library" value="微信公众号" checked> 微信公众号</label><label title="公开文献检索 API"><input type="checkbox" name="library" value="arXiv" checked> arXiv</label><label title="Clarivate Starter API · 一次查询"><input type="checkbox" name="library" value="Web of Science" checked> Web of Science</label><label title="公开文献检索 API"><input type="checkbox" name="library" value="OpenAlex" checked> OpenAlex</label><label title="公开文献检索 API"><input type="checkbox" name="library" value="Crossref" checked> Crossref</label><label title="公开文献检索 API"><input type="checkbox" name="library" value="Semantic Scholar" checked> Semantic Scholar</label><label title="公开文献检索 API"><input type="checkbox" name="library" value="PubMed" checked> PubMed</label></fieldset><div class="search-selection"><button type="button" class="text-button" id="select-libraries">全选</button><button type="button" class="text-button" id="clear-libraries">清空</button></div><p>ResearchGate 使用公开索引及本机导出；公众号优先查已订阅文章，缺少结果时尝试公开索引。各库按自身规则匹配关键词，部分来源仅提供年份。</p></details>
+    <p class="search-help">相同检索缓存 24 小时。关键词不会交给模型，检索不占用 Codex 对话额度；付费来源按你的 API 额度计费。</p>
+  </form>
+  <div class="search-progress-row"><p id="literature-status" role="status" aria-live="polite">输入研究主题，开始检索。</p><button id="search-stop" type="button" hidden>停止检索</button></div>
+  <details id="search-source-report" hidden><summary>查看各来源检索状态</summary><div id="search-source-states"></div></details>
+  <section id="search-output" hidden aria-label="检索结果">
+    <div class="search-results-toolbar"><h2>检索结果 <span id="search-result-count"></span></h2><div><label class="sr-only" for="search-result-source">按来源筛选结果</label><select id="search-result-source"><option value="">全部来源</option></select><label class="sr-only" for="search-result-sort">结果排序</label><select id="search-result-sort"><option value="relevance">匹配顺序</option><option value="latest">最新发表</option></select><button id="export-references" type="button" class="text-button">导出引用</button></div></div>
+    <p class="search-help">重复论文已合并。PDF 下载获取公开可读版本，可能是预印本；机构订阅全文请从原文入口访问。引用按 GB/T 7714-2025 整理，缺项会标注。</p>
+    <div id="literature-results"></div>
+  </section>
+  <p id="search-action-status" role="status"></p>
+  <noscript><p>请启用 JavaScript 后使用手动检索。</p></noscript>
+</section>
+
+      <footer class="site-footer"><p>每日更新，持续关注 AI 与工程可靠性。</p><div><a href="https://tengda-xmu.github.io/">腾达 · 厦门大学</a><a href="https://github.com/tengda-xmu/daily-papers" target="_blank" rel="noopener noreferrer">GitHub</a></div></footer>
+    </main>
+  </div>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <a class="back-to-top" href="#top" aria-label="返回页面顶部" hidden>回到顶部 ↑</a>
+</body>
+</html>

@@ -9,9 +9,9 @@
   <link rel="icon" href="${root}assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="${root}assets/site.css?v=$version">
   <link rel="stylesheet" href="${root}assets/paper-chat.css?v=$version">
-  <script>document.documentElement.classList.add('js');</script>
   <script src="${root}assets/site.js?v=$version" defer></script>
   <script src="${root}assets/paper-chat.js?v=$version" defer></script>
+$search_assets
 </head>
 <body id="top">
   <a class="skip-link" href="#main-content">跳至正文</a>
@@ -21,6 +21,7 @@
       <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false">菜单 <span aria-hidden="true">☰</span></button>
       <nav id="main-navigation" class="main-navigation" aria-label="主导航">
         <a href="$root" $daily_current>每日推荐</a>
+        <a href="${root}search.html" $search_current>手动检索</a>
         <a href="${root}archive/" $archive_current>历史归档</a>
         <a href="${root}setup.html" $setup_current>来源设置</a>
       </nav>

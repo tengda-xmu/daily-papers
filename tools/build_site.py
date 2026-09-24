@@ -79,7 +79,7 @@ def template(name: str, **values) -> str:
 
 def document(content: str, *, title: str, root: str = "./", active: str = "daily") -> str:
     version = hashlib.sha256(
-        b"".join((ASSETS / name).read_bytes() for name in ("site.css", "site.js", "paper-chat.css", "paper-chat.js"))
+        b"".join((ASSETS / name).read_bytes() for name in ("site.css", "site.js", "paper-chat.css", "paper-chat.js", "manual-search.css", "manual-search.js"))
     ).hexdigest()[:10]
     return template(
         "page.html", content=content.lstrip(), title=esc(title), root=root, version=version,
@@ -87,6 +87,9 @@ def document(content: str, *, title: str, root: str = "./", active: str = "daily
         daily_current='aria-current="page"' if active == "daily" else "",
         archive_current='aria-current="page"' if active == "archive" else "",
         setup_current='aria-current="page"' if active == "setup" else "",
+        search_current='aria-current="page"' if active == "search" else "",
+        search_assets=(f'<link rel="stylesheet" href="{root}assets/manual-search.css?v={version}">'
+                       f'<script src="{root}assets/manual-search.js?v={version}" defer></script>') if active == 'search' else '',
     )
 
 
@@ -389,6 +392,10 @@ def main() -> None:
     (OUT / "data.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     build_archive()
     (OUT / "setup.html").write_text(document(template("setup.html", wechat_directory=wechat_directory()), title="来源配置 | 每日论文推荐", active="setup"), encoding="utf-8")
+    from src.manual_search import SOURCES
+    choices = ''.join(f'<label title="{esc(s["mode"])}"><input type="checkbox" name="library" value="{esc(s["id"])}" checked> {esc(s["label"])}</label>' for s in SOURCES)
+    (OUT / "search.html").write_text(document(template("search.html", sources=choices),
+        title="手动检索文献 | 每日论文推荐", active="search"), encoding="utf-8")
 
 
 if __name__ == "__main__":

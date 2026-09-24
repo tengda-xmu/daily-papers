@@ -1,4 +1,5 @@
 (function () {
+  document.documentElement.classList.add('js');
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
   const menu = $('.menu-toggle');
