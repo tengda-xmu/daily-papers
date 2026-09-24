@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="聚焦 AI 驱动的智能运维、结构生成式设计与疲劳可靠性，每日追踪科研论文，提供中文摘要与精读要点。">
+  <meta name="theme-color" content="#153e64">
+  <title>我的文献 | 每日论文推荐</title>
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./assets/site.css?v=916ff91715">
+  <link rel="stylesheet" href="./assets/paper-chat.css?v=916ff91715">
+  <link rel="stylesheet" href="./assets/paper-library.css?v=916ff91715">
+  <script src="./assets/site.js?v=916ff91715" defer></script>
+  <script src="./assets/paper-library.js?v=916ff91715" defer></script>
+  <script src="./assets/paper-chat.js?v=916ff91715" defer></script>
+
+</head>
+<body id="top">
+  <a class="skip-link" href="#main-content">跳至正文</a>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a class="wordmark" href="./"><span>腾达</span><span class="wordmark-divider" aria-hidden="true"></span>科研文献</a>
+      <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false">菜单 <span aria-hidden="true">☰</span></button>
+      <nav id="main-navigation" class="main-navigation" aria-label="主导航">
+        <a href="./" >每日推荐</a>
+        <a href="./search.html" >手动检索</a>
+        <a href="./leads.html" >科研线索</a>
+        <a href="./library.html" aria-current="page">我的文献</a>
+        <a href="./archive/" >历史归档</a>
+        <a href="./setup.html" >设置</a>
+      </nav>
+    </div>
+  </header>
+  <div class="site-shell">
+    <main id="main-content" class="main-content" tabindex="-1">
+      <section id="paper-library" aria-labelledby="library-heading">
+  <div class="library-heading"><h1 id="library-heading">我的文献</h1><a href="setup.html#library-backup">备份与恢复</a></div>
+  <p class="section-description">已标星论文与本机保存的 PDF。按重要性整理，继续上次阅读。</p>
+  <form class="library-filters" role="search">
+    <label class="library-query">搜索文献<input id="library-query" type="search" placeholder="标题、作者、期刊或 DOI"></label>
+    <label>研究方向<select id="library-topic"><option value="">全部方向</option></select></label>
+    <label>重要性<select id="library-rating"><option value="0">全部星级</option><option value="1">已标星</option><option value="2">2 星及以上</option><option value="3">3 星及以上</option><option value="4">4 星及以上</option><option value="5">5 星</option></select></label>
+    <label>排序<select id="library-sort"><option value="recent">最近操作</option><option value="importance">重要性优先</option></select></label>
+    <label class="library-checkbox"><input id="library-translated" type="checkbox">已保存译文</label>
+  </form>
+  <p id="library-count" role="status"></p>
+  <div id="library-list"></div>
+  <p id="library-empty" hidden>没有符合条件的文献。给推荐论文标星，或载入 PDF 后，这里会自动收录。</p>
+  <nav class="library-pagination" aria-label="文献库分页"><label>每页 <select id="library-page-size"><option value="20">20 篇</option><option value="50">50 篇</option><option value="100">100 篇</option></select></label><button type="button" id="library-previous">上一页</button><span id="library-page"></span><button type="button" id="library-next">下一页</button></nav>
+</section>
+
+      <footer class="site-footer"><p>每日更新，持续关注 AI 与工程可靠性。</p><div><a href="https://tengda-xmu.github.io/">腾达 · 厦门大学</a><a href="https://github.com/tengda-xmu/daily-papers" target="_blank" rel="noopener noreferrer">GitHub</a></div></footer>
+    </main>
+  </div>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <a class="back-to-top" href="#top" aria-label="返回页面顶部" hidden>回到顶部 ↑</a>
+</body>
+</html>

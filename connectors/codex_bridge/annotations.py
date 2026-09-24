@@ -53,6 +53,8 @@ COLORS = {'yellow':(1, .8, .12), 'blue':(.12, .48, .9), 'red':(.86, .19, .16), '
 
 def current_pdf(store, paper_id, version):
     store.paper(paper_id)
+    if version and any(d['hash'] == version for d in store.library.documents(paper_id)):
+        return store.library.resolve(paper_id, version)
     doc = store.document(paper_id)
     if not doc or doc['kind'] != 'pdf':
         raise HTTPException(409, '请先上传或获取论文 PDF。')

@@ -53,6 +53,10 @@ def test_private_preview_annotation_export_preserves_original_and_unicode(bridge
         assert db.execute('SELECT COUNT(*) FROM annotations').fetchone()[0]==1
     assert client.delete(base,headers=h).status_code==200
     with restarted.connect() as db:
+        assert db.execute('SELECT COUNT(*) FROM annotations').fetchone()[0]==1
+    assert client.get(base+'/pdf'+version,headers=h).content==original
+    assert client.delete(f'/api/library/papers/{P1}',headers=h).status_code==200
+    with restarted.connect() as db:
         assert db.execute('SELECT COUNT(*) FROM annotations').fetchone()[0]==0
 
 
@@ -63,8 +67,8 @@ def test_annotations_reject_stale_tabs_document_replacement_and_wrong_paper(brid
     assert client.post(base+'/annotations',headers=h,json=payload).status_code==409
     assert client.get(f'/api/papers/{P2}/pdf?version='+doc['hash'],headers=h).status_code==409
     app.state.store.set_document(P1,{**doc,'hash':'f'*16})
-    assert client.post(base+'/annotations',headers=h,json={**payload,'revision':1}).status_code==409
-    assert client.get(base+'/pdf?version='+doc['hash'],headers=h).status_code==409
+    assert client.post(base+'/annotations',headers=h,json={**payload,'revision':1}).status_code==200
+    assert client.get(base+'/pdf?version='+doc['hash'],headers=h).status_code==200
     assert client.get(base+'/annotations?version='+'f'*16,headers=h).json()['items']==[]
 
 

@@ -4,7 +4,7 @@ const clone = value => structuredClone(value);
 const bounded = n => Math.max(0, Math.min(1, n));
 const ZOOM_STEPS = [.25, .5, .75, 1, 1.25, 1.5, 2, 2.5, 3];
 
-export function createReader({dialog, assets, api, onSelection, onDocument, onLayout}) {
+export function createReader({dialog, assets, api, onSelection, onDocument, onLayout, onSource}) {
   const root = document.createElement('section'); root.className = 'reader-pane'; root.setAttribute('aria-label', '论文 PDF 阅读器');
   root.innerHTML = `<header class="reader-header"><div class="reader-title-row"><strong>论文阅读</strong><span class="reader-name"></span><button type="button" data-read="toggle-toolbar" aria-expanded="true" aria-controls="reader-toolbar" title="记住工具栏的展开状态">收起工具栏</button><button type="button" data-read="hide" aria-label="隐藏原文阅读区">隐藏阅读区</button></div>
     <div class="reader-toolbar" id="reader-toolbar">
@@ -20,6 +20,7 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
   const $ = s => root.querySelector(s), pages = $('.reader-pages');
   let paper = '', doc = null, pdf = null, task = null, pdfjs = null, loadingLibrary = null, epoch = 0, views = [], current = 1;
   let sourceDoc = null, versions = [], switching = false;
+  let remembered = {last_version:'',positions:{}}, rememberedPaper='', positionTimer, positionSaving, positionDirty=false, updateRequest=0;
   const pageSizes = new Map();
   let zoomTimer = null, wheelZoom = null;
   let items = [], revision = 0, dirty = false, saving = null, saveTimer = null, saveError = false, undo = [], redo = [];
@@ -35,9 +36,13 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
   const pageLabel = number => `P${sourcePage(number)}` + (paired() ? (number % 2 ? ' · 原文' : ' · 译文') : doc?.view === 'translated' ? ' · 译文' : '');
   function versionMenu() {
     const select=$('.reader-version');select.replaceChildren();
-    for(const item of versions){const option=document.createElement('option');option.value=item.hash;option.textContent=item.label || item.name;
-      if(item.message_id && versions.length>3)option.textContent+=` · ${new Date(item.created*1000).toLocaleString('zh-CN',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})} · #${item.message_id}`;
-      select.append(option);}
+    const groups=new Map();
+    for(const item of versions){const source=item.source_hash || item.hash;let group=groups.get(source);
+      if(!group){group=document.createElement('optgroup');group.label=`原文版本 ${source.slice(0,8)}`;groups.set(source,group);select.append(group);}
+      const option=document.createElement('option');option.value=item.hash;option.textContent=item.label || item.name;
+      if(item.view!=='original')option.textContent+=` · ${new Date(item.created*1000).toLocaleString('zh-CN',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})}${item.model?' · '+item.model:''}`;
+      if(item.available===false){option.textContent+='（文件缺失）';option.disabled=true;}
+      group.append(option);}
     if(!versions.length){const option=document.createElement('option');option.value='';option.textContent='原文 PDF';select.append(option);}
     for(const [view,label] of [['translated','译文 PDF（翻译后可选）'],['bilingual','中英对照 PDF（翻译后可选）']]){
       if(!versions.some(v=>v.view===view)){const option=document.createElement('option');option.textContent=label;option.disabled=true;select.append(option);}}
@@ -60,7 +65,8 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
   }
   function tab(name) { dialog.dataset.readerTab=name; tabs.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.tab===name))); if(name==='pdf') resize(); onLayout(); }
   dialog.dataset.readerTab='chat';
-  tabs.onclick=e=>{if(e.target.dataset.tab)tab(e.target.dataset.tab);};
+  const closeReader=document.createElement('button');closeReader.type='button';closeReader.dataset.readerClose='';closeReader.textContent='关闭';closeReader.setAttribute('aria-label','关闭阅读与对话');tabs.append(closeReader);
+  tabs.onclick=e=>{if(e.target.hasAttribute('data-reader-close'))dialog.querySelector('.chat-close').click();else if(e.target.dataset.tab)tab(e.target.dataset.tab);};
   function download(blob, name) { const link=document.createElement('a'), address=URL.createObjectURL(blob); link.href=address;link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(address),30000); }
   function controls() {
     $('[data-read="undo"]').disabled=!undo.length; $('[data-read="redo"]').disabled=!redo.length;
@@ -95,6 +101,20 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
     })();
     try {await saving;} finally {saving=null;}
   }
+  async function savePosition() {
+    clearTimeout(positionTimer);
+    if(positionSaving){await positionSaving;if(positionDirty)return savePosition();return;}
+    if(!positionDirty || !pdf || documentLoading || !doc || !paper)return;
+    const anchor=readingAnchor();if(!anchor)return;
+    const pid=paper, hash=doc.hash, payload={version:hash,page:anchor.number,rx:anchor.rx,ry:anchor.ry,zoom:$('.reader-zoom').value};
+    positionDirty=false;
+    positionSaving=api(`/api/library/papers/${pid}/reading`,{method:'POST',body:JSON.stringify(payload)})
+      .then(data=>{if(pid===rememberedPaper){remembered.last_version=hash;remembered.positions[hash]=data;}})
+      .catch(error=>{if(pid===paper){positionDirty=true;state('阅读进度尚未保存：'+error.message,true);}throw error;});
+    try{await positionSaving;}finally{positionSaving=null;}
+  }
+  function schedulePosition(){if(!pdf || documentLoading || !dialog.open)return;positionDirty=true;clearTimeout(positionTimer);positionTimer=setTimeout(()=>savePosition().catch(()=>{}),700);}
+  async function flushAll(){await flush();await savePosition();}
   function svg(tag, attrs) {const el=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const[k,v]of Object.entries(attrs))el.setAttribute(k,String(v));return el;}
   function draw(view, preview=null) {
     const layer=view.overlay;layer.replaceChildren();
@@ -213,7 +233,7 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
     if(!option){option=document.createElement('option');option.dataset.customZoom='true';option.value=String(value);option.textContent=`${Math.round(value*100)}%`;select.append(option);}
     select.value=option.value;
     selection=null;$('.reader-selection').hidden=true;window.getSelection()?.removeAllRanges();
-    epoch++;buildPages(anchor);zoomControls();
+    epoch++;buildPages(anchor);zoomControls();schedulePosition();
   }
   function stepZoom(direction) {
     const value=effectiveZoom();
@@ -268,8 +288,9 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
   function go(number){current=Math.max(1,Math.min(Number(number)||1,views.length || 1));const v=views[current-1];if(v){pages.scrollTop+=v.node.getBoundingClientRect().top-pages.getBoundingClientRect().top-(paired()?26:0);queue.unshift(v);drain();}$('.reader-page-number').value=sourcePage(current);}
   let scrollFrame;
   pages.onscroll=()=>{cancelAnimationFrame(scrollFrame);scrollFrame=requestAnimationFrame(()=>{
-    if(!views.length)return;const y=pages.getBoundingClientRect().top+Math.min(pages.clientHeight/3,160);let best=views[0];for(const v of views){if(paired()&&v.number%2===0)continue;if(v.node.getBoundingClientRect().top<=y)best=v;else break;}current=best.number;$('.reader-page-number').value=sourcePage(current);
+    if(!views.length)return;const y=pages.getBoundingClientRect().top+Math.min(pages.clientHeight/3,160);let best=views[0];for(const v of views){if(paired()&&v.number%2===0)continue;if(v.node.getBoundingClientRect().top<=y)best=v;else break;}current=best.number;if(document.activeElement!==$('.reader-page-number'))$('.reader-page-number').value=sourcePage(current);
     for(const v of views)if(v.rendered && Math.abs(v.number-current)>5)clearView(v);
+    schedulePosition();
   });};
   let resizeTimer,lastWidth=0;
   function resize(){clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(!visible || !pdf || pages.clientWidth<100)return;if($('.reader-zoom').value==='fit' && Math.abs(lastWidth-pages.clientWidth)>2){lastWidth=pages.clientWidth;epoch++;buildPages(readingAnchor());}},160);}
@@ -278,20 +299,26 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
   $('.reader-version').onchange=async e=>{try{await selectVersion(e.target.value);}catch(error){versionMenu();state(error.message,true);}};
   async function selectVersion(hash){
     if(switching)return;switching=true;controls();
-    try{await update(paper,sourceDoc,versions,hash);if(doc?.hash===hash){try{localStorage.setItem('paper-reader-version:'+paper,hash);}catch{}}}
+    try{await update(paper,sourceDoc,versions,hash);schedulePosition();await savePosition();}
     finally{switching=false;controls();}
   }
-  async function update(nextPaper,nextSource,nextVersions=null,preferred=''){
+  async function update(nextPaper,nextSource,nextVersions=null,preferred='',reading=null){
+    const request=++updateRequest;
     const sameSource=nextPaper===paper && (nextSource?.hash || '')===(sourceDoc?.hash || '');
     const available=nextVersions || (sameSource?versions:[]);
+    if(reading){remembered=reading;rememberedPaper=nextPaper;}
+    else if(nextPaper && rememberedPaper!==nextPaper){const saved=await api(`/api/library/papers/${nextPaper}/reading`);if(request!==updateRequest)return;remembered=saved;rememberedPaper=nextPaper;}
     let chosen=preferred || (sameSource?doc?.hash:'');
-    if(!chosen){try{chosen=localStorage.getItem('paper-reader-version:'+nextPaper);}catch{}}
-    const nextDoc=available.find(v=>v.hash===chosen) || (nextSource?{...nextSource,view:'original'}:null);
+    if(!chosen)chosen=remembered.last_version;
+    const nextDoc=available.find(v=>v.hash===chosen && v.available!==false) || (nextSource?{...nextSource,view:'original'}:null);
     if(nextPaper===paper && (nextDoc?.hash || '')===(doc?.hash || '')){sourceDoc=nextSource;versions=available;versionMenu();return;}
-    if(dirty)await flush();
+    await flushAll();if(request!==updateRequest)return;
+    if(nextDoc?.source_hash && nextDoc.source_hash!==nextSource?.hash && onSource){nextSource=await onSource(nextDoc.source_hash);if(request!==updateRequest)return;}
+    const position=nextDoc ? remembered.positions[nextDoc.hash] : null;
     const keepPage=sameSource?sourcePage(current):1;
     const generation=++epoch;clearTimeout(zoomTimer);wheelZoom=null;pageSizes.clear();observer?.disconnect();views.forEach(clearView);views=[];queue=[];task?.destroy();task=null;pdf=null;
-    paper=nextPaper;sourceDoc=nextSource;versions=available;doc=nextDoc;items=[];revision=0;undo=[];redo=[];selection=null;documentLoading=false;$('.reader-selection').hidden=true;setTool('select');renderNotes();pages.replaceChildren();current=displayPage(keepPage);versionMenu();controls();
+    paper=nextPaper;sourceDoc=nextSource;versions=available;doc=nextDoc;items=[];revision=0;undo=[];redo=[];selection=null;documentLoading=false;positionDirty=false;$('.reader-selection').hidden=true;setTool('select');renderNotes();pages.replaceChildren();current=position?.page || displayPage(keepPage);versionMenu();controls();
+    const zoom=$('.reader-zoom'),value=position?.zoom || 'fit';if(![...zoom.options].some(o=>o.value===value)){const option=new Option(`${Math.round(Number(value)*100)}%`,value);option.dataset.customZoom='true';zoom.append(option);}zoom.value=value;
     $('.reader-name').textContent=doc?.name || '尚未载入全文';$('.reader-name').title=doc?.name || '';
     $('.reader-page-count').textContent=`/ ${sourcePage(doc?.page_count || 0)}${paired()?' 对页':''}`;
     if(!doc){state('上传或获取 PDF 后可预览、批注和划词翻译。');const empty=document.createElement('div');empty.className='reader-empty';const heading=document.createElement('h3');heading.textContent='打开原文，边读边讨论';const hint=document.createElement('p');hint.textContent='点击上方“上传 PDF”或“获取 PDF”。原文会显示在这里，选中文字即可翻译、提问或标记。';empty.append(heading,hint);pages.append(empty);return;}
@@ -308,9 +335,9 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
       const loaded=await task.promise;if(generation!==epoch){loaded.destroy();return;}
       const first=(await loaded.getPage(1)).getViewport({scale:1});if(generation!==epoch)return;
       pageSizes.set(1,{width:first.width,height:first.height});pdf=loaded;lastWidth=pages.clientWidth;
-      $('.reader-page-count').textContent=`/ ${sourcePage(pdf.numPages)}${paired()?' 对页':''}`;$('.reader-page-number').max=sourcePage(pdf.numPages);buildPages();renderNotes();state(paired()?'左侧原文、右侧译文，每张页保留原尺寸；可横向滚动、选字和批注。':'可选择文字、翻译与标记；当前 PDF 的批注独立保存。');
+      $('.reader-page-count').textContent=`/ ${sourcePage(pdf.numPages)}${paired()?' 对页':''}`;$('.reader-page-number').max=sourcePage(pdf.numPages);buildPages(position?{number:position.page,rx:position.rx,ry:position.ry,x:pages.clientWidth/2,y:Math.min(pages.clientHeight/3,160)}:null);renderNotes();state(paired()?'左侧原文、右侧译文，每张页保留原尺寸；可横向滚动、选字和批注。':'可选择文字、翻译与标记；当前 PDF 的批注独立保存。');
     }catch(error){if(generation===epoch){state('PDF 加载失败：'+error.message+' 可切换版本重试。',true);doc=null;}}
-    finally{if(generation===epoch){documentLoading=false;controls();}}
+    finally{if(generation===epoch){documentLoading=false;controls();schedulePosition();}}
   }
   root.addEventListener('click',async event=>{
     const b=event.target.closest('button');if(!b || b.disabled)return;
@@ -346,8 +373,10 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
   splitter.onpointercancel=()=>{drag=null;};splitter.ondblclick=()=>{dialog.style.removeProperty('--reader-chat-width');resize();};
   splitter.onkeydown=e=>{if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();width(dialog.querySelector('.chat-shell').clientWidth+(e.key==='ArrowLeft'?40:-40));}};
   window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)savePosition().catch(()=>{});});
   setVisible(visible,false);setToolbarExpanded(toolbarExpanded,false);controls();
-  return {update,flush,open:()=>{setVisible(true);tab('pdf');},
+  return {update,flush:flushAll,open:()=>{setVisible(true);tab('pdf');},
+    showVersion:async hash=>{setVisible(true);tab('pdf');await selectVersion(hash);},
     showPage:async number=>{setVisible(true);tab('pdf');await selectVersion(sourceDoc?.hash);go(number);},
     showTranslation:async (messageId,view='translated')=>{const item=versions.find(v=>(v.message_id===messageId||v.message_ids?.includes(messageId))&&v.view===view);if(!item)return;setVisible(true);tab('pdf');await selectVersion(item.hash);},
     showChat:()=>tab('chat'),discardChanges:()=>{dirty=false;clearTimeout(saveTimer);},hasUnsaved:()=>dirty};

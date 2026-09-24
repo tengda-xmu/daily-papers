@@ -7,11 +7,13 @@
   <meta name="theme-color" content="#153e64">
   <title>设置 | 每日论文推荐</title>
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./assets/site.css?v=69d5a0f4c8">
-  <link rel="stylesheet" href="./assets/paper-chat.css?v=69d5a0f4c8">
-  <script src="./assets/site.js?v=69d5a0f4c8" defer></script>
-  <script src="./assets/paper-chat.js?v=69d5a0f4c8" defer></script>
-<link rel="stylesheet" href="./assets/wechat-subscriptions.css?v=69d5a0f4c8"><script src="./assets/wechat-subscriptions.js?v=69d5a0f4c8" defer></script>
+  <link rel="stylesheet" href="./assets/site.css?v=916ff91715">
+  <link rel="stylesheet" href="./assets/paper-chat.css?v=916ff91715">
+  <link rel="stylesheet" href="./assets/paper-library.css?v=916ff91715">
+  <script src="./assets/site.js?v=916ff91715" defer></script>
+  <script src="./assets/paper-library.js?v=916ff91715" defer></script>
+  <script src="./assets/paper-chat.js?v=916ff91715" defer></script>
+<link rel="stylesheet" href="./assets/wechat-subscriptions.css?v=916ff91715"><script src="./assets/wechat-subscriptions.js?v=916ff91715" defer></script>
 </head>
 <body id="top">
   <a class="skip-link" href="#main-content">跳至正文</a>
@@ -23,6 +25,7 @@
         <a href="./" >每日推荐</a>
         <a href="./search.html" >手动检索</a>
         <a href="./leads.html" >科研线索</a>
+        <a href="./library.html" >我的文献</a>
         <a href="./archive/" >历史归档</a>
         <a href="./setup.html" aria-current="page">设置</a>
       </nav>
@@ -32,6 +35,15 @@
     <main id="main-content" class="main-content" tabindex="-1">
       <h1 id="setup-heading" class="sr-only">设置</h1>
 <div class="settings-groups">
+<details id="library-backup" class="reference-panel">
+  <summary><span>文献库备份与恢复</span><span class="reference-meta">星级、PDF、批注、阅读进度</span></summary>
+  <div class="reference-body" id="library-backup-controls">
+    <p>文献自动保存在本机。备份可用于迁移到另一台电脑；恢复时保留本机已有评分、批注和阅读进度。</p>
+    <div class="library-backup-actions"><a href="library.html">打开我的文献</a><button type="button" class="button-link" data-backup-export>导出文献库备份</button><label>选择备份文件 <input type="file" accept=".zip,application/zip" data-backup-file></label></div>
+    <p role="status" data-backup-status></p>
+    <div class="library-backup-preview" data-backup-preview hidden><p data-backup-summary></p><button type="button" class="button-link" data-backup-restore>确认恢复到本机</button></div>
+  </div>
+</details>
 <details id="sources" class="reference-panel">
   <summary><span>来源与采集状态</span><span class="reference-meta">11 / 11 类正常</span></summary>
   <div class="reference-body">

@@ -13,8 +13,9 @@ import shutil
 import time
 import uuid
 
-from fastapi import FastAPI, HTTPException, Request, UploadFile
+from fastapi import FastAPI, HTTPException, Request, UploadFile, Query
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse, Response
+from starlette.background import BackgroundTask
 from pydantic import BaseModel, Field
 
 from .documents import MAX_BYTES, fetch_fulltext, fetch_pdf, parse_pdf, reading_batches, render_scan, source_context
@@ -29,6 +30,8 @@ from .screenshots import MAX_IMAGE_BYTES, MAX_SCREENSHOTS, save_screenshot
 from .conversations import REQUEST_FIELDS, saved_request, dialogue_context
 from .annotations import AnnotationSet, current_pdf, read_annotations, save_annotations, export_annotated_pdf
 from .pdf_versions import pdf_versions, artifact_path
+from .library import RatingChange, ReadingPosition
+from .library_backup import MAX_ARCHIVE, export_library, inspect_backup, restore_library
 
 ROOT = Path(__file__).resolve().parents[2]
 PORT = 43127
@@ -50,11 +53,20 @@ class Ask(BaseModel):
     regenerate_message_id: int = Field(default=0, ge=0)
     expected_leaf: int | None = Field(default=None, ge=0)
     translation_revision: str = Field(default='', max_length=36)
+    expected_document_hash: str | None = Field(default=None, max_length=64)
 
 
 class BranchRequest(BaseModel):
     message_id: int = Field(gt=0)
     expected_leaf: int = Field(ge=0)
+
+
+class SourceVersion(BaseModel):
+    version: str = Field(pattern=r'^[a-f0-9]{16}$')
+
+
+class RestoreLibraryRequest(BaseModel):
+    transfer_id: str = Field(pattern=r'^[a-f0-9]{32}$')
 
 
 class PairRequest(BaseModel):
@@ -89,6 +101,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     sessions, failed_pairs, jobs = {}, [], {}
     session_devices = {}
     preparing = set()
+    library_restoring = False
     generation_lock = asyncio.Lock()
     search_service = SearchService(root, runtime)
     journal_manager = JournalManager(root)
@@ -138,6 +151,8 @@ def create_app(root=ROOT, runtime=None, rpc=None):
             max_body = MAX_IMAGE_BYTES + 65536
         if request.url.path.endswith('/annotations'):
             max_body = 2 * 1024 * 1024
+        if request.url.path == '/api/library/restore/preview':
+            max_body = MAX_ARCHIVE + 65536
         if request.url.path == "/api/pair" or request.url.path.startswith("/api/session/"):
             max_body = 1024
         try:
@@ -341,6 +356,105 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         file = await search_service.pdf(identifier, result_id)
         return FileResponse(file, media_type="application/pdf", filename=f"paper-{result_id}.pdf")
 
+    @app.get('/api/library')
+    async def library(q: str = Query('', max_length=300), min_rating: int = Query(0, ge=0, le=5),
+                      translated: bool = False, topic: str = Query('', max_length=160),
+                      sort: str = Query('recent', pattern='^(recent|importance)$'),
+                      page: int = Query(1, ge=1), page_size: int = Query(20, ge=1, le=100)):
+        return await asyncio.to_thread(store.library.listing, q=q, min_rating=min_rating, translated=translated,
+                                       topic=topic, sort=sort, page=page, page_size=page_size)
+
+    @app.get('/api/library/ratings')
+    async def ratings(ids: str = Query('', max_length=10000)):
+        identifiers = list(dict.fromkeys(ids.split(','))) if ids else []
+        if any(not re.fullmatch(r'[a-f0-9]{12}', pid) for pid in identifiers):
+            raise ValueError('论文编号无效。')
+        return {'ratings': {pid: store.library.rating(pid) for pid in identifiers}}
+
+    @app.post('/api/library/papers/{paper_id}/rating')
+    async def rate(paper_id: str, data: RatingChange):
+        return store.library.rate(paper_id, data)
+
+    @app.get('/api/library/papers/{paper_id}/reading')
+    async def reading_position(paper_id: str):
+        store.paper(paper_id)
+        return store.library.reading(paper_id)
+
+    @app.post('/api/library/papers/{paper_id}/reading')
+    async def save_position(paper_id: str, data: ReadingPosition):
+        return store.library.save_reading(paper_id, data)
+
+    @app.post('/api/papers/{paper_id}/select-source')
+    async def select_source(paper_id: str, data: SourceVersion):
+        not_busy(paper_id)
+        doc, _ = store.library.resolve(paper_id, data.version)
+        if doc['view'] != 'original':
+            raise ValueError('请选择对应的原文版本。')
+        if (store.document(paper_id) or {}).get('hash') != doc['hash']:
+            store.set_document(paper_id, doc)
+        return {'document': {k: v for k, v in doc.items() if k not in ('pages', 'file')},
+                'pdf_versions': pdf_versions(store, paper_id)}
+
+    @app.delete('/api/library/papers/{paper_id}')
+    async def delete_library_paper(paper_id: str):
+        not_busy(paper_id)
+        directory = store.directory(paper_id)
+        if directory.parent != (runtime / 'documents').resolve():
+            raise ValueError('资料目录无效。')
+        shutil.rmtree(directory)
+        store.clear(paper_id)
+        return {'message': '此论文的本机星级、PDF、批注与对话已删除。'}
+
+    @app.get('/api/library/backup')
+    async def backup_library():
+        if jobs or preparing or library_restoring:
+            raise HTTPException(409, '请等待当前资料处理完成，再备份文献库。')
+        path = await asyncio.to_thread(export_library, store)
+        return FileResponse(path, media_type='application/zip', filename='paper-library.zip',
+                            background=BackgroundTask(path.unlink, missing_ok=True))
+
+    @app.post('/api/library/restore/preview')
+    async def preview_library_restore(file: UploadFile):
+        folder = runtime / 'library-transfers'
+        folder.mkdir(exist_ok=True)
+        # Abandoned previews expire; completed exports are removed after download.
+        for old in folder.glob('restore-*.zip'):
+            if old.stat().st_mtime < time.time() - 86400:
+                old.unlink(missing_ok=True)
+        transfer = uuid.uuid4().hex
+        path = folder / f'restore-{transfer}.zip'
+        try:
+            size = 0
+            with path.open('xb') as target:
+                while chunk := await file.read(1024 * 1024):
+                    size += len(chunk)
+                    if size > MAX_ARCHIVE:
+                        raise ValueError('单次备份恢复文件不能超过 1 GB。')
+                    target.write(chunk)
+            _, summary = await asyncio.to_thread(inspect_backup, store, path)
+            return {'transfer_id': transfer, **summary}
+        except Exception:
+            path.unlink(missing_ok=True)
+            raise
+        finally:
+            await file.close()
+
+    @app.post('/api/library/restore')
+    async def restore_library_backup(data: RestoreLibraryRequest):
+        nonlocal library_restoring
+        if jobs or preparing or library_restoring:
+            raise HTTPException(409, '请等待当前资料处理完成，再恢复文献库。')
+        path = runtime / 'library-transfers' / f'restore-{data.transfer_id}.zip'
+        if not path.is_file() or path.stat().st_mtime < time.time() - 86400:
+            raise HTTPException(404, '备份预览已过期，请重新选择文件。')
+        library_restoring = True
+        try:
+            result = await asyncio.to_thread(restore_library, store, path)
+            path.unlink(missing_ok=True)
+            return {'message': '文献库已恢复，本机已有评分、批注和阅读进度已保留。', **result}
+        finally:
+            library_restoring = False
+
     @app.get("/api/papers/{paper_id}")
     async def paper(paper_id: str):
         data = store.paper(paper_id)
@@ -353,6 +467,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
                 "history": history, 'active_leaf':store.state(paper_id)['active_leaf'],
                 "document": {k: v for k, v in doc.items() if k not in ("pages", "file")} if doc else None,
                 "pdf_versions": pdf_versions(store, paper_id),
+                "reading": store.library.reading(paper_id),
                 "busy": paper_id in jobs,
                 "preparing": paper_id in preparing,
                 "screenshots": store.screenshots(paper_id, pending=True),
@@ -379,6 +494,10 @@ def create_app(root=ROOT, runtime=None, rpc=None):
             for p in payload.get("core", []) + payload.get("extended", []):
                 if p.get("id"):
                     result.setdefault(p["id"], {"id": p["id"], "title": p.get("title_zh") or p.get("title")})
+        with store.connect() as db:
+            for row in db.execute('SELECT id,metadata FROM library_papers'):
+                metadata = json.loads(row['metadata'])
+                result.setdefault(row['id'], {'id': row['id'], 'title': metadata.get('title_zh') or metadata.get('title')})
         return {"papers": list(result.values())}
 
     @app.get("/api/papers/{paper_id}/export-pdf")
@@ -447,6 +566,8 @@ def create_app(root=ROOT, runtime=None, rpc=None):
 
     def not_busy(paper_id):
         store.paper(paper_id)
+        if library_restoring:
+            raise HTTPException(409, '正在恢复文献库，请稍后再修改资料。')
         if paper_id in jobs or paper_id in preparing:
             raise HTTPException(409, "请先停止当前回答，再更换或清除资料。")
 
@@ -719,6 +840,8 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         def check_position():
             if data.expected_leaf is not None and store.state(data.paper_id)['active_leaf'] != data.expected_leaf:
                 raise HTTPException(409, '对话已在其他页面更新，请刷新后再发送。')
+            if data.expected_document_hash is not None and data.expected_document_hash != (store.document(data.paper_id) or {}).get('hash', ''):
+                raise HTTPException(409, '原文版本已在其他页面更换，请重新载入后提问。')
         check_position()
         if data.edit_message_id and data.regenerate_message_id:
             raise HTTPException(400, '每次只能编辑问题或重新生成回答。')
@@ -743,7 +866,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
             if role == 'assistant' and target['status'] == 'completed':
                 settings['translation_revision'] = str(data.request_id)
             data = Ask.model_validate({**data.model_dump(), **settings})
-        if data.paper_id in preparing:
+        if data.paper_id in preparing or library_restoring:
             raise HTTPException(409, "资料正在准备，请等待完成后提问。")
         if generation_lock.locked():
             raise HTTPException(409, "已有回答正在生成，请先停止或等待完成。")
@@ -817,12 +940,8 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     @app.delete("/api/papers/{paper_id}")
     async def clear(paper_id: str):
         not_busy(paper_id)
-        directory = store.directory(paper_id)
-        if directory.parent != (runtime / "documents").resolve():
-            raise ValueError("目录校验失败。")
-        shutil.rmtree(directory)
-        store.clear(paper_id)
-        return {"message": "本机助手资料与记录已清除。Codex 自身会话历史仍由 Codex 管理。"}
+        store.clear_conversation(paper_id)
+        return {"message": "本机对话已清除；星级、PDF、翻译进度和批注已保留。Codex 自身会话历史仍由 Codex 管理。"}
 
     @app.post("/api/shutdown")
     async def shutdown():
@@ -835,7 +954,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
 
     @app.get("/assets/{name}")
     async def asset(name: str):
-        if name not in ("paper-reader.js", "paper-reader.css", "paper-chat.js", "paper-chat.css", "site.css", "site.js", "daily-update.js", "manual-search.js", "manual-search.css", "journal-manager.js", "journal-manager.css", "research-directions.js", "research-directions.css", "wechat-subscriptions.js", "wechat-subscriptions.css", "favicon.svg"):
+        if name not in ("paper-library.js", "paper-library.css", "paper-reader.js", "paper-reader.css", "paper-chat.js", "paper-chat.css", "site.css", "site.js", "daily-update.js", "manual-search.js", "manual-search.css", "journal-manager.js", "journal-manager.css", "research-directions.js", "research-directions.css", "wechat-subscriptions.js", "wechat-subscriptions.css", "favicon.svg"):
             raise HTTPException(404)
         return FileResponse(root / "tools/assets" / name)
 
@@ -867,6 +986,10 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     @app.get('/setup.html')
     async def setup_page():
         return FileResponse(root / 'site/setup.html', media_type='text/html')
+
+    @app.get('/library.html')
+    async def library_page():
+        return FileResponse(root / 'site/library.html', media_type='text/html')
 
     @app.get('/recommendations.html')
     async def recommendations_page():

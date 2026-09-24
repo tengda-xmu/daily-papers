@@ -64,6 +64,9 @@ class Store:
             db.execute('CREATE TABLE IF NOT EXISTS branch_choices (paper TEXT NOT NULL,parent_id INTEGER NOT NULL,child_id INTEGER NOT NULL,PRIMARY KEY(paper,parent_id))')
             db.execute('CREATE INDEX IF NOT EXISTS message_parent ON messages(paper,parent_id)')
             db.execute('CREATE TABLE IF NOT EXISTS annotations (paper TEXT NOT NULL,document_hash TEXT NOT NULL,revision INTEGER NOT NULL,items TEXT NOT NULL,PRIMARY KEY(paper,document_hash))')
+        from .library import Library
+        self.library = Library(self)
+        self.library.migrate()
 
     @contextmanager
     def connect(self):
@@ -127,6 +130,9 @@ class Store:
             for p in payload.get("core", []) + payload.get("extended", []):
                 if p.get("id") == paper_id:
                     return p
+        saved = self.library.metadata(paper_id)
+        if saved:
+            return saved
         raise ValueError("本机还没有这篇论文。请先同步 GitHub 仓库的最新数据，再打开对应文章。")
 
     def state(self, paper_id):
@@ -139,6 +145,8 @@ class Store:
             db.execute("INSERT INTO papers(id,thread) VALUES(?,?) ON CONFLICT(id) DO UPDATE SET thread=excluded.thread", (paper_id, thread))
 
     def set_document(self, paper_id, document):
+        if document:
+            self.library.source(paper_id, document)
         with self.connect() as db:
             db.execute("INSERT INTO papers(id,document) VALUES(?,?) ON CONFLICT(id) DO UPDATE SET document=excluded.document, thread=NULL", (paper_id, json.dumps(document, ensure_ascii=False)))
 
@@ -196,6 +204,11 @@ class Store:
 
     def set_artifact(self, message_id, artifact):
         with self.connect() as db:
+            row = db.execute('SELECT paper,model,request,created FROM messages WHERE id=?', (message_id,)).fetchone()
+        if row:
+            self.library.artifact(row['paper'], artifact, model=row['model'],
+                                  instructions=json.loads(row['request']).get('message', ''), created=row['created'])
+        with self.connect() as db:
             db.execute('UPDATE messages SET artifact=? WHERE id=?', (json.dumps(artifact), message_id))
 
     def screenshots(self, paper_id, *, pending=False):
@@ -250,9 +263,20 @@ class Store:
 
     def clear(self, paper_id):
         with self.connect() as db:
-            for table in ("messages", "requests", "translations", "screenshots", 'branch_choices', 'annotations'):
+            for table in ("messages", "requests", "translations", "screenshots", 'branch_choices', 'annotations', 'library_documents', 'library_reading'):
                 db.execute(f"DELETE FROM {table} WHERE paper=?", (paper_id,))
             db.execute("DELETE FROM papers WHERE id=?", (paper_id,))
+            db.execute('DELETE FROM library_papers WHERE id=?', (paper_id,))
+
+    def clear_conversation(self, paper_id):
+        screenshots = self.screenshots(paper_id)
+        with self.connect() as db:
+            for table in ('messages', 'requests', 'screenshots', 'branch_choices'):
+                db.execute(f'DELETE FROM {table} WHERE paper=?', (paper_id,))
+            db.execute('UPDATE papers SET thread=NULL,active_leaf=0 WHERE id=?', (paper_id,))
+        from .screenshots import screenshot_path
+        for item in screenshots:
+            screenshot_path(self.directory(paper_id), item['id']).unlink(missing_ok=True)
 
     def translation(self, paper_id, cache_key):
         with self.connect() as db:
@@ -263,6 +287,9 @@ class Store:
         with self.connect() as db:
             db.execute("INSERT INTO translations VALUES(?,?,?) ON CONFLICT(paper,cache_key) DO UPDATE SET content=excluded.content",
                        (paper_id, cache_key, json.dumps(data, ensure_ascii=False)))
+        self.library.artifact(paper_id, data.get('artifact', {}), cache_key=cache_key,
+                              model=data.get('signature', {}).get('model', ''),
+                              instructions=data.get('signature', {}).get('instructions', ''))
 
     def directory(self, paper_id):
         if not ID_PATTERN.fullmatch(paper_id):

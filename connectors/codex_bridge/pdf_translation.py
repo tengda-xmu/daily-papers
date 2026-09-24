@@ -352,14 +352,15 @@ async def translate_pdf(client, store, ask, paper):
                     raise CodexError(str(exc) + ' 再次开始可恢复已完成的区域。') from None
                 prompt += '\n上次输出格式不合格，请重新输出全部区域的严格 JSON，并保留所有公式占位符。'
         translated.update(result)
-        store.save_translation(ask.paper_id, key, {'regions':translated, 'source_hash':document['hash']})
+        store.save_translation(ask.paper_id, key, {'regions':translated, 'source_hash':document['hash'], 'signature':signature})
     yield {'type':'progress', 'stage':'translation', 'message':'翻译完成，正在回填原版式并检查文字是否溢出…'}
     result = await asyncio.to_thread(render_pdf, source, directory / filename, layout, translated, work)
     artifact = {'kind':'layout-pdf', 'filename':filename, 'source_hash':document['hash'], 'target':ask.translation_target, **result}
     # Save the translation before pairing so a failed export never repeats model work.
-    store.save_translation(ask.paper_id, key, {'regions':translated, 'source_hash':document['hash'], 'artifact':artifact})
+    store.save_translation(ask.paper_id, key, {'regions':translated, 'source_hash':document['hash'], 'artifact':artifact, 'signature':signature})
     paired = await asyncio.to_thread(bilingual_file, source, directory, artifact)
     artifact.update(bilingual_filename=paired.name, preferred_view=preferred)
-    store.save_translation(ask.paper_id, key, {'regions':translated, 'source_hash':document['hash'], 'artifact':artifact})
+    store.save_translation(ask.paper_id, key, {'regions':translated, 'source_hash':document['hash'], 'artifact':artifact, 'signature':signature})
     yield {'type':'artifact', 'artifact':artifact}
+    yield {'type':'delta', 'text':'已保存到本机文献库。清除对话后仍可继续阅读。\n\n'}
     yield {'type':'delta', 'text':f'译文 PDF 已生成，共 {result["pages"]} 页，已翻译 {result["regions"]} 个文字区域。中英对照 PDF 按原文、译文交替保存，共 {result["pages"] * 2} 页，可在左侧并排阅读。\n\n两种文件保留各页尺寸、分栏、图表位置；图片内部文字、公式及书目信息保留原样。译文在原文字框内排版，字体与换行可能不同于原文。左侧“PDF 版本”可切换、选择文字并下载。'}

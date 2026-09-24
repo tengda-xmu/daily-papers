@@ -421,7 +421,7 @@ def test_upload_grounding_references_new_thread_and_clear(bridge):
     assert c.delete(f'/api/papers/{P1}', headers=h).status_code == 200
     assert not app.state.store.history(P1)
     assert app.state.store.history(P2)
-    assert not app.state.store.document(P1)
+    assert app.state.store.document(P1)
 
 
 def test_unknown_paper_and_invalid_pdf_rejected(bridge):

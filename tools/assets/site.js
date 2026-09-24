@@ -35,6 +35,7 @@
   const venue = $('#venue');
   const journal = $('#journal');
   const sort = $('#sort');
+  const importance = $('#importance');
   const cards = $$('.paper');
   const count = $('#result-count');
   const noData = $('#no-data');
@@ -50,7 +51,9 @@
   function sortCards() {
     ['core', 'extended'].forEach((id) => {
       const container = $(`#${id}`); if (!container) return;
-      $$('.paper', container).sort((a, b) => sort?.value === 'latest'
+      $$('.paper', container).sort((a, b) => sort?.value === 'importance'
+        ? Number(b.dataset.rating || 0) - Number(a.dataset.rating || 0) || Number(a.dataset.rank) - Number(b.dataset.rank)
+        : sort?.value === 'latest'
         ? (b.dataset.date || '').localeCompare(a.dataset.date || '')
         : Number(a.dataset.rank) - Number(b.dataset.rank)).forEach((item) => container.appendChild(item));
     });
@@ -58,6 +61,7 @@
   const reset = () => {
     [search, source, topic, venue, journal].forEach((el) => { if (el) el.value = ''; });
     if (sort) sort.value = 'recommended';
+    if (importance) importance.value = '0';
     sortCards();
     filter();
   };
@@ -74,11 +78,11 @@
       const text = (card.dataset.search || '').toLowerCase();
       const show = (!query || text.includes(query)) && (!selectedSource || sources.includes(selectedSource)) &&
         (!selectedTopic || topics.includes(selectedTopic)) && (!selectedVenue || card.dataset.venue === selectedVenue) &&
-        (!selectedJournal || card.dataset.journal === selectedJournal);
+        (!selectedJournal || card.dataset.journal === selectedJournal) && Number(card.dataset.rating || 0) >= Number(importance?.value || 0);
       card.hidden = !show;
       if (show) visible += 1;
     });
-    const activeFilters = [source, topic, venue, journal].filter((el) => el?.value).length;
+    const activeFilters = [source, topic, venue, journal].filter((el) => el?.value).length + (Number(importance?.value || 0) > 0 ? 1 : 0);
     const filtering = activeFilters > 0 || Boolean(query);
     if (count) count.textContent = filtering ? `${visible} / ${cards.length} 篇` : `${cards.length} 篇推荐`;
     const filterCount = $('#filter-count');
@@ -125,6 +129,8 @@
     filter();
   }));
   sort?.addEventListener('change', sortCards);
+  importance?.addEventListener('change', filter);
+  document.addEventListener('paper-ratings-updated', () => { sortCards(); filter(); });
   function scrollToReading() {
     $('#reading')?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
   }

@@ -1,5 +1,4 @@
-"""Only expose completed PDF artifacts belonging to the selected paper/source."""
-import hashlib
+"""Expose saved PDF versions independently of the selected source or conversation."""
 import re
 
 from fastapi import HTTPException
@@ -19,39 +18,16 @@ def artifact_path(store, paper_id, artifact, view='translated'):
 
 
 def pdf_versions(store, paper_id):
-    doc = store.document(paper_id)
-    if not doc or doc.get('kind') != 'pdf':
-        return []
-    versions = [{**{k:v for k,v in doc.items() if k not in ('pages', 'file')},
-                 'view':'original', 'source_hash':doc['hash'], 'label':'原文 PDF', 'message_id':0}]
-    seen = {}
-    directory = store.directory(paper_id)
-    for row in reversed(store.history(paper_id, all_versions=True)):
-        artifact = row.get('artifact') or {}
-        name = artifact.get('filename', '')
-        if (row['status'] != 'completed' or artifact.get('kind') != 'layout-pdf'
-                or artifact.get('source_hash') != doc['hash']
-                or not re.fullmatch(r'layout-[a-f0-9]{24}\.pdf', name) or not (directory / name).is_file()):
-            continue
-        if name in seen:
-            for descriptor in seen[name]:
-                descriptor['message_ids'].append(row['id'])
-            continue
-        seen[name] = []
-        for view in ('translated', 'bilingual'):
-            identity = hashlib.sha256(f'{doc["hash"]}:{name}:{view}'.encode()).hexdigest()[:16]
-            label = ('中文译文 PDF' if artifact.get('target') != 'en' else '英文译文 PDF') if view == 'translated' else '中英对照 PDF'
-            descriptor = {'kind':'pdf', 'hash':identity, 'source_hash':doc['hash'], 'view':view,
-                             'name':label, 'label':label, 'page_count':doc['page_count'] * (2 if view == 'bilingual' else 1),
-                             'message_id':row['id'], 'message_ids':[row['id']], 'created':row['created'], 'model':row.get('model', '')}
-            versions.append(descriptor)
-            seen[name].append(descriptor)
+    messages = store.history(paper_id, all_versions=True)
+    versions = []
+    for doc in store.library.documents(paper_id):
+        descriptor = {k:v for k,v in doc.items() if k not in ('pages', 'file', 'artifact')}
+        name = doc.get('artifact', {}).get('filename')
+        ids = [r['id'] for r in reversed(messages) if name and r.get('artifact', {}).get('filename') == name]
+        descriptor.update(message_id=ids[0] if ids else 0, message_ids=ids)
+        versions.append(descriptor)
     return versions
 
 
 def translated_pdf(store, paper_id, version):
-    descriptor = next((v for v in pdf_versions(store, paper_id) if v['hash'] == version and v['view'] != 'original'), None)
-    if not descriptor:
-        raise HTTPException(409, 'PDF 版本已更换或不存在，请重新打开阅读区。')
-    row = next(r for r in store.history(paper_id, all_versions=True) if r['id'] == descriptor['message_id'])
-    return descriptor, artifact_path(store, paper_id, row['artifact'], descriptor['view'])
+    return store.library.resolve(paper_id, version)

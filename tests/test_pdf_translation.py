@@ -200,7 +200,7 @@ def test_versions_share_translation_but_keep_separate_annotations_and_source_sco
     assert len(rpc.inputs)==count  # Switching output format consumes no model calls.
     assert len(c.get(base,headers=h).json()['pdf_versions'])==3
     store.set_document(P1,{**doc,'hash':'f'*16})
-    assert len(c.get(base,headers=h).json()['pdf_versions'])==1
-    assert c.get(base+'/pdf?version='+translated['hash'],headers=h).status_code==409
-    assert c.post(base+'/annotations',headers=h,json={**payload,'revision':1}).status_code==409
+    assert len(c.get(base,headers=h).json()['pdf_versions'])==4
+    assert c.get(base+'/pdf?version='+translated['hash'],headers=h).status_code==200
+    assert c.post(base+'/annotations',headers=h,json={**payload,'revision':1}).status_code==200
     assert c.get(base+f'/export-pdf?message_id={row["id"]}&view=bilingual',headers=h).content==default.content

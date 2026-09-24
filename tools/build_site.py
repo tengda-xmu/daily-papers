@@ -80,7 +80,7 @@ def template(name: str, **values) -> str:
 
 def document(content: str, *, title: str, root: str = "./", active: str = "daily") -> str:
     version = hashlib.sha256(
-        b"".join((ASSETS / name).read_bytes() for name in ("site.css", "site.js", "daily-update.js", "paper-chat.css", "paper-chat.js", "paper-reader.css", "paper-reader.js", "manual-search.css", "manual-search.js", "journal-manager.css", "journal-manager.js", "research-directions.css", "research-directions.js", "wechat-subscriptions.css", "wechat-subscriptions.js"))
+        b"".join((ASSETS / name).read_bytes() for name in ("site.css", "site.js", "paper-library.js", "paper-library.css", "daily-update.js", "paper-chat.css", "paper-chat.js", "paper-reader.css", "paper-reader.js", "manual-search.css", "manual-search.js", "journal-manager.css", "journal-manager.js", "research-directions.css", "research-directions.js", "wechat-subscriptions.css", "wechat-subscriptions.js"))
     ).hexdigest()[:10]
     return template(
         "page.html", content=content.lstrip(), title=esc(title), root=root, version=version,
@@ -90,6 +90,7 @@ def document(content: str, *, title: str, root: str = "./", active: str = "daily
         setup_current='aria-current="page"' if active in ("setup", "journals") else "",
         search_current='aria-current="page"' if active == "search" else "",
         leads_current='aria-current="page"' if active == "leads" else "",
+        library_current='aria-current="page"' if active == 'library' else '',
         search_assets=(f'<link rel="stylesheet" href="{root}assets/manual-search.css?v={version}">'
                        f'<script src="{root}assets/manual-search.js?v={version}" defer></script>') if active == 'search' else
                       (f'<link rel="stylesheet" href="{root}assets/journal-manager.css?v={version}">'
@@ -197,7 +198,7 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
     chat_button = (f'<button type="button" class="text-button codex-entry" data-paper-id="{esc(paper["id"])}" '
                    f'data-paper-title="{esc(display_title)}">Codex 对话</button>') if paper.get("id") else ""
     return f'''
-<article class="paper {tier}" data-sources="{esc(json.dumps(facets['source_ids'], ensure_ascii=False))}"
+<article class="paper {tier}" data-paper-id="{esc(paper.get('id', ''))}" data-sources="{esc(json.dumps(facets['source_ids'], ensure_ascii=False))}"
  data-topics="{esc(json.dumps(topics, ensure_ascii=False))}" data-venue="{esc(facets['venue_group'])}"
  data-journal="{esc(facets['journal'])}" data-search="{esc(search)}" data-rank="{rank}"
  data-date="{esc(paper.get('published_at'))}">
@@ -463,6 +464,8 @@ def main() -> None:
     (OUT / "index.html").write_text(render(payload), encoding="utf-8")
     (OUT / "data.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     build_archive()
+    (OUT / 'library.html').write_text(document(template('library.html'),
+        title='我的文献 | 每日论文推荐', active='library'), encoding='utf-8')
     (OUT / "setup.html").write_text(document(template("setup.html", wechat_directory=wechat_directory(), wechat_manager=wechat_manager(),
         sources_panel=source_status_panel(payload, reading_url='./'),
         journals=journal_directory(), journal_count=len(JOURNALS), group_count=len({j['group'] for j in JOURNALS})),

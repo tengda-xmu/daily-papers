@@ -5,7 +5,7 @@
   const base = 'http://127.0.0.1:43127';
   const local = document.body.dataset.codexLocal === 'true';
   const key = 'daily-papers-codex-session';
-  const session = local ? 'localStorage' : 'sessionStorage';
+  const session = location.origin === base ? 'localStorage' : 'sessionStorage';
   const browserKey = 'daily-papers-codex-browser', rememberKey = 'daily-papers-codex-remember';
   function readStorage(storage, name) { try { return window[storage].getItem(name) || ''; } catch { return ''; } }
   function writeStorage(storage, name, value) {
@@ -53,7 +53,7 @@
     <div class="chat-workspace">
     <div class="chat-messages" id="chat-reading-pane" aria-label="对话记录"></div>
     <button class="chat-scroll-latest text-button" type="button" data-chat-action="latest" hidden>↓ 回到最新回复</button>
-    <div class="chat-history-actions"><button class="text-button" type="button" data-chat-action="export-pdf">导出对话 PDF</button><button class="text-button" type="button" data-chat-action="export">对话文本</button><button class="text-button" type="button" data-chat-action="clear">清除记录</button></div>
+    <div class="chat-history-actions"><button class="text-button" type="button" data-chat-action="export-pdf">导出对话 PDF</button><button class="text-button" type="button" data-chat-action="export">对话文本</button><button class="text-button" type="button" data-chat-action="clear">清除对话</button></div>
     <div class="chat-height-resizer" role="separator" tabindex="0" aria-orientation="horizontal" aria-label="调整对话阅读区域高度" aria-controls="chat-reading-pane" title="上下拖动调整阅读区域；双击恢复默认"><span aria-hidden="true"></span><small aria-hidden="true">拖动调整阅读区域</small></div>
     <div class="chat-bottom">
     <form class="chat-composer">
@@ -110,10 +110,13 @@
       && row.artifact.target === $('.chat-translation-target').value && row.model === chosenModel()?.id
       && row.request?.message === prompt
       && pdfVersions.some(v => v.view === view && (v.message_id === row.id || v.message_ids?.includes(row.id))));
-    return row ? {row, view} : null;
+    const stored=pdfVersions.filter(v=>v.view===view && v.available!==false && v.source_hash===currentDocument.hash
+      && v.target===$('.chat-translation-target').value && v.model===chosenModel()?.id && v.instructions===prompt).sort((a,b)=>b.created-a.created)[0];
+    return stored ? {row:{libraryVersion:stored.hash},view} : row ? {row, view} : null;
   }
   async function previewPdf(row, view = row.artifact?.preferred_view || 'translated') {
     const targetPaper = paperId;
+    if(row.libraryVersion){const reader=await ensureReader();if(targetPaper===paperId)await reader.showVersion(row.libraryVersion);return;}
     if (!pdfVersions.some(v => v.view === view && (v.message_id === row.id || v.message_ids?.includes(row.id)))) throw new Error('此 PDF 版本已不可预览，请检查当前论文资料。');
     const reader = await ensureReader();
     if (targetPaper !== paperId) return;
@@ -139,6 +142,14 @@
       const link = document.createElement('link'); link.rel='stylesheet'; link.href=readerAsset('paper-reader.css'); document.head.append(link);
       const module = await import(readerAsset('paper-reader.js'));
       reader = module.createReader({dialog, assets:new URL('.',chatScript), api, onDocument:action, onLayout:refreshLayout,
+        onSource:async version=>{
+          if(busy || editing || documentPending || remoteDocumentPending)throw new Error('请先完成或停止当前操作，再切换原文版本。');
+          const data=await api(endpoint('/select-source'),{method:'POST',body:JSON.stringify({version})});
+          currentDocument=data.document;pdfVersions=data.pdf_versions;updateMode();
+          $('.chat-documents summary').textContent='阅读依据：'+currentDocument.name;
+          documentNotice(`已载入原文版本 ${version.slice(0,8)} · ${currentDocument.page_count} 页`,'ready');
+          return currentDocument;
+        },
         onSelection:async selected => {
           if (busy || editing || documentPending || screenshotPending) { notice('请先完成当前操作，再翻译或提问。'); return false; }
           if (selected.documentHash !== currentDocument?.hash) { notice('原文已更换，请重新选择文字。'); return false; }
@@ -696,9 +707,10 @@
       const body = message(row.role, row.content, row.status, row.document_hash, row.error, row.model, row.id, row.attachments || [], row.artifact || {}, row);
       if (row.status === 'running') showProgress(body, data.progress || { started_at: row.created, message: '本次回答仍在生成' });
     }
-    const doc = data.document;
+    let doc = data.document;
     currentDocument = doc;
-    if (dialog.open) ensureReader().then(view => view.update(currentPaper, doc, data.pdf_versions || [])).catch(error => notice(error.message));
+    if (dialog.open) await ensureReader().then(view => view.update(currentPaper, doc, data.pdf_versions || [], '', data.reading)).catch(error => notice(error.message));
+    doc=currentDocument;
     $('.chat-settings-toggle').textContent = '模型与资料' + (doc ? doc.kind === 'pdf' ? ` · PDF ${doc.page_count} 页` : ' · 已载入全文' : '');
     if (!screenshotPending) { screenshots = data.screenshots || []; drawScreenshots(); }
     remoteDocumentPending = Boolean(data.preparing);
@@ -774,8 +786,11 @@
         select.value = paperId;
       }
       await loadPaper();
+      document.dispatchEvent(new CustomEvent('paper-chat-connected'));
     } catch (error) {
       status(error.message, error.state || 'error'); $('.chat-connect').hidden = false;
+      // Saved PDFs remain readable when the local model connection is unavailable.
+      if(token && paperId)await loadPaper().catch(()=>{});
       if (error.state === 'offline' && (token || deviceToken || code) && dialog.open) {
         status('等待本机助手启动，将自动重连。若浏览器提示，请允许访问本地网络。', 'offline');
         reconnectTimer = setTimeout(() => { if (dialog.open && !busy && !document.hidden) connect(); }, 8000);
@@ -787,6 +802,7 @@
   }
 
   async function open(id, title, trigger) {
+    if(reader) {try{await reader.flush();}catch{notice('阅读进度或批注尚未保存，请重试后切换论文。');return;}}
     if (reader?.hasUnsaved()) { try { await reader.flush(); } catch { notice('批注尚未保存，请在左侧重试或备份后再切换论文。'); return; } }
     if (busy) await stop();
     rememberDraft();
@@ -804,6 +820,10 @@
     if (!dialog.open) dialog.showModal();
     ensureReader().then(view=>view.update(id,currentDocument)).catch(error=>notice(error.message));
     refreshLayout();
+    if(token || deviceToken){
+      await loadPaper().catch(error=>notice(error.message));
+      if(trigger?.dataset.openReader==='true')reader?.open();
+    }
     if (token || deviceToken || $('.chat-pair-row input').value.trim()) await connect();
     else { $('.chat-connect').hidden = false; $('.chat-messages').replaceChildren(); status('未连接本机 Codex'); }
   }
@@ -869,7 +889,7 @@
     try {
       const response = await api('/api/ask', { method: 'POST', stream: true, signal: activeController.signal,
         body: JSON.stringify({ paper_id: paperId, message: text, mode:taskMode, model: model.id, attachment_ids: sentScreenshots.map(x => x.id),
-          pages:task.pages || '', translation_target:task.translation_target || 'zh', translation_source:taskSource, expected_leaf:activeLeaf,
+          pages:task.pages || '', translation_target:task.translation_target || 'zh', translation_source:taskSource, expected_leaf:activeLeaf, expected_document_hash:currentDocument?.hash || '',
           edit_message_id:revision?.kind === 'edit' ? revision.row.id : 0, regenerate_message_id:revision?.kind === 'regenerate' ? revision.row.id : 0,
           request_id: crypto.randomUUID() }) });
       if (!revision && !layoutPdf) $('.chat-composer textarea').value = '';
@@ -972,8 +992,8 @@
       if (name === 'screenshot') { screenshotPaper = paperId; return $('.chat-image-input').click(); }
       if (name === 'fetch-pdf') return prepareDocument('/fetch-pdf', null, '正在获取并解析论文 PDF…');
       if (name === 'fulltext') return prepareDocument('/fulltext', null, '正在获取网页全文…');
-      if (name === 'clear' && window.confirm('清除这篇论文在本机助手中的资料和对话？Codex 自身会话历史仍由 Codex 管理。')) {
-        const data = await api(endpoint(), { method: 'DELETE' }); reader?.discardChanges(); releasePreviews(); screenshots = []; drawScreenshots(); await loadPaper(); notice(data.message);
+      if (name === 'clear' && window.confirm('清除这篇论文的本机对话？星级、原文、译文、翻译进度和批注会保留。')) {
+        await reader?.flush();const data = await api(endpoint(), { method: 'DELETE' }); releasePreviews(); screenshots = []; drawScreenshots(); await loadPaper(); notice(data.message);
       }
       if (name === 'export') {
         const data = await api(endpoint());
@@ -1091,7 +1111,8 @@
     if (!deviceToken) { status('浏览器授权已在其他标签页取消，请重新配对。', 'unpaired'); $('.chat-connect').hidden = false; }
     else if (dialog.open && !busy) connect();
   });
-  document.addEventListener('click', event => { const button = event.target.closest('.codex-entry'); if (button) open(button.dataset.paperId, button.dataset.paperTitle, button); });
+  document.addEventListener('paper-library-connected',()=>{token=readStorage(session,key);deviceToken=readStorage('localStorage',browserKey);if(dialog.open)connect();});
+  document.addEventListener('click', event => { const button = event.target.closest('.codex-entry'); if (button) open(button.dataset.paperId, button.dataset.paperTitle, button).then(()=>{if(button.dataset.openReader==='true')reader?.open();}); });
   if (local) {
     const hash = new URLSearchParams(location.hash.slice(1)); setPairCode(hash.get('pair') || '');
     if (pairCode) { historyReplace(); $('.chat-pair-row input').value = pairCode; }
