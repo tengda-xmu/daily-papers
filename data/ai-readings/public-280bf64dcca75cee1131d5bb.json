@@ -1,11 +1,11 @@
 {
   "id": "public-280bf64dcca75cee1131d5bb",
-  "content_version": "ac0bb5d57a150551bf21db1630b957ca5c09b2331565aad16a2ea2c56651d4cf",
+  "content_version": "eaa0a6babfa47b52a6acf5308c3c6197f121c6db062c2bc8e5ff6978a468c9f2",
   "analysis": {
-    "title_zh": "LFM2.5-VL-DSpark：加速视觉语言模型推理",
-    "summary": "官方宣布发布面向LFM2.5-VL-3B的实验性DSpark草稿模型，通过推测解码加速视觉语言模型推理，适用于需要降低生成延迟的图文任务。官方称输出质量不变，设备端与H100的解码加速最高分别为3.13倍和2.66倍，端到端加速最高分别为2.62倍和2.27倍。草稿模型新增2.8亿参数，相当于3B目标模型的8.9%；首日提供llama.cpp、MLX-VLM和SGLang的兼容集成。",
-    "application": "建议：科研迁移可考虑在图文运维问答、结构图纸解读等任务上评估延迟、内存占用和输出一致性，这些属于迁移设想，并非官方已验证场景。官方报告的效果仅为所述推理加速与输出质量不变；所给公告片段未提供具体测试任务、设备端型号或完整实验设置，不能将最高加速倍数视为普遍保证。",
-    "requirements": "目标模型为LFM2.5-VL-3B；提供适配LFM的llama.cpp、MLX-VLM和SGLang集成。草稿模型新增280M参数，为3B目标模型的8.9%。具体框架版本、账号、API、费用及完整部署条件未明确，使用条件见官方文档。",
+    "title_zh": "LFM2.5-VL-DSpark：通过推测解码加速视觉语言模型",
+    "summary": "LiquidAI 宣布发布面向 LFM2.5-VL-3B 的实验性 DSpark 草稿模型，通过推测解码，以少量额外内存开销换取推理加速，官方称不改变输出质量。公告报告设备端与 H100 的解码加速最高分别为 3.13 倍和 2.66 倍，端到端加速最高分别为 2.62 倍和 2.27 倍。草稿模型新增 280M 参数，相当于目标模型的 8.9%。适用于关注视觉语言模型推理延迟的任务，但所给片段未列出测试任务与配置。",
+    "application": "建议：科研迁移可考虑在智能运维图像问答、结构巡检描述等任务中评估该加速路径，重点核验端到端延迟、内存占用与输出一致性；这些是迁移设想，并非官方已验证的应用效果。官方报告的是推理加速及输出质量不变，所给片段不足以判断其在具体科研任务上的收益。",
+    "requirements": "目标模型为 LFM2.5-VL-3B；公告明确提供适配 LFM 的 llama.cpp、MLX-VLM 和 SGLang DSpark 集成。账号、API、费用及具体部署版本未明确，使用条件见官方文档。",
     "steps": [],
     "evidence": [
       "Today, we release an experimental DSpark draft model for our vision-language model (VLM) LFM2.5-VL-3B .",
@@ -16,5 +16,5 @@
     ],
     "basis_url": "https://huggingface.co/blog/LiquidAI/lfm2-5-vl-dspark"
   },
-  "analyzed_at": "2026-09-25T05:03:47.189641+00:00"
+  "analyzed_at": "2026-09-25T13:14:11.247825+00:00"
 }
