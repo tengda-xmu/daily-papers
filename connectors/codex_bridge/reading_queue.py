@@ -115,6 +115,15 @@ class ReadingQueue:
             self.enqueue(paper, priority=priority)
         self.sync_state = 'ok'
 
+    def document_available(self, identifier):
+        # Only published recommendations belong to this public enrichment queue.
+        # Personal/manual-search documents must never create publication tasks.
+        with self.db() as db:
+            row = db.execute('SELECT paper,priority FROM tasks WHERE paper_id=?', (identifier,)).fetchone()
+        if row:
+            self.enqueue(json.loads(row['paper']), priority=row['priority'])
+            self.last_sync = 0
+
     def snapshot(self):
         with self.db() as db:
             rows = db.execute('SELECT paper_id,paper,state,attempts,updated_at,error,material,next_material FROM tasks ORDER BY priority DESC,updated_at DESC').fetchall()

@@ -169,3 +169,15 @@ def test_new_fulltext_link_wakes_existing_task_without_changing_identity(tmp_pat
     assert row['state'] == 'pending' and row['next_material'] == 0
     assert row['result'] == 'kept' and row['fingerprint'] == fingerprint(p)
     assert json.loads(row['paper'])['pdf_url'].endswith('example.pdf')
+
+
+def test_new_local_pdf_wakes_published_task_but_never_enqueues_private_papers(tmp_path):
+    p=sample(); q=ReadingQueue(tmp_path,tmp_path/'runtime',FakeClient({}),asyncio.Lock())
+    q.enqueue(p)
+    with q.db() as db:
+        db.execute("UPDATE tasks SET state='missing_evidence',next_material=9999999999")
+    q.resolver.signature=lambda identifier:'new-pdf-hash'
+    q.document_available(p['id'])
+    assert task(q)['state']=='pending' and task(q)['next_material']==0
+    q.document_available('000000000000')
+    assert len(q.snapshot()['tasks'])==1

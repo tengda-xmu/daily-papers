@@ -113,7 +113,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     from .reading_queue import ReadingQueue
     def reading_documents(identifier):
         return [(doc, store.library.path(identifier, doc['file'])) for doc in store.library.documents(identifier)
-                if doc.get('available') and doc.get('view') == 'original']
+                if doc.get('available') and doc.get('view') == 'original' and doc.get('kind') == 'pdf']
     reading_queue = ReadingQueue(root, runtime, client, generation_lock, documents=reading_documents)
     from .ai_queue import AIQueue
     ai_queue = AIQueue(root, runtime, client, generation_lock)
@@ -652,6 +652,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
                 raise HTTPException(413, "PDF 超过 20 MB。")
             doc = await asyncio.to_thread(parse_pdf, content, store.directory(paper_id), Path(file.filename or "上传 PDF").name)
             store.set_document(paper_id, doc)
+            reading_queue.document_available(paper_id)
         except (ValueError, HTTPException):
             raise
         except Exception:
@@ -694,6 +695,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         try:
             doc = await asyncio.to_thread(fetch_fulltext, store.paper(paper_id), store.directory(paper_id))
             store.set_document(paper_id, doc)
+            reading_queue.document_available(paper_id)
         except ValueError:
             raise
         except Exception:
@@ -709,6 +711,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         try:
             doc = await asyncio.to_thread(fetch_pdf, store.paper(paper_id), store.directory(paper_id))
             store.set_document(paper_id, doc)
+            reading_queue.document_available(paper_id)
         except ValueError:
             raise
         except Exception:
