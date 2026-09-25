@@ -137,6 +137,8 @@ def enrich(payload, analyses):
     """Notes may evolve; edition membership, order and decision evidence do not."""
     result = copy.deepcopy(payload)
     from src.auto_reading import public_analysis
+    from src.paper_titles import chinese_title, title_entries
+    titles = title_entries()
     for tier in ('core', 'extended', 'papers'):
         for paper in result.get(tier, []):
             item = analyses.get(paper.get('id'))
@@ -147,6 +149,9 @@ def enrich(payload, analyses):
                         paper.update(public_analysis(item)['analysis'])
                 except ValueError:
                     pass
+            translated = chinese_title(paper, titles)
+            if translated:
+                paper['title_zh'] = translated
     from src.reading_notes import valid_analysis
     result['analysis_status'] = {**(result.get('analysis_status') or {}),
         'ready_core': sum(valid_analysis(p) for p in result.get('core', [])),

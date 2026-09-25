@@ -39,6 +39,12 @@ jobs:
         run: python -m tools.collect_figures
       - name: Import AI reading enrichment
         run: python -m tools.public_updates --import-readings
+      - name: Translate paper titles independently of reading notes
+        env:
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
+          LLM_MODEL: ${{ secrets.LLM_MODEL }}
+        run: python -m tools.translate_paper_titles
       - run: python tools/build_site.py
       - uses: actions/upload-pages-artifact@v3
         with: {path: site}

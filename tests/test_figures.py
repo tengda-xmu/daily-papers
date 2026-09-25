@@ -24,13 +24,16 @@ def test_verified_images_match_recorded_dimensions_and_bytes():
         assert urlsplit(figure['license_source']).hostname in ('www.nature.com', 'www.ebi.ac.uk')
 
 
-def test_core_and_extended_have_one_original_figure_and_archives_use_relative_asset_paths():
+def test_only_core_has_figures_and_archives_use_relative_asset_paths():
     papers = [{"doi": doi, "title": "AI structural design", "source": "fixture"}
               for doi in figure_catalog()]
     html = render({"core": papers, "extended": papers})
-    assert html.count('<figure class="paper-figure">') == len(papers) * 2
-    assert html.count('loading="lazy"') == len(papers) * 2
-    assert html.count('class="figure-credit"') == len(papers) * 2
+    assert html.count('<figure class="paper-figure">') == len(papers)
+    assert html.count('loading="lazy"') == len(papers)
+    assert html.count('class="figure-credit"') == len(papers)
+    for paper in papers:
+        extended = paper_card(paper, 'extended')
+        assert '<figure' not in extended and 'figure-unavailable' not in extended
     assert './assets/figures/' in html
     archive = render({"core": papers}, archive_date="2026-09-23")
     assert '../assets/figures/' in archive

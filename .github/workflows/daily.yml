@@ -122,6 +122,12 @@ jobs:
           python -m src.pipeline
       - name: Import AI reading enrichment
         run: python -m tools.public_updates --import-readings
+      - name: Translate paper titles independently of reading notes
+        env:
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
+          LLM_MODEL: ${{ secrets.LLM_MODEL }}
+        run: python -m tools.translate_paper_titles
       - name: Collect original paper figures
         timeout-minutes: 8
         continue-on-error: true

@@ -18,6 +18,7 @@ if str(ROOT) not in sys.path:
 from src.catalog import (JOURNALS, SOURCE_CATALOG, STATE_LABELS, TOPIC_CATALOG,
                          VENUE_GROUPS, paper_facets, source_state, string_list)
 from src.research_focus import focus_tags
+from src.paper_titles import chinese_title
 from src.figures import get_figure, figure_status
 from src.wechat_metadata import public_subscriptions
 from src.wechat_subscriptions import effective_accounts, group_overview, published_accounts
@@ -168,6 +169,8 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
         for topic in topics
     )
     summary = paper.get("summary") or paper.get("abstract") or "暂无摘要，请查看原文。"
+    if not paper.get('abstract') and summary == f"本文聚焦《{title}》，暂未提供可用摘要，请查看原文。":
+        summary = "暂无可用摘要，请查看原文。"
     recommendation = paper.get("recommendation") or ""
     deep = paper.get("deep_read") or {}
     deep_items = [(label, deep.get(key)) for key, label in (
@@ -191,7 +194,8 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
     if doi:
         actions += f'<a href="https://doi.org/{esc(doi)}" target="_blank" rel="noopener noreferrer">DOI</a>'
     actions += f'<button type="button" class="text-button copy-citation" data-citation="{esc(citation)}">复制引用</button>'
-    display_title = paper.get("title_zh") or title
+    translated_title = chinese_title(paper)
+    display_title = translated_title or title
     title_html = f'<a href="{url}" target="_blank" rel="noopener noreferrer">{esc(display_title)}</a>' if url != "#" else esc(display_title)
     search = " ".join(str(value or "") for value in
                       (title, display_title, authors, venue, summary, paper.get("abstract"), doi))
@@ -208,8 +212,8 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
     ready = paper.get("analysis_status") == "ready"
     summary_label = "中文导读" if ready else "摘要"
     note_label = "中文精读" if ready else "摘要与笔记"
-    translated_class = " translated" if paper.get("title_zh") else ""
-    original = f'<p class="original-title" lang="en">{esc(title)}</p>' if paper.get("title_zh") else ""
+    translated_class = " translated" if translated_title else ""
+    original = f'<p class="original-title" lang="en">{esc(title)}</p>' if translated_title and translated_title != title else ""
     basis = "依据公开全文整理" if paper.get("analysis_basis") == "full_text" else "依据公开摘要整理，未核验全文细节"
     evidence_links = " · ".join(f'<a href="{safe_url(link)}" target="_blank" rel="noopener noreferrer">论文依据 {i + 1}</a>'
                                 for i, link in enumerate(paper.get("analysis_sources") or []))
@@ -221,7 +225,7 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
                            for tag in focus_tags(title, paper.get("abstract", "")))
     direction = paper.get('recommended_direction') or next(iter(topics), '')
     direction_badge = f'<button type="button" class="text-button paper-direction" data-topic-filter="{esc(direction)}">{esc(topic_labels.get(direction, direction))}</button>' if direction else ''
-    figure_html = paper_figure(paper, root)
+    figure_html = paper_figure(paper, root) if tier == "core" else ""
     chat_button = (f'<button type="button" class="text-button codex-entry" data-local-only data-paper-id="{esc(paper["id"])}" '
                    f'data-paper-title="{esc(display_title)}">Codex 对话</button>') if paper.get("id") else ""
     return f'''
