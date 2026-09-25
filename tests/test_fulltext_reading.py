@@ -206,3 +206,25 @@ def test_structured_batch_notes_keep_original_page_references(tmp_path):
     assert task(q)['state']=='ready'
     assert 'P2' in json.loads(task(q)['checkpoint'])['notes'][0]
     assert (q.runtime/'reading-drafts'/p['id']/'batch-1.json').is_file()
+
+
+def test_unclear_extracted_formula_is_reread_from_original_page_images(tmp_path, monkeypatch):
+    p=sample(); m=material(p); m['directory']=str(tmp_path)
+    rendered=[]
+    def render(doc, directory, pages):
+        rendered.extend(pages)
+        return [tmp_path/f'page-{n}.png' for n in pages]
+    monkeypatch.setattr('connectors.codex_bridge.documents.render_scan',render)
+    class Visual(FullClient):
+        async def turn(self, thread, prompt, images=()):
+            if 'paper_matches' in prompt:
+                label='P2' if '[P2]' in prompt else 'P1'
+                value={'readable':bool(images),'paper_matches':True,'unreadable_pages':[label],
+                       'notes':'已核对原文中的模型关系、公式与图注，保留页码及可核验的原文依据。'*4}
+                yield {'type':'delta','text':json.dumps(value,ensure_ascii=False)}
+            else:
+                async for event in super().turn(thread,prompt,images): yield event
+    q=ReadingQueue(tmp_path,tmp_path/'run',Visual(p),asyncio.Lock(),resolver=lambda *a,**kw:m)
+    q.quiet_until=0; q.enqueue(p); asyncio.run(q.process(task(q)))
+    assert task(q)['state']=='ready' and rendered==[1,2]
+    assert 'original_page_corrections' in task(q)['checkpoint']
