@@ -206,7 +206,7 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
         note_label = '检索片段解读'
     translated_class = " translated" if translated_title else ""
     original = f'<p class="original-title" lang="en">{esc(title)}</p>' if translated_title and translated_title != title else ""
-    basis = "依据公开全文整理" if paper.get("analysis_basis") == "full_text" else "依据公开摘要整理，未核验全文细节"
+    basis = "依据论文全文整理" if paper.get("analysis_basis") == "full_text" else "依据公开摘要整理，未核验全文细节"
     if snippet_only:
         basis = '依据检索片段整理，完整摘要与全文尚待核实'
     evidence_links = " · ".join(f'<a href="{safe_url(link)}" target="_blank" rel="noopener noreferrer">论文依据 {i + 1}</a>'

@@ -178,3 +178,20 @@ def test_publication_failure_retains_result_without_regeneration(tmp_path):
     with pytest.raises(OSError):
         q.publish_ready()
     assert task(q)['result'] == saved and task(q)['attempts'] == attempts
+
+
+def test_structured_batch_notes_keep_original_page_references(tmp_path):
+    p = sample(); m = material(p)
+    class Structured(FullClient):
+        async def turn(self, thread, prompt, images=()):
+            async for event in super().turn(thread, prompt, images):
+                if event['type']=='delta' and 'paper_matches' in prompt:
+                    value=json.loads(event['text'])
+                    value['notes']=[{'pages':['P1','P2'],'summary':value['notes']}]
+                    event['text']=json.dumps(value,ensure_ascii=False)
+                yield event
+    q=ReadingQueue(tmp_path,tmp_path/'run',Structured(p),asyncio.Lock(),resolver=lambda *a,**kw:m)
+    q.quiet_until=0; q.enqueue(p); asyncio.run(q.process(task(q)))
+    assert task(q)['state']=='ready'
+    assert 'P2' in json.loads(task(q)['checkpoint'])['notes'][0]
+    assert (q.runtime/'reading-drafts'/p['id']/'batch-1.json').is_file()

@@ -134,3 +134,38 @@ def test_latest_edition_priority_preserves_draft_and_attempts(tmp_path):
         db.execute("UPDATE tasks SET state='retry',draft='kept',attempts=1")
     q.enqueue(p, priority=100)
     assert task(q)['priority'] == 100 and task(q)['draft'] == 'kept' and task(q)['attempts'] == 1
+
+
+def test_shutdown_cancels_runner_instead_of_leaving_an_orphan(tmp_path, monkeypatch):
+    async def scenario():
+        started = asyncio.Event()
+        class Waiting(FakeClient):
+            async def turn(self, thread, prompt):
+                started.set()
+                yield {'type': 'delta', 'text': 'partial'}
+                await asyncio.Event().wait()
+        p = sample()
+        q = ReadingQueue(tmp_path, tmp_path/'runtime', Waiting({}), asyncio.Lock(),
+            resolver=lambda *a, **kw: {'basis':'abstract','version':'a'*64,'text':p['abstract'],'source_url':p['landing_url']})
+        q.enqueue(p); q.quiet_until = 0; q.sync = lambda: None; q.publish_ready = lambda: None
+        sleep = asyncio.sleep
+        async def tick(_): await sleep(0)
+        monkeypatch.setattr('connectors.codex_bridge.reading_queue.asyncio.sleep', tick)
+        q.start()
+        await asyncio.wait_for(started.wait(), 1)
+        await asyncio.wait_for(q.close(), 1)
+        assert q.runner.done() and not q.lock.locked()
+        assert task(q)['state'] == 'pending' and task(q)['attempts'] == 0
+    asyncio.run(scenario())
+
+
+def test_new_fulltext_link_wakes_existing_task_without_changing_identity(tmp_path):
+    p = sample(); q = ReadingQueue(tmp_path, tmp_path/'runtime', FakeClient({}), asyncio.Lock())
+    q.enqueue(p)
+    with q.db() as db:
+        db.execute("UPDATE tasks SET state='missing_evidence',next_material=9999999999,result='kept'")
+    q.enqueue({**p,'pdf_url':'https://www.nature.com/articles/example.pdf'})
+    row = task(q)
+    assert row['state'] == 'pending' and row['next_material'] == 0
+    assert row['result'] == 'kept' and row['fingerprint'] == fingerprint(p)
+    assert json.loads(row['paper'])['pdf_url'].endswith('example.pdf')
