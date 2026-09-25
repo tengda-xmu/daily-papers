@@ -225,3 +225,15 @@ def test_ai_task_endpoints_require_pairing_but_pages_do_not(tmp_path):
     headers={'Authorization':'Bearer '+token}
     assert client.get('/api/ai/reading-tasks',headers=headers).status_code==200
     assert client.post('/api/ai/reading-tasks/sync',headers=headers).json()['state']=='queued'
+
+
+def test_bootstrap_notice_cannot_overwrite_later_verification(tmp_path):
+    from src.opportunities import refresh as refresh_opportunities
+    row={'id':identifier('https://example.org/call'),'url':'https://example.org/call',
+         'title':'航空开放课题申请','kind':'funding','verification':'verified','verified_at':NOW.isoformat(),'deadline':'2026-11-01'}
+    write(tmp_path/'data/opportunities.json',{'entries':[row]})
+    seed={**row,'verified_at':(NOW-timedelta(days=5)).isoformat(),'deadline':'2026-10-01'}
+    write(tmp_path/'config/opportunity-sources.json',{'entries':[seed]})
+    result=refresh_opportunities(tmp_path,now=NOW)
+    assert result['entries'][0]['deadline']=='2026-11-01'
+    assert result['entries'][0]['verified_at']==NOW.isoformat()

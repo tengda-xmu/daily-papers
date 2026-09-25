@@ -135,7 +135,10 @@ def refresh(root=ROOT, *, now=None, fetcher=fetch):
         fresh.extend(extra)
         statuses.extend(follow_status)
     rows = {r['id']: r for r in previous.get('entries', [])}
-    for raw in fresh + config.get('entries', []):
+    verified = lambda r: parse_date(r.get('verified_at')) or datetime.min.replace(tzinfo=timezone.utc)
+    seeds = [r for r in config.get('entries', []) if identifier(r['url']) not in rows or
+             verified(r) > verified(rows[identifier(r['url'])])]
+    for raw in seeds + fresh:
         row = enrich(raw)
         if row:
             old = rows.get(row['id'], {})
