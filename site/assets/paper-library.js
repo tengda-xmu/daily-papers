@@ -5,6 +5,7 @@
   const library = $('#paper-library'), backup = $('#library-backup-controls');
   const cards = [...document.querySelectorAll('.paper[data-paper-id]')].filter(c=>/^[a-f0-9]{12}$/.test(c.dataset.paperId));
   if (!library && !backup && !cards.length) return;
+  const quietConnection = !library && !backup;
   const storage = location.origin === base ? 'localStorage' : 'sessionStorage';
   const sessionKey = 'daily-papers-codex-session', browserKey = 'daily-papers-codex-browser';
   const labels = ['尚未评价','留作参考','一般关注','值得阅读','重点阅读','必读／关键参考'];
@@ -16,8 +17,13 @@
   connection.innerHTML='<p class="library-connection-label">连接本机后可读取文献库和保存星级</p><button type="button" class="text-button library-connect">连接本机</button><form class="library-pair" hidden><label>配对码 <input type="password" autocomplete="off" required></label><label><input type="checkbox" checked>记住浏览器</label><button type="submit" class="button-link">连接</button><a href="http://127.0.0.1:43127/" target="_blank" rel="noopener">打开本机助手</a></form>';
   const notice = document.createElement('p');notice.className='library-status';notice.setAttribute('role','status');notice.setAttribute('aria-live','polite');
   (library || backup || $('#reading')).prepend(connection,notice);
-  function status(text,error=false){notice.textContent=text;notice.dataset.error=String(error);}
-  function connectionState(ok){connected=ok;connection.querySelector('.library-connection-label').textContent=ok?'已连接本机 · 星级与 PDF 长期保存':'尚未连接本机 · 保存操作需要连接';connection.querySelector('.library-connect').textContent=ok?'刷新':'连接本机';if(ok)connection.querySelector('form').hidden=true;}
+  function status(text,error=false){notice.textContent=quietConnection && !error && text==='已连接本机'?'':text;notice.dataset.error=String(error);if(error)connection.hidden=false;}
+  function connectionState(ok){
+    connected=ok;connection.hidden=quietConnection && ok;
+    connection.querySelector('.library-connection-label').textContent=ok?'已连接本机 · 星级与 PDF 长期保存':'尚未连接本机 · 保存操作需要连接';
+    connection.querySelector('.library-connect').textContent=ok?'刷新':'连接本机';
+    if(ok){connection.querySelector('form').hidden=true;if(notice.dataset.error==='true')status('');}
+  }
   async function api(path,options={},retry=true){
     token=read(storage,sessionKey)||token;
     let response;
