@@ -11,7 +11,7 @@ from connectors.codex_bridge.reading_queue import ReadingQueue
 from connectors.codex_bridge.reading_materials import MaterialResolver
 from src.auto_reading import fingerprint, public_analysis
 from src.editions import read
-from src.paper_sources import clean_abstract, inspect_html
+from src.paper_sources import clean_abstract, inspect_html, inspect_xml
 from tests.test_reading_queue import sample, response, task, FakeClient
 
 
@@ -148,6 +148,17 @@ def test_long_abstract_page_is_not_fulltext_and_wrong_paper_is_rejected():
     assert document is None
     with pytest.raises(ValueError):
         inspect_html(html, p['landing_url'], {**p, 'doi': '10.test/other', 'title': 'A wholly unrelated research paper'})
+
+
+def test_namespaced_publisher_xml_needs_no_optional_parser():
+    p=sample()
+    xml=('<article xmlns:ce="urn:example"><doi>'+p['doi']+'</doi><title>Example</title>'
+         '<ce:abstract>' + 'A reliable scientific abstract. '*10 + '</ce:abstract><body><ce:para>'
+         + 'Methods and results of the reported experiment. '*180 + '</ce:para></body></article>')
+    abstract,document=inspect_xml(xml.encode(),p['landing_url'],p)
+    assert abstract and document['pages'][0]['label']=='S1'
+    with pytest.raises(ValueError):
+        inspect_xml(xml.replace(p['doi'],'10.test/unrelated').encode(),p['landing_url'],p)
 
 
 def test_scanned_pages_are_supplied_as_images_and_not_silently_skipped(tmp_path, monkeypatch):

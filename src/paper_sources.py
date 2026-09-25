@@ -176,14 +176,20 @@ def inspect_html(body, url, paper):
 
 
 def inspect_xml(body, url, paper):
-    soup = BeautifulSoup(body, 'xml')
-    identity = ' '.join(n.get_text(' ', strip=True) for n in soup.find_all(['doi', 'title', 'article-title']))
+    from xml.etree import ElementTree as ET
+    try:
+        tree = ET.fromstring(body)
+    except ET.ParseError as exc:
+        raise ValueError('Invalid article XML') from exc
+    tag = lambda n: n.tag.rsplit('}', 1)[-1]
+    text = lambda n: ' '.join(' '.join(n.itertext()).split()) if n is not None else ''
+    first = lambda names: next((n for n in tree.iter() if tag(n) in names), None)
+    identity = text(first({'doi'})) + ' ' + text(first({'article-title', 'title'}))
     if not matches(identity, paper):
         raise ValueError('Article XML identity mismatch')
-    abstract_node = soup.find('abstract') or soup.find('description')
-    abstract = clean_abstract(abstract_node.get_text(' ', strip=True) if abstract_node else '')
-    body_node = soup.find('body')
-    paragraphs = [n.get_text(' ', strip=True) for n in body_node.find_all(['para', 'p', 'section-title', 'title'])] if body_node else []
+    abstract = clean_abstract(text(first({'abstract', 'description'})))
+    body_node = first({'body'})
+    paragraphs = [text(n) for n in body_node.iter() if tag(n) in ('para', 'p', 'section-title', 'title')] if body_node is not None else []
     complete = sum(map(len, paragraphs)) >= 6000
     doc = {'kind': 'html', 'url': url, 'name': '原文 XML', 'hash': hashlib.sha256(body).hexdigest()[:16],
            'page_count': 0, 'scan_pages': 0,
