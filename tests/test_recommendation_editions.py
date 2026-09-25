@@ -218,4 +218,4 @@ def test_archive_groups_batches_and_mobile_link_paths(tmp_path, monkeypatch):
     assert '2026-09-25--1.html' in html and '2026-09-25--2.html' in html
     latest = (out / 'archive/2026-09-25.html').read_text(encoding='utf-8')
     assert '../archive/2026-09-25--1.html' in latest
-    assert '中文精读待完成' in latest and 'class="reading-notes"' not in latest
+    assert '资料获取中' in latest and 'class="reading-notes"' not in latest

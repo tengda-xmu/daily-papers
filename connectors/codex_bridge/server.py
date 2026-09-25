@@ -111,7 +111,10 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     subscription_manager = SubscriptionManager(root)
     note_manager = NoteManager(root)
     from .reading_queue import ReadingQueue
-    reading_queue = ReadingQueue(root, runtime, client, generation_lock)
+    def reading_documents(identifier):
+        return [(doc, store.library.path(identifier, doc['file'])) for doc in store.library.documents(identifier)
+                if doc.get('available') and doc.get('view') == 'original']
+    reading_queue = ReadingQueue(root, runtime, client, generation_lock, documents=reading_documents)
     from .ai_queue import AIQueue
     ai_queue = AIQueue(root, runtime, client, generation_lock)
 

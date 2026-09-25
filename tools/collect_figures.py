@@ -20,9 +20,10 @@ from PIL import Image
 import requests
 
 from src.models import normalize_doi
+from src.paper_sources import HOSTS as ARTICLE_HOSTS, discover, page_identity
 
 ROOT = Path(__file__).resolve().parents[1]
-HOSTS = {'www.nature.com', 'media.springernature.com', 'www.ebi.ac.uk'}
+HOSTS = ARTICLE_HOSTS
 CC = re.compile(r'https?://creativecommons\.org/licenses/(by(?:-nc)?(?:-nd|-sa)?)/(4\.0|3\.0)/?$', re.I)
 EXCLUDED_CREDIT = re.compile(r'biorender|reprinted|reproduced (?:from|with)|used (?:with|by) permission|all rights reserved|not (?:covered|included)', re.I)
 
@@ -76,6 +77,7 @@ class Fetcher:
                     if size > limit or time.monotonic() > deadline:
                         raise Unavailable('unavailable')
                     chunks.append(chunk)
+                self.last_url = url
                 return b''.join(chunks)
         raise Unavailable('unavailable')
 
@@ -155,34 +157,108 @@ def pdf_figure(doi, url, common, data):
     with fitz.open(stream=data, filetype='pdf') as document:
         if doi not in ''.join(p.get_text().lower() for p in list(document)[:2]):
             raise Unavailable('unavailable')
+        candidates = []
         for index, page in enumerate(document):
             blocks = [b for b in page.get_text('blocks') if b[6] == 0]
             captions = [b for b in blocks if re.match(r'^Fig(?:ure)?\.?\s*\d+\s*[|:.]', b[4].strip())]
             images = [im for im in page.get_images(full=True) if im[2] >= 400 and im[3] >= 250]
-            # Only a single image and unambiguous caption can be associated
-            # automatically. Its PDF transparency mask is part of that image.
-            if len(captions) != 1 or len(images) != 1:
+            # Associate one unambiguous caption with the neighbouring figure,
+            # on either side. Page banners are never figure candidates.
+            if len(captions) != 1:
                 continue
             text = ' '.join(captions[0][4].split())
             if EXCLUDED_CREDIT.search(text):
                 continue
             label = re.match(r'^(Fig(?:ure)?\.?\s*\d+)', text)[1]
-            rects = page.get_image_rects(images[0][0])
-            if len(rects) != 1 or rects[0].y0 > captions[0][3]:
+            caption = fitz.Rect(captions[0][:4])
+            margin = max(45, page.rect.height * .05)
+            rects = [r for im in images for r in page.get_image_rects(im[0])]
+            rects += [d['rect'] for d in page.get_drawings()]
+            rects = [r for r in rects if r.y0 >= margin and r.width >= 80 and r.height >= 50
+                     and (r.y1 <= caption.y1 or r.y0 >= caption.y0)]
+            if not rects:
                 continue
-            extracted = document.extract_image(images[0][0])['image']
-            extraction = 'embedded_image'
-            if images[0][1]:
-                base = fitz.Pixmap(document, images[0][0])
-                mask = fitz.Pixmap(document, images[0][1])
-                if (base.width, base.height) != (mask.width, mask.height):
-                    continue
-                extracted = fitz.Pixmap(base, mask).tobytes('png')
-                extraction = 'embedded_image_with_mask'
-            return {**common, 'figure_label': label, 'title': '原文配图', 'caption': text,
+            distance = lambda r: max(caption.y0 - r.y1, r.y0 - caption.y1, 0)
+            nearest = min(rects, key=distance)
+            if distance(nearest) > 100:
+                continue
+            above = nearest.y1 <= caption.y1
+            region = fitz.Rect(nearest)
+            neighbours = [r for r in rects if (r.y1 <= caption.y1) == above]
+            while True:
+                before = tuple(region)
+                for rect in neighbours:
+                    expanded = fitz.Rect(region.x0 - 45, region.y0 - 45, region.x1 + 45, region.y1 + 45)
+                    if expanded.intersects(rect):
+                        region |= rect
+                if tuple(region) == before:
+                    break
+            region = fitz.Rect(max(0, region.x0 - 30), max(margin, region.y0 - 30) if above else max(caption.y1, region.y0 - 10),
+                               min(page.rect.width, region.x1 + 30), caption.y0 if above else min(page.rect.height - 30, region.y1 + 15))
+            if region.width < 150 or region.height < 80:
+                continue
+            # Rasterize the original figure region, including vector/text labels
+            # and all panels; never redraw a chart or publish the source PDF.
+            extracted = page.get_pixmap(matrix=fitz.Matrix(2, 2), clip=region, alpha=False).tobytes('png')
+            metadata = {**common, 'figure_label': label, 'title': '原文配图', 'caption': text,
                     'source_url': url + f'#page={index + 1}', 'source_image_url': url,
-                    'pdf_page': index + 1, 'extraction': extraction}, extracted
+                    'pdf_page': index + 1, 'extraction': 'original_figure_region', 'region': list(region)}
+            candidates.append((figure_priority(text), index, metadata, extracted))
+        if candidates:
+            best = min(candidates, key=lambda value: value[:2])
+            return best[2], best[3]
     raise Unavailable('not_found')
+
+
+def publisher_figure(doi, paper, fetch):
+    """Publisher-declared figures/PDFs for Elsevier, ASME and known OA hosts."""
+    from src.paper_sources import allowed
+    def get(url, limit=20_000_000):
+        body = fetch(url, limit)
+        return body, getattr(fetch, 'last_url', url)
+    discovery = discover({**paper, 'doi': doi}, get)
+    state = 'not_found'
+    for url in discovery['urls'][:8]:
+        try:
+            body, final = get(url)
+            if body.startswith(b'%PDF'):
+                continue  # A PDF URL alone does not establish image permissions.
+            soup = BeautifulSoup(body, 'html.parser')
+            if not page_identity(soup, {**paper, 'doi': doi}):
+                continue
+            rights = soup.select('.Copyright, .copyright, .license, #rightslink, .permissions, #permissions')
+            links = [a.get('href') for block in rights for a in block.select('a[href]')]
+            licensing = license_info([urljoin(final, link) for link in links if link])
+            authors = [m.get('content', '') for m in soup.select('meta[name="citation_author"]')] or paper.get('authors', [])
+            if not authors:
+                continue
+            common = {**licensing, 'credit': str(authors[0]) + (' et al.' if len(authors) > 1 else ''), 'license_source': final}
+            figures = soup.select('figure, div.fig, .fig-section')
+            for figure in sorted(figures, key=lambda n: figure_priority(plain(n))):
+                caption = figure.select_one('figcaption, .caption, .fig-caption, .fig_caption')
+                label = re.match(r'^(Fig(?:ure)?\.?\s*\d+)', plain(caption), re.I)
+                image = figure.select_one('img[src],img[data-src]')
+                if not label or not image or EXCLUDED_CREDIT.search(plain(figure)):
+                    continue
+                image_url = urljoin(final, image.get('data-src') or image.get('src'))
+                larger = next((urljoin(final, a['href']) for a in figure.select('a[href]')
+                               if re.search(r'\.(?:png|jpe?g)(?:\?|$)', a['href'], re.I)), None)
+                image_url = larger or image_url
+                if not allowed(image_url):
+                    continue
+                return {**common, 'figure_label': label[1], 'title': plain(caption)[label.end():].lstrip('.: '),
+                        'caption': plain(caption), 'source_url': final + ('#' + figure['id'] if figure.get('id') else ''),
+                        'source_image_url': image_url}, fetch(image_url, 20_000_000)
+            pdfs = [urljoin(final, n.get('content', '')) for n in soup.select('meta[name="citation_pdf_url"]')]
+            pdfs += [urljoin(final, n['href']) for n in soup.select('a[href]') if re.search(r'\.pdf(?:\?|$)', n['href'])]
+            for pdf in list(dict.fromkeys(pdfs))[:2]:
+                if allowed(pdf):
+                    return pdf_figure(doi, pdf, common, fetch(pdf, 30_000_000))
+        except Unavailable as exc:
+            state = exc.state
+        except Exception:
+            state = 'unavailable'
+    raise Unavailable(state)
 
 
 def pmc_figure(doi, fetch):
@@ -238,17 +314,23 @@ def image_info(data):
 
 def collect(root=ROOT, fetch=None, now=None, *, retry=False):
     from src.figures import get_figure
-    from src.figure_guides import paper_doi
+    from src.paper_identity import paper_doi
     fetch = fetch or Fetcher()
     now = now or datetime.now(timezone.utc)
     path = root / 'data/figures/catalog.json'
     catalog = read(path)
     entries, checks = catalog.setdefault('entries', {}), catalog.setdefault('checks', {})
     payload = read(root / 'data/daily.json')
-    papers = payload.get('core', []) + payload.get('extended', [])
+    papers = payload.get('core', [])
+    from src.editions import entries as editions, relative_path
+    for edition in reversed(editions(root / 'data')):
+        papers = papers + read(root / 'data' / relative_path(edition)).get('core', [])
     counts = {'saved': 0, 'existing': 0, 'unavailable': 0}
     seen = set()
-    for paper in papers[:20]:
+    started, attempts = time.monotonic(), 0
+    for paper in papers:
+        if attempts >= 20 or time.monotonic() - started > 400:
+            break
         doi = paper_doi(paper) if root == ROOT else normalize_doi(paper.get('doi', ''))
         if not doi or doi in seen:
             continue
@@ -266,8 +348,18 @@ def collect(root=ROOT, fetch=None, now=None, *, retry=False):
         except (ValueError, TypeError):
             pass
         state = 'unavailable'
+        attempts += 1
         try:
-            metadata, data = nature_figure(doi, fetch) if doi.startswith('10.1038/') else pmc_figure(doi, fetch)
+            if doi.startswith('10.1038/'):
+                metadata, data = nature_figure(doi, fetch)
+            else:
+                try:
+                    metadata, data = publisher_figure(doi, paper, fetch)
+                except Unavailable as publisher_error:
+                    try:
+                        metadata, data = pmc_figure(doi, fetch)
+                    except Unavailable:
+                        raise publisher_error
             width, height, extension = image_info(data)
             digest = hashlib.sha256(data).hexdigest()
             filename = 'auto-' + hashlib.sha256(doi.encode()).hexdigest()[:16] + '-' + digest[:12] + '.' + extension

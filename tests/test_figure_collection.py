@@ -113,7 +113,8 @@ def test_pdf_extracts_complete_embedded_image_and_rejects_ambiguity():
     info, data = pdf_figure(DOI, META['license_source'] + '.pdf', META, pdf())
     assert info['pdf_page'] == 1 and info['figure_label'] == 'Fig. 1'
     assert info['source_url'].endswith('#page=1')
-    assert image_info(data)[:2] == (600, 400)
+    assert image_info(data)[0] >= 800
+    assert info['extraction'] == 'original_figure_region'
     for doi, document in (('10.1038/other', pdf()), (DOI, pdf(True))):
         with pytest.raises(Unavailable):
             pdf_figure(doi, META['license_source'], META, document)
@@ -129,11 +130,13 @@ def test_pdf_figure_preserves_embedded_transparency_mask():
     page.insert_text((30, 365), 'Fig. 1: Method overview.')
     info, data = pdf_figure(DOI, META['license_source']+'.pdf', META, document.tobytes())
     document.close()
-    assert info['extraction'] == 'embedded_image_with_mask'
+    assert info['extraction'] == 'original_figure_region'
     with Image.open(BytesIO(data)) as image:
-        assert image.size == (600, 400)
-        assert image.mode == 'RGBA'
-        assert image.getpixel((0, 0))[3] == 128
+        assert image.width >= 800
+        assert image.mode == 'RGB'
+        # Transparent pixels render exactly as in the PDF, on its white page.
+        red, green, blue = image.getpixel((image.width // 2, image.height // 2))
+        assert 120 <= red <= 130 and 195 <= green <= 205 and 222 <= blue <= 232
 
 
 def test_pmc_verifies_doi_license_and_reads_only_the_exact_figure():
@@ -190,7 +193,7 @@ def test_malformed_image_is_never_saved(tmp_path, monkeypatch):
     assert not record['entries'] and record['checks'][DOI]['state'] == 'unavailable'
 
 
-def test_extended_figures_deduplicate_and_manual_retry_keeps_existing(tmp_path, monkeypatch):
+def test_extended_figures_are_not_collected_and_manual_retry_keeps_existing(tmp_path, monkeypatch):
     (tmp_path / 'data').mkdir()
     (tmp_path / 'data/daily.json').write_text(json.dumps({'core': [{'doi': DOI}],
         'extended': [{'doi': DOI}, {'doi': '10.1038/extended'}]}))
@@ -202,5 +205,52 @@ def test_extended_figures_deduplicate_and_manual_retry_keeps_existing(tmp_path, 
         return META, png()
     monkeypatch.setattr('tools.collect_figures.nature_figure', fetch_one)
     assert collect(tmp_path, fetch=object())['saved'] == 1
-    assert collect(tmp_path, fetch=object(), retry=True) == {'saved': 1, 'existing': 1, 'unavailable': 0}
-    assert calls == [DOI, '10.1038/extended', '10.1038/extended']
+    assert collect(tmp_path, fetch=object(), retry=True) == {'saved': 0, 'existing': 1, 'unavailable': 0}
+    assert calls == [DOI]
+
+
+def test_elsevier_and_asme_figures_require_identity_and_article_permission(monkeypatch):
+    from tools.collect_figures import publisher_figure
+    for url in ('https://www.sciencedirect.com/science/article/pii/TEST',
+                'https://asmedigitalcollection.asme.org/test/article/1'):
+        paper = {'doi': DOI, 'title': 'A physical fatigue model for engineering', 'authors': ['A. Author']}
+        html = f'''<meta name="citation_doi" content="{DOI}">
+            <div class="copyright"><a href="{LICENSE}">Open access</a></div>
+            <figure id="f1"><figcaption>Fig. 1. Proposed method overview.</figcaption>
+            <img src="https://ars.els-cdn.com/figure.png"></figure>'''
+        monkeypatch.setattr('tools.collect_figures.discover', lambda *a: {'urls': [url]})
+        fetch = lambda target, limit=0: png() if target.endswith('.png') else html.encode()
+        info, image = publisher_figure(DOI, paper, fetch)
+        assert info['source_url'] == url + '#f1' and image == png()
+        html = html.replace(LICENSE, 'https://example.org/copyright')
+        with pytest.raises(Unavailable):
+            publisher_figure(DOI, paper, fetch)
+
+
+def test_pdf_vector_panels_and_labels_stay_in_original_figure_region():
+    document = fitz.open(); page = document.new_page()
+    page.insert_text((30, 30), DOI)
+    page.draw_rect(fitz.Rect(80, 100, 240, 260), color=(0, 0, 1))
+    page.draw_rect(fitz.Rect(280, 100, 440, 260), color=(1, 0, 0))
+    page.insert_text((85, 95), '(a) Stress')
+    page.insert_text((285, 95), '(b) Fatigue life')
+    page.insert_text((80, 290), 'Fig. 1: Framework and validation.')
+    info, image = pdf_figure(DOI, META['license_source'], META, document.tobytes())
+    assert info['region'][0] <= 80 and info['region'][2] >= 440
+    assert info['region'][1] < 95 and info['region'][3] > 260
+    assert image_info(image)[0] > 700
+    document.close()
+
+
+def test_pdf_top_caption_uses_lower_figure_and_never_page_banner():
+    document = fitz.open(); page = document.new_page()
+    page.insert_text((30, 30), DOI)
+    page.draw_rect(fitz.Rect(30, 35, 560, 52), fill=(.8, .8, .8))
+    page.insert_text((72, 112), 'Fig. 2: Proposed inverse design method.')
+    with pytest.raises(Unavailable):
+        pdf_figure(DOI, META['license_source'], META, document.tobytes())
+    page.insert_image(fitz.Rect(72, 127, 540, 457), stream=png())
+    info, image = pdf_figure(DOI, META['license_source'], META, document.tobytes())
+    assert info['region'][1] > 110 and info['region'][3] >= 457
+    assert image_info(image)[1] > 650
+    document.close()

@@ -55,7 +55,7 @@ def test_validated_notes_and_publish_acknowledgement(tmp_path):
     assert len(calls) == 1 and task(q)['state'] == 'ready'  # Dispatch is not publication.
     q.fetch = lambda path: value
     q.publish_ready()
-    assert task(q)['state'] == 'published' and len(calls) == 1
+    assert task(q)['state'] == 'awaiting_fulltext' and len(calls) == 1
 
 
 def test_three_failures_survive_restart_and_manual_retry(tmp_path):
@@ -76,7 +76,11 @@ def test_missing_evidence_no_false_completion(tmp_path):
     p = sample(); p['abstract'] = ''
     q = ReadingQueue(tmp_path, tmp_path / 'runtime', FakeClient({}), asyncio.Lock())
     q.enqueue(p)
-    assert task(q)['state'] == 'missing_evidence'
+    assert task(q)['state'] == 'pending'
+    q.resolver = lambda paper, **kwargs: {'basis': 'missing', 'reason': 'Unavailable'}
+    asyncio.run(q.process(task(q)))
+    assert task(q)['state'] == 'missing_evidence' and task(q)['attempts'] == 0
+    assert task(q)['next_material'] > 0
 
 
 def test_user_preempts_background_without_consuming_retry(tmp_path):

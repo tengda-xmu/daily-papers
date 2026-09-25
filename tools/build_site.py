@@ -107,30 +107,13 @@ def document(content: str, *, title: str, root: str = "./", active: str = "daily
 
 
 def paper_figure(paper: dict, root: str = "./") -> str:
-    from src.figure_guides import guide_for, paper_doi
+    from src.paper_identity import paper_doi
     doi = paper_doi(paper)
     figure = get_figure(doi)
-    guide = guide_for(paper) if not figure else None
-    if guide:
-        image_url = esc(root + guide['image_path'])
-        label = '主题示意 · 非原文图' if guide.get('mode') == 'topics' else '方法示意 · 非原文图'
-        title = guide['title'] + '（' + label + '）'
-        return f'''
-  <figure class="paper-figure paper-figure--guide">
-    <a class="figure-preview" href="{image_url}" target="_blank" rel="noopener noreferrer" aria-label="{esc(title)}，查看大图">
-      <img src="{image_url}" width="{guide['width']}" height="{guide['height']}" alt="{esc(title)}" loading="lazy" decoding="async">
-      <span class="figure-open">查看示意图</span>
-    </a>
-    <figcaption><strong class="figure-title">{esc(title)}</strong>
-      <p class="figure-explanation">{esc(guide['caption'])}</p>
-      <p class="figure-credit">本站整理 · <a href="{safe_url(guide['source_url'])}" target="_blank" rel="noopener noreferrer">依据：{esc(guide['basis'])}</a><br>图中内容用于理解研究路线，非论文原图。</p>
-    </figcaption>
-  </figure>'''
     if not figure:
-        if figure_status(doi):
-            url = safe_url(paper.get('landing_url') or paper.get('url') or 'https://doi.org/' + paper.get('doi', ''))
-            return f'<p class="figure-unavailable">原图暂未获取 · <a href="{url}" target="_blank" rel="noopener noreferrer">前往原文查看图表</a></p>'
-        return ""
+        url = safe_url(paper.get('landing_url') or paper.get('url') or ('https://doi.org/' + doi if doi else ''))
+        link = f' · <a href="{url}" target="_blank" rel="noopener noreferrer">查看原文</a>' if url != '#' else ''
+        return f'<p class="figure-unavailable">原图待获取{link}</p>'
     image_url = esc(root + figure["image_path"])
     figure_title = figure.get('title_zh') or figure.get('title')
     title = f'{figure["figure_label"]} · {figure_title}'
@@ -182,6 +165,10 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
         deep_html = '<dl class="reading-notes">' + "".join(
             f'<div><dt>{label}</dt><dd>{esc(value)}</dd></div>' for label, value in deep_items
         ) + '</dl>'
+        references = paper.get('analysis_references') or {}
+        labels = list(dict.fromkeys(ref for values in references.values() for ref in values))
+        if labels:
+            deep_html += '<p class="analysis-provenance">原文依据：' + esc('、'.join(labels)) + '</p>'
     citation = ". ".join(value for value in (authors, title, venue,
                                             str(paper.get("published_at") or "")[:4],
                                             f"https://doi.org/{doi}" if doi else "") if value)
@@ -210,11 +197,18 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
     panel_id = f"paper-details-{tier}-{rank}"
     full_authors = f'<p class="full-authors"><strong>作者</strong>{esc(authors)}</p>' if len(author_names) > 3 else ""
     ready = paper.get("analysis_status") == "ready"
+    from src.paper_sources import clean_abstract
+    snippet_only = (ready and not paper.get('analysis_material_version') and paper.get('analysis_basis') != 'full_text'
+                    and paper.get('source') in ('Google Scholar', 'ResearchGate') and not clean_abstract(paper.get('abstract')))
     summary_label = "中文导读" if ready else "摘要"
-    note_label = "中文精读" if ready else "摘要与笔记"
+    note_label = ("全文精读" if paper.get('analysis_basis') == 'full_text' else "摘要解读") if ready else "摘要与笔记"
+    if snippet_only:
+        note_label = '检索片段解读'
     translated_class = " translated" if translated_title else ""
     original = f'<p class="original-title" lang="en">{esc(title)}</p>' if translated_title and translated_title != title else ""
     basis = "依据公开全文整理" if paper.get("analysis_basis") == "full_text" else "依据公开摘要整理，未核验全文细节"
+    if snippet_only:
+        basis = '依据检索片段整理，完整摘要与全文尚待核实'
     evidence_links = " · ".join(f'<a href="{safe_url(link)}" target="_blank" rel="noopener noreferrer">论文依据 {i + 1}</a>'
                                 for i, link in enumerate(paper.get("analysis_sources") or []))
     provenance = f'<p class="analysis-provenance">{basis}。解读与建议不代表作者结论。 {evidence_links}</p>' if ready else ""
@@ -236,13 +230,14 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
   <div class="paper-heading"><div class="paper-heading-main">
   <div class="paper-meta"><span class="source">{esc(SOURCE_LABELS.get(source, source))}</span><span>{esc(str(paper.get('published_at') or '')[:10])}</span>{journal_badge}{method_badges}{direction_badge}</div>
   <h3 class="{translated_class.strip()}">{title_html}</h3>
+  {original}
   <p class="bibliography"><span class="authors">{esc(short_authors)}</span>{venue_line}</p>
   </div><div class="paper-rating-slot"></div></div>
 {recommendation_context(paper, root)}
   <p class="abstract">{esc(preview)}</p>
 {figure_html}
   <div class="paper-tools">{primary_action}<button type="button" class="text-button paper-toggle" data-label="{note_label}" aria-expanded="false" aria-controls="{panel_id}">{note_label}<span aria-hidden="true">＋</span></button>{chat_button}</div>
-  <div class="paper-detail-panel" id="{panel_id}" hidden>{original}{provenance}<p class="detail-label">{summary_label}</p><p class="full-abstract">{esc(summary)}</p>{recommendation_html}{full_authors}{deep_html}<div class="tags">{tags}</div><div class="paper-actions">{actions}</div></div>
+  <div class="paper-detail-panel" id="{panel_id}" hidden>{provenance}<p class="detail-label">{summary_label}</p><p class="full-abstract">{esc(summary)}</p>{recommendation_html}{full_authors}{deep_html}<div class="tags">{tags}</div><div class="paper-actions">{actions}</div></div>
 </article>'''
 
 
@@ -261,8 +256,22 @@ def recommendation_context(paper, root):
                   f'上次 {esc(previous["date"])} 第 {previous["number"]} 批</summary>'
                   f'<p>{esc(decision["reason"])}</p><p>{esc(evidence.get("reason", ""))}{links}</p>'
                   f'<a href="{target}">查看原推荐批次</a></details>')
-    if paper.get('analysis_status') != 'ready':
-        result += '<p class="analysis-pending">中文精读待完成 · 本机助手运行后自动补充</p>'
+    state = paper.get('reading_status') or {}
+    if paper.get('analysis_status') == 'ready':
+        label = '全文精读已完成' if paper.get('analysis_basis') == 'full_text' else '摘要解读已完成，全文待补充'
+        from src.paper_sources import clean_abstract
+        if (paper.get('analysis_basis') != 'full_text' and not paper.get('analysis_material_version')
+                and paper.get('source') in ('Google Scholar', 'ResearchGate') and not clean_abstract(paper.get('abstract'))):
+            label = '现有内容仅据检索片段 · 完整资料待补充'
+    elif state.get('state') == 'missing_evidence':
+        label = '暂时无法获取资料 · 将自动重试'
+        if state.get('reason') == 'restricted':
+            label = '暂时无法获取资料 · 来源限制自动访问，将自动重试'
+    elif state.get('state') == 'failed':
+        label = '精读未完成 · 可在本机任务中重试'
+    else:
+        label = '资料获取中 · 本机助手运行时自动补充'
+    result += f'<p class="analysis-pending">{label}</p>'
     return result
 
 
@@ -595,13 +604,11 @@ def main() -> None:
     shutil.copytree(ASSETS, OUT / "assets", dirs_exist_ok=True)
     if (DATA / 'figures/images').is_dir():
         shutil.copytree(DATA / 'figures/images', OUT / 'assets/figures', dirs_exist_ok=True)
-    from src.figure_guides import build_guides
-    build_guides(OUT)
     analyses = load_readings(DATA)
     payload = enrich(read_json(DATA / "daily.json", {}), analyses)
     (OUT / "index.html").write_text(render(payload), encoding="utf-8")
     (OUT / "data.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
-    for name in ('editions', 'updates', 'auto-reading'):
+    for name in ('editions', 'updates', 'auto-reading', 'reading-status'):
         if (DATA / name).is_dir():
             shutil.copytree(DATA / name, OUT / name, dirs_exist_ok=True)
     if (DATA / 'update-status.json').exists():

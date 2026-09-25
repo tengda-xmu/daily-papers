@@ -9,7 +9,7 @@
   const storage = location.origin === base ? 'localStorage' : 'sessionStorage';
   const message = panel.querySelector('[role=status]'), list = panel.querySelector('ul');
   const work = ai ? '导读' : '精读', unit = ai ? '条' : '篇';
-  const labels = {pending:`等待本机${work}`, generating:`正在${work}`, ready:`${work}完成，等待发布`, published:'已发布', retry:'等待重试', failed:'未完成，可重试', missing_evidence:ai?'官方依据不足':'摘要资料不足'};
+  const labels = {pending:`等待本机${work}`, fetching:'资料获取中', generating:`正在${work}`, ready:`${work}完成，等待发布`, published:ai?'已发布':'全文精读已完成', awaiting_fulltext:'摘要解读已完成，全文待补充', retry:'等待重试', failed:'未完成，可重试', missing_evidence:ai?'官方依据不足':'暂时无法获取资料，将自动重试'};
   function read(kind, key) { try {return window[kind].getItem(key) || '';} catch {return '';} }
   async function api(path, method = 'GET', retry = true) {
     let response = await fetch(base + path, {method, headers:{Authorization:'Bearer ' + read(storage, 'daily-papers-codex-session')}, signal:AbortSignal.timeout(15000)});
@@ -35,7 +35,7 @@
         const item = document.createElement('li');
         const text = document.createElement('span'); text.textContent = `${task.title} · ${labels[task.state] || task.state}${task.error ? ' · ' + task.error : ''}`;
         item.append(text);
-        if (['failed','retry','missing_evidence'].includes(task.state)) {
+        if (['failed','retry','missing_evidence','awaiting_fulltext'].includes(task.state)) {
           const button = document.createElement('button'); button.type='button'; button.className='text-button'; button.textContent='重试';
           button.addEventListener('click', async () => {button.disabled=true;try {await api(endpoint + '/' + encodeURIComponent(task.paper_id) + '/retry','POST');await refresh();} catch(e) {message.textContent=e.message;} finally {button.disabled=false;}});
           item.append(button);

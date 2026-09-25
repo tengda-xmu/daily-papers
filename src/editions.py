@@ -138,6 +138,8 @@ def enrich(payload, analyses):
     result = copy.deepcopy(payload)
     from src.auto_reading import public_analysis
     from src.paper_titles import chinese_title, title_entries
+    from src.auto_reading import public_status
+    from src.paper_titles import DATA
     titles = title_entries()
     for tier in ('core', 'extended', 'papers'):
         for paper in result.get(tier, []):
@@ -147,11 +149,18 @@ def enrich(payload, analyses):
                     from src.auto_reading import fingerprint
                     if item.get('fingerprint') == fingerprint(paper):
                         paper.update(public_analysis(item)['analysis'])
+                        if item.get('material'):
+                            paper['analysis_references'] = item['material']['references']
+                            paper['analysis_material_version'] = item['material']['version']
                 except ValueError:
                     pass
             translated = chinese_title(paper, titles)
             if translated:
                 paper['title_zh'] = translated
+            try:
+                paper['reading_status'] = public_status(read(DATA / 'reading-status' / (paper.get('id', '') + '.json')))
+            except ValueError:
+                pass
     from src.reading_notes import valid_analysis
     result['analysis_status'] = {**(result.get('analysis_status') or {}),
         'ready_core': sum(valid_analysis(p) for p in result.get('core', [])),

@@ -11,7 +11,7 @@ from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
 from src.editions import append, entries, enrich, migrate, read, relative_path, selected, write
-from src.auto_reading import load, public_analysis
+from src.auto_reading import load, public_analysis, public_status
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC = 'https://tengda-xmu.github.io/daily-papers/'
@@ -109,6 +109,20 @@ def import_readings(root=ROOT):
     return count
 
 
+def import_reading_status(root=ROOT):
+    result = subprocess.run(['git', 'ls-tree', '-r', '--name-only', 'origin/connector-data', '--', 'data/reading-status'],
+                            cwd=root, capture_output=True, text=True)
+    for path in result.stdout.splitlines():
+        if not path.startswith('data/reading-status/') or not path.endswith('.json'):
+            continue
+        raw = subprocess.run(['git', 'show', f'origin/connector-data:{path}'], cwd=root, capture_output=True, check=True).stdout
+        try:
+            item = public_status(json.loads(raw))
+            write(root / 'data/reading-status' / (item['paper_id'] + '.json'), item)
+        except (ValueError, TypeError):
+            continue
+
+
 def enrich_all(data):
     analyses = load(data)
     for path in [data / 'daily.json', *sorted((data / 'archive').glob('*.json')),
@@ -130,6 +144,7 @@ def main():
         reconcile(ROOT / 'data')
     if args.import_readings:
         print('Imported validated public analyses:', import_readings())
+        import_reading_status()
         enrich_all(ROOT / 'data')
 
 

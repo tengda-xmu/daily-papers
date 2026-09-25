@@ -26,7 +26,9 @@ def test_title_only_translation_does_not_complete_reading_or_change_snapshot():
         html = paper_card(paper, 'extended', root=root)
         assert f'>{row["title_zh"]}<' in html
         assert f'<p class="original-title" lang="en">{paper["title"]}</p>' in html
-        assert '中文精读待完成' in html
+        assert '资料获取中' in html
+        assert html.index('class="original-title"') < html.index('class="bibliography"')
+        assert html.count('class="original-title"') == 1
         assert '暂无可用摘要，请查看原文。' in html
         assert '本文聚焦《' not in html
         assert '<figure' not in html and 'figure-unavailable' not in html

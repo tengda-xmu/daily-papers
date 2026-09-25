@@ -10,6 +10,7 @@ from src.public_sources import write
 
 
 class AIQueue(ReadingQueue):
+    paper_queue = False
     def __init__(self, root, runtime, client, generation_lock, **kwargs):
         super().__init__(root, runtime / 'ai-digests', client, generation_lock, **kwargs)
 
