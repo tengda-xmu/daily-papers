@@ -1,0 +1,20 @@
+{
+  "id": "public-8537165d23c701b725b2bce4",
+  "content_version": "789cf092433a951bdf0387b8392ab1f5733f14e8471cf998172d0812f78ead2d",
+  "analysis": {
+    "title_zh": "扩展 Claude Managed Agents：将“大脑”与“双手”解耦",
+    "summary": "官方介绍了 Claude Platform 中的托管服务 Claude Managed Agents，并强调应随模型能力变化重新审视智能体运行框架。此前，Claude Sonnet 4.5 接近上下文上限时会提前结束任务，团队为此加入上下文重置；换用 Claude Opus 4.5 后，该行为消失，重置机制成为冗余。内容面向智能体构建与长时间运行任务的框架设计，但所给文本末尾截断，未展示服务完整能力或解耦实现。[S1]",
+    "application": "建议：科研迁移可考虑在长流程文献分析或智能运维智能体中，对比模型升级前后上下文重置机制的必要性；这是迁移设想，并非官方已验证应用。官方观察仅是在上述框架中，Claude Opus 4.5 不再出现此前的提前结束行为，不能据此推断所有模型或任务均可取消重置。[S1]",
+    "requirements": "使用条件见官方文档",
+    "steps": [],
+    "evidence": [
+      "harnesses encode assumptions about what Claude can’t do on its own.",
+      "in prior work we found that Claude Sonnet 4.5 would wrap up tasks prematurely as it sensed its context limit approaching",
+      "We addressed this by adding context resets to the harness.",
+      "But when we used the same harness on Claude Opus 4.5, we found that the behavior was gone. The resets had become dead weight.",
+      "So we built Managed Agents: a hosted service in the Claude Platform"
+    ],
+    "basis_url": "https://www.anthropic.com/engineering/managed-agents"
+  },
+  "analyzed_at": "2026-09-25T05:09:45.126509+00:00"
+}

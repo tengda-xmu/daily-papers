@@ -1,0 +1,19 @@
+{
+  "id": "public-85b0ca3c45b5c9931e3c1fa0",
+  "content_version": "7c2d7acfc3e69bdc306b6aeb2839bd5cd8a8c3f5c3dc63a27d3d525013519353",
+  "analysis": {
+    "title_zh": "Claude Code 近期质量反馈调查更新：三项问题已修复",
+    "summary": "官方公告称，近期部分用户反馈的回答质量下降，被追溯至影响 Claude Code、Claude Agent SDK 和 Claude Cowork 的三项独立变更；API 未受影响。三项问题均已于4月20日修复，对应 v2.1.116。所给片段仅展开第一项：3月4日，Claude Code 默认推理强度由 high 调为 medium，以缓解高强度模式下界面仿佛冻结的长延迟。本公告适合用于排查上述产品的质量波动，但片段不足以说明其余问题及具体修复机制。",
+    "application": "建议：【科研迁移建议】在科研编码与代理工作流中记录产品版本、推理强度和任务结果，用固定样例复测质量与延迟；这属于迁移建议，并非官方已验证效果。【官方调查结论】三项问题已修复，API 与推理层未受影响；给定片段未提供科研任务效果或量化性能验证。",
+    "requirements": "原文明示修复版本为 v2.1.116，但未说明最低使用版本、账号、费用或部署条件。使用条件见官方文档。",
+    "steps": [],
+    "evidence": [
+      "We’ve traced these reports to three separate changes that affected Claude Code, the Claude Agent SDK, and Claude Cowork.",
+      "All three issues have now been resolved as of April 20 (v2.1.116).",
+      "We never intentionally degrade our models, and we were able to immediately confirm that our API and inference layer were unaffected.",
+      "On March 4, we changed Claude Code's default reasoning effort from high to medium to reduce the very long latency—enough to make the UI appear frozen—some users were seeing in high mode."
+    ],
+    "basis_url": "https://www.anthropic.com/engineering/april-23-postmortem"
+  },
+  "analyzed_at": "2026-09-25T05:09:11.648816+00:00"
+}

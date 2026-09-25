@@ -1,0 +1,20 @@
+{
+  "id": "public-d5f9dbd62b3ecc1122d19dce",
+  "content_version": "3ec0e3b78133eccb65b7d12660e1d8009c23e70c07532f911922373d91aecb02",
+  "analysis": {
+    "title_zh": "Claude Code auto mode 的构建思路：更安全地跳过权限确认",
+    "summary": "所给官方节选介绍了 Claude Code 权限确认的设计背景：默认在执行命令或修改文件前请求批准，频繁确认可能造成审批疲劳。原文对比内置沙箱与完全跳过权限提示两种选择：前者隔离工具，但新增能力需要配置；后者维护负担低，却不提供保护。这涉及命令执行、文件修改等任务的安全与操作负担权衡。标题提及 auto mode，但节选未说明其具体机制、功能变化或发布状态，不能据此认定已上线。",
+    "application": "建议：科研迁移可考虑在自动化实验脚本执行与研究文件修改流程中评估审批疲劳、隔离维护成本及权限风险，这是迁移设想，并非官方已验证效果。官方节选称用户实际接受了 93% 的手动权限提示，但未提供 auto mode 的效果验证。",
+    "requirements": "使用条件见官方文档",
+    "steps": [],
+    "evidence": [
+      "By default, Claude Code asks users for approval before running commands or modifying files.",
+      "Over time that leads to approval fatigue, where people stop paying close attention to what they're approving.",
+      "Sandboxing is safe but high-maintenance: each new capability needs configuring, and anything requiring network or host access breaks isolation.",
+      "Bypassing permissions is zero-maintenance but offers no protection.",
+      "Manual prompts sit in the middle, and in practice users accept 93% of them anyway."
+    ],
+    "basis_url": "https://www.anthropic.com/engineering/claude-code-auto-mode"
+  },
+  "analyzed_at": "2026-09-25T05:10:12.394712+00:00"
+}
