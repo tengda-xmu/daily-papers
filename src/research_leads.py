@@ -112,6 +112,7 @@ def parse_feed(body, feed, now, days=90):
             continue
         rows.append({"id": "official-" + hashlib.sha256(link.encode()).hexdigest()[:20],
                      "kind": classify(title), "title": title, "source": feed['name'], "provider": "official",
+                     "organization": feed.get('organization', feed['id']),
                      "url": link, "published_at": published.isoformat(), "topics": feed.get('topics', []),
                      # Publish only a short excerpt, never a feed's full article.
                      "summary": snippet(node.findtext('description') or node.findtext('{*}summary'))})

@@ -80,7 +80,7 @@ def template(name: str, **values) -> str:
 
 def document(content: str, *, title: str, root: str = "./", active: str = "daily") -> str:
     version = hashlib.sha256(
-        b"".join((ASSETS / name).read_bytes() for name in ("site.css", "site.js", "paper-library.js", "paper-library.css", "daily-update.js", "paper-chat.css", "paper-chat.js", "paper-reader.css", "paper-reader.js", "manual-search.css", "manual-search.js", "journal-manager.css", "journal-manager.js", "research-directions.css", "research-directions.js", "wechat-subscriptions.css", "wechat-subscriptions.js"))
+        b"".join((ASSETS / name).read_bytes() for name in ("reading-tasks.js", "site.css", "site.js", "paper-library.js", "paper-library.css", "daily-update.js", "paper-chat.css", "paper-chat.js", "paper-reader.css", "paper-reader.js", "manual-search.css", "manual-search.js", "journal-manager.css", "journal-manager.js", "research-directions.css", "research-directions.js", "wechat-subscriptions.css", "wechat-subscriptions.js"))
     ).hexdigest()[:10]
     return template(
         "page.html", content=content.lstrip(), title=esc(title), root=root, version=version,
@@ -98,7 +98,8 @@ def document(content: str, *, title: str, root: str = "./", active: str = "daily
                       (f'<link rel="stylesheet" href="{root}assets/research-directions.css?v={version}">'
                        f'<script src="{root}assets/research-directions.js?v={version}" defer></script>') if active == 'directions' else
                       (f'<link rel="stylesheet" href="{root}assets/wechat-subscriptions.css?v={version}">'
-                       f'<script src="{root}assets/wechat-subscriptions.js?v={version}" defer></script>') if active == 'setup' else
+                       f'<script src="{root}assets/wechat-subscriptions.js?v={version}" defer></script>'
+                       f'<script src="{root}assets/reading-tasks.js?v={version}" defer></script>') if active == 'setup' else
                       f'<script src="{root}assets/daily-update.js?v={version}" defer></script>' if active == 'daily' else '',
     )
 
@@ -148,7 +149,7 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
         ("limitations", "局限与边界"), ("connection", "方向关联"), ("next_steps", "后续研究建议"),
     ) if deep.get(key)]
     deep_html = ""
-    if deep_items and (tier == "core" or paper.get("analysis_status") == "ready"):
+    if deep_items and paper.get("analysis_status") == "ready":
         deep_html = '<dl class="reading-notes">' + "".join(
             f'<div><dt>{label}</dt><dd>{esc(value)}</dd></div>' for label, value in deep_items
         ) + '</dl>'
@@ -207,11 +208,32 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
   <h3 class="{translated_class.strip()}">{title_html}</h3>
   <p class="bibliography"><span class="authors">{esc(short_authors)}</span>{venue_line}</p>
   </div><div class="paper-rating-slot"></div></div>
+{recommendation_context(paper, root)}
   <p class="abstract">{esc(preview)}</p>
 {figure_html}
   <div class="paper-tools">{primary_action}<button type="button" class="text-button paper-toggle" data-label="{note_label}" aria-expanded="false" aria-controls="{panel_id}">{note_label}<span aria-hidden="true">＋</span></button>{chat_button}</div>
   <div class="paper-detail-panel" id="{panel_id}" hidden>{original}{provenance}<p class="detail-label">{summary_label}</p><p class="full-abstract">{esc(summary)}</p>{recommendation_html}{full_authors}{deep_html}<div class="tags">{tags}</div><div class="paper-actions">{actions}</div></div>
 </article>'''
+
+
+def recommendation_context(paper, root):
+    from src.editions import archive_name
+    decision = paper.get('recommendation_decision') or {}
+    result = ''
+    if decision:
+        previous = decision['previous']
+        label = '由扩展阅读升级' if decision['kind'] == 'promotion' else '热度上升，再次推荐'
+        target = root + 'archive/' + archive_name(previous) + '.html'
+        evidence = decision.get('heat') or {}
+        links = ''.join(f' <a href="{safe_url(e["url"])}" target="_blank" rel="noopener noreferrer">{esc(e["organization"])}</a>'
+                        for e in evidence.get('events', []))
+        result = (f'<details class="recommendation-context"><summary>{label} · '
+                  f'上次 {esc(previous["date"])} 第 {previous["number"]} 批</summary>'
+                  f'<p>{esc(decision["reason"])}</p><p>{esc(evidence.get("reason", ""))}{links}</p>'
+                  f'<a href="{target}">查看原推荐批次</a></details>')
+    if paper.get('analysis_status') != 'ready':
+        result += '<p class="analysis-pending">中文精读待完成 · 本机助手运行后自动补充</p>'
+    return result
 
 
 def source_directory(statuses: dict, counts: Counter, root: str = "./", wechat_count: int = 0, *, reading_url: str | None = None) -> str:
@@ -404,6 +426,7 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
     journal_options = "".join(f'<option value="{esc(name)}" data-group="{esc(group)}">{esc(name)}</option>' for name, group in journals.items())
     day, generated = display_time(payload.get("generated_at"))
     issue = archive_date or day
+    edition = payload.get('edition') or {}
     root = "../" if archive_date else "./"
     core_html = "".join(paper_card(p, "core", i, root, topic_labels) for i, p in enumerate(core))
     extended_html = "".join(paper_card(p, "extended", i, root, topic_labels) for i, p in enumerate(extended))
@@ -434,6 +457,7 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
         archive_notice=archive_notice, history_url="./" if archive_date else "archive/",
         update_control=update_control, update_panel=update_panel,
         direction_bar=direction_bar,
+        edition_label=(f'<a href="{root}archive/">{esc(edition["date"])} · 第 {edition["number"]} 批</a>' if edition else ''),
         generated_at=esc(payload.get('generated_at', '')), update_run_id=esc(payload.get('update_run_id', '')),
         source_options="".join(source_options), health_label=f"{ok} / {adapter_count} 类来源正常",
         sources_url='#sources' if archive_date else root + 'setup.html#sources', reference_panels=reference_panels,
@@ -449,9 +473,33 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
 
 
 def build_archive() -> None:
+    from src.editions import entries as edition_entries, relative_path, archive_name, enrich
+    from src.auto_reading import load as load_readings
     archive_out = OUT / "archive"
     archive_out.mkdir(parents=True, exist_ok=True)
     entries = []
+    index = edition_entries(DATA)
+    analyses = load_readings(DATA)
+    if index:
+        for day in sorted({e['date'] for e in index}, reverse=True):
+            batches = sorted((e for e in index if e['date'] == day), key=lambda e: e['number'], reverse=True)
+            rows = []
+            for entry in batches:
+                payload = enrich(read_json(DATA / relative_path(entry), {}), analyses)
+                name = archive_name(entry)
+                encoded = json.dumps(payload, ensure_ascii=False, indent=2)
+                (archive_out / (name + '.json')).write_text(encoded, encoding='utf-8')
+                (archive_out / (name + '.html')).write_text(render(payload, archive_date=f'{day} · 第 {entry["number"]} 批'), encoding='utf-8')
+                _, time = display_time(entry['generated_at'])
+                trigger = {'manual': '手动更新', 'scheduled': '自动更新', 'recovered': '历史恢复'}.get(entry['trigger'], '更新')
+                rows.append(f'<li class="archive-entry"><div><a class="archive-date" href="{name}.html">第 {entry["number"]} 批 · {esc(time)}</a><p>{trigger} · 核心推荐 {entry["core_count"]} 篇 · 扩展阅读 {entry["extended_count"]} 篇</p></div><a href="{name}.json" download>下载数据</a></li>')
+            latest = archive_name(batches[0])
+            for suffix in ('.html', '.json'):
+                shutil.copyfile(archive_out / (latest + suffix), archive_out / (day + suffix))
+            entries.append(f'<li><details class="archive-day"><summary>{day} · {len(batches)} 批</summary><ul>{"".join(rows)}</ul></details></li>')
+        content = template('archive.html', entries=''.join(entries), count=len(index))
+        (archive_out / 'index.html').write_text(document(content, title='历史归档 | 每日论文推荐', root='../', active='archive'), encoding='utf-8')
+        return
     for source in sorted((DATA / "archive").glob("*.json"), reverse=True):
         payload = read_json(source, {})
         shutil.copyfile(source, archive_out / source.name)
@@ -498,11 +546,23 @@ def wechat_manager() -> str:
 
 
 def main() -> None:
+    from src.editions import enrich
+    from src.auto_reading import load as load_readings
     OUT.mkdir(parents=True, exist_ok=True)
     shutil.copytree(ASSETS, OUT / "assets", dirs_exist_ok=True)
-    payload = read_json(DATA / "daily.json", {})
+    analyses = load_readings(DATA)
+    payload = enrich(read_json(DATA / "daily.json", {}), analyses)
     (OUT / "index.html").write_text(render(payload), encoding="utf-8")
     (OUT / "data.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    for name in ('editions', 'updates', 'auto-reading'):
+        if (DATA / name).is_dir():
+            shutil.copytree(DATA / name, OUT / name, dirs_exist_ok=True)
+    if (DATA / 'update-status.json').exists():
+        shutil.copyfile(DATA / 'update-status.json', OUT / 'update-status.json')
+    from src.editions import entries as edition_entries, relative_path
+    for entry in edition_entries(DATA):
+        path = relative_path(entry)
+        (OUT / path).write_text(json.dumps(enrich(read_json(DATA / path, {}), analyses), ensure_ascii=False, indent=2), encoding='utf-8')
     build_archive()
     (OUT / 'library.html').write_text(document(template('library.html'),
         title='我的文献 | 每日论文推荐', active='library'), encoding='utf-8')

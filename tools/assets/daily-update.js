@@ -50,6 +50,9 @@
     }
   }
   async function showPublished(data) {
+    if (data.outcome === 'no_new') {
+      write('localStorage', pendingKey, ''); busy(false); message(data.message); return;
+    }
     if (issue.dataset.runId === data.run_id) {
       write('localStorage', pendingKey, ''); busy(false);
       message(data.message + (data.changed === false ? '本轮没有更合适的新文献，保留已有推荐。' : ''));

@@ -38,6 +38,18 @@ def result(run_id='123'):
             'extended': [{'id': '222222222222', 'title': 'New extended paper'}]}
 
 
+def test_no_new_check_completes_without_overwriting_edition_history(tmp_path):
+    remote = Remote()
+    prior = result('122')
+    prior['_update_status'] = {'run_id': '123', 'outcome': 'no_new'}
+    updater = DailyUpdater(tmp_path, remote, fetch=lambda run: dict(prior))
+    updater.start(uuid.uuid4())
+    remote.status, remote.conclusion = 'completed', 'success'
+    data = updater.snapshot()
+    assert data['state'] == 'succeeded' and data['outcome'] == 'no_new'
+    assert data['changed'] is False and not (tmp_path / 'recommendation-history/123.json').exists()
+
+
 def test_update_deduplicates_concurrent_tabs_and_survives_restart(tmp_path):
     remote = Remote()
     updater = DailyUpdater(tmp_path, remote)

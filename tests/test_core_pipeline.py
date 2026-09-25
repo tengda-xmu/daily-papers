@@ -62,8 +62,10 @@ def test_run_pipeline_writes_publishable_payload(tmp_path):
         adapters=[Adapter()],
         output_path=output,
     )
-    assert payload["core"] == []  # Unreviewed records cannot fill a core slot.
-    assert payload["extended"] == []  # Extended reading has the same quality gate.
+    assert len(payload['core']) == 1  # New papers publish before local enrichment.
+    assert payload['core'][0]['analysis_status'] == 'pending'
+    assert payload['core'][0]['deep_read'] == {}  # No synthetic reading notes.
+    assert payload['extended'] == []
     assert payload["papers"][0]["topic_tags"] == ["ai_maintenance"]
     assert output.exists()
     assert json.loads(output.read_text(encoding="utf-8"))["papers"][0]["summary"]

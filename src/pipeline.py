@@ -27,6 +27,10 @@ from src.settings import load_env
 from src.reading_notes import cached_analysis, curated_records, valid_analysis, save_analysis
 from src.research_focus import focus_tags, focus_priority
 from src.research_directions import load_profile, clean_profile, match_directions, select_tiers, query_plan, profile_revision
+from src.editions import History, append as append_edition, read as read_data, write as write_data, edition_id
+from src.auto_reading import load as load_auto_reading, fingerprint
+from src.recommendation_heat import refresh as refresh_heat, settings as heat_settings
+from src.recommendation_selection import select as select_recommendations
 
 load_env()
 
@@ -106,6 +110,7 @@ def deduplicate(records: Iterable[RawRecord]) -> list[RawRecord]:
 
     result = []
     for members in groups.values():
+        member_aliases = {key for item in members for key in _identities(item)}
         best = max(members, key=_quality)
         sources = {name for item in members for name in
                    [item.source, *item.raw_metadata.get("sources", [])]}
@@ -124,6 +129,9 @@ def deduplicate(records: Iterable[RawRecord]) -> list[RawRecord]:
                 best.raw_metadata.setdefault(key, value)
             best.source_score = max(best.source_score, other.source_score)
         best.raw_metadata["sources"] = sorted(sources)
+        inherited = {tuple(pair) for item in members for pair in item.raw_metadata.get('identity_aliases', [])
+                     if isinstance(pair, list) and len(pair) == 2 and all(isinstance(v, str) for v in pair)}
+        best.raw_metadata['identity_aliases'] = [list(k) for k in sorted(member_aliases | inherited)]
         result.append(best)
     return result
 
@@ -329,6 +337,10 @@ def run_pipeline(
 ) -> dict:
     profile = clean_profile(research_profile) if research_profile is not None else load_profile()
     until = until or datetime.now(timezone.utc)
+    data_dir = Path(output_path).parent if output_path else None
+    history = History(data_dir) if data_dir else None
+    analyses = load_auto_reading(data_dir) if data_dir else {}
+    policy = heat_settings(Path(__file__).resolve().parents[1])
     since = since or (until - timedelta(days=_read_setting("LOOKBACK_DAYS", 30)))
     all_records: list[RawRecord] = []
     statuses: dict[str, dict] = {}
@@ -347,6 +359,14 @@ def run_pipeline(
 
     # Public-account posts are research leads, not peer-reviewed papers.
     wechat_articles = [record.to_dict() for record in all_records if record.source == "微信公众号"]
+    heat = read_data(data_dir / 'recommendation-heat.json') if data_dir else {}
+    if data_dir and adapters is None:
+        from src.research_leads import wechat_leads
+        leads = read_data(data_dir / 'research-leads.json').get('entries', []) + wechat_leads(wechat_articles)
+        heat = refresh_heat(data_dir, history, all_records, leads, until)
+    # Historical papers stay observable even when outside discovery's date range.
+    if history:
+        all_records.extend(RawRecord.from_mapping(s['paper']) for s in history.papers.values())
     ranked = []
     for record in deduplicate(record for record in all_records if record.source != "微信公众号"):
         record.topic_tags = match_directions(record, profile)
@@ -366,22 +386,27 @@ def run_pipeline(
     for record in ranked:
         data = record.to_dict()
         data["id"] = record_id(record)
+        prior = history.find(data) if history else None
+        if prior:
+            data['id'] = prior['id']
         data.update(paper_facets(data))
         data["focus_tags"] = focus_tags(record.title, record.abstract)
         analysis = cached_analysis(record)
-        if (not analysis and len(ready) < target and llm_attempts < target
-                and os.getenv("LLM_API_KEY", "").strip() and len(record.abstract.strip()) >= 80):
-            llm_attempts += 1
-            analysis = _llm_summary(record)
+        item = analyses.get(data['id'])
+        if item and item['fingerprint'] == fingerprint(data):
+            analysis = item['analysis']
+        # Recommendations publish immediately; local Codex enriches them later.
         data.update(analysis or fallback_summary(record))
+        if not valid_analysis(data):
+            data.update(analysis_status='pending', deep_read={}, recommendation='')
         if valid_analysis(data):
             ready.append(data)
         papers.append(data)
-    core, extended = select_tiers(ready, profile)
+    core, extended = select_recommendations(papers, history, analyses, heat, profile, until, policy)
     selected_ids = {paper["id"] for paper in core + extended}
     remaining = [paper for paper in papers if paper["id"] not in selected_ids]
     payload = {
-        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "generated_at": (datetime.now(timezone.utc) if adapters is None else until).isoformat(),
         "update_run_id": os.getenv("GITHUB_RUN_ID", ""),
         "since": since.isoformat(),
         "until": until.isoformat(),
@@ -395,26 +420,36 @@ def run_pipeline(
         "selection_policy": {"priority": "CNS 子刊 > CNS 正刊 > 其他相关期刊",
                              "direction_allocation": "兼顾各方向，按优先级分配；同篇论文不重复推荐",
                              "within_venue_priority": "大模型与智能体优先",
-                             "core_requires_chinese_analysis": True,
-                             "extended_requires_chinese_analysis": True, "cns_lookback_days": cns_days},
-        "analysis_status": {"ready_core": len(core), "target_core": max_core,
-                            "ready_extended": len(extended), "target_extended": max_extended,
+                             "core_requires_chinese_analysis": False,
+                             "extended_requires_chinese_analysis": False, "cns_lookback_days": cns_days,
+                             "history": "new_or_evidence_backed", "historical_slots": policy['historical_slots']},
+        "heat_status": heat.get('status', {}),
+        "analysis_status": {"ready_core": sum(valid_analysis(p) for p in core), "target_core": max_core,
+                            "ready_extended": sum(valid_analysis(p) for p in extended), "target_extended": max_extended,
                             "llm_configured": bool(os.getenv("LLM_API_KEY", "").strip()),
                             "llm_attempts": llm_attempts,
-                            "pending": sum(not valid_analysis(paper) for paper in papers)},
+                            "pending": sum(not valid_analysis(paper) for paper in core + extended)},
     }
     if output_path:
         path = Path(output_path)
-        path.parent.mkdir(parents=True, exist_ok=True)
-        encoded = json.dumps(payload, ensure_ascii=False, indent=2)
-        path.write_text(encoded, encoding="utf-8")
-        # Shanghai uses a fixed UTC+08:00 offset, so archive naming should not
-        # depend on the optional system timezone database (tzdata).
-        shanghai = timezone(timedelta(hours=8))
-        archive_date = until.astimezone(shanghai).date().isoformat()
-        archive = path.parent / "archive" / f"{archive_date}.json"
-        archive.parent.mkdir(parents=True, exist_ok=True)
-        archive.write_text(encoded, encoding="utf-8")
+        trigger = 'scheduled' if os.getenv('GITHUB_EVENT_NAME') == 'schedule' or os.getenv('SCHEDULED_CHECK') == 'true' else 'manual'
+        snapshot = append_edition(path.parent, payload, trigger=trigger)
+        check = {'run_id': os.getenv('GITHUB_RUN_ID', '') or edition_id(payload),
+                 'checked_at': payload['generated_at'], 'outcome': 'published' if snapshot else 'no_new',
+                 'heat_status': payload['heat_status'], 'analysis_status': payload['analysis_status']}
+        if snapshot:
+            payload.update(core=snapshot['core'], extended=snapshot['extended'], edition=snapshot['edition'])
+            # Re-running the same workflow must reuse its exact membership/time.
+            payload['generated_at'] = snapshot['generated_at']
+            check['edition'] = snapshot['edition']
+            write_data(path, payload)
+        elif path.exists():
+            payload = read_data(path)
+        else:
+            write_data(path, payload)
+        write_data(path.parent / 'updates' / (check['run_id'] + '.json'), check)
+        write_data(path.parent / 'update-status.json', check)
+        payload['latest_update'] = check
     return payload
 
 

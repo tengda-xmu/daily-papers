@@ -26,6 +26,13 @@ def test_beijing_morning_boundary_and_manual_updates():
     assert update_needed(edition(), tomorrow)[0]
 
 
+def test_no_new_check_satisfies_morning_gate_without_new_batch():
+    value = edition('2026-09-23T22:00:00Z')
+    value['latest_update'] = {'outcome': 'no_new', 'checked_at': '2026-09-25T06:10:00+08:00'}
+    assert update_needed(value, NOW) == (False, 'already_checked_today')
+    assert workflow_gate(value, 'workflow_dispatch', now=NOW) == (True, 'manual_update')
+
+
 @pytest.mark.parametrize('payload', [
     {}, {'generated_at': 'invalid'}, edition('2026-09-25T12:00:00Z'),
     edition('2026-09-25T06:02:00'), {**edition(), 'core': []},

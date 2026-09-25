@@ -19,6 +19,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+        with: {ref: main}
       - uses: actions/setup-python@v5
         with: {python-version: "3.11"}
       - run: pip install -r requirements.txt
@@ -30,6 +31,8 @@ jobs:
             mkdir -p data/inbox
             git show "FETCH_HEAD:${path}" > "$path"
           fi
+      - name: Import validated reading enrichment and recover published editions
+        run: python -m tools.recommendation_data --recover --reconcile --import-readings
       - run: python tools/build_site.py
       - uses: actions/upload-pages-artifact@v3
         with: {path: site}

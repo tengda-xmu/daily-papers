@@ -113,7 +113,18 @@ def published(run_id):
                 content = response.read(20 * 1024 * 1024 + 1)
             if len(content) > 20 * 1024 * 1024:
                 raise ValueError('Published data too large')
-            return json.loads(content)
+            payload = json.loads(content)
+            if str(payload.get('update_run_id')) == str(run_id):
+                return payload
+            try:
+                status_request = Request(PUBLIC + 'updates/' + str(run_id) + '.json', headers={'Cache-Control': 'no-cache'})
+                with build_opener(ProxyHandler(proxies)).open(status_request, timeout=10) as response:
+                    status = json.loads(response.read(65536))
+                if str(status.get('run_id')) == str(run_id):
+                    payload['_update_status'] = status
+            except (OSError, ValueError):
+                pass  # Compatibility with sites published before batch updates.
+            return payload
         except HTTPError as exc:
             if exc.code < 500:
                 raise
@@ -201,6 +212,12 @@ class DailyUpdater:
             if run['status'] == 'completed':
                 if run.get('conclusion') != 'success':
                     data.update(state='failed', message='本次更新未完成，当前推荐仍可阅读；可查看运行记录后重试。')
+                    try:
+                        deployed = self.fetch(data['run_id'])
+                        if str(deployed.get('edition', {}).get('id')) == data['run_id']:
+                            self._finish(data, deployed)
+                    except Exception:
+                        pass
                 else:
                     self._finish(data)
             elif run['status'] in ('queued', 'waiting', 'requested', 'pending'):
@@ -216,11 +233,13 @@ class DailyUpdater:
             self.last_check = time.monotonic()
             return self._save(data)
 
-    def _finish(self, data):
+    def _finish(self, data, payload=None):
         data.update(state='publishing', message='发布已完成，正在核对线上数据，稍后自动刷新。')
         try:
-            payload = self.fetch(data['run_id'])
-            if (str(payload.get('update_run_id')) != data['run_id'] or not payload.get('generated_at')
+            payload = self.fetch(data['run_id']) if payload is None else payload
+            check = payload.pop('_update_status', {})
+            no_new = check.get('outcome') == 'no_new' and str(check.get('run_id')) == data['run_id']
+            if ((str(payload.get('update_run_id')) != data['run_id'] and not no_new) or not payload.get('generated_at')
                     or not isinstance(payload.get('core'), list) or not isinstance(payload.get('extended'), list)):
                 return  # Old CDN data is never treated as a successful update.
         except Exception:
@@ -231,10 +250,19 @@ class DailyUpdater:
         except (OSError, ValueError):
             pass
         # Retain prior paper metadata so existing conversations still resolve.
-        self._write(self.runtime / 'recommendation-history' / (data['run_id'] + '.json'), payload)
+        if not no_new:
+            self._write(self.runtime / 'recommendation-history' / (data['run_id'] + '.json'), payload)
         self._write(self.runtime / 'recommendations.json', payload)
         changed = any([p.get('id') for p in previous.get(section, [])] != [p.get('id') for p in payload[section]]
                       for section in ('core', 'extended')) if previous else None
         data.update(state='succeeded', generated_at=payload['generated_at'], core_count=len(payload['core']),
                     extended_count=len(payload['extended']), changed=changed,
                     message=f'更新完成：核心推荐 {len(payload["core"])} 篇，扩展阅读 {len(payload["extended"])} 篇。')
+        data.update(outcome='no_new' if no_new else 'published', edition=payload.get('edition'),
+                    analysis_status=check.get('analysis_status', payload.get('analysis_status', {})),
+                    heat_status=check.get('heat_status', payload.get('heat_status', {})))
+        if no_new:
+            data.update(changed=False, message='本次检查暂无可新增推荐，当前批次保留；检查记录已保存。')
+        elif payload.get('edition'):
+            e = payload['edition']
+            data['message'] = f"{e['date']} 第 {e['number']} 批已发布：核心推荐 {len(payload['core'])} 篇，扩展阅读 {len(payload['extended'])} 篇。"

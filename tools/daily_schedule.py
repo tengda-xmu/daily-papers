@@ -20,6 +20,13 @@ def update_needed(payload, now=None):
     start = now.replace(hour=6, minute=0, second=0, microsecond=0)
     if now < start:
         return False, 'before_morning_update'
+    check = (payload or {}).get('latest_update') or {}
+    try:
+        checked_at = datetime.fromisoformat(check.get('checked_at', '').replace('Z', '+00:00'))
+        if check.get('outcome') == 'no_new' and checked_at.tzinfo and start <= checked_at <= now:
+            return False, 'already_checked_today'
+    except (ValueError, TypeError):
+        pass
     try:
         generated = datetime.fromisoformat(payload['generated_at'].replace('Z', '+00:00'))
         if generated.tzinfo is None:
@@ -58,6 +65,12 @@ def dispatch_if_needed(remote, now=None):
             raise ValueError('Invalid data blob identifier')
         content = remote('GET', f'repos/{REPO}/git/blobs/{sha}')
     payload = json.loads(base64.b64decode(content['content']))
+    if update_needed(payload, now)[0]:
+        try:
+            check = remote('GET', f'repos/{REPO}/contents/data/update-status.json?ref=main')
+            payload['latest_update'] = json.loads(base64.b64decode(check['content']))
+        except Exception:
+            pass  # Legacy sites do not have a separate no-new check record.
     needed, reason = update_needed(payload, now)
     if not needed:
         return {'state': reason}
@@ -99,6 +112,10 @@ def main():
         payload = json.loads((ROOT / 'data/daily.json').read_text(encoding='utf-8'))
     except (OSError, ValueError):
         payload = {}
+    try:
+        payload['latest_update'] = json.loads((ROOT / 'data/update-status.json').read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        pass
     needed, reason = workflow_gate(payload, os.environ.get('GITHUB_EVENT_NAME', ''),
                                   os.environ.get('SCHEDULED_CHECK', '').lower() == 'true')
     if os.environ.get('GITHUB_OUTPUT'):

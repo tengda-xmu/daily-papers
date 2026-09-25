@@ -83,7 +83,8 @@ def test_pipeline_custom_fields_and_analysis_budget_are_balanced(monkeypatch):
     result = run_pipeline(adapters=[Source()], research_profile=settings)
     assert len(result['core']) == len(result['extended']) == 2
     assert any(p['title'] == 'climate observations' for p in result['extended'])
-    assert len(calls) == 4
+    assert calls == []  # Local queue now enriches the balanced selection later.
+    assert result['analysis_status']['pending'] == 4
     assert all('offtopic' != p['source_id'] for p in result['papers'])
     html = render(result, archive_date='2026-09-24')
     assert 'climate' in html and '本期方向' in html

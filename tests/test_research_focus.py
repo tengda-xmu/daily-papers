@@ -60,7 +60,7 @@ def test_scholar_excerpt_preserves_verified_metadata_and_reading_notes():
     assert valid_analysis(cached_analysis(merged))
 
 
-def test_model_budget_covers_extended_and_does_not_retry_cached_notes(monkeypatch):
+def test_recommendations_publish_pending_and_reuse_existing_notes(monkeypatch):
     sample = deepcopy(curated_entries()[0]["analysis"])
     calls, cache = [], {}
     class Fixture:
@@ -82,6 +82,9 @@ def test_model_budget_covers_extended_and_does_not_retry_cached_notes(monkeypatc
     args = {"adapters": [Fixture()], "until": datetime(2026, 9, 23, tzinfo=timezone.utc)}
     result = run_pipeline(**args)
     assert len(result["core"]) == len(result["extended"]) == 5
-    assert len(calls) == result["analysis_status"]["llm_attempts"] == 10
-    run_pipeline(**args)
-    assert len(calls) == 10  # Both tiers reuse validated notes.
+    assert len(calls) == result['analysis_status']['llm_attempts'] == 0
+    assert result['analysis_status']['pending'] == 10
+    for p in result['core'] + result['extended']:
+        cache[p['doi']] = deepcopy(sample)
+    enriched = run_pipeline(**args)
+    assert calls == [] and all(valid_analysis(p) for p in enriched['core'] + enriched['extended'])

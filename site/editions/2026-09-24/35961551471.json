@@ -1,0 +1,2216 @@
+{
+  "generated_at": "2026-09-24T05:49:33.949917+00:00",
+  "update_run_id": "35961551471",
+  "since": "2026-08-25T05:48:22.256521+00:00",
+  "until": "2026-09-24T05:48:22.256521+00:00",
+  "core": [
+    {
+      "source": "Nature Portfolio",
+      "source_id": "10.1038/s41378-026-01322-0",
+      "title": "Fine-tuned multimodal large language model for autonomous state cognition system of shape-recognition 6-bar tensegrity integrated with flexible sensors",
+      "authors": [
+        "Mao, Zebing",
+        "Wang, Jianhui",
+        "Zhang, Jianhua",
+        "Ohgi, Junji",
+        "Zheng, Yanqiu",
+        "Peng, Yanhong",
+        "Zhao, Luyang",
+        "Su, Qi",
+        "Huang, Weidi",
+        "Xu, Bing"
+      ],
+      "venue": "Microsystems & Nanoengineering",
+      "abstract": "Fine-tuned multimodal large language models combine flexible sensor observations and shape reconstruction for structural state monitoring and fault diagnosis in a six-bar tensegrity system.",
+      "published_at": "2026-06-10",
+      "doi": "10.1038/s41378-026-01322-0",
+      "landing_url": "https://www.nature.com/articles/s41378-026-01322-0",
+      "oa_url": "https://www.nature.com/articles/s41378-026-01322-0",
+      "citation_count": null,
+      "source_score": 0.8,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "针对结构监测中传感数据难以直接转化为诊断解释的问题，研究在六杆张拉整体中集成 24 个柔性传感器，结合状态估计、图像信息和经 LoRA 微调的大模型，完成故障识别与语言报告。论文报告，多模态分类准确率约 95%，高于传感或图像单模态。其对智能运维的启示，是把测量证据、诊断结论和解释报告连接起来，并分别评价识别准确性与解释可信度。",
+      "raw_metadata": {
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s41378-026-01322-0",
+        "doi": "10.1038/s41378-026-01322-0",
+        "title": "Fine-tuned multimodal large language model for autonomous state cognition system of shape-recognition 6-bar tensegrity integrated with flexible sensors",
+        "venue": "Microsystems & Nanoengineering",
+        "authors": [
+          "Mao, Zebing",
+          "Wang, Jianhui",
+          "Zhang, Jianhua",
+          "Ohgi, Junji",
+          "Zheng, Yanqiu",
+          "Peng, Yanhong",
+          "Zhao, Luyang",
+          "Su, Qi",
+          "Huang, Weidi",
+          "Xu, Bing"
+        ],
+        "published_at": "2026-06-10",
+        "landing_url": "https://www.nature.com/articles/s41378-026-01322-0",
+        "oa_url": "https://www.nature.com/articles/s41378-026-01322-0",
+        "abstract": "Fine-tuned multimodal large language models combine flexible sensor observations and shape reconstruction for structural state monitoring and fault diagnosis in a six-bar tensegrity system.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        },
+        "sources": [
+          "Nature Portfolio"
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "c6e1f2105665",
+      "source_ids": [
+        "Nature Portfolio"
+      ],
+      "venue_group": "CNS 子刊",
+      "journal": "Microsystems & Nanoengineering",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [
+        "大模型"
+      ],
+      "title_zh": "多模态大模型与柔性传感融合的张拉整体结构状态诊断",
+      "recommendation": "建议按“图6系统架构 → 图7模态对照 → 图8故障演示”的顺序阅读。重点区分多模态融合对故障识别的贡献，以及大模型对诊断解释的贡献，再判断哪些环节值得迁移到现有监测平台。",
+      "deep_read": {
+        "problem": "论文围绕六杆张拉整体的形变感知、故障识别与人机问答展开。精读时需要区分两个目标：系统能否根据观测识别异常，以及诊断报告能否说明判断依据；第二个目标决定语言交互能否真正帮助工程人员复核。",
+        "method": "技术链路：24 个柔性传感器采集电阻变化 → LSTM 支撑状态估计 → 融合传感与图像特征形成诊断描述 → 结合知识图谱，由 LoRA 微调的大模型生成解释。\n\n核查重点：顺着图6追踪每一层的输入与输出，明确故障类别来自哪个模块，以及语言报告是否保留了测量依据。",
+        "innovation": "本站解读：值得借鉴的是把“测到什么、识别出什么、为什么这样判断”连接起来，使状态估计结果成为可追问的诊断信息。评价这种集成的价值，应分别设置对照：单模态与多模态比较识别能力，固定模板与大模型报告比较解释质量，避免把融合算法的收益全部归功于大模型。",
+        "findings": "图7报告：多模态分类准确率约 95%，传感单模态为 88%–90%，图像单模态为 80%–85%。这组对照支持多模态融合的价值，但不能单独证明大模型解释可靠。\n\n图8中的 94% 是单个演示的输出置信度，不能替代整体准确率；未经概率校准，也不宜直接用于可靠性计算。",
+        "limitations": "工程迁移仍需检验跨试件、跨工况的泛化能力。若同一次试验的相邻时间窗同时进入训练和测试，结果可能高估泛化；复现时应核查样本划分、独立试验次数，以及微调数据与测试数据是否重叠。除总体准确率外，还应分别统计各故障类别的漏报，并在传感器漂移、图像缺失时检查判断是否失效。",
+        "connection": "延伸方向（本站分析）：智能运维可围绕“异常检测—证据检索—诊断解释—人工复核”构建工作流程。疲劳与可靠性研究还需接入载荷谱、裂纹或损伤状态及寿命模型，让计算工具给出失效概率或剩余寿命，大模型说明依据与适用条件；这些扩展不属于本文已验证成果。",
+        "next_steps": "建议先做一个针对解释层的对照实验：保持诊断模型与输入一致，比较“只给分类结果”“固定模板报告”“大模型报告”，由不知分组的工程人员处理同一批异常。\n\n重点记录诊断复核正确率、完成时间、证据引用错误及关键异常遗漏；再加入传感器断连、漂移与图像缺失，检验解释层是否带来稳定收益。"
+      },
+      "analysis_status": "ready",
+      "analysis_basis": "full_text",
+      "analysis_kind": "editorial",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41378-026-01322-0"
+      ],
+      "analyzed_at": "2026-09-23T08:01:56.511456+00:00",
+      "recommended_direction": "ai_maintenance"
+    },
+    {
+      "source": "Crossref",
+      "source_id": "10.1038/s44172-026-00752-y",
+      "title": "Mechanics-informed risk-aware learning for multiaxial structural reliability with Bayesian calibration",
+      "authors": [
+        "Gaofeng Zhang",
+        "Xuanrui Yu",
+        "Anxiang Song",
+        "Hanguang Liu",
+        "Xinhong Lin",
+        "Xuyijin Zhang",
+        "Qianling Wang",
+        "Wentao Wang",
+        "Pandeng Zhang"
+      ],
+      "venue": "Communications Engineering",
+      "abstract": "Abstract Reliable prediction of structural vulnerability under complex multiaxial loading remains challenging due to nonlinear load couplings, imbalanced failure-critical samples, and limited model interpretability. Here, we present a mechanics-informed, risk-aware learning framework integrating polynomial–harmonic feature augmentation, Weibull-based risk reweighting, and a unified Degradation Risk Score that combines stress margins and bolt pretension loss. Demonstrated on a bolted steering-knuckle assembly with finite-element-derived multiaxial load–response data, the framework improves multiple linear regression from R² = 0.37 to 0.96 with a 67% reduction in RMSE, while enhancing robustness and sensitivity in high-risk regimes across ensemble and neural network models. SHAP analysis confirms that physically meaningful multiaxial interaction features dominate predictions, revealing critical load paths associated with structural vulnerability. Finally, Bayesian logistic and Weibull calibration provide a route to link Degradation Risk Score to component-level failure probabilities, enabling probabilistic risk assessment and reliability-centred decision-making in practical engineering systems.",
+      "published_at": "2026-08-14",
+      "doi": "10.1038/s44172-026-00752-y",
+      "landing_url": "https://doi.org/10.1038/s44172-026-00752-y",
+      "oa_url": "https://www.nature.com/articles/s44172-026-00752-y",
+      "citation_count": 0,
+      "source_score": 0.8,
+      "topic_tags": [
+        "generative_design",
+        "fatigue_reliability"
+      ],
+      "summary": "针对多轴载荷耦合与危险样本稀缺导致的响应预测偏差，研究将力学特征增强、风险加权和贝叶斯标定结合，用于螺栓连接转向节的风险评估。在该装配体的仿真测试中，多元线性回归的 R² 由 0.37 提升至 0.96，RMSE 降低约 67%。其方法启示是分别处理响应预测、危险状态排序和失效概率标定，为可靠性优化构建更关注失效边界的代理模型。",
+      "raw_metadata": {
+        "provider": "Crossref",
+        "publisher": "Springer Science and Business Media LLC",
+        "query_scope": "CNS 子刊专项",
+        "sources": [
+          "CNS 子刊专项",
+          "Crossref",
+          "Nature Portfolio"
+        ],
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s44172-026-00752-y",
+        "doi": "10.1038/s44172-026-00752-y",
+        "title": "Mechanics-informed risk-aware learning for multiaxial structural reliability with Bayesian calibration",
+        "venue": "Communications Engineering",
+        "authors": [
+          "Zhang, Gaofeng",
+          "Yu, Xuanrui",
+          "Song, Anxiang",
+          "Liu, Hanguang",
+          "Lin, Xinhong",
+          "Zhang, Xuyijin",
+          "Wang, Qianling",
+          "Wang, Wentao",
+          "Zhang, Pandeng"
+        ],
+        "published_at": "2026-08-14",
+        "landing_url": "https://www.nature.com/articles/s44172-026-00752-y",
+        "oa_url": "https://www.nature.com/articles/s44172-026-00752-y",
+        "abstract": "Machine learning with mechanics-informed features and Bayesian calibration links multiaxial structural response prediction, structural reliability and predictive maintenance.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        },
+        "research_directions": [
+          "结构生成式设计与可靠性优化",
+          "结构疲劳与可靠性"
+        ]
+      },
+      "id": "1993f4bea7ee",
+      "source_ids": [
+        "CNS 子刊专项",
+        "Crossref",
+        "Nature Portfolio"
+      ],
+      "venue_group": "CNS 子刊",
+      "journal": "Communications Engineering",
+      "topic_ids": [
+        "generative_design",
+        "fatigue_reliability"
+      ],
+      "focus_tags": [],
+      "title_zh": "融合力学先验与风险感知学习的多轴结构可靠性评估",
+      "recommendation": "与结构可靠性优化和智能运维直接相关。优先阅读风险加权、退化指标定义及概率标定部分，评估其能否接入现有有限元代理模型。",
+      "deep_read": {
+        "problem": "多轴载荷耦合与连接退化使结构响应难以用简单输入描述，而失效附近的样本通常又较少。论文以螺栓连接的转向节装配体为例，研究如何兼顾响应预测、危险状态识别及可靠性决策。",
+        "method": "作者利用动力学和有限元生成载荷与响应数据，以多项式及谐波特征表达载荷耦合，用风险加权提高关键样本的训练贡献，再将应力裕度和预紧力损失组合成退化指标，最后提出贝叶斯概率标定层。",
+        "innovation": "解读：最有借鉴价值的是明确区分三个任务：预测结构响应、排序危险状态、估计失效概率。力学特征改善的是表示能力，风险权重改变的是优化目标，概率标定则解决决策量的解释，三者不能相互替代。",
+        "findings": "作者的仿真测试中，多元线性回归的 R² 从 0.37 提高到 0.96，RMSE 降低约 67%。这一结果针对该数据集的响应预测，不能解释为失效概率估计已经具有同样精度，也不代表所有模型都有相同增益。",
+        "limitations": "原文明示验证主要来自单一装配体的仿真数据。解读：应特别检查高风险区域的覆盖和划分方式，并用真实试验检验概率校准。退化评分本身不是失效概率，多载荷情形的可靠性合成也需要说明相关性假设。",
+        "connection": "建议：在你的结构可靠性优化中，将这类风险加权代理与极限状态函数结合，重点控制失效边界附近的误差；在智能运维中，可让智能体负责组织载荷、模型和检测证据，但保留独立的概率标定与复核环节。",
+        "next_steps": "建议先比较原始特征、力学增强、风险加权三组消融试验，分别评估总体误差、危险区漏判和概率校准。随后用跨工况留出集检验泛化，再讨论是否适合接入可靠性约束优化，而不是仅凭平均拟合优度选择模型。"
+      },
+      "analysis_status": "ready",
+      "analysis_basis": "full_text",
+      "analysis_kind": "editorial",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s44172-026-00752-y"
+      ],
+      "analyzed_at": "2026-09-23T08:01:56.511456+00:00",
+      "recommended_direction": "fatigue_reliability"
+    },
+    {
+      "source": "Nature Portfolio",
+      "source_id": "10.1038/s44387-026-00102-5",
+      "title": "AgenticSciML: collaborative multi-agent systems for emergent discovery in scientific machine learning",
+      "authors": [
+        "Jiang, Qile",
+        "Karniadakis, George"
+      ],
+      "venue": "npj Artificial Intelligence",
+      "abstract": "AgenticSciML uses LLM-based multi-agent collaboration, method retrieval and evolutionary evaluation to develop scientific machine learning models for physics-informed and operator learning problems.",
+      "published_at": "2026-04-30",
+      "doi": "10.1038/s44387-026-00102-5",
+      "landing_url": "https://www.nature.com/articles/s44387-026-00102-5",
+      "oa_url": "https://www.nature.com/articles/s44387-026-00102-5",
+      "citation_count": 1,
+      "source_score": 0.8,
+      "topic_tags": [
+        "generative_design"
+      ],
+      "summary": "AgenticSciML 面向物理约束学习与算子学习，将文献检索、方案提议、批评、代码实现和数值评价交给不同的大模型智能体，并用进化搜索改进网络结构、损失函数与训练策略。六项科学计算基准中，演化后的最优方案均优于初始单智能体方案。对结构分析，可借鉴其“提出模型—运行验证—依据误差修正”的流程，开展物理代理模型的自动开发。",
+      "raw_metadata": {
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s44387-026-00102-5",
+        "doi": "10.1038/s44387-026-00102-5",
+        "title": "AgenticSciML: collaborative multi-agent systems for emergent discovery in scientific machine learning",
+        "venue": "npj Artificial Intelligence",
+        "authors": [
+          "Jiang, Qile",
+          "Karniadakis, George"
+        ],
+        "published_at": "2026-04-30",
+        "landing_url": "https://www.nature.com/articles/s44387-026-00102-5",
+        "oa_url": "https://www.nature.com/articles/s44387-026-00102-5",
+        "abstract": "AgenticSciML uses LLM-based multi-agent collaboration, method retrieval and evolutionary evaluation to develop scientific machine learning models for physics-informed and operator learning problems.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        },
+        "publisher": "Springer Science and Business Media LLC",
+        "query_scope": "CNS 子刊专项",
+        "sources": [
+          "CNS 子刊专项",
+          "Crossref",
+          "Nature Portfolio"
+        ],
+        "research_directions": [
+          "结构生成式设计与可靠性优化"
+        ]
+      },
+      "id": "98f734cd6362",
+      "source_ids": [
+        "CNS 子刊专项",
+        "Crossref",
+        "Nature Portfolio"
+      ],
+      "venue_group": "CNS 子刊",
+      "journal": "npj Artificial Intelligence",
+      "topic_ids": [
+        "generative_design"
+      ],
+      "focus_tags": [
+        "大模型",
+        "智能体"
+      ],
+      "title_zh": "AgenticSciML：多智能体协作探索物理学习模型与求解策略",
+      "recommendation": "适合作为智能体驱动物理代理模型开发的方法参考；论文以科学计算基准为主，迁移到结构疲劳与可靠性需要重新建立工程验证。",
+      "deep_read": {
+        "problem": "科学计算模型的构建通常需要反复选择网络结构、物理约束和训练策略。本文尝试让智能体协同探索这些组合。解读：它关注的是建模方法的搜索，可为结构代理模型开发提供启发，但不等于直接完成工程设计。",
+        "method": "框架将方案提出、批评、代码实现、结果评价和知识检索分为不同角色，并通过演化过程改进候选。解读：若移植到现有求解流程，应让数值验证的输出成为共同依据，避免角色之间只在语言层面相互认可。",
+        "innovation": "解读：可复用的研究记忆应同时保存失败方案、消融结果和误差分析。单纯积累成功提示词容易形成选择偏差；把未奏效的策略及适用条件保留下来，才能使后续检索真正减少重复试错。",
+        "findings": "文中在六类科学计算任务上比较演化方案与初始单智能体方案，改进量以损失比值表示。解读：误差下降倍数不是计算加速倍数；评估时还应计入候选训练和搜索成本，避免把更多预算的收益全归因于协作。",
+        "limitations": "作者讨论了知识库覆盖、推理可靠性和演化计算开销。解读：工程场景还需保留独立测试条件，防止搜索过程不断适应同一验证集；如果求解器本身存在误差，智能体可能优化到错误的数值目标。",
+        "connection": "建议用于组织结构代理模型、物理约束学习和失效边界采样的比较实验。让智能体解释试验结果并提出下一轮候选，但以独立有限元计算、概率校准和危险区域误差作为验收依据，而不是让模型自评。",
+        "next_steps": "建议先做单智能体、双角色和完整协作流程的等预算比较，再逐步增加检索与记忆模块。记录重复运行方差、失败成本和边界工况表现，检验协作收益是否稳定，再考虑用于更昂贵的多物理场问题。"
+      },
+      "analysis_status": "ready",
+      "analysis_basis": "full_text",
+      "analysis_kind": "editorial",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s44387-026-00102-5"
+      ],
+      "analyzed_at": "2026-09-23T08:01:56.511456+00:00",
+      "recommended_direction": "generative_design"
+    },
+    {
+      "source": "Nature Portfolio",
+      "source_id": "10.1038/s44172-026-00756-8",
+      "title": "Machine learning–driven structural health monitoring of a high-rise building on thick sediments via seismic ambient noise",
+      "authors": [
+        "Qin, Linpeng",
+        "Guo, Zhen",
+        "Yuan, Tianran",
+        "Peng, Zhen",
+        "Huang, Yu",
+        "Wang, Yun"
+      ],
+      "venue": "Communications Engineering",
+      "abstract": "Interpretable machine learning predicts intermediate-floor dynamics for structural health monitoring using sparse ambient-vibration observations in a high-rise building.",
+      "published_at": "2026-08-14",
+      "doi": "10.1038/s44172-026-00756-8",
+      "landing_url": "https://www.nature.com/articles/s44172-026-00756-8",
+      "oa_url": "https://www.nature.com/articles/s44172-026-00756-8",
+      "citation_count": null,
+      "source_score": 0.8,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "针对高层建筑监测中测点数量与楼层定位能力难以兼顾的问题，研究利用上海一栋 21 层建筑的 22 天环境振动记录，以地下室和屋顶的共振及极化参数训练 XGBoost，预测中间楼层动力特征。公开摘要显示，模型归因变化与风相关波速变化出现于相同楼层。该路线为稀疏传感监测提供参考，识别结果反映动力变化，尚不能直接判定结构损伤。",
+      "raw_metadata": {
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s44172-026-00756-8",
+        "doi": "10.1038/s44172-026-00756-8",
+        "title": "Machine learning–driven structural health monitoring of a high-rise building on thick sediments via seismic ambient noise",
+        "venue": "Communications Engineering",
+        "authors": [
+          "Qin, Linpeng",
+          "Guo, Zhen",
+          "Yuan, Tianran",
+          "Peng, Zhen",
+          "Huang, Yu",
+          "Wang, Yun"
+        ],
+        "published_at": "2026-08-14",
+        "landing_url": "https://www.nature.com/articles/s44172-026-00756-8",
+        "oa_url": "https://www.nature.com/articles/s44172-026-00756-8",
+        "abstract": "Interpretable machine learning predicts intermediate-floor dynamics for structural health monitoring using sparse ambient-vibration observations in a high-rise building.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        },
+        "publisher": "Springer Science and Business Media LLC",
+        "query_scope": "CNS 子刊专项",
+        "sources": [
+          "CNS 子刊专项",
+          "Crossref",
+          "Nature Portfolio"
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "f530449d449a",
+      "source_ids": [
+        "CNS 子刊专项",
+        "Crossref",
+        "Nature Portfolio"
+      ],
+      "venue_group": "CNS 子刊",
+      "journal": "Communications Engineering",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [],
+      "title_zh": "用环境振动与可解释机器学习实现高层建筑分楼层健康监测",
+      "recommendation": "适合智能运维方向关注，尤其是稀疏传感、环境影响解耦和可解释诊断。以下解读依据公开摘要，定量泛化能力仍需查阅完整实验。",
+      "deep_read": {
+        "problem": "建筑整体共振频率可以反映总体刚度变化，却难以定位楼层；逐层干涉分析具有空间信息，但运行和对比成本更高。摘要提出的研究问题是如何用少量传感点保留对中间楼层动态变化的敏感性。",
+        "method": "摘要报告以一栋二十一层建筑的二十二天记录开展分析，利用层间干涉结果建立参考，再用地下室与屋顶的共振、振动方位及极化参数训练 XGBoost，预测中间楼层的动力学特征并分析特征归因。",
+        "innovation": "解读：方法意义在于把较复杂分析得到的空间信息转移到低成本预测模型，而不是把简单模型包装成大模型。它提示运维系统可以把高精度离线分析和轻量在线推断分开设计，并保留中间物理量供工程人员复核。",
+        "findings": "公开摘要指出，两组楼层附近出现约百分之二的风相关速度变化，模型归因也在相应楼层发生转变。这支持空间敏感性的讨论；摘要未给出跨建筑测试或完整误差分布，不能据此断言已实现普适损伤定位。",
+        "limitations": "解读：本次仅取得摘要，无法核实详细训练划分、温度控制及损伤真值。风、温度和土体条件均可能影响响应，应区分环境变化、刚度差异与真实损伤，并检查归因分析是否在独立时间段稳定。",
+        "connection": "建议：你的智能运维框架可以把预测残差、环境信息和物理诊断结果组织成证据链，再由语言模型形成可追溯的巡检解释。语言解释应绑定测点、时间及模型输出，避免把统计异常直接描述为已确认的结构损伤。",
+        "next_steps": "建议以已有监测数据建立跨时间留出试验，比较密集传感与稀疏传感方案，并单独检查极端天气条件下的误报。若要迁移到桥梁或风机，还应重新验证模态特征与测点配置，不能直接复用建筑场景的结论。"
+      },
+      "analysis_status": "ready",
+      "analysis_basis": "abstract",
+      "analysis_kind": "editorial",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s44172-026-00756-8"
+      ],
+      "analyzed_at": "2026-09-23T08:01:56.511456+00:00",
+      "recommended_direction": "ai_maintenance"
+    },
+    {
+      "source": "Nature Portfolio",
+      "source_id": "10.1038/s41524-026-02148-0",
+      "title": "Grain-level micromechanical modeling and assessment of fatigue-critical pores using graph neural networks",
+      "authors": [
+        "Loiodice, Luca",
+        "Stopka, Krzysztof S.",
+        "Sun, Yixuan",
+        "Lin, Guang",
+        "Sangid, Michael D."
+      ],
+      "venue": "npj Computational Materials",
+      "abstract": "Graph neural networks trained on crystal plasticity predict grain-level fatigue indicators and screen fatigue-critical pores in additively manufactured alloy microstructures.",
+      "published_at": "2026-05-25",
+      "doi": "10.1038/s41524-026-02148-0",
+      "landing_url": "https://www.nature.com/articles/s41524-026-02148-0",
+      "oa_url": "https://www.nature.com/articles/s41524-026-02148-0",
+      "citation_count": null,
+      "source_score": 0.8,
+      "topic_tags": [
+        "fatigue_reliability"
+      ],
+      "summary": "针对晶体塑性计算难以支撑大量缺陷筛查的问题，GFF-MAP 将增材制造 IN718 的晶粒与孔隙组织成图，以晶体塑性模拟训练图神经网络，预测局部应力和累积塑性应变能。通过判断疲劳热点是否落在孔隙邻近晶粒，模型可快速筛查疲劳关键孔隙。该方法适合用于缺陷风险初筛；局部极值预测仍是难点，需要优先校核可能被低估的危险孔隙。",
+      "raw_metadata": {
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s41524-026-02148-0",
+        "doi": "10.1038/s41524-026-02148-0",
+        "title": "Grain-level micromechanical modeling and assessment of fatigue-critical pores using graph neural networks",
+        "venue": "npj Computational Materials",
+        "authors": [
+          "Loiodice, Luca",
+          "Stopka, Krzysztof S.",
+          "Sun, Yixuan",
+          "Lin, Guang",
+          "Sangid, Michael D."
+        ],
+        "published_at": "2026-05-25",
+        "landing_url": "https://www.nature.com/articles/s41524-026-02148-0",
+        "oa_url": "https://www.nature.com/articles/s41524-026-02148-0",
+        "abstract": "Graph neural networks trained on crystal plasticity predict grain-level fatigue indicators and screen fatigue-critical pores in additively manufactured alloy microstructures.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        },
+        "sources": [
+          "Nature Portfolio"
+        ],
+        "research_directions": [
+          "结构疲劳与可靠性"
+        ]
+      },
+      "id": "8c775dd0753c",
+      "source_ids": [
+        "Nature Portfolio"
+      ],
+      "venue_group": "CNS 子刊",
+      "journal": "npj Computational Materials",
+      "topic_ids": [
+        "fatigue_reliability"
+      ],
+      "focus_tags": [],
+      "title_zh": "用晶粒图神经网络筛查增材制造合金中的疲劳关键孔隙",
+      "recommendation": "与结构疲劳和可靠性设计最直接相关。建议重点阅读孔隙关键性判据、极值预测误差和漏判分析，而不只看平均回归指标。",
+      "deep_read": {
+        "problem": "晶体塑性模型能描述微观组织与疲劳起裂之间的联系，但计算代价较高，难以支撑大量缺陷的逐一筛查。论文针对含孔隙的增材制造 IN718 微观结构，研究如何快速识别疲劳相关的局部危险区域。",
+        "method": "作者以晶粒及其相互关系构建图表示，使用晶体塑性结果训练图神经网络代理，预测应力和累积塑性应变能等晶粒尺度量，再判断热点是否位于孔隙邻近晶粒，以评估孔隙的关键性。",
+        "innovation": "解读：从平均材料性能走向局部极值，是疲劳应用中更关键也更困难的一步。预测局部场有助于解释缺陷为什么危险，但它要求模型表达孔隙几何、邻域组织与局部塑性的耦合，不能只依赖孔径等少数统计特征。",
+        "findings": "论文指出，极端值及塑性相关量的预测更困难；孔隙关键性筛查仍可由预测的局部塑性应变能支持。讨论中将部分危险孔隙的漏判与局部量低估联系起来，说明总体拟合效果不能替代面向安全的误差分析。",
+        "limitations": "解读：晶体塑性结果在这里承担训练参考，并非对所有真实材料行为的无误差描述。需要另行检查不同制造过程、载荷路径和组织条件下的适用性；能识别起裂热点，也不代表已经建立了经试验验证的完整寿命模型。",
+        "connection": "建议：在疲劳可靠性设计中，将图代理用于缺陷初筛，并针对模型不确定性较高或预测接近危险边界的样本调用高保真计算。语言模型可以整理微观结构与判据说明，但不应替代局部力学场计算或直接给出寿命承诺。",
+        "next_steps": "建议把漏判率、危险区域召回率和保守性作为独立指标，比较回归后判别与直接分类两种路线。之后考虑风险加权或主动学习优先补充危险孔隙样本，再用独立疲劳试验校核关键性判据和概率校准效果。"
+      },
+      "analysis_status": "ready",
+      "analysis_basis": "full_text",
+      "analysis_kind": "editorial",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41524-026-02148-0"
+      ],
+      "analyzed_at": "2026-09-23T08:01:56.511456+00:00",
+      "recommended_direction": "fatigue_reliability"
+    }
+  ],
+  "extended": [
+    {
+      "source": "Nature Portfolio",
+      "source_id": "10.1038/s41524-026-02175-x",
+      "title": "TrussGPT: large language model-driven inverse design framework for truss metamaterials",
+      "authors": [
+        "Lin, Jiaoxuan",
+        "Zhang, Bowen",
+        "Ma, Teng",
+        "Dong, Hengji",
+        "Huang, Anfeng",
+        "Zhao, Tianhao",
+        "Yang, Hongwei",
+        "Zhang, Weizhe",
+        "Wang, Changguo",
+        "He, Hui",
+        "Liu, Yuanpeng"
+      ],
+      "venue": "npj Computational Materials",
+      "abstract": "TrussGPT combines large language model interaction, graph tokenization and conditional structural generation for inverse design of truss metamaterials.",
+      "published_at": "2026-06-04",
+      "doi": "10.1038/s41524-026-02175-x",
+      "landing_url": "https://www.nature.com/articles/s41524-026-02175-x",
+      "oa_url": "https://www.nature.com/articles/s41524-026-02175-x",
+      "citation_count": null,
+      "source_score": 0.8,
+      "topic_tags": [
+        "generative_design"
+      ],
+      "summary": "为降低桁架超材料逆向设计的计算与交互门槛，TrussGPT 将自然语言需求连接到可计算的结构表示：先以双向编码器转换桁架与序列，再由条件 Transformer 按目标性能生成候选。论文在所测任务中报告超过 99% 的结构有效率，并支持多性能及应力—应变曲线条件设计。对结构生成式设计，可借鉴其语义理解、结构生成与性能验证的模块分工。",
+      "raw_metadata": {
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s41524-026-02175-x",
+        "doi": "10.1038/s41524-026-02175-x",
+        "title": "TrussGPT: large language model-driven inverse design framework for truss metamaterials",
+        "venue": "npj Computational Materials",
+        "authors": [
+          "Lin, Jiaoxuan",
+          "Zhang, Bowen",
+          "Ma, Teng",
+          "Dong, Hengji",
+          "Huang, Anfeng",
+          "Zhao, Tianhao",
+          "Yang, Hongwei",
+          "Zhang, Weizhe",
+          "Wang, Changguo",
+          "He, Hui",
+          "Liu, Yuanpeng"
+        ],
+        "published_at": "2026-06-04",
+        "landing_url": "https://www.nature.com/articles/s41524-026-02175-x",
+        "oa_url": "https://www.nature.com/articles/s41524-026-02175-x",
+        "abstract": "TrussGPT combines large language model interaction, graph tokenization and conditional structural generation for inverse design of truss metamaterials.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        },
+        "sources": [
+          "Nature Portfolio"
+        ],
+        "research_directions": [
+          "结构生成式设计与可靠性优化"
+        ]
+      },
+      "id": "11c3f08ec0e3",
+      "source_ids": [
+        "Nature Portfolio"
+      ],
+      "venue_group": "CNS 子刊",
+      "journal": "npj Computational Materials",
+      "topic_ids": [
+        "generative_design"
+      ],
+      "focus_tags": [
+        "大模型"
+      ],
+      "title_zh": "TrussGPT：从自然语言需求到桁架超材料逆向设计",
+      "recommendation": "与大模型驱动结构生成式设计直接相关。建议沿着“需求—结构表示—性能验证”三条线阅读，并单独检查分布外目标及多性能约束。",
+      "deep_read": {
+        "problem": "研究问题是如何让工程需求进入可计算的结构空间。论文以桁架超材料为对象，将语言交互与逆向生成结合。解读：真正需要验证的是需求能否被准确映射为目标、约束和结构参数，而不只是交互界面是否流畅。",
+        "method": "作者采用桁架与序列双向转换、条件 Transformer 生成以及语言交互模块。解读：可将其理解为语义层和结构生成层的分工；迁移到具体工程时，应先明确两层交换的数据契约，确保单位、载荷与边界条件完整。",
+        "innovation": "解读：把可解析的结构表示放在语言模型与几何之间，有助于让输出可检查、可重建。比较这类方法时，建议拆开考察语言理解、候选多样性与目标命中率，避免将聊天能力的改善混同为力学性能的提高。",
+        "findings": "论文报告较高的结构有效率，同时在全文讨论稀疏目标区域的偏差。解读：有效率描述生成表示是否可用，不能替代每个候选的力学验算；平均误差也会掩盖少量偏差较大的结构，应查看目标分区和误差尾部。",
+        "limitations": "解读：规则单元、预设节点及训练分布限定了问题边界。若应用于真实构件，还需检查连接细节、制造误差和失效模式；不能直接把理想几何上的性能匹配理解为疲劳寿命或失效概率已经得到保证。",
+        "connection": "建议在你的生成式设计平台中，将大模型用于整理需求，将结构生成器用于提出候选，将有限元和可靠性模块用于独立验收。每次生成保存目标、几何、模型版本与验证结果，便于复现成功和失败的设计。",
+        "next_steps": "建议先在固定材料用量和相同计算预算下比较传统优化与条件生成，再逐步加入制造偏差和载荷随机性。除最优解外，记录满足约束的候选比例、尾部误差和重复生成的稳定性，以判断工程收益。"
+      },
+      "analysis_status": "ready",
+      "analysis_basis": "full_text",
+      "analysis_kind": "editorial",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41524-026-02175-x"
+      ],
+      "analyzed_at": "2026-09-23T08:01:56.511456+00:00",
+      "recommended_direction": "generative_design"
+    },
+    {
+      "source": "Nature Portfolio",
+      "source_id": "10.1038/s41467-026-76632-y",
+      "title": "Machine learning-driven optimization of high-velocity impact resistance for three-dimensional biphasic composites",
+      "authors": [
+        "Bu, Lehu",
+        "Wang, Pengfei",
+        "Hao, Sida",
+        "Li, Shan",
+        "Wu, Yangfan",
+        "Wang, Deya",
+        "Liu, Mao",
+        "Luo, Tianzhi",
+        "Xu, Songlin"
+      ],
+      "venue": "Nature Communications",
+      "abstract": "Machine learning uses a three-dimensional convolutional surrogate for inverse design of mechanical composite structures, with experimental and finite-element validation of dynamic response.",
+      "published_at": "2026-08-15",
+      "doi": "10.1038/s41467-026-76632-y",
+      "landing_url": "https://www.nature.com/articles/s41467-026-76632-y",
+      "oa_url": "https://www.nature.com/articles/s41467-026-76632-y",
+      "citation_count": null,
+      "source_score": 0.8,
+      "topic_tags": [
+        "generative_design"
+      ],
+      "summary": "为缓解高速载荷下复合材料的应力集中，研究结合动态试验、有限元模拟与三维卷积网络，学习软硬两相空间构型与动态响应的关系，并据此逆向筛选微结构。在相同硬相比例下，优化设计的动态承载能力较随机设计提高约 22%–57%。对结构生成式设计，可借鉴其在统一材料用量下评价候选，再以高保真计算与试验验证性能的流程。",
+      "raw_metadata": {
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s41467-026-76632-y",
+        "doi": "10.1038/s41467-026-76632-y",
+        "title": "Machine learning-driven optimization of high-velocity impact resistance for three-dimensional biphasic composites",
+        "venue": "Nature Communications",
+        "authors": [
+          "Bu, Lehu",
+          "Wang, Pengfei",
+          "Hao, Sida",
+          "Li, Shan",
+          "Wu, Yangfan",
+          "Wang, Deya",
+          "Liu, Mao",
+          "Luo, Tianzhi",
+          "Xu, Songlin"
+        ],
+        "published_at": "2026-08-15",
+        "landing_url": "https://www.nature.com/articles/s41467-026-76632-y",
+        "oa_url": "https://www.nature.com/articles/s41467-026-76632-y",
+        "abstract": "Machine learning uses a three-dimensional convolutional surrogate for inverse design of mechanical composite structures, with experimental and finite-element validation of dynamic response.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        },
+        "publisher": "Springer Science and Business Media LLC",
+        "query_scope": "CNS 子刊专项",
+        "sources": [
+          "CNS 子刊专项",
+          "Crossref",
+          "Nature Portfolio"
+        ],
+        "research_directions": [
+          "结构生成式设计与可靠性优化"
+        ]
+      },
+      "id": "a1515ce3849b",
+      "source_ids": [
+        "CNS 子刊专项",
+        "Crossref",
+        "Nature Portfolio"
+      ],
+      "venue_group": "CNS 子刊",
+      "journal": "Nature Communications",
+      "topic_ids": [
+        "generative_design"
+      ],
+      "focus_tags": [],
+      "title_zh": "以三维卷积代理模型优化双相复合结构的动态抗冲击性能",
+      "recommendation": "优先关注结构表示、代理模型与高保真验证的衔接方式，可用于思考生成式设计如何从几何可行性进一步走向力学可行性。",
+      "deep_read": {
+        "problem": "软硬两相构型在动态载荷下会产生复杂的应力传播与局部集中，仅调整相比例不足以决定结构性能。论文研究如何利用空间构型信息，快速预测并改善复合材料的动态承载与应力分布。",
+        "method": "作者把三维构型体素化，以动态实验及有限元数据支撑三维卷积网络训练，再利用预测模型探索性能与构型之间的映射，实现逆向筛选。研究还讨论热输运表现，使结构连通性与多物理性能一并进入评价。",
+        "innovation": "解读：值得借鉴的是在同等相含量下比较空间组织，而非把材料用量增加造成的增益算作算法贡献。对于生成式结构设计，这意味着必须统一资源约束，再比较候选结构的性能、可制造性和高保真验证结果。",
+        "findings": "文中展示的应力均匀性指标由 21.54% 改善至 97.45%；相同硬相比例下，动态承载相对随机设计提高约 22% 至 57%。这些结果受构型、载荷和评价条件限定，不能直接外推为长期疲劳或整机可靠性增益。",
+        "limitations": "解读：应重点核查试样尺度、相材料模型、界面描述以及测试构型是否超出训练分布。代理在已知设计空间中的精度，并不能自动保证生成的新拓扑可信；动态承载能力也不等于循环载荷下的寿命。",
+        "connection": "建议：将生成模型用于提出结构候选，将三维代理用于初筛，再以有限元验证和不确定性估计决定是否接受。若目标是可靠性优化，应额外引入材料波动、制造缺陷及载荷不确定性，形成概率约束而非单一最优性能指标。",
+        "next_steps": "建议先复现固定相比例的比较基线，再检验随机结构、优化结构与生成结构在相同计算预算下的表现。随后使用独立高保真样本评估外推误差，并把疲劳指标作为新增目标，明确区分本文已验证结果与后续扩展。"
+      },
+      "analysis_status": "ready",
+      "analysis_basis": "full_text",
+      "analysis_kind": "editorial",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41467-026-76632-y"
+      ],
+      "analyzed_at": "2026-09-23T08:01:56.511456+00:00",
+      "recommended_direction": "generative_design"
+    },
+    {
+      "source": "Nature Portfolio",
+      "source_id": "10.1038/s44172-026-00738-w",
+      "title": "Generative AI empowered inverse design of 3D energetic material structures for customizable combustion",
+      "authors": [
+        "Li, Wentao",
+        "Zhang, Yiyi",
+        "Zheng, Hanyun",
+        "He, Yunqin",
+        "Liang, Guozhu"
+      ],
+      "venue": "Communications Engineering",
+      "abstract": "Generative inverse design of three-dimensional structures combines a learned geometry representation with diffusion proposals and optimization-based constraint refinement.",
+      "published_at": "2026-07-22",
+      "doi": "10.1038/s44172-026-00738-w",
+      "landing_url": "https://www.nature.com/articles/s44172-026-00738-w",
+      "oa_url": "https://www.nature.com/articles/s44172-026-00738-w",
+      "citation_count": null,
+      "source_score": 0.8,
+      "topic_tags": [
+        "generative_design"
+      ],
+      "summary": "围绕按目标性能反求三维构型的问题，论文在含能材料场景中，将几何表示模型、扩散生成与优化修正结合：先生成候选，再调整几何以匹配目标响应并满足约束。公开摘要报告了兼顾目标匹配与约束的可行性，未给出可直接复核的统一量化比较。对承载结构，可借鉴生成与约束修正的分工，迁移时需重新定义力学目标与验收标准。",
+      "raw_metadata": {
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s44172-026-00738-w",
+        "doi": "10.1038/s44172-026-00738-w",
+        "title": "Generative AI empowered inverse design of 3D energetic material structures for customizable combustion",
+        "venue": "Communications Engineering",
+        "authors": [
+          "Li, Wentao",
+          "Zhang, Yiyi",
+          "Zheng, Hanyun",
+          "He, Yunqin",
+          "Liang, Guozhu"
+        ],
+        "published_at": "2026-07-22",
+        "landing_url": "https://www.nature.com/articles/s44172-026-00738-w",
+        "oa_url": "https://www.nature.com/articles/s44172-026-00738-w",
+        "abstract": "Generative inverse design of three-dimensional structures combines a learned geometry representation with diffusion proposals and optimization-based constraint refinement.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        },
+        "sources": [
+          "Nature Portfolio"
+        ],
+        "research_directions": [
+          "结构生成式设计与可靠性优化"
+        ]
+      },
+      "id": "13e3f3235f1b",
+      "source_ids": [
+        "Nature Portfolio"
+      ],
+      "venue_group": "CNS 子刊",
+      "journal": "Communications Engineering",
+      "topic_ids": [
+        "generative_design"
+      ],
+      "focus_tags": [],
+      "title_zh": "生成式 AI 辅助含能材料三维结构逆向设计的方法启示",
+      "recommendation": "作为生成式结构设计的方法参考，重点关注条件生成、几何表示与约束修正之间的分工；迁移到承载结构后，需要重新定义力学目标并完成独立验证。",
+      "deep_read": {
+        "problem": "在逆向设计中，满足目标响应的几何往往不唯一，搜索效率、性能匹配与约束可行性也可能相互冲突。论文用三维结构设计讨论这一矛盾，目标是把数据驱动生成的效率与优化方法的约束处理结合。",
+        "method": "公开摘要介绍了几何表示模型和扩散生成模型的组合，并以优化驱动的后续修正改善目标匹配。这里可确认的是双模型与修正机制的整体框架，具体训练配置、约束实现及实验细节不能由摘要直接推断。",
+        "innovation": "解读：生成网络负责探索多解，优化环节负责修正候选，这种分工比要求单个模型同时保证多样性、精度与可行性更容易审查。对于工程设计，关键应是建立可重复的评价闭环，而不只展示外观新颖的生成样本。",
+        "findings": "摘要称组合方法改善了目标匹配并维持关键约束，但本次可读摘要未提供足以复核的统一定量对比。不能据此填写加速倍数、成功率或结构可靠性提升，仍需查阅全文的评价条件及独立验证结果。",
+        "limitations": "解读：本文应用的物理目标与承载结构不同，不能直接把该场景的性能结论迁移为强度或疲劳优势。特别需要检查生成分布外的几何、约束修正对多样性的影响，以及几何可行和物理可行之间的差距。",
+        "connection": "建议：在梁、支架或机械超材料的生成式设计中借鉴条件生成与验证分工，以质量、刚度和制造约束组织候选评价。若加入可靠性目标，还需要将载荷与材料不确定性显式纳入评价，而非把确定性最优视作可靠设计。",
+        "next_steps": "建议在已有非敏感结构算例上比较单独生成、单独优化和两者结合的效果，使用相同计算预算与独立有限元验证。重点记录可行率、多样性及约束违约情况，再评估是否值得发展成由智能体协调的设计工作流。"
+      },
+      "analysis_status": "ready",
+      "analysis_basis": "abstract",
+      "analysis_kind": "editorial",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s44172-026-00738-w"
+      ],
+      "analyzed_at": "2026-09-23T08:01:56.511456+00:00",
+      "recommended_direction": "generative_design"
+    },
+    {
+      "source": "arXiv",
+      "source_id": "https://arxiv.org/abs/2608.07978v1",
+      "title": "Verication-driven closed-loop multi-agent large language modelframework for code-compliant structural design",
+      "authors": [
+        "Jianbin Luo",
+        "Weibin Lin",
+        "Yiran Lin",
+        "Qing Wei",
+        "Wei Guo"
+      ],
+      "venue": "arXiv（预印本）",
+      "abstract": "A multi-agent large language model workflow uses independent finite-element checks and code-compliance feedback to repair structural designs under fixed topology.",
+      "published_at": "2026-08-08",
+      "doi": "10.48550/arxiv.2608.07978",
+      "landing_url": "https://arxiv.org/abs/2608.07978v1",
+      "oa_url": "https://arxiv.org/html/2608.07978v1",
+      "citation_count": null,
+      "source_score": 0.62,
+      "topic_tags": [
+        "generative_design"
+      ],
+      "summary": "针对大模型生成方案难以自行发现力学与规范错误的问题，这篇预印本引入外部有限元校核，将违规项和质量评价返回多智能体，推动设计修复与优化。作者在 5 类结构、44 个算例中报告规范符合率由 56.8% 提升至 98.6%。对结构自动设计，可借鉴“生成—独立验算—反馈修正”的闭环；该结果对应文中所测规范要求，不能等同于随机载荷下的结构可靠度。",
+      "raw_metadata": {
+        "source": "arXiv",
+        "source_id": "https://arxiv.org/abs/2608.07978v1",
+        "doi": "10.48550/arxiv.2608.07978",
+        "title": "Verication-driven closed-loop multi-agent large language modelframework for code-compliant structural design",
+        "venue": "arXiv（预印本）",
+        "authors": [
+          "Jianbin Luo",
+          "Weibin Lin",
+          "Yiran Lin",
+          "Qing Wei",
+          "Wei Guo"
+        ],
+        "published_at": "2026-08-08",
+        "landing_url": "https://arxiv.org/abs/2608.07978v1",
+        "oa_url": "https://arxiv.org/html/2608.07978v1",
+        "abstract": "A multi-agent large language model workflow uses independent finite-element checks and code-compliance feedback to repair structural designs under fixed topology.",
+        "source_score": 0.62,
+        "raw_metadata": {
+          "provider": "arXiv",
+          "version": "2608.07978v1",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        },
+        "sources": [
+          "arXiv"
+        ],
+        "research_directions": [
+          "结构生成式设计与可靠性优化"
+        ]
+      },
+      "id": "0b617d13cb6b",
+      "source_ids": [
+        "arXiv"
+      ],
+      "venue_group": "预印本",
+      "journal": "arXiv（预印本）",
+      "topic_ids": [
+        "generative_design"
+      ],
+      "focus_tags": [
+        "大模型",
+        "智能体"
+      ],
+      "title_zh": "用外部力学校核驱动多智能体结构设计的闭环修正",
+      "recommendation": "作为智能体结构设计的扩展阅读，重点分析外部验证如何约束模型修改；本文为 arXiv 预印本，尚不能视作已完成同行评审的工程结论。",
+      "deep_read": {
+        "problem": "一次生成的结构方案可能在几何、参数或验算方面存在错误。本文尝试用外部计算结果推动修正。解读：智能体的作用更适合定位为组织设计迭代，最终验收仍要依赖可复算的模型、明确的约束和工程判断。",
+        "method": "方法结合有限元检查与双阶段反馈，先修复违规，再优化综合质量，并提供规范条款追踪。解读：每轮修改应保留输入、计算结果和变更原因，才能区分真正纠正问题与仅仅改变评价口径的情况。",
+        "innovation": "解读：生成端与验收端的分离可降低自我确认风险。研究时应让验证工具独立于语言解释，并用同一批未见算例比较开环生成、自我修正和外部反馈，检查提升是否来自可复核的约束信号。",
+        "findings": "预印本报告五类结构、四十四个算例上的规范符合率由 56.8% 提高至 98.6%。解读：这不是随机荷载下的可靠度，也不意味着覆盖所有规范条款；需要结合任务划分、失败项及独立验证理解该指标。",
+        "limitations": "作者将适用范围限定在若干平面线弹性体系及固定拓扑的参数修正。解读：若缺陷来自拓扑或非线性失效机制，调整截面未必有效；综合评价分数本身也不应同时充当唯一的优化目标和最终证据。",
+        "connection": "建议在你的结构生成式设计中建立独立验收器，统一检查几何、边界条件、结构响应与约束，再将失败项返回智能体。若研究可靠性优化，应额外引入随机变量和失效概率计算，而不是用规范通过率替代。",
+        "next_steps": "建议先在熟悉的梁或框架算例上验证闭环是否保留载荷、单位及约束，再故意加入无法修复的拓扑缺陷。评价修复成功率之外，也记录错误接受、无效迭代和失败退出，确认系统知道何时停止并请求复核。"
+      },
+      "analysis_status": "ready",
+      "analysis_basis": "full_text",
+      "analysis_kind": "editorial",
+      "analysis_sources": [
+        "https://arxiv.org/html/2608.07978v1"
+      ],
+      "analyzed_at": "2026-09-23T08:01:56.511456+00:00",
+      "recommended_direction": "generative_design"
+    },
+    {
+      "source": "arXiv",
+      "source_id": "https://arxiv.org/abs/2605.23754v2",
+      "title": "LLM-driven design of physics-constrained constitutive models: two agents are better than one",
+      "authors": [
+        "Marius Tacke",
+        "Matthias Busch",
+        "Kian Abdolazizi",
+        "Jonas Eichinger",
+        "Kevin Linka",
+        "Roland Aydin",
+        "Christian Cyron"
+      ],
+      "venue": "arXiv（预印本）",
+      "abstract": "LLM-based Creator and Inspector agents generate constitutive models and audit physical constraints, with tests on rubber and soft materials. Version 2 was revised on 2026-09-01.",
+      "published_at": "2026-05-22",
+      "doi": "10.48550/arxiv.2605.23754",
+      "landing_url": "https://arxiv.org/abs/2605.23754v2",
+      "oa_url": "https://arxiv.org/html/2605.23754v2",
+      "citation_count": null,
+      "source_score": 0.62,
+      "topic_tags": [
+        "generative_design"
+      ],
+      "summary": "针对自动生成本构模型可能违反物理规律的问题，这篇预印本让 Creator 智能体提出模型、Inspector 智能体逐项审查 9 类物理约束，并以独立数值采样检查模型。两种大模型配置的检查通过率分别由 90% 升至 95%、47% 升至 60%。对疲劳与可靠性建模，可借鉴模型生成与物理审查的分工；迁移到循环塑性或损伤演化时，还需增加路径依赖与耗散约束。",
+      "raw_metadata": {
+        "source": "arXiv",
+        "source_id": "https://arxiv.org/abs/2605.23754v2",
+        "doi": "10.48550/arxiv.2605.23754",
+        "title": "LLM-driven design of physics-constrained constitutive models: two agents are better than one",
+        "venue": "arXiv（预印本）",
+        "authors": [
+          "Marius Tacke",
+          "Matthias Busch",
+          "Kian Abdolazizi",
+          "Jonas Eichinger",
+          "Kevin Linka",
+          "Roland Aydin",
+          "Christian Cyron"
+        ],
+        "published_at": "2026-05-22",
+        "landing_url": "https://arxiv.org/abs/2605.23754v2",
+        "oa_url": "https://arxiv.org/html/2605.23754v2",
+        "abstract": "LLM-based Creator and Inspector agents generate constitutive models and audit physical constraints, with tests on rubber and soft materials. Version 2 was revised on 2026-09-01.",
+        "source_score": 0.62,
+        "raw_metadata": {
+          "provider": "arXiv",
+          "version": "2605.23754v2",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        },
+        "sources": [
+          "arXiv"
+        ],
+        "research_directions": [
+          "结构生成式设计与可靠性优化"
+        ]
+      },
+      "id": "69eaf30dcdd5",
+      "source_ids": [
+        "arXiv"
+      ],
+      "venue_group": "预印本",
+      "journal": "arXiv（预印本）",
+      "topic_ids": [
+        "generative_design"
+      ],
+      "focus_tags": [
+        "大模型",
+        "智能体"
+      ],
+      "title_zh": "生成与审查双智能体协作构建满足物理约束的本构模型",
+      "recommendation": "适合作为疲劳与可靠性方向的本构建模方法参考。解读依据 2026 年 9 月修订的 v2；首次投稿为 5 月，保留原始日期并明确预印本身份。",
+      "deep_read": {
+        "problem": "有限试验数据通常不能覆盖材料全部受力状态，生成模型可能拟合良好却违反物理要求。本文将模型提出和审查分为两个角色。解读：这使本构自动化的评价从单一拟合误差转向数据一致性与物理可接受性。",
+        "method": "Creator 提出本构模型，Inspector 审查九类物理约束并反馈修改；论文另用采样的变形、旋转和扰动进行数值验证。解读：语言审查与独立数值测试应区分，前者提出理由，后者提供可复核证据。",
+        "innovation": "解读：双角色设计的价值在于形成不同的检查目标，而非简单重复提问。对于本构模型，应把能量表达、参数约束和适用加载范围写成明确检查项，同时防止两个角色共享相同的错误前提。",
+        "findings": "作者报告两个模型配置的数值检查通过比例分别由 90% 到 95%、47% 到 60%。解读：改进幅度依赖模型和任务，也仍存在未通过的输出；有限状态采样通过不能解释为对全部连续状态的数学证明。",
+        "limitations": "解读：文中示例主要涉及橡胶及软材料，不能直接外推到金属循环塑性或疲劳损伤。若缺少路径依赖、耗散和损伤演化的验证，就不能把静态响应拟合或物理检查结果当作寿命预测精度。",
+        "connection": "建议在你的疲劳分析中借鉴生成与检查的分工，把数据适配、物理约束和数值稳定性分别验收。语言模型可协助整理候选表达式及检查报告，参数辨识和独立加载验证仍交给可重复的计算流程。",
+        "next_steps": "建议先从已有、具有明确物理约束的材料模型出发，对比单角色与双角色生成，再用未参与生成的加载路径验证。后续若扩展至循环损伤，应增加耗散、累积损伤及跨工况检验，并报告失效案例。"
+      },
+      "analysis_status": "ready",
+      "analysis_basis": "full_text",
+      "analysis_kind": "editorial",
+      "analysis_sources": [
+        "https://arxiv.org/html/2605.23754v2"
+      ],
+      "analyzed_at": "2026-09-23T08:01:56.511456+00:00",
+      "recommended_direction": "generative_design"
+    }
+  ],
+  "papers": [
+    {
+      "source": "Nature Portfolio",
+      "source_id": "10.1038/s41378-026-01322-0",
+      "title": "Fine-tuned multimodal large language model for autonomous state cognition system of shape-recognition 6-bar tensegrity integrated with flexible sensors",
+      "authors": [
+        "Mao, Zebing",
+        "Wang, Jianhui",
+        "Zhang, Jianhua",
+        "Ohgi, Junji",
+        "Zheng, Yanqiu",
+        "Peng, Yanhong",
+        "Zhao, Luyang",
+        "Su, Qi",
+        "Huang, Weidi",
+        "Xu, Bing"
+      ],
+      "venue": "Microsystems & Nanoengineering",
+      "abstract": "Fine-tuned multimodal large language models combine flexible sensor observations and shape reconstruction for structural state monitoring and fault diagnosis in a six-bar tensegrity system.",
+      "published_at": "2026-06-10",
+      "doi": "10.1038/s41378-026-01322-0",
+      "landing_url": "https://www.nature.com/articles/s41378-026-01322-0",
+      "oa_url": "https://www.nature.com/articles/s41378-026-01322-0",
+      "citation_count": null,
+      "source_score": 0.8,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "针对结构监测中传感数据难以直接转化为诊断解释的问题，研究在六杆张拉整体中集成 24 个柔性传感器，结合状态估计、图像信息和经 LoRA 微调的大模型，完成故障识别与语言报告。论文报告，多模态分类准确率约 95%，高于传感或图像单模态。其对智能运维的启示，是把测量证据、诊断结论和解释报告连接起来，并分别评价识别准确性与解释可信度。",
+      "raw_metadata": {
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s41378-026-01322-0",
+        "doi": "10.1038/s41378-026-01322-0",
+        "title": "Fine-tuned multimodal large language model for autonomous state cognition system of shape-recognition 6-bar tensegrity integrated with flexible sensors",
+        "venue": "Microsystems & Nanoengineering",
+        "authors": [
+          "Mao, Zebing",
+          "Wang, Jianhui",
+          "Zhang, Jianhua",
+          "Ohgi, Junji",
+          "Zheng, Yanqiu",
+          "Peng, Yanhong",
+          "Zhao, Luyang",
+          "Su, Qi",
+          "Huang, Weidi",
+          "Xu, Bing"
+        ],
+        "published_at": "2026-06-10",
+        "landing_url": "https://www.nature.com/articles/s41378-026-01322-0",
+        "oa_url": "https://www.nature.com/articles/s41378-026-01322-0",
+        "abstract": "Fine-tuned multimodal large language models combine flexible sensor observations and shape reconstruction for structural state monitoring and fault diagnosis in a six-bar tensegrity system.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        },
+        "sources": [
+          "Nature Portfolio"
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "c6e1f2105665",
+      "source_ids": [
+        "Nature Portfolio"
+      ],
+      "venue_group": "CNS 子刊",
+      "journal": "Microsystems & Nanoengineering",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [
+        "大模型"
+      ],
+      "title_zh": "多模态大模型与柔性传感融合的张拉整体结构状态诊断",
+      "recommendation": "建议按“图6系统架构 → 图7模态对照 → 图8故障演示”的顺序阅读。重点区分多模态融合对故障识别的贡献，以及大模型对诊断解释的贡献，再判断哪些环节值得迁移到现有监测平台。",
+      "deep_read": {
+        "problem": "论文围绕六杆张拉整体的形变感知、故障识别与人机问答展开。精读时需要区分两个目标：系统能否根据观测识别异常，以及诊断报告能否说明判断依据；第二个目标决定语言交互能否真正帮助工程人员复核。",
+        "method": "技术链路：24 个柔性传感器采集电阻变化 → LSTM 支撑状态估计 → 融合传感与图像特征形成诊断描述 → 结合知识图谱，由 LoRA 微调的大模型生成解释。\n\n核查重点：顺着图6追踪每一层的输入与输出，明确故障类别来自哪个模块，以及语言报告是否保留了测量依据。",
+        "innovation": "本站解读：值得借鉴的是把“测到什么、识别出什么、为什么这样判断”连接起来，使状态估计结果成为可追问的诊断信息。评价这种集成的价值，应分别设置对照：单模态与多模态比较识别能力，固定模板与大模型报告比较解释质量，避免把融合算法的收益全部归功于大模型。",
+        "findings": "图7报告：多模态分类准确率约 95%，传感单模态为 88%–90%，图像单模态为 80%–85%。这组对照支持多模态融合的价值，但不能单独证明大模型解释可靠。\n\n图8中的 94% 是单个演示的输出置信度，不能替代整体准确率；未经概率校准，也不宜直接用于可靠性计算。",
+        "limitations": "工程迁移仍需检验跨试件、跨工况的泛化能力。若同一次试验的相邻时间窗同时进入训练和测试，结果可能高估泛化；复现时应核查样本划分、独立试验次数，以及微调数据与测试数据是否重叠。除总体准确率外，还应分别统计各故障类别的漏报，并在传感器漂移、图像缺失时检查判断是否失效。",
+        "connection": "延伸方向（本站分析）：智能运维可围绕“异常检测—证据检索—诊断解释—人工复核”构建工作流程。疲劳与可靠性研究还需接入载荷谱、裂纹或损伤状态及寿命模型，让计算工具给出失效概率或剩余寿命，大模型说明依据与适用条件；这些扩展不属于本文已验证成果。",
+        "next_steps": "建议先做一个针对解释层的对照实验：保持诊断模型与输入一致，比较“只给分类结果”“固定模板报告”“大模型报告”，由不知分组的工程人员处理同一批异常。\n\n重点记录诊断复核正确率、完成时间、证据引用错误及关键异常遗漏；再加入传感器断连、漂移与图像缺失，检验解释层是否带来稳定收益。"
+      },
+      "analysis_status": "ready",
+      "analysis_basis": "full_text",
+      "analysis_kind": "editorial",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41378-026-01322-0"
+      ],
+      "analyzed_at": "2026-09-23T08:01:56.511456+00:00",
+      "recommended_direction": "ai_maintenance"
+    },
+    {
+      "source": "Crossref",
+      "source_id": "10.1038/s44172-026-00752-y",
+      "title": "Mechanics-informed risk-aware learning for multiaxial structural reliability with Bayesian calibration",
+      "authors": [
+        "Gaofeng Zhang",
+        "Xuanrui Yu",
+        "Anxiang Song",
+        "Hanguang Liu",
+        "Xinhong Lin",
+        "Xuyijin Zhang",
+        "Qianling Wang",
+        "Wentao Wang",
+        "Pandeng Zhang"
+      ],
+      "venue": "Communications Engineering",
+      "abstract": "Abstract Reliable prediction of structural vulnerability under complex multiaxial loading remains challenging due to nonlinear load couplings, imbalanced failure-critical samples, and limited model interpretability. Here, we present a mechanics-informed, risk-aware learning framework integrating polynomial–harmonic feature augmentation, Weibull-based risk reweighting, and a unified Degradation Risk Score that combines stress margins and bolt pretension loss. Demonstrated on a bolted steering-knuckle assembly with finite-element-derived multiaxial load–response data, the framework improves multiple linear regression from R² = 0.37 to 0.96 with a 67% reduction in RMSE, while enhancing robustness and sensitivity in high-risk regimes across ensemble and neural network models. SHAP analysis confirms that physically meaningful multiaxial interaction features dominate predictions, revealing critical load paths associated with structural vulnerability. Finally, Bayesian logistic and Weibull calibration provide a route to link Degradation Risk Score to component-level failure probabilities, enabling probabilistic risk assessment and reliability-centred decision-making in practical engineering systems.",
+      "published_at": "2026-08-14",
+      "doi": "10.1038/s44172-026-00752-y",
+      "landing_url": "https://doi.org/10.1038/s44172-026-00752-y",
+      "oa_url": "https://www.nature.com/articles/s44172-026-00752-y",
+      "citation_count": 0,
+      "source_score": 0.8,
+      "topic_tags": [
+        "generative_design",
+        "fatigue_reliability"
+      ],
+      "summary": "针对多轴载荷耦合与危险样本稀缺导致的响应预测偏差，研究将力学特征增强、风险加权和贝叶斯标定结合，用于螺栓连接转向节的风险评估。在该装配体的仿真测试中，多元线性回归的 R² 由 0.37 提升至 0.96，RMSE 降低约 67%。其方法启示是分别处理响应预测、危险状态排序和失效概率标定，为可靠性优化构建更关注失效边界的代理模型。",
+      "raw_metadata": {
+        "provider": "Crossref",
+        "publisher": "Springer Science and Business Media LLC",
+        "query_scope": "CNS 子刊专项",
+        "sources": [
+          "CNS 子刊专项",
+          "Crossref",
+          "Nature Portfolio"
+        ],
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s44172-026-00752-y",
+        "doi": "10.1038/s44172-026-00752-y",
+        "title": "Mechanics-informed risk-aware learning for multiaxial structural reliability with Bayesian calibration",
+        "venue": "Communications Engineering",
+        "authors": [
+          "Zhang, Gaofeng",
+          "Yu, Xuanrui",
+          "Song, Anxiang",
+          "Liu, Hanguang",
+          "Lin, Xinhong",
+          "Zhang, Xuyijin",
+          "Wang, Qianling",
+          "Wang, Wentao",
+          "Zhang, Pandeng"
+        ],
+        "published_at": "2026-08-14",
+        "landing_url": "https://www.nature.com/articles/s44172-026-00752-y",
+        "oa_url": "https://www.nature.com/articles/s44172-026-00752-y",
+        "abstract": "Machine learning with mechanics-informed features and Bayesian calibration links multiaxial structural response prediction, structural reliability and predictive maintenance.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        },
+        "research_directions": [
+          "结构生成式设计与可靠性优化",
+          "结构疲劳与可靠性"
+        ]
+      },
+      "id": "1993f4bea7ee",
+      "source_ids": [
+        "CNS 子刊专项",
+        "Crossref",
+        "Nature Portfolio"
+      ],
+      "venue_group": "CNS 子刊",
+      "journal": "Communications Engineering",
+      "topic_ids": [
+        "generative_design",
+        "fatigue_reliability"
+      ],
+      "focus_tags": [],
+      "title_zh": "融合力学先验与风险感知学习的多轴结构可靠性评估",
+      "recommendation": "与结构可靠性优化和智能运维直接相关。优先阅读风险加权、退化指标定义及概率标定部分，评估其能否接入现有有限元代理模型。",
+      "deep_read": {
+        "problem": "多轴载荷耦合与连接退化使结构响应难以用简单输入描述，而失效附近的样本通常又较少。论文以螺栓连接的转向节装配体为例，研究如何兼顾响应预测、危险状态识别及可靠性决策。",
+        "method": "作者利用动力学和有限元生成载荷与响应数据，以多项式及谐波特征表达载荷耦合，用风险加权提高关键样本的训练贡献，再将应力裕度和预紧力损失组合成退化指标，最后提出贝叶斯概率标定层。",
+        "innovation": "解读：最有借鉴价值的是明确区分三个任务：预测结构响应、排序危险状态、估计失效概率。力学特征改善的是表示能力，风险权重改变的是优化目标，概率标定则解决决策量的解释，三者不能相互替代。",
+        "findings": "作者的仿真测试中，多元线性回归的 R² 从 0.37 提高到 0.96，RMSE 降低约 67%。这一结果针对该数据集的响应预测，不能解释为失效概率估计已经具有同样精度，也不代表所有模型都有相同增益。",
+        "limitations": "原文明示验证主要来自单一装配体的仿真数据。解读：应特别检查高风险区域的覆盖和划分方式，并用真实试验检验概率校准。退化评分本身不是失效概率，多载荷情形的可靠性合成也需要说明相关性假设。",
+        "connection": "建议：在你的结构可靠性优化中，将这类风险加权代理与极限状态函数结合，重点控制失效边界附近的误差；在智能运维中，可让智能体负责组织载荷、模型和检测证据，但保留独立的概率标定与复核环节。",
+        "next_steps": "建议先比较原始特征、力学增强、风险加权三组消融试验，分别评估总体误差、危险区漏判和概率校准。随后用跨工况留出集检验泛化，再讨论是否适合接入可靠性约束优化，而不是仅凭平均拟合优度选择模型。"
+      },
+      "analysis_status": "ready",
+      "analysis_basis": "full_text",
+      "analysis_kind": "editorial",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s44172-026-00752-y"
+      ],
+      "analyzed_at": "2026-09-23T08:01:56.511456+00:00",
+      "recommended_direction": "fatigue_reliability"
+    },
+    {
+      "source": "Nature Portfolio",
+      "source_id": "10.1038/s44387-026-00102-5",
+      "title": "AgenticSciML: collaborative multi-agent systems for emergent discovery in scientific machine learning",
+      "authors": [
+        "Jiang, Qile",
+        "Karniadakis, George"
+      ],
+      "venue": "npj Artificial Intelligence",
+      "abstract": "AgenticSciML uses LLM-based multi-agent collaboration, method retrieval and evolutionary evaluation to develop scientific machine learning models for physics-informed and operator learning problems.",
+      "published_at": "2026-04-30",
+      "doi": "10.1038/s44387-026-00102-5",
+      "landing_url": "https://www.nature.com/articles/s44387-026-00102-5",
+      "oa_url": "https://www.nature.com/articles/s44387-026-00102-5",
+      "citation_count": 1,
+      "source_score": 0.8,
+      "topic_tags": [
+        "generative_design"
+      ],
+      "summary": "AgenticSciML 面向物理约束学习与算子学习，将文献检索、方案提议、批评、代码实现和数值评价交给不同的大模型智能体，并用进化搜索改进网络结构、损失函数与训练策略。六项科学计算基准中，演化后的最优方案均优于初始单智能体方案。对结构分析，可借鉴其“提出模型—运行验证—依据误差修正”的流程，开展物理代理模型的自动开发。",
+      "raw_metadata": {
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s44387-026-00102-5",
+        "doi": "10.1038/s44387-026-00102-5",
+        "title": "AgenticSciML: collaborative multi-agent systems for emergent discovery in scientific machine learning",
+        "venue": "npj Artificial Intelligence",
+        "authors": [
+          "Jiang, Qile",
+          "Karniadakis, George"
+        ],
+        "published_at": "2026-04-30",
+        "landing_url": "https://www.nature.com/articles/s44387-026-00102-5",
+        "oa_url": "https://www.nature.com/articles/s44387-026-00102-5",
+        "abstract": "AgenticSciML uses LLM-based multi-agent collaboration, method retrieval and evolutionary evaluation to develop scientific machine learning models for physics-informed and operator learning problems.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        },
+        "publisher": "Springer Science and Business Media LLC",
+        "query_scope": "CNS 子刊专项",
+        "sources": [
+          "CNS 子刊专项",
+          "Crossref",
+          "Nature Portfolio"
+        ],
+        "research_directions": [
+          "结构生成式设计与可靠性优化"
+        ]
+      },
+      "id": "98f734cd6362",
+      "source_ids": [
+        "CNS 子刊专项",
+        "Crossref",
+        "Nature Portfolio"
+      ],
+      "venue_group": "CNS 子刊",
+      "journal": "npj Artificial Intelligence",
+      "topic_ids": [
+        "generative_design"
+      ],
+      "focus_tags": [
+        "大模型",
+        "智能体"
+      ],
+      "title_zh": "AgenticSciML：多智能体协作探索物理学习模型与求解策略",
+      "recommendation": "适合作为智能体驱动物理代理模型开发的方法参考；论文以科学计算基准为主，迁移到结构疲劳与可靠性需要重新建立工程验证。",
+      "deep_read": {
+        "problem": "科学计算模型的构建通常需要反复选择网络结构、物理约束和训练策略。本文尝试让智能体协同探索这些组合。解读：它关注的是建模方法的搜索，可为结构代理模型开发提供启发，但不等于直接完成工程设计。",
+        "method": "框架将方案提出、批评、代码实现、结果评价和知识检索分为不同角色，并通过演化过程改进候选。解读：若移植到现有求解流程，应让数值验证的输出成为共同依据，避免角色之间只在语言层面相互认可。",
+        "innovation": "解读：可复用的研究记忆应同时保存失败方案、消融结果和误差分析。单纯积累成功提示词容易形成选择偏差；把未奏效的策略及适用条件保留下来，才能使后续检索真正减少重复试错。",
+        "findings": "文中在六类科学计算任务上比较演化方案与初始单智能体方案，改进量以损失比值表示。解读：误差下降倍数不是计算加速倍数；评估时还应计入候选训练和搜索成本，避免把更多预算的收益全归因于协作。",
+        "limitations": "作者讨论了知识库覆盖、推理可靠性和演化计算开销。解读：工程场景还需保留独立测试条件，防止搜索过程不断适应同一验证集；如果求解器本身存在误差，智能体可能优化到错误的数值目标。",
+        "connection": "建议用于组织结构代理模型、物理约束学习和失效边界采样的比较实验。让智能体解释试验结果并提出下一轮候选，但以独立有限元计算、概率校准和危险区域误差作为验收依据，而不是让模型自评。",
+        "next_steps": "建议先做单智能体、双角色和完整协作流程的等预算比较，再逐步增加检索与记忆模块。记录重复运行方差、失败成本和边界工况表现，检验协作收益是否稳定，再考虑用于更昂贵的多物理场问题。"
+      },
+      "analysis_status": "ready",
+      "analysis_basis": "full_text",
+      "analysis_kind": "editorial",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s44387-026-00102-5"
+      ],
+      "analyzed_at": "2026-09-23T08:01:56.511456+00:00",
+      "recommended_direction": "generative_design"
+    },
+    {
+      "source": "Nature Portfolio",
+      "source_id": "10.1038/s44172-026-00756-8",
+      "title": "Machine learning–driven structural health monitoring of a high-rise building on thick sediments via seismic ambient noise",
+      "authors": [
+        "Qin, Linpeng",
+        "Guo, Zhen",
+        "Yuan, Tianran",
+        "Peng, Zhen",
+        "Huang, Yu",
+        "Wang, Yun"
+      ],
+      "venue": "Communications Engineering",
+      "abstract": "Interpretable machine learning predicts intermediate-floor dynamics for structural health monitoring using sparse ambient-vibration observations in a high-rise building.",
+      "published_at": "2026-08-14",
+      "doi": "10.1038/s44172-026-00756-8",
+      "landing_url": "https://www.nature.com/articles/s44172-026-00756-8",
+      "oa_url": "https://www.nature.com/articles/s44172-026-00756-8",
+      "citation_count": null,
+      "source_score": 0.8,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "针对高层建筑监测中测点数量与楼层定位能力难以兼顾的问题，研究利用上海一栋 21 层建筑的 22 天环境振动记录，以地下室和屋顶的共振及极化参数训练 XGBoost，预测中间楼层动力特征。公开摘要显示，模型归因变化与风相关波速变化出现于相同楼层。该路线为稀疏传感监测提供参考，识别结果反映动力变化，尚不能直接判定结构损伤。",
+      "raw_metadata": {
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s44172-026-00756-8",
+        "doi": "10.1038/s44172-026-00756-8",
+        "title": "Machine learning–driven structural health monitoring of a high-rise building on thick sediments via seismic ambient noise",
+        "venue": "Communications Engineering",
+        "authors": [
+          "Qin, Linpeng",
+          "Guo, Zhen",
+          "Yuan, Tianran",
+          "Peng, Zhen",
+          "Huang, Yu",
+          "Wang, Yun"
+        ],
+        "published_at": "2026-08-14",
+        "landing_url": "https://www.nature.com/articles/s44172-026-00756-8",
+        "oa_url": "https://www.nature.com/articles/s44172-026-00756-8",
+        "abstract": "Interpretable machine learning predicts intermediate-floor dynamics for structural health monitoring using sparse ambient-vibration observations in a high-rise building.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        },
+        "publisher": "Springer Science and Business Media LLC",
+        "query_scope": "CNS 子刊专项",
+        "sources": [
+          "CNS 子刊专项",
+          "Crossref",
+          "Nature Portfolio"
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "f530449d449a",
+      "source_ids": [
+        "CNS 子刊专项",
+        "Crossref",
+        "Nature Portfolio"
+      ],
+      "venue_group": "CNS 子刊",
+      "journal": "Communications Engineering",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [],
+      "title_zh": "用环境振动与可解释机器学习实现高层建筑分楼层健康监测",
+      "recommendation": "适合智能运维方向关注，尤其是稀疏传感、环境影响解耦和可解释诊断。以下解读依据公开摘要，定量泛化能力仍需查阅完整实验。",
+      "deep_read": {
+        "problem": "建筑整体共振频率可以反映总体刚度变化，却难以定位楼层；逐层干涉分析具有空间信息，但运行和对比成本更高。摘要提出的研究问题是如何用少量传感点保留对中间楼层动态变化的敏感性。",
+        "method": "摘要报告以一栋二十一层建筑的二十二天记录开展分析，利用层间干涉结果建立参考，再用地下室与屋顶的共振、振动方位及极化参数训练 XGBoost，预测中间楼层的动力学特征并分析特征归因。",
+        "innovation": "解读：方法意义在于把较复杂分析得到的空间信息转移到低成本预测模型，而不是把简单模型包装成大模型。它提示运维系统可以把高精度离线分析和轻量在线推断分开设计，并保留中间物理量供工程人员复核。",
+        "findings": "公开摘要指出，两组楼层附近出现约百分之二的风相关速度变化，模型归因也在相应楼层发生转变。这支持空间敏感性的讨论；摘要未给出跨建筑测试或完整误差分布，不能据此断言已实现普适损伤定位。",
+        "limitations": "解读：本次仅取得摘要，无法核实详细训练划分、温度控制及损伤真值。风、温度和土体条件均可能影响响应，应区分环境变化、刚度差异与真实损伤，并检查归因分析是否在独立时间段稳定。",
+        "connection": "建议：你的智能运维框架可以把预测残差、环境信息和物理诊断结果组织成证据链，再由语言模型形成可追溯的巡检解释。语言解释应绑定测点、时间及模型输出，避免把统计异常直接描述为已确认的结构损伤。",
+        "next_steps": "建议以已有监测数据建立跨时间留出试验，比较密集传感与稀疏传感方案，并单独检查极端天气条件下的误报。若要迁移到桥梁或风机，还应重新验证模态特征与测点配置，不能直接复用建筑场景的结论。"
+      },
+      "analysis_status": "ready",
+      "analysis_basis": "abstract",
+      "analysis_kind": "editorial",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s44172-026-00756-8"
+      ],
+      "analyzed_at": "2026-09-23T08:01:56.511456+00:00",
+      "recommended_direction": "ai_maintenance"
+    },
+    {
+      "source": "Nature Portfolio",
+      "source_id": "10.1038/s41524-026-02148-0",
+      "title": "Grain-level micromechanical modeling and assessment of fatigue-critical pores using graph neural networks",
+      "authors": [
+        "Loiodice, Luca",
+        "Stopka, Krzysztof S.",
+        "Sun, Yixuan",
+        "Lin, Guang",
+        "Sangid, Michael D."
+      ],
+      "venue": "npj Computational Materials",
+      "abstract": "Graph neural networks trained on crystal plasticity predict grain-level fatigue indicators and screen fatigue-critical pores in additively manufactured alloy microstructures.",
+      "published_at": "2026-05-25",
+      "doi": "10.1038/s41524-026-02148-0",
+      "landing_url": "https://www.nature.com/articles/s41524-026-02148-0",
+      "oa_url": "https://www.nature.com/articles/s41524-026-02148-0",
+      "citation_count": null,
+      "source_score": 0.8,
+      "topic_tags": [
+        "fatigue_reliability"
+      ],
+      "summary": "针对晶体塑性计算难以支撑大量缺陷筛查的问题，GFF-MAP 将增材制造 IN718 的晶粒与孔隙组织成图，以晶体塑性模拟训练图神经网络，预测局部应力和累积塑性应变能。通过判断疲劳热点是否落在孔隙邻近晶粒，模型可快速筛查疲劳关键孔隙。该方法适合用于缺陷风险初筛；局部极值预测仍是难点，需要优先校核可能被低估的危险孔隙。",
+      "raw_metadata": {
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s41524-026-02148-0",
+        "doi": "10.1038/s41524-026-02148-0",
+        "title": "Grain-level micromechanical modeling and assessment of fatigue-critical pores using graph neural networks",
+        "venue": "npj Computational Materials",
+        "authors": [
+          "Loiodice, Luca",
+          "Stopka, Krzysztof S.",
+          "Sun, Yixuan",
+          "Lin, Guang",
+          "Sangid, Michael D."
+        ],
+        "published_at": "2026-05-25",
+        "landing_url": "https://www.nature.com/articles/s41524-026-02148-0",
+        "oa_url": "https://www.nature.com/articles/s41524-026-02148-0",
+        "abstract": "Graph neural networks trained on crystal plasticity predict grain-level fatigue indicators and screen fatigue-critical pores in additively manufactured alloy microstructures.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        },
+        "sources": [
+          "Nature Portfolio"
+        ],
+        "research_directions": [
+          "结构疲劳与可靠性"
+        ]
+      },
+      "id": "8c775dd0753c",
+      "source_ids": [
+        "Nature Portfolio"
+      ],
+      "venue_group": "CNS 子刊",
+      "journal": "npj Computational Materials",
+      "topic_ids": [
+        "fatigue_reliability"
+      ],
+      "focus_tags": [],
+      "title_zh": "用晶粒图神经网络筛查增材制造合金中的疲劳关键孔隙",
+      "recommendation": "与结构疲劳和可靠性设计最直接相关。建议重点阅读孔隙关键性判据、极值预测误差和漏判分析，而不只看平均回归指标。",
+      "deep_read": {
+        "problem": "晶体塑性模型能描述微观组织与疲劳起裂之间的联系，但计算代价较高，难以支撑大量缺陷的逐一筛查。论文针对含孔隙的增材制造 IN718 微观结构，研究如何快速识别疲劳相关的局部危险区域。",
+        "method": "作者以晶粒及其相互关系构建图表示，使用晶体塑性结果训练图神经网络代理，预测应力和累积塑性应变能等晶粒尺度量，再判断热点是否位于孔隙邻近晶粒，以评估孔隙的关键性。",
+        "innovation": "解读：从平均材料性能走向局部极值，是疲劳应用中更关键也更困难的一步。预测局部场有助于解释缺陷为什么危险，但它要求模型表达孔隙几何、邻域组织与局部塑性的耦合，不能只依赖孔径等少数统计特征。",
+        "findings": "论文指出，极端值及塑性相关量的预测更困难；孔隙关键性筛查仍可由预测的局部塑性应变能支持。讨论中将部分危险孔隙的漏判与局部量低估联系起来，说明总体拟合效果不能替代面向安全的误差分析。",
+        "limitations": "解读：晶体塑性结果在这里承担训练参考，并非对所有真实材料行为的无误差描述。需要另行检查不同制造过程、载荷路径和组织条件下的适用性；能识别起裂热点，也不代表已经建立了经试验验证的完整寿命模型。",
+        "connection": "建议：在疲劳可靠性设计中，将图代理用于缺陷初筛，并针对模型不确定性较高或预测接近危险边界的样本调用高保真计算。语言模型可以整理微观结构与判据说明，但不应替代局部力学场计算或直接给出寿命承诺。",
+        "next_steps": "建议把漏判率、危险区域召回率和保守性作为独立指标，比较回归后判别与直接分类两种路线。之后考虑风险加权或主动学习优先补充危险孔隙样本，再用独立疲劳试验校核关键性判据和概率校准效果。"
+      },
+      "analysis_status": "ready",
+      "analysis_basis": "full_text",
+      "analysis_kind": "editorial",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41524-026-02148-0"
+      ],
+      "analyzed_at": "2026-09-23T08:01:56.511456+00:00",
+      "recommended_direction": "fatigue_reliability"
+    },
+    {
+      "source": "Nature Portfolio",
+      "source_id": "10.1038/s41524-026-02175-x",
+      "title": "TrussGPT: large language model-driven inverse design framework for truss metamaterials",
+      "authors": [
+        "Lin, Jiaoxuan",
+        "Zhang, Bowen",
+        "Ma, Teng",
+        "Dong, Hengji",
+        "Huang, Anfeng",
+        "Zhao, Tianhao",
+        "Yang, Hongwei",
+        "Zhang, Weizhe",
+        "Wang, Changguo",
+        "He, Hui",
+        "Liu, Yuanpeng"
+      ],
+      "venue": "npj Computational Materials",
+      "abstract": "TrussGPT combines large language model interaction, graph tokenization and conditional structural generation for inverse design of truss metamaterials.",
+      "published_at": "2026-06-04",
+      "doi": "10.1038/s41524-026-02175-x",
+      "landing_url": "https://www.nature.com/articles/s41524-026-02175-x",
+      "oa_url": "https://www.nature.com/articles/s41524-026-02175-x",
+      "citation_count": null,
+      "source_score": 0.8,
+      "topic_tags": [
+        "generative_design"
+      ],
+      "summary": "为降低桁架超材料逆向设计的计算与交互门槛，TrussGPT 将自然语言需求连接到可计算的结构表示：先以双向编码器转换桁架与序列，再由条件 Transformer 按目标性能生成候选。论文在所测任务中报告超过 99% 的结构有效率，并支持多性能及应力—应变曲线条件设计。对结构生成式设计，可借鉴其语义理解、结构生成与性能验证的模块分工。",
+      "raw_metadata": {
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s41524-026-02175-x",
+        "doi": "10.1038/s41524-026-02175-x",
+        "title": "TrussGPT: large language model-driven inverse design framework for truss metamaterials",
+        "venue": "npj Computational Materials",
+        "authors": [
+          "Lin, Jiaoxuan",
+          "Zhang, Bowen",
+          "Ma, Teng",
+          "Dong, Hengji",
+          "Huang, Anfeng",
+          "Zhao, Tianhao",
+          "Yang, Hongwei",
+          "Zhang, Weizhe",
+          "Wang, Changguo",
+          "He, Hui",
+          "Liu, Yuanpeng"
+        ],
+        "published_at": "2026-06-04",
+        "landing_url": "https://www.nature.com/articles/s41524-026-02175-x",
+        "oa_url": "https://www.nature.com/articles/s41524-026-02175-x",
+        "abstract": "TrussGPT combines large language model interaction, graph tokenization and conditional structural generation for inverse design of truss metamaterials.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        },
+        "sources": [
+          "Nature Portfolio"
+        ],
+        "research_directions": [
+          "结构生成式设计与可靠性优化"
+        ]
+      },
+      "id": "11c3f08ec0e3",
+      "source_ids": [
+        "Nature Portfolio"
+      ],
+      "venue_group": "CNS 子刊",
+      "journal": "npj Computational Materials",
+      "topic_ids": [
+        "generative_design"
+      ],
+      "focus_tags": [
+        "大模型"
+      ],
+      "title_zh": "TrussGPT：从自然语言需求到桁架超材料逆向设计",
+      "recommendation": "与大模型驱动结构生成式设计直接相关。建议沿着“需求—结构表示—性能验证”三条线阅读，并单独检查分布外目标及多性能约束。",
+      "deep_read": {
+        "problem": "研究问题是如何让工程需求进入可计算的结构空间。论文以桁架超材料为对象，将语言交互与逆向生成结合。解读：真正需要验证的是需求能否被准确映射为目标、约束和结构参数，而不只是交互界面是否流畅。",
+        "method": "作者采用桁架与序列双向转换、条件 Transformer 生成以及语言交互模块。解读：可将其理解为语义层和结构生成层的分工；迁移到具体工程时，应先明确两层交换的数据契约，确保单位、载荷与边界条件完整。",
+        "innovation": "解读：把可解析的结构表示放在语言模型与几何之间，有助于让输出可检查、可重建。比较这类方法时，建议拆开考察语言理解、候选多样性与目标命中率，避免将聊天能力的改善混同为力学性能的提高。",
+        "findings": "论文报告较高的结构有效率，同时在全文讨论稀疏目标区域的偏差。解读：有效率描述生成表示是否可用，不能替代每个候选的力学验算；平均误差也会掩盖少量偏差较大的结构，应查看目标分区和误差尾部。",
+        "limitations": "解读：规则单元、预设节点及训练分布限定了问题边界。若应用于真实构件，还需检查连接细节、制造误差和失效模式；不能直接把理想几何上的性能匹配理解为疲劳寿命或失效概率已经得到保证。",
+        "connection": "建议在你的生成式设计平台中，将大模型用于整理需求，将结构生成器用于提出候选，将有限元和可靠性模块用于独立验收。每次生成保存目标、几何、模型版本与验证结果，便于复现成功和失败的设计。",
+        "next_steps": "建议先在固定材料用量和相同计算预算下比较传统优化与条件生成，再逐步加入制造偏差和载荷随机性。除最优解外，记录满足约束的候选比例、尾部误差和重复生成的稳定性，以判断工程收益。"
+      },
+      "analysis_status": "ready",
+      "analysis_basis": "full_text",
+      "analysis_kind": "editorial",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41524-026-02175-x"
+      ],
+      "analyzed_at": "2026-09-23T08:01:56.511456+00:00",
+      "recommended_direction": "generative_design"
+    },
+    {
+      "source": "Nature Portfolio",
+      "source_id": "10.1038/s41467-026-76632-y",
+      "title": "Machine learning-driven optimization of high-velocity impact resistance for three-dimensional biphasic composites",
+      "authors": [
+        "Bu, Lehu",
+        "Wang, Pengfei",
+        "Hao, Sida",
+        "Li, Shan",
+        "Wu, Yangfan",
+        "Wang, Deya",
+        "Liu, Mao",
+        "Luo, Tianzhi",
+        "Xu, Songlin"
+      ],
+      "venue": "Nature Communications",
+      "abstract": "Machine learning uses a three-dimensional convolutional surrogate for inverse design of mechanical composite structures, with experimental and finite-element validation of dynamic response.",
+      "published_at": "2026-08-15",
+      "doi": "10.1038/s41467-026-76632-y",
+      "landing_url": "https://www.nature.com/articles/s41467-026-76632-y",
+      "oa_url": "https://www.nature.com/articles/s41467-026-76632-y",
+      "citation_count": null,
+      "source_score": 0.8,
+      "topic_tags": [
+        "generative_design"
+      ],
+      "summary": "为缓解高速载荷下复合材料的应力集中，研究结合动态试验、有限元模拟与三维卷积网络，学习软硬两相空间构型与动态响应的关系，并据此逆向筛选微结构。在相同硬相比例下，优化设计的动态承载能力较随机设计提高约 22%–57%。对结构生成式设计，可借鉴其在统一材料用量下评价候选，再以高保真计算与试验验证性能的流程。",
+      "raw_metadata": {
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s41467-026-76632-y",
+        "doi": "10.1038/s41467-026-76632-y",
+        "title": "Machine learning-driven optimization of high-velocity impact resistance for three-dimensional biphasic composites",
+        "venue": "Nature Communications",
+        "authors": [
+          "Bu, Lehu",
+          "Wang, Pengfei",
+          "Hao, Sida",
+          "Li, Shan",
+          "Wu, Yangfan",
+          "Wang, Deya",
+          "Liu, Mao",
+          "Luo, Tianzhi",
+          "Xu, Songlin"
+        ],
+        "published_at": "2026-08-15",
+        "landing_url": "https://www.nature.com/articles/s41467-026-76632-y",
+        "oa_url": "https://www.nature.com/articles/s41467-026-76632-y",
+        "abstract": "Machine learning uses a three-dimensional convolutional surrogate for inverse design of mechanical composite structures, with experimental and finite-element validation of dynamic response.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        },
+        "publisher": "Springer Science and Business Media LLC",
+        "query_scope": "CNS 子刊专项",
+        "sources": [
+          "CNS 子刊专项",
+          "Crossref",
+          "Nature Portfolio"
+        ],
+        "research_directions": [
+          "结构生成式设计与可靠性优化"
+        ]
+      },
+      "id": "a1515ce3849b",
+      "source_ids": [
+        "CNS 子刊专项",
+        "Crossref",
+        "Nature Portfolio"
+      ],
+      "venue_group": "CNS 子刊",
+      "journal": "Nature Communications",
+      "topic_ids": [
+        "generative_design"
+      ],
+      "focus_tags": [],
+      "title_zh": "以三维卷积代理模型优化双相复合结构的动态抗冲击性能",
+      "recommendation": "优先关注结构表示、代理模型与高保真验证的衔接方式，可用于思考生成式设计如何从几何可行性进一步走向力学可行性。",
+      "deep_read": {
+        "problem": "软硬两相构型在动态载荷下会产生复杂的应力传播与局部集中，仅调整相比例不足以决定结构性能。论文研究如何利用空间构型信息，快速预测并改善复合材料的动态承载与应力分布。",
+        "method": "作者把三维构型体素化，以动态实验及有限元数据支撑三维卷积网络训练，再利用预测模型探索性能与构型之间的映射，实现逆向筛选。研究还讨论热输运表现，使结构连通性与多物理性能一并进入评价。",
+        "innovation": "解读：值得借鉴的是在同等相含量下比较空间组织，而非把材料用量增加造成的增益算作算法贡献。对于生成式结构设计，这意味着必须统一资源约束，再比较候选结构的性能、可制造性和高保真验证结果。",
+        "findings": "文中展示的应力均匀性指标由 21.54% 改善至 97.45%；相同硬相比例下，动态承载相对随机设计提高约 22% 至 57%。这些结果受构型、载荷和评价条件限定，不能直接外推为长期疲劳或整机可靠性增益。",
+        "limitations": "解读：应重点核查试样尺度、相材料模型、界面描述以及测试构型是否超出训练分布。代理在已知设计空间中的精度，并不能自动保证生成的新拓扑可信；动态承载能力也不等于循环载荷下的寿命。",
+        "connection": "建议：将生成模型用于提出结构候选，将三维代理用于初筛，再以有限元验证和不确定性估计决定是否接受。若目标是可靠性优化，应额外引入材料波动、制造缺陷及载荷不确定性，形成概率约束而非单一最优性能指标。",
+        "next_steps": "建议先复现固定相比例的比较基线，再检验随机结构、优化结构与生成结构在相同计算预算下的表现。随后使用独立高保真样本评估外推误差，并把疲劳指标作为新增目标，明确区分本文已验证结果与后续扩展。"
+      },
+      "analysis_status": "ready",
+      "analysis_basis": "full_text",
+      "analysis_kind": "editorial",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41467-026-76632-y"
+      ],
+      "analyzed_at": "2026-09-23T08:01:56.511456+00:00",
+      "recommended_direction": "generative_design"
+    },
+    {
+      "source": "Nature Portfolio",
+      "source_id": "10.1038/s44172-026-00738-w",
+      "title": "Generative AI empowered inverse design of 3D energetic material structures for customizable combustion",
+      "authors": [
+        "Li, Wentao",
+        "Zhang, Yiyi",
+        "Zheng, Hanyun",
+        "He, Yunqin",
+        "Liang, Guozhu"
+      ],
+      "venue": "Communications Engineering",
+      "abstract": "Generative inverse design of three-dimensional structures combines a learned geometry representation with diffusion proposals and optimization-based constraint refinement.",
+      "published_at": "2026-07-22",
+      "doi": "10.1038/s44172-026-00738-w",
+      "landing_url": "https://www.nature.com/articles/s44172-026-00738-w",
+      "oa_url": "https://www.nature.com/articles/s44172-026-00738-w",
+      "citation_count": null,
+      "source_score": 0.8,
+      "topic_tags": [
+        "generative_design"
+      ],
+      "summary": "围绕按目标性能反求三维构型的问题，论文在含能材料场景中，将几何表示模型、扩散生成与优化修正结合：先生成候选，再调整几何以匹配目标响应并满足约束。公开摘要报告了兼顾目标匹配与约束的可行性，未给出可直接复核的统一量化比较。对承载结构，可借鉴生成与约束修正的分工，迁移时需重新定义力学目标与验收标准。",
+      "raw_metadata": {
+        "source": "Nature Portfolio",
+        "source_id": "10.1038/s44172-026-00738-w",
+        "doi": "10.1038/s44172-026-00738-w",
+        "title": "Generative AI empowered inverse design of 3D energetic material structures for customizable combustion",
+        "venue": "Communications Engineering",
+        "authors": [
+          "Li, Wentao",
+          "Zhang, Yiyi",
+          "Zheng, Hanyun",
+          "He, Yunqin",
+          "Liang, Guozhu"
+        ],
+        "published_at": "2026-07-22",
+        "landing_url": "https://www.nature.com/articles/s44172-026-00738-w",
+        "oa_url": "https://www.nature.com/articles/s44172-026-00738-w",
+        "abstract": "Generative inverse design of three-dimensional structures combines a learned geometry representation with diffusion proposals and optimization-based constraint refinement.",
+        "source_score": 0.8,
+        "raw_metadata": {
+          "provider": "Publisher metadata",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        },
+        "sources": [
+          "Nature Portfolio"
+        ],
+        "research_directions": [
+          "结构生成式设计与可靠性优化"
+        ]
+      },
+      "id": "13e3f3235f1b",
+      "source_ids": [
+        "Nature Portfolio"
+      ],
+      "venue_group": "CNS 子刊",
+      "journal": "Communications Engineering",
+      "topic_ids": [
+        "generative_design"
+      ],
+      "focus_tags": [],
+      "title_zh": "生成式 AI 辅助含能材料三维结构逆向设计的方法启示",
+      "recommendation": "作为生成式结构设计的方法参考，重点关注条件生成、几何表示与约束修正之间的分工；迁移到承载结构后，需要重新定义力学目标并完成独立验证。",
+      "deep_read": {
+        "problem": "在逆向设计中，满足目标响应的几何往往不唯一，搜索效率、性能匹配与约束可行性也可能相互冲突。论文用三维结构设计讨论这一矛盾，目标是把数据驱动生成的效率与优化方法的约束处理结合。",
+        "method": "公开摘要介绍了几何表示模型和扩散生成模型的组合，并以优化驱动的后续修正改善目标匹配。这里可确认的是双模型与修正机制的整体框架，具体训练配置、约束实现及实验细节不能由摘要直接推断。",
+        "innovation": "解读：生成网络负责探索多解，优化环节负责修正候选，这种分工比要求单个模型同时保证多样性、精度与可行性更容易审查。对于工程设计，关键应是建立可重复的评价闭环，而不只展示外观新颖的生成样本。",
+        "findings": "摘要称组合方法改善了目标匹配并维持关键约束，但本次可读摘要未提供足以复核的统一定量对比。不能据此填写加速倍数、成功率或结构可靠性提升，仍需查阅全文的评价条件及独立验证结果。",
+        "limitations": "解读：本文应用的物理目标与承载结构不同，不能直接把该场景的性能结论迁移为强度或疲劳优势。特别需要检查生成分布外的几何、约束修正对多样性的影响，以及几何可行和物理可行之间的差距。",
+        "connection": "建议：在梁、支架或机械超材料的生成式设计中借鉴条件生成与验证分工，以质量、刚度和制造约束组织候选评价。若加入可靠性目标，还需要将载荷与材料不确定性显式纳入评价，而非把确定性最优视作可靠设计。",
+        "next_steps": "建议在已有非敏感结构算例上比较单独生成、单独优化和两者结合的效果，使用相同计算预算与独立有限元验证。重点记录可行率、多样性及约束违约情况，再评估是否值得发展成由智能体协调的设计工作流。"
+      },
+      "analysis_status": "ready",
+      "analysis_basis": "abstract",
+      "analysis_kind": "editorial",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s44172-026-00738-w"
+      ],
+      "analyzed_at": "2026-09-23T08:01:56.511456+00:00",
+      "recommended_direction": "generative_design"
+    },
+    {
+      "source": "arXiv",
+      "source_id": "https://arxiv.org/abs/2608.07978v1",
+      "title": "Verication-driven closed-loop multi-agent large language modelframework for code-compliant structural design",
+      "authors": [
+        "Jianbin Luo",
+        "Weibin Lin",
+        "Yiran Lin",
+        "Qing Wei",
+        "Wei Guo"
+      ],
+      "venue": "arXiv（预印本）",
+      "abstract": "A multi-agent large language model workflow uses independent finite-element checks and code-compliance feedback to repair structural designs under fixed topology.",
+      "published_at": "2026-08-08",
+      "doi": "10.48550/arxiv.2608.07978",
+      "landing_url": "https://arxiv.org/abs/2608.07978v1",
+      "oa_url": "https://arxiv.org/html/2608.07978v1",
+      "citation_count": null,
+      "source_score": 0.62,
+      "topic_tags": [
+        "generative_design"
+      ],
+      "summary": "针对大模型生成方案难以自行发现力学与规范错误的问题，这篇预印本引入外部有限元校核，将违规项和质量评价返回多智能体，推动设计修复与优化。作者在 5 类结构、44 个算例中报告规范符合率由 56.8% 提升至 98.6%。对结构自动设计，可借鉴“生成—独立验算—反馈修正”的闭环；该结果对应文中所测规范要求，不能等同于随机载荷下的结构可靠度。",
+      "raw_metadata": {
+        "source": "arXiv",
+        "source_id": "https://arxiv.org/abs/2608.07978v1",
+        "doi": "10.48550/arxiv.2608.07978",
+        "title": "Verication-driven closed-loop multi-agent large language modelframework for code-compliant structural design",
+        "venue": "arXiv（预印本）",
+        "authors": [
+          "Jianbin Luo",
+          "Weibin Lin",
+          "Yiran Lin",
+          "Qing Wei",
+          "Wei Guo"
+        ],
+        "published_at": "2026-08-08",
+        "landing_url": "https://arxiv.org/abs/2608.07978v1",
+        "oa_url": "https://arxiv.org/html/2608.07978v1",
+        "abstract": "A multi-agent large language model workflow uses independent finite-element checks and code-compliance feedback to repair structural designs under fixed topology.",
+        "source_score": 0.62,
+        "raw_metadata": {
+          "provider": "arXiv",
+          "version": "2608.07978v1",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        },
+        "sources": [
+          "arXiv"
+        ],
+        "research_directions": [
+          "结构生成式设计与可靠性优化"
+        ]
+      },
+      "id": "0b617d13cb6b",
+      "source_ids": [
+        "arXiv"
+      ],
+      "venue_group": "预印本",
+      "journal": "arXiv（预印本）",
+      "topic_ids": [
+        "generative_design"
+      ],
+      "focus_tags": [
+        "大模型",
+        "智能体"
+      ],
+      "title_zh": "用外部力学校核驱动多智能体结构设计的闭环修正",
+      "recommendation": "作为智能体结构设计的扩展阅读，重点分析外部验证如何约束模型修改；本文为 arXiv 预印本，尚不能视作已完成同行评审的工程结论。",
+      "deep_read": {
+        "problem": "一次生成的结构方案可能在几何、参数或验算方面存在错误。本文尝试用外部计算结果推动修正。解读：智能体的作用更适合定位为组织设计迭代，最终验收仍要依赖可复算的模型、明确的约束和工程判断。",
+        "method": "方法结合有限元检查与双阶段反馈，先修复违规，再优化综合质量，并提供规范条款追踪。解读：每轮修改应保留输入、计算结果和变更原因，才能区分真正纠正问题与仅仅改变评价口径的情况。",
+        "innovation": "解读：生成端与验收端的分离可降低自我确认风险。研究时应让验证工具独立于语言解释，并用同一批未见算例比较开环生成、自我修正和外部反馈，检查提升是否来自可复核的约束信号。",
+        "findings": "预印本报告五类结构、四十四个算例上的规范符合率由 56.8% 提高至 98.6%。解读：这不是随机荷载下的可靠度，也不意味着覆盖所有规范条款；需要结合任务划分、失败项及独立验证理解该指标。",
+        "limitations": "作者将适用范围限定在若干平面线弹性体系及固定拓扑的参数修正。解读：若缺陷来自拓扑或非线性失效机制，调整截面未必有效；综合评价分数本身也不应同时充当唯一的优化目标和最终证据。",
+        "connection": "建议在你的结构生成式设计中建立独立验收器，统一检查几何、边界条件、结构响应与约束，再将失败项返回智能体。若研究可靠性优化，应额外引入随机变量和失效概率计算，而不是用规范通过率替代。",
+        "next_steps": "建议先在熟悉的梁或框架算例上验证闭环是否保留载荷、单位及约束，再故意加入无法修复的拓扑缺陷。评价修复成功率之外，也记录错误接受、无效迭代和失败退出，确认系统知道何时停止并请求复核。"
+      },
+      "analysis_status": "ready",
+      "analysis_basis": "full_text",
+      "analysis_kind": "editorial",
+      "analysis_sources": [
+        "https://arxiv.org/html/2608.07978v1"
+      ],
+      "analyzed_at": "2026-09-23T08:01:56.511456+00:00",
+      "recommended_direction": "generative_design"
+    },
+    {
+      "source": "arXiv",
+      "source_id": "https://arxiv.org/abs/2605.23754v2",
+      "title": "LLM-driven design of physics-constrained constitutive models: two agents are better than one",
+      "authors": [
+        "Marius Tacke",
+        "Matthias Busch",
+        "Kian Abdolazizi",
+        "Jonas Eichinger",
+        "Kevin Linka",
+        "Roland Aydin",
+        "Christian Cyron"
+      ],
+      "venue": "arXiv（预印本）",
+      "abstract": "LLM-based Creator and Inspector agents generate constitutive models and audit physical constraints, with tests on rubber and soft materials. Version 2 was revised on 2026-09-01.",
+      "published_at": "2026-05-22",
+      "doi": "10.48550/arxiv.2605.23754",
+      "landing_url": "https://arxiv.org/abs/2605.23754v2",
+      "oa_url": "https://arxiv.org/html/2605.23754v2",
+      "citation_count": null,
+      "source_score": 0.62,
+      "topic_tags": [
+        "generative_design"
+      ],
+      "summary": "针对自动生成本构模型可能违反物理规律的问题，这篇预印本让 Creator 智能体提出模型、Inspector 智能体逐项审查 9 类物理约束，并以独立数值采样检查模型。两种大模型配置的检查通过率分别由 90% 升至 95%、47% 升至 60%。对疲劳与可靠性建模，可借鉴模型生成与物理审查的分工；迁移到循环塑性或损伤演化时，还需增加路径依赖与耗散约束。",
+      "raw_metadata": {
+        "source": "arXiv",
+        "source_id": "https://arxiv.org/abs/2605.23754v2",
+        "doi": "10.48550/arxiv.2605.23754",
+        "title": "LLM-driven design of physics-constrained constitutive models: two agents are better than one",
+        "venue": "arXiv（预印本）",
+        "authors": [
+          "Marius Tacke",
+          "Matthias Busch",
+          "Kian Abdolazizi",
+          "Jonas Eichinger",
+          "Kevin Linka",
+          "Roland Aydin",
+          "Christian Cyron"
+        ],
+        "published_at": "2026-05-22",
+        "landing_url": "https://arxiv.org/abs/2605.23754v2",
+        "oa_url": "https://arxiv.org/html/2605.23754v2",
+        "abstract": "LLM-based Creator and Inspector agents generate constitutive models and audit physical constraints, with tests on rubber and soft materials. Version 2 was revised on 2026-09-01.",
+        "source_score": 0.62,
+        "raw_metadata": {
+          "provider": "arXiv",
+          "version": "2605.23754v2",
+          "curated": true,
+          "abstract_kind": "editorial discovery description"
+        },
+        "sources": [
+          "arXiv"
+        ],
+        "research_directions": [
+          "结构生成式设计与可靠性优化"
+        ]
+      },
+      "id": "69eaf30dcdd5",
+      "source_ids": [
+        "arXiv"
+      ],
+      "venue_group": "预印本",
+      "journal": "arXiv（预印本）",
+      "topic_ids": [
+        "generative_design"
+      ],
+      "focus_tags": [
+        "大模型",
+        "智能体"
+      ],
+      "title_zh": "生成与审查双智能体协作构建满足物理约束的本构模型",
+      "recommendation": "适合作为疲劳与可靠性方向的本构建模方法参考。解读依据 2026 年 9 月修订的 v2；首次投稿为 5 月，保留原始日期并明确预印本身份。",
+      "deep_read": {
+        "problem": "有限试验数据通常不能覆盖材料全部受力状态，生成模型可能拟合良好却违反物理要求。本文将模型提出和审查分为两个角色。解读：这使本构自动化的评价从单一拟合误差转向数据一致性与物理可接受性。",
+        "method": "Creator 提出本构模型，Inspector 审查九类物理约束并反馈修改；论文另用采样的变形、旋转和扰动进行数值验证。解读：语言审查与独立数值测试应区分，前者提出理由，后者提供可复核证据。",
+        "innovation": "解读：双角色设计的价值在于形成不同的检查目标，而非简单重复提问。对于本构模型，应把能量表达、参数约束和适用加载范围写成明确检查项，同时防止两个角色共享相同的错误前提。",
+        "findings": "作者报告两个模型配置的数值检查通过比例分别由 90% 到 95%、47% 到 60%。解读：改进幅度依赖模型和任务，也仍存在未通过的输出；有限状态采样通过不能解释为对全部连续状态的数学证明。",
+        "limitations": "解读：文中示例主要涉及橡胶及软材料，不能直接外推到金属循环塑性或疲劳损伤。若缺少路径依赖、耗散和损伤演化的验证，就不能把静态响应拟合或物理检查结果当作寿命预测精度。",
+        "connection": "建议在你的疲劳分析中借鉴生成与检查的分工，把数据适配、物理约束和数值稳定性分别验收。语言模型可协助整理候选表达式及检查报告，参数辨识和独立加载验证仍交给可重复的计算流程。",
+        "next_steps": "建议先从已有、具有明确物理约束的材料模型出发，对比单角色与双角色生成，再用未参与生成的加载路径验证。后续若扩展至循环损伤，应增加耗散、累积损伤及跨工况检验，并报告失效案例。"
+      },
+      "analysis_status": "ready",
+      "analysis_basis": "full_text",
+      "analysis_kind": "editorial",
+      "analysis_sources": [
+        "https://arxiv.org/html/2605.23754v2"
+      ],
+      "analyzed_at": "2026-09-23T08:01:56.511456+00:00",
+      "recommended_direction": "generative_design"
+    }
+  ],
+  "source_status": {
+    "CNS 子刊专项": {
+      "source": "CNS 子刊专项",
+      "status": "ok",
+      "count": 166,
+      "message": "Crossref ISSN queries: 9 searches across 9 journals; window 180 days"
+    },
+    "Elsevier": {
+      "source": "Elsevier",
+      "status": "ok",
+      "count": 19,
+      "message": "Scopus STANDARD metadata; COMPLETE unavailable under current authorization"
+    },
+    "Google Scholar": {
+      "source": "Google Scholar",
+      "status": "ok",
+      "count": 83,
+      "message": "SerpApi Scholar; year filter 2026-2026"
+    },
+    "ResearchGate": {
+      "source": "ResearchGate",
+      "status": "ok",
+      "count": 59,
+      "message": "公开索引已接入：Google Scholar / SerpApi 本轮返回 59 条 ResearchGate 元数据。 按发表年份检索；摘要为检索片段，未注明年份的记录保留为待核验线索。 当前使用公开索引，本地浏览器采集尚未产出本期记录。"
+    },
+    "微信公众号": {
+      "source": "微信公众号",
+      "status": "ok",
+      "count": 6,
+      "message": "公开索引已接入：读取 6 条文章元数据，本期 6 条。 微信后台文章列表受限；已通过公开搜索获取线索，链接为检索入口，非已核验全文。 最近同步：09-24 06:35（北京时间）。"
+    },
+    "arXiv": {
+      "source": "arXiv",
+      "status": "ok",
+      "count": 539,
+      "message": "Official arXiv RSS fallback (search API HTTP 406)"
+    },
+    "OpenAlex": {
+      "source": "OpenAlex",
+      "status": "quota_exhausted",
+      "count": 0,
+      "message": "HTTP 429"
+    },
+    "Crossref": {
+      "source": "Crossref",
+      "status": "ok",
+      "count": 126,
+      "message": "public API"
+    },
+    "Semantic Scholar": {
+      "source": "Semantic Scholar",
+      "status": "ok",
+      "count": 173,
+      "message": "public API"
+    },
+    "PubMed": {
+      "source": "PubMed",
+      "status": "ok",
+      "count": 13,
+      "message": "public API"
+    },
+    "Web of Science": {
+      "source": "Web of Science",
+      "status": "ok",
+      "count": 62,
+      "message": "Clarivate Starter API 已授权：检索 3 个方向，本期获取 62 条元数据。"
+    }
+  },
+  "wechat_articles": [
+    {
+      "source": "微信公众号",
+      "source_id": "https://weixin.sogou.com/weixin?type=2&query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA%20%E3%80%8A%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5%E3%80%8B2026%E5%B9%B4%E7%AC%AC16%E6%9C%9F%E7%9B%AE%E5%BD%95",
+      "title": "《航空学报》2026年第16期目录",
+      "authors": [],
+      "venue": "航空学报CJA",
+      "abstract": "《航空学报》2026年 47卷 16期目录查看整期论文方式1 识别左侧二维码2 点击以下标题2026年第47卷第16期电子期刊.pdf流体力学与...",
+      "published_at": "2026-09-14T03:56:40+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA%20%E3%80%8A%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5%E3%80%8B2026%E5%B9%B4%E7%AC%AC16%E6%9C%9F%E7%9B%AE%E5%BD%95",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.4,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "provider": "Sogou WeChat public index",
+        "account": "航空学报CJA",
+        "access_mode": "public_index",
+        "abstract_kind": "search_snippet",
+        "link_kind": "search_results",
+        "account_verification": "index_label_only"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "https://weixin.sogou.com/weixin?type=2&query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA%202026%E8%88%AA%E7%A9%BA%E8%88%AA%E5%A4%A9%E5%B7%A5%E7%A8%8B%E4%B8%96%E7%95%8C%E4%B8%80%E6%B5%81%E5%AD%A6%E7%A7%91%E6%8E%92%E5%90%8D%20%7C%20%E8%BD%AF%E7%A7%91",
+      "title": "2026航空航天工程世界一流学科排名 | 软科",
+      "authors": [],
+      "venue": "航空学报CJA",
+      "abstract": "2026年9月15日,高等教育评价专业机构软科正式发布2026“软科... 软科两刊简介航空学报CJA_小编微 信 号:HKXBCJA_xiaobian扫...",
+      "published_at": "2026-09-15T23:02:06+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA%202026%E8%88%AA%E7%A9%BA%E8%88%AA%E5%A4%A9%E5%B7%A5%E7%A8%8B%E4%B8%96%E7%95%8C%E4%B8%80%E6%B5%81%E5%AD%A6%E7%A7%91%E6%8E%92%E5%90%8D%20%7C%20%E8%BD%AF%E7%A7%91",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.4,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "provider": "Sogou WeChat public index",
+        "account": "航空学报CJA",
+        "access_mode": "public_index",
+        "abstract_kind": "search_snippet",
+        "link_kind": "search_results",
+        "account_verification": "index_label_only"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "https://weixin.sogou.com/weixin?type=2&query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA%20xAerospace%E6%AD%A3%E5%BC%8F%E5%88%9B%E5%88%8A%21%7C%20%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA",
+      "title": "xAerospace正式创刊!| 航空学报CJA",
+      "authors": [],
+      "venue": "航空学报CJA",
+      "abstract": "2026(第九届)中国航空科学技术大会于9月11日在无锡隆重开幕... END两刊简介航空学报CJA_小编微 信 号:HKXBCJA_xiaobian扫...",
+      "published_at": "2026-09-11T09:45:08+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA%20xAerospace%E6%AD%A3%E5%BC%8F%E5%88%9B%E5%88%8A%21%7C%20%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.4,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "provider": "Sogou WeChat public index",
+        "account": "航空学报CJA",
+        "access_mode": "public_index",
+        "abstract_kind": "search_snippet",
+        "link_kind": "search_results",
+        "account_verification": "index_label_only"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "https://weixin.sogou.com/weixin?type=2&query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA%20CJA%20%C2%B7%20ICAS%202026%20%E6%82%89%E5%B0%BC%E4%BA%AE%E7%9B%B8",
+      "title": "CJA · ICAS 2026 悉尼亮相",
+      "authors": [],
+      "venue": "航空学报CJA",
+      "abstract": "2026年9月13日,航空学报杂志社一行,再次走出国门,深度参与... 两刊简介航空学报CJA_小编微 信 号:HKXBCJA_xiaobian扫码添...",
+      "published_at": "2026-09-22T10:02:45+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA%20CJA%20%C2%B7%20ICAS%202026%20%E6%82%89%E5%B0%BC%E4%BA%AE%E7%9B%B8",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.4,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "provider": "Sogou WeChat public index",
+        "account": "航空学报CJA",
+        "access_mode": "public_index",
+        "abstract_kind": "search_snippet",
+        "link_kind": "search_results",
+        "account_verification": "index_label_only"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "https://weixin.sogou.com/weixin?type=2&query=%E6%99%BA%E6%BA%90FlagOpen%20%E4%B8%80%E6%A0%88%E8%B4%AF%E9%80%9A%2C%E6%99%BA%E7%AE%97%E6%97%A0%E7%95%8C%212026%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%BC%80%E6%94%BE%E8%AE%A1%E7%AE%97%E5%A4%A7%E4%BC%9A%20%E6%9A%A8%20%E4%BC%97%E6%99%BAFlagOS%E6%8A%80%E6%9C%AF%E5%A4%A7%E4%BC%9A%E4%BA%AE%E7%82%B9%E9%80%9F%E9%80%92",
+      "title": "一栈贯通,智算无界!2026人工智能开放计算大会 暨 众智FlagOS技术大会亮点速递",
+      "authors": [],
+      "venue": "智源FlagOpen",
+      "abstract": "社区联合北京智源人工智能研究院、北京量子信息科学研究院等机构、中关村人工智能开源联盟(筹)等机构,将于 2026 年 10 月 17-...",
+      "published_at": "2026-09-18T14:12:40+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E6%99%BA%E6%BA%90FlagOpen%20%E4%B8%80%E6%A0%88%E8%B4%AF%E9%80%9A%2C%E6%99%BA%E7%AE%97%E6%97%A0%E7%95%8C%212026%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%BC%80%E6%94%BE%E8%AE%A1%E7%AE%97%E5%A4%A7%E4%BC%9A%20%E6%9A%A8%20%E4%BC%97%E6%99%BAFlagOS%E6%8A%80%E6%9C%AF%E5%A4%A7%E4%BC%9A%E4%BA%AE%E7%82%B9%E9%80%9F%E9%80%92",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.4,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "provider": "Sogou WeChat public index",
+        "account": "智源FlagOpen",
+        "access_mode": "public_index",
+        "abstract_kind": "search_snippet",
+        "link_kind": "search_results",
+        "account_verification": "index_label_only"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "https://weixin.sogou.com/weixin?type=2&query=%E6%9C%BA%E6%A2%B0%E5%B7%A5%E7%A8%8B%E5%AD%A6%E6%8A%A5%20%E4%B8%93%E5%AE%B6%E9%A2%86%E8%A1%94%E7%AD%96%E5%88%92%E2%80%94%E2%80%94%E6%95%B0%E5%AD%97%E5%AD%AA%E7%94%9F%E8%B5%8B%E8%83%BD%E7%9A%84%E9%AB%98%E7%AB%AF%E8%A3%85%E5%A4%87%E6%99%BA%E8%83%BD%E8%BF%90%E7%BB%B4%E4%B8%A8JME%E7%89%B9%E9%82%80%E4%B8%93%E6%A0%8F%28%E4%B8%8B%29",
+      "title": "专家领衔策划——数字孪生赋能的高端装备智能运维丨JME特邀专栏(下)",
+      "authors": [],
+      "venue": "机械工程学报",
+      "abstract": "“数字孪生赋能的高端装备智能运维”专栏.本专栏开展“数字孪... 2026, 62(12): 77-86. 论文摘要:旋转机械的健康监测与早期故障检...",
+      "published_at": "2026-09-19T14:34:28+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E6%9C%BA%E6%A2%B0%E5%B7%A5%E7%A8%8B%E5%AD%A6%E6%8A%A5%20%E4%B8%93%E5%AE%B6%E9%A2%86%E8%A1%94%E7%AD%96%E5%88%92%E2%80%94%E2%80%94%E6%95%B0%E5%AD%97%E5%AD%AA%E7%94%9F%E8%B5%8B%E8%83%BD%E7%9A%84%E9%AB%98%E7%AB%AF%E8%A3%85%E5%A4%87%E6%99%BA%E8%83%BD%E8%BF%90%E7%BB%B4%E4%B8%A8JME%E7%89%B9%E9%82%80%E4%B8%93%E6%A0%8F%28%E4%B8%8B%29",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.4,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "provider": "Sogou WeChat public index",
+        "account": "机械工程学报",
+        "access_mode": "public_index",
+        "abstract_kind": "search_snippet",
+        "link_kind": "search_results",
+        "account_verification": "index_label_only"
+      }
+    }
+  ],
+  "research_profile": {
+    "version": 1,
+    "core_count": 5,
+    "extended_count": 5,
+    "directions": [
+      {
+        "id": "ai_maintenance",
+        "name": "AI 智能运维",
+        "enabled": true,
+        "core": true,
+        "extended": true,
+        "weight": 1,
+        "keywords": [
+          "predictive maintenance",
+          "fault diagnosis",
+          "maintenance",
+          "fault detection",
+          "prognostics",
+          "condition monitoring",
+          "health monitoring",
+          "remaining useful life",
+          "digital twin",
+          "智能运维",
+          "故障诊断",
+          "预测维护"
+        ],
+        "require_any": [
+          "machine learning",
+          "large language model",
+          "deep learning",
+          "neural network",
+          "artificial intelligence",
+          "AI",
+          "LLM",
+          "agentic",
+          "multi-agent",
+          "generative",
+          "surrogate",
+          "kriging",
+          "bayesian",
+          "physics-informed",
+          "大模型",
+          "智能体",
+          "机器学习"
+        ],
+        "exclude": [
+          "cancer",
+          "alzheimer"
+        ]
+      },
+      {
+        "id": "generative_design",
+        "name": "结构生成式设计与可靠性优化",
+        "enabled": true,
+        "core": true,
+        "extended": true,
+        "weight": 1,
+        "keywords": [
+          "generative design",
+          "topology optimization",
+          "inverse design",
+          "structural design",
+          "structural optimization",
+          "constitutive",
+          "scientific machine learning",
+          "finite element",
+          "mechanical metamaterials",
+          "structural reliability optimization",
+          "生成式设计",
+          "拓扑优化",
+          "本构"
+        ],
+        "require_any": [
+          "machine learning",
+          "large language model",
+          "deep learning",
+          "neural network",
+          "artificial intelligence",
+          "AI",
+          "LLM",
+          "agentic",
+          "multi-agent",
+          "generative",
+          "surrogate",
+          "kriging",
+          "bayesian",
+          "physics-informed",
+          "大模型",
+          "智能体",
+          "机器学习"
+        ],
+        "exclude": []
+      },
+      {
+        "id": "fatigue_reliability",
+        "name": "结构疲劳与可靠性",
+        "enabled": true,
+        "core": true,
+        "extended": true,
+        "weight": 1,
+        "keywords": [
+          "structural fatigue",
+          "fatigue life",
+          "fatigue crack",
+          "fracture mechanics",
+          "damage tolerance",
+          "probabilistic fatigue",
+          "structural reliability",
+          "fatigue strength",
+          "fatigue",
+          "结构疲劳",
+          "疲劳寿命",
+          "疲劳可靠性"
+        ],
+        "require_any": [
+          "machine learning",
+          "reliability",
+          "probabilistic",
+          "large language model",
+          "deep learning",
+          "neural network",
+          "AI",
+          "LLM",
+          "agentic",
+          "multi-agent",
+          "surrogate",
+          "kriging",
+          "bayesian",
+          "physics-informed",
+          "大模型",
+          "机器学习",
+          "可靠性"
+        ],
+        "exclude": [
+          "patient",
+          "cancer",
+          "alzheimer"
+        ]
+      }
+    ]
+  },
+  "research_profile_revision": "927d19304f3f50ee22edb38a537d9122530ccd02bbff0e252b9fb12100d9a353",
+  "selection_policy": {
+    "priority": "CNS 子刊 > CNS 正刊 > 其他相关期刊",
+    "direction_allocation": "兼顾各方向，按优先级分配；同篇论文不重复推荐",
+    "within_venue_priority": "大模型与智能体优先",
+    "core_requires_chinese_analysis": true,
+    "extended_requires_chinese_analysis": true,
+    "cns_lookback_days": 180
+  },
+  "analysis_status": {
+    "ready_core": 5,
+    "target_core": 5,
+    "ready_extended": 5,
+    "target_extended": 5,
+    "llm_configured": false,
+    "llm_attempts": 0,
+    "pending": 325
+  },
+  "edition": {
+    "id": "35961551471",
+    "date": "2026-09-24",
+    "number": 4,
+    "generated_at": "2026-09-24T05:49:33.949917+00:00",
+    "trigger": "recovered",
+    "core_count": 5,
+    "extended_count": 5
+  }
+}

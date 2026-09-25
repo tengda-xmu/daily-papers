@@ -116,7 +116,9 @@ class Store:
     def paper_paths(self):
         return [self.runtime / 'recommendations.json', self.root / 'data/daily.json',
                 *sorted((self.runtime / 'recommendation-history').glob('*.json'), reverse=True),
-                *sorted((self.root / 'data/archive').glob('*.json'), reverse=True)]
+                *sorted((self.root / 'data/archive').glob('*.json'), reverse=True),
+                *sorted((self.root / 'data/editions').glob('*/*.json'), reverse=True),
+                *sorted((self.runtime / 'public-editions').glob('*/*.json'), reverse=True)]
 
     def paper(self, paper_id):
         if not ID_PATTERN.fullmatch(paper_id):

@@ -108,12 +108,17 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     daily_updater = DailyUpdater(runtime)
     direction_manager = DirectionManager(root)
     subscription_manager = SubscriptionManager(root)
+    from .reading_queue import ReadingQueue
+    reading_queue = ReadingQueue(root, runtime, client, generation_lock)
 
     @asynccontextmanager
     async def lifespan(app):
         info = runtime / "connection.json"
         info.write_text(json.dumps({"pid": os.getpid(), "origin": LOCAL_ORIGIN, "pair_code": pair_code}), encoding="utf-8")
+        if rpc is None:
+            reading_queue.start()
         yield
+        await reading_queue.close()
         for job in list(jobs.values()):
             job["task"].cancel()
         if jobs:
@@ -135,6 +140,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     app.state.daily_updater = daily_updater
     app.state.directions = direction_manager
     app.state.wechat_subscriptions = subscription_manager
+    app.state.reading_queue = reading_queue
 
     @app.middleware("http")
     async def local_only(request: Request, next_handler):
@@ -290,6 +296,19 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     @app.get('/api/recommendations/update')
     async def recommendation_progress():
         return await asyncio.to_thread(daily_updater.snapshot)
+
+    @app.get('/api/recommendations/reading-tasks')
+    async def reading_tasks():
+        return await asyncio.to_thread(reading_queue.snapshot)
+
+    @app.post('/api/recommendations/reading-tasks/sync')
+    async def sync_reading_tasks():
+        reading_queue.last_sync = 0
+        return {'state': 'queued'}
+
+    @app.post('/api/recommendations/reading-tasks/{paper_id}/retry')
+    async def retry_reading(paper_id: str):
+        return await asyncio.to_thread(reading_queue.retry, paper_id)
 
     @app.get('/api/research-directions')
     async def research_directions():
@@ -875,6 +894,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
             data = Ask.model_validate({**data.model_dump(), **settings})
         if data.paper_id in preparing or library_restoring:
             raise HTTPException(409, "资料正在准备，请等待完成后提问。")
+        await reading_queue.preempt()
         if generation_lock.locked():
             raise HTTPException(409, "已有回答正在生成，请先停止或等待完成。")
         if len(set(data.attachment_ids)) != len(data.attachment_ids):
@@ -961,7 +981,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
 
     @app.get("/assets/{name}")
     async def asset(name: str):
-        if name not in ("paper-library.js", "paper-library.css", "paper-reader.js", "paper-reader.css", "paper-chat.js", "paper-chat.css", "site.css", "site.js", "daily-update.js", "manual-search.js", "manual-search.css", "journal-manager.js", "journal-manager.css", "research-directions.js", "research-directions.css", "wechat-subscriptions.js", "wechat-subscriptions.css", "favicon.svg"):
+        if name not in ("reading-tasks.js", "paper-library.js", "paper-library.css", "paper-reader.js", "paper-reader.css", "paper-chat.js", "paper-chat.css", "site.css", "site.js", "daily-update.js", "manual-search.js", "manual-search.css", "journal-manager.js", "journal-manager.css", "research-directions.js", "research-directions.css", "wechat-subscriptions.js", "wechat-subscriptions.css", "favicon.svg"):
             raise HTTPException(404)
         return FileResponse(root / "tools/assets" / name)
 
@@ -1010,6 +1030,38 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     @app.get('/directions.html')
     async def directions_page():
         return FileResponse(root / 'site/directions.html', media_type='text/html')
+
+    @app.get('/archive/')
+    @app.get('/archive/{name}')
+    async def archive_page(name: str = 'index.html'):
+        from src.editions import read, archive_name, valid_entry
+        from tools.build_site import render, document, esc
+        snapshots = {}
+        for path in store.paper_paths():
+            payload = read(path)
+            entry = payload.get('edition') or {}
+            if valid_entry(entry):
+                snapshots[archive_name(entry)] = payload
+        if name == 'index.html':
+            rows = []
+            for day in sorted({p['edition']['date'] for p in snapshots.values()}, reverse=True):
+                batch = sorted((p for p in snapshots.values() if p['edition']['date'] == day), key=lambda p: p['edition']['number'], reverse=True)
+                links = ''.join(f'<li class="archive-entry"><a href="{archive_name(p["edition"])}.html">第 {p["edition"]["number"]} 批 · {esc(p["generated_at"])}</a></li>' for p in batch)
+                rows.append(f'<details class="archive-day"><summary>{day} · {len(batch)} 批</summary><ul>{links}</ul></details>')
+            return Response(document('<a href="/recommendations.html">返回最新一期</a>' + ''.join(rows), title='历史归档', root='../', active='archive'), media_type='text/html')
+        match = re.fullmatch(r'(\d{4}-\d{2}-\d{2})(?:--([A-Za-z0-9_-]{1,80}))?\.(html|json)', name)
+        if not match:
+            raise HTTPException(404)
+        candidates = [p for p in snapshots.values() if p['edition']['date'] == match[1]
+                      and (not match[2] or p['edition']['id'] == match[2])]
+        if not candidates:
+            raise HTTPException(404, '该批次尚未同步到本机，请稍后再试。')
+        payload = max(candidates, key=lambda p: p['edition']['number'])
+        if match[3] == 'json':
+            return payload
+        entry = payload['edition']
+        page = render(payload, archive_date=f'{entry["date"]} · 第 {entry["number"]} 批')
+        return Response(page.replace('href="../">返回最新一期', 'href="/recommendations.html">返回最新一期'), media_type='text/html')
 
     return app
 
