@@ -2,17 +2,17 @@
   "paper_id": "d82e79457c6c",
   "fingerprint": "0f143b7aae3b3092e208c0eee523b4ada3bf63caca499e96026be2d96c9b916d",
   "analysis": {
-    "title_zh": "纤维素膜的机器学习：面向小数据情境的表征—模型—任务框架",
-    "summary": "本文是一篇方法论综述，讨论小数据条件下机器学习如何用于纤维素膜研究。摘要将关键瓶颈归于材料表征，而非模型架构，并指出现有多尺度计算层级尚未形成从合成配方到实测渗透性能的贯通链条。文章以纤维素／氧化铁油水分离膜为贯穿案例，围绕性能预测、合成优化、逆向设计、微结构分析和污染预测组织方法，同时强调验证与可解释性。[摘要] 本解读仅依据摘要，不代表已阅读全文。",
-    "recommendation": "建议作为小数据材料建模与实验验证的方法论参考阅读；若以智能运维为主线，可优先关注污染预测部分，但摘要没有提供运维实证，暂不宜列为该方向的核心成果文献。[摘要]",
+    "title_zh": "纤维素膜机器学习：面向小数据情境的表征—模型—任务框架",
+    "summary": "纤维素膜机器学习为何不能直接照搬其他膜材料的方法？这篇综述将瓶颈归于材料表征，而非模型架构，并强调现有多尺度计算之间缺乏连接。作者以“表征—模型—任务”框架梳理性能预测、合成优化、逆向设计、微结构分析和污染预测，要求明确验证方案，并将可解释性用于可被合成实验证伪的验证。[摘要]本文仅作摘要级解读，适合关注小数据材料建模的读者，尚不能据此判断具体方法的实证效果。",
+    "recommendation": "建议作为小数据材料建模的方法论补充阅读，而非智能运维核心成果优先推荐：摘要明确涉及“fouling forecasting”，但未报告在线监测、维护决策或可靠性验证成果。[摘要]",
     "deep_read": {
-      "problem": "摘要以“chemically ambiguous object”描述纤维素膜的建模对象：多晶型基体、C2、C3、C6位化学不等价羟基及两阶段制备路径共同增加表征难度。研究问题是如何在小数据下定义有效输入，而非简单移植其他膜材料的机器学习工具。[摘要]",
-      "method": "综述采用“representation–model–task framework”，按性能预测、贝叶斯合成优化、逆向设计、微结构分析和污染预测展开，并逐项明确表征、模型、任务、验证四类决策。纤维素／氧化铁油水分离复合材料是贯穿案例，而非摘要已报告的统一实验基准。[摘要]",
-      "innovation": "摘要强调“representation — not model architecture”，其方法论特色是把表征选择置于模型架构之前，并将可解释性视为可通过合成检验的验证工具。解读：贡献更偏向组织研究决策与检验逻辑；仅凭摘要不能确认该框架的首创性或相较既有综述的完整增量。[摘要]",
-      "findings": "摘要指出现有计算层级“do not connect”，从第一性原理到过程尺度尚无贯通合成配方与实测渗透性能的模型链条，并据此论证数据驱动方法的必要性。这属于综述的综合判断；摘要没有给出预测误差、优化收益或外部验证结果，不能视为性能提升证据。[摘要]",
-      "limitations": "可确认的证据边界是文章自称“This review”，且摘要未展示数据规模、检索式、纳入数量、模型对照或验证指标，无法据此复核综述覆盖度与方法效果。解读：这些是当前摘要级评估的信息缺口，不等于作者未开展相关工作，也不是已证实的论文缺陷。[摘要]",
-      "connection": "与智能运维最直接的交点是“fouling forecasting”，但摘要未说明在线监测、维护决策或现场部署。解读：微结构分析和逆向设计可联系材料结构设计，验证思路可供可靠性研究参考；这些联系尚不能证明文章直接研究装备运维或可靠性评估。[摘要]",
-      "next_steps": "建议后续核查污染预测章节是否明确时间划分、跨工况验证与数据泄漏防范，再评估其运维迁移价值。摘要称归因可“falsifiable by synthesis”；建议据此检查是否给出可操作的实验反证路径，并区分作者的方法倡议、引用案例与已完成验证，避免将框架当作实证成果。[摘要]"
+      "problem": "研究问题是如何为化学对象复杂、数据有限的纤维素膜建立有效机器学习表征。摘要指出多晶型基体、C2、C3和C6处化学不等价的羟基及两阶段制备路线，使“representation — not model architecture”成为约束，其他膜体系的工具不能原样迁移。[摘要]",
+      "method": "文章属于综述，以“representation–model–task”框架逐项组织不同建模任务，并要求明确表征、模型、任务和验证四项决策。纤维素/氧化铁油水分离复合材料贯穿示例，数据资源则按纤维素覆盖情况评估，而非简单罗列；摘要未披露具体实施细节。[摘要]",
+      "innovation": "摘要呈现的方法论特色，是把可解释性作为验证工具，而不只是预测结果的解释展示，要求归因能够“falsifiable by synthesis”。解读：这使模型解释与可检验的材料制备联系起来；但摘要不足以证明该思路的首创性，也未展示实际证伪案例。[摘要]",
+      "findings": "作者指出，现有纤维素计算跨越第一性原理、原子、粗粒化、孔尺度、唯象及过程层级，却相互脱节，即“no chain of models runs from a synthesis recipe to a measured permeance”。这是综述的问题诊断，不能当作新模型性能提升的实验证据。[摘要]",
+      "limitations": "当前资料只有摘要，缺少数据规模、具体表征变量、验证划分及定量比较，无法评价框架实施效果。摘要虽称采用“repeatable search protocol”，却未提供检索范围与筛选过程，因此也无法核查综述覆盖度；这些是证据范围限制，并非已证实的论文缺陷。[摘要]",
+      "connection": "与智能运维最直接的交点是“fouling forecasting”，与结构设计的联系则是逆向设计和微结构分析。[摘要]解读：这些任务可能连接膜污染预警及结构调控，但摘要未建立维护动作、失效概率或寿命指标之间的关系，不能将其等同于可靠性研究成果。",
+      "next_steps": "建议后续阅读重点核查“validation”如何落实：是否区分配方、制备批次与测试条件，是否防止相似样本跨集合造成信息泄漏。[摘要]建议迁移至运维时，先检验污染预测在独立运行工况下的表现，再讨论维护触发规则；这些属于研究建议，不是作者已完成的工作。"
     },
     "analysis_status": "ready",
     "analysis_basis": "abstract",
@@ -20,14 +20,21 @@
     "analysis_sources": [
       "https://doi.org/10.26434/chemrxiv.15009248/v1"
     ],
-    "analyzed_at": "2026-09-25T02:10:49.387987+00:00",
+    "analyzed_at": "2026-09-25T17:33:06.518103+00:00",
     "llm_model": "gpt-6-astra"
   },
   "evaluation": {
     "direction_fit": false,
     "research_value": true,
     "evidence_sufficient": true,
-    "reason": "以给定标签所指的智能运维为标准，本文主要聚焦纤维素膜的小数据材料建模，污染预测只是覆盖任务之一，直接方向匹配不足。但摘要明确提出表征—模型—任务框架及验证要求，足以支持其作为方法论参考的阅读价值，不足以支持任何实证性能判断。[摘要]",
-    "evidence": "The representation–model–task framework is then executed task by task across property prediction, synthesis optimisation with Bayesian optimisation, inverse design, microstructural analysis and fouling forecasting"
+    "reason": "针对给定的智能运维方向，摘要的主体是纤维素膜材料建模方法论，污染预测仅为其中一项任务，尚不足以认定直接切合；但明确的表征—模型—任务框架及验证要求具有方法论阅读价值。摘要足以支持这一定位判断，不足以证明实际性能优势。[摘要]",
+    "evidence": "property prediction, synthesis optimisation with Bayesian optimisation, inverse design, microstructural analysis and fouling forecasting"
+  },
+  "material": {
+    "version": "c6a7e0fe752fecc7561ce984a91dd754c4d96fd1d87793d691a2b38fedf10df2",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "property prediction, synthesis optimisation with Bayesian optimisation, inverse design, microstructural analysis and fouling forecasting"
   }
 }
