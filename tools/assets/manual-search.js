@@ -82,6 +82,7 @@
   });
   const dateString = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   const today = new Date(), start = new Date(today); start.setFullYear(start.getFullYear() - 5);
+  $('#search-until').defaultValue = dateString(today); $('#search-since').defaultValue = dateString(start);
   $('#search-until').value = dateString(today); $('#search-since').value = dateString(start);
   for (const input of [$('#search-since'), $('#search-until')]) { input.min = '1900-01-01'; input.max = dateString(today); }
   const savedOrder = read('localStorage', orderKey);
@@ -94,6 +95,17 @@
   };
   const sourceBoxes = [...document.querySelectorAll('[name=library]')];
   let previousSources = null;
+  const filters = FilterPanels.create({button: $('#search-filter-toggle'), panel: $('#search-filter-panel'), chips: $('#search-filter-chips'), extra: [{
+    active: () => !journalIssn && sourceBoxes.some(box => !box.checked),
+    text: () => `来源：已选 ${sourceBoxes.filter(box => box.checked).length} / ${sourceBoxes.length} 类`,
+    reset: () => { sourceBoxes.forEach(box => { box.checked = true; }); sourceCount(); }
+  }]});
+  const resultFilters = FilterPanels.create({button: $('#result-filter-toggle'), panel: $('#result-filter-panel'), chips: $('#result-filter-chips')});
+  function conditionSummary() {
+    $('#search-condition-summary').textContent = `${$('#search-since').value || '未填写起始日期'} 至 ${$('#search-until').value || '未填写结束日期'} · ${sourceBoxes.filter(box => box.checked).length} / ${sourceBoxes.length} 类来源 · ${orderLabels[$('#search-order').value]}`;
+    filters.refresh();
+  }
+  for (const id of ['#search-since', '#search-until', '#search-order']) $(id).addEventListener('change', conditionSummary);
   function setJournal(value) {
     journalIssn = value;
     applyJournal();
@@ -118,7 +130,7 @@
     $('#literature-query').focus();
   };
   applyJournal();
-  function sourceCount() { const n = sourceBoxes.filter(x => x.checked).length; $('#selected-libraries').textContent = n === 11 ? '全部 11 类来源' : `已选 ${n} / 11 类来源`; }
+  function sourceCount() { const n = sourceBoxes.filter(x => x.checked).length; $('#selected-libraries').textContent = n === sourceBoxes.length ? `全部 ${n} 类来源` : `已选 ${n} / ${sourceBoxes.length} 类来源`; conditionSummary(); }
   $('#search-libraries').addEventListener('change', sourceCount);
   $('#select-libraries').onclick = () => { sourceBoxes.forEach(x => { x.checked = true; }); sourceCount(); };
   $('#clear-libraries').onclick = () => { sourceBoxes.forEach(x => { x.checked = false; }); sourceCount(); };
@@ -130,8 +142,8 @@
   $('#literature-form').addEventListener('submit', async (event) => {
     event.preventDefault();
     const sources = sourceBoxes.filter(x => x.checked).map(x => x.value);
-    if (!sources.length) { action('请至少选择一个来源。'); return; }
-    if ($('#search-since').value > $('#search-until').value) { action('起始日期不能晚于结束日期。'); return; }
+    if (!sources.length) { filters.setOpen(true); sourceBoxes[0].focus(); action('请至少选择一个来源。'); return; }
+    if ($('#search-since').value > $('#search-until').value) { filters.setOpen(true); $('#search-since').focus(); action('起始日期不能晚于结束日期。'); return; }
     busy(true); action(''); clearTimeout(timer);
     $('#literature-status').textContent = '正在提交检索请求…';
     try {
@@ -142,6 +154,7 @@
       $('#literature-results').replaceChildren(); $('#search-output').hidden = true;
       $('#search-result-source').value = '';
       $('#search-result-sort').value = 'retrieved';
+      resultFilters.refresh();
       await poll();
     } catch (error) { busy(false); action(error.message); }
   });
@@ -210,6 +223,7 @@
     drawResults();
   }
   function drawResults() {
+    resultFilters.refresh();
     const all = filtered(), size = Number($('#search-page-size').value);
     if (pendingPage !== null && !searching) {
       pageIndex = $('#search-result-sort').value === 'retrieved' ? pendingPage : 0;

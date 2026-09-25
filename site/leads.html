@@ -7,12 +7,12 @@
   <meta name="theme-color" content="#153e64">
   <title>科研线索 | 每日论文推荐</title>
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./assets/site.css?v=37a20b6536">
-  <link rel="stylesheet" href="./assets/paper-chat.css?v=37a20b6536">
-  <link rel="stylesheet" href="./assets/paper-library.css?v=37a20b6536">
-  <script src="./assets/site.js?v=37a20b6536" defer></script>
-  <script src="./assets/paper-library.js?v=37a20b6536" defer></script>
-  <script src="./assets/paper-chat.js?v=37a20b6536" defer></script>
+  <link rel="stylesheet" href="./assets/site.css?v=2d5f5ec811">
+  <link rel="stylesheet" href="./assets/paper-chat.css?v=2d5f5ec811">
+  <link rel="stylesheet" href="./assets/paper-library.css?v=2d5f5ec811">
+  <script src="./assets/site.js?v=2d5f5ec811" defer></script>
+  <script src="./assets/paper-library.js?v=2d5f5ec811" defer></script>
+  <script src="./assets/paper-chat.js?v=2d5f5ec811" defer></script>
 
 </head>
 <body id="top">
@@ -40,18 +40,20 @@
   <div class="lead-categories" role="group" aria-label="线索分类">
     <button type="button" data-lead-kind="all" aria-pressed="true">全部 <span>44</span></button><button type="button" data-lead-kind="conference" aria-pressed="false">学术会议 <span>12</span></button><button type="button" data-lead-kind="call" aria-pressed="false">征稿与专题 <span>5</span></button><button type="button" data-lead-kind="news" aria-pressed="false">研究动态 <span>13</span></button><button type="button" data-lead-kind="resource" aria-pressed="false">论文库与数据 <span>4</span></button><button type="button" data-lead-kind="academic_role" aria-pressed="false">学术任职招募 <span>3</span></button><button type="button" data-lead-kind="funding" aria-pressed="false">项目与基金申报 <span>7</span></button>
   </div>
-  <form id="lead-filters" class="lead-filters" role="search" aria-label="筛选科研线索">
-    <label class="lead-query">搜索<input id="lead-query" type="search" placeholder="会议、主题、公众号或关键词" autocomplete="off"></label>
-    <label>研究方向<select id="lead-topic"><option value="">全部方向</option><option value="ai_maintenance">AI 智能运维</option><option value="generative_design">结构生成式设计与可靠性优化</option><option value="fatigue_reliability">结构疲劳与可靠性</option></select></label>
-    <label>来源<select id="lead-provider"><option value="">全部来源</option><option value="official">官方渠道</option><option value="wechat">微信公众号</option><option value="xiaohongshu">小红书</option></select></label>
-    <label>公众号或作者<select id="lead-author"><option value="">全部账号</option><option value="智源FlagOpen">智源FlagOpen</option><option value="机械工程学报">机械工程学报</option><option value="航空学报CJA">航空学报CJA</option></select></label>
-    <label>时间状态<select id="lead-state"><option value="">默认（申请排除已截止）</option><option value="all">全部状态</option><option value="active">排除已结束 / 已截止</option><option value="open">正在申请</option><option value="closing">即将截止</option><option value="planned">尚未开放</option><option value="standing">常年受理</option><option value="unknown">待核对</option><option value="upcoming">即将召开</option><option value="ended">已结束 / 已截止</option></select></label>
-    <label>具体类型<select id="lead-subtype"><option value="">全部类型</option><option value="editor">期刊编委</option><option value="young_editor">青年编委</option><option value="committee">学会与专业委员</option><option value="grant">科研基金</option><option value="government">政府科技项目</option><option value="open_topic">开放课题</option><option value="international">国际合作</option><option value="joint_fund">联合基金</option><option value="industry">企业委托科研</option><option value="collaboration">产学研合作</option><option value="challenge">揭榜与技术攻关</option></select></label>
-    <label>国家或地区<select id="lead-region"><option value="">全部地区</option><option value="中国">中国</option><option value="国际">国际</option><option value="英国">英国</option></select></label>
-    <label>企业项目<select id="lead-group"><option value="">全部机构</option><option value="enterprise">所有企业项目</option><option value="comac">中国商飞</option><option value="avic">中国航空工业</option><option value="aecc">中国航发</option><option value="other">其他企业</option></select></label>
-    <label>排序<select id="lead-sort"><option value="recommended">推荐顺序</option><option value="date">会期 / 截止时间</option><option value="latest">最新发布</option></select></label>
+  <form id="lead-filters" class="compact-filters" role="search" aria-label="筛选科研线索">
+    <div class="search-row"><label class="search-box"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><span class="sr-only">搜索</span><input id="lead-query" type="search" placeholder="会议、主题、公众号或关键词" autocomplete="off"></label><button id="lead-filter-toggle" class="filter-toggle" type="button" aria-expanded="false" aria-controls="lead-filter-panel" hidden>筛选</button></div>
+    <div id="lead-filter-panel" class="filter-panel filter-fields">
+    <label>研究方向<select data-filter-label="研究方向" id="lead-topic"><option value="">全部方向</option><option value="ai_maintenance">AI 智能运维</option><option value="generative_design">结构生成式设计与可靠性优化</option><option value="fatigue_reliability">结构疲劳与可靠性</option></select></label>
+    <label>来源<select data-filter-label="来源" id="lead-provider"><option value="">全部来源</option><option value="official">官方渠道</option><option value="wechat">微信公众号</option><option value="xiaohongshu">小红书</option></select></label>
+    <label>公众号或作者<select data-filter-label="公众号或作者" id="lead-author"><option value="">全部账号</option><option value="智源FlagOpen">智源FlagOpen</option><option value="机械工程学报">机械工程学报</option><option value="航空学报CJA">航空学报CJA</option></select></label>
+    <label>时间状态<select data-filter-label="时间状态" id="lead-state"><option value="">默认（申请排除已截止）</option><option value="all">全部状态</option><option value="active">排除已结束 / 已截止</option><option value="open">正在申请</option><option value="closing">即将截止</option><option value="planned">尚未开放</option><option value="standing">常年受理</option><option value="unknown">待核对</option><option value="upcoming">即将召开</option><option value="ended">已结束 / 已截止</option></select></label>
+    <label>具体类型<select data-filter-label="具体类型" id="lead-subtype"><option value="">全部类型</option><option value="editor">期刊编委</option><option value="young_editor">青年编委</option><option value="committee">学会与专业委员</option><option value="grant">科研基金</option><option value="government">政府科技项目</option><option value="open_topic">开放课题</option><option value="international">国际合作</option><option value="joint_fund">联合基金</option><option value="industry">企业委托科研</option><option value="collaboration">产学研合作</option><option value="challenge">揭榜与技术攻关</option></select></label>
+    <label>国家或地区<select data-filter-label="国家或地区" id="lead-region"><option value="">全部地区</option><option value="中国">中国</option><option value="国际">国际</option><option value="英国">英国</option></select></label>
+    <label>企业项目<select data-filter-label="企业项目" id="lead-group"><option value="">全部机构</option><option value="enterprise">所有企业项目</option><option value="comac">中国商飞</option><option value="avic">中国航空工业</option><option value="aecc">中国航发</option><option value="other">其他企业</option></select></label>
+    </div>
+    <div id="lead-filter-chips" class="filter-chips" aria-label="已启用的筛选条件" hidden></div>
   </form>
-  <div class="lead-results"><span id="lead-count" role="status" aria-live="polite">44 条线索</span><button id="lead-reset" type="button" class="text-button">重置筛选</button></div>
+  <div class="lead-results compact-results"><span id="lead-count" role="status" aria-live="polite">44 条线索</span><label class="compact-sort"><span class="sr-only">排序</span><select id="lead-sort"><option value="recommended">推荐顺序</option><option value="date">会期 / 截止时间</option><option value="latest">最新发布</option></select></label><div class="compact-result-actions"><button id="lead-reset" type="button" class="text-button">重置筛选</button></div></div>
   <ul id="lead-list" class="lead-list"><li class="lead-entry" data-platforms="official" data-authors="[]" data-kind="conference" data-provider="official" data-state="upcoming"
 data-topics="ai_maintenance fatigue_reliability" data-start="2026-09-26"
 data-published="" data-rank="0" data-opportunity="{&quot;kind&quot;: &quot;conference&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: &quot;2026-09-24&quot;, &quot;verification&quot;: null}"

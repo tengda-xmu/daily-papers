@@ -84,9 +84,20 @@
   connection.querySelector('form').onsubmit=async e=>{e.preventDefault();const form=e.currentTarget,button=form.querySelector('button');button.disabled=true;
     try{const data=await api('/api/pair',{method:'POST',body:JSON.stringify({code:form.querySelector('input[type=password]').value.trim(),remember:form.querySelector('input[type=checkbox]').checked})});token=data.token;write(storage,sessionKey,token);if(data.device_token)write('localStorage',browserKey,data.device_token);form.querySelector('input[type=password]').value='';await refresh();status('已连接本机');document.dispatchEvent(new CustomEvent('paper-library-connected'));}catch(error){status(error.message,true);}finally{button.disabled=false;}};
   if(library){
-    library.querySelector('form').onsubmit=e=>e.preventDefault();
-    for(const id of ['library-topic','library-rating','library-sort','library-translated','library-page-size'])$('#'+id).onchange=()=>{page=1;refresh().catch(e=>status(e.message,true));};
-    $('#library-query').oninput=()=>{clearTimeout(refreshTimer);page=1;refreshTimer=setTimeout(()=>refresh().catch(e=>status(e.message,true)),250);};
+    const filters=FilterPanels.create({button:$('#library-filter-toggle'),panel:$('#library-filter-panel'),chips:$('#library-filter-chips')});
+    function filterState(){
+      filters.refresh();
+      $('#library-reset').hidden=!$('#library-query').value && !$('#library-topic').value && $('#library-rating').value==='0' && $('#library-sort').value==='recent' && !$('#library-translated').checked && $('#library-page-size').value==='20';
+    }
+    $('#library-filters').onsubmit=e=>e.preventDefault();
+    $('#library-reset').onclick=()=>{
+      $('#library-query').value='';$('#library-topic').value='';$('#library-rating').value='0';
+      $('#library-sort').value='recent';$('#library-translated').checked=false;$('#library-page-size').value='20';
+      clearTimeout(refreshTimer);page=1;filterState();refresh().catch(e=>status(e.message,true));
+    };
+    for(const id of ['library-topic','library-rating','library-sort','library-translated','library-page-size'])$('#'+id).onchange=()=>{page=1;filterState();refresh().catch(e=>status(e.message,true));};
+    $('#library-query').oninput=()=>{clearTimeout(refreshTimer);page=1;filterState();refreshTimer=setTimeout(()=>refresh().catch(e=>status(e.message,true)),250);};
+    filterState();
     $('#library-previous').onclick=()=>{page=Math.max(1,page-1);refresh().catch(e=>status(e.message,true));};$('#library-next').onclick=()=>{page=Math.min(totalPages,page+1);refresh().catch(e=>status(e.message,true));};
   }
   if(backup){

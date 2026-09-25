@@ -1,3 +1,50 @@
+// Progressive disclosure only: callers retain ownership of queries and pagination.
+window.FilterPanels = {
+  create({button, panel, chips, extra = []}) {
+    const fields = [...panel.querySelectorAll('[data-filter-label]')].map(input => {
+      const checkbox = input.type === 'checkbox';
+      const initial = checkbox ? input.defaultChecked : input.options?.[0]?.value ?? input.defaultValue;
+      return {
+        active: () => (checkbox ? input.checked : input.value) !== initial,
+        text: () => input.dataset.filterLabel + (checkbox ? '' : '：' + (input.selectedOptions?.[0]?.textContent || input.value || '未填写')),
+        reset: () => {
+          if (checkbox) input.checked = initial; else input.value = initial;
+          input.dispatchEvent(new Event('change', {bubbles: true}));
+        }
+      };
+    }).concat(extra);
+    const label = button.textContent.trim();
+    function setOpen(open) {
+      if (!open && panel.contains(document.activeElement)) button.focus();
+      panel.hidden = !open;
+      button.setAttribute('aria-expanded', String(open));
+    }
+    function refresh() {
+      const active = fields.filter(field => field.active());
+      button.textContent = label + (active.length ? ` ${active.length}` : '');
+      const focused = chips.contains(document.activeElement);
+      chips.replaceChildren(...active.map(field => {
+        const chip = document.createElement('button');
+        chip.type = 'button'; chip.className = 'filter-chip';
+        chip.textContent = field.text() + ' ×';
+        chip.setAttribute('aria-label', '取消' + field.text());
+        chip.addEventListener('click', () => { field.reset(); refresh(); button.focus(); });
+        return chip;
+      }));
+      chips.hidden = !active.length;
+      if (focused) button.focus();
+    }
+    button.hidden = false;
+    button.addEventListener('click', () => setOpen(panel.hidden));
+    panel.addEventListener('change', refresh);
+    // Native validation must be able to focus required controls in a closed panel.
+    panel.addEventListener('invalid', () => setOpen(true), true);
+    window.addEventListener('pageshow', event => { if (event.persisted) { setOpen(false); refresh(); } });
+    setOpen(false); refresh();
+    return {refresh, setOpen};
+  }
+};
+
 (function () {
   document.documentElement.classList.add('js');
   const $ = (selector, root = document) => root.querySelector(selector);
@@ -253,6 +300,7 @@
   const fields = ['query', 'topic', 'provider', 'state', 'sort', 'page-size', 'period', 'subtype', 'region', 'group', 'platform', 'author'].filter(name => get('lead-' + name));
   const controls = Object.fromEntries(fields.map(name => [name, get('lead-' + name)]));
   const categories = Array.from(root.querySelectorAll('[data-lead-kind]'));
+  const filters = FilterPanels.create({button: get('lead-filter-toggle'), panel: get('lead-filter-panel'), chips: get('lead-filter-chips')});
   let category = 'all', page = 1;
   // Preserve a shareable view, including browser Back / Forward navigation.
   function restore() {
@@ -322,6 +370,9 @@
     get('lead-page').textContent = `${page} / ${pages} 页`;
     get('lead-prev').disabled = page === 1;
     get('lead-next').disabled = page === pages;
+    filters.refresh();
+    if (isAI) get('lead-period-summary').textContent = controls.period.selectedOptions[0].textContent;
+    get('lead-reset').hidden = category === 'all' && Object.values(controls).every(field => field.value === (field.options?.[0]?.value || ''));
     if (save) {
       const url = new URL(location.href);
       for (const name of ['kind', ...fields, 'page']) url.searchParams.delete(name);

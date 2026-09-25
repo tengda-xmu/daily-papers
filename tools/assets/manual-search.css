@@ -8,7 +8,7 @@
 #manual-search select { width: auto; }
 .search-options label { white-space: nowrap; }
 #manual-search #literature-submit { background: #153e64; color: #fff; border-color: #153e64; padding-inline: 24px; white-space: nowrap; }
-.search-connection { display: flex; gap: 16px; justify-content: space-between; flex-wrap: wrap; font-size: 13px; margin: 0 0 20px; }
+.search-connection { display: flex; gap: 12px; justify-content: space-between; flex-wrap: wrap; font-size: 13px; margin: 0 0 12px; }
 #search-connection-state[data-connected=true]::before { content: ''; display: inline-block; width: 6px; height: 6px; margin-right: 8px; background: #28764b; border-radius: 50%; }
 .search-pairing { padding: 16px 20px; background: #f4f7fa; margin-bottom: 24px; font-size: 14px; }
 .search-pairing p { margin: 12px 0; }
@@ -17,18 +17,17 @@
 .remember-search { flex-basis: 100%; }
 .literature-query-row { display: flex; gap: 12px; }
 #manual-search #literature-query { flex: 1; background: #f5f7fa; color: #111; padding: 14px 18px; }
-.search-options { display: flex; gap: 16px 24px; flex-wrap: wrap; margin: 20px 0; font-size: 13px; }
+.search-options { display: flex; gap: 12px; flex-wrap: wrap; margin: 0 0 12px; font-size: 13px; }
 .search-options label { display: flex; gap: 10px; align-items: center; }
-#search-order-help { margin: -6px 0 18px; max-width: 78ch; }
+#search-order-help { margin: 0 0 12px; max-width: 78ch; }
 .search-result-citations { cursor: help; }
-.search-library-panel { border-block: 1px solid #dde5ec; padding: 15px 0; }
-.search-library-panel summary { display: flex; justify-content: space-between; cursor: pointer; font-size: 14px; }
-.search-library-panel summary span:last-child { color: var(--blue-text); }
-#search-libraries { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 22px; margin: 20px 0 14px; padding: 0; border: 0; font-size: 14px; }
+.search-library-panel { border-block: 1px solid #dde5ec; padding: 12px 0; }
+.search-library-panel #selected-libraries { margin: 0; font-size: 13px; }
+#search-libraries { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 12px 0; padding: 0; border: 0; font-size: 14px; }
 #search-libraries label { cursor: pointer; }
 .search-selection { display: flex; gap: 20px; }
 .search-help, .search-library-panel p { color: #4b4b4b; font-size: 12px; line-height: 1.8; margin: 12px 0 0; }
-.search-progress-row { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-top: 32px; }
+.search-progress-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; }
 #literature-status { margin: 0; font-size: 14px; }
 #search-stop { font-size: 13px !important; white-space: nowrap; }
 #search-source-report { font-size: 12px; margin-top: 12px; }
@@ -37,10 +36,10 @@
 .search-source-state { display: grid; grid-template-columns: 160px 1fr; gap: 8px; padding: 7px 0; border-bottom: 1px solid #edf0f3; }
 .search-source-state small { display: block; color: #555; }
 .search-source-state[data-state=error], .search-source-state[data-state=access_denied], .search-source-state[data-state=timeout], .search-source-state[data-state=quota_exhausted] { color: #93431b; }
-.search-results-toolbar { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: space-between; margin: 36px 0 0; }
+.search-results-toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin: 16px 0 0; }
 .search-results-toolbar h2 { margin: 0; font-size: 21px; }
 .search-results-toolbar h2 span { margin-left: 10px; font-weight: 400; font-size: 14px; }
-.search-results-toolbar > div { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; font-size: 13px; }
+.search-results-toolbar > div { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; font-size: 13px; min-width: 0; max-width: 100%; }
 .search-rerank { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
 .search-result { padding: 28px 0; border-bottom: 1px solid #dce4eb; overflow-wrap: anywhere; }
 .search-result-meta { display: flex; flex-wrap: wrap; gap: 6px 18px; color: #414141; font-size: 12px; margin-bottom: 8px; }
@@ -56,21 +55,28 @@
 .search-reference p { color: #70480b; font-size: 12px; margin: 10px 0 0; }
 #search-action-status { font-size: 13px; position: sticky; bottom: 0; background: #fff; padding: 10px 0; margin: 0; }
 #search-action-status:empty { padding: 0; }
-#search-journal-scope { margin-bottom: 16px; }
+#search-journal-scope { margin: 8px 0 0; }
+.search-advanced-row { display: flex; align-items: center; justify-content: space-between; gap: 8px 12px; margin-top: 8px; }
+#manual-search .filter-toggle { min-height: 44px; font-size: 13px; color: var(--ink); border-color: var(--line); }
+#manual-search .filter-chip { font-size: 12px; padding: 5px 10px; background: var(--soft); min-height: 36px; }
+#manual-search .compact-sort { font-size: 12px; gap: 8px; }
+#manual-search .compact-sort select { min-width: 0; max-width: 230px; padding: 6px 4px 6px 8px; border-color: transparent; color: var(--muted); font-size: 12px; }
+#manual-search .filter-fields select { width: 100%; }
 .search-journal-scope { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 13px; overflow-wrap: anywhere; }
 .search-pagination { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 20px; padding: 16px 0; font-size: 13px; border-bottom: 1px solid #dde5ec; }
 .search-pagination > div { display: flex; flex-wrap: wrap; gap: 10px; margin-left: auto; }
 .search-pagination label { display: flex; align-items: center; gap: 8px; }
 @media (max-width: 660px) {
-  #search-libraries { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  #search-libraries { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  #search-libraries label { display: flex; align-items: center; gap: 8px; min-height: 44px; }
   .literature-query-row { flex-direction: column; }
   .search-options { flex-direction: column; gap: 12px; }
-  .search-options label { justify-content: space-between; }
-  .search-options input, .search-options select { width: 170px; }
-  .search-results-toolbar > div { width: 100%; gap: 12px; }
-  #manual-search .search-results-toolbar select { max-width: 100%; flex: 1; }
-  .search-rerank { order: 1; width: 100%; justify-content: space-between; }
-  #manual-search #search-result-sort { flex: 0 1 auto; min-width: 185px; max-width: calc(100% - 100px); }
+  .search-options label { display: grid; gap: 6px; }
+  #manual-search .search-options input, #manual-search .search-options select { width: 100%; }
+  .search-results-toolbar > div { gap: 8px; }
+  .search-rerank { flex-wrap: wrap; }
+  #manual-search .compact-sort select { max-width: 100%; min-height: 44px; }
+  #manual-search .filter-chip { min-height: 44px; }
   .search-source-state { grid-template-columns: 1fr; gap: 0; }
   #manual-search .page-heading { align-items: start; }
   .search-result h3 { font-size: 18px; }
