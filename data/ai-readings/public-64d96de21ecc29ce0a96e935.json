@@ -1,0 +1,24 @@
+{
+  "id": "public-64d96de21ecc29ce0a96e935",
+  "content_version": "772021686dc36ac45810024203f6a377a219d98e0a97d279becba1886126edad",
+  "analysis": {
+    "title_zh": "DeepSeek-V4：API 新增 V4-Pro 与 V4-Flash，旧模型名计划停用",
+    "summary": "【官方公告】DeepSeek API 已支持 V4-Pro 与 V4-Flash，可通过 OpenAI ChatCompletions 接口或 Anthropic 接口调用。接入时 base_url 不变，仅需指定新模型名，适用于现有 API 应用的模型切换。公告称旧名称 deepseek-chat、deepseek-reasoner 将于2026年7月24日停用；公告所述过渡期内，二者分别指向 V4-Flash 的非思考与思考模式，不能据此确认当前停用状态。",
+    "application": "建议：【科研迁移建议】已有论文处理、信息抽取或科研问答流程可评估切换至明确的新模型名，并自行验证输出质量与兼容性。【官方已明确的能力】两种接口均支持新模型；公告未提供科研任务效果、性能或成本对比，不能据此认定迁移后效果提升。",
+    "requirements": "通过 DeepSeek API 使用；支持 OpenAI ChatCompletions 接口与 Anthropic 接口。base_url 保持不变，model 参数设为 deepseek-v4-pro 或 deepseek-v4-flash。账号、费用及部署条件未明确，使用条件见官方文档。",
+    "steps": [
+      {
+        "text": "保持 base_url 不变，将 model 参数设为 deepseek-v4-pro 或 deepseek-v4-flash。",
+        "evidence": "To access the new models, the base_url remains unchanged, and the model parameter should be set to deepseek-v4-pro or deepseek-v4-flash ."
+      }
+    ],
+    "evidence": [
+      "The DeepSeek API now supports V4-Pro and V4-Flash, available via both the OpenAI ChatCompletions interface and the Anthropic interface.",
+      "To access the new models, the base_url remains unchanged, and the model parameter should be set to deepseek-v4-pro or deepseek-v4-flash .",
+      "The two legacy API model names, deepseek-chat and deepseek-reasoner , will be discontinued in three months (2026-07-24).",
+      "During the current period, these two model names point to the non-thinking mode and thinking mode of deepseek-v4-flash , respectively."
+    ],
+    "basis_url": "https://api-docs.deepseek.com/updates/#date-2026-04-24"
+  },
+  "analyzed_at": "2026-09-25T05:08:26.561935+00:00"
+}

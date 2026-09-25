@@ -1,0 +1,25 @@
+{
+  "id": "public-b6d1ad104292fa31c11ab6f0",
+  "content_version": "3ed28ff49369cd7ba44271a487ddd4681d699fc158f43e18b38ad7b07cad038c",
+  "analysis": {
+    "title_zh": "DeepSeek-V4-Flash 更新：API 进入公开测试",
+    "summary": "官方公告称，DeepSeek-V4-Flash API 已进入公开测试，调用方式保持不变，将模型名称设为 deepseek-v4-flash 即可使用最新版。公告列出终端、代码智能体等基准成绩，可作为相关任务选型的参考，但未提供旧版对照，不能据此判断提升幅度。公开基准中的代码智能体任务采用特定框架与参数测试；其中 DeepSeek Harness minimal mode 尚待发布，两项 DSBench 则属于内部测试集。",
+    "application": "建议：科研迁移可考虑在智能运维脚本开发、结构设计计算代码维护等任务中开展小规模评测，单独检验正确性与可靠性；这些属于迁移设想，并非官方已验证效果。官方报告的是所列基准及指定配置下的测试成绩，未验证上述科研场景，也未提供相对旧版的提升证据。",
+    "requirements": "原文明示：API 处于公开测试阶段，调用方式不变，模型名称为 deepseek-v4-flash。账号、费用及部署条件未明确，使用条件见官方文档。基准测试配置不应视为 API 使用的必要条件。",
+    "steps": [
+      {
+        "text": "沿用现有 API 调用方式，将模型名称设为 deepseek-v4-flash。",
+        "evidence": "The API calling method remains unchanged — simply set the model name to deepseek-v4-flash to use the latest version."
+      }
+    ],
+    "evidence": [
+      "The official release of the DeepSeek-V4-Flash API is now in public beta.",
+      "The API calling method remains unchanged — simply set the model name to deepseek-v4-flash to use the latest version.",
+      "Terminal Bench 2.1: 82.7 NL2Repo: 54.2 Cybergym: 76.7 DeepSWE: 54.4",
+      "Note 1: For the Code Agent tasks in the public benchmark sets, the official DeepSeek-V4-Flash was tested using the DeepSeek Harness minimal mode (to be released soon) as the framework, with the max effort level, topp=0.95, and temperature=1.0",
+      "Note 2: DSBench-FullStack is an internal full-stack development test set, and DSBench-Hard is an internal Coding Agent hard-problem test set"
+    ],
+    "basis_url": "https://api-docs.deepseek.com/updates/#date-2026-07-31"
+  },
+  "analyzed_at": "2026-09-25T05:06:48.830294+00:00"
+}
