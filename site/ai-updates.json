@@ -1,0 +1,1382 @@
+{
+  "version": 1,
+  "checked_at": "2026-09-25T04:57:45.211616+00:00",
+  "entries": [
+    {
+      "title": "Accelerating vision-language models with LFM2.5-VL-DSpark",
+      "url": "https://huggingface.co/blog/LiquidAI/lfm2-5-vl-dspark",
+      "published_at": "2026-09-24T14:11:39+00:00",
+      "summary": "Today, we release an experimental DSpark draft model for our vision-language model (VLM) LFM2.5-VL-3B . As with our recently released LFM2.5-DSpark drafter models , it adds a speculative decoding path that trades a minim",
+      "evidence_text": "Back to Articles Accelerating vision-language models with LFM2.5-VL-DSpark Team Article Published September 24, 2026 Upvote 11 +5 xx tugot17 Follow LiquidAI Yuri Khrustalev ykhrustalev Follow LiquidAI Leonie Monigatti iamleonie Follow LiquidAI Viviana Márquez vivianamarquez Follow LiquidAI Today, we release an experimental DSpark draft model for our vision-language model (VLM) LFM2.5-VL-3B . As with our recently released LFM2.5-DSpark drafter models , it adds a speculative decoding path that trades a minimal increase in memory footprint for a larger speedup without changing output quality. Faster inference: decode speedups up to 3.13x on device and 2.66x on an H100, with end-to-end gains up to 2.62x and 2.27x. Small memory cost: the drafter adds 280M parameters, 8.9% on top of the 3B target Day-one support: LFM-compatible DSpark integrations for llama.cpp, MLX-VLM, and SGLang How does sp",
+      "id": "public-280bf64dcca75cee1131d5bb",
+      "source_id": "huggingface",
+      "source": "Hugging Face 官方博客",
+      "organization": "Hugging Face 官方博客",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://huggingface.co/blog/LiquidAI/lfm2-5-vl-dspark",
+      "categories": [
+        "models"
+      ],
+      "scenarios": [
+        "coding"
+      ],
+      "release_state": "unknown",
+      "content_version": "ac0bb5d57a150551bf21db1630b957ca5c09b2331565aad16a2ea2c56651d4cf",
+      "analysis_status": "pending"
+    },
+    {
+      "title": "LangSmith Engine v2: Red teaming and automated testing",
+      "url": "https://www.langchain.com/blog/langsmith-engine-v2-redteam",
+      "published_at": "2026-09-24T00:00:00+00:00",
+      "evidence_text": "LangSmith LangSmith Engine v2: Red teaming and automated testing Ben Tannyhill Trammell Saltzgaber September 24, 2026 5 min Go back to blog Create agents Create agents Share Key Takeaways Red team your agents: Engine proactively finds issues in your agent before they emerge in production. Detect more issue types: Engine detects inefficient agent paths and trends in error rate, latency, and cost. Automatically test proposed fixes: Engine now tests and validates prompt and code fixes before showing them to you. We built LangSmith Engine to make fixing agents faster, so developers can spend more time building new capabilities and less time fighting bugs. Engine is an in-platform agent that automates work at each step of the agent development lifecycle . Agents are well-suited for this work. They excel at analyzing large datasets and writing code, making them great at spotting subtle issues,",
+      "summary": "We built LangSmith Engine to make fixing agents faster, so developers can spend more time building new capabilities and less time fighting bugs.",
+      "id": "public-27dad38353ccb73ad7f790bf",
+      "source_id": "langchain",
+      "source": "LangChain 官方发布",
+      "organization": "LangChain 官方发布",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://www.langchain.com/blog/langsmith-engine-v2-redteam",
+      "categories": [
+        "agents",
+        "tools"
+      ],
+      "scenarios": [
+        "coding"
+      ],
+      "release_state": "unknown",
+      "content_version": "a0e6fed58a3508de77d681bb3ef9bcfe63681533de2ed9848ba6dcc87cd4f31d",
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "LangSmith Engine v2：增加红队检查与修复验证",
+        "summary": "LangSmith Engine v2 增加主动发现智能体问题、识别低效执行路径，以及验证提示词和代码修复的能力。适合智能体上线前检查和运行问题排查。",
+        "application": "建议：在科研或编程智能体中，用真实失败案例检验修复是否有效。",
+        "requirements": "LangSmith Engine v2；账号及套餐条件见官方说明。",
+        "steps": [],
+        "evidence": [
+          "Engine proactively finds issues in your agent before they emerge in production.",
+          "Engine now tests and validates prompt and code fixes before showing them to you."
+        ],
+        "basis_url": "https://www.langchain.com/blog/langsmith-engine-v2-redteam"
+      },
+      "analyzed_at": "2026-09-25T04:51:35.231943+00:00"
+    },
+    {
+      "title": "Trajectories now in LangSmith: A readable view of every agent session",
+      "url": "https://www.langchain.com/blog/langsmith-trajectories-tracing",
+      "published_at": "2026-09-24T00:00:00+00:00",
+      "evidence_text": "LangSmith Observability & Evals Trajectories now in LangSmith: A readable view of every agent session Winston Huynh Bonnie Pecevich September 24, 2026 5 min Go back to blog Create agents Create agents Share Key Takeaways Find the root cause faster. Trajectories show the ordered path an agent took across a session, so you can pinpoint where behavior deviated before diving into the trace for full details. Get expert feedback with less friction. SMEs can review agent behavior in a readable format, without parsing nested traces. Continuously improve with production behavior data. Score trajectories with online evaluators, save useful sessions to datasets, and export examples for supervised fine-tuning workflows. Debugging agents often starts with a simple question: what did the agent actually do? For short, single-turn workflows, the answer is usually easy to find. For longer-running agents,",
+      "summary": "Debugging agents often starts with a simple question: what did the agent actually do?",
+      "id": "public-b60131f089d9948998c041ea",
+      "source_id": "langchain",
+      "source": "LangChain 官方发布",
+      "organization": "LangChain 官方发布",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://www.langchain.com/blog/langsmith-trajectories-tracing",
+      "categories": [
+        "agents",
+        "tools"
+      ],
+      "scenarios": [
+        "general"
+      ],
+      "release_state": "unknown",
+      "content_version": "aaab797ca53a36c68131ef9504600bd78225d3081f87a4eed689a40cf68805fd",
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "LangSmith Trajectories：按执行顺序查看智能体会话",
+        "summary": "新增 Trajectories 视图，按顺序呈现智能体执行过程，便于定位偏离预期的位置。轨迹还可参与在线评估、保存为数据集并导出微调样本。",
+        "application": "建议：用它检查多步骤文献检索或数据分析任务在哪一步出错。",
+        "requirements": "适用于 LangSmith；具体权限和套餐见官方资料。",
+        "steps": [
+          {
+            "text": "先从 Trajectories 找到执行偏差，再查看对应 trace 细节。",
+            "evidence": "Trajectories show the ordered path an agent took across a session, so you can pinpoint where behavior deviated before diving into the trace for full details."
+          }
+        ],
+        "evidence": [
+          "Score trajectories with online evaluators, save useful sessions to datasets, and export examples for supervised fine-tuning workflows."
+        ],
+        "basis_url": "https://www.langchain.com/blog/langsmith-trajectories-tracing"
+      },
+      "analyzed_at": "2026-09-25T04:51:35.245504+00:00"
+    },
+    {
+      "title": "Introducing LangSmith Fine-Tuning",
+      "url": "https://www.langchain.com/blog/langsmith-fine-tuning",
+      "published_at": "2026-09-24T00:00:00+00:00",
+      "evidence_text": "LangChain Labs LangSmith Introducing LangSmith Fine-Tuning Ankush Gola Jake Broekhuizen Vivek Trivedy September 24, 2026 8 min Go back to blog Create agents Create agents Share Key Takeaways Use the LangSmith Fine-Tuning CLI and skill - smithtune - to leverage agent trajectories stored in LangSmith to a fine-tuned model in one end-to-end workflow In addition to driving training, the smithtune CLI handles evaluating the fine-tuned model and uploads eval results to LangSmith for easy analysis We partnered with Fireworks & Baseten to create a seamless link between LangSmith trajectories and creation of a dataset for fine-tuning both the platforms Today we're launching LangSmith Fine-Tuning and smithtune , a CLI that helps teams turn LangSmith trajectories into custom fine-tuned models for their agents. It handles the entire fine-tuning process from one CLI: dataset creation and preparation ",
+      "summary": "Today we're launching LangSmith Fine-Tuning and smithtune , a CLI that helps teams turn LangSmith trajectories into custom fine-tuned models for their agents. It handles the entire fine-tuning process from one CLI: datas",
+      "id": "public-43f618bcad02931aaa715c5d",
+      "source_id": "langchain",
+      "source": "LangChain 官方发布",
+      "organization": "LangChain 官方发布",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://www.langchain.com/blog/langsmith-fine-tuning",
+      "categories": [
+        "models",
+        "agents",
+        "skills",
+        "tools"
+      ],
+      "scenarios": [
+        "general"
+      ],
+      "release_state": "released",
+      "content_version": "a275eeacd69d764217e264171635112ba8edefd56363ffc47a64d9917ff6f84d",
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "LangSmith Fine-Tuning：通过 smithtune CLI 与 Skill 微调智能体",
+        "summary": "LangSmith 发布 Fine-Tuning 和 smithtune，将已有智能体轨迹连接到数据集准备、模型微调与效果评估流程。这里的 Skill 是可复用的智能体工作流程。",
+        "application": "建议：先积累并审核任务轨迹，再评估是否值得微调科研或工程专用智能体。",
+        "requirements": "适用于 LangSmith Fine-Tuning 和 smithtune；平台连接涉及 Fireworks、Baseten，具体配置和费用见官方文档。",
+        "steps": [
+          {
+            "text": "使用 smithtune CLI／Skill，将 LangSmith 中的轨迹接入微调流程。",
+            "evidence": "Use the LangSmith Fine-Tuning CLI and skill - smithtune - to leverage agent trajectories stored in LangSmith to a fine-tuned model in one end-to-end workflow"
+          },
+          {
+            "text": "完成训练后使用 CLI 评估，并在 LangSmith 查看上传的结果。",
+            "evidence": "the smithtune CLI handles evaluating the fine-tuned model and uploads eval results to LangSmith for easy analysis"
+          }
+        ],
+        "evidence": [
+          "launching LangSmith Fine-Tuning and smithtune"
+        ],
+        "basis_url": "https://www.langchain.com/blog/langsmith-fine-tuning"
+      },
+      "analyzed_at": "2026-09-25T04:51:35.246932+00:00"
+    },
+    {
+      "title": "Introducing LangSmith Custom Apps: Build custom interfaces around your agent data",
+      "url": "https://www.langchain.com/blog/langsmith-custom-apps",
+      "published_at": "2026-09-24T00:00:00+00:00",
+      "evidence_text": "LangSmith Introducing LangSmith Custom Apps: Build custom interfaces around your agent data Sam Crowder Bonnie Pecevich September 24, 2026 4 min Go back to blog Create agents Create agents Share Key Takeaways Create custom interfaces without starting from scratch. Use templates and coding-agent guidance to build on LangSmith data, then publish and share inside LangSmith. Review agent behavior your way. Build focused UIs for feedback, experiments, traces, and the behaviors that matter most to your application. Create Custom Apps with a prompt. Enterprise Plan customers can use LangSmith Chat to describe what data they want and how to display it, then turn that into a working app. Today, we’re launching Custom Apps in LangSmith , which lets you build, publish, and run custom UIs on top of LangSmith data and run them directly inside LangSmith. Thousands of AI engineering teams use LangSmith",
+      "summary": "Today, we’re launching Custom Apps in LangSmith , which lets you build, publish, and run custom UIs on top of LangSmith data and run them directly inside LangSmith.",
+      "id": "public-8574e9b0b2d28510b8852d2a",
+      "source_id": "langchain",
+      "source": "LangChain 官方发布",
+      "organization": "LangChain 官方发布",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://www.langchain.com/blog/langsmith-custom-apps",
+      "categories": [
+        "agents",
+        "tools",
+        "science"
+      ],
+      "scenarios": [
+        "coding",
+        "engineering"
+      ],
+      "release_state": "released",
+      "content_version": "f192cc9a141ab90da4c47b55cc6af5da079573aaa4996cabd23cff7a9d06acc7",
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "LangSmith Custom Apps：围绕智能体数据建立专用界面",
+        "summary": "Custom Apps 支持在 LangSmith 数据上构建、发布和运行自定义界面，用于反馈、实验与执行轨迹查看。Enterprise Plan 用户还可通过 LangSmith Chat 描述所需界面。",
+        "application": "建议：为团队的智能体评审建立专用反馈页面，是否适合现有流程需自行验证。",
+        "requirements": "通过 LangSmith Chat 生成界面需 Enterprise Plan；其他使用条件见官网。",
+        "steps": [
+          {
+            "text": "利用模板和编程智能体指导，在 LangSmith 数据上构建界面并发布分享。",
+            "evidence": "Use templates and coding-agent guidance to build on LangSmith data, then publish and share inside LangSmith."
+          }
+        ],
+        "evidence": [
+          "Enterprise Plan customers can use LangSmith Chat to describe what data they want and how to display it, then turn that into a working app."
+        ],
+        "basis_url": "https://www.langchain.com/blog/langsmith-custom-apps"
+      },
+      "analyzed_at": "2026-09-25T04:51:35.248946+00:00"
+    },
+    {
+      "title": "How to Use NVIDIA Warp and MjWarp to Accelerate Robotics Simulation and Learning Workflows",
+      "url": "https://huggingface.co/blog/nvidia/how-to-use-nvidia-warp-and-mjwarp",
+      "published_at": "2026-09-23T18:58:39+00:00",
+      "summary": "Classic MuJoCo provides fast CPU-based robot simulation for developing, testing, and controlling robots and it can parallelize sampling across CPU cores. But as learning workloads grow, the question shifts from how quick",
+      "evidence_text": "Back to Articles How to Use NVIDIA Warp and MjWarp to Accelerate Robotics Simulation and Learning Workflows Enterprise + Article Published September 23, 2026 Upvote 20 +14 Johnny Nuñez Cano johnnynv Follow nvidia Asier Arranz asiernvidia Follow nvidia Rishabh Chadha rchadha-nv Follow nvidia Ben Oliveri BenOliveri Follow nvidia Classic MuJoCo provides fast CPU-based robot simulation for developing, testing, and controlling robots and it can parallelize sampling across CPU cores. But as learning workloads grow, the question shifts from how quickly one world can run to how many worlds can run at once. GPU acceleration makes it possible to advance those worlds in large batches while keeping simulation and learning data close to the device. MuJoCo Warp (MJWarp) , built on NVIDIA Warp , takes compatible MuJoCo models into that GPU-scale regime. In this article, we will move an SO-101 follower ",
+      "id": "public-30aa7c0acfe7f3809f1c0c2e",
+      "source_id": "huggingface",
+      "source": "Hugging Face 官方博客",
+      "organization": "Hugging Face 官方博客",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://huggingface.co/blog/nvidia/how-to-use-nvidia-warp-and-mjwarp",
+      "categories": [
+        "tools",
+        "science"
+      ],
+      "scenarios": [
+        "engineering"
+      ],
+      "release_state": "unknown",
+      "content_version": "4cdc56a05d197e36ddb0293ca24dcb18625068173e3a5793bec1177b63b978a5",
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "NVIDIA Warp 与 MJWarp：机器人仿真及学习工作流教程",
+        "summary": "官方教程介绍如何把兼容的 MuJoCo 模型接入基于 NVIDIA Warp 的 MJWarp，在 GPU 上批量推进仿真。适合需要大量并行环境的机器人学习与仿真工作。",
+        "application": "建议：先核对自己的模型兼容性，再评估 GPU 批量仿真能否改善具体训练流程。",
+        "requirements": "适用于 NVIDIA Warp／MJWarp 和兼容的 MuJoCo 模型；部署步骤及硬件条件以官方教程为准。",
+        "steps": [],
+        "evidence": [
+          "MuJoCo Warp (MJWarp) , built on NVIDIA Warp , takes compatible MuJoCo models into that GPU-scale regime."
+        ],
+        "basis_url": "https://huggingface.co/blog/nvidia/how-to-use-nvidia-warp-and-mjwarp"
+      },
+      "analyzed_at": "2026-09-25T04:51:35.249946+00:00"
+    },
+    {
+      "title": "Better prompt caching for GPT-6",
+      "url": "https://openai.com/index/better-prompt-caching-for-gpt-6",
+      "published_at": "2026-09-22T21:00:00+00:00",
+      "summary": "Learn how GPT-6 improves prompt caching with higher cache hit rates, new diagnostics, explicit breakpoints, and controls that reduce latency and costs.",
+      "evidence_text": "Learn how GPT-6 improves prompt caching with higher cache hit rates, new diagnostics, explicit breakpoints, and controls that reduce latency and costs.",
+      "verification": "pending",
+      "id": "public-f9027d80e820682e90d7e8a7",
+      "source_id": "openai",
+      "source": "OpenAI 官方发布",
+      "organization": "OpenAI 官方发布",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "",
+      "evidence_url": "https://openai.com/index/better-prompt-caching-for-gpt-6",
+      "categories": [
+        "models"
+      ],
+      "scenarios": [
+        "general"
+      ],
+      "release_state": "unknown",
+      "content_version": "8fab1c2465a1b65fb71a74c73ce643207c81589d8c9119529eda49b079cdcd28",
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "GPT-6 提示词缓存更新：诊断、断点与控制项",
+        "summary": "OpenAI 公告介绍 GPT-6 提示词缓存的改进，包括缓存命中、诊断、显式断点和控制项。适合关注重复上下文、响应延迟与调用成本的应用开发者。",
+        "application": "建议：在自己的重复文献处理或智能体任务上测量缓存表现，避免直接套用其他工作负载的收益。",
+        "requirements": "适用于 GPT-6；具体接口与可用条件见官方说明。",
+        "steps": [],
+        "evidence": [
+          "higher cache hit rates, new diagnostics, explicit breakpoints, and controls that reduce latency and costs."
+        ],
+        "basis_url": "https://openai.com/index/better-prompt-caching-for-gpt-6"
+      },
+      "analyzed_at": "2026-09-25T04:51:35.250945+00:00"
+    },
+    {
+      "title": "Introducing GPT-6 Sol and Luna",
+      "url": "https://openai.com/index/introducing-gpt-6-sol-and-luna",
+      "published_at": "2026-09-22T18:00:00+00:00",
+      "summary": "Meet GPT-6 Sol and Luna, two models that bring frontier intelligence to everyday work with different balances of capability and cost.",
+      "evidence_text": "Meet GPT-6 Sol and Luna, two models that bring frontier intelligence to everyday work with different balances of capability and cost.",
+      "verification": "pending",
+      "id": "public-73461b3e97af0d93277a11c9",
+      "source_id": "openai",
+      "source": "OpenAI 官方发布",
+      "organization": "OpenAI 官方发布",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "",
+      "evidence_url": "https://openai.com/index/introducing-gpt-6-sol-and-luna",
+      "categories": [
+        "models"
+      ],
+      "scenarios": [
+        "general"
+      ],
+      "release_state": "unknown",
+      "content_version": "008b45937abefd2618210385199525a1143d1fe0c7de8fc32f19aee6b30d6e9d",
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "GPT-6 Sol 与 Luna：面向日常工作的两种模型选择",
+        "summary": "OpenAI 介绍 GPT-6 Sol 和 Luna，两者面向日常任务，提供不同的能力与成本取舍。公告摘要没有给出详细适用条件和评测设置。",
+        "application": "建议：使用自己的编程、文献整理或数据处理样例比较两者，不仅依据模型名称选择。",
+        "requirements": "账号、接口、价格与开放范围请核对官方发布页。",
+        "steps": [],
+        "evidence": [
+          "two models that bring frontier intelligence to everyday work with different balances of capability and cost."
+        ],
+        "basis_url": "https://openai.com/index/introducing-gpt-6-sol-and-luna"
+      },
+      "analyzed_at": "2026-09-25T04:51:35.252464+00:00"
+    },
+    {
+      "title": "Parallel cut research time and cost in half with GPT‑6 Astra",
+      "url": "https://openai.com/index/parallel-cuts-time-and-cost-with-astra",
+      "published_at": "2026-09-22T12:00:00+00:00",
+      "summary": "GPT‑6 Astra allowed Parallel’s agents to research and synthesize labor-market data in half the time and at half the cost vs. prior models.",
+      "evidence_text": "GPT‑6 Astra allowed Parallel’s agents to research and synthesize labor-market data in half the time and at half the cost vs. prior models.",
+      "verification": "pending",
+      "id": "public-3fcefd9c665fb2c2484965cf",
+      "source_id": "openai",
+      "source": "OpenAI 官方发布",
+      "organization": "OpenAI 官方发布",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "",
+      "evidence_url": "https://openai.com/index/parallel-cuts-time-and-cost-with-astra",
+      "categories": [
+        "models",
+        "agents"
+      ],
+      "scenarios": [
+        "research"
+      ],
+      "release_state": "unknown",
+      "content_version": "7abd61e005377740bcf11afc82c64b672d586483060261c76f6b2d0f894e89b7",
+      "analysis_status": "pending"
+    },
+    {
+      "title": "How UK AISI and EvalEval Are Making Benchmark Results Reproducible",
+      "url": "https://huggingface.co/blog/evaleval-aisi",
+      "published_at": "2026-09-22T00:00:00.748000+00:00",
+      "summary": "The EvalEval Coalition is thrilled to share that the UK AI Security Institute (AISI) is using EvalEval's infrastructure to openly share evaluation results, supporting more reproducible and verifiable evaluation science.",
+      "evidence_text": "Back to Articles How UK AISI and EvalEval Are Making Benchmark Results Reproducible Published September 22, 2026 Update on GitHub Upvote 17 +11 Avijit Ghosh evijit Follow evaleval Jenny Chim j-chim Follow evaleval Deep Joshi deeplumiere Follow evaleval Srishti srishtiy Follow evaleval Matt Kennedy wmmkennedy Follow evaleval Irene Solaiman irenesolaiman Follow evaleval Jessica McFadyen mcfadyen-aisi Follow ai-safety-institute Lynn Tan lynn-aisi Follow ai-safety-institute Coz coz-aisi Follow ai-safety-institute The EvalEval Coalition is thrilled to share that the UK AI Security Institute (AISI) is using EvalEval's infrastructure to openly share evaluation results, supporting more reproducible and verifiable evaluation science. AISI and EvalEval have previously collaborated on research that began at a joint workshop alongside NeurIPS 2025 , and feedback from the Institute has helped shape t",
+      "id": "public-e9f63aa1f7aaa02f4024a141",
+      "source_id": "huggingface",
+      "source": "Hugging Face 官方博客",
+      "organization": "Hugging Face 官方博客",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://huggingface.co/blog/evaleval-aisi",
+      "categories": [
+        "science"
+      ],
+      "scenarios": [
+        "research"
+      ],
+      "release_state": "research",
+      "content_version": "5e762462168d7d2fab22bcc5bac1faaa5bbe8d44faac374fd64b999c05b4597b",
+      "analysis_status": "pending"
+    },
+    {
+      "title": "tokenizers v1: encode, decode and scaling, measured",
+      "url": "https://huggingface.co/blog/tokenizers-v1",
+      "published_at": "2026-09-21T18:16:14+00:00",
+      "summary": "The tokenizer has not historically been the bottleneck within ML workflows. Compute-wise, tokenization is light compared to the heavy modeling happening in the rest of the pipeline. Yet, in some cases, it has rapidly bec",
+      "evidence_text": "Back to Articles tokenizers v1: encode, decode and scaling, measured Published September 21, 2026 Update on GitHub Upvote 74 +68 Arthur Zucker ArthurZ Follow Simon Brandeis sbrandeis Follow Luc Georges mcpotato Follow Lysandre lysandre Follow The tokenizer has not historically been the bottleneck within ML workflows. Compute-wise, tokenization is light compared to the heavy modeling happening in the rest of the pipeline. Yet, in some cases, it has rapidly become key to accelerating (or slowing down) your machine learning work. As models become faster and workloads scale, that balance begins to shift. Training on massive datasets, serving many concurrent requests, or repeatedly processing long inputs can put enough pressure on the tokenizer that it starves the model of data. This is why we have chosen to heavily focus on performance for the upcoming version 1 of tokenizers. Tokenization s",
+      "id": "public-693b3130e25cc8808f585a69",
+      "source_id": "huggingface",
+      "source": "Hugging Face 官方博客",
+      "organization": "Hugging Face 官方博客",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://huggingface.co/blog/tokenizers-v1",
+      "categories": [
+        "models",
+        "tools"
+      ],
+      "scenarios": [
+        "coding"
+      ],
+      "release_state": "unknown",
+      "content_version": "902382c65174ea8982c85df9125383af35fcb8a2b27b5ed80ff52b114072f70f",
+      "analysis_status": "pending"
+    },
+    {
+      "title": "Introducing Astra for Law",
+      "url": "https://openai.com/index/astra-for-law",
+      "published_at": "2026-09-17T00:00:00+00:00",
+      "summary": "OpenAI for Law brings frontier intelligence for law, custom firm workflows, connected legal data sources, and legal-grade controls for confidential client work.",
+      "evidence_text": "OpenAI for Law brings frontier intelligence for law, custom firm workflows, connected legal data sources, and legal-grade controls for confidential client work.",
+      "verification": "pending",
+      "id": "public-192794312f979cbd50ee7eab",
+      "source_id": "openai",
+      "source": "OpenAI 官方发布",
+      "organization": "OpenAI 官方发布",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "",
+      "evidence_url": "https://openai.com/index/astra-for-law",
+      "categories": [
+        "tools"
+      ],
+      "scenarios": [
+        "general"
+      ],
+      "release_state": "unknown",
+      "content_version": "76cbeece2f131b90f819e7621e686002b6c42a07ae30f7f892e5d7b51bd160d6",
+      "analysis_status": "pending"
+    },
+    {
+      "title": "Managed Deep Agents v0.8: new auth, memory, and channels",
+      "url": "https://www.langchain.com/blog/langsmith-managed-deep-agents-whats-new",
+      "published_at": "2026-09-17T00:00:00+00:00",
+      "evidence_text": "Deep Agents Managed Deep Agents v0.8: new auth, memory, and channels Nathan Drezner Karthic Subramanian September 24, 2026 8 min Go back to blog Create agents Create agents Share Key Takeaways Identity-scoped auth and memory: user-owned credentials and user-level memory let agents act on the right permissions and remember caller-specific context. HTTP channels: use agents in internal tools, customer portals, support systems, and other product surfaces that can send webhooks. Built-in web search: Managed Deep Agents now includes web search powered by Parallel out of the box. Today we’re launching Managed Deep Agents 0.8, which adds support for user-owned credentials, user-level memory, HTTP channels, file transfer in Slack and adds a pre-built tool for web search powered by Parallel. Managed Deep Agents (MDA) is the simplest way to build, deploy, and run mission-critical agents in product",
+      "summary": "Today we’re launching Managed Deep Agents 0.8, which adds support for user-owned credentials, user-level memory, HTTP channels, file transfer in Slack and adds a pre-built tool for web search powered by Parallel.",
+      "id": "public-ae0a400c8192a30448ad3703",
+      "source_id": "langchain",
+      "source": "LangChain 官方发布",
+      "organization": "LangChain 官方发布",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://www.langchain.com/blog/langsmith-managed-deep-agents-whats-new",
+      "categories": [
+        "agents"
+      ],
+      "scenarios": [
+        "general"
+      ],
+      "release_state": "released",
+      "content_version": "d2c5e678ed44dc6b6d253ebe3e5c1aac39d2537599fcad234d153588783b4f3f",
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "Managed Deep Agents v0.8：用户身份、记忆与 HTTP 通道",
+        "summary": "v0.8 增加用户级凭证和记忆、HTTP 通道、Slack 文件传输及内置网络搜索，用于把智能体接入实际产品和工作流程。",
+        "application": "建议：多人共享的科研助手可先检查权限和记忆是否按用户隔离，再接入团队工具。",
+        "requirements": "适用于 Managed Deep Agents v0.8；部署、账户和计费条件见官方文档。",
+        "steps": [],
+        "evidence": [
+          "Identity-scoped auth and memory: user-owned credentials and user-level memory let agents act on the right permissions and remember caller-specific context.",
+          "HTTP channels: use agents in internal tools, customer portals, support systems, and other product surfaces that can send webhooks."
+        ],
+        "basis_url": "https://www.langchain.com/blog/langsmith-managed-deep-agents-whats-new"
+      },
+      "analyzed_at": "2026-09-25T04:51:35.255095+00:00"
+    },
+    {
+      "title": "Your Agent Aced the Task. Will It Do It Again?",
+      "url": "https://huggingface.co/blog/ibm-research/altk-evolve-consistency",
+      "published_at": "2026-09-16T06:53:00+00:00",
+      "summary": "Your agent works in rehearsal, but during the live demo, it takes a different path and fails the same task.",
+      "evidence_text": "Back to Articles Your Agent Aced the Task. Will It Do It Again? Enterprise Article Published September 15, 2026 Upvote 110 +104 Evelyn Duesterwald evduester Follow ibm-research Lilian Ngweta lilianngweta Follow ibm-research Vatche Isahagian Vatche Follow ibm-research Jayaram Radhakrishnan jayaramkr Follow ibm-research Vinod Muthusamy vinodmut Follow ibm-research Gaodan Fang gaodan-fang Follow ibm-research Ashwath Vaithinathan Aravindan ashwath-vaithina Follow ibm-research Punleuk Oum illeatmyhat Follow ibm-research G Thomas gsthomasx Follow ibm-research Merve Unuvar mrvnvr Follow ibm-research Ayhan Sebin ayhansebin Follow ibm-research Michał Ulewicz Michal Follow ibm-research Your agent works in rehearsal, but during the live demo, it takes a different path and fails the same task. That is embarrassing onstage. In production, it is a reliability problem: a workflow that succeeded once ma",
+      "id": "public-a1d018f16fad79f97456f75b",
+      "source_id": "huggingface",
+      "source": "Hugging Face 官方博客",
+      "organization": "Hugging Face 官方博客",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://huggingface.co/blog/ibm-research/altk-evolve-consistency",
+      "categories": [
+        "agents",
+        "tools"
+      ],
+      "scenarios": [
+        "research"
+      ],
+      "release_state": "unknown",
+      "content_version": "8f4dba7d5cc279154bf814c671234c9e9548b822620835e8a351b4a2718cb5a7",
+      "analysis_status": "pending"
+    },
+    {
+      "title": "How a researcher uses Codex and ChatGPT to search for new antimicrobial molecules",
+      "url": "https://openai.com/index/using-codex-chatgpt-to-search-for-new-antimicrobials",
+      "published_at": "2026-09-10T16:00:00+00:00",
+      "summary": "César de la Fuente’s lab uses Codex and ChatGPT to search living and extinct genomes for antimicrobial candidates to fight drug-resistant infections.",
+      "evidence_text": "César de la Fuente’s lab uses Codex and ChatGPT to search living and extinct genomes for antimicrobial candidates to fight drug-resistant infections.",
+      "verification": "pending",
+      "id": "public-39842fa0b34b37cbe3f74a63",
+      "source_id": "openai",
+      "source": "OpenAI 官方发布",
+      "organization": "OpenAI 官方发布",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "",
+      "evidence_url": "https://openai.com/index/using-codex-chatgpt-to-search-for-new-antimicrobials",
+      "categories": [
+        "agents"
+      ],
+      "scenarios": [
+        "research",
+        "coding"
+      ],
+      "release_state": "unknown",
+      "content_version": "f28852f203b70a9c5e20d2d92891e07854dd56daeb192c771ae65095d0c9a7c5",
+      "analysis_status": "pending"
+    },
+    {
+      "title": "Introducing ChatGPT for Financial Services",
+      "url": "https://openai.com/index/introducing-chatgpt-financial-services",
+      "published_at": "2026-09-10T07:00:00+00:00",
+      "summary": "Introducing ChatGPT for Financial Services, combining built-in financial data and GPT-6 Astra for research, modeling, and client-ready materials.",
+      "evidence_text": "Introducing ChatGPT for Financial Services, combining built-in financial data and GPT-6 Astra for research, modeling, and client-ready materials.",
+      "verification": "pending",
+      "id": "public-0bb946f0c421538942e42564",
+      "source_id": "openai",
+      "source": "OpenAI 官方发布",
+      "organization": "OpenAI 官方发布",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "",
+      "evidence_url": "https://openai.com/index/introducing-chatgpt-financial-services",
+      "categories": [
+        "models"
+      ],
+      "scenarios": [
+        "research"
+      ],
+      "release_state": "unknown",
+      "content_version": "786376dded328bae2a592e8348c1f4435e3dc0e72477911041c85228c5866cf3",
+      "analysis_status": "pending"
+    },
+    {
+      "title": "Introducing the Agents API",
+      "url": "https://openai.com/index/introducing-the-agents-api",
+      "published_at": "2026-09-10T00:00:00+00:00",
+      "summary": "Build and launch cloud agents with the Agents API, a managed service powered by the Codex harness for orchestration, long-running sessions, and tool use.",
+      "evidence_text": "Build and launch cloud agents with the Agents API, a managed service powered by the Codex harness for orchestration, long-running sessions, and tool use.",
+      "verification": "pending",
+      "id": "public-b32e9b847135398762b9f07d",
+      "source_id": "openai",
+      "source": "OpenAI 官方发布",
+      "organization": "OpenAI 官方发布",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "",
+      "evidence_url": "https://openai.com/index/introducing-the-agents-api",
+      "categories": [
+        "agents"
+      ],
+      "scenarios": [
+        "coding"
+      ],
+      "release_state": "unknown",
+      "content_version": "331c8183b66507afa6e656b51973afe0ef8e9b8891f6ebc189de7050fd8194d7",
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "Agents API：托管云端智能体、长时会话与工具调用",
+        "summary": "OpenAI 介绍 Agents API，采用 Codex harness 支持智能体编排、长时间会话及工具使用。适合需要持续执行多个步骤的应用。",
+        "application": "建议：先用可检查的小任务评估任务恢复和工具调用，再扩展到文献或工程自动化。",
+        "requirements": "这是 API 服务；具体账号、开放范围和计费条件以官方资料为准。",
+        "steps": [],
+        "evidence": [
+          "a managed service powered by the Codex harness for orchestration, long-running sessions, and tool use."
+        ],
+        "basis_url": "https://openai.com/index/introducing-the-agents-api"
+      },
+      "analyzed_at": "2026-09-25T04:51:35.256900+00:00"
+    },
+    {
+      "categories": [
+        "models"
+      ],
+      "scenarios": [
+        "coding",
+        "general"
+      ],
+      "product": "DeepSeek",
+      "title": "DeepSeek-V4.1-Flash Release ​",
+      "published_at": "2026-09-10T00:00:00+00:00",
+      "url": "https://api-docs.deepseek.com/updates/#date-2026-09-10",
+      "summary": "DeepSeek-V4.1-Flash Release ​ Today, we officially release the DeepSeek-V4.1-Flash model. It is the smallest model in our new architecture family, with native multimodal visual understanding. The new architecture is desi",
+      "evidence_text": "DeepSeek-V4.1-Flash Release ​ Today, we officially release the DeepSeek-V4.1-Flash model. It is the smallest model in our new architecture family, with native multimodal visual understanding. The new architecture is designed for a higher capability ceiling, faster inference, higher throughput, and scaling to larger models. GPQA Diamond: 90.9 HLE: 36.8 (39.1*) Codeforces (Rating): 3471 MathArena Apex: 65.6 Terminal-Bench 2.1: 90.6 Terminal-Bench 3.0: 30.0 Terminal-Bench 4.0: 31.2 DeepSWE v1.1: 74.2 ProgramBench: 20.3 NL2Repo-Bench: 65.4 CyberGym: 88.1 SEC-Bench Pro: 62.8 ExploitGym: 15.3 HLE (w/tools): 63.9 Automation-Bench: 54.8 Agents' Last Exam: 31.8 Chartography (w/tools): 78.9 BabyVision (w/tools): 89.6 ZeroBench-main (w/tools): 49.0 * Tested only on the pure-text subset of the HLE benchmark set. DeepSeek V4.1 Flash is now available on the DeepSeek API with native multimodal support.",
+      "id": "public-7423e770cbbebfa9ecbdc27b",
+      "source_id": "deepseek",
+      "source": "DeepSeek 更新日志",
+      "organization": "DeepSeek 更新日志",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-09-10",
+      "release_state": "released",
+      "content_version": "b62c1614f2c7545eb33afe0c72a754659dcfaf0f296f8f1f736a1d0f41c5e3bb",
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "DeepSeek-V4.1-Flash 发布：原生多模态视觉理解",
+        "summary": "DeepSeek 发布 V4.1-Flash，官方说明其具备原生视觉理解并已在 API 提供多模态能力。更新日志列有不同任务评测，使用时应结合各自测试条件解读。",
+        "application": "建议：用包含图表的真实文献样本检查视觉理解与文本推理，不把榜单结果直接当作科研有效性证明。",
+        "requirements": "适用于 DeepSeek-V4.1-Flash API，具体调用方式、账号和费用见官方文档。",
+        "steps": [],
+        "evidence": [
+          "DeepSeek V4.1 Flash is now available on the DeepSeek API with native multimodal support."
+        ],
+        "basis_url": "https://api-docs.deepseek.com/updates/#date-2026-09-10"
+      },
+      "analyzed_at": "2026-09-25T04:51:35.259382+00:00"
+    },
+    {
+      "title": "Research acceleration: The view inside OpenAI",
+      "url": "https://openai.com/index/research-acceleration-view-inside-openai",
+      "published_at": "2026-09-06T08:00:00+00:00",
+      "summary": "Inside OpenAI, coding agents are reshaping AI research. Explore early data on agent usage, experiment velocity, task complexity, and research acceleration.",
+      "evidence_text": "Inside OpenAI, coding agents are reshaping AI research. Explore early data on agent usage, experiment velocity, task complexity, and research acceleration.",
+      "verification": "pending",
+      "id": "public-3784d7aba9718af9aa1923cc",
+      "source_id": "openai",
+      "source": "OpenAI 官方发布",
+      "organization": "OpenAI 官方发布",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "",
+      "evidence_url": "https://openai.com/index/research-acceleration-view-inside-openai",
+      "categories": [
+        "agents",
+        "tools"
+      ],
+      "scenarios": [
+        "research",
+        "coding"
+      ],
+      "release_state": "unknown",
+      "content_version": "b4859e037c4c07d05d275251e7ca224cfd18111859ec07bc9a0913cdb402f39a",
+      "analysis_status": "pending"
+    },
+    {
+      "categories": [
+        "models"
+      ],
+      "scenarios": [
+        "coding",
+        "general"
+      ],
+      "product": "DeepSeek",
+      "title": "DeepSeek-V4-Flash-Vision-Exp Release ​",
+      "published_at": "2026-08-21T00:00:00+00:00",
+      "url": "https://api-docs.deepseek.com/updates/#date-2026-08-21",
+      "summary": "DeepSeek-V4-Flash-Vision-Exp Release ​ Today, the new multimodal vision understanding model DeepSeek-V4-Flash-Vision-Exp is now available on the DeepSeek API platform. This is an experimental model that can be accessed b",
+      "evidence_text": "DeepSeek-V4-Flash-Vision-Exp Release ​ Today, the new multimodal vision understanding model DeepSeek-V4-Flash-Vision-Exp is now available on the DeepSeek API platform. This is an experimental model that can be accessed by setting model='deepseek-v4-flash-vision-exp' . Terminal Bench 2.1: 83.9 NL2Repo: 57.7 DeepSWE: 59.3 DSBench-Hard: 63.6 AutomationBench (Public): 25.7 ApexBench (Pass@1): 36.5 Agents' Last Exam: 27.3 Chartography: 64.3 ZeroBench (Pass@5): 35.0 * For the Code Agent text tasks in the public benchmark sets, the DeepSeek family models were tested using the DeepSeek Harness minimal mode as the framework, with the max effort level, topp=0.95, and temperature=1.0; in the ApexBench and Agents' Last Exam evaluations, the text model DeepSeek-V4-Flash ignores the multimodal elements within them. In terms of pure-text capabilities (agent, reasoning, world knowledge, etc.), DeepSeek-",
+      "id": "public-2a6886f8c6561a9a3e84a236",
+      "source_id": "deepseek",
+      "source": "DeepSeek 更新日志",
+      "organization": "DeepSeek 更新日志",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-08-21",
+      "release_state": "preview",
+      "content_version": "495eb2ab5a221f0f61aeee663c23f157adabd0b4f80c17a76137824dbbaa08c8",
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "DeepSeek-V4-Flash-Vision-Exp：实验性视觉模型",
+        "summary": "DeepSeek 提供实验性多模态视觉理解模型，可通过 API 选择指定模型名称调用。它属于实验版本，应结合实际图文任务验证表现。",
+        "application": "建议：先对少量图表进行核对测试，保留原图和人工检查。",
+        "requirements": "实验模型；需要 DeepSeek API 调用条件，具体费用和限制见官网。",
+        "steps": [
+          {
+            "text": "调用 API 时将模型名称设为 deepseek-v4-flash-vision-exp。",
+            "evidence": "This is an experimental model that can be accessed by setting model='deepseek-v4-flash-vision-exp'"
+          }
+        ],
+        "evidence": [
+          "This is an experimental model"
+        ],
+        "basis_url": "https://api-docs.deepseek.com/updates/#date-2026-08-21"
+      },
+      "analyzed_at": "2026-09-25T04:51:35.261783+00:00"
+    },
+    {
+      "categories": [
+        "models"
+      ],
+      "scenarios": [
+        "coding",
+        "general"
+      ],
+      "product": "DeepSeek",
+      "title": "DeepSeek-V4-Pro Update ​",
+      "published_at": "2026-08-13T00:00:00+00:00",
+      "url": "https://api-docs.deepseek.com/updates/#date-2026-08-13",
+      "summary": "DeepSeek-V4-Pro Update ​ The GA release of DeepSeek-V4-Pro has been rolled out on the APP, Web, and API. The API calling method remains unchanged — simply set the model name to deepseek-v4-pro to use the latest version. ",
+      "evidence_text": "DeepSeek-V4-Pro Update ​ The GA release of DeepSeek-V4-Pro has been rolled out on the APP, Web, and API. The API calling method remains unchanged — simply set the model name to deepseek-v4-pro to use the latest version. The GA version of DeepSeek V4 Pro greatly enhances agent capabilities, with particularly significant performance improvements in production environments. HLE (wo / w tools): 42.7/60.0 Terminal Bench 2.1: 87.9 NL2Repo: 61.5 Cybergym: 83.3 DeepSWE: 62.7 Toolathlon-Verified: 74.1 Agents' Last Exam: 25.7 AutomationBench (Public): 31.8 DSBench-FullStack: 71.1 DSBench-Hard: 67.2 The DeepSeek API now natively supports the OpenAI Responses API format and is specifically adapted for Codex. Users can refer to the official documentation and complete the Codex configuration with a one-click configuration script. The thinking modes of V4-Pro and V4-Flash now support three thinking eff",
+      "id": "public-43d3190fc831ca70d3988c62",
+      "source_id": "deepseek",
+      "source": "DeepSeek 更新日志",
+      "organization": "DeepSeek 更新日志",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-08-13",
+      "release_state": "unknown",
+      "content_version": "154071c9cf9f2efbc29e1d1d5068fb30a47abbe948c144a0dbff51aab44602a0",
+      "analysis_status": "pending"
+    },
+    {
+      "title": "What does it mean to \"own your intelligence\"?",
+      "url": "https://www.langchain.com/blog/own-your-intelligence",
+      "published_at": "2026-08-12T00:00:00+00:00",
+      "evidence_text": "Harrison's In the Loop What does it mean to \"own your intelligence\"? Harrison Chase July 25, 2026 9 min Go back to blog Create agents Create agents Share Key Takeaways Generic AI alone will not create lasting advantage Companies need control over their models, agent systems, context, and memory Owning intelligence also means managing its cost, quality, risk, and behavior Advantage comes from a feedback loop that improves the system with use Buy the generic infrastructure, but own the intelligence that compounds Over the next five years, every company will use AI in one of two ways: to run critical parts of their business, or as part of the product they sell to customers. In both cases, generic intelligence will not be enough. To have real impact, companies need to own their intelligence. Ownership does not mean building every layer from scratch. It means controlling the parts that determ",
+      "summary": "Over the next five years, every company will use AI in one of two ways: to run critical parts of their business, or as part of the product they sell to customers. In both cases, generic intelligence will not be enough.",
+      "id": "public-3d92d6aca51f7bb16b3909a1",
+      "source_id": "langchain",
+      "source": "LangChain 官方发布",
+      "organization": "LangChain 官方发布",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://www.langchain.com/blog/own-your-intelligence",
+      "categories": [
+        "agents"
+      ],
+      "scenarios": [
+        "general"
+      ],
+      "release_state": "unknown",
+      "content_version": "af718618aae33ce0e7fb064b29f52a59480b2bb26855edf9fc8d85406406331e",
+      "analysis_status": "pending"
+    },
+    {
+      "categories": [
+        "models"
+      ],
+      "scenarios": [
+        "coding",
+        "general"
+      ],
+      "product": "DeepSeek",
+      "title": "DeepSeek-V4-Flash Update ​",
+      "published_at": "2026-07-31T00:00:00+00:00",
+      "url": "https://api-docs.deepseek.com/updates/#date-2026-07-31",
+      "summary": "DeepSeek-V4-Flash Update ​ The official release of the DeepSeek-V4-Flash API is now in public beta. The API calling method remains unchanged — simply set the model name to deepseek-v4-flash to use the latest version. Ter",
+      "evidence_text": "DeepSeek-V4-Flash Update ​ The official release of the DeepSeek-V4-Flash API is now in public beta. The API calling method remains unchanged — simply set the model name to deepseek-v4-flash to use the latest version. Terminal Bench 2.1: 82.7 NL2Repo: 54.2 Cybergym: 76.7 DeepSWE: 54.4 Toolathlon verified: 70.3 Agent Last Exam: 25.2 Automation Bench (Public): 25.1 DSBench-FullStack: 68.7 DSBench-Hard: 59.6 Note 1: For the Code Agent tasks in the public benchmark sets, the official DeepSeek-V4-Flash was tested using the DeepSeek Harness minimal mode (to be released soon) as the framework, with the max effort level, topp=0.95, and temperature=1.0 Note 2: DSBench-FullStack is an internal full-stack development test set, and DSBench-Hard is an internal Coding Agent hard-problem test set",
+      "id": "public-b6d1ad104292fa31c11ab6f0",
+      "source_id": "deepseek",
+      "source": "DeepSeek 更新日志",
+      "organization": "DeepSeek 更新日志",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-07-31",
+      "release_state": "unknown",
+      "content_version": "3ed28ff49369cd7ba44271a487ddd4681d699fc158f43e18b38ad7b07cad038c",
+      "analysis_status": "pending"
+    },
+    {
+      "title": "Pruning LLMs Like a Physicist: Block Removal as an Ising Optimization Problem",
+      "url": "https://huggingface.co/blog/MultiverseComputingCAI/pruning-llms-like-a-physicist-block-removal-as-an",
+      "published_at": "2026-06-17T00:00:00+00:00",
+      "summary": "One of the cheapest ways to make a large language model faster is also one of the bluntest: delete whole transformer blocks. Because the model literally gets shorter, block removal (also called depth pruning) buys predic",
+      "evidence_text": "Back to Articles Pruning LLMs Like a Physicist: Block Removal as an Ising Optimization Problem Team Article Published September 21, 2026 Upvote 30 +24 Antonio Tiene AntonioTN Follow MultiverseComputingCAI Ali Hashemi ali-hashemi Follow MultiverseComputingCAI David Jansen Jansenhbar Follow MultiverseComputingCAI Roman Rausch spinflip Follow MultiverseComputingCAI One of the cheapest ways to make a large language model faster is also one of the bluntest: delete whole transformer blocks. Because the model literally gets shorter, block removal (also called depth pruning) buys predictable inference speedups on top of the memory savings, and it stacks cleanly with quantization, low-rank compression, and other techniques. The hard part is deciding which blocks to cut. Remove the wrong ones and the model collapses; and the effect of removing any one block depends on which others you remove along",
+      "id": "public-ae2a66f3c360fd1788ea542e",
+      "source_id": "huggingface",
+      "source": "Hugging Face 官方博客",
+      "organization": "Hugging Face 官方博客",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://huggingface.co/blog/MultiverseComputingCAI/pruning-llms-like-a-physicist-block-removal-as-an",
+      "categories": [
+        "models"
+      ],
+      "scenarios": [
+        "general"
+      ],
+      "release_state": "unknown",
+      "content_version": "2fd623ea95f1d27be8728b96fb0257d0211f9d9d44e5450c18747e7bc7255b75",
+      "analysis_status": "pending"
+    },
+    {
+      "title": "How we contain Claude across products",
+      "url": "https://www.anthropic.com/engineering/how-we-contain-claude",
+      "published_at": "2026-05-25T00:00:00+00:00",
+      "evidence_text": "Twelve months ago, we'd have rejected out of hand the idea of granting Claude access sufficient to take down an internal Anthropic service. Today that level of access is routine, and Anthropic developers are more productive for it. The risk of these deployments has two components: how likely a failure is, and how much damage one could do. Progress on safeguards and model training has steadily driven down the first; the second—the theoretical blast radius—only grows as capabilities and access expand. Yet as agents become capable of doing work that once required a person or even a team, the cost of not deploying grows large enough that the risk-reward calculation tips heavily toward adoption, as long as products can be made safe. The engineering question becomes how to cap the blast radius. When bounds can be placed on the relative damage of an autonomous agent—such as through control over",
+      "summary": "Twelve months ago, we'd have rejected out of hand the idea of granting Claude access sufficient to take down an internal Anthropic service. Today that level of access is routine, and Anthropic developers are more product",
+      "id": "public-64af1d1a2fd48283363f2a58",
+      "source_id": "anthropic",
+      "source": "Anthropic 工程进展",
+      "organization": "Anthropic 工程进展",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://www.anthropic.com/engineering/how-we-contain-claude",
+      "categories": [
+        "models",
+        "agents",
+        "science"
+      ],
+      "scenarios": [
+        "coding",
+        "engineering"
+      ],
+      "release_state": "unknown",
+      "content_version": "c97aefb12cb0b10bdf7d799bef2bad48bca258931b03e720c1025261c3631953",
+      "analysis_status": "pending"
+    },
+    {
+      "categories": [
+        "models"
+      ],
+      "scenarios": [
+        "coding",
+        "general"
+      ],
+      "product": "DeepSeek",
+      "title": "DeepSeek-V4 ​",
+      "published_at": "2026-04-24T00:00:00+00:00",
+      "url": "https://api-docs.deepseek.com/updates/#date-2026-04-24",
+      "summary": "DeepSeek-V4 ​ The DeepSeek API now supports V4-Pro and V4-Flash, available via both the OpenAI ChatCompletions interface and the Anthropic interface. To access the new models, the base_url remains unchanged, and the mode",
+      "evidence_text": "DeepSeek-V4 ​ The DeepSeek API now supports V4-Pro and V4-Flash, available via both the OpenAI ChatCompletions interface and the Anthropic interface. To access the new models, the base_url remains unchanged, and the model parameter should be set to deepseek-v4-pro or deepseek-v4-flash . The two legacy API model names, deepseek-chat and deepseek-reasoner , will be discontinued in three months (2026-07-24). During the current period, these two model names point to the non-thinking mode and thinking mode of deepseek-v4-flash , respectively. For more details, please refer to this documentation .",
+      "id": "public-64d96de21ecc29ce0a96e935",
+      "source_id": "deepseek",
+      "source": "DeepSeek 更新日志",
+      "organization": "DeepSeek 更新日志",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-04-24",
+      "release_state": "unknown",
+      "content_version": "772021686dc36ac45810024203f6a377a219d98e0a97d279becba1886126edad",
+      "analysis_status": "pending"
+    },
+    {
+      "title": "An update on recent Claude Code quality reports",
+      "url": "https://www.anthropic.com/engineering/april-23-postmortem",
+      "published_at": "2026-04-23T00:00:00+00:00",
+      "evidence_text": "Over the past month, we’ve been looking into reports that Claude’s responses have worsened for some users. We’ve traced these reports to three separate changes that affected Claude Code, the Claude Agent SDK, and Claude Cowork. The API was not impacted. All three issues have now been resolved as of April 20 (v2.1.116). In this post, we explain what we found, what we fixed, and what we’ll do differently to ensure similar issues are much less likely to happen again. We take reports about degradation very seriously. We never intentionally degrade our models, and we were able to immediately confirm that our API and inference layer were unaffected. After investigation, we identified three different issues: On March 4, we changed Claude Code's default reasoning effort from high to medium to reduce the very long latency—enough to make the UI appear frozen—some users were seeing in high mode. Th",
+      "summary": "Over the past month, we’ve been looking into reports that Claude’s responses have worsened for some users. We’ve traced these reports to three separate changes that affected Claude Code, the Claude Agent SDK, and Claude ",
+      "id": "public-85b0ca3c45b5c9931e3c1fa0",
+      "source_id": "anthropic",
+      "source": "Anthropic 工程进展",
+      "organization": "Anthropic 工程进展",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://www.anthropic.com/engineering/april-23-postmortem",
+      "categories": [
+        "models",
+        "agents",
+        "tools"
+      ],
+      "scenarios": [
+        "coding"
+      ],
+      "release_state": "unknown",
+      "content_version": "7c2d7acfc3e69bdc306b6aeb2839bd5cd8a8c3f5c3dc63a27d3d525013519353",
+      "analysis_status": "pending"
+    },
+    {
+      "title": "Scaling Managed Agents: Decoupling the brain from the hands",
+      "url": "https://www.anthropic.com/engineering/managed-agents",
+      "published_at": "2026-04-08T00:00:00+00:00",
+      "evidence_text": "Get started with Claude Managed Agents by following our docs . A running topic on the Engineering Blog is how to build effective agents and design harnesses for long-running work . A common thread across this work is that harnesses encode assumptions about what Claude can’t do on its own. However, those assumptions need to be frequently questioned because they can go stale as models improve. As just one example, in prior work we found that Claude Sonnet 4.5 would wrap up tasks prematurely as it sensed its context limit approaching—a behavior sometimes called “context anxiety.” We addressed this by adding context resets to the harness. But when we used the same harness on Claude Opus 4.5, we found that the behavior was gone. The resets had become dead weight. We expect harnesses to continue evolving. So we built Managed Agents: a hosted service in the Claude Platform that runs long-horizo",
+      "summary": "Get started with Claude Managed Agents by following our docs . A running topic on the Engineering Blog is how to build effective agents and design harnesses for long-running work . A common thread across this work is tha",
+      "id": "public-8537165d23c701b725b2bce4",
+      "source_id": "anthropic",
+      "source": "Anthropic 工程进展",
+      "organization": "Anthropic 工程进展",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://www.anthropic.com/engineering/managed-agents",
+      "categories": [
+        "models",
+        "agents",
+        "science"
+      ],
+      "scenarios": [
+        "coding",
+        "engineering"
+      ],
+      "release_state": "unknown",
+      "content_version": "789cf092433a951bdf0387b8392ab1f5733f14e8471cf998172d0812f78ead2d",
+      "analysis_status": "pending"
+    },
+    {
+      "title": "How we built Claude Code auto mode: a safer way to skip permissions",
+      "url": "https://www.anthropic.com/engineering/claude-code-auto-mode",
+      "published_at": "2026-03-25T00:00:00+00:00",
+      "evidence_text": "By default, Claude Code asks users for approval before running commands or modifying files. This keeps users safe, but it also means a lot of clicking \"approve.\" Over time that leads to approval fatigue, where people stop paying close attention to what they're approving. Users have two solutions for avoiding this fatigue: a built-in sandbox where tools are isolated to prevent dangerous actions, or the --dangerously-skip-permissions flag that disables all permission prompts and lets Claude act freely, which is unsafe in most situations. Figure 1 lays out the tradeoff space. Sandboxing is safe but high-maintenance: each new capability needs configuring, and anything requiring network or host access breaks isolation. Bypassing permissions is zero-maintenance but offers no protection. Manual prompts sit in the middle, and in practice users accept 93% of them anyway. Figure 1. The permission ",
+      "summary": "By default, Claude Code asks users for approval before running commands or modifying files. This keeps users safe, but it also means a lot of clicking \"approve.\" Over time that leads to approval fatigue, where people sto",
+      "id": "public-d5f9dbd62b3ecc1122d19dce",
+      "source_id": "anthropic",
+      "source": "Anthropic 工程进展",
+      "organization": "Anthropic 工程进展",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://www.anthropic.com/engineering/claude-code-auto-mode",
+      "categories": [
+        "models",
+        "tools"
+      ],
+      "scenarios": [
+        "coding"
+      ],
+      "release_state": "unknown",
+      "content_version": "3ec0e3b78133eccb65b7d12660e1d8009c23e70c07532f911922373d91aecb02",
+      "analysis_status": "pending"
+    },
+    {
+      "title": "Harness design for long-running application development",
+      "url": "https://www.anthropic.com/engineering/harness-design-long-running-apps",
+      "published_at": "2026-03-24T00:00:00+00:00",
+      "evidence_text": "Written by Prithvi Rajasekaran, a member of our Labs team. Over the past several months I’ve been working on two interconnected problems: getting Claude to produce high-quality frontend designs, and getting it to build complete applications without human intervention. This work originated with earlier efforts on our frontend design skill and long-running coding agent harness , where my colleagues and I were able to improve Claude’s performance well above baseline through prompt engineering and harness design—but both eventually hit ceilings. To break through, I sought out novel AI engineering approaches that held across two quite different domains, one defined by subjective taste, the other by verifiable correctness and usability. Taking inspiration from Generative Adversarial Networks (GANs), I designed a multi-agent structure with a generator and evaluator agent. Building an evaluator ",
+      "summary": "Over the past several months I’ve been working on two interconnected problems: getting Claude to produce high-quality frontend designs, and getting it to build complete applications without human intervention. This work ",
+      "id": "public-9fa759b72385cdecdf59660d",
+      "source_id": "anthropic",
+      "source": "Anthropic 工程进展",
+      "organization": "Anthropic 工程进展",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://www.anthropic.com/engineering/harness-design-long-running-apps",
+      "categories": [
+        "models",
+        "agents",
+        "tools",
+        "science"
+      ],
+      "scenarios": [
+        "coding",
+        "engineering"
+      ],
+      "release_state": "unknown",
+      "content_version": "a13564ca5a2099bf6a9dd1a4a7821ffe5a15c2530e824ad1ec362e34f8d83a35",
+      "analysis_status": "pending"
+    },
+    {
+      "title": "Eval awareness in Claude Opus 4.6’s BrowseComp performance",
+      "url": "https://www.anthropic.com/engineering/eval-awareness-browsecomp",
+      "published_at": "2026-03-06T00:00:00+00:00",
+      "evidence_text": "BrowseComp is an evaluation designed to test how well models can find hard-to-locate information on the web. Like many benchmarks, it is vulnerable to contamination: answers leak onto the public web through academic papers, blog posts, and GitHub issues, and a model running the eval can encounter them in search results. When we evaluated Claude Opus 4.6 on BrowseComp in a multi-agent configuration, we found nine examples of this kind of contamination across 1,266 BrowseComp problems. However, we also witnessed two cases of a novel contamination pattern. Instead of inadvertently coming across a leaked answer, Claude Opus 4.6 independently hypothesized that it was being evaluated, identified which benchmark it was running in, then located and decrypted the answer key. To our knowledge, this is the first documented instance of a model suspecting it is being evaluated without knowing which b",
+      "summary": "BrowseComp is an evaluation designed to test how well models can find hard-to-locate information on the web. Like many benchmarks, it is vulnerable to contamination: answers leak onto the public web through academic pape",
+      "id": "public-42468eb1c49ef4da0e4e468e",
+      "source_id": "anthropic",
+      "source": "Anthropic 工程进展",
+      "organization": "Anthropic 工程进展",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://www.anthropic.com/engineering/eval-awareness-browsecomp",
+      "categories": [
+        "models",
+        "agents"
+      ],
+      "scenarios": [
+        "office"
+      ],
+      "release_state": "unknown",
+      "content_version": "0334d71a06f7aa2b9ce6391c91560aff2c932afe27704d0c69fc40032d9a7347",
+      "analysis_status": "pending"
+    },
+    {
+      "title": "Transformers now runs llama.cpp quants",
+      "url": "https://huggingface.co/blog/transformers-llama-cpp-quants",
+      "published_at": "2026-03-02T14:08:17+00:00",
+      "summary": "We're adding support for running GGUF models efficiently in transformers , so you can use checkpoints sized for your laptop's memory through the familiar transformers APIs. Pick a GGUF from the Hub, load it with from_pre",
+      "evidence_text": "Back to Articles Transformers now runs llama.cpp quants Published September 22, 2026 Update on GitHub Upvote 60 +54 Marc Sun marcsun13 Follow Arthur Zucker ArthurZ Follow Lysandre lysandre Follow We're adding support for running GGUF models efficiently in transformers , so you can use checkpoints sized for your laptop's memory through the familiar transformers APIs. Pick a GGUF from the Hub, load it with from_pretrained , and start generating on your own machine. Running AI models on your laptop has become much easier, and llama.cpp has been a big part of that. Its inference engine powers local AI tools such as Ollama, LM Studio, and Jan. Alongside projects like MLX , it has helped make local inference a practical option for everyday use. A recent example of what local AI can feel like: This is where we are right now. And i’m not gonna lie it feels pretty magical 🧙‍♀️ Qwen3.6 27B running",
+      "id": "public-689d78c6e007ab8e2c4f1996",
+      "source_id": "huggingface",
+      "source": "Hugging Face 官方博客",
+      "organization": "Hugging Face 官方博客",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://huggingface.co/blog/transformers-llama-cpp-quants",
+      "categories": [
+        "models"
+      ],
+      "scenarios": [
+        "general"
+      ],
+      "release_state": "unknown",
+      "content_version": "1e37d8fe75699240c4ea166b3e52cc4fecc3c04ff742d98dcba07e0bd5cc067c",
+      "analysis_status": "pending"
+    },
+    {
+      "categories": [
+        "models"
+      ],
+      "scenarios": [
+        "coding",
+        "general"
+      ],
+      "product": "DeepSeek",
+      "title": "DeepSeek-V3.2 ​",
+      "published_at": "2025-12-01T00:00:00+00:00",
+      "url": "https://api-docs.deepseek.com/updates/#date-2025-12-01",
+      "summary": "DeepSeek-V3.2 ​ Both deepseek-chat and deepseek-reasoner have been upgraded to DeepSeek-V3.2. deepseek-chat corresponds to DeepSeek-V3.2's non-thinking mode deepseek-reasoner corresponds to DeepSeek-V3.2's thinking mode ",
+      "evidence_text": "DeepSeek-V3.2 ​ Both deepseek-chat and deepseek-reasoner have been upgraded to DeepSeek-V3.2. deepseek-chat corresponds to DeepSeek-V3.2's non-thinking mode deepseek-reasoner corresponds to DeepSeek-V3.2's thinking mode DeepSeek-V3.2-Speciale ​ DeepSeek-V3.2-Speciale is served via a temporary endpoint: base_url=\" https://api.deepseek.com/v3.2_speciale_expires_on_20251215 \". Same pricing as V3.2, no tool calls, available until Dec 15th, 2025, 15:59 (UTC Time). For more details, please refer to this documentation .",
+      "id": "public-dbc51ec3cc356469cd986ce6",
+      "source_id": "deepseek",
+      "source": "DeepSeek 更新日志",
+      "organization": "DeepSeek 更新日志",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://api-docs.deepseek.com/updates/#date-2025-12-01",
+      "release_state": "unknown",
+      "content_version": "f730a3cebabaeebebba21b6a70c5ed75d5b48f716cb81810e88be85e3cccac9d",
+      "analysis_status": "pending"
+    },
+    {
+      "title": "SIMA 2An agent that plays, reasons, and learns with you",
+      "url": "https://deepmind.google/blog/sima-2-an-agent-that-plays-reasons-and-learns-with-you-in-virtual-3d-worlds/",
+      "evidence_text": "�\b\u0000\u0000\u0000\u0000\u0000\u0002����F���}�\u0002S�Ӗw ,\u0002|w��#K��n�v[�<�9{j@\u0012,R\u0002_L�U*��9}\u0011�e����\\X_���G\u0002$�bIU���nX.\u0012\u0004\u0012������\u0011�\u0011��S�[��bo�\u0018'�?ק�K�4=���,\u001ay�h\u0011�ǋ�?� ~��s��� =��?~�'/�&Ǉ�w���q����0����p�\u0018����t��'�ýQ|\u0018���=�Z�������������t<�\u0016�n\u0012o�r:�/�@r2�ž�� MF�Q��i/J�àR��&�8><\u0019ŧ��|q���hAM/�>���y\u000f���1/��NO�y�� <� \u0003�7�ν�#��h�XF���t��S�����W��q\u0012{����Ѥ������d4y� ���P]H?;8\u0010���_9�W\u000e���� �#?��� �!1�\u0016�,��R G�t���'q4��t�\u0018�gӥ?��'\u000e\u0016���O �\u0003o '��h2����6~�N\u0016�i�\u001bM�=��}o1��I�f�GI�.���\u001bM��rNU)M��^\u000f0\u0016z\u0007��9}\u0007 o\u0018'��2\u0011~ ��}qƫ��x�J��\u0012Mz��\u0017͢�(a0�ԛ\u000e�\u0001�io<��I�� \u001a�^|2MN��`> �\u0016������\u0018M'�`�$�����b?N{��LO��j��>��Y�h�\u0018N�;K]}����|:�狳���g�p;����7�k�\u0002��� Ă�g Nb�8���=��\u0013�_���;F&� ɰ�̓e\u001a�{\u000eq\u0015* h�h|V��k��纩��ٲ���a�?Z��!�z�~��W��\u0007����Ϫ�J5\bZ\u0017W\u0007'\u0019 F�k�.�f�:���Z���.��h~v�D���Ȇ߭ 80��^4_�c�����HƢ�w�l�����5���i�\u000f�\u001a7�r1o�7�QrIb���P��\u0010*X��0���F�QjL��?�s #�ɇ���͸��\bv� 8)�(/u\u0014�9�4��� �.A\"�͒�_L����7���ZH�4cM�9/ ����Z��\u0016zbM�FN\u0007on\u0000�@x�\u0001L�|\u00134o\u001a�(IvC\u0013M�n\u001a�z\u001bP�\u0013G 6J��",
+      "summary": "�\b\u0000\u0000\u0000\u0000\u0000\u0002����F���}�\u0002S�Ӗw ,\u0002|w��#K��n�v[�<�9{j@\u0012,R\u0002_L�U*��9}\u0011�e����\\X_���G\u0002$�bIU���nX.\u0012\u0004\u0012������\u0011�\u0011��S�[��bo�\u0018'�?ק�K�4=���,\u001ay�h\u0011�ǋ�?� ~��s��� =��?~�'/�&Ǉ�w���q����0����p�\u0018����t��'�ýQ|\u0018���=�Z�������������t<�\u0016�n\u0012o�r:�/�@r2�",
+      "id": "public-73e1e385eec202cf8af2271b",
+      "source_id": "deepmind",
+      "source": "Google DeepMind",
+      "organization": "Google DeepMind",
+      "checked_at": "2026-09-25T04:53:36.850234+00:00",
+      "verified_at": "2026-09-25T04:53:36.850234+00:00",
+      "verification": "verified",
+      "evidence_url": "https://deepmind.google/blog/sima-2-an-agent-that-plays-reasons-and-learns-with-you-in-virtual-3d-worlds/",
+      "categories": [
+        "agents"
+      ],
+      "scenarios": [
+        "general"
+      ],
+      "release_state": "unknown",
+      "content_version": "6dba2386eef9696940f8367714781a6133910857af6093c0181f28d724335284",
+      "analysis_status": "pending",
+      "published_at": "2025-11-13T18:55:00+00:00"
+    },
+    {
+      "categories": [
+        "models"
+      ],
+      "scenarios": [
+        "coding",
+        "general"
+      ],
+      "product": "DeepSeek",
+      "title": "DeepSeek-V3.2-Exp ​",
+      "published_at": "2025-09-29T00:00:00+00:00",
+      "url": "https://api-docs.deepseek.com/updates/#date-2025-09-29",
+      "summary": "DeepSeek-V3.2-Exp ​ Both deepseek-chat and deepseek-reasoner have been upgraded to DeepSeek-V3.2-Exp. deepseek-chat corresponds to DeepSeek-V3.2-Exp's non-thinking mode deepseek-reasoner corresponds to DeepSeek-V3.2-Exp'",
+      "evidence_text": "DeepSeek-V3.2-Exp ​ Both deepseek-chat and deepseek-reasoner have been upgraded to DeepSeek-V3.2-Exp. deepseek-chat corresponds to DeepSeek-V3.2-Exp's non-thinking mode deepseek-reasoner corresponds to DeepSeek-V3.2-Exp's thinking mode For more details, please refer to this documentation .",
+      "id": "public-ebd3d1bf9d956e41815e8573",
+      "source_id": "deepseek",
+      "source": "DeepSeek 更新日志",
+      "organization": "DeepSeek 更新日志",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://api-docs.deepseek.com/updates/#date-2025-09-29",
+      "release_state": "preview",
+      "content_version": "ba13707270f0fa9478f158766953b442c620ba8df540a9d59f75a22944289569",
+      "analysis_status": "pending"
+    },
+    {
+      "categories": [
+        "models"
+      ],
+      "scenarios": [
+        "coding",
+        "general"
+      ],
+      "product": "DeepSeek",
+      "title": "DeepSeek-V3.1-Terminus ​",
+      "published_at": "2025-09-22T00:00:00+00:00",
+      "url": "https://api-docs.deepseek.com/updates/#date-2025-09-22",
+      "summary": "DeepSeek-V3.1-Terminus ​ Both deepseek-chat and deepseek-reasoner have been upgraded to DeepSeek-V3.1-Terminus. deepseek-chat corresponds to DeepSeek-V3.1-Terminus's non-thinking mode , while deepseek-reasoner correspond",
+      "evidence_text": "DeepSeek-V3.1-Terminus ​ Both deepseek-chat and deepseek-reasoner have been upgraded to DeepSeek-V3.1-Terminus. deepseek-chat corresponds to DeepSeek-V3.1-Terminus's non-thinking mode , while deepseek-reasoner corresponds to its thinking mode . This update maintains the model's original capabilities while addressing issues reported by users, including: Language consistency: Reduced occurrences of Chinese-English mixing and occasional abnormal characters; Agent capabilities: Further optimized the performance of the Code Agent and Search Agent.",
+      "id": "public-5894fabfc644a10e855c03e6",
+      "source_id": "deepseek",
+      "source": "DeepSeek 更新日志",
+      "organization": "DeepSeek 更新日志",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://api-docs.deepseek.com/updates/#date-2025-09-22",
+      "release_state": "unknown",
+      "content_version": "3b61bca1a0cc71e9536b8660170a618176fa9b09563e3ae5d6b53affffeb3643",
+      "analysis_status": "pending"
+    },
+    {
+      "title": "AlphaEarth Foundations helps map our planet in unprecedented detail",
+      "url": "https://deepmind.google/blog/alphaearth-foundations-helps-map-our-planet-in-unprecedented-detail/",
+      "published_at": "2025-07-30T00:00:00+00:00",
+      "evidence_text": "July 30, 2025 Science AlphaEarth Foundations helps map our planet in unprecedented detail The AlphaEarth Foundations team Share New AI model integrates petabytes of Earth observation data to generate a unified data representation that revolutionizes global mapping and monitoring Every day, satellites capture information-rich images and measurements, providing scientists and experts with a nearly real-time view of our planet. While this data has been incredibly impactful, its complexity, multimodality and refresh rate creates a new challenge: connecting disparate datasets and making use of them all effectively. Today, we’re introducing AlphaEarth Foundations, an artificial intelligence (AI) model that functions like a virtual satellite. It accurately and efficiently characterizes the planet’s entire terrestrial land and coastal waters by integrating huge amounts of Earth observation data ",
+      "summary": "July 30, 2025 Science AlphaEarth Foundations helps map our planet in unprecedented detail The AlphaEarth Foundations team Share New AI model integrates petabytes of Earth observation data to generate a unified data repre",
+      "id": "public-c19ecf1b92dd445cb4fedb9c",
+      "source_id": "deepmind",
+      "source": "Google DeepMind",
+      "organization": "Google DeepMind",
+      "checked_at": "2026-09-25T04:53:36.850234+00:00",
+      "verified_at": "2026-09-25T04:53:36.850234+00:00",
+      "verification": "verified",
+      "evidence_url": "https://deepmind.google/blog/alphaearth-foundations-helps-map-our-planet-in-unprecedented-detail/",
+      "categories": [
+        "models",
+        "science"
+      ],
+      "scenarios": [
+        "research"
+      ],
+      "release_state": "unknown",
+      "content_version": "592eca73fb85db083547eb091de1ba8d45c749e9397d6903f4762cd778d4f1c8",
+      "analysis_status": "pending"
+    },
+    {
+      "categories": [
+        "agents",
+        "tools"
+      ],
+      "scenarios": [
+        "coding"
+      ],
+      "release_state": "released",
+      "product": "Qwen-Agent",
+      "title": "Qwen-Agent v0.0.26",
+      "url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.26",
+      "published_at": "2025-05-29T09:36:00+00:00",
+      "summary": "bugfix: support set sse_read_timeout and automatic reconnection for mcp",
+      "evidence_text": "bugfix: support set sse_read_timeout and automatic reconnection for mcp",
+      "product_version": "v0.0.26",
+      "id": "public-f3422f24bec5627d5e5241ee",
+      "source_id": "qwen-agent",
+      "source": "Qwen-Agent 版本发布",
+      "organization": "Qwen-Agent 版本发布",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.26",
+      "content_version": "2c301ad979bec74794359b1f3b91dd982ae0df5ac8eb3a23d4bb5ffee7850cf0",
+      "analysis_status": "pending"
+    },
+    {
+      "categories": [
+        "agents",
+        "tools"
+      ],
+      "scenarios": [
+        "coding"
+      ],
+      "release_state": "released",
+      "product": "Qwen-Agent",
+      "title": "Qwen-Agent v0.0.25",
+      "url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.25",
+      "published_at": "2025-05-22T10:29:30+00:00",
+      "summary": "support streamable-http for mcp change license to apache 2.0",
+      "evidence_text": "support streamable-http for mcp change license to apache 2.0",
+      "product_version": "v0.0.25",
+      "id": "public-ba156e90d696d1e8ff2eb143",
+      "source_id": "qwen-agent",
+      "source": "Qwen-Agent 版本发布",
+      "organization": "Qwen-Agent 版本发布",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.25",
+      "content_version": "3d1b4928b8c3335cb7d414163225c3bf46b6f383659b1bf193dd905d5d04e715",
+      "analysis_status": "pending"
+    },
+    {
+      "categories": [
+        "agents",
+        "tools"
+      ],
+      "scenarios": [
+        "coding"
+      ],
+      "release_state": "released",
+      "product": "Qwen-Agent",
+      "title": "Qwen-Agent v0.0.24",
+      "url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.24",
+      "published_at": "2025-05-19T11:19:10+00:00",
+      "summary": "allow tool response to be empty string add a fallback for invalid tool call output support resource in mcp server as tool support transformers models, audio input, and fix openvino",
+      "evidence_text": "allow tool response to be empty string add a fallback for invalid tool call output support resource in mcp server as tool support transformers models, audio input, and fix openvino",
+      "product_version": "v0.0.24",
+      "id": "public-e75091a707f3a3dc951c0f60",
+      "source_id": "qwen-agent",
+      "source": "Qwen-Agent 版本发布",
+      "organization": "Qwen-Agent 版本发布",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.24",
+      "content_version": "054f5267296d2b7dcbde36c1419fec06b39b29393c62b8f3ccf34a84245984fb",
+      "analysis_status": "pending"
+    },
+    {
+      "categories": [
+        "agents",
+        "tools"
+      ],
+      "scenarios": [
+        "coding"
+      ],
+      "release_state": "released",
+      "product": "Qwen-Agent",
+      "title": "Qwen-Agent v0.0.23",
+      "url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.23",
+      "published_at": "2025-05-16T04:48:21+00:00",
+      "summary": "fix missing dashscope api_key after creating fncall_agent with qwen3",
+      "evidence_text": "fix missing dashscope api_key after creating fncall_agent with qwen3",
+      "product_version": "v0.0.23",
+      "id": "public-28a99181e3265f7c0e4ff6a2",
+      "source_id": "qwen-agent",
+      "source": "Qwen-Agent 版本发布",
+      "organization": "Qwen-Agent 版本发布",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.23",
+      "content_version": "a52b6679b34bf97717ff70c47bc0a03c31a22ff7096585e0caf7ee4f987c2fc1",
+      "analysis_status": "pending"
+    },
+    {
+      "title": "AlphaEvolve: A Gemini-powered coding agent for designing advanced algorithms",
+      "url": "https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/",
+      "published_at": "2025-05-14T00:00:00+00:00",
+      "evidence_text": "May 14, 2025 Science AlphaEvolve: A Gemini-powered coding agent for designing advanced algorithms AlphaEvolve team Share New AI agent evolves algorithms for math and practical applications in computing by combining the creativity of large language models with automated evaluators Large language models (LLMs) are remarkably versatile. They can summarize documents, generate code or even brainstorm new ideas. And now we’ve expanded these capabilities to target fundamental and highly complex problems in mathematics and modern computing. Today, we’re announcing AlphaEvolve , an evolutionary coding agent powered by large language models for general-purpose algorithm discovery and optimization. AlphaEvolve pairs the creative problem-solving capabilities of our Gemini models with automated evaluators that verify answers, and uses an evolutionary framework to improve upon the most promising ideas",
+      "summary": "May 14, 2025 Science AlphaEvolve: A Gemini-powered coding agent for designing advanced algorithms AlphaEvolve team Share New AI agent evolves algorithms for math and practical applications in computing by combining the c",
+      "id": "public-1b5c7b499756dd8f247b3d01",
+      "source_id": "deepmind",
+      "source": "Google DeepMind",
+      "organization": "Google DeepMind",
+      "checked_at": "2026-09-25T04:53:36.850234+00:00",
+      "verified_at": "2026-09-25T04:53:36.850234+00:00",
+      "verification": "verified",
+      "evidence_url": "https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/",
+      "categories": [
+        "models",
+        "agents",
+        "tools",
+        "science"
+      ],
+      "scenarios": [
+        "research",
+        "coding",
+        "office"
+      ],
+      "release_state": "unknown",
+      "content_version": "9b7c98564c8bbb02efd6eb763c9f9cabe0bd4401d7aa33e1b030117a0a566c40",
+      "analysis_status": "pending"
+    },
+    {
+      "categories": [
+        "agents",
+        "tools"
+      ],
+      "scenarios": [
+        "coding"
+      ],
+      "release_state": "released",
+      "product": "Qwen-Agent",
+      "title": "Qwen-Agent v0.0.22",
+      "url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.22",
+      "published_at": "2025-05-08T13:21:46+00:00",
+      "summary": "add Qwen3 examples and MCP cookbooks change keygen model in rag bugfix: pass reasoning_content to oai interface",
+      "evidence_text": "add Qwen3 examples and MCP cookbooks change keygen model in rag bugfix: pass reasoning_content to oai interface",
+      "product_version": "v0.0.22",
+      "id": "public-f3fa51a6cbd04433d125ce90",
+      "source_id": "qwen-agent",
+      "source": "Qwen-Agent 版本发布",
+      "organization": "Qwen-Agent 版本发布",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.22",
+      "content_version": "5df7dcf5518ab4068163005fa68fa290f9f3e940e03bc11fe306bad11e64f09c",
+      "analysis_status": "pending"
+    },
+    {
+      "categories": [
+        "agents",
+        "tools"
+      ],
+      "scenarios": [
+        "coding"
+      ],
+      "release_state": "released",
+      "product": "Qwen-Agent",
+      "title": "Qwen-Agent v0.0.21",
+      "url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.21",
+      "published_at": "2025-05-01T18:36:04+00:00",
+      "summary": "add qwen3 example fix bug of typewriter_print for code_interpreter",
+      "evidence_text": "add qwen3 example fix bug of typewriter_print for code_interpreter",
+      "product_version": "v0.0.21",
+      "id": "public-a35def1fe9be1fd39b047f3a",
+      "source_id": "qwen-agent",
+      "source": "Qwen-Agent 版本发布",
+      "organization": "Qwen-Agent 版本发布",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "verification": "verified",
+      "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.21",
+      "content_version": "88406150221dc889d29c34e2ddf741e6292582b128ecb3997b4e46acba200406",
+      "analysis_status": "pending"
+    }
+  ],
+  "sources": [
+    {
+      "id": "openai",
+      "name": "OpenAI 官方发布",
+      "url": "https://openai.com/news/rss.xml",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "last_success": "2026-09-25T04:57:45.211616+00:00",
+      "status": "ok",
+      "count": 12
+    },
+    {
+      "id": "anthropic",
+      "name": "Anthropic 工程进展",
+      "url": "https://www.anthropic.com/engineering",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "last_success": "2026-09-25T04:57:45.211616+00:00",
+      "status": "ok",
+      "count": 6
+    },
+    {
+      "id": "deepmind",
+      "name": "Google DeepMind",
+      "url": "https://deepmind.google/blog/",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "last_success": "2026-09-25T04:57:45.211616+00:00",
+      "status": "no_data",
+      "count": 0
+    },
+    {
+      "id": "qwen",
+      "name": "Qwen 官方发布",
+      "url": "https://qwen.ai/blog",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "last_success": "2026-09-25T04:57:45.211616+00:00",
+      "status": "no_data",
+      "count": 0
+    },
+    {
+      "id": "qwen-agent",
+      "name": "Qwen-Agent 版本发布",
+      "url": "https://github.com/QwenLM/Qwen-Agent/releases.atom",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "last_success": "2026-09-25T04:57:45.211616+00:00",
+      "status": "ok",
+      "count": 6
+    },
+    {
+      "id": "deepseek",
+      "name": "DeepSeek 更新日志",
+      "url": "https://api-docs.deepseek.com/updates/",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "last_success": "2026-09-25T04:57:45.211616+00:00",
+      "status": "ok",
+      "count": 8
+    },
+    {
+      "id": "huggingface",
+      "name": "Hugging Face 官方博客",
+      "url": "https://huggingface.co/blog/feed.xml",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "last_success": "2026-09-25T04:57:45.211616+00:00",
+      "status": "ok",
+      "count": 8
+    },
+    {
+      "id": "langchain",
+      "name": "LangChain 官方发布",
+      "url": "https://www.langchain.com/blog",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "last_success": "2026-09-25T04:57:45.211616+00:00",
+      "status": "ok",
+      "count": 6
+    },
+    {
+      "id": "agent-skills",
+      "name": "Agent Skills 规范版本",
+      "url": "https://github.com/agentskills/agentskills/releases.atom",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "last_success": "2026-09-25T04:57:45.211616+00:00",
+      "status": "no_data",
+      "count": 0
+    },
+    {
+      "id": "anthropic-skills",
+      "name": "Anthropic Skills 版本",
+      "url": "https://github.com/anthropics/skills/releases.atom",
+      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "last_success": "2026-09-25T04:57:45.211616+00:00",
+      "status": "no_data",
+      "count": 0
+    }
+  ],
+  "outcome": "ok"
+}

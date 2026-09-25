@@ -7,12 +7,12 @@
   <meta name="theme-color" content="#153e64">
   <title>科研线索 | 每日论文推荐</title>
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./assets/site.css?v=43dcd9d6f6">
-  <link rel="stylesheet" href="./assets/paper-chat.css?v=43dcd9d6f6">
-  <link rel="stylesheet" href="./assets/paper-library.css?v=43dcd9d6f6">
-  <script src="./assets/site.js?v=43dcd9d6f6" defer></script>
-  <script src="./assets/paper-library.js?v=43dcd9d6f6" defer></script>
-  <script src="./assets/paper-chat.js?v=43dcd9d6f6" defer></script>
+  <link rel="stylesheet" href="./assets/site.css?v=92af73fdf5">
+  <link rel="stylesheet" href="./assets/paper-chat.css?v=92af73fdf5">
+  <link rel="stylesheet" href="./assets/paper-library.css?v=92af73fdf5">
+  <script src="./assets/site.js?v=92af73fdf5" defer></script>
+  <script src="./assets/paper-library.js?v=92af73fdf5" defer></script>
+  <script src="./assets/paper-chat.js?v=92af73fdf5" defer></script>
 
 </head>
 <body id="top">
@@ -25,6 +25,7 @@
         <a href="./" >每日推荐</a>
         <a href="./search.html" data-local-only >手动检索</a>
         <a href="./leads.html" aria-current="page">科研线索</a>
+        <a href="./ai.html" >AI 前沿</a>
         <a href="./library.html" data-local-only >我的文献</a>
         <a href="./archive/" >历史归档</a>
         <a href="./setup.html" data-local-only >设置</a>
@@ -35,226 +36,334 @@
     <main id="main-content" class="main-content" tabindex="-1">
       <section id="wechat-articles" class="research-leads" aria-labelledby="leads-heading">
   <h1 id="leads-heading" class="sr-only">科研线索、学术会议与征稿</h1>
-  <div class="issue-meta"><span>科研线索 · 35 条线索</span><span><time>2026-09-25 09:55</time> 最近采集</span><a href="setup.html#wechat" data-local-only>订阅与来源设置</a></div>
-  <p class="section-description">会议、征稿、研究动态与实用资源。汇总近 90 天公众号与官方公告，会议另按会期整理。</p>
+  <div class="issue-meta"><span>科研线索 · 45 条线索</span><span><time>2026-09-25 12:57</time> 最近采集</span><a href="setup.html#wechat" data-local-only>订阅与来源设置</a></div>
+  <p class="section-description">会议、征稿、学术任职和项目申报。近期动态汇总近 90 天内容，有效申请另按截止时间整理。大模型与智能体进展见<a href="ai.html">AI 前沿</a>。</p>
   <div class="lead-categories" role="group" aria-label="线索分类">
-    <button type="button" data-lead-kind="all" aria-pressed="true">全部 <span>35</span></button><button type="button" data-lead-kind="conference" aria-pressed="false">学术会议 <span>12</span></button><button type="button" data-lead-kind="call" aria-pressed="false">征稿与专题 <span>5</span></button><button type="button" data-lead-kind="news" aria-pressed="false">研究动态 <span>14</span></button><button type="button" data-lead-kind="resource" aria-pressed="false">论文库与数据 <span>4</span></button>
+    <button type="button" data-lead-kind="all" aria-pressed="true">全部 <span>45</span></button><button type="button" data-lead-kind="conference" aria-pressed="false">学术会议 <span>12</span></button><button type="button" data-lead-kind="call" aria-pressed="false">征稿与专题 <span>5</span></button><button type="button" data-lead-kind="news" aria-pressed="false">研究动态 <span>14</span></button><button type="button" data-lead-kind="resource" aria-pressed="false">论文库与数据 <span>4</span></button><button type="button" data-lead-kind="academic_role" aria-pressed="false">学术任职招募 <span>3</span></button><button type="button" data-lead-kind="funding" aria-pressed="false">项目与基金申报 <span>7</span></button>
   </div>
   <form id="lead-filters" class="lead-filters" role="search" aria-label="筛选科研线索">
     <label class="lead-query">搜索<input id="lead-query" type="search" placeholder="会议、主题、公众号或关键词" autocomplete="off"></label>
     <label>研究方向<select id="lead-topic"><option value="">全部方向</option><option value="ai_maintenance">AI 智能运维</option><option value="generative_design">结构生成式设计与可靠性优化</option><option value="fatigue_reliability">结构疲劳与可靠性</option></select></label>
     <label>来源<select id="lead-provider"><option value="">全部来源</option><option value="official">官方来源</option><option value="wechat">微信公众号</option></select></label>
-    <label>时间状态<select id="lead-state"><option value="">全部状态</option><option value="active">排除已结束 / 已截止</option><option value="upcoming">即将召开</option><option value="ended">已结束 / 已截止</option></select></label>
+    <label>时间状态<select id="lead-state"><option value="">默认（申请排除已截止）</option><option value="all">全部状态</option><option value="active">排除已结束 / 已截止</option><option value="open">正在申请</option><option value="closing">即将截止</option><option value="planned">尚未开放</option><option value="standing">常年受理</option><option value="unknown">待核对</option><option value="upcoming">即将召开</option><option value="ended">已结束 / 已截止</option></select></label>
+    <label>具体类型<select id="lead-subtype"><option value="">全部类型</option><option value="editor">期刊编委</option><option value="young_editor">青年编委</option><option value="committee">学会与专业委员</option><option value="grant">科研基金</option><option value="government">政府科技项目</option><option value="open_topic">开放课题</option><option value="international">国际合作</option><option value="joint_fund">联合基金</option><option value="industry">企业委托科研</option><option value="collaboration">产学研合作</option><option value="challenge">揭榜与技术攻关</option></select></label>
+    <label>国家或地区<select id="lead-region"><option value="">全部地区</option><option value="中国">中国</option><option value="国际">国际</option><option value="英国">英国</option></select></label>
+    <label>企业项目<select id="lead-group"><option value="">全部机构</option><option value="enterprise">所有企业项目</option><option value="comac">中国商飞</option><option value="avic">中国航空工业</option><option value="aecc">中国航发</option><option value="other">其他企业</option></select></label>
     <label>排序<select id="lead-sort"><option value="recommended">推荐顺序</option><option value="date">会期 / 截止时间</option><option value="latest">最新发布</option></select></label>
   </form>
-  <div class="lead-results"><span id="lead-count" role="status" aria-live="polite">35 条线索</span><button id="lead-reset" type="button" class="text-button">重置筛选</button></div>
+  <div class="lead-results"><span id="lead-count" role="status" aria-live="polite">45 条线索</span><button id="lead-reset" type="button" class="text-button">重置筛选</button></div>
   <ul id="lead-list" class="lead-list"><li class="lead-entry" data-kind="conference" data-provider="official" data-state="upcoming"
 data-topics="ai_maintenance fatigue_reliability" data-start="2026-09-26"
-data-published="" data-rank="0">
+data-published="" data-rank="0" data-opportunity="{&quot;kind&quot;: &quot;conference&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: &quot;2026-09-24&quot;, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://phm2026.phmsociety.org/" target="_blank" rel="noopener noreferrer">PHM 2026 · 故障预测与健康管理年会</a></h2>
 <span class="lead-state" data-state="upcoming">即将召开</span></div>
 <p class="lead-meta">学术会议 · PHM Society · 会期 2026-09-26 至 2026-09-30（当地日期） · 美国 · 夏洛特</p><p class="lead-summary">主会为 9 月 28–30 日，26–27 日设短课程。关注故障诊断、寿命预测、工业数据科学与智能运维。</p>
 <div class="lead-footer"><a href="https://phm2026.phmsociety.org/" target="_blank" rel="noopener noreferrer">官网与日程</a><span>AI 智能运维</span><span>结构疲劳与可靠性</span><span class="lead-verified">信息核对 2026-09-24</span></div></li><li class="lead-entry" data-kind="conference" data-provider="official" data-state="upcoming"
 data-topics="generative_design fatigue_reliability" data-start="2026-10-23"
-data-published="" data-rank="1">
+data-published="" data-rank="1" data-opportunity="{&quot;kind&quot;: &quot;conference&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: &quot;2026-09-24&quot;, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://meeting.cstam.org.cn/index.php/Dynamics/homePage" target="_blank" rel="noopener noreferrer">第七届动力学、振动与控制国际会议</a></h2>
 <span class="lead-state" data-state="upcoming">即将召开</span></div>
 <p class="lead-meta">学术会议 · 中国力学学会会议平台 · 会期 2026-10-23 至 2026-10-26（当地日期） · 中国 · 桂林</p><p class="lead-summary">适合追踪结构动力学、振动与控制研究。进入学会会议平台后按会议名称查看通知与参会信息。</p>
 <div class="lead-footer"><a href="https://meeting.cstam.org.cn/index.php/Dynamics/homePage" target="_blank" rel="noopener noreferrer">官网与日程</a><span>结构生成式设计与可靠性优化</span><span>结构疲劳与可靠性</span><span class="lead-verified">信息核对 2026-09-24</span></div></li><li class="lead-entry" data-kind="conference" data-provider="official" data-state="upcoming"
 data-topics="generative_design fatigue_reliability" data-start="2026-11-06"
-data-published="" data-rank="2">
+data-published="" data-rank="2" data-opportunity="{&quot;kind&quot;: &quot;conference&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: &quot;2026-09-24&quot;, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://meeting.cstam.org.cn/index.php/Dynamics/homePage" target="_blank" rel="noopener noreferrer">CCCM 2026 · 中国计算力学大会</a></h2>
 <span class="lead-state" data-state="upcoming">即将召开</span></div>
 <p class="lead-meta">学术会议 · 中国力学学会会议平台 · 会期 2026-11-06 至 2026-11-09（当地日期） · 中国 · 武汉</p><p class="lead-summary">适合关注计算力学、数值模拟及结构分析。进入学会会议平台后按会议名称查看专题与投稿通知。</p>
 <div class="lead-footer"><a href="https://meeting.cstam.org.cn/index.php/Dynamics/homePage" target="_blank" rel="noopener noreferrer">官网与日程</a><span>结构生成式设计与可靠性优化</span><span>结构疲劳与可靠性</span><span class="lead-verified">信息核对 2026-09-24</span></div></li><li class="lead-entry" data-kind="conference" data-provider="official" data-state="upcoming"
 data-topics="generative_design fatigue_reliability" data-start="2026-11-08"
-data-published="" data-rank="3">
+data-published="" data-rank="3" data-opportunity="{&quot;kind&quot;: &quot;conference&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: &quot;2026-09-24&quot;, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://event.asme.org/IMECE" target="_blank" rel="noopener noreferrer">ASME IMECE 2026 · 国际机械工程大会</a></h2>
 <span class="lead-state" data-state="upcoming">即将召开</span></div>
 <p class="lead-meta">学术会议 · ASME · 会期 2026-11-08 至 2026-11-12（当地日期） · 加拿大 · 温哥华</p><p class="lead-summary">机械工程跨领域交流，可关注力学、设计、材料与计算方法的相关分会。</p>
 <div class="lead-footer"><a href="https://event.asme.org/IMECE" target="_blank" rel="noopener noreferrer">官网与日程</a><span>结构生成式设计与可靠性优化</span><span>结构疲劳与可靠性</span><span class="lead-verified">信息核对 2026-09-24</span></div></li><li class="lead-entry" data-kind="conference" data-provider="official" data-state="upcoming"
 data-topics="generative_design fatigue_reliability" data-start="2026-11-20"
-data-published="" data-rank="4">
+data-published="" data-rank="4" data-opportunity="{&quot;kind&quot;: &quot;conference&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: &quot;2026-09-24&quot;, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://meeting.cstam.org.cn/index.php/Dynamics/homePage" target="_blank" rel="noopener noreferrer">APCSM 2026 · 第一届亚太固体力学大会</a></h2>
 <span class="lead-state" data-state="upcoming">即将召开</span></div>
 <p class="lead-meta">学术会议 · 中国力学学会会议平台 · 会期 2026-11-20 至 2026-11-22（当地日期） · 中国 · 南宁</p><p class="lead-summary">适合关注固体力学及结构、材料的交叉研究。会议通知与具体专题通过学会会议平台查看。</p>
 <div class="lead-footer"><a href="https://meeting.cstam.org.cn/index.php/Dynamics/homePage" target="_blank" rel="noopener noreferrer">官网与日程</a><span>结构生成式设计与可靠性优化</span><span>结构疲劳与可靠性</span><span class="lead-verified">信息核对 2026-09-24</span></div></li><li class="lead-entry" data-kind="conference" data-provider="official" data-state="upcoming"
 data-topics="ai_maintenance generative_design" data-start="2026-12-06"
-data-published="" data-rank="5">
+data-published="" data-rank="5" data-opportunity="{&quot;kind&quot;: &quot;conference&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: &quot;2026-09-24&quot;, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://neurips.cc/Conferences/2026" target="_blank" rel="noopener noreferrer">NeurIPS 2026 · 机器学习与人工智能</a></h2>
 <span class="lead-state" data-state="upcoming">即将召开</span></div>
 <p class="lead-meta">学术会议 · NeurIPS · 会期 2026-12-06 至 2026-12-12（当地日期） · 澳大利亚 · 悉尼主会场</p><p class="lead-summary">适合关注大模型、生成式方法与科学机器学习。亚特兰大、巴黎卫星会场的日期不同，见官方日程。</p>
 <div class="lead-footer"><a href="https://neurips.cc/Conferences/2026" target="_blank" rel="noopener noreferrer">官网与日程</a><span>AI 智能运维</span><span>结构生成式设计与可靠性优化</span><span class="lead-verified">信息核对 2026-09-24</span></div></li><li class="lead-entry" data-kind="conference" data-provider="official" data-state="upcoming"
 data-topics="generative_design fatigue_reliability" data-start="2027-01-11"
-data-published="" data-rank="6">
+data-published="" data-rank="6" data-opportunity="{&quot;kind&quot;: &quot;conference&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: &quot;2026-09-24&quot;, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://scitech.aiaa.org/" target="_blank" rel="noopener noreferrer">AIAA SciTech 2027 · 航空航天科学与技术</a></h2>
 <span class="lead-state" data-state="upcoming">即将召开</span></div>
 <p class="lead-meta">学术会议 · AIAA · 会期 2027-01-11 至 2027-01-15（当地日期）</p><p class="lead-summary">适合关注航空航天建模、仿真、结构设计与数字工程的研究进展。具体分会与场地以官网为准。</p>
 <div class="lead-footer"><a href="https://scitech.aiaa.org/" target="_blank" rel="noopener noreferrer">官网与日程</a><span>结构生成式设计与可靠性优化</span><span>结构疲劳与可靠性</span><span class="lead-verified">信息核对 2026-09-24</span></div></li><li class="lead-entry" data-kind="conference" data-provider="official" data-state="upcoming"
 data-topics="generative_design" data-start="2027-02-22"
-data-published="" data-rank="7">
+data-published="" data-rank="7" data-opportunity="{&quot;kind&quot;: &quot;conference&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: &quot;2026-09-24&quot;, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://www.siam.org/conferences-events/siam-conferences/cse27/" target="_blank" rel="noopener noreferrer">SIAM CSE 2027 · 计算科学与工程</a></h2>
 <span class="lead-state" data-state="upcoming">即将召开</span></div>
 <p class="lead-meta">学术会议 · SIAM · 会期 2027-02-22 至 2027-02-26（当地日期） · 美国 · 匹兹堡</p><p class="lead-summary">关注科学计算、建模仿真与 AI 方法，适合物理信息学习及结构优化方向。</p>
 <div class="lead-footer"><a href="https://www.siam.org/conferences-events/siam-conferences/cse27/" target="_blank" rel="noopener noreferrer">官网与日程</a><span>结构生成式设计与可靠性优化</span><span class="lead-verified">信息核对 2026-09-24</span></div></li><li class="lead-entry" data-kind="conference" data-provider="official" data-state="upcoming"
 data-topics="ai_maintenance generative_design" data-start="2027-04-26"
-data-published="" data-rank="8">
+data-published="" data-rank="8" data-opportunity="{&quot;kind&quot;: &quot;conference&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: &quot;2026-09-24&quot;, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://iclr.cc/Conferences/2027" target="_blank" rel="noopener noreferrer">ICLR 2027 · 表征学习与深度学习</a></h2>
 <span class="lead-state" data-state="upcoming">即将召开</span></div>
 <p class="lead-meta">学术会议 · ICLR · 会期 2027-04-26 至 2027-04-30（当地日期） · 美国 · 加利福尼亚州</p><p class="lead-summary">可关注表征学习、生成模型、优化及工程应用；会议尚未召开不代表投稿仍开放，请查看官方征稿要求。</p>
 <div class="lead-footer"><a href="https://iclr.cc/Conferences/2027" target="_blank" rel="noopener noreferrer">官网与日程</a><span>AI 智能运维</span><span>结构生成式设计与可靠性优化</span><span class="lead-verified">信息核对 2026-09-24</span></div></li><li class="lead-entry" data-kind="conference" data-provider="official" data-state="upcoming"
 data-topics="ai_maintenance fatigue_reliability" data-start="2027-06-06"
-data-published="" data-rank="9">
+data-published="" data-rank="9" data-opportunity="{&quot;kind&quot;: &quot;conference&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: &quot;2026-09-24&quot;, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://esrel2027prd.ethz.ch/" target="_blank" rel="noopener noreferrer">ESREL 2027 · 安全、可靠性与风险分析</a></h2>
 <span class="lead-state" data-state="upcoming">即将召开</span></div>
 <p class="lead-meta">学术会议 · ETH Zürich / ESRA · 会期 2027-06-06 至 2027-06-10（当地日期） · 瑞士 · 苏黎世</p><p class="lead-summary">覆盖可靠性工程、维护优化、PHM、风险与韧性，以及 AI 和数据驱动风险分析。</p>
 <div class="lead-footer"><a href="https://esrel2027prd.ethz.ch/" target="_blank" rel="noopener noreferrer">官网与日程</a><span>AI 智能运维</span><span>结构疲劳与可靠性</span><span class="lead-verified">信息核对 2026-09-24</span></div></li><li class="lead-entry" data-kind="news" data-provider="wechat" data-state="reference"
 data-topics="" data-start=""
-data-published="2026-09-24T07:18:18+00:00" data-rank="10">
+data-published="2026-09-24T07:18:18+00:00" data-rank="10" data-opportunity="{&quot;kind&quot;: &quot;news&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: null, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://weixin.sogou.com/weixin?type=2&amp;query=%E6%9C%BA%E5%99%A8%E4%B9%8B%E5%BF%83%20%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E8%B6%8A%E6%9D%A5%E8%B6%8A%E5%BF%AB%2C%E8%BD%AF%E4%BB%B6%E4%BA%A4%E4%BB%98%E7%9C%9F%E6%AD%A3%E7%9A%84%E7%93%B6%E9%A2%88%E8%BD%AC%E5%90%91%E4%BA%86%E5%93%AA%E9%87%8C%3F" target="_blank" rel="noopener noreferrer">代码生成越来越快,软件交付真正的瓶颈转向了哪里?</a></h2>
 <span class="lead-state" data-state="reference">研究动态</span></div>
 <p class="lead-meta">研究动态 · 机器之心 · 发布 2026-09-24</p><p class="lead-summary">机器之心发布2026 年 9 月 22 日,阿里巴巴集团 CEO 吴泳铭在杭州云栖大会发表演讲,阐述对「机器智能」时代的思考:机器正在成...</p>
-<div class="lead-footer"><a href="https://weixin.sogou.com/weixin?type=2&amp;query=%E6%9C%BA%E5%99%A8%E4%B9%8B%E5%BF%83%20%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E8%B6%8A%E6%9D%A5%E8%B6%8A%E5%BF%AB%2C%E8%BD%AF%E4%BB%B6%E4%BA%A4%E4%BB%98%E7%9C%9F%E6%AD%A3%E7%9A%84%E7%93%B6%E9%A2%88%E8%BD%AC%E5%90%91%E4%BA%86%E5%93%AA%E9%87%8C%3F" target="_blank" rel="noopener noreferrer">公开检索入口</a></div></li><li class="lead-entry" data-kind="news" data-provider="wechat" data-state="reference"
+<div class="lead-footer"><a href="https://weixin.sogou.com/weixin?type=2&amp;query=%E6%9C%BA%E5%99%A8%E4%B9%8B%E5%BF%83%20%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E8%B6%8A%E6%9D%A5%E8%B6%8A%E5%BF%AB%2C%E8%BD%AF%E4%BB%B6%E4%BA%A4%E4%BB%98%E7%9C%9F%E6%AD%A3%E7%9A%84%E7%93%B6%E9%A2%88%E8%BD%AC%E5%90%91%E4%BA%86%E5%93%AA%E9%87%8C%3F" target="_blank" rel="noopener noreferrer">公开检索入口</a></div></li><li class="lead-entry" data-kind="funding" data-provider="official" data-state="unknown"
 data-topics="" data-start=""
-data-published="2026-09-22T10:02:45+00:00" data-rank="11">
+data-published="2026-09-23T09:00:00+00:00" data-rank="11" data-opportunity="{&quot;kind&quot;: &quot;funding&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: &quot;application&quot;, &quot;verified_at&quot;: &quot;2026-09-25T04:16:37.454086+00:00&quot;, &quot;verification&quot;: &quot;verified&quot;}"
+data-subtype="grant" data-region="英国" data-group="" data-enterprise="false">
+<div class="lead-heading"><h2><a href="https://www.ukri.org/opportunity/pushing-the-frontiers-of-environmental-research/" target="_blank" rel="noopener noreferrer">Funding opportunity: Pushing the frontiers of environmental research</a></h2>
+<span class="lead-state" data-state="unknown">截止时间待核对</span></div>
+<p class="lead-meta">项目与基金申报 · UKRI 资助机会 · 发布 2026-09-23 · 英国 · 科研基金 · 正式申报</p><p class="lead-summary">Funding opportunity Funding opportunity: Pushing the frontiers of environmental research Opportunity status: Open Funders: Natural Environment Research Council (NERC) Funding type: Grant Maximum award: £950,000 Publicati</p>
+<details class="public-details"><summary>申请详情</summary><dl><dt>申请条件</dt><dd>请查看官方通知</dd><dt>申请主体</dt><dd>请查看官方通知</dd><dt>材料清单</dt><dd>请查看官方通知</dd><dt>申请方式</dt><dd>请查看官方通知</dd><dt>项目年度</dt><dd>请查看官方通知</dd><dt>资助额度</dt><dd>请查看官方通知</dd><dt>执行周期</dt><dd>请查看官方通知</dd><dt>联合申报要求</dt><dd>请查看官方通知</dd><dt>研究任务与交付要求</dt><dd>请查看官方通知</dd></dl><p></p><div class="lead-footer"><a href="https://ukri-tfs-prod-assets.s3.eu-west-2.amazonaws.com/FACILITIESLIST.docx" target="_blank" rel="noopener noreferrer">facility information list (DOCX, 43.1KB)</a></div></details><div class="lead-footer"><a href="https://www.ukri.org/opportunity/pushing-the-frontiers-of-environmental-research/" target="_blank" rel="noopener noreferrer">查看官方通知</a><span class="lead-verified">信息核对 2026-09-25T04:16:37.454086+00:00</span></div></li><li class="lead-entry" data-kind="funding" data-provider="official" data-state="open"
+data-topics="ai_maintenance" data-start="2026-10-21"
+data-published="2026-09-23T00:00:00+01:00" data-rank="12" data-opportunity="{&quot;kind&quot;: &quot;funding&quot;, &quot;deadline&quot;: &quot;2026-10-21&quot;, &quot;deadline_at&quot;: &quot;2026-10-21T11:00:00+01:00&quot;, &quot;opens&quot;: &quot;2026-09-21&quot;, &quot;stage&quot;: &quot;application&quot;, &quot;verified_at&quot;: &quot;2026-09-25T04:57:45.211616+00:00&quot;, &quot;verification&quot;: &quot;verified&quot;}"
+data-subtype="collaboration" data-region="英国" data-group="" data-enterprise="false">
+<div class="lead-heading"><h2><a href="https://www.ukri.org/opportunity/ofgem-strategic-innovation-fund-discovery-c7/" target="_blank" rel="noopener noreferrer">Ofgem Strategic Innovation Fund：Discovery C7 合作项目</a></h2>
+<span class="lead-state" data-state="open">正在申请</span></div>
+<p class="lead-meta">项目与基金申报 · Innovate UK／Ofgem · 截止 2026-10-21 11:00 英国夏令时（Europe/London，UTC+1；北京时间 18:00） · 英国 · 产学研合作 · 正式申报</p><p class="lead-summary">面向能源网络创新挑战的合作探索项目。牵头机构资格受英国能源监管许可限制。</p>
+<details class="public-details"><summary>申请详情</summary><dl><dt>申请条件</dt><dd>请查看官方通知</dd><dt>申请主体</dt><dd>Ofgem 许可的电力／燃气配网、输网运营商或 NESO 牵头。</dd><dt>材料清单</dt><dd>请查看官方通知</dd><dt>申请方式</dt><dd>由官方页面进入 Innovation Funding Service 查看完整指南并申请。</dd><dt>项目年度</dt><dd>请查看官方通知</dd><dt>资助额度</dt><dd>本轮共享预算最高 3000 万英镑（不含 VAT），并非单项额度。</dd><dt>执行周期</dt><dd>请查看官方通知</dd><dt>联合申报要求</dt><dd>只接受合作申报。</dd><dt>研究任务与交付要求</dt><dd>请查看官方通知</dd></dl><p></p><div class="lead-footer"><a href="https://apply-for-innovation-funding.service.gov.uk/competition/2552/overview/9f47273b-291d-4328-a49e-a038eff65f0d" target="_blank" rel="noopener noreferrer">前往申请</a></div></details><div class="lead-footer"><a href="https://www.ukri.org/opportunity/ofgem-strategic-innovation-fund-discovery-c7/" target="_blank" rel="noopener noreferrer">查看官方通知</a><span>AI 智能运维</span><span class="lead-verified">信息核对 2026-09-25T04:57:45.211616+00:00</span></div></li><li class="lead-entry" data-kind="news" data-provider="wechat" data-state="reference"
+data-topics="" data-start=""
+data-published="2026-09-22T10:02:45+00:00" data-rank="13" data-opportunity="{&quot;kind&quot;: &quot;news&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: null, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://weixin.sogou.com/weixin?type=2&amp;query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA%20CJA%20%C2%B7%20ICAS%202026%20%E6%82%89%E5%B0%BC%E4%BA%AE%E7%9B%B8" target="_blank" rel="noopener noreferrer">CJA · ICAS 2026 悉尼亮相</a></h2>
 <span class="lead-state" data-state="reference">研究动态</span></div>
 <p class="lead-meta">研究动态 · 航空学报CJA · 发布 2026-09-22</p><p class="lead-summary">2026年9月13日,航空学报杂志社一行,再次走出国门,深度参与... 两刊简介航空学报CJA_小编微 信 号:HKXBCJA_xiaobian扫码添...</p>
-<div class="lead-footer"><a href="https://weixin.sogou.com/weixin?type=2&amp;query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA%20CJA%20%C2%B7%20ICAS%202026%20%E6%82%89%E5%B0%BC%E4%BA%AE%E7%9B%B8" target="_blank" rel="noopener noreferrer">公开检索入口</a></div></li><li class="lead-entry" data-kind="news" data-provider="wechat" data-state="reference"
+<div class="lead-footer"><a href="https://weixin.sogou.com/weixin?type=2&amp;query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA%20CJA%20%C2%B7%20ICAS%202026%20%E6%82%89%E5%B0%BC%E4%BA%AE%E7%9B%B8" target="_blank" rel="noopener noreferrer">公开检索入口</a></div></li><li class="lead-entry" data-kind="funding" data-provider="official" data-state="open"
+data-topics="" data-start="2026-10-21"
+data-published="2026-09-22T00:00:00+00:00" data-rank="14" data-opportunity="{&quot;kind&quot;: &quot;funding&quot;, &quot;deadline&quot;: &quot;2026-10-21&quot;, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: &quot;application&quot;, &quot;verified_at&quot;: &quot;2026-09-25T04:57:45.211616+00:00&quot;, &quot;verification&quot;: &quot;verified&quot;}"
+data-subtype="grant" data-region="英国" data-group="" data-enterprise="false">
+<div class="lead-heading"><h2><a href="https://www.ukri.org/opportunity/ofgem-strategic-innovation-fund-round-five-discovery-c7/" target="_blank" rel="noopener noreferrer">Funding opportunity: Ofgem Strategic Innovation Fund round five discovery C7</a></h2>
+<span class="lead-state" data-state="open">正在申请</span></div>
+<p class="lead-meta">项目与基金申报 · UKRI 资助机会 · 截止 2026-10-21 时区及具体时刻见官方通知 · 英国 · 科研基金 · 正式申报</p><p class="lead-summary">Organisations can apply for a share of up to £30 million exclusive of VAT, for collaborative discovery phase projects that meet the round five challenges.</p>
+<details class="public-details"><summary>申请详情</summary><dl><dt>申请条件</dt><dd>请查看官方通知</dd><dt>申请主体</dt><dd>请查看官方通知</dd><dt>材料清单</dt><dd>请查看官方通知</dd><dt>申请方式</dt><dd>请查看官方通知</dd><dt>项目年度</dt><dd>请查看官方通知</dd><dt>资助额度</dt><dd>请查看官方通知</dd><dt>执行周期</dt><dd>请查看官方通知</dd><dt>联合申报要求</dt><dd>请查看官方通知</dd><dt>研究任务与交付要求</dt><dd>请查看官方通知</dd></dl><p></p><div class="lead-footer"><a href="https://apply-for-innovation-funding.service.gov.uk/competition/2550/overview/5cbb2d13-74bb-41b1-be19-005376930f80" target="_blank" rel="noopener noreferrer">前往申请</a></div></details><div class="lead-footer"><a href="https://www.ukri.org/opportunity/ofgem-strategic-innovation-fund-round-five-discovery-c7/" target="_blank" rel="noopener noreferrer">查看官方通知</a><span class="lead-verified">信息核对 2026-09-25T04:57:45.211616+00:00</span></div></li><li class="lead-entry" data-kind="news" data-provider="wechat" data-state="reference"
 data-topics="ai_maintenance" data-start=""
-data-published="2026-09-19T14:34:28+00:00" data-rank="12">
+data-published="2026-09-19T14:34:28+00:00" data-rank="15" data-opportunity="{&quot;kind&quot;: &quot;news&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: null, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://weixin.sogou.com/weixin?type=2&amp;query=%E6%9C%BA%E6%A2%B0%E5%B7%A5%E7%A8%8B%E5%AD%A6%E6%8A%A5%20%E4%B8%93%E5%AE%B6%E9%A2%86%E8%A1%94%E7%AD%96%E5%88%92%E2%80%94%E2%80%94%E6%95%B0%E5%AD%97%E5%AD%AA%E7%94%9F%E8%B5%8B%E8%83%BD%E7%9A%84%E9%AB%98%E7%AB%AF%E8%A3%85%E5%A4%87%E6%99%BA%E8%83%BD%E8%BF%90%E7%BB%B4%E4%B8%A8JME%E7%89%B9%E9%82%80%E4%B8%93%E6%A0%8F%28%E4%B8%8B%29" target="_blank" rel="noopener noreferrer">专家领衔策划——数字孪生赋能的高端装备智能运维丨JME特邀专栏(下)</a></h2>
 <span class="lead-state" data-state="reference">研究动态</span></div>
 <p class="lead-meta">研究动态 · 机械工程学报 · 发布 2026-09-19</p><p class="lead-summary">“数字孪生赋能的高端装备智能运维”专栏.本专栏开展“数字孪... 2026, 62(12): 77-86. 论文摘要:旋转机械的健康监测与早期故障检...</p>
 <div class="lead-footer"><a href="https://weixin.sogou.com/weixin?type=2&amp;query=%E6%9C%BA%E6%A2%B0%E5%B7%A5%E7%A8%8B%E5%AD%A6%E6%8A%A5%20%E4%B8%93%E5%AE%B6%E9%A2%86%E8%A1%94%E7%AD%96%E5%88%92%E2%80%94%E2%80%94%E6%95%B0%E5%AD%97%E5%AD%AA%E7%94%9F%E8%B5%8B%E8%83%BD%E7%9A%84%E9%AB%98%E7%AB%AF%E8%A3%85%E5%A4%87%E6%99%BA%E8%83%BD%E8%BF%90%E7%BB%B4%E4%B8%A8JME%E7%89%B9%E9%82%80%E4%B8%93%E6%A0%8F%28%E4%B8%8B%29" target="_blank" rel="noopener noreferrer">公开检索入口</a><span>AI 智能运维</span></div></li><li class="lead-entry" data-kind="conference" data-provider="wechat" data-state="unknown"
 data-topics="" data-start=""
-data-published="2026-09-18T14:12:40+00:00" data-rank="13">
+data-published="2026-09-18T14:12:40+00:00" data-rank="16" data-opportunity="{&quot;kind&quot;: &quot;conference&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: null, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://weixin.sogou.com/weixin?type=2&amp;query=%E6%99%BA%E6%BA%90FlagOpen%20%E4%B8%80%E6%A0%88%E8%B4%AF%E9%80%9A%2C%E6%99%BA%E7%AE%97%E6%97%A0%E7%95%8C%212026%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%BC%80%E6%94%BE%E8%AE%A1%E7%AE%97%E5%A4%A7%E4%BC%9A%20%E6%9A%A8%20%E4%BC%97%E6%99%BAFlagOS%E6%8A%80%E6%9C%AF%E5%A4%A7%E4%BC%9A%E4%BA%AE%E7%82%B9%E9%80%9F%E9%80%92" target="_blank" rel="noopener noreferrer">一栈贯通,智算无界!2026人工智能开放计算大会 暨 众智FlagOS技术大会亮点速递</a></h2>
 <span class="lead-state" data-state="unknown">会期见原文</span></div>
 <p class="lead-meta">学术会议 · 智源FlagOpen · 发布 2026-09-18</p><p class="lead-summary">社区联合北京智源人工智能研究院、北京量子信息科学研究院等机构、中关村人工智能开源联盟(筹)等机构,将于 2026 年 10 月 17-...</p>
-<div class="lead-footer"><a href="https://weixin.sogou.com/weixin?type=2&amp;query=%E6%99%BA%E6%BA%90FlagOpen%20%E4%B8%80%E6%A0%88%E8%B4%AF%E9%80%9A%2C%E6%99%BA%E7%AE%97%E6%97%A0%E7%95%8C%212026%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%BC%80%E6%94%BE%E8%AE%A1%E7%AE%97%E5%A4%A7%E4%BC%9A%20%E6%9A%A8%20%E4%BC%97%E6%99%BAFlagOS%E6%8A%80%E6%9C%AF%E5%A4%A7%E4%BC%9A%E4%BA%AE%E7%82%B9%E9%80%9F%E9%80%92" target="_blank" rel="noopener noreferrer">公开检索入口</a></div></li><li class="lead-entry" data-kind="news" data-provider="official" data-state="reference"
+<div class="lead-footer"><a href="https://weixin.sogou.com/weixin?type=2&amp;query=%E6%99%BA%E6%BA%90FlagOpen%20%E4%B8%80%E6%A0%88%E8%B4%AF%E9%80%9A%2C%E6%99%BA%E7%AE%97%E6%97%A0%E7%95%8C%212026%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%BC%80%E6%94%BE%E8%AE%A1%E7%AE%97%E5%A4%A7%E4%BC%9A%20%E6%9A%A8%20%E4%BC%97%E6%99%BAFlagOS%E6%8A%80%E6%9C%AF%E5%A4%A7%E4%BC%9A%E4%BA%AE%E7%82%B9%E9%80%9F%E9%80%92" target="_blank" rel="noopener noreferrer">公开检索入口</a></div></li><li class="lead-entry" data-kind="funding" data-provider="official" data-state="unknown"
+data-topics="ai_maintenance" data-start=""
+data-published="2026-09-18T00:00:00+08:00" data-rank="17" data-opportunity="{&quot;kind&quot;: &quot;funding&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: &quot;application&quot;, &quot;verified_at&quot;: &quot;2026-09-25T04:59:07.420337+00:00&quot;, &quot;verification&quot;: &quot;verified&quot;}"
+data-subtype="grant" data-region="中国" data-group="" data-enterprise="false">
+<div class="lead-heading"><h2><a href="https://www.nsfc.gov.cn/p1/3381/2824/142425.html" target="_blank" rel="noopener noreferrer">2026 年“空间智能与世界模型”专项项目申请指南</a></h2>
+<span class="lead-state" data-state="unknown">截止时间待核对</span></div>
+<p class="lead-meta">项目与基金申报 · 国家自然科学基金委员会信息科学部 · 发布 2026-09-18 · 中国 · 科研基金 · 正式申报</p><p class="lead-summary">基金委已发布指南通告。具体申请条件和截止时间需登录科学基金网络信息系统查看。</p>
+<details class="public-details"><summary>申请详情</summary><dl><dt>申请条件</dt><dd>请查看官方通知</dd><dt>申请主体</dt><dd>请查看官方通知</dd><dt>材料清单</dt><dd>请查看官方通知</dd><dt>申请方式</dt><dd>登录后在“项目管理—项目指南”查看正式要求。</dd><dt>项目年度</dt><dd>请查看官方通知</dd><dt>资助额度</dt><dd>请查看官方通知</dd><dt>执行周期</dt><dd>请查看官方通知</dd><dt>联合申报要求</dt><dd>请查看官方通知</dd><dt>研究任务与交付要求</dt><dd>请查看官方通知</dd></dl><p>公开通告未给出截止时间，请依托单位和申请人登录核对。</p><div class="lead-footer"><a href="https://grants.nsfc.gov.cn" target="_blank" rel="noopener noreferrer">前往申请</a></div></details><div class="lead-footer"><a href="https://www.nsfc.gov.cn/p1/3381/2824/142425.html" target="_blank" rel="noopener noreferrer">查看官方通知</a><span>AI 智能运维</span><span class="lead-verified">信息核对 2026-09-25T04:59:07.420337+00:00</span></div></li><li class="lead-entry" data-kind="news" data-provider="official" data-state="reference"
 data-topics="ai_maintenance generative_design" data-start=""
-data-published="2026-09-17T02:33:21+00:00" data-rank="14">
+data-published="2026-09-17T02:33:21+00:00" data-rank="18" data-opportunity="{&quot;kind&quot;: &quot;news&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: null, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://blog.neurips.cc/2026/09/16/join-us-at-neurips-2026-financial-assistance-and-volunteer-applications-are-now-open/" target="_blank" rel="noopener noreferrer">Join Us at NeurIPS 2026: Financial Assistance and Volunteer Applications Are Now Open</a></h2>
 <span class="lead-state" data-state="reference">研究动态</span></div>
 <p class="lead-meta">研究动态 · NeurIPS 官方公告 · 发布 2026-09-17</p><p class="lead-summary">NeurIPS is at its best when people from across our community can participate fully, presenting their work, exchanging ideas, finding collaborators, and helping make the conference possible. We are excited to announce…</p>
 <div class="lead-footer"><a href="https://blog.neurips.cc/2026/09/16/join-us-at-neurips-2026-financial-assistance-and-volunteer-applications-are-now-open/" target="_blank" rel="noopener noreferrer">阅读官方公告</a><span>AI 智能运维</span><span>结构生成式设计与可靠性优化</span></div></li><li class="lead-entry" data-kind="news" data-provider="wechat" data-state="reference"
 data-topics="" data-start=""
-data-published="2026-09-15T23:02:06+00:00" data-rank="15">
+data-published="2026-09-15T23:02:06+00:00" data-rank="19" data-opportunity="{&quot;kind&quot;: &quot;news&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: null, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://weixin.sogou.com/weixin?type=2&amp;query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA%202026%E8%88%AA%E7%A9%BA%E8%88%AA%E5%A4%A9%E5%B7%A5%E7%A8%8B%E4%B8%96%E7%95%8C%E4%B8%80%E6%B5%81%E5%AD%A6%E7%A7%91%E6%8E%92%E5%90%8D%20%7C%20%E8%BD%AF%E7%A7%91" target="_blank" rel="noopener noreferrer">2026航空航天工程世界一流学科排名 | 软科</a></h2>
 <span class="lead-state" data-state="reference">研究动态</span></div>
 <p class="lead-meta">研究动态 · 航空学报CJA · 发布 2026-09-16</p><p class="lead-summary">2026年9月15日,高等教育评价专业机构软科正式发布2026“软科... 软科两刊简介航空学报CJA_小编微 信 号:HKXBCJA_xiaobian扫...</p>
 <div class="lead-footer"><a href="https://weixin.sogou.com/weixin?type=2&amp;query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA%202026%E8%88%AA%E7%A9%BA%E8%88%AA%E5%A4%A9%E5%B7%A5%E7%A8%8B%E4%B8%96%E7%95%8C%E4%B8%80%E6%B5%81%E5%AD%A6%E7%A7%91%E6%8E%92%E5%90%8D%20%7C%20%E8%BD%AF%E7%A7%91" target="_blank" rel="noopener noreferrer">公开检索入口</a></div></li><li class="lead-entry" data-kind="news" data-provider="wechat" data-state="reference"
 data-topics="" data-start=""
-data-published="2026-09-14T03:56:40+00:00" data-rank="16">
+data-published="2026-09-14T03:56:40+00:00" data-rank="20" data-opportunity="{&quot;kind&quot;: &quot;news&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: null, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://weixin.sogou.com/weixin?type=2&amp;query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA%20%E3%80%8A%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5%E3%80%8B2026%E5%B9%B4%E7%AC%AC16%E6%9C%9F%E7%9B%AE%E5%BD%95" target="_blank" rel="noopener noreferrer">《航空学报》2026年第16期目录</a></h2>
 <span class="lead-state" data-state="reference">研究动态</span></div>
 <p class="lead-meta">研究动态 · 航空学报CJA · 发布 2026-09-14</p><p class="lead-summary">《航空学报》2026年 47卷 16期目录查看整期论文方式1 识别左侧二维码2 点击以下标题2026年第47卷第16期电子期刊.pdf流体力学与...</p>
 <div class="lead-footer"><a href="https://weixin.sogou.com/weixin?type=2&amp;query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA%20%E3%80%8A%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5%E3%80%8B2026%E5%B9%B4%E7%AC%AC16%E6%9C%9F%E7%9B%AE%E5%BD%95" target="_blank" rel="noopener noreferrer">公开检索入口</a></div></li><li class="lead-entry" data-kind="news" data-provider="wechat" data-state="reference"
 data-topics="" data-start=""
-data-published="2026-09-11T09:45:08+00:00" data-rank="17">
+data-published="2026-09-11T09:45:08+00:00" data-rank="21" data-opportunity="{&quot;kind&quot;: &quot;news&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: null, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://weixin.sogou.com/weixin?type=2&amp;query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA%20xAerospace%E6%AD%A3%E5%BC%8F%E5%88%9B%E5%88%8A%21%7C%20%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA" target="_blank" rel="noopener noreferrer">xAerospace正式创刊!| 航空学报CJA</a></h2>
 <span class="lead-state" data-state="reference">研究动态</span></div>
 <p class="lead-meta">研究动态 · 航空学报CJA · 发布 2026-09-11</p><p class="lead-summary">2026(第九届)中国航空科学技术大会于9月11日在无锡隆重开幕... END两刊简介航空学报CJA_小编微 信 号:HKXBCJA_xiaobian扫...</p>
 <div class="lead-footer"><a href="https://weixin.sogou.com/weixin?type=2&amp;query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA%20xAerospace%E6%AD%A3%E5%BC%8F%E5%88%9B%E5%88%8A%21%7C%20%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA" target="_blank" rel="noopener noreferrer">公开检索入口</a></div></li><li class="lead-entry" data-kind="resource" data-provider="official" data-state="reference"
 data-topics="ai_maintenance generative_design" data-start=""
-data-published="2026-09-10T16:02:25+00:00" data-rank="18">
+data-published="2026-09-10T16:02:25+00:00" data-rank="22" data-opportunity="{&quot;kind&quot;: &quot;resource&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: null, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://blog.iclr.cc/2026/09/10/making-googles-paper-assistant-tool-pat-available-to-iclr-submitters/" target="_blank" rel="noopener noreferrer">Making Google’s Paper Assistant Tool (PAT) available to ICLR submitters</a></h2>
 <span class="lead-state" data-state="reference">研究动态</span></div>
 <p class="lead-meta">论文库与数据 · ICLR 官方公告 · 发布 2026-09-11</p><p class="lead-summary">ICLR Program Chairs: Jacob Andreas, Guy Van den Broeck, Andrej Risteski, Stella Yu Google Research: Rajesh Jayaram, Vincent Cohen-Addad, Drew Tyler, David Woodruff, Tommaso D’Orsi Google Cloud: Jinsung Yoon, Mihir…</p>
-<div class="lead-footer"><a href="https://blog.iclr.cc/2026/09/10/making-googles-paper-assistant-tool-pat-available-to-iclr-submitters/" target="_blank" rel="noopener noreferrer">查看资源</a><span>AI 智能运维</span><span>结构生成式设计与可靠性优化</span></div></li><li class="lead-entry" data-kind="news" data-provider="official" data-state="reference"
+<div class="lead-footer"><a href="https://blog.iclr.cc/2026/09/10/making-googles-paper-assistant-tool-pat-available-to-iclr-submitters/" target="_blank" rel="noopener noreferrer">查看资源</a><span>AI 智能运维</span><span>结构生成式设计与可靠性优化</span></div></li><li class="lead-entry" data-kind="academic_role" data-provider="official" data-state="closing"
+data-topics="ai_maintenance" data-start="2026-09-25"
+data-published="2026-09-11T00:00:00+08:00" data-rank="23" data-opportunity="{&quot;kind&quot;: &quot;academic_role&quot;, &quot;deadline&quot;: &quot;2026-09-25&quot;, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: &quot;application&quot;, &quot;verified_at&quot;: &quot;2026-09-25T04:57:45.211616+00:00&quot;, &quot;verification&quot;: &quot;verified&quot;}"
+data-subtype="young_editor" data-region="中国" data-group="" data-enterprise="false">
+<div class="lead-heading"><h2><a href="https://www.arocmag.cn/info/announce/youngboardmember-request" target="_blank" rel="noopener noreferrer">《计算机应用研究》青年编委征集</a></h2>
+<span class="lead-state" data-state="closing">即将截止</span></div>
+<p class="lead-meta">学术任职招募 · 《计算机应用研究》编辑部 · 截止 2026-09-25 通知写明 9 月 25 日前，具体时刻请向编辑部确认 · 中国 · 青年编委 · 正式申报</p><p class="lead-summary">面向计算机及相关领域征集青年编委，采用个人自荐，需提交申请表。</p>
+<details class="public-details"><summary>申请详情</summary><dl><dt>申请条件</dt><dd>45 岁以下、博士学位；第一或通信作者发表至少 5 篇相关领域知名期刊或会议论文，其他条件见通知。</dd><dt>申请主体</dt><dd>请查看官方通知</dd><dt>材料清单</dt><dd>青年编委申请表 Word 文件。</dd><dt>申请方式</dt><dd>个人自荐，邮件主题使用“青年编委会委员登记表-单位名称-姓名”。</dd><dt>任期</dt><dd>请查看官方通知</dd><dt>职责</dt><dd>参与组稿、审稿、栏目建议及学术推广，遵守出版伦理。</dd></dl><p></p><div class="lead-footer"><span>申请邮箱：journal@arocmag.cn</span></div></details><div class="lead-footer"><a href="https://www.arocmag.cn/info/announce/youngboardmember-request" target="_blank" rel="noopener noreferrer">查看官方通知</a><span>AI 智能运维</span><span class="lead-verified">信息核对 2026-09-25T04:57:45.211616+00:00</span></div></li><li class="lead-entry" data-kind="academic_role" data-provider="official" data-state="closing"
+data-topics="ai_maintenance" data-start="2026-09-25"
+data-published="2026-09-11T00:00:00+08:00" data-rank="24" data-opportunity="{&quot;kind&quot;: &quot;academic_role&quot;, &quot;deadline&quot;: &quot;2026-09-25&quot;, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: &quot;application&quot;, &quot;verified_at&quot;: &quot;2026-09-25T04:57:45.211616+00:00&quot;, &quot;verification&quot;: &quot;verified&quot;}"
+data-subtype="editor" data-region="中国" data-group="" data-enterprise="false">
+<div class="lead-heading"><h2><a href="https://www.arocmag.cn/info/announce/boardmember-request" target="_blank" rel="noopener noreferrer">《计算机应用研究》编委征集</a></h2>
+<span class="lead-state" data-state="closing">即将截止</span></div>
+<p class="lead-meta">学术任职招募 · 《计算机应用研究》编辑部 · 截止 2026-09-25 通知写明 9 月 25 日前，具体时刻请向编辑部确认 · 中国 · 期刊编委 · 正式申报</p><p class="lead-summary">征集计算机及相关领域编委，审核候选人的研究经历、学术影响和参与意愿。</p>
+<details class="public-details"><summary>申请详情</summary><dl><dt>申请条件</dt><dd>博士、教授或相应职称／职务；近 3 年作为第一负责人主持省部级及以上科研项目，其他条件见通知。</dd><dt>申请主体</dt><dd>请查看官方通知</dd><dt>材料清单</dt><dd>编委申请表 Word 文件。</dd><dt>申请方式</dt><dd>个人自荐；邮件主题使用“编委会委员登记表-单位名称-姓名”。</dd><dt>任期</dt><dd>请查看官方通知</dd><dt>职责</dt><dd>参与办刊方向、选题策划、稿件推荐与出版质量工作。</dd></dl><p></p><div class="lead-footer"><span>申请邮箱：journal@arocmag.cn</span></div></details><div class="lead-footer"><a href="https://www.arocmag.cn/info/announce/boardmember-request" target="_blank" rel="noopener noreferrer">查看官方通知</a><span>AI 智能运维</span><span class="lead-verified">信息核对 2026-09-25T04:57:45.211616+00:00</span></div></li><li class="lead-entry" data-kind="news" data-provider="official" data-state="reference"
 data-topics="ai_maintenance generative_design" data-start=""
-data-published="2026-09-09T00:47:46+00:00" data-rank="19">
+data-published="2026-09-09T00:47:46+00:00" data-rank="25" data-opportunity="{&quot;kind&quot;: &quot;news&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: null, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://blog.neurips.cc/2026/09/08/neurips-foundation-announces-2026-bridging-the-future-grants-program-recipients/" target="_blank" rel="noopener noreferrer">NeurIPS Foundation Announces 2026 Bridging the Future Grants Program Recipients</a></h2>
 <span class="lead-state" data-state="reference">研究动态</span></div>
 <p class="lead-meta">研究动态 · NeurIPS 官方公告 · 发布 2026-09-09</p><p class="lead-summary">The Neural Information Processing Systems Foundation is excited to announce the recipients of the NeurIPS 2026 Bridging the Future Grants Program, created to support innovative activities that broaden participation in…</p>
 <div class="lead-footer"><a href="https://blog.neurips.cc/2026/09/08/neurips-foundation-announces-2026-bridging-the-future-grants-program-recipients/" target="_blank" rel="noopener noreferrer">阅读官方公告</a><span>AI 智能运维</span><span>结构生成式设计与可靠性优化</span></div></li><li class="lead-entry" data-kind="news" data-provider="official" data-state="reference"
 data-topics="ai_maintenance generative_design" data-start=""
-data-published="2026-09-05T08:17:57+00:00" data-rank="20">
+data-published="2026-09-05T08:17:57+00:00" data-rank="26" data-opportunity="{&quot;kind&quot;: &quot;news&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: null, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://blog.neurips.cc/2026/09/05/neurips-newsletter-august-2026/" target="_blank" rel="noopener noreferrer">NeurIPS Newsletter – August 2026</a></h2>
 <span class="lead-state" data-state="reference">研究动态</span></div>
 <p class="lead-meta">研究动态 · NeurIPS 官方公告 · 发布 2026-09-05</p><p class="lead-summary">Welcome to the August edition of the NeurIPS monthly Newsletter! The NeurIPS Newsletter aims to provide an easy way to keep up to date with NeurIPS events and planning progress, respond to requests for feedback and…</p>
-<div class="lead-footer"><a href="https://blog.neurips.cc/2026/09/05/neurips-newsletter-august-2026/" target="_blank" rel="noopener noreferrer">阅读官方公告</a><span>AI 智能运维</span><span>结构生成式设计与可靠性优化</span></div></li><li class="lead-entry" data-kind="call" data-provider="official" data-state="unknown"
+<div class="lead-footer"><a href="https://blog.neurips.cc/2026/09/05/neurips-newsletter-august-2026/" target="_blank" rel="noopener noreferrer">阅读官方公告</a><span>AI 智能运维</span><span>结构生成式设计与可靠性优化</span></div></li><li class="lead-entry" data-kind="funding" data-provider="official" data-state="closing"
+data-topics="ai_maintenance" data-start="2026-09-30"
+data-published="2026-09-05T00:00:00+08:00" data-rank="27" data-opportunity="{&quot;kind&quot;: &quot;funding&quot;, &quot;deadline&quot;: &quot;2026-09-30&quot;, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: &quot;application&quot;, &quot;verified_at&quot;: &quot;2026-09-25T04:57:45.211616+00:00&quot;, &quot;verification&quot;: &quot;verified&quot;}"
+data-subtype="open_topic" data-region="中国" data-group="" data-enterprise="false">
+<div class="lead-heading"><h2><a href="https://klais.ict.ac.cn/tzgg/xmzj/202609/t20260908_856264.html" target="_blank" rel="noopener noreferrer">智能算法安全全国重点实验室 2026 年开放课题</a></h2>
+<span class="lead-state" data-state="closing">即将截止</span></div>
+<p class="lead-meta">项目与基金申报 · 中国科学院计算技术研究所 · 智能算法安全全国重点实验室 · 截止 2026-09-30 中国；公告未列具体截止时刻 · 中国 · 开放课题 · 正式申报</p><p class="lead-summary">覆盖大模型与智能体安全、多模态、算法治理、协同计算、隐私计算和端侧安全。</p>
+<details class="public-details"><summary>申请详情</summary><dl><dt>申请条件</dt><dd>博士或副高级及以上；无高级职称的青年在职人员需两名高级职称专家推荐。每年限申请 1 项，在研主持不超过 1 项。</dd><dt>申请主体</dt><dd>非实验室固定研究人员。</dd><dt>材料清单</dt><dd>签字盖章的申请书扫描件及 Word 文件，无需纸质材料。</dd><dt>申请方式</dt><dd>按官网指定文件命名规则发送邮件。</dd><dt>项目年度</dt><dd>2026</dd><dt>资助额度</dt><dd>每项 10–15 万元</dd><dt>执行周期</dt><dd>2 年</dd><dt>联合申报要求</dt><dd>鼓励海内外高校、科研院所和企业跨单位合作。</dd><dt>研究任务与交付要求</dt><dd>阶段及结题报告；执行期至少参加一次实验室开放课题交流。</dd></dl><p></p><div class="lead-footer"><span>申请邮箱：sklais@ict.ac.cn</span><a href="https://klais.ict.ac.cn/tzgg/xmzj/202609/P020260908613459681977.docx" target="_blank" rel="noopener noreferrer">附件：智能算法安全全国重点实验室2026年度开放课题申请书.docx</a></div></details><div class="lead-footer"><a href="https://klais.ict.ac.cn/tzgg/xmzj/202609/t20260908_856264.html" target="_blank" rel="noopener noreferrer">查看官方通知</a><span>AI 智能运维</span><span class="lead-verified">信息核对 2026-09-25T04:57:45.211616+00:00</span></div></li><li class="lead-entry" data-kind="call" data-provider="official" data-state="unknown"
 data-topics="ai_maintenance generative_design" data-start=""
-data-published="2026-09-02T14:29:56+00:00" data-rank="21">
+data-published="2026-09-02T14:29:56+00:00" data-rank="28" data-opportunity="{&quot;kind&quot;: &quot;call&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: null, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://blog.iclr.cc/2026/09/02/submission-policies-for-iclr-2027/" target="_blank" rel="noopener noreferrer">Submission policies for ICLR 2027</a></h2>
 <span class="lead-state" data-state="unknown">投稿状态见原文</span></div>
 <p class="lead-meta">征稿与专题 · ICLR 官方公告 · 发布 2026-09-02</p><p class="lead-summary">ICLR Program Chairs: Jacob Andreas, Guy Van den Broeck, Andrej Risteski, Stella Yu One of the big changes we’ve made at ICLR this year is a set of policies that effectively “rate-limit” submissions—a 20-paper limit for…</p>
 <div class="lead-footer"><a href="https://blog.iclr.cc/2026/09/02/submission-policies-for-iclr-2027/" target="_blank" rel="noopener noreferrer">查看征稿要求</a><span>AI 智能运维</span><span>结构生成式设计与可靠性优化</span></div></li><li class="lead-entry" data-kind="news" data-provider="official" data-state="reference"
 data-topics="ai_maintenance generative_design" data-start=""
-data-published="2026-08-27T17:18:47+00:00" data-rank="22">
+data-published="2026-08-27T17:18:47+00:00" data-rank="29" data-opportunity="{&quot;kind&quot;: &quot;news&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: null, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://blog.neurips.cc/2026/08/27/navigating-neurips-2026-a-breakdown-of-the-multi-site-registration-process/" target="_blank" rel="noopener noreferrer">Navigating NeurIPS 2026: A Breakdown of the Multi-Site Registration Process</a></h2>
 <span class="lead-state" data-state="reference">研究动态</span></div>
 <p class="lead-meta">研究动态 · NeurIPS 官方公告 · 发布 2026-08-28</p><p class="lead-summary">With NeurIPS 2026 adopting a distributed, multi-site format across Sydney, Atlanta, and Paris, managing attendance is a significant logistical challenge. Given the size of the conference, our primary goal is to provide…</p>
-<div class="lead-footer"><a href="https://blog.neurips.cc/2026/08/27/navigating-neurips-2026-a-breakdown-of-the-multi-site-registration-process/" target="_blank" rel="noopener noreferrer">阅读官方公告</a><span>AI 智能运维</span><span>结构生成式设计与可靠性优化</span></div></li><li class="lead-entry" data-kind="news" data-provider="official" data-state="reference"
+<div class="lead-footer"><a href="https://blog.neurips.cc/2026/08/27/navigating-neurips-2026-a-breakdown-of-the-multi-site-registration-process/" target="_blank" rel="noopener noreferrer">阅读官方公告</a><span>AI 智能运维</span><span>结构生成式设计与可靠性优化</span></div></li><li class="lead-entry" data-kind="funding" data-provider="official" data-state="closing"
+data-topics="ai_maintenance fatigue_reliability" data-start="2026-09-30"
+data-published="2026-08-27T09:21:00+08:00" data-rank="30" data-opportunity="{&quot;kind&quot;: &quot;funding&quot;, &quot;deadline&quot;: &quot;2026-09-30&quot;, &quot;deadline_at&quot;: &quot;2026-09-30T17:00:00+08:00&quot;, &quot;opens&quot;: &quot;2026-09-01&quot;, &quot;stage&quot;: &quot;application&quot;, &quot;verified_at&quot;: &quot;2026-09-25T04:57:45.211616+00:00&quot;, &quot;verification&quot;: &quot;verified&quot;}"
+data-subtype="open_topic" data-region="中国" data-group="" data-enterprise="false">
+<div class="lead-heading"><h2><a href="https://www.nctifc.com/announcement/202608/t20260827_126441.html" target="_blank" rel="noopener noreferrer">燃料电池国家技术创新中心 2026 年开放课题</a></h2>
+<span class="lead-state" data-state="closing">即将截止</span></div>
+<p class="lead-meta">项目与基金申报 · 燃料电池国家技术创新中心 · 截止 2026-09-30 17:00，中国时间 · 中国 · 开放课题 · 正式申报</p><p class="lead-summary">支持材料、电堆、系统控制和健康管理等方向，包括目标导向揭榜和自由探索。</p>
+<details class="public-details"><summary>申请详情</summary><dl><dt>申请条件</dt><dd>副高级及以上或博士；年度限 1 项，中心在研课题负责人不得申请。</dd><dt>申请主体</dt><dd>国内外高校、科研院所等。</dd><dt>材料清单</dt><dd>线上申请书；目标导向类参照官方附件 2。</dd><dt>申请方式</dt><dd>在开放课题管理系统填写并提交。</dd><dt>项目年度</dt><dd>2026</dd><dt>资助额度</dt><dd>每项 25 万元，原则上立项 10 项</dd><dt>执行周期</dt><dd>原则上不超过 2 年</dd><dt>联合申报要求</dt><dd>不允许多院校联合申报。</dd><dt>研究任务与交付要求</dt><dd>与产业需求相关的前沿研究及论文；目标导向类按附件约定任务，不得降低指标。</dd></dl><p></p><div class="lead-footer"><a href="https://kfkt.nctifc.com" target="_blank" rel="noopener noreferrer">前往申请</a><a href="https://www.nctifc.com/announcement/202608/W020260827356355243376.docx" target="_blank" rel="noopener noreferrer">附件1：燃料电池国家技术创新中心2026年开放课题申请书</a><a href="https://www.nctifc.com/announcement/202608/W020260827356355390225.docx" target="_blank" rel="noopener noreferrer">附件2：2026年度目标导向类开放课题资助方向</a></div></details><div class="lead-footer"><a href="https://www.nctifc.com/announcement/202608/t20260827_126441.html" target="_blank" rel="noopener noreferrer">查看官方通知</a><span>AI 智能运维</span><span>结构疲劳与可靠性</span><span class="lead-verified">信息核对 2026-09-25T04:57:45.211616+00:00</span></div></li><li class="lead-entry" data-kind="news" data-provider="official" data-state="reference"
 data-topics="ai_maintenance generative_design" data-start=""
-data-published="2026-08-12T04:00:30+00:00" data-rank="23">
+data-published="2026-08-12T04:00:30+00:00" data-rank="31" data-opportunity="{&quot;kind&quot;: &quot;news&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: null, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://blog.neurips.cc/2026/08/11/meet-the-organizing-team-behind-neurips-2026/" target="_blank" rel="noopener noreferrer">Meet the Organizing Team Behind NeurIPS 2026</a></h2>
 <span class="lead-state" data-state="reference">研究动态</span></div>
 <p class="lead-meta">研究动态 · NeurIPS 官方公告 · 发布 2026-08-12</p><p class="lead-summary">Every year, the Conference on Neural Information Processing Systems (NeurIPS) relies on the incredible dedication, vision, and hard work of our volunteer organizing committee. We are so excited to introduce the…</p>
 <div class="lead-footer"><a href="https://blog.neurips.cc/2026/08/11/meet-the-organizing-team-behind-neurips-2026/" target="_blank" rel="noopener noreferrer">阅读官方公告</a><span>AI 智能运维</span><span>结构生成式设计与可靠性优化</span></div></li><li class="lead-entry" data-kind="call" data-provider="official" data-state="unknown"
 data-topics="ai_maintenance generative_design" data-start=""
-data-published="2026-08-10T19:22:06+00:00" data-rank="24">
+data-published="2026-08-10T19:22:06+00:00" data-rank="32" data-opportunity="{&quot;kind&quot;: &quot;call&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: null, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://blog.neurips.cc/2026/08/10/announcing-the-neurips-2026-workshops/" target="_blank" rel="noopener noreferrer">Announcing the NeurIPS 2026 Workshops</a></h2>
 <span class="lead-state" data-state="unknown">投稿状态见原文</span></div>
 <p class="lead-meta">征稿与专题 · NeurIPS 官方公告 · 发布 2026-08-11</p><p class="lead-summary">We are excited to announce the list of NeurIPS 2026 workshops. We received 477 submissions (454 valid), a significant increase over last year’s numbers. From this great batch of submissions, we have accepted 102…</p>
 <div class="lead-footer"><a href="https://blog.neurips.cc/2026/08/10/announcing-the-neurips-2026-workshops/" target="_blank" rel="noopener noreferrer">查看征稿要求</a><span>AI 智能运维</span><span>结构生成式设计与可靠性优化</span></div></li><li class="lead-entry" data-kind="news" data-provider="official" data-state="reference"
 data-topics="ai_maintenance generative_design" data-start=""
-data-published="2026-07-31T23:15:00+00:00" data-rank="25">
+data-published="2026-07-31T23:15:00+00:00" data-rank="33" data-opportunity="{&quot;kind&quot;: &quot;news&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: null, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://blog.neurips.cc/2026/07/31/neurips-newsletter-july-2026/" target="_blank" rel="noopener noreferrer">NeurIPS Newsletter – July 2026</a></h2>
 <span class="lead-state" data-state="reference">研究动态</span></div>
 <p class="lead-meta">研究动态 · NeurIPS 官方公告 · 发布 2026-08-01</p><p class="lead-summary">Welcome to the July edition of the NeurIPS monthly Newsletter! The NeurIPS Newsletter aims to provide an easy way to keep up to date with NeurIPS events and planning progress, respond to requests for feedback and…</p>
 <div class="lead-footer"><a href="https://blog.neurips.cc/2026/07/31/neurips-newsletter-july-2026/" target="_blank" rel="noopener noreferrer">阅读官方公告</a><span>AI 智能运维</span><span>结构生成式设计与可靠性优化</span></div></li><li class="lead-entry" data-kind="news" data-provider="official" data-state="reference"
 data-topics="ai_maintenance generative_design" data-start=""
-data-published="2026-07-28T23:46:56+00:00" data-rank="26">
+data-published="2026-07-28T23:46:56+00:00" data-rank="34" data-opportunity="{&quot;kind&quot;: &quot;news&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: null, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://blog.neurips.cc/2026/07/28/neurips-2026-competitions-announced/" target="_blank" rel="noopener noreferrer">NeurIPS 2026 Competitions Announced</a></h2>
 <span class="lead-state" data-state="reference">研究动态</span></div>
 <p class="lead-meta">研究动态 · NeurIPS 官方公告 · 发布 2026-07-29</p><p class="lead-summary">We are delighted to announce the competitions that have been accepted to the NeurIPS 2026 Competition Track. As in previous years, the selection process was highly competitive, with many outstanding submissions spanning…</p>
 <div class="lead-footer"><a href="https://blog.neurips.cc/2026/07/28/neurips-2026-competitions-announced/" target="_blank" rel="noopener noreferrer">阅读官方公告</a><span>AI 智能运维</span><span>结构生成式设计与可靠性优化</span></div></li><li class="lead-entry" data-kind="news" data-provider="official" data-state="reference"
 data-topics="ai_maintenance generative_design" data-start=""
-data-published="2026-07-04T03:40:19+00:00" data-rank="27">
+data-published="2026-07-04T03:40:19+00:00" data-rank="35" data-opportunity="{&quot;kind&quot;: &quot;news&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: null, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://blog.neurips.cc/2026/07/03/neurips-newsletter-june-2026/" target="_blank" rel="noopener noreferrer">NeurIPS Newsletter – June 2026</a></h2>
 <span class="lead-state" data-state="reference">研究动态</span></div>
 <p class="lead-meta">研究动态 · NeurIPS 官方公告 · 发布 2026-07-04</p><p class="lead-summary">Welcome to the June edition of the NeurIPS monthly Newsletter! The NeurIPS Newsletter aims to provide an easy way to keep up to date with NeurIPS events and planning progress, respond to requests for feedback and…</p>
-<div class="lead-footer"><a href="https://blog.neurips.cc/2026/07/03/neurips-newsletter-june-2026/" target="_blank" rel="noopener noreferrer">阅读官方公告</a><span>AI 智能运维</span><span>结构生成式设计与可靠性优化</span></div></li><li class="lead-entry" data-kind="call" data-provider="official" data-state="planned"
+<div class="lead-footer"><a href="https://blog.neurips.cc/2026/07/03/neurips-newsletter-june-2026/" target="_blank" rel="noopener noreferrer">阅读官方公告</a><span>AI 智能运维</span><span>结构生成式设计与可靠性优化</span></div></li><li class="lead-entry" data-kind="academic_role" data-provider="official" data-state="standing"
+data-topics="generative_design fatigue_reliability" data-start=""
+data-published="" data-rank="36" data-opportunity="{&quot;kind&quot;: &quot;academic_role&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: &quot;standing&quot;, &quot;verified_at&quot;: &quot;2026-09-25T04:57:45.211616+00:00&quot;, &quot;verification&quot;: &quot;verified&quot;}"
+data-subtype="committee" data-region="国际" data-group="" data-enterprise="false">
+<div class="lead-heading"><h2><a href="https://www.asme.org/codes-standards/asme-code-committee/get-involved/join-a-c-s-committee" target="_blank" rel="noopener noreferrer">ASME 标准与认证委员会：委员申请入口</a></h2>
+<span class="lead-state" data-state="standing">常年受理</span></div>
+<p class="lead-meta">学术任职招募 · ASME · 国际 · 学会与专业委员 · 常年受理</p><p class="lead-summary">长期提供委员申请流程；具体委员会有无空缺须先联系其工作人员确认。</p>
+<details class="public-details"><summary>申请详情</summary><dl><dt>申请条件</dt><dd>具备对应技术专长及参与能力；不强制要求 ASME 会员身份，委员会参与免费。</dd><dt>申请主体</dt><dd>请查看官方通知</dd><dt>材料清单</dt><dd>PF-1 个人信息表、签署的 PAF 和履历资料；各委员会可能有额外要求。</dd><dt>申请方式</dt><dd>先联系对应委员会工作人员，再按委员会要求递交资料。</dd><dt>任期</dt><dd>请查看官方通知</dd><dt>职责</dt><dd>成员参与讨论、任务、投票及会议；不同成员类型职责不同。</dd></dl><p></p><div class="lead-footer"></div></details><div class="lead-footer"><a href="https://www.asme.org/codes-standards/asme-code-committee/get-involved/join-a-c-s-committee" target="_blank" rel="noopener noreferrer">查看官方通知</a><span>结构生成式设计与可靠性优化</span><span>结构疲劳与可靠性</span><span class="lead-verified">信息核对 2026-09-25T04:57:45.211616+00:00</span></div></li><li class="lead-entry" data-kind="call" data-provider="official" data-state="planned"
 data-topics="ai_maintenance fatigue_reliability" data-start="2026-11-30"
-data-published="" data-rank="28">
+data-published="" data-rank="37" data-opportunity="{&quot;kind&quot;: &quot;call&quot;, &quot;deadline&quot;: &quot;2026-11-30&quot;, &quot;deadline_at&quot;: null, &quot;opens&quot;: &quot;2026-10-15&quot;, &quot;stage&quot;: null, &quot;verified_at&quot;: &quot;2026-09-24&quot;, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://esrel2027prd.ethz.ch/submissionsdeadlines/" target="_blank" rel="noopener noreferrer">ESREL 2027 · 摘要与全文征集</a></h2>
 <span class="lead-state" data-state="planned">尚未开放投稿</span></div>
 <p class="lead-meta">征稿与专题 · ESREL 2027 官方征稿 · 截止 2026-11-30 （时区见官网）</p><p class="lead-summary">摘要投稿入口计划 10 月 15 日开放，摘要截止 11 月 30 日。拟提交全文者也需先投摘要；摘要录用后全文截止为 2027 年 2 月 28 日。截止时区未注明，请核对官网。</p>
 <div class="lead-footer"><a href="https://esrel2027prd.ethz.ch/submissionsdeadlines/" target="_blank" rel="noopener noreferrer">查看征稿要求</a><span>AI 智能运维</span><span>结构疲劳与可靠性</span><span class="lead-verified">信息核对 2026-09-24</span></div></li><li class="lead-entry" data-kind="call" data-provider="official" data-state="deadline"
 data-topics="ai_maintenance generative_design" data-start="2026-09-25"
-data-published="" data-rank="29">
+data-published="" data-rank="38" data-opportunity="{&quot;kind&quot;: &quot;call&quot;, &quot;deadline&quot;: &quot;2026-09-25&quot;, &quot;deadline_at&quot;: &quot;2026-09-25T23:59:00-12:00&quot;, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: &quot;2026-09-24&quot;, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://iclr.cc/Conferences/2027/CallForPapers" target="_blank" rel="noopener noreferrer">ICLR 2027 · 论文投稿要求与时间</a></h2>
 <span class="lead-state" data-state="deadline">截止时间已公布</span></div>
 <p class="lead-meta">征稿与专题 · ICLR 官方征稿 · 截止 2026-09-25 AoE（UTC−12）</p><p class="lead-summary">全文截止 9 月 25 日 23:59 AoE；摘要注册已于 9 月 18 日截止。仅有全文截止时间并不意味着仍可新建投稿，请先核对摘要与作者要求。</p>
 <div class="lead-footer"><a href="https://iclr.cc/Conferences/2027/CallForPapers" target="_blank" rel="noopener noreferrer">查看征稿要求</a><span>AI 智能运维</span><span>结构生成式设计与可靠性优化</span><span class="lead-verified">信息核对 2026-09-24</span></div></li><li class="lead-entry" data-kind="resource" data-provider="official" data-state="reference"
 data-topics="ai_maintenance fatigue_reliability" data-start=""
-data-published="" data-rank="30">
+data-published="" data-rank="39" data-opportunity="{&quot;kind&quot;: &quot;resource&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: &quot;2026-09-24&quot;, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://www.nasa.gov/intelligent-systems-division/discovery-and-systems-health/pcoe/pcoe-data-set-repository/" target="_blank" rel="noopener noreferrer">NASA PCoE · 故障预测数据集</a></h2>
 <span class="lead-state" data-state="reference">数据集</span></div>
 <p class="lead-meta">论文库与数据 · NASA</p><p class="lead-summary">用于查找退化与故障预测实验数据；下载前查看具体数据集的说明、可用性与使用要求。</p>
 <div class="lead-footer"><a href="https://www.nasa.gov/intelligent-systems-division/discovery-and-systems-health/pcoe/pcoe-data-set-repository/" target="_blank" rel="noopener noreferrer">查看资源</a><span>AI 智能运维</span><span>结构疲劳与可靠性</span><span class="lead-verified">信息核对 2026-09-24</span></div></li><li class="lead-entry" data-kind="resource" data-provider="official" data-state="reference"
 data-topics="ai_maintenance fatigue_reliability" data-start=""
-data-published="" data-rank="31">
+data-published="" data-rank="40" data-opportunity="{&quot;kind&quot;: &quot;resource&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: &quot;2026-09-24&quot;, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://papers.phmsociety.org/" target="_blank" rel="noopener noreferrer">PHM Society · 期刊与会议论文库</a></h2>
 <span class="lead-state" data-state="reference">论文库</span></div>
 <p class="lead-meta">论文库与数据 · PHM Society</p><p class="lead-summary">集中查找 IJPHM、北美、欧洲和亚太 PHM 会议成果，补充故障诊断、预测维护与寿命预测阅读。</p>
 <div class="lead-footer"><a href="https://papers.phmsociety.org/" target="_blank" rel="noopener noreferrer">查看资源</a><span>AI 智能运维</span><span>结构疲劳与可靠性</span><span class="lead-verified">信息核对 2026-09-24</span></div></li><li class="lead-entry" data-kind="resource" data-provider="official" data-state="reference"
 data-topics="ai_maintenance generative_design fatigue_reliability" data-start=""
-data-published="" data-rank="32">
+data-published="" data-rank="41" data-opportunity="{&quot;kind&quot;: &quot;resource&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: &quot;2026-09-24&quot;, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://proceedings.mlr.press/" target="_blank" rel="noopener noreferrer">PMLR · 机器学习会议与研讨会论文集</a></h2>
 <span class="lead-state" data-state="reference">论文库</span></div>
 <p class="lead-meta">论文库与数据 · Proceedings of Machine Learning Research</p><p class="lead-summary">按会议与卷次浏览机器学习论文集，可继续寻找概率建模、优化、学习控制和可靠 AI 相关方法。</p>
 <div class="lead-footer"><a href="https://proceedings.mlr.press/" target="_blank" rel="noopener noreferrer">查看资源</a><span>AI 智能运维</span><span>结构生成式设计与可靠性优化</span><span>结构疲劳与可靠性</span><span class="lead-verified">信息核对 2026-09-24</span></div></li><li class="lead-entry" data-kind="call" data-provider="official" data-state="unknown"
 data-topics="generative_design" data-start=""
-data-published="" data-rank="33">
+data-published="" data-rank="42" data-opportunity="{&quot;kind&quot;: &quot;call&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: &quot;2026-09-24&quot;, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://pubs.cstam.org.cn/lxxb/specials/293" target="_blank" rel="noopener noreferrer">《力学学报》· 数据驱动的结构分析与设计专题</a></h2>
 <span class="lead-state" data-state="unknown">已发表专题</span></div>
 <p class="lead-meta">征稿与专题 · 力学学报</p><p class="lead-summary">已发表专题，包含综述与研究论文。适合系统阅读数据驱动计算力学和结构分析设计，不是正在征稿的通知。</p>
-<div class="lead-footer"><a href="https://pubs.cstam.org.cn/lxxb/specials/293" target="_blank" rel="noopener noreferrer">查看专题</a><span>结构生成式设计与可靠性优化</span><span class="lead-verified">信息核对 2026-09-24</span></div></li><li class="lead-entry" data-kind="conference" data-provider="official" data-state="ended"
+<div class="lead-footer"><a href="https://pubs.cstam.org.cn/lxxb/specials/293" target="_blank" rel="noopener noreferrer">查看专题</a><span>结构生成式设计与可靠性优化</span><span class="lead-verified">信息核对 2026-09-24</span></div></li><li class="lead-entry" data-kind="funding" data-provider="official" data-state="unknown"
+data-topics="" data-start=""
+data-published="" data-rank="43" data-opportunity="{&quot;kind&quot;: &quot;funding&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: &quot;application&quot;, &quot;verified_at&quot;: &quot;2026-09-25T04:24:36.420521+00:00&quot;, &quot;verification&quot;: &quot;verified&quot;}"
+data-subtype="open_topic" data-region="中国" data-group="comac" data-enterprise="true">
+<div class="lead-heading"><h2><a href="https://www.comac.cc/xwzx/xxgg/202505/07/t20250507_7404447.shtml" target="_blank" rel="noopener noreferrer">关于上海民机试飞工程技术研究中心开放课题指南发布的通知</a></h2>
+<span class="lead-state" data-state="unknown">截止时间待核对</span></div>
+<p class="lead-meta">项目与基金申报 · 中国商飞官方公告 · 中国 · 开放课题 · 正式申报</p><p class="lead-summary">�     �}ywI���ŧ�3�i�6/� �fj^wu��&gt;=�{�p���YRI2^�9ǦXl6��V�Y��YlS@� ��L+S�_���FDfF.� �j�=,efdč�ō7nt������/�+��@F������&gt;%� ���/���������V����B,[�JZ.˄B��(�t��� �����C-�\�?t��0�������f0YJz�u��2�b�O5����6+</p>
+<details class="public-details"><summary>申请详情</summary><dl><dt>申请条件</dt><dd>请查看官方通知</dd><dt>申请主体</dt><dd>请查看官方通知</dd><dt>材料清单</dt><dd>请查看官方通知</dd><dt>申请方式</dt><dd>请查看官方通知</dd><dt>项目年度</dt><dd>请查看官方通知</dd><dt>资助额度</dt><dd>请查看官方通知</dd><dt>执行周期</dt><dd>请查看官方通知</dd><dt>联合申报要求</dt><dd>请查看官方通知</dd><dt>研究任务与交付要求</dt><dd>请查看官方通知</dd></dl><p></p><div class="lead-footer"></div></details><div class="lead-footer"><a href="https://www.comac.cc/xwzx/xxgg/202505/07/t20250507_7404447.shtml" target="_blank" rel="noopener noreferrer">查看官方通知</a><span class="lead-verified">信息核对 2026-09-25T04:24:36.420521+00:00</span></div></li><li class="lead-entry" data-kind="conference" data-provider="official" data-state="ended"
 data-topics="generative_design" data-start="2026-08-23"
-data-published="" data-rank="34">
+data-published="" data-rank="44" data-opportunity="{&quot;kind&quot;: &quot;conference&quot;, &quot;deadline&quot;: null, &quot;deadline_at&quot;: null, &quot;opens&quot;: null, &quot;stage&quot;: null, &quot;verified_at&quot;: &quot;2026-09-24&quot;, &quot;verification&quot;: null}"
+data-subtype="" data-region="" data-group="" data-enterprise="false">
 <div class="lead-heading"><h2><a href="https://event.asme.org/IDETC-CIE-2026" target="_blank" rel="noopener noreferrer">ASME IDETC / CIE 2026 · 设计工程与工程信息学</a></h2>
 <span class="lead-state" data-state="ended">已结束 · 可回看</span></div>
 <p class="lead-meta">学术会议 · ASME · 会期 2026-08-23 至 2026-08-26（当地日期） · 美国 · 休斯敦</p><p class="lead-summary">已结束，可回看设计自动化、机械设计及计算机辅助工程相关议程，追踪后续论文。</p>
@@ -264,7 +373,7 @@ data-published="" data-rank="34">
     <label>每页 <select id="lead-page-size"><option value="20">20 条</option><option value="50">50 条</option><option value="100">100 条</option></select></label>
     <button type="button" id="lead-prev">上一页</button><span id="lead-page" role="status"></span><button type="button" id="lead-next">下一页</button>
   </nav>
-  <details class="leads-source-status"><summary>来源与更新说明</summary><p>公众号汇总近 90 天已发布线索，官方公告随每日更新采集。会议目录显示人工核对日期，会期状态按当前日期计算；投稿与报名要求请以官网为准。</p><ul><li>NeurIPS 官方公告：更新成功；最近检查 2026-09-25 09:55</li><li>ICLR 官方公告：更新成功；最近检查 2026-09-25 09:55</li></ul></details>
+  <details class="leads-source-status"><summary>来源与更新说明</summary><p>公众号汇总近 90 天已发布线索，官方公告随每日更新采集。会议目录显示人工核对日期，会期状态按当前日期计算；投稿与报名要求请以官网为准。</p><ul><li>NeurIPS 官方公告：更新成功；最近检查 2026-09-25 12:57</li><li>ICLR 官方公告：更新成功；最近检查 2026-09-25 12:57</li><li>国家自然科学基金委：本轮获取失败，保留已有条目；最近检查 2026-09-25 12:57</li><li>国家科技管理信息系统公共服务平台：暂无近期公告；最近检查 2026-09-25 12:57</li><li>中国商飞官方公告：暂无近期公告；最近检查 2026-09-25 12:57</li><li>上海飞机设计研究院：更新成功；最近检查 2026-09-25 12:57</li><li>上海飞机制造有限公司：更新成功；最近检查 2026-09-25 12:57</li><li>中国航空工业官方公告：暂无近期公告；最近检查 2026-09-25 12:57</li><li>中国航发官方公告：暂无近期公告；最近检查 2026-09-25 12:57</li><li>UKRI 资助机会：更新成功；最近检查 2026-09-25 12:57</li><li>NSF Funding：暂无近期公告；最近检查 2026-09-25 12:57</li><li>欧盟 Funding &amp; Tenders：本轮获取失败，保留已有条目；最近检查 2026-09-25 12:57</li><li>ASME 委员招募：暂无近期公告；最近检查 2026-09-25 12:57</li><li>中国力学学会：本轮获取失败，保留已有条目；最近检查 2026-09-25 12:57</li><li>Engineering Physics Review Letters：本轮获取失败，保留已有条目；最近检查 2026-09-25 12:57</li><li>《计算机应用研究》编辑部：更新成功；最近检查 2026-09-25 12:57</li><li>《计算机应用研究》编辑部：更新成功；最近检查 2026-09-25 12:57</li><li>ASME：更新成功；最近检查 2026-09-25 12:57</li><li>中国科学院计算技术研究所 · 智能算法安全全国重点实验室：更新成功；最近检查 2026-09-25 12:57</li><li>燃料电池国家技术创新中心：更新成功；最近检查 2026-09-25 12:57</li><li>Innovate UK／Ofgem：更新成功；最近检查 2026-09-25 12:57</li><li>中国航发动力股份有限公司：本轮获取失败，保留已有条目；最近检查 2026-09-25 12:57</li><li>中国航发北京航空材料研究院：本轮获取失败，保留已有条目；最近检查 2026-09-25 12:57</li></ul></details>
   <p class="section-description">公众号的“公开检索入口”提供搜索片段，请核对原文；线索不占用核心推荐与扩展阅读名额。</p>
 </section>
 

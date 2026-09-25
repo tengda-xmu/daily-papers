@@ -14,6 +14,12 @@ LOCK = threading.Lock()
 
 def publish(root, values):
     outputs = [public_analysis(value) for value in values]
+    return publish_values(root, outputs, 'auto-reading', 'paper_id')
+
+
+def publish_values(root, outputs, directory, key):
+    if (directory, key) not in (('auto-reading', 'paper_id'), ('ai-readings', 'id')):
+        raise ValueError('Unsupported public notes')
     if not outputs:
         return
     env = dict(os.environ)
@@ -38,7 +44,7 @@ def publish(root, values):
             for value in outputs:
                 blob = git('hash-object', '-w', '--stdin', data=json.dumps(value, ensure_ascii=False, indent=2), extra=index)
                 git('update-index', '--add', '--cacheinfo', '100644', blob,
-                    'data/auto-reading/' + value['paper_id'] + '.json', extra=index)
+                    'data/' + directory + '/' + value[key] + '.json', extra=index)
             tree = git('write-tree', extra=index)
             if tree != git('rev-parse', parent + '^{tree}'):
                 commit = git('commit-tree', tree, '-p', parent, '-m', 'chore: publish validated Chinese reading notes', extra=index)

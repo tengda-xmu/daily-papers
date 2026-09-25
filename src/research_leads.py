@@ -19,7 +19,8 @@ from src.wechat_metadata import excerpt, public_records
 
 ROOT = Path(__file__).resolve().parents[1]
 CHINA = timezone(timedelta(hours=8))
-KINDS = {"conference": "学术会议", "call": "征稿与专题", "news": "研究动态", "resource": "论文库与数据"}
+KINDS = {"conference": "学术会议", "call": "征稿与专题", "news": "研究动态", "resource": "论文库与数据",
+         "academic_role": "学术任职招募", "funding": "项目与基金申报"}
 
 
 def read_json(path, default):
@@ -38,6 +39,10 @@ def web_url(value, hosts=None):
 
 
 def classify(title):
+    from src.opportunities import classify as opportunity_kind
+    kind = opportunity_kind(title)
+    if kind:
+        return kind
     text = title.casefold()
     if any(word in text for word in ("征稿", "征集", "专刊", "专题", "call for", "submission", "deadline", "workshop")):
         return "call"
@@ -58,6 +63,9 @@ def snippet(value):
 
 def state(row, now):
     """Never infer a call is open merely because a conference is upcoming."""
+    if row.get('kind') in ('academic_role', 'funding'):
+        from src.opportunities import state as opportunity_state
+        return opportunity_state(row, now)
     today = now.astimezone(CHINA).date().isoformat()
     if row.get("end"):
         if row["end"] < today:
@@ -176,13 +184,23 @@ def collect(payload, root=ROOT, *, now=None):
     feed_data = read_json(root / 'data/research-leads.json', {})
     entries = [{**r, 'provider': 'official'} for r in config.get('entries', [])]
     entries += feed_data.get('entries', []) + wechat_leads(history)
+    from src.opportunities import collect as collect_opportunities, retain
+    opportunities = collect_opportunities(root, now)
+    entries += opportunities['entries']
+    from src.ai_updates import public_index
+    ai_urls = {r['url'] for r in public_index(root).get('entries', [])}
     directions = active_directions(load_profile(root))
     result = {}
     for row in entries:
         if row.get('kind') not in KINDS or not web_url(row.get('url')):
             continue
         published = parse_date(row.get('published_at'))
-        if row.get('published_at') and (not published or not now - timedelta(days=days) <= published <= now):
+        if row.get('url') in ai_urls and row.get('kind') in ('news', 'resource'):
+            continue
+        opportunity = row.get('kind') in ('academic_role', 'funding')
+        if opportunity and not retain(row, now):
+            continue
+        if not opportunity and row.get('published_at') and (not published or not now - timedelta(days=days) <= published <= now):
             continue
         text = (row.get('title', '') + ' ' + row.get('summary', '')).casefold()
         topics = [d['id'] for d in directions if not any(t.casefold() in text for t in d.get('exclude', []))
@@ -198,7 +216,7 @@ def collect(payload, root=ROOT, *, now=None):
         if row.get('published_at'):
             return 1, -parse_date(row['published_at']).timestamp()
         return 2, row.get('title', '')
-    return {'entries': sorted(result.values(), key=order), 'directions': directions, 'sources': feed_data.get('sources', []),
+    return {'entries': sorted(result.values(), key=order), 'directions': directions, 'sources': feed_data.get('sources', []) + opportunities.get('sources', []),
             'days': days, 'checked_at': feed_data.get('checked_at', ''), 'built_at': now.isoformat()}
 
 

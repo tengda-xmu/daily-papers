@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['config/custom-journals.json', 'config/research-directions.json', 'config/custom-wechat.json', 'config/research-leads.json']
+    paths: ['config/custom-journals.json', 'config/research-directions.json', 'config/custom-wechat.json', 'config/research-leads.json', 'config/ai-sources.json', 'config/opportunity-sources.json']
 permissions:
   contents: read
   pages: write
@@ -37,6 +37,8 @@ jobs:
         timeout-minutes: 8
         continue-on-error: true
         run: python -m tools.collect_figures
+      - name: Import AI reading enrichment
+        run: python -m tools.public_updates --import-readings
       - run: python tools/build_site.py
       - uses: actions/upload-pages-artifact@v3
         with: {path: site}

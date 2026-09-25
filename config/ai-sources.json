@@ -1,0 +1,160 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "id": "openai",
+      "name": "OpenAI 官方发布",
+      "url": "https://openai.com/news/rss.xml",
+      "hosts": [
+        "openai.com"
+      ],
+      "format": "rss",
+      "details": true,
+      "include": "introduc|release|launch|better|update|research|science|skill",
+      "limit": 12,
+      "exclude": "Ads|customer|Airbnb|Ringg|Harvey|invideo|practical AI skills"
+    },
+    {
+      "id": "anthropic",
+      "name": "Anthropic 工程进展",
+      "url": "https://www.anthropic.com/engineering",
+      "hosts": [
+        "www.anthropic.com",
+        "anthropic.com"
+      ],
+      "format": "html",
+      "link_pattern": "/engineering/[^/]+/?$",
+      "limit": 6
+    },
+    {
+      "id": "deepmind",
+      "name": "Google DeepMind",
+      "url": "https://deepmind.google/blog/",
+      "hosts": [
+        "deepmind.google"
+      ],
+      "format": "html",
+      "link_pattern": "/blog/[^/]+/?$",
+      "limit": 6
+    },
+    {
+      "id": "qwen",
+      "name": "Qwen 官方发布",
+      "url": "https://qwen.ai/blog",
+      "hosts": [
+        "qwen.ai"
+      ],
+      "format": "html",
+      "link_pattern": "/blog/",
+      "limit": 6
+    },
+    {
+      "id": "qwen-agent",
+      "name": "Qwen-Agent 版本发布",
+      "url": "https://github.com/QwenLM/Qwen-Agent/releases.atom",
+      "hosts": [
+        "github.com"
+      ],
+      "format": "releases",
+      "limit": 6,
+      "defaults": {
+        "categories": [
+          "agents",
+          "tools"
+        ],
+        "scenarios": [
+          "coding"
+        ],
+        "release_state": "released",
+        "product": "Qwen-Agent"
+      }
+    },
+    {
+      "id": "deepseek",
+      "name": "DeepSeek 更新日志",
+      "url": "https://api-docs.deepseek.com/updates/",
+      "hosts": [
+        "api-docs.deepseek.com"
+      ],
+      "format": "changelog",
+      "limit": 8,
+      "defaults": {
+        "categories": [
+          "models"
+        ],
+        "scenarios": [
+          "coding",
+          "general"
+        ],
+        "product": "DeepSeek"
+      }
+    },
+    {
+      "id": "huggingface",
+      "name": "Hugging Face 官方博客",
+      "url": "https://huggingface.co/blog/feed.xml",
+      "hosts": [
+        "huggingface.co"
+      ],
+      "format": "rss",
+      "details": true,
+      "limit": 8
+    },
+    {
+      "id": "langchain",
+      "name": "LangChain 官方发布",
+      "url": "https://www.langchain.com/blog",
+      "hosts": [
+        "www.langchain.com",
+        "blog.langchain.com"
+      ],
+      "format": "html",
+      "link_pattern": "/blog/[^/]+/?$",
+      "limit": 6,
+      "card_titles": true
+    },
+    {
+      "id": "agent-skills",
+      "name": "Agent Skills 规范版本",
+      "url": "https://github.com/agentskills/agentskills/releases.atom",
+      "hosts": [
+        "github.com"
+      ],
+      "format": "releases",
+      "limit": 6,
+      "defaults": {
+        "categories": [
+          "skills"
+        ],
+        "scenarios": [
+          "coding",
+          "research"
+        ],
+        "release_state": "released",
+        "product": "Agent Skills"
+      }
+    },
+    {
+      "id": "anthropic-skills",
+      "name": "Anthropic Skills 版本",
+      "url": "https://github.com/anthropics/skills/releases.atom",
+      "hosts": [
+        "github.com"
+      ],
+      "format": "releases",
+      "limit": 6,
+      "defaults": {
+        "categories": [
+          "skills"
+        ],
+        "scenarios": [
+          "coding",
+          "office"
+        ],
+        "release_state": "released",
+        "product": "Anthropic Skills"
+      }
+    }
+  ],
+  "entries": []
+}

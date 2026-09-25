@@ -245,11 +245,12 @@
 
 // Research leads have their own filters; paper ranking is intentionally separate.
 (function () {
-  const root = document.querySelector('.research-leads');
+  const root = document.querySelector('.research-leads, .ai-updates');
   if (!root) return;
+  const isAI = root.classList.contains('ai-updates');
   const get = id => root.querySelector('#' + id);
   const list = get('lead-list'), rows = Array.from(list.children);
-  const fields = ['query', 'topic', 'provider', 'state', 'sort', 'page-size'];
+  const fields = ['query', 'topic', 'provider', 'state', 'sort', 'page-size', 'period', 'subtype', 'region', 'group'].filter(name => get('lead-' + name));
   const controls = Object.fromEntries(fields.map(name => [name, get('lead-' + name)]));
   const categories = Array.from(root.querySelectorAll('[data-lead-kind]'));
   let category = 'all', page = 1;
@@ -266,16 +267,46 @@
     draw();
   }
   function draw(save = false) {
+    const now = Date.now(), today = new Intl.DateTimeFormat('sv-SE', {timeZone:'Asia/Shanghai'}).format(now);
+    const opportunity = row => ['academic_role','funding'].includes(row.dataset.kind);
+    for (const row of rows.filter(opportunity)) {
+      let data; try {data = JSON.parse(row.dataset.opportunity);} catch {continue;}
+      const exact = Date.parse(data.deadline_at || ''), checked = Date.parse(data.verified_at || '');
+      let status = 'unknown', label = '待核对';
+      if ((Number.isFinite(exact) && now > exact) || (!Number.isFinite(exact) && data.deadline && data.deadline < today)) {status='ended';label='已截止';}
+      else if (data.verification === 'verified' && Number.isFinite(checked) && now-checked <= 30*86400000) {
+        if (data.stage === 'results') {status='ended';label='结果已公布';}
+        else if (data.stage === 'preview' || data.opens > today) {status='planned';label='尚未开放';}
+        else if (data.stage === 'standing') {status='standing';label='常年受理';}
+        else if (data.deadline) {status=(Date.parse(data.deadline)-Date.parse(today))/86400000 <= 7 ? 'closing':'open';label=status==='closing'?'即将截止':data.stage==='guide'?'正在征集指南建议':'正在申请';}
+        else label='截止时间待核对';
+      }
+      row.dataset.state=status;
+      const badge=row.querySelector('.lead-state'); if (badge) {badge.dataset.state=status;badge.textContent=label;}
+    }
     const query = controls.query.value.trim().toLocaleLowerCase(), topic = controls.topic.value;
-    const provider = controls.provider.value, state = controls.state.value;
-    const matches = rows.filter(row => (category === 'all' || row.dataset.kind === category)
+    const provider = controls.provider.value, state = controls.state?.value || '';
+    const matches = rows.filter(row => (category === 'all' || (isAI ? (row.dataset.categories || '').split(' ').includes(category) : row.dataset.kind === category))
       && (!query || row.textContent.toLocaleLowerCase().includes(query))
       && (!topic || row.dataset.topics.split(' ').includes(topic))
       && (!provider || row.dataset.provider === provider)
-      && (!state || (state === 'active' ? row.dataset.state !== 'ended' : row.dataset.state === state)));
+      && (state === 'all' || (!state ? !opportunity(row) || row.dataset.state !== 'ended' : state === 'active' ? row.dataset.state !== 'ended' : state === 'open' ? ['open','closing'].includes(row.dataset.state) : row.dataset.state === state))
+      && (!controls.subtype?.value || row.dataset.subtype === controls.subtype.value)
+      && (!controls.region?.value || row.dataset.region === controls.region.value)
+      && (!controls.group?.value || (controls.group.value === 'enterprise' ? row.dataset.enterprise === 'true' : row.dataset.group === controls.group.value))
+      && (!isAI || controls.period.value === 'all' || (Date.parse(row.dataset.published) <= now && Date.parse(row.dataset.published) >= now-Number(controls.period.value)*86400000)));
     matches.sort((a, b) => {
       if (controls.sort.value === 'date') return (a.dataset.start || '9999').localeCompare(b.dataset.start || '9999') || +a.dataset.rank - +b.dataset.rank;
       if (controls.sort.value === 'latest') return b.dataset.published.localeCompare(a.dataset.published) || +a.dataset.rank - +b.dataset.rank;
+      if (isAI) {
+        const recent = row => Date.parse(row.dataset.published) >= now-7*86400000 ? 0 : 1;
+        const useful = row => /research|coding|engineering/.test(row.dataset.topics) ? 0 : 1;
+        return recent(a)-recent(b) || useful(a)-useful(b) || b.dataset.published.localeCompare(a.dataset.published) || +a.dataset.rank-+b.dataset.rank;
+      }
+      if (opportunity(a) && opportunity(b)) {
+        const states={closing:0,open:0,planned:1,standing:2,unknown:3,ended:4};
+        return states[a.dataset.state]-states[b.dataset.state] || (a.dataset.start || '9999').localeCompare(b.dataset.start || '9999') || b.dataset.published.localeCompare(a.dataset.published);
+      }
       return +a.dataset.rank - +b.dataset.rank;
     });
     const size = Number(controls['page-size'].value), pages = Math.max(1, Math.ceil(matches.length / size));
@@ -313,5 +344,7 @@
     page += step; draw(true); get('lead-count').scrollIntoView({block: 'start'});
   });
   window.addEventListener('popstate', restore);
+  window.addEventListener('pageshow', () => draw());
+  document.addEventListener('visibilitychange', () => {if (!document.hidden) draw();});
   restore();
 }());

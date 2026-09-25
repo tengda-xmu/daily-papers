@@ -110,6 +110,8 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     subscription_manager = SubscriptionManager(root)
     from .reading_queue import ReadingQueue
     reading_queue = ReadingQueue(root, runtime, client, generation_lock)
+    from .ai_queue import AIQueue
+    ai_queue = AIQueue(root, runtime, client, generation_lock)
 
     @asynccontextmanager
     async def lifespan(app):
@@ -117,8 +119,10 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         info.write_text(json.dumps({"pid": os.getpid(), "origin": LOCAL_ORIGIN, "pair_code": pair_code}), encoding="utf-8")
         if rpc is None:
             reading_queue.start()
+            ai_queue.start()
         yield
         await reading_queue.close()
+        await ai_queue.close()
         for job in list(jobs.values()):
             job["task"].cancel()
         if jobs:
@@ -141,6 +145,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     app.state.directions = direction_manager
     app.state.wechat_subscriptions = subscription_manager
     app.state.reading_queue = reading_queue
+    app.state.ai_queue = ai_queue
 
     @app.middleware("http")
     async def local_only(request: Request, next_handler):
@@ -300,6 +305,19 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     @app.get('/api/recommendations/reading-tasks')
     async def reading_tasks():
         return await asyncio.to_thread(reading_queue.snapshot)
+
+    @app.get('/api/ai/reading-tasks')
+    async def ai_reading_tasks():
+        return await asyncio.to_thread(ai_queue.snapshot)
+
+    @app.post('/api/ai/reading-tasks/sync')
+    async def sync_ai_reading():
+        ai_queue.last_sync = 0
+        return {'state': 'queued'}
+
+    @app.post('/api/ai/reading-tasks/{identifier}/retry')
+    async def retry_ai_reading(identifier: str):
+        return await asyncio.to_thread(ai_queue.retry, identifier)
 
     @app.post('/api/recommendations/reading-tasks/sync')
     async def sync_reading_tasks():
@@ -895,6 +913,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         if data.paper_id in preparing or library_restoring:
             raise HTTPException(409, "资料正在准备，请等待完成后提问。")
         await reading_queue.preempt()
+        await ai_queue.preempt()
         if generation_lock.locked():
             raise HTTPException(409, "已有回答正在生成，请先停止或等待完成。")
         if len(set(data.attachment_ids)) != len(data.attachment_ids):
@@ -1030,6 +1049,18 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     @app.get('/directions.html')
     async def directions_page():
         return FileResponse(root / 'site/directions.html', media_type='text/html')
+
+    @app.get('/ai.html')
+    async def ai_frontier_page():
+        return FileResponse(root / 'site/ai.html', media_type='text/html')
+
+    @app.get('/leads.html')
+    async def research_leads_page():
+        return FileResponse(root / 'site/leads.html', media_type='text/html')
+
+    @app.get('/ai-updates.json')
+    async def ai_public_index():
+        return FileResponse(root / 'site/ai-updates.json', media_type='application/json')
 
     @app.get('/archive/')
     @app.get('/archive/{name}')

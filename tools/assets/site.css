@@ -85,6 +85,13 @@ button:disabled { cursor: default; }
 .lead-heading { display:flex; align-items:baseline; justify-content:space-between; gap:16px; }
 .lead-heading h2 { font-size:18px; line-height:1.55; margin:0 0 8px; }
 .lead-heading h2 a { font-weight:600; }
+.public-details { margin:12px 0 18px; max-width:1000px; }
+.public-details>summary { color:var(--link); font-weight:600; cursor:pointer; padding:6px 0; }
+.public-details dl { display:grid; grid-template-columns:130px minmax(0,1fr); gap:9px 20px; line-height:1.8; }
+.public-details dt { color:var(--muted); }
+.public-details dd { margin:0; }
+.public-details p,.public-details ol { line-height:1.85; }
+@media(max-width:600px) { .public-details dl { grid-template-columns:95px minmax(0,1fr); gap:8px 12px; } }
 .lead-state { flex-shrink:0; color:var(--muted); font-size:12px; }
 .lead-state[data-state="upcoming"], .lead-state[data-state="ongoing"] { color:var(--blue); font-weight:600; }
 .lead-meta { font-size:12px; color:var(--muted); margin-bottom:8px; }

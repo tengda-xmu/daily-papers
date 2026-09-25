@@ -73,7 +73,17 @@ def dispatch_if_needed(remote, now=None):
             pass  # Legacy sites do not have a separate no-new check record.
     needed, reason = update_needed(payload, now)
     if not needed:
-        return {'state': reason}
+        from tools.public_updates import column_needed
+        for name in ('ai-updates.json', 'opportunities.json'):
+            try:
+                content = remote('GET', f'repos/{REPO}/contents/data/{name}?ref=main')
+                public = json.loads(base64.b64decode(content['content']))
+            except Exception:
+                public = {}
+            if column_needed(public, now):
+                needed = True
+        if not needed:
+            return {'state': reason}
     runs = remote('GET', API + '/workflows/daily.yml/runs?branch=main&per_page=30')
     if any(run.get('status') in ACTIVE for run in runs.get('workflow_runs', [])):
         return {'state': 'update_already_running'}
@@ -118,9 +128,13 @@ def main():
         pass
     needed, reason = workflow_gate(payload, os.environ.get('GITHUB_EVENT_NAME', ''),
                                   os.environ.get('SCHEDULED_CHECK', '').lower() == 'true')
+    papers_needed = needed
+    from tools.public_updates import needed as public_needed
+    needed = needed or public_needed(ROOT)
     if os.environ.get('GITHUB_OUTPUT'):
         with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as output:
             output.write(f'needed={str(needed).lower()}\n')
+            output.write(f'papers_needed={str(papers_needed).lower()}\n')
     print(json.dumps({'needed': needed, 'reason': reason}))
     return 0
 

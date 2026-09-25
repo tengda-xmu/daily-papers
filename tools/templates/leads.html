@@ -1,7 +1,7 @@
 <section id="wechat-articles" class="research-leads" aria-labelledby="leads-heading">
   <h1 id="leads-heading" class="sr-only">科研线索、学术会议与征稿</h1>
   <div class="issue-meta"><span>科研线索 · $count 条线索</span><span><time>$generated</time> 最近采集</span><a href="setup.html#wechat" data-local-only>订阅与来源设置</a></div>
-  <p class="section-description">会议、征稿、研究动态与实用资源。汇总近 $days 天公众号与官方公告，会议另按会期整理。</p>
+  <p class="section-description">会议、征稿、学术任职和项目申报。近期动态汇总近 $days 天内容，有效申请另按截止时间整理。大模型与智能体进展见<a href="ai.html">AI 前沿</a>。</p>
   <div class="lead-categories" role="group" aria-label="线索分类">
     <button type="button" data-lead-kind="all" aria-pressed="true">全部 <span>$count</span></button>$categories
   </div>
@@ -9,7 +9,10 @@
     <label class="lead-query">搜索<input id="lead-query" type="search" placeholder="会议、主题、公众号或关键词" autocomplete="off"></label>
     <label>研究方向<select id="lead-topic"><option value="">全部方向</option>$topics</select></label>
     <label>来源<select id="lead-provider"><option value="">全部来源</option><option value="official">官方来源</option><option value="wechat">微信公众号</option></select></label>
-    <label>时间状态<select id="lead-state"><option value="">全部状态</option><option value="active">排除已结束 / 已截止</option><option value="upcoming">即将召开</option><option value="ended">已结束 / 已截止</option></select></label>
+    <label>时间状态<select id="lead-state"><option value="">默认（申请排除已截止）</option><option value="all">全部状态</option><option value="active">排除已结束 / 已截止</option><option value="open">正在申请</option><option value="closing">即将截止</option><option value="planned">尚未开放</option><option value="standing">常年受理</option><option value="unknown">待核对</option><option value="upcoming">即将召开</option><option value="ended">已结束 / 已截止</option></select></label>
+    <label>具体类型<select id="lead-subtype"><option value="">全部类型</option>$subtypes</select></label>
+    <label>国家或地区<select id="lead-region"><option value="">全部地区</option>$regions</select></label>
+    <label>企业项目<select id="lead-group"><option value="">全部机构</option><option value="enterprise">所有企业项目</option>$groups</select></label>
     <label>排序<select id="lead-sort"><option value="recommended">推荐顺序</option><option value="date">会期 / 截止时间</option><option value="latest">最新发布</option></select></label>
   </form>
   <div class="lead-results"><span id="lead-count" role="status" aria-live="polite">$count 条线索</span><button id="lead-reset" type="button" class="text-button">重置筛选</button></div>

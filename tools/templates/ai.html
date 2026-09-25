@@ -1,0 +1,21 @@
+<section class="ai-updates" aria-labelledby="ai-heading">
+  <h1 id="ai-heading" class="sr-only">AI 前沿</h1>
+  <div class="issue-meta"><span>AI 前沿 · $count 条进展</span><span>$generated 最近采集</span><span>每日 21:00 · 北京时间</span></div>
+  <p class="section-description">大模型、智能体与 Skills 新进展，优先关注科研、编程和工程用途。<a href="https://agentskills.io/home" target="_blank" rel="noopener noreferrer">Agent Skills</a> 指可复用的智能体知识与工作流程。</p>
+  <div class="lead-categories" role="group" aria-label="AI 分类"><button type="button" data-lead-kind="all" aria-pressed="true">全部 <span>$count</span></button>$categories</div>
+  <form id="lead-filters" class="lead-filters" role="search" aria-label="筛选 AI 进展">
+    <label class="lead-query">搜索<input id="lead-query" type="search" placeholder="模型、智能体、Skills 或关键词" autocomplete="off"></label>
+    <label>应用场景<select id="lead-topic"><option value="">全部场景</option>$topics</select></label>
+    <label>发布机构<select id="lead-provider"><option value="">全部机构</option>$providers</select></label>
+    <label>发布时间<select id="lead-period"><option value="30">最近 30 天</option><option value="7">最近 7 天</option><option value="90">最近 90 天</option><option value="all">全部时间</option></select></label>
+    <label>排序<select id="lead-sort"><option value="recommended">科研用途优先</option><option value="latest">最新发布</option></select></label>
+  </form>
+  <div class="lead-results"><span id="lead-count" role="status" aria-live="polite">$count 条进展</span><button id="lead-reset" type="button" class="text-button">重置筛选</button></div>
+  <ul id="lead-list" class="lead-list">$entries</ul>
+  <p id="lead-empty" class="empty" hidden>没有符合条件的进展，可扩大时间范围或重置筛选。</p>
+  <nav id="lead-pagination" class="lead-pagination" aria-label="AI 进展分页" hidden>
+    <label>每页 <select id="lead-page-size"><option value="20">20 条</option><option value="50">50 条</option><option value="100">100 条</option></select></label>
+    <button type="button" id="lead-prev">上一页</button><span id="lead-page" role="status"></span><button type="button" id="lead-next">下一页</button>
+  </nav>
+  $source_status
+</section>

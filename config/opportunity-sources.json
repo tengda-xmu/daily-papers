@@ -1,0 +1,494 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "id": "nsfc",
+      "name": "国家自然科学基金委",
+      "url": "https://www.nsfc.gov.cn/",
+      "hosts": [
+        "www.nsfc.gov.cn"
+      ],
+      "format": "html",
+      "link_pattern": "/p1/.*html$",
+      "include": "申请|申报|项目指南",
+      "limit": 10,
+      "defaults": {
+        "kind": "funding",
+        "region": "中国"
+      }
+    },
+    {
+      "id": "most",
+      "name": "国家科技管理信息系统公共服务平台",
+      "url": "https://service.most.gov.cn/",
+      "hosts": [
+        "service.most.gov.cn"
+      ],
+      "format": "html",
+      "include": "申报|指南|征集",
+      "limit": 8,
+      "defaults": {
+        "kind": "funding",
+        "subtype": "government",
+        "region": "中国"
+      }
+    },
+    {
+      "id": "comac",
+      "name": "中国商飞官方公告",
+      "url": "https://www.comac.cc/xwzx/xxgg/",
+      "hosts": [
+        "www.comac.cc"
+      ],
+      "format": "html",
+      "include": "基金|课题|指南|科研|揭榜",
+      "limit": 8,
+      "defaults": {
+        "kind": "funding",
+        "organization_group": "comac",
+        "region": "中国"
+      }
+    },
+    {
+      "id": "comac-sadri",
+      "name": "上海飞机设计研究院",
+      "url": "https://sadri.comac.cc/xwzx/sfyxw/",
+      "hosts": [
+        "sadri.comac.cc"
+      ],
+      "format": "html",
+      "include": "基金|课题|指南|科研合作|征集",
+      "limit": 8,
+      "defaults": {
+        "kind": "funding",
+        "organization_group": "comac",
+        "region": "中国"
+      }
+    },
+    {
+      "id": "comac-samc",
+      "name": "上海飞机制造有限公司",
+      "url": "https://samc.comac.cc/xwzx/tzgg/",
+      "hosts": [
+        "samc.comac.cc"
+      ],
+      "format": "html",
+      "include": "基金|课题|指南|科研合作|征集",
+      "limit": 8,
+      "defaults": {
+        "kind": "funding",
+        "organization_group": "comac",
+        "region": "中国"
+      }
+    },
+    {
+      "id": "avic",
+      "name": "中国航空工业官方公告",
+      "url": "https://www.avic.com.cn/",
+      "hosts": [
+        "www.avic.com.cn",
+        "www.avic.com"
+      ],
+      "format": "html",
+      "include": "基金|课题|指南|科研合作|揭榜",
+      "limit": 8,
+      "defaults": {
+        "kind": "funding",
+        "organization_group": "avic",
+        "region": "中国"
+      }
+    },
+    {
+      "id": "aecc",
+      "name": "中国航发官方公告",
+      "url": "https://www.aecc.cn/",
+      "hosts": [
+        "www.aecc.cn"
+      ],
+      "format": "html",
+      "include": "基金|课题|指南|科研合作|揭榜",
+      "limit": 8,
+      "defaults": {
+        "kind": "funding",
+        "organization_group": "aecc",
+        "region": "中国"
+      }
+    },
+    {
+      "id": "ukri",
+      "name": "UKRI 资助机会",
+      "url": "https://www.ukri.org/opportunity/",
+      "hosts": [
+        "www.ukri.org"
+      ],
+      "format": "html",
+      "link_pattern": "/opportunity/[^/?#]+/?$",
+      "include": "engineer|AI|artificial|comput|material|manufactur|EPSRC|innovation",
+      "limit": 8,
+      "defaults": {
+        "kind": "funding",
+        "region": "英国"
+      },
+      "selector": "h3 a[href]"
+    },
+    {
+      "id": "nsf",
+      "name": "NSF Funding",
+      "url": "https://www.nsf.gov/funding/opportunities",
+      "hosts": [
+        "www.nsf.gov"
+      ],
+      "format": "html",
+      "link_pattern": "/funding/opportunities/",
+      "include": "engineer|AI|artificial|comput|material|mechanic",
+      "limit": 8,
+      "defaults": {
+        "kind": "funding",
+        "region": "美国"
+      }
+    },
+    {
+      "id": "eu-funding",
+      "name": "欧盟 Funding & Tenders",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/topic-search",
+      "hosts": [
+        "ec.europa.eu"
+      ],
+      "format": "html",
+      "include": "research|innovation|artificial|engineer",
+      "limit": 8,
+      "defaults": {
+        "kind": "funding",
+        "region": "欧盟"
+      }
+    },
+    {
+      "id": "asme",
+      "name": "ASME 委员招募",
+      "url": "https://access.asme.org/engagement/opportunities/",
+      "hosts": [
+        "access.asme.org",
+        "www.asme.org"
+      ],
+      "format": "html",
+      "link_pattern": "/opportunities/[^/]+/?$",
+      "include": "committee|chair|editor|technical",
+      "limit": 8,
+      "defaults": {
+        "kind": "academic_role",
+        "subtype": "committee",
+        "region": "国际"
+      }
+    },
+    {
+      "id": "cstam",
+      "name": "中国力学学会",
+      "url": "https://www.cstam.org.cn/",
+      "hosts": [
+        "www.cstam.org.cn"
+      ],
+      "format": "html",
+      "include": "委员.*(?:招募|增补|遴选)|(?:招募|增补|遴选).*委员|开放课题|基金.*申报",
+      "limit": 8,
+      "defaults": {
+        "region": "中国"
+      }
+    },
+    {
+      "id": "eprl",
+      "name": "Engineering Physics Review Letters",
+      "url": "https://www.eprl.inest.cas.cn/bwh/cyqnbw/",
+      "hosts": [
+        "www.eprl.inest.cas.cn"
+      ],
+      "format": "html",
+      "include": "青年编委|招募",
+      "limit": 4,
+      "defaults": {
+        "kind": "academic_role",
+        "subtype": "young_editor",
+        "region": "中国"
+      }
+    },
+    {
+      "id": "aroc-young",
+      "name": "《计算机应用研究》编辑部",
+      "organization": "《计算机应用研究》编辑部",
+      "url": "https://www.arocmag.cn/info/announce/youngboardmember-request",
+      "hosts": [
+        "www.arocmag.cn"
+      ],
+      "format": "document",
+      "defaults": {
+        "kind": "academic_role",
+        "region": "中国"
+      },
+      "review": {
+        "source_version": "9a1eae970b6f93223d44c9af797b8980fc016c952e6a050f4502526480d1f4a1",
+        "fields": {
+          "title": "《计算机应用研究》青年编委征集",
+          "published_at": "2026-09-11T00:00:00+08:00",
+          "kind": "academic_role",
+          "subtype": "young_editor",
+          "region": "中国",
+          "deadline": "2026-09-25",
+          "deadline_zone": "通知写明 9 月 25 日前，具体时刻请向编辑部确认",
+          "summary": "面向计算机及相关领域征集青年编委，采用个人自荐，需提交申请表。",
+          "eligibility": "45 岁以下、博士学位；第一或通信作者发表至少 5 篇相关领域知名期刊或会议论文，其他条件见通知。",
+          "materials": "青年编委申请表 Word 文件。",
+          "method": "个人自荐，邮件主题使用“青年编委会委员登记表-单位名称-姓名”。",
+          "application_email": "journal@arocmag.cn",
+          "duties": "参与组稿、审稿、栏目建议及学术推广，遵守出版伦理。",
+          "topics": [
+            "ai_maintenance"
+          ]
+        }
+      }
+    },
+    {
+      "id": "aroc-editor",
+      "name": "《计算机应用研究》编辑部",
+      "organization": "《计算机应用研究》编辑部",
+      "url": "https://www.arocmag.cn/info/announce/boardmember-request",
+      "hosts": [
+        "www.arocmag.cn"
+      ],
+      "format": "document",
+      "defaults": {
+        "kind": "academic_role",
+        "region": "中国"
+      },
+      "review": {
+        "source_version": "71552e6f246211cb5e9d8a9c18c52c42a09ddc432e77b4014890e2333b04fd1d",
+        "fields": {
+          "title": "《计算机应用研究》编委征集",
+          "published_at": "2026-09-11T00:00:00+08:00",
+          "kind": "academic_role",
+          "subtype": "editor",
+          "region": "中国",
+          "deadline": "2026-09-25",
+          "deadline_zone": "通知写明 9 月 25 日前，具体时刻请向编辑部确认",
+          "summary": "征集计算机及相关领域编委，审核候选人的研究经历、学术影响和参与意愿。",
+          "eligibility": "博士、教授或相应职称／职务；近 3 年作为第一负责人主持省部级及以上科研项目，其他条件见通知。",
+          "materials": "编委申请表 Word 文件。",
+          "method": "个人自荐；邮件主题使用“编委会委员登记表-单位名称-姓名”。",
+          "application_email": "journal@arocmag.cn",
+          "duties": "参与办刊方向、选题策划、稿件推荐与出版质量工作。",
+          "topics": [
+            "ai_maintenance"
+          ]
+        }
+      }
+    },
+    {
+      "id": "asme-standing",
+      "name": "ASME",
+      "organization": "ASME",
+      "url": "https://www.asme.org/codes-standards/asme-code-committee/get-involved/join-a-c-s-committee",
+      "hosts": [
+        "www.asme.org"
+      ],
+      "format": "document",
+      "defaults": {
+        "kind": "academic_role",
+        "region": "国际"
+      },
+      "review": {
+        "source_version": "f9b2a07e0406ed23eec36960d5ea88fe6b5b4f569fd784baac17685347cae90e",
+        "fields": {
+          "title": "ASME 标准与认证委员会：委员申请入口",
+          "published_at": "",
+          "kind": "academic_role",
+          "subtype": "committee",
+          "region": "国际",
+          "stage": "standing",
+          "summary": "长期提供委员申请流程；具体委员会有无空缺须先联系其工作人员确认。",
+          "eligibility": "具备对应技术专长及参与能力；不强制要求 ASME 会员身份，委员会参与免费。",
+          "materials": "PF-1 个人信息表、签署的 PAF 和履历资料；各委员会可能有额外要求。",
+          "method": "先联系对应委员会工作人员，再按委员会要求递交资料。",
+          "duties": "成员参与讨论、任务、投票及会议；不同成员类型职责不同。",
+          "topics": [
+            "generative_design",
+            "fatigue_reliability"
+          ]
+        }
+      }
+    },
+    {
+      "id": "klais-2026",
+      "name": "中国科学院计算技术研究所 · 智能算法安全全国重点实验室",
+      "organization": "中国科学院计算技术研究所 · 智能算法安全全国重点实验室",
+      "url": "https://klais.ict.ac.cn/tzgg/xmzj/202609/t20260908_856264.html",
+      "hosts": [
+        "klais.ict.ac.cn"
+      ],
+      "format": "document",
+      "defaults": {
+        "kind": "funding",
+        "region": "中国"
+      },
+      "review": {
+        "source_version": "dfcbbb298138e4251ed17b2a94f551b24d8591cc04a19e66fcecfa7c61a32e79",
+        "fields": {
+          "title": "智能算法安全全国重点实验室 2026 年开放课题",
+          "published_at": "2026-09-05T00:00:00+08:00",
+          "kind": "funding",
+          "subtype": "open_topic",
+          "region": "中国",
+          "stage": "application",
+          "deadline": "2026-09-30",
+          "deadline_zone": "中国；公告未列具体截止时刻",
+          "summary": "覆盖大模型与智能体安全、多模态、算法治理、协同计算、隐私计算和端侧安全。",
+          "amount": "每项 10–15 万元",
+          "duration": "2 年",
+          "applicant": "非实验室固定研究人员。",
+          "eligibility": "博士或副高级及以上；无高级职称的青年在职人员需两名高级职称专家推荐。每年限申请 1 项，在研主持不超过 1 项。",
+          "materials": "签字盖章的申请书扫描件及 Word 文件，无需纸质材料。",
+          "method": "按官网指定文件命名规则发送邮件。",
+          "application_email": "sklais@ict.ac.cn",
+          "partner_requirements": "鼓励海内外高校、科研院所和企业跨单位合作。",
+          "deliverables": "阶段及结题报告；执行期至少参加一次实验室开放课题交流。",
+          "topics": [
+            "ai_maintenance"
+          ]
+        }
+      }
+    },
+    {
+      "id": "fuelcell-2026",
+      "name": "燃料电池国家技术创新中心",
+      "organization": "燃料电池国家技术创新中心",
+      "url": "https://www.nctifc.com/announcement/202608/t20260827_126441.html",
+      "hosts": [
+        "www.nctifc.com"
+      ],
+      "format": "document",
+      "defaults": {
+        "kind": "funding",
+        "region": "中国"
+      },
+      "review": {
+        "source_version": "c6c103fdc17319348b0916de4bd3f5d5655ffddae6476683566b9972ec3e2131",
+        "fields": {
+          "title": "燃料电池国家技术创新中心 2026 年开放课题",
+          "published_at": "2026-08-27T09:21:00+08:00",
+          "kind": "funding",
+          "subtype": "open_topic",
+          "region": "中国",
+          "stage": "application",
+          "opens": "2026-09-01",
+          "deadline": "2026-09-30",
+          "deadline_at": "2026-09-30T17:00:00+08:00",
+          "deadline_zone": "17:00，中国时间",
+          "summary": "支持材料、电堆、系统控制和健康管理等方向，包括目标导向揭榜和自由探索。",
+          "amount": "每项 25 万元，原则上立项 10 项",
+          "duration": "原则上不超过 2 年",
+          "applicant": "国内外高校、科研院所等。",
+          "eligibility": "副高级及以上或博士；年度限 1 项，中心在研课题负责人不得申请。",
+          "partner_requirements": "不允许多院校联合申报。",
+          "materials": "线上申请书；目标导向类参照官方附件 2。",
+          "method": "在开放课题管理系统填写并提交。",
+          "application_url": "https://kfkt.nctifc.com",
+          "deliverables": "与产业需求相关的前沿研究及论文；目标导向类按附件约定任务，不得降低指标。",
+          "topics": [
+            "ai_maintenance",
+            "fatigue_reliability"
+          ]
+        }
+      }
+    },
+    {
+      "id": "ukri-discovery-c7",
+      "name": "Innovate UK／Ofgem",
+      "organization": "Innovate UK／Ofgem",
+      "url": "https://www.ukri.org/opportunity/ofgem-strategic-innovation-fund-discovery-c7/",
+      "hosts": [
+        "www.ukri.org"
+      ],
+      "format": "document",
+      "defaults": {
+        "kind": "funding",
+        "region": "英国"
+      },
+      "review": {
+        "source_version": "d059f5c558060ad0c081c1e6c2e2076b470df2768bc4f99477044a96a8486865",
+        "fields": {
+          "title": "Ofgem Strategic Innovation Fund：Discovery C7 合作项目",
+          "published_at": "2026-09-23T00:00:00+01:00",
+          "kind": "funding",
+          "subtype": "collaboration",
+          "region": "英国",
+          "stage": "application",
+          "opens": "2026-09-21",
+          "deadline": "2026-10-21",
+          "deadline_at": "2026-10-21T11:00:00+01:00",
+          "deadline_zone": "11:00 英国夏令时（Europe/London，UTC+1；北京时间 18:00）",
+          "summary": "面向能源网络创新挑战的合作探索项目。牵头机构资格受英国能源监管许可限制。",
+          "amount": "本轮共享预算最高 3000 万英镑（不含 VAT），并非单项额度。",
+          "applicant": "Ofgem 许可的电力／燃气配网、输网运营商或 NESO 牵头。",
+          "partner_requirements": "只接受合作申报。",
+          "method": "由官方页面进入 Innovation Funding Service 查看完整指南并申请。",
+          "topics": [
+            "ai_maintenance"
+          ]
+        }
+      }
+    },
+    {
+      "id": "aecc-power",
+      "name": "中国航发动力股份有限公司",
+      "organization": "中国航发动力股份有限公司",
+      "url": "https://hfdl.aecc.cn/",
+      "hosts": [
+        "hfdl.aecc.cn"
+      ],
+      "format": "html",
+      "include": "开放课题|开放基金|科研.*征集|技术.*攻关|联合基金",
+      "defaults": {
+        "kind": "funding",
+        "region": "中国",
+        "organization_group": "aecc"
+      }
+    },
+    {
+      "id": "aecc-materials",
+      "name": "中国航发北京航空材料研究院",
+      "organization": "中国航发北京航空材料研究院",
+      "url": "https://www.biam.ac.cn/",
+      "hosts": [
+        "www.biam.ac.cn"
+      ],
+      "format": "html",
+      "include": "开放课题|开放基金|科研.*征集|技术.*攻关|联合基金",
+      "defaults": {
+        "kind": "funding",
+        "region": "中国",
+        "organization_group": "aecc"
+      }
+    }
+  ],
+  "entries": [
+    {
+      "id": "public-0904aa7cbfd407d120a520ef",
+      "url": "https://www.nsfc.gov.cn/p1/3381/2824/142425.html",
+      "source": "国家自然科学基金委员会信息科学部",
+      "organization": "国家自然科学基金委员会信息科学部",
+      "kind": "funding",
+      "subtype": "grant",
+      "region": "中国",
+      "stage": "application",
+      "title": "2026 年“空间智能与世界模型”专项项目申请指南",
+      "published_at": "2026-09-18T00:00:00+08:00",
+      "summary": "基金委已发布指南通告。具体申请条件和截止时间需登录科学基金网络信息系统查看。",
+      "method": "登录后在“项目管理—项目指南”查看正式要求。",
+      "application_url": "https://grants.nsfc.gov.cn",
+      "deadline_note": "公开通告未给出截止时间，请依托单位和申请人登录核对。",
+      "topics": [
+        "ai_maintenance"
+      ],
+      "verification": "verified",
+      "verified_at": "2026-09-25T04:59:07.420337+00:00",
+      "verification_method": "人工核对官方通告"
+    }
+  ]
+}

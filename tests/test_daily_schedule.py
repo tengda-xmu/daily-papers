@@ -55,7 +55,8 @@ class Remote:
         if method == 'POST':
             return {'workflow_run_id': 123}
         if '/contents/' in path:
-            return {'content': base64.b64encode(json.dumps(self.payload).encode()).decode()}
+            payload = {'checked_at': NOW.isoformat(), 'outcome': 'ok'} if any(name in path for name in ('ai-updates.json', 'opportunities.json')) else self.payload
+            return {'content': base64.b64encode(json.dumps(payload).encode()).decode()}
         return {'workflow_runs': self.runs}
 
 
@@ -70,7 +71,7 @@ def test_local_dispatch_waits_until_evening_but_manual_updates_remain_available(
 def test_current_edition_skips_without_dispatch_and_active_runs_are_respected():
     remote = Remote(edition())
     assert dispatch_if_needed(remote, NOW)['state'] == 'already_updated_today'
-    assert len(remote.calls) == 1
+    assert len(remote.calls) == 3
     for state in ('queued', 'in_progress', 'waiting', 'pending', 'requested'):
         remote = Remote({}, [{'status': state}])
         assert dispatch_if_needed(remote, NOW)['state'] == 'update_already_running'
@@ -91,12 +92,24 @@ def test_large_recommendation_file_reads_git_blob_instead_of_empty_contents():
     calls = []
     def remote(method, path, body=None):
         calls.append((method, path))
+        if any(name in path for name in ('ai-updates.json', 'opportunities.json')):
+            return {'content': base64.b64encode(json.dumps({'checked_at':NOW.isoformat(),'outcome':'ok'}).encode()).decode()}
         if '/contents/' in path:
             return {'encoding': 'none', 'content': '', 'sha': 'a' * 40}
         assert path.endswith('/git/blobs/' + 'a' * 40)
         return {'encoding': 'base64', 'content': base64.b64encode(json.dumps(edition()).encode()).decode()}
     assert dispatch_if_needed(remote, NOW)['state'] == 'already_updated_today'
-    assert len(calls) == 2
+    assert len(calls) == 4
+
+
+def test_local_catchup_dispatches_missing_column_even_with_fresh_papers():
+    remote = Remote(edition())
+    def missing(method, path, body=None):
+        if 'ai-updates.json' in path:
+            return {'content': base64.b64encode(b'{}').decode()}
+        return remote(method, path, body)
+    assert dispatch_if_needed(missing, NOW)['state'] == 'dispatched'
+    assert sum(method == 'POST' for method, _, _ in remote.calls) == 1
 
 
 def test_dispatch_failure_is_not_blindly_retried():

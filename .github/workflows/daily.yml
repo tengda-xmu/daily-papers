@@ -31,6 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       needed: ${{ steps.freshness.outputs.needed }}
+      papers_needed: ${{ steps.freshness.outputs.papers_needed }}
     steps:
       - uses: actions/checkout@v4
         with: {ref: main} # Queued checks must see the preceding run's committed data.
@@ -79,7 +80,17 @@ jobs:
               fi
             done
           fi
+      - name: Refresh public AI and research columns
+        continue-on-error: true
+        env:
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
+          LLM_MODEL: ${{ secrets.LLM_MODEL }}
+        run: python -m tools.public_updates --refresh
       - name: Run daily pipeline
+        id: pipeline
+        if: needs.check.outputs.papers_needed == 'true'
+        continue-on-error: true
         env:
           ELSEVIER_API_KEY: ${{ secrets.ELSEVIER_API_KEY }}
           ELSEVIER_INSTTOKEN: ${{ secrets.ELSEVIER_INSTTOKEN }}
@@ -101,10 +112,9 @@ jobs:
           SCHEDULED_CHECK: ${{ inputs.scheduled_check }}
         run: |
           python -m tools.recommendation_data --recover --reconcile --import-readings
-          python -m src.research_leads
           python -m src.pipeline
-      - name: Update official research leads
-        run: python -m src.research_leads
+      - name: Import AI reading enrichment
+        run: python -m tools.public_updates --import-readings
       - name: Collect original paper figures
         timeout-minutes: 8
         continue-on-error: true
@@ -117,7 +127,7 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
       - name: Send Enterprise WeChat digest
-        if: github.event_name == 'schedule' || inputs.scheduled_check || inputs.send_digest
+        if: steps.pipeline.outcome == 'success' && (github.event_name == 'schedule' || inputs.scheduled_check || inputs.send_digest)
         env:
           WECHAT_WORK_WEBHOOK_URL: ${{ secrets.WECHAT_WORK_WEBHOOK_URL }}
         run: python -m src.notify
@@ -128,3 +138,6 @@ jobs:
           git add data site
           git diff --cached --quiet || git commit -m "chore: update daily papers"
           git push
+      - name: Report paper update failure after preserving public columns
+        if: steps.pipeline.outcome == 'failure'
+        run: exit 1
