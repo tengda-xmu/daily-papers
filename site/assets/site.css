@@ -114,7 +114,6 @@ button:disabled { cursor: default; }
   .main-content:has(> #recommendation-issue) { padding-top: 8px; }
 }
 .daily-issue > .issue-meta { margin: 0 0 8px; }
-.daily-issue > .direction-bar { margin-bottom: 8px; }
 .daily-issue #core-section { margin-top: 12px; }
 .daily-issue #core-section[hidden] + #extended-section { margin-top: 12px; }
 .daily-update-panel { margin: 0 0 20px; padding: 12px 16px; border-left: 2px solid var(--blue); background: var(--soft); font-size: 13px; }
@@ -123,11 +122,13 @@ button:disabled { cursor: default; }
 .update-pair-fields { display: flex; gap: 10px; margin: 10px 0; }
 .update-pair-fields input { flex: 1; min-width: 0; padding: 8px; border: 1px solid #cbd6e0; border-radius: 4px; }
 .update-links { display: flex; flex-wrap: wrap; gap: 16px; }
-.direction-bar { display: flex; align-items: baseline; flex-wrap: wrap; gap: 10px 16px; margin: 0 0 18px; font-size: 13px; }
-.direction-bar > span { color: var(--muted); white-space: nowrap; }
-.direction-bar > a { margin-left: auto; white-space: nowrap; }
-.direction-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.direction-chips button { border: 1px solid var(--line); border-radius: 4px; background: #fff; color: var(--ink); padding: 5px 10px; font-size: 12px; }
+.recommendation-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 24px; }
+.direction-bar { display: flex; align-items: center; flex-wrap: wrap; flex: 0 1 auto; width: max-content; max-width: 100%; gap: 8px 12px; font-size: 13px; }
+.direction-label { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.direction-label > span { color: var(--muted); }
+.direction-label > a { font-size: 12px; }
+.direction-chips { display: flex; flex-wrap: wrap; max-width: 100%; gap: 8px; }
+.direction-chips button { max-width: 100%; overflow-wrap: anywhere; border: 1px solid var(--line); border-radius: 4px; background: #fff; color: var(--ink); padding: 5px 10px; font-size: 12px; }
 .direction-chips span { margin-left: 8px; color: var(--muted); }
 .direction-chips button[aria-pressed=true] { border-color: var(--blue); background: var(--soft); }
 .direction-pending { font-size: 12px; color: var(--muted); margin: 0 0 14px; }
@@ -136,9 +137,12 @@ button:disabled { cursor: default; }
 .source-health { margin-left: auto; color: var(--muted); }
 .source-health::before { content: ""; display: inline-block; width: 5px; height: 5px; margin-right: 7px; border-radius: 50%; background: currentColor; vertical-align: middle; }
 .search-row { display: flex; gap: 10px; }
-.daily-issue .search-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; }
-@media (max-width: 900px) {
-  .daily-issue .search-row { grid-template-columns: minmax(0, 1fr) auto; row-gap: 4px; }
+.daily-issue .search-row { display: grid; grid-template-columns: clamp(280px, 20vw, 360px) auto auto; align-items: center; flex: 0 1 auto; width: max-content; max-width: 100%; margin-left: auto; gap: 8px; }
+.daily-issue .search-box, .daily-issue .filter-toggle { min-height: 44px; padding: 6px 12px; }
+.daily-issue .results-toolbar { gap: 8px; }
+.daily-issue .results-toolbar > * { white-space: nowrap; }
+@media (max-width: 700px) {
+  .daily-issue .search-row { width: 100%; grid-template-columns: minmax(0, 1fr) auto; row-gap: 4px; }
   .daily-issue .search-row > .results-toolbar { grid-column: 1 / -1; }
 }
 .search-box { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; min-height: 46px; padding: 9px 15px; border: 1px solid var(--line); border-radius: 6px; background: var(--soft); color: var(--muted); }

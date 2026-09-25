@@ -450,10 +450,12 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
     core_html = "".join(paper_card(p, "core", i, root, topic_labels) for i, p in enumerate(core))
     extended_html = "".join(paper_card(p, "extended", i, root, topic_labels) for i, p in enumerate(extended))
     direction_chips = ''.join(f'<button type="button" data-topic-filter="{esc(d["id"])}" aria-pressed="false">{esc(d["name"])}<span>{sum(d["id"] in p.get("topic_tags", []) for p in all_papers)}</span></button>' for d in shown_directions)
-    direction_bar = f'<div class="direction-bar"><span>本期方向</span><div class="direction-chips">{direction_chips}</div>'
-    direction_bar += f'<a href="{root}directions.html" data-local-only>管理方向</a></div>'
+    direction_bar = (f'<div class="direction-bar"><div class="direction-label"><span>本期方向</span>'
+                     f'<a href="{root}directions.html" data-local-only>管理方向</a></div>'
+                     f'<div class="direction-chips">{direction_chips}</div></div>')
+    direction_pending = ''
     if not archive_date and profile and profile_revision(profile) != profile_revision(current_profile):
-        direction_bar += '<p class="direction-pending" data-local-only>方向设置已变更，点击“手动更新”后按新设置生成推荐。</p>'
+        direction_pending = '<p class="direction-pending" data-local-only>方向设置已变更，点击“手动更新”后按新设置生成推荐。</p>'
     ok = sum(source_state(s, statuses)[0] in ("ok", "no_data") for s in SOURCE_CATALOG if s["kind"] == "adapter")
     adapter_count = sum(s["kind"] == "adapter" for s in SOURCE_CATALOG)
     cns_children = sum(j["group"] == "CNS 子刊" for j in JOURNALS)
@@ -475,7 +477,7 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
         "daily.html", title="每日论文推荐", day=esc(issue), generated=esc(generated),
         archive_notice=archive_notice, history_url="./" if archive_date else "archive/",
         update_control=update_control, update_panel=update_panel,
-        direction_bar=direction_bar,
+        direction_bar=direction_bar, direction_pending=direction_pending,
         edition_label=(f'<a href="{root}archive/">{esc(edition["date"])} · 第 {edition["number"]} 批</a>' if edition else ''),
         generated_at=esc(payload.get('generated_at', '')), update_run_id=esc(payload.get('update_run_id', '')),
         source_options="".join(source_options), health_label=f"{ok} / {adapter_count} 类来源正常",
