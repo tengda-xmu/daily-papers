@@ -250,7 +250,7 @@
   const isAI = root.classList.contains('ai-updates');
   const get = id => root.querySelector('#' + id);
   const list = get('lead-list'), rows = Array.from(list.children);
-  const fields = ['query', 'topic', 'provider', 'state', 'sort', 'page-size', 'period', 'subtype', 'region', 'group'].filter(name => get('lead-' + name));
+  const fields = ['query', 'topic', 'provider', 'state', 'sort', 'page-size', 'period', 'subtype', 'region', 'group', 'platform', 'author'].filter(name => get('lead-' + name));
   const controls = Object.fromEntries(fields.map(name => [name, get('lead-' + name)]));
   const categories = Array.from(root.querySelectorAll('[data-lead-kind]'));
   let category = 'all', page = 1;
@@ -289,7 +289,9 @@
     const matches = rows.filter(row => (category === 'all' || (isAI ? (row.dataset.categories || '').split(' ').includes(category) : row.dataset.kind === category))
       && (!query || row.textContent.toLocaleLowerCase().includes(query))
       && (!topic || row.dataset.topics.split(' ').includes(topic))
-      && (!provider || row.dataset.provider === provider)
+      && (!provider || (isAI ? row.dataset.provider === provider : (row.dataset.platforms || row.dataset.provider).split(' ').includes(provider)))
+      && (!controls.platform?.value || (row.dataset.platforms || 'official').split(' ').includes(controls.platform.value))
+      && (!controls.author?.value || JSON.parse(row.dataset.authors || '[]').includes(controls.author.value))
       && (state === 'all' || (!state ? !opportunity(row) || row.dataset.state !== 'ended' : state === 'active' ? row.dataset.state !== 'ended' : state === 'open' ? ['open','closing'].includes(row.dataset.state) : row.dataset.state === state))
       && (!controls.subtype?.value || row.dataset.subtype === controls.subtype.value)
       && (!controls.region?.value || row.dataset.region === controls.region.value)

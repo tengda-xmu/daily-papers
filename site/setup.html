@@ -7,13 +7,13 @@
   <meta name="theme-color" content="#153e64">
   <title>设置 | 每日论文推荐</title>
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./assets/site.css?v=92af73fdf5">
-  <link rel="stylesheet" href="./assets/paper-chat.css?v=92af73fdf5">
-  <link rel="stylesheet" href="./assets/paper-library.css?v=92af73fdf5">
-  <script src="./assets/site.js?v=92af73fdf5" defer></script>
-  <script src="./assets/paper-library.js?v=92af73fdf5" defer></script>
-  <script src="./assets/paper-chat.js?v=92af73fdf5" defer></script>
-<link rel="stylesheet" href="./assets/wechat-subscriptions.css?v=92af73fdf5"><script src="./assets/wechat-subscriptions.js?v=92af73fdf5" defer></script><script src="./assets/reading-tasks.js?v=92af73fdf5" defer></script>
+  <link rel="stylesheet" href="./assets/site.css?v=321112587d">
+  <link rel="stylesheet" href="./assets/paper-chat.css?v=321112587d">
+  <link rel="stylesheet" href="./assets/paper-library.css?v=321112587d">
+  <script src="./assets/site.js?v=321112587d" defer></script>
+  <script src="./assets/paper-library.js?v=321112587d" defer></script>
+  <script src="./assets/paper-chat.js?v=321112587d" defer></script>
+<link rel="stylesheet" href="./assets/wechat-subscriptions.css?v=321112587d"><script src="./assets/wechat-subscriptions.js?v=321112587d" defer></script><script src="./assets/reading-tasks.js?v=321112587d" defer></script>
 </head>
 <body id="top">
   <a class="skip-link" href="#main-content">跳至正文</a>
@@ -234,7 +234,7 @@ python -m tools.publish_researchgate</code></pre><p>Windows 可直接使用已�
   </div>
 </details>
 <details id="wechat" class="reference-panel">
-  <summary><span>公众号订阅与科研线索</span><span class="reference-meta">订阅、采集与同步</span></summary>
+  <summary><span>公众号与小红书来源</span><span class="reference-meta">订阅、添加笔记与同步</span></summary>
   <div class="reference-body settings-copy">
 <section id="wechat-manager" aria-label="手动管理公众号订阅" data-local-only>
   <div class="wechat-connection"><span id="wechat-connection" role="status">正在连接本机…</span><a href="http://127.0.0.1:43127/setup.html#wechat" target="_blank" rel="noopener noreferrer">在本机管理</a></div>
@@ -262,6 +262,17 @@ python -m tools.publish_researchgate</code></pre><p>Windows 可直接使用已�
   <div class="wechat-sync"><div><p id="wechat-sync-state">本机保存与每日更新的订阅目录分别管理。</p><p class="wechat-help">同步会将公众号名称、微信号和分组保存到公开网站的订阅目录；未同步的修改只在本机生效。</p></div><button id="wechat-sync" type="button" disabled>同步到每日更新</button></div>
   <p class="wechat-help">按公开索引轮换采集，不代表已在微信中关注或已获取全部历史文章。暂停订阅后不再安排该账号的定向采集，已收集的文章仍保留。</p>
   <p id="wechat-status" role="status" aria-live="polite"></p>
+  <details class="settings-source" id="social-note-manager"><summary>添加小红书笔记</summary>
+    <p class="wechat-help">粘贴分享链接，可补充标题、作者和正文。先保存到本机，再同步到网站；公开页面只展示短摘要和导读。</p>
+    <form id="social-note-form"><fieldset id="social-note-fields" disabled><legend class="sr-only">小红书笔记</legend>
+      <label>分享链接或分享文本<textarea id="social-note-share" required maxlength="2500" rows="2" placeholder="粘贴小红书分享内容或链接"></textarea></label>
+      <div class="wechat-form-grid"><label>标题（可补充）<input id="social-note-title" maxlength="300"></label><label>作者（可补充）<input id="social-note-author" maxlength="100"></label><label>原始发布日期（可选）<input id="social-note-date" type="date"></label></div>
+      <label>正文（可选，仅本机保留完整内容）<textarea id="social-note-body" maxlength="10000" rows="5" placeholder="无法读取原文时，可粘贴内容帮助分类和解读"></textarea></label>
+      <div class="wechat-form-actions"><button id="social-note-preview" type="button">预览分类</button><button type="submit">保存到本机</button><button id="social-note-cancel" type="button" hidden>取消编辑</button></div>
+    </fieldset></form>
+    <p id="social-note-status" role="status" aria-live="polite"></p><div id="social-note-list"></div>
+    <div class="wechat-sync"><p id="social-note-sync-state">连接本机后可管理笔记。</p><button id="social-note-sync" type="button" disabled>同步到网站</button></div>
+  </details>
 </section>
 
 <details><summary>查看已订阅的 32 个公众号与自动扩展状态</summary>
@@ -270,6 +281,7 @@ python -m tools.publish_researchgate</code></pre><p>Windows 可直接使用已�
 自动发现订阅上限 60 个。达到上限后保留候选，需调整配置后继续扩展。
 领域标签按账号名称和简介匹配，不代表对账号或文章的质量背书。</p></details>
 <details class="settings-source" data-local-only><summary>采集与同步说明</summary><div class="settings-copy">
+    <p><strong>公众号与小红书：</strong>内容按主题进入<a href="leads.html">科研线索</a>或<a href="ai.html">AI 前沿</a>，独立保存，不占论文推荐名额。每天 21:00、手动更新及补偿检查都会处理两个栏目。小红书使用已配置的 SerpApi 网页搜索，每天最多两次新查询，缓存 24 小时；也可在上方添加笔记，先保存到本机，再明确同步到网站。未配置搜索或页面受限时，手动添加仍可使用。</p>
     <p><strong>公开文章索引：</strong>每日 20:35 按订阅目录低频检索近期文章，21:00 日报读取成功同步的标题、来源、日期、短片段和公开检索入口。快照缺失或超过 24 小时时，云端尝试补充公开检索。这些内容在<a href="leads.html">科研线索</a>页单独展示。</p><p>微信后台文章列表持续返回 <code>200013</code>，<a href="https://github.com/wechat-article/wechat-article-exporter/issues/200" target="_blank" rel="noopener noreferrer">上游维护者已有接口关闭报告</a>；当前停止调用受限列表接口，公开索引可用不代表微信已解除限制。每天最多 3 次公开查询，缓存 24 小时；遇验证码暂停请求至少 24 小时。</p><p>索引不保证覆盖所有订阅的全部文章，检索片段也不等于全文。链接明确标注“公开检索入口”，需人工验证的跳转请在浏览器中完成；公众号线索不占核心和扩展论文名额。</p><p><strong>WeRSS 订阅管理：</strong>本机管理地址为 <code>http://127.0.0.1:8001/</code>，微信扫码会话与管理密码只保存在本机。网站通过 <code>connector-data</code> 读取元数据，无需开放公网端口；本机定时任务需要电脑开机并登录 Windows。</p><pre><code>powershell -NoProfile -ExecutionPolicy Bypass -File tools/start_wechat.ps1
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/sync_wechat.ps1</code></pre><p><strong>持续扩展订阅：</strong>本机每天 18:00 轮换检索人工智能、智能体、大模型、可靠性、航空航天、结构材料和智能运维主题，筛选后自动添加新账号。排除营销、招聘、中小学教育和会员事务账号；同名歧义账号保留待核验。新增账号进入公开索引筛选目录，账号发现仍依赖有效微信扫码授权。</p>
 <p><a href="https://github.com/tengda-xmu/daily-papers/tree/main/connectors/wechat_sync" target="_blank" rel="noopener noreferrer">本机连接器说明</a> · <a href="https://github.com/tengda-xmu/daily-papers/blob/main/config/wechat_accounts.json" target="_blank" rel="noopener noreferrer">订阅领域与筛选配置</a></p><p><strong>已有远程 WeRSS：</strong>也可把 GitHub Actions 可访问的文章 RSS、Atom 或 JSON 地址保存为 <code>WECHAT_RSS_URLS</code>，需要请求头时配置 <code>WECHAT_RSS_HEADERS</code>。WeRSS 的 <code>/feed/all.json</code> 返回文章，根路径 <code>/rss</code> 是订阅目录；本机地址使用上述同步连接器。</p>

@@ -24,4 +24,15 @@
   <div class="wechat-sync"><div><p id="wechat-sync-state">本机保存与每日更新的订阅目录分别管理。</p><p class="wechat-help">同步会将公众号名称、微信号和分组保存到公开网站的订阅目录；未同步的修改只在本机生效。</p></div><button id="wechat-sync" type="button" disabled>同步到每日更新</button></div>
   <p class="wechat-help">按公开索引轮换采集，不代表已在微信中关注或已获取全部历史文章。暂停订阅后不再安排该账号的定向采集，已收集的文章仍保留。</p>
   <p id="wechat-status" role="status" aria-live="polite"></p>
+  <details class="settings-source" id="social-note-manager"><summary>添加小红书笔记</summary>
+    <p class="wechat-help">粘贴分享链接，可补充标题、作者和正文。先保存到本机，再同步到网站；公开页面只展示短摘要和导读。</p>
+    <form id="social-note-form"><fieldset id="social-note-fields" disabled><legend class="sr-only">小红书笔记</legend>
+      <label>分享链接或分享文本<textarea id="social-note-share" required maxlength="2500" rows="2" placeholder="粘贴小红书分享内容或链接"></textarea></label>
+      <div class="wechat-form-grid"><label>标题（可补充）<input id="social-note-title" maxlength="300"></label><label>作者（可补充）<input id="social-note-author" maxlength="100"></label><label>原始发布日期（可选）<input id="social-note-date" type="date"></label></div>
+      <label>正文（可选，仅本机保留完整内容）<textarea id="social-note-body" maxlength="10000" rows="5" placeholder="无法读取原文时，可粘贴内容帮助分类和解读"></textarea></label>
+      <div class="wechat-form-actions"><button id="social-note-preview" type="button">预览分类</button><button type="submit">保存到本机</button><button id="social-note-cancel" type="button" hidden>取消编辑</button></div>
+    </fieldset></form>
+    <p id="social-note-status" role="status" aria-live="polite"></p><div id="social-note-list"></div>
+    <div class="wechat-sync"><p id="social-note-sync-state">连接本机后可管理笔记。</p><button id="social-note-sync" type="button" disabled>同步到网站</button></div>
+  </details>
 </section>

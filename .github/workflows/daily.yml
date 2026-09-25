@@ -65,7 +65,9 @@ jobs:
       - name: Restore public WeChat index cache
         uses: actions/cache@v4
         with:
-          path: data/cache/wechat-public
+          path: |
+            data/cache/wechat-public
+            data/cache/xiaohongshu
           key: wechat-public-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
             wechat-public-${{ runner.os }}-
@@ -83,6 +85,10 @@ jobs:
       - name: Refresh public AI and research columns
         continue-on-error: true
         env:
+          SERPAPI_API_KEY: ${{ secrets.SERPAPI_API_KEY }}
+          WECHAT_RSS_URLS: ${{ secrets.WECHAT_RSS_URLS }}
+          WECHAT_RSS_HEADERS: ${{ secrets.WECHAT_RSS_HEADERS }}
+          WECHAT_IMPORT_PATH: data/inbox/wechat.json
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
           LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
           LLM_MODEL: ${{ secrets.LLM_MODEL }}
@@ -92,6 +98,7 @@ jobs:
         if: needs.check.outputs.papers_needed == 'true'
         continue-on-error: true
         env:
+          WECHAT_USE_SHARED_SNAPSHOT: '1'
           ELSEVIER_API_KEY: ${{ secrets.ELSEVIER_API_KEY }}
           ELSEVIER_INSTTOKEN: ${{ secrets.ELSEVIER_INSTTOKEN }}
           CNS_LOOKBACK_DAYS: 180

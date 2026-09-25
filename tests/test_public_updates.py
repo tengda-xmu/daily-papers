@@ -109,7 +109,7 @@ def test_public_freshness_is_independent_of_papers(tmp_path):
     from tools.public_updates import needed
     write(tmp_path / 'data/daily.json', {'generated_at': NOW.isoformat(), 'core': [{'id':'paper'}], 'extended':[]})
     assert needed(tmp_path,NOW)
-    for name in ('ai-updates.json','opportunities.json'):
+    for name in ('ai-updates.json','opportunities.json','social-articles.json'):
         write(tmp_path / 'data' / name, {'checked_at':NOW.isoformat(),'outcome':'ok'})
     assert not needed(tmp_path,NOW)
     write(tmp_path / 'data/ai-updates.json', {'checked_at':NOW.isoformat(),'outcome':'partial'})

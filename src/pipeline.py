@@ -363,6 +363,8 @@ def run_pipeline(
     if data_dir and adapters is None:
         from src.research_leads import wechat_leads
         leads = read_data(data_dir / 'research-leads.json').get('entries', []) + wechat_leads(wechat_articles)
+        from src.social_content import route
+        leads = [r for r in leads if (route(r) or {}).get('column') != 'ai' and r.get('kind') not in ('academic_role','funding')]
         heat = refresh_heat(data_dir, history, all_records, leads, until)
     # Historical papers stay observable even when outside discovery's date range.
     if history:

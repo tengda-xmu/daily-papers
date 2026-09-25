@@ -17,6 +17,20 @@ class WeChatAdapter:
         return self._status
 
     def fetch(self, since, until):
+        import os
+        if os.getenv('WECHAT_USE_SHARED_SNAPSHOT') == '1':
+            from src.public_sources import ROOT, read
+            from src.models import RawRecord, in_date_window
+            payload = read(ROOT/'data/social-articles.json')
+            if payload:
+                records = [RawRecord(source=self.name, source_id=r['id'], title=r['title'], venue=r.get('account',''),
+                    abstract=r.get('summary',''), published_at=r.get('published_at',''), landing_url=r['url'],
+                    raw_metadata={'access_mode':'public_index' if r.get('evidence_kind') == 'search_snippet' else 'article', 'social_column':r.get('column')})
+                    for r in payload.get('entries',[]) if r.get('platform') == 'wechat' and in_date_window(r.get('published_at'), since, until)]
+                statuses = [s for s in payload.get('sources',[]) if s.get('id','').startswith('wechat-')]
+                status = 'partial' if not statuses or any(s['status'] not in ('ok','no_data') for s in statuses) else 'ok' if records else 'no_data'
+                self._status = SourceStatus(self.name, status, len(records), '复用本轮独立公众号采集结果；覆盖范围见科研线索与 AI 前沿的来源状态。')
+                return records
         rows = self.rss.fetch(since, until)
         if rows and self.rss.status.status == "ok":
             self._status = self.rss.status

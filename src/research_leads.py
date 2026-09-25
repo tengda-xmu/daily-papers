@@ -187,8 +187,14 @@ def collect(payload, root=ROOT, *, now=None):
     from src.opportunities import collect as collect_opportunities, retain
     opportunities = collect_opportunities(root, now)
     entries += opportunities['entries']
+    from src.social_content import column, combine, PATH
+    social = read_json(root / PATH, {})
+    if social or read_json(root / 'config/xiaohongshu-notes.json', {}).get('entries'):
+        entries = combine([r for r in entries if r.get('provider') != 'wechat'], column(root, 'leads'))
     from src.ai_updates import public_index
-    ai_urls = {r['url'] for r in public_index(root).get('entries', [])}
+    index = public_index(root)
+    ai_urls = {r['url'] for r in index.get('entries', [])}
+    readings = {r['id']:r['analysis'] for r in index.get('social_readings',[]) if r.get('analysis')}
     directions = active_directions(load_profile(root))
     result = {}
     for row in entries:
@@ -207,6 +213,8 @@ def collect(payload, root=ROOT, *, now=None):
                   and (d['id'] in row.get('topics', []) or any(t.casefold() in text for t in d['keywords']))]
         status, status_label = state(row, now)
         result[row['id']] = {**row, 'topics': topics, 'state': status, 'state_label': status_label}
+        if row['id'] in readings:
+            result[row['id']]['analysis'] = readings[row['id']]
     # Upcoming events first, then recent announcements, resources and past events.
     def order(row):
         if row['state'] == 'ended':
@@ -216,7 +224,7 @@ def collect(payload, root=ROOT, *, now=None):
         if row.get('published_at'):
             return 1, -parse_date(row['published_at']).timestamp()
         return 2, row.get('title', '')
-    return {'entries': sorted(result.values(), key=order), 'directions': directions, 'sources': feed_data.get('sources', []) + opportunities.get('sources', []),
+    return {'entries': sorted(result.values(), key=order), 'directions': directions, 'sources': feed_data.get('sources', []) + opportunities.get('sources', []) + social.get('sources', []),
             'days': days, 'checked_at': feed_data.get('checked_at', ''), 'built_at': now.isoformat()}
 
 

@@ -5,7 +5,7 @@ import json
 import time
 
 from .reading_queue import ReadingQueue
-from src.ai_updates import fingerprint, normalize, prompt, validate_analysis
+from src.ai_updates import fingerprint, normalize, prompt, validate_analysis, can_analyze
 from src.public_sources import write
 
 
@@ -16,7 +16,7 @@ class AIQueue(ReadingQueue):
     def enqueue(self, item, priority=0):
         item = normalize(item)
         key = fingerprint(item)
-        state = 'pending' if len(item.get('evidence_text', '')) >= 80 and item.get('verification') == 'verified' else 'missing_evidence'
+        state = 'pending' if can_analyze(item) else 'missing_evidence'
         if item.get('analysis_status') == 'ready':
             state = 'published'
         with self.db() as db:
@@ -35,7 +35,7 @@ class AIQueue(ReadingQueue):
     def sync(self):
         from tools.recommendation_data import fetch
         data = (self.fetch or fetch)('ai-updates.json')
-        for item in sorted(data.get('entries', []), key=lambda r: r.get('published_at', ''), reverse=True):
+        for item in sorted(data.get('entries', []) + data.get('social_readings', []), key=lambda r: r.get('published_at', ''), reverse=True):
             self.enqueue(item)
         self.sync_state = 'ok'
 
@@ -83,7 +83,8 @@ class AIQueue(ReadingQueue):
             rows = db.execute("SELECT paper_id,paper,result FROM tasks WHERE state='ready'").fetchall()
         if not rows:
             return
-        current = {r['id']: r for r in (self.fetch or fetch)('ai-updates.json').get('entries', [])}
+        data = (self.fetch or fetch)('ai-updates.json')
+        current = {r['id']: r for r in data.get('entries', []) + data.get('social_readings', [])}
         values = []
         for row in rows:
             item = current.get(row['paper_id'])

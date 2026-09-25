@@ -12,6 +12,9 @@
   const status = message => { $('#wechat-status').textContent = message; };
   function lock(value) {
     busy = value;
+    if ($('#social-note-fields')) $('#social-note-fields').disabled = busy || !connected;
+    if ($('#social-note-sync')) $('#social-note-sync').disabled = busy || !connected || !noteState;
+    document.querySelectorAll('#social-note-list button').forEach(el => { el.disabled = busy; });
     $('#wechat-fields').disabled = busy || !connected;
     $('#wechat-sync').disabled = busy || !connected;
     $('#wechat-refresh').disabled = busy;
@@ -114,6 +117,10 @@
     const data = await api('/api/wechat-subscriptions');
     if (!data.group_overview) throw new Error('请重新启动论文助手，以载入分组统计功能。');
     draw(data); connection(true, '已连接本机 · 可管理公众号订阅');
+    if ($('#social-note-manager')) {
+      try { drawNotes(await api('/api/social-notes')); }
+      catch { $('#social-note-status').textContent = '笔记管理尚未连接，请更新并重启本机助手后重试。'; }
+    }
   }
   async function mutate(path, method, payload, message, clear = false) {
     if (busy) return;
@@ -148,6 +155,42 @@
       a.href = 'https://tengda-xmu.github.io/daily-papers/' + (url.pathname === '/' ? '' : url.pathname.slice(1)) + url.hash;
     }
   });
+  let noteState, noteEditing = '';
+  const noteLabels = {ai:'AI 前沿', leads:'科研线索'};
+  function noteReset() { noteEditing=''; $('#social-note-form').reset(); $('#social-note-cancel').hidden=true; }
+  function noteData() { return {revision:noteState?.revision || '', id:noteEditing,
+    share:$('#social-note-share').value.trim(), title:$('#social-note-title').value.trim(),
+    author:$('#social-note-author').value.trim(), body:$('#social-note-body').value,
+    published_at:$('#social-note-date').value}; }
+  function drawNotes(data) {
+    noteState=data;
+    $('#social-note-sync-state').textContent = data.pending ? '本机有尚未同步的笔记修改。' : '笔记与已载入的网站版本一致。';
+    $('#social-note-list').replaceChildren(...data.entries.map(row => {
+      const article=node('article'); article.className='wechat-row';
+      const info=node('div'); info.append(node('h4',row.title),node('p',`${noteLabels[row.column] || '待分类'} · ${row.author || '作者待补充'} · ${row.evidence_kind==='manual_text'?'手动补充':row.read_status==='readable'?'已读取内容':'待补充'}`));
+      const actions=node('div'); actions.className='wechat-row-actions';
+      const edit=node('button','编辑'), remove=node('button','删除'); edit.type=remove.type='button';
+      edit.onclick=()=> { noteEditing=row.id; $('#social-note-share').value=row.share || row.url;
+        $('#social-note-title').value=row.title; $('#social-note-author').value=row.author || '';
+        $('#social-note-body').value=row.body || ''; $('#social-note-date').value=(row.published_at || '').slice(0,10);
+        $('#social-note-cancel').hidden=false; $('#social-note-share').focus(); };
+      remove.onclick=()=>noteAction('/api/social-notes/'+row.id,'DELETE',{revision:noteState.revision},'已从本机列表移除；同步后网站生效。');
+      actions.append(edit,remove); article.append(info,actions); return article;
+    })); lock(busy);
+  }
+  async function noteAction(path,method,data,message,clear=false) {
+    if (busy) return; lock(true); $('#social-note-status').textContent='正在处理…';
+    try { const result=await api(path,{method,body:JSON.stringify(data)});
+      if (path.endsWith('/preview')) $('#social-note-status').textContent=`${noteLabels[result.column]} · ${result.title}。${result.evidence_text ? result.summary : '未取得正文，可手动补充。'}`;
+      else { drawNotes(result); if(clear)noteReset(); $('#social-note-status').textContent=message; }
+    } catch(error) { $('#social-note-status').textContent=error.message; } finally {lock(false);}
+  }
+  if ($('#social-note-manager')) {
+    $('#social-note-form').onsubmit=e=>{e.preventDefault();noteAction('/api/social-notes','POST',noteData(),'已保存到本机；同步后进入公开栏目。',true);};
+    $('#social-note-preview').onclick=()=>{if($('#social-note-form').reportValidity())noteAction('/api/social-notes/preview','POST',noteData());};
+    $('#social-note-sync').onclick=()=>noteAction('/api/social-notes/sync','POST',{revision:noteState.revision},'已同步，网站正在更新。');
+    $('#social-note-cancel').onclick=noteReset;
+  }
   refresh().catch(error => { connection(false, '尚未连接本机论文助手'); status(error.message); });
   window.addEventListener('focus', () => { if (!connected && !busy) refresh().catch(() => {}); });
 })();

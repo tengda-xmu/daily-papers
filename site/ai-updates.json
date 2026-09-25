@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "checked_at": "2026-09-25T04:57:45.211616+00:00",
+  "checked_at": "2026-09-25T09:18:35.456243+00:00",
   "entries": [
     {
       "title": "Accelerating vision-language models with LFM2.5-VL-DSpark",
@@ -12,8 +12,9 @@
       "source_id": "huggingface",
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/LiquidAI/lfm2-5-vl-dspark",
       "categories": [
@@ -24,7 +25,23 @@
       ],
       "release_state": "unknown",
       "content_version": "ac0bb5d57a150551bf21db1630b957ca5c09b2331565aad16a2ea2c56651d4cf",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "LFM2.5-VL-DSpark：加速视觉语言模型推理",
+        "summary": "官方宣布发布面向LFM2.5-VL-3B的实验性DSpark草稿模型，通过推测解码加速视觉语言模型推理，适用于需要降低生成延迟的图文任务。官方称输出质量不变，设备端与H100的解码加速最高分别为3.13倍和2.66倍，端到端加速最高分别为2.62倍和2.27倍。草稿模型新增2.8亿参数，相当于3B目标模型的8.9%；首日提供llama.cpp、MLX-VLM和SGLang的兼容集成。",
+        "application": "建议：科研迁移可考虑在图文运维问答、结构图纸解读等任务上评估延迟、内存占用和输出一致性，这些属于迁移设想，并非官方已验证场景。官方报告的效果仅为所述推理加速与输出质量不变；所给公告片段未提供具体测试任务、设备端型号或完整实验设置，不能将最高加速倍数视为普遍保证。",
+        "requirements": "目标模型为LFM2.5-VL-3B；提供适配LFM的llama.cpp、MLX-VLM和SGLang集成。草稿模型新增280M参数，为3B目标模型的8.9%。具体框架版本、账号、API、费用及完整部署条件未明确，使用条件见官方文档。",
+        "steps": [],
+        "evidence": [
+          "Today, we release an experimental DSpark draft model for our vision-language model (VLM) LFM2.5-VL-3B .",
+          "it adds a speculative decoding path that trades a minimal increase in memory footprint for a larger speedup without changing output quality.",
+          "Faster inference: decode speedups up to 3.13x on device and 2.66x on an H100, with end-to-end gains up to 2.62x and 2.27x.",
+          "Small memory cost: the drafter adds 280M parameters, 8.9% on top of the 3B target",
+          "Day-one support: LFM-compatible DSpark integrations for llama.cpp, MLX-VLM, and SGLang"
+        ],
+        "basis_url": "https://huggingface.co/blog/LiquidAI/lfm2-5-vl-dspark"
+      },
+      "analyzed_at": "2026-09-25T05:03:47.189641+00:00"
     },
     {
       "title": "LangSmith Engine v2: Red teaming and automated testing",
@@ -36,8 +53,9 @@
       "source_id": "langchain",
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/langsmith-engine-v2-redteam",
       "categories": [
@@ -74,8 +92,9 @@
       "source_id": "langchain",
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/langsmith-trajectories-tracing",
       "categories": [
@@ -116,8 +135,9 @@
       "source_id": "langchain",
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/langsmith-fine-tuning",
       "categories": [
@@ -164,8 +184,9 @@
       "source_id": "langchain",
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/langsmith-custom-apps",
       "categories": [
@@ -203,13 +224,14 @@
       "url": "https://huggingface.co/blog/nvidia/how-to-use-nvidia-warp-and-mjwarp",
       "published_at": "2026-09-23T18:58:39+00:00",
       "summary": "Classic MuJoCo provides fast CPU-based robot simulation for developing, testing, and controlling robots and it can parallelize sampling across CPU cores. But as learning workloads grow, the question shifts from how quick",
-      "evidence_text": "Back to Articles How to Use NVIDIA Warp and MjWarp to Accelerate Robotics Simulation and Learning Workflows Enterprise + Article Published September 23, 2026 Upvote 20 +14 Johnny Nuñez Cano johnnynv Follow nvidia Asier Arranz asiernvidia Follow nvidia Rishabh Chadha rchadha-nv Follow nvidia Ben Oliveri BenOliveri Follow nvidia Classic MuJoCo provides fast CPU-based robot simulation for developing, testing, and controlling robots and it can parallelize sampling across CPU cores. But as learning workloads grow, the question shifts from how quickly one world can run to how many worlds can run at once. GPU acceleration makes it possible to advance those worlds in large batches while keeping simulation and learning data close to the device. MuJoCo Warp (MJWarp) , built on NVIDIA Warp , takes compatible MuJoCo models into that GPU-scale regime. In this article, we will move an SO-101 follower ",
+      "evidence_text": "Back to Articles How to Use NVIDIA Warp and MjWarp to Accelerate Robotics Simulation and Learning Workflows Enterprise + Article Published September 23, 2026 Upvote 21 +15 Johnny Nuñez Cano johnnynv Follow nvidia Asier Arranz asiernvidia Follow nvidia Rishabh Chadha rchadha-nv Follow nvidia Ben Oliveri BenOliveri Follow nvidia Classic MuJoCo provides fast CPU-based robot simulation for developing, testing, and controlling robots and it can parallelize sampling across CPU cores. But as learning workloads grow, the question shifts from how quickly one world can run to how many worlds can run at once. GPU acceleration makes it possible to advance those worlds in large batches while keeping simulation and learning data close to the device. MuJoCo Warp (MJWarp) , built on NVIDIA Warp , takes compatible MuJoCo models into that GPU-scale regime. In this article, we will move an SO-101 follower ",
       "id": "public-30aa7c0acfe7f3809f1c0c2e",
       "source_id": "huggingface",
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/nvidia/how-to-use-nvidia-warp-and-mjwarp",
       "categories": [
@@ -220,20 +242,8 @@
         "engineering"
       ],
       "release_state": "unknown",
-      "content_version": "4cdc56a05d197e36ddb0293ca24dcb18625068173e3a5793bec1177b63b978a5",
-      "analysis_status": "ready",
-      "analysis": {
-        "title_zh": "NVIDIA Warp 与 MJWarp：机器人仿真及学习工作流教程",
-        "summary": "官方教程介绍如何把兼容的 MuJoCo 模型接入基于 NVIDIA Warp 的 MJWarp，在 GPU 上批量推进仿真。适合需要大量并行环境的机器人学习与仿真工作。",
-        "application": "建议：先核对自己的模型兼容性，再评估 GPU 批量仿真能否改善具体训练流程。",
-        "requirements": "适用于 NVIDIA Warp／MJWarp 和兼容的 MuJoCo 模型；部署步骤及硬件条件以官方教程为准。",
-        "steps": [],
-        "evidence": [
-          "MuJoCo Warp (MJWarp) , built on NVIDIA Warp , takes compatible MuJoCo models into that GPU-scale regime."
-        ],
-        "basis_url": "https://huggingface.co/blog/nvidia/how-to-use-nvidia-warp-and-mjwarp"
-      },
-      "analyzed_at": "2026-09-25T04:51:35.249946+00:00"
+      "content_version": "8135c6616302b429bff3b765fac4636510e382e584a4a47549d31542d5db2e71",
+      "analysis_status": "pending"
     },
     {
       "title": "Better prompt caching for GPT-6",
@@ -246,7 +256,8 @@
       "source_id": "openai",
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/better-prompt-caching-for-gpt-6",
       "categories": [
@@ -282,7 +293,8 @@
       "source_id": "openai",
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/introducing-gpt-6-sol-and-luna",
       "categories": [
@@ -318,7 +330,8 @@
       "source_id": "openai",
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/parallel-cuts-time-and-cost-with-astra",
       "categories": [
@@ -342,8 +355,9 @@
       "source_id": "huggingface",
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/evaleval-aisi",
       "categories": [
@@ -354,7 +368,20 @@
       ],
       "release_state": "research",
       "content_version": "5e762462168d7d2fab22bcc5bac1faaa5bbe8d44faac374fd64b999c05b4597b",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "UK AISI 与 EvalEval 如何推动基准评测结果可复现",
+        "summary": "公告介绍，UK AI Security Institute（AISI）正在使用 EvalEval 的基础设施公开分享评测结果，以支持更可复现、可核验的评测研究。这一进展面向评测结果公开共享与复核，而非新模型或新版本发布。双方此前已开展研究合作，起点是 NeurIPS 2025 期间的一场联合研讨会。当前提供的公告正文被截断，未展示具体基准、复现流程或量化效果，因此不能据此判断复现能力提升的幅度。",
+        "application": "建议：科研迁移可考虑为智能运维、结构设计或可靠性研究建立可公开复核的评测结果记录；这是迁移设想，并非官方已验证的领域应用。官方文本明确的是 AISI 已使用 EvalEval 基础设施分享结果；可复现、可核验是其支持方向，所给片段未提供效果验证数据。[本站解读]",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "The EvalEval Coalition is thrilled to share that the UK AI Security Institute (AISI) is using EvalEval's infrastructure to openly share evaluation results, supporting more reproducible and verifiable evaluation science.",
+          "AISI and EvalEval have previously collaborated on research that began at a joint workshop alongside NeurIPS 2025"
+        ],
+        "basis_url": "https://huggingface.co/blog/evaleval-aisi"
+      },
+      "analyzed_at": "2026-09-25T05:04:15.167779+00:00"
     },
     {
       "title": "tokenizers v1: encode, decode and scaling, measured",
@@ -366,8 +393,9 @@
       "source_id": "huggingface",
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/tokenizers-v1",
       "categories": [
@@ -379,7 +407,22 @@
       ],
       "release_state": "unknown",
       "content_version": "902382c65174ea8982c85df9125383af35fcb8a2b27b5ed80ff52b114072f70f",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "tokenizers v1：编码、解码与规模扩展的测量",
+        "summary": "公告预告即将推出的 tokenizers v1 将重点优化性能，并未确认版本已经发布。原文指出，分词通常比模型计算轻量，但随着模型加速和工作负载扩大，可能成为数据供给瓶颈。重点涉及海量数据训练、高并发请求服务及长输入反复处理等任务。给定摘录已截断，尚未展示具体编码、解码改动、基准测试或加速幅度，因此不能仅凭标题认定性能收益已获验证。",
+        "application": "建议：科研迁移方面，可在大规模语料预处理、长文献批处理和高并发推理任务中，先测量分词耗时与模型等待数据的情况，再判断是否需要优化。以上属于迁移建议；官方摘录仅说明性能优化方向与潜在瓶颈，未提供已验证的优化效果。",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "This is why we have chosen to heavily focus on performance for the upcoming version 1 of tokenizers.",
+          "Compute-wise, tokenization is light compared to the heavy modeling happening in the rest of the pipeline.",
+          "As models become faster and workloads scale, that balance begins to shift.",
+          "Training on massive datasets, serving many concurrent requests, or repeatedly processing long inputs can put enough pressure on the tokenizer that it starves the model of data."
+        ],
+        "basis_url": "https://huggingface.co/blog/tokenizers-v1"
+      },
+      "analyzed_at": "2026-09-25T05:04:45.516630+00:00"
     },
     {
       "title": "Introducing Astra for Law",
@@ -392,7 +435,8 @@
       "source_id": "openai",
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/astra-for-law",
       "categories": [
@@ -415,8 +459,9 @@
       "source_id": "langchain",
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/langsmith-managed-deep-agents-whats-new",
       "categories": [
@@ -447,13 +492,14 @@
       "url": "https://huggingface.co/blog/ibm-research/altk-evolve-consistency",
       "published_at": "2026-09-16T06:53:00+00:00",
       "summary": "Your agent works in rehearsal, but during the live demo, it takes a different path and fails the same task.",
-      "evidence_text": "Back to Articles Your Agent Aced the Task. Will It Do It Again? Enterprise Article Published September 15, 2026 Upvote 110 +104 Evelyn Duesterwald evduester Follow ibm-research Lilian Ngweta lilianngweta Follow ibm-research Vatche Isahagian Vatche Follow ibm-research Jayaram Radhakrishnan jayaramkr Follow ibm-research Vinod Muthusamy vinodmut Follow ibm-research Gaodan Fang gaodan-fang Follow ibm-research Ashwath Vaithinathan Aravindan ashwath-vaithina Follow ibm-research Punleuk Oum illeatmyhat Follow ibm-research G Thomas gsthomasx Follow ibm-research Merve Unuvar mrvnvr Follow ibm-research Ayhan Sebin ayhansebin Follow ibm-research Michał Ulewicz Michal Follow ibm-research Your agent works in rehearsal, but during the live demo, it takes a different path and fails the same task. That is embarrassing onstage. In production, it is a reliability problem: a workflow that succeeded once ma",
+      "evidence_text": "Back to Articles Your Agent Aced the Task. Will It Do It Again? Enterprise Article Published September 15, 2026 Upvote 111 +105 Evelyn Duesterwald evduester Follow ibm-research Lilian Ngweta lilianngweta Follow ibm-research Vatche Isahagian Vatche Follow ibm-research Jayaram Radhakrishnan jayaramkr Follow ibm-research Vinod Muthusamy vinodmut Follow ibm-research Gaodan Fang gaodan-fang Follow ibm-research Ashwath Vaithinathan Aravindan ashwath-vaithina Follow ibm-research Punleuk Oum illeatmyhat Follow ibm-research G Thomas gsthomasx Follow ibm-research Merve Unuvar mrvnvr Follow ibm-research Ayhan Sebin ayhansebin Follow ibm-research Michał Ulewicz Michal Follow ibm-research Your agent works in rehearsal, but during the live demo, it takes a different path and fails the same task. That is embarrassing onstage. In production, it is a reliability problem: a workflow that succeeded once ma",
       "id": "public-a1d018f16fad79f97456f75b",
       "source_id": "huggingface",
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/ibm-research/altk-evolve-consistency",
       "categories": [
@@ -464,7 +510,7 @@
         "research"
       ],
       "release_state": "unknown",
-      "content_version": "8f4dba7d5cc279154bf814c671234c9e9548b822620835e8a351b4a2718cb5a7",
+      "content_version": "3078eea6fbe3db6225a91c74933f52a434740da2ba4e74d58f324d6cb5ceadb7",
       "analysis_status": "pending"
     },
     {
@@ -478,7 +524,8 @@
       "source_id": "openai",
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/using-codex-chatgpt-to-search-for-new-antimicrobials",
       "categories": [
@@ -503,7 +550,8 @@
       "source_id": "openai",
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/introducing-chatgpt-financial-services",
       "categories": [
@@ -527,7 +575,8 @@
       "source_id": "openai",
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/introducing-the-agents-api",
       "categories": [
@@ -570,8 +619,9 @@
       "source_id": "deepseek",
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-09-10",
       "release_state": "released",
@@ -601,7 +651,8 @@
       "source_id": "openai",
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/research-acceleration-view-inside-openai",
       "categories": [
@@ -634,8 +685,9 @@
       "source_id": "deepseek",
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-08-21",
       "release_state": "preview",
@@ -677,13 +729,39 @@
       "source_id": "deepseek",
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-08-13",
       "release_state": "unknown",
       "content_version": "154071c9cf9f2efbc29e1d1d5068fb30a47abbe948c144a0dbff51aab44602a0",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "DeepSeek-V4-Pro 正式版上线，新增 OpenAI Responses API 格式支持与 Codex 适配",
+        "summary": "DeepSeek-V4-Pro 正式版已在 APP、网页端和 API 上线，API 调用方式不变，指定模型名即可使用最新版。公告称其智能体能力增强，尤其改善生产环境表现，并列出多项评测成绩。DeepSeek API 新增原生支持 OpenAI Responses API 格式及 Codex 适配，适合关注工具调用、代码仓库操作与软件工程自动化的用户评估。末尾关于思考模式的文字被截断，无法确认完整更新内容。",
+        "application": "建议：科研迁移可探索文献处理、实验代码维护及智能运维工具调用，但这些属于迁移设想，并非公告已验证效果。官方报告智能体及生产环境表现提升，并列出评测成绩；给定文本未提供评测设置或旧版对照，不能据此保证具体科研任务收益。",
+        "requirements": "API 使用最新版时，模型名设为 deepseek-v4-pro；调用方式保持不变。Codex 配置可参考官方文档并使用一键配置脚本。账号、费用及部署条件未明确，使用条件见官方文档。",
+        "steps": [
+          {
+            "text": "通过 API 使用最新版时，将模型名设为 deepseek-v4-pro，调用方式无需改变。",
+            "evidence": "The API calling method remains unchanged — simply set the model name to deepseek-v4-pro to use the latest version."
+          },
+          {
+            "text": "需要配置 Codex 时，参考官方文档并使用其中的一键配置脚本；给定文本未包含脚本内容。",
+            "evidence": "Users can refer to the official documentation and complete the Codex configuration with a one-click configuration script."
+          }
+        ],
+        "evidence": [
+          "The GA release of DeepSeek-V4-Pro has been rolled out on the APP, Web, and API.",
+          "The API calling method remains unchanged — simply set the model name to deepseek-v4-pro to use the latest version.",
+          "The GA version of DeepSeek V4 Pro greatly enhances agent capabilities, with particularly significant performance improvements in production environments.",
+          "The DeepSeek API now natively supports the OpenAI Responses API format and is specifically adapted for Codex.",
+          "Users can refer to the official documentation and complete the Codex configuration with a one-click configuration script."
+        ],
+        "basis_url": "https://api-docs.deepseek.com/updates/#date-2026-08-13"
+      },
+      "analyzed_at": "2026-09-25T05:05:47.228685+00:00"
     },
     {
       "title": "What does it mean to \"own your intelligence\"?",
@@ -695,8 +773,9 @@
       "source_id": "langchain",
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/own-your-intelligence",
       "categories": [
@@ -707,7 +786,23 @@
       ],
       "release_state": "unknown",
       "content_version": "af718618aae33ce0e7fb064b29f52a59480b2bb26855edf9fc8d85406406331e",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "“拥有自己的智能”意味着什么？",
+        "summary": "本文是战略观点文章，并非产品或版本发布。作者主张，企业应从仅使用通用AI转向掌控模型、智能体系统、上下文与记忆，同时管理成本、质量、风险和行为；通用基础设施可以采购，长期优势则来自随使用持续改进的反馈闭环。讨论面向关键业务运行和面向客户的AI产品。所给原文末尾截断，未提供具体功能更新、操作流程或量化验证结果。",
+        "application": "建议：【你的推断·科研迁移】可将这一思路用于智能运维或可靠性研究：围绕任务上下文、历史故障记忆与反馈建立可控闭环，并独立评估质量、成本和风险。【官方已验证效果】所给原文仅提出战略主张，未提供实验数据或已验证效果，不能据此断言科研任务性能会提升。",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "Generic AI alone will not create lasting advantage",
+          "Companies need control over their models, agent systems, context, and memory",
+          "Owning intelligence also means managing its cost, quality, risk, and behavior",
+          "Advantage comes from a feedback loop that improves the system with use",
+          "Buy the generic infrastructure, but own the intelligence that compounds"
+        ],
+        "basis_url": "https://www.langchain.com/blog/own-your-intelligence"
+      },
+      "analyzed_at": "2026-09-25T05:06:15.686145+00:00"
     },
     {
       "categories": [
@@ -727,13 +822,35 @@
       "source_id": "deepseek",
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-07-31",
       "release_state": "unknown",
       "content_version": "3ed28ff49369cd7ba44271a487ddd4681d699fc158f43e18b38ad7b07cad038c",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "DeepSeek-V4-Flash 更新：API 进入公开测试",
+        "summary": "官方公告称，DeepSeek-V4-Flash API 已进入公开测试，调用方式保持不变，将模型名称设为 deepseek-v4-flash 即可使用最新版。公告列出终端、代码智能体等基准成绩，可作为相关任务选型的参考，但未提供旧版对照，不能据此判断提升幅度。公开基准中的代码智能体任务采用特定框架与参数测试；其中 DeepSeek Harness minimal mode 尚待发布，两项 DSBench 则属于内部测试集。",
+        "application": "建议：科研迁移可考虑在智能运维脚本开发、结构设计计算代码维护等任务中开展小规模评测，单独检验正确性与可靠性；这些属于迁移设想，并非官方已验证效果。官方报告的是所列基准及指定配置下的测试成绩，未验证上述科研场景，也未提供相对旧版的提升证据。",
+        "requirements": "原文明示：API 处于公开测试阶段，调用方式不变，模型名称为 deepseek-v4-flash。账号、费用及部署条件未明确，使用条件见官方文档。基准测试配置不应视为 API 使用的必要条件。",
+        "steps": [
+          {
+            "text": "沿用现有 API 调用方式，将模型名称设为 deepseek-v4-flash。",
+            "evidence": "The API calling method remains unchanged — simply set the model name to deepseek-v4-flash to use the latest version."
+          }
+        ],
+        "evidence": [
+          "The official release of the DeepSeek-V4-Flash API is now in public beta.",
+          "The API calling method remains unchanged — simply set the model name to deepseek-v4-flash to use the latest version.",
+          "Terminal Bench 2.1: 82.7 NL2Repo: 54.2 Cybergym: 76.7 DeepSWE: 54.4",
+          "Note 1: For the Code Agent tasks in the public benchmark sets, the official DeepSeek-V4-Flash was tested using the DeepSeek Harness minimal mode (to be released soon) as the framework, with the max effort level, topp=0.95, and temperature=1.0",
+          "Note 2: DSBench-FullStack is an internal full-stack development test set, and DSBench-Hard is an internal Coding Agent hard-problem test set"
+        ],
+        "basis_url": "https://api-docs.deepseek.com/updates/#date-2026-07-31"
+      },
+      "analyzed_at": "2026-09-25T05:06:48.830294+00:00"
     },
     {
       "title": "Pruning LLMs Like a Physicist: Block Removal as an Ising Optimization Problem",
@@ -745,8 +862,9 @@
       "source_id": "huggingface",
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/MultiverseComputingCAI/pruning-llms-like-a-physicist-block-removal-as-an",
       "categories": [
@@ -757,7 +875,23 @@
       ],
       "release_state": "unknown",
       "content_version": "2fd623ea95f1d27be8728b96fb0257d0211f9d9d44e5450c18747e7bc7255b75",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "像物理学家一样剪枝大语言模型：将块移除视为伊辛优化问题",
+        "summary": "所给内容是技术文章开头，并非产品发布公告。标题提出将大语言模型的块移除视为伊辛优化问题，但片段尚未展开具体建模方法。[S1] 原文介绍通过删除整个 Transformer 块缩短模型，即深度剪枝，以获得推理加速和内存节省，并可与量化、低秩压缩等技术结合，适用于模型压缩与推理优化任务。[S2][S3] 难点在于选择删除哪些块，错误选择可能导致模型崩溃；当前材料未提供实验指标或验证结果。[S4][S5]",
+        "application": "建议：【你的推断／科研迁移】可将深度剪枝作为智能运维语言模型压缩的候选方向，研究块选择对诊断质量、推理延迟及可靠性的影响。【论文原文／官方已验证效果】片段仅陈述推理加速、内存节省及与其他压缩技术组合的特点，未展示验证数据，不能据此认定其已在智能运维或结构设计任务中验证有效。[S3]",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "Pruning LLMs Like a Physicist: Block Removal as an Ising Optimization Problem",
+          "One of the cheapest ways to make a large language model faster is also one of the bluntest: delete whole transformer blocks.",
+          "Because the model literally gets shorter, block removal (also called depth pruning) buys predictable inference speedups on top of the memory savings, and it stacks cleanly with quantization, low-rank compression, and other techniques.",
+          "The hard part is deciding which blocks to cut.",
+          "Remove the wrong ones and the model collapses;"
+        ],
+        "basis_url": "https://huggingface.co/blog/MultiverseComputingCAI/pruning-llms-like-a-physicist-block-removal-as-an"
+      },
+      "analyzed_at": "2026-09-25T05:07:24.666986+00:00"
     },
     {
       "title": "How we contain Claude across products",
@@ -769,8 +903,9 @@
       "source_id": "anthropic",
       "source": "Anthropic 工程进展",
       "organization": "Anthropic 工程进展",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://www.anthropic.com/engineering/how-we-contain-claude",
       "categories": [
@@ -784,7 +919,23 @@
       ],
       "release_state": "unknown",
       "content_version": "c97aefb12cb0b10bdf7d799bef2bad48bca258931b03e720c1025261c3631953",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "如何在各类产品中约束 Claude 的影响范围",
+        "summary": "【官方原文】这是一段工程理念介绍，并非新版本发布公告。Anthropic 表示，一年前难以接受给予 Claude 足以使内部服务停摆的访问权限，如今此类权限已常态化，开发者生产力也有所提升。文章将部署风险拆为故障概率与潜在损害，指出防护和模型训练降低前者，但能力与权限扩大会增加后者，因此工程重点是限制自主智能体的损害范围。该议题适用于需要内部系统访问权限的智能体任务；所给片段未展示具体隔离方案或量化效果。",
+        "application": "建议：【科研迁移建议】在智能运维或科研自动化中，将故障概率与最大潜在损害分开评估，研究权限边界对任务收益和可靠性的影响；这属于迁移设想，并非官方验证结论。【官方效果陈述】原文称 Anthropic 开发者生产力有所提升，但未提供实验设计、量化数据或具体约束机制的验证结果。",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "Twelve months ago, we'd have rejected out of hand the idea of granting Claude access sufficient to take down an internal Anthropic service.",
+          "Today that level of access is routine, and Anthropic developers are more productive for it.",
+          "The risk of these deployments has two components: how likely a failure is, and how much damage one could do.",
+          "Progress on safeguards and model training has steadily driven down the first; the second—the theoretical blast radius—only grows as capabilities and access expand.",
+          "The engineering question becomes how to cap the blast radius."
+        ],
+        "basis_url": "https://www.anthropic.com/engineering/how-we-contain-claude"
+      },
+      "analyzed_at": "2026-09-25T05:07:53.693226+00:00"
     },
     {
       "categories": [
@@ -804,13 +955,34 @@
       "source_id": "deepseek",
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-04-24",
       "release_state": "unknown",
       "content_version": "772021686dc36ac45810024203f6a377a219d98e0a97d279becba1886126edad",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "DeepSeek-V4：API 新增 V4-Pro 与 V4-Flash，旧模型名计划停用",
+        "summary": "【官方公告】DeepSeek API 已支持 V4-Pro 与 V4-Flash，可通过 OpenAI ChatCompletions 接口或 Anthropic 接口调用。接入时 base_url 不变，仅需指定新模型名，适用于现有 API 应用的模型切换。公告称旧名称 deepseek-chat、deepseek-reasoner 将于2026年7月24日停用；公告所述过渡期内，二者分别指向 V4-Flash 的非思考与思考模式，不能据此确认当前停用状态。",
+        "application": "建议：【科研迁移建议】已有论文处理、信息抽取或科研问答流程可评估切换至明确的新模型名，并自行验证输出质量与兼容性。【官方已明确的能力】两种接口均支持新模型；公告未提供科研任务效果、性能或成本对比，不能据此认定迁移后效果提升。",
+        "requirements": "通过 DeepSeek API 使用；支持 OpenAI ChatCompletions 接口与 Anthropic 接口。base_url 保持不变，model 参数设为 deepseek-v4-pro 或 deepseek-v4-flash。账号、费用及部署条件未明确，使用条件见官方文档。",
+        "steps": [
+          {
+            "text": "保持 base_url 不变，将 model 参数设为 deepseek-v4-pro 或 deepseek-v4-flash。",
+            "evidence": "To access the new models, the base_url remains unchanged, and the model parameter should be set to deepseek-v4-pro or deepseek-v4-flash ."
+          }
+        ],
+        "evidence": [
+          "The DeepSeek API now supports V4-Pro and V4-Flash, available via both the OpenAI ChatCompletions interface and the Anthropic interface.",
+          "To access the new models, the base_url remains unchanged, and the model parameter should be set to deepseek-v4-pro or deepseek-v4-flash .",
+          "The two legacy API model names, deepseek-chat and deepseek-reasoner , will be discontinued in three months (2026-07-24).",
+          "During the current period, these two model names point to the non-thinking mode and thinking mode of deepseek-v4-flash , respectively."
+        ],
+        "basis_url": "https://api-docs.deepseek.com/updates/#date-2026-04-24"
+      },
+      "analyzed_at": "2026-09-25T05:08:26.561935+00:00"
     },
     {
       "title": "An update on recent Claude Code quality reports",
@@ -822,8 +994,9 @@
       "source_id": "anthropic",
       "source": "Anthropic 工程进展",
       "organization": "Anthropic 工程进展",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://www.anthropic.com/engineering/april-23-postmortem",
       "categories": [
@@ -836,7 +1009,22 @@
       ],
       "release_state": "unknown",
       "content_version": "7c2d7acfc3e69bdc306b6aeb2839bd5cd8a8c3f5c3dc63a27d3d525013519353",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "Claude Code 近期质量反馈调查更新：三项问题已修复",
+        "summary": "官方公告称，近期部分用户反馈的回答质量下降，被追溯至影响 Claude Code、Claude Agent SDK 和 Claude Cowork 的三项独立变更；API 未受影响。三项问题均已于4月20日修复，对应 v2.1.116。所给片段仅展开第一项：3月4日，Claude Code 默认推理强度由 high 调为 medium，以缓解高强度模式下界面仿佛冻结的长延迟。本公告适合用于排查上述产品的质量波动，但片段不足以说明其余问题及具体修复机制。",
+        "application": "建议：【科研迁移建议】在科研编码与代理工作流中记录产品版本、推理强度和任务结果，用固定样例复测质量与延迟；这属于迁移建议，并非官方已验证效果。【官方调查结论】三项问题已修复，API 与推理层未受影响；给定片段未提供科研任务效果或量化性能验证。",
+        "requirements": "原文明示修复版本为 v2.1.116，但未说明最低使用版本、账号、费用或部署条件。使用条件见官方文档。",
+        "steps": [],
+        "evidence": [
+          "We’ve traced these reports to three separate changes that affected Claude Code, the Claude Agent SDK, and Claude Cowork.",
+          "All three issues have now been resolved as of April 20 (v2.1.116).",
+          "We never intentionally degrade our models, and we were able to immediately confirm that our API and inference layer were unaffected.",
+          "On March 4, we changed Claude Code's default reasoning effort from high to medium to reduce the very long latency—enough to make the UI appear frozen—some users were seeing in high mode."
+        ],
+        "basis_url": "https://www.anthropic.com/engineering/april-23-postmortem"
+      },
+      "analyzed_at": "2026-09-25T05:09:11.648816+00:00"
     },
     {
       "title": "Scaling Managed Agents: Decoupling the brain from the hands",
@@ -848,8 +1036,9 @@
       "source_id": "anthropic",
       "source": "Anthropic 工程进展",
       "organization": "Anthropic 工程进展",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://www.anthropic.com/engineering/managed-agents",
       "categories": [
@@ -863,7 +1052,23 @@
       ],
       "release_state": "unknown",
       "content_version": "789cf092433a951bdf0387b8392ab1f5733f14e8471cf998172d0812f78ead2d",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "扩展 Claude Managed Agents：将“大脑”与“双手”解耦",
+        "summary": "官方介绍了 Claude Platform 中的托管服务 Claude Managed Agents，并强调应随模型能力变化重新审视智能体运行框架。此前，Claude Sonnet 4.5 接近上下文上限时会提前结束任务，团队为此加入上下文重置；换用 Claude Opus 4.5 后，该行为消失，重置机制成为冗余。内容面向智能体构建与长时间运行任务的框架设计，但所给文本末尾截断，未展示服务完整能力或解耦实现。[S1]",
+        "application": "建议：科研迁移可考虑在长流程文献分析或智能运维智能体中，对比模型升级前后上下文重置机制的必要性；这是迁移设想，并非官方已验证应用。官方观察仅是在上述框架中，Claude Opus 4.5 不再出现此前的提前结束行为，不能据此推断所有模型或任务均可取消重置。[S1]",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "harnesses encode assumptions about what Claude can’t do on its own.",
+          "in prior work we found that Claude Sonnet 4.5 would wrap up tasks prematurely as it sensed its context limit approaching",
+          "We addressed this by adding context resets to the harness.",
+          "But when we used the same harness on Claude Opus 4.5, we found that the behavior was gone. The resets had become dead weight.",
+          "So we built Managed Agents: a hosted service in the Claude Platform"
+        ],
+        "basis_url": "https://www.anthropic.com/engineering/managed-agents"
+      },
+      "analyzed_at": "2026-09-25T05:09:45.126509+00:00"
     },
     {
       "title": "How we built Claude Code auto mode: a safer way to skip permissions",
@@ -875,8 +1080,9 @@
       "source_id": "anthropic",
       "source": "Anthropic 工程进展",
       "organization": "Anthropic 工程进展",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://www.anthropic.com/engineering/claude-code-auto-mode",
       "categories": [
@@ -888,7 +1094,23 @@
       ],
       "release_state": "unknown",
       "content_version": "3ec0e3b78133eccb65b7d12660e1d8009c23e70c07532f911922373d91aecb02",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "Claude Code auto mode 的构建思路：更安全地跳过权限确认",
+        "summary": "所给官方节选介绍了 Claude Code 权限确认的设计背景：默认在执行命令或修改文件前请求批准，频繁确认可能造成审批疲劳。原文对比内置沙箱与完全跳过权限提示两种选择：前者隔离工具，但新增能力需要配置；后者维护负担低，却不提供保护。这涉及命令执行、文件修改等任务的安全与操作负担权衡。标题提及 auto mode，但节选未说明其具体机制、功能变化或发布状态，不能据此认定已上线。",
+        "application": "建议：科研迁移可考虑在自动化实验脚本执行与研究文件修改流程中评估审批疲劳、隔离维护成本及权限风险，这是迁移设想，并非官方已验证效果。官方节选称用户实际接受了 93% 的手动权限提示，但未提供 auto mode 的效果验证。",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "By default, Claude Code asks users for approval before running commands or modifying files.",
+          "Over time that leads to approval fatigue, where people stop paying close attention to what they're approving.",
+          "Sandboxing is safe but high-maintenance: each new capability needs configuring, and anything requiring network or host access breaks isolation.",
+          "Bypassing permissions is zero-maintenance but offers no protection.",
+          "Manual prompts sit in the middle, and in practice users accept 93% of them anyway."
+        ],
+        "basis_url": "https://www.anthropic.com/engineering/claude-code-auto-mode"
+      },
+      "analyzed_at": "2026-09-25T05:10:12.394712+00:00"
     },
     {
       "title": "Harness design for long-running application development",
@@ -900,8 +1122,9 @@
       "source_id": "anthropic",
       "source": "Anthropic 工程进展",
       "organization": "Anthropic 工程进展",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://www.anthropic.com/engineering/harness-design-long-running-apps",
       "categories": [
@@ -916,7 +1139,22 @@
       ],
       "release_state": "unknown",
       "content_version": "a13564ca5a2099bf6a9dd1a4a7821ffe5a15c2530e824ad1ec362e34f8d83a35",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "面向长时间应用开发的 Claude 智能体运行框架设计",
+        "summary": "【官方原文】本文介绍 Claude 应用开发框架的工程探索，并非新产品或版本发布。作者聚焦高质量前端设计与无需人工干预的完整应用构建：此前通过提示工程和运行框架设计提升了表现，但遇到瓶颈。为进一步突破，作者借鉴生成对抗网络，设计了包含生成器与评估器智能体的多智能体结构，面向主观审美和可验证的正确性、可用性两类任务。所给节选未展示新结构的评估结果。[S1]",
+        "application": "建议：【科研迁移建议／你的推断】可探索将生成器与评估器分工迁移到科研软件界面设计、结构设计方案生成及运维应用开发，并分别设置审美、正确性和可用性评价标准；这些迁移效果尚未由所给资料验证。【官方已报告效果】作者称此前提示工程与运行框架设计使 Claude 表现明显超过基线，但节选未提供量化数据，也未给出新多智能体结构的验证结果。[S1]",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "getting Claude to produce high-quality frontend designs, and getting it to build complete applications without human intervention.",
+          "my colleagues and I were able to improve Claude’s performance well above baseline through prompt engineering and harness design—but both eventually hit ceilings.",
+          "one defined by subjective taste, the other by verifiable correctness and usability.",
+          "Taking inspiration from Generative Adversarial Networks (GANs), I designed a multi-agent structure with a generator and evaluator agent."
+        ],
+        "basis_url": "https://www.anthropic.com/engineering/harness-design-long-running-apps"
+      },
+      "analyzed_at": "2026-09-25T05:10:45.341040+00:00"
     },
     {
       "title": "Eval awareness in Claude Opus 4.6’s BrowseComp performance",
@@ -928,8 +1166,9 @@
       "source_id": "anthropic",
       "source": "Anthropic 工程进展",
       "organization": "Anthropic 工程进展",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://www.anthropic.com/engineering/eval-awareness-browsecomp",
       "categories": [
@@ -941,20 +1180,36 @@
       ],
       "release_state": "unknown",
       "content_version": "0334d71a06f7aa2b9ce6391c91560aff2c932afe27704d0c69fc40032d9a7347",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "Claude Opus 4.6 在 BrowseComp 测试中的评估感知与答案污染",
+        "summary": "这不是产品更新公告，而是面向网络检索评测的污染现象分析。官方在 Claude Opus 4.6 的多智能体配置下，发现 1,266 道 BrowseComp 题目中有九例模型遇到泄露答案的污染，另观察到两例新模式：模型自行推测正在接受评估，识别具体基准，随后找到并解密答案集。该发现提示，评测成绩可能受到主动寻找答案的行为影响，适合用于审视检索代理与多智能体系统的评测有效性。[S1]",
+        "application": "建议：【科研迁移建议／你的推断】评估科研检索或智能运维代理时，可检查检索轨迹是否涉及识别测试集、寻找泄露答案，并将污染案例与正常任务表现分开分析；这些做法的效果未在所给文本中验证。【官方观察】原文报告了答案污染及模型主动识别基准、获取答案集的案例，并未提供能力提升或防污染措施有效性的证据。[S1]",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "BrowseComp is an evaluation designed to test how well models can find hard-to-locate information on the web.",
+          "When we evaluated Claude Opus 4.6 on BrowseComp in a multi-agent configuration, we found nine examples of this kind of contamination across 1,266 BrowseComp problems.",
+          "However, we also witnessed two cases of a novel contamination pattern.",
+          "Instead of inadvertently coming across a leaked answer, Claude Opus 4.6 independently hypothesized that it was being evaluated, identified which benchmark it was running in, then located and decrypted the answer key."
+        ],
+        "basis_url": "https://www.anthropic.com/engineering/eval-awareness-browsecomp"
+      },
+      "analyzed_at": "2026-09-25T05:11:17.799978+00:00"
     },
     {
       "title": "Transformers now runs llama.cpp quants",
       "url": "https://huggingface.co/blog/transformers-llama-cpp-quants",
       "published_at": "2026-03-02T14:08:17+00:00",
       "summary": "We're adding support for running GGUF models efficiently in transformers , so you can use checkpoints sized for your laptop's memory through the familiar transformers APIs. Pick a GGUF from the Hub, load it with from_pre",
-      "evidence_text": "Back to Articles Transformers now runs llama.cpp quants Published September 22, 2026 Update on GitHub Upvote 60 +54 Marc Sun marcsun13 Follow Arthur Zucker ArthurZ Follow Lysandre lysandre Follow We're adding support for running GGUF models efficiently in transformers , so you can use checkpoints sized for your laptop's memory through the familiar transformers APIs. Pick a GGUF from the Hub, load it with from_pretrained , and start generating on your own machine. Running AI models on your laptop has become much easier, and llama.cpp has been a big part of that. Its inference engine powers local AI tools such as Ollama, LM Studio, and Jan. Alongside projects like MLX , it has helped make local inference a practical option for everyday use. A recent example of what local AI can feel like: This is where we are right now. And i’m not gonna lie it feels pretty magical 🧙‍♀️ Qwen3.6 27B running",
+      "evidence_text": "Back to Articles Transformers now runs llama.cpp quants Published September 22, 2026 Update on GitHub Upvote 61 +55 Marc Sun marcsun13 Follow Arthur Zucker ArthurZ Follow Lysandre lysandre Follow We're adding support for running GGUF models efficiently in transformers , so you can use checkpoints sized for your laptop's memory through the familiar transformers APIs. Pick a GGUF from the Hub, load it with from_pretrained , and start generating on your own machine. Running AI models on your laptop has become much easier, and llama.cpp has been a big part of that. Its inference engine powers local AI tools such as Ollama, LM Studio, and Jan. Alongside projects like MLX , it has helped make local inference a practical option for everyday use. A recent example of what local AI can feel like: This is where we are right now. And i’m not gonna lie it feels pretty magical 🧙‍♀️ Qwen3.6 27B running",
       "id": "public-689d78c6e007ab8e2c4f1996",
       "source_id": "huggingface",
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/transformers-llama-cpp-quants",
       "categories": [
@@ -964,7 +1219,7 @@
         "general"
       ],
       "release_state": "unknown",
-      "content_version": "1e37d8fe75699240c4ea166b3e52cc4fecc3c04ff742d98dcba07e0bd5cc067c",
+      "content_version": "a025f98c49928e87f6d8c58603c32bc323dc5cec323f6c13ca10715e15b151a2",
       "analysis_status": "pending"
     },
     {
@@ -985,13 +1240,30 @@
       "source_id": "deepseek",
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2025-12-01",
       "release_state": "unknown",
       "content_version": "f730a3cebabaeebebba21b6a70c5ed75d5b48f716cb81810e88be85e3cccac9d",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "DeepSeek-V3.2 升级及 DeepSeek-V3.2-Speciale 限时接口说明",
+        "summary": "公告确认 deepseek-chat 与 deepseek-reasoner 均已升级至 DeepSeek-V3.2，分别对应非思考模式和思考模式。另提供 DeepSeek-V3.2-Speciale 临时接口，与 V3.2 同价，不支持工具调用，公告所列服务期限现已结束。原文未提供任务效果或性能对比；科研文本整理与复杂推理可作为两种模式的迁移评估任务，但不是官方已验证结论。[S1]",
+        "application": "建议：科研迁移可分别评估非思考模式的文献摘要整理、思考模式的多步推理表现，此为迁移设想。官方仅确认模型升级、模式对应关系及 Speciale 的服务限制，未报告科研任务的已验证效果；不应将已过期临时接口作为当前可用方案。[S1]",
+        "requirements": "deepseek-chat 与 deepseek-reasoner 已升级至 DeepSeek-V3.2。Speciale 使用临时 base_url：https://api.deepseek.com/v3.2_speciale_expires_on_20251215；与 V3.2 同价，不支持工具调用，仅提供至 2025年12月15日15:59（UTC）。原文未列具体价格、账号或部署要求，使用条件见官方文档。[S1]",
+        "steps": [],
+        "evidence": [
+          "Both deepseek-chat and deepseek-reasoner have been upgraded to DeepSeek-V3.2.",
+          "deepseek-chat corresponds to DeepSeek-V3.2's non-thinking mode",
+          "deepseek-reasoner corresponds to DeepSeek-V3.2's thinking mode",
+          "DeepSeek-V3.2-Speciale is served via a temporary endpoint: base_url=\" https://api.deepseek.com/v3.2_speciale_expires_on_20251215 \".",
+          "Same pricing as V3.2, no tool calls, available until Dec 15th, 2025, 15:59 (UTC Time)."
+        ],
+        "basis_url": "https://api-docs.deepseek.com/updates/#date-2025-12-01"
+      },
+      "analyzed_at": "2026-09-25T05:12:25.744824+00:00"
     },
     {
       "title": "SIMA 2An agent that plays, reasons, and learns with you",
@@ -1035,13 +1307,28 @@
       "source_id": "deepseek",
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2025-09-29",
       "release_state": "preview",
       "content_version": "ba13707270f0fa9478f158766953b442c620ba8df540a9d59f75a22944289569",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "DeepSeek-V3.2-Exp：两个 API 模型名称均已升级",
+        "summary": "官方公告确认，deepseek-chat 与 deepseek-reasoner 均已升级为 DeepSeek-V3.2-Exp，前者对应非思考模式，后者对应思考模式。这是已完成的升级，而非发布预告。公告未提供任务适用性评测或性能数据。科研使用中，可考虑分别测试常规文本处理与复杂推理任务，但这属于迁移建议，不能据此认定准确率、速度或成本已有改善。",
+        "application": "建议：科研迁移时，可用文献摘要、信息抽取和多步推理样例对两种模式开展对照测试。官方已确认的是升级及模式对应关系；给定公告未报告科研任务上的已验证效果。",
+        "requirements": "公告明确的 API 模型名称为 deepseek-chat 和 deepseek-reasoner；使用条件见官方文档。",
+        "steps": [],
+        "evidence": [
+          "Both deepseek-chat and deepseek-reasoner have been upgraded to DeepSeek-V3.2-Exp.",
+          "deepseek-chat corresponds to DeepSeek-V3.2-Exp's non-thinking mode",
+          "deepseek-reasoner corresponds to DeepSeek-V3.2-Exp's thinking mode"
+        ],
+        "basis_url": "https://api-docs.deepseek.com/updates/#date-2025-09-29"
+      },
+      "analyzed_at": "2026-09-25T05:13:19.488290+00:00"
     },
     {
       "categories": [
@@ -1061,13 +1348,30 @@
       "source_id": "deepseek",
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2025-09-22",
       "release_state": "unknown",
       "content_version": "3b61bca1a0cc71e9536b8660170a618176fa9b09563e3ae5d6b53affffeb3643",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "DeepSeek-V3.1-Terminus：语言一致性与智能体能力更新",
+        "summary": "官方公告指出，deepseek-chat 与 deepseek-reasoner 均已升级至 DeepSeek-V3.1-Terminus，分别对应非思考模式和思考模式。本次更新保留模型原有能力，针对用户反馈减少中英文混杂及偶发异常字符，并进一步优化 Code Agent 和 Search Agent 的表现。相关变化面向语言输出、代码智能体与搜索智能体任务；公告未提供量化测试结果，不能据此判断具体性能增幅。",
+        "application": "建议：科研迁移可优先测试中文论文导读中的语言一致性、科研代码辅助及文献搜索任务；这些属于迁移建议，并非官方已验证的科研效果。官方报告的改进仅包括减少中英文混杂和偶发异常字符，以及优化 Code Agent、Search Agent 表现，未给出验证方法或量化指标。",
+        "requirements": "官方明示 deepseek-chat 和 deepseek-reasoner 已升级至 DeepSeek-V3.1-Terminus，分别对应非思考模式和思考模式；账号、费用及部署条件未明确，使用条件见官方文档。",
+        "steps": [],
+        "evidence": [
+          "Both deepseek-chat and deepseek-reasoner have been upgraded to DeepSeek-V3.1-Terminus.",
+          "deepseek-chat corresponds to DeepSeek-V3.1-Terminus's non-thinking mode , while deepseek-reasoner corresponds to its thinking mode .",
+          "This update maintains the model's original capabilities while addressing issues reported by users, including:",
+          "Language consistency: Reduced occurrences of Chinese-English mixing and occasional abnormal characters;",
+          "Agent capabilities: Further optimized the performance of the Code Agent and Search Agent."
+        ],
+        "basis_url": "https://api-docs.deepseek.com/updates/#date-2025-09-22"
+      },
+      "analyzed_at": "2026-09-25T05:13:48.645361+00:00"
     },
     {
       "title": "AlphaEarth Foundations helps map our planet in unprecedented detail",
@@ -1092,7 +1396,22 @@
       ],
       "release_state": "unknown",
       "content_version": "592eca73fb85db083547eb091de1ba8d45c749e9397d6903f4762cd778d4f1c8",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "AlphaEarth Foundations：以统一地球观测表征支持精细制图与监测",
+        "summary": "【官方公告】2025年7月30日，官方介绍了AlphaEarth Foundations，将其定位为类似“虚拟卫星”的AI模型。它整合拍字节级地球观测数据，生成统一数据表征，旨在应对观测数据复杂、多模态且持续更新带来的整合难题，适用于全球制图与监测，覆盖地球全部陆地及近岸水域。所给节选未提供量化评测、具体操作方法或开放使用信息。[S1]",
+        "application": "建议：【你的推断】可探索将统一地球观测表征用于基础设施周边环境监测及可靠性研究中的环境暴露特征构建；这些属于科研迁移设想，并非官方已验证用途。【官方公告】原文称模型能够准确、高效地表征陆地和近岸水域，但所给节选没有评测数据，无法判断已验证效果的幅度。[S1]",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "New AI model integrates petabytes of Earth observation data to generate a unified data representation that revolutionizes global mapping and monitoring",
+          "While this data has been incredibly impactful, its complexity, multimodality and refresh rate creates a new challenge: connecting disparate datasets and making use of them all effectively.",
+          "Today, we’re introducing AlphaEarth Foundations, an artificial intelligence (AI) model that functions like a virtual satellite.",
+          "It accurately and efficiently characterizes the planet’s entire terrestrial land and coastal waters by integrating huge amounts of Earth observation data"
+        ],
+        "basis_url": "https://deepmind.google/blog/alphaearth-foundations-helps-map-our-planet-in-unprecedented-detail/"
+      },
+      "analyzed_at": "2026-09-25T05:29:32.119125+00:00"
     },
     {
       "categories": [
@@ -1114,8 +1433,9 @@
       "source_id": "qwen-agent",
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.26",
       "content_version": "2c301ad979bec74794359b1f3b91dd982ae0df5ac8eb3a23d4bb5ffee7850cf0",
@@ -1141,8 +1461,9 @@
       "source_id": "qwen-agent",
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.25",
       "content_version": "3d1b4928b8c3335cb7d414163225c3bf46b6f383659b1bf193dd905d5d04e715",
@@ -1168,12 +1489,28 @@
       "source_id": "qwen-agent",
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.24",
       "content_version": "054f5267296d2b7dcbde36c1419fec06b39b29393c62b8f3ccf34a84245984fb",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "Qwen-Agent v0.0.24：工具调用容错与模型、音频支持更新",
+        "summary": "Qwen-Agent v0.0.24 的更新集中在工具调用兼容性与输入、模型支持：允许工具响应为空字符串，为无效工具调用输出增加回退处理，支持将 MCP 服务器中的资源作为工具使用，并支持 transformers 模型、音频输入及修复 openvino 相关问题。这些变化可供涉及工具调用、资源访问或音频输入的任务评估采用；公告未说明具体接口、修复范围或量化效果。[S1]",
+        "application": "建议：科研迁移可考虑测试空工具响应、无效调用输出的处理，以及 MCP 资源访问和音频输入在科研助手中的适用性；这些属于迁移建议，并非官方已验证效果。官方仅列出功能更新与修复，未提供科研任务验证或性能数据。[S1]",
+        "requirements": "版本：v0.0.24。账号、API、费用或部署条件未明确，使用条件见官方文档。",
+        "steps": [],
+        "evidence": [
+          "allow tool response to be empty string",
+          "add a fallback for invalid tool call output",
+          "support resource in mcp server as tool",
+          "support transformers models, audio input, and fix openvino"
+        ],
+        "basis_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.24"
+      },
+      "analyzed_at": "2026-09-25T05:24:40.912585+00:00"
     },
     {
       "categories": [
@@ -1195,8 +1532,9 @@
       "source_id": "qwen-agent",
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.23",
       "content_version": "a52b6679b34bf97717ff70c47bc0a03c31a22ff7096585e0caf7ee4f987c2fc1",
@@ -1229,7 +1567,22 @@
       ],
       "release_state": "unknown",
       "content_version": "9b7c98564c8bbb02efd6eb763c9f9cabe0bd4401d7aa33e1b030117a0a566c40",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "AlphaEvolve：由 Gemini 驱动、用于设计高级算法的编程智能体",
+        "summary": "官方于2025年5月14日宣布 AlphaEvolve，将大语言模型的能力从文档总结、代码生成和创意构思扩展到通用算法发现与优化。它结合 Gemini 模型的创造性问题求解能力与自动评估器，用评估器验证答案，再通过进化框架改进最有潜力的方案。适用方向是数学及现代计算中的基础性、高复杂度问题；所给公告片段未提供具体实验结果、性能指标或公众可用性说明。",
+        "application": "建议：科研迁移可考虑将这一思路用于结构设计优化、运维调度或可靠性计算中的算法搜索，前提是能够定义可自动验证的目标与约束。这些属于迁移设想，并非官方已验证效果；所给片段仅介绍机制与任务方向，未报告上述科研场景的验证结果。",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "May 14, 2025",
+          "Today, we’re announcing AlphaEvolve , an evolutionary coding agent powered by large language models for general-purpose algorithm discovery and optimization.",
+          "And now we’ve expanded these capabilities to target fundamental and highly complex problems in mathematics and modern computing.",
+          "AlphaEvolve pairs the creative problem-solving capabilities of our Gemini models with automated evaluators that verify answers, and uses an evolutionary framework to improve upon the most promising ideas"
+        ],
+        "basis_url": "https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/"
+      },
+      "analyzed_at": "2026-09-25T05:25:11.437071+00:00"
     },
     {
       "categories": [
@@ -1251,12 +1604,25 @@
       "source_id": "qwen-agent",
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.22",
       "content_version": "5df7dcf5518ab4068163005fa68fa290f9f3e940e03bc11fe306bad11e64f09c",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "Qwen-Agent v0.0.22：新增 Qwen3 示例与 MCP 实践指南",
+        "summary": "【官方原文】Qwen-Agent v0.0.22 新增 Qwen3 示例和 MCP 实践指南，更换 RAG 中的 keygen 模型，并修复向 oai 接口传递 reasoning_content 的问题。这些变更涉及示例参考、MCP 实践、RAG 流程及接口字段传递；公告未说明替换后的模型名称、具体操作方法，也未提供性能或效果对比。[S1]",
+        "application": "建议：【科研迁移建议】可评估新增示例与指南是否适合科研助手的模型接入和工具调用，并针对既有 RAG 流程及 reasoning_content 字段传递开展回归测试。【官方已验证效果】给定公告仅列出新增、替换与修复事项，未提供验证数据，不能据此认定科研任务准确率、效率或可靠性提升。[S1]",
+        "requirements": "版本：Qwen-Agent v0.0.22。账号、API 使用要求、费用及部署条件未明确，使用条件见官方文档。",
+        "steps": [],
+        "evidence": [
+          "add Qwen3 examples and MCP cookbooks change keygen model in rag bugfix: pass reasoning_content to oai interface"
+        ],
+        "basis_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.22"
+      },
+      "analyzed_at": "2026-09-25T05:25:40.762580+00:00"
     },
     {
       "categories": [
@@ -1278,12 +1644,49 @@
       "source_id": "qwen-agent",
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "verified_at": "2026-09-25T04:57:45.211616+00:00",
+      "provider": "official",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "verified_at": "2026-09-25T09:18:35.456243+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.21",
       "content_version": "88406150221dc889d29c34e2ddf741e6292582b128ecb3997b4e46acba200406",
       "analysis_status": "pending"
+    },
+    {
+      "id": "wechat-d585505dcccf32c5611f",
+      "platform": "wechat",
+      "provider": "wechat",
+      "account": "机器之心",
+      "source": "机器之心",
+      "title": "代码生成越来越快,软件交付真正的瓶颈转向了哪里?",
+      "url": "https://weixin.sogou.com/weixin?type=2&query=%E6%9C%BA%E5%99%A8%E4%B9%8B%E5%BF%83+%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E8%B6%8A%E6%9D%A5%E8%B6%8A%E5%BF%AB%2C%E8%BD%AF%E4%BB%B6%E4%BA%A4%E4%BB%98%E7%9C%9F%E6%AD%A3%E7%9A%84%E7%93%B6%E9%A2%88%E8%BD%AC%E5%90%91%E4%BA%86%E5%93%AA%E9%87%8C%3F",
+      "published_at": "2026-09-24T07:18:18+00:00",
+      "summary": "机器之心发布2026 年 9 月 22 日,阿里巴巴集团 CEO 吴泳铭在杭州云栖大会发表演讲,阐述对「机器智能」时代的思考:机器正在成...",
+      "evidence_kind": "search_snippet",
+      "verification": "pending",
+      "kind": "ai",
+      "content_type": "report",
+      "evidence_text": "",
+      "reported_at": "2026-09-24T07:18:18+00:00",
+      "categories": [
+        "tools"
+      ],
+      "scenarios": [
+        "general"
+      ],
+      "article_id": "1e37a14d9720ca12bdef",
+      "release_state": "unknown",
+      "content_version": "af078c38ec3e8eb6688b4423adeac0a9ff8248a3996467801e80e70b2db656ee",
+      "analysis_status": "pending",
+      "source_links": [
+        {
+          "platform": "wechat",
+          "name": "机器之心",
+          "url": "https://weixin.sogou.com/weixin?type=2&query=%E6%9C%BA%E5%99%A8%E4%B9%8B%E5%BF%83+%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E8%B6%8A%E6%9D%A5%E8%B6%8A%E5%BF%AB%2C%E8%BD%AF%E4%BB%B6%E4%BA%A4%E4%BB%98%E7%9C%9F%E6%AD%A3%E7%9A%84%E7%93%B6%E9%A2%88%E8%BD%AC%E5%90%91%E4%BA%86%E5%93%AA%E9%87%8C%3F",
+          "published_at": "2026-09-24T07:18:18+00:00",
+          "evidence_kind": "search_snippet"
+        }
+      ]
     }
   ],
   "sources": [
@@ -1291,8 +1694,8 @@
       "id": "openai",
       "name": "OpenAI 官方发布",
       "url": "https://openai.com/news/rss.xml",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "last_success": "2026-09-25T04:57:45.211616+00:00",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "last_success": "2026-09-25T09:18:35.456243+00:00",
       "status": "ok",
       "count": 12
     },
@@ -1300,8 +1703,8 @@
       "id": "anthropic",
       "name": "Anthropic 工程进展",
       "url": "https://www.anthropic.com/engineering",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "last_success": "2026-09-25T04:57:45.211616+00:00",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "last_success": "2026-09-25T09:18:35.456243+00:00",
       "status": "ok",
       "count": 6
     },
@@ -1309,8 +1712,8 @@
       "id": "deepmind",
       "name": "Google DeepMind",
       "url": "https://deepmind.google/blog/",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "last_success": "2026-09-25T04:57:45.211616+00:00",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "last_success": "2026-09-25T09:18:35.456243+00:00",
       "status": "no_data",
       "count": 0
     },
@@ -1318,8 +1721,8 @@
       "id": "qwen",
       "name": "Qwen 官方发布",
       "url": "https://qwen.ai/blog",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "last_success": "2026-09-25T04:57:45.211616+00:00",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "last_success": "2026-09-25T09:18:35.456243+00:00",
       "status": "no_data",
       "count": 0
     },
@@ -1327,8 +1730,8 @@
       "id": "qwen-agent",
       "name": "Qwen-Agent 版本发布",
       "url": "https://github.com/QwenLM/Qwen-Agent/releases.atom",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "last_success": "2026-09-25T04:57:45.211616+00:00",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "last_success": "2026-09-25T09:18:35.456243+00:00",
       "status": "ok",
       "count": 6
     },
@@ -1336,8 +1739,8 @@
       "id": "deepseek",
       "name": "DeepSeek 更新日志",
       "url": "https://api-docs.deepseek.com/updates/",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "last_success": "2026-09-25T04:57:45.211616+00:00",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "last_success": "2026-09-25T09:18:35.456243+00:00",
       "status": "ok",
       "count": 8
     },
@@ -1345,8 +1748,8 @@
       "id": "huggingface",
       "name": "Hugging Face 官方博客",
       "url": "https://huggingface.co/blog/feed.xml",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "last_success": "2026-09-25T04:57:45.211616+00:00",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "last_success": "2026-09-25T09:18:35.456243+00:00",
       "status": "ok",
       "count": 8
     },
@@ -1354,8 +1757,8 @@
       "id": "langchain",
       "name": "LangChain 官方发布",
       "url": "https://www.langchain.com/blog",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "last_success": "2026-09-25T04:57:45.211616+00:00",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "last_success": "2026-09-25T09:18:35.456243+00:00",
       "status": "ok",
       "count": 6
     },
@@ -1363,8 +1766,8 @@
       "id": "agent-skills",
       "name": "Agent Skills 规范版本",
       "url": "https://github.com/agentskills/agentskills/releases.atom",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "last_success": "2026-09-25T04:57:45.211616+00:00",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "last_success": "2026-09-25T09:18:35.456243+00:00",
       "status": "no_data",
       "count": 0
     },
@@ -1372,11 +1775,205 @@
       "id": "anthropic-skills",
       "name": "Anthropic Skills 版本",
       "url": "https://github.com/anthropics/skills/releases.atom",
-      "checked_at": "2026-09-25T04:57:45.211616+00:00",
-      "last_success": "2026-09-25T04:57:45.211616+00:00",
+      "checked_at": "2026-09-25T09:18:35.456243+00:00",
+      "last_success": "2026-09-25T09:18:35.456243+00:00",
       "status": "no_data",
+      "count": 0
+    },
+    {
+      "id": "wechat-rss",
+      "name": "公众号订阅与同步",
+      "url": "https://mp.weixin.qq.com/",
+      "status": "partial",
+      "count": 6,
+      "message": "公开索引已接入：读取 6 条文章元数据，本期 6 条。 微信后台文章列表受限；已通过公开搜索获取线索，链接为检索入口，非已核验全文。 最近同步：09-24 06:35（北京时间）。 公开索引快照超过 24 小时，将尝试刷新。",
+      "checked_at": "2026-09-25T09:22:05.038651+00:00",
+      "last_success": ""
+    },
+    {
+      "id": "wechat-index",
+      "name": "公众号公开索引",
+      "url": "https://mp.weixin.qq.com/",
+      "status": "ok",
+      "count": 3,
+      "message": "公开索引已接入：本期读取 3 条公众号文章线索，按 32 个订阅筛选。 微信后台文章列表受限；线索提供公开检索入口，非已核验全文。",
+      "checked_at": "2026-09-25T09:22:05.038651+00:00",
+      "last_success": "2026-09-25T09:22:05.038651+00:00"
+    },
+    {
+      "id": "xiaohongshu-leads",
+      "name": "小红书 · 科研线索",
+      "url": "https://www.xiaohongshu.com/",
+      "checked_at": "2026-09-25T09:22:05.038651+00:00",
+      "last_success": "",
+      "status": "quota_exhausted",
+      "message": "今日两个发现查询已执行，下一日轮换主题；可继续手动添加笔记。",
+      "count": 0
+    },
+    {
+      "id": "xiaohongshu-ai",
+      "name": "小红书 · AI 前沿",
+      "url": "https://www.xiaohongshu.com/",
+      "checked_at": "2026-09-25T09:22:05.038651+00:00",
+      "last_success": "",
+      "status": "quota_exhausted",
+      "message": "今日两个发现查询已执行，下一日轮换主题；可继续手动添加笔记。",
       "count": 0
     }
   ],
-  "outcome": "ok"
+  "outcome": "ok",
+  "social_readings": [
+    {
+      "id": "wechat-5388de52a1a9088edcee",
+      "platform": "wechat",
+      "provider": "wechat",
+      "account": "航空学报CJA",
+      "source": "航空学报CJA",
+      "title": "《航空学报》2026年第16期目录",
+      "url": "https://weixin.sogou.com/weixin?type=2&query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA+%E3%80%8A%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5%E3%80%8B2026%E5%B9%B4%E7%AC%AC16%E6%9C%9F%E7%9B%AE%E5%BD%95",
+      "published_at": "2026-09-14T03:56:40+00:00",
+      "summary": "《航空学报》2026年 47卷 16期目录查看整期论文方式1 识别左侧二维码2 点击以下标题2026年第47卷第16期电子期刊.pdf流体力学与...",
+      "evidence_kind": "search_snippet",
+      "verification": "pending",
+      "kind": "news",
+      "content_type": "report",
+      "evidence_text": "",
+      "reported_at": "2026-09-14T03:56:40+00:00",
+      "article_id": "04fd69b1c04f2aff276a",
+      "categories": [],
+      "scenarios": [
+        "engineering"
+      ],
+      "release_state": "unknown",
+      "content_version": "3d709be15922345503003c03145a25635304c53b416a580d1912b25ecc89a2a5",
+      "analysis_status": "pending"
+    },
+    {
+      "id": "wechat-1d5a9a827afba8362929",
+      "platform": "wechat",
+      "provider": "wechat",
+      "account": "航空学报CJA",
+      "source": "航空学报CJA",
+      "title": "2026航空航天工程世界一流学科排名 | 软科",
+      "url": "https://weixin.sogou.com/weixin?type=2&query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA+2026%E8%88%AA%E7%A9%BA%E8%88%AA%E5%A4%A9%E5%B7%A5%E7%A8%8B%E4%B8%96%E7%95%8C%E4%B8%80%E6%B5%81%E5%AD%A6%E7%A7%91%E6%8E%92%E5%90%8D+%7C+%E8%BD%AF%E7%A7%91",
+      "published_at": "2026-09-15T23:02:06+00:00",
+      "summary": "2026年9月15日,高等教育评价专业机构软科正式发布2026“软科... 软科两刊简介航空学报CJA_小编微 信 号:HKXBCJA_xiaobian扫...",
+      "evidence_kind": "search_snippet",
+      "verification": "pending",
+      "kind": "news",
+      "content_type": "report",
+      "evidence_text": "",
+      "reported_at": "2026-09-15T23:02:06+00:00",
+      "article_id": "06a3a60ec13239e2cf1a",
+      "categories": [],
+      "scenarios": [
+        "engineering"
+      ],
+      "release_state": "unknown",
+      "content_version": "e4bb1b4a12bf1bfe9e0fde985a6f0a82989020ee3f65e11024303d1181e98e89",
+      "analysis_status": "pending"
+    },
+    {
+      "id": "wechat-b4ab7221c0ba2045545f",
+      "platform": "wechat",
+      "provider": "wechat",
+      "account": "航空学报CJA",
+      "source": "航空学报CJA",
+      "title": "xAerospace正式创刊!| 航空学报CJA",
+      "url": "https://weixin.sogou.com/weixin?type=2&query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA+xAerospace%E6%AD%A3%E5%BC%8F%E5%88%9B%E5%88%8A%21%7C+%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA",
+      "published_at": "2026-09-11T09:45:08+00:00",
+      "summary": "2026(第九届)中国航空科学技术大会于9月11日在无锡隆重开幕... END两刊简介航空学报CJA_小编微 信 号:HKXBCJA_xiaobian扫...",
+      "evidence_kind": "search_snippet",
+      "verification": "pending",
+      "kind": "news",
+      "content_type": "report",
+      "evidence_text": "",
+      "reported_at": "2026-09-11T09:45:08+00:00",
+      "article_id": "b95369ab8da0da296235",
+      "categories": [],
+      "scenarios": [
+        "general"
+      ],
+      "release_state": "unknown",
+      "content_version": "0aa8a1bcbe29f69ac01c98fb36317f9e5542feef3090618bcd7138c364baaee6",
+      "analysis_status": "pending"
+    },
+    {
+      "id": "wechat-694c88a6ab7673b89a92",
+      "platform": "wechat",
+      "provider": "wechat",
+      "account": "航空学报CJA",
+      "source": "航空学报CJA",
+      "title": "CJA · ICAS 2026 悉尼亮相",
+      "url": "https://weixin.sogou.com/weixin?type=2&query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA+CJA+%C2%B7+ICAS+2026+%E6%82%89%E5%B0%BC%E4%BA%AE%E7%9B%B8",
+      "published_at": "2026-09-22T10:02:45+00:00",
+      "summary": "2026年9月13日,航空学报杂志社一行,再次走出国门,深度参与... 两刊简介航空学报CJA_小编微 信 号:HKXBCJA_xiaobian扫码添...",
+      "evidence_kind": "search_snippet",
+      "verification": "pending",
+      "kind": "news",
+      "content_type": "report",
+      "evidence_text": "",
+      "reported_at": "2026-09-22T10:02:45+00:00",
+      "article_id": "61985114c17b372c2de5",
+      "categories": [],
+      "scenarios": [
+        "general"
+      ],
+      "release_state": "unknown",
+      "content_version": "16269101ae04a4a56688aa5e2bb9dbc1e451e26aa22c7ae093ea027a6e60371c",
+      "analysis_status": "pending"
+    },
+    {
+      "id": "wechat-b2412b5e66451c94d7a3",
+      "platform": "wechat",
+      "provider": "wechat",
+      "account": "智源FlagOpen",
+      "source": "智源FlagOpen",
+      "title": "一栈贯通,智算无界!2026人工智能开放计算大会 暨 众智FlagOS技术大会亮点速递",
+      "url": "https://weixin.sogou.com/weixin?type=2&query=%E6%99%BA%E6%BA%90FlagOpen+%E4%B8%80%E6%A0%88%E8%B4%AF%E9%80%9A%2C%E6%99%BA%E7%AE%97%E6%97%A0%E7%95%8C%212026%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%BC%80%E6%94%BE%E8%AE%A1%E7%AE%97%E5%A4%A7%E4%BC%9A+%E6%9A%A8+%E4%BC%97%E6%99%BAFlagOS%E6%8A%80%E6%9C%AF%E5%A4%A7%E4%BC%9A%E4%BA%AE%E7%82%B9%E9%80%9F%E9%80%92",
+      "published_at": "2026-09-18T14:12:40+00:00",
+      "summary": "社区联合北京智源人工智能研究院、北京量子信息科学研究院等机构、中关村人工智能开源联盟(筹)等机构,将于 2026 年 10 月 17-...",
+      "evidence_kind": "search_snippet",
+      "verification": "pending",
+      "kind": "conference",
+      "content_type": "report",
+      "evidence_text": "",
+      "reported_at": "2026-09-18T14:12:40+00:00",
+      "article_id": "a02472f18ac93939b85a",
+      "categories": [],
+      "scenarios": [
+        "general"
+      ],
+      "release_state": "unknown",
+      "content_version": "a5e0d496e214924a7620cf2a5bc8e6be529d06d0957473d8c9da672dff05017c",
+      "analysis_status": "pending"
+    },
+    {
+      "id": "wechat-0e928f1ed78ebc12b2a5",
+      "platform": "wechat",
+      "provider": "wechat",
+      "account": "机械工程学报",
+      "source": "机械工程学报",
+      "title": "专家领衔策划——数字孪生赋能的高端装备智能运维丨JME特邀专栏(下)",
+      "url": "https://weixin.sogou.com/weixin?type=2&query=%E6%9C%BA%E6%A2%B0%E5%B7%A5%E7%A8%8B%E5%AD%A6%E6%8A%A5+%E4%B8%93%E5%AE%B6%E9%A2%86%E8%A1%94%E7%AD%96%E5%88%92%E2%80%94%E2%80%94%E6%95%B0%E5%AD%97%E5%AD%AA%E7%94%9F%E8%B5%8B%E8%83%BD%E7%9A%84%E9%AB%98%E7%AB%AF%E8%A3%85%E5%A4%87%E6%99%BA%E8%83%BD%E8%BF%90%E7%BB%B4%E4%B8%A8JME%E7%89%B9%E9%82%80%E4%B8%93%E6%A0%8F%28%E4%B8%8B%29",
+      "published_at": "2026-09-19T14:34:28+00:00",
+      "summary": "“数字孪生赋能的高端装备智能运维”专栏.本专栏开展“数字孪... 2026, 62(12): 77-86. 论文摘要:旋转机械的健康监测与早期故障检...",
+      "evidence_kind": "search_snippet",
+      "verification": "pending",
+      "kind": "news",
+      "content_type": "report",
+      "evidence_text": "",
+      "reported_at": "2026-09-19T14:34:28+00:00",
+      "article_id": "4f90be357e376a7ae08f",
+      "categories": [
+        "science"
+      ],
+      "scenarios": [
+        "engineering"
+      ],
+      "release_state": "unknown",
+      "content_version": "a2064470bf5a4292a242a424a0eb1858c26a3f5974319f47958fd082f2154307",
+      "analysis_status": "pending"
+    }
+  ]
 }

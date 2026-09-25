@@ -26,6 +26,7 @@ from .journals import JournalManager, JournalChange, Revision
 from .daily_update import DailyUpdater, UpdateRequest
 from .directions import DirectionManager, DirectionChange
 from .wechat_subscriptions import SubscriptionManager, SubscriptionChange
+from .social_notes import NoteManager, NoteChange
 from .screenshots import MAX_IMAGE_BYTES, MAX_SCREENSHOTS, save_screenshot
 from .conversations import REQUEST_FIELDS, saved_request, dialogue_context
 from .annotations import AnnotationDraft, AnnotationSet, annotation_source, current_pdf, read_annotations, save_annotations, export_annotated_pdf
@@ -108,6 +109,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     daily_updater = DailyUpdater(runtime)
     direction_manager = DirectionManager(root)
     subscription_manager = SubscriptionManager(root)
+    note_manager = NoteManager(root)
     from .reading_queue import ReadingQueue
     reading_queue = ReadingQueue(root, runtime, client, generation_lock)
     from .ai_queue import AIQueue
@@ -144,6 +146,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     app.state.daily_updater = daily_updater
     app.state.directions = direction_manager
     app.state.wechat_subscriptions = subscription_manager
+    app.state.social_notes = note_manager
     app.state.reading_queue = reading_queue
     app.state.ai_queue = ai_queue
 
@@ -359,6 +362,26 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     @app.post("/api/search")
     async def start_search(data: SearchRequest):
         return {"id": search_service.start(data)}
+
+    @app.get('/api/social-notes')
+    async def social_notes():
+        return await asyncio.to_thread(note_manager.snapshot)
+
+    @app.post('/api/social-notes/preview')
+    async def preview_social_note(data: NoteChange):
+        return await asyncio.to_thread(note_manager.preview, data)
+
+    @app.post('/api/social-notes')
+    async def save_social_note(data: NoteChange):
+        return await asyncio.to_thread(note_manager.save, data)
+
+    @app.delete('/api/social-notes/{identifier}')
+    async def remove_social_note(identifier: str, data: Revision):
+        return await asyncio.to_thread(note_manager.remove, identifier, data.revision)
+
+    @app.post('/api/social-notes/sync')
+    async def sync_social_notes(data: Revision):
+        return await asyncio.to_thread(note_manager.sync, data.revision)
 
     @app.get('/api/wechat-subscriptions')
     async def subscription_list():

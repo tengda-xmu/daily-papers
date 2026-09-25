@@ -359,6 +359,7 @@ def wechat_articles_panel(records: list[dict]) -> str:
 
 
 def render_leads(payload: dict, collection=None) -> str:
+    from tools.public_pages import source_attributes, social_details, author_options
     from src.research_leads import KINDS, state, wechat_leads
     from tools.public_pages import opportunity_details
     from src.opportunities import GROUPS, STAGES, SUBTYPES
@@ -371,7 +372,7 @@ def render_leads(payload: dict, collection=None) -> str:
         status, status_label = state(row, now)
         provider = row.get('provider', 'official')
         kind = row['kind']
-        label = ('公开检索入口' if row.get('indexed') else '公众号原文') if provider == 'wechat' else {
+        label = ('公开检索入口' if row.get('indexed') or 'weixin.sogou.com' in row.get('url','') else '公众号原文') if provider == 'wechat' else '小红书原文' if provider == 'xiaohongshu' else {
             'conference': '官网与日程', 'call': '查看专题' if row.get('resource_type') else '查看征稿要求',
             'resource': '查看资源', 'news': '阅读官方公告', 'academic_role': '查看官方通知', 'funding': '查看官方通知'}[kind]
         when = ''
@@ -383,11 +384,11 @@ def render_leads(payload: dict, collection=None) -> str:
             when = f"发布 {display_time(row['published_at'])[0]}"
         meta = ' · '.join(esc(v) for v in [row.get('source'), when, row.get('location') or row.get('region'),
                         SUBTYPES.get(row.get('subtype')), STAGES.get(row.get('stage'))] if v)
-        details = opportunity_details(row) if kind in ('academic_role', 'funding') else ''
+        details = (opportunity_details(row) if kind in ('academic_role', 'funding') else '') + social_details(row)
         state_data = esc(json.dumps({k: row.get(k) for k in ('kind', 'deadline', 'deadline_at', 'opens', 'stage', 'verified_at', 'verification')}, ensure_ascii=False))
         tags = ''.join(f'<span>{esc(topic_labels[t])}</span>' for t in row.get('topics', []) if t in topic_labels)
         checked = f'<span class="lead-verified">信息核对 {esc(row["verified_at"])}</span>' if row.get('verified_at') else ''
-        entries.append(f'''<li class="lead-entry" data-kind="{kind}" data-provider="{provider}" data-state="{status}"
+        entries.append(f'''<li class="lead-entry" {source_attributes(row)} data-kind="{kind}" data-provider="{provider}" data-state="{status}"
 data-topics="{esc(' '.join(row.get('topics', [])))}" data-start="{esc(row.get('start', row.get('deadline', '')))}"
 data-published="{esc(row.get('published_at', ''))}" data-rank="{index}" data-opportunity="{state_data}"
 data-subtype="{esc(row.get('subtype', ''))}" data-region="{esc(row.get('region', ''))}" data-group="{esc(row.get('organization_group', ''))}" data-enterprise="{str(row.get('organization_type') == 'enterprise').lower()}">
@@ -402,9 +403,10 @@ data-subtype="{esc(row.get('subtype', ''))}" data-region="{esc(row.get('region',
     for source in collection['sources']:
         status_label = {'ok': '更新成功', 'no_data': '暂无近期公告', 'error': '本轮获取失败，保留已有条目'}.get(source['status'], '尚未获取')
         statuses.append(f'<li>{esc(source["name"])}：{status_label}；最近检查 {esc(display_time(source.get("checked_at"))[1])}</li>')
-    source_status = f'<details class="leads-source-status"><summary>来源与更新说明</summary><p>公众号汇总近 {collection["days"]} 天已发布线索，官方公告随每日更新采集。会议目录显示人工核对日期，会期状态按当前日期计算；投稿与报名要求请以官网为准。</p><ul>{"".join(statuses)}</ul></details>'
+    from tools.public_pages import source_status as public_source_status
+    source_status = public_source_status(collection['sources'])
     return document(template('leads.html', count=len(records), entries=''.join(entries), categories=categories,
-        topics=options, source_status=source_status, days=collection['days'],
+        topics=options, source_status=source_status, days=collection['days'], authors=author_options(records),
         subtypes=''.join(f'<option value="{k}">{v}</option>' for k, v in SUBTYPES.items()),
         groups=''.join(f'<option value="{k}">{v}</option>' for k, v in GROUPS.items()),
         regions=''.join(f'<option value="{esc(v)}">{esc(v)}</option>' for v in sorted({r.get('region') for r in records if r.get('region')})),

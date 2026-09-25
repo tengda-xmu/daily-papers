@@ -10,8 +10,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def import_readings(root=ROOT):
     from src.public_sources import read, write
-    from src.ai_updates import validate_analysis
-    rows = {r['id']: r for r in read(root / 'data/ai-updates.json').get('entries', [])}
+    from src.ai_updates import validate_analysis, public_index
+    index = public_index(root)
+    rows = {r['id']: r for r in index.get('entries', []) + index.get('social_readings', [])}
     result = subprocess.run(['git', 'ls-tree', '-r', '--name-only', 'origin/connector-data', '--', 'data/ai-readings'],
                             cwd=root, capture_output=True, text=True)
     count = 0
@@ -35,7 +36,7 @@ def needed(root=ROOT, now=None):
     start = now.astimezone(BEIJING).replace(hour=21, minute=0, second=0, microsecond=0)
     if now < start:
         return False
-    for name in ('ai-updates.json', 'opportunities.json'):
+    for name in ('ai-updates.json', 'opportunities.json', 'social-articles.json'):
         try:
             payload = json.loads((root / 'data' / name).read_text(encoding='utf-8'))
         except (OSError, ValueError):
@@ -65,6 +66,13 @@ def refresh(root=ROOT):
     from src.public_sources import write
     import os
     state = {'run_id': os.environ.get('GITHUB_RUN_ID', ''), 'checked_at': datetime.now(timezone.utc).isoformat(), 'columns': {}}
+    from src.social_content import refresh as social_refresh
+    try:
+        social = social_refresh(root)
+        state['columns']['social'] = {k:social[k] for k in ('outcome', 'checked_at', 'sources')}
+        state['columns']['social']['counts'] = {name:sum(r.get('column') == name for r in social['entries']) for name in ('ai','leads')}
+    except Exception:
+        state['columns']['social'] = {'outcome':'error', 'retained':True}
     # Each column owns a separate file and failure state; papers are untouched.
     with ThreadPoolExecutor(max_workers=3) as pool:
         futures = {name: pool.submit(fn, root) for name, fn in [('ai', ai), ('opportunities', opportunities), ('leads', leads)]}
