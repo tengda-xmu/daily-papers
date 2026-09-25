@@ -105,6 +105,10 @@ jobs:
           python -m src.pipeline
       - name: Update official research leads
         run: python -m src.research_leads
+      - name: Collect original paper figures
+        timeout-minutes: 8
+        continue-on-error: true
+        run: python -m tools.collect_figures
       - run: python tools/build_site.py
       - name: Publish GitHub Pages
         uses: actions/upload-pages-artifact@v3

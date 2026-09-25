@@ -33,6 +33,10 @@ jobs:
           fi
       - name: Import validated reading enrichment and recover published editions
         run: python -m tools.recommendation_data --recover --reconcile --import-readings
+      - name: Collect missing original paper figures
+        timeout-minutes: 8
+        continue-on-error: true
+        run: python -m tools.collect_figures
       - run: python tools/build_site.py
       - uses: actions/upload-pages-artifact@v3
         with: {path: site}

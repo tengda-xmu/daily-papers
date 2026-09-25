@@ -1,8 +1,10 @@
 import hashlib
-import struct
 from copy import deepcopy
+from io import BytesIO
+from urllib.parse import urlsplit
+from PIL import Image
 
-from src.figures import ROOT, figure_catalog, get_figure
+from src.figures import ROOT, figure_catalog, figure_file, get_figure
 from tools.build_site import paper_card, render
 
 
@@ -12,12 +14,14 @@ def test_verified_images_match_recorded_dimensions_and_bytes():
     for doi, expected in entries.items():
         figure = get_figure("https://doi.org/" + doi)
         assert figure == expected
-        data = (ROOT / "tools" / figure["image_path"]).read_bytes()
-        assert data.startswith(b"\x89PNG\r\n\x1a\n")
-        assert struct.unpack(">II", data[16:24]) == (figure["width"], figure["height"])
+        data = figure_file(figure).read_bytes()
+        with Image.open(BytesIO(data)) as image:
+            assert image.format in ('PNG', 'JPEG')
+            assert image.size == (figure["width"], figure["height"])
+            image.verify()
         assert hashlib.sha256(data).hexdigest() == figure["sha256"]
         assert figure["modified"] is False
-        assert figure["license_source"].startswith("https://www.nature.com/articles/")
+        assert urlsplit(figure['license_source']).hostname in ('www.nature.com', 'www.ebi.ac.uk')
 
 
 def test_core_has_one_original_figure_and_archives_use_relative_asset_paths():

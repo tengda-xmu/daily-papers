@@ -18,7 +18,7 @@ if str(ROOT) not in sys.path:
 from src.catalog import (JOURNALS, SOURCE_CATALOG, STATE_LABELS, TOPIC_CATALOG,
                          VENUE_GROUPS, paper_facets, source_state, string_list)
 from src.research_focus import focus_tags
-from src.figures import get_figure
+from src.figures import get_figure, figure_status
 from src.wechat_metadata import public_subscriptions
 from src.wechat_subscriptions import effective_accounts, group_overview, published_accounts
 from src.research_directions import load_profile, active_directions, profile_revision
@@ -107,19 +107,26 @@ def document(content: str, *, title: str, root: str = "./", active: str = "daily
 def paper_figure(paper: dict, root: str = "./") -> str:
     figure = get_figure(paper.get("doi", ""))
     if not figure:
+        if figure_status(paper.get('doi', '')):
+            url = safe_url(paper.get('landing_url') or paper.get('url') or 'https://doi.org/' + paper.get('doi', ''))
+            return f'<p class="figure-unavailable">原图暂未获取 · <a href="{url}" target="_blank" rel="noopener noreferrer">前往原文查看图表</a></p>'
         return ""
     image_url = esc(root + figure["image_path"])
-    title = f'{figure["figure_label"]} · {figure["title_zh"]}'
+    figure_title = figure.get('title_zh') or figure.get('title')
+    title = f'{figure["figure_label"]} · {figure_title}'
+    caption = figure.get('caption_zh') or figure.get('caption')
+    caption_label = '图解' if figure.get('caption_zh') else '原文图注'
+    credit_note = '原图未改动，中文图解由本站整理。' if figure.get('caption_zh') else '原图与图注来自原文。'
     return f'''
   <figure class="paper-figure">
     <a class="figure-preview" href="{image_url}" target="_blank" rel="noopener noreferrer" aria-label="{esc(title)}，查看大图">
-      <img src="{image_url}" width="{figure['width']}" height="{figure['height']}" alt="{esc(figure['title_zh'])}，{esc(figure['figure_label'])}" loading="lazy" decoding="async">
+      <img src="{image_url}" width="{figure['width']}" height="{figure['height']}" alt="{esc(figure_title)}，{esc(figure['figure_label'])}" loading="lazy" decoding="async">
       <span class="figure-open">查看大图</span>
     </a>
     <figcaption>
       <strong class="figure-title">{esc(title)}</strong>
-      <p class="figure-explanation">图解：{esc(figure['caption_zh'])}</p>
-      <p class="figure-credit">{esc(figure['credit'])}<br><a href="{safe_url(figure['source_url'])}" target="_blank" rel="noopener noreferrer">原文图页</a> · <a href="{safe_url(figure['license_url'])}" target="_blank" rel="noopener noreferrer">{esc(figure['license'])}</a><br>原图未改动，中文图解由本站整理。</p>
+      <p class="figure-explanation">{caption_label}：{esc(caption)}</p>
+      <p class="figure-credit">{esc(figure['credit'])}<br><a href="{safe_url(figure['source_url'])}" target="_blank" rel="noopener noreferrer">原文图页</a> · <a href="{safe_url(figure['license_url'])}" target="_blank" rel="noopener noreferrer">{esc(figure['license'])}</a><br>{credit_note}</p>
     </figcaption>
   </figure>'''
 
@@ -550,6 +557,8 @@ def main() -> None:
     from src.auto_reading import load as load_readings
     OUT.mkdir(parents=True, exist_ok=True)
     shutil.copytree(ASSETS, OUT / "assets", dirs_exist_ok=True)
+    if (DATA / 'figures/images').is_dir():
+        shutil.copytree(DATA / 'figures/images', OUT / 'assets/figures', dirs_exist_ok=True)
     analyses = load_readings(DATA)
     payload = enrich(read_json(DATA / "daily.json", {}), analyses)
     (OUT / "index.html").write_text(render(payload), encoding="utf-8")
