@@ -72,6 +72,12 @@ class ReadingQueue:
             old = db.execute('SELECT * FROM tasks WHERE paper_id=?', (paper['id'],)).fetchone()
             if old:
                 db.execute('UPDATE tasks SET priority=? WHERE paper_id=?', (priority, paper['id']))
+                previous = json.loads(old['paper'])
+                if old['fingerprint'] == key and old['state'] not in ('generating', 'fetching'):
+                    hints_changed = any(previous.get(k) != clean.get(k) for k in ('source', 'oa_url', 'pdf_url'))
+                    if hints_changed:
+                        db.execute("UPDATE tasks SET paper=?,state='pending',next_material=0,next_attempt=0 WHERE paper_id=?",
+                                   (json.dumps(clean, ensure_ascii=False), paper['id']))
                 if signature != old['local_signature'] and old['state'] not in ('generating', 'fetching'):
                     db.execute("UPDATE tasks SET state='pending',next_material=0,next_attempt=0,local_signature=? WHERE paper_id=?", (signature, paper['id']))
             if old and (old['fingerprint'] == key or old['state'] in ('generating', 'fetching')):
