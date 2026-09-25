@@ -1,4 +1,4 @@
-"""Collect DOI-verified, openly licensed original figures for the current core papers.
+"""Collect DOI-verified, openly licensed original figures for current recommendations.
 
 Failures are recorded per paper and never block publication. Existing images are
 reused; failed attempts are retried on the next day, not on every site rebuild.
@@ -56,7 +56,10 @@ class Fetcher:
         deadline = time.monotonic() + 45
         for _ in range(5):
             parsed = urlsplit(url)
-            if parsed.scheme != 'https' or parsed.hostname not in HOSTS or parsed.port not in (None, 443) or parsed.username:
+            # Nature's public pages establish an anonymous cookie through these
+            # two redirects, including when serving open-access manuscript PDFs.
+            cookie_redirect = parsed.hostname == 'idp.nature.com' and parsed.path in ('/authorize', '/transit')
+            if parsed.scheme != 'https' or (parsed.hostname not in HOSTS and not cookie_redirect) or parsed.port not in (None, 443) or parsed.username:
                 raise Unavailable('unavailable')
             with self.session.get(url, timeout=(8, 20), stream=True, allow_redirects=False) as response:
                 if response.status_code in (301, 302, 303, 307, 308):
@@ -91,6 +94,13 @@ def plain(node):
     return node.get_text(' ', strip=True) if node else ''
 
 
+def figure_priority(title):
+    """Prefer a method overview to an isolated result or parameter sweep."""
+    return -sum(bool(re.search(pattern, title, re.I)) for pattern in (
+        r'framework|workflow|pipeline|overview', r'schematic|architecture|block diagram',
+        r'proposed|method|approach|process'))
+
+
 def nature_figure(doi, fetch):
     url = 'https://www.nature.com/articles/' + doi.split('/', 1)[1]
     soup = BeautifulSoup(fetch(url), 'html.parser')
@@ -113,7 +123,8 @@ def nature_figure(doi, fetch):
         raise Unavailable('unavailable')
     common = {**licensing, 'credit': authors[0] + (' et al.' if len(authors) > 1 else ''),
               'license_source': url}
-    for figure in soup.select('figure'):
+    figures = sorted(soup.select('figure'), key=lambda f: figure_priority(plain(f.select_one('figcaption'))))
+    for figure in figures:
         caption = figure.select_one('figcaption')
         label = re.match(r'(Fig\.\s*\d+)', plain(caption))
         image = figure.select_one('img[src]')
@@ -148,8 +159,9 @@ def pdf_figure(doi, url, common, data):
             blocks = [b for b in page.get_text('blocks') if b[6] == 0]
             captions = [b for b in blocks if re.match(r'^Fig(?:ure)?\.?\s*\d+\s*[|:.]', b[4].strip())]
             images = [im for im in page.get_images(full=True) if im[2] >= 400 and im[3] >= 250]
-            # Multiple images, masks, or ambiguous captions need manual review.
-            if len(captions) != 1 or len(images) != 1 or images[0][1] != 0:
+            # Only a single image and unambiguous caption can be associated
+            # automatically. Its PDF transparency mask is part of that image.
+            if len(captions) != 1 or len(images) != 1:
                 continue
             text = ' '.join(captions[0][4].split())
             if EXCLUDED_CREDIT.search(text):
@@ -158,10 +170,18 @@ def pdf_figure(doi, url, common, data):
             rects = page.get_image_rects(images[0][0])
             if len(rects) != 1 or rects[0].y0 > captions[0][3]:
                 continue
-            extracted = document.extract_image(images[0][0])
+            extracted = document.extract_image(images[0][0])['image']
+            extraction = 'embedded_image'
+            if images[0][1]:
+                base = fitz.Pixmap(document, images[0][0])
+                mask = fitz.Pixmap(document, images[0][1])
+                if (base.width, base.height) != (mask.width, mask.height):
+                    continue
+                extracted = fitz.Pixmap(base, mask).tobytes('png')
+                extraction = 'embedded_image_with_mask'
             return {**common, 'figure_label': label, 'title': '原文配图', 'caption': text,
                     'source_url': url + f'#page={index + 1}', 'source_image_url': url,
-                    'pdf_page': index + 1, 'extraction': 'embedded_image'}, extracted['image']
+                    'pdf_page': index + 1, 'extraction': extraction}, extracted
     raise Unavailable('not_found')
 
 
@@ -216,19 +236,23 @@ def image_info(data):
         return result
 
 
-def collect(root=ROOT, fetch=None, now=None):
+def collect(root=ROOT, fetch=None, now=None, *, retry=False):
     from src.figures import get_figure
+    from src.figure_guides import paper_doi
     fetch = fetch or Fetcher()
     now = now or datetime.now(timezone.utc)
     path = root / 'data/figures/catalog.json'
     catalog = read(path)
     entries, checks = catalog.setdefault('entries', {}), catalog.setdefault('checks', {})
-    papers = read(root / 'data/daily.json').get('core', [])
+    payload = read(root / 'data/daily.json')
+    papers = payload.get('core', []) + payload.get('extended', [])
     counts = {'saved': 0, 'existing': 0, 'unavailable': 0}
-    for paper in papers[:10]:
-        doi = normalize_doi(paper.get('doi', ''))
-        if not doi:
+    seen = set()
+    for paper in papers[:20]:
+        doi = paper_doi(paper) if root == ROOT else normalize_doi(paper.get('doi', ''))
+        if not doi or doi in seen:
             continue
+        seen.add(doi)
         old = entries.get(doi, {})
         filename = old.get('image_path', '').removeprefix('assets/figures/')
         if (root == ROOT and get_figure(doi)) or (re.fullmatch(r'auto-[a-f0-9-]+\.(?:png|jpg)', filename or '') and (path.parent / 'images' / filename).is_file()):
@@ -236,7 +260,7 @@ def collect(root=ROOT, fetch=None, now=None):
             continue
         try:
             last = datetime.fromisoformat(checks.get(doi, {}).get('checked_at', ''))
-            if 0 <= (now - last).total_seconds() < 86400:
+            if not retry and 0 <= (now - last).total_seconds() < 86400:
                 counts['unavailable'] += 1
                 continue
         except (ValueError, TypeError):
@@ -266,4 +290,7 @@ def collect(root=ROOT, fetch=None, now=None):
 
 
 if __name__ == '__main__':
-    print(json.dumps(collect(), ensure_ascii=False))
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--retry', action='store_true', help='Retry unavailable figures now; existing images are reused')
+    print(json.dumps(collect(retry=parser.parse_args().retry), ensure_ascii=False))

@@ -106,9 +106,27 @@ def document(content: str, *, title: str, root: str = "./", active: str = "daily
 
 
 def paper_figure(paper: dict, root: str = "./") -> str:
-    figure = get_figure(paper.get("doi", ""))
+    from src.figure_guides import guide_for, paper_doi
+    doi = paper_doi(paper)
+    figure = get_figure(doi)
+    guide = guide_for(paper) if not figure else None
+    if guide:
+        image_url = esc(root + guide['image_path'])
+        label = '主题示意 · 非原文图' if guide.get('mode') == 'topics' else '方法示意 · 非原文图'
+        title = guide['title'] + '（' + label + '）'
+        return f'''
+  <figure class="paper-figure paper-figure--guide">
+    <a class="figure-preview" href="{image_url}" target="_blank" rel="noopener noreferrer" aria-label="{esc(title)}，查看大图">
+      <img src="{image_url}" width="{guide['width']}" height="{guide['height']}" alt="{esc(title)}" loading="lazy" decoding="async">
+      <span class="figure-open">查看示意图</span>
+    </a>
+    <figcaption><strong class="figure-title">{esc(title)}</strong>
+      <p class="figure-explanation">{esc(guide['caption'])}</p>
+      <p class="figure-credit">本站整理 · <a href="{safe_url(guide['source_url'])}" target="_blank" rel="noopener noreferrer">依据：{esc(guide['basis'])}</a><br>图中内容用于理解研究路线，非论文原图。</p>
+    </figcaption>
+  </figure>'''
     if not figure:
-        if figure_status(paper.get('doi', '')):
+        if figure_status(doi):
             url = safe_url(paper.get('landing_url') or paper.get('url') or 'https://doi.org/' + paper.get('doi', ''))
             return f'<p class="figure-unavailable">原图暂未获取 · <a href="{url}" target="_blank" rel="noopener noreferrer">前往原文查看图表</a></p>'
         return ""
@@ -203,7 +221,7 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
                            for tag in focus_tags(title, paper.get("abstract", "")))
     direction = paper.get('recommended_direction') or next(iter(topics), '')
     direction_badge = f'<button type="button" class="text-button paper-direction" data-topic-filter="{esc(direction)}">{esc(topic_labels.get(direction, direction))}</button>' if direction else ''
-    figure_html = paper_figure(paper, root) if tier == "core" else ""
+    figure_html = paper_figure(paper, root)
     chat_button = (f'<button type="button" class="text-button codex-entry" data-local-only data-paper-id="{esc(paper["id"])}" '
                    f'data-paper-title="{esc(display_title)}">Codex 对话</button>') if paper.get("id") else ""
     return f'''
@@ -573,6 +591,8 @@ def main() -> None:
     shutil.copytree(ASSETS, OUT / "assets", dirs_exist_ok=True)
     if (DATA / 'figures/images').is_dir():
         shutil.copytree(DATA / 'figures/images', OUT / 'assets/figures', dirs_exist_ok=True)
+    from src.figure_guides import build_guides
+    build_guides(OUT)
     analyses = load_readings(DATA)
     payload = enrich(read_json(DATA / "daily.json", {}), analyses)
     (OUT / "index.html").write_text(render(payload), encoding="utf-8")
