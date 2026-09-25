@@ -1,16 +1,19 @@
 {
   "id": "public-30aa7c0acfe7f3809f1c0c2e",
-  "content_version": "4cdc56a05d197e36ddb0293ca24dcb18625068173e3a5793bec1177b63b978a5",
+  "content_version": "ef2386b0f4b0d228a433cd96b74dcbbbd59f5df02dc66c6a7b912f8b0558eede",
   "analysis": {
-    "title_zh": "NVIDIA Warp 与 MJWarp：机器人仿真及学习工作流教程",
-    "summary": "官方教程介绍如何把兼容的 MuJoCo 模型接入基于 NVIDIA Warp 的 MJWarp，在 GPU 上批量推进仿真。适合需要大量并行环境的机器人学习与仿真工作。",
-    "application": "建议：先核对自己的模型兼容性，再评估 GPU 批量仿真能否改善具体训练流程。",
-    "requirements": "适用于 NVIDIA Warp／MJWarp 和兼容的 MuJoCo 模型；部署步骤及硬件条件以官方教程为准。",
+    "title_zh": "使用 NVIDIA Warp 与 MjWarp 加速机器人仿真和学习工作流",
+    "summary": "【原文节选】文章介绍机器人学习工作流从 CPU 仿真向 GPU 批量仿真的扩展：经典 MuJoCo 支持基于 CPU 的机器人开发、测试与控制，并可跨 CPU 核心并行采样；随着学习负载增长，重点转向同时运行更多仿真世界。基于 NVIDIA Warp 的 MuJoCo Warp（MJWarp）将兼容的 MuJoCo 模型带入 GPU 规模运行，适用于大批量仿真与学习数据协同处理。所给片段未展示操作步骤或量化验证结果。",
+    "application": "建议：【科研迁移建议，非官方已验证效果】可评估将兼容的机器人模型用于批量控制策略训练，以及多工况可靠性仿真；迁移前需另行验证模型兼容性与结果一致性。【原文说明】GPU 可批量推进仿真世界，并使仿真和学习数据靠近设备；所给片段未提供具体加速比、训练收益或可靠性研究效果的验证。",
+    "requirements": "原文明示模型需为兼容的 MuJoCo 模型；版本、账号、API、费用及具体部署条件未明确，使用条件见官方文档。",
     "steps": [],
     "evidence": [
+      "Classic MuJoCo provides fast CPU-based robot simulation for developing, testing, and controlling robots and it can parallelize sampling across CPU cores.",
+      "But as learning workloads grow, the question shifts from how quickly one world can run to how many worlds can run at once.",
+      "GPU acceleration makes it possible to advance those worlds in large batches while keeping simulation and learning data close to the device.",
       "MuJoCo Warp (MJWarp) , built on NVIDIA Warp , takes compatible MuJoCo models into that GPU-scale regime."
     ],
     "basis_url": "https://huggingface.co/blog/nvidia/how-to-use-nvidia-warp-and-mjwarp"
   },
-  "analyzed_at": "2026-09-25T04:51:35.249946+00:00"
+  "analyzed_at": "2026-09-25T13:15:30.850317+00:00"
 }
