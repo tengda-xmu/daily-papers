@@ -8,9 +8,9 @@ $pythonPath = (Get-Command python -ErrorAction Stop).Source
 $scriptPath = Join-Path $repoRoot 'tools\run_daily_update.ps1'
 $arguments = '-NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File "' + $scriptPath + '" -PythonPath "' + $pythonPath + '"'
 $action = New-ScheduledTaskAction -Execute (Join-Path $PSHOME 'powershell.exe') -Argument $arguments -WorkingDirectory $repoRoot
-$triggers = @('06:00', '06:17', '06:37', '07:17') | ForEach-Object { New-ScheduledTaskTrigger -Daily -At $_ }
+$triggers = @('21:00', '21:17', '21:37', '22:17') | ForEach-Object { New-ScheduledTaskTrigger -Daily -At $_ }
 $principal = New-ScheduledTaskPrincipal -UserId ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) -LogonType Interactive -RunLevel Limited
 $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -ExecutionTimeLimit (New-TimeSpan -Minutes 5) -MultipleInstances IgnoreNew -RestartCount 2 -RestartInterval (New-TimeSpan -Minutes 5) -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
 $settings.Enabled = [bool]$Enable
-$task = New-ScheduledTask -Action $action -Trigger $triggers -Principal $principal -Settings $settings -Description 'Trigger the missing 06:00 Beijing paper update through authenticated GitHub CLI. Skip if updated today or a run is active; cloud scheduling remains enabled.'
+$task = New-ScheduledTask -Action $action -Trigger $triggers -Principal $principal -Settings $settings -Description 'Trigger the missing 21:00 Beijing paper update through authenticated GitHub CLI. Skip if updated today or a run is active; cloud scheduling remains enabled.'
 Register-ScheduledTask -TaskName 'DailyPapers-MorningUpdate' -InputObject $task -Force | Select-Object TaskName,State

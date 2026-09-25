@@ -8,34 +8,38 @@ import yaml
 
 from tools.daily_schedule import dispatch_if_needed, update_needed, workflow_gate
 
-NOW = datetime.fromisoformat('2026-09-25T06:20:00+08:00')
+NOW = datetime.fromisoformat('2026-09-25T21:20:00+08:00')
 
 
-def edition(timestamp='2026-09-24T22:02:00Z'):
+def edition(timestamp='2026-09-25T13:02:00Z'):
     return {'generated_at': timestamp, 'core': [{'id': '111111111111'}], 'extended': []}
 
 
-def test_beijing_morning_boundary_and_manual_updates():
-    assert update_needed({}, datetime.fromisoformat('2026-09-24T21:59:59Z')) == (False, 'before_morning_update')
-    assert update_needed(edition('2026-09-24T21:59:00Z'), NOW)[0]
+def test_beijing_evening_boundary_and_manual_updates():
+    assert update_needed({}, datetime.fromisoformat('2026-09-25T12:59:59Z')) == (False, 'before_scheduled_update')
+    assert update_needed({}, datetime.fromisoformat('2026-09-25T13:00:00Z')) == (True, 'scheduled_update_missing')
+    assert update_needed(edition('2026-09-25T06:30:00+08:00'), NOW)[0]
+    assert update_needed(edition('2026-09-25T12:59:00Z'), NOW)[0]
     assert update_needed(edition(), NOW) == (False, 'already_updated_today')
     assert workflow_gate(edition(), 'schedule', now=NOW)[0] is False
     assert workflow_gate(edition(), 'workflow_dispatch', scheduled_check=True, now=NOW)[0] is False
     assert workflow_gate(edition(), 'workflow_dispatch', now=NOW) == (True, 'manual_update')
-    tomorrow = datetime.fromisoformat('2026-09-26T06:00:00+08:00')
+    tomorrow = datetime.fromisoformat('2026-09-26T21:00:00+08:00')
     assert update_needed(edition(), tomorrow)[0]
 
 
-def test_no_new_check_satisfies_morning_gate_without_new_batch():
-    value = edition('2026-09-23T22:00:00Z')
-    value['latest_update'] = {'outcome': 'no_new', 'checked_at': '2026-09-25T06:10:00+08:00'}
+def test_no_new_check_satisfies_evening_gate_without_new_batch():
+    value = edition('2026-09-24T13:00:00Z')
+    value['latest_update'] = {'outcome': 'no_new', 'checked_at': '2026-09-25T21:10:00+08:00'}
     assert update_needed(value, NOW) == (False, 'already_checked_today')
     assert workflow_gate(value, 'workflow_dispatch', now=NOW) == (True, 'manual_update')
+    value['latest_update']['checked_at'] = '2026-09-25T20:59:59+08:00'
+    assert update_needed(value, NOW)[0]
 
 
 @pytest.mark.parametrize('payload', [
-    {}, {'generated_at': 'invalid'}, edition('2026-09-25T12:00:00Z'),
-    edition('2026-09-25T06:02:00'), {**edition(), 'core': []},
+    {}, {'generated_at': 'invalid'}, edition('2026-09-25T14:00:00Z'),
+    edition('2026-09-25T21:02:00'), {**edition(), 'core': []},
     {**edition(), 'extended': None}, None,
 ])
 def test_incomplete_invalid_or_future_data_cannot_skip_update(payload):
@@ -53,6 +57,14 @@ class Remote:
         if '/contents/' in path:
             return {'content': base64.b64encode(json.dumps(self.payload).encode()).decode()}
         return {'workflow_runs': self.runs}
+
+
+def test_local_dispatch_waits_until_evening_but_manual_updates_remain_available():
+    remote = Remote({})
+    before = datetime.fromisoformat('2026-09-25T20:59:59+08:00')
+    assert dispatch_if_needed(remote, before)['state'] == 'before_scheduled_update'
+    assert not remote.calls
+    assert workflow_gate({}, 'workflow_dispatch', now=before) == (True, 'manual_update')
 
 
 def test_current_edition_skips_without_dispatch_and_active_runs_are_respected():
@@ -102,7 +114,7 @@ def test_dispatch_failure_is_not_blindly_retried():
 def test_workflow_serializes_checks_and_uses_current_main():
     root = Path(__file__).resolve().parents[1]
     workflow = yaml.load((root / '.github/workflows/daily.yml').read_text(encoding='utf-8'), Loader=yaml.BaseLoader)
-    assert [entry['cron'] for entry in workflow['on']['schedule']] == ['0 22 * * *', '17,37 22 * * *', '17 23 * * *']
+    assert [entry['cron'] for entry in workflow['on']['schedule']] == ['0 13 * * *', '17,37 13 * * *', '17 14 * * *']
     assert workflow['concurrency']['cancel-in-progress'] == 'false'
     assert workflow['jobs']['update']['needs'] == 'check'
     assert "needed == 'true'" in workflow['jobs']['update']['if']

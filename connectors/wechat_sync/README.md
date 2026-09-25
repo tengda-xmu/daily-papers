@@ -1,7 +1,7 @@
 # 微信公众号本机同步
 
 本机 WeRSS 管理订阅，微信扫码会话只留在电脑；每日把文章元数据和采集状态同步到
-`connector-data`，GitHub Actions 06:00 读取。无需把本机服务暴露到公网。
+`connector-data`，GitHub Actions 21:00 读取。无需把本机服务暴露到公网。
 
 ## 手动添加公众号
 
@@ -28,7 +28,7 @@
 微信后台跨账号列表持续返回 `200013`，已有[上游维护者报告核心接口关闭](https://github.com/wechat-article/wechat-article-exporter/issues/200)。
 当前默认 `article_mode=public_index` 停用这条受限路径，不再把“等待下次重试”当作解决办法。
 
-- 每日 05:35 轮换最多 3 次搜狗微信公开搜索，请求间隔至少 30 秒，缓存 24 小时；重复执行共享当天预算。
+- 每日 20:35 轮换最多 3 次搜狗微信公开搜索，请求间隔至少 30 秒，缓存 24 小时；重复执行共享当天预算。
 - 根据已订阅账号名称及真实发布时间筛选近 30 天结果。公开账号标签未经独立身份核验，索引覆盖不等于全部订阅历史。
 - 仅保留标题、来源、短检索片段和稳定的公开检索入口，不自动跟随需验证的 `/link` 跳转，不声称取得原文。
 - 遇到验证码暂停公开请求至少 24 小时，仍可使用有效缓存；不更换网络或绕过验证。
@@ -50,7 +50,7 @@
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/start_wechat.ps1
 # 在 WeRSS 管理页面扫码、添加公众号后，手动采集并同步：
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/sync_wechat.ps1
-# 创建每日 05:35 任务：
+# 创建每日 20:35 任务：
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/schedule_wechat.ps1 -Enable
 ```
 
@@ -81,7 +81,7 @@ Windows 任务运行时电脑需要开机并登录。晚间账号发现使用本
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/discover_wechat.ps1
-# 重新注册/启用早间同步及晚间发现两个任务：
+# 重新注册/启用晚间同步及订阅发现两个任务：
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/schedule_wechat.ps1 -Enable
 ```
 
@@ -91,8 +91,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/schedule_wechat.ps1 -E
 《航空学报》的官方微信入口可见[期刊官网](https://hkxb.buaa.edu.cn/)，当前搜索名称为“航空学报CJA”。
 
 新增订阅通过本机 WeRSS 的 `fetch_articles=false` 扩展参数延迟首次采集，避免批量建号
-立即触发受限文章请求。每日 05:35 公开索引按当前订阅目录筛选，
-06:00 云端日报读取最新已导出的内容。晚间新增的订阅目录在下次网站更新后可见。
+立即触发受限文章请求。每日 20:35 公开索引按当前订阅目录筛选，
+21:00 云端日报读取最新已导出的内容。晚间新增的订阅目录在下次网站更新后可见。
 
 `data/inbox/wechat.json` 仅允许标题、公众号名、短摘要、发布日期、原文或公开检索链接及对应类型标记，
 `wechat-status.json` 仅允许采集时间、状态、订阅名称及是否授权。

@@ -1,5 +1,5 @@
 name: Daily papers
-run-name: ${{ inputs.scheduled_check && format('Morning check {0}', inputs.request_id) || inputs.request_id && format('Manual papers {0}', inputs.request_id) || 'Daily papers' }}
+run-name: ${{ inputs.scheduled_check && format('Evening check {0}', inputs.request_id) || inputs.request_id && format('Manual papers {0}', inputs.request_id) || 'Daily papers' }}
 on:
   workflow_dispatch:
     inputs:
@@ -12,13 +12,13 @@ on:
         type: boolean
         default: false
       scheduled_check:
-        description: Only update when today's morning edition is missing
+        description: Only update when today's evening edition is missing
         type: boolean
         default: false
   schedule:
-    - cron: "0 22 * * *" # 06:00 Asia/Shanghai (UTC)
-    - cron: "17,37 22 * * *" # 06:17 / 06:37 catch-up, away from the hourly peak
-    - cron: "17 23 * * *" # 07:17 final morning catch-up
+    - cron: "0 13 * * *" # 21:00 Asia/Shanghai (UTC)
+    - cron: "17,37 13 * * *" # 21:17 / 21:37 catch-up, away from the hourly peak
+    - cron: "17 14 * * *" # 22:17 final evening catch-up
 permissions:
   contents: write
   pages: write
@@ -36,7 +36,7 @@ jobs:
         with: {ref: main} # Queued checks must see the preceding run's committed data.
       - uses: actions/setup-python@v5
         with: {python-version: "3.11"}
-      - name: Check today's morning edition
+      - name: Check today's evening edition
         id: freshness
         env:
           SCHEDULED_CHECK: ${{ inputs.scheduled_check }}

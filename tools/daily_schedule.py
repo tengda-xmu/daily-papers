@@ -1,4 +1,4 @@
-"""Idempotent morning updates; the workflow gate uses only the standard library."""
+"""Idempotent scheduled updates; the workflow gate uses only the standard library."""
 from __future__ import annotations
 
 import argparse
@@ -17,9 +17,9 @@ ACTIVE = {'queued', 'in_progress', 'waiting', 'pending', 'requested'}
 
 def update_needed(payload, now=None):
     now = (now or datetime.now(timezone.utc)).astimezone(BEIJING)
-    start = now.replace(hour=6, minute=0, second=0, microsecond=0)
+    start = now.replace(hour=21, minute=0, second=0, microsecond=0)
     if now < start:
-        return False, 'before_morning_update'
+        return False, 'before_scheduled_update'
     check = (payload or {}).get('latest_update') or {}
     try:
         checked_at = datetime.fromisoformat(check.get('checked_at', '').replace('Z', '+00:00'))
@@ -37,11 +37,11 @@ def update_needed(payload, now=None):
             return False, 'already_updated_today'
     except (KeyError, TypeError, ValueError, AttributeError):
         pass
-    return True, 'morning_update_missing'
+    return True, 'scheduled_update_missing'
 
 
 def workflow_gate(payload, event, scheduled_check=False, now=None):
-    # Explicit manual updates remain available even after today's morning run.
+    # Explicit manual updates remain available even after today's scheduled run.
     if event != 'schedule' and not scheduled_check:
         return True, 'manual_update'
     return update_needed(payload, now)
@@ -52,8 +52,8 @@ def dispatch_if_needed(remote, now=None):
     from connectors.codex_bridge.daily_update import API, REPO
 
     now = now or datetime.now(timezone.utc)
-    if now.astimezone(BEIJING).hour < 6:
-        return {'state': 'before_morning_update'}
+    if now.astimezone(BEIJING).hour < 21:
+        return {'state': 'before_scheduled_update'}
     # The daily workflow commits data only after deployment, so a current record
     # also confirms that a completed update has passed the publication step.
     content = remote('GET', f'repos/{REPO}/contents/data/daily.json?ref=main')
@@ -78,7 +78,7 @@ def dispatch_if_needed(remote, now=None):
     if any(run.get('status') in ACTIVE for run in runs.get('workflow_runs', [])):
         return {'state': 'update_already_running'}
     day = now.astimezone(BEIJING).date().isoformat()
-    request_id = str(uuid.uuid5(uuid.NAMESPACE_URL, f'{REPO}/morning/{day}'))
+    request_id = str(uuid.uuid5(uuid.NAMESPACE_URL, f'{REPO}/evening/{day}'))
     response = remote('POST', API + '/workflows/daily.yml/dispatches', {
         'ref': 'main', 'return_run_details': True,
         'inputs': {'request_id': request_id, 'scheduled_check': True, 'send_digest': False}})
