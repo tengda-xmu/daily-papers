@@ -1,0 +1,33 @@
+{
+  "paper_id": "fce3019b88c7",
+  "fingerprint": "f2dabebd71b52dfcdcfd1fd64bfbd908c3c7a676573c4559bdf5106b2616ff79",
+  "analysis": {
+    "title_zh": "生成式人工智能设计功能性硫醇化结构域以重编程非核糖体肽合成酶",
+    "summary": "【摘要级解读】研究关注生成式模型能否设计依赖瞬态、情境特异性界面的非核糖体肽合成酶结构域。作者结合三种预训练模型、设计—构建—测试—学习循环及数据引导筛选，生成76个全新硫醇化结构域，并在体内测试578个重组变体。摘要报告设计结构域支持多类架构产物形成，产量最高约为天然结构域对照的3倍；一个代表性设计还表现出热稳定性改善。结果支持情境适配的蛋白质生成设计，但不足以判断整体成功率。[摘要]",
+    "recommendation": "建议重点阅读其生成设计与实验反馈结合的方法，以及跨装配线架构的功能验证；与给定generative_design标签直接相关，但不能将蛋白质设计结果直接视为工程结构可靠性证据。[摘要]",
+    "deep_read": {
+      "problem": "【论文摘要】核心问题是生成式模型能否工程化改造动态巨型合成酶，而不仅是设计孤立蛋白。摘要强调其活性依赖“transient, context-specific domain interfaces”。非核糖体肽合成酶是研究载体，难点在于结构域必须适配不同相互作用情境。[摘要]",
+      "method": "【论文摘要】作者整合ESM3、ProteinMPNN和EvoDiff，结合设计—构建—测试—学习循环及数据引导优先排序，生成76个全新硫醇化结构域。在体内构建并测试578个重组变体，覆盖最小、全长和混合装配线；摘要未说明各模型的具体分工。[摘要]",
+      "innovation": "【解读】值得关注的创新定位，是把生成设计用于具有动态界面约束的生物合成装配线重编程，而非仅优化单个结构域的静态性质。摘要以“context-conditioned engineering”概括这一方向，但未提供与既有方法的系统比较，不能据此确认首创性。[摘要]",
+      "findings": "【论文摘要】设计结构域支持跨架构产物形成，并使重组连接处的混合体具备催化活性；产量最高约为天然结构域对照的3倍。一个代表性设计的熔解温度提高12 °C。分子动力学提示整体稳定性保持，而状态依赖的结构域间接触网络发生重塑。[摘要]",
+      "limitations": "【解读：证据边界】摘要未报告功能设计所占比例、产量分布、重复次数或统计不确定性，因此最高增益不能代表平均表现。热稳定性结果仅对应一个代表性设计。上述属于当前材料的信息缺口，并非作者明确承认的局限；仅凭摘要也无法判断模拟与功能变化的因果关系。[摘要]",
+      "connection": "【解读】与给定generative_design标签的联系直接：生成模型提出候选，实验结果用于学习和优先排序。对结构设计与可靠性研究，可借鉴情境适配及多层次验证思路；但研究对象是生物合成酶，摘要没有智能运维、工程结构失效概率或服役可靠性的直接证据。[摘要]",
+      "next_steps": "【建议】后续阅读全文时，应优先核查候选筛选规则、不同模型的贡献、失败设计及跨架构性能分布，再评估方法的可复用性。若迁移到工程设计，可研究条件化生成与闭环验证的结合，但需重新定义物理约束和可靠性指标；这属于研究建议，而非作者已验证的成果。[摘要]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://pubmed.ncbi.nlm.nih.gov/42773138/"
+    ],
+    "analyzed_at": "2026-09-25T01:58:10.589640+00:00",
+    "llm_model": "gpt-6-astra"
+  },
+  "evaluation": {
+    "direction_fit": true,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "方向判断以本轮给定的generative_design标签为准：摘要明确结合预训练生成模型与实验学习循环，并报告多架构功能验证和产量改善，足以支持重点阅读；这不等于已证明其适用于智能运维或工程结构可靠性，也不足以评价全文方法质量。[摘要]",
+    "evidence": "Here we integrate pretrained generative models (ESM3, ProteinMPNN and EvoDiff) with design-build-test-learn cycles and data-guided prioritization to generate 76 de novo thiolation (T) domains."
+  }
+}

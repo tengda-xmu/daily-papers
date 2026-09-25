@@ -38,7 +38,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Large language models and generative protein design promise to accelerate biotechnology, but it remains unclear whether they can engineer dynamic megasynth(et)ases whose activity depends on transient, context-specific domain interfaces. Non-ribosomal peptide synthetases (NRPSs) exemplify this challenge and produce many clinically used therapeutics. Here we integrate pretrained generative models (ESM3, ProteinMPNN and EvoDiff) with design-build-test-learn cycles and data-guided prioritization to generate 76 de novo thiolation (T) domains. We build and test 578 recombinant NRPS variants in vivo…",
+      "summary": "【摘要级解读】研究关注生成式模型能否设计依赖瞬态、情境特异性界面的非核糖体肽合成酶结构域。作者结合三种预训练模型、设计—构建—测试—学习循环及数据引导筛选，生成76个全新硫醇化结构域，并在体内测试578个重组变体。摘要报告设计结构域支持多类架构产物形成，产量最高约为天然结构域对照的3倍；一个代表性设计还表现出热稳定性改善。结果支持情境适配的蛋白质生成设计，但不足以判断整体成功率。[摘要]",
       "raw_metadata": {
         "provider": "PubMed",
         "pmid": "42773138",
@@ -165,11 +165,27 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议重点阅读其生成设计与实验反馈结合的方法，以及跨装配线架构的功能验证；与给定generative_design标签直接相关，但不能将蛋白质设计结果直接视为工程结构可靠性证据。[摘要]",
+      "deep_read": {
+        "problem": "【论文摘要】核心问题是生成式模型能否工程化改造动态巨型合成酶，而不仅是设计孤立蛋白。摘要强调其活性依赖“transient, context-specific domain interfaces”。非核糖体肽合成酶是研究载体，难点在于结构域必须适配不同相互作用情境。[摘要]",
+        "method": "【论文摘要】作者整合ESM3、ProteinMPNN和EvoDiff，结合设计—构建—测试—学习循环及数据引导优先排序，生成76个全新硫醇化结构域。在体内构建并测试578个重组变体，覆盖最小、全长和混合装配线；摘要未说明各模型的具体分工。[摘要]",
+        "innovation": "【解读】值得关注的创新定位，是把生成设计用于具有动态界面约束的生物合成装配线重编程，而非仅优化单个结构域的静态性质。摘要以“context-conditioned engineering”概括这一方向，但未提供与既有方法的系统比较，不能据此确认首创性。[摘要]",
+        "findings": "【论文摘要】设计结构域支持跨架构产物形成，并使重组连接处的混合体具备催化活性；产量最高约为天然结构域对照的3倍。一个代表性设计的熔解温度提高12 °C。分子动力学提示整体稳定性保持，而状态依赖的结构域间接触网络发生重塑。[摘要]",
+        "limitations": "【解读：证据边界】摘要未报告功能设计所占比例、产量分布、重复次数或统计不确定性，因此最高增益不能代表平均表现。热稳定性结果仅对应一个代表性设计。上述属于当前材料的信息缺口，并非作者明确承认的局限；仅凭摘要也无法判断模拟与功能变化的因果关系。[摘要]",
+        "connection": "【解读】与给定generative_design标签的联系直接：生成模型提出候选，实验结果用于学习和优先排序。对结构设计与可靠性研究，可借鉴情境适配及多层次验证思路；但研究对象是生物合成酶，摘要没有智能运维、工程结构失效概率或服役可靠性的直接证据。[摘要]",
+        "next_steps": "【建议】后续阅读全文时，应优先核查候选筛选规则、不同模型的贡献、失败设计及跨架构性能分布，再评估方法的可复用性。若迁移到工程设计，可研究条件化生成与闭环验证的结合，但需重新定义物理约束和可靠性指标；这属于研究建议，而非作者已验证的成果。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "生成式人工智能设计功能性硫醇化结构域以重编程非核糖体肽合成酶",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/42773138/"
+      ],
+      "analyzed_at": "2026-09-25T01:58:10.589640+00:00",
+      "llm_model": "gpt-6-astra"
     },
     {
       "source": "Semantic Scholar",
@@ -195,7 +211,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "Triply periodic minimal surface (TPMS) porous structures show considerable promise for lightweight load‐bearing implants. To address the fatigue reliability of radially graded gyroid‐type TPMS Ti‐6Al‐4V scaffolds under unavoidable uncertainties in loading and material properties, this study proposes an efficient reliability analysis framework by integrating finite element (FE) analysis with an active learning–based Gaussian process regression (GPR‐AL) surrogate model. Firstly, five bone‐mimetic cylindrical scaffolds with porosities ranging from 60% to 80% are designed and analyzed under displa…",
+      "summary": "本文面向承载植入物，研究载荷与材料性能不确定性下，径向梯度陀螺型三周期极小曲面钛合金支架的疲劳可靠性。作者将有限元、主动学习高斯过程回归、蒙特卡洛模拟及Basquin模型串联，并以应力场第95百分位数表征高应力。[摘要] 解读：重点在于以代理模型降低可靠性分析成本，服务孔隙率选择；摘要未提供误差、加速比或实验验证数据，不能据此判断工程预测精度。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "57fb67cb40a0665d6a228f2e8968ec351d2aacc9",
@@ -312,11 +328,27 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议重点阅读其主动学习采样、应力指标及不确定性传播之间的衔接，直接服务疲劳可靠性与结构设计研究；但摘要未体现生成式设计算法，计算效率优势也尚缺定量证据。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是载荷和材料性能存在不可避免的不确定性时，如何分析径向梯度陀螺型TPMS Ti‐6Al‐4V支架的疲劳可靠性。摘要以“lightweight load‐bearing implants”界定应用背景。[摘要] 解读：关注点是随机条件下的寿命与可靠性，而非仅比较确定性压缩响应。",
+        "method": "作者分析五种孔隙率为60%至80%的仿骨圆柱支架，采用位移控制压缩；随后以有限元与主动学习高斯过程回归构建代理，用RMSE作误差指标，并按最大最小距离准则在高不确定性区域补点。再结合蒙特卡洛模拟传播不确定性，通过Basquin模型评价疲劳寿命。[摘要]",
+        "innovation": "摘要明确提出将有限元与“GPR‐AL”代理模型整合，并采用von Mises应力场第95百分位数作为高应力指标，以改善网格稳健性。[摘要] 解读：值得关注的是应力表征与自适应代理分析的组合；缺少既有方法对照，不能认定各组成技术或整体框架具有首创性。",
+        "findings": "摘要称该方法为承载TPMS植入物的可靠性导向设计和孔隙率选择提供“computationally efficient tool”。[摘要] 这是作者报告的定性成果，而非可核验的加速倍数。摘要没有给出不同孔隙率的寿命排序、失效概率或最优取值，因此不能据此直接提出具体结构参数。",
+        "limitations": "证据边界在于摘要未交代随机变量的分布与相关性、疲劳失效阈值、Basquin参数来源，以及代理模型的独立验证结果。[摘要] 这些是当前资料缺项，不等于论文未开展相关工作。解读：在取得正文前，尚无法判断预测精度、尾部失效概率可信度及实际植入工况适用性。",
+        "connection": "解读：该研究与疲劳可靠性方向直接契合，也将结构设计中的孔隙率选择与不确定性分析连接起来；摘要明确使用“reliability‐oriented design”。[摘要] 对智能运维的潜在联系是快速寿命评估，但摘要没有在线监测、状态更新或维护决策内容，也未展示生成式设计流程。",
+        "next_steps": "建议：后续阅读正文时，优先核查主动学习停止条件、有限元调用次数、代理误差与失效概率估计误差的关系，并确认应力百分位指标如何进入疲劳计算。若尝试迁移，应设置相同计算预算的基线比较，检验孔隙率推荐是否稳定；这些属于研究建议，并非摘要已证明的结论。"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "考虑运行条件不确定性的三周期极小曲面结构可靠性分析",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.semanticscholar.org/paper/57fb67cb40a0665d6a228f2e8968ec351d2aacc9"
+      ],
+      "analyzed_at": "2026-09-25T01:58:59.183955+00:00",
+      "llm_model": "gpt-6-astra"
     },
     {
       "source": "Crossref",
@@ -349,7 +381,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "The evolution of soft robots into embodied intelligent systems relies fundamentally on precise proprioception. However, a universal solution for capturing continuous deformations during diverse interactions, particularly in spatially confined interventional scenarios, remains lacking. Here, we introduce a deep learning–enabled versatile shape perception method based on a single-ended multimode fiber (MMF). By leveraging the intrinsic integration advantages of optics, our minimalist reflective architecture physically eliminates the dependence on complex demodulation units and distal devices. Fu…",
+      "summary": "软体机器人需要在复杂交互中准确感知自身形变，尤其面临狭窄介入空间的集成约束。本文提出单端多模光纤与深度学习结合的形状感知方法，以反射式架构减少硬件依赖，并用可重构神经解码器从光学散斑中提取形状信息。摘要报告了软夹爪状态确认、仿生灵巧手连续形状跟踪和软体手术机器人三维重建三类应用。作者将其定位为数字孪生闭环控制的基础，但摘要未报告闭环控制验证。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "American Association for the Advancement of Science (AAAS)",
@@ -384,11 +416,27 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为柔性结构感知与数字孪生的交叉方法论文重点阅读，而非直接作为智能运维成果引用；其单端光纤架构与多任务神经解码具有明确的方法参考价值。[摘要]",
+      "deep_read": {
+        "problem": "研究针对软体机器人连续形变难以被通用感知方案覆盖的问题，特别关注多样交互和空间受限的介入场景。摘要以“precise proprioception”强调精确本体感知的重要性。解读：核心需求是兼顾形变表征、任务多样性与传感集成，而非故障诊断。[摘要]",
+        "method": "方法使用单端多模光纤的反射式架构，将光学散斑场视为编码高维形状信息的数据流，再由可重构神经解码器输出不同任务所需的感知结果。作者称该架构消除了对复杂解调单元和远端器件的依赖；摘要未披露网络结构、训练流程和标定细节。[摘要]",
+        "innovation": "摘要呈现的方法特色是用同一物理通道配合可重构解码器支持多种感知模式，并以计算增强硬件适应性。原文表述为“breaking hardware adaptability limits via computation”。解读：创新关注点在软硬件协同，但缺少相关工作对比，不能据此确认首创性。[摘要]",
+        "findings": "摘要报告：软夹爪离散状态确认准确率超过99%，仿生灵巧手连续形状跟踪的空间分辨率约提升5倍，软体手术机器人三维形态重建的IoU超过0.93。这些结果覆盖三种感知任务，但摘要未说明样本规模、分辨率比较基准或统计不确定性。[摘要]",
+        "limitations": "目前仅有摘要，无法判断跨机器人迁移、环境扰动、光纤长期使用及模型失配对性能的影响；这些属于证据缺口，不是已证实的缺陷。摘要称工作为闭环控制奠定基础，不能等同于已完成控制验证，也不足以认定其具备临床部署或长期运维能力。[摘要]",
+        "connection": "解读：对结构设计而言，单端、少远端器件的感知架构可启发狭窄柔性结构的传感集成；对智能运维和可靠性研究而言，形状信息可能成为状态监测输入。但摘要只验证形状感知，没有故障识别、寿命预测或可靠性量化证据，与给定方向属于间接关联。[摘要]",
+        "next_steps": "建议：后续阅读全文时优先核查数据划分、任务间是否需要重新训练、标定成本及推理时延，再确认分辨率提升的比较条件。若迁移至智能运维，可另行设计重复加载、环境变化与异常形变试验，评估长期稳定性和异常检出能力；这些不是作者已报告的结果。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "基于单端多模光纤与深度学习的软体机器人多功能形状感知",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1126/sciadv.aef6263"
+      ],
+      "analyzed_at": "2026-09-25T01:59:47.425349+00:00",
+      "llm_model": "gpt-6-astra"
     },
     {
       "source": "OpenAlex",
@@ -416,7 +464,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Artificial intelligence is transforming materials discovery from trial-and-error experimentation towards data driven design. Here we present a thermoelectric inverse-design (TEID) framework that integrates the MatHub-3d database, a generative model, and hierarchical screening across low-, medium-, and high-accuracy calculations. Trained on MatHub-3d, a crystal diffusion variational autoencoder generated 6400 candidate structures as the starting point of the workflow. Deduplication and stoichiometric/elemental constraints reduced this set to 1461 compositions. At the low-accuracy stage, pretrai…",
+      "summary": "本文提出热电逆向设计框架，将材料数据库、晶体生成模型与多精度计算筛选串联，从6400个候选结构逐步筛得四种此前未报道的动态稳定化合物。摘要报告，其中两种材料在700 K下的n型热电优值ZT分别达到1.59和2.24。[摘要] 解读：其阅读价值在于生成与物理计算验证的衔接，而非仅扩大候选数量；以上属于计算结果，不能视为实验验证。本导读仅依据元数据与摘要。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7204839608",
@@ -454,11 +502,27 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议优先阅读其生成模型与分层物理筛选的接口设计，尤其关注候选淘汰规则及最终输运计算，适合作为生成式材料设计的方法案例；但不能据摘要认定其适用于工程运维或已获实验验证。[摘要；解读]",
+      "deep_read": {
+        "problem": "论文聚焦如何把材料发现从试错转向数据驱动设计，并以热电材料为对象组织候选生成和性能筛选。摘要以“thermoelectric inverse-design (TEID) framework”界定研究方案。[摘要] 解读：核心问题是如何把生成的晶体候选转化为具有物理计算支撑的材料线索。",
+        "method": "方法将MatHub-3d数据库、晶体扩散变分自编码器和低、中、高精度筛选串联。生成6400个结构后，依次施加去重与组成约束、机器学习筛选、密度泛函理论计算及声子和输运计算。[摘要] 解读：各阶段逐步收缩候选空间，但摘要没有提供完整阈值与计算参数。",
+        "innovation": "摘要明确的方法特点是将生成模型与“hierarchical screening”结合，在同一流程中连接结构生成、稳定性判断和热电性能计算。[摘要] 解读：可重点考察这种整合方式的贡献；现有资料没有同类方法比较或消融结果，不能认定各模块本身原创，也不能断言整体优于已有方案。",
+        "findings": "摘要报告四种此前未报道的动态稳定化合物，晶格热导率为0.67–1.72 W m⁻¹ K⁻¹；其中Na₃CaP₃与Si₂Cu₃AgS₆在700 K下的n型ZT分别为1.59和2.24。[摘要] 这些性能来自计算，电输运计算纳入了形变势与极性光学声子散射。",
+        "limitations": "摘要未交代训练数据划分、生成模型基准比较、筛选阈值敏感性及预测误差，也未报告材料合成或性能测量。[摘要] 解读：这些是当前资料的证据缺口，不等于全文必然缺失；动态稳定及热力学筛选结果亦不足以单独证明材料可合成或服役可靠。",
+        "connection": "解读：与给定生成式设计标签的联系直接，表现为先生成晶体结构，再以物理计算筛选。[摘要] 对结构设计，其可迁移启发是把生成模型与约束验证分层衔接；对可靠性研究，可借鉴逐级核验思路，但晶体稳定性不等同于工程可靠性，摘要也未涉及智能运维任务。",
+        "next_steps": "建议：后续取得全文时，优先核对生成目标如何编码、各筛选阶段的阈值与计算成本，再检查ZT对应的载流子条件及输运假设；若迁移到结构设计，可设置等预算基线比较分层筛选收益。这些是阅读与研究建议，并非作者已完成的验证，摘要尚不足以回答。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "功能材料的逆向设计：以热电材料为例",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s41524-026-02307-3"
+      ],
+      "analyzed_at": "2026-09-25T02:00:36.052480+00:00",
+      "llm_model": "gpt-6-astra"
     },
     {
       "source": "OpenAlex",
@@ -482,7 +546,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "ABSTRACT To address empirical parameter dependence, high test costs, and the accuracy‐applicability trade‐off in traditional fatigue cumulative damage models, this paper proposes a novel fatigue life prediction method integrating adaptive exponential interpolation data enhancement, an improved nonlinear damage model, and machine learning. Based on limited test data, virtual loads are constructed to boost stress‐domain sampling density at no extra cost. An improved AEVILD–Manson model with reliability criterion and convergence proof is established via Monte Carlo correction. Nine machine learni…",
+      "summary": "该研究针对传统疲劳累积损伤模型依赖经验参数、试验成本高及精度与适用性难兼顾的问题，将自适应指数插值数据增强、改进非线性损伤模型与机器学习结合。摘要报告，方法经12个材料数据集和B750L钢多级疲劳试验验证，在85%可靠度下绝对误差小于2.5%[摘要]。解读：其重点是小样本条件下的数据扩充与载荷交互校准，适合疲劳可靠性研究者关注；本文仅作摘要级解读，误差口径与泛化能力仍需全文核验。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7204767153",
@@ -532,11 +596,27 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议重点阅读其虚拟载荷构造、可靠度准则及载荷交互系数校准方法，与疲劳可靠性和结构设计方向直接相关；摘要明确提出“small‐sample fatigue assessment”，但尚不能据此认定其具有生成式设计能力[摘要]。",
+      "deep_read": {
+        "problem": "论文针对疲劳累积损伤预测中的经验参数依赖、试验成本与精度—适用性权衡，摘要明确提及“high test costs”[摘要]。解读：核心问题是如何利用有限试验数据开展可靠的寿命评估，而非单纯增加预测模型复杂度；具体载荷谱范围与使用边界尚未披露。",
+        "method": "方法结合自适应指数插值、改进AEVILD–Manson模型与机器学习，通过虚拟载荷加密应力域采样，并以蒙特卡洛修正建立损伤模型。摘要称采用“Nine machine learning algorithms”自适应校准载荷交互系数[摘要]，但未说明各算法的组织方式。",
+        "innovation": "摘要将方案描述为“a novel fatigue life prediction method”，并将可靠度准则和收敛证明纳入改进模型[摘要]。解读：值得核查的创新点是数据增强、损伤建模与参数校准之间如何衔接；缺少公式与相关工作比较，尚不能确认各环节的独立原创性。",
+        "findings": "摘要报告经12个材料数据集及B750L钢多级疲劳试验验证，在85%可靠度下绝对误差小于2.5%；LSTM集成模型R²为0.9668、RMSE为0.0536，并称“outperforming traditional benchmarks”[摘要]。基准详情及指标尺度尚不明确。",
+        "limitations": "摘要使用“Based on limited test data”描述数据条件，却未给出原始样本量、增强比例、训练测试划分和消融结果[摘要]。解读：目前无法判断插值样本与测试样本是否严格隔离，也无法分辨各模块的独立贡献；这些属于证据缺口，而非已确认的方法缺陷。",
+        "connection": "摘要将应用指向“low‐cost, high‐reliability structural design”[摘要]。解读：与疲劳可靠性和结构设计直接契合，也可能为智能运维中的寿命评估提供模型基础；但未涉及在线监测、维护决策或设计方案生成，不能将这些潜在联系表述为论文成果。",
+        "next_steps": "建议获取全文后，优先核查“reliability criterion and convergence proof”的定义、假设与证明范围[摘要]，再检查增强过程是否仅使用训练数据。建议研究迁移时设置无增强、无校准及不同载荷谱对照，并评估区间覆盖率，以区分精度提升与可靠度收益。"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "融合自适应指数插值数据增强与机器学习的疲劳寿命预测方法",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1111/ffe.70436"
+      ],
+      "analyzed_at": "2026-09-25T02:01:23.105983+00:00",
+      "llm_model": "gpt-6-astra"
     }
   ],
   "extended": [
@@ -559,7 +639,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Discovering functional crystalline materials entails navigating an immense combinatorial design space. Although recent advances in generative artificial intelligence have enabled the sampling of chemically plausible compositions and structures, a fundamental challenge remains: the objective misalignment between the likelihood-based sampling in generative modelling and the targeted focus on underexplored regions where novel compounds reside. Here we introduce a reinforcement learning framework that guides latent denoising diffusion models in finding diverse and novel, yet thermodynamic…",
+      "summary": "晶体材料发现面临巨大组合空间，生成模型的似然采样目标又未必指向潜在新化合物所在的欠探索区域。作者提出强化学习框架，以组相对策略优化和可验证的多目标奖励引导潜空间去噪扩散模型，兼顾新颖性、热力学可行性与多样性，并开展性质引导设计。[摘要] 解读：论文值得关注的是生成目标与发现目标的对齐机制；但摘要没有量化结果，尚不能判断提升幅度和验证充分性。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -594,11 +674,27 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议重点阅读其奖励设计与性质引导机制：这些内容直接对应生成式设计中的多目标控制问题，但应在获取全文后核查性能比较及热力学可行性的验证依据。[摘要]",
+      "deep_read": {
+        "problem": "作者指出，晶体发现不仅受组合设计空间庞大所限，还存在生成采样与探索目标之间的“objective misalignment”：化学上合理的样本未必来自欠探索区域。[摘要] 解读：核心问题是如何把生成过程导向有发现价值的候选，而非仅提高常见结构的生成概率。",
+        "method": "框架以强化学习引导潜空间去噪扩散模型，结合“group-relative policy optimization”与可验证的多目标奖励，同时平衡创造性、稳定性和多样性。[摘要] 摘要未提供奖励公式、策略更新细节或验证器构成，因此目前只能概括方法组成，不能复现训练流程。",
+        "innovation": "摘要将方法表述为可控逆向设计的模块化基础，并强调处理“novelty–validity trade-off”。[摘要] 解读：值得考察的创新候选是把探索新颖性与有效性约束共同纳入生成引导，而非仅在生成后筛选；其相对已有工作的独特程度仍需全文与文献比较确认。",
+        "findings": "作者报告框架能够寻找多样、新颖且热力学可行的晶体，并展示性质引导设计的增强效果，在追求目标功能性质时保持“chemical validity”。[摘要] 这些属于摘要中的定性成果陈述；未给出成功率、性质改善幅度或对照结果，不能据此判定实际优势大小。",
+        "limitations": "当前只有摘要，没有全文。虽然作者使用“thermodynamically viable”描述候选晶体，但未说明热力学判据、计算层级或实验验证情况。[摘要] 解读：这是现有材料的证据边界，不等于论文自身缺陷；尤其不能把热力学可行性直接当作可合成性已获证实。",
+        "connection": "摘要明确面向“AI-driven inverse design”，与给定的生成式设计标签直接相关。[摘要] 解读：其多目标生成思路可启发结构设计中的性能与可行性协调，但晶体设计不等同于工程结构设计；摘要也未涉及故障诊断、维护决策或可靠性指标，不能宣称已验证这些用途。",
+        "next_steps": "建议获取全文后，优先核查“verifiable, multi-objective rewards”的计算依据、目标间权衡方式，以及新颖性和多样性的评价口径。[摘要] 若迁移至可靠性约束设计，建议另行定义失效概率与可制造性约束，并检验生成候选是否满足这些要求；这不是作者已报告的成果。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "通过强化学习引导生成模型发现多样且新颖的晶体",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s42256-026-01262-4"
+      ],
+      "analyzed_at": "2026-09-25T02:02:12.442245+00:00",
+      "llm_model": "gpt-6-astra"
     },
     {
       "source": "OpenAlex",
@@ -620,7 +716,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "ABSTRACT Predicting structural lifetime under complex loading remains a major challenge in computational mechanics, especially for high cycle fatigue in large scale systems such as aircraft, bridges, and wind turbines. This difficulty arises from the need to capture fatigue damage accumulation, crack initiation, crack growth across scales, and life prediction, making direct simulation over millions of load cycles computationally infeasible. To overcome this limitation, the presented work introduces a physics‐based machine learning () framework to accelerate fatigue life‐timescale homogenizatio…",
+      "summary": "针对高周疲劳逐循环计算成本过高的问题，论文提出物理约束机器学习框架，以两个模型分别预测完整循环历程中的损伤演化及循环块上的累积损伤。模型采用双前馈神经网络，并引入能量平衡、损伤演化和退化定律约束。摘要报告，相较传统增量疲劳分析，计算加速最高约2700倍，同时与参考解良好一致。本文仅作摘要级解读；具体误差、验证范围和工程适用边界仍需全文核查。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7207710948",
@@ -734,11 +830,27 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议重点阅读其循环块损伤预测机制与物理约束实现方式：这两点直接对应疲劳可靠性研究中的长寿命计算瓶颈。摘要报告“speed‐ups of up to approximately 2700 times”，但该最高加速结果的测试条件与精度代价尚待核查。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是如何避免高周疲劳寿命分析中数百万次循环的直接计算，同时描述损伤累积及相关跨尺度过程。摘要以“millions of load cycles”说明计算负担，并列举飞机、桥梁和风力机等应用背景；这些是问题背景，不能据此认定已完成相应工程验证。[摘要]",
+        "method": "方法包含两个预测层次：第一模型覆盖完整循环加载历程，第二模型在寿命尺度上估计循环块的累积损伤，并发展宏观与微观力学启发的退化机制。摘要明确采用“double feed‐forward neural networks”，结合能量平衡、损伤演化及退化定律约束，但未说明约束的具体施加方式。[摘要]",
+        "innovation": "解读：值得关注的方法特点是将物理约束与寿命尺度损伤预测结合，而非仅替代单次循环计算。摘要所称“blocks of load cycles”表明其以循环块为预测对象，试图绕开逐循环推进。现有资料不足以判断相对已有循环跳跃或均匀化方法的原创性边界。[摘要]",
+        "findings": "摘要报告模型能够复现不同加载历程和材料参数下的非线性损伤演化，并与参考解保持良好一致；速度提升“up to approximately 2700 times”属于最高约值，而非普遍性能保证。摘要未给出误差指标、样本规模及耗时统计口径，因此目前只能确认作者报告了这些结果。[摘要]",
+        "limitations": "证据局限：摘要虽使用“unseen materials and loading conditions”表述泛化目标或能力，但没有交代材料类别、加载边界及独立测试划分，也未说明参考解是否经过实验检验。这里列出的是摘要缺少的信息，不是已经证实的模型缺陷，更不能归为作者承认的局限。[摘要]",
+        "connection": "解读：该研究与疲劳可靠性的直接联系在于降低损伤历程及寿命评估的计算成本；若精度和适用范围得到验证，可考虑用于结构设计中的多方案比较。摘要以“lifetime assessment”为应用落点，但未展示失效概率分析、传感数据融合或在线更新，故智能运维联系仍属潜在迁移。[摘要]",
+        "next_steps": "建议：后续阅读全文时，优先核查循环块大小如何确定、物理约束是否严格满足，以及加速比较是否包含训练成本。围绕摘要所称“reference solutions”，还应确认参考解来源与误差评价方式；若开展迁移研究，可设计变幅加载与跨材料独立测试，再判断是否适合可靠性计算。[摘要]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "物理约束下机器学习加速的疲劳寿命时间尺度均匀化与循环损伤演化框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1002/nme.70394"
+      ],
+      "analyzed_at": "2026-09-25T02:03:00.455784+00:00",
+      "llm_model": "gpt-6-astra"
     },
     {
       "source": "Google Scholar",
@@ -761,7 +873,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "… the actual needs of fault diagnosis in variable speed operating conditions, we propose a VOC-LLM for industrial-grade variable speed operating condition fault diagnosis. Specifically, (1…",
+      "summary": "本文聚焦变速运行条件下的工业故障诊断，所提供摘要片段称提出“VOC-LLM”，以回应这一场景的实际需求。[摘要] 当前材料仅为截断摘要，未展示模型结构、适应机制、数据来源、实验设置或诊断结果。解读：研究主题与智能运维直接相关，但“面向工业级诊断”是任务定位，不能等同于已验证的工业部署能力。适合列入补充资料后的候选阅读清单，暂不足以支持重点推荐。",
       "raw_metadata": {
         "position": 4,
         "title": "An adaptive industrial large language model for mechanical fault diagnosis under variable operating conditions",
@@ -825,11 +937,27 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为智能运维方向的候选论文保留：摘要明确涉及变速故障诊断与VOC-LLM，但需补齐方法和验证证据后再决定是否重点阅读。[摘要]",
+      "deep_read": {
+        "problem": "摘要将问题定位于“fault diagnosis in variable speed operating conditions”，即变速运行条件下的故障诊断。[摘要] 解读：这里明确的是应用场景，而非具体技术难题；片段没有说明诊断对象、故障类别，以及变速如何影响现有方法，不能代作者补充问题成因。",
+        "method": "摘要明确表示“we propose a VOC-LLM”，并将其用于工业级变速工况故障诊断。[摘要] 但具体说明在“Specifically, (1”处截断，无法识别输入表示、模型组成、训练流程和输出形式；也不能仅凭名称认定采用了微调、检索增强或特定信号编码方案。",
+        "innovation": "当前片段只支持作者提出了名为VOC-LLM的方案，并未提供与既有方法的比较或创新机制说明。[摘要] 解读：将模型用于变速诊断可以视为研究切入点，但不足以证明方法新颖性；自适应设计是否存在实质技术贡献，仍需完整方法描述和相关工作对照。",
+        "findings": "可确认的信息是作者面向变速故障诊断需求提出方案，而非已展示诊断性能提升。[摘要] 片段没有提供实验结果、基线比较、误差分析或实际部署反馈，因此不能判断准确率、泛化能力、鲁棒性及计算效率，也不能将“industrial-grade”表述当作成熟度验证。",
+        "limitations": "此处能够说明的是所提供资料的局限，而不是论文自身已被证实的缺陷：摘要在方法展开之前截断，缺失验证内容。[摘要] 因此无法评价数据覆盖、测试独立性或结论适用范围；不能把这些未展示的信息写成作者未开展的工作，也不能据此否定论文质量。",
+        "connection": "解读：变速运行故障诊断与智能运维中的设备状态识别具有直接主题关联，依据是摘要明确的诊断任务。[摘要] 与可靠性研究的联系目前仅能作为潜在延伸，尚无寿命预测或失效概率证据；片段也未涉及结构设计，不能将其推荐价值扩展为已支持结构优化。",
+        "next_steps": "建议补充完整摘要，优先确认VOC-LLM的具体机制及是否报告可核查的验证结果，再决定精读优先级。若继续获取正文，建议重点检查工况划分、训练测试隔离、比较基线与消融实验；这些是后续阅读问题，不是对本文已有实验配置或缺陷的陈述。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "面向变工况机械故障诊断的自适应工业大语言模型",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.sciencedirect.com/science/article/pii/S1474034626005136"
+      ],
+      "analyzed_at": "2026-09-25T02:04:01.043126+00:00",
+      "llm_model": "gpt-6-astra"
     },
     {
       "source": "Crossref",
@@ -851,7 +979,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Spiking neural networks (SNNs) offer biologically inspired computation but remain underexplored for continuous regression tasks in scientific machine learning. In this work, we introduce and systematically evaluate Quadratic Integrate-and-Fire (QIF) neurons as an alternative to the conventional Leaky Integrate-and-Fire (LIF) model in both directly trained SNNs and ANN-to-SNN conversion frameworks. The QIF neuron exhibits smooth and differentiable spiking dynamics, enabling gradient-based training and stable optimization within architectures such as multilayer perceptrons (MLPs), Deep…",
+      "summary": "本文研究脉冲神经网络在科学机器学习连续回归任务中的应用，以二次积分发放神经元（QIF）替代传统漏积分发放神经元（LIF），覆盖直接训练与人工神经网络到脉冲网络的转换。摘要报告，在函数逼近、算子学习及偏微分方程求解基准中，QIF网络预测更平滑、准确且稳定。[摘要] 解读：其价值主要在科学计算网络的神经元选择，而非直接提出生成式设计方法；以下仅为摘要级解读。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -886,11 +1014,27 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议作为科学机器学习的方法拓展文献阅读，重点核查QIF的可微机制及其在DeepONet、PINN中的效果；对生成式设计仅具间接参考价值，不宜列为该方向的核心成果。[摘要]",
+      "deep_read": {
+        "problem": "论文关注脉冲神经网络在科学机器学习连续回归中的应用不足，摘要称其“remain underexplored”。[摘要] 解读：关键问题是脉冲动力学能否适应连续输出，而非分类能力；研究通过比较两类神经元，考察预测平滑性及训练适用性。",
+        "method": "作者将二次积分发放神经元与漏积分发放神经元比较，同时考察直接训练和ANN到SNN转换，覆盖MLP、DeepONet及PINN。摘要以“smooth and differentiable spiking dynamics”说明QIF的训练基础，但未给出方程与梯度实现。[摘要]",
+        "innovation": "摘要将方法贡献表述为“introduce and systematically evaluate”，即引入并系统评估QIF在所述科学机器学习框架中的表现。[摘要] 解读：创新重点在神经元选型及跨框架验证，不能据此声称作者首次提出QIF模型，或已解决所有脉冲网络的可微训练问题。",
+        "findings": "摘要报告，在函数逼近、算子学习及偏微分方程求解基准中，QIF网络相对LIF预测“smoother, more accurate, and more stable”，并指出后者存在不连续时间步响应及锯齿状激活曲面。[摘要] 这些是定性结果，未提供误差数值、方差或计算成本。",
+        "limitations": "当前仅有摘要，未披露数据规模、具体方程、基线调参、重复试验及硬件条件，因此无法判断优势幅度与复现难度。[摘要] 解读：这些属于资料不足，并非作者确认的缺陷；也不能仅凭脉冲网络这一形式，推定模型更节能或更适合实时部署。",
+        "connection": "摘要涉及“operator learning”和“PDE solving”，但未报告结构生成、运维诊断或可靠性任务。[摘要] 解读：它可能为结构设计中的物理响应代理模型提供神经元选择思路；与智能运维及可靠性分析的联系尚属潜在迁移，不能视为已有应用证据。",
+        "next_steps": "建议：后续获取全文时，优先核查QIF动力学、离散化方式、发放事件的梯度处理，以及与LIF比较的训练预算是否一致。若迁移到结构设计，可另设响应预测实验，比较误差、平滑性与耗时；摘要未报告这类验证，以上不是作者结论。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "从LIF到QIF：面向科学机器学习的可微脉冲神经元",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s44387-026-00121-2"
+      ],
+      "analyzed_at": "2026-09-25T02:04:46.473451+00:00",
+      "llm_model": "gpt-6-astra"
     },
     {
       "source": "Semantic Scholar",
@@ -916,7 +1060,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "The mechanical properties of reinforcing steel are fundamental to the durability of concrete structures. In service environments, corrosion of reinforcing bars is pervasive, and corrosion–fatigue failure constitutes a major driver of structural degradation, particularly in bridge infrastructure. Conventional data‐driven approaches, such as probabilistic neural networks ( PNN ), often assume a normal distribution to construct point predictions and confidence intervals. This assumption can obscure the intrinsic distributional characteristics of corrosion–fatigue life and offers limited physical…",
+      "summary": "本文针对腐蚀钢筋疲劳寿命预测中的分布假设与物理解释问题，提出结合变分贝叶斯推断和物理约束的神经网络框架。摘要报告，该方法预测表现优于常规神经网络，并捕捉到疲劳寿命显著偏离正态分布的特征。其阅读价值在于连接寿命预测、不确定性量化与结构可靠性评估；但摘要未提供样本规模、误差指标及物理约束细节，尚不能判断性能提升幅度和工程适用范围。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "330b40b960b4e4247f65d037270e4269714ed0a1",
@@ -948,11 +1092,27 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议重点阅读其寿命分布建模与物理约束设计，尤其核查非正态特征如何影响可靠性评估；摘要提供了明确方法和定性结果，但不足以确认工程可用性。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是如何在腐蚀钢筋疲劳寿命预测中同时表达不确定性并保持物理合理性。摘要指出，常规方法的“assume a normal distribution”可能掩盖寿命分布特征，进而限制工程决策可靠性；问题不仅是点预测精度，还涉及概率描述是否符合观测。[摘要]",
+        "method": "方法以疲劳数据驱动贝叶斯更新，采用“variational Bayesian inference”将先验更新为后验，并在训练目标中嵌入物理约束。摘要称其不强加预定义分布形式，但未说明这具体针对何种分布，也未交代先验、似然及约束表达式，不能据此复现模型。[摘要]",
+        "innovation": "解读：潜在创新在于将物理约束学习与贝叶斯概率预测用于腐蚀钢筋疲劳寿命，并关注经验分布而非仅输出点值及区间。摘要以“distribution-aware modeling”概括其价值，但缺少与已有同类方法的系统对照，尚不能确认其首创性或具体创新边界。[摘要]",
+        "findings": "摘要报告模型预测表现持续优于常规神经网络，并发现寿命分布存在“substantial deviations from normality”。这些是作者报告的定性结果；摘要未给出误差、区间覆盖率、重复试验或显著性检验，因而不能量化优势，也不能确认不同工况下的稳定程度。[摘要]",
+        "limitations": "这里的局限指摘要级证据不足，而非作者已证实的模型缺陷。资料未交代试验样本数量、腐蚀程度覆盖、载荷条件、数据划分及外部验证，也未报告计算成本和后验近似质量。因此，泛化能力、概率校准表现及现场部署可行性均需全文证据支持。[摘要]",
+        "connection": "解读：该工作与疲劳可靠性方向直接相关，寿命概率描述可为结构风险分析提供输入；与智能运维的联系在于潜在支持检测和维修时机决策，与结构设计的联系在于寿命不确定性考虑。不过，摘要没有展示失效概率计算、运维优化或设计流程中的实际应用。[摘要]",
+        "next_steps": "建议：阅读全文时先核查物理约束依据、概率模型设定及对照实验公平性，再检查预测区间校准和非正态特征的统计证据。若开展迁移研究，可比较不同寿命分布对目标服役期失效概率的影响，并设置跨腐蚀程度验证；这些属于研究建议，不是作者已完成的成果。"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "用于腐蚀钢筋疲劳寿命概率估计的贝叶斯物理信息神经网络",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.semanticscholar.org/paper/330b40b960b4e4247f65d037270e4269714ed0a1"
+      ],
+      "analyzed_at": "2026-09-25T02:05:34.809245+00:00",
+      "llm_model": "gpt-6-astra"
     }
   ],
   "papers": [
@@ -990,7 +1150,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Large language models and generative protein design promise to accelerate biotechnology, but it remains unclear whether they can engineer dynamic megasynth(et)ases whose activity depends on transient, context-specific domain interfaces. Non-ribosomal peptide synthetases (NRPSs) exemplify this challenge and produce many clinically used therapeutics. Here we integrate pretrained generative models (ESM3, ProteinMPNN and EvoDiff) with design-build-test-learn cycles and data-guided prioritization to generate 76 de novo thiolation (T) domains. We build and test 578 recombinant NRPS variants in vivo…",
+      "summary": "【摘要级解读】研究关注生成式模型能否设计依赖瞬态、情境特异性界面的非核糖体肽合成酶结构域。作者结合三种预训练模型、设计—构建—测试—学习循环及数据引导筛选，生成76个全新硫醇化结构域，并在体内测试578个重组变体。摘要报告设计结构域支持多类架构产物形成，产量最高约为天然结构域对照的3倍；一个代表性设计还表现出热稳定性改善。结果支持情境适配的蛋白质生成设计，但不足以判断整体成功率。[摘要]",
       "raw_metadata": {
         "provider": "PubMed",
         "pmid": "42773138",
@@ -1117,11 +1277,27 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议重点阅读其生成设计与实验反馈结合的方法，以及跨装配线架构的功能验证；与给定generative_design标签直接相关，但不能将蛋白质设计结果直接视为工程结构可靠性证据。[摘要]",
+      "deep_read": {
+        "problem": "【论文摘要】核心问题是生成式模型能否工程化改造动态巨型合成酶，而不仅是设计孤立蛋白。摘要强调其活性依赖“transient, context-specific domain interfaces”。非核糖体肽合成酶是研究载体，难点在于结构域必须适配不同相互作用情境。[摘要]",
+        "method": "【论文摘要】作者整合ESM3、ProteinMPNN和EvoDiff，结合设计—构建—测试—学习循环及数据引导优先排序，生成76个全新硫醇化结构域。在体内构建并测试578个重组变体，覆盖最小、全长和混合装配线；摘要未说明各模型的具体分工。[摘要]",
+        "innovation": "【解读】值得关注的创新定位，是把生成设计用于具有动态界面约束的生物合成装配线重编程，而非仅优化单个结构域的静态性质。摘要以“context-conditioned engineering”概括这一方向，但未提供与既有方法的系统比较，不能据此确认首创性。[摘要]",
+        "findings": "【论文摘要】设计结构域支持跨架构产物形成，并使重组连接处的混合体具备催化活性；产量最高约为天然结构域对照的3倍。一个代表性设计的熔解温度提高12 °C。分子动力学提示整体稳定性保持，而状态依赖的结构域间接触网络发生重塑。[摘要]",
+        "limitations": "【解读：证据边界】摘要未报告功能设计所占比例、产量分布、重复次数或统计不确定性，因此最高增益不能代表平均表现。热稳定性结果仅对应一个代表性设计。上述属于当前材料的信息缺口，并非作者明确承认的局限；仅凭摘要也无法判断模拟与功能变化的因果关系。[摘要]",
+        "connection": "【解读】与给定generative_design标签的联系直接：生成模型提出候选，实验结果用于学习和优先排序。对结构设计与可靠性研究，可借鉴情境适配及多层次验证思路；但研究对象是生物合成酶，摘要没有智能运维、工程结构失效概率或服役可靠性的直接证据。[摘要]",
+        "next_steps": "【建议】后续阅读全文时，应优先核查候选筛选规则、不同模型的贡献、失败设计及跨架构性能分布，再评估方法的可复用性。若迁移到工程设计，可研究条件化生成与闭环验证的结合，但需重新定义物理约束和可靠性指标；这属于研究建议，而非作者已验证的成果。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "生成式人工智能设计功能性硫醇化结构域以重编程非核糖体肽合成酶",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/42773138/"
+      ],
+      "analyzed_at": "2026-09-25T01:58:10.589640+00:00",
+      "llm_model": "gpt-6-astra"
     },
     {
       "source": "Semantic Scholar",
@@ -1147,7 +1323,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "Triply periodic minimal surface (TPMS) porous structures show considerable promise for lightweight load‐bearing implants. To address the fatigue reliability of radially graded gyroid‐type TPMS Ti‐6Al‐4V scaffolds under unavoidable uncertainties in loading and material properties, this study proposes an efficient reliability analysis framework by integrating finite element (FE) analysis with an active learning–based Gaussian process regression (GPR‐AL) surrogate model. Firstly, five bone‐mimetic cylindrical scaffolds with porosities ranging from 60% to 80% are designed and analyzed under displa…",
+      "summary": "本文面向承载植入物，研究载荷与材料性能不确定性下，径向梯度陀螺型三周期极小曲面钛合金支架的疲劳可靠性。作者将有限元、主动学习高斯过程回归、蒙特卡洛模拟及Basquin模型串联，并以应力场第95百分位数表征高应力。[摘要] 解读：重点在于以代理模型降低可靠性分析成本，服务孔隙率选择；摘要未提供误差、加速比或实验验证数据，不能据此判断工程预测精度。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "57fb67cb40a0665d6a228f2e8968ec351d2aacc9",
@@ -1264,11 +1440,27 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议重点阅读其主动学习采样、应力指标及不确定性传播之间的衔接，直接服务疲劳可靠性与结构设计研究；但摘要未体现生成式设计算法，计算效率优势也尚缺定量证据。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是载荷和材料性能存在不可避免的不确定性时，如何分析径向梯度陀螺型TPMS Ti‐6Al‐4V支架的疲劳可靠性。摘要以“lightweight load‐bearing implants”界定应用背景。[摘要] 解读：关注点是随机条件下的寿命与可靠性，而非仅比较确定性压缩响应。",
+        "method": "作者分析五种孔隙率为60%至80%的仿骨圆柱支架，采用位移控制压缩；随后以有限元与主动学习高斯过程回归构建代理，用RMSE作误差指标，并按最大最小距离准则在高不确定性区域补点。再结合蒙特卡洛模拟传播不确定性，通过Basquin模型评价疲劳寿命。[摘要]",
+        "innovation": "摘要明确提出将有限元与“GPR‐AL”代理模型整合，并采用von Mises应力场第95百分位数作为高应力指标，以改善网格稳健性。[摘要] 解读：值得关注的是应力表征与自适应代理分析的组合；缺少既有方法对照，不能认定各组成技术或整体框架具有首创性。",
+        "findings": "摘要称该方法为承载TPMS植入物的可靠性导向设计和孔隙率选择提供“computationally efficient tool”。[摘要] 这是作者报告的定性成果，而非可核验的加速倍数。摘要没有给出不同孔隙率的寿命排序、失效概率或最优取值，因此不能据此直接提出具体结构参数。",
+        "limitations": "证据边界在于摘要未交代随机变量的分布与相关性、疲劳失效阈值、Basquin参数来源，以及代理模型的独立验证结果。[摘要] 这些是当前资料缺项，不等于论文未开展相关工作。解读：在取得正文前，尚无法判断预测精度、尾部失效概率可信度及实际植入工况适用性。",
+        "connection": "解读：该研究与疲劳可靠性方向直接契合，也将结构设计中的孔隙率选择与不确定性分析连接起来；摘要明确使用“reliability‐oriented design”。[摘要] 对智能运维的潜在联系是快速寿命评估，但摘要没有在线监测、状态更新或维护决策内容，也未展示生成式设计流程。",
+        "next_steps": "建议：后续阅读正文时，优先核查主动学习停止条件、有限元调用次数、代理误差与失效概率估计误差的关系，并确认应力百分位指标如何进入疲劳计算。若尝试迁移，应设置相同计算预算的基线比较，检验孔隙率推荐是否稳定；这些属于研究建议，并非摘要已证明的结论。"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "考虑运行条件不确定性的三周期极小曲面结构可靠性分析",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.semanticscholar.org/paper/57fb67cb40a0665d6a228f2e8968ec351d2aacc9"
+      ],
+      "analyzed_at": "2026-09-25T01:58:59.183955+00:00",
+      "llm_model": "gpt-6-astra"
     },
     {
       "source": "Crossref",
@@ -1301,7 +1493,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "The evolution of soft robots into embodied intelligent systems relies fundamentally on precise proprioception. However, a universal solution for capturing continuous deformations during diverse interactions, particularly in spatially confined interventional scenarios, remains lacking. Here, we introduce a deep learning–enabled versatile shape perception method based on a single-ended multimode fiber (MMF). By leveraging the intrinsic integration advantages of optics, our minimalist reflective architecture physically eliminates the dependence on complex demodulation units and distal devices. Fu…",
+      "summary": "软体机器人需要在复杂交互中准确感知自身形变，尤其面临狭窄介入空间的集成约束。本文提出单端多模光纤与深度学习结合的形状感知方法，以反射式架构减少硬件依赖，并用可重构神经解码器从光学散斑中提取形状信息。摘要报告了软夹爪状态确认、仿生灵巧手连续形状跟踪和软体手术机器人三维重建三类应用。作者将其定位为数字孪生闭环控制的基础，但摘要未报告闭环控制验证。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "American Association for the Advancement of Science (AAAS)",
@@ -1336,11 +1528,27 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为柔性结构感知与数字孪生的交叉方法论文重点阅读，而非直接作为智能运维成果引用；其单端光纤架构与多任务神经解码具有明确的方法参考价值。[摘要]",
+      "deep_read": {
+        "problem": "研究针对软体机器人连续形变难以被通用感知方案覆盖的问题，特别关注多样交互和空间受限的介入场景。摘要以“precise proprioception”强调精确本体感知的重要性。解读：核心需求是兼顾形变表征、任务多样性与传感集成，而非故障诊断。[摘要]",
+        "method": "方法使用单端多模光纤的反射式架构，将光学散斑场视为编码高维形状信息的数据流，再由可重构神经解码器输出不同任务所需的感知结果。作者称该架构消除了对复杂解调单元和远端器件的依赖；摘要未披露网络结构、训练流程和标定细节。[摘要]",
+        "innovation": "摘要呈现的方法特色是用同一物理通道配合可重构解码器支持多种感知模式，并以计算增强硬件适应性。原文表述为“breaking hardware adaptability limits via computation”。解读：创新关注点在软硬件协同，但缺少相关工作对比，不能据此确认首创性。[摘要]",
+        "findings": "摘要报告：软夹爪离散状态确认准确率超过99%，仿生灵巧手连续形状跟踪的空间分辨率约提升5倍，软体手术机器人三维形态重建的IoU超过0.93。这些结果覆盖三种感知任务，但摘要未说明样本规模、分辨率比较基准或统计不确定性。[摘要]",
+        "limitations": "目前仅有摘要，无法判断跨机器人迁移、环境扰动、光纤长期使用及模型失配对性能的影响；这些属于证据缺口，不是已证实的缺陷。摘要称工作为闭环控制奠定基础，不能等同于已完成控制验证，也不足以认定其具备临床部署或长期运维能力。[摘要]",
+        "connection": "解读：对结构设计而言，单端、少远端器件的感知架构可启发狭窄柔性结构的传感集成；对智能运维和可靠性研究而言，形状信息可能成为状态监测输入。但摘要只验证形状感知，没有故障识别、寿命预测或可靠性量化证据，与给定方向属于间接关联。[摘要]",
+        "next_steps": "建议：后续阅读全文时优先核查数据划分、任务间是否需要重新训练、标定成本及推理时延，再确认分辨率提升的比较条件。若迁移至智能运维，可另行设计重复加载、环境变化与异常形变试验，评估长期稳定性和异常检出能力；这些不是作者已报告的结果。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "基于单端多模光纤与深度学习的软体机器人多功能形状感知",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1126/sciadv.aef6263"
+      ],
+      "analyzed_at": "2026-09-25T01:59:47.425349+00:00",
+      "llm_model": "gpt-6-astra"
     },
     {
       "source": "OpenAlex",
@@ -1368,7 +1576,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Artificial intelligence is transforming materials discovery from trial-and-error experimentation towards data driven design. Here we present a thermoelectric inverse-design (TEID) framework that integrates the MatHub-3d database, a generative model, and hierarchical screening across low-, medium-, and high-accuracy calculations. Trained on MatHub-3d, a crystal diffusion variational autoencoder generated 6400 candidate structures as the starting point of the workflow. Deduplication and stoichiometric/elemental constraints reduced this set to 1461 compositions. At the low-accuracy stage, pretrai…",
+      "summary": "本文提出热电逆向设计框架，将材料数据库、晶体生成模型与多精度计算筛选串联，从6400个候选结构逐步筛得四种此前未报道的动态稳定化合物。摘要报告，其中两种材料在700 K下的n型热电优值ZT分别达到1.59和2.24。[摘要] 解读：其阅读价值在于生成与物理计算验证的衔接，而非仅扩大候选数量；以上属于计算结果，不能视为实验验证。本导读仅依据元数据与摘要。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7204839608",
@@ -1406,11 +1614,27 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议优先阅读其生成模型与分层物理筛选的接口设计，尤其关注候选淘汰规则及最终输运计算，适合作为生成式材料设计的方法案例；但不能据摘要认定其适用于工程运维或已获实验验证。[摘要；解读]",
+      "deep_read": {
+        "problem": "论文聚焦如何把材料发现从试错转向数据驱动设计，并以热电材料为对象组织候选生成和性能筛选。摘要以“thermoelectric inverse-design (TEID) framework”界定研究方案。[摘要] 解读：核心问题是如何把生成的晶体候选转化为具有物理计算支撑的材料线索。",
+        "method": "方法将MatHub-3d数据库、晶体扩散变分自编码器和低、中、高精度筛选串联。生成6400个结构后，依次施加去重与组成约束、机器学习筛选、密度泛函理论计算及声子和输运计算。[摘要] 解读：各阶段逐步收缩候选空间，但摘要没有提供完整阈值与计算参数。",
+        "innovation": "摘要明确的方法特点是将生成模型与“hierarchical screening”结合，在同一流程中连接结构生成、稳定性判断和热电性能计算。[摘要] 解读：可重点考察这种整合方式的贡献；现有资料没有同类方法比较或消融结果，不能认定各模块本身原创，也不能断言整体优于已有方案。",
+        "findings": "摘要报告四种此前未报道的动态稳定化合物，晶格热导率为0.67–1.72 W m⁻¹ K⁻¹；其中Na₃CaP₃与Si₂Cu₃AgS₆在700 K下的n型ZT分别为1.59和2.24。[摘要] 这些性能来自计算，电输运计算纳入了形变势与极性光学声子散射。",
+        "limitations": "摘要未交代训练数据划分、生成模型基准比较、筛选阈值敏感性及预测误差，也未报告材料合成或性能测量。[摘要] 解读：这些是当前资料的证据缺口，不等于全文必然缺失；动态稳定及热力学筛选结果亦不足以单独证明材料可合成或服役可靠。",
+        "connection": "解读：与给定生成式设计标签的联系直接，表现为先生成晶体结构，再以物理计算筛选。[摘要] 对结构设计，其可迁移启发是把生成模型与约束验证分层衔接；对可靠性研究，可借鉴逐级核验思路，但晶体稳定性不等同于工程可靠性，摘要也未涉及智能运维任务。",
+        "next_steps": "建议：后续取得全文时，优先核对生成目标如何编码、各筛选阶段的阈值与计算成本，再检查ZT对应的载流子条件及输运假设；若迁移到结构设计，可设置等预算基线比较分层筛选收益。这些是阅读与研究建议，并非作者已完成的验证，摘要尚不足以回答。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "功能材料的逆向设计：以热电材料为例",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s41524-026-02307-3"
+      ],
+      "analyzed_at": "2026-09-25T02:00:36.052480+00:00",
+      "llm_model": "gpt-6-astra"
     },
     {
       "source": "OpenAlex",
@@ -1434,7 +1658,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "ABSTRACT To address empirical parameter dependence, high test costs, and the accuracy‐applicability trade‐off in traditional fatigue cumulative damage models, this paper proposes a novel fatigue life prediction method integrating adaptive exponential interpolation data enhancement, an improved nonlinear damage model, and machine learning. Based on limited test data, virtual loads are constructed to boost stress‐domain sampling density at no extra cost. An improved AEVILD–Manson model with reliability criterion and convergence proof is established via Monte Carlo correction. Nine machine learni…",
+      "summary": "该研究针对传统疲劳累积损伤模型依赖经验参数、试验成本高及精度与适用性难兼顾的问题，将自适应指数插值数据增强、改进非线性损伤模型与机器学习结合。摘要报告，方法经12个材料数据集和B750L钢多级疲劳试验验证，在85%可靠度下绝对误差小于2.5%[摘要]。解读：其重点是小样本条件下的数据扩充与载荷交互校准，适合疲劳可靠性研究者关注；本文仅作摘要级解读，误差口径与泛化能力仍需全文核验。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7204767153",
@@ -1484,11 +1708,27 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议重点阅读其虚拟载荷构造、可靠度准则及载荷交互系数校准方法，与疲劳可靠性和结构设计方向直接相关；摘要明确提出“small‐sample fatigue assessment”，但尚不能据此认定其具有生成式设计能力[摘要]。",
+      "deep_read": {
+        "problem": "论文针对疲劳累积损伤预测中的经验参数依赖、试验成本与精度—适用性权衡，摘要明确提及“high test costs”[摘要]。解读：核心问题是如何利用有限试验数据开展可靠的寿命评估，而非单纯增加预测模型复杂度；具体载荷谱范围与使用边界尚未披露。",
+        "method": "方法结合自适应指数插值、改进AEVILD–Manson模型与机器学习，通过虚拟载荷加密应力域采样，并以蒙特卡洛修正建立损伤模型。摘要称采用“Nine machine learning algorithms”自适应校准载荷交互系数[摘要]，但未说明各算法的组织方式。",
+        "innovation": "摘要将方案描述为“a novel fatigue life prediction method”，并将可靠度准则和收敛证明纳入改进模型[摘要]。解读：值得核查的创新点是数据增强、损伤建模与参数校准之间如何衔接；缺少公式与相关工作比较，尚不能确认各环节的独立原创性。",
+        "findings": "摘要报告经12个材料数据集及B750L钢多级疲劳试验验证，在85%可靠度下绝对误差小于2.5%；LSTM集成模型R²为0.9668、RMSE为0.0536，并称“outperforming traditional benchmarks”[摘要]。基准详情及指标尺度尚不明确。",
+        "limitations": "摘要使用“Based on limited test data”描述数据条件，却未给出原始样本量、增强比例、训练测试划分和消融结果[摘要]。解读：目前无法判断插值样本与测试样本是否严格隔离，也无法分辨各模块的独立贡献；这些属于证据缺口，而非已确认的方法缺陷。",
+        "connection": "摘要将应用指向“low‐cost, high‐reliability structural design”[摘要]。解读：与疲劳可靠性和结构设计直接契合，也可能为智能运维中的寿命评估提供模型基础；但未涉及在线监测、维护决策或设计方案生成，不能将这些潜在联系表述为论文成果。",
+        "next_steps": "建议获取全文后，优先核查“reliability criterion and convergence proof”的定义、假设与证明范围[摘要]，再检查增强过程是否仅使用训练数据。建议研究迁移时设置无增强、无校准及不同载荷谱对照，并评估区间覆盖率，以区分精度提升与可靠度收益。"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "融合自适应指数插值数据增强与机器学习的疲劳寿命预测方法",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1111/ffe.70436"
+      ],
+      "analyzed_at": "2026-09-25T02:01:23.105983+00:00",
+      "llm_model": "gpt-6-astra"
     },
     {
       "source": "Crossref",
@@ -1509,7 +1749,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Discovering functional crystalline materials entails navigating an immense combinatorial design space. Although recent advances in generative artificial intelligence have enabled the sampling of chemically plausible compositions and structures, a fundamental challenge remains: the objective misalignment between the likelihood-based sampling in generative modelling and the targeted focus on underexplored regions where novel compounds reside. Here we introduce a reinforcement learning framework that guides latent denoising diffusion models in finding diverse and novel, yet thermodynamic…",
+      "summary": "晶体材料发现面临巨大组合空间，生成模型的似然采样目标又未必指向潜在新化合物所在的欠探索区域。作者提出强化学习框架，以组相对策略优化和可验证的多目标奖励引导潜空间去噪扩散模型，兼顾新颖性、热力学可行性与多样性，并开展性质引导设计。[摘要] 解读：论文值得关注的是生成目标与发现目标的对齐机制；但摘要没有量化结果，尚不能判断提升幅度和验证充分性。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -1544,11 +1784,27 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议重点阅读其奖励设计与性质引导机制：这些内容直接对应生成式设计中的多目标控制问题，但应在获取全文后核查性能比较及热力学可行性的验证依据。[摘要]",
+      "deep_read": {
+        "problem": "作者指出，晶体发现不仅受组合设计空间庞大所限，还存在生成采样与探索目标之间的“objective misalignment”：化学上合理的样本未必来自欠探索区域。[摘要] 解读：核心问题是如何把生成过程导向有发现价值的候选，而非仅提高常见结构的生成概率。",
+        "method": "框架以强化学习引导潜空间去噪扩散模型，结合“group-relative policy optimization”与可验证的多目标奖励，同时平衡创造性、稳定性和多样性。[摘要] 摘要未提供奖励公式、策略更新细节或验证器构成，因此目前只能概括方法组成，不能复现训练流程。",
+        "innovation": "摘要将方法表述为可控逆向设计的模块化基础，并强调处理“novelty–validity trade-off”。[摘要] 解读：值得考察的创新候选是把探索新颖性与有效性约束共同纳入生成引导，而非仅在生成后筛选；其相对已有工作的独特程度仍需全文与文献比较确认。",
+        "findings": "作者报告框架能够寻找多样、新颖且热力学可行的晶体，并展示性质引导设计的增强效果，在追求目标功能性质时保持“chemical validity”。[摘要] 这些属于摘要中的定性成果陈述；未给出成功率、性质改善幅度或对照结果，不能据此判定实际优势大小。",
+        "limitations": "当前只有摘要，没有全文。虽然作者使用“thermodynamically viable”描述候选晶体，但未说明热力学判据、计算层级或实验验证情况。[摘要] 解读：这是现有材料的证据边界，不等于论文自身缺陷；尤其不能把热力学可行性直接当作可合成性已获证实。",
+        "connection": "摘要明确面向“AI-driven inverse design”，与给定的生成式设计标签直接相关。[摘要] 解读：其多目标生成思路可启发结构设计中的性能与可行性协调，但晶体设计不等同于工程结构设计；摘要也未涉及故障诊断、维护决策或可靠性指标，不能宣称已验证这些用途。",
+        "next_steps": "建议获取全文后，优先核查“verifiable, multi-objective rewards”的计算依据、目标间权衡方式，以及新颖性和多样性的评价口径。[摘要] 若迁移至可靠性约束设计，建议另行定义失效概率与可制造性约束，并检验生成候选是否满足这些要求；这不是作者已报告的成果。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "通过强化学习引导生成模型发现多样且新颖的晶体",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s42256-026-01262-4"
+      ],
+      "analyzed_at": "2026-09-25T02:02:12.442245+00:00",
+      "llm_model": "gpt-6-astra"
     },
     {
       "source": "OpenAlex",
@@ -1570,7 +1826,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "ABSTRACT Predicting structural lifetime under complex loading remains a major challenge in computational mechanics, especially for high cycle fatigue in large scale systems such as aircraft, bridges, and wind turbines. This difficulty arises from the need to capture fatigue damage accumulation, crack initiation, crack growth across scales, and life prediction, making direct simulation over millions of load cycles computationally infeasible. To overcome this limitation, the presented work introduces a physics‐based machine learning () framework to accelerate fatigue life‐timescale homogenizatio…",
+      "summary": "针对高周疲劳逐循环计算成本过高的问题，论文提出物理约束机器学习框架，以两个模型分别预测完整循环历程中的损伤演化及循环块上的累积损伤。模型采用双前馈神经网络，并引入能量平衡、损伤演化和退化定律约束。摘要报告，相较传统增量疲劳分析，计算加速最高约2700倍，同时与参考解良好一致。本文仅作摘要级解读；具体误差、验证范围和工程适用边界仍需全文核查。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7207710948",
@@ -1684,11 +1940,27 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议重点阅读其循环块损伤预测机制与物理约束实现方式：这两点直接对应疲劳可靠性研究中的长寿命计算瓶颈。摘要报告“speed‐ups of up to approximately 2700 times”，但该最高加速结果的测试条件与精度代价尚待核查。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是如何避免高周疲劳寿命分析中数百万次循环的直接计算，同时描述损伤累积及相关跨尺度过程。摘要以“millions of load cycles”说明计算负担，并列举飞机、桥梁和风力机等应用背景；这些是问题背景，不能据此认定已完成相应工程验证。[摘要]",
+        "method": "方法包含两个预测层次：第一模型覆盖完整循环加载历程，第二模型在寿命尺度上估计循环块的累积损伤，并发展宏观与微观力学启发的退化机制。摘要明确采用“double feed‐forward neural networks”，结合能量平衡、损伤演化及退化定律约束，但未说明约束的具体施加方式。[摘要]",
+        "innovation": "解读：值得关注的方法特点是将物理约束与寿命尺度损伤预测结合，而非仅替代单次循环计算。摘要所称“blocks of load cycles”表明其以循环块为预测对象，试图绕开逐循环推进。现有资料不足以判断相对已有循环跳跃或均匀化方法的原创性边界。[摘要]",
+        "findings": "摘要报告模型能够复现不同加载历程和材料参数下的非线性损伤演化，并与参考解保持良好一致；速度提升“up to approximately 2700 times”属于最高约值，而非普遍性能保证。摘要未给出误差指标、样本规模及耗时统计口径，因此目前只能确认作者报告了这些结果。[摘要]",
+        "limitations": "证据局限：摘要虽使用“unseen materials and loading conditions”表述泛化目标或能力，但没有交代材料类别、加载边界及独立测试划分，也未说明参考解是否经过实验检验。这里列出的是摘要缺少的信息，不是已经证实的模型缺陷，更不能归为作者承认的局限。[摘要]",
+        "connection": "解读：该研究与疲劳可靠性的直接联系在于降低损伤历程及寿命评估的计算成本；若精度和适用范围得到验证，可考虑用于结构设计中的多方案比较。摘要以“lifetime assessment”为应用落点，但未展示失效概率分析、传感数据融合或在线更新，故智能运维联系仍属潜在迁移。[摘要]",
+        "next_steps": "建议：后续阅读全文时，优先核查循环块大小如何确定、物理约束是否严格满足，以及加速比较是否包含训练成本。围绕摘要所称“reference solutions”，还应确认参考解来源与误差评价方式；若开展迁移研究，可设计变幅加载与跨材料独立测试，再判断是否适合可靠性计算。[摘要]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "物理约束下机器学习加速的疲劳寿命时间尺度均匀化与循环损伤演化框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1002/nme.70394"
+      ],
+      "analyzed_at": "2026-09-25T02:03:00.455784+00:00",
+      "llm_model": "gpt-6-astra"
     },
     {
       "source": "Google Scholar",
@@ -1711,7 +1983,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "… the actual needs of fault diagnosis in variable speed operating conditions, we propose a VOC-LLM for industrial-grade variable speed operating condition fault diagnosis. Specifically, (1…",
+      "summary": "本文聚焦变速运行条件下的工业故障诊断，所提供摘要片段称提出“VOC-LLM”，以回应这一场景的实际需求。[摘要] 当前材料仅为截断摘要，未展示模型结构、适应机制、数据来源、实验设置或诊断结果。解读：研究主题与智能运维直接相关，但“面向工业级诊断”是任务定位，不能等同于已验证的工业部署能力。适合列入补充资料后的候选阅读清单，暂不足以支持重点推荐。",
       "raw_metadata": {
         "position": 4,
         "title": "An adaptive industrial large language model for mechanical fault diagnosis under variable operating conditions",
@@ -1775,11 +2047,27 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为智能运维方向的候选论文保留：摘要明确涉及变速故障诊断与VOC-LLM，但需补齐方法和验证证据后再决定是否重点阅读。[摘要]",
+      "deep_read": {
+        "problem": "摘要将问题定位于“fault diagnosis in variable speed operating conditions”，即变速运行条件下的故障诊断。[摘要] 解读：这里明确的是应用场景，而非具体技术难题；片段没有说明诊断对象、故障类别，以及变速如何影响现有方法，不能代作者补充问题成因。",
+        "method": "摘要明确表示“we propose a VOC-LLM”，并将其用于工业级变速工况故障诊断。[摘要] 但具体说明在“Specifically, (1”处截断，无法识别输入表示、模型组成、训练流程和输出形式；也不能仅凭名称认定采用了微调、检索增强或特定信号编码方案。",
+        "innovation": "当前片段只支持作者提出了名为VOC-LLM的方案，并未提供与既有方法的比较或创新机制说明。[摘要] 解读：将模型用于变速诊断可以视为研究切入点，但不足以证明方法新颖性；自适应设计是否存在实质技术贡献，仍需完整方法描述和相关工作对照。",
+        "findings": "可确认的信息是作者面向变速故障诊断需求提出方案，而非已展示诊断性能提升。[摘要] 片段没有提供实验结果、基线比较、误差分析或实际部署反馈，因此不能判断准确率、泛化能力、鲁棒性及计算效率，也不能将“industrial-grade”表述当作成熟度验证。",
+        "limitations": "此处能够说明的是所提供资料的局限，而不是论文自身已被证实的缺陷：摘要在方法展开之前截断，缺失验证内容。[摘要] 因此无法评价数据覆盖、测试独立性或结论适用范围；不能把这些未展示的信息写成作者未开展的工作，也不能据此否定论文质量。",
+        "connection": "解读：变速运行故障诊断与智能运维中的设备状态识别具有直接主题关联，依据是摘要明确的诊断任务。[摘要] 与可靠性研究的联系目前仅能作为潜在延伸，尚无寿命预测或失效概率证据；片段也未涉及结构设计，不能将其推荐价值扩展为已支持结构优化。",
+        "next_steps": "建议补充完整摘要，优先确认VOC-LLM的具体机制及是否报告可核查的验证结果，再决定精读优先级。若继续获取正文，建议重点检查工况划分、训练测试隔离、比较基线与消融实验；这些是后续阅读问题，不是对本文已有实验配置或缺陷的陈述。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "面向变工况机械故障诊断的自适应工业大语言模型",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.sciencedirect.com/science/article/pii/S1474034626005136"
+      ],
+      "analyzed_at": "2026-09-25T02:04:01.043126+00:00",
+      "llm_model": "gpt-6-astra"
     },
     {
       "source": "Crossref",
@@ -1801,7 +2089,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Spiking neural networks (SNNs) offer biologically inspired computation but remain underexplored for continuous regression tasks in scientific machine learning. In this work, we introduce and systematically evaluate Quadratic Integrate-and-Fire (QIF) neurons as an alternative to the conventional Leaky Integrate-and-Fire (LIF) model in both directly trained SNNs and ANN-to-SNN conversion frameworks. The QIF neuron exhibits smooth and differentiable spiking dynamics, enabling gradient-based training and stable optimization within architectures such as multilayer perceptrons (MLPs), Deep…",
+      "summary": "本文研究脉冲神经网络在科学机器学习连续回归任务中的应用，以二次积分发放神经元（QIF）替代传统漏积分发放神经元（LIF），覆盖直接训练与人工神经网络到脉冲网络的转换。摘要报告，在函数逼近、算子学习及偏微分方程求解基准中，QIF网络预测更平滑、准确且稳定。[摘要] 解读：其价值主要在科学计算网络的神经元选择，而非直接提出生成式设计方法；以下仅为摘要级解读。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -1836,11 +2124,27 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议作为科学机器学习的方法拓展文献阅读，重点核查QIF的可微机制及其在DeepONet、PINN中的效果；对生成式设计仅具间接参考价值，不宜列为该方向的核心成果。[摘要]",
+      "deep_read": {
+        "problem": "论文关注脉冲神经网络在科学机器学习连续回归中的应用不足，摘要称其“remain underexplored”。[摘要] 解读：关键问题是脉冲动力学能否适应连续输出，而非分类能力；研究通过比较两类神经元，考察预测平滑性及训练适用性。",
+        "method": "作者将二次积分发放神经元与漏积分发放神经元比较，同时考察直接训练和ANN到SNN转换，覆盖MLP、DeepONet及PINN。摘要以“smooth and differentiable spiking dynamics”说明QIF的训练基础，但未给出方程与梯度实现。[摘要]",
+        "innovation": "摘要将方法贡献表述为“introduce and systematically evaluate”，即引入并系统评估QIF在所述科学机器学习框架中的表现。[摘要] 解读：创新重点在神经元选型及跨框架验证，不能据此声称作者首次提出QIF模型，或已解决所有脉冲网络的可微训练问题。",
+        "findings": "摘要报告，在函数逼近、算子学习及偏微分方程求解基准中，QIF网络相对LIF预测“smoother, more accurate, and more stable”，并指出后者存在不连续时间步响应及锯齿状激活曲面。[摘要] 这些是定性结果，未提供误差数值、方差或计算成本。",
+        "limitations": "当前仅有摘要，未披露数据规模、具体方程、基线调参、重复试验及硬件条件，因此无法判断优势幅度与复现难度。[摘要] 解读：这些属于资料不足，并非作者确认的缺陷；也不能仅凭脉冲网络这一形式，推定模型更节能或更适合实时部署。",
+        "connection": "摘要涉及“operator learning”和“PDE solving”，但未报告结构生成、运维诊断或可靠性任务。[摘要] 解读：它可能为结构设计中的物理响应代理模型提供神经元选择思路；与智能运维及可靠性分析的联系尚属潜在迁移，不能视为已有应用证据。",
+        "next_steps": "建议：后续获取全文时，优先核查QIF动力学、离散化方式、发放事件的梯度处理，以及与LIF比较的训练预算是否一致。若迁移到结构设计，可另设响应预测实验，比较误差、平滑性与耗时；摘要未报告这类验证，以上不是作者结论。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "从LIF到QIF：面向科学机器学习的可微脉冲神经元",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s44387-026-00121-2"
+      ],
+      "analyzed_at": "2026-09-25T02:04:46.473451+00:00",
+      "llm_model": "gpt-6-astra"
     },
     {
       "source": "Semantic Scholar",
@@ -1866,7 +2170,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "The mechanical properties of reinforcing steel are fundamental to the durability of concrete structures. In service environments, corrosion of reinforcing bars is pervasive, and corrosion–fatigue failure constitutes a major driver of structural degradation, particularly in bridge infrastructure. Conventional data‐driven approaches, such as probabilistic neural networks ( PNN ), often assume a normal distribution to construct point predictions and confidence intervals. This assumption can obscure the intrinsic distributional characteristics of corrosion–fatigue life and offers limited physical…",
+      "summary": "本文针对腐蚀钢筋疲劳寿命预测中的分布假设与物理解释问题，提出结合变分贝叶斯推断和物理约束的神经网络框架。摘要报告，该方法预测表现优于常规神经网络，并捕捉到疲劳寿命显著偏离正态分布的特征。其阅读价值在于连接寿命预测、不确定性量化与结构可靠性评估；但摘要未提供样本规模、误差指标及物理约束细节，尚不能判断性能提升幅度和工程适用范围。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "330b40b960b4e4247f65d037270e4269714ed0a1",
@@ -1898,11 +2202,27 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议重点阅读其寿命分布建模与物理约束设计，尤其核查非正态特征如何影响可靠性评估；摘要提供了明确方法和定性结果，但不足以确认工程可用性。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是如何在腐蚀钢筋疲劳寿命预测中同时表达不确定性并保持物理合理性。摘要指出，常规方法的“assume a normal distribution”可能掩盖寿命分布特征，进而限制工程决策可靠性；问题不仅是点预测精度，还涉及概率描述是否符合观测。[摘要]",
+        "method": "方法以疲劳数据驱动贝叶斯更新，采用“variational Bayesian inference”将先验更新为后验，并在训练目标中嵌入物理约束。摘要称其不强加预定义分布形式，但未说明这具体针对何种分布，也未交代先验、似然及约束表达式，不能据此复现模型。[摘要]",
+        "innovation": "解读：潜在创新在于将物理约束学习与贝叶斯概率预测用于腐蚀钢筋疲劳寿命，并关注经验分布而非仅输出点值及区间。摘要以“distribution-aware modeling”概括其价值，但缺少与已有同类方法的系统对照，尚不能确认其首创性或具体创新边界。[摘要]",
+        "findings": "摘要报告模型预测表现持续优于常规神经网络，并发现寿命分布存在“substantial deviations from normality”。这些是作者报告的定性结果；摘要未给出误差、区间覆盖率、重复试验或显著性检验，因而不能量化优势，也不能确认不同工况下的稳定程度。[摘要]",
+        "limitations": "这里的局限指摘要级证据不足，而非作者已证实的模型缺陷。资料未交代试验样本数量、腐蚀程度覆盖、载荷条件、数据划分及外部验证，也未报告计算成本和后验近似质量。因此，泛化能力、概率校准表现及现场部署可行性均需全文证据支持。[摘要]",
+        "connection": "解读：该工作与疲劳可靠性方向直接相关，寿命概率描述可为结构风险分析提供输入；与智能运维的联系在于潜在支持检测和维修时机决策，与结构设计的联系在于寿命不确定性考虑。不过，摘要没有展示失效概率计算、运维优化或设计流程中的实际应用。[摘要]",
+        "next_steps": "建议：阅读全文时先核查物理约束依据、概率模型设定及对照实验公平性，再检查预测区间校准和非正态特征的统计证据。若开展迁移研究，可比较不同寿命分布对目标服役期失效概率的影响，并设置跨腐蚀程度验证；这些属于研究建议，不是作者已完成的成果。"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "用于腐蚀钢筋疲劳寿命概率估计的贝叶斯物理信息神经网络",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.semanticscholar.org/paper/330b40b960b4e4247f65d037270e4269714ed0a1"
+      ],
+      "analyzed_at": "2026-09-25T02:05:34.809245+00:00",
+      "llm_model": "gpt-6-astra"
     }
   ],
   "source_status": {
@@ -2298,13 +2618,13 @@
     "unavailable": 0
   },
   "analysis_status": {
-    "ready_core": 0,
+    "ready_core": 5,
     "target_core": 5,
-    "ready_extended": 0,
+    "ready_extended": 5,
     "target_extended": 5,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 10
+    "pending": 0
   },
   "edition": {
     "id": "36083974735",
