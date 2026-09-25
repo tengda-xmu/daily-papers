@@ -154,7 +154,6 @@ window.FilterPanels = {
     const filterCount = $('#filter-count');
     if (filterCount) { filterCount.textContent = String(activeFilters); filterCount.hidden = activeFilters === 0; }
     $$('.clear-filters').forEach((button) => { button.hidden = !filtering; });
-    $$('[data-group-filter]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.groupFilter === selectedVenue)));
     $$('[data-topic-filter]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.topicFilter === selectedTopic)));
     $$('[data-journal-filter]').forEach((button) => button.classList.toggle('active', button.dataset.journalFilter === selectedJournal));
     if (noData) noData.hidden = cards.length > 0;
@@ -186,13 +185,6 @@ window.FilterPanels = {
     if (topic) topic.value = topic.value === button.dataset.topicFilter ? '' : button.dataset.topicFilter;
     filter();
     if (button.classList.contains('paper-direction')) scrollToReading();
-  }));
-  $$('[data-group-filter]').forEach((button) => button.addEventListener('click', () => {
-    const active = button.getAttribute('aria-pressed') === 'true';
-    $$('[data-group-filter]').forEach((b) => b.setAttribute('aria-pressed', 'false'));
-    if (active) { if (venue) venue.value = ''; } else { button.setAttribute('aria-pressed', 'true'); if (venue) venue.value = button.dataset.groupFilter || ''; }
-    if (journal) journal.value = '';
-    filter();
   }));
   sort?.addEventListener('change', sortCards);
   importance?.addEventListener('change', filter);
