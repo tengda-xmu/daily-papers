@@ -594,7 +594,7 @@ def main() -> None:
     from src.ai_updates import public_index
     from tools.public_pages import render_ai
     ai = public_index(ROOT)
-    (OUT / 'ai.html').write_text(render_ai(ai), encoding='utf-8')
+    (OUT / 'ai.html').write_text(render_ai(ai), encoding='utf-8', newline='\n')
     (OUT / 'ai-updates.json').write_text(json.dumps(ai, ensure_ascii=False, indent=2), encoding='utf-8')
     if (DATA / 'public-updates.json').exists():
         shutil.copyfile(DATA / 'public-updates.json', OUT / 'public-updates.json')
