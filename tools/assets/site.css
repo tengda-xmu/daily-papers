@@ -117,7 +117,13 @@ button:disabled { cursor: default; }
   .lead-pagination { gap:10px; }
   .lead-filters label { flex-basis:135px; }
 }
-.daily-issue > .issue-meta { margin: 0 0 20px; }
+@media screen {
+  .main-content:has(> #recommendation-issue) { padding-top: 8px; }
+}
+.daily-issue > .issue-meta { margin: 0 0 8px; }
+.daily-issue > .direction-bar { margin-bottom: 8px; }
+.daily-issue .reading-toolbar { margin-top: 8px; }
+.daily-issue #core-section { margin-top: 14px; }
 .daily-update-panel { margin: 0 0 20px; padding: 12px 16px; border-left: 2px solid var(--blue); background: var(--soft); font-size: 13px; }
 .daily-update-panel p { margin-bottom: 8px; }
 .daily-update-panel form { max-width: 560px; }
