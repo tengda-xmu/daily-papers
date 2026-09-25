@@ -123,6 +123,8 @@ class History:
                     state['latest'] = appearance
                     if tier == 'core':
                         state['last_core'] = appearance
+                        evidence = (paper.get('recommendation_decision') or {}).get('heat') or {}
+                        state.setdefault('used_attention', set()).update(e.get('story_id') for e in evidence.get('events', []) if e.get('story_id'))
                     for key in keys:
                         self.by_alias[key] = identifier
 

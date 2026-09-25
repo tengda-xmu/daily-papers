@@ -84,8 +84,9 @@ def repeat_evidence(state, heat, now, policy=None):
     last = parse_date(state['last_core']['generated_at'])
     if (now.astimezone(BEIJING).date() - last.astimezone(BEIJING).date()).days < policy['cooldown_days']:
         return None
+    unused = [e for e in heat.get('attention', []) if e.get('story_id') not in state.get('used_attention', set())]
     return (citation_evidence(heat.get('citations', []), last, now, policy)
-            or attention_evidence(heat.get('attention', []), last, now, policy))
+            or attention_evidence(unused, last, now, policy))
 
 
 def fetch_citations(paper):

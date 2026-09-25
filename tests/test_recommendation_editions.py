@@ -106,6 +106,15 @@ def test_only_explicit_paper_mentions_count():
     assert verified_attention(p, [{**lead, 'summary': 'A topic similar to fault diagnosis'}]) == []
 
 
+def test_previously_used_attention_cannot_be_reused_with_new_dates(tmp_path):
+    p = paper()
+    p['recommendation_decision'] = {'kind': 'repeat', 'heat': {'kind': 'attention', 'events': events()}}
+    append(tmp_path, payload(1, [p], when=NOW-timedelta(days=40)))
+    state = History(tmp_path).find(p)
+    assert state['used_attention'] == {'journal', 'society'}
+    assert repeat_evidence(state, {'attention': events()}, NOW) is None
+
+
 def test_heat_refresh_daily_cache_and_failures(tmp_path):
     append(tmp_path, payload(1, [paper(1)]))
     h = History(tmp_path)
