@@ -158,6 +158,7 @@ def test_enrichment_preserves_batch_decisions(tmp_path):
     assert result['edition'] == original['edition'] and result['generated_at'] == original['generated_at']
     assert result['core'][0]['recommendation_decision'] == p['recommendation_decision']
     assert valid_analysis(result['core'][0])
+    assert result['analysis_status']['ready_core'] == 1 and result['analysis_status']['pending'] == 0
     assert 'deep_read' not in original['core'][0]
 
 

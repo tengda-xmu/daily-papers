@@ -145,6 +145,11 @@ def enrich(payload, analyses):
                         paper.update(public_analysis(item)['analysis'])
                 except ValueError:
                     pass
+    from src.reading_notes import valid_analysis
+    result['analysis_status'] = {**(result.get('analysis_status') or {}),
+        'ready_core': sum(valid_analysis(p) for p in result.get('core', [])),
+        'ready_extended': sum(valid_analysis(p) for p in result.get('extended', [])),
+        'pending': sum(not valid_analysis(p) for p in selected(result))}
     return result
 
 
