@@ -2,17 +2,17 @@
   "paper_id": "acfadad31d61",
   "fingerprint": "86fbbae6b25dc23a4b366e76bcd391d7dcb12d369fd18de4682b9ee31c07b2a4",
   "analysis": {
-    "title_zh": "针对淀粉样纤维的生成式蛋白质设计：包含AL淀粉样变性的跨方法基准与多态结构依赖性",
-    "summary": "生成式蛋白质设计能否从球状靶标推广到平坦、缺少口袋的淀粉样纤维表面？本文比较三种工具在三类疾病、八个冷冻电镜纤维结构上的结合蛋白设计表现。摘要报告，预测成功更依赖纤维多态结构，而非疾病类别；扩散方法在部分靶标上优于基于AF2幻觉的方法，并发现序列组成与预测界面置信度相关。本文仅作摘要级解读：结果属于计算可行性证据，不能等同于实验结合能力或治疗效果。[摘要]",
-    "recommendation": "推荐关注生成式设计跨靶标泛化、统一评分基准及计算资源约束的读者重点阅读；若目标是智能运维或工程结构可靠性，则仅有间接方法借鉴价值，不能视为直接应用证据。[摘要]",
+    "title_zh": "面向淀粉样纤维的生成式蛋白质设计：多态结构依赖性与跨方法基准比较",
+    "summary": "生成式蛋白质设计能否从球状靶标推广到平坦、无口袋的淀粉样纤维？本文以三类疾病的八种纤维结构比较三种设计工具，并统一预测评分流程。摘要报告，设计表现更依赖纤维多态结构，而非疾病类别；扩散方法在部分靶标上优于基于幻觉的方法。[摘要] 解读：研究值得作为生成式设计跨结构泛化的计算案例阅读，但预测置信度不能等同于真实结合效果，本解读不涉及全文。",
+    "recommendation": "建议作为生成式设计的跨靶标基准研究重点阅读，关注统一评分、结构分层与方法失败案例；若用于工程结构设计或智能运维，则仅宜参考其评估思路，不能直接迁移生物学结论。[摘要]",
     "deep_read": {
-      "problem": "研究问题是：主要在球状受体和信号蛋白上验证的生成式设计工具，能否适用于淀粉样纤维？摘要将其表面描述为“flat, pocket-less, cross-beta surfaces”，强调这种结构与既有基准靶标不同。核心关注的是跨靶标形态的泛化能力，而非直接证明疾病治疗效果。[摘要]",
-      "method": "研究比较RFdiffusion3、BindCraft和BindEnergyCraft，在涉及三类疾病的八个冷冻电镜纤维结构上生成结合蛋白。摘要说明采用共同的“AlphaFold2-Multimer scoring oracle”，并要求扩散生成骨架经过ProteinMPNN序列重设计；具体采样预算和完整验收规则未提供。[摘要]",
-      "innovation": "作者将工作定位为首次针对AL淀粉样纤维的生成式结合蛋白设计计算可行性评估，以及这些工具在淀粉样纤维靶标上的首次系统比较。摘要以“to our knowledge”限定首次性。解读：其贡献重点是拓展评测对象并揭示适用范围，而不是提出新的生成算法；首次性尚不能独立核实。[摘要]",
-      "findings": "摘要将设计成功概括为“polymorph-dependent rather than disease-dependent”。淀粉样β两个多态结构的i_pTM为0.09–0.15；α-突触核蛋白四种多态结构中三种达到i_pTM≥0.70；AL两种结构分别为0.235和0.585。这些是预测评分，不代表实测亲和力。[摘要]",
-      "limitations": "摘要未提供湿实验结合验证，因此不足以判断候选蛋白的真实亲和力、选择性或治疗潜力；也不能据此认定全文没有相关实验。另一个明确约束是“could not be run at all”：候选工具ESMFold2因硬件要求未能运行，故未进入三工具的实际比较。[摘要]",
-      "connection": "解读：该工作与生成式设计方向直接相关，但研究对象是蛋白质，不能自动归入工程结构设计。对智能运维和可靠性研究，可借鉴按结构子类检查模型失效、使用共同评价标准及记录硬件适用条件的思路；这属于跨领域方法联系，并非作者已经验证的工程应用成果。[摘要]",
-      "next_steps": "建议：进一步阅读时优先核查各工具计算预算、验收阈值、重复运行设置，以及统一评分器是否可能偏向特定生成路线。摘要报告序列β折叠形成倾向与置信度相关，不能直接作因果解释；后续可考虑控制序列组成开展比较，并用结合实验检验预测结果。[摘要]"
+      "problem": "研究问题是：主要在球状受体和信号蛋白上验证的生成式设计工具，能否设计针对淀粉样纤维的结合蛋白？这类靶标具有“flat, pocket-less, cross-beta surfaces”，与既有基准的结构明显不同，因而需要检验方法的适用边界。[摘要]",
+      "method": "作者比较RFdiffusion3、BindCraft和BindEnergyCraft，覆盖三类疾病的八种冷冻电镜纤维结构。各方法使用统一的AlphaFold2-Multimer评分，扩散生成骨架还必须经过ProteinMPNN序列重设计，以比较预测层面的设计表现。[摘要]",
+      "innovation": "作者将贡献定位为AL淀粉样蛋白结合物生成设计的首次计算可行性评估，以及这些工具在淀粉样纤维上的首次系统比较，并以“to our knowledge”限定优先性。[摘要] 解读：新意主要在靶标扩展与比较框架，摘要未显示提出了新的生成算法。",
+      "findings": "摘要称成功呈“polymorph-dependent rather than disease-dependent”：淀粉样β蛋白两种多态结构的i_pTM为0.09–0.15；α-突触核蛋白四种中三种达到≥0.70；AL两种分别为0.235和0.585。这里的成功属于预测评分层面。[摘要]",
+      "limitations": "摘要仅提供计算结果，未报告结合亲和力、特异性或实验验证；接受设计的具体阈值和完整采样设置也未交代。[摘要] 解读：共同评分器虽便于比较，却不能独立确认生物学有效性；八种结构也不足以确立所有淀粉样纤维的一般规律。",
+      "connection": "结合物形成β折叠的氨基酸倾向与预测界面置信度相关，Pearson r = 0.80，p < 0.001，n = 24。[摘要] 解读：这为生成式结构设计提供组成与几何适配的线索；对可靠性及智能运维，更可借鉴按结构条件分层评估的方法，而非直接套用该相关性。",
+      "next_steps": "建议优先核查全文的评分阈值、各方法计算预算和失败轨迹，再通过独立评分及结合实验验证候选物。针对摘要报告的硬件障碍，可另建兼容性清单。[摘要] 建议扩大多态结构覆盖，并控制序列组成开展对照，以区分β折叠倾向的相关关系与因果作用。"
     },
     "analysis_status": "ready",
     "analysis_basis": "abstract",
@@ -20,14 +20,21 @@
     "analysis_sources": [
       "https://doi.org/10.21203/rs.3.rs-11106209/v1"
     ],
-    "analyzed_at": "2026-09-25T02:09:56.935324+00:00",
+    "analyzed_at": "2026-09-25T17:31:44.095171+00:00",
     "llm_model": "gpt-6-astra"
   },
   "evaluation": {
     "direction_fit": true,
     "research_value": true,
     "evidence_sufficient": true,
-    "reason": "按输入唯一明确的方向标签generative_design判断，论文直接比较生成式蛋白质设计方法，具有清晰的靶标集合、共同评分流程及方法差异结果，足以支持重点阅读其计算基准。该肯定判断不涵盖实验有效性，也不意味着直接切合智能运维或工程可靠性研究。[摘要]",
+    "reason": "按所给generative_design标签判断，论文直接研究生成式蛋白质设计，方向切合；摘要明确给出跨工具比较方法、结构依赖差异和量化预测结果，足以支持重点阅读其计算基准，但不足以判断真实结合效果，也不能据此认定其直接适用于工程结构或智能运维。[摘要]",
     "evidence": "Diffusion-based backbone generation (RFdiffusion3) produced confident designs on several targets where AF2-hallucination-based methods (BindCraft, BindEnergyCraft) produced none."
+  },
+  "material": {
+    "version": "59f72e1cdb7faaa80d016b54e182ef68e62bbe76a160c5ef86b7c1db48d4bb75",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "Diffusion-based backbone generation (RFdiffusion3) produced confident designs on several targets where AF2-hallucination-based methods (BindCraft, BindEnergyCraft) produced none."
   }
 }

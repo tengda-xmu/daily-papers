@@ -2,17 +2,17 @@
   "paper_id": "9c6423c9957f",
   "fingerprint": "f396940f80e8b51e110299f589fe5fe950edbb6e72d6e7ac3c1c1dd488b44963",
   "analysis": {
-    "title_zh": "五种Tau纤维折叠对生成式蛋白结合体设计的多态非依赖性抵抗：跨Tau蛋白病基准研究",
-    "summary": "该研究检验Tau纤维不同结构多态是否影响生成式结合体设计的表现。作者以五种Tau蛋白病对应的冷冻电镜折叠为靶标，结合RFdiffusion3、ProteinMPNN与统一预测评分开展基准测试。摘要报告五种折叠均难以获得高评分结合体，且未检测到β折叠形成倾向与预测结合成功的相关关系[摘要]。解读：其价值在于呈现生成式设计跨蛋白家族迁移的失败边界，而非证明真实结合不可实现；本文仅作摘要级评估。",
-    "recommendation": "推荐关注生成式蛋白设计与失败案例评测的读者重点阅读：该研究提供统一流程下的跨折叠比较，但预测评分尚不能替代实验结合证据[摘要]。",
+    "title_zh": "五种Tau纤维折叠对生成式蛋白结合体设计的共同抗性：跨Tau蛋白病基准研究",
+    "summary": "本研究检验生成式结合体设计在Tau纤维上的表现是否依赖结构多态性。作者对五种疾病相关折叠使用RFdiffusion3生成设计、ProteinMPNN重设计序列，并统一采用AlphaFold2-Multimer评分。五种折叠的最佳i_pTM均较低，且未检出β折叠形成倾向与预测结合成功的相关性。[摘要]解读：研究提供了生成设计的失败边界线索，但计算评分不能直接证明真实结合失败；本解读仅依据摘要。",
+    "recommendation": "推荐作为生成式蛋白设计的负结果基准阅读，重点关注跨折叠比较和统一评分流程；若研究目标是工程结构设计或智能运维，则仅具方法借鉴价值。[摘要]解读。",
     "deep_read": {
-      "problem": "研究问题是：其他淀粉样纤维中观察到的结构多态依赖性，是否同样适用于Tau纤维结合体设计？摘要明确称其适用性“is untested”[摘要]。解读：研究意在区分折叠形态与蛋白家族背景对设计难度的影响，而不直接评估疾病治疗效果。",
-      "method": "作者将RFdiffusion3与强制ProteinMPNN序列重设计结合，面向五种Tau蛋白病的冷冻电镜纤维折叠生成候选，并用统一的“AlphaFold2-Multimer oracle”评分[摘要]。摘要未交代候选生成预算、筛选细则及重复设置，尚不足以完整复现流程。",
-      "innovation": "作者将创新定位为现代扩散式生成设计工具首次应用于Tau纤维，并以“to our knowledge”限定优先性声明[摘要]。解读：值得关注的是跨疾病折叠基准及其与其他蛋白家族结果的对照；摘要没有提出新模型，也不足以独立核实其首次性。",
-      "findings": "五种折叠的最佳界面预测模板建模评分i_pTM为0.116–0.401；β折叠形成倾向与预测成功的相关性未获支持（r=-0.19，p=0.50；n=15）。最高分设计为“an alpha-helical bundle”[摘要]。解读：这些发现限于预测层面。",
-      "limitations": "摘要未提供实验结合验证，也未说明与其他淀粉样蛋白基准的设置是否完全一致。“n=15 designs”指相关性分析样本，不能当作整个研究的候选总量[摘要]。解读：结果限定于所测五种折叠与设计评分流程，不能据此断言所有Tau结合体均不可设计。",
-      "connection": "解读：该研究与生成式设计的可靠性评估直接相关，统一评分下的跨折叠测试可启发结构设计中的分布外评测。与智能运维仅存在方法类比：关注持续失败的对象类别，而非只统计平均成功率；摘要的“all five tau folds proved resistant”提供这一启发[摘要]。",
-      "next_steps": "建议：后续阅读应优先核查生成预算、评分阈值、对照可比性，以及强制序列重设计对结果的影响。研究上可比较不同生成器和独立评分器，并对候选开展结合验证。这些是针对摘要预测证据提出的核验路径，不是作者已报告的实验或结论[摘要]。"
+      "problem": "研究问题是：其他淀粉样纤维中设计成败依赖结构多态性的规律，是否也适用于Tau纤维？摘要以“Whether this polymorph-dependence generalizes to tau”提出待检验问题。[摘要]解读：关键在于区分折叠差异与蛋白家族背景，而非直接验证治疗效果。",
+      "method": "作者以五种Tau蛋白病对应的冷冻电镜纤维折叠为靶标，采用RFdiffusion3，并强制进行ProteinMPNN序列重设计；所有候选统一经AlphaFold2-Multimer评分，原文称“a common AlphaFold2-Multimer oracle”。[摘要]未提供完整采样与筛选参数。",
+      "innovation": "作者将工作定位为现代扩散生成工具首次用于Tau纤维，并报告跨五种折叠的一致设计困难，但以“to our knowledge”限定优先性声明。[摘要]解读：潜在新意在于拓展负结果基准、挑战既有多态性规律，不能据摘要认定其提出了新算法或已证实普遍机制。",
+      "findings": "五种折叠的最佳i_pTM为“0.116-0.401”，表现最好的进行性核上性麻痹折叠仍未达到其他类别报道的易设计范围。[摘要]β折叠形成倾向与预测成功未检出相关性（r=-0.19，p=0.50；n=15），最高分设计为α螺旋束；这些均属计算结果。",
+      "limitations": "摘要仅报告预测评分，未提供实验结合验证；“n=15 designs”对应相关性分析，不能据此推定全部生成规模。[摘要]解读：未检出相关性不等于不存在关系，五种折叠的共同低分也不足以证明所有Tau结构或所有设计工具均不可行；全文细节目前缺失。",
+      "connection": "与生成式设计方向直接相关，摘要明确使用“RFdiffusion3”开展蛋白结合体设计。[摘要]解读：对可靠性研究的启发是检查模型在不同对象类别上的一致失效；对智能运维和工程结构设计，仅能迁移分组基准与失败分析思路，不能直接迁移分子结合结论。",
+      "next_steps": "建议：围绕摘要所述“all five tau folds proved resistant”，后续阅读全文时核查每种折叠的采样预算、靶面选择及评分阈值来源。[摘要]研究上可增加独立评分与结合实验，区分生成流程失败和评分器偏差，再用更大样本检验二级结构倾向；这些并非作者已完成的工作。"
     },
     "analysis_status": "ready",
     "analysis_basis": "abstract",
@@ -20,14 +20,21 @@
     "analysis_sources": [
       "https://doi.org/10.21203/rs.3.rs-11108822/v1"
     ],
-    "analyzed_at": "2026-09-25T02:09:07.891473+00:00",
+    "analyzed_at": "2026-09-25T17:30:53.271064+00:00",
     "llm_model": "gpt-6-astra"
   },
   "evaluation": {
     "direction_fit": true,
     "research_value": true,
     "evidence_sufficient": true,
-    "reason": "以所给标签generative_design为研究方向，本研究直接评测生成式蛋白结合体设计，且具有明确流程、跨五种折叠比较与定量预测结果，值得重点阅读。摘要足以支持方向匹配和基准研究价值判断，但不足以确认真实结合失败、机制解释或对工程结构设计的直接适用性。",
+    "reason": "以所给generative_design标签作为研究方向，本研究直接评估生成式蛋白设计，并提供跨五种Tau折叠的统一计算比较和负结果，具有重点阅读价值。[摘要]现有证据足以支持这一推荐，但不足以确认真实结合失败、普遍机制或工程应用价值。",
     "evidence": "all five tau folds proved resistant to binder design (best interface predicted template modeling score, i_pTM, 0.116-0.401 across folds)"
+  },
+  "material": {
+    "version": "00b5c7434977a5b934c6e1321e184a836ad7af39632fb53e529204eefdad6bec",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "all five tau folds proved resistant to binder design (best interface predicted template modeling score, i_pTM, 0.116-0.401 across folds)"
   }
 }
