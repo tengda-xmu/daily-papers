@@ -12,7 +12,7 @@ from urllib.parse import urljoin, urlsplit
 
 import requests
 
-MAX_BYTES = 20 * 1024 * 1024
+MAX_BYTES = 50 * 1024 * 1024
 MAX_PAGES = 300
 MAX_TEXT = 1_500_000
 PUBLIC_HOSTS = {"www.nature.com", "nature.com", "idp.nature.com", "arxiv.org", "export.arxiv.org",
@@ -48,7 +48,7 @@ def download(url):
             for chunk in r.iter_content(65536):
                 content.extend(chunk)
                 if len(content) > MAX_BYTES:
-                    raise ValueError("全文文件超过 20 MB，请使用较小的 PDF。")
+                    raise ValueError(f"全文文件超过 {MAX_BYTES // (1024 * 1024)} MB，请使用较小的 PDF。")
             return bytes(content), url
     raise ValueError("全文地址重定向次数过多。")
 

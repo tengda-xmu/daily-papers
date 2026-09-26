@@ -432,6 +432,30 @@ def test_unknown_paper_and_invalid_pdf_rejected(bridge):
     assert not rpc.inputs
 
 
+def test_pdf_upload_accepts_50_mb_and_rejects_larger_without_replacing_document(bridge):
+    c, app, _ = bridge; h = login(c, app)
+    limit = 50 * 1024 * 1024
+    original = pdf_bytes()
+    before, after = original.rsplit(b'startxref', 1)
+    # A valid PDF comment grows the file without altering page or xref offsets.
+    content = before + b'%' + b'x' * (limit - len(original) - 2) + b'\nstartxref' + after
+    assert len(content) == limit
+    url = f'/api/papers/{P1}/pdf'
+    result = c.post(url, files={'file': ('large.pdf', content, 'application/pdf')}, headers=h)
+    assert result.status_code == 200, result.text
+    saved = app.state.store.document(P1)
+    assert saved['page_count'] == 1 and 'measured evidence' in saved['pages'][0]['text']
+    assert (app.state.store.directory(P1) / saved['file']).stat().st_size == limit
+    result = c.post(url, files={'file': ('over.pdf', content + b'\n', 'application/pdf')}, headers=h)
+    assert result.status_code == 413 and '50 MB' in result.text
+    assert app.state.store.document(P1)['hash'] == saved['hash']
+    # The request-level guard must use the same limit and keep CORS error feedback.
+    result = c.post(url, content=b'x', headers={**h, 'Content-Length': str(limit + 65537)})
+    assert result.status_code == 413 and '50 MB' in result.text
+    assert result.headers['access-control-allow-origin'] == PUBLIC_ORIGIN
+    assert app.state.store.document(P1)['hash'] == saved['hash']
+
+
 def test_pdf_candidates_for_nature_arxiv_and_untrusted_urls():
     assert pdf_candidates({'oa_url': 'https://www.nature.com/articles/s44387-026-00102-5'})[0] == 'https://www.nature.com/articles/s44387-026-00102-5.pdf'
     assert pdf_candidates({'oa_url': 'https://arxiv.org/html/2608.07978v1'})[0] == 'https://arxiv.org/pdf/2608.07978v1'

@@ -176,6 +176,30 @@ def test_uploaded_pdf_title_is_used_in_reader_and_download(reader):
     playwright.expect(page.locator('.reader-name')).to_have_text(title)
 
 
+def test_pdf_size_limit_accepts_50_mb_and_shows_larger_file_error(reader):
+    from tests.test_codex_bridge import pdf_bytes
+    page, _, client, headers, _, _, _, requests, root = reader
+    original = pdf_bytes()
+    before, after = original.rsplit(b'startxref', 1)
+    path = root / '50mb.pdf'
+    path.write_bytes(before + b'%' + b'x' * (50 * 1024 * 1024 - len(original) - 2) + b'\nstartxref' + after)
+    with page.expect_file_chooser() as chooser:
+        page.locator('[data-read="upload"]').click()
+    chooser.value.set_files(str(path))
+    playwright.expect(page.locator('.reader-status')).to_contain_text('PDF 已就绪', timeout=20000)
+    playwright.expect(page.locator('[data-read="download"]')).to_be_enabled()
+    saved = client.get(f'/api/papers/{P1}', headers=headers).json()['document']['hash']
+    with path.open('ab') as file:
+        file.write(b'\n')
+    with page.expect_file_chooser() as chooser:
+        page.locator('[data-read="upload"]').click()
+    chooser.value.set_files(str(path))
+    playwright.expect(page.locator('.reader-status')).to_have_text('PDF 超过 50 MB，请选择较小的文件。')
+    assert sum(method == 'POST' and path == f'/api/papers/{P1}/pdf' for method, path in requests) == 1
+    assert client.get(f'/api/papers/{P1}', headers=headers).json()['document']['hash'] == saved
+    playwright.expect(page.locator('.reader-page').first).to_be_visible()
+
+
 def test_uploaded_original_figure_refreshes_core_card_and_opens_large_view(reader):
     import json
     from tests.test_figure_collection import DOI, pdf

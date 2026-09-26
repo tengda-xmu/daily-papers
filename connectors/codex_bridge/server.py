@@ -182,7 +182,8 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         except ValueError:
             return JSONResponse({"message": "无效的请求长度。"}, status_code=400, headers=cors)
         if too_large:
-            return JSONResponse({"message": "请求内容超过大小限制。"}, status_code=413, headers=cors)
+            message = f"PDF 超过 {MAX_BYTES // (1024 * 1024)} MB。" if request.url.path.endswith('/pdf') else "请求内容超过大小限制。"
+            return JSONResponse({"message": message}, status_code=413, headers=cors)
         if request.method == "OPTIONS":
             cors.update({"Access-Control-Allow-Methods": "GET,POST,DELETE,OPTIONS",
                          "Access-Control-Allow-Headers": "Authorization,Content-Type",
@@ -668,7 +669,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
             content = await file.read(MAX_BYTES + 1)
             await file.close()
             if len(content) > MAX_BYTES:
-                raise HTTPException(413, "PDF 超过 20 MB。")
+                raise HTTPException(413, f"PDF 超过 {MAX_BYTES // (1024 * 1024)} MB。")
             doc = await asyncio.to_thread(parse_pdf, content, store.directory(paper_id), Path(file.filename or "上传 PDF").name)
             store.set_document(paper_id, doc)
             reading_queue.document_available(paper_id)

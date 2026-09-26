@@ -47,7 +47,7 @@
     <section class="chat-documents" aria-label="论文资料">
       <div class="chat-doc-actions"><button type="button" class="chat-button" data-chat-action="upload">上传 PDF</button><button type="button" class="chat-button" data-chat-action="fetch-pdf">获取论文 PDF</button></div>
       <p class="chat-document-status" role="status">未载入 PDF，可上传或直接获取。</p>
-      <details><summary>阅读依据：摘要与本站解读</summary><p class="chat-document-note">文件仅保存在本机，最多 20 MB / 300 页。</p><button type="button" class="text-button" data-chat-action="fulltext">获取网页全文</button></details>
+      <details><summary>阅读依据：摘要与本站解读</summary><p class="chat-document-note">文件仅保存在本机，最多 50 MB / 300 页。</p><button type="button" class="text-button" data-chat-action="fulltext">获取网页全文</button></details>
       <input type="file" accept="application/pdf,.pdf" hidden>
     </section></div></header>
     <section class="chat-connect"><p>先运行“启动论文助手.cmd”。首次连接请粘贴配对码，记住浏览器后可自动连接。</p><div class="chat-pair-row"><input type="password" autocomplete="off" aria-label="本机配对码" placeholder="首次连接的配对码"><button class="chat-button" type="button" data-chat-action="connect">连接</button></div><label class="chat-remember"><input type="checkbox" checked>记住此浏览器，下次自动连接</label><p class="chat-local-help"><a class="chat-local-link" target="_blank" rel="noopener noreferrer">在本机打开论文助手</a> · 电脑须保持运行</p></section>
@@ -727,7 +727,7 @@
     const wasPreparing = remoteDocumentPending;
     remoteDocumentPending = Boolean(data.preparing);
     $('.chat-documents summary').textContent = `阅读依据：${doc ? doc.name : '摘要与本站解读'}`;
-    $('.chat-document-note').textContent = doc ? `${doc.kind === 'pdf' ? `${doc.page_count} 页，其中 ${doc.scan_pages} 页需图片识别。` : '正文按段落编号，可点击回答中的引用核查。'} 资料已更新时会建立新上下文；上传内容请与论文标题核对。` : '尚未读取全文。上传 PDF 仅保存在本机，最多 20 MB / 300 页。';
+    $('.chat-document-note').textContent = doc ? `${doc.kind === 'pdf' ? `${doc.page_count} 页，其中 ${doc.scan_pages} 页需图片识别。` : '正文按段落编号，可点击回答中的引用核查。'} 资料已更新时会建立新上下文；上传内容请与论文标题核对。` : '尚未读取全文。上传 PDF 仅保存在本机，最多 50 MB / 300 页。';
     if (!documentPending) {
       if (remoteDocumentPending) documentNotice('本机正在获取或解析资料，请稍候…', 'loading', true);
       else documentNotice(doc ? (doc.kind === 'pdf' ? `已载入 PDF · ${doc.page_count} 页${doc.scan_pages ? ` · ${doc.scan_pages} 页需图片识别` : ''}` : '已载入网页全文；可继续获取 PDF 以按页阅读。') : '未载入 PDF，可上传或直接获取。', doc ? 'ready' : '', wasPreparing);
@@ -1072,7 +1072,7 @@
     const file = event.target.files[0]; if (!file) return;
     event.target.value = '';
     if (uploadPaper !== paperId) { notice('论文已切换，请在当前论文重新选择要上传的 PDF。'); return; }
-    if (file.size > 20 * 1024 * 1024) { documentNotice('PDF 超过 20 MB，请选择较小的文件。', 'error', true); return; }
+    if (file.size > 50 * 1024 * 1024) { documentNotice('PDF 超过 50 MB，请选择较小的文件。', 'error', true); return; }
     const form = new FormData(); form.append('file', file);
     await prepareDocument('/pdf', form, `正在上传并解析 ${file.name}…`);
   });
