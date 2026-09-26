@@ -179,11 +179,19 @@ select { width: 100%; min-width: 0; padding: 9px 10px; border: 1px solid #ced8e2
 .compact-sort { display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; }
 .compact-sort select { width: auto; max-width: 100%; min-height: 38px; padding: 6px 4px 6px 8px; border-color: transparent; color: var(--muted); font-size: 12px; }
 .compact-sort select:hover { border-color: var(--line); }
+.period-control, .period-custom, .period-custom label { display:flex; align-items:center; flex-wrap:wrap; gap:6px 8px; max-width:100%; margin:0; }
+.period-custom label { white-space:nowrap; }
+.period-custom input { width:76px; min-height:38px; padding:6px 8px; border:1px solid var(--line); border-radius:4px; background:var(--paper); color:var(--ink); font:inherit; }
+.period-custom button { min-height:38px; padding:6px 10px; border:1px solid var(--line); border-radius:4px; background:var(--paper); color:var(--link); font:inherit; }
+.period-custom button:hover { background:var(--soft); border-color:var(--blue); }
+.period-hint { color:var(--muted); font-size:11px; }
+.period-error { flex-basis:100%; color:#a03020; }
+.period-custom input[aria-invalid="true"] { border-color:#a03020; }
 .filter-summary { margin: 0; color: var(--muted); font-size: 12px; overflow-wrap: anywhere; }
 @media (max-width: 900px) { .filter-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 640px) {
   .filter-fields { grid-template-columns: minmax(0, 1fr); }
-  .filter-chip, .compact-sort select, .compact-result-actions > .text-button, .compact-result-actions > a { min-height: 44px; }
+  .filter-chip, .compact-sort select, .compact-result-actions > .text-button, .compact-result-actions > a, .period-custom input, .period-custom button { min-height: 44px; }
   .compact-result-actions > .text-button, .compact-result-actions > a { display: inline-flex; align-items: center; }
   .compact-results { gap: 8px; }
 }

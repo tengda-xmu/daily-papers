@@ -308,14 +308,52 @@ window.FilterPanels = {
   const isAI = root.classList.contains('ai-updates');
   const get = id => root.querySelector('#' + id);
   const list = get('lead-list'), rows = Array.from(list.children);
-  const fields = ['query', 'topic', 'provider', 'state', 'sort', 'page-size', 'period', 'subtype', 'region', 'group', 'platform', 'author'].filter(name => get('lead-' + name));
+  const fields = ['query', 'topic', 'provider', 'state', 'sort', 'page-size', 'subtype', 'region', 'group', 'platform', 'author'].filter(name => get('lead-' + name));
   const controls = Object.fromEntries(fields.map(name => [name, get('lead-' + name)]));
   const categories = Array.from(root.querySelectorAll('[data-lead-kind]'));
   const filters = FilterPanels.create({button: get('lead-filter-toggle'), panel: get('lead-filter-panel'), chips: get('lead-filter-chips')});
+  const defaultPeriod = isAI ? '30' : '90', periodKey = `daily-papers-${isAI ? 'ai' : 'leads'}-period`;
+  const periodSelect = get('lead-period'), periodInput = get('lead-period-days');
+  const chinaDay = new Intl.DateTimeFormat('sv-SE', {timeZone:'Asia/Shanghai'});
+  let period = defaultPeriod;
+  function validPeriod(value) {
+    if (value === 'all') return value;
+    return /^\d+$/.test(value || '') && Number(value) >= 1 && Number(value) <= 3650 ? String(Number(value)) : '';
+  }
+  function savedPeriod() { try { return validPeriod(localStorage.getItem(periodKey)); } catch { return ''; } }
+  function rememberPeriod(value) {
+    try { if (value) localStorage.setItem(periodKey, value); else localStorage.removeItem(periodKey); } catch {}
+  }
+  function periodError(message = '') {
+    const error = get('lead-period-error'); error.textContent = message; error.hidden = !message;
+    if (message) periodInput.setAttribute('aria-invalid', 'true'); else periodInput.removeAttribute('aria-invalid');
+  }
+  function showPeriod() {
+    const custom = get('lead-period-custom'), hadFocus = custom.contains(document.activeElement);
+    periodSelect.value = ['7','30','90','all'].includes(period) ? period : 'custom';
+    periodSelect.querySelector('[value="custom"]').textContent = periodSelect.value === 'custom' ? `最近 ${period} 天（自定义）` : '自定义';
+    custom.hidden = periodSelect.value !== 'custom';
+    if (custom.hidden && hadFocus) periodSelect.focus();
+    periodInput.value = period === 'all' ? defaultPeriod : period;
+    periodError();
+  }
+  function publicationDay(value) {
+    const text = (value || '').trim(), date = text.slice(0,10);
+    if (!/^\d{4}-\d{2}-\d{2}(?:$|T)/.test(text)) return '';
+    const midnight = Date.parse(date + 'T00:00:00Z');
+    if (!Number.isFinite(midnight) || new Date(midnight).toISOString().slice(0,10) !== date) return '';
+    if (text.length === 10) return date;
+    // Date-only records retain their calendar date; zone-less timestamps use Beijing time.
+    const stamp = Date.parse(/(?:Z|[+-]\d{2}:?\d{2})$/i.test(text) ? text : text + '+08:00');
+    return Number.isFinite(stamp) ? chinaDay.format(stamp) : '';
+  }
+  const publicationDays = new Map(rows.map(row => [row, publicationDay(row.dataset.published)]));
   let category = 'all', page = 1;
   // Preserve a shareable view, including browser Back / Forward navigation.
   function restore() {
     const params = new URLSearchParams(location.search);
+    period = validPeriod(params.get('period')) || savedPeriod() || defaultPeriod;
+    showPeriod();
     category = categories.some(b => b.dataset.leadKind === params.get('kind')) ? params.get('kind') : 'all';
     for (const [name, field] of Object.entries(controls)) {
       const value = params.get(name);
@@ -323,10 +361,15 @@ window.FilterPanels = {
       else field.value = Array.from(field.options).some(o => o.value === value) ? value : field.options[0].value;
     }
     page = Math.max(1, parseInt(params.get('page'), 10) || 1);
-    draw();
+    draw(true);
   }
   function draw(save = false) {
-    const now = Date.now(), today = new Intl.DateTimeFormat('sv-SE', {timeZone:'Asia/Shanghai'}).format(now);
+    const now = Date.now(), today = chinaDay.format(now);
+    const firstDay = period === 'all' ? '' : new Date(Date.parse(today + 'T00:00:00Z') - (Number(period)-1)*86400000).toISOString().slice(0,10);
+    const inPeriod = row => {
+      const day = publicationDays.get(row);
+      return day ? day <= today && (!firstDay || day >= firstDay) : period === 'all';
+    };
     const opportunity = row => ['academic_role','funding'].includes(row.dataset.kind);
     for (const row of rows.filter(opportunity)) {
       let data; try {data = JSON.parse(row.dataset.opportunity);} catch {continue;}
@@ -355,7 +398,7 @@ window.FilterPanels = {
       && (!controls.subtype?.value || row.dataset.subtype === controls.subtype.value)
       && (!controls.region?.value || row.dataset.region === controls.region.value)
       && (!controls.group?.value || (controls.group.value === 'enterprise' ? row.dataset.enterprise === 'true' : row.dataset.group === controls.group.value))
-      && (!isAI || controls.period.value === 'all' || (Date.parse(row.dataset.published) <= now && Date.parse(row.dataset.published) >= now-Number(controls.period.value)*86400000)));
+      && inPeriod(row));
     matches.sort((a, b) => {
       if (controls.sort.value === 'date') return (a.dataset.start || '9999').localeCompare(b.dataset.start || '9999') || +a.dataset.rank - +b.dataset.rank;
       if (controls.sort.value === 'latest') return b.dataset.published.localeCompare(a.dataset.published) || +a.dataset.rank - +b.dataset.rank;
@@ -382,11 +425,11 @@ window.FilterPanels = {
     get('lead-prev').disabled = page === 1;
     get('lead-next').disabled = page === pages;
     filters.refresh();
-    if (isAI) get('lead-period-summary').textContent = controls.period.selectedOptions[0].textContent;
-    get('lead-reset').hidden = category === 'all' && Object.values(controls).every(field => field.value === (field.options?.[0]?.value || ''));
+    get('lead-reset').hidden = period === defaultPeriod && periodSelect.value !== 'custom' && category === 'all' && Object.values(controls).every(field => field.value === (field.options?.[0]?.value || ''));
     if (save) {
       const url = new URL(location.href);
       for (const name of ['kind', ...fields, 'page']) url.searchParams.delete(name);
+      url.searchParams.set('period', period);
       if (category !== 'all') url.searchParams.set('kind', category);
       for (const [name, field] of Object.entries(controls)) {
         const value = field.value;
@@ -397,10 +440,26 @@ window.FilterPanels = {
     }
   }
   categories.forEach(button => button.addEventListener('click', () => { category = button.dataset.leadKind; page = 1; draw(true); }));
+  function applyPeriod(value) {
+    period = value; page = 1; rememberPeriod(value); showPeriod(); draw(true);
+  }
+  periodSelect.addEventListener('change', () => {
+    if (periodSelect.value !== 'custom') return applyPeriod(periodSelect.value);
+    get('lead-period-custom').hidden = false; periodError();
+    get('lead-reset').hidden = false; periodInput.focus(); periodInput.select();
+  });
+  get('lead-period-form').addEventListener('submit', event => {
+    event.preventDefault();
+    if (periodSelect.value !== 'custom') return;
+    const value = validPeriod(periodInput.value);
+    if (!value) { periodError('请输入 1–3650 的整数天数。'); periodInput.focus(); return; }
+    applyPeriod(value);
+  });
   for (const [name, field] of Object.entries(controls)) field.addEventListener(name === 'query' ? 'input' : 'change', () => { page = 1; draw(true); });
   get('lead-filters').addEventListener('submit', event => event.preventDefault());
   get('lead-reset').addEventListener('click', () => {
     category = 'all'; page = 1;
+    period = defaultPeriod; rememberPeriod(''); showPeriod();
     for (const [name, field] of Object.entries(controls)) field.value = name === 'query' ? '' : field.options[0].value;
     draw(true);
   });
