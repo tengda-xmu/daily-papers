@@ -9,6 +9,8 @@ from contextlib import closing
 from fastapi import HTTPException
 from pydantic import BaseModel, Field
 
+from .document_names import name_original_pdf
+
 ID = re.compile(r'^[a-f0-9]{12}$')
 HASH = re.compile(r'^[a-f0-9]{16}$')
 FILE = re.compile(r'^(?:[a-f0-9]{16}|layout-[a-f0-9]{24}(?:-bilingual)?)\.pdf$')
@@ -80,9 +82,10 @@ class Library:
     def documents(self, paper_id):
         with self.store.connect() as db:
             rows = db.execute('SELECT content FROM library_documents WHERE paper=? ORDER BY rowid', (paper_id,)).fetchall()
+        paper = self.store.paper(paper_id) if rows else {}
         result = []
         for row in rows:
-            doc = json.loads(row[0])
+            doc = name_original_pdf(json.loads(row[0]), paper)
             doc['available'] = self.path(paper_id, doc['file']).is_file()
             result.append(doc)
         return result

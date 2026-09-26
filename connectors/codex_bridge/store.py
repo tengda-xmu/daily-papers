@@ -9,6 +9,8 @@ import secrets
 import sqlite3
 import time
 
+from .document_names import name_original_pdf
+
 
 ID_PATTERN = re.compile(r"^[a-f0-9]{12}$")
 BROWSER_LIFETIME = 90 * 24 * 3600
@@ -148,13 +150,15 @@ class Store:
 
     def set_document(self, paper_id, document):
         if document:
+            document = name_original_pdf(document, self.paper(paper_id))
             self.library.source(paper_id, document)
         with self.connect() as db:
             db.execute("INSERT INTO papers(id,document) VALUES(?,?) ON CONFLICT(id) DO UPDATE SET document=excluded.document, thread=NULL", (paper_id, json.dumps(document, ensure_ascii=False)))
 
     def document(self, paper_id):
         value = self.state(paper_id)["document"]
-        return json.loads(value) if value else None
+        # Resolve legacy names without rewriting documents, versions or private records.
+        return name_original_pdf(json.loads(value), self.paper(paper_id)) if value else None
 
     def history(self, paper_id, *, leaf=None, all_versions=False):
         with self.connect() as db:

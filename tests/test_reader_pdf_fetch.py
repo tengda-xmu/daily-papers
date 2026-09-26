@@ -123,3 +123,16 @@ def test_successful_acquisition_does_not_hide_pdf_viewer_failure(reader):
     pending[0].fulfill(json={'message': '已获取并载入论文 PDF。'})
     playwright.expect(page.locator('.reader-status')).to_contain_text('PDF 加载失败：PDF 文件不可读取')
     playwright.expect(page.locator('[data-read="fetch-pdf"]')).to_be_enabled()
+
+
+def test_uploaded_pdf_title_is_used_in_reader_and_download(reader):
+    from tests.test_pdf_annotations import source_pdf
+    page, context, *_ = reader
+    with page.expect_file_chooser() as chooser:
+        page.locator('[data-read="upload"]').click()
+    chooser.value.set_files({'name': '1-s2.0-paper-main (1).pdf', 'mimeType': 'application/pdf', 'buffer': source_pdf()})
+    playwright.expect(page.locator('.reader-name')).to_have_text('Paper A.pdf')
+    playwright.expect(page.locator('[data-read="download"]')).to_be_enabled()
+    with page.expect_download() as download:
+        page.locator('[data-read="download"]').click()
+    assert download.value.suggested_filename == 'Paper A.pdf'

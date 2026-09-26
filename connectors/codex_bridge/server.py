@@ -589,8 +589,11 @@ def create_app(root=ROOT, runtime=None, rpc=None):
 
     @app.get('/api/papers/{paper_id}/pdf')
     async def original_pdf(paper_id: str, version: str = ''):
-        _, path = await asyncio.to_thread(current_pdf, store, paper_id, version)
-        return FileResponse(path, media_type='application/pdf', filename='original.pdf', content_disposition_type='inline')
+        doc, path = await asyncio.to_thread(current_pdf, store, paper_id, version)
+        name = doc.get('name') or 'original.pdf'
+        if not name.lower().endswith('.pdf'):
+            name += '.pdf'
+        return FileResponse(path, media_type='application/pdf', filename=name, content_disposition_type='inline')
 
     @app.get('/api/papers/{paper_id}/annotations')
     async def annotations(paper_id: str, version: str = ''):
