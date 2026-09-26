@@ -23,6 +23,7 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
   let sourceDoc = null, versions = [], switching = false, documentLocked = false;
   let remembered = {last_version:'',positions:{}}, rememberedPaper='', positionTimer, positionSaving, positionDirty=false, updateRequest=0;
   const pageSizes = new Map();
+  const paperTitles = new Map();
   let zoomTimer = null, wheelZoom = null;
   let items = [], savedItems = [], revision = 0, dirty = false, saving = null, annotationError = '', leaving = false, undo = [], redo = [];
   let selection = null, tool = 'select', observer = null, rendering = false, queue = [], drawing = null, documentLoading = false;
@@ -48,6 +49,13 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
   const sourcePage = number => paired() ? Math.ceil(number / 2) : number;
   const displayPage = number => paired() ? number * 2 - 1 : number;
   const pageLabel = number => `P${sourcePage(number)}` + (paired() ? (number % 2 ? ' · 原文' : ' · 译文') : doc?.view === 'translated' ? ' · 译文' : '');
+  function displayTitle() {
+    // A filesystem-safe PDF name cannot preserve the original title's punctuation.
+    const title=paperTitles.get(paper);
+    const suffix=doc?.view==='translated'?' · 中文译文':paired()?' · 中英对照':'';
+    const name=title ? title+suffix : doc?.name || '尚未载入全文';
+    $('.reader-name').textContent=name;$('.reader-name').title=name;
+  }
   function versionMenu() {
     const select=$('.reader-version');select.replaceChildren();
     const groups=new Map();
@@ -356,13 +364,14 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
     try{if(await update(paper,sourceDoc,versions,hash)===false)return false;schedulePosition();await savePosition();return true;}
     finally{switching=false;controls();}
   }
-  async function update(nextPaper,nextSource,nextVersions=null,preferred='',reading=null){
+  async function update(nextPaper,nextSource,nextVersions=null,preferred='',reading=null,title=''){
+    if(title.trim())paperTitles.set(nextPaper,title.trim());
     const sameSource=nextPaper===paper && (nextSource?.hash || '')===(sourceDoc?.hash || '');
     const available=nextVersions || (sameSource?versions:[]);
     // Metadata refreshes (including clearing chat) must not cancel a pending
     // user-approved switch or replace the current annotation draft.
     if(sameSource && doc && (!preferred || preferred===doc.hash)) {
-      sourceDoc=nextSource;versions=available;if(!switching)versionMenu();return;
+      sourceDoc=nextSource;versions=available;displayTitle();if(!switching)versionMenu();return;
     }
     const request=++updateRequest;
     let nextRemembered=reading || remembered;
@@ -371,7 +380,7 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
     let chosen=preferred || (sameSource?doc?.hash:sourceChanged?nextSource?.hash:'');
     if(!chosen && !sourceChanged)chosen=nextRemembered.last_version;
     const nextDoc=available.find(v=>v.hash===chosen && v.available!==false) || (nextSource?{...nextSource,view:'original'}:null);
-    if(nextPaper===paper && (nextDoc?.hash || '')===(doc?.hash || '')){sourceDoc=nextSource;versions=available;versionMenu();return;}
+    if(nextPaper===paper && (nextDoc?.hash || '')===(doc?.hash || '')){sourceDoc=nextSource;versions=available;displayTitle();versionMenu();return;}
     if(!await prepareLeave()){versionMenu();return false;}if(request!==updateRequest)return false;
     if(nextDoc?.source_hash && nextDoc.source_hash!==nextSource?.hash && onSource){nextSource=await onSource(nextDoc.source_hash);if(request!==updateRequest)return;}
     remembered=nextRemembered;rememberedPaper=nextPaper;
@@ -380,7 +389,7 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
     const generation=++epoch;clearTimeout(zoomTimer);wheelZoom=null;pageSizes.clear();observer?.disconnect();views.forEach(clearView);views=[];queue=[];task?.destroy();task=null;pdf=null;
     paper=nextPaper;sourceDoc=nextSource;versions=available;doc=nextDoc;items=[];savedItems=[];dirty=false;annotationError='';revision=0;undo=[];redo=[];selection=null;documentLoading=false;positionDirty=false;$('.reader-selection').hidden=true;setTool('select');renderNotes();pages.replaceChildren();current=position?.page || displayPage(keepPage);versionMenu();controls();
     const zoom=$('.reader-zoom'),value=position?.zoom || 'fit';if(![...zoom.options].some(o=>o.value===value)){const option=new Option(`${Math.round(Number(value)*100)}%`,value);option.dataset.customZoom='true';zoom.append(option);}zoom.value=value;
-    $('.reader-name').textContent=doc?.name || '尚未载入全文';$('.reader-name').title=doc?.name || '';
+    displayTitle();
     $('.reader-page-count').textContent=`/ ${sourcePage(doc?.page_count || 0)}${paired()?' 对页':''}`;
     if(!doc){state('上传或获取 PDF 后可预览、批注和划词翻译。');const empty=document.createElement('div');empty.className='reader-empty';const heading=document.createElement('h3');heading.textContent='打开原文，边读边讨论';const hint=document.createElement('p');hint.textContent='点击上方“上传 PDF”或“获取 PDF”。原文会显示在这里，选中文字即可翻译、提问或标记。';empty.append(heading,hint);pages.append(empty);return;}
     state('正在载入'+(doc.label || '原文')+'…');documentLoading=true;controls();

@@ -1,6 +1,6 @@
 """The PDF reader must show document acquisition progress beside its own button."""
 import re
-from tests.test_reader_manual_save import browser, reader, note, playwright, P1
+from tests.test_reader_manual_save import browser, reader, note, playwright, P1, P2
 
 
 def empty_reader(page, context, client, headers):
@@ -126,16 +126,54 @@ def test_successful_acquisition_does_not_hide_pdf_viewer_failure(reader):
 
 
 def test_uploaded_pdf_title_is_used_in_reader_and_download(reader):
+    import json
     from tests.test_pdf_annotations import source_pdf
-    page, context, *_ = reader
+    page, _, _, _, original, alternative, _, _, root = reader
+    title = ('Prediction of residual life and critical crack length using the forward/inverse '
+             'machine learning based on the configurational force fatigue model')
+    path = root / 'data/daily.json'
+    data = json.loads(path.read_text(encoding='utf-8'))
+    data['core'][0]['title'] = title
+    path.write_text(json.dumps(data), encoding='utf-8')
     with page.expect_file_chooser() as chooser:
         page.locator('[data-read="upload"]').click()
     chooser.value.set_files({'name': '1-s2.0-paper-main (1).pdf', 'mimeType': 'application/pdf', 'buffer': source_pdf()})
-    playwright.expect(page.locator('.reader-name')).to_have_text('Paper A.pdf')
+    playwright.expect(page.locator('.reader-name')).to_have_text(title)
     playwright.expect(page.locator('[data-read="download"]')).to_be_enabled()
     with page.expect_download() as download:
         page.locator('[data-read="download"]').click()
-    assert download.value.suggested_filename == 'Paper A.pdf'
+    assert download.value.suggested_filename == title.replace('/', '_') + '.pdf'
+    # Internal version changes and metadata refreshes retain the unsanitized title.
+    for version in (alternative['hash'], original['hash']):
+        page.locator('.reader-version').select_option(version)
+        playwright.expect(page.locator('.reader-version')).to_be_enabled()
+        playwright.expect(page.locator('.reader-name')).to_have_text(title)
+    for width in (1920, 1440, 1024, 390, 320):
+        page.set_viewport_size({'width': width, 'height': 1000})
+        if width < 860:
+            page.locator('[data-tab="pdf"]').click()
+        for _ in range(2):
+            page.locator('[data-read="toggle-toolbar"]').click()
+            playwright.expect(page.locator('.reader-name')).to_be_visible()
+            assert page.locator('.reader-title-row').evaluate('(el) => el.scrollWidth <= el.clientWidth')
+            assert page.locator('.reader-name').evaluate('''el => {
+                const range=document.createRange();range.selectNodeContents(el);
+                const box=el.getBoundingClientRect();
+                return [...range.getClientRects()].every(r => r.left>=box.left-1 && r.right<=box.right+1 && r.bottom<=box.bottom+1);
+            }''')
+            for action in ('toggle-toolbar', 'hide'):
+                box = page.locator(f'[data-read="{action}"]').bounding_box()
+                assert 0 <= box['x'] and box['x'] + box['width'] <= width
+        if width <= 1440:
+            assert page.locator('.reader-name').evaluate('el => el.clientHeight > parseFloat(getComputedStyle(el).lineHeight)')
+    # The cached title must never leak into another paper's reader.
+    page.set_viewport_size({'width': 1440, 'height': 1000})
+    page.locator('.chat-close').click()
+    page.locator(f'.codex-entry[data-paper-id="{P2}"]').click()
+    playwright.expect(page.locator('.reader-name')).to_have_text('Paper B')
+    page.locator('.chat-close').click()
+    page.locator(f'.codex-entry[data-paper-id="{P1}"]').click()
+    playwright.expect(page.locator('.reader-name')).to_have_text(title)
 
 
 def test_uploaded_original_figure_refreshes_core_card_and_opens_large_view(reader):

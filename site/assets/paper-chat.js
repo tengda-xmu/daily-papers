@@ -720,7 +720,7 @@
     }
     let doc = data.document;
     currentDocument = doc;
-    if (dialog.open) await ensureReader().then(view => view.update(currentPaper, doc, data.pdf_versions || [], '', data.reading)).catch(error => notice(error.message));
+    if (dialog.open) await ensureReader().then(view => view.update(currentPaper, doc, data.pdf_versions || [], '', data.reading, data.paper.title || data.paper.title_zh || '')).catch(error => notice(error.message));
     doc=currentDocument;
     $('.chat-settings-toggle').textContent = '模型与资料' + (doc ? doc.kind === 'pdf' ? ` · PDF ${doc.page_count} 页` : ' · 已载入全文' : '');
     if (!screenshotPending) { screenshots = data.screenshots || []; drawScreenshots(); }

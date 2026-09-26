@@ -3,14 +3,20 @@
 .paper-chat[open].reader-open { width:100%; max-width:100%; display:grid; grid-template-columns:minmax(360px,1fr) 8px minmax(350px,var(--reader-chat-width,560px)); border-left:0; }
 .reader-open > .chat-width-resizer { display:none; }
 .reader-open > .chat-shell { min-width:0; grid-column:3; }
-.reader-open > .reader-pane { display:flex; min-width:0; min-height:0; flex-direction:column; height:100%; overflow:hidden; color:#161616; font:13px/1.5 var(--font); grid-column:1; }
+.reader-open > .reader-pane { display:flex; min-width:0; min-height:0; flex-direction:column; height:100%; overflow:hidden; color:#161616; font:13px/1.5 var(--font); grid-column:1; container:paper-reader / inline-size; }
 .reader-open > .reader-splitter { display:block; grid-column:2; grid-row:1; background:#e6ebef; cursor:ew-resize; touch-action:none; }
 .reader-splitter:hover,.reader-splitter:focus-visible { background:#97aebe; }
 .reader-header { position:relative; z-index:4; padding:10px 14px 5px; border-bottom:1px solid #d4dce3; background:#fff; flex:none; }
-.reader-title-row { display:flex; align-items:center; gap:12px; margin-bottom:7px; }
+.reader-title-row { display:grid; grid-template-columns:auto minmax(0,1fr) auto auto; align-items:start; gap:6px 12px; margin-bottom:7px; }
 .reader-title-row strong { white-space:nowrap; font-size:16px; }
-.reader-name { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#4b5258; }
+.reader-name { min-width:0; white-space:normal; overflow-wrap:anywhere; color:#4b5258; }
 .reader-title-row > button { flex:none; white-space:nowrap; }
+@container paper-reader (max-width:640px) {
+  .reader-name { grid-column:1 / -1; grid-row:2; }
+  .reader-title-row > button { grid-row:1; }
+  .reader-title-row > [data-read="toggle-toolbar"] { grid-column:3; }
+  .reader-title-row > [data-read="hide"] { grid-column:4; }
+}
 .reader-toolbar[hidden],.reader-toolbar-collapsed .reader-status:not(.reader-error):not(.reader-document-status) { display:none; }
 .reader-toolbar-collapsed .reader-title-row { margin-bottom:0; }
 .reader-toolbar-collapsed .reader-header { padding-bottom:10px; }
