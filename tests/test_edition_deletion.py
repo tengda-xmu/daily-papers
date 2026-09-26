@@ -111,8 +111,11 @@ def test_build_removes_old_files_and_dead_provenance_links(tmp_path, monkeypatch
     html = (out / 'archive/index.html').read_text(encoding='utf-8')
     assert '2 批归档' in html and '当前推荐' in html and 'archive-manage' in html
     p = paper(1); p['recommendation_decision'] = {'kind': 'promotion', 'previous': batches[0]['edition'], 'reason': 'Earlier decision'}
-    assert '该批次已删除' in build_site.recommendation_context(p, '../')
-    assert '2026-09-25--1.html' not in build_site.recommendation_context(p, '../')
+    context = build_site.recommendation_context(p, '../')
+    assert 'recommendation-context' not in context
+    assert '该批次已删除' not in context and '2026-09-25--1.html' not in context
+    assert 'analysis-pending' in context
+    assert '2026-09-25--1.html' in build_site.recommendation_context(p, '../', set())
 
 
 class Remote:

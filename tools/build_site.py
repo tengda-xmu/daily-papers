@@ -246,13 +246,12 @@ def recommendation_context(paper, root, deleted_editions=None):
     from src.editions import archive_name, manifest
     decision = paper.get('recommendation_decision') or {}
     result = ''
-    if decision:
+    removed = deleted_editions if deleted_editions is not None else {e['id'] for e in manifest(DATA)['deleted']}
+    if decision and decision.get('previous', {}).get('id') not in removed:
         previous = decision['previous']
         label = '由扩展阅读升级' if decision['kind'] == 'promotion' else '热度上升，再次推荐'
         target = root + 'archive/' + archive_name(previous) + '.html'
-        removed = deleted_editions if deleted_editions is not None else {e['id'] for e in manifest(DATA)['deleted']}
-        prior_link = ('<span>该批次已删除</span>' if previous['id'] in removed
-                      else f'<a href="{target}">查看原推荐批次</a>')
+        prior_link = f'<a href="{target}">查看原推荐批次</a>'
         evidence = decision.get('heat') or {}
         links = ''.join(f' <a href="{safe_url(e["url"])}" target="_blank" rel="noopener noreferrer">{esc(e["organization"])}</a>'
                         for e in evidence.get('events', []))
