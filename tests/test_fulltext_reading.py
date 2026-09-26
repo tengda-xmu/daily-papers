@@ -9,7 +9,7 @@ import pytest
 
 from connectors.codex_bridge.reading_queue import ReadingQueue
 from connectors.codex_bridge.reading_materials import MaterialResolver
-from src.auto_reading import fingerprint, public_analysis
+from src.auto_reading import READER_VERSION, fingerprint, public_analysis
 from src.editions import read
 from src.paper_sources import clean_abstract, inspect_html, inspect_xml
 from tests.test_reading_queue import sample, response, task, FakeClient
@@ -53,7 +53,7 @@ def test_fulltext_covers_every_batch_and_keeps_snapshot_identity(tmp_path):
     assert value['fingerprint'] == fingerprint(p)
     assert value['analysis']['analysis_basis'] == 'full_text'
     assert value['material']['covered'] == value['material']['total'] == 2
-    assert len(json.loads(row['checkpoint'])['notes']) == 2
+    assert set(json.loads(row['checkpoint'])['pages']) == {'P1', 'P2'}
     assert len(client.calls) == 3
     assert 'document' not in value['material'] and 'text' not in value['material']
     assert json.loads(row['paper'])['abstract'] == p['abstract']
@@ -70,7 +70,8 @@ def test_unreadable_pages_never_complete_and_retries_reuse_completed_batches(tmp
     assert task(q)['state'] == 'retry' and task(q)['result'] is None
     assert task(q)['attempts'] == 1
     client.readable = True
-    checkpoint = {'version': m['version'], 'notes': ['已完成第一批 [P1] 的阅读要点。' * 10]}
+    checkpoint = {'version': m['version'], 'reader_version': READER_VERSION, 'notes': [], 'pages': {
+        'P1': {'status': 'read', 'notes': '已完成第一批 [P1] 的阅读要点。' * 10, 'issues': []}}}
     with q.db() as db:
         db.execute('UPDATE tasks SET checkpoint=?', (json.dumps(checkpoint),))
     client.calls.clear()
@@ -174,7 +175,7 @@ def test_scanned_pages_are_supplied_as_images_and_not_silently_skipped(tmp_path,
     monkeypatch.setattr('connectors.codex_bridge.documents.render_scan', scans)
     q = ReadingQueue(tmp_path, tmp_path / 'run', client, asyncio.Lock(), resolver=lambda p, **kw: m)
     q.quiet_until = 0; q.enqueue(p); asyncio.run(q.process(task(q)))
-    assert seen == [1] and any(images for _, images in client.calls)
+    assert seen == [1, 2] and any(images for _, images in client.calls)
     assert task(q)['state'] == 'ready'
 
 
@@ -205,7 +206,7 @@ def test_structured_batch_notes_keep_original_page_references(tmp_path):
     q.quiet_until=0; q.enqueue(p); asyncio.run(q.process(task(q)))
     assert task(q)['state']=='ready'
     assert 'P2' in json.loads(task(q)['checkpoint'])['notes'][0]
-    assert (q.runtime/'reading-drafts'/p['id']/'batch-1.json').is_file()
+    assert (q.runtime/'reading-drafts'/p['id']/f'v{READER_VERSION}-P1.json').is_file()
 
 
 def test_unclear_extracted_formula_is_reread_from_original_page_images(tmp_path, monkeypatch):
@@ -219,7 +220,8 @@ def test_unclear_extracted_formula_is_reread_from_original_page_images(tmp_path,
         async def turn(self, thread, prompt, images=()):
             if 'paper_matches' in prompt:
                 label='P2' if '[P2]' in prompt else 'P1'
-                value={'readable':bool(images),'paper_matches':True,'unreadable_pages':[label],
+                value={'readable':bool(images),'paper_matches':True,'unreadable_pages':[] if images else [label],
+                       'issues':[{'page':label,'kind':'extraction_error','detail':'已根据原页核对并纠正公式符号。'}] if images else [],
                        'notes':'已核对原文中的模型关系、公式与图注，保留页码及可核验的原文依据。'*4}
                 yield {'type':'delta','text':json.dumps(value,ensure_ascii=False)}
             else:
@@ -227,4 +229,4 @@ def test_unclear_extracted_formula_is_reread_from_original_page_images(tmp_path,
     q=ReadingQueue(tmp_path,tmp_path/'run',Visual(p),asyncio.Lock(),resolver=lambda *a,**kw:m)
     q.quiet_until=0; q.enqueue(p); asyncio.run(q.process(task(q)))
     assert task(q)['state']=='ready' and rendered==[1,2]
-    assert 'original_page_corrections' in task(q)['checkpoint']
+    assert 'extraction_error' in task(q)['checkpoint']

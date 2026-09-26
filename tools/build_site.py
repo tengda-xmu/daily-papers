@@ -102,8 +102,10 @@ def document(content: str, *, title: str, root: str = "./", active: str = "daily
                       (f'<link rel="stylesheet" href="{root}assets/wechat-subscriptions.css?v={version}">'
                        f'<script src="{root}assets/wechat-subscriptions.js?v={version}" defer></script>'
                        f'<script src="{root}assets/reading-tasks.js?v={version}" defer></script>') if active == 'setup' else
-                      f'<script src="{root}assets/daily-update.js?v={version}" defer></script>' if active == 'daily' else
-                      f'<script src="{root}assets/archive-manager.js?v={version}" defer></script>' if active == 'archive' else '',
+                      (f'<script src="{root}assets/daily-update.js?v={version}" defer></script>'
+                       f'<script src="{root}assets/reading-tasks.js?v={version}" defer></script>') if active == 'daily' else
+                      (f'<script src="{root}assets/archive-manager.js?v={version}" defer></script>'
+                       f'<script src="{root}assets/reading-tasks.js?v={version}" defer></script>') if active == 'archive' else '',
     )
 
 
@@ -260,8 +262,13 @@ def recommendation_context(paper, root, deleted_editions=None):
                   f'<p>{esc(decision["reason"])}</p><p>{esc(evidence.get("reason", ""))}{links}</p>'
                   f'{prior_link}</details>')
     state = paper.get('reading_status') or {}
-    if paper.get('analysis_status') == 'ready':
+    if state and state.get('state') not in ('published', 'awaiting_fulltext'):
+        from src.auto_reading import status_label
+        label = status_label(state)
+    elif paper.get('analysis_status') == 'ready':
         label = '全文精读已完成' if paper.get('analysis_basis') == 'full_text' else '摘要解读已完成，全文待补充'
+        if paper.get('analysis_basis') == 'full_text' and any(i['kind'] == 'source_defect' for i in paper.get('analysis_issues', [])):
+            label += ' · 原文有缺项'
         from src.paper_sources import clean_abstract
         if (paper.get('analysis_basis') != 'full_text' and not paper.get('analysis_material_version')
                 and paper.get('source') in ('Google Scholar', 'ResearchGate') and not clean_abstract(paper.get('abstract'))):
@@ -274,7 +281,12 @@ def recommendation_context(paper, root, deleted_editions=None):
         label = '精读未完成 · 可在本机任务中重试'
     else:
         label = '资料获取中 · 本机助手运行时自动补充'
-    result += f'<p class="analysis-pending">{label}</p>'
+    result += f'<p class="analysis-pending" data-reading-status="{esc(paper.get("id", ""))}" data-reading-result="{esc(paper.get("analyzed_at", ""))}">{label}</p>'
+    issues = state.get('issues', []) if state and state.get('state') != 'published' else paper.get('analysis_issues', [])
+    if issues:
+        items = ''.join(f'<li>{esc(i["page"])} · {esc(i["detail"])}</li>' for i in issues if i['kind'] != 'extraction_error')
+        if items:
+            result += f'<details class="reading-issues"><summary>资料核对说明</summary><ul>{items}</ul></details>'
     return result
 
 

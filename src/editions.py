@@ -252,6 +252,7 @@ def enrich(payload, analyses):
                         if item.get('material'):
                             paper['analysis_references'] = item['material']['references']
                             paper['analysis_material_version'] = item['material']['version']
+                            paper['analysis_issues'] = item['material'].get('issues', [])
                 except ValueError:
                     pass
             translated = chinese_title(paper, titles)

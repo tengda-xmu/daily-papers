@@ -114,9 +114,28 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     note_manager = NoteManager(root)
     from .reading_queue import ReadingQueue
     def reading_documents(identifier):
-        return [(doc, store.library.path(identifier, doc['file'])) for doc in store.library.documents(identifier)
+        current = store.document(identifier) or {}
+        docs = [doc for doc in store.library.documents(identifier)
                 if doc.get('available') and doc.get('view') == 'original' and doc.get('kind') == 'pdf']
-    reading_queue = ReadingQueue(root, runtime, client, generation_lock, documents=reading_documents)
+        docs.sort(key=lambda d: (d['hash'] == current.get('hash'), d.get('created', 0)), reverse=True)
+        return [(doc, store.library.path(identifier, doc['file'])) for doc in docs]
+    def acquired_pdf(identifier, material):
+        import shutil
+        doc = material['document']
+        if any(d['hash'] == doc['hash'] and d.get('available') for d in store.library.documents(identifier)):
+            return
+        source = Path(material['directory']) / doc['file']
+        destination = store.directory(identifier) / doc['file']
+        if source.resolve() != destination.resolve():
+            temporary = destination.with_suffix('.pdf.tmp')
+            shutil.copyfile(source, temporary)
+            temporary.replace(destination)
+        # Never replace an original the user selected during acquisition.
+        if not store.document(identifier) and identifier not in jobs and identifier not in preparing:
+            store.set_document(identifier, doc)
+        else:
+            store.library.source(identifier, doc)
+    reading_queue = ReadingQueue(root, runtime, client, generation_lock, documents=reading_documents, acquired=acquired_pdf)
     from .ai_queue import AIQueue
     ai_queue = AIQueue(root, runtime, client, generation_lock)
     from .local_figures import LocalFigures
@@ -693,7 +712,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
                 raise HTTPException(413, f"PDF 超过 {MAX_BYTES // (1024 * 1024)} MB。")
             doc = await asyncio.to_thread(parse_pdf, content, store.directory(paper_id), Path(file.filename or "上传 PDF").name)
             store.set_document(paper_id, doc)
-            reading_queue.document_available(paper_id)
+            reading_task = reading_queue.document_available(paper_id)
             await asyncio.to_thread(local_figures.ensure, paper_id)
         except (ValueError, HTTPException):
             raise
@@ -701,7 +720,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
             raise ValueError("PDF 解析失败，请检查文件是否损坏或加密。")
         finally:
             preparing.discard(paper_id)
-        return {"message": "PDF 已就绪。后续问题使用新资料，对话将新建独立上下文。", "page_count": doc["page_count"]}
+        return {"message": "PDF 已就绪，推荐论文将自动进行全文精读。", "page_count": doc["page_count"], 'reading_task': reading_task}
 
     @app.post('/api/papers/{paper_id}/screenshots')
     async def upload_screenshot(paper_id: str, file: UploadFile):
@@ -737,14 +756,14 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         try:
             doc = await asyncio.to_thread(fetch_fulltext, store.paper(paper_id), store.directory(paper_id))
             store.set_document(paper_id, doc)
-            reading_queue.document_available(paper_id)
+            reading_task = reading_queue.document_available(paper_id)
         except ValueError:
             raise
         except Exception:
             raise ValueError("开放全文暂时获取失败，请上传 PDF；已有资料保持可用。")
         finally:
             preparing.discard(paper_id)
-        return {"message": "开放全文已载入，后续问题使用新资料。"}
+        return {"message": "开放全文已载入，推荐论文将自动进行全文精读。", 'reading_task': reading_task}
 
     @app.post("/api/papers/{paper_id}/fetch-pdf")
     async def get_pdf(paper_id: str):
@@ -753,7 +772,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         try:
             doc = await asyncio.to_thread(fetch_pdf, store.paper(paper_id), store.directory(paper_id))
             store.set_document(paper_id, doc)
-            reading_queue.document_available(paper_id)
+            reading_task = reading_queue.document_available(paper_id)
             await asyncio.to_thread(local_figures.ensure, paper_id)
         except ValueError:
             raise
@@ -762,7 +781,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         finally:
             preparing.discard(paper_id)
         return {"message": f"已获取并载入论文 PDF，共 {doc['page_count']} 页。后续问答使用该 PDF。",
-                "page_count": doc["page_count"], "scan_pages": doc["scan_pages"]}
+                "page_count": doc["page_count"], "scan_pages": doc["scan_pages"], 'reading_task': reading_task}
 
     async def generate(ask, queue):
         message_id = None

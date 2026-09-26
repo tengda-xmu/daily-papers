@@ -61,7 +61,8 @@ class MaterialResolver:
                 continue
         discovered = discover(paper, self.fetch)
         abstract, abstract_url = discovered['abstract'], discovered['abstract_url']
-        urls, visited, failures = list(discovered['urls']), set(), []
+        urls = sorted(discovered['urls'], key=lambda url: not re.search(r'(?i)(\.pdf(?:[?#]|$)|/pdf(?:[/?#]|$))', url))
+        visited, failures, full_html = set(), [], None
         while urls and len(visited) < 8:
             url = urls.pop(0)
             if url in visited:
@@ -81,7 +82,7 @@ class MaterialResolver:
                 if found:
                     abstract, abstract_url = found, final
                 if document:
-                    return self.save(path, bundle(paper, document, directory), signature)
+                    full_html = full_html or document
                 urls[:0] = [link for link in links[:2] if link not in visited]
             except requests.HTTPError as exc:
                 failures.append('restricted' if exc.response is not None and exc.response.status_code in (401, 403, 429) else 'not_found')
@@ -90,6 +91,8 @@ class MaterialResolver:
             except (ValueError, KeyError):
                 failures.append('unverified')
                 continue
+        if full_html:
+            return self.save(path, bundle(paper, full_html, directory), signature)
         # Known literature APIs return abstracts; web-search snippets never qualify.
         if not abstract and paper.get('source') in ('Crossref', 'OpenAlex', 'PubMed', 'arXiv', 'Semantic Scholar', 'Nature Portfolio（CNS）'):
             abstract = clean_abstract(paper.get('abstract'))

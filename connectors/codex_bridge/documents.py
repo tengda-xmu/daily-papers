@@ -218,11 +218,22 @@ def page_selection(value, count):
     return sorted(selected)
 
 
-def render_scan(document, directory, page_numbers):
+def render_scan(document, directory, page_numbers, *, detail=False):
     import pypdfium2 as pdfium
     result = []
     with pdfium.PdfDocument(directory / document["file"]) as pdf:
         for number in page_numbers:
+            if detail:
+                page = pdf[number - 1]
+                image = page.render(scale=3).to_pil()
+                page.close()
+                width, height = image.size
+                for part, box in enumerate(((0, 0, width, int(height * .56)), (0, int(height * .44), width, height))):
+                    dest = directory / f'{document["hash"]}-p{number}-detail-{part}.png'
+                    if not dest.exists():
+                        image.crop(box).save(dest)
+                    result.append(dest)
+                continue
             dest = directory / f'{document["hash"]}-p{number}.png'
             if not dest.exists():
                 page = pdf[number - 1]
