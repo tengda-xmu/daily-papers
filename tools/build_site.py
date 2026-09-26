@@ -81,7 +81,7 @@ def template(name: str, **values) -> str:
 
 def document(content: str, *, title: str, root: str = "./", active: str = "daily") -> str:
     version = hashlib.sha256(
-        b"".join((ASSETS / name).read_bytes() for name in ("reading-tasks.js", "site.css", "site.js", "paper-library.js", "paper-library.css", "daily-update.js", "paper-chat.css", "paper-chat.js", "paper-reader.css", "paper-reader.js", "manual-search.css", "manual-search.js", "journal-manager.css", "journal-manager.js", "research-directions.css", "research-directions.js", "wechat-subscriptions.css", "wechat-subscriptions.js"))
+        b"".join((ASSETS / name).read_bytes() for name in ("archive-manager.js", "reading-tasks.js", "site.css", "site.js", "paper-library.js", "paper-library.css", "daily-update.js", "paper-chat.css", "paper-chat.js", "paper-reader.css", "paper-reader.js", "manual-search.css", "manual-search.js", "journal-manager.css", "journal-manager.js", "research-directions.css", "research-directions.js", "wechat-subscriptions.css", "wechat-subscriptions.js"))
     ).hexdigest()[:10]
     return template(
         "page.html", content=content.lstrip(), title=esc(title), root=root, version=version,
@@ -102,7 +102,8 @@ def document(content: str, *, title: str, root: str = "./", active: str = "daily
                       (f'<link rel="stylesheet" href="{root}assets/wechat-subscriptions.css?v={version}">'
                        f'<script src="{root}assets/wechat-subscriptions.js?v={version}" defer></script>'
                        f'<script src="{root}assets/reading-tasks.js?v={version}" defer></script>') if active == 'setup' else
-                      f'<script src="{root}assets/daily-update.js?v={version}" defer></script>' if active == 'daily' else '',
+                      f'<script src="{root}assets/daily-update.js?v={version}" defer></script>' if active == 'daily' else
+                      f'<script src="{root}assets/archive-manager.js?v={version}" defer></script>' if active == 'archive' else '',
     )
 
 
@@ -134,7 +135,7 @@ def paper_figure(paper: dict, root: str = "./") -> str:
   </figure>'''
 
 
-def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_labels=None) -> str:
+def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_labels=None, deleted_editions=None) -> str:
     topic_labels = topic_labels or {k: v['label'] for k, v in TOPIC_CATALOG.items()}
     facets = paper_facets(paper)
     title = paper.get("title") or "未命名论文"
@@ -233,7 +234,7 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
   {original}
   <p class="bibliography"><span class="authors">{esc(short_authors)}</span>{venue_line}</p>
   </div><div class="paper-rating-slot"></div></div>
-{recommendation_context(paper, root)}
+{recommendation_context(paper, root, deleted_editions)}
   <p class="abstract">{esc(preview)}</p>
 {figure_html}
   <div class="paper-tools">{primary_action}<button type="button" class="text-button paper-toggle" data-label="{note_label}" aria-expanded="false" aria-controls="{panel_id}">{note_label}<span aria-hidden="true">＋</span></button>{chat_button}</div>
@@ -241,21 +242,24 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
 </article>'''
 
 
-def recommendation_context(paper, root):
-    from src.editions import archive_name
+def recommendation_context(paper, root, deleted_editions=None):
+    from src.editions import archive_name, manifest
     decision = paper.get('recommendation_decision') or {}
     result = ''
     if decision:
         previous = decision['previous']
         label = '由扩展阅读升级' if decision['kind'] == 'promotion' else '热度上升，再次推荐'
         target = root + 'archive/' + archive_name(previous) + '.html'
+        removed = deleted_editions if deleted_editions is not None else {e['id'] for e in manifest(DATA)['deleted']}
+        prior_link = ('<span>该批次已删除</span>' if previous['id'] in removed
+                      else f'<a href="{target}">查看原推荐批次</a>')
         evidence = decision.get('heat') or {}
         links = ''.join(f' <a href="{safe_url(e["url"])}" target="_blank" rel="noopener noreferrer">{esc(e["organization"])}</a>'
                         for e in evidence.get('events', []))
         result = (f'<details class="recommendation-context"><summary>{label} · '
                   f'上次 {esc(previous["date"])} 第 {previous["number"]} 批</summary>'
                   f'<p>{esc(decision["reason"])}</p><p>{esc(evidence.get("reason", ""))}{links}</p>'
-                  f'<a href="{target}">查看原推荐批次</a></details>')
+                  f'{prior_link}</details>')
     state = paper.get('reading_status') or {}
     if paper.get('analysis_status') == 'ready':
         label = '全文精读已完成' if paper.get('analysis_basis') == 'full_text' else '摘要解读已完成，全文待补充'
@@ -445,7 +449,7 @@ data-subtype="{esc(row.get('subtype', ''))}" data-region="{esc(row.get('region',
         title='科研线索 | 每日论文推荐', active='leads')
 
 
-def render(payload: dict, *, archive_date: str | None = None) -> str:
+def render(payload: dict, *, archive_date: str | None = None, deleted_editions=None) -> str:
     core = payload.get("core") or []
     extended = payload.get("extended") or []
     all_papers = core + extended
@@ -478,8 +482,11 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
     issue = archive_date or day
     edition = payload.get('edition') or {}
     root = "../" if archive_date else "./"
-    core_html = "".join(paper_card(p, "core", i, root, topic_labels) for i, p in enumerate(core))
-    extended_html = "".join(paper_card(p, "extended", i, root, topic_labels) for i, p in enumerate(extended))
+    from src.editions import manifest
+    if deleted_editions is None:
+        deleted_editions = {e['id'] for e in manifest(DATA)['deleted']}
+    core_html = "".join(paper_card(p, "core", i, root, topic_labels, deleted_editions) for i, p in enumerate(core))
+    extended_html = "".join(paper_card(p, "extended", i, root, topic_labels, deleted_editions) for i, p in enumerate(extended))
     direction_chips = ''.join(f'<button type="button" data-topic-filter="{esc(d["id"])}" aria-pressed="false">{esc(d["name"])}<span>{sum(d["id"] in p.get("topic_tags", []) for p in all_papers)}</span></button>' for d in shown_directions)
     direction_bar = (f'<div class="direction-bar"><div class="direction-label"><span>本期方向</span>'
                      f'<a href="{root}directions.html" data-local-only>管理方向</a></div>'
@@ -524,33 +531,67 @@ def render(payload: dict, *, archive_date: str | None = None) -> str:
                     active="archive" if archive_date else "daily")
 
 
+def archive_index(index, current=''):
+    from src.editions import archive_name
+    groups = []
+    for day in sorted({e['date'] for e in index}, reverse=True):
+        rows = []
+        for entry in sorted((e for e in index if e['date'] == day), key=lambda e: e['number'], reverse=True):
+            name = archive_name(entry)
+            label = f'{day} 第 {entry["number"]} 批'
+            protected = entry['id'] == current
+            check = f'<input type="checkbox" class="archive-choice" data-edition-id="{esc(entry["id"])}" aria-label="选择 {label}" {"disabled" if protected else ""}>'
+            badge = '<span class="archive-current">当前推荐</span>' if protected else ''
+            trigger = {'manual': '手动更新', 'scheduled': '自动更新', 'recovered': '历史恢复'}.get(entry.get('trigger'), '更新')
+            rows.append(f'<li class="archive-entry" data-edition-id="{esc(entry["id"])}">{check}<div><a class="archive-date" href="{name}.html">第 {entry["number"]} 批 · {esc(display_time(entry["generated_at"])[1])}</a>{badge}<p>{trigger} · 核心推荐 {entry["core_count"]} 篇 · 扩展阅读 {entry["extended_count"]} 篇</p></div><a href="{name}.json" download>下载数据</a></li>')
+        groups.append(f'<li><details class="archive-day" data-day="{day}"><summary>{day} · {len(rows)} 批</summary><label class="archive-day-choice"><input type="checkbox" data-day="{day}">选择当天可删除批次</label><ul>{"".join(rows)}</ul></details></li>')
+    content = template('archive.html', entries=''.join(groups) or '<li class="empty">尚无历史归档。</li>', count=len(index))
+    return document(content, title='历史归档 | 每日论文推荐', root='../', active='archive')
+
+
+def clear_generated_directory(name):
+    # These are owned build outputs. Resolve and validate before recursive removal.
+    target = (OUT / name).resolve()
+    if name not in ('archive', 'editions') or target.parent != OUT.resolve():
+        raise ValueError('Invalid generated directory')
+    if target.exists():
+        shutil.rmtree(target)
+
+
 def build_archive() -> None:
     from src.editions import entries as edition_entries, relative_path, archive_name, enrich
     from src.auto_reading import load as load_readings
+    clear_generated_directory('archive')
     archive_out = OUT / "archive"
     archive_out.mkdir(parents=True, exist_ok=True)
     entries = []
     index = edition_entries(DATA)
     analyses = load_readings(DATA)
-    if index:
+    if index or (DATA / 'editions/index.json').exists():
         for day in sorted({e['date'] for e in index}, reverse=True):
             batches = sorted((e for e in index if e['date'] == day), key=lambda e: e['number'], reverse=True)
-            rows = []
             for entry in batches:
                 payload = enrich(read_json(DATA / relative_path(entry), {}), analyses)
                 name = archive_name(entry)
                 encoded = json.dumps(payload, ensure_ascii=False, indent=2)
                 (archive_out / (name + '.json')).write_text(encoded, encoding='utf-8')
                 (archive_out / (name + '.html')).write_text(render(payload, archive_date=f'{day} · 第 {entry["number"]} 批'), encoding='utf-8')
-                _, time = display_time(entry['generated_at'])
-                trigger = {'manual': '手动更新', 'scheduled': '自动更新', 'recovered': '历史恢复'}.get(entry['trigger'], '更新')
-                rows.append(f'<li class="archive-entry"><div><a class="archive-date" href="{name}.html">第 {entry["number"]} 批 · {esc(time)}</a><p>{trigger} · 核心推荐 {entry["core_count"]} 篇 · 扩展阅读 {entry["extended_count"]} 篇</p></div><a href="{name}.json" download>下载数据</a></li>')
             latest = archive_name(batches[0])
             for suffix in ('.html', '.json'):
                 shutil.copyfile(archive_out / (latest + suffix), archive_out / (day + suffix))
-            entries.append(f'<li><details class="archive-day"><summary>{day} · {len(batches)} 批</summary><ul>{"".join(rows)}</ul></details></li>')
-        content = template('archive.html', entries=''.join(entries), count=len(index))
-        (archive_out / 'index.html').write_text(document(content, title='历史归档 | 每日论文推荐', root='../', active='archive'), encoding='utf-8')
+        from src.editions import current_id
+        from src.editions import manifest, edition_id
+        removed = manifest(DATA)['deleted']
+        known_days = {e['date'] for e in index + removed}
+        removed_ids = {e['id'] for e in removed}
+        # Keep pre-edition date links when they were never explicitly deleted.
+        for source in (DATA / 'archive').glob('*.json'):
+            payload = read_json(source, {})
+            if source.stem not in known_days and edition_id(payload) not in removed_ids:
+                shutil.copyfile(source, archive_out / source.name)
+                (archive_out / (source.stem + '.html')).write_text(render(payload, archive_date=source.stem), encoding='utf-8')
+        content = archive_index(index, read_json(DATA / 'daily.json', {}).get('edition', {}).get('id') or current_id({'editions': index}))
+        (archive_out / 'index.html').write_text(content, encoding='utf-8')
         return
     for source in sorted((DATA / "archive").glob("*.json"), reverse=True):
         payload = read_json(source, {})
@@ -608,7 +649,10 @@ def main() -> None:
     payload = enrich(read_json(DATA / "daily.json", {}), analyses)
     (OUT / "index.html").write_text(render(payload), encoding="utf-8")
     (OUT / "data.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
-    for name in ('editions', 'updates', 'auto-reading', 'reading-status'):
+    from src.editions import manifest, write, entries as edition_entries, relative_path
+    clear_generated_directory('editions')
+    write(OUT / 'editions/index.json', manifest(DATA))
+    for name in ('updates', 'auto-reading', 'reading-status'):
         if (DATA / name).is_dir():
             shutil.copytree(DATA / name, OUT / name, dirs_exist_ok=True)
     if (DATA / 'update-status.json').exists():
@@ -616,6 +660,7 @@ def main() -> None:
     from src.editions import entries as edition_entries, relative_path
     for entry in edition_entries(DATA):
         path = relative_path(entry)
+        (OUT / path).parent.mkdir(parents=True, exist_ok=True)
         (OUT / path).write_text(json.dumps(enrich(read_json(DATA / path, {}), analyses), ensure_ascii=False, indent=2), encoding='utf-8')
     build_archive()
     (OUT / 'library.html').write_text(document(template('library.html'),

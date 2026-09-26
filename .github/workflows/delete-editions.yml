@@ -1,0 +1,54 @@
+name: Delete archive editions
+run-name: Delete editions ${{ inputs.request_id }}
+on:
+  workflow_dispatch:
+    inputs:
+      request_id:
+        description: Idempotent paired archive request
+        required: true
+        type: string
+      revision:
+        description: Expected archive revision
+        required: true
+        type: string
+      edition_ids:
+        description: JSON array of edition identifiers
+        required: true
+        type: string
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: daily-papers-update
+  cancel-in-progress: false
+jobs:
+  delete:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: pip install -r requirements.txt
+      - name: Validate and delete selected editions
+        env:
+          DELETE_REQUEST_ID: ${{ inputs.request_id }}
+          DELETE_REVISION: ${{ inputs.revision }}
+          DELETE_EDITION_IDS: ${{ inputs.edition_ids }}
+        run: python -m tools.delete_editions
+      - run: python tools/build_site.py
+      - name: Persist deletion and candidate metadata before deployment
+        run: |
+          git config user.name github-actions
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data site
+          git diff --cached --quiet || git commit -m "chore: delete selected archive editions"
+          git push
+      - uses: actions/upload-pages-artifact@v3
+        with: {path: site}
+      - uses: actions/deploy-pages@v4
+        id: deployment

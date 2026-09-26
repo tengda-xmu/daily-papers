@@ -24,6 +24,7 @@ from .store import Store
 from .search import SearchService, SearchRequest, MoreRequest, SOURCES, SORT_OPTIONS
 from .journals import JournalManager, JournalChange, Revision
 from .daily_update import DailyUpdater, UpdateRequest
+from .edition_manager import EditionManager, DeleteRequest
 from .directions import DirectionManager, DirectionChange
 from .wechat_subscriptions import SubscriptionManager, SubscriptionChange
 from .social_notes import NoteManager, NoteChange
@@ -107,6 +108,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     search_service = SearchService(root, runtime)
     journal_manager = JournalManager(root)
     daily_updater = DailyUpdater(runtime)
+    edition_manager = EditionManager(root, runtime)
     direction_manager = DirectionManager(root)
     subscription_manager = SubscriptionManager(root)
     note_manager = NoteManager(root)
@@ -128,10 +130,12 @@ def create_app(root=ROOT, runtime=None, rpc=None):
             reading_queue.start()
             ai_queue.start()
             local_figures.start()
+            edition_manager.start()
         yield
         await reading_queue.close()
         await ai_queue.close()
         await local_figures.close()
+        await edition_manager.close()
         for job in list(jobs.values()):
             job["task"].cancel()
         if jobs:
@@ -151,6 +155,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     app.state.search = search_service
     app.state.journals = journal_manager
     app.state.daily_updater = daily_updater
+    app.state.edition_manager = edition_manager
     app.state.directions = direction_manager
     app.state.wechat_subscriptions = subscription_manager
     app.state.social_notes = note_manager
@@ -313,6 +318,22 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     @app.get('/api/recommendations/update')
     async def recommendation_progress():
         return await asyncio.to_thread(daily_updater.snapshot)
+
+    @app.get('/api/recommendations/editions')
+    async def recommendation_editions():
+        return await asyncio.to_thread(edition_manager.snapshot)
+
+    @app.post('/api/recommendations/editions/delete')
+    async def delete_recommendation_editions(data: DeleteRequest):
+        return await asyncio.to_thread(edition_manager.submit, data)
+
+    @app.get('/api/recommendations/editions/operations/{identifier}')
+    async def edition_operation(identifier: uuid.UUID):
+        return await asyncio.to_thread(edition_manager.status, str(identifier))
+
+    @app.post('/api/recommendations/editions/operations/{identifier}/retry')
+    async def retry_edition_operation(identifier: uuid.UUID):
+        return await asyncio.to_thread(edition_manager.retry, str(identifier))
 
     @app.get('/api/recommendations/reading-tasks')
     async def reading_tasks():
@@ -1051,7 +1072,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
 
     @app.get("/assets/{name}")
     async def asset(name: str):
-        if name not in ("reading-tasks.js", "paper-library.js", "paper-library.css", "paper-reader.js", "paper-reader.css", "paper-chat.js", "paper-chat.css", "site.css", "site.js", "daily-update.js", "manual-search.js", "manual-search.css", "journal-manager.js", "journal-manager.css", "research-directions.js", "research-directions.css", "wechat-subscriptions.js", "wechat-subscriptions.css", "favicon.svg"):
+        if name not in ("archive-manager.js", "reading-tasks.js", "paper-library.js", "paper-library.css", "paper-reader.js", "paper-reader.css", "paper-chat.js", "paper-chat.css", "site.css", "site.js", "daily-update.js", "manual-search.js", "manual-search.css", "journal-manager.js", "journal-manager.css", "research-directions.js", "research-directions.css", "wechat-subscriptions.js", "wechat-subscriptions.css", "favicon.svg"):
             raise HTTPException(404)
         return FileResponse(root / "tools/assets" / name)
 
@@ -1091,11 +1112,13 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     @app.get('/recommendations.html')
     async def recommendations_page():
         from tools.build_site import render
+        from src.editions import read, manifest
         path = runtime / 'recommendations.json'
         if not path.exists():
             path = root / 'data/daily.json'
         payload = json.loads(path.read_text(encoding='utf-8')) if path.exists() else {}
-        return Response(render(payload), media_type='text/html')
+        removed = {e['id'] for e in manifest(root / 'data')['deleted'] + read(runtime / 'edition-manifest.json').get('deleted', [])}
+        return Response(render(payload, deleted_editions=removed), media_type='text/html')
 
     @app.get('/directions.html')
     async def directions_page():
@@ -1116,21 +1139,21 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     @app.get('/archive/')
     @app.get('/archive/{name}')
     async def archive_page(name: str = 'index.html'):
-        from src.editions import read, archive_name, valid_entry
-        from tools.build_site import render, document, esc
+        from src.editions import read, archive_name, valid_entry, manifest, current_id
+        from tools.build_site import render, archive_index
+        cache = read(runtime / 'edition-manifest.json')
+        value = manifest(root / 'data')
+        deleted = {e['id'] for e in value['deleted'] + cache.get('deleted', [])}
         snapshots = {}
         for path in store.paper_paths():
             payload = read(path)
             entry = payload.get('edition') or {}
-            if valid_entry(entry):
+            if valid_entry(entry) and entry['id'] not in deleted:
                 snapshots[archive_name(entry)] = payload
         if name == 'index.html':
-            rows = []
-            for day in sorted({p['edition']['date'] for p in snapshots.values()}, reverse=True):
-                batch = sorted((p for p in snapshots.values() if p['edition']['date'] == day), key=lambda p: p['edition']['number'], reverse=True)
-                links = ''.join(f'<li class="archive-entry"><a href="{archive_name(p["edition"])}.html">第 {p["edition"]["number"]} 批 · {esc(p["generated_at"])}</a></li>' for p in batch)
-                rows.append(f'<details class="archive-day"><summary>{day} · {len(batch)} 批</summary><ul>{links}</ul></details>')
-            return Response(document('<a href="/recommendations.html">返回最新一期</a>' + ''.join(rows), title='历史归档', root='../', active='archive'), media_type='text/html')
+            index = [p['edition'] for p in snapshots.values()]
+            page = archive_index(index, current_id({'editions': index}))
+            return Response(page.replace('href="../">返回最新一期', 'href="/recommendations.html">返回最新一期'), media_type='text/html')
         match = re.fullmatch(r'(\d{4}-\d{2}-\d{2})(?:--([A-Za-z0-9_-]{1,80}))?\.(html|json)', name)
         if not match:
             raise HTTPException(404)
@@ -1142,7 +1165,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         if match[3] == 'json':
             return payload
         entry = payload['edition']
-        page = render(payload, archive_date=f'{entry["date"]} · 第 {entry["number"]} 批')
+        page = render(payload, archive_date=f'{entry["date"]} · 第 {entry["number"]} 批', deleted_editions=deleted)
         return Response(page.replace('href="../">返回最新一期', 'href="/recommendations.html">返回最新一期'), media_type='text/html')
 
     return app

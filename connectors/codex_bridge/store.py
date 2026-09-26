@@ -137,6 +137,10 @@ class Store:
         saved = self.library.metadata(paper_id)
         if saved:
             return saved
+        from src.editions import candidates
+        saved = candidates(self.root / 'data').get(paper_id)
+        if saved:
+            return saved
         raise ValueError("本机还没有这篇论文。请先同步 GitHub 仓库的最新数据，再打开对应文章。")
 
     def state(self, paper_id):

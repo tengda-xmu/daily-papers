@@ -29,6 +29,7 @@
   async function refresh() {
     try {
       const data = await api(endpoint);
+      data.tasks = data.tasks.filter(task => task.enabled !== false);
       message.textContent = `共 ${data.tasks.length} ${unit} · 已发布 ${data.counts.published} ${unit} · 正在${work} ${data.counts.generating} ${unit}` + (data.sync_state === 'retry' ? ' · 公开内容同步等待重试' : '');
       list.replaceChildren();
       for (const task of data.tasks) {

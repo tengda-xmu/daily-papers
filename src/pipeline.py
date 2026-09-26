@@ -369,6 +369,7 @@ def run_pipeline(
     # Historical papers stay observable even when outside discovery's date range.
     if history:
         all_records.extend(RawRecord.from_mapping(s['paper']) for s in history.papers.values())
+        all_records.extend(RawRecord.from_mapping(p) for p in history.candidates.values())
     ranked = []
     for record in deduplicate(record for record in all_records if record.source != "微信公众号"):
         record.topic_tags = match_directions(record, profile)
@@ -391,6 +392,8 @@ def run_pipeline(
         prior = history.find(data) if history else None
         if prior:
             data['id'] = prior['id']
+        elif history:
+            data['id'] = history.identity(data)
         data.update(paper_facets(data))
         data["focus_tags"] = focus_tags(record.title, record.abstract)
         analysis = cached_analysis(record)

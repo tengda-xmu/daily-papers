@@ -43,7 +43,98 @@ def edition_id(payload):
 
 
 def entries(data):
-    return read(Path(data) / 'editions/index.json', {}).get('editions', [])
+    return manifest(data)['editions']
+
+
+def manifest(data):
+    return normalize_manifest(read(Path(data) / 'editions/index.json', {}))
+
+
+def normalize_manifest(value):
+    removed = {e['id'] for e in value.get('deleted', [])}
+    return {**value, 'schema': 2, 'editions': [e for e in value.get('editions', []) if e['id'] not in removed],
+            'deleted': value.get('deleted', []), 'operations': value.get('operations', {})}
+
+
+def current_id(value):
+    rows = value.get('editions', [])
+    return max(rows, key=lambda e: (e['date'], e['number']))['id'] if rows else ''
+
+
+def revision(value):
+    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+
+
+def candidates(data):
+    return read(Path(data) / 'recommendation-candidates.json', {}).get('papers', {})
+
+
+def remember_candidates(data, papers):
+    from src.auto_reading import public_paper
+    saved = candidates(data)
+    for paper in papers:
+        identifier = paper.get('id')
+        if not re.fullmatch(r'[a-f0-9]{12}', str(identifier or '')):
+            continue
+        value = public_paper(paper)
+        value.update({k: paper[k] for k in ('source', 'source_id', 'oa_url', 'pdf_url', 'citation_count', 'source_score') if paper.get(k) is not None})
+        keys = aliases(paper) | (aliases(saved[identifier]) if identifier in saved else set())
+        value['raw_metadata'] = {'identity_aliases': [list(k) for k in sorted(keys)]}
+        saved[identifier] = value
+    write(Path(data) / 'recommendation-candidates.json', {'schema': 1, 'papers': saved})
+
+
+def prune_deleted(data):
+    """Remove obsolete batch snapshots/aliases, preserving independent paper data."""
+    data = Path(data)
+    value = manifest(data)
+    for row in value['deleted']:
+        (data / relative_path(row)).unlink(missing_ok=True)
+    for day in {e['date'] for e in value['deleted']}:
+        rows = [e for e in value['editions'] if e['date'] == day]
+        target = data / 'archive' / (day + '.json')
+        if rows:
+            latest = max(rows, key=lambda e: e['number'])
+            payload = read(data / relative_path(latest))
+            if payload:
+                write(target, payload)
+        else:
+            target.unlink(missing_ok=True)
+
+
+def delete_editions(data, identifiers, expected_revision, request_id):
+    """All-or-nothing validation; journal first, then recoverable file cleanup."""
+    data = Path(data)
+    value = manifest(data)
+    identifiers = sorted(set(identifiers))
+    old = value['operations'].get(request_id)
+    if old:
+        if old['edition_ids'] != identifiers:
+            raise ValueError('请求编号已用于另一组批次。')
+        prune_deleted(data)
+        return value
+    if revision(value) != expected_revision:
+        raise ValueError('批次列表已变化，请刷新后重新选择。')
+    by_id = {e['id']: e for e in value['editions']}
+    if not identifiers or any(i not in by_id for i in identifiers):
+        raise ValueError('所选批次不存在，请刷新后重新选择。')
+    protected = {current_id(value), read(data / 'daily.json').get('edition', {}).get('id')}
+    if protected.intersection(identifiers):
+        raise ValueError('当前推荐批次不能删除。')
+    papers = []
+    for identifier in identifiers:
+        payload = read(data / relative_path(by_id[identifier]))
+        if payload.get('edition') != by_id[identifier] or not selected(payload):
+            raise ValueError('批次资料不完整，未执行删除。')
+        papers.extend(selected(payload))
+    remember_candidates(data, papers)
+    when = datetime.now(timezone.utc).isoformat()
+    value['deleted'].extend({**by_id[i], 'deleted_at': when, 'request_id': request_id} for i in identifiers)
+    value['editions'] = [e for e in value['editions'] if e['id'] not in identifiers]
+    value['operations'][request_id] = {'edition_ids': identifiers, 'deleted_at': when}
+    write(data / 'editions/index.json', value)
+    prune_deleted(data)
+    return value
 
 
 def valid_entry(row):
@@ -70,7 +161,10 @@ def append(data, payload, *, trigger='manual', day=None):
     """Stage a fixed edition. It becomes history only when these files publish."""
     data = Path(data)
     index = entries(data)
+    state = manifest(data)
     identifier = edition_id(payload)
+    if identifier in {e['id'] for e in state['deleted']}:
+        return None
     existing = next((e for e in index if e['id'] == identifier), None)
     if existing:
         return read(data / relative_path(existing))
@@ -80,7 +174,7 @@ def append(data, payload, *, trigger='manual', day=None):
     if not when:
         raise ValueError('Edition requires a real generation time')
     day = day or when.astimezone(BEIJING).date().isoformat()
-    row = {'id': identifier, 'date': day, 'number': 1 + max((e['number'] for e in index if e['date'] == day), default=0),
+    row = {'id': identifier, 'date': day, 'number': 1 + max((e['number'] for e in index + state['deleted'] if e['date'] == day), default=0),
            'generated_at': payload['generated_at'], 'trigger': trigger,
            'core_count': len(payload.get('core', [])), 'extended_count': len(payload.get('extended', []))}
     snapshot = copy.deepcopy(payload)
@@ -90,7 +184,7 @@ def append(data, payload, *, trigger='manual', day=None):
     write(data / relative_path(row), snapshot)
     index.append(row)
     index.sort(key=lambda e: (e['date'], e['number']))
-    write(data / 'editions/index.json', {'schema': 1, 'editions': index})
+    write(data / 'editions/index.json', {**state, 'editions': index})
     write(data / 'archive' / (day + '.json'), snapshot)
     return snapshot
 
@@ -109,6 +203,8 @@ def aliases(paper):
 class History:
     def __init__(self, data):
         self.by_alias, self.papers = {}, {}
+        self.candidates = candidates(data)
+        self.identities = {key: identifier for identifier, p in self.candidates.items() for key in aliases(p)}
         for entry in entries(data):
             payload = read(Path(data) / relative_path(entry))
             for tier in ('core', 'extended'):
@@ -127,6 +223,10 @@ class History:
                         state.setdefault('used_attention', set()).update(e.get('story_id') for e in evidence.get('events', []) if e.get('story_id'))
                     for key in keys:
                         self.by_alias[key] = identifier
+                        self.identities[key] = identifier
+
+    def identity(self, paper):
+        return next((self.identities[k] for k in sorted(aliases(paper)) if k in self.identities), paper.get('id'))
 
     def find(self, paper):
         identifier = next((self.by_alias[k] for k in aliases(paper) if k in self.by_alias), None)

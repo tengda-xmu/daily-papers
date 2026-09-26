@@ -1,3 +1,13 @@
 <h1 id="archive-heading" class="sr-only">历史归档</h1>
-<div class="archive-toolbar"><p>共 $count 批归档</p><a href="../">返回最新一期</a></div>
+<div class="archive-toolbar"><p id="archive-count">共 $count 批归档</p><div><button type="button" id="archive-manage" class="text-button" aria-expanded="false" aria-controls="archive-controls" hidden>管理批次</button> <a href="../">返回最新一期</a></div></div>
+<div id="archive-controls" hidden>
+  <label><input type="checkbox" id="archive-select-all">全选可删除批次</label>
+  <span id="archive-selected" aria-live="polite">已选择 0 批</span>
+  <button type="button" id="archive-delete" disabled>删除所选</button>
+  <button type="button" id="archive-cancel">取消</button>
+</div>
+<p id="archive-operation" role="status" hidden></p>
+<p id="archive-connect" hidden>管理批次需要连接本机助手。<a href="http://127.0.0.1:43127/archive/" target="_blank" rel="noopener">在本机打开</a> · <a href="../setup.html">连接设置</a></p>
+<form id="archive-pair" hidden><label>配对码 <input id="archive-pair-code" type="password" autocomplete="off" required></label><label><input id="archive-remember" type="checkbox" checked>记住此浏览器</label><button type="submit">连接本机</button></form>
+<button type="button" id="archive-retry" hidden>重试删除与发布</button>
 <ul class="archive-list">$entries</ul>

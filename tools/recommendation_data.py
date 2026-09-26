@@ -10,7 +10,7 @@ import subprocess
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
-from src.editions import append, entries, enrich, migrate, read, relative_path, selected, write
+from src.editions import append, entries, enrich, migrate, read, relative_path, selected, write, manifest, prune_deleted, remember_candidates
 from src.auto_reading import load, public_analysis, public_status
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -33,17 +33,37 @@ def reconcile(data, get=fetch):
         if exc.code == 404:
             return
         raise
+    data = Path(data)
+    state = manifest(data)
+    removed = {e['id']: e for e in state['deleted']}
+    removed.update({e['id']: e for e in remote.get('deleted', [])})
+    # Retain identities before applying remote deletions to an older checkout.
+    if removed:
+        remember_candidates(data, [p for e in removed.values() for p in selected(read(data / relative_path(e)))])
+    state.update(deleted=list(removed.values()), operations={**state['operations'], **remote.get('operations', {})})
+    state['editions'] = [e for e in state['editions'] if e['id'] not in removed]
+    write(data / 'editions/index.json', state)
+    prune_deleted(data)
     local = {e['id'] for e in entries(data)}
     for entry in remote.get('editions', []):
         path = relative_path(entry)
-        if entry['id'] in local:
+        if entry['id'] in local or entry['id'] in removed:
             continue
         payload = get(path)
         if payload.get('edition') != entry or not selected(payload):
             raise ValueError('Published edition failed identity validation')
-        append(data, payload, trigger=entry['trigger'], day=entry['date'])
-    if remote.get('editions'):
-        latest = max(remote['editions'], key=lambda e: (e['date'], e['number']))
+        # Published batch numbers are identities, including gaps after deletion.
+        write(data / path, payload)
+        state = manifest(data)
+        state['editions'].append(entry)
+        state['editions'].sort(key=lambda e: (e['date'], e['number']))
+        write(data / 'editions/index.json', state)
+        day_rows = [e for e in state['editions'] if e['date'] == entry['date']]
+        latest_day = max(day_rows, key=lambda e: e['number'])
+        write(data / 'archive' / (entry['date'] + '.json'), read(data / relative_path(latest_day)))
+    # Local committed editions can be newer than a temporarily stale CDN.
+    if entries(data):
+        latest = max(entries(data), key=lambda e: (e['date'], e['number']))
         current = read(data / 'daily.json')
         if current.get('edition', {}).get('id') != latest['id']:
             restored = read(data / relative_path(latest))

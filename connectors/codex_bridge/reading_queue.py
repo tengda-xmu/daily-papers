@@ -31,6 +31,8 @@ class ReadingQueue:
             if 'priority' not in {r[1] for r in db.execute('PRAGMA table_info(tasks)')}:
                 db.execute('ALTER TABLE tasks ADD COLUMN priority INTEGER NOT NULL DEFAULT 0')
             columns = {r[1] for r in db.execute('PRAGMA table_info(tasks)')}
+            if 'enabled' not in columns:
+                db.execute('ALTER TABLE tasks ADD COLUMN enabled INTEGER NOT NULL DEFAULT 1')
             if 'material' not in columns:
                 db.commit()
                 backup = self.runtime / 'before-fulltext-queue.sqlite3'
@@ -71,7 +73,7 @@ class ReadingQueue:
         with self.db() as db:
             old = db.execute('SELECT * FROM tasks WHERE paper_id=?', (paper['id'],)).fetchone()
             if old:
-                db.execute('UPDATE tasks SET priority=? WHERE paper_id=?', (priority, paper['id']))
+                db.execute('UPDATE tasks SET priority=?,enabled=1 WHERE paper_id=?', (priority, paper['id']))
                 previous = json.loads(old['paper'])
                 if old['fingerprint'] == key and old['state'] not in ('generating', 'fetching'):
                     hints_changed = any(previous.get(k) != clean.get(k) for k in ('source', 'oa_url', 'pdf_url'))
@@ -93,6 +95,10 @@ class ReadingQueue:
         else:
             fetch = self.fetch
         manifest = fetch('editions/index.json')
+        deleted = {e['id']: e for e in read(self.runtime / 'edition-manifest.json').get('deleted', [])}
+        deleted.update({e['id']: e for e in manifest.get('deleted', [])})
+        manifest = {**manifest, 'deleted': list(deleted.values()),
+                    'editions': [e for e in manifest.get('editions', []) if e['id'] not in deleted]}
         papers = {}
         for entry in sorted(manifest.get('editions', []), key=lambda e: (e['date'], e['number'])):
             path = relative_path(entry)
@@ -110,6 +116,9 @@ class ReadingQueue:
             write(self.runtime / 'recommendations.json', latest)
             papers.update({p['id']: p for p in selected(latest)})
         # Newest metadata wins; repeated historic copies never reset a task.
+        write(self.runtime / 'edition-manifest.json', manifest)
+        with self.db() as db:
+            db.execute('UPDATE tasks SET enabled=0')
         for paper in papers.values():
             priority = 200 if paper['id'] in {p['id'] for p in latest.get('core', [])} else 100 if paper['id'] in {p['id'] for p in latest.get('extended', [])} else 0
             self.enqueue(paper, priority=priority)
@@ -119,25 +128,25 @@ class ReadingQueue:
         # Only published recommendations belong to this public enrichment queue.
         # Personal/manual-search documents must never create publication tasks.
         with self.db() as db:
-            row = db.execute('SELECT paper,priority FROM tasks WHERE paper_id=?', (identifier,)).fetchone()
+            row = db.execute('SELECT paper,priority FROM tasks WHERE paper_id=? AND enabled=1', (identifier,)).fetchone()
         if row:
             self.enqueue(json.loads(row['paper']), priority=row['priority'])
             self.last_sync = 0
 
     def snapshot(self):
         with self.db() as db:
-            rows = db.execute('SELECT paper_id,paper,state,attempts,updated_at,error,material,next_material FROM tasks ORDER BY priority DESC,updated_at DESC').fetchall()
+            rows = db.execute('SELECT paper_id,paper,state,attempts,updated_at,error,material,next_material,enabled FROM tasks ORDER BY priority DESC,updated_at DESC').fetchall()
         items = [{**{k: row[k] for k in ('paper_id', 'state', 'attempts', 'updated_at', 'error')},
                   'title': json.loads(row['paper']).get('title', ''),
                   'basis': (json.loads(row['material'] or '{}')).get('basis', ''),
-                  'reason': (json.loads(row['material'] or '{}')).get('reason_code', ''), 'next_material': row['next_material']} for row in rows]
+                  'reason': (json.loads(row['material'] or '{}')).get('reason_code', ''), 'next_material': row['next_material'], 'enabled': bool(row['enabled'])} for row in rows]
         return {'sync_state': self.sync_state, 'tasks': items,
-                'counts': {state: sum(r['state'] == state for r in items) for state in
+                'counts': {state: sum(r['state'] == state and r['enabled'] for r in items) for state in
                            ('pending', 'fetching', 'generating', 'ready', 'published', 'retry', 'failed', 'missing_evidence', 'awaiting_fulltext')}}
 
     def retry(self, identifier):
         with self.db() as db:
-            row = db.execute('SELECT state FROM tasks WHERE paper_id=?', (identifier,)).fetchone()
+            row = db.execute('SELECT state FROM tasks WHERE paper_id=? AND enabled=1', (identifier,)).fetchone()
             if not row or row['state'] not in ('failed', 'retry', 'missing_evidence', 'awaiting_fulltext'):
                 raise ValueError('该论文当前没有可重试的精读任务。')
             db.execute("UPDATE tasks SET state='pending',attempts=0,next_attempt=0,next_material=0,error='' WHERE paper_id=?", (identifier,))
@@ -333,8 +342,10 @@ class ReadingQueue:
                          '精读尚未完成或输出未通过校验；已保留任务，可重试。' + reason, text[:50000], time.time(), identifier))
 
     def publish_ready(self):
+        if self.paper_queue:
+            self.apply_deletions()
         with self.db() as db:
-            rows = db.execute("SELECT paper_id,result,fingerprint FROM tasks WHERE result IS NOT NULL AND result!=published_result").fetchall()
+            rows = db.execute("SELECT paper_id,result,fingerprint FROM tasks WHERE enabled=1 AND result IS NOT NULL AND result!=published_result").fetchall()
         rows = [row for row in rows if json.loads(row['result']).get('fingerprint') == row['fingerprint']]
         if self.fetch is None:
             from tools.recommendation_data import fetch
@@ -354,6 +365,8 @@ class ReadingQueue:
         statuses = []
         if not self.publisher:
             for row in self.snapshot()['tasks']:
+                if not row['enabled']:
+                    continue
                 if row['state'] in ('pending', 'fetching', 'generating'):
                     continue  # Publish stable outcomes, not a rebuild for each transient step.
                 value = public_status({'paper_id': row['paper_id'], 'state': row['state'], 'basis': row['basis'],
@@ -383,11 +396,30 @@ class ReadingQueue:
             for row in waiting:
                 db.execute("UPDATE tasks SET error='精读已完成，正在等待发布结果核对。' WHERE paper_id=? AND state='ready'", (row['paper_id'],))
 
+    def apply_deletions(self):
+        """Stop only tasks whose public batch membership has been revoked."""
+        from src.editions import manifest as local_manifest
+        values = [local_manifest(self.root / 'data'), read(self.runtime / 'edition-manifest.json')]
+        removed = {e['id'] for value in values for e in value.get('deleted', [])}
+        if not removed:
+            return
+        retained, revoked = set(), set()
+        for path in [* (self.runtime / 'public-editions').glob('*/*.json'),
+                     * (self.runtime / 'recommendation-history').glob('*.json'),
+                     * (self.root / 'data/editions').glob('*/*.json'), self.runtime / 'recommendations.json', self.root / 'data/daily.json']:
+            payload = read(path)
+            target = revoked if payload.get('edition', {}).get('id') in removed else retained
+            target.update(p['id'] for p in selected(payload))
+        with self.db() as db:
+            db.executemany('UPDATE tasks SET enabled=0 WHERE paper_id=?', [(i,) for i in revoked - retained])
+
     async def run(self):
         while True:
             await asyncio.sleep(10)
             if time.time() < self.quiet_until or self.lock.locked():
                 continue
+            if self.paper_queue:
+                self.apply_deletions()
             if time.time() - self.last_sync >= 600:
                 self.last_sync = time.time()
                 try:
@@ -405,9 +437,9 @@ class ReadingQueue:
                 continue
             with self.db() as db:
                 if self.paper_queue:
-                    row = db.execute("""SELECT * FROM tasks WHERE
+                    row = db.execute("""SELECT * FROM tasks WHERE enabled=1 AND (
                         (state IN ('pending','retry') AND attempts<3 AND next_attempt<=?) OR
-                        (state IN ('missing_evidence','awaiting_fulltext','failed') AND next_material<=?)
+                        (state IN ('missing_evidence','awaiting_fulltext','failed') AND next_material<=?))
                         ORDER BY priority DESC,updated_at LIMIT 1""", (time.time(), time.time())).fetchone()
                 else:
                     row = db.execute("SELECT * FROM tasks WHERE state IN ('pending','retry') AND attempts<3 AND next_attempt<=? ORDER BY priority DESC,updated_at LIMIT 1", (time.time(),)).fetchone()
