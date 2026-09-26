@@ -22,7 +22,7 @@
   let availableModels = [];
   let paperId = '', mode = 'question', controller = null, busy = false, history = [], pairCode = '';
   let refreshTimer = null;
-  let documentPending = false, remoteDocumentPending = false, uploadPaper = '';
+  let documentPending = false, remoteDocumentPending = false, documentAction = '', uploadPaper = '';
   let currentDocument = null, pdfVersions = [], translationSource = 'text';
   let progressTimer = null;
   let lastTrigger = null;
@@ -72,7 +72,10 @@
   const $ = (selector) => dialog.querySelector(selector);
   const status = (text, state = '') => { $('.chat-status').textContent = text; $('.chat-status').dataset.state = state; };
   const notice = (text) => { $('.chat-notice').textContent = text; };
-  const documentNotice = (text, state = '') => { $('.chat-document-status').textContent = text; $('.chat-document-status').dataset.state = state; };
+  const documentNotice = (text, state = '', inReader = false) => {
+    $('.chat-document-status').textContent = text; $('.chat-document-status').dataset.state = state;
+    if (inReader) reader?.documentNotice(text, state);
+  };
   const endpoint = (suffix = '') => `/api/papers/${paperId}${suffix}`;
   function scrollLatest(force = false) {
     if (force || followLatest) {
@@ -168,6 +171,7 @@
           if (previous) {drafts.set(key,{text:previous});if(draftKey()===key){$('.chat-composer textarea').value=previous;rememberDraft();}}
           return true;
         }});
+      reader.documentControls(busy || documentPending || remoteDocumentPending || screenshotPending || Boolean(editing), documentPending || remoteDocumentPending, documentAction);
       return reader;
     })().catch(error=>{readerPromise=null;notice('原文阅读器加载失败：'+error.message);throw error;});
     return readerPromise;
@@ -389,6 +393,7 @@
     clearInterval(progressTimer);
     if (value) progressTimer = setInterval(tickProgress, 1000);
     const locked = value || documentPending || remoteDocumentPending || screenshotPending;
+    reader?.documentControls(locked || Boolean(editing), documentPending || remoteDocumentPending, documentAction);
     $('.chat-documents').setAttribute('aria-busy', String(documentPending || remoteDocumentPending));
     $('#chat-model').disabled = locked || !availableModels.length;
     $('[data-chat-action="stop"]').hidden = !value;
@@ -424,6 +429,10 @@
     try { response = await fetch(base + path, { ...options, headers, signal: options.signal || AbortSignal.timeout(120000) }); }
     catch (error) {
       if (error.name === 'AbortError') throw error;
+      if (error.name === 'TimeoutError') {
+        const timeout = new Error('等待本机响应超时，操作可能仍在进行，请稍候查看状态。');
+        timeout.state = 'timeout'; throw timeout;
+      }
       const offline = new Error('无法连接本机。请启动论文助手、允许浏览器访问本地网络，或使用“在本机打开”入口。');
       offline.state = 'offline'; throw offline;
     }
@@ -715,12 +724,13 @@
     doc=currentDocument;
     $('.chat-settings-toggle').textContent = '模型与资料' + (doc ? doc.kind === 'pdf' ? ` · PDF ${doc.page_count} 页` : ' · 已载入全文' : '');
     if (!screenshotPending) { screenshots = data.screenshots || []; drawScreenshots(); }
+    const wasPreparing = remoteDocumentPending;
     remoteDocumentPending = Boolean(data.preparing);
     $('.chat-documents summary').textContent = `阅读依据：${doc ? doc.name : '摘要与本站解读'}`;
     $('.chat-document-note').textContent = doc ? `${doc.kind === 'pdf' ? `${doc.page_count} 页，其中 ${doc.scan_pages} 页需图片识别。` : '正文按段落编号，可点击回答中的引用核查。'} 资料已更新时会建立新上下文；上传内容请与论文标题核对。` : '尚未读取全文。上传 PDF 仅保存在本机，最多 20 MB / 300 页。';
     if (!documentPending) {
-      if (remoteDocumentPending) documentNotice('本机正在获取或解析资料，请稍候…', 'loading');
-      else documentNotice(doc ? (doc.kind === 'pdf' ? `已载入 PDF · ${doc.page_count} 页${doc.scan_pages ? ` · ${doc.scan_pages} 页需图片识别` : ''}` : '已载入网页全文；可继续获取 PDF 以按页阅读。') : '未载入 PDF，可上传或直接获取。', doc ? 'ready' : '');
+      if (remoteDocumentPending) documentNotice('本机正在获取或解析资料，请稍候…', 'loading', true);
+      else documentNotice(doc ? (doc.kind === 'pdf' ? `已载入 PDF · ${doc.page_count} 页${doc.scan_pages ? ` · ${doc.scan_pages} 页需图片识别` : ''}` : '已载入网页全文；可继续获取 PDF 以按页阅读。') : '未载入 PDF，可上传或直接获取。', doc ? 'ready' : '', wasPreparing);
     }
     followLatest = stick;
     if (anchor) {
@@ -987,12 +997,12 @@
       if (name === 'connect') return await connect();
       if (name === 'stop') return await stop();
       if (name === 'forget-browser') return await forgetBrowser();
-      if (!token || !paperId) { notice('请先连接并选择论文。'); return; }
+      if (!token || !paperId) { notice('请先连接并选择论文。'); if (['upload','fetch-pdf'].includes(name)) documentNotice('请先连接本机助手并选择论文。', 'error', true); return; }
       if (name === 'export-pdf') return await downloadPdf(paperId, null, false, $('[data-chat-action="export-pdf"]'));
       if (name === 'upload') { uploadPaper = paperId; return $('.chat-documents input[type="file"]').click(); }
       if (name === 'screenshot') { screenshotPaper = paperId; return $('.chat-image-input').click(); }
-      if (name === 'fetch-pdf') return prepareDocument('/fetch-pdf', null, '正在获取并解析论文 PDF…');
-      if (name === 'fulltext') return prepareDocument('/fulltext', null, '正在获取网页全文…');
+      if (name === 'fetch-pdf') return await prepareDocument('/fetch-pdf', null, '正在获取并解析论文 PDF，请稍候…');
+      if (name === 'fulltext') return await prepareDocument('/fulltext', null, '正在获取网页全文…');
       if (name === 'clear' && window.confirm('清除这篇论文的本机对话？星级、原文、译文、翻译进度和批注会保留。')) {
         const data = await api(endpoint(), { method: 'DELETE' }); releasePreviews(); screenshots = []; drawScreenshots(); await loadPaper(); notice(data.message);
       }
@@ -1002,7 +1012,7 @@
         const url = URL.createObjectURL(new Blob([md], { type: 'text/markdown;charset=utf-8' }));
         const a = document.createElement('a'); a.href = url; a.download = `${paperId}-Codex.md`; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
       }
-    } catch (error) { notice(error.message); }
+    } catch (error) { notice(error.message); if (['upload','fetch-pdf','fulltext'].includes(name)) documentNotice(error.message, 'error', true); }
   }
   async function forgetBrowser() {
     if (busy || documentPending || remoteDocumentPending || screenshotPending) return;
@@ -1036,20 +1046,22 @@
     }
   });
   async function prepareDocument(path, body, pendingText) {
-    if (busy || documentPending || remoteDocumentPending || screenshotPending) return;
-    if(reader && !await reader.prepareLeave())return;
+    const blocked = () => busy || documentPending || remoteDocumentPending || screenshotPending || editing;
+    if (blocked()) { documentNotice('请先完成当前操作，再获取或上传 PDF。', 'error', true); return; }
     const targetPaper = paperId;
-    documentPending = true; setBusy(busy); documentNotice(pendingText, 'loading'); notice(pendingText);
+    if(reader && !await reader.prepareLeave())return;
+    if (targetPaper !== paperId || blocked()) return;
+    documentPending = true; documentAction = path; setBusy(busy); documentNotice(pendingText, 'loading', true); notice(pendingText);
     let outcome = '', failed = false;
     try {
       const data = await api(`/api/papers/${targetPaper}${path}`, { method: 'POST', ...(body ? { body } : {}) });
       outcome = data.message;
     } catch (error) { outcome = error.message; failed = true; }
     finally {
-      documentPending = false;
+      documentPending = false; documentAction = '';
       if (paperId === targetPaper) {
         await loadPaper().catch(() => {});
-        if (!remoteDocumentPending) documentNotice(outcome, failed ? 'error' : 'ready');
+        if (!remoteDocumentPending) documentNotice(outcome, failed ? 'error' : 'ready', true);
         notice(outcome);
       }
       setBusy(busy);
@@ -1059,7 +1071,7 @@
     const file = event.target.files[0]; if (!file) return;
     event.target.value = '';
     if (uploadPaper !== paperId) { notice('论文已切换，请在当前论文重新选择要上传的 PDF。'); return; }
-    if (file.size > 20 * 1024 * 1024) { documentNotice('PDF 超过 20 MB，请选择较小的文件。', 'error'); return; }
+    if (file.size > 20 * 1024 * 1024) { documentNotice('PDF 超过 20 MB，请选择较小的文件。', 'error', true); return; }
     const form = new FormData(); form.append('file', file);
     await prepareDocument('/pdf', form, `正在上传并解析 ${file.name}…`);
   });

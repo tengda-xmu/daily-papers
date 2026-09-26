@@ -20,7 +20,7 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
   dialog.prepend(tabs, root, splitter);
   const $ = s => root.querySelector(s), pages = $('.reader-pages');
   let paper = '', doc = null, pdf = null, task = null, pdfjs = null, loadingLibrary = null, epoch = 0, views = [], current = 1;
-  let sourceDoc = null, versions = [], switching = false;
+  let sourceDoc = null, versions = [], switching = false, documentLocked = false;
   let remembered = {last_version:'',positions:{}}, rememberedPaper='', positionTimer, positionSaving, positionDirty=false, updateRequest=0;
   const pageSizes = new Map();
   let zoomTimer = null, wheelZoom = null;
@@ -28,7 +28,20 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
   let selection = null, tool = 'select', observer = null, rendering = false, queue = [], drawing = null, documentLoading = false;
   let visible = true; try { visible = localStorage.getItem('paper-reader-visible') !== 'off'; } catch {}
   let toolbarExpanded = true; try { toolbarExpanded = localStorage.getItem('paper-reader-toolbar') !== 'off'; } catch {}
-  const state = (text, error=false) => { $('.reader-status').textContent=text; $('.reader-status').classList.toggle('reader-error', error); };
+  const state = (text, error=false) => { $('.reader-status').textContent=text; $('.reader-status').classList.remove('reader-document-status'); $('.reader-status').classList.toggle('reader-error', error); };
+  function documentNotice(text, status='') {
+    // Acquisition can succeed even if the PDF viewer fails to open the file.
+    if (status==='ready' && $('.reader-status').classList.contains('reader-error') && !$('.reader-status').classList.contains('reader-document-status')) return;
+    state(text, status==='error');
+    $('.reader-status').classList.add('reader-document-status');
+  }
+  function documentControls(locked, pending=false, action='') {
+    documentLocked=locked;
+    $('.reader-tools').setAttribute('aria-busy', String(pending));
+    $('[data-read="fetch-pdf"]').textContent=pending && action!=='/pdf' ? '获取中…' : '获取 PDF';
+    $('[data-read="upload"]').textContent=pending && action==='/pdf' ? '上传中…' : '上传 PDF';
+    controls();
+  }
   const url = suffix => `/api/papers/${paper}${suffix}`;
   const version = () => `?version=${encodeURIComponent(doc?.hash || '')}`;
   const paired = () => doc?.view === 'bilingual';
@@ -70,6 +83,7 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
   tabs.onclick=e=>{if(e.target.hasAttribute('data-reader-close'))dialog.querySelector('.chat-close').click();else if(e.target.dataset.tab)tab(e.target.dataset.tab);};
   function download(blob, name) { const link=document.createElement('a'), address=URL.createObjectURL(blob); link.href=address;link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(address),30000); }
   function controls() {
+    root.querySelectorAll('[data-read="fetch-pdf"],[data-read="upload"]').forEach(b=>b.disabled=documentLocked || documentLoading || switching);
     $('[data-read="undo"]').disabled=!undo.length; $('[data-read="redo"]').disabled=!redo.length;
     $('[data-read="export"]').disabled=!pdf || documentLoading;
     $('[data-read="download"]').disabled=!pdf || documentLoading;
@@ -397,7 +411,7 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
       if(action==='toggle-toolbar')return setToolbarExpanded(!toolbarExpanded);
       if(action==='zoom-in' || action==='zoom-out')return stepZoom(action==='zoom-in'?1:-1);
       if(action==='dismiss-selection'){selection=null;$('.reader-selection').hidden=true;window.getSelection()?.removeAllRanges();return;}
-      if(action==='upload' || action==='fetch-pdf')return onDocument(action);
+      if(action==='upload' || action==='fetch-pdf')return await onDocument(action);
       if(action==='prev' || action==='next')return go(displayPage(sourcePage(current)+(action==='prev'?-1:1)));
       if(action==='notes')return showNotes($('.reader-notes').hidden);
       if(action==='backup')return download(new Blob([JSON.stringify({document_hash:doc?.hash,items},null,2)],{type:'application/json'}),'paper-annotations.json');
@@ -432,7 +446,7 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
   document.addEventListener('visibilitychange',()=>{if(document.hidden)savePosition().catch(()=>{});});
   window.addEventListener('pagehide',()=>savePosition().catch(()=>{}));
   setVisible(visible,false);setToolbarExpanded(toolbarExpanded,false);controls();
-  return {update,prepareLeave,savePosition,open:()=>{setVisible(true);tab('pdf');},
+  return {update,prepareLeave,savePosition,documentNotice,documentControls,open:()=>{setVisible(true);tab('pdf');},
     showVersion:async hash=>{setVisible(true);tab('pdf');await selectVersion(hash);},
     showPage:async number=>{setVisible(true);tab('pdf');if(await selectVersion(sourceDoc?.hash)!==false)go(number);},
     showTranslation:async (messageId,view='translated')=>{const item=versions.find(v=>(v.message_id===messageId||v.message_ids?.includes(messageId))&&v.view===view);if(!item)return;setVisible(true);tab('pdf');await selectVersion(item.hash);},
