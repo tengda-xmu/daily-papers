@@ -1192,13 +1192,18 @@ def create_app(root=ROOT, runtime=None, rpc=None):
 
 def main():
     import uvicorn
+    import socket
     parser = argparse.ArgumentParser()
     parser.add_argument("--runtime", type=Path)
     args = parser.parse_args()
-    app = create_app(runtime=args.runtime)
-    server = uvicorn.Server(uvicorn.Config(app, host="127.0.0.1", port=PORT, access_log=False, log_level="warning"))
-    app.state.shutdown = lambda: setattr(server, "should_exit", True)
-    server.run()
+    # Reserve the port before creating queues or running their migrations.
+    # A duplicate launch must not leave a second background reader behind.
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as listener:
+        listener.bind(('127.0.0.1', PORT))
+        app = create_app(runtime=args.runtime)
+        server = uvicorn.Server(uvicorn.Config(app, host="127.0.0.1", port=PORT, access_log=False, log_level="warning"))
+        app.state.shutdown = lambda: setattr(server, "should_exit", True)
+        server.run(sockets=[listener])
 
 
 if __name__ == "__main__":

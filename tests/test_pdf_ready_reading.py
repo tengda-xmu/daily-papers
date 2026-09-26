@@ -174,3 +174,14 @@ def test_pdf_links_are_followed_before_using_html_fulltext(tmp_path, monkeypatch
     monkeypatch.setattr(resolver, 'pdf', lambda *a: {'kind':'pdf','hash':'pdf','pages':[]})
     result = resolver(p)
     assert result['document']['kind'] == 'pdf' and result['source_url'] == pdf_url
+
+
+def test_duplicate_backend_cannot_start_or_migrate_reading_queue(monkeypatch):
+    import socket
+    import connectors.codex_bridge.server as server
+    with socket.socket() as listener:
+        listener.bind(('127.0.0.1',0)); listener.listen()
+        monkeypatch.setattr(server,'PORT',listener.getsockname()[1])
+        monkeypatch.setattr('sys.argv',['server'])
+        monkeypatch.setattr(server,'create_app',lambda **kw: pytest.fail('Duplicate process must not create queues'))
+        with pytest.raises(OSError): server.main()
