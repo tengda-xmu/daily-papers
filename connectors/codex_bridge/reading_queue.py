@@ -348,7 +348,13 @@ class ReadingQueue:
                     continue
                 if row['state'] in ('pending', 'fetching', 'generating'):
                     continue  # Publish stable outcomes, not a rebuild for each transient step.
-                value = public_status({'paper_id': row['paper_id'], 'state': row['state'], 'basis': row['basis'],
+                # This status travels in the same deployment as the completed
+                # reading. Keep the local task ready until its online copy is
+                # verified, but never publish a stale "waiting to publish" label.
+                public_state = row['state']
+                if public_state == 'ready':
+                    public_state = 'published' if row['basis'] == 'full_text' else 'awaiting_fulltext'
+                value = public_status({'paper_id': row['paper_id'], 'state': public_state, 'basis': row['basis'],
                     'reason': row['reason'], **{k: row[k] for k in ('total', 'covered', 'pdf_available', 'issues')},
                     'updated_at': datetime.fromtimestamp(row['updated_at'], timezone.utc).isoformat()})
                 path = self.runtime / 'published-reading-status' / (row['paper_id'] + '.json')

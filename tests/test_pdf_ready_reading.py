@@ -185,3 +185,15 @@ def test_duplicate_backend_cannot_start_or_migrate_reading_queue(monkeypatch):
         monkeypatch.setattr('sys.argv',['server'])
         monkeypatch.setattr(server,'create_app',lambda **kw: pytest.fail('Duplicate process must not create queues'))
         with pytest.raises(OSError): server.main()
+
+
+def test_published_status_describes_delivered_result_while_local_waits_for_confirmation(tmp_path, monkeypatch):
+    p=sample(); q=ReadingQueue(tmp_path,tmp_path/'run',FullClient(p),asyncio.Lock(),
+                              resolver=Resolver(material(p)),fetch=lambda _: {})
+    q.enqueue(p);q.quiet_until=0;asyncio.run(q.process(task(q)))
+    calls=[]
+    monkeypatch.setattr('tools.publish_reading.publish',lambda root,values,**kw: calls.append((values,kw)))
+    q.publish_ready()
+    assert calls[0][1]['statuses'][0]['state']=='published'
+    assert calls[0][1]['statuses'][0]['covered']==2
+    assert task(q)['state']=='ready' and task(q)['published_result']==''
