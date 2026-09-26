@@ -1,20 +1,20 @@
 {
   "id": "public-280bf64dcca75cee1131d5bb",
-  "content_version": "c6475e33d57612a960db545ed958dffa21187005a7115b2c896a1b0e9eca38aa",
+  "content_version": "a07e78930549cf642bd7a170e401dd2baa32454703f0ebdf17f37a337e0b64ff",
   "analysis": {
     "title_zh": "LFM2.5-VL-DSpark：通过推测解码加速视觉语言模型",
-    "summary": "【官方公告】LiquidAI 已发布面向 LFM2.5-VL-3B 的实验性 DSpark 草稿模型，通过推测解码以少量额外内存换取推理加速，官方称不改变输出质量。草稿模型新增 280M 参数，相当于 3B 目标模型的 8.9%。公告报告设备端与 H100 解码最高分别加速 3.13 倍和 2.66 倍，并提供 llama.cpp、MLX-VLM 和 SGLang 集成支持。适用于关注生成延迟的视觉语言推理任务；所给节选未展示具体测试任务与配置。",
-    "application": "建议：【科研迁移建议，非官方已验证效果】可针对设备端巡检图像问答、运维图文报告等任务，评估推测解码的端到端延迟、内存占用与输出一致性。【官方报告效果】设备端与 H100 的端到端最高加速分别为 2.62 倍和 2.27 倍；节选未提供实验细节，不能据此认定上述科研场景可获得同等收益。",
-    "requirements": "原文明示目标模型为 LFM2.5-VL-3B，并提供兼容 LFM 的 llama.cpp、MLX-VLM、SGLang 集成；未明确具体软件版本、账号、API、费用或完整部署条件。使用条件见官方文档。",
+    "summary": "LiquidAI 已发布面向 LFM2.5-VL-3B 的实验性 DSpark 草稿模型，通过推测解码加速视觉语言推理。官方称其不改变输出质量，新增参数量为280M，相当于目标模型的8.9%。设备端与 H100 上的解码加速最高分别为3.13倍、2.66倍，端到端加速最高为2.62倍、2.27倍；首日支持 llama.cpp、MLX-VLM 和 SGLang 集成，适合关注响应速度的视觉语言任务。",
+    "application": "建议：科研迁移可考虑在设备图像问答、巡检图片分析等智能运维任务中评估推测解码的时延、内存开销与输出一致性。官方报告的是推理加速及输出质量不变，并非这些科研场景的已验证效果；所给节选未展示测试任务、配置或质量评估细节。",
+    "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
       "Today, we release an experimental DSpark draft model for our vision-language model (VLM) LFM2.5-VL-3B .",
-      "As with our recently released LFM2.5-DSpark drafter models , it adds a speculative decoding path that trades a minimal increase in memory footprint for a larger speedup without changing output quality.",
+      "it adds a speculative decoding path that trades a minimal increase in memory footprint for a larger speedup without changing output quality.",
       "Faster inference: decode speedups up to 3.13x on device and 2.66x on an H100, with end-to-end gains up to 2.62x and 2.27x.",
       "Small memory cost: the drafter adds 280M parameters, 8.9% on top of the 3B target",
       "Day-one support: LFM-compatible DSpark integrations for llama.cpp, MLX-VLM, and SGLang"
     ],
     "basis_url": "https://huggingface.co/blog/LiquidAI/lfm2-5-vl-dspark"
   },
-  "analyzed_at": "2026-09-25T14:24:44.299033+00:00"
+  "analyzed_at": "2026-09-26T13:18:52.372632+00:00"
 }
