@@ -117,6 +117,8 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     reading_queue = ReadingQueue(root, runtime, client, generation_lock, documents=reading_documents)
     from .ai_queue import AIQueue
     ai_queue = AIQueue(root, runtime, client, generation_lock)
+    from .local_figures import LocalFigures
+    local_figures = LocalFigures(store, busy=lambda: bool(jobs or preparing) or generation_lock.locked())
 
     @asynccontextmanager
     async def lifespan(app):
@@ -125,9 +127,11 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         if rpc is None:
             reading_queue.start()
             ai_queue.start()
+            local_figures.start()
         yield
         await reading_queue.close()
         await ai_queue.close()
+        await local_figures.close()
         for job in list(jobs.values()):
             job["task"].cancel()
         if jobs:
@@ -152,6 +156,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     app.state.social_notes = note_manager
     app.state.reading_queue = reading_queue
     app.state.ai_queue = ai_queue
+    app.state.local_figures = local_figures
 
     @app.middleware("http")
     async def local_only(request: Request, next_handler):
@@ -464,6 +469,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         directory = store.directory(paper_id)
         if directory.parent != (runtime / 'documents').resolve():
             raise ValueError('资料目录无效。')
+        await asyncio.to_thread(local_figures.remove, paper_id)
         shutil.rmtree(directory)
         store.clear(paper_id)
         return {'message': '此论文的本机星级、PDF、批注与对话已删除。'}
@@ -595,6 +601,16 @@ def create_app(root=ROOT, runtime=None, rpc=None):
             name += '.pdf'
         return FileResponse(path, media_type='application/pdf', filename=name, content_disposition_type='inline')
 
+    @app.get('/api/papers/{paper_id}/original-figure')
+    async def original_figure(paper_id: str):
+        value = await asyncio.to_thread(local_figures.descriptor, paper_id)
+        return JSONResponse(value, headers={'Cache-Control': 'no-store'})
+
+    @app.get('/api/papers/{paper_id}/original-figure/image')
+    async def original_figure_image(paper_id: str, version: str = ''):
+        path = await asyncio.to_thread(local_figures.image, paper_id, version)
+        return FileResponse(path, media_type='image/png', headers={'Cache-Control': 'no-store'})
+
     @app.get('/api/papers/{paper_id}/annotations')
     async def annotations(paper_id: str, version: str = ''):
         await asyncio.to_thread(current_pdf, store, paper_id, version)
@@ -656,6 +672,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
             doc = await asyncio.to_thread(parse_pdf, content, store.directory(paper_id), Path(file.filename or "上传 PDF").name)
             store.set_document(paper_id, doc)
             reading_queue.document_available(paper_id)
+            await asyncio.to_thread(local_figures.ensure, paper_id)
         except (ValueError, HTTPException):
             raise
         except Exception:
@@ -715,6 +732,7 @@ def create_app(root=ROOT, runtime=None, rpc=None):
             doc = await asyncio.to_thread(fetch_pdf, store.paper(paper_id), store.directory(paper_id))
             store.set_document(paper_id, doc)
             reading_queue.document_available(paper_id)
+            await asyncio.to_thread(local_figures.ensure, paper_id)
         except ValueError:
             raise
         except Exception:

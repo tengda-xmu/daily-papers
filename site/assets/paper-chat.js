@@ -1056,6 +1056,7 @@
     try {
       const data = await api(`/api/papers/${targetPaper}${path}`, { method: 'POST', ...(body ? { body } : {}) });
       outcome = data.message;
+      document.dispatchEvent(new CustomEvent('paper-document-updated',{detail:{paperId:targetPaper}}));
     } catch (error) { outcome = error.message; failed = true; }
     finally {
       documentPending = false; documentAction = '';

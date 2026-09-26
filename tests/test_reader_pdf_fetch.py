@@ -136,3 +136,29 @@ def test_uploaded_pdf_title_is_used_in_reader_and_download(reader):
     with page.expect_download() as download:
         page.locator('[data-read="download"]').click()
     assert download.value.suggested_filename == 'Paper A.pdf'
+
+
+def test_uploaded_original_figure_refreshes_core_card_and_opens_large_view(reader):
+    import json
+    from tests.test_figure_collection import DOI, pdf
+    page, _, _, _, _, _, _, _, root = reader
+    data = json.loads((root / 'data/daily.json').read_text(encoding='utf-8'))
+    data['core'][0]['doi'] = DOI
+    (root / 'data/daily.json').write_text(json.dumps(data), encoding='utf-8')
+    with page.expect_file_chooser() as chooser:
+        page.locator('[data-read="upload"]').click()
+    chooser.value.set_files({'name': 'original.pdf', 'mimeType': 'application/pdf', 'buffer': pdf()})
+    playwright.expect(page.locator('.reader-status')).to_contain_text('PDF 已就绪')
+    page.locator('.chat-close').click()
+    figure = page.locator(f'.paper[data-paper-id="{P1}"] .local-paper-figure')
+    playwright.expect(figure).to_be_visible()
+    playwright.expect(figure.locator('.figure-credit')).to_contain_text('仅本机连接可见')
+    figure.locator('img').evaluate('(img) => img.decode()')
+    assert figure.locator('img').get_attribute('src').startswith('blob:')
+    assert page.locator('#extended .paper-figure').count() == 0
+    figure.locator('.figure-preview').click()
+    playwright.expect(page.locator('.figure-dialog')).to_be_visible()
+    playwright.expect(page.locator('.figure-dialog-image')).to_be_visible()
+    page.keyboard.press('Escape')
+    page.set_viewport_size({'width': 390, 'height': 844})
+    assert not page.evaluate('document.documentElement.scrollWidth > innerWidth + 1')

@@ -13,6 +13,7 @@
   const write = (kind,key,value) => {try{window[kind].setItem(key,value);}catch{}};
   let token = read(storage,sessionKey), connected = false, page = 1, totalPages = 1, restorePromise, refreshTimer, generation = 0, transfer = '';
   const ratings = new Map(), controls = new Map();
+  const localFigures = new Map();
   const connection = document.createElement('div'); connection.className='library-connection';
   connection.innerHTML='<p class="library-connection-label">连接本机后可读取文献库和保存星级</p><button type="button" class="text-button library-connect">连接本机</button><form class="library-pair" hidden><label>配对码 <input type="password" autocomplete="off" required></label><label><input type="checkbox" checked>记住浏览器</label><button type="submit" class="button-link">连接</button><a href="http://127.0.0.1:43127/" target="_blank" rel="noopener">打开本机助手</a></form>';
   const notice = document.createElement('p');notice.className='library-status';notice.setAttribute('role','status');notice.setAttribute('aria-live','polite');
@@ -66,10 +67,39 @@
     const ids=[...controls.keys()];if(!ids.length)return;
     const data=await api('/api/library/ratings?ids='+ids.join(','));for(const[id,value]of Object.entries(data.ratings)){ratings.set(id,value);drawRating(id);}notifyRatings();
   }
+  async function refreshFigure(card) {
+    const placeholder=card.querySelector('.figure-unavailable');if(!placeholder)return;
+    const id=card.dataset.paperId, previous=localFigures.get(id)||{ticket:0};
+    const ticket=++previous.ticket;localFigures.set(id,previous);
+    const clear=()=>{previous.node?.remove();if(previous.url)URL.revokeObjectURL(previous.url);previous.node=null;previous.url='';previous.hash='';placeholder.hidden=false;};
+    try {
+      const info=await api(`/api/papers/${id}/original-figure`);
+      if(previous.ticket!==ticket)return;
+      if(info.state!=='ready'){clear();return;}
+      if(previous.hash===info.sha256 && previous.node?.isConnected)return;
+      const blob=await api(`/api/papers/${id}/original-figure/image?version=${encodeURIComponent(info.source_hash)}`,{blob:true});
+      if(previous.ticket!==ticket)return;
+      if(blob.type!=='image/png')throw new Error('原图暂不可用');
+      clear();
+      const url=URL.createObjectURL(blob),figure=element('figure','paper-figure local-paper-figure');
+      const link=element('a','figure-preview');link.href=url;link.target='_blank';link.rel='noopener noreferrer';link.setAttribute('aria-label',`${info.figure_label}，查看大图`);
+      const image=element('img');image.src=url;image.width=info.width;image.height=info.height;image.alt=info.figure_label+' · 原文代表图';image.loading='lazy';
+      link.append(image,element('span','figure-open','查看大图'));
+      const caption=element('figcaption');caption.append(element('strong','figure-title',info.figure_label+' · 原文代表图'),element('p','figure-explanation','原文图注：'+info.caption));
+      const credit=element('p','figure-credit',`来自上传 PDF · 第 ${info.pdf_page} 页 · 仅本机连接可见`);
+      try {const source=new URL(info.source_url);if(source.protocol==='https:'){const original=element('a','','查看原文');original.href=source.href;original.target='_blank';original.rel='noopener noreferrer';credit.append(document.createElement('br'),original);}} catch {}
+      caption.append(credit);figure.append(link,caption);placeholder.after(figure);placeholder.hidden=true;
+      Object.assign(previous,{node:figure,url,hash:info.sha256});
+      document.dispatchEvent(new CustomEvent('paper-figures-updated'));
+    } catch {if(previous.ticket===ticket)clear();}
+  }
+  async function refreshFigures(id='') {
+    await Promise.allSettled(cards.filter(c=>(!id || c.dataset.paperId===id) && c.querySelector('.figure-unavailable')).map(refreshFigure));
+  }
   cards.forEach(card=>addRating(card.querySelector('.paper-rating-slot'),card.dataset.paperId));
   function element(tag,className,text){const node=document.createElement(tag);if(className)node.className=className;if(text!==undefined)node.textContent=text;return node;}
   async function refresh(){
-    if(!library){await refreshRatings();if(backup && !cards.length)await api('/api/library/ratings');return;}
+    if(!library){await refreshRatings();if(backup && !cards.length)await api('/api/library/ratings');await refreshFigures();return;}
     const current=++generation, params=new URLSearchParams({q:$('#library-query').value,min_rating:$('#library-rating').value,topic:$('#library-topic').value,sort:$('#library-sort').value,translated:$('#library-translated').checked,page,page_size:$('#library-page-size').value});
     const data=await api('/api/library?'+params);if(current!==generation)return;
     const topics=$('#library-topic'),chosen=topics.value;topics.replaceChildren(new Option('全部方向',''));for(const t of data.topics)topics.add(new Option(data.topic_labels?.[t]||t,t));topics.value=chosen;
@@ -113,6 +143,8 @@
     backup.querySelector('[data-backup-restore]').onclick=async e=>{if(!transfer)return;const button=e.currentTarget;button.disabled=true;try{const result=await api('/api/library/restore',{method:'POST',body:JSON.stringify({transfer_id:transfer})});message.textContent=result.message;transfer='';backup.querySelector('[data-backup-preview]').hidden=true;await refresh();}catch(error){message.textContent=error.message;}finally{button.disabled=false;}};
   }
   document.addEventListener('paper-chat-connected',()=>refresh().catch(e=>status(e.message,true)));
+  document.addEventListener('paper-document-updated',event=>{if(connected)refreshFigures(event.detail.paperId);});
+  window.addEventListener('pagehide',event=>{if(!event.persisted)for(const value of localFigures.values())if(value.url)URL.revokeObjectURL(value.url);});
   window.addEventListener('focus',()=>{if(connected)refresh().catch(e=>status(e.message,true));});
   if(token || read('localStorage',browserKey))refresh().catch(e=>status(e.message,true));
 })();

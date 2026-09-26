@@ -204,7 +204,7 @@ window.FilterPanels = {
   const previews = $$('.figure-preview');
   let figureDialog;
   let figureOpener;
-  if (previews.length && typeof HTMLDialogElement !== 'undefined') {
+  if ((previews.length || $('.figure-unavailable')) && typeof HTMLDialogElement !== 'undefined') {
     figureDialog = document.createElement('dialog');
     figureDialog.className = 'figure-dialog';
     figureDialog.setAttribute('aria-labelledby', 'figure-dialog-title');
@@ -220,14 +220,17 @@ window.FilterPanels = {
       figureOpener?.focus({ preventScroll: true });
     });
   }
-  previews.forEach((preview) => {
+  const boundPreviews = new WeakSet();
+  function bindFigure(preview) {
+    if(boundPreviews.has(preview))return;boundPreviews.add(preview);
     const image = $('img', preview);
     const figure = preview.closest('figure');
     function unavailable() {
       image.hidden = true;
       figure.classList.add('image-unavailable');
       $('.figure-open', preview).textContent = '图片暂不可用，查看原文图表';
-      preview.href = $('.figure-credit a', figure).href;
+      const source = $('.figure-credit a', figure);
+      if(source)preview.href = source.href;else preview.removeAttribute('href');
       preview.setAttribute('aria-label', '图片暂不可用，查看原文图表');
     }
     image.addEventListener('error', unavailable);
@@ -245,7 +248,9 @@ window.FilterPanels = {
       figureDialog.showModal();
       document.body.classList.add('figure-opened');
     });
-  });
+  }
+  previews.forEach(bindFigure);
+  document.addEventListener('paper-figures-updated',()=>$$('.figure-preview').forEach(bindFigure));
   function openAnchor(hash) {
     let target;
     try { target = document.getElementById(decodeURIComponent(hash.slice(1))); } catch (_) { return; }
