@@ -159,6 +159,10 @@ def test_uploaded_original_figure_refreshes_core_card_and_opens_large_view(reade
     figure.locator('.figure-preview').click()
     playwright.expect(page.locator('.figure-dialog')).to_be_visible()
     playwright.expect(page.locator('.figure-dialog-image')).to_be_visible()
+    dimensions = figure.locator('img').evaluate('(img) => [img.naturalWidth,img.naturalHeight]')
+    page.locator('.figure-dialog-rotate').click()
+    page.locator('.figure-dialog-image').evaluate('(img) => img.decode()')
+    assert page.locator('.figure-dialog-image').evaluate('(img) => [img.naturalWidth,img.naturalHeight]') == dimensions[::-1]
     page.keyboard.press('Escape')
     page.set_viewport_size({'width': 390, 'height': 844})
     assert not page.evaluate('document.documentElement.scrollWidth > innerWidth + 1')

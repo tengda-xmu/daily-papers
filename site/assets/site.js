@@ -204,12 +204,25 @@ window.FilterPanels = {
   const previews = $$('.figure-preview');
   let figureDialog;
   let figureOpener;
+  let figureRotation = 0;
   if ((previews.length || $('.figure-unavailable')) && typeof HTMLDialogElement !== 'undefined') {
     figureDialog = document.createElement('dialog');
     figureDialog.className = 'figure-dialog';
     figureDialog.setAttribute('aria-labelledby', 'figure-dialog-title');
-    figureDialog.innerHTML = '<div class="figure-dialog-header"><h2 id="figure-dialog-title"></h2><button type="button" class="figure-dialog-close" autofocus>关闭</button></div><img class="figure-dialog-image" alt=""><div class="figure-dialog-footer"><div class="figure-dialog-credit"></div><a class="figure-original-size" target="_blank" rel="noopener noreferrer">查看原尺寸</a></div>';
+    figureDialog.innerHTML = '<div class="figure-dialog-header"><h2 id="figure-dialog-title"></h2><div class="figure-dialog-actions"><button type="button" class="figure-dialog-rotate" aria-label="顺时针旋转原图 90 度">旋转 90°</button><button type="button" class="figure-dialog-close" autofocus>关闭</button></div></div><img class="figure-dialog-image" alt=""><div class="figure-dialog-footer"><div class="figure-dialog-credit"></div><a class="figure-original-size" target="_blank" rel="noopener noreferrer">查看原尺寸</a></div>';
     document.body.append(figureDialog);
+    $('.figure-dialog-rotate', figureDialog).addEventListener('click', () => {
+      const original=$('img',figureOpener);if(!original?.naturalWidth)return;
+      figureRotation=(figureRotation+90)%360;
+      const large=$('.figure-dialog-image',figureDialog);
+      if(!figureRotation){large.src=original.currentSrc || original.src;return;}
+      const canvas=document.createElement('canvas'),sideways=figureRotation%180;
+      canvas.width=sideways?original.naturalHeight:original.naturalWidth;
+      canvas.height=sideways?original.naturalWidth:original.naturalHeight;
+      const context=canvas.getContext('2d');context.translate(canvas.width/2,canvas.height/2);context.rotate(figureRotation*Math.PI/180);
+      context.drawImage(original,-original.naturalWidth/2,-original.naturalHeight/2);
+      large.src=canvas.toDataURL('image/png');
+    });
     $('.figure-dialog-close', figureDialog).addEventListener('click', () => figureDialog.close());
     figureDialog.addEventListener('click', (event) => {
       const box = figureDialog.getBoundingClientRect();
@@ -239,6 +252,7 @@ window.FilterPanels = {
       if (!figureDialog || image.hidden || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
       figureOpener = preview;
+      figureRotation = 0;
       $('#figure-dialog-title').textContent = $('.figure-title', figure).textContent;
       const large = $('.figure-dialog-image', figureDialog);
       large.src = image.currentSrc || image.src;
