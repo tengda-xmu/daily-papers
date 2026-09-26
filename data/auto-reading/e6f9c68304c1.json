@@ -2,32 +2,39 @@
   "paper_id": "e6f9c68304c1",
   "fingerprint": "a6a26be84673034ec6cfe0516ff4236d8085d4f2134d9cfb20b3c53eeed56c2b",
   "analysis": {
-    "title_zh": "用于奥氏体不锈钢蠕变剩余寿命与损伤分数双预测的多物理信息神经网络框架",
-    "summary": "高温合金的蠕变评估既需判断还能服役多久，也需刻画累积损伤。本文针对九种牌号奥氏体不锈钢，构建同时预测蠕变剩余寿命与损伤分数的物理信息神经网络，结合物理描述符及输出边界约束。摘要报告使用1179个数据点训练和验证，两项测试R²分别为0.933与0.936。[摘要] 解读：其价值在于联合寿命与状态评估，但摘要不足以确认跨牌号外推能力及工程部署可靠性；本解读未涉及全文。",
-    "recommendation": "建议作为智能运维方向的重点候选文献，关注双输出预测、物理特征和约束损失如何结合；摘要称其面向“structural health monitoring and predictive maintenance”，但未提供生成式结构设计方法。[摘要]",
+    "title_zh": "用于奥氏体不锈钢蠕变剩余寿命与损伤分数双重预测的多物理信息神经网络框架",
+    "summary": "高温合金蠕变评估不仅需要判断剩余寿命，也需要量化累积损伤。本文摘要提出面向九种奥氏体不锈钢的双输出物理信息神经网络，将物理描述符与输出边界约束结合，并使用1179个数据点训练和验证。摘要报告剩余寿命与损伤分数的测试R²分别为0.933和0.936，并通过SHAP分析特征贡献。其面向预测性维护的应用值得关注，但跨材料泛化和工程可靠性仍需全文证据核查。[摘要]",
+    "recommendation": "推荐从智能运维与材料可靠性角度重点阅读，关注剩余寿命与损伤联合预测、物理特征和约束损失的组合；摘要明确指向“predictive maintenance”，但不直接支撑生成式结构设计方向。[摘要]",
     "deep_read": {
-      "problem": "论文针对高温合金跨牌号蠕变退化预测困难，指出传统经验与机理模型通常仅估计总蠕变断裂寿命，且具有材料专属性。原文称其“limiting their generalizability”。[摘要] 解读：核心问题是如何联合描述剩余寿命与当前损伤，而非仅预测最终断裂时间。",
-      "method": "框架采用双输出物理信息神经网络，纳入Larson–Miller参数、Monkman–Grant参数及层错能，并通过损失函数约束“CRL > 0 and 0 ≤ CDF ≤ 1”。[摘要] 摘要未交代网络结构及损失权重，不能据此认定其嵌入了完整蠕变演化方程。",
-      "innovation": "作者将贡献概括为“unified dual-output modeling strategy”、物理信息特征工程和物理约束损失三部分。[摘要] 解读：其方法特色是组合联合预测、机理描述符与可行域限制；这是作者声称的贡献，摘要不足以证明相对既有研究的首创性。",
-      "findings": "摘要报告在1179个数据点上训练和验证，覆盖九种牌号；测试结果为“0.933 for CRL and 0.936 for CDF”，对应R²，并称优于常规机器学习及标准深度神经网络。[摘要] SHAP分析支持物理特征的重要性，但摘要未列基线差值或误差分布。",
-      "limitations": "摘要称模型具有“generalizable and interpretable”特性，但未说明数据划分、独立牌号测试、预测不确定性或外部验证。[摘要] 解读：这些是当前资料的证据边界，而非已证实的模型缺陷；输出满足物理上下界，也不能单独保证长期预测准确。",
-      "connection": "原文将应用指向“high-temperature structural health monitoring and predictive maintenance”。[摘要] 解读：双输出可为智能运维同时提供寿命与损伤信息，也与结构可靠性评估相关；但尚未给出失效概率模型，对生成式结构设计仅有潜在间接联系。",
-      "next_steps": "建议优先核查物理参数在预测时是否可获得、是否包含待预测寿命信息，再检查按牌号及工况划分的验证与特征消融。摘要仅称数据覆盖“diverse compositions and service conditions”。[摘要] 建议后续考察跨工况误差和不确定性，以上并非作者已完成的工作。"
+      "problem": "研究针对多牌号高温合金蠕变退化预测，摘要指出传统模型往往局限于“total creep rupture life”，且具有材料专属性。核心问题是如何同时估计剩余寿命与累积损伤，并减少不同奥氏体不锈钢牌号分别建模的局限，而不只是预测最终断裂时间。[摘要]",
+      "method": "框架采用双输出PINN，引入Larson–Miller参数、Monkman–Grant参数和层错能作为物理描述符，并以损失约束“CRL > 0 and 0 ≤ CDF ≤ 1”。摘要给出的是物理特征与边界约束，未交代网络结构、损失权重及是否含控制方程残差。[摘要]",
+      "innovation": "作者将贡献概括为“unified dual-output modeling strategy”、多物理信息特征工程和物理约束损失三部分，分别对应寿命与损伤联合表征、物理知识输入及预测边界控制。解读：创新主张集中在框架组合，是否具有方法首创性仍需核查全文与相关文献。[摘要]",
+      "findings": "摘要报告模型在九种牌号、1179个数据点上训练和验证；测试结果为“0.933 for CRL and 0.936 for CDF”，并称优于传统机器学习与标准深度网络。SHAP分析支持物理特征的重要作用，但摘要没有列出各基线成绩、提升幅度或结果波动。[摘要]",
+      "limitations": "摘要虽宣称模型“generalizable and interpretable”，却未提供数据划分、独立外部验证、误差分布或预测不确定性信息。解读：现有证据不足以确认对未见牌号及服役条件的外推能力；这些是摘要信息缺口，不能据此断言作者未开展相应检验。[摘要]",
+      "connection": "摘要明确面向“structural health monitoring and predictive maintenance”，与智能运维直接相关。解读：联合输出可为检修排序和退化状态评估提供候选指标，也与高温结构可靠性研究相衔接；但文中摘要未涉及结构生成、几何优化或失效概率计算。[摘要]",
+      "next_steps": "建议阅读全文时优先核查物理描述符的计算时点、输入可获得性及标签定义，排查潜在目标信息泄漏；再检查按牌号或工况留出的验证与消融实验。摘要仅说明覆盖“diverse compositions and service conditions”，尚不足以证明实际部署条件下的迁移能力。[摘要]"
     },
     "analysis_status": "ready",
     "analysis_basis": "abstract",
     "analysis_kind": "model",
     "analysis_sources": [
-      "https://www.semanticscholar.org/paper/70369827ca64bc6974e9309d37a86f862be2fef4"
+      "https://doi.org/10.1007/s40430-026-06565-6"
     ],
-    "analyzed_at": "2026-09-25T02:20:06.177551+00:00",
+    "analyzed_at": "2026-09-25T17:42:32.291409+00:00",
     "llm_model": "gpt-6-astra"
   },
   "evaluation": {
     "direction_fit": true,
     "research_value": true,
     "evidence_sufficient": true,
-    "reason": "与给定方向中的智能运维直接契合：摘要明确提出剩余寿命与损伤联合预测，并报告物理特征、约束损失及测试R²，足以支持重点阅读推荐。[摘要] 对生成式设计则缺少直接证据；肯定判断不代表已验证工程可靠性或跨牌号泛化能力。",
+    "reason": "摘要提供明确的双输出建模方法、物理特征、边界约束和测试指标，足以支持其在智能运维与可靠性方向值得重点阅读的初步判断；但与生成式设计的联系较弱，现有证据也不足以确认跨牌号外推和工程部署可靠性。[摘要]",
     "evidence": "The proposed PINN outperforms conventional Machine Learning (ML) and standard deep neural network models, achieving test R² values of 0.933 for CRL and 0.936 for CDF."
+  },
+  "material": {
+    "version": "a5c5c6c7856a76cd21e959bffd08720ccea6b6055123b536ed0a255eb0bd2662",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "The proposed PINN outperforms conventional Machine Learning (ML) and standard deep neural network models, achieving test R² values of 0.933 for CRL and 0.936 for CDF."
   }
 }

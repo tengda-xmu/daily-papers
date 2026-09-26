@@ -23,7 +23,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "晶体材料发现面临巨大组合空间，生成模型的似然采样目标又未必指向潜在新化合物所在的欠探索区域。作者提出强化学习框架，以组相对策略优化和可验证的多目标奖励引导潜空间去噪扩散模型，兼顾新颖性、热力学可行性与多样性，并开展性质引导设计。[摘要] 解读：论文值得关注的是生成目标与发现目标的对齐机制；但摘要没有量化结果，尚不能判断提升幅度和验证充分性。",
+      "summary": "本文针对似然驱动生成与新材料发现目标错位，提出Chemeleon2，将潜空间扩散、组相对策略优化与多目标奖励结合，兼顾晶体新颖性、稳定性和多样性。[P1–P3]在Alex-MP-20上，亚稳、唯一且新颖的联合比例由15.9%升至61.3%，但唯一性下降；带隙定向生成也获得改善。[P4][P7]值得关注的是奖励设计与探索约束，而非将计算稳定性直接等同于可合成性或工程可靠性。[P6][P11]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -133,23 +133,23 @@
       ],
       "focus_tags": [],
       "title_zh": "通过强化学习引导生成模型发现多样且新颖的晶体",
-      "recommendation": "建议重点阅读其奖励设计与性质引导机制：这些内容直接对应生成式设计中的多目标控制问题，但应在获取全文后核查性能比较及热力学可行性的验证依据。[摘要]",
+      "recommendation": "推荐作为生成式材料设计的方法论文重点阅读，尤其关注GRPO、边际贡献奖励及多样性消融；对智能运维和可靠性研究仅具间接迁移价值，不能视作直接应用证据。[P3][P6][P11]",
       "deep_read": {
-        "problem": "作者指出，晶体发现不仅受组合设计空间庞大所限，还存在生成采样与探索目标之间的“objective misalignment”：化学上合理的样本未必来自欠探索区域。[摘要] 解读：核心问题是如何把生成过程导向有发现价值的候选，而非仅提高常见结构的生成概率。",
-        "method": "框架以强化学习引导潜空间去噪扩散模型，结合“group-relative policy optimization”与可验证的多目标奖励，同时平衡创造性、稳定性和多样性。[摘要] 摘要未提供奖励公式、策略更新细节或验证器构成，因此目前只能概括方法组成，不能复现训练流程。",
-        "innovation": "摘要将方法表述为可控逆向设计的模块化基础，并强调处理“novelty–validity trade-off”。[摘要] 解读：值得考察的创新候选是把探索新颖性与有效性约束共同纳入生成引导，而非仅在生成后筛选；其相对已有工作的独特程度仍需全文与文献比较确认。",
-        "findings": "作者报告框架能够寻找多样、新颖且热力学可行的晶体，并展示性质引导设计的增强效果，在追求目标功能性质时保持“chemical validity”。[摘要] 这些属于摘要中的定性成果陈述；未给出成功率、性质改善幅度或对照结果，不能据此判定实际优势大小。",
-        "limitations": "当前只有摘要，没有全文。虽然作者使用“thermodynamically viable”描述候选晶体，但未说明热力学判据、计算层级或实验验证情况。[摘要] 解读：这是现有材料的证据边界，不等于论文自身缺陷；尤其不能把热力学可行性直接当作可合成性已获证实。",
-        "connection": "摘要明确面向“AI-driven inverse design”，与给定的生成式设计标签直接相关。[摘要] 解读：其多目标生成思路可启发结构设计中的性能与可行性协调，但晶体设计不等同于工程结构设计；摘要也未涉及故障诊断、维护决策或可靠性指标，不能宣称已验证这些用途。",
-        "next_steps": "建议获取全文后，优先核查“verifiable, multi-objective rewards”的计算依据、目标间权衡方式，以及新颖性和多样性的评价口径。[摘要] 若迁移至可靠性约束设计，建议另行定义失效概率与可制造性约束，并检验生成候选是否满足这些要求；这不是作者已报告的成果。"
+        "problem": "作者指出，最大化训练数据似然倾向于复现已知材料分布，而材料发现希望进入兼具新颖性与热力学可行性的欠探索区域。原子种类、晶格和坐标又构成耦合的离散—连续空间，使直接策略优化成本较高。核心问题因此是如何改变探索目标，同时维持物理合理性。[P1][P2]",
+        "method": "方法先用VAE统一编码晶体，再把潜空间反向扩散作为策略，以GRPO进行同条件候选的组内优势归一化，冻结解码器。奖励结合AMD创造性、MLFF凸包能量及成分和结构多样性；后者用核分布差异和留一法贡献分配样本奖励，并辅以KL约束与熵奖励。[P9–P11]",
+        "innovation": "解读：贡献主要是把适合策略梯度的连续潜表示、无需独立价值网络的GRPO和材料领域奖励整合，而非提出全新的强化学习算法。多样性奖励同时约束批内冗余和参考分布偏离，区别于单纯鼓励远离已知样本；模块化设计还支持加入性质目标。[P2][P8][P11]",
+        "findings": "每模型生成10,000个未经弛豫的结构：Alex-MP-20上mSUN由15.9%升至61.3%，唯一性却由99.4%降至88.7%。性质生成的512个样本中，82个同时满足mSUN与2.7—3.3 eV带隙区间。结果支持本设置下的综合收益，而非所有指标均改善。[P3][P4][P7]",
+        "limitations": "作者承认0 K凸包代理未涵盖温度与动力学，模型不能区分有序相和无序固溶体；高元体系可能因竞争相缺失而被高估稳定性。解读：复现还需核对奖励权重遗漏、MMD指标重复及图文数值不一致，不能用潜空间覆盖得分替代真实结构新颖性。[P6][P7][P10][P11]",
+        "connection": "解读：本文直接契合生成式材料逆向设计，可为结构设计提供先学习生成先验、再用可验证目标优化的思路。对智能运维和可靠性，仅能借鉴多目标权衡及候选去冗余机制；论文没有设备退化、寿命或失效概率验证，晶体热力学稳定性不能直接充当工程安全指标。[P2][P8][P11]",
+        "next_steps": "建议：先核实公开版本的奖励权重、能量归一化及核函数求和实现，再设置多随机种子和奖励消融，分开报告重复率、原型新颖性及DFT复核结果。对复杂组成加入元素数量约束，并检查竞争无序相；迁移工程设计时另设失效约束，不沿用晶体稳定性标签。[P6][P10–P12]"
       },
       "analysis_status": "ready",
-      "analysis_basis": "abstract",
+      "analysis_basis": "full_text",
       "analysis_kind": "model",
       "analysis_sources": [
         "https://doi.org/10.1038/s42256-026-01262-4"
       ],
-      "analyzed_at": "2026-09-25T02:02:12.442245+00:00",
+      "analyzed_at": "2026-09-25T17:00:41.140639+00:00",
       "llm_model": "gpt-6-astra",
       "recommendation_decision": {
         "kind": "promotion",
@@ -166,7 +166,58 @@
         "reason": "以本轮给定的 generative_design 标签作为方向依据，论文直接研究强化学习引导的晶体生成与逆向设计，并明确提出优化算法和多目标奖励机制，足以支持重点阅读判断。摘要证据仅支持主题契合与方法价值，不足以确认量化优势，也不支持其已应用于智能运维或工程可靠性。",
         "heat": null
       },
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P9",
+          "P10",
+          "P11"
+        ],
+        "innovation": [
+          "P2",
+          "P8",
+          "P11"
+        ],
+        "findings": [
+          "P3",
+          "P4",
+          "P7"
+        ],
+        "limitations": [
+          "P6",
+          "P7",
+          "P10",
+          "P11"
+        ],
+        "connection": [
+          "P2",
+          "P8",
+          "P11"
+        ],
+        "next_steps": [
+          "P6",
+          "P10",
+          "P11",
+          "P12"
+        ]
+      },
+      "analysis_material_version": "659bd1f9d700d46a8fda8d500824e775793dfa3bfcffc6cc0795dd6ca8b1e364",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "c53c3b080d69",
+        "state": "published",
+        "updated_at": "2026-09-25T17:00:41.157898+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 16,
+        "covered": 16,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "Google Scholar",
@@ -188,7 +239,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "… This section outlines the methodological framework for predicting the fatigue life and critical … residual fatigue life (N r ) of mixed-mode cracks, referred to as the forward machine learning …",
+      "summary": "本文面向延性金属混合型疲劳裂纹，将构形力疲劳关系嵌入物理信息神经网络，正向预测剩余寿命，再以零剩余寿命为目标，通过遗传算法反演临界裂纹长度[P4–P5]。铝合金与45钢数据支持其预测潜力，混合型测试集报告R²为0.9623[P11]。解读：值得借鉴的是寿命与失效阈值联合评估框架，但原文件公式缺失、拟合图文矛盾及测试集参与调参，限制了复现与可靠性论证[P3、P8、P13]。",
       "raw_metadata": {
         "position": 4,
         "title": "Prediction of residual life and critical crack length using the forward/inverse machine learning based on the configurational force fatigue model",
@@ -244,12 +295,169 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议重点阅读物理损失构造和临界裂纹长度反演流程[P4–P5、P12]，适合作为疲劳可靠性研究的方法参考；不宜未经公式核验与独立验证就用于工程失效阈值决策。",
+      "deep_read": {
+        "problem": "混合型裂纹在复杂应力状态下发生偏转，寿命评估需要同时描述增长速率和方向。作者指出经验模型超出标定范围存在“significant predictive scatter”[P2]。研究因此聚焦两个关联问题：当前裂纹还能服役多久，以及达到何种长度对应疲劳失效[P1]。",
+        "method": "网络以裂纹长度及构形力分量C1、C2为输入，以剩余寿命为输出；损失由数据均方误差与加权对数物理残差组成，并迭代识别经验参数。推导采用修正因子近似为1及初始裂纹远小于临界长度的假设，随后用遗传算法搜索零剩余寿命对应的长度[P4–P5]。",
+        "innovation": "作者将构形力的能量驱动与方向信息引入寿命学习，并把训练后的正向模型用于临界长度逆向识别[P2、P4]。解读：值得关注的是混合型裂纹物理表征、损失约束和逆向搜索的组合，而非单独使用神经网络或遗传算法；现有资料不足以认定这一组合具有领域首次性。",
+        "findings": "作者报告I型与混合型测试集R²分别为0.8847、0.9623，RMSE分别为5565、3075 cycles[P8、P11]。混合型多数相对误差低于20%，临界长度预测点位于实验分布范围内[P9、P12]。解读：这些是作者报告的预测表现，并非失效概率或置信区间。",
+        "limitations": "原文件[P3]公式(5)、(6)仅有MERGEFORMAT占位，影响等效构形力幅及疲劳模型完整表达的核验，不能补造。[P13]图16与正文指数符号冲突，影响增长率拟合及饱和解释。此外，测试集参与调参[P8]；解读：独立泛化证据受限，缺失公式及相关推导尚未验证。\n原文核对：[P3] 原页公式(5)、(6)位置分别显示“3. \\* MERGEFORMAT(5)”和“4. \\* MERGEFORMAT(6)”，实际公式缺失。分别影响等效构形力幅ΔCeq的计算关系及该处疲劳模型完整表达的核验。P2的增长率关系及P3公式(7)仍可独立识读，但不能据此补造缺失公式。；[P13] 已从原页核实图16左下拟合标注为da/dN = −9.8611(1 − e^(0.25844a))，正文却写为da/dN = −9.8611(1 − e^(−0.25844a))，并称其为饱和指数增长。指数符号在图文之间不一致；正文所写式对正a给出负增长率，而图式不呈所述饱和趋势，且所列系数与图示增长率量级存在疑点。原页没有说明应更正哪一项，不补造系数或公式。该缺陷影响增长率—裂纹长度拟合及稳定高速阶段的解释，不妨碍其余内容识读。",
+        "connection": "解读：正向寿命预测与逆向裂纹阈值识别，可连接智能运维中的检修安排和结构可靠性中的损伤限值评估[P4、P12]。但铝合金采用最终断裂、45钢采用刚度下降20%的失效定义[P6]，迁移到结构设计时必须统一判据，不能将确定性寿命直接视为可靠度。",
+        "next_steps": "建议先索取数据与实现，核对物理损失推导及统计指标公式[P5、P7、P15]；再按试样划分独立测试集，仅在训练和验证集调参，复核预测表现[P8]。最后针对变幅载荷开展验证与不确定性量化，检验阈值决策是否稳健；作者也明确超出既有条件需要重新标定[P13]。"
+      },
       "recommended_direction": "fatigue_reliability",
-      "title_zh": "基于构形力疲劳模型的正向与逆向机器学习预测剩余寿命及临界裂纹长度"
+      "title_zh": "基于构形力疲劳模型的正向与逆向机器学习：剩余寿命及临界裂纹长度预测",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.sciencedirect.com/science/article/pii/S0142112326000459"
+      ],
+      "analyzed_at": "2026-09-26T09:16:00.317050+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P4"
+        ],
+        "findings": [
+          "P8",
+          "P9",
+          "P11",
+          "P12"
+        ],
+        "limitations": [
+          "P3",
+          "P8",
+          "P13"
+        ],
+        "connection": [
+          "P4",
+          "P6",
+          "P12"
+        ],
+        "next_steps": [
+          "P5",
+          "P7",
+          "P8",
+          "P13",
+          "P15"
+        ]
+      },
+      "analysis_material_version": "0991dd22364728e0f28dc88a28460f2b28b7e834d827ae5fbe583026a8042d87",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "公式(1)、(2)的提取文本出现空字符，原页可辨为负号；公式(2)为Cij = Wδij − σikuk,j。已依据原图纠正符号识别，避免改变构形力张量定义；不是原文件缺项。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P3",
+          "detail": "原页公式(5)、(6)位置分别显示“3. \\* MERGEFORMAT(5)”和“4. \\* MERGEFORMAT(6)”，实际公式缺失。分别影响等效构形力幅ΔCeq的计算关系及该处疲劳模型完整表达的核验。P2的增长率关系及P3公式(7)仍可独立识读，但不能据此补造缺失公式。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "公式(3)、(4)被提取为空字符的运算符，在原页均为减号，积分被积项分别为Wn1 − σjkuk,1nj及Wn2 − σjkuk,2nj；图1图注载荷应为(σx1, σx2)，而非提取文本的(σ1, σx2)。已核对纠正，涉及能量释放率表达及载荷方向标识，不影响图示合力决定偏转方向的作者论述。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "提供的文字仅包含图2图注，遗漏原图内可读的网络结构、公式及遗传算法流程。已从原图识读输入(a,C1,C2)、输出Nr、五层神经元数30/25/20/10/5、L = Ldata + pLa及Nr = 0逆向判据。缺失属于文字提取遗漏，不是原页缺项；直接影响方法结构和逆向求解流程的理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "公式(8)–(11)、(13)–(15)的提取文本含异常空字符，原图对应位置可辨为减号或负号。公式(8)分子为ac − a0，分母完整包含λ(Ceqc − Ceq0)^ξY(a0,ac)；公式(10)、(11)右侧为负对数；数据损失含真实值与预测值之差，更新式含负梯度项。已纠正，避免改变寿命关系及优化方向。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "公式(16)提取文本中的异常字符已据原图核对为减号：分母含(1 − α)^(3/2)，多项式含−13.32α²和−5.6α⁴。原页公式完整，无缺项；符号错误会影响应力强度因子范围及后续构形力计算。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "公式(18)–(21)中异常空字符已据原图纠正为减号，包括1减去求和项、寿命预测残差和去均值项。保留原页公式(18)、(20)的实际求和及分母结构，不替换为常见R²、CC定义；原页公式可读，不能将其数学形式疑点当作提取错误予以改写。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P12",
+          "detail": "正文关于图16的指数说明被提取为异常字符加1；原页清楚写为“close to −1”。已纠正为接近−1，涉及作者对构形力与剩余寿命近似反比关系的解释，不是原文件缺项。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P13",
+          "detail": "已从原页核实图16左下拟合标注为da/dN = −9.8611(1 − e^(0.25844a))，正文却写为da/dN = −9.8611(1 − e^(−0.25844a))，并称其为饱和指数增长。指数符号在图文之间不一致；正文所写式对正a给出负增长率，而图式不呈所述饱和趋势，且所列系数与图示增长率量级存在疑点。原页没有说明应更正哪一项，不补造系数或公式。该缺陷影响增长率—裂纹长度拟合及稳定高速阶段的解释，不妨碍其余内容识读。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "fc714e796fa3",
+        "state": "published",
+        "updated_at": "2026-09-26T09:16:00.324656+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 16,
+        "covered": 16,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "公式(1)、(2)的提取文本出现空字符，原页可辨为负号；公式(2)为Cij = Wδij − σikuk,j。已依据原图纠正符号识别，避免改变构形力张量定义；不是原文件缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P3",
+            "detail": "原页公式(5)、(6)位置分别显示“3. \\* MERGEFORMAT(5)”和“4. \\* MERGEFORMAT(6)”，实际公式缺失。分别影响等效构形力幅ΔCeq的计算关系及该处疲劳模型完整表达的核验。P2的增长率关系及P3公式(7)仍可独立识读，但不能据此补造缺失公式。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "公式(3)、(4)被提取为空字符的运算符，在原页均为减号，积分被积项分别为Wn1 − σjkuk,1nj及Wn2 − σjkuk,2nj；图1图注载荷应为(σx1, σx2)，而非提取文本的(σ1, σx2)。已核对纠正，涉及能量释放率表达及载荷方向标识，不影响图示合力决定偏转方向的作者论述。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "提供的文字仅包含图2图注，遗漏原图内可读的网络结构、公式及遗传算法流程。已从原图识读输入(a,C1,C2)、输出Nr、五层神经元数30/25/20/10/5、L = Ldata + pLa及Nr = 0逆向判据。缺失属于文字提取遗漏，不是原页缺项；直接影响方法结构和逆向求解流程的理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "公式(8)–(11)、(13)–(15)的提取文本含异常空字符，原图对应位置可辨为减号或负号。公式(8)分子为ac − a0，分母完整包含λ(Ceqc − Ceq0)^ξY(a0,ac)；公式(10)、(11)右侧为负对数；数据损失含真实值与预测值之差，更新式含负梯度项。已纠正，避免改变寿命关系及优化方向。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "公式(16)提取文本中的异常字符已据原图核对为减号：分母含(1 − α)^(3/2)，多项式含−13.32α²和−5.6α⁴。原页公式完整，无缺项；符号错误会影响应力强度因子范围及后续构形力计算。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "公式(18)–(21)中异常空字符已据原图纠正为减号，包括1减去求和项、寿命预测残差和去均值项。保留原页公式(18)、(20)的实际求和及分母结构，不替换为常见R²、CC定义；原页公式可读，不能将其数学形式疑点当作提取错误予以改写。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "正文关于图16的指数说明被提取为异常字符加1；原页清楚写为“close to −1”。已纠正为接近−1，涉及作者对构形力与剩余寿命近似反比关系的解释，不是原文件缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P13",
+            "detail": "已从原页核实图16左下拟合标注为da/dN = −9.8611(1 − e^(0.25844a))，正文却写为da/dN = −9.8611(1 − e^(−0.25844a))，并称其为饱和指数增长。指数符号在图文之间不一致；正文所写式对正a给出负增长率，而图式不呈所述饱和趋势，且所列系数与图示增长率量级存在疑点。原页没有说明应更正哪一项，不补造系数或公式。该缺陷影响增长率—裂纹长度拟合及稳定高速阶段的解释，不妨碍其余内容识读。"
+          }
+        ]
+      }
     },
     {
       "source": "Elsevier",
@@ -269,7 +477,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "本文聚焦《Large Language Model-Augmented Semantic Digital Twins for Real-Time Fault Diagnosis and Closed-Loop Control》，暂未提供可用摘要，请查看原文。",
+      "summary": "本文面向智能制造中数字孪生缺乏情境理解与行为推理的问题，提出融合本体、大语言模型与检索增强生成的神经符号认知数字孪生框架。作者将虚拟机器单元的仿真数据映射为知识图谱，结合规则推理生成可读解释及机器可执行命令。[摘要] 用例报告了故障检测、可解释性与自适应控制方面的改善，但摘要未给出量化指标或对照结果。解读：值得关注其知识组织与诊断决策衔接方式，尚不能据此确认工业现场效果。",
       "raw_metadata": {
         "@_fa": "true",
         "link": [
@@ -353,12 +561,41 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为智能运维中知识图谱、规则推理与大语言模型融合的方法型论文重点候选阅读；摘要明确提出诊断解释和机器命令生成，但推荐不等于认可其性能与安全性已获充分验证。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是数字孪生如何从物理过程复现走向情境理解和系统行为推理。摘要指出传统数字孪生“lack these cognitive abilities”，从而限制可信、透明和自适应决策。[摘要] 解读：作者关注的不只是识别故障，还包括将运行状态转化为可理解、可用于决策的知识。",
+        "method": "方法以本体组织故障、纠正措施及规则知识，使用语义网规则语言（SWRL）表达逻辑，再将虚拟机器单元仿真数据语义映射为知识图谱。摘要称其通过“retrieval-augmented generation (RAG)”连接大语言模型。[摘要] 图谱提供结构化背景，模型负责生成解释和命令。",
+        "innovation": "摘要自述的贡献是神经符号认知数字孪生框架，其核心表述为“unifies ontology-based modeling with large language models”。[摘要] 解读：值得关注的是符号知识与语言生成在同一诊断流程中的整合，而非某个组件单独出现；缺少相关工作比较，不能认定这种组合具有首创性。",
+        "findings": "摘要报告，展示用例表明规则推理与神经生成结合“enhances fault detection, interpretability, and adaptive control”。[摘要] 这是作者对效果的定性陈述。资料未提供检测准确率、响应时延或解释质量评价，因而只能确认其宣称的改善方向，不能比较改善幅度或统计可靠性。",
+        "limitations": "证据边界在于摘要仅明确描述“Simulation data from a virtual machine cell”，未交代实体设备部署、对照基线、测试规模及安全验证。[摘要] 解读：这些属于当前资料缺失，并不等于全文没有相关实验；标题所指闭环控制是否得到完整验证，也不能仅凭命令生成能力确认。",
+        "connection": "与智能运维最直接的联系是本体覆盖“faults, corrective actions, and rule-based logic”，为故障知识、处置措施及推理规则提供统一表达。[摘要] 解读：这可作为运维知识组织的参考；但摘要未涉及结构优化、寿命预测或失效概率计算，不能将其视为结构设计或定量可靠性研究成果。",
+        "next_steps": "建议后续阅读优先核查“machine-actionable commands”如何被验证、执行并接收状态反馈，以及异常命令能否被约束。[摘要] 建议迁移研究时分别设置规则推理、语言模型和融合方案的对照，并考察错误检索及知识缺失下的表现；这些是研究建议，不是作者已完成的实验。"
+      },
       "recommended_direction": "ai_maintenance",
-      "title_zh": "大语言模型增强的语义数字孪生：实时故障诊断与闭环控制"
+      "title_zh": "大语言模型增强的语义数字孪生：实时故障诊断与闭环控制",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1115/1.4071805"
+      ],
+      "analyzed_at": "2026-09-25T16:42:53.880422+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "bf8f230d7ac808d120f5af365536c07368d80bf97fa56716da60f6c5d01b9183",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "c935fc51c706",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-09-26T09:13:08.784805+00:00",
+        "basis": "abstract",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -380,7 +617,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract System discovery is an important part of the power systems asset management process. In this paper, we introduce an end-to-end approach for robust system discovery for a class of electrical dynamical systems with polynomial dynamics. To that end, we provide a theoretical analysis of the problem setting and the solution approach using a particular Scientific Machine Learning method called Physics-Informed Machine Learning. We introduce model architecture and training and validation methods for deterministic as well as probabilistic approaches to predict the solution to pertinent invers…",
+      "summary": "本文面向电力系统资产管理，研究具有多项式动力学的电气系统发现问题，提出基于物理信息机器学习的端到端逆问题求解方案，并以采样方法应对数据稀疏。摘要报告，在感应电机热建模案例中，相比除一个基线外的其他方法，验证误差降低6%至78%；其概率方案精度不及贝叶斯方法，但计算时间减少86%。研究重点是预测性能与计算成本的权衡，而非生成式设计。以下仅为摘要级解读。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -415,12 +652,189 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为物理信息逆问题求解与智能运维的交叉文献补充阅读；其稀疏数据处理和精度—成本比较值得关注，但与给定生成式设计方向并不直接契合，不宜仅凭主题标签列为核心推荐。[摘要]",
+      "deep_read": {
+        "problem": "论文将系统发现置于电力系统资产管理背景，研究对象限定为具有多项式动力学的一类电气系统，目标是求解相关逆问题并增强稀疏数据条件下的预测鲁棒性。原文称其为“electrical dynamical systems with polynomial dynamics”，不能据此扩展至任意动力系统。[摘要]",
+        "method": "作者采用物理信息机器学习，提供问题设定与求解方法的理论分析，并介绍确定性及概率方案的模型架构、训练和验证方法，同时提出应对数据稀疏的采样方法。原文使用“Physics-Informed Machine Learning”一词，但摘要未给出网络结构、损失函数或采样规则。[摘要]",
+        "innovation": "解读：摘要呈现的方法特色，是在端到端系统发现方案中结合物理信息学习、确定性与概率建模及稀疏数据采样，而非仅比较单一预测器。作者称其为“end-to-end approach”，但没有充分交代与既有方法的技术差异，尚不能据此确认首创性或各组件的独立贡献。[摘要]",
+        "findings": "感应电机热建模案例中，该方法相对除一个基线外的其他方法实现验证误差降低6%至78%，原文明确为“all but one baseline”。端到端概率方案的验证误差高于贝叶斯方法，但计算时间减少86%；这些结果支持成本与性能权衡，而非所有指标全面领先。[摘要]",
+        "limitations": "证据局限：摘要仅披露感应电机热建模案例，未给出数据规模、稀疏程度、误差指标定义及重复实验信息，无法判断统计稳定性或跨设备适用性。作者明确研究“一类”多项式动力学系统；这限定了摘要支持的结论范围，但不能据此断言该方法在其他系统上失效。[摘要]",
+        "connection": "解读：系统发现与电力资产管理直接相关，因此对智能运维中的模型辨识具有参考价值；概率方案也可能为可靠性分析提供建模思路，但摘要未证明其不确定性校准能力。给定标签为生成式设计，而摘要未涉及结构生成、设计优化或几何约束，因此与该方向仅有间接的方法联系。[摘要]",
+        "next_steps": "建议：后续阅读全文时，优先核查逆问题中的待辨识变量、物理约束实现、采样策略以及计算时间比较条件，再判断方法能否迁移至目标设备。若用于可靠性或设计研究，可另行检验稀疏观测下的辨识稳定性与概率预测校准；这些是研究建议，不是论文已报告的成果。"
+      },
       "recommended_direction": "generative_design",
-      "title_zh": "利用科学机器学习实现电气动力系统的端到端鲁棒系统发现"
+      "title_zh": "利用科学机器学习实现电气动力系统的端到端鲁棒系统发现",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s44172-026-00689-2"
+      ],
+      "analyzed_at": "2026-09-25T13:06:22.849201+00:00",
+      "llm_model": "gpt-6-astra",
+      "reading_status": {
+        "paper_id": "9170f18af989",
+        "state": "failed",
+        "updated_at": "2026-09-26T09:39:11.234067+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 27,
+        "covered": 25,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "式(3)、(4)文字提取将求和符号显示为X，并打散范数上下标。原图已核实为对x∈Ω_x、t∈Ω_t求和，残差及观测失配均取平方二范数，再除以|Ω_x||Ω_t|；不应将X解释为变量或将损失读成未平方范数。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "式(5)、(7)、(8)的上下标及分式被文本提取打散。原图确认∇²为拉普拉斯算子，式(7)为∂T̂/∂t̂−D∇²T̂−q̂=0，式(8)分母为L²P_ref；这些排版更正影响热扩散残差和归一化系数的准确复现。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P7",
+            "detail": "Data acquisition and processing原页写“29 field of view”，数值29后没有单位。已核实为原页参数说明缺项，不自行补为29°；不影响其他相机参数识读。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P7",
+            "detail": "图3(a)测点附近部分黑底微小标签仍模糊，不能完整逐字确认。P1、P2—P5大字、图3(b)、正文和式(9)已读清；不补写小标签名称或数值，也不把模糊认定为原文件缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "图4(a)下方热源预测网络有三个输入节点：上方标X，下方标I(t)，中间节点未标变量名。原图已清楚核实该标签缺项，影响完整输入定义的复现；不自行补为y或其他变量，不影响页面其余内容识读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "式(10)—(11)文字提取将求和符号显示为X并打散下标。原图确认式(10)为对空间与时间配点的双重求和，式(11)对τ∈Ω_{t−1}的历史损失求和；已恢复其数学排版，不能把X当成乘数或变量。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "式(12)文字提取中的绝对值、分式和求和符号排版损坏；原页确认求和项为ℒ_PINN(x,τ)|∂τ/∂ℒ_PINN(x,τ)|。不得将该逆梯度项改写成|∂ℒ_PINN/∂τ|，两者对应不同训练权重。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "Reconstruction-based validation页末e_T定义的2在原页为上标：e_T=‖T_gt−T_recon‖²，而非下标二范数。提取文本丢失上下标位置造成歧义；平方已存在，不能报告为原文缺少平方。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P9",
+            "detail": "式(13)、(15)原页均写+D∂²/∂x²，未列y方向扩散项；与所述二维热扩散模型及其负号拉普拉斯形式存在表述不一致。这不是提取错误；无法判定是未说明的简化还是排版错误，影响概率模型物理残差复现，不自行补项或改号。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "式(17)—(18)文字提取将求和符号显示为X并打散分式。原图确认MSE为时空配点平均，LSE为时间平均后取空间最大值；已恢复运算次序，不能解释为时空逐点最大误差。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P11",
+            "detail": "图7(a)、(b)原图均有数值刻度，但未标横、纵轴名称及单位；图注只说明比较训练损失，无法据此确定横轴代表时间、训练轮次还是其他变量，不擅自补写。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P11",
+            "detail": "图8图注称四个坐标点在图8(a)中展示，但所提供原页图8(a)未见明确的(1)—(4)测点编号或定位标记。图8(b)编号与图注坐标可读，仍不能直接从图8(a)核对四点位置；不自行添加标记。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "图9(c)纵轴仅标“MSE [log]”，未注明对数底数；图例、负刻度均清楚可读，但不足以唯一还原原始MSE数值，不擅自假定自然对数或常用对数。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "图9(b)空间坐标约为0—4，图9(d)横坐标为0—300，二者均标x[m]、y[m]；本页未说明尺度转换关系。不能据此确认实际几何尺寸，也不能自行把(d)单位改成像素。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "图9(d)标T_diff，图注仅称“their difference”，未定义T_exact−T_pred还是T_pred−T_exact。差值色条清楚，但正负值不能直接解释为高估或低估。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P16",
+            "detail": "Table I(a)—(b)提取文本将设备名、列名和Yes等单词拆开，破坏行列对应。原图已确认六个训练设置及定性表五个评价列，数值和Yes/No对应关系已在notes中恢复。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P19",
+            "detail": "文字提取仅保留ARTICLE IN PRESS，遗漏整幅框架图。原页清楚包含数据处理、逆解与不确定性建模、训练验证、数据稀疏/噪声/无关数据鲁棒性分析及三色图例；不能把该页当作空白或跳过。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P20",
+            "detail": "文字提取仅保留ARTICLE IN PRESS，遗漏(a)测量示意图和(b)工厂试验照片及标签。原图已识读，不能按空白页处理。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P21",
+            "detail": "文字提取仅保留ARTICLE IN PRESS，遗漏(a)热像图和(b)温度对照曲线、图例及坐标。可读图像内容已核对，该页不是空白页。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P21",
+            "detail": "图(a)测点上方部分黑底微小标签仍像素模糊，无法完整逐字确认。大字P1、P2—P5及图(b)已读清；不补写小标签，也不将模糊认定为原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P22",
+            "detail": "文字提取遗漏两种网络架构、输出变量、微分算子和层数图例。原图已读清，残差中的时间导数为正号，扩散项及热源为负号。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P22",
+            "detail": "图(a)热源网络的中间输入节点未标变量名，上、下节点分别标x和I(t)。缺项已从原图确认，影响完整输入定义复现；不能自行补为y。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P23",
+            "detail": "文字提取遗漏T_pred热图、0.0—1.0色条和x[m]轴标签。原页不是空白，图中没有提供可用于恢复实际空间位置的数值刻度。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P24",
+            "detail": "文字提取遗漏(a)规模与训练时间柱图及(b)误差曲线。原图已核实配置、图例、轴名和对数刻度；该页不是空白页。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P25",
+            "detail": "文字提取遗漏全部模型比较曲线及图例。原图可清楚识读Main、Temporal、Causal模型与n=1、2、10、100的比较，不能跳过。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P25",
+            "detail": "图(a)、(b)有数值刻度但未标横纵轴名称及单位。无法仅凭本页确定横轴是时间、训练轮次还是其他变量；不自行补写。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P26",
+            "detail": "文字提取遗漏温度—热源及不确定性—仿真温度流程图和四个时间曲线子图。现已核实流程标签、色条、子图编号及坐标；不应视为空白。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P27",
+            "detail": "文字提取遗漏采样布局、热源图、主动与随机采样比较及温度差值图。原图标签、图例、刻度和色条已读清。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P27",
+            "detail": "图(c)纵轴仅标“MSE [log]”，未给对数底数，不能唯一还原原始MSE；负刻度不代表原始MSE为负。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P27",
+            "detail": "图(b)空间刻度约0—4，图(d)横轴刻度0—300，两者均标米，本页未说明尺度转换；图(d)T_diff也未定义相减顺序。不能自行改单位或将差值正负解释为高估、低估。"
+          }
+        ]
+      }
     },
     {
       "source": "Google Scholar",
@@ -444,7 +858,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "… machine learning framework is proposed for the fatigue life … capability in predicting the fatigue life of stud connectors … -based formulations and conventional machine learning models. In …",
+      "summary": "论文汇集305个栓钉试件数据，将线弹性断裂力学寿命作为附加特征，结合四类学习器与堆叠集成预测疲劳寿命，并开展SHAP和全局敏感性分析。[P2][P6]表8报告集成模型测试R²为0.83，但误差基于对数寿命，不能直接理解为循环次数误差。[P11]解读：值得借鉴的是物理特征与集成学习的结合；公式、归因排序和敏感性图存在内部矛盾，不宜直接作为可靠性设计依据。[P6][P15][P17]",
       "raw_metadata": {
         "position": 9,
         "title": "Physics-informed stacking ensemble machine learning for fatigue life prediction of stud connectors in steel-concrete composite structures",
@@ -512,12 +926,82 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议有条件重点阅读：适合借鉴栓钉疲劳预测的物理特征构造和集成流程，但复现时必须核查公式、数据及敏感性实现，不建议直接采用其工程安全结论。[P6][P17][P19]",
+      "deep_read": {
+        "problem": "作者关注组合结构栓钉在材料、几何和加载条件共同作用下的疲劳寿命预测，指出经验公式适用性及机器学习物理解释不足。[P1][P2]解读：研究目标主要是提高寿命点预测与参数识别能力，并非直接计算失效概率；预测准确与设计安全应分别评价。[P13]",
+        "method": "作者收集305个试件，以十项基础变量加对数LEFM寿命为输入，随机按8:2划分数据。[P2][P6]采用RF、SVR、GBR和XGBoost，训练集内调参，并以交叉验证预测构建Lasso元学习器；另用SHAP、Morris和Sobol解释模型。[P4][P8][P16]",
+        "innovation": "解读：可借鉴贡献在于把断裂力学计算寿命转为输入特征，再结合异质学习器集成，而非提出新的裂纹扩展定律。[P6][P8]这种物理信息嵌入属于特征工程，不是物理损失或硬约束；联合归因和敏感性分析拓展了解释视角，但不能据此证明物理一致性。[P17]",
+        "findings": "表8及结论报告PI-Stacking测试RMSE为0.33、MAE为0.24、MAPE为4.48%、R²为0.83，均对应对数寿命评价。[P11][P19]图22显示PI-XGBoost中Δτ与物理特征重要性分别为20%和14.5%，与正文对应关系相反，须保留这一冲突。[P15]",
+        "limitations": "作者承认试验数据不足。[P19]解读：随机划分尚不足以证明跨来源泛化；表3积分形式与式(6)冲突，图13与表8的MAE不一致。[P5][P6][P11]此外Sobol图出现S1大于ST、输入相关性处理不明，削弱了定量敏感性结论的可信度。[P14][P17]",
+        "connection": "解读：该框架可为智能运维中的寿命筛查、结构设计参数比较提供代理模型，但不能把点预测直接作为维护期限。[P18]作者明确模型未内置安全裕度，规范与学习模型承担不同角色；可靠性研究的衔接应是误差建模和安全校准，而不是把文中生存率直接当结构可靠度。[P13]",
+        "next_steps": "建议先索取数据，核对强度定义、LEFM公式和GUI单位，再按文献来源分组验证，并保持派生输入的物理一致性。[P3][P6][P18][P19]随后重算相关输入条件下的敏感性、补充预测区间；作者提出的无损检测微裂纹信息可作为后续物理特征更新方向，而非已有成果。[P19]"
+      },
       "recommended_direction": "fatigue_reliability",
-      "title_zh": "面向钢—混凝土组合结构栓钉连接件疲劳寿命预测的物理信息堆叠集成机器学习"
+      "title_zh": "面向钢—混凝土组合结构栓钉疲劳寿命预测的物理信息堆叠集成机器学习",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.sciencedirect.com/science/article/pii/S0141029626000945"
+      ],
+      "analyzed_at": "2026-09-26T01:49:45.274907+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P13"
+        ],
+        "method": [
+          "P2",
+          "P4",
+          "P6",
+          "P8",
+          "P16"
+        ],
+        "innovation": [
+          "P6",
+          "P8",
+          "P17"
+        ],
+        "findings": [
+          "P11",
+          "P15",
+          "P19"
+        ],
+        "limitations": [
+          "P5",
+          "P6",
+          "P11",
+          "P14",
+          "P17",
+          "P19"
+        ],
+        "connection": [
+          "P13",
+          "P18"
+        ],
+        "next_steps": [
+          "P3",
+          "P6",
+          "P18",
+          "P19"
+        ]
+      },
+      "analysis_material_version": "ada858a9fd64b8c979b79021e193521ba6cf02b6a5c84ad4bdbb035c17ca138e",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "0e815a1ce338",
+        "state": "published",
+        "updated_at": "2026-09-26T01:49:45.288188+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 20,
+        "covered": 20,
+        "pdf_available": true,
+        "issues": []
+      }
     }
   ],
   "extended": [
@@ -550,7 +1034,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract As a pinning-controlled permanent magnet, tailoring the cellular nanostructure of samarium-cobalt-based 1:7-type (SmCo-1:7) magnets remains crucial for improving magnetic performance. Jointing forward and inverse machine learning models with the high-throughput micromagnetic simulations (42,300 sets), we identify the nanostructural and magnetic features that are most effective for coercivity, combining both nucleation and pinning mechanisms. Sensitivity analyses reveal that the 1:5-phase enhances coercivity by providing high anisotropy, whereas the Z-phase strengthens pinning through…",
+      "summary": "本文围绕SmCo-1:7磁体的结构—矫顽力关系，将42,300组微磁模拟与正向预测、逆向设计结合，区分形核与畴壁钉扎贡献。[P1–P7]作者发现取向偏差影响突出，1:5相主要提供高各向异性，Z相主要增强钉扎。[P11–P12]三个逆向案例的矫顽力误差均低于5%，但钉扎指标误差超过25%。解读：适合学习物理仿真驱动的结构反演，不宜直接视为真实磁体可靠性的验证。[P7]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -585,12 +1069,342 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "推荐作为生成式结构设计的方法型论文重点阅读：其前向代理与逆向双误差约束具有明确借鉴价值，但必须同时关注独立微磁验证、适用条件及原文指标错误。[P7][P13–P14]",
+      "deep_read": {
+        "problem": "研究要回答两个问题：哪些纳米几何和磁性特征决定矫顽力，以及如何根据目标性能反推出结构。[P2]难点是形核与钉扎共同作用，且不同结构可能产生相近性能；作者因此同时考察矫顽场与钉扎贡献，而不是仅寻找单一性能最大值。[P5][P14]",
+        "method": "作者筛选得到42,300组输入，开展GPU并行微磁模拟，以受控软磁边界层统一形核条件，再训练前向网络。[P3–P5]逆向网络在固定磁性参数下输出四个几何量，损失同时约束参数误差和前向性能误差，权重λ=0.02。[P6][P14]",
+        "innovation": "解读：本文的方法特色是把高通量微磁、机制指标与目标结构反演整合，而非证明一种全新的网络架构。[P3][P14]作者还用相间磁性差值替代部分单相描述符，使1:5–2:17界面的钉扎作用更清晰；这种特征构造比仅报告预测精度更有物理解释价值。[P11]",
+        "findings": "作者报告取向偏差为主导因素，1:5相通过高各向异性增强矫顽力，Z相提供钉扎位置但过多会限制矫顽力。[P12]图5三个逆向案例的矫顽力相对误差均低于5%，钉扎指标误差却为28.20%、41.18%、25.87%，两类目标的验证质量明显不同。[P7]",
+        "limitations": "模型采用理想周期几何和平均成分，未覆盖随机缺陷极值。[P12]原文缺项包括表1的Cu漏u，影响相标识[P5]；链式求导漏∂，影响梯度表达[P14]；文献55缺期刊名，影响定位[P16]。另有R²定义异常，实际实现未核验，不补造公式或确认受影响评分。[P13]\n原文核对：[P5] 表1的1:5相表头原页写作Sm(Co₁₋ₓCₓ)₅，Cu中的u缺失，与正文Cu替代及图3的Sm(Co₁₋ₓCuₓ)₅标注不一致。保留该原文表头问题，不将其解释为碳掺杂；受影响的是相成分标识，表内参数仍可识读。；[P6] 图4g–h右轴、图例及约1.25×10⁻³的标注均为MSE，但P5末至P6开头的对应正文称MAPE。原页已确认图文指标名称不一致，并非公式缺失或文字提取错误。不能据此把1.25×10⁻³确定解释为MAPE；受影响的是模型误差大小及收敛指标的表述，R²趋于约0.90的趋势仍可识读。；[P8] 对应图7的正文先称固定厚度时增大d、减小L提高H_c，随后在最小厚度情形又称“reducing L and d tends to improve H_c”，并称该效应随厚度增加而增强。原页确有两种方向表述，无公式缺项；影响d对H_c趋势的概括，不能擅自统一为同一方向。；[P9] 图7讨论中，原文将随x_Cu从0增至0.3而畴壁能下降近32%的相写为“2:17-phase”，但本段明确Cu变化发生在1:5相，且前句已将2:17相的约10%降幅对应Fe变化。属于原页相名称错配，无缺失公式；影响Cu降低哪一相畴壁能的解释。；[P9] 图8引入段把φ_Z写成Sm₂Co₁₇（2:17相）的体积分数；与P8公式(5)的φ_Z=w_Z/d及P10图8横轴“Z-Phase Vol. Frac.”不一致。原页可确认该相标识错误，无公式缺项；φ_Z应按已给定义识别为Z相变量，不应据此改称基体相分数。；[P9] 图7图注将变化厚度描述为SmCo₅和Sm₂Co₁₇两相的厚度，但图中实际标注w_S与w_Z，示意图明确w_Z对应Z相。原页图注与图内变量含义不一致，无图像缺项；影响厚度扫描对象的辨认。；[P11] 公式(6)原页将Δσ_dw^(S−M)的右端写为σ_dw^(S−M)−σ_dw^(M)，而不是与其他差值定义平行的单相项σ_dw^(S)。原页无字符缺失，但上标与差值定义语境不一致；影响1:5–2:17畴壁能差值的形式定义。不能据此认定实际代码也采用了错误表达式。；[P11] 图9e与正文的Φ_p重要性次序不完全一致：正文在Δσ_dw^(S−M)之后依次列Δl_dw^(S−M)、ΔM_s^(Z−M)，但图中红柱分别约为0.042、0.060，后者更高。无图像缺项；影响后续特征排序，不改变α及Δσ_dw^(S−M)的重要性结论。；[P12] 讨论第(iii)项把H_c称为“coherence factor”，与本页其余正文将H_c用作矫顽力的含义不一致。该术语误写已在原页核实，无公式缺项；不能据此另行引入一个相干性因子。；[P13] 首段将SmCo₅、Sm₂Co₁₇的计算结果称为M_s和K_u，但对应第二项数值为15.0、19.48 pJ m⁻¹，且上下文明确讨论交换刚度。原页符号与物理量及单位不一致，应标注为疑似将A_e误写为K_u，不能把这些数值解释成各向异性常数。；[P13] 公式(12)原页确实写作R²=Σ(Ŷ_i−Ȳ)²/Σ(Y_i−Ȳ)²，而非通常预测决定系数的1−Σ(Y_i−Ŷ_i)²/Σ(Y_i−Ȳ)²。公式现有内容完整，不是提取丢失“1−”；影响R²指标的定义与复现。仅凭此页不能判断实际评分代码及已报告数值使用哪一公式。；[P14] 公式(13)之后，原页将收敛准则写作“H_c≤1%”，而上下文定义的百分比误差指标为MAPE。矫顽场与百分比阈值的写法不一致，无公式缺项；影响收敛准则复现。可指出疑似指标符号误写，但不能擅自补定作者实际使用的判据。；[P14] 公式(15)下方反向传播说明的行内公式原页写作∂L/∂X=(L/∂Y)(∂Y/∂X)，中间因子分子缺少偏导符号∂。这是原页链式求导表达缺项，不是提取错误；影响梯度公式的形式正确性，不能据此断言训练代码有同样错误。；[P15] 参考文献9与28的作者和题名相同，但9写为“Nat. Commun. 8, 7 Seiten (2022)”，28写为“Nat. Commun. 8, 54 (2017)”。原页确有元数据冲突及异常的“7 Seiten”字段；影响文献定位，不能仅凭本批决定正确年份或条目编号。无正文公式或图像缺项。；[P15] 原页参考文献存在重复书目：3/35、4/34、11/38、15/41分别具有相同题名及期刊卷页年份，部分仅作者缩写或排版不同。影响文献去重和独立证据数量统计，不构成新增研究证据；无页面内容缺失。；[P16] 参考文献55原页在题名“Micromagnetic simulations on the grain shape effect in Nd-Fe-B magnets”之后直接列“120, 033903 (2016)”，缺少期刊名称。已从图片核实，并非提取遗漏；影响书目定位完整性，不影响本批其他内容识读。该项不涉及公式或图号，不推补缺失期刊名。",
+        "connection": "解读：与生成式设计的直接联系是从目标性能生成代表性结构候选，并通过前向模型反馈约束；作者明确它不是唯一物理解。[P14]对结构设计可迁移这种反演思路，对可靠性研究则应进一步关注局部薄弱位置；资料没有智能运维场景的直接验证。[P12]",
+        "next_steps": "建议：先用独立微磁计算检验高矫顽力区和训练范围外候选，并对钉扎指标单独验收。[P6–P7]随后加入几何可实现性约束和独立测试集，避免只以非负输出或选轮次的测试损失证明泛化。[P14]最后沿作者提出的APT与体素路线引入局部成分和缺陷波动。[P12]"
+      },
       "recommended_direction": "generative_design",
-      "title_zh": "SmCo-1:7 磁体纳米结构对矫顽力的影响：基于高通量微磁数据的机器学习"
+      "title_zh": "SmCo-1:7磁体纳米结构对矫顽力的影响：高通量微磁数据的机器学习",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41524-026-02174-y.pdf"
+      ],
+      "analyzed_at": "2026-09-26T09:33:18.223901+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P5",
+          "P14"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P5",
+          "P6",
+          "P14"
+        ],
+        "innovation": [
+          "P3",
+          "P11",
+          "P14"
+        ],
+        "findings": [
+          "P7",
+          "P12"
+        ],
+        "limitations": [
+          "P5",
+          "P12",
+          "P13",
+          "P14",
+          "P16"
+        ],
+        "connection": [
+          "P12",
+          "P14"
+        ],
+        "next_steps": [
+          "P6",
+          "P7",
+          "P12",
+          "P14"
+        ]
+      },
+      "analysis_material_version": "9d855ce26428bb8b7e7117a44885f40fbf68eb6a1ca0de1dff2105dcaa14d164",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "原页已核清：几何及成分KDE区间的文字提取出现“/C24”“/C0”“/C138”等乱码。95%成分区间为X_Zr∼[1.77–3.53]、X_Cu∼[4.68–7.88]、X_Fe∼[1.30–26.90] at.%；95%几何区间为L∼[33.60,184.78]、d∼[9.78,72.28]、w_S∼[2.60,20.12]、w_Z∼[1.07–28.80] nm。公式(1)根号及公式(2)分式均完整，无公式缺项；已按原页恢复，避免误读参数范围与畴壁性质关系。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "相内成分列表的提取含“/C138”等乱码。原页可读为X_Cu^P∈[0.0,8.3,16.7,25.0] at.%、X_Fe^P∈[0.0,9.0,17.9,26.8] at.%。描述符列表中的σ_dw^(S)也被错误提取为带额外0的形式；原页无此0。影响成分采样及输入变量辨认，不是原文件缺项。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P5",
+          "detail": "表1的1:5相表头原页写作Sm(Co₁₋ₓCₓ)₅，Cu中的u缺失，与正文Cu替代及图3的Sm(Co₁₋ₓCuₓ)₅标注不一致。保留该原文表头问题，不将其解释为碳掺杂；受影响的是相成分标识，表内参数仍可识读。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "公式(3)文字提取将减号变成“/C0”，原页清楚显示Φ_p=(H_c−H_p)/H_c，无缺项。边界缺陷层参数原页为K′=0.01K_u，提取的K0不准确。已纠正，以免误读钉扎贡献定义和缺陷层设置。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P6",
+          "detail": "图4g–h右轴、图例及约1.25×10⁻³的标注均为MSE，但P5末至P6开头的对应正文称MAPE。原页已确认图文指标名称不一致，并非公式缺失或文字提取错误。不能据此把1.25×10⁻³确定解释为MAPE；受影响的是模型误差大小及收敛指标的表述，R²趋于约0.90的趋势仍可识读。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "逆向设计固定参数处，原页为M_s^(P)、σ_dw^(P)、l_dw^(P)，后两项没有文字提取中的额外下标0；α=0后的句点也不是小数残缺。此处无公式缺项，纠正后明确固定的是各相磁性参数。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "公式(4)的−3/2指数被提取为含“/C0”的乱码，原页分段、指数和分母均完整，已在笔记恢复。图5图注中的l_dw^(P)、σ_dw^(P)无提取文本所带额外0。没有公式缺项；影响角度模型与固定微磁输入的辨认。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "公式(5)的括号、减号及分式在提取文本中出现乱码。原页清楚显示φ_S=w_S(2L−w_S)/L²−w_Sw_Z/(Ld)，φ_Z=w_Z/d。无缺项，已据原页恢复，避免误读相分数定义。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P8",
+          "detail": "对应图7的正文先称固定厚度时增大d、减小L提高H_c，随后在最小厚度情形又称“reducing L and d tends to improve H_c”，并称该效应随厚度增加而增强。原页确有两种方向表述，无公式缺项；影响d对H_c趋势的概括，不能擅自统一为同一方向。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P9",
+          "detail": "图7讨论中，原文将随x_Cu从0增至0.3而畴壁能下降近32%的相写为“2:17-phase”，但本段明确Cu变化发生在1:5相，且前句已将2:17相的约10%降幅对应Fe变化。属于原页相名称错配，无缺失公式；影响Cu降低哪一相畴壁能的解释。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P9",
+          "detail": "图8引入段把φ_Z写成Sm₂Co₁₇（2:17相）的体积分数；与P8公式(5)的φ_Z=w_Z/d及P10图8横轴“Z-Phase Vol. Frac.”不一致。原页可确认该相标识错误，无公式缺项；φ_Z应按已给定义识别为Z相变量，不应据此改称基体相分数。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P9",
+          "detail": "图7图注将变化厚度描述为SmCo₅和Sm₂Co₁₇两相的厚度，但图中实际标注w_S与w_Z，示意图明确w_Z对应Z相。原页图注与图内变量含义不一致，无图像缺项；影响厚度扫描对象的辨认。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P11",
+          "detail": "公式(6)的相间上标S−M、Z−M及减号被提取为含“/C0”的乱码。原页可清楚辨认这些均为差值符号；已据原页恢复。此项不涉及公式缺失，也不应掩盖公式本身另有的上标错误。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P11",
+          "detail": "公式(6)原页将Δσ_dw^(S−M)的右端写为σ_dw^(S−M)−σ_dw^(M)，而不是与其他差值定义平行的单相项σ_dw^(S)。原页无字符缺失，但上标与差值定义语境不一致；影响1:5–2:17畴壁能差值的形式定义。不能据此认定实际代码也采用了错误表达式。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P11",
+          "detail": "图9e与正文的Φ_p重要性次序不完全一致：正文在Δσ_dw^(S−M)之后依次列Δl_dw^(S−M)、ΔM_s^(Z−M)，但图中红柱分别约为0.042、0.060，后者更高。无图像缺项；影响后续特征排序，不改变α及Δσ_dw^(S−M)的重要性结论。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P12",
+          "detail": "讨论第(iii)项把H_c称为“coherence factor”，与本页其余正文将H_c用作矫顽力的含义不一致。该术语误写已在原页核实，无公式缺项；不能据此另行引入一个相干性因子。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P13",
+          "detail": "首段将SmCo₅、Sm₂Co₁₇的计算结果称为M_s和K_u，但对应第二项数值为15.0、19.48 pJ m⁻¹，且上下文明确讨论交换刚度。原页符号与物理量及单位不一致，应标注为疑似将A_e误写为K_u，不能把这些数值解释成各向异性常数。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P13",
+          "detail": "公式(12)原页确实写作R²=Σ(Ŷ_i−Ȳ)²/Σ(Y_i−Ȳ)²，而非通常预测决定系数的1−Σ(Y_i−Ŷ_i)²/Σ(Y_i−Ȳ)²。公式现有内容完整，不是提取丢失“1−”；影响R²指标的定义与复现。仅凭此页不能判断实际评分代码及已报告数值使用哪一公式。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P13",
+          "detail": "公式(7)–(12)的括号、负号、内积、范数及均值符号在文字提取中含“/C2”“/C3”“/C1”等乱码。原页均可识读：例如f_ms=−μ₀M_s m·H_dm/2，f_zm=−μ₀M_s m·H_ext，MSE=Σ(Y_i−Ŷ_i)²/N。无这些运算符的原文件缺项；公式(12)自身的定义问题另列。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P14",
+          "detail": "公式(13)的∞上标被提取成1，绝对值、减号亦出现乱码；原页为MAPE=|μ_Y^N−μ_Y^∞|/μ_Y^∞×100%。公式(14)、(15)的减号、范数及括号也可从原页完整恢复，无公式缺项。影响样本量收敛指标和逆向损失的准确转录。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P14",
+          "detail": "公式(13)之后，原页将收敛准则写作“H_c≤1%”，而上下文定义的百分比误差指标为MAPE。矫顽场与百分比阈值的写法不一致，无公式缺项；影响收敛准则复现。可指出疑似指标符号误写，但不能擅自补定作者实际使用的判据。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P14",
+          "detail": "公式(15)下方反向传播说明的行内公式原页写作∂L/∂X=(L/∂Y)(∂Y/∂X)，中间因子分子缺少偏导符号∂。这是原页链式求导表达缺项，不是提取错误；影响梯度公式的形式正确性，不能据此断言训练代码有同样错误。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P14",
+          "detail": "文字资料漏提了原页日期行“Published online: 11 June 2026”。已据图片补记为2026年6月11日；属于提取遗漏，不是原文件缺项，不影响模型结论。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P15",
+          "detail": "参考文献9与28的作者和题名相同，但9写为“Nat. Commun. 8, 7 Seiten (2022)”，28写为“Nat. Commun. 8, 54 (2017)”。原页确有元数据冲突及异常的“7 Seiten”字段；影响文献定位，不能仅凭本批决定正确年份或条目编号。无正文公式或图像缺项。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P15",
+          "detail": "原页参考文献存在重复书目：3/35、4/34、11/38、15/41分别具有相同题名及期刊卷页年份，部分仅作者缩写或排版不同。影响文献去重和独立证据数量统计，不构成新增研究证据；无页面内容缺失。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P16",
+          "detail": "参考文献55原页在题名“Micromagnetic simulations on the grain shape effect in Nd-Fe-B magnets”之后直接列“120, 033903 (2016)”，缺少期刊名称。已从图片核实，并非提取遗漏；影响书目定位完整性，不影响本批其他内容识读。该项不涉及公式或图号，不推补缺失期刊名。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "d10423960846",
+        "state": "published",
+        "updated_at": "2026-09-26T09:33:18.237305+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 17,
+        "covered": 17,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "原页已核清：几何及成分KDE区间的文字提取出现“/C24”“/C0”“/C138”等乱码。95%成分区间为X_Zr∼[1.77–3.53]、X_Cu∼[4.68–7.88]、X_Fe∼[1.30–26.90] at.%；95%几何区间为L∼[33.60,184.78]、d∼[9.78,72.28]、w_S∼[2.60,20.12]、w_Z∼[1.07–28.80] nm。公式(1)根号及公式(2)分式均完整，无公式缺项；已按原页恢复，避免误读参数范围与畴壁性质关系。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "相内成分列表的提取含“/C138”等乱码。原页可读为X_Cu^P∈[0.0,8.3,16.7,25.0] at.%、X_Fe^P∈[0.0,9.0,17.9,26.8] at.%。描述符列表中的σ_dw^(S)也被错误提取为带额外0的形式；原页无此0。影响成分采样及输入变量辨认，不是原文件缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P5",
+            "detail": "表1的1:5相表头原页写作Sm(Co₁₋ₓCₓ)₅，Cu中的u缺失，与正文Cu替代及图3的Sm(Co₁₋ₓCuₓ)₅标注不一致。保留该原文表头问题，不将其解释为碳掺杂；受影响的是相成分标识，表内参数仍可识读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "公式(3)文字提取将减号变成“/C0”，原页清楚显示Φ_p=(H_c−H_p)/H_c，无缺项。边界缺陷层参数原页为K′=0.01K_u，提取的K0不准确。已纠正，以免误读钉扎贡献定义和缺陷层设置。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P6",
+            "detail": "图4g–h右轴、图例及约1.25×10⁻³的标注均为MSE，但P5末至P6开头的对应正文称MAPE。原页已确认图文指标名称不一致，并非公式缺失或文字提取错误。不能据此把1.25×10⁻³确定解释为MAPE；受影响的是模型误差大小及收敛指标的表述，R²趋于约0.90的趋势仍可识读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "逆向设计固定参数处，原页为M_s^(P)、σ_dw^(P)、l_dw^(P)，后两项没有文字提取中的额外下标0；α=0后的句点也不是小数残缺。此处无公式缺项，纠正后明确固定的是各相磁性参数。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "公式(4)的−3/2指数被提取为含“/C0”的乱码，原页分段、指数和分母均完整，已在笔记恢复。图5图注中的l_dw^(P)、σ_dw^(P)无提取文本所带额外0。没有公式缺项；影响角度模型与固定微磁输入的辨认。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "公式(5)的括号、减号及分式在提取文本中出现乱码。原页清楚显示φ_S=w_S(2L−w_S)/L²−w_Sw_Z/(Ld)，φ_Z=w_Z/d。无缺项，已据原页恢复，避免误读相分数定义。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "对应图7的正文先称固定厚度时增大d、减小L提高H_c，随后在最小厚度情形又称“reducing L and d tends to improve H_c”，并称该效应随厚度增加而增强。原页确有两种方向表述，无公式缺项；影响d对H_c趋势的概括，不能擅自统一为同一方向。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P9",
+            "detail": "图7讨论中，原文将随x_Cu从0增至0.3而畴壁能下降近32%的相写为“2:17-phase”，但本段明确Cu变化发生在1:5相，且前句已将2:17相的约10%降幅对应Fe变化。属于原页相名称错配，无缺失公式；影响Cu降低哪一相畴壁能的解释。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P9",
+            "detail": "图8引入段把φ_Z写成Sm₂Co₁₇（2:17相）的体积分数；与P8公式(5)的φ_Z=w_Z/d及P10图8横轴“Z-Phase Vol. Frac.”不一致。原页可确认该相标识错误，无公式缺项；φ_Z应按已给定义识别为Z相变量，不应据此改称基体相分数。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P9",
+            "detail": "图7图注将变化厚度描述为SmCo₅和Sm₂Co₁₇两相的厚度，但图中实际标注w_S与w_Z，示意图明确w_Z对应Z相。原页图注与图内变量含义不一致，无图像缺项；影响厚度扫描对象的辨认。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "公式(6)的相间上标S−M、Z−M及减号被提取为含“/C0”的乱码。原页可清楚辨认这些均为差值符号；已据原页恢复。此项不涉及公式缺失，也不应掩盖公式本身另有的上标错误。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P11",
+            "detail": "公式(6)原页将Δσ_dw^(S−M)的右端写为σ_dw^(S−M)−σ_dw^(M)，而不是与其他差值定义平行的单相项σ_dw^(S)。原页无字符缺失，但上标与差值定义语境不一致；影响1:5–2:17畴壁能差值的形式定义。不能据此认定实际代码也采用了错误表达式。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P11",
+            "detail": "图9e与正文的Φ_p重要性次序不完全一致：正文在Δσ_dw^(S−M)之后依次列Δl_dw^(S−M)、ΔM_s^(Z−M)，但图中红柱分别约为0.042、0.060，后者更高。无图像缺项；影响后续特征排序，不改变α及Δσ_dw^(S−M)的重要性结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "讨论第(iii)项把H_c称为“coherence factor”，与本页其余正文将H_c用作矫顽力的含义不一致。该术语误写已在原页核实，无公式缺项；不能据此另行引入一个相干性因子。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P13",
+            "detail": "首段将SmCo₅、Sm₂Co₁₇的计算结果称为M_s和K_u，但对应第二项数值为15.0、19.48 pJ m⁻¹，且上下文明确讨论交换刚度。原页符号与物理量及单位不一致，应标注为疑似将A_e误写为K_u，不能把这些数值解释成各向异性常数。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P13",
+            "detail": "公式(12)原页确实写作R²=Σ(Ŷ_i−Ȳ)²/Σ(Y_i−Ȳ)²，而非通常预测决定系数的1−Σ(Y_i−Ŷ_i)²/Σ(Y_i−Ȳ)²。公式现有内容完整，不是提取丢失“1−”；影响R²指标的定义与复现。仅凭此页不能判断实际评分代码及已报告数值使用哪一公式。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "公式(7)–(12)的括号、负号、内积、范数及均值符号在文字提取中含“/C2”“/C3”“/C1”等乱码。原页均可识读：例如f_ms=−μ₀M_s m·H_dm/2，f_zm=−μ₀M_s m·H_ext，MSE=Σ(Y_i−Ŷ_i)²/N。无这些运算符的原文件缺项；公式(12)自身的定义问题另列。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "公式(13)的∞上标被提取成1，绝对值、减号亦出现乱码；原页为MAPE=|μ_Y^N−μ_Y^∞|/μ_Y^∞×100%。公式(14)、(15)的减号、范数及括号也可从原页完整恢复，无公式缺项。影响样本量收敛指标和逆向损失的准确转录。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P14",
+            "detail": "公式(13)之后，原页将收敛准则写作“H_c≤1%”，而上下文定义的百分比误差指标为MAPE。矫顽场与百分比阈值的写法不一致，无公式缺项；影响收敛准则复现。可指出疑似指标符号误写，但不能擅自补定作者实际使用的判据。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P14",
+            "detail": "公式(15)下方反向传播说明的行内公式原页写作∂L/∂X=(L/∂Y)(∂Y/∂X)，中间因子分子缺少偏导符号∂。这是原页链式求导表达缺项，不是提取错误；影响梯度公式的形式正确性，不能据此断言训练代码有同样错误。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "文字资料漏提了原页日期行“Published online: 11 June 2026”。已据图片补记为2026年6月11日；属于提取遗漏，不是原文件缺项，不影响模型结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P15",
+            "detail": "参考文献9与28的作者和题名相同，但9写为“Nat. Commun. 8, 7 Seiten (2022)”，28写为“Nat. Commun. 8, 54 (2017)”。原页确有元数据冲突及异常的“7 Seiten”字段；影响文献定位，不能仅凭本批决定正确年份或条目编号。无正文公式或图像缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P15",
+            "detail": "原页参考文献存在重复书目：3/35、4/34、11/38、15/41分别具有相同题名及期刊卷页年份，部分仅作者缩写或排版不同。影响文献去重和独立证据数量统计，不构成新增研究证据；无页面内容缺失。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P16",
+            "detail": "参考文献55原页在题名“Micromagnetic simulations on the grain shape effect in Nd-Fe-B magnets”之后直接列“120, 033903 (2016)”，缺少期刊名称。已从图片核实，并非提取遗漏；影响书目定位完整性，不影响本批其他内容识读。该项不涉及公式或图号，不推补缺失期刊名。"
+          }
+        ]
+      }
     },
     {
       "source": "OpenAlex",
@@ -671,7 +1485,18 @@
       "recommendation": "",
       "deep_read": {},
       "recommended_direction": "fatigue_reliability",
-      "title_zh": "考虑焊接残余应力松弛的物理疲劳寿命建模，以及面向疲劳设计寿命的机器学习辅助残余应力阈值确定"
+      "title_zh": "考虑焊接残余应力松弛的物理疲劳寿命建模，以及面向疲劳设计寿命的机器学习辅助残余应力阈值确定",
+      "reading_status": {
+        "paper_id": "b972c8c0d15c",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-26T09:13:28.582350+00:00",
+        "basis": "missing",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -733,7 +1558,18 @@
       "recommendation": "",
       "deep_read": {},
       "recommended_direction": "ai_maintenance",
-      "title_zh": "面向变工况机械故障诊断的自适应工业大语言模型"
+      "title_zh": "面向变工况机械故障诊断的自适应工业大语言模型",
+      "reading_status": {
+        "paper_id": "1172e7a5c357",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-26T09:13:42.668495+00:00",
+        "basis": "missing",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Elsevier",
@@ -866,7 +1702,18 @@
       "recommendation": "",
       "deep_read": {},
       "recommended_direction": "generative_design",
-      "title_zh": "融合生成式 AI 与机器学习力场的稠环芳烃逆向设计及高保真动力学模拟"
+      "title_zh": "融合生成式 AI 与机器学习力场的稠环芳烃逆向设计及高保真动力学模拟",
+      "reading_status": {
+        "paper_id": "45dbfe9703f1",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-26T09:13:56.569443+00:00",
+        "basis": "missing",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -927,7 +1774,18 @@
       "recommendation": "",
       "deep_read": {},
       "recommended_direction": "fatigue_reliability",
-      "title_zh": "通过全场实验与物理信息机器学习揭示并预测织构 Zircaloy-4 合金中的疲劳裂纹萌生"
+      "title_zh": "通过全场实验与物理信息机器学习揭示并预测织构 Zircaloy-4 合金中的疲劳裂纹萌生",
+      "reading_status": {
+        "paper_id": "a71884573e77",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-26T09:14:10.831462+00:00",
+        "basis": "missing",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "papers": [
@@ -950,7 +1808,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "晶体材料发现面临巨大组合空间，生成模型的似然采样目标又未必指向潜在新化合物所在的欠探索区域。作者提出强化学习框架，以组相对策略优化和可验证的多目标奖励引导潜空间去噪扩散模型，兼顾新颖性、热力学可行性与多样性，并开展性质引导设计。[摘要] 解读：论文值得关注的是生成目标与发现目标的对齐机制；但摘要没有量化结果，尚不能判断提升幅度和验证充分性。",
+      "summary": "本文针对似然驱动生成与新材料发现目标错位，提出Chemeleon2，将潜空间扩散、组相对策略优化与多目标奖励结合，兼顾晶体新颖性、稳定性和多样性。[P1–P3]在Alex-MP-20上，亚稳、唯一且新颖的联合比例由15.9%升至61.3%，但唯一性下降；带隙定向生成也获得改善。[P4][P7]值得关注的是奖励设计与探索约束，而非将计算稳定性直接等同于可合成性或工程可靠性。[P6][P11]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -1060,23 +1918,23 @@
       ],
       "focus_tags": [],
       "title_zh": "通过强化学习引导生成模型发现多样且新颖的晶体",
-      "recommendation": "建议重点阅读其奖励设计与性质引导机制：这些内容直接对应生成式设计中的多目标控制问题，但应在获取全文后核查性能比较及热力学可行性的验证依据。[摘要]",
+      "recommendation": "推荐作为生成式材料设计的方法论文重点阅读，尤其关注GRPO、边际贡献奖励及多样性消融；对智能运维和可靠性研究仅具间接迁移价值，不能视作直接应用证据。[P3][P6][P11]",
       "deep_read": {
-        "problem": "作者指出，晶体发现不仅受组合设计空间庞大所限，还存在生成采样与探索目标之间的“objective misalignment”：化学上合理的样本未必来自欠探索区域。[摘要] 解读：核心问题是如何把生成过程导向有发现价值的候选，而非仅提高常见结构的生成概率。",
-        "method": "框架以强化学习引导潜空间去噪扩散模型，结合“group-relative policy optimization”与可验证的多目标奖励，同时平衡创造性、稳定性和多样性。[摘要] 摘要未提供奖励公式、策略更新细节或验证器构成，因此目前只能概括方法组成，不能复现训练流程。",
-        "innovation": "摘要将方法表述为可控逆向设计的模块化基础，并强调处理“novelty–validity trade-off”。[摘要] 解读：值得考察的创新候选是把探索新颖性与有效性约束共同纳入生成引导，而非仅在生成后筛选；其相对已有工作的独特程度仍需全文与文献比较确认。",
-        "findings": "作者报告框架能够寻找多样、新颖且热力学可行的晶体，并展示性质引导设计的增强效果，在追求目标功能性质时保持“chemical validity”。[摘要] 这些属于摘要中的定性成果陈述；未给出成功率、性质改善幅度或对照结果，不能据此判定实际优势大小。",
-        "limitations": "当前只有摘要，没有全文。虽然作者使用“thermodynamically viable”描述候选晶体，但未说明热力学判据、计算层级或实验验证情况。[摘要] 解读：这是现有材料的证据边界，不等于论文自身缺陷；尤其不能把热力学可行性直接当作可合成性已获证实。",
-        "connection": "摘要明确面向“AI-driven inverse design”，与给定的生成式设计标签直接相关。[摘要] 解读：其多目标生成思路可启发结构设计中的性能与可行性协调，但晶体设计不等同于工程结构设计；摘要也未涉及故障诊断、维护决策或可靠性指标，不能宣称已验证这些用途。",
-        "next_steps": "建议获取全文后，优先核查“verifiable, multi-objective rewards”的计算依据、目标间权衡方式，以及新颖性和多样性的评价口径。[摘要] 若迁移至可靠性约束设计，建议另行定义失效概率与可制造性约束，并检验生成候选是否满足这些要求；这不是作者已报告的成果。"
+        "problem": "作者指出，最大化训练数据似然倾向于复现已知材料分布，而材料发现希望进入兼具新颖性与热力学可行性的欠探索区域。原子种类、晶格和坐标又构成耦合的离散—连续空间，使直接策略优化成本较高。核心问题因此是如何改变探索目标，同时维持物理合理性。[P1][P2]",
+        "method": "方法先用VAE统一编码晶体，再把潜空间反向扩散作为策略，以GRPO进行同条件候选的组内优势归一化，冻结解码器。奖励结合AMD创造性、MLFF凸包能量及成分和结构多样性；后者用核分布差异和留一法贡献分配样本奖励，并辅以KL约束与熵奖励。[P9–P11]",
+        "innovation": "解读：贡献主要是把适合策略梯度的连续潜表示、无需独立价值网络的GRPO和材料领域奖励整合，而非提出全新的强化学习算法。多样性奖励同时约束批内冗余和参考分布偏离，区别于单纯鼓励远离已知样本；模块化设计还支持加入性质目标。[P2][P8][P11]",
+        "findings": "每模型生成10,000个未经弛豫的结构：Alex-MP-20上mSUN由15.9%升至61.3%，唯一性却由99.4%降至88.7%。性质生成的512个样本中，82个同时满足mSUN与2.7—3.3 eV带隙区间。结果支持本设置下的综合收益，而非所有指标均改善。[P3][P4][P7]",
+        "limitations": "作者承认0 K凸包代理未涵盖温度与动力学，模型不能区分有序相和无序固溶体；高元体系可能因竞争相缺失而被高估稳定性。解读：复现还需核对奖励权重遗漏、MMD指标重复及图文数值不一致，不能用潜空间覆盖得分替代真实结构新颖性。[P6][P7][P10][P11]",
+        "connection": "解读：本文直接契合生成式材料逆向设计，可为结构设计提供先学习生成先验、再用可验证目标优化的思路。对智能运维和可靠性，仅能借鉴多目标权衡及候选去冗余机制；论文没有设备退化、寿命或失效概率验证，晶体热力学稳定性不能直接充当工程安全指标。[P2][P8][P11]",
+        "next_steps": "建议：先核实公开版本的奖励权重、能量归一化及核函数求和实现，再设置多随机种子和奖励消融，分开报告重复率、原型新颖性及DFT复核结果。对复杂组成加入元素数量约束，并检查竞争无序相；迁移工程设计时另设失效约束，不沿用晶体稳定性标签。[P6][P10–P12]"
       },
       "analysis_status": "ready",
-      "analysis_basis": "abstract",
+      "analysis_basis": "full_text",
       "analysis_kind": "model",
       "analysis_sources": [
         "https://doi.org/10.1038/s42256-026-01262-4"
       ],
-      "analyzed_at": "2026-09-25T02:02:12.442245+00:00",
+      "analyzed_at": "2026-09-25T17:00:41.140639+00:00",
       "llm_model": "gpt-6-astra",
       "recommendation_decision": {
         "kind": "promotion",
@@ -1093,7 +1951,58 @@
         "reason": "以本轮给定的 generative_design 标签作为方向依据，论文直接研究强化学习引导的晶体生成与逆向设计，并明确提出优化算法和多目标奖励机制，足以支持重点阅读判断。摘要证据仅支持主题契合与方法价值，不足以确认量化优势，也不支持其已应用于智能运维或工程可靠性。",
         "heat": null
       },
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P9",
+          "P10",
+          "P11"
+        ],
+        "innovation": [
+          "P2",
+          "P8",
+          "P11"
+        ],
+        "findings": [
+          "P3",
+          "P4",
+          "P7"
+        ],
+        "limitations": [
+          "P6",
+          "P7",
+          "P10",
+          "P11"
+        ],
+        "connection": [
+          "P2",
+          "P8",
+          "P11"
+        ],
+        "next_steps": [
+          "P6",
+          "P10",
+          "P11",
+          "P12"
+        ]
+      },
+      "analysis_material_version": "659bd1f9d700d46a8fda8d500824e775793dfa3bfcffc6cc0795dd6ca8b1e364",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "c53c3b080d69",
+        "state": "published",
+        "updated_at": "2026-09-25T17:00:41.157898+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 16,
+        "covered": 16,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "Google Scholar",
@@ -1115,7 +2024,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "… This section outlines the methodological framework for predicting the fatigue life and critical … residual fatigue life (N r ) of mixed-mode cracks, referred to as the forward machine learning …",
+      "summary": "本文面向延性金属混合型疲劳裂纹，将构形力疲劳关系嵌入物理信息神经网络，正向预测剩余寿命，再以零剩余寿命为目标，通过遗传算法反演临界裂纹长度[P4–P5]。铝合金与45钢数据支持其预测潜力，混合型测试集报告R²为0.9623[P11]。解读：值得借鉴的是寿命与失效阈值联合评估框架，但原文件公式缺失、拟合图文矛盾及测试集参与调参，限制了复现与可靠性论证[P3、P8、P13]。",
       "raw_metadata": {
         "position": 4,
         "title": "Prediction of residual life and critical crack length using the forward/inverse machine learning based on the configurational force fatigue model",
@@ -1171,12 +2080,169 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议重点阅读物理损失构造和临界裂纹长度反演流程[P4–P5、P12]，适合作为疲劳可靠性研究的方法参考；不宜未经公式核验与独立验证就用于工程失效阈值决策。",
+      "deep_read": {
+        "problem": "混合型裂纹在复杂应力状态下发生偏转，寿命评估需要同时描述增长速率和方向。作者指出经验模型超出标定范围存在“significant predictive scatter”[P2]。研究因此聚焦两个关联问题：当前裂纹还能服役多久，以及达到何种长度对应疲劳失效[P1]。",
+        "method": "网络以裂纹长度及构形力分量C1、C2为输入，以剩余寿命为输出；损失由数据均方误差与加权对数物理残差组成，并迭代识别经验参数。推导采用修正因子近似为1及初始裂纹远小于临界长度的假设，随后用遗传算法搜索零剩余寿命对应的长度[P4–P5]。",
+        "innovation": "作者将构形力的能量驱动与方向信息引入寿命学习，并把训练后的正向模型用于临界长度逆向识别[P2、P4]。解读：值得关注的是混合型裂纹物理表征、损失约束和逆向搜索的组合，而非单独使用神经网络或遗传算法；现有资料不足以认定这一组合具有领域首次性。",
+        "findings": "作者报告I型与混合型测试集R²分别为0.8847、0.9623，RMSE分别为5565、3075 cycles[P8、P11]。混合型多数相对误差低于20%，临界长度预测点位于实验分布范围内[P9、P12]。解读：这些是作者报告的预测表现，并非失效概率或置信区间。",
+        "limitations": "原文件[P3]公式(5)、(6)仅有MERGEFORMAT占位，影响等效构形力幅及疲劳模型完整表达的核验，不能补造。[P13]图16与正文指数符号冲突，影响增长率拟合及饱和解释。此外，测试集参与调参[P8]；解读：独立泛化证据受限，缺失公式及相关推导尚未验证。\n原文核对：[P3] 原页公式(5)、(6)位置分别显示“3. \\* MERGEFORMAT(5)”和“4. \\* MERGEFORMAT(6)”，实际公式缺失。分别影响等效构形力幅ΔCeq的计算关系及该处疲劳模型完整表达的核验。P2的增长率关系及P3公式(7)仍可独立识读，但不能据此补造缺失公式。；[P13] 已从原页核实图16左下拟合标注为da/dN = −9.8611(1 − e^(0.25844a))，正文却写为da/dN = −9.8611(1 − e^(−0.25844a))，并称其为饱和指数增长。指数符号在图文之间不一致；正文所写式对正a给出负增长率，而图式不呈所述饱和趋势，且所列系数与图示增长率量级存在疑点。原页没有说明应更正哪一项，不补造系数或公式。该缺陷影响增长率—裂纹长度拟合及稳定高速阶段的解释，不妨碍其余内容识读。",
+        "connection": "解读：正向寿命预测与逆向裂纹阈值识别，可连接智能运维中的检修安排和结构可靠性中的损伤限值评估[P4、P12]。但铝合金采用最终断裂、45钢采用刚度下降20%的失效定义[P6]，迁移到结构设计时必须统一判据，不能将确定性寿命直接视为可靠度。",
+        "next_steps": "建议先索取数据与实现，核对物理损失推导及统计指标公式[P5、P7、P15]；再按试样划分独立测试集，仅在训练和验证集调参，复核预测表现[P8]。最后针对变幅载荷开展验证与不确定性量化，检验阈值决策是否稳健；作者也明确超出既有条件需要重新标定[P13]。"
+      },
       "recommended_direction": "fatigue_reliability",
-      "title_zh": "基于构形力疲劳模型的正向与逆向机器学习预测剩余寿命及临界裂纹长度"
+      "title_zh": "基于构形力疲劳模型的正向与逆向机器学习：剩余寿命及临界裂纹长度预测",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.sciencedirect.com/science/article/pii/S0142112326000459"
+      ],
+      "analyzed_at": "2026-09-26T09:16:00.317050+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P4"
+        ],
+        "findings": [
+          "P8",
+          "P9",
+          "P11",
+          "P12"
+        ],
+        "limitations": [
+          "P3",
+          "P8",
+          "P13"
+        ],
+        "connection": [
+          "P4",
+          "P6",
+          "P12"
+        ],
+        "next_steps": [
+          "P5",
+          "P7",
+          "P8",
+          "P13",
+          "P15"
+        ]
+      },
+      "analysis_material_version": "0991dd22364728e0f28dc88a28460f2b28b7e834d827ae5fbe583026a8042d87",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "公式(1)、(2)的提取文本出现空字符，原页可辨为负号；公式(2)为Cij = Wδij − σikuk,j。已依据原图纠正符号识别，避免改变构形力张量定义；不是原文件缺项。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P3",
+          "detail": "原页公式(5)、(6)位置分别显示“3. \\* MERGEFORMAT(5)”和“4. \\* MERGEFORMAT(6)”，实际公式缺失。分别影响等效构形力幅ΔCeq的计算关系及该处疲劳模型完整表达的核验。P2的增长率关系及P3公式(7)仍可独立识读，但不能据此补造缺失公式。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "公式(3)、(4)被提取为空字符的运算符，在原页均为减号，积分被积项分别为Wn1 − σjkuk,1nj及Wn2 − σjkuk,2nj；图1图注载荷应为(σx1, σx2)，而非提取文本的(σ1, σx2)。已核对纠正，涉及能量释放率表达及载荷方向标识，不影响图示合力决定偏转方向的作者论述。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "提供的文字仅包含图2图注，遗漏原图内可读的网络结构、公式及遗传算法流程。已从原图识读输入(a,C1,C2)、输出Nr、五层神经元数30/25/20/10/5、L = Ldata + pLa及Nr = 0逆向判据。缺失属于文字提取遗漏，不是原页缺项；直接影响方法结构和逆向求解流程的理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "公式(8)–(11)、(13)–(15)的提取文本含异常空字符，原图对应位置可辨为减号或负号。公式(8)分子为ac − a0，分母完整包含λ(Ceqc − Ceq0)^ξY(a0,ac)；公式(10)、(11)右侧为负对数；数据损失含真实值与预测值之差，更新式含负梯度项。已纠正，避免改变寿命关系及优化方向。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "公式(16)提取文本中的异常字符已据原图核对为减号：分母含(1 − α)^(3/2)，多项式含−13.32α²和−5.6α⁴。原页公式完整，无缺项；符号错误会影响应力强度因子范围及后续构形力计算。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "公式(18)–(21)中异常空字符已据原图纠正为减号，包括1减去求和项、寿命预测残差和去均值项。保留原页公式(18)、(20)的实际求和及分母结构，不替换为常见R²、CC定义；原页公式可读，不能将其数学形式疑点当作提取错误予以改写。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P12",
+          "detail": "正文关于图16的指数说明被提取为异常字符加1；原页清楚写为“close to −1”。已纠正为接近−1，涉及作者对构形力与剩余寿命近似反比关系的解释，不是原文件缺项。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P13",
+          "detail": "已从原页核实图16左下拟合标注为da/dN = −9.8611(1 − e^(0.25844a))，正文却写为da/dN = −9.8611(1 − e^(−0.25844a))，并称其为饱和指数增长。指数符号在图文之间不一致；正文所写式对正a给出负增长率，而图式不呈所述饱和趋势，且所列系数与图示增长率量级存在疑点。原页没有说明应更正哪一项，不补造系数或公式。该缺陷影响增长率—裂纹长度拟合及稳定高速阶段的解释，不妨碍其余内容识读。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "fc714e796fa3",
+        "state": "published",
+        "updated_at": "2026-09-26T09:16:00.324656+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 16,
+        "covered": 16,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "公式(1)、(2)的提取文本出现空字符，原页可辨为负号；公式(2)为Cij = Wδij − σikuk,j。已依据原图纠正符号识别，避免改变构形力张量定义；不是原文件缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P3",
+            "detail": "原页公式(5)、(6)位置分别显示“3. \\* MERGEFORMAT(5)”和“4. \\* MERGEFORMAT(6)”，实际公式缺失。分别影响等效构形力幅ΔCeq的计算关系及该处疲劳模型完整表达的核验。P2的增长率关系及P3公式(7)仍可独立识读，但不能据此补造缺失公式。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "公式(3)、(4)被提取为空字符的运算符，在原页均为减号，积分被积项分别为Wn1 − σjkuk,1nj及Wn2 − σjkuk,2nj；图1图注载荷应为(σx1, σx2)，而非提取文本的(σ1, σx2)。已核对纠正，涉及能量释放率表达及载荷方向标识，不影响图示合力决定偏转方向的作者论述。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "提供的文字仅包含图2图注，遗漏原图内可读的网络结构、公式及遗传算法流程。已从原图识读输入(a,C1,C2)、输出Nr、五层神经元数30/25/20/10/5、L = Ldata + pLa及Nr = 0逆向判据。缺失属于文字提取遗漏，不是原页缺项；直接影响方法结构和逆向求解流程的理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "公式(8)–(11)、(13)–(15)的提取文本含异常空字符，原图对应位置可辨为减号或负号。公式(8)分子为ac − a0，分母完整包含λ(Ceqc − Ceq0)^ξY(a0,ac)；公式(10)、(11)右侧为负对数；数据损失含真实值与预测值之差，更新式含负梯度项。已纠正，避免改变寿命关系及优化方向。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "公式(16)提取文本中的异常字符已据原图核对为减号：分母含(1 − α)^(3/2)，多项式含−13.32α²和−5.6α⁴。原页公式完整，无缺项；符号错误会影响应力强度因子范围及后续构形力计算。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "公式(18)–(21)中异常空字符已据原图纠正为减号，包括1减去求和项、寿命预测残差和去均值项。保留原页公式(18)、(20)的实际求和及分母结构，不替换为常见R²、CC定义；原页公式可读，不能将其数学形式疑点当作提取错误予以改写。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "正文关于图16的指数说明被提取为异常字符加1；原页清楚写为“close to −1”。已纠正为接近−1，涉及作者对构形力与剩余寿命近似反比关系的解释，不是原文件缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P13",
+            "detail": "已从原页核实图16左下拟合标注为da/dN = −9.8611(1 − e^(0.25844a))，正文却写为da/dN = −9.8611(1 − e^(−0.25844a))，并称其为饱和指数增长。指数符号在图文之间不一致；正文所写式对正a给出负增长率，而图式不呈所述饱和趋势，且所列系数与图示增长率量级存在疑点。原页没有说明应更正哪一项，不补造系数或公式。该缺陷影响增长率—裂纹长度拟合及稳定高速阶段的解释，不妨碍其余内容识读。"
+          }
+        ]
+      }
     },
     {
       "source": "Elsevier",
@@ -1196,7 +2262,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "本文聚焦《Large Language Model-Augmented Semantic Digital Twins for Real-Time Fault Diagnosis and Closed-Loop Control》，暂未提供可用摘要，请查看原文。",
+      "summary": "本文面向智能制造中数字孪生缺乏情境理解与行为推理的问题，提出融合本体、大语言模型与检索增强生成的神经符号认知数字孪生框架。作者将虚拟机器单元的仿真数据映射为知识图谱，结合规则推理生成可读解释及机器可执行命令。[摘要] 用例报告了故障检测、可解释性与自适应控制方面的改善，但摘要未给出量化指标或对照结果。解读：值得关注其知识组织与诊断决策衔接方式，尚不能据此确认工业现场效果。",
       "raw_metadata": {
         "@_fa": "true",
         "link": [
@@ -1280,12 +2346,41 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为智能运维中知识图谱、规则推理与大语言模型融合的方法型论文重点候选阅读；摘要明确提出诊断解释和机器命令生成，但推荐不等于认可其性能与安全性已获充分验证。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是数字孪生如何从物理过程复现走向情境理解和系统行为推理。摘要指出传统数字孪生“lack these cognitive abilities”，从而限制可信、透明和自适应决策。[摘要] 解读：作者关注的不只是识别故障，还包括将运行状态转化为可理解、可用于决策的知识。",
+        "method": "方法以本体组织故障、纠正措施及规则知识，使用语义网规则语言（SWRL）表达逻辑，再将虚拟机器单元仿真数据语义映射为知识图谱。摘要称其通过“retrieval-augmented generation (RAG)”连接大语言模型。[摘要] 图谱提供结构化背景，模型负责生成解释和命令。",
+        "innovation": "摘要自述的贡献是神经符号认知数字孪生框架，其核心表述为“unifies ontology-based modeling with large language models”。[摘要] 解读：值得关注的是符号知识与语言生成在同一诊断流程中的整合，而非某个组件单独出现；缺少相关工作比较，不能认定这种组合具有首创性。",
+        "findings": "摘要报告，展示用例表明规则推理与神经生成结合“enhances fault detection, interpretability, and adaptive control”。[摘要] 这是作者对效果的定性陈述。资料未提供检测准确率、响应时延或解释质量评价，因而只能确认其宣称的改善方向，不能比较改善幅度或统计可靠性。",
+        "limitations": "证据边界在于摘要仅明确描述“Simulation data from a virtual machine cell”，未交代实体设备部署、对照基线、测试规模及安全验证。[摘要] 解读：这些属于当前资料缺失，并不等于全文没有相关实验；标题所指闭环控制是否得到完整验证，也不能仅凭命令生成能力确认。",
+        "connection": "与智能运维最直接的联系是本体覆盖“faults, corrective actions, and rule-based logic”，为故障知识、处置措施及推理规则提供统一表达。[摘要] 解读：这可作为运维知识组织的参考；但摘要未涉及结构优化、寿命预测或失效概率计算，不能将其视为结构设计或定量可靠性研究成果。",
+        "next_steps": "建议后续阅读优先核查“machine-actionable commands”如何被验证、执行并接收状态反馈，以及异常命令能否被约束。[摘要] 建议迁移研究时分别设置规则推理、语言模型和融合方案的对照，并考察错误检索及知识缺失下的表现；这些是研究建议，不是作者已完成的实验。"
+      },
       "recommended_direction": "ai_maintenance",
-      "title_zh": "大语言模型增强的语义数字孪生：实时故障诊断与闭环控制"
+      "title_zh": "大语言模型增强的语义数字孪生：实时故障诊断与闭环控制",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1115/1.4071805"
+      ],
+      "analyzed_at": "2026-09-25T16:42:53.880422+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "bf8f230d7ac808d120f5af365536c07368d80bf97fa56716da60f6c5d01b9183",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "c935fc51c706",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-09-26T09:13:08.784805+00:00",
+        "basis": "abstract",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -1307,7 +2402,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract System discovery is an important part of the power systems asset management process. In this paper, we introduce an end-to-end approach for robust system discovery for a class of electrical dynamical systems with polynomial dynamics. To that end, we provide a theoretical analysis of the problem setting and the solution approach using a particular Scientific Machine Learning method called Physics-Informed Machine Learning. We introduce model architecture and training and validation methods for deterministic as well as probabilistic approaches to predict the solution to pertinent invers…",
+      "summary": "本文面向电力系统资产管理，研究具有多项式动力学的电气系统发现问题，提出基于物理信息机器学习的端到端逆问题求解方案，并以采样方法应对数据稀疏。摘要报告，在感应电机热建模案例中，相比除一个基线外的其他方法，验证误差降低6%至78%；其概率方案精度不及贝叶斯方法，但计算时间减少86%。研究重点是预测性能与计算成本的权衡，而非生成式设计。以下仅为摘要级解读。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -1342,12 +2437,189 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为物理信息逆问题求解与智能运维的交叉文献补充阅读；其稀疏数据处理和精度—成本比较值得关注，但与给定生成式设计方向并不直接契合，不宜仅凭主题标签列为核心推荐。[摘要]",
+      "deep_read": {
+        "problem": "论文将系统发现置于电力系统资产管理背景，研究对象限定为具有多项式动力学的一类电气系统，目标是求解相关逆问题并增强稀疏数据条件下的预测鲁棒性。原文称其为“electrical dynamical systems with polynomial dynamics”，不能据此扩展至任意动力系统。[摘要]",
+        "method": "作者采用物理信息机器学习，提供问题设定与求解方法的理论分析，并介绍确定性及概率方案的模型架构、训练和验证方法，同时提出应对数据稀疏的采样方法。原文使用“Physics-Informed Machine Learning”一词，但摘要未给出网络结构、损失函数或采样规则。[摘要]",
+        "innovation": "解读：摘要呈现的方法特色，是在端到端系统发现方案中结合物理信息学习、确定性与概率建模及稀疏数据采样，而非仅比较单一预测器。作者称其为“end-to-end approach”，但没有充分交代与既有方法的技术差异，尚不能据此确认首创性或各组件的独立贡献。[摘要]",
+        "findings": "感应电机热建模案例中，该方法相对除一个基线外的其他方法实现验证误差降低6%至78%，原文明确为“all but one baseline”。端到端概率方案的验证误差高于贝叶斯方法，但计算时间减少86%；这些结果支持成本与性能权衡，而非所有指标全面领先。[摘要]",
+        "limitations": "证据局限：摘要仅披露感应电机热建模案例，未给出数据规模、稀疏程度、误差指标定义及重复实验信息，无法判断统计稳定性或跨设备适用性。作者明确研究“一类”多项式动力学系统；这限定了摘要支持的结论范围，但不能据此断言该方法在其他系统上失效。[摘要]",
+        "connection": "解读：系统发现与电力资产管理直接相关，因此对智能运维中的模型辨识具有参考价值；概率方案也可能为可靠性分析提供建模思路，但摘要未证明其不确定性校准能力。给定标签为生成式设计，而摘要未涉及结构生成、设计优化或几何约束，因此与该方向仅有间接的方法联系。[摘要]",
+        "next_steps": "建议：后续阅读全文时，优先核查逆问题中的待辨识变量、物理约束实现、采样策略以及计算时间比较条件，再判断方法能否迁移至目标设备。若用于可靠性或设计研究，可另行检验稀疏观测下的辨识稳定性与概率预测校准；这些是研究建议，不是论文已报告的成果。"
+      },
       "recommended_direction": "generative_design",
-      "title_zh": "利用科学机器学习实现电气动力系统的端到端鲁棒系统发现"
+      "title_zh": "利用科学机器学习实现电气动力系统的端到端鲁棒系统发现",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s44172-026-00689-2"
+      ],
+      "analyzed_at": "2026-09-25T13:06:22.849201+00:00",
+      "llm_model": "gpt-6-astra",
+      "reading_status": {
+        "paper_id": "9170f18af989",
+        "state": "failed",
+        "updated_at": "2026-09-26T09:39:11.234067+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 27,
+        "covered": 25,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "式(3)、(4)文字提取将求和符号显示为X，并打散范数上下标。原图已核实为对x∈Ω_x、t∈Ω_t求和，残差及观测失配均取平方二范数，再除以|Ω_x||Ω_t|；不应将X解释为变量或将损失读成未平方范数。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "式(5)、(7)、(8)的上下标及分式被文本提取打散。原图确认∇²为拉普拉斯算子，式(7)为∂T̂/∂t̂−D∇²T̂−q̂=0，式(8)分母为L²P_ref；这些排版更正影响热扩散残差和归一化系数的准确复现。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P7",
+            "detail": "Data acquisition and processing原页写“29 field of view”，数值29后没有单位。已核实为原页参数说明缺项，不自行补为29°；不影响其他相机参数识读。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P7",
+            "detail": "图3(a)测点附近部分黑底微小标签仍模糊，不能完整逐字确认。P1、P2—P5大字、图3(b)、正文和式(9)已读清；不补写小标签名称或数值，也不把模糊认定为原文件缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "图4(a)下方热源预测网络有三个输入节点：上方标X，下方标I(t)，中间节点未标变量名。原图已清楚核实该标签缺项，影响完整输入定义的复现；不自行补为y或其他变量，不影响页面其余内容识读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "式(10)—(11)文字提取将求和符号显示为X并打散下标。原图确认式(10)为对空间与时间配点的双重求和，式(11)对τ∈Ω_{t−1}的历史损失求和；已恢复其数学排版，不能把X当成乘数或变量。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "式(12)文字提取中的绝对值、分式和求和符号排版损坏；原页确认求和项为ℒ_PINN(x,τ)|∂τ/∂ℒ_PINN(x,τ)|。不得将该逆梯度项改写成|∂ℒ_PINN/∂τ|，两者对应不同训练权重。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "Reconstruction-based validation页末e_T定义的2在原页为上标：e_T=‖T_gt−T_recon‖²，而非下标二范数。提取文本丢失上下标位置造成歧义；平方已存在，不能报告为原文缺少平方。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P9",
+            "detail": "式(13)、(15)原页均写+D∂²/∂x²，未列y方向扩散项；与所述二维热扩散模型及其负号拉普拉斯形式存在表述不一致。这不是提取错误；无法判定是未说明的简化还是排版错误，影响概率模型物理残差复现，不自行补项或改号。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "式(17)—(18)文字提取将求和符号显示为X并打散分式。原图确认MSE为时空配点平均，LSE为时间平均后取空间最大值；已恢复运算次序，不能解释为时空逐点最大误差。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P11",
+            "detail": "图7(a)、(b)原图均有数值刻度，但未标横、纵轴名称及单位；图注只说明比较训练损失，无法据此确定横轴代表时间、训练轮次还是其他变量，不擅自补写。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P11",
+            "detail": "图8图注称四个坐标点在图8(a)中展示，但所提供原页图8(a)未见明确的(1)—(4)测点编号或定位标记。图8(b)编号与图注坐标可读，仍不能直接从图8(a)核对四点位置；不自行添加标记。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "图9(c)纵轴仅标“MSE [log]”，未注明对数底数；图例、负刻度均清楚可读，但不足以唯一还原原始MSE数值，不擅自假定自然对数或常用对数。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "图9(b)空间坐标约为0—4，图9(d)横坐标为0—300，二者均标x[m]、y[m]；本页未说明尺度转换关系。不能据此确认实际几何尺寸，也不能自行把(d)单位改成像素。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "图9(d)标T_diff，图注仅称“their difference”，未定义T_exact−T_pred还是T_pred−T_exact。差值色条清楚，但正负值不能直接解释为高估或低估。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P16",
+            "detail": "Table I(a)—(b)提取文本将设备名、列名和Yes等单词拆开，破坏行列对应。原图已确认六个训练设置及定性表五个评价列，数值和Yes/No对应关系已在notes中恢复。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P19",
+            "detail": "文字提取仅保留ARTICLE IN PRESS，遗漏整幅框架图。原页清楚包含数据处理、逆解与不确定性建模、训练验证、数据稀疏/噪声/无关数据鲁棒性分析及三色图例；不能把该页当作空白或跳过。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P20",
+            "detail": "文字提取仅保留ARTICLE IN PRESS，遗漏(a)测量示意图和(b)工厂试验照片及标签。原图已识读，不能按空白页处理。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P21",
+            "detail": "文字提取仅保留ARTICLE IN PRESS，遗漏(a)热像图和(b)温度对照曲线、图例及坐标。可读图像内容已核对，该页不是空白页。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P21",
+            "detail": "图(a)测点上方部分黑底微小标签仍像素模糊，无法完整逐字确认。大字P1、P2—P5及图(b)已读清；不补写小标签，也不将模糊认定为原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P22",
+            "detail": "文字提取遗漏两种网络架构、输出变量、微分算子和层数图例。原图已读清，残差中的时间导数为正号，扩散项及热源为负号。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P22",
+            "detail": "图(a)热源网络的中间输入节点未标变量名，上、下节点分别标x和I(t)。缺项已从原图确认，影响完整输入定义复现；不能自行补为y。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P23",
+            "detail": "文字提取遗漏T_pred热图、0.0—1.0色条和x[m]轴标签。原页不是空白，图中没有提供可用于恢复实际空间位置的数值刻度。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P24",
+            "detail": "文字提取遗漏(a)规模与训练时间柱图及(b)误差曲线。原图已核实配置、图例、轴名和对数刻度；该页不是空白页。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P25",
+            "detail": "文字提取遗漏全部模型比较曲线及图例。原图可清楚识读Main、Temporal、Causal模型与n=1、2、10、100的比较，不能跳过。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P25",
+            "detail": "图(a)、(b)有数值刻度但未标横纵轴名称及单位。无法仅凭本页确定横轴是时间、训练轮次还是其他变量；不自行补写。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P26",
+            "detail": "文字提取遗漏温度—热源及不确定性—仿真温度流程图和四个时间曲线子图。现已核实流程标签、色条、子图编号及坐标；不应视为空白。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P27",
+            "detail": "文字提取遗漏采样布局、热源图、主动与随机采样比较及温度差值图。原图标签、图例、刻度和色条已读清。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P27",
+            "detail": "图(c)纵轴仅标“MSE [log]”，未给对数底数，不能唯一还原原始MSE；负刻度不代表原始MSE为负。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P27",
+            "detail": "图(b)空间刻度约0—4，图(d)横轴刻度0—300，两者均标米，本页未说明尺度转换；图(d)T_diff也未定义相减顺序。不能自行改单位或将差值正负解释为高估、低估。"
+          }
+        ]
+      }
     },
     {
       "source": "Google Scholar",
@@ -1371,7 +2643,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "… machine learning framework is proposed for the fatigue life … capability in predicting the fatigue life of stud connectors … -based formulations and conventional machine learning models. In …",
+      "summary": "论文汇集305个栓钉试件数据，将线弹性断裂力学寿命作为附加特征，结合四类学习器与堆叠集成预测疲劳寿命，并开展SHAP和全局敏感性分析。[P2][P6]表8报告集成模型测试R²为0.83，但误差基于对数寿命，不能直接理解为循环次数误差。[P11]解读：值得借鉴的是物理特征与集成学习的结合；公式、归因排序和敏感性图存在内部矛盾，不宜直接作为可靠性设计依据。[P6][P15][P17]",
       "raw_metadata": {
         "position": 9,
         "title": "Physics-informed stacking ensemble machine learning for fatigue life prediction of stud connectors in steel-concrete composite structures",
@@ -1439,12 +2711,82 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议有条件重点阅读：适合借鉴栓钉疲劳预测的物理特征构造和集成流程，但复现时必须核查公式、数据及敏感性实现，不建议直接采用其工程安全结论。[P6][P17][P19]",
+      "deep_read": {
+        "problem": "作者关注组合结构栓钉在材料、几何和加载条件共同作用下的疲劳寿命预测，指出经验公式适用性及机器学习物理解释不足。[P1][P2]解读：研究目标主要是提高寿命点预测与参数识别能力，并非直接计算失效概率；预测准确与设计安全应分别评价。[P13]",
+        "method": "作者收集305个试件，以十项基础变量加对数LEFM寿命为输入，随机按8:2划分数据。[P2][P6]采用RF、SVR、GBR和XGBoost，训练集内调参，并以交叉验证预测构建Lasso元学习器；另用SHAP、Morris和Sobol解释模型。[P4][P8][P16]",
+        "innovation": "解读：可借鉴贡献在于把断裂力学计算寿命转为输入特征，再结合异质学习器集成，而非提出新的裂纹扩展定律。[P6][P8]这种物理信息嵌入属于特征工程，不是物理损失或硬约束；联合归因和敏感性分析拓展了解释视角，但不能据此证明物理一致性。[P17]",
+        "findings": "表8及结论报告PI-Stacking测试RMSE为0.33、MAE为0.24、MAPE为4.48%、R²为0.83，均对应对数寿命评价。[P11][P19]图22显示PI-XGBoost中Δτ与物理特征重要性分别为20%和14.5%，与正文对应关系相反，须保留这一冲突。[P15]",
+        "limitations": "作者承认试验数据不足。[P19]解读：随机划分尚不足以证明跨来源泛化；表3积分形式与式(6)冲突，图13与表8的MAE不一致。[P5][P6][P11]此外Sobol图出现S1大于ST、输入相关性处理不明，削弱了定量敏感性结论的可信度。[P14][P17]",
+        "connection": "解读：该框架可为智能运维中的寿命筛查、结构设计参数比较提供代理模型，但不能把点预测直接作为维护期限。[P18]作者明确模型未内置安全裕度，规范与学习模型承担不同角色；可靠性研究的衔接应是误差建模和安全校准，而不是把文中生存率直接当结构可靠度。[P13]",
+        "next_steps": "建议先索取数据，核对强度定义、LEFM公式和GUI单位，再按文献来源分组验证，并保持派生输入的物理一致性。[P3][P6][P18][P19]随后重算相关输入条件下的敏感性、补充预测区间；作者提出的无损检测微裂纹信息可作为后续物理特征更新方向，而非已有成果。[P19]"
+      },
       "recommended_direction": "fatigue_reliability",
-      "title_zh": "面向钢—混凝土组合结构栓钉连接件疲劳寿命预测的物理信息堆叠集成机器学习"
+      "title_zh": "面向钢—混凝土组合结构栓钉疲劳寿命预测的物理信息堆叠集成机器学习",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.sciencedirect.com/science/article/pii/S0141029626000945"
+      ],
+      "analyzed_at": "2026-09-26T01:49:45.274907+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P13"
+        ],
+        "method": [
+          "P2",
+          "P4",
+          "P6",
+          "P8",
+          "P16"
+        ],
+        "innovation": [
+          "P6",
+          "P8",
+          "P17"
+        ],
+        "findings": [
+          "P11",
+          "P15",
+          "P19"
+        ],
+        "limitations": [
+          "P5",
+          "P6",
+          "P11",
+          "P14",
+          "P17",
+          "P19"
+        ],
+        "connection": [
+          "P13",
+          "P18"
+        ],
+        "next_steps": [
+          "P3",
+          "P6",
+          "P18",
+          "P19"
+        ]
+      },
+      "analysis_material_version": "ada858a9fd64b8c979b79021e193521ba6cf02b6a5c84ad4bdbb035c17ca138e",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "0e815a1ce338",
+        "state": "published",
+        "updated_at": "2026-09-26T01:49:45.288188+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 20,
+        "covered": 20,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -1475,7 +2817,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract As a pinning-controlled permanent magnet, tailoring the cellular nanostructure of samarium-cobalt-based 1:7-type (SmCo-1:7) magnets remains crucial for improving magnetic performance. Jointing forward and inverse machine learning models with the high-throughput micromagnetic simulations (42,300 sets), we identify the nanostructural and magnetic features that are most effective for coercivity, combining both nucleation and pinning mechanisms. Sensitivity analyses reveal that the 1:5-phase enhances coercivity by providing high anisotropy, whereas the Z-phase strengthens pinning through…",
+      "summary": "本文围绕SmCo-1:7磁体的结构—矫顽力关系，将42,300组微磁模拟与正向预测、逆向设计结合，区分形核与畴壁钉扎贡献。[P1–P7]作者发现取向偏差影响突出，1:5相主要提供高各向异性，Z相主要增强钉扎。[P11–P12]三个逆向案例的矫顽力误差均低于5%，但钉扎指标误差超过25%。解读：适合学习物理仿真驱动的结构反演，不宜直接视为真实磁体可靠性的验证。[P7]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -1510,12 +2852,342 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "推荐作为生成式结构设计的方法型论文重点阅读：其前向代理与逆向双误差约束具有明确借鉴价值，但必须同时关注独立微磁验证、适用条件及原文指标错误。[P7][P13–P14]",
+      "deep_read": {
+        "problem": "研究要回答两个问题：哪些纳米几何和磁性特征决定矫顽力，以及如何根据目标性能反推出结构。[P2]难点是形核与钉扎共同作用，且不同结构可能产生相近性能；作者因此同时考察矫顽场与钉扎贡献，而不是仅寻找单一性能最大值。[P5][P14]",
+        "method": "作者筛选得到42,300组输入，开展GPU并行微磁模拟，以受控软磁边界层统一形核条件，再训练前向网络。[P3–P5]逆向网络在固定磁性参数下输出四个几何量，损失同时约束参数误差和前向性能误差，权重λ=0.02。[P6][P14]",
+        "innovation": "解读：本文的方法特色是把高通量微磁、机制指标与目标结构反演整合，而非证明一种全新的网络架构。[P3][P14]作者还用相间磁性差值替代部分单相描述符，使1:5–2:17界面的钉扎作用更清晰；这种特征构造比仅报告预测精度更有物理解释价值。[P11]",
+        "findings": "作者报告取向偏差为主导因素，1:5相通过高各向异性增强矫顽力，Z相提供钉扎位置但过多会限制矫顽力。[P12]图5三个逆向案例的矫顽力相对误差均低于5%，钉扎指标误差却为28.20%、41.18%、25.87%，两类目标的验证质量明显不同。[P7]",
+        "limitations": "模型采用理想周期几何和平均成分，未覆盖随机缺陷极值。[P12]原文缺项包括表1的Cu漏u，影响相标识[P5]；链式求导漏∂，影响梯度表达[P14]；文献55缺期刊名，影响定位[P16]。另有R²定义异常，实际实现未核验，不补造公式或确认受影响评分。[P13]\n原文核对：[P5] 表1的1:5相表头原页写作Sm(Co₁₋ₓCₓ)₅，Cu中的u缺失，与正文Cu替代及图3的Sm(Co₁₋ₓCuₓ)₅标注不一致。保留该原文表头问题，不将其解释为碳掺杂；受影响的是相成分标识，表内参数仍可识读。；[P6] 图4g–h右轴、图例及约1.25×10⁻³的标注均为MSE，但P5末至P6开头的对应正文称MAPE。原页已确认图文指标名称不一致，并非公式缺失或文字提取错误。不能据此把1.25×10⁻³确定解释为MAPE；受影响的是模型误差大小及收敛指标的表述，R²趋于约0.90的趋势仍可识读。；[P8] 对应图7的正文先称固定厚度时增大d、减小L提高H_c，随后在最小厚度情形又称“reducing L and d tends to improve H_c”，并称该效应随厚度增加而增强。原页确有两种方向表述，无公式缺项；影响d对H_c趋势的概括，不能擅自统一为同一方向。；[P9] 图7讨论中，原文将随x_Cu从0增至0.3而畴壁能下降近32%的相写为“2:17-phase”，但本段明确Cu变化发生在1:5相，且前句已将2:17相的约10%降幅对应Fe变化。属于原页相名称错配，无缺失公式；影响Cu降低哪一相畴壁能的解释。；[P9] 图8引入段把φ_Z写成Sm₂Co₁₇（2:17相）的体积分数；与P8公式(5)的φ_Z=w_Z/d及P10图8横轴“Z-Phase Vol. Frac.”不一致。原页可确认该相标识错误，无公式缺项；φ_Z应按已给定义识别为Z相变量，不应据此改称基体相分数。；[P9] 图7图注将变化厚度描述为SmCo₅和Sm₂Co₁₇两相的厚度，但图中实际标注w_S与w_Z，示意图明确w_Z对应Z相。原页图注与图内变量含义不一致，无图像缺项；影响厚度扫描对象的辨认。；[P11] 公式(6)原页将Δσ_dw^(S−M)的右端写为σ_dw^(S−M)−σ_dw^(M)，而不是与其他差值定义平行的单相项σ_dw^(S)。原页无字符缺失，但上标与差值定义语境不一致；影响1:5–2:17畴壁能差值的形式定义。不能据此认定实际代码也采用了错误表达式。；[P11] 图9e与正文的Φ_p重要性次序不完全一致：正文在Δσ_dw^(S−M)之后依次列Δl_dw^(S−M)、ΔM_s^(Z−M)，但图中红柱分别约为0.042、0.060，后者更高。无图像缺项；影响后续特征排序，不改变α及Δσ_dw^(S−M)的重要性结论。；[P12] 讨论第(iii)项把H_c称为“coherence factor”，与本页其余正文将H_c用作矫顽力的含义不一致。该术语误写已在原页核实，无公式缺项；不能据此另行引入一个相干性因子。；[P13] 首段将SmCo₅、Sm₂Co₁₇的计算结果称为M_s和K_u，但对应第二项数值为15.0、19.48 pJ m⁻¹，且上下文明确讨论交换刚度。原页符号与物理量及单位不一致，应标注为疑似将A_e误写为K_u，不能把这些数值解释成各向异性常数。；[P13] 公式(12)原页确实写作R²=Σ(Ŷ_i−Ȳ)²/Σ(Y_i−Ȳ)²，而非通常预测决定系数的1−Σ(Y_i−Ŷ_i)²/Σ(Y_i−Ȳ)²。公式现有内容完整，不是提取丢失“1−”；影响R²指标的定义与复现。仅凭此页不能判断实际评分代码及已报告数值使用哪一公式。；[P14] 公式(13)之后，原页将收敛准则写作“H_c≤1%”，而上下文定义的百分比误差指标为MAPE。矫顽场与百分比阈值的写法不一致，无公式缺项；影响收敛准则复现。可指出疑似指标符号误写，但不能擅自补定作者实际使用的判据。；[P14] 公式(15)下方反向传播说明的行内公式原页写作∂L/∂X=(L/∂Y)(∂Y/∂X)，中间因子分子缺少偏导符号∂。这是原页链式求导表达缺项，不是提取错误；影响梯度公式的形式正确性，不能据此断言训练代码有同样错误。；[P15] 参考文献9与28的作者和题名相同，但9写为“Nat. Commun. 8, 7 Seiten (2022)”，28写为“Nat. Commun. 8, 54 (2017)”。原页确有元数据冲突及异常的“7 Seiten”字段；影响文献定位，不能仅凭本批决定正确年份或条目编号。无正文公式或图像缺项。；[P15] 原页参考文献存在重复书目：3/35、4/34、11/38、15/41分别具有相同题名及期刊卷页年份，部分仅作者缩写或排版不同。影响文献去重和独立证据数量统计，不构成新增研究证据；无页面内容缺失。；[P16] 参考文献55原页在题名“Micromagnetic simulations on the grain shape effect in Nd-Fe-B magnets”之后直接列“120, 033903 (2016)”，缺少期刊名称。已从图片核实，并非提取遗漏；影响书目定位完整性，不影响本批其他内容识读。该项不涉及公式或图号，不推补缺失期刊名。",
+        "connection": "解读：与生成式设计的直接联系是从目标性能生成代表性结构候选，并通过前向模型反馈约束；作者明确它不是唯一物理解。[P14]对结构设计可迁移这种反演思路，对可靠性研究则应进一步关注局部薄弱位置；资料没有智能运维场景的直接验证。[P12]",
+        "next_steps": "建议：先用独立微磁计算检验高矫顽力区和训练范围外候选，并对钉扎指标单独验收。[P6–P7]随后加入几何可实现性约束和独立测试集，避免只以非负输出或选轮次的测试损失证明泛化。[P14]最后沿作者提出的APT与体素路线引入局部成分和缺陷波动。[P12]"
+      },
       "recommended_direction": "generative_design",
-      "title_zh": "SmCo-1:7 磁体纳米结构对矫顽力的影响：基于高通量微磁数据的机器学习"
+      "title_zh": "SmCo-1:7磁体纳米结构对矫顽力的影响：高通量微磁数据的机器学习",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41524-026-02174-y.pdf"
+      ],
+      "analyzed_at": "2026-09-26T09:33:18.223901+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P5",
+          "P14"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P5",
+          "P6",
+          "P14"
+        ],
+        "innovation": [
+          "P3",
+          "P11",
+          "P14"
+        ],
+        "findings": [
+          "P7",
+          "P12"
+        ],
+        "limitations": [
+          "P5",
+          "P12",
+          "P13",
+          "P14",
+          "P16"
+        ],
+        "connection": [
+          "P12",
+          "P14"
+        ],
+        "next_steps": [
+          "P6",
+          "P7",
+          "P12",
+          "P14"
+        ]
+      },
+      "analysis_material_version": "9d855ce26428bb8b7e7117a44885f40fbf68eb6a1ca0de1dff2105dcaa14d164",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "原页已核清：几何及成分KDE区间的文字提取出现“/C24”“/C0”“/C138”等乱码。95%成分区间为X_Zr∼[1.77–3.53]、X_Cu∼[4.68–7.88]、X_Fe∼[1.30–26.90] at.%；95%几何区间为L∼[33.60,184.78]、d∼[9.78,72.28]、w_S∼[2.60,20.12]、w_Z∼[1.07–28.80] nm。公式(1)根号及公式(2)分式均完整，无公式缺项；已按原页恢复，避免误读参数范围与畴壁性质关系。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "相内成分列表的提取含“/C138”等乱码。原页可读为X_Cu^P∈[0.0,8.3,16.7,25.0] at.%、X_Fe^P∈[0.0,9.0,17.9,26.8] at.%。描述符列表中的σ_dw^(S)也被错误提取为带额外0的形式；原页无此0。影响成分采样及输入变量辨认，不是原文件缺项。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P5",
+          "detail": "表1的1:5相表头原页写作Sm(Co₁₋ₓCₓ)₅，Cu中的u缺失，与正文Cu替代及图3的Sm(Co₁₋ₓCuₓ)₅标注不一致。保留该原文表头问题，不将其解释为碳掺杂；受影响的是相成分标识，表内参数仍可识读。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "公式(3)文字提取将减号变成“/C0”，原页清楚显示Φ_p=(H_c−H_p)/H_c，无缺项。边界缺陷层参数原页为K′=0.01K_u，提取的K0不准确。已纠正，以免误读钉扎贡献定义和缺陷层设置。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P6",
+          "detail": "图4g–h右轴、图例及约1.25×10⁻³的标注均为MSE，但P5末至P6开头的对应正文称MAPE。原页已确认图文指标名称不一致，并非公式缺失或文字提取错误。不能据此把1.25×10⁻³确定解释为MAPE；受影响的是模型误差大小及收敛指标的表述，R²趋于约0.90的趋势仍可识读。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "逆向设计固定参数处，原页为M_s^(P)、σ_dw^(P)、l_dw^(P)，后两项没有文字提取中的额外下标0；α=0后的句点也不是小数残缺。此处无公式缺项，纠正后明确固定的是各相磁性参数。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "公式(4)的−3/2指数被提取为含“/C0”的乱码，原页分段、指数和分母均完整，已在笔记恢复。图5图注中的l_dw^(P)、σ_dw^(P)无提取文本所带额外0。没有公式缺项；影响角度模型与固定微磁输入的辨认。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "公式(5)的括号、减号及分式在提取文本中出现乱码。原页清楚显示φ_S=w_S(2L−w_S)/L²−w_Sw_Z/(Ld)，φ_Z=w_Z/d。无缺项，已据原页恢复，避免误读相分数定义。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P8",
+          "detail": "对应图7的正文先称固定厚度时增大d、减小L提高H_c，随后在最小厚度情形又称“reducing L and d tends to improve H_c”，并称该效应随厚度增加而增强。原页确有两种方向表述，无公式缺项；影响d对H_c趋势的概括，不能擅自统一为同一方向。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P9",
+          "detail": "图7讨论中，原文将随x_Cu从0增至0.3而畴壁能下降近32%的相写为“2:17-phase”，但本段明确Cu变化发生在1:5相，且前句已将2:17相的约10%降幅对应Fe变化。属于原页相名称错配，无缺失公式；影响Cu降低哪一相畴壁能的解释。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P9",
+          "detail": "图8引入段把φ_Z写成Sm₂Co₁₇（2:17相）的体积分数；与P8公式(5)的φ_Z=w_Z/d及P10图8横轴“Z-Phase Vol. Frac.”不一致。原页可确认该相标识错误，无公式缺项；φ_Z应按已给定义识别为Z相变量，不应据此改称基体相分数。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P9",
+          "detail": "图7图注将变化厚度描述为SmCo₅和Sm₂Co₁₇两相的厚度，但图中实际标注w_S与w_Z，示意图明确w_Z对应Z相。原页图注与图内变量含义不一致，无图像缺项；影响厚度扫描对象的辨认。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P11",
+          "detail": "公式(6)的相间上标S−M、Z−M及减号被提取为含“/C0”的乱码。原页可清楚辨认这些均为差值符号；已据原页恢复。此项不涉及公式缺失，也不应掩盖公式本身另有的上标错误。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P11",
+          "detail": "公式(6)原页将Δσ_dw^(S−M)的右端写为σ_dw^(S−M)−σ_dw^(M)，而不是与其他差值定义平行的单相项σ_dw^(S)。原页无字符缺失，但上标与差值定义语境不一致；影响1:5–2:17畴壁能差值的形式定义。不能据此认定实际代码也采用了错误表达式。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P11",
+          "detail": "图9e与正文的Φ_p重要性次序不完全一致：正文在Δσ_dw^(S−M)之后依次列Δl_dw^(S−M)、ΔM_s^(Z−M)，但图中红柱分别约为0.042、0.060，后者更高。无图像缺项；影响后续特征排序，不改变α及Δσ_dw^(S−M)的重要性结论。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P12",
+          "detail": "讨论第(iii)项把H_c称为“coherence factor”，与本页其余正文将H_c用作矫顽力的含义不一致。该术语误写已在原页核实，无公式缺项；不能据此另行引入一个相干性因子。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P13",
+          "detail": "首段将SmCo₅、Sm₂Co₁₇的计算结果称为M_s和K_u，但对应第二项数值为15.0、19.48 pJ m⁻¹，且上下文明确讨论交换刚度。原页符号与物理量及单位不一致，应标注为疑似将A_e误写为K_u，不能把这些数值解释成各向异性常数。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P13",
+          "detail": "公式(12)原页确实写作R²=Σ(Ŷ_i−Ȳ)²/Σ(Y_i−Ȳ)²，而非通常预测决定系数的1−Σ(Y_i−Ŷ_i)²/Σ(Y_i−Ȳ)²。公式现有内容完整，不是提取丢失“1−”；影响R²指标的定义与复现。仅凭此页不能判断实际评分代码及已报告数值使用哪一公式。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P13",
+          "detail": "公式(7)–(12)的括号、负号、内积、范数及均值符号在文字提取中含“/C2”“/C3”“/C1”等乱码。原页均可识读：例如f_ms=−μ₀M_s m·H_dm/2，f_zm=−μ₀M_s m·H_ext，MSE=Σ(Y_i−Ŷ_i)²/N。无这些运算符的原文件缺项；公式(12)自身的定义问题另列。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P14",
+          "detail": "公式(13)的∞上标被提取成1，绝对值、减号亦出现乱码；原页为MAPE=|μ_Y^N−μ_Y^∞|/μ_Y^∞×100%。公式(14)、(15)的减号、范数及括号也可从原页完整恢复，无公式缺项。影响样本量收敛指标和逆向损失的准确转录。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P14",
+          "detail": "公式(13)之后，原页将收敛准则写作“H_c≤1%”，而上下文定义的百分比误差指标为MAPE。矫顽场与百分比阈值的写法不一致，无公式缺项；影响收敛准则复现。可指出疑似指标符号误写，但不能擅自补定作者实际使用的判据。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P14",
+          "detail": "公式(15)下方反向传播说明的行内公式原页写作∂L/∂X=(L/∂Y)(∂Y/∂X)，中间因子分子缺少偏导符号∂。这是原页链式求导表达缺项，不是提取错误；影响梯度公式的形式正确性，不能据此断言训练代码有同样错误。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P14",
+          "detail": "文字资料漏提了原页日期行“Published online: 11 June 2026”。已据图片补记为2026年6月11日；属于提取遗漏，不是原文件缺项，不影响模型结论。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P15",
+          "detail": "参考文献9与28的作者和题名相同，但9写为“Nat. Commun. 8, 7 Seiten (2022)”，28写为“Nat. Commun. 8, 54 (2017)”。原页确有元数据冲突及异常的“7 Seiten”字段；影响文献定位，不能仅凭本批决定正确年份或条目编号。无正文公式或图像缺项。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P15",
+          "detail": "原页参考文献存在重复书目：3/35、4/34、11/38、15/41分别具有相同题名及期刊卷页年份，部分仅作者缩写或排版不同。影响文献去重和独立证据数量统计，不构成新增研究证据；无页面内容缺失。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P16",
+          "detail": "参考文献55原页在题名“Micromagnetic simulations on the grain shape effect in Nd-Fe-B magnets”之后直接列“120, 033903 (2016)”，缺少期刊名称。已从图片核实，并非提取遗漏；影响书目定位完整性，不影响本批其他内容识读。该项不涉及公式或图号，不推补缺失期刊名。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "d10423960846",
+        "state": "published",
+        "updated_at": "2026-09-26T09:33:18.237305+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 17,
+        "covered": 17,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "原页已核清：几何及成分KDE区间的文字提取出现“/C24”“/C0”“/C138”等乱码。95%成分区间为X_Zr∼[1.77–3.53]、X_Cu∼[4.68–7.88]、X_Fe∼[1.30–26.90] at.%；95%几何区间为L∼[33.60,184.78]、d∼[9.78,72.28]、w_S∼[2.60,20.12]、w_Z∼[1.07–28.80] nm。公式(1)根号及公式(2)分式均完整，无公式缺项；已按原页恢复，避免误读参数范围与畴壁性质关系。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "相内成分列表的提取含“/C138”等乱码。原页可读为X_Cu^P∈[0.0,8.3,16.7,25.0] at.%、X_Fe^P∈[0.0,9.0,17.9,26.8] at.%。描述符列表中的σ_dw^(S)也被错误提取为带额外0的形式；原页无此0。影响成分采样及输入变量辨认，不是原文件缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P5",
+            "detail": "表1的1:5相表头原页写作Sm(Co₁₋ₓCₓ)₅，Cu中的u缺失，与正文Cu替代及图3的Sm(Co₁₋ₓCuₓ)₅标注不一致。保留该原文表头问题，不将其解释为碳掺杂；受影响的是相成分标识，表内参数仍可识读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "公式(3)文字提取将减号变成“/C0”，原页清楚显示Φ_p=(H_c−H_p)/H_c，无缺项。边界缺陷层参数原页为K′=0.01K_u，提取的K0不准确。已纠正，以免误读钉扎贡献定义和缺陷层设置。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P6",
+            "detail": "图4g–h右轴、图例及约1.25×10⁻³的标注均为MSE，但P5末至P6开头的对应正文称MAPE。原页已确认图文指标名称不一致，并非公式缺失或文字提取错误。不能据此把1.25×10⁻³确定解释为MAPE；受影响的是模型误差大小及收敛指标的表述，R²趋于约0.90的趋势仍可识读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "逆向设计固定参数处，原页为M_s^(P)、σ_dw^(P)、l_dw^(P)，后两项没有文字提取中的额外下标0；α=0后的句点也不是小数残缺。此处无公式缺项，纠正后明确固定的是各相磁性参数。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "公式(4)的−3/2指数被提取为含“/C0”的乱码，原页分段、指数和分母均完整，已在笔记恢复。图5图注中的l_dw^(P)、σ_dw^(P)无提取文本所带额外0。没有公式缺项；影响角度模型与固定微磁输入的辨认。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "公式(5)的括号、减号及分式在提取文本中出现乱码。原页清楚显示φ_S=w_S(2L−w_S)/L²−w_Sw_Z/(Ld)，φ_Z=w_Z/d。无缺项，已据原页恢复，避免误读相分数定义。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "对应图7的正文先称固定厚度时增大d、减小L提高H_c，随后在最小厚度情形又称“reducing L and d tends to improve H_c”，并称该效应随厚度增加而增强。原页确有两种方向表述，无公式缺项；影响d对H_c趋势的概括，不能擅自统一为同一方向。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P9",
+            "detail": "图7讨论中，原文将随x_Cu从0增至0.3而畴壁能下降近32%的相写为“2:17-phase”，但本段明确Cu变化发生在1:5相，且前句已将2:17相的约10%降幅对应Fe变化。属于原页相名称错配，无缺失公式；影响Cu降低哪一相畴壁能的解释。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P9",
+            "detail": "图8引入段把φ_Z写成Sm₂Co₁₇（2:17相）的体积分数；与P8公式(5)的φ_Z=w_Z/d及P10图8横轴“Z-Phase Vol. Frac.”不一致。原页可确认该相标识错误，无公式缺项；φ_Z应按已给定义识别为Z相变量，不应据此改称基体相分数。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P9",
+            "detail": "图7图注将变化厚度描述为SmCo₅和Sm₂Co₁₇两相的厚度，但图中实际标注w_S与w_Z，示意图明确w_Z对应Z相。原页图注与图内变量含义不一致，无图像缺项；影响厚度扫描对象的辨认。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "公式(6)的相间上标S−M、Z−M及减号被提取为含“/C0”的乱码。原页可清楚辨认这些均为差值符号；已据原页恢复。此项不涉及公式缺失，也不应掩盖公式本身另有的上标错误。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P11",
+            "detail": "公式(6)原页将Δσ_dw^(S−M)的右端写为σ_dw^(S−M)−σ_dw^(M)，而不是与其他差值定义平行的单相项σ_dw^(S)。原页无字符缺失，但上标与差值定义语境不一致；影响1:5–2:17畴壁能差值的形式定义。不能据此认定实际代码也采用了错误表达式。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P11",
+            "detail": "图9e与正文的Φ_p重要性次序不完全一致：正文在Δσ_dw^(S−M)之后依次列Δl_dw^(S−M)、ΔM_s^(Z−M)，但图中红柱分别约为0.042、0.060，后者更高。无图像缺项；影响后续特征排序，不改变α及Δσ_dw^(S−M)的重要性结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "讨论第(iii)项把H_c称为“coherence factor”，与本页其余正文将H_c用作矫顽力的含义不一致。该术语误写已在原页核实，无公式缺项；不能据此另行引入一个相干性因子。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P13",
+            "detail": "首段将SmCo₅、Sm₂Co₁₇的计算结果称为M_s和K_u，但对应第二项数值为15.0、19.48 pJ m⁻¹，且上下文明确讨论交换刚度。原页符号与物理量及单位不一致，应标注为疑似将A_e误写为K_u，不能把这些数值解释成各向异性常数。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P13",
+            "detail": "公式(12)原页确实写作R²=Σ(Ŷ_i−Ȳ)²/Σ(Y_i−Ȳ)²，而非通常预测决定系数的1−Σ(Y_i−Ŷ_i)²/Σ(Y_i−Ȳ)²。公式现有内容完整，不是提取丢失“1−”；影响R²指标的定义与复现。仅凭此页不能判断实际评分代码及已报告数值使用哪一公式。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "公式(7)–(12)的括号、负号、内积、范数及均值符号在文字提取中含“/C2”“/C3”“/C1”等乱码。原页均可识读：例如f_ms=−μ₀M_s m·H_dm/2，f_zm=−μ₀M_s m·H_ext，MSE=Σ(Y_i−Ŷ_i)²/N。无这些运算符的原文件缺项；公式(12)自身的定义问题另列。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "公式(13)的∞上标被提取成1，绝对值、减号亦出现乱码；原页为MAPE=|μ_Y^N−μ_Y^∞|/μ_Y^∞×100%。公式(14)、(15)的减号、范数及括号也可从原页完整恢复，无公式缺项。影响样本量收敛指标和逆向损失的准确转录。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P14",
+            "detail": "公式(13)之后，原页将收敛准则写作“H_c≤1%”，而上下文定义的百分比误差指标为MAPE。矫顽场与百分比阈值的写法不一致，无公式缺项；影响收敛准则复现。可指出疑似指标符号误写，但不能擅自补定作者实际使用的判据。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P14",
+            "detail": "公式(15)下方反向传播说明的行内公式原页写作∂L/∂X=(L/∂Y)(∂Y/∂X)，中间因子分子缺少偏导符号∂。这是原页链式求导表达缺项，不是提取错误；影响梯度公式的形式正确性，不能据此断言训练代码有同样错误。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "文字资料漏提了原页日期行“Published online: 11 June 2026”。已据图片补记为2026年6月11日；属于提取遗漏，不是原文件缺项，不影响模型结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P15",
+            "detail": "参考文献9与28的作者和题名相同，但9写为“Nat. Commun. 8, 7 Seiten (2022)”，28写为“Nat. Commun. 8, 54 (2017)”。原页确有元数据冲突及异常的“7 Seiten”字段；影响文献定位，不能仅凭本批决定正确年份或条目编号。无正文公式或图像缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P15",
+            "detail": "原页参考文献存在重复书目：3/35、4/34、11/38、15/41分别具有相同题名及期刊卷页年份，部分仅作者缩写或排版不同。影响文献去重和独立证据数量统计，不构成新增研究证据；无页面内容缺失。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P16",
+            "detail": "参考文献55原页在题名“Micromagnetic simulations on the grain shape effect in Nd-Fe-B magnets”之后直接列“120, 033903 (2016)”，缺少期刊名称。已从图片核实，并非提取遗漏；影响书目定位完整性，不影响本批其他内容识读。该项不涉及公式或图号，不推补缺失期刊名。"
+          }
+        ]
+      }
     },
     {
       "source": "OpenAlex",
@@ -1596,7 +3268,18 @@
       "recommendation": "",
       "deep_read": {},
       "recommended_direction": "fatigue_reliability",
-      "title_zh": "考虑焊接残余应力松弛的物理疲劳寿命建模，以及面向疲劳设计寿命的机器学习辅助残余应力阈值确定"
+      "title_zh": "考虑焊接残余应力松弛的物理疲劳寿命建模，以及面向疲劳设计寿命的机器学习辅助残余应力阈值确定",
+      "reading_status": {
+        "paper_id": "b972c8c0d15c",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-26T09:13:28.582350+00:00",
+        "basis": "missing",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -1658,7 +3341,18 @@
       "recommendation": "",
       "deep_read": {},
       "recommended_direction": "ai_maintenance",
-      "title_zh": "面向变工况机械故障诊断的自适应工业大语言模型"
+      "title_zh": "面向变工况机械故障诊断的自适应工业大语言模型",
+      "reading_status": {
+        "paper_id": "1172e7a5c357",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-26T09:13:42.668495+00:00",
+        "basis": "missing",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Elsevier",
@@ -1791,7 +3485,18 @@
       "recommendation": "",
       "deep_read": {},
       "recommended_direction": "generative_design",
-      "title_zh": "融合生成式 AI 与机器学习力场的稠环芳烃逆向设计及高保真动力学模拟"
+      "title_zh": "融合生成式 AI 与机器学习力场的稠环芳烃逆向设计及高保真动力学模拟",
+      "reading_status": {
+        "paper_id": "45dbfe9703f1",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-26T09:13:56.569443+00:00",
+        "basis": "missing",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -1852,7 +3557,18 @@
       "recommendation": "",
       "deep_read": {},
       "recommended_direction": "fatigue_reliability",
-      "title_zh": "通过全场实验与物理信息机器学习揭示并预测织构 Zircaloy-4 合金中的疲劳裂纹萌生"
+      "title_zh": "通过全场实验与物理信息机器学习揭示并预测织构 Zircaloy-4 合金中的疲劳裂纹萌生",
+      "reading_status": {
+        "paper_id": "a71884573e77",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-26T09:14:10.831462+00:00",
+        "basis": "missing",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "source_status": {
@@ -2244,13 +3960,13 @@
     "unavailable": 0
   },
   "analysis_status": {
-    "ready_core": 1,
+    "ready_core": 5,
     "target_core": 5,
-    "ready_extended": 0,
+    "ready_extended": 1,
     "target_extended": 5,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 9
+    "pending": 4
   },
   "edition": {
     "id": "36138227128",

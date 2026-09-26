@@ -2,17 +2,17 @@
   "paper_id": "69c3e52815b7",
   "fingerprint": "f37d30864df88e03ea0e14e6b28debbf871b25f1f3045b8a436a5d4be2e1672e",
   "analysis": {
-    "title_zh": "按需任用的智能：能力的临时授权与治理",
-    "summary": "【摘要级解读】本文研究如何在资源、期限、持续覆盖和权限约束下，让合适的智能能力在恰当时空可用。作者将“任用”定义为临时、受治理且可撤销的授权，并提出参考内核、控制平面、中间表示及运行时执行与证据机制。[摘要] 具身智能是主要验证场景，设备—边缘—云等系统用于检验可迁移性。摘要未报告实验结果，因此应将其视为研究框架与工程议程，而非已验证的性能改进方案。",
-    "recommendation": "【解读】建议作为智能运维的邻近方向参考阅读，重点关注能力授权、资源保留与撤销恢复机制；摘要未涉及故障诊断或维护决策，不宜列为运维实证成果的优先推荐。[摘要]",
+    "title_zh": "按需任命的智能：能力的临时部署与受控撤回",
+    "summary": "本文提出“按需任命的智能”研究纲领，讨论智能系统如何在资源、期限与权限约束下，将合适能力部署到合适位置和时刻，同时维持持续覆盖。作者将任命定义为临时、受治理且可撤销的授权，并提出参考内核、控制平面、中间表示及运行时执行与证据机制。具身智能是主要验证场景，端—边—云等系统用于检验可迁移性。摘要未报告实验结果，阅读价值主要在系统架构与治理思路，而非已验证的性能优势。[摘要]",
+    "recommendation": "建议作为智能运维资源调度与权限治理的拓展材料阅读，而非直接相关的运维成果论文；重点关注任命抽象及其复杂度评估思路，摘要尚不足以证明实际收益。[摘要]",
     "deep_read": {
-      "problem": "【论文摘要】核心问题是智能系统拥有的决策相关能力与资源，无法同时在所有位置投入使用。作者希望协调能力、位置和时机，同时遵守持续覆盖、资源限额、期限与有限权限约束。原文概括为“the right capability present at the right place and moment”。[摘要]",
-      "method": "【论文摘要】方法以“任用”为基本抽象，将能力、部署位置、时间、资源、受保护储备、状态、权限及退出纳入临时授权。框架包括八项承诺的参考内核、任用控制平面、中间表示、运行时执行与证据机制；摘要未展开各项承诺及其具体实现。[摘要]",
-      "innovation": "【解读】概念上的特点是把智能从组件长期固有的属性，转为可以主动配置、约束、观察、撤销和恢复的能力。原文以“less as a permanently installed property”表述这一转向；但摘要缺少相关工作比较，无法确认相对既有调度或授权机制的原创性。[摘要]",
-      "findings": "【论文摘要】可确认的产出是研究框架与配套实验研究计划，而非量化性能结论。作者拟判断任用机制何时值得引入额外复杂度，以具身智能为主要验证场景，并用异构系统检验迁移性。摘要未提供实验数据、对照结果或已证实的适用条件。[摘要]",
-      "limitations": "【解读】当前资料的证据边界在于只有摘要：无法核查运行时开销、期限保障、撤销正确性和恢复效果，也无法判断配套实验是否已经实施。以上属于本次解读无法评估的事项，并非作者承认的缺陷；不能据此断言框架无效或缺乏可实现性。[摘要]",
-      "connection": "【解读】与智能运维的潜在联系在于动态配置诊断或干预能力，同时保留必要覆盖并限制操作权限。可靠性研究也可关注撤销、恢复与状态生命周期。不过这些属于跨领域映射；摘要没有直接讨论设备维护、结构设计或可靠性指标改善。[摘要]",
-      "next_steps": "【建议】后续若获得全文，应先核查八项承诺的定义、执行机制及实验状态，再评估其运维价值。可设计受资源与期限约束的诊断任务，对比固定部署和动态任用，考察覆盖保持、授权撤销与恢复代价；这些是研究建议，并非论文已有实验。[摘要]"
+      "problem": "论文关注能力与资源无法同时在所有位置充分使用的矛盾：如何在正确时空提供所需能力，又不牺牲持续覆盖、资源约束、截止期限和有限权限。原文强调“the right place and moment”，说明问题不只是能力强弱，还包括能力何时、何处可用。[摘要]",
+      "method": "作者把任命定义为“temporary, governed, and revocable grant”，覆盖能力、位置、时间、资源、受保护储备、状态、权限与退出。方法框架包括八项承诺参考内核、任命控制平面、中间表示及运行时执行与证据机制，但摘要没有展开接口与具体算法。[摘要]",
+      "innovation": "解读：概念上的新意候选，是把智能从组件的永久属性转为可部署、约束、观察、撤销和恢复的能力授权。原文以“less as a permanently installed property”表达这一转向；但摘要没有与已有调度、编排或授权机制比较，无法确认其相对创新程度。[摘要]",
+      "findings": "摘要可确认的产出是研究框架及配套实验计划，而不是实证性能结论。作者拟评估“when appointment machinery earns its complexity”，即任命机制何时值得付出复杂度代价。具身智能被定位为主要验证场景，但未给出实验设置、指标、基线或结果。[摘要]",
+      "limitations": "当前资料仅为摘要，缺少八项承诺的逐项内容、运行时保障细节与实验数据，因此不能判断实现可行性、执行开销或失效恢复效果。这属于证据范围限制，并非作者已证实的缺陷。摘要虽列出对抗性任命劫持等议题，也不能据此断言系统已经存在相应漏洞。[摘要]",
+      "connection": "解读：临时授权、受保护储备与撤销恢复，可为智能运维中的诊断能力调度和可靠性保障提供概念参考；但摘要并未研究设备故障预测、检修决策或结构设计。其与给定方向属于系统治理层面的间接联系，不能把跨场景适用设想当成运维效果证据。[摘要]",
+      "next_steps": "建议：后续若获得全文，先核查任命与传统调度、编排及访问控制的区别，再检查实验是否同时衡量覆盖保持、期限满足、资源开销和撤销恢复。若迁移至智能运维，可设计诊断任务竞争资源的对照研究；这是研究建议，不是作者已经完成的实验。[摘要]"
     },
     "analysis_status": "ready",
     "analysis_basis": "abstract",
@@ -20,14 +20,21 @@
     "analysis_sources": [
       "https://doi.org/10.5281/zenodo.22882246"
     ],
-    "analyzed_at": "2026-09-25T01:57:11.098031+00:00",
+    "analyzed_at": "2026-09-25T17:10:14.933527+00:00",
     "llm_model": "gpt-6-astra"
   },
   "evaluation": {
     "direction_fit": false,
     "research_value": true,
     "evidence_sufficient": true,
-    "reason": "【解读】针对给定的 ai_maintenance 方向，摘要主要讨论通用智能能力的配置与治理，没有直接提出维护问题或验证运维效果，因此不判为直接切合。其明确提出参考内核、控制平面和运行时机制，具有框架层面的阅读价值；摘要足以支持这一定位，但不足以支持有效性或性能优势判断。[摘要]",
-    "evidence": "The paper develops an eight-commitment reference kernel, an appointment control plane, an intermediate representation, runtime enforcement and evidence mechanisms, and a matched experimental program"
+    "reason": "摘要明确提出参考内核、控制平面、中间表示和运行时机制，足以支持其具有架构方法层面的阅读价值，但未报告验证结果。主要场景为具身智能，未直接涉及智能运维任务，因此不判为直接切合该方向；证据充分仅指足以作出上述摘要级判断。[摘要]",
+    "evidence": "The paper develops an eight-commitment reference kernel, an appointment control plane, an intermediate representation, runtime enforcement and evidence mechanisms"
+  },
+  "material": {
+    "version": "d2ccce7130ef4e7b6ca4502e6b9b854e5a97522ccad6369f113c066ff78bc8cb",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "The paper develops an eight-commitment reference kernel, an appointment control plane, an intermediate representation, runtime enforcement and evidence mechanisms"
   }
 }
