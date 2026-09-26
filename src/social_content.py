@@ -124,7 +124,7 @@ def enrich_public(row, root=ROOT, *, fetcher=fetch):
 
 def wechat_snapshot(root, now):
     from src.sources.wechat_rss import WeChatRSSAdapter
-    from src.sources.wechat_public_index import WeChatPublicIndexAdapter
+    from src.sources.wechat_public_index import WeChatPublicIndexAdapter, daily_queries
     from src.wechat_subscriptions import effective_accounts, name_key
     accounts = [r for r in effective_accounts(root) if r['enabled']]
     if not accounts:
@@ -132,14 +132,8 @@ def wechat_snapshot(root, now):
     since = now - timedelta(days=90)
     rss = WeChatRSSAdapter(import_path=root/'data/inbox/wechat.json', merge_import=True)
     records = rss.fetch(since, now)
-    covered = {name_key(r.venue) for r in records}
-    missing = [r for r in accounts if name_key(r['name']) not in covered or rss.status.status != 'ok']
-    day = now.astimezone(timezone(timedelta(hours=8))).date().toordinal()
     policy = read(root/'config/wechat_accounts.json')
-    pools = [['智能体 Skills MCP 科研', '大模型 编程 工具 实践'], ['青年编委 开放课题', '航空 企业 科研基金 申报'], policy.get('public_article_queries') or ['科研 会议 征稿']]
-    queries = [pool[day % len(pool)].format(year=now.year, month=now.month) for pool in pools]
-    if missing:
-        queries[day % 3] = missing[day % len(missing)]['name'] + f' {now.year}年{now.month}月'
+    queries = daily_queries(policy, accounts, now)
     index = WeChatPublicIndexAdapter(directory=root/'data/inbox/wechat-subscriptions.json', cache_dir=root/'data/cache/wechat-public', queries=queries)
     records.extend(index.fetch(since, now))
     names = {name_key(r['name']) for r in accounts}

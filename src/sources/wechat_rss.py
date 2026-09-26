@@ -8,7 +8,7 @@ from urllib.request import Request, urlopen
 import xml.etree.ElementTree as ET
 
 from src.models import RawRecord, SourceStatus, in_date_window, parse_date
-from src.wechat_metadata import excerpt, public_records, public_health, public_subscriptions
+from src.wechat_metadata import excerpt, public_records, public_health, public_subscriptions, index_health_message
 
 
 class WeChatRSSAdapter:
@@ -59,6 +59,7 @@ class WeChatRSSAdapter:
             return []
         result, failures = [], []
         mode, timestamp, imported_failures = "WeRSS 订阅已接入", None, 0
+        collection = None
         for url in self.urls:
             try:
                 request = Request(url, headers=self.headers)
@@ -82,6 +83,8 @@ class WeChatRSSAdapter:
                         mode = "公开索引已接入"
                 value = payload.get("failed_feeds", 0)
                 imported_failures = value if type(value) is int and value > 0 else 0
+                if payload.get('collection'):
+                    collection = public_health(payload['collection'])
             except Exception as exc:
                 failures.append(type(exc).__name__)
         # Reconstruct from a whitelist before any record reaches public data.
@@ -106,14 +109,23 @@ class WeChatRSSAdapter:
             message += " 导出缺少采集时间，请重新同步。"
         if failures or imported_failures:
             state = "partial" if result else "error"
-            message += f" {len(failures) + imported_failures} 个订阅或导入请求失败；已有结果保留。"
+            if failures:
+                message += f" {len(failures)} 个订阅或导入请求失败；已有结果保留。"
+            if imported_failures:
+                message += (" 上次公开索引同步未全部完成，旧记录未保存具体原因。" if mode == '公开索引已接入' else
+                            f" {imported_failures} 个订阅同步失败；已有结果保留。")
         elif not imported:
             message += " 尚无文章，请完成微信扫码并添加公众号订阅。"
         if self.health_path.is_file():
             try:
                 health = public_health(json.loads(self.health_path.read_text(encoding="utf-8-sig")))
                 checked = parse_date(health["checked_at"])
-                if (not timestamp or checked >= timestamp) and health["status"] != "ok":
+                if health['provider'] == 'WeChat public index':
+                    if not imported and not self.urls:
+                        message = '公开索引已接入：暂无已同步文章。'
+                    if not collection or checked >= parse_date(collection['checked_at']):
+                        collection = health
+                elif (not timestamp or checked >= timestamp) and health["status"] != "ok":
                     state = health["status"]
                     message = "WeRSS 微信授权已完成；" if health["authenticated"] else "WeRSS 微信授权需要更新；"
                     accounts = health["accounts"]
@@ -139,6 +151,15 @@ class WeChatRSSAdapter:
                 if state in ("ok", "no_data"):
                     state = "partial" if result else "error"
                     message += " 本机同步状态文件无法读取。"
+        if collection and collection['provider'] == 'WeChat public index':
+            checked = parse_date(collection['checked_at'])
+            if not timestamp or checked >= timestamp:
+                if collection['status'] not in ('ok', 'no_data'):
+                    state = 'partial' if result else collection['status']
+                elif not failures and until - checked <= timedelta(hours=24):
+                    state = 'ok' if result else 'no_data'
+                message += ' ' + index_health_message(collection)
+                message += f" 最近检查：{checked.astimezone(timezone(timedelta(hours=8))):%m-%d %H:%M}（北京时间）。"
         self._status = SourceStatus(self.name, state, len(result), message)
         return result
 

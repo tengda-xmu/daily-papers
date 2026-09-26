@@ -13,10 +13,32 @@ from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
 from src.models import RawRecord, SourceStatus, in_date_window, parse_date
-from src.wechat_metadata import excerpt, public_index_url
+from src.wechat_metadata import excerpt, public_index_url, public_health, index_health_message
 from src.wechat_subscriptions import effective_accounts, manual_queries, name_key
 
 ROOT = Path(__file__).resolve().parents[2]
+BEIJING = timezone(timedelta(hours=8))
+
+
+def daily_queries(policy, accounts, until):
+    """Use the same daily plan for local exports and both public columns."""
+    local = until.astimezone(BEIJING)
+    day = local.date().toordinal()
+    pools = [
+        ['机器之心 {year}年{month}月', '智能体 Skills MCP 科研'],
+        ['青年编委 开放课题', '航空 企业 科研基金 申报'],
+        policy.get('public_article_queries') or ['科研 会议 征稿'],
+    ]
+    queries = [pool[day % len(pool)].format(year=local.year, month=local.month) for pool in pools]
+    targeted = manual_queries(accounts, local)
+    limit = max(1, min(3, policy.get('public_daily_queries', 3)))
+    if targeted:
+        topics = [queries[(day + i) % len(queries)] for i in range(len(queries))]
+        return list(dict.fromkeys([*targeted, *topics]))[:limit]
+    targets = [f"{r['name']} {local.year}年{local.month}月" for r in accounts if r['enabled']]
+    if targets:
+        queries[day % 3] = targets[day % len(targets)]
+    return list(dict.fromkeys(queries))[:limit]
 
 
 class PublicSearchUnavailable(RuntimeError):
@@ -88,6 +110,7 @@ class WeChatPublicIndexAdapter:
         self.page = max(1, int(page))
         self.manual_paging = manual_paging
         self.has_more = False
+        self.collection = None
         self._status = SourceStatus(self.name, "not_run")
 
     @property
@@ -103,23 +126,21 @@ class WeChatPublicIndexAdapter:
             names = {name_key(row['name']) for row in accounts if row['enabled']}
         queries = self.queries
         if queries is None:
-            pool = policy["public_article_queries"]
-            offset = (until.date().toordinal() % len(pool))
-            queries = [pool[(offset + i) % len(pool)].format(year=until.year, month=until.month)
-                       for i in range(min(3, policy.get("public_daily_queries", 3)))]
-            targeted = manual_queries(accounts, until)
-            queries = list(dict.fromkeys([*targeted, *queries]))[:min(3, policy.get('public_daily_queries', 3))]
+            queries = daily_queries(policy, accounts, until)
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         records, failures, indexed_count = {}, 0, 0
         last_request, challenge, budget_exhausted = None, False, False
         now = datetime.now(timezone.utc)
+        health = {'provider': 'WeChat public index', 'checked_at': now.isoformat(),
+                  'planned': len(queries[:3]), 'completed': 0, 'cached': 0, 'failed': 0, 'deferred': 0, 'reasons': []}
         budget_path = self.cache_dir / "request-budget.json"
         try:
             budget = json.loads(budget_path.read_text(encoding="utf-8"))
         except (OSError, ValueError):
             budget = {}
-        if budget.get("day") != now.date().isoformat():
-            budget = {"day": now.date().isoformat(), "count": 0, "blocked_until": budget.get("blocked_until", "")}
+        today = now.astimezone(BEIJING).date().isoformat()
+        if budget.get("day") != today:
+            budget = {"day": today, "count": 0, "blocked_until": budget.get("blocked_until", "")}
         for query in queries[:3]:
             cache_query = query if self.page == 1 else f'{query}|page:{self.page}'
             key = hashlib.sha256(cache_query.encode()).hexdigest()
@@ -131,6 +152,7 @@ class WeChatPublicIndexAdapter:
                     checked = parse_date(payload.get("checked_at"))
                     if checked and timedelta(0) <= now - checked < timedelta(hours=24):
                         rows = payload["rows"]
+                        health['cached'] += 1
                         self.has_more = payload.get('has_more', len(rows) >= 10)
                 except (ValueError, KeyError, TypeError):
                     pass
@@ -139,10 +161,14 @@ class WeChatPublicIndexAdapter:
                 if blocked_until and now < blocked_until:
                     failures += 1
                     challenge = True
+                    health['deferred'] += 1
+                    health['reasons'].append('verification_required')
                     continue  # Cached results remain usable during the cooldown.
                 if not self.manual_paging and budget.get("count", 0) >= 3:
                     failures += 1
                     budget_exhausted = True
+                    health['deferred'] += 1
+                    health['reasons'].append('daily_limit')
                     continue
                 if last_request is not None:
                     time.sleep(max(0, 30 - (time.monotonic() - last_request)))
@@ -160,21 +186,33 @@ class WeChatPublicIndexAdapter:
                     path.write_text(json.dumps({"checked_at": now.isoformat(), "rows": rows, 'has_more': self.has_more}, ensure_ascii=False), encoding="utf-8")
                 except PublicSearchChallenge:
                     failures += 1
+                    health['failed'] += 1
+                    health['reasons'].append('verification_required')
                     challenge = True
                     budget["blocked_until"] = (now + timedelta(hours=24)).isoformat()
                     budget_path.write_text(json.dumps(budget), encoding="utf-8")
                     continue  # Only cached results can be used for the remaining queries.
                 except HTTPError as exc:
                     failures += 1
+                    health['failed'] += 1
+                    health['reasons'].append('verification_required' if exc.code in (403, 429) else 'http_error')
                     if exc.code in (403, 429):
                         challenge = True
                         budget["blocked_until"] = (now + timedelta(hours=24)).isoformat()
                         budget_path.write_text(json.dumps(budget), encoding="utf-8")
+                except PublicSearchUnavailable:
+                    failures += 1
+                    health['failed'] += 1
+                    health['reasons'].append('unrecognized_response')
+                    continue
                 except Exception:
                     failures += 1
+                    health['failed'] += 1
+                    health['reasons'].append('network_error')
                     continue
             if rows is None:
                 continue
+            health['completed'] += 1
             indexed_count += len(rows)
             for row in rows:
                 if self.subscribed_only and name_key(row.get('account', '')) not in names:
@@ -197,11 +235,7 @@ class WeChatPublicIndexAdapter:
         else:
             message = f"公开索引返回 {indexed_count} 条线索，所选日期内 {len(records)} 条；不限已订阅公众号。"
             message += " 结果为索引片段，提供公开检索入口；不代表公众号全量历史。"
-        if failures:
-            message += " 部分公开查询失败，已保留成功结果。"
-        if challenge:
-            message += " 公开搜索访问受限或要求人工验证，已停止继续请求。"
-        if budget_exhausted:
-            message += " 当日公开检索预算已用完，缓存结果保留，次日继续。"
+        self.collection = public_health({**health, 'status': state})
+        message += ' ' + index_health_message(self.collection)
         self._status = SourceStatus(self.name, state, len(records), message)
         return list(records.values())

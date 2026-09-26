@@ -162,6 +162,13 @@ def export(output: Path, refresh: bool = False) -> int:
     adapter = WeChatPublicIndexAdapter() if use_index else WeChatRSSAdapter(urls=urls, import_path=ROOT / ".local/no-wechat-fallback.json")
     now = datetime.now(timezone.utc)
     records = adapter.fetch(now - timedelta(days=30), now)
+    collection = getattr(adapter, 'collection', None) if use_index else None
+    if collection:
+        # Even a failed/empty refresh must replace obsolete connector health.
+        health_path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = health_path.with_suffix('.json.tmp')
+        temporary.write_text(json.dumps(public_health(collection), ensure_ascii=False, indent=2), encoding='utf-8')
+        temporary.replace(health_path)
     if adapter.status.status not in ("ok", "partial") or not records:
         raise RuntimeError("No new public index metadata; previous export preserved" if use_index else
                            "No current WeRSS article metadata; check the local service")
@@ -175,8 +182,9 @@ def export(output: Path, refresh: bool = False) -> int:
         preserved = [row for row in public_records(old.get("records", []))
                      if in_date_window(row.get("published_at", ""), now - timedelta(days=30), now)]
         records = [*preserved, *records]
-    payload = public_export({"exported_at": now.isoformat(), "failed_feeds": failures + int(adapter.status.status == "partial"),
-                             "records": records})
+    payload = public_export({"exported_at": now.isoformat(),
+                             "failed_feeds": failures + int(not use_index and adapter.status.status == "partial"),
+                             "collection": collection, "records": records})
     output.parent.mkdir(parents=True, exist_ok=True)
     temporary = output.with_suffix(".json.tmp")
     temporary.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")

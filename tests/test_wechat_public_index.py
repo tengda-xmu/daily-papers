@@ -78,6 +78,61 @@ def test_daily_request_budget_survives_repeated_runs(adapter, monkeypatch):
     assert adapter.fetch(*WINDOW) and len(calls) == 3
 
 
+def test_daily_plan_is_shared_and_uses_beijing_day(adapter, monkeypatch):
+    policy = {'public_article_queries': ['科研 {year}年{month}月'], 'public_daily_queries': 3}
+    accounts = [{'name': '研究号', 'enabled': True}]
+    before_midnight = datetime(2026, 9, 25, 17, tzinfo=timezone.utc)
+    after_midnight = datetime(2026, 9, 26, 7, tzinfo=timezone.utc)
+    queries = index.daily_queries(policy, accounts, before_midnight)
+    assert queries == index.daily_queries(policy, accounts, after_midnight)
+    (index.ROOT / 'config/wechat_accounts.json').write_text(json.dumps(policy), encoding='utf8')
+    monkeypatch.setattr(index, 'effective_accounts', lambda *_: accounts)
+    calls = []
+    def respond(request, **kwargs):
+        calls.append(request.full_url)
+        return io.BytesIO(result_html().encode())
+    monkeypatch.setattr(index, 'urlopen', respond)
+    adapter.queries = None  # Local export.
+    adapter.fetch(*WINDOW)
+    shared = index.WeChatPublicIndexAdapter(cache_dir=adapter.cache_dir,
+        queries=index.daily_queries(policy, accounts, NOW))  # Column collection.
+    shared.fetch(*WINDOW)
+    assert len(calls) == len(shared.queries)
+    assert shared.collection['cached'] == shared.collection['completed'] == len(shared.queries)
+
+
+def test_request_budget_rolls_over_at_beijing_midnight(adapter, monkeypatch):
+    class Clock(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return datetime(2026, 9, 25, 16, 5, tzinfo=timezone.utc)
+    monkeypatch.setattr(index, 'datetime', Clock)
+    adapter.cache_dir.mkdir()
+    budget = adapter.cache_dir / 'request-budget.json'
+    budget.write_text(json.dumps({'day': '2026-09-25', 'count': 3}))
+    monkeypatch.setattr(index, 'urlopen', lambda *a, **k: io.BytesIO(result_html().encode()))
+    assert adapter.fetch(*WINDOW)
+    assert json.loads(budget.read_text()) == {'day': '2026-09-26', 'count': 1, 'blocked_until': ''}
+
+
+def test_query_failures_and_budget_deferrals_remain_distinct(adapter, monkeypatch):
+    def respond(request, **kwargs):
+        if request.full_url.endswith('bad'):
+            raise TimeoutError('token=PRIVATE')
+        return io.BytesIO(result_html().encode())
+    monkeypatch.setattr(index, 'urlopen', respond)
+    adapter.queries = ['one', 'bad', 'three']
+    assert adapter.fetch(*WINDOW) and adapter.status.status == 'partial'
+    assert adapter.collection['completed'] == 2 and adapter.collection['failed'] == 1
+    assert adapter.collection['reasons'] == ['network_error']
+    assert '连接失败或超时' in adapter.status.message and 'PRIVATE' not in adapter.status.message
+    adapter.queries = ['one', 'four']
+    adapter.fetch(*WINDOW)
+    assert adapter.collection['cached'] == 1 and adapter.collection['failed'] == 0
+    assert adapter.collection['deferred'] == 1 and adapter.collection['reasons'] == ['daily_limit']
+    assert '1 项暂缓' in adapter.status.message
+
+
 def test_manual_scope_reuses_raw_cache_without_subscription_allowlist(adapter, monkeypatch):
     calls = []
     def respond(request, **kwargs):
@@ -208,6 +263,72 @@ def test_public_collection_never_calls_restricted_native_endpoint_and_preserves_
         "published_at": (now - timedelta(days=1)).isoformat()}]}), encoding="utf-8")
     assert connector.export(output, refresh=True) == 2
     assert {row["title"] for row in json.loads(output.read_text(encoding="utf-8"))["records"]} == {"旧文章", "新文章"}
+
+
+def test_failed_public_refresh_publishes_health_without_replacing_articles(tmp_path, monkeypatch):
+    import connectors.wechat_sync.export as connector
+    from src.wechat_metadata import public_health
+    (tmp_path / 'config').mkdir()
+    (tmp_path / 'config/wechat_accounts.json').write_text('{"article_mode":"public_index"}')
+    monkeypatch.setattr(connector, 'ROOT', tmp_path)
+    now = datetime.now(timezone.utc)
+    exported = public_export({'exported_at': (now - timedelta(hours=1)).isoformat(), 'records': [
+        {'title': '旧文章', 'account': '研究号', 'published_at': now.isoformat(), 'access_mode': 'public_index'}]})
+    path = tmp_path / 'wechat.json'
+    path.write_text(json.dumps(exported), encoding='utf8')
+    before = path.read_bytes()
+    class Index:
+        status = SourceStatus('微信公众号', 'access_denied', 0)
+        collection = {'provider': 'WeChat public index', 'status': 'access_denied', 'checked_at': now.isoformat(),
+                      'planned': 3, 'completed': 0, 'failed': 1, 'deferred': 2, 'reasons': ['verification_required'],
+                      'cookies': 'PRIVATE', 'error': 'token=PRIVATE'}
+        def fetch(self, *args):
+            return []
+    monkeypatch.setattr(connector, 'WeChatPublicIndexAdapter', Index)
+    with pytest.raises(RuntimeError):
+        connector.export(path, refresh=True)
+    assert path.read_bytes() == before
+    health = json.loads(path.with_name('wechat-status.json').read_text('utf8'))
+    assert public_health(health) == health and 'PRIVATE' not in json.dumps(health)
+    imported = WeChatRSSAdapter(urls=[], import_path=path)
+    assert len(imported.fetch(now - timedelta(days=30), now)) == 1
+    assert imported.status.status == 'partial' and '人工验证' in imported.status.message
+    assert '微信授权需要更新' not in imported.status.message
+    # A subsequent successful export removes the failure without losing old records.
+    Index.status = SourceStatus('微信公众号', 'ok', 1)
+    Index.collection = {**Index.collection, 'status': 'ok', 'completed': 3, 'failed': 0, 'deferred': 0, 'reasons': [],
+                        'checked_at': (now + timedelta(seconds=1)).isoformat()}
+    Index.fetch = lambda *_: [RawRecord('微信公众号', 'new', '新文章', venue='研究号', published_at=now.isoformat(),
+                                       raw_metadata={'access_mode': 'public_index'})]
+    assert connector.export(path, refresh=True) == 2
+    payload = json.loads(path.read_text('utf8'))
+    assert payload['failed_feeds'] == 0 and public_export(payload)['collection']['completed'] == 3
+    imported.fetch(now - timedelta(days=30), now + timedelta(minutes=1))
+    assert imported.status.status == 'ok' and '3/3' in imported.status.message
+
+
+def test_shared_status_and_current_page_follow_independent_public_updates():
+    from src.sources.wechat import shared_snapshot
+    from tools.build_site import current_public_sources, source_status_panel
+    snapshot = {'checked_at': NOW.isoformat(), 'entries': [
+        {'id': 'one', 'platform': 'wechat', 'title': '新线索', 'url': 'https://mp.weixin.qq.com/s/one',
+         'published_at': NOW.isoformat()}], 'sources': [
+        {'id': 'wechat-rss', 'name': '公众号同步', 'status': 'partial', 'message': '公开查询完成 2/3 项；连接失败或超时。'},
+        {'id': 'wechat-index', 'name': '公开索引', 'status': 'ok', 'message': '复用缓存 3 项。'}]}
+    rows, status = shared_snapshot(snapshot, *WINDOW)
+    assert len(rows) == 1 and status.status == 'partial' and '连接失败或超时' in status.message
+    original = {'generated_at': (NOW - timedelta(hours=1)).isoformat(), 'since': WINDOW[0].isoformat(),
+                'core': [{'id': 'paper'}], 'extended': [], 'source_status': {'微信公众号': {'status': 'partial'}}}
+    current = current_public_sources(original, snapshot)
+    assert current['core'] == original['core'] and current['generated_at'] == original['generated_at']
+    assert 'wechat_articles' not in original  # Historical edition not mutated.
+    html = source_status_panel(current, reading_url='./')
+    assert '连接失败或超时' in html and '复用缓存 3 项' in html and '本期 1 条线索' in html
+    assert '部分期刊采集完成' not in html
+    snapshot['sources'][0].update(status='ok', message='公开查询完成 3/3 项。')
+    recovered = current_public_sources(original, snapshot)
+    assert recovered['source_status']['微信公众号']['status'] == 'ok'
+    assert current_public_sources(original, {**snapshot, 'checked_at': WINDOW[0].isoformat()}) is original
 
 
 def test_wechat_leads_are_visible_but_never_promoted_to_paper_analysis(monkeypatch):

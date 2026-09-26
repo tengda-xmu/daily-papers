@@ -4,6 +4,25 @@ from src.sources.wechat_rss import WeChatRSSAdapter
 from src.sources.wechat_public_index import WeChatPublicIndexAdapter
 
 
+def shared_snapshot(payload, since, until):
+    from src.models import RawRecord, in_date_window, parse_date
+    from datetime import timezone, timedelta
+    records = [RawRecord(source='微信公众号', source_id=r['id'], title=r['title'], venue=r.get('account',''),
+        abstract=r.get('summary',''), published_at=r.get('published_at',''), landing_url=r['url'],
+        raw_metadata={'access_mode':'public_index' if r.get('evidence_kind') == 'search_snippet' else 'article', 'social_column':r.get('column')})
+        for r in payload.get('entries',[]) if r.get('platform') == 'wechat' and in_date_window(r.get('published_at'), since, until)]
+    statuses = [s for s in payload.get('sources',[]) if s.get('id','').startswith('wechat-')]
+    state = 'partial' if not statuses or any(s['status'] not in ('ok','no_data') for s in statuses) else 'ok' if records else 'no_data'
+    message = '公众号独立采集：'
+    checked = parse_date(payload.get('checked_at'))
+    if checked:
+        message += f"最近检查 {checked.astimezone(timezone(timedelta(hours=8))):%m-%d %H:%M}（北京时间）。"
+    message += ' '.join(f"{s.get('name', '微信公众号')}：{s.get('message') or s['status']}" for s in statuses)
+    if not statuses:
+        message += '缺少来源状态，已有线索保留。'
+    return records, SourceStatus('微信公众号', state, len(records), message)
+
+
 class WeChatAdapter:
     name = "微信公众号"
 
@@ -20,16 +39,9 @@ class WeChatAdapter:
         import os
         if os.getenv('WECHAT_USE_SHARED_SNAPSHOT') == '1':
             from src.public_sources import ROOT, read
-            from src.models import RawRecord, in_date_window
             payload = read(ROOT/'data/social-articles.json')
             if payload:
-                records = [RawRecord(source=self.name, source_id=r['id'], title=r['title'], venue=r.get('account',''),
-                    abstract=r.get('summary',''), published_at=r.get('published_at',''), landing_url=r['url'],
-                    raw_metadata={'access_mode':'public_index' if r.get('evidence_kind') == 'search_snippet' else 'article', 'social_column':r.get('column')})
-                    for r in payload.get('entries',[]) if r.get('platform') == 'wechat' and in_date_window(r.get('published_at'), since, until)]
-                statuses = [s for s in payload.get('sources',[]) if s.get('id','').startswith('wechat-')]
-                status = 'partial' if not statuses or any(s['status'] not in ('ok','no_data') for s in statuses) else 'ok' if records else 'no_data'
-                self._status = SourceStatus(self.name, status, len(records), '复用本轮独立公众号采集结果；覆盖范围见科研线索与 AI 前沿的来源状态。')
+                records, self._status = shared_snapshot(payload, since, until)
                 return records
         rows = self.rss.fetch(since, until)
         if rows and self.rss.status.status == "ok":

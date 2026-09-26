@@ -307,7 +307,7 @@ def source_directory(statuses: dict, counts: Counter, root: str = "./", wechat_c
             connector_message = source_state(item, statuses)[1] or ""
             if item["id"] == "ResearchGate" and connector_message.startswith(("本地连接器已导入", "公开索引已接入")):
                 message = connector_message
-            elif item["id"] == "微信公众号" and connector_message.startswith(("WeRSS ", "公开索引已接入")):
+            elif item["id"] == "微信公众号" and connector_message.startswith(("WeRSS ", "公开索引已接入", "公众号独立采集：", "复用本轮独立公众号")):
                 message = connector_message
             elif item["id"] == "Web of Science" and connector_message.startswith(("Clarivate ", "密钥")):
                 message = connector_message
@@ -323,7 +323,7 @@ def source_directory(statuses: dict, counts: Counter, root: str = "./", wechat_c
                 target = root + 'leads.html' if reading_url is not None else '#wechat-articles'
                 count_link = f'<a class="text-button" href="{esc(target)}">本期 {wechat_count} 条线索</a>'
                 if connector_message.startswith("公开索引已接入"):
-                    state_label = "公开索引可用" if state == "ok" else "公开索引部分可用"
+                    state_label = {'ok': '公开索引可用', 'no_data': '暂无新线索', 'partial': '公开索引部分可用'}.get(state, state_label)
             rows.append(f'''
 <div class="source-row">
   <div><a class="source-name" href="{safe_url(item['url'])}" target="_blank" rel="noopener noreferrer">{esc(item['label'])}</a><p>{esc(message)}</p></div>
@@ -637,6 +637,20 @@ def wechat_manager() -> str:
             f'{overview["multi_group"]} 个归入多个分组。')
 
 
+def current_public_sources(payload: dict, snapshot: dict) -> dict:
+    """Current connector health can advance without creating a paper edition."""
+    from src.models import parse_date
+    from src.sources.wechat import shared_snapshot
+    checked = parse_date(snapshot.get('checked_at'))
+    generated = parse_date(payload.get('generated_at'))
+    since = parse_date(payload.get('since'))
+    if not checked or not since or (generated and checked < generated):
+        return payload
+    records, status = shared_snapshot(snapshot, since, checked)
+    return {**payload, 'source_status': {**payload.get('source_status', {}), '微信公众号': status.to_dict()},
+            'wechat_articles': [r.to_dict() for r in records]}
+
+
 def main() -> None:
     from src.editions import enrich
     from src.auto_reading import load as load_readings
@@ -646,6 +660,7 @@ def main() -> None:
         shutil.copytree(DATA / 'figures/images', OUT / 'assets/figures', dirs_exist_ok=True)
     analyses = load_readings(DATA)
     payload = enrich(read_json(DATA / "daily.json", {}), analyses)
+    payload = current_public_sources(payload, read_json(DATA / 'social-articles.json', {}))
     (OUT / "index.html").write_text(render(payload), encoding="utf-8")
     (OUT / "data.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     from src.editions import manifest, write, entries as edition_entries, relative_path

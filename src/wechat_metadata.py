@@ -80,8 +80,11 @@ def public_export(payload: dict) -> dict:
         raise ValueError("Collection timestamp is required")
     failed = payload.get("failed_feeds", 0)
     indexed = any(row.get("access_mode") == "public_index" for row in records)
-    return {"provider": "WeChat public index" if indexed else "WeRSS", "exported_at": timestamp.astimezone(timezone.utc).isoformat(),
+    result = {"provider": "WeChat public index" if indexed else "WeRSS", "exported_at": timestamp.astimezone(timezone.utc).isoformat(),
             "failed_feeds": failed if type(failed) is int and failed >= 0 else 0, "records": records}
+    if payload.get('collection'):
+        result['collection'] = public_health(payload['collection'])
+    return result
 
 
 def public_health(payload: dict) -> dict:
@@ -89,9 +92,21 @@ def public_health(payload: dict) -> dict:
     if not isinstance(payload, dict):
         raise ValueError("Expected a WeRSS health object")
     allowed = {"ok", "no_data", "quota_exhausted", "access_denied", "error"}
+    indexed = payload.get('provider') == 'WeChat public index'
+    if indexed:
+        allowed.add('partial')
     timestamp = parse_date(payload.get("checked_at"))
     if payload.get("status") not in allowed or not timestamp:
         raise ValueError("Invalid WeRSS health status")
+    if indexed:
+        result = {'provider': 'WeChat public index', 'checked_at': timestamp.astimezone(timezone.utc).isoformat(),
+                  'status': payload['status']}
+        for field in ('planned', 'completed', 'cached', 'failed', 'deferred'):
+            value = payload.get(field, 0)
+            result[field] = min(value, 3) if type(value) is int and value >= 0 else 0
+        reasons = payload.get('reasons', [])
+        result['reasons'] = sorted({r for r in reasons if isinstance(r, str) and r in INDEX_REASONS}) if isinstance(reasons, list) else []
+        return result
     accounts = payload.get("accounts") or []
     if not isinstance(accounts, list):
         raise ValueError("Expected a list of WeRSS account names")
@@ -99,6 +114,27 @@ def public_health(payload: dict) -> dict:
             "status": payload["status"], "authenticated": payload.get("authenticated") is True,
             "accounts": [excerpt(a) for a in accounts if isinstance(a, str)][:100],
             "platform_code": "200013" if str(payload.get("platform_code")) == "200013" else ""}
+
+
+INDEX_REASONS = {
+    'daily_limit': '当日公开检索预算已用完；保留缓存，次日继续',
+    'verification_required': '公开搜索访问受限或要求人工验证；已停止新请求并进入 24 小时冷却',
+    'http_error': '公开搜索服务返回 HTTP 错误',
+    'network_error': '公开搜索连接失败或超时',
+    'unrecognized_response': '公开搜索未返回可识别的文章列表',
+}
+
+
+def index_health_message(health):
+    health = public_health(health)
+    text = f"公开查询完成 {health['completed']}/{health['planned']} 项（复用缓存 {health['cached']} 项）。"
+    if health['failed']:
+        text += f" {health['failed']} 项失败。"
+    if health['deferred']:
+        text += f" {health['deferred']} 项暂缓。"
+    for reason in health['reasons']:
+        text += ' ' + INDEX_REASONS[reason] + '。'
+    return text
 
 
 def public_subscriptions(payload: dict) -> dict:
