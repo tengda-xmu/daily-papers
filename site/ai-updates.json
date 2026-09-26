@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "checked_at": "2026-09-26T13:17:50.245182+00:00",
+  "checked_at": "2026-09-26T13:37:48.343541+00:00",
   "entries": [
     {
       "title": "Accelerating vision-language models with LFM2.5-VL-DSpark",
@@ -13,8 +13,8 @@
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/LiquidAI/lfm2-5-vl-dspark",
       "categories": [
@@ -25,7 +25,23 @@
       ],
       "release_state": "unknown",
       "content_version": "a07e78930549cf642bd7a170e401dd2baa32454703f0ebdf17f37a337e0b64ff",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "LFM2.5-VL-DSpark：通过推测解码加速视觉语言模型",
+        "summary": "LiquidAI 已发布面向 LFM2.5-VL-3B 的实验性 DSpark 草稿模型，通过推测解码加速视觉语言推理。官方称其不改变输出质量，新增参数量为280M，相当于目标模型的8.9%。设备端与 H100 上的解码加速最高分别为3.13倍、2.66倍，端到端加速最高为2.62倍、2.27倍；首日支持 llama.cpp、MLX-VLM 和 SGLang 集成，适合关注响应速度的视觉语言任务。",
+        "application": "建议：科研迁移可考虑在设备图像问答、巡检图片分析等智能运维任务中评估推测解码的时延、内存开销与输出一致性。官方报告的是推理加速及输出质量不变，并非这些科研场景的已验证效果；所给节选未展示测试任务、配置或质量评估细节。",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "Today, we release an experimental DSpark draft model for our vision-language model (VLM) LFM2.5-VL-3B .",
+          "it adds a speculative decoding path that trades a minimal increase in memory footprint for a larger speedup without changing output quality.",
+          "Faster inference: decode speedups up to 3.13x on device and 2.66x on an H100, with end-to-end gains up to 2.62x and 2.27x.",
+          "Small memory cost: the drafter adds 280M parameters, 8.9% on top of the 3B target",
+          "Day-one support: LFM-compatible DSpark integrations for llama.cpp, MLX-VLM, and SGLang"
+        ],
+        "basis_url": "https://huggingface.co/blog/LiquidAI/lfm2-5-vl-dspark"
+      },
+      "analyzed_at": "2026-09-26T13:18:52.372632+00:00"
     },
     {
       "title": "LangSmith Engine v2: Red teaming and automated testing",
@@ -38,8 +54,8 @@
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/langsmith-engine-v2-redteam",
       "categories": [
@@ -77,8 +93,8 @@
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/langsmith-trajectories-tracing",
       "categories": [
@@ -214,8 +230,8 @@
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/langsmith-engine-agents-fine-tuning-trajectories",
       "categories": [
@@ -256,8 +272,8 @@
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/nvidia/how-to-use-nvidia-warp-and-mjwarp",
       "categories": [
@@ -269,7 +285,22 @@
       ],
       "release_state": "unknown",
       "content_version": "bf7c7e757fec3efb924dd57d58f80a748e6eb5849fe78a9999336043e699128c",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "使用 NVIDIA Warp 与 MjWarp 加速机器人仿真与学习工作流",
+        "summary": "原文介绍从经典 MuJoCo 的 CPU 仿真转向 GPU 大规模并行仿真的思路：学习负载扩大后，重点由单个仿真世界的运行速度转为同时运行的世界数量。基于 NVIDIA Warp 的 MuJoCo Warp（MJWarp）可将兼容的 MuJoCo 模型用于这一场景，通过批量推进仿真并使仿真与学习数据靠近设备，服务机器人开发、测试、控制及学习工作流。所给片段未包含具体操作、性能测试或新版本发布信息。",
+        "application": "建议：科研迁移可考虑将多环境机器人学习、控制策略测试及批量采样作为评估方向，先确认模型兼容性。官方原文说明了 GPU 批量仿真的能力与适用思路，但所给片段没有实验数据，不能据此认定具体加速幅度或科研任务效果已经验证。",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "Classic MuJoCo provides fast CPU-based robot simulation for developing, testing, and controlling robots and it can parallelize sampling across CPU cores.",
+          "But as learning workloads grow, the question shifts from how quickly one world can run to how many worlds can run at once.",
+          "GPU acceleration makes it possible to advance those worlds in large batches while keeping simulation and learning data close to the device.",
+          "MuJoCo Warp (MJWarp) , built on NVIDIA Warp , takes compatible MuJoCo models into that GPU-scale regime."
+        ],
+        "basis_url": "https://huggingface.co/blog/nvidia/how-to-use-nvidia-warp-and-mjwarp"
+      },
+      "analyzed_at": "2026-09-26T13:19:24.801283+00:00"
     },
     {
       "title": "Better prompt caching for GPT-6",
@@ -283,7 +314,7 @@
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/better-prompt-caching-for-gpt-6",
       "categories": [
@@ -320,7 +351,7 @@
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/introducing-gpt-6-sol-and-luna",
       "categories": [
@@ -357,7 +388,7 @@
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/parallel-cuts-time-and-cost-with-astra",
       "categories": [
@@ -382,8 +413,8 @@
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/evaleval-aisi",
       "categories": [
@@ -419,8 +450,8 @@
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/tokenizers-v1",
       "categories": [
@@ -432,7 +463,22 @@
       ],
       "release_state": "unknown",
       "content_version": "8caf3e61649010ee0db79a825f4303762c5092b95272b5dfe2f21098734dafc6",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "tokenizers v1：编码、解码与规模扩展的测量主题预告",
+        "summary": "【公告原文】tokenizers 即将推出的 v1 将重点关注性能，但给定片段未说明具体优化实现，也未确认正式发布。公告指出，分词过去通常不是机器学习流程的瓶颈；随着模型提速和工作负载扩大，海量数据训练、高并发服务及长输入的重复处理可能使分词环节供数不足，拖慢模型运行。标题涉及编码、解码与规模扩展的测量，但所给正文已截断，不能据此判断实测收益或版本兼容性。[摘要]",
+        "application": "建议：【科研迁移建议】在科研语料预处理、运维日志建模或长文本推理中，先测量分词耗时与模型等待时间，再判断是否值得关注 tokenizers v1；这不是官方已验证的应用效果。【官方效果边界】所给公告片段仅说明性能优化方向和潜在瓶颈场景，未提供可核验的性能结果。[摘要]",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "The tokenizer has not historically been the bottleneck within ML workflows.",
+          "As models become faster and workloads scale, that balance begins to shift.",
+          "Training on massive datasets, serving many concurrent requests, or repeatedly processing long inputs can put enough pressure on the tokenizer that it starves the model of data.",
+          "This is why we have chosen to heavily focus on performance for the upcoming version 1 of tokenizers."
+        ],
+        "basis_url": "https://huggingface.co/blog/tokenizers-v1"
+      },
+      "analyzed_at": "2026-09-26T13:23:15.057360+00:00"
     },
     {
       "title": "Introducing Astra for Law",
@@ -446,7 +492,7 @@
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/astra-for-law",
       "categories": [
@@ -470,8 +516,8 @@
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/langsmith-managed-deep-agents-whats-new",
       "categories": [
@@ -508,8 +554,8 @@
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/building-prod-with-jev-and-langgraph",
       "categories": [
@@ -524,7 +570,23 @@
       ],
       "release_state": "unknown",
       "content_version": "26d551cb60de9f7ebd6cb5abb6f04181d129a087396f72e9a385eec72fed4492",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "使用 Jev 与 LangGraph 构建生产应用",
+        "summary": "公告摘录称，TypeSafe AI 已于上周发布 Jev。与生成文本的传统大语言模型不同，Jev 输出可由代码直接执行后续动作的决策，强调由代码掌控工作流、AI 处理范围有限的结构化判断，适合关注明确决策而非自由文本生成的任务。摘录以通用模型处理简单判断时的成本与延迟问题引出其定位，但未提供 Jev 的性能测试，也未展示与 LangGraph 集成的具体方法。",
+        "application": "建议：科研迁移可探索将智能运维中的告警分流、结构设计中的候选方案筛选设为有限的结构化决策，并由代码控制后续流程；这些属于迁移设想，不是官方已验证效果。所给摘录仅说明产品定位，未提供准确率、成本、延迟或可靠性改善的实验证据。",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "Last week, TypeSafe AI released Jev, a new kind of model.",
+          "Unlike traditional LLMs, Jev doesn't generate text.",
+          "It makes decisions your code can act on directly",
+          "code owns the workflow and AI handles narrow, structured decisions.",
+          "You pay for that generality on every call, even when all you needed was a yes or no."
+        ],
+        "basis_url": "https://www.langchain.com/blog/building-prod-with-jev-and-langgraph"
+      },
+      "analyzed_at": "2026-09-26T13:28:16.306955+00:00"
     },
     {
       "title": "Your Agent Aced the Task. Will It Do It Again?",
@@ -537,8 +599,8 @@
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/ibm-research/altk-evolve-consistency",
       "categories": [
@@ -550,7 +612,21 @@
       ],
       "release_state": "unknown",
       "content_version": "e2aa93965073eb89141d8b8b2c1fd875d6b6d9aa7e154e171a2b056f4a4c8a9b",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "你的智能体成功完成了任务，下次还能做到吗？",
+        "summary": "【原文】所给片段以智能体在排练中成功、却在现场演示中选择不同路径并失败为例，指出同一任务重复执行时的可靠性问题。【本站解读】这一问题适用于需要稳定复现结果的智能体工作流评估，关注点不只是单次成功，而是再次执行能否成功。资料在开篇即被截断，未提供具体产品变化、发布内容、实现方法或测试结果，不能据此认定已有新功能上线或可靠性得到改善。",
+        "application": "建议：【科研迁移建议】可将同一任务的重复运行、执行路径差异和失败原因纳入科研智能体及智能运维工作流评估；这属于迁移设想，并非作者已验证结论。【官方已验证效果】所给片段未提供实验结果或效果数据，无法确认任何方案的改进效果。",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "Your Agent Aced the Task. Will It Do It Again?",
+          "Your agent works in rehearsal, but during the live demo, it takes a different path and fails the same task.",
+          "In production, it is a reliability problem:"
+        ],
+        "basis_url": "https://huggingface.co/blog/ibm-research/altk-evolve-consistency"
+      },
+      "analyzed_at": "2026-09-26T13:29:28.685191+00:00"
     },
     {
       "title": "How a researcher uses Codex and ChatGPT to search for new antimicrobial molecules",
@@ -564,7 +640,7 @@
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/using-codex-chatgpt-to-search-for-new-antimicrobials",
       "categories": [
@@ -590,7 +666,7 @@
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/introducing-chatgpt-financial-services",
       "categories": [
@@ -615,7 +691,7 @@
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/introducing-the-agents-api",
       "categories": [
@@ -659,8 +735,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-09-10",
       "release_state": "released",
@@ -691,7 +767,7 @@
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/research-acceleration-view-inside-openai",
       "categories": [
@@ -725,8 +801,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-08-21",
       "release_state": "preview",
@@ -769,8 +845,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-08-13",
       "release_state": "unknown",
@@ -813,8 +889,8 @@
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/own-your-intelligence",
       "categories": [
@@ -862,8 +938,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-07-31",
       "release_state": "unknown",
@@ -902,8 +978,8 @@
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/MultiverseComputingCAI/pruning-llms-like-a-physicist-block-removal-as-an",
       "categories": [
@@ -914,7 +990,23 @@
       ],
       "release_state": "unknown",
       "content_version": "f58d805f5d173472b35ea82b8c8b838626d67ef86246d9f46d19d6cf434cc144",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "像物理学家一样剪枝大语言模型：将块移除视为 Ising 优化问题",
+        "summary": "所给资料是团队技术文章节选，并非产品版本发布。文章讨论通过删除完整 transformer 块进行深度剪枝，以缩短模型、节省内存并加快推理，且可与量化、低秩压缩等技术结合[本站解读]。核心难点是选择删除哪些块：错误选择可能导致模型失效，各块的移除影响也存在相互依赖。标题提出 Ising 优化视角，但节选未展示具体建模、实验或量化效果。适用方向是大语言模型压缩与推理部署优化，不能据此认定已有可用产品或已验证性能。",
+        "application": "建议：科研迁移可考虑面向智能运维语言模型的部署压缩，研究块选择与量化组合下的任务准确性、推理时延和内存占用，此为迁移设想而非作者已验证结论。原文仅陈述块移除的一般收益；所给节选未提供 Ising 方法的实验结果，不能将其表述为官方已验证效果[本站解读]。",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "Pruning LLMs Like a Physicist: Block Removal as an Ising Optimization Problem",
+          "One of the cheapest ways to make a large language model faster is also one of the bluntest: delete whole transformer blocks.",
+          "Because the model literally gets shorter, block removal (also called depth pruning) buys predictable inference speedups on top of the memory savings, and it stacks cleanly with quantization, low-rank compression, and other techniques.",
+          "The hard part is deciding which blocks to cut.",
+          "Remove the wrong ones and the model collapses;"
+        ],
+        "basis_url": "https://huggingface.co/blog/MultiverseComputingCAI/pruning-llms-like-a-physicist-block-removal-as-an"
+      },
+      "analyzed_at": "2026-09-26T13:30:00.742111+00:00"
     },
     {
       "title": "How we contain Claude across products",
@@ -927,8 +1019,8 @@
       "source": "Anthropic 工程进展",
       "organization": "Anthropic 工程进展",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://www.anthropic.com/engineering/how-we-contain-claude",
       "categories": [
@@ -979,8 +1071,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-04-24",
       "release_state": "unknown",
@@ -1018,8 +1110,8 @@
       "source": "Anthropic 工程进展",
       "organization": "Anthropic 工程进展",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://www.anthropic.com/engineering/april-23-postmortem",
       "categories": [
@@ -1060,8 +1152,8 @@
       "source": "Anthropic 工程进展",
       "organization": "Anthropic 工程进展",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://www.anthropic.com/engineering/managed-agents",
       "categories": [
@@ -1104,8 +1196,8 @@
       "source": "Anthropic 工程进展",
       "organization": "Anthropic 工程进展",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://www.anthropic.com/engineering/claude-code-auto-mode",
       "categories": [
@@ -1146,8 +1238,8 @@
       "source": "Anthropic 工程进展",
       "organization": "Anthropic 工程进展",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://www.anthropic.com/engineering/harness-design-long-running-apps",
       "categories": [
@@ -1190,8 +1282,8 @@
       "source": "Anthropic 工程进展",
       "organization": "Anthropic 工程进展",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://www.anthropic.com/engineering/eval-awareness-browsecomp",
       "categories": [
@@ -1231,8 +1323,8 @@
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/transformers-llama-cpp-quants",
       "categories": [
@@ -1243,7 +1335,29 @@
       ],
       "release_state": "unknown",
       "content_version": "f6c29367798f02bba26b24ce1f453c62767d5fbf15d22635f5f589a2191aa2e4",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "Transformers 新增运行 llama.cpp 量化模型的支持",
+        "summary": "公告介绍在 Transformers 中新增高效运行 GGUF 模型的支持，让用户通过熟悉的 Transformers API，使用适合笔记本内存容量的模型检查点。原文给出的流程是从 Hub 选择 GGUF，通过 from_pretrained 加载，再在本机生成内容，适用于本地文本生成与模型试用。所给片段未提供具体版本、性能对比或完整评测，不能据此判断速度提升幅度。",
+        "application": "建议：科研迁移可尝试将适配本机内存的 GGUF 模型用于论文摘要草拟、文本标注原型及本地推理实验，并自行评估质量、延迟与内存占用。官方说明了本地加载与生成能力，但所给片段没有科研任务效果或性能量化验证；上述用途属于迁移建议，不是官方已验证效果。",
+        "requirements": "原文明示应选用适合笔记本内存容量的模型检查点，并通过 Transformers API 加载；具体版本、账号、费用及其他部署要求未明确，使用条件见官方文档。",
+        "steps": [
+          {
+            "text": "从 Hub 选择 GGUF 模型。",
+            "evidence": "Pick a GGUF from the Hub, load it with from_pretrained , and start generating on your own machine."
+          },
+          {
+            "text": "使用 from_pretrained 加载模型，并在本机开始生成。",
+            "evidence": "Pick a GGUF from the Hub, load it with from_pretrained , and start generating on your own machine."
+          }
+        ],
+        "evidence": [
+          "We're adding support for running GGUF models efficiently in transformers , so you can use checkpoints sized for your laptop's memory through the familiar transformers APIs.",
+          "Pick a GGUF from the Hub, load it with from_pretrained , and start generating on your own machine."
+        ],
+        "basis_url": "https://huggingface.co/blog/transformers-llama-cpp-quants"
+      },
+      "analyzed_at": "2026-09-26T13:31:16.761909+00:00"
     },
     {
       "categories": [
@@ -1264,8 +1378,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2025-12-01",
       "release_state": "unknown",
@@ -1299,8 +1413,8 @@
       "source": "Google DeepMind",
       "organization": "Google DeepMind",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://deepmind.google/blog/sima-2-an-agent-that-plays-reasons-and-learns-with-you-in-virtual-3d-worlds/",
       "categories": [
@@ -1332,8 +1446,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2025-09-29",
       "release_state": "preview",
@@ -1373,8 +1487,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2025-09-22",
       "release_state": "unknown",
@@ -1408,8 +1522,8 @@
       "source": "Google DeepMind",
       "organization": "Google DeepMind",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://deepmind.google/blog/alphaearth-foundations-helps-map-our-planet-in-unprecedented-detail/",
       "categories": [
@@ -1459,8 +1573,8 @@
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.26",
       "content_version": "2c301ad979bec74794359b1f3b91dd982ae0df5ac8eb3a23d4bb5ffee7850cf0",
@@ -1487,8 +1601,8 @@
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.25",
       "content_version": "3d1b4928b8c3335cb7d414163225c3bf46b6f383659b1bf193dd905d5d04e715",
@@ -1515,8 +1629,8 @@
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.24",
       "content_version": "054f5267296d2b7dcbde36c1419fec06b39b29393c62b8f3ccf34a84245984fb",
@@ -1558,8 +1672,8 @@
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.23",
       "content_version": "a52b6679b34bf97717ff70c47bc0a03c31a22ff7096585e0caf7ee4f987c2fc1",
@@ -1631,8 +1745,8 @@
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.22",
       "content_version": "5df7dcf5518ab4068163005fa68fa290f9f3e940e03bc11fe306bad11e64f09c",
@@ -1671,8 +1785,8 @@
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
       "provider": "official",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "verified_at": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "verified_at": "2026-09-26T13:37:48.343541+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.21",
       "content_version": "88406150221dc889d29c34e2ddf741e6292582b128ecb3997b4e46acba200406",
@@ -1720,8 +1834,8 @@
       "id": "openai",
       "name": "OpenAI 官方发布",
       "url": "https://openai.com/news/rss.xml",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "last_success": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "last_success": "2026-09-26T13:37:48.343541+00:00",
       "status": "ok",
       "count": 12
     },
@@ -1729,8 +1843,8 @@
       "id": "anthropic",
       "name": "Anthropic 工程进展",
       "url": "https://www.anthropic.com/engineering",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "last_success": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "last_success": "2026-09-26T13:37:48.343541+00:00",
       "status": "ok",
       "count": 6
     },
@@ -1738,17 +1852,17 @@
       "id": "deepmind",
       "name": "Google DeepMind",
       "url": "https://deepmind.google/blog/",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "last_success": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "last_success": "2026-09-26T13:37:48.343541+00:00",
       "status": "ok",
-      "count": 6
+      "count": 5
     },
     {
       "id": "qwen",
       "name": "Qwen 官方发布",
       "url": "https://qwen.ai/blog",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "last_success": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "last_success": "2026-09-26T13:37:48.343541+00:00",
       "status": "no_data",
       "count": 0
     },
@@ -1756,8 +1870,8 @@
       "id": "qwen-agent",
       "name": "Qwen-Agent 版本发布",
       "url": "https://github.com/QwenLM/Qwen-Agent/releases.atom",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "last_success": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "last_success": "2026-09-26T13:37:48.343541+00:00",
       "status": "ok",
       "count": 6
     },
@@ -1765,8 +1879,8 @@
       "id": "deepseek",
       "name": "DeepSeek 更新日志",
       "url": "https://api-docs.deepseek.com/updates/",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "last_success": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "last_success": "2026-09-26T13:37:48.343541+00:00",
       "status": "ok",
       "count": 8
     },
@@ -1774,8 +1888,8 @@
       "id": "huggingface",
       "name": "Hugging Face 官方博客",
       "url": "https://huggingface.co/blog/feed.xml",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "last_success": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "last_success": "2026-09-26T13:37:48.343541+00:00",
       "status": "ok",
       "count": 8
     },
@@ -1783,8 +1897,8 @@
       "id": "langchain",
       "name": "LangChain 官方发布",
       "url": "https://www.langchain.com/blog",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "last_success": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "last_success": "2026-09-26T13:37:48.343541+00:00",
       "status": "ok",
       "count": 6
     },
@@ -1792,8 +1906,8 @@
       "id": "agent-skills",
       "name": "Agent Skills 规范版本",
       "url": "https://github.com/agentskills/agentskills/releases.atom",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "last_success": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "last_success": "2026-09-26T13:37:48.343541+00:00",
       "status": "no_data",
       "count": 0
     },
@@ -1801,8 +1915,8 @@
       "id": "anthropic-skills",
       "name": "Anthropic Skills 版本",
       "url": "https://github.com/anthropics/skills/releases.atom",
-      "checked_at": "2026-09-26T13:17:50.245182+00:00",
-      "last_success": "2026-09-26T13:17:50.245182+00:00",
+      "checked_at": "2026-09-26T13:37:48.343541+00:00",
+      "last_success": "2026-09-26T13:37:48.343541+00:00",
       "status": "no_data",
       "count": 0
     },
@@ -1813,8 +1927,8 @@
       "status": "ok",
       "count": 7,
       "message": "公开索引已接入：读取 7 条文章元数据，本期 7 条。 微信后台文章列表受限；已通过公开搜索获取线索，链接为检索入口，非已核验全文。 最近同步：09-26 20:35（北京时间）。 公开查询完成 3/3 项（复用缓存 3 项）。 最近检查：09-26 20:35（北京时间）。",
-      "checked_at": "2026-09-26T13:17:50.149053+00:00",
-      "last_success": "2026-09-26T13:17:50.149053+00:00"
+      "checked_at": "2026-09-26T13:37:48.253127+00:00",
+      "last_success": "2026-09-26T13:37:48.253127+00:00"
     },
     {
       "id": "wechat-index",
@@ -1823,14 +1937,14 @@
       "status": "ok",
       "count": 1,
       "message": "公开索引已接入：本期读取 1 条公众号文章线索，按 35 个订阅筛选。 微信后台文章列表受限；线索提供公开检索入口，非已核验全文。 公开查询完成 3/3 项（复用缓存 3 项）。",
-      "checked_at": "2026-09-26T13:17:50.149053+00:00",
-      "last_success": "2026-09-26T13:17:50.149053+00:00"
+      "checked_at": "2026-09-26T13:37:48.253127+00:00",
+      "last_success": "2026-09-26T13:37:48.253127+00:00"
     },
     {
       "id": "xiaohongshu-leads",
       "name": "小红书 · 科研线索",
       "url": "https://www.xiaohongshu.com/",
-      "checked_at": "2026-09-26T13:17:50.149053+00:00",
+      "checked_at": "2026-09-26T13:37:48.253127+00:00",
       "last_success": "2026-09-26T13:01:23.691666+00:00",
       "cached": true,
       "status": "no_data",
@@ -1840,7 +1954,7 @@
       "id": "xiaohongshu-ai",
       "name": "小红书 · AI 前沿",
       "url": "https://www.xiaohongshu.com/",
-      "checked_at": "2026-09-26T13:17:50.149053+00:00",
+      "checked_at": "2026-09-26T13:37:48.253127+00:00",
       "last_success": "2026-09-26T13:01:23.691666+00:00",
       "cached": true,
       "status": "no_data",

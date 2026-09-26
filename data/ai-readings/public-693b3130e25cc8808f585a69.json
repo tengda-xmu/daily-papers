@@ -1,19 +1,19 @@
 {
   "id": "public-693b3130e25cc8808f585a69",
-  "content_version": "902382c65174ea8982c85df9125383af35fcb8a2b27b5ed80ff52b114072f70f",
+  "content_version": "8caf3e61649010ee0db79a825f4303762c5092b95272b5dfe2f21098734dafc6",
   "analysis": {
-    "title_zh": "tokenizers v1：编码、解码与规模扩展的测量",
-    "summary": "公告预告即将推出的 tokenizers v1 将重点优化性能，并未确认版本已经发布。原文指出，分词通常比模型计算轻量，但随着模型加速和工作负载扩大，可能成为数据供给瓶颈。重点涉及海量数据训练、高并发请求服务及长输入反复处理等任务。给定摘录已截断，尚未展示具体编码、解码改动、基准测试或加速幅度，因此不能仅凭标题认定性能收益已获验证。",
-    "application": "建议：科研迁移方面，可在大规模语料预处理、长文献批处理和高并发推理任务中，先测量分词耗时与模型等待数据的情况，再判断是否需要优化。以上属于迁移建议；官方摘录仅说明性能优化方向与潜在瓶颈，未提供已验证的优化效果。",
+    "title_zh": "tokenizers v1：编码、解码与规模扩展的测量主题预告",
+    "summary": "【公告原文】tokenizers 即将推出的 v1 将重点关注性能，但给定片段未说明具体优化实现，也未确认正式发布。公告指出，分词过去通常不是机器学习流程的瓶颈；随着模型提速和工作负载扩大，海量数据训练、高并发服务及长输入的重复处理可能使分词环节供数不足，拖慢模型运行。标题涉及编码、解码与规模扩展的测量，但所给正文已截断，不能据此判断实测收益或版本兼容性。[摘要]",
+    "application": "建议：【科研迁移建议】在科研语料预处理、运维日志建模或长文本推理中，先测量分词耗时与模型等待时间，再判断是否值得关注 tokenizers v1；这不是官方已验证的应用效果。【官方效果边界】所给公告片段仅说明性能优化方向和潜在瓶颈场景，未提供可核验的性能结果。[摘要]",
     "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
-      "This is why we have chosen to heavily focus on performance for the upcoming version 1 of tokenizers.",
-      "Compute-wise, tokenization is light compared to the heavy modeling happening in the rest of the pipeline.",
+      "The tokenizer has not historically been the bottleneck within ML workflows.",
       "As models become faster and workloads scale, that balance begins to shift.",
-      "Training on massive datasets, serving many concurrent requests, or repeatedly processing long inputs can put enough pressure on the tokenizer that it starves the model of data."
+      "Training on massive datasets, serving many concurrent requests, or repeatedly processing long inputs can put enough pressure on the tokenizer that it starves the model of data.",
+      "This is why we have chosen to heavily focus on performance for the upcoming version 1 of tokenizers."
     ],
     "basis_url": "https://huggingface.co/blog/tokenizers-v1"
   },
-  "analyzed_at": "2026-09-25T05:04:45.516630+00:00"
+  "analyzed_at": "2026-09-26T13:23:15.057360+00:00"
 }
