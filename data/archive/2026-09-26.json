@@ -108,7 +108,49 @@
       ],
       "analyzed_at": "2026-09-25T02:29:47.211040+00:00",
       "llm_model": "gpt-6-astra",
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "98f734cd6362",
+        "state": "failed",
+        "updated_at": "2026-09-26T13:49:20.297828+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 12,
+        "covered": 12,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "提供的文字提取未包含图1柱顶的六项具体数值；原页图像可清楚核实：函数拟合194×、Poisson 927×、Burgers PINN 11169×、反导数算子669×、多输入算子15.6×、圆柱尾流重建10.3×。已补充识读；这些数值用于核对各任务改善幅度及超过11000×的结论，不是原文件缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P4",
+            "detail": "图2原页图注与图面不一致：图注称横轴为第一、第二、第三提名次序，纵轴为六个实验中全体选择器一致的实验比例；实际横轴为六项实验，纵轴标为Average Agreement (%)，每组包含Top 1、Top 2、Top 3三根柱。原页缺少与实际图面一致的统计口径说明，不能据图注将柱高解释为六个实验中的一致实验比例；不影响识读其余内容。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P4",
+            "detail": "图3原页图注称其为总字数堆叠柱状图，代理包括Retriever；实际为分组柱状图，纵轴为Percentage of Total Text (%)，图例为User、Proposer、Critic、Result Analyst、Data Analyst，没有Retriever。缺少与实际图面一致的图注，且图面未给出绝对总字数或Retriever贡献，不能据此推算这些量；提案者占比最大仍与图面相符。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P7",
+            "detail": "图5图注称最优节点“highlighted with a star”，但原图未显示星形标记，实际用橙色边框及Current best图例标识Solution 000（Loss: 0.008）。这是原页图注与标记不一致，不是提取错误；不影响识别最优节点或理解最优解优先选择机制。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "文字提取仅保留算法1标题，遗漏原页完整34行伪代码。原图已读清并补充核对：人工批准评估契约、根解初始化、最优解与K−1个票选父节点、0–1条KB检索、N轮辩论且所有实验N=4、工程调试评估及最小评分冠军解返回。遗漏影响方法复现与辩论轮数识别，不是原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "出版日期信息的文字提取遗漏“Published online: 30 April 2026”；原页清晰可读，已补正为2026年4月30日。无公式或图号涉及，不影响实验结论，但影响出版信息完整性。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -240,7 +282,49 @@
       ],
       "analyzed_at": "2026-09-25T02:24:07.761436+00:00",
       "llm_model": "gpt-6-astra",
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "1993f4bea7ee",
+        "state": "failed",
+        "updated_at": "2026-09-26T13:47:40.187032+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 10,
+        "covered": 10,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "式(1)、式(2)提取文本中的“/C0”为减号识别错误；原页清楚显示 R_i=1−P_{f,i}，R_system=∏_i(1−P_{f,i})=∏_i R_i。螺栓预测段落中的“R2 ¼ 0:90”应为 R²=0.90。均为提取错误，不是原文件缺项；纠正后可正确理解可靠性与失效概率的互补关系及预测性能。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "式(3)文字提取中的“/C0”经原页核实为减号，完整公式为D_pre,j=(F_initial_pre,j−F_residual_pre,j)/F_initial_pre,j×100%。原页没有公式缺项；纠正明确退化量为初始与残余预紧力之差相对于初始值的百分比，避免误解预紧力损失定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "式(4)—(13)的提取文本存在运算符乱码：式(4)、(9)、(11)—(13)相关“/C1”为乘法点，式(5)“/C24”为分布符号“∼”，式(7)竖线表示特征拼接，式(8)竖线表示集合条件，式(10)为1−exp[−(z/λ)^k]。原页这些符号可读，无公式占位或缺项；纠正影响采样、特征构造与加权损失的准确理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "式(14)—(16)的减号、括号及方括号在提取文本中部分变为编码串。原页式(14)中间分支为(σ_crit,i−σ_y)/(σ_u−σ_y)，式(15)为四螺栓损失比例最大值截断至[0,1]，式(16)为DRS_i=1−(1−D_res,i)(1−D_pre,i)。原页公式完整，纠正后可明确两类退化的归一化与耦合方式。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "原页收稿和接受日期下方清楚印有“Published online: 14 August 2026”，所给文字提取遗漏该行。已核实发表日期为2026年8月14日；不涉及公式或图表，不影响技术结论，但影响文献出版时间记录。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P10",
+            "detail": "参考文献36原页仅列作者、题名、“IEEE Access, (2025)”，未提供卷号、页码或文章号，亦无DOI。属于原页书目信息缺项，不是无法识读；影响该不均衡数据综述的准确定位，不直接改变本文实验结果或公式结论。"
+          }
+        ]
+      }
     },
     {
       "source": "Nature Portfolio",
@@ -350,7 +434,79 @@
       ],
       "analyzed_at": "2026-09-25T02:30:53.857706+00:00",
       "llm_model": "gpt-6-astra",
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "c6e1f2105665",
+        "state": "failed",
+        "updated_at": "2026-09-26T13:51:02.003560+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 14,
+        "covered": 12,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "图1左下角纵轴原页清晰显示ΔR/R，文字提取为“/g39R/R”；已据图纠正为相对电阻变化。该错误影响传感器信号物理量的识别，不改变图示系统流程。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "式(1)前的自由度定义原页为q_i=[T_x,T_y,T_z,θ_x,θ_y,θ_z]^T，提取文本出现“/C138”等乱码；式(1)中的加速度为q̈，式(2)为ẋ=v_x、ẏ=v_y、ż=0。已按原页辨明括号、转置及时间导数，避免误读自由度与运动约束。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P3",
+            "detail": "原页式(3)确实仅写F_support=(C=0,F_external,F_internal)，等号右侧为约束及力的列表，未给出将这些量映射为支撑力的函数或具体运算关系。正文虽称可据此计算地面支撑力，本式本身不足以复现该计算及其消元过程；不推补缺失函数。其余公式和正文可读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "式(6)提取文本中的“Ri /C0 R0”已据原页纠正为R_i−R_0；完整公式为ΔR/R=(R_i−R_0)/R_0，i=1,2。原公式无缺项，该乱码影响相对电阻变化定义的识别。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "图3的“/g39R/R”“/g72”“k/g58”已据原页分别识别为ΔR/R、ε、kΩ。图3b横轴单位为mm/mm，图3c纵轴为Resistance (kΩ)。纠正避免将无量纲应变或电阻单位误读；正文自身写“−0.9 to 0 mm”的单位不一致保留于notes，不冒充提取错误。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "报警系统段落提取的“Python 12”在原页为Python后接上标参考文献12，并非Python版本号。已据原页纠正，避免错误记录系统软件版本；该处没有公式或图表缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "图4a、c纵轴提取为“/g39R/R (%)”，原页为ΔR/R (%)；图4e矩阵示意中的导数和系数符号已按原图识别为Ẋ=Θ(X)Ξ。原图无此处缺项，纠正后可辨明相对电阻百分比及SINDy的导数—候选函数库—稀疏系数关系。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "图5c纵轴提取文本“Resistance (M/g58)”已据原图纠正为Resistance (MΩ)，单位为兆欧。原图单位完整，提取乱码影响电阻量级识别，不属于原文件缺项。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P9",
+            "detail": "图5d右上网页表格的逐行通道名称与电阻值、右下数据字符串及背景电脑屏幕文字仍过小，无法全部可靠辨认。影响屏幕数据与传感通道对应关系的复核，不影响正文、图5主要流程、曲线和图注识读。未补写模糊内容，未确认原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "图7g—i的文字提取将坐标名称、类别及部分矩阵数值拆散，不能保留原矩阵布局。原图核实横轴为真实标签、纵轴为预测标签，纵轴自下向上为I—IV。图7h真实IV列按预测I—IV依次为0.04、0.07、0.11、0.78；图7i对应列为0、0、0.02、0.98。已按原图恢复方向及归属，避免交换真实类别与预测类别而误读分类性能。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P13",
+            "detail": "图8a上方两张实物照片中的电脑屏幕文字仍过小，无法逐字识别其中代码、日志或数值。其余主体流程、图8c曲线、节点标注、置信分数、示例解释及正文局限可读。该局部不清影响屏幕内容复核，不影响作者关于可行性和工程部署局限的结论识读；未认定原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "出版日期信息存在提取遗漏：原页在收稿、修回及接受日期下方清晰写有“Published online: 10 June 2026”，提供的文字未包含此行。已核实在线发表日期为2026年6月10日。此项影响出版时间记录，不影响实验结论；不涉及公式或图号。"
+          }
+        ]
+      }
     },
     {
       "source": "PubMed",
@@ -581,7 +737,39 @@
       ],
       "analyzed_at": "2026-09-25T01:58:10.589640+00:00",
       "llm_model": "gpt-6-astra",
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "fce3019b88c7",
+        "state": "failed",
+        "updated_at": "2026-09-26T13:40:07.825601+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 15,
+        "covered": 15,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页明确显示“Published online: 22 September 2026”，所附文字提取未包含该行。已据截图补核；影响出版信息完整性，不影响实验结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P3",
+            "detail": "图1d的“Bipartite system; Produce 5–8”示意中，两枚质粒均标为 SU2，未正确区分 SU1 与 SU2。原页可清楚核实这一标注问题；正文和图1b、图注明确完整体系由 SU1 与 SU2 重构。该问题影响双组分表达示意的准确性，不表示正文缺失，也不妨碍读取实验方案。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "图4d横轴标签在文字提取中次序错乱。原页从左至右为 AI-2 (untreated)、AI-2 (urea)、AI-2 (heat_sup.)、AI-2 (heat_pellet)、WT-T3 (urea)。已据截图纠正；无原文件缺项，错误影响热处理上清与沉淀组的对应关系，不改变 AI-2各组熔解温度约52 °C、WT约40 °C的总体比较。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "原页正文在76个设计的跨体系筛选中，将 GxhS-1列为53个高活性、2个中活性及19个无功能，合计74个，未交代其余2个设计的分类或排除情况。该缺项已由原页核实，影响分类分母及功能比例复核；不能擅自认定缺少的2个属于低活性。相关明细指向补充图14，本批未提供。"
+          }
+        ]
+      }
     },
     {
       "source": "Nature Portfolio",
@@ -679,7 +867,79 @@
       ],
       "analyzed_at": "2026-09-25T02:26:43.970609+00:00",
       "llm_model": "gpt-6-astra",
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "8c775dd0753c",
+        "state": "failed",
+        "updated_at": "2026-09-26T13:48:30.628901+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 13,
+        "covered": 13,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "作者行提取为“Y i x u a nS u n”，原页清楚显示“Yixuan Sun”，已纠正；不影响研究结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "性能评价段提取出现“/C22e”，原页为相对L2误差的数学符号，而非公式缺失或占位。应按原页识读该误差指标，不将乱码视为源文件缺项；不影响数据划分和模型任务结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "正文多处误差符号被提取为“/C22e”，等号亦有“¼”乱码；原页数值可读，平均应力误差为4.1%，邻孔晶粒为5.1%，最大wᴾ误差为57.9%。已按原页识读，不存在这些位置公式缺失的证据。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P3",
+            "detail": "原页图2a标注R²=0.900，正文描述同一全部测试晶粒的平均轴向应力预测时两次写R²=0.909，构成原页图文数值不一致，并非提取错误。无公式缺项；影响该指标的准确引用，但不改变其明显优于最大wᴾ预测的定性比较。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P4",
+            "detail": "已核对P4正文及P6图6a，原页存在回归筛查性能的图文不一致，非公式缺项：正文准确率79.8%、召回率81.1%、精确率51.8%、F1为63.2%；图6a分别为80.6%、81.8%、54.2%、65.2%。图内TN=155、FP=38、FN=10、TP=45，其计数支持图示指标。影响回归筛查性能的定量引用，但不改变其优于本批直接分类方案的比较结论；无法从本批确定正文数值的来源。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "性能总结段的误差符号和等号被提取为“/C22e”“¼”等乱码。原页可读，平均轴向应力对应4.1%、R²=0.909、ρ=0.951，最大wᴾ对应57.9%、R²=0.471、ρ=0.749。无源文件公式缺项；已按原页纠正，不影响性能比较结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "式(1)的循环积分、求和及γ上方时间导数点在文字提取中错位，并出现“/C1”；式(2)的求和上下限也被拆行。原页两式完整清楚：Δw_yᴾ(x)=∮_{第y个循环}(∑_{λ=1}^{Q}τ^λ(x,t)γ̇^λ(x,t))dt；w_kᴾ(x)=∑_{j=1}^{k}Δw_jᴾ(x)。无缺失项，已恢复滑移功循环积分及跨循环累加关系，避免误读疲劳指标定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "式(3)、式(4)的提取含“/C12”“/C0”“/C18/C19”等乱码。原页清楚显示式(3)的⊙运算符，以及式(4)指数中的负号、转置ᵀ、协方差逆矩阵Σ_k⁻¹和括号。已按原页恢复邻域聚合与高斯核权重表达；没有源文件缺项，不影响继续分析GMMConv方法。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "式(5)至式(7)及式(11)的提取出现“/C22e”“/C0”“/C1”、预测值帽号错位等问题。原页可完整辨认为相对L2误差、R²、Spearman秩相关及F1公式，式(8)至式(10)亦完整；已恢复减号、乘号、均值横线和预测值帽号。无公式缺项，受影响的是指标表达而非报告结果。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "日期信息的文字提取漏掉“Published online: 25 May 2026”。原页在收稿、接受日期下方清楚显示该行，已补录为2026年5月25日在线发表。属于提取遗漏，不是原文件缺项，不影响方法或实验结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "参考文献30原页末尾确为“J. Eng. Mater. Technol. 144 2021).”，年份缺少左括号，且未列页码或文章编号。该项属于原页书目信息缺项，不涉及公式或图号；影响引用完整性和文献定位，不影响本论文现有方法与结果的识读。未推补缺失内容。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "参考文献40在文字提取中出现作者名、题名和期刊名的异常逐字空格；原页可清楚识读题名“Graph neural network for predicting the effective properties of polycrystalline materials: A comprehensive analysis.”及期刊信息Comput. Mater. Sci. 230, 112461 (2023)。已按原页恢复正常分词；无原文件缺项，不影响研究结论。"
+          }
+        ]
+      }
     }
   ],
   "extended": [
@@ -793,7 +1053,69 @@
       ],
       "analyzed_at": "2026-09-25T02:28:16.014320+00:00",
       "llm_model": "gpt-6-astra",
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "11c3f08ec0e3",
+        "state": "failed",
+        "updated_at": "2026-09-27T02:25:27.806348+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 15,
+        "covered": 15,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "正文及图2图注中提取为“ν21 ¼/C0 0:5”的表达，经原页正文、图注和图2b对话交叉核实，应为 ν21 = −0.5。原页没有公式缺项；错误涉及等号、负号及小数点编码，若不纠正会妨碍辨认负泊松比逆向设计目标。预测值 ν21 = +0.27 与该目标值须区分。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "单性能目标示例的等号、负号及小数点存在提取乱码。原页清楚显示E33 = 0.01, 0.02, …；ν21 = −1.0, −0.5, 0.0, 0.5, 1.0。没有原文缺项；纠正后明确泊松比目标包含负值、零和正值，避免误读负泊松比设计范围。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "泊松比分析中的“ν21 ¼/C0 1”等乱码，经原页核实为ν21 = −1或−0.5，零目标为ν21 = 0。原文没有缺项；符号纠正关系到数据稀疏负泊松比区域的判断，以及零目标MAPE因除零而未定义的解释。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "式(1)及前文应变采样表达出现/C0、/C1等提取乱码。原页完整可读：0 ≤ ε ≤ 0.6，ε0 = 0，ε60 = 0.6；式(1)为σ = [σ(ε0), σ(ε1), …, σ(ε60)]。后文条件分布为p(indices | σ)。无公式缺项；纠正明确了61维应力条件向量及生成条件，不能将乱码视为原公式缺失。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "实验目标表达“ν ¼þ 0:5; 0; /C0 0:5”经原页核实为ν = +0.5, 0, −0.5；正文零泊松比表达为ν = 0。无原文件缺项。纠正等号、正负号及小数点编码，明确图7实验覆盖正、零、负三类泊松比。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "实验段ν21相关乱码经原页核实为ν21 = +0.5、ν21 = −0.5及ν21 = 0，分别描述压缩时横向膨胀、收缩及横向尺寸近乎不变。无原文件缺项。此纠正关系到图7c变形模式与目标符号的对应，不能将目标数值当作实测数值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "式(2)提取中的/C0、/C12等乱码，经原页核实为MAPE = (1/n)Σᵢ₌₁ⁿ |(Pᵢ−T)/T| × 100%。减号、绝对值及求和结构均完整，无原文缺项；纠正关系到负目标误差的非负计算及T = 0时公式未定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "式(3)根号、平方、上下标及减号在提取中乱码。原页为NRMSE = sqrt[(1/m)Σⱼ₌₁ᵐ(yⱼᵖʳᵉᵈ−yⱼᵗʳᵘᵉ)²]/[max(yᵗʳᵘᵉ)−min(yᵗʳᵘᵉ)]。无原文缺项；分母是目标应力极差，不是均值或最大值，影响曲线误差的归一化解释。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "基线参数提取中的5 × 10 /C0 3及区间乱码，经原页核实分别为学习率5×10⁻³、PSO速度限制[−0.5, 0.5]。式(3)续文条件为max(yᵗʳᵘᵉ) = min(yᵗʳᵘᵉ)时记NaN。原页无缺项；纠正影响基线复现及零极差曲线的处理。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "所给文字遗漏原页日期行“Published online: 04 June 2026”。原图可清楚核实，属于文字提取遗漏而非原文件缺项；影响出版元数据完整性，不影响模型或实验结论。"
+          }
+        ]
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -989,7 +1311,21 @@
       ],
       "analyzed_at": "2026-09-25T17:13:32.705936+00:00",
       "llm_model": "gpt-6-astra",
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "analysis_references": {},
+      "analysis_material_version": "512e76f8412042d04abac7af8ac6b8ba0c6113ce7a214e423c53a570fdba86b3",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "533cdd3a344d",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-09-26T13:35:01.878817+00:00",
+        "basis": "abstract",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Nature Portfolio",
@@ -1099,7 +1435,29 @@
       ],
       "analyzed_at": "2026-09-25T02:25:10.735925+00:00",
       "llm_model": "gpt-6-astra",
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "f530449d449a",
+        "state": "failed",
+        "updated_at": "2026-09-26T14:07:37.200160+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 33,
+        "covered": 33,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页清楚载有“Published online: 14 August 2026”，所附文字提取遗漏该行，现已核对补正。此项为出版信息遗漏，不涉及公式或图号，不影响研究结论；并非原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P23",
+            "detail": "数据与代码可获取性段落的DOI被文字提取分别拼接了上标参考文献号64和65。原页已核实应为10.5281/zenodo.15586440及10.5281/zenodo.21470309，而非末尾含4064或0965的字符串。无公式或图号涉及；影响资源定位与复现，不改变研究结果，不属于原文件缺项。"
+          }
+        ]
+      }
     },
     {
       "source": "OpenAlex",
@@ -1225,7 +1583,49 @@
       ],
       "analyzed_at": "2026-09-25T02:00:36.052480+00:00",
       "llm_model": "gpt-6-astra",
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "709bdb82c0b5",
+        "state": "failed",
+        "updated_at": "2026-09-26T14:06:36.086858+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 11,
+        "covered": 11,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "页底未编号的形变势公式在文字提取中出现“E/C0 Eref”等乱码。原页可读为E_DP=d(E−E_ref)/d(ln V)，分子为E与参考能量E_ref之差。已依据截图纠正；此错误影响形变势定义的理解，不是原文件公式缺失。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P6",
+            "detail": "表2原页的“Average atomic mass”列仅列144、102、29、46，表头和表下注释未注明该列单位。现有数值可识读，但单位缺项使平均原子质量的量纲记录不完整；不影响直接识读同表PF、热导率和ZT。不得自行补写单位。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "未编号电子输运及散射公式的提取文字含/C0、/C138等编码乱码。原页可辨认能量差中的减号、−∂fμ/∂ε_nk、δ函数、求和与绝对值平方；IMP分母包含(εsκ0)²(L_D⁻²+|k′−k|²)²，POP介电因子为(1/ε∞−1/εs)。已按图识读，不是原文件公式缺失；乱码会妨碍复现输运和散射模型。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "承接P8的POP公式符号说明中，提取文字把高频介电常数写为ε1；原页清楚标为ε∞，与P8公式一致。已纠正，影响POP散射参数识别。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "出版日期段的文字提取遗漏“Published online: 31 August 2026”，原页可读，已补记为2026年8月31日在线发表。不涉及公式或图号，不影响材料性能结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P10",
+            "detail": "参考文献70原页仅有作者及“To be submitted.”，缺少题名、年份和公开获取标识。该条目被P8用于引用TransOpt 3.0，因此无法仅凭此引用追溯完整的软件方法说明；不代表P8现有散射公式缺失，也不直接否定其性能预测。"
+          }
+        ]
+      }
     },
     {
       "source": "OpenAlex",
@@ -1359,7 +1759,21 @@
       ],
       "analyzed_at": "2026-09-25T17:22:27.456132+00:00",
       "llm_model": "gpt-6-astra",
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "analysis_references": {},
+      "analysis_material_version": "a81f517482fe1627fe766f011e910f0cc3dfc8828d3d8a8f0fe9ae1adec2d9bf",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "9f42a1c20a27",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-09-26T13:35:15.740129+00:00",
+        "basis": "abstract",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "papers": [
@@ -1467,7 +1881,49 @@
       ],
       "analyzed_at": "2026-09-25T02:29:47.211040+00:00",
       "llm_model": "gpt-6-astra",
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "98f734cd6362",
+        "state": "failed",
+        "updated_at": "2026-09-26T13:49:20.297828+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 12,
+        "covered": 12,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "提供的文字提取未包含图1柱顶的六项具体数值；原页图像可清楚核实：函数拟合194×、Poisson 927×、Burgers PINN 11169×、反导数算子669×、多输入算子15.6×、圆柱尾流重建10.3×。已补充识读；这些数值用于核对各任务改善幅度及超过11000×的结论，不是原文件缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P4",
+            "detail": "图2原页图注与图面不一致：图注称横轴为第一、第二、第三提名次序，纵轴为六个实验中全体选择器一致的实验比例；实际横轴为六项实验，纵轴标为Average Agreement (%)，每组包含Top 1、Top 2、Top 3三根柱。原页缺少与实际图面一致的统计口径说明，不能据图注将柱高解释为六个实验中的一致实验比例；不影响识读其余内容。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P4",
+            "detail": "图3原页图注称其为总字数堆叠柱状图，代理包括Retriever；实际为分组柱状图，纵轴为Percentage of Total Text (%)，图例为User、Proposer、Critic、Result Analyst、Data Analyst，没有Retriever。缺少与实际图面一致的图注，且图面未给出绝对总字数或Retriever贡献，不能据此推算这些量；提案者占比最大仍与图面相符。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P7",
+            "detail": "图5图注称最优节点“highlighted with a star”，但原图未显示星形标记，实际用橙色边框及Current best图例标识Solution 000（Loss: 0.008）。这是原页图注与标记不一致，不是提取错误；不影响识别最优节点或理解最优解优先选择机制。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "文字提取仅保留算法1标题，遗漏原页完整34行伪代码。原图已读清并补充核对：人工批准评估契约、根解初始化、最优解与K−1个票选父节点、0–1条KB检索、N轮辩论且所有实验N=4、工程调试评估及最小评分冠军解返回。遗漏影响方法复现与辩论轮数识别，不是原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "出版日期信息的文字提取遗漏“Published online: 30 April 2026”；原页清晰可读，已补正为2026年4月30日。无公式或图号涉及，不影响实验结论，但影响出版信息完整性。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -1599,7 +2055,49 @@
       ],
       "analyzed_at": "2026-09-25T02:24:07.761436+00:00",
       "llm_model": "gpt-6-astra",
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "1993f4bea7ee",
+        "state": "failed",
+        "updated_at": "2026-09-26T13:47:40.187032+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 10,
+        "covered": 10,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "式(1)、式(2)提取文本中的“/C0”为减号识别错误；原页清楚显示 R_i=1−P_{f,i}，R_system=∏_i(1−P_{f,i})=∏_i R_i。螺栓预测段落中的“R2 ¼ 0:90”应为 R²=0.90。均为提取错误，不是原文件缺项；纠正后可正确理解可靠性与失效概率的互补关系及预测性能。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "式(3)文字提取中的“/C0”经原页核实为减号，完整公式为D_pre,j=(F_initial_pre,j−F_residual_pre,j)/F_initial_pre,j×100%。原页没有公式缺项；纠正明确退化量为初始与残余预紧力之差相对于初始值的百分比，避免误解预紧力损失定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "式(4)—(13)的提取文本存在运算符乱码：式(4)、(9)、(11)—(13)相关“/C1”为乘法点，式(5)“/C24”为分布符号“∼”，式(7)竖线表示特征拼接，式(8)竖线表示集合条件，式(10)为1−exp[−(z/λ)^k]。原页这些符号可读，无公式占位或缺项；纠正影响采样、特征构造与加权损失的准确理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "式(14)—(16)的减号、括号及方括号在提取文本中部分变为编码串。原页式(14)中间分支为(σ_crit,i−σ_y)/(σ_u−σ_y)，式(15)为四螺栓损失比例最大值截断至[0,1]，式(16)为DRS_i=1−(1−D_res,i)(1−D_pre,i)。原页公式完整，纠正后可明确两类退化的归一化与耦合方式。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "原页收稿和接受日期下方清楚印有“Published online: 14 August 2026”，所给文字提取遗漏该行。已核实发表日期为2026年8月14日；不涉及公式或图表，不影响技术结论，但影响文献出版时间记录。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P10",
+            "detail": "参考文献36原页仅列作者、题名、“IEEE Access, (2025)”，未提供卷号、页码或文章号，亦无DOI。属于原页书目信息缺项，不是无法识读；影响该不均衡数据综述的准确定位，不直接改变本文实验结果或公式结论。"
+          }
+        ]
+      }
     },
     {
       "source": "Nature Portfolio",
@@ -1709,7 +2207,79 @@
       ],
       "analyzed_at": "2026-09-25T02:30:53.857706+00:00",
       "llm_model": "gpt-6-astra",
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "c6e1f2105665",
+        "state": "failed",
+        "updated_at": "2026-09-26T13:51:02.003560+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 14,
+        "covered": 12,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "图1左下角纵轴原页清晰显示ΔR/R，文字提取为“/g39R/R”；已据图纠正为相对电阻变化。该错误影响传感器信号物理量的识别，不改变图示系统流程。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "式(1)前的自由度定义原页为q_i=[T_x,T_y,T_z,θ_x,θ_y,θ_z]^T，提取文本出现“/C138”等乱码；式(1)中的加速度为q̈，式(2)为ẋ=v_x、ẏ=v_y、ż=0。已按原页辨明括号、转置及时间导数，避免误读自由度与运动约束。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P3",
+            "detail": "原页式(3)确实仅写F_support=(C=0,F_external,F_internal)，等号右侧为约束及力的列表，未给出将这些量映射为支撑力的函数或具体运算关系。正文虽称可据此计算地面支撑力，本式本身不足以复现该计算及其消元过程；不推补缺失函数。其余公式和正文可读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "式(6)提取文本中的“Ri /C0 R0”已据原页纠正为R_i−R_0；完整公式为ΔR/R=(R_i−R_0)/R_0，i=1,2。原公式无缺项，该乱码影响相对电阻变化定义的识别。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "图3的“/g39R/R”“/g72”“k/g58”已据原页分别识别为ΔR/R、ε、kΩ。图3b横轴单位为mm/mm，图3c纵轴为Resistance (kΩ)。纠正避免将无量纲应变或电阻单位误读；正文自身写“−0.9 to 0 mm”的单位不一致保留于notes，不冒充提取错误。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "报警系统段落提取的“Python 12”在原页为Python后接上标参考文献12，并非Python版本号。已据原页纠正，避免错误记录系统软件版本；该处没有公式或图表缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "图4a、c纵轴提取为“/g39R/R (%)”，原页为ΔR/R (%)；图4e矩阵示意中的导数和系数符号已按原图识别为Ẋ=Θ(X)Ξ。原图无此处缺项，纠正后可辨明相对电阻百分比及SINDy的导数—候选函数库—稀疏系数关系。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "图5c纵轴提取文本“Resistance (M/g58)”已据原图纠正为Resistance (MΩ)，单位为兆欧。原图单位完整，提取乱码影响电阻量级识别，不属于原文件缺项。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P9",
+            "detail": "图5d右上网页表格的逐行通道名称与电阻值、右下数据字符串及背景电脑屏幕文字仍过小，无法全部可靠辨认。影响屏幕数据与传感通道对应关系的复核，不影响正文、图5主要流程、曲线和图注识读。未补写模糊内容，未确认原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "图7g—i的文字提取将坐标名称、类别及部分矩阵数值拆散，不能保留原矩阵布局。原图核实横轴为真实标签、纵轴为预测标签，纵轴自下向上为I—IV。图7h真实IV列按预测I—IV依次为0.04、0.07、0.11、0.78；图7i对应列为0、0、0.02、0.98。已按原图恢复方向及归属，避免交换真实类别与预测类别而误读分类性能。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P13",
+            "detail": "图8a上方两张实物照片中的电脑屏幕文字仍过小，无法逐字识别其中代码、日志或数值。其余主体流程、图8c曲线、节点标注、置信分数、示例解释及正文局限可读。该局部不清影响屏幕内容复核，不影响作者关于可行性和工程部署局限的结论识读；未认定原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "出版日期信息存在提取遗漏：原页在收稿、修回及接受日期下方清晰写有“Published online: 10 June 2026”，提供的文字未包含此行。已核实在线发表日期为2026年6月10日。此项影响出版时间记录，不影响实验结论；不涉及公式或图号。"
+          }
+        ]
+      }
     },
     {
       "source": "PubMed",
@@ -1940,7 +2510,39 @@
       ],
       "analyzed_at": "2026-09-25T01:58:10.589640+00:00",
       "llm_model": "gpt-6-astra",
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "fce3019b88c7",
+        "state": "failed",
+        "updated_at": "2026-09-26T13:40:07.825601+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 15,
+        "covered": 15,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页明确显示“Published online: 22 September 2026”，所附文字提取未包含该行。已据截图补核；影响出版信息完整性，不影响实验结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P3",
+            "detail": "图1d的“Bipartite system; Produce 5–8”示意中，两枚质粒均标为 SU2，未正确区分 SU1 与 SU2。原页可清楚核实这一标注问题；正文和图1b、图注明确完整体系由 SU1 与 SU2 重构。该问题影响双组分表达示意的准确性，不表示正文缺失，也不妨碍读取实验方案。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "图4d横轴标签在文字提取中次序错乱。原页从左至右为 AI-2 (untreated)、AI-2 (urea)、AI-2 (heat_sup.)、AI-2 (heat_pellet)、WT-T3 (urea)。已据截图纠正；无原文件缺项，错误影响热处理上清与沉淀组的对应关系，不改变 AI-2各组熔解温度约52 °C、WT约40 °C的总体比较。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "原页正文在76个设计的跨体系筛选中，将 GxhS-1列为53个高活性、2个中活性及19个无功能，合计74个，未交代其余2个设计的分类或排除情况。该缺项已由原页核实，影响分类分母及功能比例复核；不能擅自认定缺少的2个属于低活性。相关明细指向补充图14，本批未提供。"
+          }
+        ]
+      }
     },
     {
       "source": "Nature Portfolio",
@@ -2038,7 +2640,79 @@
       ],
       "analyzed_at": "2026-09-25T02:26:43.970609+00:00",
       "llm_model": "gpt-6-astra",
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "8c775dd0753c",
+        "state": "failed",
+        "updated_at": "2026-09-26T13:48:30.628901+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 13,
+        "covered": 13,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "作者行提取为“Y i x u a nS u n”，原页清楚显示“Yixuan Sun”，已纠正；不影响研究结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "性能评价段提取出现“/C22e”，原页为相对L2误差的数学符号，而非公式缺失或占位。应按原页识读该误差指标，不将乱码视为源文件缺项；不影响数据划分和模型任务结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "正文多处误差符号被提取为“/C22e”，等号亦有“¼”乱码；原页数值可读，平均应力误差为4.1%，邻孔晶粒为5.1%，最大wᴾ误差为57.9%。已按原页识读，不存在这些位置公式缺失的证据。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P3",
+            "detail": "原页图2a标注R²=0.900，正文描述同一全部测试晶粒的平均轴向应力预测时两次写R²=0.909，构成原页图文数值不一致，并非提取错误。无公式缺项；影响该指标的准确引用，但不改变其明显优于最大wᴾ预测的定性比较。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P4",
+            "detail": "已核对P4正文及P6图6a，原页存在回归筛查性能的图文不一致，非公式缺项：正文准确率79.8%、召回率81.1%、精确率51.8%、F1为63.2%；图6a分别为80.6%、81.8%、54.2%、65.2%。图内TN=155、FP=38、FN=10、TP=45，其计数支持图示指标。影响回归筛查性能的定量引用，但不改变其优于本批直接分类方案的比较结论；无法从本批确定正文数值的来源。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "性能总结段的误差符号和等号被提取为“/C22e”“¼”等乱码。原页可读，平均轴向应力对应4.1%、R²=0.909、ρ=0.951，最大wᴾ对应57.9%、R²=0.471、ρ=0.749。无源文件公式缺项；已按原页纠正，不影响性能比较结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "式(1)的循环积分、求和及γ上方时间导数点在文字提取中错位，并出现“/C1”；式(2)的求和上下限也被拆行。原页两式完整清楚：Δw_yᴾ(x)=∮_{第y个循环}(∑_{λ=1}^{Q}τ^λ(x,t)γ̇^λ(x,t))dt；w_kᴾ(x)=∑_{j=1}^{k}Δw_jᴾ(x)。无缺失项，已恢复滑移功循环积分及跨循环累加关系，避免误读疲劳指标定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "式(3)、式(4)的提取含“/C12”“/C0”“/C18/C19”等乱码。原页清楚显示式(3)的⊙运算符，以及式(4)指数中的负号、转置ᵀ、协方差逆矩阵Σ_k⁻¹和括号。已按原页恢复邻域聚合与高斯核权重表达；没有源文件缺项，不影响继续分析GMMConv方法。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "式(5)至式(7)及式(11)的提取出现“/C22e”“/C0”“/C1”、预测值帽号错位等问题。原页可完整辨认为相对L2误差、R²、Spearman秩相关及F1公式，式(8)至式(10)亦完整；已恢复减号、乘号、均值横线和预测值帽号。无公式缺项，受影响的是指标表达而非报告结果。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "日期信息的文字提取漏掉“Published online: 25 May 2026”。原页在收稿、接受日期下方清楚显示该行，已补录为2026年5月25日在线发表。属于提取遗漏，不是原文件缺项，不影响方法或实验结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "参考文献30原页末尾确为“J. Eng. Mater. Technol. 144 2021).”，年份缺少左括号，且未列页码或文章编号。该项属于原页书目信息缺项，不涉及公式或图号；影响引用完整性和文献定位，不影响本论文现有方法与结果的识读。未推补缺失内容。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "参考文献40在文字提取中出现作者名、题名和期刊名的异常逐字空格；原页可清楚识读题名“Graph neural network for predicting the effective properties of polycrystalline materials: A comprehensive analysis.”及期刊信息Comput. Mater. Sci. 230, 112461 (2023)。已按原页恢复正常分词；无原文件缺项，不影响研究结论。"
+          }
+        ]
+      }
     },
     {
       "source": "Nature Portfolio",
@@ -2150,7 +2824,69 @@
       ],
       "analyzed_at": "2026-09-25T02:28:16.014320+00:00",
       "llm_model": "gpt-6-astra",
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "11c3f08ec0e3",
+        "state": "failed",
+        "updated_at": "2026-09-27T02:25:27.806348+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 15,
+        "covered": 15,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "正文及图2图注中提取为“ν21 ¼/C0 0:5”的表达，经原页正文、图注和图2b对话交叉核实，应为 ν21 = −0.5。原页没有公式缺项；错误涉及等号、负号及小数点编码，若不纠正会妨碍辨认负泊松比逆向设计目标。预测值 ν21 = +0.27 与该目标值须区分。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "单性能目标示例的等号、负号及小数点存在提取乱码。原页清楚显示E33 = 0.01, 0.02, …；ν21 = −1.0, −0.5, 0.0, 0.5, 1.0。没有原文缺项；纠正后明确泊松比目标包含负值、零和正值，避免误读负泊松比设计范围。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "泊松比分析中的“ν21 ¼/C0 1”等乱码，经原页核实为ν21 = −1或−0.5，零目标为ν21 = 0。原文没有缺项；符号纠正关系到数据稀疏负泊松比区域的判断，以及零目标MAPE因除零而未定义的解释。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "式(1)及前文应变采样表达出现/C0、/C1等提取乱码。原页完整可读：0 ≤ ε ≤ 0.6，ε0 = 0，ε60 = 0.6；式(1)为σ = [σ(ε0), σ(ε1), …, σ(ε60)]。后文条件分布为p(indices | σ)。无公式缺项；纠正明确了61维应力条件向量及生成条件，不能将乱码视为原公式缺失。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "实验目标表达“ν ¼þ 0:5; 0; /C0 0:5”经原页核实为ν = +0.5, 0, −0.5；正文零泊松比表达为ν = 0。无原文件缺项。纠正等号、正负号及小数点编码，明确图7实验覆盖正、零、负三类泊松比。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "实验段ν21相关乱码经原页核实为ν21 = +0.5、ν21 = −0.5及ν21 = 0，分别描述压缩时横向膨胀、收缩及横向尺寸近乎不变。无原文件缺项。此纠正关系到图7c变形模式与目标符号的对应，不能将目标数值当作实测数值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "式(2)提取中的/C0、/C12等乱码，经原页核实为MAPE = (1/n)Σᵢ₌₁ⁿ |(Pᵢ−T)/T| × 100%。减号、绝对值及求和结构均完整，无原文缺项；纠正关系到负目标误差的非负计算及T = 0时公式未定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "式(3)根号、平方、上下标及减号在提取中乱码。原页为NRMSE = sqrt[(1/m)Σⱼ₌₁ᵐ(yⱼᵖʳᵉᵈ−yⱼᵗʳᵘᵉ)²]/[max(yᵗʳᵘᵉ)−min(yᵗʳᵘᵉ)]。无原文缺项；分母是目标应力极差，不是均值或最大值，影响曲线误差的归一化解释。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "基线参数提取中的5 × 10 /C0 3及区间乱码，经原页核实分别为学习率5×10⁻³、PSO速度限制[−0.5, 0.5]。式(3)续文条件为max(yᵗʳᵘᵉ) = min(yᵗʳᵘᵉ)时记NaN。原页无缺项；纠正影响基线复现及零极差曲线的处理。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "所给文字遗漏原页日期行“Published online: 04 June 2026”。原图可清楚核实，属于文字提取遗漏而非原文件缺项；影响出版元数据完整性，不影响模型或实验结论。"
+          }
+        ]
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -2346,7 +3082,21 @@
       ],
       "analyzed_at": "2026-09-25T17:13:32.705936+00:00",
       "llm_model": "gpt-6-astra",
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "analysis_references": {},
+      "analysis_material_version": "512e76f8412042d04abac7af8ac6b8ba0c6113ce7a214e423c53a570fdba86b3",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "533cdd3a344d",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-09-26T13:35:01.878817+00:00",
+        "basis": "abstract",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Nature Portfolio",
@@ -2456,7 +3206,29 @@
       ],
       "analyzed_at": "2026-09-25T02:25:10.735925+00:00",
       "llm_model": "gpt-6-astra",
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "f530449d449a",
+        "state": "failed",
+        "updated_at": "2026-09-26T14:07:37.200160+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 33,
+        "covered": 33,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页清楚载有“Published online: 14 August 2026”，所附文字提取遗漏该行，现已核对补正。此项为出版信息遗漏，不涉及公式或图号，不影响研究结论；并非原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P23",
+            "detail": "数据与代码可获取性段落的DOI被文字提取分别拼接了上标参考文献号64和65。原页已核实应为10.5281/zenodo.15586440及10.5281/zenodo.21470309，而非末尾含4064或0965的字符串。无公式或图号涉及；影响资源定位与复现，不改变研究结果，不属于原文件缺项。"
+          }
+        ]
+      }
     },
     {
       "source": "OpenAlex",
@@ -2582,7 +3354,49 @@
       ],
       "analyzed_at": "2026-09-25T02:00:36.052480+00:00",
       "llm_model": "gpt-6-astra",
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "709bdb82c0b5",
+        "state": "failed",
+        "updated_at": "2026-09-26T14:06:36.086858+00:00",
+        "basis": "full_text",
+        "reason": "",
+        "total": 11,
+        "covered": 11,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "页底未编号的形变势公式在文字提取中出现“E/C0 Eref”等乱码。原页可读为E_DP=d(E−E_ref)/d(ln V)，分子为E与参考能量E_ref之差。已依据截图纠正；此错误影响形变势定义的理解，不是原文件公式缺失。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P6",
+            "detail": "表2原页的“Average atomic mass”列仅列144、102、29、46，表头和表下注释未注明该列单位。现有数值可识读，但单位缺项使平均原子质量的量纲记录不完整；不影响直接识读同表PF、热导率和ZT。不得自行补写单位。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "未编号电子输运及散射公式的提取文字含/C0、/C138等编码乱码。原页可辨认能量差中的减号、−∂fμ/∂ε_nk、δ函数、求和与绝对值平方；IMP分母包含(εsκ0)²(L_D⁻²+|k′−k|²)²，POP介电因子为(1/ε∞−1/εs)。已按图识读，不是原文件公式缺失；乱码会妨碍复现输运和散射模型。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "承接P8的POP公式符号说明中，提取文字把高频介电常数写为ε1；原页清楚标为ε∞，与P8公式一致。已纠正，影响POP散射参数识别。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "出版日期段的文字提取遗漏“Published online: 31 August 2026”，原页可读，已补记为2026年8月31日在线发表。不涉及公式或图号，不影响材料性能结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P10",
+            "detail": "参考文献70原页仅有作者及“To be submitted.”，缺少题名、年份和公开获取标识。该条目被P8用于引用TransOpt 3.0，因此无法仅凭此引用追溯完整的软件方法说明；不代表P8现有散射公式缺失，也不直接否定其性能预测。"
+          }
+        ]
+      }
     },
     {
       "source": "OpenAlex",
@@ -2716,7 +3530,21 @@
       ],
       "analyzed_at": "2026-09-25T17:22:27.456132+00:00",
       "llm_model": "gpt-6-astra",
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "analysis_references": {},
+      "analysis_material_version": "a81f517482fe1627fe766f011e910f0cc3dfc8828d3d8a8f0fe9ae1adec2d9bf",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "9f42a1c20a27",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-09-26T13:35:15.740129+00:00",
+        "basis": "abstract",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "source_status": {
