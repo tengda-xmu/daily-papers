@@ -5,6 +5,7 @@ import hashlib
 import json
 import os
 import re
+import unicodedata
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Iterable, Sequence
@@ -17,6 +18,8 @@ from src.sources.google_scholar import GoogleScholarAdapter
 from src.sources.researchgate import ResearchGateAdapter
 from src.sources.wechat import WeChatAdapter
 from src.sources.cns_journals import CNSJournalAdapter
+from src.sources.conferences import ConferenceAdapter
+from src.conferences import info as conference_info
 from src.sources.public_literature import (
     ArxivAdapter, CrossrefAdapter, OpenAlexAdapter, PubMedAdapter,
     SemanticScholarAdapter, WebOfScienceAdapter,
@@ -57,21 +60,43 @@ TOPICS = {
 
 
 def normalize_title(title: str) -> str:
-    return re.sub(r"[^a-z0-9\u4e00-\u9fff]+", "", str(title or "").casefold())
+    value = unicodedata.normalize('NFKC', str(title or '')).replace('°', 'deg')
+    return re.sub(r"[^a-z0-9\u4e00-\u9fff]+", "", value.casefold())
 
 
 def _identities(record: RawRecord) -> set[tuple[str, str]]:
     keys = set()
     if record.doi:
         keys.add(("doi", record.doi))
-    for value in (record.source_id, record.landing_url, record.oa_url):
+    links = [record.source_id, record.landing_url, record.oa_url]
+    metadata = record.raw_metadata
+    for _ in range(8):
+        if not isinstance(metadata, dict):
+            break
+        links.extend(v for v in metadata.get('source_links', []) if isinstance(v, str))
+        metadata = metadata.get('raw_metadata')
+    for value in links:
         match = re.search(r"arxiv\.org/(?:abs|pdf)/(\d{4}\.\d{4,5}|[a-z.-]+/\d{7})(?:v\d+)?", value, re.I)
         if match:
             keys.add(("arxiv", match.group(1).lower()))
+        match = re.search(r'https://openreview\.net/(?:forum|pdf)\?id=([\w-]+)(?:&|$)', value)
+        if match:
+            keys.add(('openreview', match.group(1)))
     normalized = normalize_title(record.title)
     if normalized:
         authors = "|".join(sorted(normalize_title(name) for name in record.authors))
         keys.add(("title_authors", normalized + "|" + authors))
+        # Official proceedings often use "Family, Given" while arXiv uses
+        # "Given Family". Require the entire title and author list to agree.
+        signatures = []
+        for author in record.authors:
+            parts = re.findall(r'[^\W\d_]+', author, re.UNICODE)
+            if len(parts) < 2:
+                break
+            family, given = (parts[0], parts[1]) if ',' in author else (parts[-1], parts[0])
+            signatures.append(normalize_title(family) + ':' + normalize_title(given)[:1])
+        if signatures and len(signatures) == len(record.authors):
+            keys.add(('title_author_names', normalized + '|' + '|'.join(sorted(signatures))))
     return keys or {("source_id", f"{record.source}:{record.source_id}".casefold())}
 
 
@@ -129,6 +154,17 @@ def deduplicate(records: Iterable[RawRecord]) -> list[RawRecord]:
                 best.raw_metadata.setdefault(key, value)
             best.source_score = max(best.source_score, other.source_score)
         best.raw_metadata["sources"] = sorted(sources)
+        links = {url for item in members for url in
+                 [item.landing_url, item.oa_url, *item.raw_metadata.get('source_links', [])] if url}
+        best.raw_metadata['source_links'] = sorted(links)
+        conference = next((c for item in members if (c := conference_info(item.to_dict()))), None)
+        if conference:
+            best.raw_metadata['conference'] = conference
+            best.oa_url = conference.get('pdf_url') or best.oa_url
+            # Prefer the proceedings DOI over an arXiv DOI, while retaining
+            # both identity aliases so existing IDs/history remain stable.
+            if conference.get('doi') and (not best.doi or best.doi.startswith('10.48550/arxiv.')):
+                best.doi = conference['doi']
         inherited = {tuple(pair) for item in members for pair in item.raw_metadata.get('identity_aliases', [])
                      if isinstance(pair, list) and len(pair) == 2 and all(isinstance(v, str) for v in pair)}
         best.raw_metadata['identity_aliases'] = [list(k) for k in sorted(member_aliases | inherited)]
@@ -176,7 +212,7 @@ def classify(record: RawRecord) -> RawRecord:
 def _sort_key(record: RawRecord) -> tuple:
     published = parse_date(record.published_at)
     return (
-        venue_priority(record.venue),
+        max(venue_priority(record.venue), 1 if conference_info(record.to_dict()) else 0),
         focus_priority(record),
         len(record.topic_tags),
         bool(record.abstract),
@@ -297,6 +333,7 @@ def build_adapters(profile=None) -> list:
     from src.sources.researchgate import ResearchGateIndexAdapter
     return [
         cns,
+        ConferenceAdapter(profile=profile or load_profile()),
         ElsevierAdapter(queries=['TITLE-ABS-KEY(' + q + ')' for q in plan['bounded_boolean']]),
         GoogleScholarAdapter(queries=plan['boolean']),
         ResearchGateAdapter(index=ResearchGateIndexAdapter(queries=['site:researchgate.net (' + q + ')' for q in plan['bounded_boolean']])),
@@ -371,7 +408,11 @@ def run_pipeline(
         all_records.extend(RawRecord.from_mapping(s['paper']) for s in history.papers.values())
         all_records.extend(RawRecord.from_mapping(p) for p in history.candidates.values())
     ranked = []
+    revoked = {url for adapter in collection for url in getattr(adapter, 'revoked', set())}
     for record in deduplicate(record for record in all_records if record.source != "微信公众号"):
+        conference = conference_info(record.to_dict())
+        if conference and conference.get('paper_url') in revoked:
+            continue
         record.topic_tags = match_directions(record, profile)
         if record.topic_tags:
             record.raw_metadata['research_directions'] = [d['name'] for d in profile['directions'] if d['id'] in record.topic_tags]
@@ -422,7 +463,7 @@ def run_pipeline(
         "wechat_articles": wechat_articles,
         "research_profile": profile,
         "research_profile_revision": profile_revision(profile),
-        "selection_policy": {"priority": "CNS 子刊 > CNS 正刊 > 其他相关期刊",
+        "selection_policy": {"priority": "CNS 子刊 > CNS 正刊 > 其他相关期刊与已核验主会论文",
                              "direction_allocation": "兼顾各方向，按优先级分配；同篇论文不重复推荐",
                              "within_venue_priority": "大模型与智能体优先",
                              "core_requires_chinese_analysis": False,
@@ -450,6 +491,11 @@ def run_pipeline(
             write_data(path, payload)
         elif path.exists():
             payload = read_data(path)
+            # A collection can succeed without publishing another edition.
+            # Keep its per-conference status visible while preserving membership.
+            if statuses:
+                payload['source_status'] = {**payload.get('source_status', {}), **statuses}
+                write_data(path, payload)
         else:
             write_data(path, payload)
         write_data(path.parent / 'updates' / (check['run_id'] + '.json'), check)

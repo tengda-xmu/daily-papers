@@ -12,6 +12,32 @@ from connectors.codex_bridge.reading_materials import MaterialResolver
 from src.auto_reading import READER_VERSION, fingerprint, public_analysis
 from src.editions import read
 from src.paper_sources import clean_abstract, inspect_html, inspect_xml
+
+
+def test_pdf_evidence_handles_typography_without_accepting_changed_facts():
+    from src.paper_sources import evidence_in_text
+    source = 'We model digital twin-\nning using ﬁne-tuned encoders. Error was 12.5%, not 2.5%. In-\ncontext learning was evaluated.'
+    assert evidence_in_text('digital twinning using fine-tuned encoders', source)
+    assert evidence_in_text('In-context learning was evaluated.', source)
+    assert evidence_in_text('Error was 12.5%, not 2.5%.', source)
+    assert not evidence_in_text('Error was 2.5%, not 12.5%.', source)
+    assert not evidence_in_text('digital twins outperformed all methods', source)
+    assert not evidence_in_text('Error was 125%', source)
+
+
+def test_old_typography_failures_resume_once_without_discarding_pages(tmp_path):
+    p=sample();runtime=tmp_path/'runtime'
+    q=ReadingQueue(tmp_path,runtime,FakeClient({}),asyncio.Lock());q.enqueue(p)
+    with q.db() as db:
+        db.execute("DELETE FROM reading_migrations WHERE name='pdf-evidence-v1'")
+        db.execute("UPDATE tasks SET state='failed',attempts=3,error='Assessment evidence is not in the provided material',material=?,draft=?,checkpoint=?",
+                   (json.dumps({'text':'Digital twin-\nning is evaluated.'}),json.dumps({'evaluation':{'evidence':'Digital twinning is evaluated.'}}),'{"pages":{"P1":{"status":"read"}}}'))
+    q=ReadingQueue(tmp_path,runtime,FakeClient({}),asyncio.Lock())
+    assert task(q)['state']=='pending' and task(q)['attempts']==0
+    assert 'P1' in json.loads(task(q)['checkpoint'])['pages']
+    with q.db() as db: db.execute("UPDATE tasks SET state='failed',attempts=3")
+    q=ReadingQueue(tmp_path,runtime,FakeClient({}),asyncio.Lock())
+    assert task(q)['state']=='failed' and task(q)['attempts']==3
 from tests.test_reading_queue import sample, response, task, FakeClient
 
 

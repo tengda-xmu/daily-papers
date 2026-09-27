@@ -94,7 +94,7 @@ def test_catalog_facets_keep_source_and_platform_filters():
 
 def test_pipeline_builds_public_adapters_without_planned_sources():
     names = [adapter.name for adapter in __import__("src.pipeline", fromlist=["build_adapters"]).build_adapters()]
-    assert names == ["CNS 子刊专项", "Elsevier", "Google Scholar", "ResearchGate", "微信公众号", "arXiv", "OpenAlex", "Crossref", "Semantic Scholar", "PubMed", "Web of Science"]
+    assert names == ["CNS 子刊专项", "AI 顶会论文", "Elsevier", "Google Scholar", "ResearchGate", "微信公众号", "arXiv", "OpenAlex", "Crossref", "Semantic Scholar", "PubMed", "Web of Science"]
 
 
 def test_irrelevant_ai_and_biological_design_are_not_recommended():

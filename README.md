@@ -25,6 +25,16 @@ Start-Process site\index.html
 
 ## 四类来源
 
+### AI 顶会主会论文
+
+每日 21:00 和手动更新共同采集 NeurIPS、ICML、ICLR、AAAI、IJCAI、KDD、CVPR、ICCV、ECCV、ACL、EMNLP。入口与主会范围配置在 `config/conferences.json`，仅接受官方论文集或正式录用目录中的研究论文，包含 Oral、Poster、长文、短文；不接受 Workshop、Findings、教程、演示、撤稿或未录用投稿。ICLR 的 OpenReview API 不可用时读取会议官网的 Oral/Poster 录用目录；KDD 严格限定 Research Track。
+
+会议论文和期刊共用研究方向、常规时间窗口、数量及再次推荐规则，不预留会议名额、不增加会议排序奖励，已核验会议与普通已识别期刊同级，CNS 优先规则保留。正式发表/公开录用日期保留年、月、日精度，不使用采集时间补日期。首页、历史批次显示会议年份及主会标识；在“筛选 → 期刊／会议”中选择会议，来源状态可展开查看各会议状态。
+
+官方目录和元数据缓存 24 小时，存于 `data/cache/conferences`，GitHub Actions 会恢复缓存及分页进度。单次每会议最多处理 3 个目录/接口分页和 20 篇详情，优先与启用方向关键词匹配的题目，后续更新接续采集；异常保留已有结果。会议来源不调用 SerpApi 等付费检索，不新增手动检索专项入口。Crossref、OpenAlex 补充元数据，会议、arXiv 与其他索引记录按 DOI、官方版本链接和完整题名/作者合并，DOI 补全及批次删除保留稳定论文 ID。
+
+官方 PDF 和受限定路径的官方托管文件沿用本机身份核对、保存与自动全文精读流程。核心推荐只显示来源与许可可核验的原图，扩展阅读不显示图片；网站可公开访问 PDF 不等于允许公开展示原图。原始 PDF、批注和对话仍只保存在本机。
+
 ### Elsevier / Scopus
 
 使用 Elsevier Search API；`pybliometrics` 已列入依赖，便于后续使用 Scopus/ScienceDirect 的高级接口。配置：

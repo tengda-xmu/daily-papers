@@ -80,6 +80,14 @@ def remember_candidates(data, papers):
         value.update({k: paper[k] for k in ('source', 'source_id', 'oa_url', 'pdf_url', 'citation_count', 'source_score') if paper.get(k) is not None})
         keys = aliases(paper) | (aliases(saved[identifier]) if identifier in saved else set())
         value['raw_metadata'] = {'identity_aliases': [list(k) for k in sorted(keys)]}
+        from src.conferences import info as conference_info
+        conference = conference_info(paper) or conference_info(saved.get(identifier, {}))
+        if conference:
+            value['raw_metadata']['conference'] = conference
+        links = set(paper.get('raw_metadata', {}).get('source_links', []))
+        links.update(saved.get(identifier, {}).get('raw_metadata', {}).get('source_links', []))
+        if links:
+            value['raw_metadata']['source_links'] = sorted(links)
         saved[identifier] = value
     write(Path(data) / 'recommendation-candidates.json', {'schema': 1, 'papers': saved})
 

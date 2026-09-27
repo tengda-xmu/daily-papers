@@ -11,6 +11,7 @@ import socket
 from urllib.parse import urljoin, urlsplit
 
 import requests
+from src.conferences import public_url as conference_url, info as conference_info
 
 MAX_BYTES = 50 * 1024 * 1024
 MAX_PAGES = 300
@@ -23,7 +24,7 @@ PUBLIC_HOSTS = {"www.nature.com", "nature.com", "idp.nature.com", "arxiv.org", "
 
 def validate_url(url):
     p = urlsplit(url)
-    if p.scheme != "https" or p.username or p.password or p.port not in (None, 443) or p.hostname not in PUBLIC_HOSTS:
+    if p.scheme != "https" or p.username or p.password or p.port not in (None, 443) or not (p.hostname in PUBLIC_HOSTS or conference_url(url)):
         raise ValueError("此全文地址暂不支持自动提取，请上传合法取得的 PDF。")
     answers = socket.getaddrinfo(p.hostname, 443, type=socket.SOCK_STREAM)
     if not answers or any(not ipaddress.ip_address(a[4][0]).is_global for a in answers):
@@ -156,6 +157,9 @@ class PDFLinkParser(HTMLParser):
 
 def pdf_candidates(paper):
     urls = [paper.get(k) for k in ("pdf_url", "oa_url", "landing_url")]
+    conference = conference_info(paper)
+    if conference:
+        urls[:0] = [conference.get('pdf_url'), conference.get('paper_url')]
     doi = str(paper.get("doi") or "").lower()
     if re.fullmatch(r"10\.1038/[a-z0-9.-]+", doi):
         urls.append("https://www.nature.com/articles/" + doi.split("/", 1)[1])
@@ -167,7 +171,7 @@ def pdf_candidates(paper):
         if not url:
             continue
         p = urlsplit(url)
-        if p.scheme != "https" or p.hostname not in PUBLIC_HOSTS or p.username or p.password or p.port not in (None, 443):
+        if p.scheme != "https" or not (p.hostname in PUBLIC_HOSTS or conference_url(url)) or p.username or p.password or p.port not in (None, 443):
             continue
         if p.hostname in ("arxiv.org", "export.arxiv.org") and p.path.startswith(("/abs/", "/html/", "/pdf/")):
             identifier = p.path.split("/", 2)[2].removesuffix(".pdf")

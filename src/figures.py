@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import re
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -10,6 +11,18 @@ from src.models import normalize_doi
 
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / "data/curated/figures.json"
+
+
+def figure_key(paper):
+    from src.paper_identity import paper_doi
+    from src.conferences import info
+    doi = paper_doi(paper)
+    if doi:
+        return doi
+    conference = info(paper)
+    if conference:
+        return 'conference:' + hashlib.sha256(conference['paper_url'].encode()).hexdigest()[:24]
+    return ''
 
 
 def read_catalog(path) -> dict:

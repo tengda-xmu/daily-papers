@@ -62,6 +62,13 @@ jobs:
           key: scholar-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
             scholar-${{ runner.os }}-
+      - name: Restore official conference metadata and pagination
+        uses: actions/cache@v4
+        with:
+          path: data/cache/conferences
+          key: conferences-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            conferences-${{ runner.os }}-
       - name: Restore public WeChat index cache
         uses: actions/cache@v4
         with:

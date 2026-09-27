@@ -21,6 +21,7 @@ import requests
 
 from src.models import normalize_doi
 from src.paper_sources import HOSTS as ARTICLE_HOSTS, discover, page_identity
+from src.conferences import public_url as conference_url
 
 ROOT = Path(__file__).resolve().parents[1]
 HOSTS = ARTICLE_HOSTS
@@ -60,7 +61,7 @@ class Fetcher:
             # Nature's public pages establish an anonymous cookie through these
             # two redirects, including when serving open-access manuscript PDFs.
             cookie_redirect = parsed.hostname == 'idp.nature.com' and parsed.path in ('/authorize', '/transit')
-            if parsed.scheme != 'https' or (parsed.hostname not in HOSTS and not cookie_redirect) or parsed.port not in (None, 443) or parsed.username:
+            if parsed.scheme != 'https' or (parsed.hostname not in HOSTS and not cookie_redirect and not conference_url(url)) or parsed.port not in (None, 443) or parsed.username:
                 raise Unavailable('unavailable')
             with self.session.get(url, timeout=(8, 20), stream=True, allow_redirects=False) as response:
                 if response.status_code in (301, 302, 303, 307, 308):
@@ -150,12 +151,14 @@ def nature_figure(doi, fetch):
     raise Unavailable('not_found')
 
 
-def pdf_figure(doi, url, common, data):
+def pdf_figure(doi, url, common, data, paper=None):
     import fitz
     if not data.startswith(b'%PDF'):
         raise Unavailable('unavailable')
     with fitz.open(stream=data, filetype='pdf') as document:
-        if doi not in ''.join(p.get_text().lower() for p in list(document)[:2]):
+        identity = ''.join(p.get_text().lower() for p in list(document)[:2])
+        from src.paper_sources import matches
+        if not ((doi and doi in identity) or (paper and matches(identity, paper))):
             raise Unavailable('unavailable')
         candidates = []
         for index, page in enumerate(document):
@@ -253,7 +256,7 @@ def publisher_figure(doi, paper, fetch):
             pdfs += [urljoin(final, n['href']) for n in soup.select('a[href]') if re.search(r'\.pdf(?:\?|$)', n['href'])]
             for pdf in list(dict.fromkeys(pdfs))[:2]:
                 if allowed(pdf):
-                    return pdf_figure(doi, pdf, common, fetch(pdf, 30_000_000))
+                    return pdf_figure(doi, pdf, common, fetch(pdf, 30_000_000), paper=paper)
         except Unavailable as exc:
             state = exc.state
         except Exception:
@@ -313,7 +316,7 @@ def image_info(data):
 
 
 def collect(root=ROOT, fetch=None, now=None, *, retry=False):
-    from src.figures import get_figure
+    from src.figures import get_figure, figure_key
     from src.paper_identity import paper_doi
     fetch = fetch or Fetcher()
     now = now or datetime.now(timezone.utc)
@@ -332,16 +335,17 @@ def collect(root=ROOT, fetch=None, now=None, *, retry=False):
         if attempts >= 20 or time.monotonic() - started > 400:
             break
         doi = paper_doi(paper) if root == ROOT else normalize_doi(paper.get('doi', ''))
-        if not doi or doi in seen:
+        key = figure_key(paper) if root == ROOT or not doi else doi
+        if not key or key in seen:
             continue
-        seen.add(doi)
-        old = entries.get(doi, {})
+        seen.add(key)
+        old = entries.get(key, {})
         filename = old.get('image_path', '').removeprefix('assets/figures/')
-        if (root == ROOT and get_figure(doi)) or (re.fullmatch(r'auto-[a-f0-9-]+\.(?:png|jpg)', filename or '') and (path.parent / 'images' / filename).is_file()):
+        if (root == ROOT and get_figure(key)) or (re.fullmatch(r'auto-[a-f0-9-]+\.(?:png|jpg)', filename or '') and (path.parent / 'images' / filename).is_file()):
             counts['existing'] += 1
             continue
         try:
-            last = datetime.fromisoformat(checks.get(doi, {}).get('checked_at', ''))
+            last = datetime.fromisoformat(checks.get(key, {}).get('checked_at', ''))
             if not retry and 0 <= (now - last).total_seconds() < 86400:
                 counts['unavailable'] += 1
                 continue
@@ -356,17 +360,19 @@ def collect(root=ROOT, fetch=None, now=None, *, retry=False):
                 try:
                     metadata, data = publisher_figure(doi, paper, fetch)
                 except Unavailable as publisher_error:
+                    if not doi:
+                        raise publisher_error
                     try:
                         metadata, data = pmc_figure(doi, fetch)
                     except Unavailable:
                         raise publisher_error
             width, height, extension = image_info(data)
             digest = hashlib.sha256(data).hexdigest()
-            filename = 'auto-' + hashlib.sha256(doi.encode()).hexdigest()[:16] + '-' + digest[:12] + '.' + extension
+            filename = 'auto-' + hashlib.sha256(key.encode()).hexdigest()[:16] + '-' + digest[:12] + '.' + extension
             image_path = path.parent / 'images' / filename
             image_path.parent.mkdir(parents=True, exist_ok=True)
             image_path.write_bytes(data)
-            entries[doi] = {**metadata, 'image_path': 'assets/figures/' + filename, 'width': width, 'height': height,
+            entries[key] = {**metadata, 'image_path': 'assets/figures/' + filename, 'width': width, 'height': height,
                             'sha256': digest, 'modified': False, 'verified_at': now.isoformat()}
             state = 'ready'
             counts['saved'] += 1
@@ -376,7 +382,7 @@ def collect(root=ROOT, fetch=None, now=None, *, retry=False):
         except Exception:
             # Malformed publisher HTML/XML/images must not cancel the edition.
             counts['unavailable'] += 1
-        checks[doi] = {'state': state, 'checked_at': now.isoformat()}
+        checks[key] = {'state': state, 'checked_at': now.isoformat()}
         write(path, catalog)
     return counts
 

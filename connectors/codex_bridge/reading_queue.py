@@ -63,6 +63,21 @@ class ReadingQueue:
                     if not (row['state'] in ('published', 'ready') and value.get('analysis', {}).get('analysis_basis') == 'full_text'):
                         db.execute("UPDATE tasks SET state='pending',attempts=0,next_attempt=0,next_material=0,checkpoint='',thread_id=NULL,error='' WHERE paper_id=?", (row['paper_id'],))
                 db.execute('UPDATE tasks SET reader_version=?,wanted_signature=local_signature WHERE reader_version!=?', (READER_VERSION, READER_VERSION))
+                # One-time recovery for evidence rejected solely because PDF
+                # extraction split a word or used a typographic ligature. Keep
+                # all page checkpoints; genuinely unsupported quotes stay failed.
+                db.execute('CREATE TABLE IF NOT EXISTS reading_migrations (name TEXT PRIMARY KEY)')
+                if not db.execute("SELECT 1 FROM reading_migrations WHERE name='pdf-evidence-v1'").fetchone():
+                    from src.paper_sources import evidence_in_text
+                    for row in db.execute("SELECT paper_id,material,draft FROM tasks WHERE state IN ('failed','retry') AND error LIKE '%Assessment evidence is not in the provided material%'").fetchall():
+                        try:
+                            material = json.loads(row['material'])
+                            evidence = json.loads(row['draft']).get('evaluation', {}).get('evidence', '')
+                            if evidence and evidence_in_text(evidence, material.get('text', '')):
+                                db.execute("UPDATE tasks SET state='pending',attempts=0,next_attempt=0,error='' WHERE paper_id=?", (row['paper_id'],))
+                        except (ValueError, TypeError, AttributeError):
+                            continue
+                    db.execute("INSERT INTO reading_migrations VALUES ('pdf-evidence-v1')")
         self.fetch, self.publisher = fetch, publisher
         self.runner = self.active = None
         self.quiet_until = time.time() + 30
@@ -89,6 +104,10 @@ class ReadingQueue:
             return
         clean = public_paper(paper)
         clean.update({k: paper[k] for k in ('source', 'oa_url', 'pdf_url') if paper.get(k)})
+        from src.conferences import info as conference_info
+        conference = conference_info(paper)
+        if conference:
+            clean['conference'] = conference
         key = fingerprint(clean)
         state = 'pending'
         signature = self.resolver.signature(paper['id']) if hasattr(self.resolver, 'signature') else ''
@@ -97,7 +116,7 @@ class ReadingQueue:
             if old:
                 db.execute('UPDATE tasks SET priority=?,enabled=1 WHERE paper_id=?', (priority, paper['id']))
                 previous = json.loads(old['paper'])
-                hints_changed = any(previous.get(k) != clean.get(k) for k in ('source', 'oa_url', 'pdf_url'))
+                hints_changed = any(previous.get(k) != clean.get(k) for k in ('source', 'oa_url', 'pdf_url', 'conference'))
                 if old['fingerprint'] != key or hints_changed or signature != old['wanted_signature']:
                     db.execute("""UPDATE tasks SET paper=?,fingerprint=?,state='pending',attempts=0,next_material=0,next_attempt=0,
                         wanted_signature=?,revision=revision+1,error='',updated_at=? WHERE paper_id=?""",
@@ -283,7 +302,8 @@ class ReadingQueue:
                 if defects and isinstance(analysis.get('deep_read', {}).get('limitations'), str):
                     analysis['deep_read']['limitations'] += '\n原文核对：' + '；'.join(f"[{i['page']}] {i['detail']}" for i in defects)
                 evidence = (raw.get('evaluation') or {}).get('evidence', '')
-                if evidence and ' '.join(evidence.casefold().split()) not in ' '.join(material['text'].casefold().split()):
+                from src.paper_sources import evidence_in_text
+                if evidence and not evidence_in_text(evidence, material['text']):
                     if (material.get('document') or {}).get('scan_pages'):
                         raw['evaluation']['evidence'] = evidence = ''
                         raw['evaluation']['evidence_sufficient'] = False

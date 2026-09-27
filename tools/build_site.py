@@ -15,6 +15,7 @@ from urllib.parse import quote, urlsplit
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
+from src.conferences import CONFERENCES, GROUP as CONFERENCE_GROUP, SOURCE as CONFERENCE_SOURCE, info as conference_info, label as conference_label
 from src.catalog import (JOURNALS, SOURCE_CATALOG, STATE_LABELS, TOPIC_CATALOG,
                          VENUE_GROUPS, paper_facets, source_state, string_list)
 from src.research_focus import focus_tags
@@ -111,8 +112,9 @@ def document(content: str, *, title: str, root: str = "./", active: str = "daily
 
 def paper_figure(paper: dict, root: str = "./") -> str:
     from src.paper_identity import paper_doi
+    from src.figures import figure_key
     doi = paper_doi(paper)
-    figure = get_figure(doi)
+    figure = get_figure(figure_key(paper))
     if not figure:
         url = safe_url(paper.get('landing_url') or paper.get('url') or ('https://doi.org/' + doi if doi else ''))
         link = f' · <a href="{url}" target="_blank" rel="noopener noreferrer">查看原文</a>' if url != '#' else ''
@@ -216,7 +218,11 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
                                 for i, link in enumerate(paper.get("analysis_sources") or []))
     provenance = f'<p class="analysis-provenance">{basis}。解读与建议不代表作者结论。 {evidence_links}</p>' if ready else ""
     journal_badge = '<span class="journal-priority">CNS 子刊</span>' if facets["venue_group"] == "CNS 子刊" else ""
-    if source == "arXiv" or str(doi).lower().startswith("10.48550/arxiv."):
+    conference = conference_info(paper)
+    if conference:
+        journal_badge += f'<span class="publication-type">{esc(conference_label(conference))}</span>'
+        search += ' ' + conference_label(conference)
+    if not conference and (source == "arXiv" or str(doi).lower().startswith("10.48550/arxiv.")):
         journal_badge += '<span class="publication-type">预印本版本</span>'
     method_badges = "".join(f'<span class="method-focus">{esc(tag)}</span>'
                            for tag in focus_tags(title, paper.get("abstract", "")))
@@ -336,9 +342,25 @@ def source_directory(statuses: dict, counts: Counter, root: str = "./", wechat_c
                 count_link = f'<a class="text-button" href="{esc(target)}">本期 {wechat_count} 条线索</a>'
                 if connector_message.startswith("公开索引已接入"):
                     state_label = {'ok': '公开索引可用', 'no_data': '暂无新线索', 'partial': '公开索引部分可用'}.get(state, state_label)
+            conference_details = ''
+            if item['id'] == CONFERENCE_SOURCE:
+                message = connector_message or '官方主会论文，与期刊共同参与后续推荐；不增加推荐篇数。'
+                states = {s['id']: s for s in (statuses.get(item['id']) or {}).get('conferences', [])}
+                entries = []
+                for conference in CONFERENCES:
+                    status = states.get(conference['id'], {})
+                    detail = f"已核验 {status.get('count', 0)} 篇，本轮方向与时间匹配 {status.get('matched', 0)} 篇"
+                    if status.get('pending'):
+                        detail += f"；{status['pending']} 篇待补元数据"
+                    if status.get('last_success'):
+                        detail += '；最近成功 ' + str(status['last_success'])[:10]
+                    if status.get('message'):
+                        detail += '；' + status['message']
+                    entries.append(f'<li><strong>{esc(conference["name"])}</strong> · {esc(STATE_LABELS.get(status.get("status", "not_run"), "状态待确认"))} · {esc(detail)}</li>')
+                conference_details = '<details class="conference-status"><summary>各会议采集情况</summary><ul>' + ''.join(entries) + '</ul></details>'
             rows.append(f'''
 <div class="source-row">
-  <div><a class="source-name" href="{safe_url(item['url'])}" target="_blank" rel="noopener noreferrer">{esc(item['label'])}</a><p>{esc(message)}</p></div>
+  <div><a class="source-name" href="{safe_url(item['url'])}" target="_blank" rel="noopener noreferrer">{esc(item['label'])}</a><p>{esc(message)}</p>{conference_details}</div>
   <div class="source-state"><span class="state {state_class}">{esc(state_label)}</span>
   {count_link}{setup_link}</div>
 </div>''')
@@ -486,7 +508,9 @@ def render(payload: dict, *, archive_date: str | None = None, deleted_editions=N
     topics = list(dict.fromkeys([*(d['id'] for d in shown_directions), *(t for p in all_papers for t in string_list(p.get("topic_tags")))]))
     topic_options = "".join(f'<option value="{esc(t)}">{esc(topic_labels.get(t, t))}</option>' for t in topics)
     group_options = "".join(f'<option value="{esc(g["id"])}">{esc(g["id"])}</option>' for g in VENUE_GROUPS)
+    group_options += f'<option value="{esc(CONFERENCE_GROUP)}">{esc(CONFERENCE_GROUP)}</option>'
     journals = {j["name"]: j["group"] for j in JOURNALS}
+    journals.update({c['name']: CONFERENCE_GROUP for c in CONFERENCES})
     journals.update({f["journal"]: f["venue_group"] for f in facets_list if f["journal"]})
     journal_options = "".join(f'<option value="{esc(name)}" data-group="{esc(group)}">{esc(name)}</option>' for name, group in journals.items())
     day, generated = display_time(payload.get("generated_at"))

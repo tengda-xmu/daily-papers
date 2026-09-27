@@ -8,6 +8,7 @@ from urllib.parse import urlsplit
 
 import yaml
 from src.custom_journals import journal_groups
+from src.conferences import info as conference_info, SOURCE as CONFERENCE_SOURCE, GROUP as CONFERENCE_GROUP
 
 CONFIG = Path(__file__).resolve().parents[1] / 'config'
 
@@ -63,11 +64,14 @@ def canonical_source(value: str) -> str:
 
 
 def paper_facets(paper: dict) -> dict:
+    conference = conference_info(paper)
     metadata = paper.get('raw_metadata') or {}
     sources = set(canonical_source(item) for item in
                   [paper.get('source', ''), *string_list(metadata.get('sources')),
                    *string_list(paper.get('sources'))] if item)
     journal = match_journal(paper.get('venue', ''))
+    if conference:
+        sources.add(CONFERENCE_SOURCE)
     if journal:
         sources.add(journal['platform'])
     try:
@@ -80,7 +84,9 @@ def paper_facets(paper: dict) -> dict:
     if host == 'arxiv.org' or host.endswith('.arxiv.org'):
         sources.add('arXiv')
 
-    if journal:
+    if conference:
+        group = CONFERENCE_GROUP
+    elif journal:
         group = journal['group']
     elif '微信公众号' in sources:
         group = '公众号文章'
@@ -90,7 +96,7 @@ def paper_facets(paper: dict) -> dict:
         group = next((item['id'] for item in VENUE_GROUPS
                       if item.get('platform') in sources), '其他／未分类')
     return {'source_ids': sorted(sources - {''}), 'venue_group': group,
-            'journal': journal['name'] if journal else str(paper.get('venue') or ''),
+            'journal': conference['name'] if conference else journal['name'] if journal else str(paper.get('venue') or ''),
             'topic_ids': string_list(paper.get('topic_tags'))}
 
 

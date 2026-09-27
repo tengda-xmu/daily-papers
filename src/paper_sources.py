@@ -6,6 +6,7 @@ import json
 import os
 import re
 import socket
+import unicodedata
 from urllib.parse import quote, urljoin, urlsplit
 
 from bs4 import BeautifulSoup
@@ -13,6 +14,7 @@ import requests
 
 from src.models import normalize_doi
 from src.paper_identity import paper_doi
+from src.conferences import public_url as conference_url, info as conference_info
 
 HOSTS = {'doi.org', 'api.crossref.org', 'api.openalex.org', 'api.semanticscholar.org', 'www.nature.com', 'nature.com',
          'media.springernature.com', 'www.sciencedirect.com', 'www.cell.com', 'api.elsevier.com',
@@ -24,7 +26,7 @@ HOSTS = {'doi.org', 'api.crossref.org', 'api.openalex.org', 'api.semanticscholar
 def allowed(url):
     p = urlsplit(url)
     return (p.scheme == 'https' and p.port in (None, 443) and not p.username and not p.password
-            and (p.hostname in HOSTS or (p.hostname == 'idp.nature.com' and p.path in ('/authorize', '/transit'))))
+            and (conference_url(url) or p.hostname in HOSTS or (p.hostname == 'idp.nature.com' and p.path in ('/authorize', '/transit'))))
 
 
 class PublicFetcher:
@@ -60,7 +62,25 @@ class PublicFetcher:
 
 
 def normalized_title(text):
-    return re.sub(r'[^\w]+', '', unescape(str(text)).casefold())
+    value = unicodedata.normalize('NFKC', unescape(str(text))).replace('°', 'deg')
+    return re.sub(r'[^\w]+', '', value.casefold())
+
+
+def evidence_in_text(excerpt, text):
+    """Match verbatim evidence despite PDF ligatures and end-of-line hyphens.
+
+    No fuzzy matching, paraphrase acceptance or removal of numeric punctuation.
+    Keep both interpretations of a line-ending hyphen (compound or word wrap).
+    """
+    def normalized(value):
+        return ' '.join(unicodedata.normalize('NFKC', value).replace('\u00ad', '').casefold().split())
+    quote = normalized(excerpt)
+    source = unicodedata.normalize('NFKC', text)
+    if not quote:
+        return False
+    variants = (source, re.sub(r'(?<=\w)[-‐][ \t]*\n[ \t]*(?=\w)', '', source),
+                re.sub(r'(?<=\w)([-‐])[ \t]*\n[ \t]*(?=\w)', r'\1', source))
+    return any(quote in normalized(value) for value in variants)
 
 
 def matches(text, paper):
@@ -93,6 +113,11 @@ def discover(paper, fetch=None):
             result['urls'].append(url)
     for key in ('oa_url', 'pdf_url', 'landing_url'):
         add(paper.get(key))
+    conference = conference_info(paper)
+    if conference:
+        add(conference.get('pdf_url'))
+        add(conference.get('paper_url'))
+        result.update(abstract=clean_abstract(paper.get('abstract')), abstract_url=conference['paper_url'])
     if doi:
         try:
             body, _ = fetch('https://api.crossref.org/works/' + quote(doi, safe=''))

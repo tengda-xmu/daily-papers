@@ -25,7 +25,7 @@ from src.sources.wechat_rss import WeChatRSSAdapter
 from src.sources.wechat_public_index import WeChatPublicIndexAdapter
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCES = [dict(id=s['id'], label=s['label']) for s in SOURCE_CATALOG if s['kind'] == 'adapter']
+SOURCES = [dict(id=s['id'], label=s['label']) for s in SOURCE_CATALOG if s['kind'] == 'adapter' and s.get('manual_search', True)]
 MODES = {
     'CNS 子刊专项': 'Crossref · 配置中的 CNS 子刊 ISSN 专项',
     'ResearchGate': 'SerpApi 公开索引 + 本机导出；不读取登录页面',
