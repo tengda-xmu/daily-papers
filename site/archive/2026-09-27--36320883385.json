@@ -384,7 +384,7 @@
       "reading_status": {
         "paper_id": "533cdd3a344d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-26T13:35:01.878817+00:00",
+        "updated_at": "2026-09-30T09:26:10.575695+00:00",
         "basis": "abstract",
         "reason": "not_found",
         "total": 0,
@@ -583,9 +583,13 @@
       "reading_status": {
         "paper_id": "932eec332894",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-25T17:23:15.018500+00:00",
+        "updated_at": "2026-09-30T09:25:37.635695+00:00",
         "basis": "abstract",
-        "reason": "not_found"
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
       }
     },
     {
@@ -727,9 +731,13 @@
       "reading_status": {
         "paper_id": "229ee813a122",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-25T17:14:43.427047+00:00",
+        "updated_at": "2026-09-30T09:25:22.351589+00:00",
         "basis": "abstract",
-        "reason": "restricted"
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
       }
     },
     {
@@ -850,9 +858,64 @@
       "reading_status": {
         "paper_id": "a1515ce3849b",
         "state": "failed",
-        "updated_at": "2026-09-25T18:26:36.347773+00:00",
+        "updated_at": "2026-09-30T09:26:00.244792+00:00",
         "basis": "full_text",
-        "reason": ""
+        "reason": "",
+        "total": 14,
+        "covered": 14,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页明确列出“Published online: 15 August 2026”，所给文字提取遗漏该行，现据截图补正。不涉及公式或图号，不影响抗冲击性能结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "式(1)、式(2)在文字提取中出现求和、上下标及集合归属符号错位，原页公式完整，已在笔记中按原页恢复。图1d的尺寸标签在文字提取中遗漏；原图可读C1为32@13×13×13、P1为32@6×6×6、C2为64@4×4×4、P2为32@6×6×6、C3为512@1、H为256×128×64×2。影响网络结构复现，不构成公式缺失；图示与正文之间的疑点未擅自修正。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "图3图注的R²公式在文字提取中出现/C0、/C22等乱码；原页公式完整，核实为R² = 1 − Σ_i(y_i − ŷ_i)² / Σ_i(y_i − ȳ)²。并非原文件公式缺项。该纠正影响预测精度指标的定义，不改变图3c、d标示的0.986和0.985。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "设计空间段落中应变能密度单位被提取为MJm/C0 3；原页清晰显示MJ m⁻³，范围为6.454—10.730 MJ m⁻³，对应52%硬相。属于单位上标提取错误，不是原文缺项；纠正关系到吸能密度范围的量纲解释。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "图4图注的相对准确度及RAE公式提取出现/C0和绝对值符号错位。原页完整可读：相对准确度为1−RAE，RAE = |ŷ−y|/y；图中以百分数表示。已恢复预测误差定义，不存在原文件公式缺项，影响CNN与有限元一致性的定量解释。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "图5e图注的Uk公式在提取文字中出现/C0、/C138及括号错位。原页公式完整：Uk = 1 − |σ_f(t)−σ_b(t)|/{[σ_f(t)+σ_b(t)]/2}，σ_f和σ_b为前后表面应力。纠正影响动态应力均匀性的计算定义，不改变图中报告的三个百分比。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "图6及正文中的等效导热系数k̄被提取成/C22k，图注单位出现/C0乱码。原页明确图6d单位为10³ W m⁻²，图6e为10³ K m⁻¹，已恢复。无原文件缺项；纠正用于区分导热系数、热流密度和温度梯度，避免误读为温度或应力结果。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "方法段组合数在提取文字中显示为2125和225，原页为指数形式2^125和2^25。已按原页恢复，影响对称约束下设计空间规模的理解，不涉及图7实验曲线或性能数值的改变。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "式(3)、式(4)的文字提取出现/C0、/C22乱码。原页公式完整，分别为q = −k∇T和k̄ = q̄L/ΔT；q̄为面积平均法向热流密度。已恢复负号及平均符号，不存在原文件公式缺项；影响傅里叶定律与等效导热系数的定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "有限元材料段与导热模拟段的单位上标被提取为/C0等乱码。原页两相密度均为1200 kg m⁻³，演示导热系数分别为0.3和3 W m⁻¹ K⁻¹；钢杆泊松比的0:3应按原页读为0.3。已纠正，不涉及原文缺项，影响材料输入参数和量纲的准确复现。"
+          }
+        ]
       }
     },
     {
@@ -975,9 +1038,13 @@
       "reading_status": {
         "paper_id": "04a29ffa0d97",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-25T17:27:37.288773+00:00",
+        "updated_at": "2026-09-30T09:25:48.912113+00:00",
         "basis": "abstract",
-        "reason": "not_found"
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
       }
     }
   ],
@@ -1082,9 +1149,159 @@
       "reading_status": {
         "paper_id": "13e3f3235f1b",
         "state": "failed",
-        "updated_at": "2026-09-25T18:30:40.934072+00:00",
+        "updated_at": "2026-09-30T09:26:58.356434+00:00",
         "basis": "full_text",
-        "reason": ""
+        "reason": "",
+        "total": 41,
+        "covered": 41,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "提供的文字遗漏原页明确可读的“Published online: 22 July 2026”，已据截图补正为2026年7月22日。无公式或图号涉及；影响出版信息完整性，不影响研究结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "文字资料保留图1图注，但未提取图内标签和曲线内容。原页可清楚识别六组标签依次为 Progressive、Dual-thrust、Regressive、Regressive、Neutral、Neutral，横轴 Time、纵轴 Flow rate，并有 Slots、Star point 标注。已据图补充，避免遗漏双推力类型；不是原文件缺图。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "图2的图内文字未进入所给文字提取，已据原页补读。图2c明确区分42种几何类型、47,800个有符号距离数据样本与近478万个性能—结构特征样本；图2a标明本文结合α、β象限，图2b列出三类映射/生成路线。遗漏影响数据规模和方法分类理解，并非原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "正文耗时被提取为“1 5 minutes”；原页清楚显示“15 minutes”，已纠正为使用A5000 GPU在15分钟内完成。无公式或图号涉及；该纠正影响计算效率声明的准确理解，但本页未说明计时是否包含离线训练。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "正文数学符号提取发生错序，并遗漏无量纲长度的上横线。原页可读为λ_g=[L̄,N,m]及W(x,λ_L,λ_g)，几何样本数量为N_geo=47,800。已纠正；涉及几何参数定义和场表示，非原文缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "式(1)在文字提取中丢失范数符号并打乱上下标。原页明确为‖∇_x W_{i,j,Pre}‖²=1；预测值定义为W_{i,j,Pre}=W(x_{i,j},λ_{i,L},λ_{i,g})。已据原页纠正，避免将梯度范数平方误读为梯度本身，影响物理正则含义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "图3内部结构、损失表达式和扩散过程公式未进入文字提取。原页已读清：a包含SDF均方误差与eikonal平方残差均值；b包含前向加噪、反向去噪、条件嵌入、噪声预测及高斯采样的均值和协方差表达式。遗漏影响模型架构和训练目标理解，属于提取遗漏，不是原图缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "式(2)的文字提取打乱了条件箭头和变量顺序。原页明确为纯高斯噪声在λ_p、λ_ud条件下生成λ_L、λ_g、λ_uu。已纠正其条件与输出的对应关系；页末引出的后续表达式不在本批，未判定为源文件缺失。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "式(3)、式(4)的文字提取存在上下标及顺序错乱。原页式(3)可辨为无条件预测加w_g乘以条件与无条件预测之差；式(4)的优化变量为λ_L、L̄、r_b、R，目标为F(λ_L,L̄,r_b,R)。已核对，原文件未缺公式；错误影响引导权重和优化变量的理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "图4相关正文的倍数被提取为错序的“35.0 10×”。原页明确为“5.0×10³ times higher than DEAD”，已纠正。该数值是作者报告的DeepSDF角点残差相对DEAD的最高倍数，不是所有插值点的统一改善倍数。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "所给文字遗漏图4内部的插值坐标、矩阵标度和单元格数值，本次已据两幅高清重叠截图补读。图4b、d均含DEAD与DeepSDF的6×6矩阵，标度为×10⁻³；例如图4b行5列0分别为0.21与1057.42。此前矩阵数字无法完整识别的问题已解除；遗漏影响残差量级和模型比较，不是原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P16",
+            "detail": "图5内部坐标、训练轮数和细节标签未进入文字提取。原页可读出图5a的两个MSE坐标及50,000、20,000 epochs标注，图5b的过拟合和边缘保持对比标签，以及W/m色标。已补读；遗漏影响训练比较和几何保真性证据的理解，并非原文件缺图。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P18",
+            "detail": "图6内部的曲线、代表结果标注、UMAP标签及分布图图例未进入文字提取，已据原页补读。图6c图例包括25%—75%、1.5IQR范围、中位数、最大或最小值，不能将全部图形范围解释为标准差。遗漏影响分布统计与生成结果的理解，非原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P19",
+            "detail": "表1的文字提取未完整保留合并单元格关系。原页上半部分固定生成数量为1000、改变聚类数量；下半部分固定聚类数量为5、改变生成数量。脚注限定统计对象为聚类代表。已核对并恢复对应关系，避免将0.9579误认为所有实验条件下恒定的最大r²。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P20",
+            "detail": "图7的实际样本量、误差棒定义及相对标准误差标注未进入文字提取。原页明确P1—P5样本量为10、9、2、9、10，误差棒为SEM，RSE=SEM/mean×100%；P3装填率和长度的RSE为12%和11%。已补读，避免将10次总实验误认为每种模式均有10个样本，或将排除P3后的低于3%结论推广到全部模式。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P21",
+            "detail": "图8内部数值及曲线标签未进入文字提取，已据原页补读。五种模式最终r²依次为0.9881、0.9935、0.9801、0.9877、0.9796；其中P5为0.9796，不应四舍五入后表述为严格超过0.98。右侧三类目标项的黑、红、蓝对应关系与图注一致。遗漏影响最终匹配程度的准确理解，非原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P23",
+            "detail": "图9内部12组曲线、结构图及r²、η标注未进入文字提取，已据原页补读。例如案例i为r²=0.9457、η=98.1%，案例g为r²=0.983、η=70.3%。这些结果不能概括为所有案例r²均超过0.98或装填率均超过75%；遗漏影响跨案例性能与约束达成情况的判断。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P26",
+            "detail": "图10内部的数值、图例及比较标注未进入文字提取，已据原页补读。在η=82.6%处，本文结果r²=0.9943，MENN比较结果r²=0.9924；阴影为分箱后的±1标准差，不是置信区间。遗漏影响重复比较的量化理解，非原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P27",
+            "detail": "图11内部的目标函数、局部几何标注、三组结果及近邻说明未进入文字提取。原页目标函数包含性能匹配、装填率、eikonal残差及三类局部几何惩罚项；三个结果旁均展示“Five neighbors in dataset”。已补读，遗漏影响约束微调与数据集近邻比较的理解；未发现公式占位或原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P29",
+            "detail": "式(5)的分式、求和范围与下标在文字提取中错序。原页为N_i=N_geo·DOF_i/(Σ_{j=1}^{N_type}DOF_j)，i=1,…,N_type。已核对，影响按自由度分配各类型样本数的理解，非原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P30",
+            "detail": "图12a图注的球形类别被提取为“2 types of spherical grains”，原页清楚写为“3 types of spherical grains”，已按原页纠正。图12内部网格分类及数据组成也未完整进入文字提取，已补读。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P30",
+            "detail": "图12a图注原页列出10、3、4、5、10、2、3、6类，合计43，但同时称总数为42。属于已核实的原页计数不一致，而非页面不清；现有资料不能确定哪个分项应修正，影响几何类型组成的准确复核，不影响本页现有内容识读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P31",
+            "detail": "式(6)的分段结构、上下标及矩阵行列在文字提取中混乱。原页明确潜向量和几何向量随同一几何的重复采样保持对应，性能矩阵第一行为时间、第二行为压力。已核对，避免将采样次数误当几何数量或将两行矩阵误读为单一向量。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P32",
+            "detail": "式(7)—(11)的权重、积分、范数及上下标在文字提取中部分错序。原页式(9)显示F_η=(1−η)²；式(10)被积项为(1−‖∇_xW‖)²；式(11)积分下标是边界标记，非偏导算子。均已据原页纠正，影响目标函数和物理残差的准确理解；未发现缺失公式。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P33",
+            "detail": "式(12)、(13)的积分范围、分段括号、分母及平方位置在文字提取中错序。原页可明确区分式(12)中u的分段定义、对y的偏导与平面边界积分，以及式(13)的线边界积分。已核对，影响几何惩罚项含义；原页未缺公式。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P34",
+            "detail": "“Measures of performance matching degree”首段在原页将计算曲线和目标曲线均标为p_T(t)，而式(14)—(16)明确分别使用p(t)和p_T(t)。属于原文符号误标，不是提取错误；影响两条曲线的身份区分，但后续公式可读且无需补造。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P34",
+            "detail": "式(14)—(16)的分式、指数、积分及向量括号在文字提取中错序。原页式(14)区分压力计算、肉厚随时间的积分以及等值燃面的面积定义；式(15)、(16)区分计算压力向量与目标压力向量。已据原页核对，未发现占位或缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P35",
+            "detail": "式(17)的文字提取遗漏目标均值的上横线并打乱点积结构。原页分子为(p_T−p)·(p_T−p)，分母为(p_T−p̄_T)·(p_T−p̄_T)，整体为1减该比值。已纠正，避免将归一化分母误读为零或将r²误解为普通相关系数的平方。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P39",
+            "detail": "参考文献17在原页以“Defence Technology, (2025).”结束，未提供卷号、页码、文章号或DOI。该条书目信息不完整已由原页核实，但不能据此判断文献不存在或研究结论错误；影响精确定位与核验。无公式或图号涉及，页面仍可阅读。"
+          }
+        ]
       }
     },
     {
@@ -1108,7 +1325,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "Reducing unsprung mass in high-performance braking systems is critical for vehicle dynamics, but applying topology optimization (TO) to conventional solid discs under combined thermo-mechanical loading often causes “thermal entrapment” and structural failure. This study addresses this limitation by proposing a floating disc architecture and a two-stage computational framework. First, TO via the SIMP algorithm was applied to the Aluminum 7075-T6 inner carrier strictly under mechanical loads, decoupling artificial thermal stresses and yielding a fixed, optimized geometry. Results show the TO ach…",
+      "summary": "本文针对制动系统轻量化中热—机械耦合拓扑优化可能引发的“thermal entrapment”，提出浮动盘架构与两阶段计算框架：先在机械载荷下优化内支架，再为固定优化几何建立热—机械响应代理模型。摘要报告内支架减重53%，预测精度为R2≈0.9998，并给出疲劳分析结果。[摘要] 解读：值得关注的是结构优化与快速性能评估的衔接，但现有资料不足以核实模型泛化能力及实物可靠性。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "6bea9d28aa1d1c3205b2d2cc3f36ad3f97e7e0a7",
@@ -1150,11 +1367,41 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "推荐重点阅读其机械载荷拓扑优化与热—机械代理建模的衔接方法，适合结构轻量化和疲劳可靠性研究；智能运维价值属于潜在迁移方向，摘要未展示在线监测应用。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是在降低制动系统簧下质量的同时，避免传统实心盘在热—机械联合载荷拓扑优化中出现“thermal entrapment”和结构失效。[摘要] 解读：核心并非单纯追求减重，而是选择适合优化的构件与载荷处理方式，协调轻量化和服役性能。",
+        "method": "作者采用浮动盘架构，先以SIMP算法对Aluminum 7075-T6内支架进行纯机械载荷拓扑优化，固定几何后再建立热—机械代理模型。训练使用覆盖“15 design scenarios”的拉丁超立方采样及Genetic Aggregation算法。[摘要]",
+        "innovation": "摘要明确提出“two-stage computational framework”，将内支架机械拓扑优化与优化后几何的热—机械响应预测分阶段处理。[摘要] 解读：可关注这种任务拆分与流程组合，但摘要未提供既有方法对比，不能据此认定算法原创性或领域首次突破。",
+        "findings": "内支架质量由0.218 kg降至0.102 kg，摘要称减重“53%”；应力与温度场预测报告R2≈0.9998。[摘要] 疲劳结果原文为“106 extreme braking cycles”，安全系数1.65；次数保留原样，不能自行恢复为指数写法。",
+        "limitations": "资料仅为摘要，未交代训练与测试划分、参数覆盖范围、误差分布或实物试验，无法核实高预测精度的适用边界。[摘要] 解读：这些是当前证据缺口，并非已确认的论文缺陷；疲劳循环数的文本格式也需核对原文，不能据此直接作寿命承诺。",
+        "connection": "与结构设计的直接联系是内支架减重，与可靠性研究的直接联系是疲劳分析及安全系数。[摘要] 解读：其“real-time responses”预测思路可能支持智能运维中的快速状态评估，但摘要没有传感数据接入、模型在线更新或故障诊断证据，不能等同于已落地的运维系统。",
+        "next_steps": "建议后续阅读优先核对机械优化与热—机械校核的载荷对应关系，并查看代理模型独立验证和极限制动工况的判定标准。若迁移至可靠性研究，建议增加参数不确定性与预测误差传播分析；这些属于研究建议，而非摘要所述作者已完成的工作。[摘要]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "制动盘内支架的拓扑优化与机器学习参数化预测模型开发",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.3390/dynamics6030040"
+      ],
+      "analyzed_at": "2026-09-27T13:21:09.152429+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "c36ba57f4e7e7166f2ca48fecb435a7ade3992d8a961159671eef8175b32bf0b",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "c05baf48e37d",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-09-30T09:26:35.695858+00:00",
+        "basis": "abstract",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -1272,9 +1519,13 @@
       "reading_status": {
         "paper_id": "c6eb0c75d85e",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-25T17:08:17.846297+00:00",
+        "updated_at": "2026-09-30T09:26:21.979437+00:00",
         "basis": "abstract",
-        "reason": "restricted"
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
       }
     },
     {
@@ -1441,7 +1692,11 @@
         "state": "published",
         "updated_at": "2026-09-25T17:26:23.148407+00:00",
         "basis": "full_text",
-        "reason": ""
+        "reason": "",
+        "total": 20,
+        "covered": 20,
+        "pdf_available": true,
+        "issues": []
       }
     },
     {
@@ -1464,7 +1719,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "Wind turbine towers are critical supporting structures whose structural safety, durability, and cost-effectiveness become increasingly important as turbine capacities and hub heights increase. This review synthesises the structural design and performance characteristics of steel tubular, concrete, steel–concrete hybrid, and lattice wind turbine towers, with particular emphasis on the role of finite element analysis (FEA). The review considers mechanical behaviour, durability, static response, fatigue performance, and dynamic and seismic characteristics. FEA enables high-fidelity representation…",
+      "summary": "本文围绕风力机大型化、高塔化背景下的安全、耐久与经济性问题，综述钢管、混凝土、钢—混凝土混合及格构式塔架，重点讨论有限元分析在静力、疲劳、动力与抗震评估中的作用。摘要指出法兰连接、过渡区域及循环风荷载值得关注，并介绍机器学习预测、声发射监测与振动控制的结合趋势。本文适合作为塔架性能研究的入门索引，但当前仅有摘要，不能据此判断综述完整性或模型验证质量。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7212351561",
@@ -1505,11 +1760,41 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议作为风电塔架结构设计与疲劳评估的方向性综述阅读，优先关注连接细节、动力响应及监测融合线索；若目标是复现智能运维算法或生成式设计流程，摘要尚未提供足够方法细节。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是机组容量与轮毂高度增加时，如何兼顾塔架结构安全、耐久性和成本效益。作者以“structural safety, durability, and cost-effectiveness”概括核心关切，并覆盖不同塔架形式；摘要未给出特定设计场景或量化目标。[摘要]",
+        "method": "本文采用综述方式，整理四类塔架的结构设计与性能特征，以有限元分析为重点，原文称“particular emphasis on the role of finite element analysis”。分析涉及锥形壳体、连接、过渡段、材料及荷载；摘要未说明检索策略和纳入标准。[摘要]",
+        "innovation": "解读：其潜在价值在于将多类塔架及静力、疲劳、动力问题置于共同的有限元分析框架下，而非提出已获验证的新算法。摘要提及“machine-learning-based prediction”等融合方向，但未证明这些方法由本文首创，也未提供足以判定原创性的比较证据。[摘要]",
+        "findings": "综述归纳认为，静力评估应关注“flange connections and transition regions”，疲劳则受循环风荷载与塔架特定荷载条件显著影响。动力与抗震分析还需考虑固有频率控制、长周期地震动、近场效应及土—结构相互作用；摘要未报告定量比较结果。[摘要]",
+        "limitations": "当前证据仅限摘要，缺少文献筛选流程、研究覆盖范围、模型验证资料及不确定性处理信息，因此无法核实综述的系统性与结论稳健性。“high-fidelity representation”是摘要对有限元能力的表述，并不能替代具体误差验证；这些是资料限制，不是已确认的论文缺陷。[摘要]",
+        "connection": "解读：与结构设计的联系最直接，包括应力、变形与屈曲评估；与可靠性研究的联系来自“fatigue-damage accumulation”，但尚无概率可靠性证据。机器学习及监测提供智能运维线索；摘要未涉及生成式设计机制，不能将一般设计优化等同于生成式设计。[摘要]",
+        "next_steps": "建议：后续获取全文时，优先核查连接与过渡段的建模假设、疲劳荷载谱及验证依据，并追踪监测与数值模型融合的具体案例。可探索用监测信息更新有限元模型并评估寿命预测不确定性；该设想受“digital-twin”展望启发，不是本文已完成的成果。[摘要]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "风力机塔架结构设计与性能分析综述",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.9734/acri/2026/v26i92166"
+      ],
+      "analyzed_at": "2026-09-27T13:22:15.242639+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "99245a16cbb7135ea764dc67279b091ac5bf97652befa23b467d5dbebc6ab848",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "8a095e50b332",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-09-30T09:26:46.978893+00:00",
+        "basis": "abstract",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "papers": [
@@ -1893,7 +2178,7 @@
       "reading_status": {
         "paper_id": "533cdd3a344d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-26T13:35:01.878817+00:00",
+        "updated_at": "2026-09-30T09:26:10.575695+00:00",
         "basis": "abstract",
         "reason": "not_found",
         "total": 0,
@@ -2092,9 +2377,13 @@
       "reading_status": {
         "paper_id": "932eec332894",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-25T17:23:15.018500+00:00",
+        "updated_at": "2026-09-30T09:25:37.635695+00:00",
         "basis": "abstract",
-        "reason": "not_found"
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
       }
     },
     {
@@ -2236,9 +2525,13 @@
       "reading_status": {
         "paper_id": "229ee813a122",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-25T17:14:43.427047+00:00",
+        "updated_at": "2026-09-30T09:25:22.351589+00:00",
         "basis": "abstract",
-        "reason": "restricted"
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
       }
     },
     {
@@ -2359,9 +2652,64 @@
       "reading_status": {
         "paper_id": "a1515ce3849b",
         "state": "failed",
-        "updated_at": "2026-09-25T18:26:36.347773+00:00",
+        "updated_at": "2026-09-30T09:26:00.244792+00:00",
         "basis": "full_text",
-        "reason": ""
+        "reason": "",
+        "total": 14,
+        "covered": 14,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页明确列出“Published online: 15 August 2026”，所给文字提取遗漏该行，现据截图补正。不涉及公式或图号，不影响抗冲击性能结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "式(1)、式(2)在文字提取中出现求和、上下标及集合归属符号错位，原页公式完整，已在笔记中按原页恢复。图1d的尺寸标签在文字提取中遗漏；原图可读C1为32@13×13×13、P1为32@6×6×6、C2为64@4×4×4、P2为32@6×6×6、C3为512@1、H为256×128×64×2。影响网络结构复现，不构成公式缺失；图示与正文之间的疑点未擅自修正。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "图3图注的R²公式在文字提取中出现/C0、/C22等乱码；原页公式完整，核实为R² = 1 − Σ_i(y_i − ŷ_i)² / Σ_i(y_i − ȳ)²。并非原文件公式缺项。该纠正影响预测精度指标的定义，不改变图3c、d标示的0.986和0.985。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "设计空间段落中应变能密度单位被提取为MJm/C0 3；原页清晰显示MJ m⁻³，范围为6.454—10.730 MJ m⁻³，对应52%硬相。属于单位上标提取错误，不是原文缺项；纠正关系到吸能密度范围的量纲解释。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "图4图注的相对准确度及RAE公式提取出现/C0和绝对值符号错位。原页完整可读：相对准确度为1−RAE，RAE = |ŷ−y|/y；图中以百分数表示。已恢复预测误差定义，不存在原文件公式缺项，影响CNN与有限元一致性的定量解释。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "图5e图注的Uk公式在提取文字中出现/C0、/C138及括号错位。原页公式完整：Uk = 1 − |σ_f(t)−σ_b(t)|/{[σ_f(t)+σ_b(t)]/2}，σ_f和σ_b为前后表面应力。纠正影响动态应力均匀性的计算定义，不改变图中报告的三个百分比。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "图6及正文中的等效导热系数k̄被提取成/C22k，图注单位出现/C0乱码。原页明确图6d单位为10³ W m⁻²，图6e为10³ K m⁻¹，已恢复。无原文件缺项；纠正用于区分导热系数、热流密度和温度梯度，避免误读为温度或应力结果。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "方法段组合数在提取文字中显示为2125和225，原页为指数形式2^125和2^25。已按原页恢复，影响对称约束下设计空间规模的理解，不涉及图7实验曲线或性能数值的改变。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "式(3)、式(4)的文字提取出现/C0、/C22乱码。原页公式完整，分别为q = −k∇T和k̄ = q̄L/ΔT；q̄为面积平均法向热流密度。已恢复负号及平均符号，不存在原文件公式缺项；影响傅里叶定律与等效导热系数的定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "有限元材料段与导热模拟段的单位上标被提取为/C0等乱码。原页两相密度均为1200 kg m⁻³，演示导热系数分别为0.3和3 W m⁻¹ K⁻¹；钢杆泊松比的0:3应按原页读为0.3。已纠正，不涉及原文缺项，影响材料输入参数和量纲的准确复现。"
+          }
+        ]
       }
     },
     {
@@ -2484,9 +2832,13 @@
       "reading_status": {
         "paper_id": "04a29ffa0d97",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-25T17:27:37.288773+00:00",
+        "updated_at": "2026-09-30T09:25:48.912113+00:00",
         "basis": "abstract",
-        "reason": "not_found"
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
       }
     },
     {
@@ -2589,9 +2941,159 @@
       "reading_status": {
         "paper_id": "13e3f3235f1b",
         "state": "failed",
-        "updated_at": "2026-09-25T18:30:40.934072+00:00",
+        "updated_at": "2026-09-30T09:26:58.356434+00:00",
         "basis": "full_text",
-        "reason": ""
+        "reason": "",
+        "total": 41,
+        "covered": 41,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "提供的文字遗漏原页明确可读的“Published online: 22 July 2026”，已据截图补正为2026年7月22日。无公式或图号涉及；影响出版信息完整性，不影响研究结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "文字资料保留图1图注，但未提取图内标签和曲线内容。原页可清楚识别六组标签依次为 Progressive、Dual-thrust、Regressive、Regressive、Neutral、Neutral，横轴 Time、纵轴 Flow rate，并有 Slots、Star point 标注。已据图补充，避免遗漏双推力类型；不是原文件缺图。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "图2的图内文字未进入所给文字提取，已据原页补读。图2c明确区分42种几何类型、47,800个有符号距离数据样本与近478万个性能—结构特征样本；图2a标明本文结合α、β象限，图2b列出三类映射/生成路线。遗漏影响数据规模和方法分类理解，并非原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "正文耗时被提取为“1 5 minutes”；原页清楚显示“15 minutes”，已纠正为使用A5000 GPU在15分钟内完成。无公式或图号涉及；该纠正影响计算效率声明的准确理解，但本页未说明计时是否包含离线训练。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "正文数学符号提取发生错序，并遗漏无量纲长度的上横线。原页可读为λ_g=[L̄,N,m]及W(x,λ_L,λ_g)，几何样本数量为N_geo=47,800。已纠正；涉及几何参数定义和场表示，非原文缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "式(1)在文字提取中丢失范数符号并打乱上下标。原页明确为‖∇_x W_{i,j,Pre}‖²=1；预测值定义为W_{i,j,Pre}=W(x_{i,j},λ_{i,L},λ_{i,g})。已据原页纠正，避免将梯度范数平方误读为梯度本身，影响物理正则含义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "图3内部结构、损失表达式和扩散过程公式未进入文字提取。原页已读清：a包含SDF均方误差与eikonal平方残差均值；b包含前向加噪、反向去噪、条件嵌入、噪声预测及高斯采样的均值和协方差表达式。遗漏影响模型架构和训练目标理解，属于提取遗漏，不是原图缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "式(2)的文字提取打乱了条件箭头和变量顺序。原页明确为纯高斯噪声在λ_p、λ_ud条件下生成λ_L、λ_g、λ_uu。已纠正其条件与输出的对应关系；页末引出的后续表达式不在本批，未判定为源文件缺失。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "式(3)、式(4)的文字提取存在上下标及顺序错乱。原页式(3)可辨为无条件预测加w_g乘以条件与无条件预测之差；式(4)的优化变量为λ_L、L̄、r_b、R，目标为F(λ_L,L̄,r_b,R)。已核对，原文件未缺公式；错误影响引导权重和优化变量的理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "图4相关正文的倍数被提取为错序的“35.0 10×”。原页明确为“5.0×10³ times higher than DEAD”，已纠正。该数值是作者报告的DeepSDF角点残差相对DEAD的最高倍数，不是所有插值点的统一改善倍数。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "所给文字遗漏图4内部的插值坐标、矩阵标度和单元格数值，本次已据两幅高清重叠截图补读。图4b、d均含DEAD与DeepSDF的6×6矩阵，标度为×10⁻³；例如图4b行5列0分别为0.21与1057.42。此前矩阵数字无法完整识别的问题已解除；遗漏影响残差量级和模型比较，不是原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P16",
+            "detail": "图5内部坐标、训练轮数和细节标签未进入文字提取。原页可读出图5a的两个MSE坐标及50,000、20,000 epochs标注，图5b的过拟合和边缘保持对比标签，以及W/m色标。已补读；遗漏影响训练比较和几何保真性证据的理解，并非原文件缺图。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P18",
+            "detail": "图6内部的曲线、代表结果标注、UMAP标签及分布图图例未进入文字提取，已据原页补读。图6c图例包括25%—75%、1.5IQR范围、中位数、最大或最小值，不能将全部图形范围解释为标准差。遗漏影响分布统计与生成结果的理解，非原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P19",
+            "detail": "表1的文字提取未完整保留合并单元格关系。原页上半部分固定生成数量为1000、改变聚类数量；下半部分固定聚类数量为5、改变生成数量。脚注限定统计对象为聚类代表。已核对并恢复对应关系，避免将0.9579误认为所有实验条件下恒定的最大r²。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P20",
+            "detail": "图7的实际样本量、误差棒定义及相对标准误差标注未进入文字提取。原页明确P1—P5样本量为10、9、2、9、10，误差棒为SEM，RSE=SEM/mean×100%；P3装填率和长度的RSE为12%和11%。已补读，避免将10次总实验误认为每种模式均有10个样本，或将排除P3后的低于3%结论推广到全部模式。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P21",
+            "detail": "图8内部数值及曲线标签未进入文字提取，已据原页补读。五种模式最终r²依次为0.9881、0.9935、0.9801、0.9877、0.9796；其中P5为0.9796，不应四舍五入后表述为严格超过0.98。右侧三类目标项的黑、红、蓝对应关系与图注一致。遗漏影响最终匹配程度的准确理解，非原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P23",
+            "detail": "图9内部12组曲线、结构图及r²、η标注未进入文字提取，已据原页补读。例如案例i为r²=0.9457、η=98.1%，案例g为r²=0.983、η=70.3%。这些结果不能概括为所有案例r²均超过0.98或装填率均超过75%；遗漏影响跨案例性能与约束达成情况的判断。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P26",
+            "detail": "图10内部的数值、图例及比较标注未进入文字提取，已据原页补读。在η=82.6%处，本文结果r²=0.9943，MENN比较结果r²=0.9924；阴影为分箱后的±1标准差，不是置信区间。遗漏影响重复比较的量化理解，非原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P27",
+            "detail": "图11内部的目标函数、局部几何标注、三组结果及近邻说明未进入文字提取。原页目标函数包含性能匹配、装填率、eikonal残差及三类局部几何惩罚项；三个结果旁均展示“Five neighbors in dataset”。已补读，遗漏影响约束微调与数据集近邻比较的理解；未发现公式占位或原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P29",
+            "detail": "式(5)的分式、求和范围与下标在文字提取中错序。原页为N_i=N_geo·DOF_i/(Σ_{j=1}^{N_type}DOF_j)，i=1,…,N_type。已核对，影响按自由度分配各类型样本数的理解，非原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P30",
+            "detail": "图12a图注的球形类别被提取为“2 types of spherical grains”，原页清楚写为“3 types of spherical grains”，已按原页纠正。图12内部网格分类及数据组成也未完整进入文字提取，已补读。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P30",
+            "detail": "图12a图注原页列出10、3、4、5、10、2、3、6类，合计43，但同时称总数为42。属于已核实的原页计数不一致，而非页面不清；现有资料不能确定哪个分项应修正，影响几何类型组成的准确复核，不影响本页现有内容识读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P31",
+            "detail": "式(6)的分段结构、上下标及矩阵行列在文字提取中混乱。原页明确潜向量和几何向量随同一几何的重复采样保持对应，性能矩阵第一行为时间、第二行为压力。已核对，避免将采样次数误当几何数量或将两行矩阵误读为单一向量。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P32",
+            "detail": "式(7)—(11)的权重、积分、范数及上下标在文字提取中部分错序。原页式(9)显示F_η=(1−η)²；式(10)被积项为(1−‖∇_xW‖)²；式(11)积分下标是边界标记，非偏导算子。均已据原页纠正，影响目标函数和物理残差的准确理解；未发现缺失公式。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P33",
+            "detail": "式(12)、(13)的积分范围、分段括号、分母及平方位置在文字提取中错序。原页可明确区分式(12)中u的分段定义、对y的偏导与平面边界积分，以及式(13)的线边界积分。已核对，影响几何惩罚项含义；原页未缺公式。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P34",
+            "detail": "“Measures of performance matching degree”首段在原页将计算曲线和目标曲线均标为p_T(t)，而式(14)—(16)明确分别使用p(t)和p_T(t)。属于原文符号误标，不是提取错误；影响两条曲线的身份区分，但后续公式可读且无需补造。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P34",
+            "detail": "式(14)—(16)的分式、指数、积分及向量括号在文字提取中错序。原页式(14)区分压力计算、肉厚随时间的积分以及等值燃面的面积定义；式(15)、(16)区分计算压力向量与目标压力向量。已据原页核对，未发现占位或缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P35",
+            "detail": "式(17)的文字提取遗漏目标均值的上横线并打乱点积结构。原页分子为(p_T−p)·(p_T−p)，分母为(p_T−p̄_T)·(p_T−p̄_T)，整体为1减该比值。已纠正，避免将归一化分母误读为零或将r²误解为普通相关系数的平方。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P39",
+            "detail": "参考文献17在原页以“Defence Technology, (2025).”结束，未提供卷号、页码、文章号或DOI。该条书目信息不完整已由原页核实，但不能据此判断文献不存在或研究结论错误；影响精确定位与核验。无公式或图号涉及，页面仍可阅读。"
+          }
+        ]
       }
     },
     {
@@ -2615,7 +3117,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "Reducing unsprung mass in high-performance braking systems is critical for vehicle dynamics, but applying topology optimization (TO) to conventional solid discs under combined thermo-mechanical loading often causes “thermal entrapment” and structural failure. This study addresses this limitation by proposing a floating disc architecture and a two-stage computational framework. First, TO via the SIMP algorithm was applied to the Aluminum 7075-T6 inner carrier strictly under mechanical loads, decoupling artificial thermal stresses and yielding a fixed, optimized geometry. Results show the TO ach…",
+      "summary": "本文针对制动系统轻量化中热—机械耦合拓扑优化可能引发的“thermal entrapment”，提出浮动盘架构与两阶段计算框架：先在机械载荷下优化内支架，再为固定优化几何建立热—机械响应代理模型。摘要报告内支架减重53%，预测精度为R2≈0.9998，并给出疲劳分析结果。[摘要] 解读：值得关注的是结构优化与快速性能评估的衔接，但现有资料不足以核实模型泛化能力及实物可靠性。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "6bea9d28aa1d1c3205b2d2cc3f36ad3f97e7e0a7",
@@ -2657,11 +3159,41 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "推荐重点阅读其机械载荷拓扑优化与热—机械代理建模的衔接方法，适合结构轻量化和疲劳可靠性研究；智能运维价值属于潜在迁移方向，摘要未展示在线监测应用。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是在降低制动系统簧下质量的同时，避免传统实心盘在热—机械联合载荷拓扑优化中出现“thermal entrapment”和结构失效。[摘要] 解读：核心并非单纯追求减重，而是选择适合优化的构件与载荷处理方式，协调轻量化和服役性能。",
+        "method": "作者采用浮动盘架构，先以SIMP算法对Aluminum 7075-T6内支架进行纯机械载荷拓扑优化，固定几何后再建立热—机械代理模型。训练使用覆盖“15 design scenarios”的拉丁超立方采样及Genetic Aggregation算法。[摘要]",
+        "innovation": "摘要明确提出“two-stage computational framework”，将内支架机械拓扑优化与优化后几何的热—机械响应预测分阶段处理。[摘要] 解读：可关注这种任务拆分与流程组合，但摘要未提供既有方法对比，不能据此认定算法原创性或领域首次突破。",
+        "findings": "内支架质量由0.218 kg降至0.102 kg，摘要称减重“53%”；应力与温度场预测报告R2≈0.9998。[摘要] 疲劳结果原文为“106 extreme braking cycles”，安全系数1.65；次数保留原样，不能自行恢复为指数写法。",
+        "limitations": "资料仅为摘要，未交代训练与测试划分、参数覆盖范围、误差分布或实物试验，无法核实高预测精度的适用边界。[摘要] 解读：这些是当前证据缺口，并非已确认的论文缺陷；疲劳循环数的文本格式也需核对原文，不能据此直接作寿命承诺。",
+        "connection": "与结构设计的直接联系是内支架减重，与可靠性研究的直接联系是疲劳分析及安全系数。[摘要] 解读：其“real-time responses”预测思路可能支持智能运维中的快速状态评估，但摘要没有传感数据接入、模型在线更新或故障诊断证据，不能等同于已落地的运维系统。",
+        "next_steps": "建议后续阅读优先核对机械优化与热—机械校核的载荷对应关系，并查看代理模型独立验证和极限制动工况的判定标准。若迁移至可靠性研究，建议增加参数不确定性与预测误差传播分析；这些属于研究建议，而非摘要所述作者已完成的工作。[摘要]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "制动盘内支架的拓扑优化与机器学习参数化预测模型开发",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.3390/dynamics6030040"
+      ],
+      "analyzed_at": "2026-09-27T13:21:09.152429+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "c36ba57f4e7e7166f2ca48fecb435a7ade3992d8a961159671eef8175b32bf0b",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "c05baf48e37d",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-09-30T09:26:35.695858+00:00",
+        "basis": "abstract",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -2779,9 +3311,13 @@
       "reading_status": {
         "paper_id": "c6eb0c75d85e",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-25T17:08:17.846297+00:00",
+        "updated_at": "2026-09-30T09:26:21.979437+00:00",
         "basis": "abstract",
-        "reason": "restricted"
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
       }
     },
     {
@@ -2948,7 +3484,11 @@
         "state": "published",
         "updated_at": "2026-09-25T17:26:23.148407+00:00",
         "basis": "full_text",
-        "reason": ""
+        "reason": "",
+        "total": 20,
+        "covered": 20,
+        "pdf_available": true,
+        "issues": []
       }
     },
     {
@@ -2971,7 +3511,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "Wind turbine towers are critical supporting structures whose structural safety, durability, and cost-effectiveness become increasingly important as turbine capacities and hub heights increase. This review synthesises the structural design and performance characteristics of steel tubular, concrete, steel–concrete hybrid, and lattice wind turbine towers, with particular emphasis on the role of finite element analysis (FEA). The review considers mechanical behaviour, durability, static response, fatigue performance, and dynamic and seismic characteristics. FEA enables high-fidelity representation…",
+      "summary": "本文围绕风力机大型化、高塔化背景下的安全、耐久与经济性问题，综述钢管、混凝土、钢—混凝土混合及格构式塔架，重点讨论有限元分析在静力、疲劳、动力与抗震评估中的作用。摘要指出法兰连接、过渡区域及循环风荷载值得关注，并介绍机器学习预测、声发射监测与振动控制的结合趋势。本文适合作为塔架性能研究的入门索引，但当前仅有摘要，不能据此判断综述完整性或模型验证质量。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7212351561",
@@ -3012,11 +3552,41 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议作为风电塔架结构设计与疲劳评估的方向性综述阅读，优先关注连接细节、动力响应及监测融合线索；若目标是复现智能运维算法或生成式设计流程，摘要尚未提供足够方法细节。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是机组容量与轮毂高度增加时，如何兼顾塔架结构安全、耐久性和成本效益。作者以“structural safety, durability, and cost-effectiveness”概括核心关切，并覆盖不同塔架形式；摘要未给出特定设计场景或量化目标。[摘要]",
+        "method": "本文采用综述方式，整理四类塔架的结构设计与性能特征，以有限元分析为重点，原文称“particular emphasis on the role of finite element analysis”。分析涉及锥形壳体、连接、过渡段、材料及荷载；摘要未说明检索策略和纳入标准。[摘要]",
+        "innovation": "解读：其潜在价值在于将多类塔架及静力、疲劳、动力问题置于共同的有限元分析框架下，而非提出已获验证的新算法。摘要提及“machine-learning-based prediction”等融合方向，但未证明这些方法由本文首创，也未提供足以判定原创性的比较证据。[摘要]",
+        "findings": "综述归纳认为，静力评估应关注“flange connections and transition regions”，疲劳则受循环风荷载与塔架特定荷载条件显著影响。动力与抗震分析还需考虑固有频率控制、长周期地震动、近场效应及土—结构相互作用；摘要未报告定量比较结果。[摘要]",
+        "limitations": "当前证据仅限摘要，缺少文献筛选流程、研究覆盖范围、模型验证资料及不确定性处理信息，因此无法核实综述的系统性与结论稳健性。“high-fidelity representation”是摘要对有限元能力的表述，并不能替代具体误差验证；这些是资料限制，不是已确认的论文缺陷。[摘要]",
+        "connection": "解读：与结构设计的联系最直接，包括应力、变形与屈曲评估；与可靠性研究的联系来自“fatigue-damage accumulation”，但尚无概率可靠性证据。机器学习及监测提供智能运维线索；摘要未涉及生成式设计机制，不能将一般设计优化等同于生成式设计。[摘要]",
+        "next_steps": "建议：后续获取全文时，优先核查连接与过渡段的建模假设、疲劳荷载谱及验证依据，并追踪监测与数值模型融合的具体案例。可探索用监测信息更新有限元模型并评估寿命预测不确定性；该设想受“digital-twin”展望启发，不是本文已完成的成果。[摘要]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "风力机塔架结构设计与性能分析综述",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.9734/acri/2026/v26i92166"
+      ],
+      "analyzed_at": "2026-09-27T13:22:15.242639+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "99245a16cbb7135ea764dc67279b091ac5bf97652befa23b467d5dbebc6ab848",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "8a095e50b332",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-09-30T09:26:46.978893+00:00",
+        "basis": "abstract",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "source_status": {
@@ -3450,11 +4020,11 @@
   "analysis_status": {
     "ready_core": 5,
     "target_core": 5,
-    "ready_extended": 3,
+    "ready_extended": 5,
     "target_extended": 5,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 2
+    "pending": 0
   },
   "edition": {
     "id": "36320883385",
