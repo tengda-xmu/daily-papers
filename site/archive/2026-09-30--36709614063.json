@@ -383,10 +383,14 @@
       "recommended_direction": "generative_design",
       "reading_status": {
         "paper_id": "c8e9f96f8b55",
-        "state": "failed",
-        "updated_at": "2026-09-25T18:32:27.329713+00:00",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-30T11:45:35.626472+00:00",
         "basis": "full_text",
-        "reason": ""
+        "reason": "",
+        "total": 244,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
       }
     },
     {
@@ -409,7 +413,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Machine learning (ML) algorithms were applied to data from fiber optic sensors embedded in inflatable softgoods space habitat structures to enable structural health monitoring (SHM). Fiber optic distributed strain sensing (DSS) with data spacing of 2.6 mm along each sensor was foundational to the presented approach of detecting changes in the structure over time. The ML models were applied to the distributed fiber optic signals to automatically detect structural failures as well as indicators of future failure of the inflatable’s restraint layer materials. In addition to the detection of the e…",
+      "summary": "本文面向充气式柔性空间栖居结构，利用嵌入式光纤分布式应变信号开展异常检测、分类与定位。研究以NASA约翰逊航天中心三分之一缩比充气结构蠕变试验数据训练卷积神经网络，处理一维和二维应变历史，并通过并行卷积层识别不同时间尺度的特征。摘要报告准确率为“99.6% or better”，但未说明数据划分及各类事件表现。本文适合关注柔性结构损伤识别与智能运维的研究者，以下仅作摘要级解读。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -448,11 +452,41 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐重点阅读其分布式应变数据组织方式及并行卷积设计：前者连接连续空间感知与事件定位，后者针对不同时间尺度的异常特征；但需通过全文核查准确率对应任务及验证设置。[摘要]",
+      "deep_read": {
+        "problem": "研究关注充气式柔性空间栖居结构约束层的失效及未来失效征兆，需要同时回答异常是否发生、属于何种事件以及发生在哪里。摘要以“indicators of future failure”明确预警目标，研究问题不止于识别已发生的破坏，也涉及蠕变演化中的风险征兆。[摘要]",
+        "method": "研究采用嵌入式光纤分布式应变感知，沿传感器的数据间距为“2.6 mm”。训练数据来自采用航天级材料与制造工艺的三分之一缩比蠕变试验；卷积神经网络处理一维、二维应变历史，并行卷积层用于提取不同时间尺度的特征。[摘要]",
+        "innovation": "解读：值得关注的方法特色是将分布式光纤应变历史与多时间尺度卷积处理结合，并覆盖事件检测、分类和定位。摘要使用“Parallel convolutional layers”说明网络设计，但不足以确认架构首创性；作者关于未见同等空间可部署技术的表述不能替代系统比较。[摘要]",
+        "findings": "摘要列出的识别对象包括纱线与带条断裂、持续损伤、压力下降，以及提示临近爆裂的蠕变趋势异常，并报告模型准确率为“99.6% or better”。该数值支持进一步阅读，但摘要没有给出类别级指标或定位误差，不能认定所有事件均达到相同精度。[摘要]",
+        "limitations": "摘要未交代样本规模、训练测试划分、类别分布、误报漏报及预警提前量，因此高准确率的适用范围尚不清楚。这些是当前资料的证据缺口，而非已证实的方法缺陷。数据来源明确为“one-third-scale”试验，摘要也不足以确认全尺寸或在轨泛化能力。[摘要]",
+        "connection": "解读：该研究与智能运维直接相关，因为模型输出覆盖异常检测、分类和物理定位，可为状态评估提供信息。摘要提及“overall structural integrity”；但若进一步用于结构设计反馈或可靠性量化，仍需建立监测特征与承载能力、失效概率之间的关系，摘要未提供此类模型。[摘要]",
+        "next_steps": "建议：阅读全文时优先核查数据是否按独立试件或试验划分、相邻时间窗是否跨训练测试集，以及不同事件的召回率和误报率。围绕摘要提出的“impending burst”，还应核查预警提前量；后续可设计跨工况验证与并行卷积消融试验，这些是研究建议，并非作者已完成的工作。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "机器学习用于充气结构光纤健康监测中的异常检测与分类",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1177/14759217261487744"
+      ],
+      "analyzed_at": "2026-09-30T11:48:15.455926+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "35600c3ce04035d4a7456c6abac82733c7fcef4a640a4865284d06d5f26cbdac",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "dfc9b7fc8847",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-09-30T11:48:15.459324+00:00",
+        "basis": "abstract",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Google Scholar",
@@ -563,7 +597,18 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "846009a34c58",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-30T11:46:28.980678+00:00",
+        "basis": "missing",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -653,7 +698,18 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "a5695ec17eb2",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-30T11:47:04.967442+00:00",
+        "basis": "",
+        "reason": "",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "extended": [
@@ -770,7 +826,18 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "f61abfb865f5",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-30T11:49:43.045546+00:00",
+        "basis": "missing",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -843,7 +910,18 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "f55569d6c20b",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-30T11:49:58.494451+00:00",
+        "basis": "",
+        "reason": "",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -974,9 +1052,13 @@
       "reading_status": {
         "paper_id": "a1130ac09906",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-25T18:01:45.820456+00:00",
+        "updated_at": "2026-09-30T11:49:28.702770+00:00",
         "basis": "abstract",
-        "reason": "not_found"
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
       }
     },
     {
@@ -1072,7 +1154,18 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "eb62449238c8",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-30T11:50:09.588932+00:00",
+        "basis": "missing",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Elsevier",
@@ -1092,7 +1185,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "本文聚焦《Generative design of bacteriophages with genome language models》，暂未提供可用摘要，请查看原文。",
+      "summary": "【摘要】研究以ΦX174为模板，用基因组语言模型生成完整噬菌体基因组，旨在设计具有目标宿主嗜性的可存活噬菌体。实验获得16株在实验室条件下适合度表现不同的噬菌体；冷冻电镜确认，其中一株的衣壳采用进化关系较远的DNA包装蛋白。生成噬菌体组成的混合制剂还能克服大肠杆菌对ΦX174的抗性。[摘要] 解读：工作将生成式设计推进到基因组尺度，但摘要不足以判断生成成功率、治疗安全性与工程迁移价值。",
       "raw_metadata": {
         "@_fa": "true",
         "link": [
@@ -1188,11 +1281,41 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议作为生成式设计的跨领域案例选读：摘要提供了完整基因组生成、存活验证和抗性菌株实验线索，但与智能运维、结构设计及可靠性研究并不直接对应，不宜仅凭主题标签重点推荐。[摘要]",
+      "deep_read": {
+        "problem": "【论文摘要】研究关注完整基因组编码的复杂相互作用，而非单个基因的孤立功能，原文指出“complex interactions encoded by entire genomes”。[摘要] 解读：核心问题是生成模型能否在基因组尺度协调这些相互作用，产生可存活且具有目标宿主嗜性的噬菌体。",
+        "method": "【论文摘要】作者使用基因组语言模型，以ΦX174为设计模板生成完整基因组，再以实验检验噬菌体存活及适合度，并借助冷冻电镜检查一个生成噬菌体的衣壳。[摘要] 摘要未交代模型架构、训练数据、生成约束和候选筛选流程，因此尚不能还原可复现的方法步骤。",
+        "innovation": "【论文摘要】作者将贡献表述为“the first generative design of complete bacteriophage genomes”，强调设计对象是完整噬菌体基因组。[摘要] 解读：值得关注的是从局部序列设计走向整套功能系统生成；但“首次”属于作者声明，仅凭摘要无法核查优先性或量化相对既有方法的优势。",
+        "findings": "【论文摘要】实验获得“16 phages with diverse fitness profiles”；冷冻电镜确认一个生成噬菌体使用进化关系较远的DNA包装蛋白，混合制剂还能克服ΦX174抗性大肠杆菌。[摘要] 这些结果分别提供存活、结构和功能层面的证据，但不等于已经验证临床疗效。",
+        "limitations": "【资料边界】摘要将适合度观察限定于“in laboratory conditions”。[摘要] 未提供候选总数、失败比例、适合度测量定义、重复实验或统计结果，也未报告体内验证。解读：因此无法判断生成效率、结果稳定性与治疗适用范围；这些是当前资料缺口，不能断言全文也未涉及。",
+        "connection": "【解读】与智能运维、结构设计和可靠性研究的联系主要是方法类比：生成完整候选系统后，还需以结构检查和功能试验验证可行性。[摘要] 这种验证思路可启发工程生成式设计，但摘要不涉及设备监测、承载结构或失效概率，不能把生物学成功直接视作工程可靠性提升。",
+        "next_steps": "【建议】若继续精读，应优先核查候选生成总量、训练测试数据划分、与模板及基线的比较，以及宿主嗜性和抗性克服的测量方式。针对工程迁移，可另行研究约束生成与分层验证的结合；这是研究设想，不是作者结论，现有摘要也未证明其跨领域有效性。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "利用基因组语言模型生成式设计噬菌体",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1126/science.aec2657"
+      ],
+      "analyzed_at": "2026-09-30T11:51:00.269560+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "1d2a363f33ce91abc98f101afe1758cbe13ba441721a34fca6bc3eb704e880f6",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "e287fb472485",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-09-30T11:51:00.273082+00:00",
+        "basis": "abstract",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "papers": [
@@ -1575,10 +1698,14 @@
       "recommended_direction": "generative_design",
       "reading_status": {
         "paper_id": "c8e9f96f8b55",
-        "state": "failed",
-        "updated_at": "2026-09-25T18:32:27.329713+00:00",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-30T11:45:35.626472+00:00",
         "basis": "full_text",
-        "reason": ""
+        "reason": "",
+        "total": 244,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
       }
     },
     {
@@ -1601,7 +1728,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Machine learning (ML) algorithms were applied to data from fiber optic sensors embedded in inflatable softgoods space habitat structures to enable structural health monitoring (SHM). Fiber optic distributed strain sensing (DSS) with data spacing of 2.6 mm along each sensor was foundational to the presented approach of detecting changes in the structure over time. The ML models were applied to the distributed fiber optic signals to automatically detect structural failures as well as indicators of future failure of the inflatable’s restraint layer materials. In addition to the detection of the e…",
+      "summary": "本文面向充气式柔性空间栖居结构，利用嵌入式光纤分布式应变信号开展异常检测、分类与定位。研究以NASA约翰逊航天中心三分之一缩比充气结构蠕变试验数据训练卷积神经网络，处理一维和二维应变历史，并通过并行卷积层识别不同时间尺度的特征。摘要报告准确率为“99.6% or better”，但未说明数据划分及各类事件表现。本文适合关注柔性结构损伤识别与智能运维的研究者，以下仅作摘要级解读。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -1640,11 +1767,41 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐重点阅读其分布式应变数据组织方式及并行卷积设计：前者连接连续空间感知与事件定位，后者针对不同时间尺度的异常特征；但需通过全文核查准确率对应任务及验证设置。[摘要]",
+      "deep_read": {
+        "problem": "研究关注充气式柔性空间栖居结构约束层的失效及未来失效征兆，需要同时回答异常是否发生、属于何种事件以及发生在哪里。摘要以“indicators of future failure”明确预警目标，研究问题不止于识别已发生的破坏，也涉及蠕变演化中的风险征兆。[摘要]",
+        "method": "研究采用嵌入式光纤分布式应变感知，沿传感器的数据间距为“2.6 mm”。训练数据来自采用航天级材料与制造工艺的三分之一缩比蠕变试验；卷积神经网络处理一维、二维应变历史，并行卷积层用于提取不同时间尺度的特征。[摘要]",
+        "innovation": "解读：值得关注的方法特色是将分布式光纤应变历史与多时间尺度卷积处理结合，并覆盖事件检测、分类和定位。摘要使用“Parallel convolutional layers”说明网络设计，但不足以确认架构首创性；作者关于未见同等空间可部署技术的表述不能替代系统比较。[摘要]",
+        "findings": "摘要列出的识别对象包括纱线与带条断裂、持续损伤、压力下降，以及提示临近爆裂的蠕变趋势异常，并报告模型准确率为“99.6% or better”。该数值支持进一步阅读，但摘要没有给出类别级指标或定位误差，不能认定所有事件均达到相同精度。[摘要]",
+        "limitations": "摘要未交代样本规模、训练测试划分、类别分布、误报漏报及预警提前量，因此高准确率的适用范围尚不清楚。这些是当前资料的证据缺口，而非已证实的方法缺陷。数据来源明确为“one-third-scale”试验，摘要也不足以确认全尺寸或在轨泛化能力。[摘要]",
+        "connection": "解读：该研究与智能运维直接相关，因为模型输出覆盖异常检测、分类和物理定位，可为状态评估提供信息。摘要提及“overall structural integrity”；但若进一步用于结构设计反馈或可靠性量化，仍需建立监测特征与承载能力、失效概率之间的关系，摘要未提供此类模型。[摘要]",
+        "next_steps": "建议：阅读全文时优先核查数据是否按独立试件或试验划分、相邻时间窗是否跨训练测试集，以及不同事件的召回率和误报率。围绕摘要提出的“impending burst”，还应核查预警提前量；后续可设计跨工况验证与并行卷积消融试验，这些是研究建议，并非作者已完成的工作。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "机器学习用于充气结构光纤健康监测中的异常检测与分类",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1177/14759217261487744"
+      ],
+      "analyzed_at": "2026-09-30T11:48:15.455926+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "35600c3ce04035d4a7456c6abac82733c7fcef4a640a4865284d06d5f26cbdac",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "dfc9b7fc8847",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-09-30T11:48:15.459324+00:00",
+        "basis": "abstract",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Google Scholar",
@@ -1755,7 +1912,18 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "846009a34c58",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-30T11:46:28.980678+00:00",
+        "basis": "missing",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -1845,7 +2013,18 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "a5695ec17eb2",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-30T11:47:04.967442+00:00",
+        "basis": "",
+        "reason": "",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Google Scholar",
@@ -1960,7 +2139,18 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "f61abfb865f5",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-30T11:49:43.045546+00:00",
+        "basis": "missing",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -2033,7 +2223,18 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "f55569d6c20b",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-30T11:49:58.494451+00:00",
+        "basis": "",
+        "reason": "",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -2164,9 +2365,13 @@
       "reading_status": {
         "paper_id": "a1130ac09906",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-25T18:01:45.820456+00:00",
+        "updated_at": "2026-09-30T11:49:28.702770+00:00",
         "basis": "abstract",
-        "reason": "not_found"
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
       }
     },
     {
@@ -2262,7 +2467,18 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "eb62449238c8",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-30T11:50:09.588932+00:00",
+        "basis": "missing",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Elsevier",
@@ -2282,7 +2498,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "本文聚焦《Generative design of bacteriophages with genome language models》，暂未提供可用摘要，请查看原文。",
+      "summary": "【摘要】研究以ΦX174为模板，用基因组语言模型生成完整噬菌体基因组，旨在设计具有目标宿主嗜性的可存活噬菌体。实验获得16株在实验室条件下适合度表现不同的噬菌体；冷冻电镜确认，其中一株的衣壳采用进化关系较远的DNA包装蛋白。生成噬菌体组成的混合制剂还能克服大肠杆菌对ΦX174的抗性。[摘要] 解读：工作将生成式设计推进到基因组尺度，但摘要不足以判断生成成功率、治疗安全性与工程迁移价值。",
       "raw_metadata": {
         "@_fa": "true",
         "link": [
@@ -2378,11 +2594,41 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议作为生成式设计的跨领域案例选读：摘要提供了完整基因组生成、存活验证和抗性菌株实验线索，但与智能运维、结构设计及可靠性研究并不直接对应，不宜仅凭主题标签重点推荐。[摘要]",
+      "deep_read": {
+        "problem": "【论文摘要】研究关注完整基因组编码的复杂相互作用，而非单个基因的孤立功能，原文指出“complex interactions encoded by entire genomes”。[摘要] 解读：核心问题是生成模型能否在基因组尺度协调这些相互作用，产生可存活且具有目标宿主嗜性的噬菌体。",
+        "method": "【论文摘要】作者使用基因组语言模型，以ΦX174为设计模板生成完整基因组，再以实验检验噬菌体存活及适合度，并借助冷冻电镜检查一个生成噬菌体的衣壳。[摘要] 摘要未交代模型架构、训练数据、生成约束和候选筛选流程，因此尚不能还原可复现的方法步骤。",
+        "innovation": "【论文摘要】作者将贡献表述为“the first generative design of complete bacteriophage genomes”，强调设计对象是完整噬菌体基因组。[摘要] 解读：值得关注的是从局部序列设计走向整套功能系统生成；但“首次”属于作者声明，仅凭摘要无法核查优先性或量化相对既有方法的优势。",
+        "findings": "【论文摘要】实验获得“16 phages with diverse fitness profiles”；冷冻电镜确认一个生成噬菌体使用进化关系较远的DNA包装蛋白，混合制剂还能克服ΦX174抗性大肠杆菌。[摘要] 这些结果分别提供存活、结构和功能层面的证据，但不等于已经验证临床疗效。",
+        "limitations": "【资料边界】摘要将适合度观察限定于“in laboratory conditions”。[摘要] 未提供候选总数、失败比例、适合度测量定义、重复实验或统计结果，也未报告体内验证。解读：因此无法判断生成效率、结果稳定性与治疗适用范围；这些是当前资料缺口，不能断言全文也未涉及。",
+        "connection": "【解读】与智能运维、结构设计和可靠性研究的联系主要是方法类比：生成完整候选系统后，还需以结构检查和功能试验验证可行性。[摘要] 这种验证思路可启发工程生成式设计，但摘要不涉及设备监测、承载结构或失效概率，不能把生物学成功直接视作工程可靠性提升。",
+        "next_steps": "【建议】若继续精读，应优先核查候选生成总量、训练测试数据划分、与模板及基线的比较，以及宿主嗜性和抗性克服的测量方式。针对工程迁移，可另行研究约束生成与分层验证的结合；这是研究设想，不是作者结论，现有摘要也未证明其跨领域有效性。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "利用基因组语言模型生成式设计噬菌体",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1126/science.aec2657"
+      ],
+      "analyzed_at": "2026-09-30T11:51:00.269560+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "1d2a363f33ce91abc98f101afe1758cbe13ba441721a34fca6bc3eb704e880f6",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "e287fb472485",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-09-30T11:51:00.273082+00:00",
+        "basis": "abstract",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "source_status": {
@@ -2943,13 +3189,13 @@
     "unavailable": 2
   },
   "analysis_status": {
-    "ready_core": 2,
+    "ready_core": 3,
     "target_core": 5,
-    "ready_extended": 1,
+    "ready_extended": 2,
     "target_extended": 5,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 7
+    "pending": 5
   },
   "edition": {
     "id": "36709614063",
