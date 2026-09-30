@@ -23,7 +23,7 @@ from .rpc import CodexClient, CodexError
 from .store import Store
 from .search import SearchService, SearchRequest, MoreRequest, SOURCES, SORT_OPTIONS
 from .journals import JournalManager, JournalChange, Revision
-from .daily_update import DailyUpdater, UpdateRequest
+from .daily_update import DailyUpdater, UpdateRequest, CatchUpRequest
 from .edition_manager import EditionManager, DeleteRequest
 from .directions import DirectionManager, DirectionChange
 from .wechat_subscriptions import SubscriptionManager, SubscriptionChange
@@ -95,7 +95,10 @@ def error_info(exc):
     return {"state": state, "message": text[:500]}
 
 
-def create_app(root=ROOT, runtime=None, rpc=None):
+def create_app(root=ROOT, runtime=None, rpc=None, automatic_updates=None):
+    # Isolated app roots (tests, previews) must opt in to external dispatches.
+    if automatic_updates is None:
+        automatic_updates = Path(root).resolve() == ROOT and rpc is None
     runtime = Path(runtime or root / ".local/codex-bridge").resolve()
     store = Store(runtime, root)
     client = rpc or CodexClient(runtime / "workspace")
@@ -146,11 +149,14 @@ def create_app(root=ROOT, runtime=None, rpc=None):
         info = runtime / "connection.json"
         info.write_text(json.dumps({"pid": os.getpid(), "origin": LOCAL_ORIGIN, "pair_code": pair_code}), encoding="utf-8")
         if rpc is None:
+            if automatic_updates:
+                daily_updater.start_monitor()
             reading_queue.start()
             ai_queue.start()
             local_figures.start()
             edition_manager.start()
         yield
+        await daily_updater.close()
         await reading_queue.close()
         await ai_queue.close()
         await local_figures.close()
@@ -337,6 +343,10 @@ def create_app(root=ROOT, runtime=None, rpc=None):
     @app.get('/api/recommendations/update')
     async def recommendation_progress():
         return await asyncio.to_thread(daily_updater.snapshot)
+
+    @app.post('/api/recommendations/catch-up')
+    async def catch_up_recommendations(data: CatchUpRequest):
+        return await asyncio.to_thread(daily_updater.catch_up, reconnected=data.reconnected)
 
     @app.get('/api/recommendations/editions')
     async def recommendation_editions():

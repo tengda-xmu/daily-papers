@@ -10,6 +10,8 @@ import subprocess
 import threading
 import time
 import uuid
+import base64
+from datetime import datetime, timezone
 from urllib.error import HTTPError, URLError
 from urllib.request import ProxyHandler, Request, build_opener, getproxies
 
@@ -26,6 +28,21 @@ _prefer_system_proxy = False
 class UpdateRequest(BaseModel):
     model_config = ConfigDict(extra='forbid')
     request_id: uuid.UUID
+
+
+class CatchUpRequest(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    reconnected: bool = False
+
+
+def remote_json(remote, path):
+    value = remote('GET', f'repos/{REPO}/contents/data/{path}?ref=main')
+    if value.get('encoding') == 'none':
+        sha = value.get('sha', '')
+        if not re.fullmatch(r'[a-f0-9]{40,64}', sha):
+            raise ValueError('Invalid metadata blob')
+        value = remote('GET', f'repos/{REPO}/git/blobs/{sha}')
+    return json.loads(base64.b64decode(value['content']))
 
 
 class GitHubError(HTTPException):
@@ -138,8 +155,116 @@ class DailyUpdater:
         self.runtime = Path(runtime)
         self.path = self.runtime / 'daily-update.json'
         self.remote, self.fetch = remote, fetch
-        self.lock = threading.RLock()
+        from .update_lock import UpdateLock
+        self.lock = UpdateLock(self.runtime / 'daily-update.lock')
         self.last_check = 0
+        self.background = None
+
+    def start_monitor(self):
+        import asyncio
+        async def monitor():
+            while True:
+                try:
+                    await asyncio.to_thread(self.catch_up)
+                except Exception:
+                    pass  # Catch-up persists actionable errors; never stop other workers.
+                await asyncio.sleep(60)
+        self.background = asyncio.create_task(monitor())
+
+    async def close(self):
+        import asyncio
+        if self.background:
+            self.background.cancel()
+            await asyncio.gather(self.background, return_exceptions=True)
+
+    def catch_up(self, *, reconnected=False, now=None):
+        from tools.daily_schedule import update_needed
+        from tools.public_updates import FILES, column_needed
+        from src.update_cycle import cycle_start, retry_delay
+        now = now or datetime.now(timezone.utc)
+        stamp, cycle = now.timestamp(), cycle_start(now).isoformat()
+        with self.lock:
+            path = self.runtime / 'catch-up.json'
+            try:
+                meta = json.loads(path.read_text(encoding='utf-8'))
+            except (OSError, ValueError):
+                meta = {}
+            if meta.get('cycle') != cycle:
+                meta = {'cycle': cycle, 'failures': 0}
+            old = self._read()
+            def save_meta():
+                self._write(path, meta)
+            def failed(message, network=False):
+                meta['failures'] = meta.get('failures', 0) + 1
+                meta.update(next_retry_at=stamp + retry_delay(meta['failures']), network=network, checked=stamp)
+                save_meta()
+                return self._save({**self._read(), 'state': 'failed', 'message': message,
+                    'cycle': cycle, 'retry_at': meta['next_retry_at']})
+            try:
+                if old['state'] in ACTIVE:
+                    old = self.snapshot()
+                    if old['state'] in ACTIVE:
+                        return old
+                failure_key = f'{old.get("run_id")}/{old.get("started_at")}' if old.get('run_id') else None
+                if (old['state'] == 'failed' and failure_key != meta.get('failed_run')
+                        and (old.get('cycle') == cycle or old.get('started_at', 0) >= cycle_start(now).timestamp())):
+                    meta['failed_run'] = failure_key
+                    return failed(old.get('message', '本次更新未完成，将自动重试。'))
+                if meta.get('checked', 0) > stamp - 30 and not (reconnected and meta.get('network')):
+                    return self._read()
+                if meta.get('next_retry_at', 0) > stamp and not (reconnected and meta.get('network')):
+                    return self._read()
+                # Read committed results, not the possibly stale local checkout.
+                papers = remote_json(self.remote, 'daily.json')
+                papers['latest_update'] = remote_json(self.remote, 'update-status.json')
+                ledger = remote_json(self.remote, 'public-updates.json').get('columns', {})
+                paper_due = update_needed(papers, now)[0]
+                columns = {}
+                for name, file in FILES.items():
+                    columns[name] = ledger.get(name) or remote_json(self.remote, file)
+                due = [name for name, value in columns.items() if column_needed(value, now)]
+                checked = papers.get('latest_update') or {}
+                meta.update(checked=stamp, network=False)
+                if not paper_due and not due:
+                    meta.update(failures=0, next_retry_at=0)
+                    save_meta()
+                    partial = any(v.get('outcome') in ('partial', 'error') for v in columns.values())
+                    # Preserve completion notifications for tabs still awaiting a reload.
+                    if old['state'] == 'succeeded' and old.get('cycle') == cycle:
+                        return old
+                    # Cloud updates can finish while this machine is offline.
+                    self._write(self.runtime / 'recommendations.json', papers)
+                    return self._save({'state': 'current', 'cycle': cycle, 'outcome': checked.get('outcome'),
+                        'checked_at': checked.get('checked_at'), 'columns': columns, 'edition': papers.get('edition'),
+                        'run_id': str(checked.get('run_id') or papers.get('update_run_id') or ''),
+                        'message': '论文已更新，部分栏目等待自动重试。' if partial else '最近更新周期已完成。'})
+                runs = self.remote('GET', API + '/workflows/daily.yml/runs?branch=main&per_page=30')
+                active = next((r for r in runs.get('workflow_runs', [])
+                               if r.get('status') in ('queued', 'in_progress', 'waiting', 'pending', 'requested')), None)
+                if active:
+                    data = {'state': 'queued', 'request_id': str(uuid.uuid5(uuid.NAMESPACE_URL, str(active['id']))),
+                            'started_at': stamp, 'cycle': cycle, 'automatic': True,
+                            'message': '已有更新任务，正在跟踪进度。'}
+                    self._run(data, active['id']); save_meta()
+                    return self._save(data)
+                # A failed publish job can resume its saved artifact without collecting again.
+                if old.get('run_id') and old.get('publish_retry'):
+                    data = {**old, 'state': 'confirming', 'retrying_publish': True,
+                            'started_at': stamp, 'message': '正在重试发布，保留已完成的采集结果。'}
+                    self._save(data); save_meta()
+                    self.remote('POST', API + '/runs/' + old['run_id'] + '/rerun-failed-jobs', {})
+                    return self._save({**data, 'state': 'queued'})
+                meta['attempt'] = meta.get('attempt', 0) + 1
+                request_id = uuid.uuid5(uuid.NAMESPACE_URL, f'{REPO}/catch-up/{cycle}/{meta["attempt"]}')
+                save_meta()
+                return self.start(request_id, scheduled=True, cycle=cycle)
+            except Exception as exc:
+                # An ambiguous POST already has a persistent confirming record.
+                data = self._read()
+                if data.get('state') == 'confirming':
+                    return data
+                message = exc.detail if isinstance(exc, HTTPException) and isinstance(exc.detail, str) else '自动补更暂时无法连接，恢复联网后会重试。'
+                return failed(message, network=True)
 
     def _read(self):
         try:
@@ -165,7 +290,7 @@ class DailyUpdater:
             raise ValueError('Invalid run ID')
         data.update(run_id=str(run_id), run_url=f'https://github.com/{REPO}/actions/runs/{run_id}')
 
-    def start(self, request_id):
+    def start(self, request_id, *, scheduled=False, cycle=None):
         request_id = str(uuid.UUID(str(request_id)))
         with self.lock:
             old = self._read()
@@ -176,11 +301,13 @@ class DailyUpdater:
             self.remote('GET', API + '/workflows/daily.yml')
             data = {'state': 'confirming', 'request_id': request_id, 'started_at': time.time(),
                     'message': '正在确认更新任务，请稍候。'}
+            if scheduled:
+                data.update(automatic=True, cycle=cycle, message='检测到遗漏，正在启动自动补更。')
             self._save(data)
             try:
                 response = self.remote('POST', API + '/workflows/daily.yml/dispatches', {
                     'ref': 'main', 'return_run_details': True,
-                    'inputs': {'request_id': request_id, 'send_digest': False}})
+                    'inputs': {'request_id': request_id, 'send_digest': False, 'scheduled_check': scheduled}})
                 if response.get('workflow_run_id'):
                     self._run(data, response['workflow_run_id'])
                     data.update(state='queued', message='更新已启动，等待开始采集。')
@@ -201,7 +328,7 @@ class DailyUpdater:
             if not data.get('run_id'):
                 runs = self.remote('GET', API + '/workflows/daily.yml/runs?event=workflow_dispatch&branch=main&per_page=30')
                 found = next((r for r in runs.get('workflow_runs', [])
-                              if r.get('display_title') == 'Manual papers ' + data['request_id']), None)
+                              if r.get('display_title') in ('Manual papers ' + data['request_id'], 'Evening check ' + data['request_id'])), None)
                 if not found:
                     if time.time() - data['started_at'] > 180:
                         data.update(state='failed', message='未找到已提交的更新任务，请检查 GitHub 登录和网络后重试。')
@@ -209,17 +336,40 @@ class DailyUpdater:
                     return self._save(data)
                 self._run(data, found['id'])
             run = self.remote('GET', API + '/runs/' + data['run_id'])
+            if data.get('retrying_publish'):
+                if run.get('status') == 'completed' and run.get('conclusion') != 'success' and time.time() - data['started_at'] < 180:
+                    return data
+                data.pop('retrying_publish', None)
             if run['status'] == 'completed':
                 if run.get('conclusion') != 'success':
                     data.update(state='failed', message='本次更新未完成，当前推荐仍可阅读；可查看运行记录后重试。')
+                    jobs = self.remote('GET', API + '/runs/' + data['run_id'] + '/jobs?per_page=20')
+                    data['publish_retry'] = (any(j.get('name') == 'update' and j.get('conclusion') == 'success' for j in jobs.get('jobs', []))
+                                             and any(j.get('name') == 'publish' and j.get('conclusion') == 'failure' for j in jobs.get('jobs', [])))
                     try:
                         deployed = self.fetch(data['run_id'])
-                        if str(deployed.get('edition', {}).get('id')) == data['run_id']:
+                        if not data.get('publish_retry') and str(deployed.get('edition', {}).get('id')) == data['run_id']:
                             self._finish(data, deployed)
                     except Exception:
                         pass
                 else:
                     self._finish(data)
+                    if data['state'] == 'publishing' and data.get('automatic'):
+                        jobs = self.remote('GET', API + '/runs/' + data['run_id'] + '/jobs?per_page=20')
+                        updates = [j for j in jobs.get('jobs', []) if j.get('name') == 'update']
+                        if updates and all(j.get('conclusion') == 'skipped' for j in updates):
+                            # Another serialized run may have completed the cycle
+                            # between dispatch and this workflow's freshness gate.
+                            from tools.daily_schedule import update_needed
+                            current = remote_json(self.remote, 'daily.json')
+                            current['latest_update'] = remote_json(self.remote, 'update-status.json')
+                            if not update_needed(current)[0]:
+                                check = current['latest_update']
+                                online = self.fetch(check.get('run_id', current.get('update_run_id', '')))
+                                if online.get('generated_at') == current.get('generated_at'):
+                                    self._write(self.runtime / 'recommendations.json', online)
+                                    data.update(state='current', outcome=check.get('outcome'), checked_at=check.get('checked_at'),
+                                                run_id=str(check.get('run_id', '')), message='该更新周期已由其他任务完成。')
             elif run['status'] in ('queued', 'waiting', 'requested', 'pending'):
                 data.update(state='queued', message='更新任务正在排队，完成后会自动载入核心推荐和扩展阅读。')
             else:
@@ -239,7 +389,8 @@ class DailyUpdater:
             payload = self.fetch(data['run_id']) if payload is None else payload
             check = payload.pop('_update_status', {})
             no_new = check.get('outcome') == 'no_new' and str(check.get('run_id')) == data['run_id']
-            if ((str(payload.get('update_run_id')) != data['run_id'] and not no_new) or not payload.get('generated_at')
+            columns_only = check.get('outcome') == 'columns_only' and str(check.get('run_id')) == data['run_id']
+            if ((str(payload.get('update_run_id')) != data['run_id'] and not no_new and not columns_only) or not payload.get('generated_at')
                     or not isinstance(payload.get('core'), list) or not isinstance(payload.get('extended'), list)):
                 return  # Old CDN data is never treated as a successful update.
         except Exception:
@@ -250,7 +401,7 @@ class DailyUpdater:
         except (OSError, ValueError):
             pass
         # Retain prior paper metadata so existing conversations still resolve.
-        if not no_new:
+        if not no_new and not columns_only:
             self._write(self.runtime / 'recommendation-history' / (data['run_id'] + '.json'), payload)
         self._write(self.runtime / 'recommendations.json', payload)
         changed = any([p.get('id') for p in previous.get(section, [])] != [p.get('id') for p in payload[section]]
@@ -258,11 +409,14 @@ class DailyUpdater:
         data.update(state='succeeded', generated_at=payload['generated_at'], core_count=len(payload['core']),
                     extended_count=len(payload['extended']), changed=changed,
                     message=f'更新完成：核心推荐 {len(payload["core"])} 篇，扩展阅读 {len(payload["extended"])} 篇。')
-        data.update(outcome='no_new' if no_new else 'published', edition=payload.get('edition'),
+        data.update(outcome='columns_only' if columns_only else 'no_new' if no_new else 'published', edition=payload.get('edition'),
+                    checked_at=check.get('checked_at', payload.get('generated_at')), columns=check.get('columns', {}),
                     analysis_status=check.get('analysis_status', payload.get('analysis_status', {})),
                     heat_status=check.get('heat_status', payload.get('heat_status', {})))
         if no_new:
             data.update(changed=False, message='本次检查暂无可新增推荐，当前批次保留；检查记录已保存。')
+        elif columns_only:
+            data.update(changed=False, message='栏目补更已发布，论文推荐批次保持不变。')
         elif payload.get('edition'):
             e = payload['edition']
             data['message'] = f"{e['date']} 第 {e['number']} 批已发布：核心推荐 {len(payload['core'])} 篇，扩展阅读 {len(payload['extended'])} 篇。"

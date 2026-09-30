@@ -1,11 +1,27 @@
 """Independently refresh public columns, and import validated AI reading notes."""
 import argparse
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import json
 import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+FILES = {'ai': 'ai-updates.json', 'opportunities': 'opportunities.json',
+         'leads': 'research-leads.json', 'social': 'social-articles.json'}
+
+
+def load(path):
+    try:
+        return json.loads(path.read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        return {}
+
+
+def pending_columns(root=ROOT, now=None):
+    now = now or datetime.now(timezone.utc)
+    ledger = load(root / 'data/public-updates.json').get('columns', {})
+    return [name for name, file in FILES.items()
+            if column_needed(ledger.get(name) or load(root / 'data' / file), now)]
 
 
 def import_readings(root=ROOT):
@@ -31,59 +47,63 @@ def import_readings(root=ROOT):
 
 
 def needed(root=ROOT, now=None):
-    now = now or datetime.now(timezone.utc)
-    from tools.daily_schedule import BEIJING
-    start = now.astimezone(BEIJING).replace(hour=21, minute=0, second=0, microsecond=0)
-    if now < start:
-        return False
-    for name in ('ai-updates.json', 'opportunities.json', 'social-articles.json'):
-        try:
-            payload = json.loads((root / 'data' / name).read_text(encoding='utf-8'))
-        except (OSError, ValueError):
-            payload = {}
-        if column_needed(payload, now):
-            return True
-    return False
+    return bool(pending_columns(root, now))
 
 
 def column_needed(payload, now):
-    from tools.daily_schedule import BEIJING
-    start = now.astimezone(BEIJING).replace(hour=21, minute=0, second=0, microsecond=0)
-    if now < start:
+    from src.update_cycle import in_cycle
+    outcome = payload.get('outcome') or ('partial' if any(
+        s.get('status') not in ('ok', 'no_data') for s in payload.get('sources', [])) else 'ok')
+    if in_cycle(payload.get('checked_at'), now) and outcome == 'ok':
         return False
     try:
-        checked = datetime.fromisoformat(payload.get('checked_at', '').replace('Z', '+00:00'))
-        return not (checked.tzinfo and start <= checked <= now and payload.get('outcome') == 'ok')
+        retry = datetime.fromisoformat(payload.get('next_retry_at', '').replace('Z', '+00:00'))
+        if in_cycle(payload.get('checked_at'), now) and retry.tzinfo and retry > now:
+            return False
     except (ValueError, TypeError):
-        return True
+        pass
+    return True
 
 
-def refresh(root=ROOT):
+def refresh(root=ROOT, *, due_only=False, now=None):
     from src.ai_updates import refresh as ai
     from src.opportunities import refresh as opportunities
     from src.research_leads import refresh as leads
     from concurrent.futures import ThreadPoolExecutor
     from src.public_sources import write
     import os
-    state = {'run_id': os.environ.get('GITHUB_RUN_ID', ''), 'checked_at': datetime.now(timezone.utc).isoformat(), 'columns': {}}
+    now = now or datetime.now(timezone.utc)
+    previous = load(root / 'data/public-updates.json').get('columns', {})
+    selected = set(pending_columns(root, now)) if due_only else set(FILES)
+    state = {'run_id': os.environ.get('GITHUB_RUN_ID', ''), 'checked_at': now.isoformat(), 'columns': dict(previous)}
+    def record(name, value):
+        from src.update_cycle import in_cycle, retry_delay
+        old = previous.get(name, {})
+        count = 0 if value['outcome'] == 'ok' else (old.get('failures', 0) if in_cycle(old.get('checked_at'), now) else 0) + 1
+        value.update(checked_at=value.get('checked_at') or now.isoformat(), failures=count)
+        if count:
+            value['next_retry_at'] = (now + timedelta(seconds=retry_delay(count))).isoformat()
+        state['columns'][name] = value
     from src.social_content import refresh as social_refresh
     try:
-        social = social_refresh(root)
-        state['columns']['social'] = {k:social[k] for k in ('outcome', 'checked_at', 'sources')}
-        state['columns']['social']['counts'] = {name:sum(r.get('column') == name for r in social['entries']) for name in ('ai','leads')}
+        if 'social' in selected:
+            social = social_refresh(root)
+            record('social', {k:social[k] for k in ('outcome', 'checked_at', 'sources')})
+            state['columns']['social']['counts'] = {name:sum(r.get('column') == name for r in social['entries']) for name in ('ai','leads')}
     except Exception:
-        state['columns']['social'] = {'outcome':'error', 'retained':True}
+        record('social', {'outcome':'error', 'retained':True})
     # Each column owns a separate file and failure state; papers are untouched.
     with ThreadPoolExecutor(max_workers=3) as pool:
-        futures = {name: pool.submit(fn, root) for name, fn in [('ai', ai), ('opportunities', opportunities), ('leads', leads)]}
+        futures = {name: pool.submit(fn, root) for name, fn in [('ai', ai), ('opportunities', opportunities), ('leads', leads)] if name in selected}
         for name, future in futures.items():
             try:
                 result = future.result()
-                state['columns'][name] = {'outcome': result.get('outcome', 'partial' if any(s.get('status') == 'error' for s in result.get('sources', [])) else 'ok'),
+                record(name, {'outcome': result.get('outcome', 'partial' if any(s.get('status') == 'error' for s in result.get('sources', [])) else 'ok'),
                                           'checked_at': result.get('checked_at'), 'count': len(result.get('entries', []))}
+                )
                 print(name + ': ' + str(len(result.get('entries', []))) + ' entries; ' + result.get('outcome', 'checked'), flush=True)
             except Exception as exc:
-                state['columns'][name] = {'outcome': 'error', 'retained': True}
+                record(name, {'outcome': 'error', 'retained': True})
                 print(name + ': failed (' + type(exc).__name__ + '), previous records retained', flush=True)
     write(root / 'data/public-updates.json', state)
     import_readings(root)
@@ -93,9 +113,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--refresh', action='store_true')
     parser.add_argument('--import-readings', action='store_true')
+    parser.add_argument('--due-only', action='store_true')
     args = parser.parse_args()
     if args.refresh:
-        refresh()
+        refresh(due_only=args.due_only)
     if args.import_readings:
         print('AI readings imported:', import_readings())
 

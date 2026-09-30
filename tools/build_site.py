@@ -103,8 +103,7 @@ def document(content: str, *, title: str, root: str = "./", active: str = "daily
                       (f'<link rel="stylesheet" href="{root}assets/wechat-subscriptions.css?v={version}">'
                        f'<script src="{root}assets/wechat-subscriptions.js?v={version}" defer></script>'
                        f'<script src="{root}assets/reading-tasks.js?v={version}" defer></script>') if active == 'setup' else
-                      (f'<script src="{root}assets/daily-update.js?v={version}" defer></script>'
-                       f'<script src="{root}assets/reading-tasks.js?v={version}" defer></script>') if active == 'daily' else
+                      (f'<script src="{root}assets/reading-tasks.js?v={version}" defer></script>') if active == 'daily' else
                       (f'<script src="{root}assets/archive-manager.js?v={version}" defer></script>'
                        f'<script src="{root}assets/reading-tasks.js?v={version}" defer></script>') if active == 'archive' else '',
     )
@@ -534,6 +533,13 @@ def render(payload: dict, *, archive_date: str | None = None, deleted_editions=N
     cns_children = sum(j["group"] == "CNS 子刊" for j in JOURNALS)
     archive_notice = f'<p class="archive-notice">正在阅读 {esc(archive_date)} 归档。<a href="../">返回最新一期</a></p>' if archive_date else ""
     update_control = '<button class="manual-update" id="manual-update" type="button" data-local-only>手动更新</button>' if not archive_date else ''
+    check = payload.get('latest_update') or {}
+    last_check = ''
+    if not archive_date and check.get('outcome') in ('published', 'no_new') and check.get('checked_at'):
+        label = '已检查，暂无新推荐' if check['outcome'] == 'no_new' else '最近检查'
+        last_check = f'<span id="last-update-check">{label} {esc(display_time(check["checked_at"])[1])}</span>'
+    elif not archive_date:
+        last_check = '<span id="last-update-check" hidden></span>'
     update_panel = '''<div id="daily-update-panel" class="daily-update-panel" data-local-only hidden>
   <p id="daily-update-status" role="status" aria-live="polite"></p>
   <form id="daily-update-pair" hidden>
@@ -549,7 +555,7 @@ def render(payload: dict, *, archive_date: str | None = None, deleted_editions=N
     content = template(
         "daily.html", title="每日论文推荐", day=esc(issue), generated=esc(generated),
         archive_notice=archive_notice, history_url="./" if archive_date else "archive/",
-        update_control=update_control, update_panel=update_panel,
+        update_control=update_control, update_panel=update_panel, last_check=last_check,
         direction_bar=direction_bar, direction_pending=direction_pending,
         edition_label=(f'<a href="{root}archive/">{esc(edition["date"])} · 第 {edition["number"]} 批</a>' if edition else ''),
         generated_at=esc(payload.get('generated_at', '')), update_run_id=esc(payload.get('update_run_id', '')),
@@ -696,6 +702,7 @@ def main() -> None:
         shutil.copytree(DATA / 'figures/images', OUT / 'assets/figures', dirs_exist_ok=True)
     analyses = load_readings(DATA)
     payload = enrich(read_json(DATA / "daily.json", {}), analyses)
+    payload['latest_update'] = read_json(DATA / 'update-status.json', {})
     payload = current_public_sources(payload, read_json(DATA / 'social-articles.json', {}))
     (OUT / "index.html").write_text(render(payload), encoding="utf-8")
     (OUT / "data.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")

@@ -99,7 +99,13 @@ jobs:
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
           LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
           LLM_MODEL: ${{ secrets.LLM_MODEL }}
-        run: python -m tools.public_updates --refresh
+          DUE_ONLY: ${{ github.event_name == 'schedule' || inputs.scheduled_check }}
+        run: |
+          if [ "$DUE_ONLY" = 'true' ]; then
+            python -m tools.public_updates --refresh --due-only
+          else
+            python -m tools.public_updates --refresh
+          fi
       - name: Run daily pipeline
         id: pipeline
         if: needs.check.outputs.papers_needed == 'true'
@@ -139,18 +145,60 @@ jobs:
         timeout-minutes: 8
         continue-on-error: true
         run: python -m tools.collect_figures
+      - name: Record update results
+        env:
+          PIPELINE_OUTCOME: ${{ steps.pipeline.outcome }}
+        run: python -m tools.update_receipt
       - run: python tools/build_site.py
+      - name: Save collected data and generated pages for publication retries
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-publication
+          path: |
+            data/
+            site/
+            !data/cache/**
+            !data/werss/**
+            !data/inbox/**
+          retention-days: 7
+          overwrite: true
+      - name: Report paper update failure after preserving public columns
+        if: steps.pipeline.outcome == 'failure'
+        run: exit 1
+  publish:
+    needs: [check, update]
+    if: always() && needs.check.outputs.needed == 'true' && (needs.update.result == 'success' || needs.update.result == 'failure')
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main}
+      - uses: actions/download-artifact@v4
+        with:
+          name: daily-publication
+          path: .publication
+      - name: Restore exact publication snapshot
+        run: python -m tools.restore_publication .publication
       - name: Publish GitHub Pages
         uses: actions/upload-pages-artifact@v3
-        with: {path: site}
+        with:
+          path: site
+          name: github-pages-${{ github.run_attempt }}
       - name: Deploy GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages-${{ github.run_attempt }}
       - name: Send Enterprise WeChat digest
-        if: steps.pipeline.outcome == 'success' && (github.event_name == 'schedule' || inputs.scheduled_check || inputs.send_digest)
+        if: needs.update.result == 'success' && needs.check.outputs.papers_needed == 'true' && (github.event_name == 'schedule' || inputs.send_digest)
+        continue-on-error: true
         env:
           WECHAT_WORK_WEBHOOK_URL: ${{ secrets.WECHAT_WORK_WEBHOOK_URL }}
-        run: python -m src.notify
+        run: |
+          pip install -r requirements.txt
+          python -m src.notify
       - name: Commit data archive
         run: |
           git config user.name github-actions
@@ -158,6 +206,3 @@ jobs:
           git add data site
           git diff --cached --quiet || git commit -m "chore: update daily papers"
           git push
-      - name: Report paper update failure after preserving public columns
-        if: steps.pipeline.outcome == 'failure'
-        run: exit 1

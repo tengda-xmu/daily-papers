@@ -2,24 +2,18 @@
 from __future__ import annotations
 
 import argparse
-import base64
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
-import re
-import uuid
 
-BEIJING = timezone(timedelta(hours=8))
+from src.update_cycle import BEIJING, cycle_start
 ROOT = Path(__file__).resolve().parents[1]
-ACTIVE = {'queued', 'in_progress', 'waiting', 'pending', 'requested'}
 
 
 def update_needed(payload, now=None):
     now = (now or datetime.now(timezone.utc)).astimezone(BEIJING)
-    start = now.replace(hour=21, minute=0, second=0, microsecond=0)
-    if now < start:
-        return False, 'before_scheduled_update'
+    start = cycle_start(now)
     check = (payload or {}).get('latest_update') or {}
     try:
         checked_at = datetime.fromisoformat(check.get('checked_at', '').replace('Z', '+00:00'))
@@ -47,54 +41,9 @@ def workflow_gate(payload, event, scheduled_check=False, now=None):
     return update_needed(payload, now)
 
 
-def dispatch_if_needed(remote, now=None):
-    # Importing the bridge adapter here does not construct the app or open its DB.
-    from connectors.codex_bridge.daily_update import API, REPO
-
-    now = now or datetime.now(timezone.utc)
-    if now.astimezone(BEIJING).hour < 21:
-        return {'state': 'before_scheduled_update'}
-    # The daily workflow commits data only after deployment, so a current record
-    # also confirms that a completed update has passed the publication step.
-    content = remote('GET', f'repos/{REPO}/contents/data/daily.json?ref=main')
-    # The contents API omits the body for files over 1 MB. Recommendation
-    # metadata includes candidate records and can exceed that threshold.
-    if content.get('encoding') == 'none':
-        sha = content.get('sha', '')
-        if not re.fullmatch(r'[a-f0-9]{40,64}', sha):
-            raise ValueError('Invalid data blob identifier')
-        content = remote('GET', f'repos/{REPO}/git/blobs/{sha}')
-    payload = json.loads(base64.b64decode(content['content']))
-    if update_needed(payload, now)[0]:
-        try:
-            check = remote('GET', f'repos/{REPO}/contents/data/update-status.json?ref=main')
-            payload['latest_update'] = json.loads(base64.b64decode(check['content']))
-        except Exception:
-            pass  # Legacy sites do not have a separate no-new check record.
-    needed, reason = update_needed(payload, now)
-    if not needed:
-        from tools.public_updates import column_needed
-        for name in ('ai-updates.json', 'opportunities.json'):
-            try:
-                content = remote('GET', f'repos/{REPO}/contents/data/{name}?ref=main')
-                public = json.loads(base64.b64decode(content['content']))
-            except Exception:
-                public = {}
-            if column_needed(public, now):
-                needed = True
-        if not needed:
-            return {'state': reason}
-    runs = remote('GET', API + '/workflows/daily.yml/runs?branch=main&per_page=30')
-    if any(run.get('status') in ACTIVE for run in runs.get('workflow_runs', [])):
-        return {'state': 'update_already_running'}
-    day = now.astimezone(BEIJING).date().isoformat()
-    request_id = str(uuid.uuid5(uuid.NAMESPACE_URL, f'{REPO}/evening/{day}'))
-    response = remote('POST', API + '/workflows/daily.yml/dispatches', {
-        'ref': 'main', 'return_run_details': True,
-        'inputs': {'request_id': request_id, 'scheduled_check': True, 'send_digest': False}})
-    # Never retry an ambiguous POST here. The next scheduled check first reads
-    # current runs; the workflow itself checks freshness again under its lock.
-    return {'state': 'dispatched', 'run_id': response.get('workflow_run_id')}
+def dispatch_if_needed(remote, now=None, *, runtime=None):
+    from connectors.codex_bridge.daily_update import DailyUpdater
+    return DailyUpdater(runtime or ROOT / '.local/codex-bridge', remote=remote).catch_up(now=now, reconnected=True)
 
 
 def main():
@@ -102,17 +51,20 @@ def main():
     parser.add_argument('--dispatch', action='store_true', help='Check GitHub and dispatch a missing update')
     args = parser.parse_args()
     if args.dispatch:
-        from connectors.codex_bridge.daily_update import github
         log = ROOT / '.local/daily-schedule.log'
         log.parent.mkdir(parents=True, exist_ok=True)
         code = 0
         try:
-            result = dispatch_if_needed(github)
+            from connectors.codex_bridge.daily_update import DailyUpdater
+            result = DailyUpdater(ROOT / '.local/codex-bridge').catch_up(reconnected=True)
+            if result.get('state') == 'failed':
+                code = 1
         except Exception:
             # gh output, proxy addresses and credentials must not reach logs.
             result = {'state': 'check_failed', 'message': 'Check GitHub login and network; next check will retry.'}
             code = 1
         result['checked_at'] = datetime.now(BEIJING).isoformat()
+        result = {k: result[k] for k in ('state', 'message', 'run_id', 'cycle', 'checked_at') if k in result}
         text = json.dumps(result, ensure_ascii=False)
         with log.open('a', encoding='utf-8') as output:
             output.write(text + '\n')

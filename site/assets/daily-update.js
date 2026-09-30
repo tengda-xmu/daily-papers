@@ -3,7 +3,12 @@
   if (document.documentElement.classList.contains('mobile-public')) return;
   const $ = selector => document.querySelector(selector);
   const button = $('#manual-update');
-  if (!button) return;
+  if (!$('#daily-update-panel')) {
+    const panel = document.createElement('div');
+    panel.id = 'daily-update-panel'; panel.className = 'daily-update-panel'; panel.hidden = true;
+    panel.innerHTML = '<p id="daily-update-status" role="status" aria-live="polite"></p><a id="daily-update-run" target="_blank" rel="noopener noreferrer" hidden>查看更新进度</a>';
+    $('#main-content')?.prepend(panel);
+  }
   const base = 'http://127.0.0.1:43127';
   const local = location.origin === base;
   const storage = local ? 'localStorage' : 'sessionStorage';
@@ -15,14 +20,15 @@
   function read(kind, key) { try { return window[kind].getItem(key) || ''; } catch { return ''; } }
   function write(kind, key, value) { try { if (value) window[kind].setItem(key, value); else window[kind].removeItem(key); } catch {} }
   function message(text) { $('#daily-update-panel').hidden = false; $('#daily-update-status').textContent = text; }
-  function busy(value) { button.disabled = value; button.textContent = value ? '更新中…' : '手动更新'; button.setAttribute('aria-busy', String(value)); }
+  function hide(selector, value) { const node = $(selector); if (node) node.hidden = value; }
+  function busy(value) { if (!button) return; button.disabled = value; button.textContent = value ? '更新中…' : '手动更新'; button.setAttribute('aria-busy', String(value)); }
   async function api(path, options = {}, retry = true) {
     let response;
     try {
       response = await fetch(base + path, {...options, headers: {'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + read(storage, sessionKey)}, signal: AbortSignal.timeout(65000)});
     } catch {
-      $('#daily-update-local').hidden = local;
+      hide('#daily-update-local', local);
       throw new Error('无法连接本机助手。请运行“启动论文助手.cmd”；浏览器阻止本地连接时，可在本机更新推荐。');
     }
     if (response.status === 401 && retry) {
@@ -35,7 +41,7 @@
     }
     if (!response.ok) {
       const info = await response.json().catch(() => ({}));
-      if (response.status === 401) { $('#daily-update-pair').hidden = false; $('#daily-update-local').hidden = local; }
+      if (response.status === 401 && options.manual) { hide('#daily-update-pair', false); hide('#daily-update-local', local); }
       const text = typeof info.detail === 'string' ? info.detail : info.message;
       throw new Error(response.status === 404 ? '本机助手需要更新，请停止后重新运行“启动论文助手.cmd”。'
         : response.status === 401 ? '首次更新请连接本机论文助手。' : text || '更新请求未完成，请稍后重试。');
@@ -50,7 +56,15 @@
     }
   }
   async function showPublished(data) {
-    if (data.outcome === 'no_new') {
+    const check = $('#last-update-check');
+    if (check && data.checked_at && data.outcome !== 'columns_only') {
+      const date = new Date(data.checked_at);
+      if (!Number.isNaN(date.valueOf())) {
+        check.hidden = false;
+        check.textContent = (data.outcome === 'no_new' ? '已检查，暂无新推荐 ' : '最近检查 ') + date.toLocaleString('zh-CN', {timeZone:'Asia/Shanghai', hour12:false});
+      }
+    }
+    if (!button || data.outcome === 'no_new' || data.outcome === 'columns_only') {
       write('localStorage', pendingKey, ''); busy(false); message(data.message); return;
     }
     if (issue.dataset.runId === data.run_id) {
@@ -59,8 +73,8 @@
       return;
     }
     // Do not interrupt an open paper conversation, including an unsent draft.
-    if ($('.paper-chat[open]')) {
-      message('最新推荐已发布；关闭论文对话后会自动刷新。'); again(() => showPublished(data), 3000); return;
+    if ($('.paper-chat[open]') || $('dialog[open]') || [...document.querySelectorAll('textarea')].some(node => node.value.trim())) {
+      message('最新推荐已发布；当前对话或编辑结束后会自动刷新。'); again(() => showPublished(data), 3000); return;
     }
     const target = local ? new URL('/recommendations.html', base) : new URL('./', location.href);
     target.searchParams.set('updated', data.run_id);
@@ -77,9 +91,19 @@
     }
   }
   async function display(data, initial = false) {
-    if (data.state === 'idle') { busy(false); return; }
-    if (initial && !active.has(data.state) && !read('localStorage', pendingKey)) return;
-    $('#daily-update-pair').hidden = true; runLink(data);
+    if (data.state === 'idle' || data.state === 'current') {
+      busy(false);
+      if (button && data.outcome === 'published' && data.run_id && issue.dataset.runId !== data.run_id) {
+        await showPublished(data); return;
+      }
+      if (data.checked_at && data.outcome === 'no_new') {
+        const check = $('#last-update-check');
+        if (check) { check.hidden = false; check.textContent = '已检查，暂无新推荐 ' + new Date(data.checked_at).toLocaleString('zh-CN', {timeZone:'Asia/Shanghai',hour12:false}); }
+      }
+      return;
+    }
+    if (initial && !active.has(data.state) && data.state !== 'failed' && !read('localStorage', pendingKey)) return;
+    hide('#daily-update-pair', true); runLink(data);
     message(data.message); busy(active.has(data.state) || data.state === 'succeeded');
     if (active.has(data.state)) {
       write('localStorage', pendingKey, data.request_id); again(poll);
@@ -103,17 +127,17 @@
     message('正在连接并启动更新…');
     try {
       // Resume an outstanding job before creating a new request.
-      const existing = await api('/api/recommendations/update');
+      const existing = await api('/api/recommendations/update', {manual:true});
       if (active.has(existing.state)) { await display(existing); return; }
       let requestId = read('localStorage', pendingKey);
       if (!/^[0-9a-f-]{36}$/.test(requestId) || existing.request_id === requestId) requestId = crypto.randomUUID();
       write('localStorage', pendingKey, requestId);
-      await display(await api('/api/recommendations/update', {method: 'POST', body: JSON.stringify({request_id: requestId})}));
+      await display(await api('/api/recommendations/update', {manual:true, method: 'POST', body: JSON.stringify({request_id: requestId})}));
     } catch (error) { message(error.message); busy(false); }
     finally { refreshing = false; }
   }
-  button.addEventListener('click', start);
-  $('#daily-update-pair').addEventListener('submit', async event => {
+  button?.addEventListener('click', start);
+  $('#daily-update-pair')?.addEventListener('submit', async event => {
     event.preventDefault(); event.submitter.disabled = true;
     try {
       const data = await api('/api/pair', {method: 'POST', body: JSON.stringify({code: $('#daily-pair-code').value.trim(), remember: $('#daily-remember').checked})}, false);
@@ -124,5 +148,22 @@
     } catch (error) { message(error.message); }
     finally { event.submitter.disabled = false; }
   });
-  if (read(storage, sessionKey) || read('localStorage', browserKey)) poll(true);
+  let checking = false, lastWake = 0;
+  async function catchUp(reconnected = false) {
+    if (document.hidden || !navigator.onLine || checking || Date.now() - lastWake < 5000) return;
+    if (!read(storage, sessionKey) && !read('localStorage', browserKey)) return;
+    checking = true; lastWake = Date.now();
+    try {
+      await display(await api('/api/recommendations/catch-up', {method:'POST', body:JSON.stringify({reconnected})}), true);
+    } catch (error) {
+      if (read('localStorage', pendingKey)) message(error.message);
+    } finally { checking = false; }
+  }
+  window.addEventListener('online', () => catchUp(true));
+  window.addEventListener('focus', () => catchUp());
+  document.addEventListener('visibilitychange', () => catchUp());
+  document.addEventListener('paper-library-connected', () => catchUp(true));
+  window.addEventListener('storage', event => { if (event.key === browserKey) catchUp(true); });
+  setInterval(() => catchUp(), 60000);
+  catchUp(true);
 })();

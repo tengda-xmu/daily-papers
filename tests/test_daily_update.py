@@ -101,11 +101,13 @@ def test_authentication_fixed_dispatch_and_new_papers_available_to_chat(tmp_path
     with TestClient(app, base_url=LOCAL_ORIGIN) as client:
         request = {'request_id': str(uuid.uuid4())}
         assert client.post('/api/recommendations/update', json=request).status_code == 401
+        assert client.post('/api/recommendations/catch-up', json={}).status_code == 401
         token = client.post('/api/pair', json={'code': app.state.pair_code}, headers={'Origin': PUBLIC_ORIGIN}).json()['token']
         headers = {'Origin': PUBLIC_ORIGIN, 'Authorization': 'Bearer ' + token}
         assert client.post('/api/recommendations/update', json=request, headers={**headers, 'Origin': 'https://evil.example'}).status_code == 403
         assert client.post('/api/recommendations/update', json={**request, 'workflow': 'evil.yml'}, headers=headers).status_code == 422
         assert remote.calls == []
+        assert client.post('/api/recommendations/catch-up', json={'workflow':'evil'}, headers=headers).status_code == 422
         assert client.post('/api/recommendations/update', json=request, headers=headers).json()['state'] == 'queued'
         remote.status, remote.conclusion = 'completed', 'success'
         assert client.get('/api/recommendations/update', headers=headers).json()['state'] == 'succeeded'
@@ -128,3 +130,92 @@ def test_home_controls_are_compact_and_archives_remain_immutable():
     archive = render(result(), archive_date='2026-09-24')
     assert 'id="manual-update"' not in archive
     assert '返回最新一期' in archive
+
+
+def test_columns_only_receipt_completes_without_new_edition(tmp_path):
+    remote=Remote()
+    prior=result('122')
+    prior['_update_status']={'run_id':'123','outcome':'columns_only','checked_at':'2026-09-30T03:00:00Z'}
+    updater=DailyUpdater(tmp_path,remote,fetch=lambda _:dict(prior))
+    updater.start(uuid.uuid4())
+    remote.status,remote.conclusion='completed','success'
+    data=updater.snapshot()
+    assert data['state']=='succeeded' and data['outcome']=='columns_only'
+    assert not (tmp_path/'recommendation-history/123.json').exists()
+
+
+def test_publish_failure_retries_existing_artifact_without_new_dispatch(tmp_path):
+    from tests.test_daily_schedule import Remote as ScheduledRemote, NOW, edition
+    from datetime import timedelta
+    remote=ScheduledRemote(edition('2026-09-27T21:00:00Z'))
+    calls=[]
+    def remote_with_jobs(method,path,body=None):
+        calls.append((method,path,body))
+        if '/jobs?' in path:return {'jobs':[{'name':'update','conclusion':'success'},{'name':'publish','conclusion':'failure'}]}
+        return remote(method,path,body)
+    updater=DailyUpdater(tmp_path,remote_with_jobs,fetch=lambda _:result('122'))
+    updater.catch_up(now=NOW)
+    remote.status,remote.conclusion='completed','failure'
+    updater.last_check=0
+    assert updater.catch_up(now=NOW+timedelta(minutes=1))['state']=='failed'
+    assert updater.catch_up(now=NOW+timedelta(minutes=2))['state']=='failed'
+    assert updater.catch_up(now=NOW+timedelta(minutes=7))['state']=='queued'
+    posts=[p for method,p,_ in calls if method=='POST']
+    assert len(posts)==2 and posts[-1].endswith('/runs/123/rerun-failed-jobs')
+
+
+def test_background_monitor_checks_immediately_and_stops(tmp_path):
+    import asyncio
+    async def run():
+        updater=DailyUpdater(tmp_path)
+        checked=asyncio.Event()
+        loop=asyncio.get_running_loop()
+        updater.catch_up=lambda:loop.call_soon_threadsafe(checked.set)
+        updater.start_monitor()
+        await asyncio.wait_for(checked.wait(),timeout=3)
+        await updater.close()
+        assert updater.background.done()
+    asyncio.run(run())
+
+
+def test_isolated_app_does_not_dispatch_live_workflows(tmp_path,monkeypatch):
+    calls=[]
+    monkeypatch.setattr(DailyUpdater,'start_monitor',lambda _:calls.append(True))
+    with TestClient(create_app(tmp_path),base_url=LOCAL_ORIGIN) as client:
+        assert client.get('/api/health').status_code==200
+    assert calls==[]
+
+
+def test_publication_snapshot_removes_old_pages_and_preserves_private_data(tmp_path):
+    import json
+    from tools.restore_publication import restore
+    snap=tmp_path/'.publication'
+    for name,body in [('data/daily.json',{}),('data/editions/index.json',{'deleted':[{'id':'old'}]}),('site/data.json',{})]:
+        path=snap/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps(body))
+    (snap/'site/index.html').write_text('new')
+    (tmp_path/'site/archive').mkdir(parents=True)
+    (tmp_path/'site/archive/deleted.html').write_text('old')
+    (tmp_path/'.local').mkdir();private=tmp_path/'.local/private.pdf';private.write_bytes(b'private')
+    restore(snap,tmp_path)
+    assert (tmp_path/'site/index.html').read_text()=='new'
+    assert not (tmp_path/'site/archive/deleted.html').exists()
+    assert private.read_bytes()==b'private'
+    (snap/'site/data.json').unlink()
+    with __import__('pytest').raises(ValueError):restore(snap,tmp_path)
+    assert (tmp_path/'site/index.html').read_text()=='new'
+
+
+def test_automatic_gate_skipped_after_another_run_does_not_wait_forever(tmp_path):
+    from tests.test_daily_schedule import Remote as ScheduledRemote, NOW, edition
+    remote=ScheduledRemote(edition('2026-09-27T21:00:00Z'))
+    def with_jobs(method,path,body=None):
+        if '/jobs?' in path:return {'jobs':[{'name':'update','conclusion':'skipped'}]}
+        return remote(method,path,body)
+    current={**edition(),'update_run_id':'124'}
+    updater=DailyUpdater(tmp_path,with_jobs,fetch=lambda _:dict(current))
+    updater.catch_up(now=NOW)
+    remote.status,remote.conclusion='completed','success'
+    remote.files['daily.json']=current
+    remote.files['update-status.json']={'run_id':'124','outcome':'published','checked_at':current['generated_at']}
+    assert updater.snapshot()['state']=='current'
+    assert updater.snapshot()['run_id']=='124'
