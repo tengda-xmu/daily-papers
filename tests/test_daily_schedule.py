@@ -164,3 +164,6 @@ def test_workflow_serialization_and_publication_artifact():
     assert workflow['jobs']['publish']['needs']==['check','update']
     assert any(s.get('uses')=='actions/upload-artifact@v4' for s in workflow['jobs']['update']['steps'])
     assert any(s.get('uses')=='actions/download-artifact@v4' for s in workflow['jobs']['publish']['steps'])
+    assert 'publication_ready' in workflow['jobs']['publish']['if']
+    imported=next(s for s in workflow['jobs']['update']['steps'] if s.get('name')=='Import local connector metadata')
+    assert 'mkdir -p data/inbox' in imported['run']

@@ -45,6 +45,8 @@ jobs:
   update:
     needs: check
     if: needs.check.outputs.needed == 'true'
+    outputs:
+      publication_ready: ${{ steps.publication.outcome == 'success' }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -81,6 +83,7 @@ jobs:
       - name: Import local connector metadata
         shell: bash
         run: |
+          mkdir -p data/inbox
           if git fetch origin connector-data:refs/remotes/origin/connector-data; then
             for source in researchgate wechat wechat-status wechat-subscriptions; do
               path="data/inbox/${source}.json"
@@ -151,6 +154,7 @@ jobs:
         run: python -m tools.update_receipt
       - run: python tools/build_site.py
       - name: Save collected data and generated pages for publication retries
+        id: publication
         uses: actions/upload-artifact@v4
         with:
           name: daily-publication
@@ -167,7 +171,7 @@ jobs:
         run: exit 1
   publish:
     needs: [check, update]
-    if: always() && needs.check.outputs.needed == 'true' && (needs.update.result == 'success' || needs.update.result == 'failure')
+    if: always() && needs.check.outputs.needed == 'true' && needs.update.outputs.publication_ready == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
