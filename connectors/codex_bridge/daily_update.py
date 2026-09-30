@@ -195,6 +195,9 @@ class DailyUpdater:
             def save_meta():
                 self._write(path, meta)
             def failed(message, network=False):
+                current = self._read()
+                if current.get('run_id'):
+                    meta['failed_run'] = f'{current["run_id"]}/{current.get("started_at")}'
                 meta['failures'] = meta.get('failures', 0) + 1
                 meta.update(next_retry_at=stamp + retry_delay(meta['failures']), network=network, checked=stamp)
                 save_meta()

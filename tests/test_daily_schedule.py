@@ -115,6 +115,19 @@ def test_failure_backoff_and_online_recovery(tmp_path):
     assert updater.catch_up(reconnected=True,now=NOW+timedelta(seconds=5))['state']=='queued'
 
 
+def test_reconnect_tracks_existing_run_immediately_after_status_read_failed(tmp_path):
+    remote=Remote(edition('2026-09-27T21:00:00Z'))
+    updater=DailyUpdater(tmp_path,remote)
+    updater.catch_up(now=NOW)
+    def offline(*args):raise OSError('offline')
+    updater.remote=offline
+    assert updater.catch_up(now=NOW+timedelta(minutes=1))['state']=='failed'
+    updater.remote=remote
+    resumed=updater.catch_up(reconnected=True,now=NOW+timedelta(seconds=65))
+    assert resumed['run_id']=='123' and resumed['state']=='queued'
+    assert sum(c[0]=='POST' for c in remote.calls)==1
+
+
 def test_large_metadata_uses_blob():
     def remote(method,path):
         if '/contents/' in path:return {'encoding':'none','sha':'a'*40}
