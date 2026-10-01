@@ -93,7 +93,18 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "f93c5ebdceed",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-30T13:11:51.686514+00:00",
+        "basis": "missing",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -426,7 +437,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Identifying mechanical faults is crucial for maintaining stability in industrial systems. However, the lack of labeled fault data significantly undermines the accuracy and generalization of diagnostic methods in practical applications. To address this issue, this paper presents a novel multi-scale physics-informed neural network with enhanced reinforcement learning (MPINN-ERL) for bearing fault diagnosis under data scarcity. First, a multi-scale convolutional bi-directional gated recurrent unit with physics-inspired residual regularization module is developed to effectively integrate physics-i…",
+      "summary": "轴承故障标注不足会削弱诊断准确性与泛化能力。本文提出MPINN-ERL，将多尺度卷积、双向门控循环单元与物理启发残差正则化结合，通过条件生成对抗网络扩充故障样本，再用增强强化学习动态调节正则项权重。[摘要]报告其诊断准确性具有竞争力、表现相对稳定，但未给出具体数值或实验设置。本导读仅依据摘要，适合关注小样本智能运维的读者，不足以确认其优势幅度与适用边界。",
       "raw_metadata": {
         "id": "b26c6aabf051",
         "title": "Multi-scale physics-informed reinforcement learning method for bearing fault diagnosis under data scarcity",
@@ -504,17 +515,40 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为小样本轴承智能诊断的方法型候选重点阅读，尤其关注样本增强与正则权重动态调节如何协同；摘要尚不足以支持直接复现或工程采用。[摘要]",
+      "deep_read": {
+        "problem": "论文针对轴承故障诊断中标注样本不足的问题，摘要指出“lack of labeled fault data”会损害诊断准确性与泛化能力。[摘要]其研究目标不仅是提高识别准确性，还包括维持稀缺标注条件下的诊断稳定性；摘要未说明样本稀缺的具体程度。",
+        "method": "方法采用带物理启发残差正则化的多尺度卷积与双向门控循环单元，并以条件通道—空间Wasserstein生成对抗网络扩充故障样本。随后引入新损失函数和增强强化学习算法，动态调整残差正则项权重。[摘要]各模块结构及训练流程尚未披露。",
+        "innovation": "摘要将组合方法称为“novel”，并提出新的损失函数与增强强化学习算法。[摘要]解读：值得核查的创新点在于让物理启发正则约束的强度动态变化，而非仅叠加诊断与生成模块；但没有公式及相关工作比较，无法确认其独创程度。",
+        "findings": "实验结论限于所评估的轴承故障数据集：准确性达到“competitive diagnostic accuracy”，相较若干代表性先进深度学习方法，诊断表现相对稳定。[摘要]这些是定性报告，不能改写为全面领先，也无法据此判断增益大小或统计显著性。",
+        "limitations": "摘要没有提供数据集名称、标注样本量、评价指标数值、对比方法清单及消融结果，因此难以分离各模块贡献。[摘要]解读：这些属于当前资料的证据缺口，并不等于论文未开展相关实验；物理残差的依据及生成样本可信度也需全文核验。",
+        "connection": "解读：该研究直接对应智能运维中的少标注故障识别，可为可靠性研究提供状态诊断层面的候选方法，但摘要未涉及寿命预测、失效概率或结构设计优化。[摘要]其“physics-inspired”表述也不足以证明模型严格满足明确的机械控制方程。",
+        "next_steps": "建议：获取全文后优先核查残差定义、强化学习的状态与奖励、生成数据的训练边界，并检查不同标注比例下的消融和重复实验。若迁移到自有设备，可分别验证增强模块与动态权重机制的贡献；这些是后续研究建议，并非作者已报告的结果。"
+      },
       "recommended_direction": "ai_maintenance",
+      "title_zh": "数据稀缺条件下轴承故障诊断的多尺度物理信息强化学习方法",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1177/14759217261485331"
+      ],
+      "analyzed_at": "2026-09-30T13:12:44.558820+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "b9d57cdc250f716b6ce25f08fe905beb022d2b233a4b2a79337570be69daf4d8",
+      "analysis_issues": [],
       "reading_status": {
         "paper_id": "b26c6aabf051",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-25T17:39:21.433671+00:00",
+        "updated_at": "2026-09-30T13:12:44.564944+00:00",
         "basis": "abstract",
-        "reason": "not_found"
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
       }
     },
     {
@@ -537,7 +571,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "It is our pleasure to present the September 2026 issue of the IIUM Engineering Journal. This issue captures an important transition in contemporary engineering: the movement from isolated models, devices, and analyses toward integrated systems that are expected to be intelligent, efficient, sustainable, reliable, and useful in real operating environments. Across the papers in this volume, advanced computation is increasingly coupled with physical engineering, while experimental validation, resource awareness, safety, and practical deployment remain central.A defining feature of this issue is t…",
+      "summary": "本文是期刊编者寄语，而非报告独立实验的研究论文。[摘要]以“from isolated models, devices, and analyses toward integrated systems”概括本期主题，串联人工智能、有限元、数字孪生、优化与可持续工程，并强调验证、安全和实际部署。解读：其价值在于提供跨领域选题线索与工程评价视角；所给摘要未提供具体模型、实验结果或比较数据，不宜将对本期论文的概述当作本文自身的技术成果。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "f620c6bf5b6f89dcbf4db00296ad07aba0aabf2e",
@@ -580,11 +614,41 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议作为选题导航简读，而非重点技术精读对象。[摘要]涉及管道监测、结构分析与疲劳寿命，但未展开可复用方法或验证结果，应进一步筛选其介绍的具体研究。",
+      "deep_read": {
+        "problem": "本文关注工程研究如何从孤立模型和器件转向真实环境中的集成系统，而非求解单一技术问题。[摘要]以“real operating environments”强调应用背景。解读：核心议题是智能化如何同时满足效率、可持续性、可靠性与实际效用，不是提出新的故障预测任务。",
+        "method": "[摘要]列举机器学习、有限元、数值预测、数字孪生和代理辅助优化，其中“surrogate-assisted optimization”属于本期研究的方法线索。本文采用编者概述方式组织这些主题，未给出自身的算法流程、训练数据或试验设计，不能据此复现任何技术方案。",
+        "innovation": "[摘要]用“innovation with responsibility”表达编辑导向，而未声明本文提出原创算法或系统架构。解读：可关注的特色是把智能计算、物理理解及社会责任放在同一评价视角中；这属于议题组织层面的特点，不能等同于经验证的技术创新。",
+        "findings": "[摘要]称人工智能正“embedded within engineering workflows”，并概括仿真和优化对成本、设计信心及实施进程的作用。这些是编者对本期研究的总体归纳，不是本文独立测得的发现；摘要没有量化效果、对照实验或不确定性结果可供核验。",
+        "limitations": "资料局限在于目前仅有摘要级文本，不能据此判断本期各研究的样本规模、基线设置及外部验证质量。[摘要]虽强调“experimental validation”，却未展示相关证据。上述属于当前材料的可评估性边界，并非作者自述的方法缺陷或已证实的研究不足。",
+        "connection": "[摘要]提及“pipeline condition monitoring”和“fatigue life”，并涉及混凝土结构有限元分析。解读：这些主题分别联系智能运维、疲劳可靠性和结构设计，方向关联明确；但优化与数字工程的出现，不足以证明本文包含生成式设计方法或可靠性约束建模。",
+        "next_steps": "建议将本文作为文献筛选入口，后续获取其涉及的管道监测、结构分析及疲劳研究，逐项核查数据来源、验证工况和评价指标。[摘要]强调“compute-aware evaluation”，可据此关注精度与计算开销的共同报告；这是后续阅读建议，不是作者已完成的统一评估。"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "2026年第27卷第3期编者寄语：从智能模型走向负责任的工程系统",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.31436/iiumej.v27i3.4768"
+      ],
+      "analyzed_at": "2026-09-30T13:13:45.101407+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "f0fff1311797d2ce9899e805b8a7432ca1d6c082aab06ff4492d1279531fe3b9",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "35b3b0d29b69",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-09-30T13:13:45.107404+00:00",
+        "basis": "abstract",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -649,7 +713,18 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "0b71b4d17bb7",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-30T13:14:14.618944+00:00",
+        "basis": "missing",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "extended": [
@@ -725,7 +800,18 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "abf0865db466",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-30T13:14:25.299155+00:00",
+        "basis": "missing",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Web of Science",
@@ -869,7 +955,18 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "de48174471ad",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-30T13:14:41.434982+00:00",
+        "basis": "missing",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -895,7 +992,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Power electronic systems serve as core infrastructure for modern energy conversion and power control. Their reliability is crucial for the stable operation of key fields, such as industrial power systems, transportation, and aerospace. Open-circuit faults are difficult to detect, which can lead to serious consequences. While effective in data-rich environments, existing data-driven approaches’ reliance on extensive labeled data hinders their practical deployment. The reason is that acquiring comprehensive fault data in real-world settings is often prohibitively expensive. To address this, this…",
+      "summary": "本文针对变换器开路故障难检测、完整标注故障数据获取成本高的问题，提出先验知识注入与注意力机制结合的双贝叶斯零样本诊断方法。其利用Vienna整流器拓扑与故障模式的物理关系构建属性空间，以多头注意力融合三相电流的多域特征，再通过双贝叶斯推断识别难以获取数据的故障。摘要报告实验平台验证优于传统机器学习模型，但未给出定量指标与零样本划分。本导读仅依据摘要，不代表全文评审。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "872c7d43aea6ad81c010de816b7c7ba9fddc6a8f",
@@ -934,11 +1031,41 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议重点关注物理故障属性如何连接已知与未见故障，以及双贝叶斯推断的具体实现；这与少标签智能运维直接相关，但推荐强度仍需全文中的数据划分、对照与消融证据支撑。[摘要]",
+      "deep_read": {
+        "problem": "研究针对开路故障难检测与故障标注数据难获取的双重问题。摘要指出既有数据驱动方法存在“reliance on extensive labeled data”，全面获取故障数据往往成本过高。核心问题因此是如何利用可得信号与先验知识，识别缺乏可获取样本的故障，而非仅提高数据充足时的分类表现。[摘要]",
+        "method": "方法先分析Vienna整流器拓扑与故障模式的物理关系，建立故障属性空间；再以“multihead attention mechanism”融合三相电流的多域特征；最后结合朴素贝叶斯与集成多高斯贝叶斯算法形成双贝叶斯推断框架。摘要未交代属性编码、训练目标与各模块的具体连接方式。[摘要]",
+        "innovation": "摘要可确认的方法特色是将物理属性空间、注意力特征融合与双贝叶斯推断组合用于零样本诊断，其中属性空间具有“clear physical meaning”。解读：潜在价值在于让物理知识参与未见故障识别，而非仅增加分类模块；但其相对既有零样本方法的原创程度，尚无充分对照信息可判定。[摘要]",
+        "findings": "摘要报告在Vienna整流器实验平台进行了验证，并称该方法“significantly outperforms conventional classical machine learning models”。这支持作者报告了比较优势，但未提供准确率、误报率、重复试验或统计检验信息，不能据此量化提升幅度，也不能确认优势覆盖哪些未见故障与运行工况。[摘要]",
+        "limitations": "当前限制首先是资料范围仅为摘要，而非已证实的方法缺陷。摘要使用“inaccessible open-circuit faults”描述识别对象，却未说明不可获取的具体含义及训练测试划分；同时缺少样本规模、基线配置和消融结果。因此无法判断零样本设置的严格性、模块贡献与跨工况泛化能力。[摘要]",
+        "connection": "解读：该研究与智能运维直接相关，因为它面向故障样本稀缺下的自动诊断；与可靠性研究的联系在于为故障识别提供技术支持，摘要以“Their reliability is crucial”交代背景，但并未开展寿命或失效概率建模。拓扑知识在此用于诊断属性构建，不能将其视为结构设计优化成果。[摘要]",
+        "next_steps": "建议：阅读全文时优先核查故障属性的物理定义、未见类别划分及先验知识是否涉及测试信息；随后检查注意力与双贝叶斯模块的独立消融、基线公平性和工况变化测试。若用于自身运维研究，可再设计噪声与负载扰动验证。这些是后续核验和迁移建议，不是摘要已报告的实验。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "基于先验知识注入与注意力机制双贝叶斯网络的变换器零样本开路故障诊断",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1109/tie.2026.3677610"
+      ],
+      "analyzed_at": "2026-09-30T13:15:30.414782+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "a6b6b9fbbc01df4b9fd228d7585e6b655c2bce7b9ba6f11681edd2a23ca8c6a5",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "8564d8ee9066",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-09-30T13:15:30.419668+00:00",
+        "basis": "abstract",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -960,7 +1087,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "The connecting rod is a critical mechanical component that transmits reciprocating motion from the piston to rotational motion in the crankshaft. Although connecting rods are traditionally manufactured from aluminum alloys, titanium alloys, or alloy steels, the demand for higher power-to-weight ratios has motivated the exploration of alternative materials supported by advanced computational validation methods. This study proposes a multilayer optimization framework for identifying the most suitable material for the connecting rod of a 110 cc four-stroke petrol engine. The component was modelle…",
+      "summary": "本文面向110 cc四冲程汽油机连杆选材，将有限元分析、深度神经网络代理、多准则模糊排序及量子启发优化串联，并用经典疲劳关系评估寿命。[摘要]网络基于1,500个仿真样本训练，应力预测达到“R2 = 0.987”；作者据疲劳安全系数推荐42CrMo4合金钢。解读：其价值主要在结构选材与疲劳评估流程整合，不能由应力拟合精度直接推出寿命预测准确。当前仅有摘要，量子优化增益与实物验证仍缺少证据。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "a42a314f36ed57d0aa30de5cdeb19e3925357c95",
@@ -1053,11 +1180,41 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议作为疲劳可靠性与代理辅助结构选材的候选文献阅读；摘要报告了明确流程和定量结果，但尚不足以将其列为量子优化优势或高精度寿命预测的强证据。[摘要]",
+      "deep_read": {
+        "problem": "研究针对110 cc四冲程汽油机连杆的材料选择，背景是提升功率重量比的需求。摘要以“most suitable material”为目标，并考察拉伸、压缩载荷下的结构响应。[摘要]解读：核心是材料性能与成本的多准则权衡，而非已展示的连杆几何生成设计。",
+        "method": "作者用Pro/ENGINEER建模、ANSYS计算应力应变及位移，以DNN充当“fast surrogate model”，结合Takagi–Sugeno模糊推理排序和模拟器上的QAOA搜索。[摘要]疲劳计算采用Basquin关系、Goodman修正与Miner累积损伤规则，摘要未交代各模块接口。",
+        "innovation": "摘要将框架描述为“multilayer optimization framework”，整合代理预测、模糊排序及量子启发搜索。[摘要]解读：可辨识的特点是方法组合，现有资料不能确认各模块具有原创算法贡献。QAOA运行于状态向量模拟器，不等于量子硬件验证，也未证明量子加速。",
+        "findings": "应力预测报告“RMSE = 2.41 MPa”、MAPE为0.71%，并称优于随机森林和XGBoost。[摘要]AA-7075与42CrMo4的疲劳安全系数分别为0.78和1.97，作者推荐后者。解读：“无限寿命”应限于所用模型及载荷条件，不应理解为实际服役的无条件保证。",
+        "limitations": "摘要虽声称“improved predictive accuracy”，但未提供数据划分、独立试验验证、载荷谱、材料疲劳参数来源或优化消融结果。[摘要]解读：这些属于摘要层面的证据缺口，不能断言全文未做；应力代理拟合指标也不足以单独验证疲劳寿命预测误差。",
+        "connection": "与结构设计和疲劳可靠性的联系直接，摘要明确采用“Miner's linear damage accumulation rule”评估累积损伤。[摘要]解读：代理模型可为快速方案筛选提供思路，但材料搜索不等于生成式设计；对智能运维的联系仅是潜在迁移，摘要未涉及在线监测或维护决策。",
+        "next_steps": "建议取得全文后，优先核查训练测试隔离、有限元边界条件及材料寿命参数，再检查“outperforming the Random Forest and XGBoost baselines”的比较条件。[摘要]建议将量子优化单独消融并与经典搜索比较，随后用独立疲劳试验检验寿命结论，而非仅复现应力指标。"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "量子增强与机器学习框架用于连杆高精度疲劳寿命预测及结构分析",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.68212/3006-5410.1042"
+      ],
+      "analyzed_at": "2026-09-30T13:16:57.079557+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "f1cd95936b3b961b4a95315d8e453d176c1c8435751beb76a8543116413af109",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "df76394da208",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-09-30T13:16:57.085789+00:00",
+        "basis": "abstract",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -1139,7 +1296,18 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "e1a150bc890d",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-30T13:17:27.337222+00:00",
+        "basis": "missing",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "papers": [
@@ -1232,7 +1400,18 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "f93c5ebdceed",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-30T13:11:51.686514+00:00",
+        "basis": "missing",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -1565,7 +1744,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Identifying mechanical faults is crucial for maintaining stability in industrial systems. However, the lack of labeled fault data significantly undermines the accuracy and generalization of diagnostic methods in practical applications. To address this issue, this paper presents a novel multi-scale physics-informed neural network with enhanced reinforcement learning (MPINN-ERL) for bearing fault diagnosis under data scarcity. First, a multi-scale convolutional bi-directional gated recurrent unit with physics-inspired residual regularization module is developed to effectively integrate physics-i…",
+      "summary": "轴承故障标注不足会削弱诊断准确性与泛化能力。本文提出MPINN-ERL，将多尺度卷积、双向门控循环单元与物理启发残差正则化结合，通过条件生成对抗网络扩充故障样本，再用增强强化学习动态调节正则项权重。[摘要]报告其诊断准确性具有竞争力、表现相对稳定，但未给出具体数值或实验设置。本导读仅依据摘要，适合关注小样本智能运维的读者，不足以确认其优势幅度与适用边界。",
       "raw_metadata": {
         "id": "b26c6aabf051",
         "title": "Multi-scale physics-informed reinforcement learning method for bearing fault diagnosis under data scarcity",
@@ -1643,17 +1822,40 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为小样本轴承智能诊断的方法型候选重点阅读，尤其关注样本增强与正则权重动态调节如何协同；摘要尚不足以支持直接复现或工程采用。[摘要]",
+      "deep_read": {
+        "problem": "论文针对轴承故障诊断中标注样本不足的问题，摘要指出“lack of labeled fault data”会损害诊断准确性与泛化能力。[摘要]其研究目标不仅是提高识别准确性，还包括维持稀缺标注条件下的诊断稳定性；摘要未说明样本稀缺的具体程度。",
+        "method": "方法采用带物理启发残差正则化的多尺度卷积与双向门控循环单元，并以条件通道—空间Wasserstein生成对抗网络扩充故障样本。随后引入新损失函数和增强强化学习算法，动态调整残差正则项权重。[摘要]各模块结构及训练流程尚未披露。",
+        "innovation": "摘要将组合方法称为“novel”，并提出新的损失函数与增强强化学习算法。[摘要]解读：值得核查的创新点在于让物理启发正则约束的强度动态变化，而非仅叠加诊断与生成模块；但没有公式及相关工作比较，无法确认其独创程度。",
+        "findings": "实验结论限于所评估的轴承故障数据集：准确性达到“competitive diagnostic accuracy”，相较若干代表性先进深度学习方法，诊断表现相对稳定。[摘要]这些是定性报告，不能改写为全面领先，也无法据此判断增益大小或统计显著性。",
+        "limitations": "摘要没有提供数据集名称、标注样本量、评价指标数值、对比方法清单及消融结果，因此难以分离各模块贡献。[摘要]解读：这些属于当前资料的证据缺口，并不等于论文未开展相关实验；物理残差的依据及生成样本可信度也需全文核验。",
+        "connection": "解读：该研究直接对应智能运维中的少标注故障识别，可为可靠性研究提供状态诊断层面的候选方法，但摘要未涉及寿命预测、失效概率或结构设计优化。[摘要]其“physics-inspired”表述也不足以证明模型严格满足明确的机械控制方程。",
+        "next_steps": "建议：获取全文后优先核查残差定义、强化学习的状态与奖励、生成数据的训练边界，并检查不同标注比例下的消融和重复实验。若迁移到自有设备，可分别验证增强模块与动态权重机制的贡献；这些是后续研究建议，并非作者已报告的结果。"
+      },
       "recommended_direction": "ai_maintenance",
+      "title_zh": "数据稀缺条件下轴承故障诊断的多尺度物理信息强化学习方法",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1177/14759217261485331"
+      ],
+      "analyzed_at": "2026-09-30T13:12:44.558820+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "b9d57cdc250f716b6ce25f08fe905beb022d2b233a4b2a79337570be69daf4d8",
+      "analysis_issues": [],
       "reading_status": {
         "paper_id": "b26c6aabf051",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-25T17:39:21.433671+00:00",
+        "updated_at": "2026-09-30T13:12:44.564944+00:00",
         "basis": "abstract",
-        "reason": "not_found"
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
       }
     },
     {
@@ -1676,7 +1878,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "It is our pleasure to present the September 2026 issue of the IIUM Engineering Journal. This issue captures an important transition in contemporary engineering: the movement from isolated models, devices, and analyses toward integrated systems that are expected to be intelligent, efficient, sustainable, reliable, and useful in real operating environments. Across the papers in this volume, advanced computation is increasingly coupled with physical engineering, while experimental validation, resource awareness, safety, and practical deployment remain central.A defining feature of this issue is t…",
+      "summary": "本文是期刊编者寄语，而非报告独立实验的研究论文。[摘要]以“from isolated models, devices, and analyses toward integrated systems”概括本期主题，串联人工智能、有限元、数字孪生、优化与可持续工程，并强调验证、安全和实际部署。解读：其价值在于提供跨领域选题线索与工程评价视角；所给摘要未提供具体模型、实验结果或比较数据，不宜将对本期论文的概述当作本文自身的技术成果。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "f620c6bf5b6f89dcbf4db00296ad07aba0aabf2e",
@@ -1719,11 +1921,41 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议作为选题导航简读，而非重点技术精读对象。[摘要]涉及管道监测、结构分析与疲劳寿命，但未展开可复用方法或验证结果，应进一步筛选其介绍的具体研究。",
+      "deep_read": {
+        "problem": "本文关注工程研究如何从孤立模型和器件转向真实环境中的集成系统，而非求解单一技术问题。[摘要]以“real operating environments”强调应用背景。解读：核心议题是智能化如何同时满足效率、可持续性、可靠性与实际效用，不是提出新的故障预测任务。",
+        "method": "[摘要]列举机器学习、有限元、数值预测、数字孪生和代理辅助优化，其中“surrogate-assisted optimization”属于本期研究的方法线索。本文采用编者概述方式组织这些主题，未给出自身的算法流程、训练数据或试验设计，不能据此复现任何技术方案。",
+        "innovation": "[摘要]用“innovation with responsibility”表达编辑导向，而未声明本文提出原创算法或系统架构。解读：可关注的特色是把智能计算、物理理解及社会责任放在同一评价视角中；这属于议题组织层面的特点，不能等同于经验证的技术创新。",
+        "findings": "[摘要]称人工智能正“embedded within engineering workflows”，并概括仿真和优化对成本、设计信心及实施进程的作用。这些是编者对本期研究的总体归纳，不是本文独立测得的发现；摘要没有量化效果、对照实验或不确定性结果可供核验。",
+        "limitations": "资料局限在于目前仅有摘要级文本，不能据此判断本期各研究的样本规模、基线设置及外部验证质量。[摘要]虽强调“experimental validation”，却未展示相关证据。上述属于当前材料的可评估性边界，并非作者自述的方法缺陷或已证实的研究不足。",
+        "connection": "[摘要]提及“pipeline condition monitoring”和“fatigue life”，并涉及混凝土结构有限元分析。解读：这些主题分别联系智能运维、疲劳可靠性和结构设计，方向关联明确；但优化与数字工程的出现，不足以证明本文包含生成式设计方法或可靠性约束建模。",
+        "next_steps": "建议将本文作为文献筛选入口，后续获取其涉及的管道监测、结构分析及疲劳研究，逐项核查数据来源、验证工况和评价指标。[摘要]强调“compute-aware evaluation”，可据此关注精度与计算开销的共同报告；这是后续阅读建议，不是作者已完成的统一评估。"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "2026年第27卷第3期编者寄语：从智能模型走向负责任的工程系统",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.31436/iiumej.v27i3.4768"
+      ],
+      "analyzed_at": "2026-09-30T13:13:45.101407+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "f0fff1311797d2ce9899e805b8a7432ca1d6c082aab06ff4492d1279531fe3b9",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "35b3b0d29b69",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-09-30T13:13:45.107404+00:00",
+        "basis": "abstract",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -1788,7 +2020,18 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "0b71b4d17bb7",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-30T13:14:14.618944+00:00",
+        "basis": "missing",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "ResearchGate",
@@ -1862,7 +2105,18 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "abf0865db466",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-30T13:14:25.299155+00:00",
+        "basis": "missing",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Web of Science",
@@ -2006,7 +2260,18 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "de48174471ad",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-30T13:14:41.434982+00:00",
+        "basis": "missing",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -2032,7 +2297,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Power electronic systems serve as core infrastructure for modern energy conversion and power control. Their reliability is crucial for the stable operation of key fields, such as industrial power systems, transportation, and aerospace. Open-circuit faults are difficult to detect, which can lead to serious consequences. While effective in data-rich environments, existing data-driven approaches’ reliance on extensive labeled data hinders their practical deployment. The reason is that acquiring comprehensive fault data in real-world settings is often prohibitively expensive. To address this, this…",
+      "summary": "本文针对变换器开路故障难检测、完整标注故障数据获取成本高的问题，提出先验知识注入与注意力机制结合的双贝叶斯零样本诊断方法。其利用Vienna整流器拓扑与故障模式的物理关系构建属性空间，以多头注意力融合三相电流的多域特征，再通过双贝叶斯推断识别难以获取数据的故障。摘要报告实验平台验证优于传统机器学习模型，但未给出定量指标与零样本划分。本导读仅依据摘要，不代表全文评审。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "872c7d43aea6ad81c010de816b7c7ba9fddc6a8f",
@@ -2071,11 +2336,41 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议重点关注物理故障属性如何连接已知与未见故障，以及双贝叶斯推断的具体实现；这与少标签智能运维直接相关，但推荐强度仍需全文中的数据划分、对照与消融证据支撑。[摘要]",
+      "deep_read": {
+        "problem": "研究针对开路故障难检测与故障标注数据难获取的双重问题。摘要指出既有数据驱动方法存在“reliance on extensive labeled data”，全面获取故障数据往往成本过高。核心问题因此是如何利用可得信号与先验知识，识别缺乏可获取样本的故障，而非仅提高数据充足时的分类表现。[摘要]",
+        "method": "方法先分析Vienna整流器拓扑与故障模式的物理关系，建立故障属性空间；再以“multihead attention mechanism”融合三相电流的多域特征；最后结合朴素贝叶斯与集成多高斯贝叶斯算法形成双贝叶斯推断框架。摘要未交代属性编码、训练目标与各模块的具体连接方式。[摘要]",
+        "innovation": "摘要可确认的方法特色是将物理属性空间、注意力特征融合与双贝叶斯推断组合用于零样本诊断，其中属性空间具有“clear physical meaning”。解读：潜在价值在于让物理知识参与未见故障识别，而非仅增加分类模块；但其相对既有零样本方法的原创程度，尚无充分对照信息可判定。[摘要]",
+        "findings": "摘要报告在Vienna整流器实验平台进行了验证，并称该方法“significantly outperforms conventional classical machine learning models”。这支持作者报告了比较优势，但未提供准确率、误报率、重复试验或统计检验信息，不能据此量化提升幅度，也不能确认优势覆盖哪些未见故障与运行工况。[摘要]",
+        "limitations": "当前限制首先是资料范围仅为摘要，而非已证实的方法缺陷。摘要使用“inaccessible open-circuit faults”描述识别对象，却未说明不可获取的具体含义及训练测试划分；同时缺少样本规模、基线配置和消融结果。因此无法判断零样本设置的严格性、模块贡献与跨工况泛化能力。[摘要]",
+        "connection": "解读：该研究与智能运维直接相关，因为它面向故障样本稀缺下的自动诊断；与可靠性研究的联系在于为故障识别提供技术支持，摘要以“Their reliability is crucial”交代背景，但并未开展寿命或失效概率建模。拓扑知识在此用于诊断属性构建，不能将其视为结构设计优化成果。[摘要]",
+        "next_steps": "建议：阅读全文时优先核查故障属性的物理定义、未见类别划分及先验知识是否涉及测试信息；随后检查注意力与双贝叶斯模块的独立消融、基线公平性和工况变化测试。若用于自身运维研究，可再设计噪声与负载扰动验证。这些是后续核验和迁移建议，不是摘要已报告的实验。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "基于先验知识注入与注意力机制双贝叶斯网络的变换器零样本开路故障诊断",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1109/tie.2026.3677610"
+      ],
+      "analyzed_at": "2026-09-30T13:15:30.414782+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "a6b6b9fbbc01df4b9fd228d7585e6b655c2bce7b9ba6f11681edd2a23ca8c6a5",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "8564d8ee9066",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-09-30T13:15:30.419668+00:00",
+        "basis": "abstract",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -2097,7 +2392,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "The connecting rod is a critical mechanical component that transmits reciprocating motion from the piston to rotational motion in the crankshaft. Although connecting rods are traditionally manufactured from aluminum alloys, titanium alloys, or alloy steels, the demand for higher power-to-weight ratios has motivated the exploration of alternative materials supported by advanced computational validation methods. This study proposes a multilayer optimization framework for identifying the most suitable material for the connecting rod of a 110 cc four-stroke petrol engine. The component was modelle…",
+      "summary": "本文面向110 cc四冲程汽油机连杆选材，将有限元分析、深度神经网络代理、多准则模糊排序及量子启发优化串联，并用经典疲劳关系评估寿命。[摘要]网络基于1,500个仿真样本训练，应力预测达到“R2 = 0.987”；作者据疲劳安全系数推荐42CrMo4合金钢。解读：其价值主要在结构选材与疲劳评估流程整合，不能由应力拟合精度直接推出寿命预测准确。当前仅有摘要，量子优化增益与实物验证仍缺少证据。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "a42a314f36ed57d0aa30de5cdeb19e3925357c95",
@@ -2190,11 +2485,41 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议作为疲劳可靠性与代理辅助结构选材的候选文献阅读；摘要报告了明确流程和定量结果，但尚不足以将其列为量子优化优势或高精度寿命预测的强证据。[摘要]",
+      "deep_read": {
+        "problem": "研究针对110 cc四冲程汽油机连杆的材料选择，背景是提升功率重量比的需求。摘要以“most suitable material”为目标，并考察拉伸、压缩载荷下的结构响应。[摘要]解读：核心是材料性能与成本的多准则权衡，而非已展示的连杆几何生成设计。",
+        "method": "作者用Pro/ENGINEER建模、ANSYS计算应力应变及位移，以DNN充当“fast surrogate model”，结合Takagi–Sugeno模糊推理排序和模拟器上的QAOA搜索。[摘要]疲劳计算采用Basquin关系、Goodman修正与Miner累积损伤规则，摘要未交代各模块接口。",
+        "innovation": "摘要将框架描述为“multilayer optimization framework”，整合代理预测、模糊排序及量子启发搜索。[摘要]解读：可辨识的特点是方法组合，现有资料不能确认各模块具有原创算法贡献。QAOA运行于状态向量模拟器，不等于量子硬件验证，也未证明量子加速。",
+        "findings": "应力预测报告“RMSE = 2.41 MPa”、MAPE为0.71%，并称优于随机森林和XGBoost。[摘要]AA-7075与42CrMo4的疲劳安全系数分别为0.78和1.97，作者推荐后者。解读：“无限寿命”应限于所用模型及载荷条件，不应理解为实际服役的无条件保证。",
+        "limitations": "摘要虽声称“improved predictive accuracy”，但未提供数据划分、独立试验验证、载荷谱、材料疲劳参数来源或优化消融结果。[摘要]解读：这些属于摘要层面的证据缺口，不能断言全文未做；应力代理拟合指标也不足以单独验证疲劳寿命预测误差。",
+        "connection": "与结构设计和疲劳可靠性的联系直接，摘要明确采用“Miner's linear damage accumulation rule”评估累积损伤。[摘要]解读：代理模型可为快速方案筛选提供思路，但材料搜索不等于生成式设计；对智能运维的联系仅是潜在迁移，摘要未涉及在线监测或维护决策。",
+        "next_steps": "建议取得全文后，优先核查训练测试隔离、有限元边界条件及材料寿命参数，再检查“outperforming the Random Forest and XGBoost baselines”的比较条件。[摘要]建议将量子优化单独消融并与经典搜索比较，随后用独立疲劳试验检验寿命结论，而非仅复现应力指标。"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "量子增强与机器学习框架用于连杆高精度疲劳寿命预测及结构分析",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.68212/3006-5410.1042"
+      ],
+      "analyzed_at": "2026-09-30T13:16:57.079557+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "f1cd95936b3b961b4a95315d8e453d176c1c8435751beb76a8543116413af109",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "df76394da208",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-09-30T13:16:57.085789+00:00",
+        "basis": "abstract",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -2276,7 +2601,18 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "e1a150bc890d",
+        "state": "missing_evidence",
+        "updated_at": "2026-09-30T13:17:27.337222+00:00",
+        "basis": "missing",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "source_status": {
@@ -2837,13 +3173,13 @@
     "unavailable": 3
   },
   "analysis_status": {
-    "ready_core": 1,
+    "ready_core": 3,
     "target_core": 5,
-    "ready_extended": 0,
+    "ready_extended": 2,
     "target_extended": 5,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 9
+    "pending": 5
   },
   "edition": {
     "id": "36718518549",
