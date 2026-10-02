@@ -45,11 +45,13 @@ class AIQueue(ReadingQueue):
         async with self.lock:
             with self.db() as db:
                 db.execute("UPDATE tasks SET state='generating',attempts=attempts+1,error='',updated_at=? WHERE paper_id=?", (time.time(), item['id']))
+            connected = False
             try:
                 await self.client.start()
                 thread = await self.client.thread(row['thread_id'])
+                connected = True
                 with self.db() as db:
-                    db.execute('UPDATE tasks SET thread_id=? WHERE paper_id=?', (thread, item['id']))
+                    db.execute("UPDATE tasks SET thread_id=?,connection_failures=0,error_code='' WHERE paper_id=?", (thread, item['id']))
                 text = ''
                 async for event in self.client.turn(thread, prompt(item)):
                     if event['type'] == 'delta':
@@ -70,7 +72,10 @@ class AIQueue(ReadingQueue):
                 with self.db() as db:
                     db.execute("UPDATE tasks SET state='pending',attempts=MAX(0,attempts-1) WHERE paper_id=?", (item['id'],))
                 raise
-            except Exception:
+            except Exception as exc:
+                if not connected:
+                    self.connection_failed(row, exc)
+                    return
                 with self.db() as db:
                     attempts = db.execute('SELECT attempts FROM tasks WHERE paper_id=?', (item['id'],)).fetchone()[0]
                     db.execute('UPDATE tasks SET state=?,next_attempt=?,error=?,updated_at=? WHERE paper_id=?',

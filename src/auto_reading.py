@@ -2,6 +2,7 @@
 import hashlib
 import json
 import re
+from datetime import timezone, timedelta
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -11,6 +12,12 @@ from src.reading_notes import valid_analysis, NOTE_FIELDS
 
 PAPER_FIELDS = ('id', 'title', 'authors', 'venue', 'doi', 'abstract', 'published_at', 'landing_url', 'topic_tags')
 READER_VERSION = 2
+CONNECTION_ERRORS = {
+    'codex_connection': 'Codex 连接暂不可用',
+    'codex_version': '本机 Codex 版本尚未适配，请更新论文助手',
+    'codex_auth': 'Codex 登录已失效，请在本机重新登录',
+    'codex_permission': '论文只读会话未能建立，请更新论文助手',
+}
 ANALYSIS_FIELDS = ('title_zh', 'summary', 'recommendation', 'deep_read', 'analysis_status', 'analysis_basis',
                    'analysis_kind', 'analysis_sources', 'analyzed_at', 'llm_model')
 
@@ -147,6 +154,12 @@ def public_status(value):
         raise ValueError('Invalid task state')
     result = {k: value.get(k, '') for k in ('paper_id', 'state', 'updated_at', 'basis')}
     result['reason'] = value.get('reason') if value.get('reason') in ('restricted', 'network', 'not_found', 'unverified') else ''
+    if value.get('error_code') in CONNECTION_ERRORS:
+        result['error_code'] = value['error_code']
+    if value.get('next_retry_at'):
+        if not parse_date(value['next_retry_at']):
+            raise ValueError('Invalid reading retry date')
+        result['next_retry_at'] = value['next_retry_at']
     if 'total' in value:
         total, covered = value.get('total'), value.get('covered')
         if type(total) is not int or type(covered) is not int or not 0 <= covered <= total <= 10000:
@@ -166,7 +179,12 @@ def status_label(state):
     if status == 'generating':
         return ('正在全文精读' if basis == 'full_text' else '正在摘要解读') + progress
     if status in ('failed', 'retry'):
-        return ('全文精读未完成' if basis == 'full_text' else '解读未完成') + progress + (' · 等待自动重试' if status == 'retry' else ' · 请查看未完成原因')
+        retry_at = parse_date(state.get('next_retry_at'))
+        retry = (' · 下次自动重试 ' + retry_at.astimezone(timezone(timedelta(hours=8))).strftime('%m-%d %H:%M') + '（北京时间）'
+                 if retry_at else ' · 等待自动重试')
+        if status == 'retry' and state.get('error_code') in CONNECTION_ERRORS:
+            return CONNECTION_ERRORS[state['error_code']] + retry
+        return ('全文精读未完成' if basis == 'full_text' else '解读未完成') + progress + (retry if status == 'retry' else ' · 自动尝试已用尽，可补充资料或手动重试')
     if status == 'pending':
         return 'PDF 已就绪 · 等待自动精读' if state.get('pdf_available') else '等待获取全文资料'
     if status == 'fetching':

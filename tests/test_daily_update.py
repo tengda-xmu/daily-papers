@@ -205,8 +205,16 @@ def test_publication_snapshot_removes_old_pages_and_preserves_private_data(tmp_p
     assert (tmp_path/'site/index.html').read_text()=='new'
 
 
-def test_automatic_gate_skipped_after_another_run_does_not_wait_forever(tmp_path):
+def test_automatic_gate_skipped_after_another_run_does_not_wait_forever(tmp_path, monkeypatch):
     from tests.test_daily_schedule import Remote as ScheduledRemote, NOW, edition
+    from datetime import datetime
+    class Clock(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return NOW.astimezone(tz)
+    # The scenario and its background snapshot must use the same clock, even
+    # when this regression test runs days after its fixed fixture dates.
+    monkeypatch.setattr('tools.daily_schedule.datetime', Clock)
     remote=ScheduledRemote(edition('2026-09-27T21:00:00Z'))
     def with_jobs(method,path,body=None):
         if '/jobs?' in path:return {'jobs':[{'name':'update','conclusion':'skipped'}]}

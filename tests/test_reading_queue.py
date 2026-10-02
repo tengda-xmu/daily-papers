@@ -1,6 +1,7 @@
 import asyncio
 from copy import deepcopy
 import json
+import pytest
 
 from connectors.codex_bridge.reading_queue import ReadingQueue
 from src.auto_reading import fingerprint, public_analysis
@@ -181,3 +182,100 @@ def test_new_local_pdf_wakes_published_task_but_never_enqueues_private_papers(tm
     assert task(q)['state']=='pending' and task(q)['next_material']==0
     q.document_available('000000000000')
     assert len(q.snapshot()['tasks'])==1
+
+
+@pytest.mark.parametrize('stage', ['start', 'thread'])
+def test_connection_retries_do_not_exhaust_generation_attempts(tmp_path, monkeypatch, stage):
+    from connectors.codex_bridge.rpc import CodexError
+    from src.auto_reading import public_status, status_label
+    now = 1790934000
+    monkeypatch.setattr('connectors.codex_bridge.reading_queue.time.time', lambda: now)
+    class Unavailable(FakeClient):
+        async def start(self):
+            if stage == 'start':
+                raise CodexError('Private diagnostic must not become public', code='codex_version')
+        async def thread(self, existing=None):
+            raise CodexError('Private diagnostic must not become public')
+    p = sample(); q = ReadingQueue(tmp_path, tmp_path/'runtime', Unavailable({}), asyncio.Lock())
+    q.enqueue(p)
+    for count, delay in enumerate((300, 900, 1800, 3600, 3600), 1):
+        asyncio.run(q.generate(task(q)))
+        current = task(q)
+        assert current['state'] == 'retry' and current['attempts'] == 0
+        assert current['connection_failures'] == count and current['next_attempt'] == now + delay
+        assert 'Private' not in current['error']
+    snapshot = q.snapshot()['tasks'][0]
+    value = public_status({**snapshot, 'updated_at': '2026-10-02T09:40:00+00:00'})
+    assert value['error_code'] == ('codex_version' if stage == 'start' else 'codex_connection')
+    assert '10-02 18:40' in status_label(value)
+    q2 = ReadingQueue(tmp_path, tmp_path/'runtime', FakeClient(response(p)), asyncio.Lock())
+    assert task(q2)['connection_failures'] == 5 and task(q2)['next_attempt'] == now + 3600
+    asyncio.run(q2.generate(task(q2)))
+    assert task(q2)['state'] == 'ready' and task(q2)['attempts'] == 1
+    assert task(q2)['connection_failures'] == 0 and task(q2)['error_code'] == ''
+
+
+def test_only_proven_pre_generation_failures_are_migrated_once(tmp_path):
+    q = ReadingQueue(tmp_path, tmp_path/'runtime', FakeClient({}), asyncio.Lock())
+    p = sample()
+    for index in range(3):
+        q.enqueue({**p, 'id': str(index)*12})
+    with q.db() as db:
+        db.execute("DELETE FROM reading_migrations WHERE name='connection-attempts-v1'")
+        db.execute("UPDATE tasks SET state='failed',attempts=3,error='精读尚未完成或输出未通过校验；已保留任务。CodexError'")
+        db.execute("UPDATE tasks SET thread_id='started',draft='kept' WHERE paper_id=?", ('1'*12,))
+        db.execute("UPDATE tasks SET error='Invalid evidence',checkpoint='kept' WHERE paper_id=?", ('2'*12,))
+    q = ReadingQueue(tmp_path, tmp_path/'runtime', FakeClient({}), asyncio.Lock())
+    with q.db() as db:
+        rows = [dict(r) for r in db.execute('SELECT * FROM tasks ORDER BY paper_id')]
+        assert rows[0]['state'] == 'retry' and rows[0]['attempts'] == 0 and rows[0]['next_attempt'] == 0
+        assert rows[1]['state'] == rows[2]['state'] == 'failed'
+        assert rows[1]['draft'] == rows[2]['checkpoint'] == 'kept'
+        db.execute("UPDATE tasks SET next_attempt=9999999999 WHERE paper_id=?", ('0'*12,))
+    q = ReadingQueue(tmp_path, tmp_path/'runtime', FakeClient({}), asyncio.Lock())
+    with q.db() as db:
+        assert db.execute('SELECT next_attempt FROM tasks WHERE paper_id=?', ('0'*12,)).fetchone()[0] == 9999999999
+
+
+def test_connection_failure_cannot_overwrite_new_document_revision(tmp_path):
+    p = sample()
+    q = ReadingQueue(tmp_path, tmp_path/'runtime', FakeClient({}), asyncio.Lock())
+    q.enqueue(p); old = task(q)
+    q.enqueue({**p, 'pdf_url': 'https://www.nature.com/articles/replacement.pdf'})
+    q.connection_failed(old, TimeoutError())
+    assert task(q)['revision'] == old['revision'] + 1
+    assert task(q)['state'] == 'pending' and task(q)['connection_failures'] == 0
+
+
+def test_terminal_failure_does_not_promise_automatic_generation_retry():
+    from src.auto_reading import status_label
+    label = status_label({'state': 'failed', 'basis': 'abstract'})
+    assert '自动尝试已用尽' in label and '等待自动重试' not in label
+
+
+def test_runner_automatically_retries_connection_when_due(tmp_path, monkeypatch):
+    async def scenario():
+        p = sample(); clock = [1790934000]; calls=[]; published=asyncio.Event()
+        sleep = asyncio.sleep
+        async def tick(seconds):
+            clock[0] += seconds
+            await sleep(0)
+        class Recovered(FakeClient):
+            async def start(self):
+                calls.append(clock[0])
+                if len(calls) == 1:
+                    raise TimeoutError('offline')
+        q = ReadingQueue(tmp_path, tmp_path/'runtime', Recovered(response(p)), asyncio.Lock(),
+            resolver=lambda *a, **kw: {'basis':'abstract','version':'a'*64,'text':p['abstract'],'source_url':p['landing_url']})
+        q.enqueue(p); q.quiet_until=0; q.sync=lambda: None
+        q.publish_ready=lambda: published.set() if task(q)['state']=='ready' else None
+        monkeypatch.setattr('connectors.codex_bridge.reading_queue.time.time',lambda:clock[0])
+        monkeypatch.setattr('connectors.codex_bridge.reading_queue.asyncio.sleep',tick)
+        q.start()
+        try:
+            await asyncio.wait_for(published.wait(),2)
+            assert len(calls)==2 and calls[1]-calls[0]>=300
+            assert task(q)['state']=='ready' and task(q)['attempts']==1
+        finally:
+            await q.close()
+    asyncio.run(scenario())

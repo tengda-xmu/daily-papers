@@ -34,7 +34,7 @@
         const li = document.createElement('li'); li.textContent = `${i.page} · ${i.detail}`; return li;
       }));
     } else if (details && task.state === 'published') details.remove();
-    if (task.state !== 'published' || !task.completed_at || node.dataset.readingResult === task.completed_at) return;
+    if (!['published', 'awaiting_fulltext'].includes(task.state) || !task.completed_at || node.dataset.readingResult === task.completed_at) return;
     try {
       publishedPage ||= fetch(location.href, {cache:'no-store'}).then(r => {if (!r.ok) throw new Error(); return r.text();})
         .then(html => new DOMParser().parseFromString(html, 'text/html'));
@@ -42,8 +42,15 @@
       if (!fresh || fresh.querySelector('[data-reading-status]')?.dataset.readingResult !== task.completed_at) return;
       for (const selector of ['h3', '.abstract', '.paper-detail-panel', '.paper-toggle']) {
         const old = card.querySelector(selector), next = fresh.querySelector(selector);
-        if (old && next) { old.innerHTML = next.innerHTML; if (next.dataset.label) old.dataset.label = next.dataset.label; }
+        if (old && next) { old.innerHTML = next.innerHTML; old.className = next.className; if (next.dataset.label) old.dataset.label = next.dataset.label; }
       }
+      const original = card.querySelector('.original-title'), nextOriginal = fresh.querySelector('.original-title');
+      if (nextOriginal) {
+        if (original) original.replaceWith(nextOriginal.cloneNode(true));
+        else card.querySelector('h3')?.after(nextOriginal.cloneNode(true));
+      } else original?.remove();
+      const chat = card.querySelector('[data-paper-title]'), nextChat = fresh.querySelector('[data-paper-title]');
+      if (chat && nextChat) chat.dataset.paperTitle = nextChat.dataset.paperTitle;
       node.dataset.readingResult = task.completed_at;
     } catch (_) { /* Existing notes remain visible until publication is reachable. */ }
     finally { publishedPage = null; }
@@ -76,7 +83,7 @@
         if (!ai) updateCard(task);
         if (!list) continue;
         const item = document.createElement('li');
-        const text = document.createElement('span'); text.textContent = `${task.title} · ${(!ai && task.label) || labels[task.state] || task.state}${task.error ? ' · ' + task.error : ''}`;
+        const text = document.createElement('span'); text.textContent = `${task.title} · ${((!ai || task.error_code) && task.label) || labels[task.state] || task.state}${task.error ? ' · ' + task.error : ''}`;
         item.append(text);
         if (['failed','retry','missing_evidence','awaiting_fulltext'].includes(task.state)) {
           const button = document.createElement('button'); button.type='button'; button.className='text-button'; button.textContent='重试';

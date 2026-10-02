@@ -15,7 +15,7 @@ from urllib.request import getproxies
 # Exact builds verified against their generated experimental schemas and live
 # paper-reader sessions. Do not accept a version prefix: alpha builds may change
 # permissions or streaming semantics even when their major/minor version matches.
-TESTED_VERSIONS = ("0.155.0-alpha.16.3", "0.155.0-alpha.16", "0.154.0-alpha.6.2")
+TESTED_VERSIONS = ("0.159.2", "0.155.0-alpha.16.3", "0.155.0-alpha.16", "0.154.0-alpha.6.2")
 DISABLED_FEATURES = (
     "shell_tool", "unified_exec", "code_mode", "code_mode_host", "apps", "plugins",
     "browser_use", "browser_use_external", "computer_use", "image_generation",
@@ -36,7 +36,9 @@ INSTRUCTIONS = """你是本人专用的科研论文阅读助手，默认用中�
 
 
 class CodexError(Exception):
-    pass
+    def __init__(self, message, *, code="codex_connection"):
+        super().__init__(message)
+        self.code = code
 
 
 def subprocess_environment() -> dict[str, str]:
@@ -117,7 +119,7 @@ class CodexClient:
             self.version = stdout.decode().strip().removeprefix("codex-cli ")
             if self.version not in TESTED_VERSIONS:
                 supported = "、".join(TESTED_VERSIONS)
-                raise CodexError(f"Codex 版本 {self.version} 尚未验证，请更新本机论文助手连接器。已验证版本：{supported}。")
+                raise CodexError(f"Codex 版本 {self.version} 尚未验证，请更新本机论文助手连接器。已验证版本：{supported}。", code="codex_version")
             self.process = await asyncio.create_subprocess_exec(
                 *launch_args(binary, self.workspace), cwd=self.workspace,
                 stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE,
@@ -131,7 +133,7 @@ class CodexClient:
                 self.send({"method": "initialized", "params": {}})
                 account = await self.call("account/read", {"refreshToken": False})
                 if (account.get("account") or {}).get("type") != "chatgpt":
-                    raise CodexError("需要重新登录：请在本机运行 codex login，使用你的 ChatGPT 账号。")
+                    raise CodexError("需要重新登录：请在本机运行 codex login，使用你的 ChatGPT 账号。", code="codex_auth")
                 await self.refresh_models()
             except Exception:
                 await self.close()
@@ -228,12 +230,12 @@ class CodexClient:
             method = "thread/resume"
         result = await self.call(method, params)
         if (result.get("activePermissionProfile") or {}).get("id") != "paper-reader":
-            raise CodexError("论文专用权限未生效，已停止连接。")
+            raise CodexError("论文专用权限未生效，已停止连接。", code="codex_permission")
         sandbox = result.get("sandbox") or {}
         if (sandbox.get("type") not in ("readOnly", "read-only")
                 or sandbox.get("networkAccess", False)
                 or result.get("approvalPolicy") != "never"):
-            raise CodexError("无法建立只读论文会话，已停止连接。")
+            raise CodexError("无法建立只读论文会话，已停止连接。", code="codex_permission")
         thread = result["thread"]["id"]
         self.loaded.add(thread)
         return thread

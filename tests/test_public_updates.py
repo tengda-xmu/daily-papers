@@ -192,6 +192,24 @@ def test_ai_generation_retries_and_publish_requires_live_acknowledgement(tmp_pat
     q.retry(other['id']);assert q.snapshot()['counts']['pending']==1
 
 
+def test_ai_connection_failure_recovers_without_exhausting_attempts(tmp_path):
+    from connectors.codex_bridge.ai_queue import AIQueue
+    from connectors.codex_bridge.rpc import CodexError
+    from tests.test_reading_queue import FakeClient, task
+    class Unavailable(FakeClient):
+        async def start(self):
+            raise CodexError('Version unavailable', code='codex_version')
+    row = item(); q = AIQueue(tmp_path, tmp_path/'runtime', Unavailable({}), asyncio.Lock())
+    q.enqueue(row)
+    for _ in range(4):
+        asyncio.run(q.generate(task(q)))
+    assert task(q)['state'] == 'retry' and task(q)['attempts'] == 0
+    assert task(q)['connection_failures'] == 4
+    q.client = FakeClient(analysis(row))
+    asyncio.run(q.generate(task(q)))
+    assert task(q)['state'] == 'ready' and task(q)['attempts'] == 1
+
+
 def test_public_collection_failure_does_not_replace_other_columns_or_papers(tmp_path,monkeypatch):
     import src.ai_updates,src.opportunities,src.research_leads
     from tools import public_updates

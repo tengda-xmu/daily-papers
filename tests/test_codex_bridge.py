@@ -283,6 +283,7 @@ def test_rpc_model_catalog_pagination_and_image_capabilities(tmp_path):
 
 
 @pytest.mark.parametrize('version,supported', [
+    ('0.159.2', True),
     ('0.154.0-alpha.6.2', True),
     ('0.155.0-alpha.16', True),
     ('0.155.0-alpha.16.3', True),

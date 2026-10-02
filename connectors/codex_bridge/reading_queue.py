@@ -10,7 +10,7 @@ from pathlib import Path
 import sqlite3
 import time
 
-from src.auto_reading import READER_VERSION, fingerprint, prompt, public_analysis, public_paper, public_status, status_label
+from src.auto_reading import CONNECTION_ERRORS, READER_VERSION, fingerprint, prompt, public_analysis, public_paper, public_status, status_label
 from src.editions import read, relative_path, selected, write
 from src.reading_notes import valid_analysis
 
@@ -54,9 +54,21 @@ class ReadingQueue:
             db.execute("UPDATE tasks SET state='pending' WHERE state='fetching'")
             columns = {r[1] for r in db.execute('PRAGMA table_info(tasks)')}
             for name, declaration in (('revision', 'INTEGER NOT NULL DEFAULT 0'), ('result_revision', 'INTEGER NOT NULL DEFAULT 0'),
-                                      ('reader_version', 'INTEGER NOT NULL DEFAULT 0'), ('wanted_signature', "TEXT NOT NULL DEFAULT ''")):
+                                      ('reader_version', 'INTEGER NOT NULL DEFAULT 0'), ('wanted_signature', "TEXT NOT NULL DEFAULT ''"),
+                                      ('connection_failures', 'INTEGER NOT NULL DEFAULT 0'), ('error_code', "TEXT NOT NULL DEFAULT ''")):
                 if name not in columns:
                     db.execute(f'ALTER TABLE tasks ADD COLUMN {name} {declaration}')
+            db.execute('CREATE TABLE IF NOT EXISTS reading_migrations (name TEXT PRIMARY KEY)')
+            if not db.execute("SELECT 1 FROM reading_migrations WHERE name='connection-attempts-v1'").fetchone():
+                # A missing thread means no model turn could have started. Do
+                # not reset real generation failures or discard existing notes.
+                previous_error = ('精读尚未完成或输出未通过校验；已保留任务。CodexError' if self.paper_queue
+                                  else 'AI 导读未完成或未通过来源校验，可重试。')
+                db.execute("""UPDATE tasks SET state='retry',attempts=0,next_attempt=0,
+                    error_code='codex_connection',error=?,updated_at=?
+                    WHERE state IN ('failed','retry') AND thread_id IS NULL AND draft='' AND checkpoint='' AND error=?""",
+                    ('连接未建立，已恢复自动重试；未占用精读尝试次数。', time.time(), previous_error))
+                db.execute("INSERT INTO reading_migrations VALUES ('connection-attempts-v1')")
             if self.paper_queue:
                 for row in db.execute('SELECT paper_id,state,result FROM tasks WHERE reader_version!=?', (READER_VERSION,)).fetchall():
                     value = json.loads(row['result'] or '{}')
@@ -119,7 +131,7 @@ class ReadingQueue:
                 hints_changed = any(previous.get(k) != clean.get(k) for k in ('source', 'oa_url', 'pdf_url', 'conference'))
                 if old['fingerprint'] != key or hints_changed or signature != old['wanted_signature']:
                     db.execute("""UPDATE tasks SET paper=?,fingerprint=?,state='pending',attempts=0,next_material=0,next_attempt=0,
-                        wanted_signature=?,revision=revision+1,error='',updated_at=? WHERE paper_id=?""",
+                        wanted_signature=?,revision=revision+1,error='',error_code='',connection_failures=0,updated_at=? WHERE paper_id=?""",
                         (json.dumps(clean, ensure_ascii=False), key, signature, time.time(), paper['id']))
                 return
             db.execute('''INSERT INTO tasks(paper_id,paper,fingerprint,state,updated_at,priority,wanted_signature,reader_version)
@@ -174,7 +186,8 @@ class ReadingQueue:
     def snapshot(self):
         with self.db() as db:
             rows = db.execute('SELECT * FROM tasks ORDER BY priority DESC,updated_at DESC').fetchall()
-        items = [{**{k: row[k] for k in ('paper_id', 'state', 'attempts', 'updated_at', 'error')},
+        items = [{**{k: row[k] for k in ('paper_id', 'state', 'attempts', 'updated_at', 'error', 'error_code', 'connection_failures')},
+                  'next_retry_at': datetime.fromtimestamp(row['next_attempt'], timezone.utc).isoformat() if row['state'] == 'retry' and row['next_attempt'] else '',
                   'title': json.loads(row['paper']).get('title', ''),
                   'basis': (json.loads(row['material'] or '{}')).get('basis', ''),
                   'reason': (json.loads(row['material'] or '{}')).get('reason_code', ''), 'next_material': row['next_material'], 'enabled': bool(row['enabled'])} for row in rows]
@@ -202,8 +215,26 @@ class ReadingQueue:
             row = db.execute('SELECT state FROM tasks WHERE paper_id=? AND enabled=1', (identifier,)).fetchone()
             if not row or row['state'] not in ('failed', 'retry', 'missing_evidence', 'awaiting_fulltext'):
                 raise ValueError('该论文当前没有可重试的精读任务。')
-            db.execute("UPDATE tasks SET state='pending',attempts=0,next_attempt=0,next_material=0,error='' WHERE paper_id=?", (identifier,))
+            db.execute("UPDATE tasks SET state='pending',attempts=0,next_attempt=0,next_material=0,error='',error_code='',connection_failures=0 WHERE paper_id=?", (identifier,))
         return self.snapshot()
+
+    def connection_failed(self, row, exc):
+        """Retry setup independently; no inference was started for this attempt."""
+        code = getattr(exc, 'code', 'codex_connection')
+        if code not in CONNECTION_ERRORS:
+            code = 'codex_connection'
+        with self.db() as db:
+            current = db.execute('SELECT connection_failures FROM tasks WHERE paper_id=? AND revision=?',
+                                 (row['paper_id'], row['revision'])).fetchone()
+            if not current:
+                return
+            failures = current['connection_failures'] + 1
+            delay = (300, 900, 1800, 3600)[min(failures - 1, 3)]
+            db.execute("""UPDATE tasks SET state='retry',attempts=MAX(0,attempts-1),connection_failures=?,
+                next_attempt=?,error_code=?,error=?,updated_at=? WHERE paper_id=? AND revision=?""",
+                (failures, time.time() + delay, code, CONNECTION_ERRORS[code] + '；将自动检查恢复，不占用精读尝试次数。',
+                 time.time(), row['paper_id'], row['revision']))
+        self.last_publish = 0
 
     async def preempt(self):
         self.quiet_until = time.time() + 120
@@ -243,7 +274,7 @@ class ReadingQueue:
                 elif row['attempts'] >= 3:
                     db.execute("UPDATE tasks SET state='failed' WHERE paper_id=?", (identifier,))
                     return
-                db.execute("UPDATE tasks SET state='pending',error='',updated_at=? WHERE paper_id=?", (time.time(), identifier))
+                db.execute("UPDATE tasks SET state='pending',error='',error_code='',updated_at=? WHERE paper_id=?", (time.time(), identifier))
                 fresh = dict(db.execute('SELECT * FROM tasks WHERE paper_id=?', (identifier,)).fetchone())
             if time.time() >= self.quiet_until and not self.lock.locked():
                 await self.generate(fresh)
@@ -268,11 +299,14 @@ class ReadingQueue:
             with self.db() as db:
                 db.execute("UPDATE tasks SET state='generating',attempts=attempts+1,error='',updated_at=? WHERE paper_id=?", (time.time(), identifier))
             text = ''
+            connected = False
             try:
                 await self.client.start()
                 thread = await self.client.thread(row['thread_id'])
+                connected = True
+                self.assert_current(row)
                 with self.db() as db:
-                    db.execute('UPDATE tasks SET thread_id=? WHERE paper_id=?', (thread, identifier))
+                    db.execute("UPDATE tasks SET thread_id=?,connection_failures=0,error_code='' WHERE paper_id=?", (thread, identifier))
                 from .reading_document import read_document, coverage
                 notes, ledger = await read_document(self, row, material, thread) if material['basis'] == 'full_text' else ('', {})
                 text, saved = '', 0
@@ -333,12 +367,16 @@ class ReadingQueue:
                     db.execute("UPDATE tasks SET state='pending',attempts=MAX(0,attempts-1) WHERE paper_id=? AND revision=?", (identifier, row['revision']))
                 raise
             except Exception as exc:
+                if not connected:
+                    self.connection_failed(row, exc)
+                    return
                 with self.db() as db:
                     attempts = db.execute('SELECT attempts FROM tasks WHERE paper_id=?', (identifier,)).fetchone()[0]
                     reason = str(exc)[:180] if isinstance(exc, ValueError) else type(exc).__name__
-                    db.execute('UPDATE tasks SET state=?,next_attempt=?,error=?,draft=?,updated_at=? WHERE paper_id=? AND revision=?',
+                    db.execute("UPDATE tasks SET state=?,next_attempt=?,error=?,draft=?,error_code='',updated_at=? WHERE paper_id=? AND revision=?",
                         ('failed' if attempts >= 3 else 'retry', time.time() + 300 * attempts,
                          '精读尚未完成或输出未通过校验；已保留任务。' + reason, text[:50000], time.time(), identifier, row['revision']))
+                self.last_publish = 0
 
     def publish_ready(self):
         if self.paper_queue:
@@ -375,6 +413,7 @@ class ReadingQueue:
                 if public_state == 'ready':
                     public_state = 'published' if row['basis'] == 'full_text' else 'awaiting_fulltext'
                 value = public_status({'paper_id': row['paper_id'], 'state': public_state, 'basis': row['basis'],
+                    'error_code': row['error_code'], 'next_retry_at': row['next_retry_at'],
                     'reason': row['reason'], **{k: row[k] for k in ('total', 'covered', 'pdf_available', 'issues')},
                     'updated_at': datetime.fromtimestamp(row['updated_at'], timezone.utc).isoformat()})
                 path = self.runtime / 'published-reading-status' / (row['paper_id'] + '.json')
