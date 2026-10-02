@@ -1,0 +1,20 @@
+{
+  "id": "public-378de5b0a4ef1ffb1912cd87",
+  "content_version": "d5cbf670e0fdbe3f5a4dce6252fb5d95f0034a0ab39cfdd1b6843b59651152a4",
+  "analysis": {
+    "title_zh": "LangChain：如何在 Harness 中构建模型路由器",
+    "summary": "本文讨论通过模型路由降低智能体运行成本，而非宣布新产品发布。作者主张将路由器放在智能体运行框架（harness）内，利用其已有的领域与任务上下文选择模型，而不是依赖通用网关。官方报告：在其编码任务实验中，相较基线，每任务成本中位数下降64%，质量未见明显变化。该思路适合编码智能体及其他任务差异较大的场景，但路由设计需要可观测性、评估和明确的成功标准。[S1]",
+    "application": "建议：科研迁移建议（你的推断）是按代码生成、文献处理或运维诊断等任务分别建立模型评估，再研究上下文驱动的路由策略。官方已验证效果仅限所述编码任务实验中的成本与质量表现，不能据此认定科研或智能运维任务也能获得相同收益。[S1]",
+    "requirements": "使用条件见官方文档",
+    "steps": [],
+    "evidence": [
+      "In our experiments, model routing cut median cost per coding task by 64% compared with the baseline, with no noticeable change in quality.",
+      "An effective model router belongs in the harness, not a generic gateway.",
+      "Choosing the right model requires domain and task context that the harness already assembles, and a gateway typically lacks.",
+      "Effective router design is rooted in observability and evals.",
+      "It requires an understanding of an agent's task space, model performance research, and clear success criteria."
+    ],
+    "basis_url": "https://www.langchain.com/blog/how-to-build-a-model-router-in-the-harness"
+  },
+  "analyzed_at": "2026-10-02T13:11:54.318588+00:00"
+}
