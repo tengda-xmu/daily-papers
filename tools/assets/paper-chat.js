@@ -16,7 +16,7 @@
   let deviceToken = readStorage('localStorage', browserKey);
   if (!/^[A-Za-z0-9_-]{43}$/.test(deviceToken)) deviceToken = '';
   let devicePersisted = Boolean(deviceToken);
-  let restorePromise = null, connectPromise = null, reconnectTimer = null, connecting = false;
+  let restorePromise = null, connectPromise = null, reconnectTimer = null, connecting = false, reconnectNeeded = false;
   let connectedModel = '';
   const modelKey = 'daily-papers-codex-model';
   let availableModels = [];
@@ -449,6 +449,7 @@
       if (response.status === 401 && protectedRoute) { clearSession(); $('.chat-connect').hidden = false; }
       const err = new Error(data.message || (typeof data.detail === 'string' ? data.detail : '请求未完成，请重试。'));
       err.state = data.state;
+      err.retryable = data.retryable === true;
       err.status = response.status;
       throw err;
     }
@@ -758,6 +759,7 @@
   }
   async function performConnect() {
     connecting = true;
+    reconnectNeeded = false;
     status('正在连接本机 Codex…');
     $('[data-chat-action="connect"]').disabled = true;
     $('[data-chat-action="forget-browser"]').disabled = true;
@@ -803,8 +805,9 @@
       status(error.message, error.state || 'error'); $('.chat-connect').hidden = false;
       // Saved PDFs remain readable when the local model connection is unavailable.
       if(token && paperId)await loadPaper().catch(()=>{});
-      if (error.state === 'offline' && (token || deviceToken || code) && dialog.open) {
-        status('等待本机助手启动，将自动重连。若浏览器提示，请允许访问本地网络。', 'offline');
+      if ((['offline','timeout'].includes(error.state) || error.retryable) && (token || deviceToken || code) && dialog.open) {
+        reconnectNeeded = true;
+        status(error.state === 'offline' ? '等待本机助手启动，将自动重连。若浏览器提示，请允许访问本地网络。' : error.message + ' · 将自动重连。', error.state || 'error');
         reconnectTimer = setTimeout(() => { if (dialog.open && !busy && !document.hidden) connect(); }, 8000);
       }
     } finally {
@@ -1117,7 +1120,7 @@
   };
   dialog.addEventListener('cancel', event => { event.preventDefault(); $('.chat-close').click(); });
   function reconnectWhenVisible() {
-    if (dialog.open && !document.hidden && !busy && (token || deviceToken) && $('.chat-status').dataset.state === 'offline') connect();
+    if (dialog.open && !document.hidden && !busy && (token || deviceToken) && reconnectNeeded) connect();
   }
   window.addEventListener('online', reconnectWhenVisible);
   window.addEventListener('focus', reconnectWhenVisible);
@@ -1130,7 +1133,7 @@
     if (!deviceToken) { status('浏览器授权已在其他标签页取消，请重新配对。', 'unpaired'); $('.chat-connect').hidden = false; }
     else if (dialog.open && !busy) connect();
   });
-  document.addEventListener('paper-library-connected',()=>{token=readStorage(session,key);deviceToken=readStorage('localStorage',browserKey);if(dialog.open)connect();});
+  document.addEventListener('paper-library-connected',()=>{token=readStorage(session,key);deviceToken=readStorage('localStorage',browserKey);if(dialog.open && !busy && $('.chat-status').dataset.state !== 'connected')connect();});
   document.addEventListener('click', event => { const button = event.target.closest('.codex-entry'); if (button) open(button.dataset.paperId, button.dataset.paperTitle, button).then(()=>{if(button.dataset.openReader==='true')reader?.open();}); });
   if (local) {
     const hash = new URLSearchParams(location.hash.slice(1)); setPairCode(hash.get('pair') || '');

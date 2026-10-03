@@ -12,6 +12,26 @@
   const read = (kind,key) => {try{return window[kind].getItem(key)||'';}catch{return '';}};
   const write = (kind,key,value) => {try{window[kind].setItem(key,value);}catch{}};
   let token = read(storage,sessionKey), connected = false, page = 1, totalPages = 1, restorePromise, refreshTimer, generation = 0, transfer = '';
+  let reconnectTimer, reconnectPromise, reconnectFailures = 0, authorizationRejected = false;
+  const hasCredentials = () => Boolean(token || read(storage,sessionKey) || read('localStorage',browserKey));
+  function scheduleReconnect() {
+    if (reconnectTimer || authorizationRejected || !hasCredentials()) return;
+    reconnectTimer=setTimeout(()=>{reconnectTimer=null;automaticConnect();},Math.min(8000 * 2 ** Math.min(reconnectFailures,3),60000));
+  }
+  function automaticConnect() {
+    if (reconnectPromise || document.hidden || authorizationRejected || !hasCredentials()) return reconnectPromise;
+    clearTimeout(reconnectTimer);reconnectTimer=null;
+    const wasConnected=connected;
+    reconnectPromise=refresh().then(()=>{
+      reconnectFailures=0;
+      if(notice.dataset.error==='true')status('');
+      if(!wasConnected)document.dispatchEvent(new CustomEvent('paper-library-connected'));
+    }).catch(error=>{
+      status(error.message,true);
+      if(error.retryable){reconnectFailures++;scheduleReconnect();}
+    }).finally(()=>{reconnectPromise=null;});
+    return reconnectPromise;
+  }
   const ratings = new Map(), controls = new Map();
   const localFigures = new Map();
   const connection = document.createElement('div'); connection.className='library-connection';
@@ -29,12 +49,16 @@
     token=read(storage,sessionKey)||token;
     let response;
     try{response=await fetch(base+path,{...options,headers:{Authorization:'Bearer '+token,...(options.body && !(options.body instanceof FormData)?{'Content-Type':'application/json'}:{})},signal:AbortSignal.timeout(path.includes('backup')||path.includes('restore')?180000:20000)});}
-    catch{connectionState(false);throw new Error('无法连接本机助手，请启动后重试。');}
+    catch{connectionState(false);scheduleReconnect();const error=new Error('暂未连接本机助手，将自动重连；如浏览器询问，请允许访问本地网络。');error.retryable=true;throw error;}
     if(response.status===401 && retry && !path.startsWith('/api/session/') && path!=='/api/pair'){
       if(!restorePromise)restorePromise=(async()=>{const credential=read('localStorage',browserKey);if(!credential)throw new Error('首次使用请粘贴本机助手的配对码。');const data=await api('/api/session/restore',{method:'POST',body:JSON.stringify({device_token:credential})},false);token=data.token;write(storage,sessionKey,token);})().finally(()=>restorePromise=null);
       try{await restorePromise;return await api(path,options,false);}catch(error){connectionState(false);connection.querySelector('form').hidden=false;throw error;}
     }
-    if(!response.ok){const data=await response.json().catch(()=>({}));const error=new Error(data.message || (typeof data.detail==='string'?data.detail:'操作未完成，请重试。'));error.code=response.status;throw error;}
+    if(!response.ok){const data=await response.json().catch(()=>({}));const error=new Error(data.message || (typeof data.detail==='string'?data.detail:'操作未完成，请重试。'));error.code=response.status;error.retryable=response.status>=500;
+      if(response.status===401 && path==='/api/session/restore'){
+        authorizationRejected=true;token='';write(storage,sessionKey,'');write('localStorage',browserKey,'');clearTimeout(reconnectTimer);reconnectTimer=null;
+      }
+      if(error.retryable){connectionState(false);scheduleReconnect();}throw error;}
     connectionState(true);
     return options.blob ? response.blob() : response.json();
   }
@@ -118,7 +142,7 @@
   }
   connection.querySelector('.library-connect').onclick=()=>refresh().catch(error=>{connection.querySelector('form').hidden=false;status(error.message,true);});
   connection.querySelector('form').onsubmit=async e=>{e.preventDefault();const form=e.currentTarget,button=form.querySelector('button');button.disabled=true;
-    try{const data=await api('/api/pair',{method:'POST',body:JSON.stringify({code:form.querySelector('input[type=password]').value.trim(),remember:form.querySelector('input[type=checkbox]').checked})});token=data.token;write(storage,sessionKey,token);if(data.device_token)write('localStorage',browserKey,data.device_token);form.querySelector('input[type=password]').value='';await refresh();status('已连接本机');document.dispatchEvent(new CustomEvent('paper-library-connected'));}catch(error){status(error.message,true);}finally{button.disabled=false;}};
+    try{const data=await api('/api/pair',{method:'POST',body:JSON.stringify({code:form.querySelector('input[type=password]').value.trim(),remember:form.querySelector('input[type=checkbox]').checked})});authorizationRejected=false;token=data.token;write(storage,sessionKey,token);if(data.device_token)write('localStorage',browserKey,data.device_token);form.querySelector('input[type=password]').value='';await refresh();status('已连接本机');document.dispatchEvent(new CustomEvent('paper-library-connected'));}catch(error){status(error.message,true);}finally{button.disabled=false;}};
   if(library){
     const filters=FilterPanels.create({button:$('#library-filter-toggle'),panel:$('#library-filter-panel'),chips:$('#library-filter-chips')});
     function filterState(){
@@ -142,9 +166,13 @@
     backup.querySelector('[data-backup-file]').onchange=async e=>{const file=e.target.files[0];transfer='';backup.querySelector('[data-backup-preview]').hidden=true;if(!file)return;const data=new FormData();data.append('file',file);message.textContent='正在校验备份文件…';try{const result=await api('/api/library/restore/preview',{method:'POST',body:data});transfer=result.transfer_id;backup.querySelector('[data-backup-summary]').textContent=`${result.papers} 篇文献、${result.files} 个 PDF；新增 ${result.new_papers} 篇、补入 ${result.new_files} 个文件。${result.existing_papers} 篇已存在，将保留本机评分、批注和进度。${result.missing_files?`备份中缺少 ${result.missing_files} 个文件。`:''}`;backup.querySelector('[data-backup-preview]').hidden=false;message.textContent='校验通过，请确认恢复。';}catch(error){message.textContent=error.message;}};
     backup.querySelector('[data-backup-restore]').onclick=async e=>{if(!transfer)return;const button=e.currentTarget;button.disabled=true;try{const result=await api('/api/library/restore',{method:'POST',body:JSON.stringify({transfer_id:transfer})});message.textContent=result.message;transfer='';backup.querySelector('[data-backup-preview]').hidden=true;await refresh();}catch(error){message.textContent=error.message;}finally{button.disabled=false;}};
   }
-  document.addEventListener('paper-chat-connected',()=>refresh().catch(e=>status(e.message,true)));
+  document.addEventListener('paper-chat-connected',()=>{authorizationRejected=false;automaticConnect();});
   document.addEventListener('paper-document-updated',event=>{if(connected)refreshFigures(event.detail.paperId);});
   window.addEventListener('pagehide',event=>{if(!event.persisted)for(const value of localFigures.values())if(value.url)URL.revokeObjectURL(value.url);});
-  window.addEventListener('focus',()=>{if(connected)refresh().catch(e=>status(e.message,true));});
-  if(token || read('localStorage',browserKey))refresh().catch(e=>status(e.message,true));
+  window.addEventListener('focus',automaticConnect);
+  window.addEventListener('online',automaticConnect);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)automaticConnect();});
+  window.addEventListener('storage',event=>{if([browserKey,sessionKey].includes(event.key)){token=read(storage,sessionKey);authorizationRejected=false;automaticConnect();}});
+  setInterval(()=>{if(!connected && !document.hidden)scheduleReconnect();},30000);
+  if(hasCredentials())automaticConnect();
 })();

@@ -15,7 +15,7 @@ from urllib.request import getproxies
 # Exact builds verified against their generated experimental schemas and live
 # paper-reader sessions. Do not accept a version prefix: alpha builds may change
 # permissions or streaming semantics even when their major/minor version matches.
-TESTED_VERSIONS = ("0.159.2", "0.155.0-alpha.16.3", "0.155.0-alpha.16", "0.154.0-alpha.6.2")
+TESTED_VERSIONS = ("0.159.2", "0.159.0-alpha.12.1", "0.155.0-alpha.16.3", "0.155.0-alpha.16", "0.154.0-alpha.6.2")
 DISABLED_FEATURES = (
     "shell_tool", "unified_exec", "code_mode", "code_mode_host", "apps", "plugins",
     "browser_use", "browser_use_external", "computer_use", "image_generation",
@@ -64,7 +64,16 @@ def subprocess_environment() -> dict[str, str]:
 
 
 def executable() -> str:
-    found = os.environ.get("PAPER_CODEX_EXE") or shutil.which("codex")
+    override = os.environ.get("PAPER_CODEX_EXE")
+    if override:
+        if not Path(override).is_file():
+            raise CodexError("指定的 Codex 程序不存在，请检查 PAPER_CODEX_EXE。", code="codex_version")
+        return str(Path(override).resolve())
+    from .codex_runtime import pinned_executable
+    pinned = pinned_executable(TESTED_VERSIONS)
+    if pinned:
+        return str(pinned)
+    found = shutil.which("codex")
     if found and Path(found).is_file():
         return str(Path(found).resolve())
     candidates = list((Path.home() / ".vscode/extensions").glob("openai.chatgpt-*/bin/windows-x86_64/codex.exe"))

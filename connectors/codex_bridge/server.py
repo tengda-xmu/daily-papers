@@ -329,7 +329,11 @@ def create_app(root=ROOT, runtime=None, rpc=None, automatic_updates=None):
             return {"state": "connected", "model": client.model, "version": client.version,
                     "images": client.images, "models": models}
         except Exception as exc:
-            return JSONResponse(error_info(exc), status_code=503)
+            problem = error_info(exc)
+            problem['retryable'] = problem['state'] not in ('login_required', 'quota_limited')
+            if getattr(exc, 'code', '') in ('codex_version', 'codex_permission'):
+                problem['state'] = 'runtime_unavailable'
+            return JSONResponse(problem, status_code=503)
 
     @app.get("/api/search/sources")
     async def search_sources():

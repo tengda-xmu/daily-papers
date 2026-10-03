@@ -78,6 +78,26 @@ def login(client, app):
     return {'Authorization': 'Bearer ' + response.json()['token'], 'Origin': PUBLIC_ORIGIN}
 
 
+@pytest.mark.parametrize('error,state,retryable', [
+    (CodexError('版本尚未验证', code='codex_version'), 'runtime_unavailable', True),
+    (CodexError('只读权限不匹配', code='codex_permission'), 'runtime_unavailable', True),
+    (TimeoutError(), 'error', True),
+    (CodexError('authentication expired'), 'login_required', False),
+    (CodexError('quota limited'), 'quota_limited', False),
+])
+def test_connection_failure_retains_pairing_and_reports_recovery(bridge, monkeypatch, error, state, retryable):
+    client, app, rpc = bridge
+    auth = login(client, app)
+    async def fail():
+        raise error
+    monkeypatch.setattr(rpc, 'start', fail)
+    response = client.post('/api/connect', headers=auth)
+    assert response.status_code == 503
+    assert response.json()['state'] == state
+    assert response.json()['retryable'] == retryable
+    assert client.get('/api/papers', headers=auth).status_code == 200
+
+
 def ask(client, headers, paper=P1, **changes):
     data = dict(paper_id=paper, message='这篇论文有什么证据？', mode='question', request_id=str(uuid.uuid4()))
     data.update(changes)
@@ -283,6 +303,7 @@ def test_rpc_model_catalog_pagination_and_image_capabilities(tmp_path):
 
 
 @pytest.mark.parametrize('version,supported', [
+    ('0.159.0-alpha.12.1', True),
     ('0.159.2', True),
     ('0.154.0-alpha.6.2', True),
     ('0.155.0-alpha.16', True),

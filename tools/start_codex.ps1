@@ -1,4 +1,4 @@
-param([switch]$NoBrowser)
+param([switch]$NoBrowser, [string]$PythonPath)
 $ErrorActionPreference = 'Stop'
 $projectDir = Split-Path -Parent $PSScriptRoot
 Set-Location -LiteralPath $projectDir
@@ -8,18 +8,20 @@ $ownerName = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
 & icacls.exe $runtimeDir /inheritance:r /grant:r "${ownerName}:(OI)(CI)F" '*S-1-5-18:(OI)(CI)F' | Out-Null
 if ($LASTEXITCODE -ne 0) { throw 'Could not protect the private paper assistant directory.' }
 $baseUrl = 'http://127.0.0.1:43127'
+$pythonExe = if ($PythonPath) { $PythonPath } else { (Get-Command python).Source }
 $running = $false
 try {
     $health = Invoke-RestMethod -Uri "$baseUrl/api/health" -TimeoutSec 2
     $running = $health.service -eq 'daily-papers-codex'
 } catch { }
 if (-not $running) {
-    & python -c "import fastapi, uvicorn, pypdf, pypdfium2, multipart, fontTools, reportlab, pymupdf, yaml, requests, PIL, bs4; assert pymupdf.VersionBind == '1.27.2.3'"
+    & $pythonExe -c "import fastapi, uvicorn, pypdf, pypdfium2, multipart, fontTools, reportlab, pymupdf, yaml, requests, PIL, bs4; assert pymupdf.VersionBind == '1.27.2.3'"
     if ($LASTEXITCODE -ne 0) {
-        & python -m pip install -r (Join-Path $projectDir 'connectors\codex_bridge\requirements.txt')
+        & $pythonExe -m pip install -r (Join-Path $projectDir 'connectors\codex_bridge\requirements.txt')
         if ($LASTEXITCODE -ne 0) { throw 'Could not install paper assistant dependencies.' }
     }
-    $pythonExe = (Get-Command python).Source
+    & $pythonExe -m tools.pin_codex
+    if ($LASTEXITCODE -ne 0) { throw 'Could not prepare the verified Codex runtime.' }
     Start-Process -FilePath $pythonExe -ArgumentList '-m', 'connectors.codex_bridge.server' -WorkingDirectory $projectDir -WindowStyle Hidden -RedirectStandardOutput (Join-Path $runtimeDir 'stdout.log') -RedirectStandardError (Join-Path $runtimeDir 'stderr.log') | Out-Null
     for ($attempt = 0; $attempt -lt 30; $attempt++) {
         Start-Sleep -Milliseconds 500
