@@ -92,6 +92,10 @@ jobs:
               fi
             done
           fi
+      - name: Import validated paper readings for every update
+        run: |
+          git fetch origin connector-data:refs/remotes/origin/connector-data
+          python -m tools.recommendation_data --recover --reconcile --import-readings
       - name: Refresh public AI and research columns
         continue-on-error: true
         env:
@@ -134,7 +138,6 @@ jobs:
           WECHAT_WORK_WEBHOOK_URL: ${{ secrets.WECHAT_WORK_WEBHOOK_URL }}
           SCHEDULED_CHECK: ${{ inputs.scheduled_check }}
         run: |
-          python -m tools.recommendation_data --recover --reconcile --import-readings
           python -m src.pipeline
       - name: Import AI reading enrichment
         run: python -m tools.public_updates --import-readings
@@ -185,6 +188,15 @@ jobs:
           path: .publication
       - name: Restore exact publication snapshot
         run: python -m tools.restore_publication .publication
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: pip install -r requirements.txt
+      - name: Preserve current readings when publishing or retrying a snapshot
+        run: |
+          git fetch origin connector-data:refs/remotes/origin/connector-data
+          python -m tools.recommendation_data --import-readings
+          python -m tools.public_updates --import-readings
+          python tools/build_site.py
       - name: Publish GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:

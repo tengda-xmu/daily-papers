@@ -111,9 +111,7 @@ def recover(root=ROOT, *, git_history=False):
 
 def import_readings(root=ROOT):
     result = subprocess.run(['git', 'ls-tree', '-r', '--name-only', 'origin/connector-data', '--', 'data/auto-reading'],
-                            cwd=root, capture_output=True, text=True)
-    if result.returncode:
-        return 0
+                            cwd=root, capture_output=True, text=True, check=True)
     count = 0
     for path in result.stdout.splitlines():
         if not path.startswith('data/auto-reading/') or not path.endswith('.json'):
@@ -131,7 +129,7 @@ def import_readings(root=ROOT):
 
 def import_reading_status(root=ROOT):
     result = subprocess.run(['git', 'ls-tree', '-r', '--name-only', 'origin/connector-data', '--', 'data/reading-status'],
-                            cwd=root, capture_output=True, text=True)
+                            cwd=root, capture_output=True, text=True, check=True)
     for path in result.stdout.splitlines():
         if not path.startswith('data/reading-status/') or not path.endswith('.json'):
             continue

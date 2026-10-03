@@ -27,9 +27,10 @@ jobs:
         shell: bash
         run: |
           path="data/inbox/wechat-subscriptions.json"
-          if git fetch origin connector-data && git cat-file -e "FETCH_HEAD:${path}" 2>/dev/null; then
+          git fetch origin connector-data:refs/remotes/origin/connector-data
+          if git cat-file -e "origin/connector-data:${path}" 2>/dev/null; then
             mkdir -p data/inbox
-            git show "FETCH_HEAD:${path}" > "$path"
+            git show "origin/connector-data:${path}" > "$path"
           fi
       - name: Import validated reading enrichment and recover published editions
         run: python -m tools.recommendation_data --recover --reconcile --import-readings
