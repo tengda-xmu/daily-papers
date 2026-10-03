@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="聚焦 AI 驱动的智能运维、结构生成式设计与疲劳可靠性，每日追踪科研论文，提供中文摘要与精读要点。">
+  <meta name="theme-color" content="#153e64">
+  <title>利用地震环境噪声与机器学习监测厚沉积层上高层建筑的结构健康 | 全文精读</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css?v=df71e844e4">
+  <link rel="stylesheet" href="../assets/paper-chat.css?v=df71e844e4">
+  <link rel="stylesheet" href="../assets/paper-library.css?v=df71e844e4">
+  <script src="../assets/site.js?v=df71e844e4" defer></script>
+  <script src="../assets/paper-library.js?v=df71e844e4" defer></script>
+  <script src="../assets/paper-chat.js?v=df71e844e4" defer></script>
+  <script src="../assets/daily-update.js?v=df71e844e4" defer></script>
+<link rel="stylesheet" href="../assets/reading-article.css?v=df71e844e4"><script src="../assets/reading-article.js?v=df71e844e4" defer></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main-content">跳至正文</a>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a class="wordmark" href="../"><span>腾达</span><span class="wordmark-divider" aria-hidden="true"></span>科研文献</a>
+      <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false">菜单 <span aria-hidden="true">☰</span></button>
+      <nav id="main-navigation" class="main-navigation" aria-label="主导航">
+        <a href="../" >每日推荐</a>
+        <a href="../search.html" data-local-only >手动检索</a>
+        <a href="../leads.html" >科研线索</a>
+        <a href="../ai.html" >AI 前沿</a>
+        <a href="../library.html" data-local-only >我的文献</a>
+        <a href="../archive/" >历史归档</a>
+        <a href="../setup.html" data-local-only >设置</a>
+      </nav>
+    </div>
+  </header>
+  <div class="site-shell">
+    <main id="main-content" class="main-content" tabindex="-1">
+      <article class="reading-article" data-paper-id="f530449d449a"><a class="article-back" href="../">返回每日推荐</a><header class="article-header"><p class="article-type">论文精读</p><h1>利用地震环境噪声与机器学习监测厚沉积层上高层建筑的结构健康</h1><p class="article-original" lang="en">Machine learning–driven structural health monitoring of a high-rise building on thick sediments via seismic ambient noise</p><p class="article-byline">Qin, Linpeng, Guo, Zhen, Yuan, Tianran, Peng, Zhen, Huang, Yu, Wang, Yun<br>Communications Engineering</p><p class="article-updated">精读更新 2026-10-03 10:54 · 依据论文全文整理</p><div class="article-links"><a href="https://www.nature.com/articles/s44172-026-00756-8" target="_blank" rel="noopener noreferrer">阅读原文</a><button type="button" class="text-button copy-citation" data-citation="Qin, Linpeng, Guo, Zhen, Yuan, Tianran, Peng, Zhen, Huang, Yu, Wang, Yun. Machine learning–driven structural health monitoring of a high-rise building on thick sediments via seismic ambient noise. Communications Engineering. https://www.nature.com/articles/s44172-026-00756-8">复制引用</button><button type="button" class="text-button codex-entry" data-local-only data-paper-id="f530449d449a" data-paper-title="利用地震环境噪声与机器学习监测厚沉积层上高层建筑的结构健康">Codex 对话</button></div></header><p class="article-upgrade">全文精读已完成，文章版正在逐步升级。现有内容可继续阅读。</p><div class="article-lead"><p>依据覆盖全文的阅读笔记，论文探讨如何兼顾高层建筑监测的操作简便性与楼层定位能力。作者利用上海一栋21层建筑连续22天的环境噪声记录，以地下室、屋顶动态参数及楼层高度训练统一预测模型，并通过SHAP解释沿高贡献变化。层间干涉显示两处约2%的波速下降，模型归因转变与其位置对应。这些结果支持楼层动态转变识别，但不等于损伤确诊；单建筑验证与归因稳健性仍限制工程推广。</p></div><section><h2>研究问题</h2><p>共振频率反映整体刚度，却难定位局部变化；层间干涉具有更明确的空间约束，但计算密集并依赖事件前后观测。研究因此关注监测便利性与楼层敏感性的权衡，目标是识别运动学转变，而非作者所排除的“diagnose structural unsafety”。</p></section><section><h2>方法与路线</h2><p>以B1、F21的共振频率、方位角、倾角及归一化楼层高度构建统一模型，比较五类算法后采用XGBoost并开展SHAP分析。训练测试按7:3划分，同一时间窗各楼层归入同一子集，训练内进行五折分组交叉验证与网格搜索。</p></section><section><h2>创新与比较</h2><p>值得关注的是将边界响应与楼层位置联合建模，再把归因沿高转变与局部干涉证据对照，而不是仅凭整体频移解释局部状态。这一组合为训练后减少重复层间分析提供思路，但资料不足以认定其为首次提出，也不能把解释性对应提升为损伤因果验证。</p></section><section><h2>证据与发现</h2><p>XGBoost预测频率、方位角、倾角的nMAE依次为2.23%、3.22%、0.86%。干涉所得最大平均波速下降在f₀的F6–F7及f₂的F9–F10，均约2%；SHAP主导因素在第6–7层及第9层附近转变。波速下降不能改写成同幅度刚度下降。</p></section><section><h2>局限与边界</h2><p>仅有“a single building case”，SHAP稳健性检验尚未报告。P22–P23未明确时间隔离及折内标准化，不能排除相关性影响；P23补充搜索配置未提供，复现受限。核对记录未发现原文件缺项，P1、P23为已纠正提取错误，不能据此宣称缺失公式。</p></section><section><h2>方向关联</h2><p>对智能运维，边界测点预测可作为日常状态跟踪线索；对结构设计，可结合模块界面及设备夹层复核荷载传递差异。可靠性研究则须区分正常设计分段与损伤演化：作者明确这些转变并非“direct evidence of structural instability”，现有结果不提供失效概率。</p></section><section><h2>后续研究建议</h2><p>优先采用时间先后划分并隔离相邻窗口，核查折内预处理；通过重复训练、bootstrap及SHAP置信区间检验转变位置稳定性。再依作者展望纳入健康、已知损伤与渐进损伤建筑，结合独立检查和有限元模型更新，检验设计转变与损伤异常能否区分。</p></section><footer class="article-end"><p>本文依据论文资料整理，研究建议由本站提出。原文、相关文献和图示标注共同说明内容来源。</p></footer></article><dialog class="article-figure-dialog"><form method="dialog"><button type="submit">关闭大图</button></form><img alt="研究思路图放大查看"></dialog>
+      <footer class="site-footer"><p>每日更新，持续关注 AI 与工程可靠性。</p><div><a href="https://tengda-xmu.github.io/">腾达 · 厦门大学</a><a href="https://github.com/tengda-xmu/daily-papers" target="_blank" rel="noopener noreferrer">GitHub</a></div></footer>
+    </main>
+  </div>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <a class="back-to-top" href="#top" aria-label="返回页面顶部" hidden>回到顶部 ↑</a>
+</body>
+</html>

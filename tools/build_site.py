@@ -20,6 +20,7 @@ from src.catalog import (JOURNALS, SOURCE_CATALOG, STATE_LABELS, TOPIC_CATALOG,
                          VENUE_GROUPS, paper_facets, source_state, string_list)
 from src.research_focus import focus_tags
 from src.paper_titles import chinese_title
+from src.reading_article import without_page_citations
 from src.figures import get_figure, figure_status
 from src.wechat_metadata import public_subscriptions
 from src.wechat_subscriptions import effective_accounts, group_overview, published_accounts
@@ -82,7 +83,7 @@ def template(name: str, **values) -> str:
 
 def document(content: str, *, title: str, root: str = "./", active: str = "daily") -> str:
     version = hashlib.sha256(
-        b"".join((ASSETS / name).read_bytes() for name in ("archive-manager.js", "reading-tasks.js", "site.css", "site.js", "paper-library.js", "paper-library.css", "daily-update.js", "paper-chat.css", "paper-chat.js", "paper-reader.css", "paper-reader.js", "manual-search.css", "manual-search.js", "journal-manager.css", "journal-manager.js", "research-directions.css", "research-directions.js", "wechat-subscriptions.css", "wechat-subscriptions.js"))
+        b"".join((ASSETS / name).read_bytes() for name in ("reading-article.css", "reading-article.js", "archive-manager.js", "reading-tasks.js", "site.css", "site.js", "paper-library.js", "paper-library.css", "daily-update.js", "paper-chat.css", "paper-chat.js", "paper-reader.css", "paper-reader.js", "manual-search.css", "manual-search.js", "journal-manager.css", "journal-manager.js", "research-directions.css", "research-directions.js", "wechat-subscriptions.css", "wechat-subscriptions.js"))
     ).hexdigest()[:10]
     return template(
         "page.html", content=content.lstrip(), title=esc(title), root=root, version=version,
@@ -104,6 +105,8 @@ def document(content: str, *, title: str, root: str = "./", active: str = "daily
                        f'<script src="{root}assets/wechat-subscriptions.js?v={version}" defer></script>'
                        f'<script src="{root}assets/reading-tasks.js?v={version}" defer></script>') if active == 'setup' else
                       (f'<script src="{root}assets/reading-tasks.js?v={version}" defer></script>') if active == 'daily' else
+                      (f'<link rel="stylesheet" href="{root}assets/reading-article.css?v={version}">'
+                       f'<script src="{root}assets/reading-article.js?v={version}" defer></script>') if active == 'reading' else
                       (f'<script src="{root}assets/archive-manager.js?v={version}" defer></script>'
                        f'<script src="{root}assets/reading-tasks.js?v={version}" defer></script>') if active == 'archive' else '',
     )
@@ -155,7 +158,7 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
         f'<span class="tag">{esc(topic_labels.get(topic, topic))}</span>'
         for topic in topics
     )
-    summary = paper.get("summary") or paper.get("abstract") or "暂无摘要，请查看原文。"
+    summary = without_page_citations(paper.get("summary") or paper.get("abstract") or "暂无摘要，请查看原文。")
     if not paper.get('abstract') and summary == f"本文聚焦《{title}》，暂未提供可用摘要，请查看原文。":
         summary = "暂无可用摘要，请查看原文。"
     recommendation = paper.get("recommendation") or ""
@@ -167,12 +170,8 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
     deep_html = ""
     if deep_items and paper.get("analysis_status") == "ready":
         deep_html = '<dl class="reading-notes">' + "".join(
-            f'<div><dt>{label}</dt><dd>{esc(value)}</dd></div>' for label, value in deep_items
+            f'<div><dt>{label}</dt><dd>{esc(without_page_citations(value))}</dd></div>' for label, value in deep_items
         ) + '</dl>'
-        references = paper.get('analysis_references') or {}
-        labels = list(dict.fromkeys(ref for values in references.values() for ref in values))
-        if labels:
-            deep_html += '<p class="analysis-provenance">原文依据：' + esc('、'.join(labels)) + '</p>'
     citation = ". ".join(value for value in (authors, title, venue,
                                             str(paper.get("published_at") or "")[:4],
                                             f"https://doi.org/{doi}" if doi else "") if value)
@@ -230,6 +229,11 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
     figure_html = paper_figure(paper, root) if tier == "core" else ""
     chat_button = (f'<button type="button" class="text-button codex-entry" data-local-only data-paper-id="{esc(paper["id"])}" '
                    f'data-paper-title="{esc(display_title)}">Codex 对话</button>') if paper.get("id") else ""
+    note_action = (f'<a class="full-reading-link" href="{root}readings/{esc(paper["id"])}.html">全文精读</a>'
+                   if ready and paper.get('analysis_basis') == 'full_text' else
+                   f'<button type="button" class="text-button paper-toggle" data-label="{note_label}" aria-expanded="false" aria-controls="{panel_id}">{note_label}<span aria-hidden="true">＋</span></button>')
+    if ready and paper.get('analysis_basis') == 'full_text':
+        deep_html = ''
     return f'''
 <article class="paper {tier}" data-paper-id="{esc(paper.get('id', ''))}" data-sources="{esc(json.dumps(facets['source_ids'], ensure_ascii=False))}"
  data-topics="{esc(json.dumps(topics, ensure_ascii=False))}" data-venue="{esc(facets['venue_group'])}"
@@ -244,7 +248,7 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
 {recommendation_context(paper, root, deleted_editions)}
   <p class="abstract">{esc(preview)}</p>
 {figure_html}
-  <div class="paper-tools">{primary_action}<button type="button" class="text-button paper-toggle" data-label="{note_label}" aria-expanded="false" aria-controls="{panel_id}">{note_label}<span aria-hidden="true">＋</span></button>{chat_button}</div>
+  <div class="paper-tools">{primary_action}{note_action}{chat_button}</div>
   <div class="paper-detail-panel" id="{panel_id}" hidden>{provenance}<p class="detail-label">{summary_label}</p><p class="full-abstract">{esc(summary)}</p>{recommendation_html}{full_authors}{deep_html}<div class="tags">{tags}</div><div class="paper-actions">{actions}</div></div>
 </article>'''
 
@@ -286,10 +290,11 @@ def recommendation_context(paper, root, deleted_editions=None):
         label = '精读未完成 · 可在本机任务中重试'
     else:
         label = '资料获取中 · 本机助手运行时自动补充'
-    result += f'<p class="analysis-pending" data-reading-status="{esc(paper.get("id", ""))}" data-reading-result="{esc(paper.get("analyzed_at", ""))}">{label}</p>'
+    result += f'<p class="analysis-pending" data-reading-status="{esc(paper.get("id", ""))}" data-reading-result="{esc(paper.get("article_updated_at") or paper.get("analyzed_at", ""))}">{label}</p>'
     issues = state.get('issues', []) if state and state.get('state') != 'published' else paper.get('analysis_issues', [])
     if issues:
-        items = ''.join(f'<li>{esc(i["page"])} · {esc(i["detail"])}</li>' for i in issues if i['kind'] != 'extraction_error')
+        from tools.reading_articles import source_note
+        items = ''.join(f'<li>{source_note(i["detail"])}</li>' for i in issues if i['kind'] != 'extraction_error')
         if items:
             result += f'<details class="reading-issues"><summary>资料核对说明</summary><ul>{items}</ul></details>'
     return result
@@ -720,6 +725,8 @@ def main() -> None:
         (OUT / path).parent.mkdir(parents=True, exist_ok=True)
         (OUT / path).write_text(json.dumps(enrich(read_json(DATA / path, {}), analyses), ensure_ascii=False, indent=2), encoding='utf-8')
     build_archive()
+    from tools.reading_articles import build_articles
+    build_articles(DATA, OUT, analyses)
     (OUT / 'library.html').write_text(document(template('library.html'),
         title='我的文献 | 每日论文推荐', active='library'), encoding='utf-8')
     (OUT / "setup.html").write_text(document(template("setup.html", wechat_directory=wechat_directory(), wechat_manager=wechat_manager(),

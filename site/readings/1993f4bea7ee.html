@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="聚焦 AI 驱动的智能运维、结构生成式设计与疲劳可靠性，每日追踪科研论文，提供中文摘要与精读要点。">
+  <meta name="theme-color" content="#153e64">
+  <title>结合贝叶斯校准的力学启发风险感知多轴结构可靠性学习 | 全文精读</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css?v=df71e844e4">
+  <link rel="stylesheet" href="../assets/paper-chat.css?v=df71e844e4">
+  <link rel="stylesheet" href="../assets/paper-library.css?v=df71e844e4">
+  <script src="../assets/site.js?v=df71e844e4" defer></script>
+  <script src="../assets/paper-library.js?v=df71e844e4" defer></script>
+  <script src="../assets/paper-chat.js?v=df71e844e4" defer></script>
+  <script src="../assets/daily-update.js?v=df71e844e4" defer></script>
+<link rel="stylesheet" href="../assets/reading-article.css?v=df71e844e4"><script src="../assets/reading-article.js?v=df71e844e4" defer></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main-content">跳至正文</a>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a class="wordmark" href="../"><span>腾达</span><span class="wordmark-divider" aria-hidden="true"></span>科研文献</a>
+      <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false">菜单 <span aria-hidden="true">☰</span></button>
+      <nav id="main-navigation" class="main-navigation" aria-label="主导航">
+        <a href="../" >每日推荐</a>
+        <a href="../search.html" data-local-only >手动检索</a>
+        <a href="../leads.html" >科研线索</a>
+        <a href="../ai.html" >AI 前沿</a>
+        <a href="../library.html" data-local-only >我的文献</a>
+        <a href="../archive/" >历史归档</a>
+        <a href="../setup.html" data-local-only >设置</a>
+      </nav>
+    </div>
+  </header>
+  <div class="site-shell">
+    <main id="main-content" class="main-content" tabindex="-1">
+      <article class="reading-article" data-paper-id="1993f4bea7ee"><a class="article-back" href="../">返回每日推荐</a><header class="article-header"><p class="article-type">论文精读</p><h1>结合贝叶斯校准的力学启发风险感知多轴结构可靠性学习</h1><p class="article-original" lang="en">Mechanics-informed risk-aware learning for multiaxial structural reliability with Bayesian calibration</p><p class="article-byline">Gaofeng Zhang, Xuanrui Yu, Anxiang Song, Hanguang Liu, Xinhong Lin, Xuyijin Zhang, Qianling Wang, Wentao Wang, Pandeng Zhang<br>Communications Engineering</p><p class="article-updated">精读更新 2026-10-03 10:26 · 依据论文全文整理</p><div class="article-links"><a href="https://doi.org/10.1038/s44172-026-00752-y" target="_blank" rel="noopener noreferrer">阅读原文</a><button type="button" class="text-button copy-citation" data-citation="Gaofeng Zhang, Xuanrui Yu, Anxiang Song, Hanguang Liu, Xinhong Lin, Xuyijin Zhang, Qianling Wang, Wentao Wang, Pandeng Zhang. Mechanics-informed risk-aware learning for multiaxial structural reliability with Bayesian calibration. Communications Engineering. https://doi.org/10.1038/s44172-026-00752-y">复制引用</button><button type="button" class="text-button codex-entry" data-local-only data-paper-id="1993f4bea7ee" data-paper-title="结合贝叶斯校准的力学启发风险感知多轴结构可靠性学习">Codex 对话</button></div></header><p class="article-upgrade">全文精读已完成，文章版正在逐步升级。现有内容可继续阅读。</p><div class="article-lead"><p>依据本轮全文阅读笔记，论文面向多轴载荷耦合与高风险样本不足，结合多项式—谐波特征增强、Weibull风险重加权和退化风险评分，预测转向节应力及螺栓预紧力损失。摘要报告线性回归R²由0.37升至0.96，RMSE降低67%。其价值在于将响应预测连接到风险排序；但验证来自模拟数据，评分不等于失效概率，贝叶斯校准仍需观测支持。</p></div><section><h2>研究问题</h2><p>研究针对非线性载荷耦合、失效关键样本不均衡和可解释性不足，原文概括为“nonlinear load couplings”。预测对象同时涵盖转向节应力与连接预紧力退化，因而不能只关注平均误差，还需关注上尾响应及两类退化的共同影响。</p></section><section><h2>方法与路线</h2><p>以多体动力学和有限元生成120个样本，将24维载荷扩展为372维多项式—谐波特征，并以Weibull函数加权训练。四类回归模型预测应力与预紧力损失，再构建DRS；概率映射以观测可用为条件，原文明确“when available”。</p></section><section><h2>创新与比较</h2><p>值得关注的是力学特征、上尾样本权重与双退化评分的组合，而非单纯增加模型复杂度。作者称增强表示为“physics-aligned representation”，使透明线性模型表达非线性交互；现有资料支持这一方法特色，但不足以确认各组件的首创性或普遍优越性。</p></section><section><h2>证据与发现</h2><p>MLR的R²由0.37升至0.96，RMSE降低67%；测试RMSE由9.96降至3.22，螺栓退化预测总体R²=0.90。SHAP主导特征涉及LP2、LP4交互。这些支持模拟域内的预测改善，不构成现场失效概率已获验证的证据。</p></section><section><h2>局限与边界</h2><p>验证仅限模拟转向节。P10参考文献36缺卷页、文章号和DOI，影响定位而非实验结论。P3—P9相关补充方法、表图及校准细节未提供，无法核验实现与概率验证；P5工况编号对应尚不明。公式乱码已纠正，并非原文件公式缺项。
+原文核对： 参考文献36原页仅列作者、题名、“IEEE Access, (2025)”，未提供卷号、页码或文章号，亦无DOI。属于原页书目信息缺项，不是无法识读；影响该不均衡数据综述的准确定位，不直接改变本文实验结果或公式结论。</p></section><section><h2>方向关联</h2><p>DRS可作为智能运维中的检查优先级指标，原文提到“inspection prioritization”；应力与连接退化双输出也能辅助结构设计比较。但论文没有展示生成式设计闭环。可靠性应用还须区分脆弱性评分与校准概率，并核查系统乘积公式的独立性依据。</p></section><section><h2>后续研究建议</h2><p>先核对补充材料与公开代码，检查二次特征计数、载荷区间扩展和百分数转比例的实现；再通过构件试验或监测数据验证上尾预测，并实施概率校准。建议补充跨结构测试及相关失效建模；这些是后续研究设想，不是作者已完成的验证。</p></section><aside class="article-source-note"><h2>原文资料边界</h2><ul><li>参考文献36原页仅列作者、题名、“IEEE Access, (2025)”，未提供卷号、页码或文章号，亦无DOI。属于原页书目信息缺项，不是无法识读；影响该不均衡数据综述的准确定位，不直接改变本文实验结果或公式结论。</li></ul></aside><footer class="article-end"><p>本文依据论文资料整理，研究建议由本站提出。原文、相关文献和图示标注共同说明内容来源。</p></footer></article><dialog class="article-figure-dialog"><form method="dialog"><button type="submit">关闭大图</button></form><img alt="研究思路图放大查看"></dialog>
+      <footer class="site-footer"><p>每日更新，持续关注 AI 与工程可靠性。</p><div><a href="https://tengda-xmu.github.io/">腾达 · 厦门大学</a><a href="https://github.com/tengda-xmu/daily-papers" target="_blank" rel="noopener noreferrer">GitHub</a></div></footer>
+    </main>
+  </div>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <a class="back-to-top" href="#top" aria-label="返回页面顶部" hidden>回到顶部 ↑</a>
+</body>
+</html>

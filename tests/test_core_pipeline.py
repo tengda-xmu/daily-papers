@@ -178,7 +178,8 @@ def test_core_keeps_complete_chinese_notes_when_live_source_fails(monkeypatch, t
     assert {tag for p in result["core"] for tag in p["topic_tags"]} == {"ai_maintenance", "generative_design", "fatigue_reliability"}
     assert result["analysis_status"]["llm_attempts"] == 0
     rendered = render(result)
-    assert rendered.count('class="reading-notes"') == 10
+    # Full-text notes now have independent article links; abstract notes remain inline.
+    assert rendered.count('class="reading-notes"') + rendered.count('class="full-reading-link"') == 10
     assert rendered.count('class="analysis-provenance"') == 10
     assert rendered.count('class="original-title"') == 10
     assert rendered.count('class="publication-type"') == 2

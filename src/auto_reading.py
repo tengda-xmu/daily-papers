@@ -54,6 +54,14 @@ def public_analysis(value):
     if not valid_analysis(analysis) or analysis['analysis_basis'] not in ('abstract', 'full_text') or not parse_date(analysis.get('analyzed_at')):
         raise ValueError('Reading evidence is incomplete')
     analysis['deep_read'] = {k: analysis['deep_read'][k] for k in NOTE_FIELDS}
+    if value.get('analysis', {}).get('article') is not None:
+        from src.reading_article import public_article
+        if analysis['analysis_basis'] != 'full_text':
+            raise ValueError('Articles require verified full text')
+        analysis['article'] = public_article(value['analysis']['article'])
+        if not parse_date(value['analysis'].get('article_updated_at')) or not re.fullmatch('[a-f0-9]{64}', str(value['analysis'].get('article_profile', ''))):
+            raise ValueError('Invalid article revision')
+        analysis.update({k: value['analysis'][k] for k in ('article_updated_at', 'article_profile')})
     for url in analysis['analysis_sources']:
         parsed = urlsplit(url)
         if parsed.username or parsed.password or parsed.hostname in ('localhost', '127.0.0.1'):
@@ -98,7 +106,7 @@ def public_analysis(value):
     if analysis['analysis_basis'] == 'full_text':
         if not material or material['covered'] != material['total'] or not material.get('references', {}).get('findings'):
             raise ValueError('Full text has not been completely covered')
-    if len(json.dumps(result, ensure_ascii=False).encode()) > 40000:
+    if len(json.dumps(result, ensure_ascii=False).encode()) > (160000 if analysis.get('article') else 40000):
         raise ValueError('Reading output too large')
     return result
 
@@ -180,6 +188,9 @@ def public_status(value):
     if value.get('state') not in states or not parse_date(value.get('updated_at')):
         raise ValueError('Invalid task state')
     result = {k: value.get(k, '') for k in ('paper_id', 'state', 'updated_at', 'basis')}
+    if value.get('article_state') in ('pending', 'generating', 'retry', 'failed', 'complete'):
+        result['article_state'] = value['article_state']
+        result['article_stage'] = value.get('article_stage') if value.get('article_stage') in ('facts', 'research', 'writing', 'review') else ''
     result['reason'] = value.get('reason') if value.get('reason') in ('restricted', 'network', 'not_found', 'unverified') else ''
     if value.get('error_code') in CONNECTION_ERRORS or value.get('error_code') in READING_ERRORS:
         result['error_code'] = value['error_code']
@@ -201,7 +212,13 @@ def status_label(state):
     progress = f" · {state['covered']}/{state['total']} 页" if state.get('total') else ''
     pages_read = basis == 'full_text' and state.get('total', 0) > 0 and state.get('covered') == state['total']
     if status == 'published':
-        return '全文精读已完成' + (' · 原文有缺项' if any(i['kind'] == 'source_defect' for i in state.get('issues', [])) else '')
+        label = '全文精读已完成' + (' · 原文有缺项' if any(i['kind'] == 'source_defect' for i in state.get('issues', [])) else '')
+        stages = {'facts': '正在整理实验事实', 'research': '正在核对同类研究', 'writing': '正在撰写精读文章', 'review': '正在校验文章'}
+        if state.get('article_state') == 'generating':
+            label += ' · ' + stages.get(state.get('article_stage'), '文章升级中')
+        elif state.get('article_state') in ('retry', 'failed'):
+            label += ' · 文章升级' + ('等待重试' if state['article_state'] == 'retry' else '未完成，原精读可读')
+        return label
     if status == 'ready':
         return ('全文精读' if basis == 'full_text' else '摘要解读') + '已完成 · 等待发布'
     if status == 'generating':

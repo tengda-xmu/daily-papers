@@ -1105,6 +1105,8 @@ def create_app(root=ROOT, runtime=None, rpc=None, automatic_updates=None):
 
     @app.get("/assets/{name}")
     async def asset(name: str):
+        if name in ('reading-article.css', 'reading-article.js'):
+            return FileResponse(root / 'tools/assets' / name)
         if name not in ("archive-manager.js", "reading-tasks.js", "paper-library.js", "paper-library.css", "paper-reader.js", "paper-reader.css", "paper-chat.js", "paper-chat.css", "site.css", "site.js", "daily-update.js", "manual-search.js", "manual-search.css", "journal-manager.js", "journal-manager.css", "research-directions.js", "research-directions.css", "wechat-subscriptions.js", "wechat-subscriptions.css", "favicon.svg"):
             raise HTTPException(404)
         return FileResponse(root / "tools/assets" / name)
@@ -1125,6 +1127,50 @@ def create_app(root=ROOT, runtime=None, rpc=None, automatic_updates=None):
         if not re.fullmatch(r'[A-Za-z0-9_.-]+\.(?:png|jpg|jpeg|webp)', name) or path.parent != directory or not path.is_file():
             raise HTTPException(404)
         return FileResponse(path)
+
+    def published_article(identifier):
+        # The local site follows confirmed public results without requiring a
+        # static rebuild. Drafts, PDFs and private library metadata stay private.
+        from src.auto_reading import public_analysis, public_paper
+        with reading_queue.db() as db:
+            row = db.execute('SELECT paper,published_result FROM tasks WHERE paper_id=? AND enabled=1', (identifier,)).fetchone()
+        if row and row['published_result']:
+            try:
+                result = public_analysis(json.loads(row['published_result']))
+                if result['analysis'].get('article'):
+                    return {**public_paper(json.loads(row['paper'])), **result['analysis'],
+                            'analysis_issues': result.get('material', {}).get('issues', [])}
+            except (ValueError, TypeError):
+                pass
+        return None
+
+    @app.get('/readings/{name}')
+    async def reading_article_page(name: str):
+        if not re.fullmatch(r'[a-f0-9]{12}\.html', name):
+            raise HTTPException(404)
+        paper = published_article(name[:-5])
+        if paper:
+            from tools.reading_articles import render_article
+            return Response(render_article(paper), media_type='text/html')
+        path = root / 'site/readings' / name
+        if not path.is_file():
+            raise HTTPException(404, '精读文章尚未发布，请稍后刷新。')
+        return FileResponse(path, media_type='text/html')
+
+    @app.get('/assets/reading-diagrams/{name}')
+    async def reading_diagram(name: str):
+        if not re.fullmatch(r'[a-f0-9]{12}-(study|proposal)(-mobile)?\.svg', name):
+            raise HTTPException(404)
+        paper = published_article(name[:12])
+        if paper:
+            from tools.reading_articles import diagram_svg
+            kind = 'proposal' if '-proposal' in name else 'study'
+            diagram = next(d for d in paper['article']['diagrams'] if d['kind'] == kind)
+            return Response(diagram_svg(diagram, mobile='-mobile' in name), media_type='image/svg+xml')
+        path = root / 'site/assets/reading-diagrams' / name
+        if not path.is_file():
+            raise HTTPException(404)
+        return FileResponse(path, media_type='image/svg+xml')
 
     @app.get("/search.html")
     async def manual_search_page():

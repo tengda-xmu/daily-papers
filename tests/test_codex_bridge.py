@@ -375,6 +375,7 @@ def test_rpc_start_only_launches_verified_builds(tmp_path, monkeypatch, version,
 
 
 @pytest.mark.parametrize('existing', [None, 'existing-thread'])
+@pytest.mark.parametrize('purpose', ['reading', 'article'])
 @pytest.mark.parametrize('changes,valid', [
     ({}, True),
     ({'activePermissionProfile': {'id': 'other'}}, False),
@@ -384,7 +385,7 @@ def test_rpc_start_only_launches_verified_builds(tmp_path, monkeypatch, version,
     ({'sandbox': {'type': 'readOnly', 'networkAccess': True}}, False),
     ({'approvalPolicy': 'on-request'}, False),
 ])
-def test_thread_start_and_resume_require_effective_reader_permissions(tmp_path, existing, changes, valid):
+def test_thread_start_and_resume_require_effective_reader_permissions(tmp_path, existing, purpose, changes, valid):
     async def run():
         client = CodexClient(tmp_path)
         client.models = FakeCodex().models; client.model = 'test-model'
@@ -396,6 +397,7 @@ def test_thread_start_and_resume_require_effective_reader_permissions(tmp_path, 
             assert method == ('thread/resume' if existing else 'thread/start')
             assert params['permissions'] == 'paper-reader'
             assert params['approvalPolicy'] == 'never'
+            assert ('面向读者的文章正文不显示页码引用' in params['baseInstructions']) == (purpose == 'article')
             return {'thread': {'id': 'existing-thread'},
                     'activePermissionProfile': {'id': 'paper-reader'},
                     'sandbox': {'type': 'readOnly', 'networkAccess': False},
@@ -403,10 +405,10 @@ def test_thread_start_and_resume_require_effective_reader_permissions(tmp_path, 
 
         client.start, client.call = start, call
         if valid:
-            assert await client.thread(existing) == 'existing-thread'
+            assert await client.thread(existing, purpose=purpose) == 'existing-thread'
         else:
             with pytest.raises(CodexError):
-                await client.thread(existing)
+                await client.thread(existing, purpose=purpose)
             assert not client.loaded
     asyncio.run(run())
 

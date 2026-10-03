@@ -48,6 +48,8 @@ def test_publishing_without_paper_collection_keeps_latest_reading_and_batch(tmp_
     latest = deepcopy(old)
     latest['analysis'].update(analysis_basis='full_text', analyzed_at='2026-10-03T02:19:53+00:00',
         summary='全文逐页核对已完成，研究方法与实验条件有对应页码依据。根据原文说明验证范围，保留局限与可迁移研究建议，不将摘要解读当作全文结论。[P1]')
+    from tests.test_reading_articles import article_fixture
+    latest['analysis'].update(article=article_fixture(), article_profile='b'*64, article_updated_at='2026-10-03T05:00:00+00:00')
     latest['material']={'version':'a'*64,'total':12,'covered':12,'reader_version':READER_VERSION,
         'references':{'findings':['P1']},'covered_labels':[f'P{i}' for i in range(1,13)],'issues':[]}
     latest = public_analysis(latest)
@@ -77,10 +79,15 @@ def test_publishing_without_paper_collection_keeps_latest_reading_and_batch(tmp_
         paper = updated['core'][0]
         assert paper['analysis_basis']=='full_text' and paper['summary']==latest['analysis']['summary']
         assert paper['reading_status']['state']=='published'
+        assert paper['article'] == latest['analysis']['article']
         html = render(updated)
         assert '全文精读已完成' in html and '自动尝试已用尽' not in html
     assert private.read_bytes()==b'private PDF'
     assert read(data/'auto-reading'/f"{p['id']}.json")==latest
+    from tools.reading_articles import build_articles
+    build_articles(data, tmp_path/'site', {p['id']:latest})
+    article_page=(tmp_path/'site/readings'/f"{p['id']}.html").read_text(encoding='utf-8')
+    assert '实验与验证一览' in article_page and '[P1]' not in article_page
 
 
 @pytest.mark.parametrize('importer', [import_readings, import_reading_status])

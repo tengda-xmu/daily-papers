@@ -31,7 +31,7 @@
         details.append(summary, document.createElement('ul')); node.after(details);
       }
       details.querySelector('ul').replaceChildren(...issues.map(i => {
-        const li = document.createElement('li'); li.textContent = `${i.page} · ${i.detail}`; return li;
+        const li = document.createElement('li'); li.textContent = i.detail.replace(/\[\s*[PS]\d+(?:\s*[-–—,，、]\s*[PS]?\d+)*\s*\]/g, '').replace(/\b[PS]\d+\s*(?:页|章节)?(?:的)?(?=[\u4e00-\u9fff（(])/g, ''); return li;
       }));
     } else if (details && task.state === 'published') details.remove();
     if (!['published', 'awaiting_fulltext'].includes(task.state) || !task.completed_at || node.dataset.readingResult === task.completed_at) return;
@@ -44,6 +44,9 @@
         const old = card.querySelector(selector), next = fresh.querySelector(selector);
         if (old && next) { old.innerHTML = next.innerHTML; old.className = next.className; if (next.dataset.label) old.dataset.label = next.dataset.label; }
       }
+      const currentReading = card.querySelector('.full-reading-link, .paper-toggle');
+      const nextReading = fresh.querySelector('.full-reading-link, .paper-toggle');
+      if (currentReading && nextReading && currentReading.outerHTML !== nextReading.outerHTML) currentReading.replaceWith(nextReading.cloneNode(true));
       const original = card.querySelector('.original-title'), nextOriginal = fresh.querySelector('.original-title');
       if (nextOriginal) {
         if (original) original.replaceWith(nextOriginal.cloneNode(true));
@@ -83,9 +86,9 @@
         if (!ai) updateCard(task);
         if (!list) continue;
         const item = document.createElement('li');
-        const text = document.createElement('span'); text.textContent = `${task.title} · ${((!ai || task.error_code) && task.label) || labels[task.state] || task.state}${task.error ? ' · ' + task.error : ''}`;
+        const text = document.createElement('span'); text.textContent = `${task.title} · ${((!ai || task.error_code) && task.label) || labels[task.state] || task.state}${task.error ? ' · ' + task.error : ''}${task.article_error ? ' · ' + task.article_error : ''}`;
         item.append(text);
-        if (['failed','retry','missing_evidence','awaiting_fulltext'].includes(task.state)) {
+        if (['failed','retry','missing_evidence','awaiting_fulltext'].includes(task.state) || ['failed','retry'].includes(task.article_state)) {
           const button = document.createElement('button'); button.type='button'; button.className='text-button'; button.textContent='重试';
           button.addEventListener('click', async () => {button.disabled=true;try {await api(endpoint + '/' + encodeURIComponent(task.paper_id) + '/retry','POST');await refresh();} catch(e) {message.textContent=e.message;} finally {button.disabled=false;}});
           item.append(button);

@@ -58,6 +58,13 @@ class ReadingQueue:
                                       ('connection_failures', 'INTEGER NOT NULL DEFAULT 0'), ('error_code', "TEXT NOT NULL DEFAULT ''")):
                 if name not in columns:
                     db.execute(f'ALTER TABLE tasks ADD COLUMN {name} {declaration}')
+            if self.paper_queue:
+                for name, declaration in (('article_state', "TEXT NOT NULL DEFAULT 'pending'"), ('article_key', "TEXT NOT NULL DEFAULT ''"),
+                    ('article_attempts', 'INTEGER NOT NULL DEFAULT 0'), ('article_next_attempt', 'REAL NOT NULL DEFAULT 0'),
+                    ('article_stage', "TEXT NOT NULL DEFAULT ''"), ('article_error', "TEXT NOT NULL DEFAULT ''")):
+                    if name not in columns:
+                        db.execute(f'ALTER TABLE tasks ADD COLUMN {name} {declaration}')
+                db.execute("UPDATE tasks SET article_state='pending',article_attempts=MAX(0,article_attempts-1) WHERE article_state='generating'")
             db.execute('CREATE TABLE IF NOT EXISTS reading_migrations (name TEXT PRIMARY KEY)')
             if not db.execute("SELECT 1 FROM reading_migrations WHERE name='connection-attempts-v1'").fetchone():
                 # A missing thread means no model turn could have started. Do
@@ -117,6 +124,8 @@ class ReadingQueue:
         if self.paper_queue:
             from .reading_materials import MaterialResolver
             self.resolver = resolver or MaterialResolver(self.runtime, documents=documents)
+            from .article_queue import ArticleWorker
+            self.articles = ArticleWorker(self)
 
     def db(self):
         db = sqlite3.connect(self.path, timeout=10)
@@ -216,7 +225,10 @@ class ReadingQueue:
             if row['wanted_signature'] != row['local_signature']:
                 pages, material = {}, {}
             result = json.loads(row['result'] or '{}').get('material', {})
-            item['completed_at'] = json.loads(row['result'] or '{}').get('analysis', {}).get('analyzed_at', '')
+            analysis = json.loads(row['result'] or '{}').get('analysis', {})
+            item['completed_at'] = analysis.get('article_updated_at') or analysis.get('analyzed_at', '')
+            if self.paper_queue:
+                item.update({k: row[k] for k in ('article_state', 'article_stage', 'article_error', 'article_attempts')})
             item.update(pdf_available=bool(row['wanted_signature'] or material.get('document', {}).get('kind') == 'pdf'),
                         total=len(material.get('document', {}).get('pages', [])),
                         covered=sum(p['status'] in ('read', 'source_defect') for p in pages.values()),
@@ -230,7 +242,11 @@ class ReadingQueue:
 
     def retry(self, identifier):
         with self.db() as db:
-            row = db.execute('SELECT state FROM tasks WHERE paper_id=? AND enabled=1', (identifier,)).fetchone()
+            row = db.execute('SELECT * FROM tasks WHERE paper_id=? AND enabled=1', (identifier,)).fetchone()
+            if row and self.paper_queue and row['article_state'] in ('failed', 'retry') and row['state'] in ('ready', 'published'):
+                db.execute("UPDATE tasks SET article_state='pending',article_attempts=0,article_next_attempt=0,article_error='' WHERE paper_id=?", (identifier,))
+                db.commit()
+                return self.snapshot()
             if not row or row['state'] not in ('failed', 'retry', 'missing_evidence', 'awaiting_fulltext'):
                 raise ValueError('该论文当前没有可重试的精读任务。')
             db.execute("UPDATE tasks SET state='pending',attempts=0,next_attempt=0,next_material=0,error='',error_code='',connection_failures=0 WHERE paper_id=?", (identifier,))
@@ -436,6 +452,7 @@ class ReadingQueue:
                     public_state = 'published' if row['basis'] == 'full_text' else 'awaiting_fulltext'
                 value = public_status({'paper_id': row['paper_id'], 'state': public_state, 'basis': row['basis'],
                     'error_code': row['error_code'], 'next_retry_at': row['next_retry_at'],
+                    **{k: row[k] for k in ('article_state', 'article_stage') if k in row},
                     'reason': row['reason'], **{k: row[k] for k in ('total', 'covered', 'pdf_available', 'issues')},
                     'updated_at': datetime.fromtimestamp(row['updated_at'], timezone.utc).isoformat()})
                 path = self.runtime / 'published-reading-status' / (row['paper_id'] + '.json')
@@ -511,8 +528,12 @@ class ReadingQueue:
                         ORDER BY priority DESC,updated_at LIMIT 1""", (time.time(), time.time())).fetchone()
                 else:
                     row = db.execute("SELECT * FROM tasks WHERE state IN ('pending','retry') AND attempts<3 AND next_attempt<=? ORDER BY priority DESC,updated_at LIMIT 1", (time.time(),)).fetchone()
+            work = self.process if self.paper_queue else self.generate
+            if self.paper_queue:
+                article = self.articles.next_task()
+                if article and (not row or article['priority'] >= row['priority']):
+                    row, work = article, self.articles.process
             if row:
-                work = self.process if self.paper_queue else self.generate
                 self.active = asyncio.create_task(work(dict(row)))
                 try:
                     await self.active
