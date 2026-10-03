@@ -2,32 +2,126 @@
   "paper_id": "f530449d449a",
   "fingerprint": "80062aecf8fd9a96641463c4975dc11465fdb037bd151ea3a63192101b385f75",
   "analysis": {
-    "title_zh": "利用地震环境噪声开展厚沉积层上高层建筑的机器学习驱动结构健康监测",
-    "summary": "【摘要级导读】本文关注高层建筑结构健康监测，摘要提出利用稀疏环境振动观测，通过可解释机器学习预测中间楼层动力响应。[摘要]其核心表述为“predicts intermediate-floor dynamics”。解读：该工作与有限观测条件下的建筑状态感知相关，值得关注预测任务与可解释性的结合。但现有摘要未提供模型细节、预测误差或损伤验证，不能据此判断工程部署成熟度。",
-    "recommendation": "解读：建议作为智能运维方向的方法线索优先查阅，重点核查稀疏观测如何支持中间楼层动力预测，以及可解释性是否有结构机理依据；目前仅能确认任务相关性，不能确认性能优势。[摘要]",
+    "title_zh": "利用地震环境噪声与机器学习监测厚沉积层上高层建筑的结构健康",
+    "summary": "依据覆盖全文的阅读笔记，论文探讨如何兼顾高层建筑监测的操作简便性与楼层定位能力。作者利用上海一栋21层建筑连续22天的环境噪声记录，以地下室、屋顶动态参数及楼层高度训练统一预测模型，并通过SHAP解释沿高贡献变化。[P7][P11][P14]层间干涉显示两处约2%的波速下降，模型归因转变与其位置对应。[P31][P33]这些结果支持楼层动态转变识别，但不等于损伤确诊；单建筑验证与归因稳健性仍限制工程推广。[P15][P17]",
+    "recommendation": "推荐重点阅读边界测点预测、时间窗分组验证及SHAP与干涉结果对照，适合智能运维方法研究；不宜作为通用损伤阈值或安全鉴定依据。[P11][P22][P15]",
     "deep_read": {
-      "problem": "【论文摘要】研究面向高层建筑结构健康监测，输入条件是“sparse ambient-vibration observations”。[摘要]解读：核心问题是在观测稀疏时获取中间楼层动力信息。摘要未交代稀疏程度、测点位置，以及预测变量的具体物理定义。",
-      "method": "【论文摘要】方法被概括为“Interpretable machine learning”，用于预测中间楼层动力响应。[摘要]摘要没有说明模型类型、特征构造、训练标签和数据划分，因此目前只能描述输入与目标，不能还原完整技术流程或复现实验。",
-      "innovation": "【解读】可关注的潜在方法特色，是将“Interpretable machine learning”与中间楼层动力预测结合。[摘要]但摘要没有提供既有工作比较、模型机制或创新声明，故不能认定其首创性，也不能把可解释性标签直接视为已经验证的技术突破。",
-      "findings": "【论文摘要】摘要以“predicts intermediate-floor dynamics”陈述所实现的预测任务。[摘要]这支持作者开展了相应方法研究的判断，但没有报告精度、基线比较或不确定性结果，不能进一步声称预测可靠、优于其他方法或能够准确识别损伤。",
-      "limitations": "【资料局限】当前只有一句摘要，且研究对象被描述为“a high-rise building”。[摘要]无法评估模型在不同建筑和工况中的适用性，也无法确认数据质量与验证充分性。这些属于现有资料的证据缺口，并非作者已承认或实验已证实的局限。",
-      "connection": "【解读】摘要明确指向“structural health monitoring”，与智能运维中的结构状态感知直接相关。[摘要]对结构设计与可靠性研究，动力信息可能作为后续分析输入，但摘要并未涉及设计优化、失效概率或寿命预测，不宜将这些延伸用途归为论文成果。",
-      "next_steps": "【建议】后续阅读应围绕“sparse ambient-vibration observations”核查传感器配置、观测时间跨度及预测目标。[摘要]再检查训练测试是否严格隔离、解释结果是否符合结构动力学，并寻找误差与损伤验证证据，以判断其是否适合迁移到实际运维任务。"
+      "problem": "【论文原文】共振频率反映整体刚度，却难定位局部变化；层间干涉具有更明确的空间约束，但计算密集并依赖事件前后观测。[P4][P10]研究因此关注监测便利性与楼层敏感性的权衡，目标是识别运动学转变，而非作者所排除的“diagnose structural unsafety”。[P15]",
+      "method": "【论文原文】以B1、F21的共振频率、方位角、倾角及归一化楼层高度构建统一模型，比较五类算法后采用XGBoost并开展SHAP分析。[P11][P12]训练测试按7:3划分，同一时间窗各楼层归入同一子集，训练内进行五折分组交叉验证与网格搜索。[P22]",
+      "innovation": "【解读】值得关注的是将边界响应与楼层位置联合建模，再把归因沿高转变与局部干涉证据对照，而不是仅凭整体频移解释局部状态。[P11][P14]这一组合为训练后减少重复层间分析提供思路，但资料不足以认定其为首次提出，也不能把解释性对应提升为损伤因果验证。",
+      "findings": "【论文原文】XGBoost预测频率、方位角、倾角的nMAE依次为2.23%、3.22%、0.86%。[P12]干涉所得最大平均波速下降在f₀的F6–F7及f₂的F9–F10，均约2%；SHAP主导因素在第6–7层及第9层附近转变。[P31][P33]波速下降不能改写成同幅度刚度下降。",
+      "limitations": "【论文原文】仅有“a single building case”，SHAP稳健性检验尚未报告。[P17]P22–P23未明确时间隔离及折内标准化，不能排除相关性影响；P23补充搜索配置未提供，复现受限。核对记录未发现原文件缺项，P1、P23为已纠正提取错误，不能据此宣称缺失公式。",
+      "connection": "【解读】对智能运维，边界测点预测可作为日常状态跟踪线索；对结构设计，可结合模块界面及设备夹层复核荷载传递差异。[P11][P16][P29]可靠性研究则须区分正常设计分段与损伤演化：作者明确这些转变并非“direct evidence of structural instability”，现有结果不提供失效概率。[P19]",
+      "next_steps": "【建议】优先采用时间先后划分并隔离相邻窗口，核查折内预处理；通过重复训练、bootstrap及SHAP置信区间检验转变位置稳定性。[P17][P22][P23]再依作者展望纳入健康、已知损伤与渐进损伤建筑，结合独立检查和有限元模型更新，检验设计转变与损伤异常能否区分。[P18][P19]"
     },
     "analysis_status": "ready",
-    "analysis_basis": "abstract",
+    "analysis_basis": "full_text",
     "analysis_kind": "model",
     "analysis_sources": [
       "https://www.nature.com/articles/s44172-026-00756-8"
     ],
-    "analyzed_at": "2026-09-25T02:25:10.735925+00:00",
-    "llm_model": "gpt-6-astra"
+    "analyzed_at": "2026-10-03T02:54:23.947708+00:00",
+    "llm_model": "gpt-6.1-sol"
   },
   "evaluation": {
     "direction_fit": true,
     "research_value": true,
     "evidence_sufficient": true,
-    "reason": "摘要明确给出可解释机器学习、稀疏环境振动观测和中间楼层动力预测任务，足以支持其切合智能运维方向且具有值得重点核查的方法线索。[摘要]这里的证据充分仅针对方向与阅读价值判断，不代表预测效果、创新程度或工程可靠性已有充分证据。",
-    "evidence": "Interpretable machine learning predicts intermediate-floor dynamics for structural health monitoring using sparse ambient-vibration observations in a high-rise building."
+    "reason": "论文直接面向智能运维中的连续结构监测，具有明确的边界输入预测方法、算法比较及楼层归因与波速变化对照结果，值得重点阅读。[P11][P12][P17]当前证据足以支持方向契合与方法价值判断，但不足以支持可靠损伤诊断、跨建筑泛化或通用报警阈值；肯定评价仅限上述研究价值。[P15][P17][P18]",
+    "evidence": "The localized anomalies at floors F6 –F7 and F9–\nF10 were clearly identified in the model outputs, consistent with transition zones observed in \nvelocity reductions and resonance frequency variations."
+  },
+  "material": {
+    "version": "5153f5cb04706ae548d823ae81690dfa83602bb2738388a03281a93cc05fe9ac",
+    "total": 33,
+    "covered": 33,
+    "references": {
+      "problem": [
+        "P4",
+        "P10",
+        "P15"
+      ],
+      "method": [
+        "P11",
+        "P12",
+        "P22"
+      ],
+      "innovation": [
+        "P11",
+        "P14"
+      ],
+      "findings": [
+        "P12",
+        "P31",
+        "P33"
+      ],
+      "limitations": [
+        "P1",
+        "P17",
+        "P22",
+        "P23"
+      ],
+      "connection": [
+        "P11",
+        "P16",
+        "P19",
+        "P29"
+      ],
+      "next_steps": [
+        "P17",
+        "P18",
+        "P19",
+        "P22",
+        "P23"
+      ]
+    },
+    "excerpt": "The localized anomalies at floors F6 –F7 and F9–\nF10 were clearly identified in the model outputs, consistent with transition zones observed in \nvelocity reductions and resonance frequency variations.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P21",
+      "P22",
+      "P23",
+      "P24",
+      "P25",
+      "P26",
+      "P27",
+      "P28",
+      "P29",
+      "P30",
+      "P31",
+      "P32",
+      "P33"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P1",
+        "detail": "原页清楚载有“Published online: 14 August 2026”，所附文字提取遗漏该行，现已核对补正。此项为出版信息遗漏，不涉及公式或图号，不影响研究结论；并非原文件缺项。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P23",
+        "detail": "数据与代码可获取性段落的DOI被文字提取分别拼接了上标参考文献号64和65。原页已核实应为10.5281/zenodo.15586440及10.5281/zenodo.21470309，而非末尾含4064或0965的字符串。无公式或图号涉及；影响资源定位与复现，不改变研究结果，不属于原文件缺项。"
+      }
+    ]
   }
 }
