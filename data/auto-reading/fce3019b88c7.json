@@ -2,32 +2,112 @@
   "paper_id": "fce3019b88c7",
   "fingerprint": "f2dabebd71b52dfcdcfd1fd64bfbd908c3c7a676573c4559bdf5106b2616ff79",
   "analysis": {
-    "title_zh": "生成式人工智能设计功能性硫醇化结构域以重编程非核糖体肽合成酶",
-    "summary": "【摘要级解读】研究关注生成式模型能否设计依赖瞬态、情境特异性界面的非核糖体肽合成酶结构域。作者结合三种预训练模型、设计—构建—测试—学习循环及数据引导筛选，生成76个全新硫醇化结构域，并在体内测试578个重组变体。摘要报告设计结构域支持多类架构产物形成，产量最高约为天然结构域对照的3倍；一个代表性设计还表现出热稳定性改善。结果支持情境适配的蛋白质生成设计，但不足以判断整体成功率。[摘要]",
-    "recommendation": "建议重点阅读其生成设计与实验反馈结合的方法，以及跨装配线架构的功能验证；与给定generative_design标签直接相关，但不能将蛋白质设计结果直接视为工程结构可靠性证据。[摘要]",
+    "title_zh": "生成式人工智能设计功能性硫载体结构域以重编程非核糖体肽合成酶",
+    "summary": "依据所提供的全文逐页笔记，本研究探讨生成式模型能否设计适应动态界面的非核糖体肽合成酶硫载体结构域。作者结合三类生成模型、实验筛选与代理模型排序，设计76个结构域并研究578个重组变体。部分设计提高产量，但效果随替换位置、下游伙伴和培养条件改变。[P1][P10]解读：重点价值是连接情境条件化设计，而非通用部件互换；模拟提供机制假说，不构成因果证明。[P10]",
+    "recommendation": "推荐重点阅读其生成设计与实验反馈闭环，以及跨位置功能验证；对结构设计和可靠性评价具有方法启发，但智能运维联系仅属迁移解读。[P4][P8][P10]",
     "deep_read": {
-      "problem": "【论文摘要】核心问题是生成式模型能否工程化改造动态巨型合成酶，而不仅是设计孤立蛋白。摘要强调其活性依赖“transient, context-specific domain interfaces”。非核糖体肽合成酶是研究载体，难点在于结构域必须适配不同相互作用情境。[摘要]",
-      "method": "【论文摘要】作者整合ESM3、ProteinMPNN和EvoDiff，结合设计—构建—测试—学习循环及数据引导优先排序，生成76个全新硫醇化结构域。在体内构建并测试578个重组变体，覆盖最小、全长和混合装配线；摘要未说明各模型的具体分工。[摘要]",
-      "innovation": "【解读】值得关注的创新定位，是把生成设计用于具有动态界面约束的生物合成装配线重编程，而非仅优化单个结构域的静态性质。摘要以“context-conditioned engineering”概括这一方向，但未提供与既有方法的系统比较，不能据此确认首创性。[摘要]",
-      "findings": "【论文摘要】设计结构域支持跨架构产物形成，并使重组连接处的混合体具备催化活性；产量最高约为天然结构域对照的3倍。一个代表性设计的熔解温度提高12 °C。分子动力学提示整体稳定性保持，而状态依赖的结构域间接触网络发生重塑。[摘要]",
-      "limitations": "【解读：证据边界】摘要未报告功能设计所占比例、产量分布、重复次数或统计不确定性，因此最高增益不能代表平均表现。热稳定性结果仅对应一个代表性设计。上述属于当前材料的信息缺口，并非作者明确承认的局限；仅凭摘要也无法判断模拟与功能变化的因果关系。[摘要]",
-      "connection": "【解读】与给定generative_design标签的联系直接：生成模型提出候选，实验结果用于学习和优先排序。对结构设计与可靠性研究，可借鉴情境适配及多层次验证思路；但研究对象是生物合成酶，摘要没有智能运维、工程结构失效概率或服役可靠性的直接证据。[摘要]",
-      "next_steps": "【建议】后续阅读全文时，应优先核查候选筛选规则、不同模型的贡献、失败设计及跨架构性能分布，再评估方法的可复用性。若迁移到工程设计，可研究条件化生成与闭环验证的结合，但需重新定义物理约束和可靠性指标；这属于研究建议，而非作者已验证的成果。[摘要]"
+      "problem": "研究问题是生成模型能否设计依赖瞬态界面协作的功能性硫载体结构域，而不只是产生合理序列或稳定折叠。NRPS需要载体在不同催化状态下与多个伙伴协调，原文强调“context-speciﬁc”。因此，单结构域预测如何转化为多结构域系统功能，是本文关注的核心难题。[P1][P2]",
+      "method": "作者固定侧翼A、C结构域，重新生成T区域，结合ESM3、ProteinMPNN和EvoDiff开展三轮设计。候选经过基序、序列一致性及困惑度筛选，再用实验标签训练代理模型排序；先在拆分体系预筛，随后验证完整体系，形成设计—构建—测试—学习闭环。[P2][P4][P12]",
+      "innovation": "解读：本文值得关注的是把生成设计置于动态、多伙伴的合成体系，并利用实验反馈逐轮选择候选，而非仅凭结构预测评价设计。作者并未证明模型显式学会或优化了结构域界面，因此不能把功能改善直接宣称为界面机制创新；创新价值应限定于情境化设计与验证框架。[P4][P10]",
+      "findings": "完整五模块体系中，8个入选设计均支持肽6生成；20 mL琥珀酸XPP条件下，AI-27达到257% WT、7.4 mg L⁻¹。[P5]跨位置结果则显示AI-12在T4约为137%、T5约为272%的天然对照。[P7]原文将相容性归为“position-dependent”，不支持通用互换结论。[P8]",
+      "limitations": "原文件问题：P3图1d两枚质粒均标SU2，影响示意准确性；P8分类合计74而非76，缺少2个设计归类，妨碍比例复核。P12–P13补充数据未提供，不能独立复核接触明细；产量未做假设检验，MD不证明因果。未见编号公式，不构成公式缺失，不能声称已验证缺失公式。[P3][P8][P12][P13]\n原文核对：[P3] 图1d的“Bipartite system; Produce 5–8”示意中，两枚质粒均标为 SU2，未正确区分 SU1 与 SU2。原页可清楚核实这一标注问题；正文和图1b、图注明确完整体系由 SU1 与 SU2 重构。该问题影响双组分表达示意的准确性，不表示正文缺失，也不妨碍读取实验方案。；[P8] 原页正文在76个设计的跨体系筛选中，将 GxhS-1列为53个高活性、2个中活性及19个无功能，合计74个，未交代其余2个设计的分类或排除情况。该缺项已由原页核实，影响分类分母及功能比例复核；不能擅自认定缺少的2个属于低活性。相关明细指向补充图14，本批未提供。",
+      "connection": "解读：对结构设计与可靠性研究，本文提示应把连接对象、替换位置和运行条件纳入功能评价，避免以部件稳定性代替系统输出。作者报告pLDDT与产量“no significant correlation”。[P12]对智能运维，可借鉴工况条件化标签建模，但本文没有验证设备诊断或维护效果。[P10]",
+      "next_steps": "建议：先补核P8缺失分类及补充明细，再按下游伙伴与培养条件分层建立性能数据集，分别评价排序迁移和功能成功率。针对MD提出的界面接触假说，可结合定点突变与生化实验检验因果。上述为研究建议；作者亦提出标准化检测、扩大多条件数据和测试远缘NRPS。[P8][P10]"
     },
     "analysis_status": "ready",
-    "analysis_basis": "abstract",
+    "analysis_basis": "full_text",
     "analysis_kind": "model",
     "analysis_sources": [
       "https://pubmed.ncbi.nlm.nih.gov/42773138/"
     ],
-    "analyzed_at": "2026-09-25T01:58:10.589640+00:00",
-    "llm_model": "gpt-6-astra"
+    "analyzed_at": "2026-10-03T02:43:25.260621+00:00",
+    "llm_model": "gpt-6.1-sol"
   },
   "evaluation": {
     "direction_fit": true,
     "research_value": true,
     "evidence_sufficient": true,
-    "reason": "方向判断以本轮给定的generative_design标签为准：摘要明确结合预训练生成模型与实验学习循环，并报告多架构功能验证和产量改善，足以支持重点阅读；这不等于已证明其适用于智能运维或工程结构可靠性，也不足以评价全文方法质量。[摘要]",
-    "evidence": "Here we integrate pretrained generative models (ESM3, ProteinMPNN and EvoDiff) with design-build-test-learn cycles and data-guided prioritization to generate 76 de novo thiolation (T) domains."
+    "reason": "切合生成式结构设计及情境依赖的功能可靠性研究，但不直接涉及智能运维。当前连续原文明确支持位置和下游伙伴影响相容性的结论；全文笔记还记录生成—筛选—验证方法，值得重点阅读。证据足以支持这一限定推荐，不足以证明通用互换或界面因果机制。[P4][P8][P10]",
+    "evidence": "Taken together, these results indicate that\nT-domain compatibility in GxpS is position-dependent and strongly\ninﬂuenced by the identity of the immediate downstream partner."
+  },
+  "material": {
+    "version": "1e0806aedcd22820995d0a2157a5b23e64985737d7eebfdd66a7292a7cec3f42",
+    "total": 15,
+    "covered": 15,
+    "references": {
+      "problem": [
+        "P1",
+        "P2"
+      ],
+      "method": [
+        "P2",
+        "P4",
+        "P12"
+      ],
+      "innovation": [
+        "P4",
+        "P10"
+      ],
+      "findings": [
+        "P5",
+        "P7",
+        "P8"
+      ],
+      "limitations": [
+        "P3",
+        "P8",
+        "P12",
+        "P13"
+      ],
+      "connection": [
+        "P10",
+        "P12"
+      ],
+      "next_steps": [
+        "P8",
+        "P10"
+      ]
+    },
+    "excerpt": "Taken together, these results indicate that\nT-domain compatibility in GxpS is position-dependent and strongly\ninﬂuenced by the identity of the immediate downstream partner.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P1",
+        "detail": "原页明确显示“Published online: 22 September 2026”，所附文字提取未包含该行。已据截图补核；影响出版信息完整性，不影响实验结论。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P3",
+        "detail": "图1d的“Bipartite system; Produce 5–8”示意中，两枚质粒均标为 SU2，未正确区分 SU1 与 SU2。原页可清楚核实这一标注问题；正文和图1b、图注明确完整体系由 SU1 与 SU2 重构。该问题影响双组分表达示意的准确性，不表示正文缺失，也不妨碍读取实验方案。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P6",
+        "detail": "图4d横轴标签在文字提取中次序错乱。原页从左至右为 AI-2 (untreated)、AI-2 (urea)、AI-2 (heat_sup.)、AI-2 (heat_pellet)、WT-T3 (urea)。已据截图纠正；无原文件缺项，错误影响热处理上清与沉淀组的对应关系，不改变 AI-2各组熔解温度约52 °C、WT约40 °C的总体比较。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P8",
+        "detail": "原页正文在76个设计的跨体系筛选中，将 GxhS-1列为53个高活性、2个中活性及19个无功能，合计74个，未交代其余2个设计的分类或排除情况。该缺项已由原页核实，影响分类分母及功能比例复核；不能擅自认定缺少的2个属于低活性。相关明细指向补充图14，本批未提供。"
+      }
+    ]
   }
 }

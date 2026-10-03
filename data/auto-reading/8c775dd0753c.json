@@ -3,31 +3,156 @@
   "fingerprint": "e2ae3616a6664b5bdd526ddfec972d171796e2f305417c62bb3b5a256ae9aecd",
   "analysis": {
     "title_zh": "基于图神经网络的晶粒级微观力学建模与疲劳关键孔隙评估",
-    "summary": "【摘要级导读】本文面向增材制造合金微观组织中的疲劳问题，使用基于晶体塑性训练的图神经网络，预测晶粒级疲劳指标并筛选疲劳关键孔隙。[摘要] 解读：其阅读价值在于连接微观力学信息、学习模型与缺陷筛选，契合疲劳可靠性研究。但所给摘要仅有一句话，未提供模型结构、数据规模、预测误差或实验验证，不能据此确认实际精度、效率及工程适用范围。",
-    "recommendation": "建议列入疲劳可靠性方向的候选精读清单：摘要明确提出晶粒级指标预测与疲劳关键孔隙筛选两项任务，具有具体方法线索；是否重点采用仍需核查全文验证证据。[摘要]",
+    "summary": "据覆盖全文的逐页笔记，论文提出GFF-MAP，以晶体塑性模拟训练图神经网络，预测增材制造IN718含孔微结构的晶粒应力和累积塑性应变能密度，并比较场回归后筛查与直接分类两条路径。[P1][P2]回归筛查优于直接分类，但极值预测误差及漏检仍明显。[P3][P6]训练后评估“less than 1 minute”，不含数据生成与训练成本。[P8]解读：适合借鉴缺陷筛查方法，不能作为已验证的寿命预测或安全保证。",
+    "recommendation": "建议重点阅读图表示、极值响应预测与两种筛查路径的比较，契合疲劳可靠性研究；引用性能时须保留图文差异，并关注漏检而非仅看准确率。[P3][P6][P10]",
     "deep_read": {
-      "problem": "研究问题是如何在增材制造合金微观组织中预测晶粒级疲劳指标，并识别疲劳关键孔隙。摘要以“grain-level fatigue indicators”和“fatigue-critical pores”明确两个目标，但未说明疲劳指标的定义、孔隙判定准则及载荷条件。[摘要]",
-      "method": "方法采用图神经网络，摘要表述为“trained on crystal plasticity”，表明训练与晶体塑性有关。[摘要] 解读：这是将微观力学信息用于学习预测的路线；但训练样本如何生成、晶粒与孔隙如何编码、图结构如何构造，现有资料均未交代。",
-      "innovation": "解读：值得核查的潜在方法特色，是将图神经网络用于晶粒尺度疲劳预测和关键孔隙筛选，摘要中的“predict”与“screen”对应这两项用途。[摘要] 但资料没有与既有工作的比较，不能断言该组合首次提出，也无法确认网络结构或物理约束方面的原创贡献。",
-      "findings": "摘要报告模型能够预测晶粒级疲劳指标并筛选疲劳关键孔隙，原文使用“predict”和“screen”描述成果。[摘要] 这支持识别其产出类型，却不足以评价成果强度：未提供误差、筛选准确性、计算成本或对照结果，不能进一步推定优于传统方法。",
-      "limitations": "当前能够确认的是资料层面的证据不足，而非作者已证明的模型局限。摘要仅限定对象为“additively manufactured alloy microstructures”。[摘要] 合金种类、组织覆盖范围、边界条件和独立验证均未说明，无法判断模型的泛化能力或适用边界。",
-      "connection": "解读：与疲劳可靠性研究的联系最直接，因为摘要明确涉及“fatigue-critical pores”；关键缺陷筛选可作为后续可靠性分析的研究切入点。[摘要] 与结构设计和智能运维的联系则是潜在延伸，现有资料未涉及设计优化、在线监测或剩余寿命预测，不能视为已实现应用。",
-      "next_steps": "建议：后续阅读全文时，优先检查疲劳指标与关键孔隙标签的定义、训练测试划分，以及是否按独立微观组织验证；再核查晶体塑性参照结果与实际疲劳证据之间的关系。这些是针对摘要所述“predict”和“screen”的验证建议，并非作者已开展的工作。[摘要]"
+      "problem": "论文原文聚焦微结构敏感疲劳分析的计算负担：晶体塑性能描述局部响应，却难以低成本评估大量孔隙。[P1]研究目标是定位疲劳热点，而非计算寿命；孔隙关键性取决于最高晶粒最大累积塑性应变能密度所在晶粒是否邻孔，不能仅由孔隙尺寸判断。[P4][P10]",
+      "method": "论文将断层扫描孔隙嵌入虚拟微结构，以晶体塑性模拟生成训练目标；晶粒和孔隙作为节点，物理邻接作为边，采用GMMConv建立四个回归模型与一个分类模型。[P2][P10]同一孔隙的四种邻域配置“always included in the same split”，避免跨子集混入。[P9]",
+      "innovation": "论文的方法贡献是把孔隙特征显式纳入高保真微结构图，并将预测对象推进至晶粒极值响应，而不只停留在平均量。[P2][P9]作者强调“geometry alone is not sufficient”。解读：其价值在于联合缺陷形貌与邻域微结构判断热点，而非提出已验证的通用疲劳定律。[P10]",
+      "findings": "论文图6a给出回归筛查准确率0.806、召回率0.818、精确率0.542，仍漏检10例；直接分类精确率仅0.400。[P6]最大累积塑性应变能密度的相对误差为57.9%，显示极值数值预测仍困难。[P3]作者认为直接分类“performs worse”，但回归优势不等于安全保证。[P5]",
+      "limitations": "原文缺项：[P12]文献30缺年份左括号、页码或文章编号，影响定位。[P3]应力R²图文不一，[P4][P6]筛查指标不一，影响定量引用。[P11]补充超参数表未提供、生成数据未公开，限制复现。已核对公式无缺项；[P8]跨材料与载荷泛化未验证。\n原文核对：[P3] 原页图2a标注R²=0.900，正文描述同一全部测试晶粒的平均轴向应力预测时两次写R²=0.909，构成原页图文数值不一致，并非提取错误。无公式缺项；影响该指标的准确引用，但不改变其明显优于最大wᴾ预测的定性比较。；[P4] 已核对P4正文及P6图6a，原页存在回归筛查性能的图文不一致，非公式缺项：正文准确率79.8%、召回率81.1%、精确率51.8%、F1为63.2%；图6a分别为80.6%、81.8%、54.2%、65.2%。图内TN=155、FP=38、FN=10、TP=45，其计数支持图示指标。影响回归筛查性能的定量引用，但不改变其优于本批直接分类方案的比较结论；无法从本批确定正文数值的来源。；[P12] 参考文献30原页末尾确为“J. Eng. Mater. Technol. 144 2021).”，年份缺少左括号，且未列页码或文章编号。该项属于原页书目信息缺项，不涉及公式或图号；影响引用完整性和文献定位，不影响本论文现有方法与结果的识读。未推补缺失内容。",
+      "connection": "解读：对结构设计与智能运维，可迁移的是无损检测、微结构代理预测和高保真复核相结合的流程，而非直接移用现有权重。[P8][P9]可靠性研究应重视作者所称“safety-critical failure mode”，将漏检风险与误报复核成本并列评价；有限邻域采样比例不能当作服役失效概率。[P6][P10]",
+      "next_steps": "建议先补齐补充资料中的特征与超参数配置，申请生成数据，再独立复核混淆矩阵及非局部平均域的敏感性。[P9][P11]随后针对目标材料和载荷生成新晶体塑性数据，评估漏检与分布外表现。孔隙群、表面孔隙可作为扩展课题，但这是研究建议，不是作者已验证的成果。[P8]"
     },
     "analysis_status": "ready",
-    "analysis_basis": "abstract",
+    "analysis_basis": "full_text",
     "analysis_kind": "model",
     "analysis_sources": [
       "https://www.nature.com/articles/s41524-026-02148-0"
     ],
-    "analyzed_at": "2026-09-25T02:26:43.970609+00:00",
-    "llm_model": "gpt-6-astra"
+    "analyzed_at": "2026-10-03T02:44:35.676234+00:00",
+    "llm_model": "gpt-6.1-sol"
   },
   "evaluation": {
     "direction_fit": true,
     "research_value": true,
     "evidence_sufficient": true,
-    "reason": "摘要明确将图神经网络、晶体塑性、晶粒级疲劳指标和关键孔隙筛选联系起来，直接契合疲劳可靠性方向，并提供值得进一步阅读的具体方法与任务。证据足以支持相关性及候选阅读价值判断，但不足以支持精度优势、创新程度或工程成熟度判断。[摘要]",
-    "evidence": "Graph neural networks trained on crystal plasticity predict grain-level fatigue indicators and screen fatigue-critical pores in additively manufactured alloy microstructures."
+    "reason": "当前原文[P9]明确说明以疲劳损伤指标预测晶粒极值，并显式纳入孔隙特征，支持其契合疲劳可靠性方向且具有明确方法价值。逐页笔记还提供筛查对比与漏检证据，足以支持重点阅读，但不足以认定寿命预测、跨工况泛化或实际运维安全性已经验证。",
+    "evidence": "this work extends GNN-based modeli ng of polycrystalline materials by\ntargeting grain-level extreme responses usingwP as a fatigue damage indi-\ncator parameter and explicitly including pore defect features in high-ﬁdelity\nmicrostructures."
+  },
+  "material": {
+    "version": "f1cb46fea5b3dd067bc735ff0179ec66827edb64109ce91967890e83af8b81bc",
+    "total": 13,
+    "covered": 13,
+    "references": {
+      "problem": [
+        "P1",
+        "P4",
+        "P10"
+      ],
+      "method": [
+        "P2",
+        "P9",
+        "P10"
+      ],
+      "innovation": [
+        "P2",
+        "P9",
+        "P10"
+      ],
+      "findings": [
+        "P3",
+        "P5",
+        "P6"
+      ],
+      "limitations": [
+        "P3",
+        "P4",
+        "P6",
+        "P8",
+        "P11",
+        "P12"
+      ],
+      "connection": [
+        "P6",
+        "P8",
+        "P9",
+        "P10"
+      ],
+      "next_steps": [
+        "P8",
+        "P9",
+        "P11"
+      ]
+    },
+    "excerpt": "this work extends GNN-based modeli ng of polycrystalline materials by\ntargeting grain-level extreme responses usingwP as a fatigue damage indi-\ncator parameter and explicitly including pore defect features in high-ﬁdelity\nmicrostructures.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P1",
+        "detail": "作者行提取为“Y i x u a nS u n”，原页清楚显示“Yixuan Sun”，已纠正；不影响研究结论。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P2",
+        "detail": "性能评价段提取出现“/C22e”，原页为相对L2误差的数学符号，而非公式缺失或占位。应按原页识读该误差指标，不将乱码视为源文件缺项；不影响数据划分和模型任务结论。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P3",
+        "detail": "正文多处误差符号被提取为“/C22e”，等号亦有“¼”乱码；原页数值可读，平均应力误差为4.1%，邻孔晶粒为5.1%，最大wᴾ误差为57.9%。已按原页识读，不存在这些位置公式缺失的证据。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P3",
+        "detail": "原页图2a标注R²=0.900，正文描述同一全部测试晶粒的平均轴向应力预测时两次写R²=0.909，构成原页图文数值不一致，并非提取错误。无公式缺项；影响该指标的准确引用，但不改变其明显优于最大wᴾ预测的定性比较。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P4",
+        "detail": "已核对P4正文及P6图6a，原页存在回归筛查性能的图文不一致，非公式缺项：正文准确率79.8%、召回率81.1%、精确率51.8%、F1为63.2%；图6a分别为80.6%、81.8%、54.2%、65.2%。图内TN=155、FP=38、FN=10、TP=45，其计数支持图示指标。影响回归筛查性能的定量引用，但不改变其优于本批直接分类方案的比较结论；无法从本批确定正文数值的来源。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P8",
+        "detail": "性能总结段的误差符号和等号被提取为“/C22e”“¼”等乱码。原页可读，平均轴向应力对应4.1%、R²=0.909、ρ=0.951，最大wᴾ对应57.9%、R²=0.471、ρ=0.749。无源文件公式缺项；已按原页纠正，不影响性能比较结论。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P9",
+        "detail": "式(1)的循环积分、求和及γ上方时间导数点在文字提取中错位，并出现“/C1”；式(2)的求和上下限也被拆行。原页两式完整清楚：Δw_yᴾ(x)=∮_{第y个循环}(∑_{λ=1}^{Q}τ^λ(x,t)γ̇^λ(x,t))dt；w_kᴾ(x)=∑_{j=1}^{k}Δw_jᴾ(x)。无缺失项，已恢复滑移功循环积分及跨循环累加关系，避免误读疲劳指标定义。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P10",
+        "detail": "式(3)、式(4)的提取含“/C12”“/C0”“/C18/C19”等乱码。原页清楚显示式(3)的⊙运算符，以及式(4)指数中的负号、转置ᵀ、协方差逆矩阵Σ_k⁻¹和括号。已按原页恢复邻域聚合与高斯核权重表达；没有源文件缺项，不影响继续分析GMMConv方法。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P11",
+        "detail": "式(5)至式(7)及式(11)的提取出现“/C22e”“/C0”“/C1”、预测值帽号错位等问题。原页可完整辨认为相对L2误差、R²、Spearman秩相关及F1公式，式(8)至式(10)亦完整；已恢复减号、乘号、均值横线和预测值帽号。无公式缺项，受影响的是指标表达而非报告结果。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P11",
+        "detail": "日期信息的文字提取漏掉“Published online: 25 May 2026”。原页在收稿、接受日期下方清楚显示该行，已补录为2026年5月25日在线发表。属于提取遗漏，不是原文件缺项，不影响方法或实验结论。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P12",
+        "detail": "参考文献30原页末尾确为“J. Eng. Mater. Technol. 144 2021).”，年份缺少左括号，且未列页码或文章编号。该项属于原页书目信息缺项，不涉及公式或图号；影响引用完整性和文献定位，不影响本论文现有方法与结果的识读。未推补缺失内容。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P12",
+        "detail": "参考文献40在文字提取中出现作者名、题名和期刊名的异常逐字空格；原页可清楚识读题名“Graph neural network for predicting the effective properties of polycrystalline materials: A comprehensive analysis.”及期刊信息Comput. Mater. Sci. 230, 112461 (2023)。已按原页恢复正常分词；无原文件缺项，不影响研究结论。"
+      }
+    ]
   }
 }
