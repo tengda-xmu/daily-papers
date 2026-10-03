@@ -6,8 +6,9 @@ import time
 
 
 class UpdateLock(AbstractContextManager):
-    def __init__(self, path):
+    def __init__(self, path, *, timeout=60):
         self.path = path
+        self.timeout = timeout
         self.thread = threading.RLock()
         self.depth = 0
 
@@ -19,7 +20,7 @@ class UpdateLock(AbstractContextManager):
         try:
             self.path.parent.mkdir(parents=True, exist_ok=True)
             self.file = self.path.open('a+b')
-            deadline = time.monotonic() + 60
+            deadline = time.monotonic() + self.timeout
             while True:
                 try:
                     self.file.seek(0)

@@ -78,6 +78,30 @@ def login(client, app):
     return {'Authorization': 'Bearer ' + response.json()['token'], 'Origin': PUBLIC_ORIGIN}
 
 
+def test_shutdown_stops_background_publishers_before_listener(bridge):
+    client,app,_=bridge
+    closed=[]
+    for name in ('daily_updater','reading_queue','ai_queue','local_figures','edition_manager'):
+        async def close(name=name):closed.append(name)
+        getattr(app.state,name).close=close
+    def shutdown():
+        assert set(closed)=={'daily_updater','reading_queue','ai_queue','local_figures','edition_manager'}
+        closed.append('listener')
+    app.state.shutdown=shutdown
+    assert client.post('/api/shutdown',headers=login(client,app)).status_code==200
+    assert closed[-1]=='listener'
+
+
+def test_service_lock_blocks_duplicate_process_until_exit(tmp_path):
+    import subprocess,sys
+    from connectors.codex_bridge.update_lock import UpdateLock
+    path=tmp_path/'service.lock'
+    program='from pathlib import Path\nimport sys\nfrom connectors.codex_bridge.update_lock import UpdateLock\ntry:\n with UpdateLock(Path(sys.argv[1]),timeout=0): pass\nexcept TimeoutError: sys.exit(3)'
+    with UpdateLock(path,timeout=0):
+        assert subprocess.run([sys.executable,'-c',program,str(path)]).returncode==3
+    assert subprocess.run([sys.executable,'-c',program,str(path)]).returncode==0
+
+
 @pytest.mark.parametrize('error,state,retryable', [
     (CodexError('版本尚未验证', code='codex_version'), 'runtime_unavailable', True),
     (CodexError('只读权限不匹配', code='codex_permission'), 'runtime_unavailable', True),

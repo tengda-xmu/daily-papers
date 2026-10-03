@@ -144,6 +144,12 @@ def create_app(root=ROOT, runtime=None, rpc=None, automatic_updates=None):
     from .local_figures import LocalFigures
     local_figures = LocalFigures(store, busy=lambda: bool(jobs or preparing) or generation_lock.locked())
 
+    async def close_background():
+        # Stop all dispatchers together. Waiting for one slow monitor must not
+        # leave an old reading publisher alive while an upgraded server starts.
+        await asyncio.gather(daily_updater.close(), reading_queue.close(), ai_queue.close(),
+                             local_figures.close(), edition_manager.close())
+
     @asynccontextmanager
     async def lifespan(app):
         info = runtime / "connection.json"
@@ -156,11 +162,7 @@ def create_app(root=ROOT, runtime=None, rpc=None, automatic_updates=None):
             local_figures.start()
             edition_manager.start()
         yield
-        await daily_updater.close()
-        await reading_queue.close()
-        await ai_queue.close()
-        await local_figures.close()
-        await edition_manager.close()
+        await close_background()
         for job in list(jobs.values()):
             job["task"].cancel()
         if jobs:
@@ -1096,6 +1098,9 @@ def create_app(root=ROOT, runtime=None, rpc=None, automatic_updates=None):
 
     @app.post("/api/shutdown")
     async def shutdown():
+        if jobs or preparing or library_restoring:
+            raise HTTPException(409, '请等待当前对话或资料操作完成后再停止助手。')
+        await close_background()
         app.state.shutdown()
         return {"message": "连接程序正在停止。"}
 
@@ -1258,10 +1263,15 @@ def main():
     args = parser.parse_args()
     # Reserve the port before creating queues or running their migrations.
     # A duplicate launch must not leave a second background reader behind.
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as listener:
+    from .update_lock import UpdateLock
+    service_runtime = Path(args.runtime or ROOT / '.local/codex-bridge')
+    # A listener may close before the process and its pending network threads.
+    # Keep process ownership until all old work has exited, including shutdown.
+    with UpdateLock(service_runtime / 'service.lock', timeout=0), socket.socket(socket.AF_INET, socket.SOCK_STREAM) as listener:
         listener.bind(('127.0.0.1', PORT))
         app = create_app(runtime=args.runtime)
-        server = uvicorn.Server(uvicorn.Config(app, host="127.0.0.1", port=PORT, access_log=False, log_level="warning"))
+        server = uvicorn.Server(uvicorn.Config(app, host="127.0.0.1", port=PORT, access_log=False,
+                                             log_level="warning", timeout_graceful_shutdown=10))
         app.state.shutdown = lambda: setattr(server, "should_exit", True)
         server.run(sockets=[listener])
 
