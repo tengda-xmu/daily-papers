@@ -90,6 +90,24 @@ class ReadingQueue:
                         except (ValueError, TypeError, AttributeError):
                             continue
                     db.execute("INSERT INTO reading_migrations VALUES ('pdf-evidence-v1')")
+                if not db.execute("SELECT 1 FROM reading_migrations WHERE name='synthesis-evidence-source-v1'").fetchone():
+                    # The previous synthesis prompt exposed the indexed abstract
+                    # alongside PDF notes, while validation checked only the PDF.
+                    # Retry synthesis once with the corrected source boundary;
+                    # never mark invalid output complete or discard page notes.
+                    from .reading_document import ledger, coverage
+                    for row in db.execute("SELECT paper_id,material,checkpoint FROM tasks WHERE enabled=1 AND state IN ('failed','retry') AND error LIKE '%Assessment evidence is not in the provided material%'").fetchall():
+                        try:
+                            material = json.loads(row['material'] or '{}')
+                            saved = ledger(json.loads(row['checkpoint'] or '{}'), material)
+                            labels = {p['label'] for p in material.get('document', {}).get('pages', [])}
+                            if material.get('basis') == 'full_text' and labels and set(coverage(saved)) == labels:
+                                db.execute("""UPDATE tasks SET state='pending',attempts=0,next_attempt=0,thread_id=NULL,
+                                    error_code='assessment_evidence',error=?,updated_at=? WHERE paper_id=?""",
+                                    ('已修复汇总证据来源，保留逐页笔记并自动重试。', time.time(), row['paper_id']))
+                        except (ValueError, TypeError, AttributeError, KeyError):
+                            continue
+                    db.execute("INSERT INTO reading_migrations VALUES ('synthesis-evidence-source-v1')")
         self.fetch, self.publisher = fetch, publisher
         self.runner = self.active = None
         self.quiet_until = time.time() + 30
@@ -274,7 +292,9 @@ class ReadingQueue:
                 elif row['attempts'] >= 3:
                     db.execute("UPDATE tasks SET state='failed' WHERE paper_id=?", (identifier,))
                     return
-                db.execute("UPDATE tasks SET state='pending',error='',error_code='',updated_at=? WHERE paper_id=?", (time.time(), identifier))
+                retry_code = ('assessment_evidence' if material['version'] == row['material_version'] and
+                              (row['error_code'] == 'assessment_evidence' or 'Assessment evidence is not in the provided material' in row['error']) else '')
+                db.execute("UPDATE tasks SET state='pending',error='',error_code=?,updated_at=? WHERE paper_id=?", (retry_code, time.time(), identifier))
                 fresh = dict(db.execute('SELECT * FROM tasks WHERE paper_id=?', (identifier,)).fetchone())
             if time.time() >= self.quiet_until and not self.lock.locked():
                 await self.generate(fresh)
@@ -302,7 +322,8 @@ class ReadingQueue:
             connected = False
             try:
                 await self.client.start()
-                thread = await self.client.thread(row['thread_id'])
+                evidence_retry = row.get('error_code') == 'assessment_evidence' or 'Assessment evidence is not in the provided material' in row.get('error', '')
+                thread = await self.client.thread(None if evidence_retry else row['thread_id'])
                 connected = True
                 self.assert_current(row)
                 with self.db() as db:
@@ -310,7 +331,7 @@ class ReadingQueue:
                 from .reading_document import read_document, coverage
                 notes, ledger = await read_document(self, row, material, thread) if material['basis'] == 'full_text' else ('', {})
                 text, saved = '', 0
-                async for event in self.client.turn(thread, prompt(paper, material, notes)):
+                async for event in self.client.turn(thread, prompt(paper, material, notes, evidence_retry=evidence_retry)):
                     self.assert_current(row)
                     if event['type'] == 'delta':
                         text += event.get('text', '')
@@ -373,9 +394,10 @@ class ReadingQueue:
                 with self.db() as db:
                     attempts = db.execute('SELECT attempts FROM tasks WHERE paper_id=?', (identifier,)).fetchone()[0]
                     reason = str(exc)[:180] if isinstance(exc, ValueError) else type(exc).__name__
-                    db.execute("UPDATE tasks SET state=?,next_attempt=?,error=?,draft=?,error_code='',updated_at=? WHERE paper_id=? AND revision=?",
+                    code = 'assessment_evidence' if str(exc) == 'Assessment evidence is not in the provided material' else ''
+                    db.execute("UPDATE tasks SET state=?,next_attempt=?,error=?,draft=?,error_code=?,updated_at=? WHERE paper_id=? AND revision=?",
                         ('failed' if attempts >= 3 else 'retry', time.time() + 300 * attempts,
-                         '精读尚未完成或输出未通过校验；已保留任务。' + reason, text[:50000], time.time(), identifier, row['revision']))
+                         '精读尚未完成或输出未通过校验；已保留任务。' + reason, text[:50000], code, time.time(), identifier, row['revision']))
                 self.last_publish = 0
 
     def publish_ready(self):
