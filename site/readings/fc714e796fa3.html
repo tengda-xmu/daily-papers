@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="聚焦 AI 驱动的智能运维、结构生成式设计与疲劳可靠性，每日追踪科研论文，提供中文摘要与精读要点。">
+  <meta name="theme-color" content="#153e64">
+  <title>基于构形力疲劳模型的正向与逆向机器学习：剩余寿命及临界裂纹长度预测 | 全文精读</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css?v=b30c5f17c6">
+  <link rel="stylesheet" href="../assets/paper-chat.css?v=b30c5f17c6">
+  <link rel="stylesheet" href="../assets/paper-library.css?v=b30c5f17c6">
+  <script src="../assets/site.js?v=b30c5f17c6" defer></script>
+  <script src="../assets/paper-library.js?v=b30c5f17c6" defer></script>
+  <script src="../assets/paper-chat.js?v=b30c5f17c6" defer></script>
+  <script src="../assets/daily-update.js?v=b30c5f17c6" defer></script>
+<link rel="stylesheet" href="../assets/reading-article.css?v=b30c5f17c6"><script src="../assets/reading-article.js?v=b30c5f17c6" defer></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main-content">跳至正文</a>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a class="wordmark" href="../"><span>腾达</span><span class="wordmark-divider" aria-hidden="true"></span>科研文献</a>
+      <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false">菜单 <span aria-hidden="true">☰</span></button>
+      <nav id="main-navigation" class="main-navigation" aria-label="主导航">
+        <a href="../" >每日推荐</a>
+        <a href="../search.html" data-local-only >手动检索</a>
+        <a href="../leads.html" >科研线索</a>
+        <a href="../ai.html" >AI 前沿</a>
+        <a href="../library.html" data-local-only >我的文献</a>
+        <a href="../archive/" >历史归档</a>
+        <a href="../setup.html" data-local-only >设置</a>
+      </nav>
+    </div>
+  </header>
+  <div class="site-shell">
+    <main id="main-content" class="main-content" tabindex="-1">
+      <article class="reading-article" data-paper-id="fc714e796fa3"><a class="article-back" href="../">返回每日推荐</a><header class="article-header"><p class="article-type">论文精读</p><h1>基于构形力疲劳模型的正向与逆向机器学习：剩余寿命及临界裂纹长度预测</h1><p class="article-original" lang="en">Prediction of residual life and critical crack length using the forward/inverse machine learning based on the configurational force fatigue model</p><p class="article-byline">Y Dong, R Liu, Q Li<br>Y Dong, R Liu, Q Li - International Journal of Fatigue, 2026 - Elsevier</p><p class="article-updated">精读更新 2026-09-26 17:16 · 依据论文全文整理</p><div class="article-links"><a href="https://www.sciencedirect.com/science/article/pii/S0142112326000459" target="_blank" rel="noopener noreferrer">阅读原文</a><button type="button" class="text-button copy-citation" data-citation="Y Dong, R Liu, Q Li. Prediction of residual life and critical crack length using the forward/inverse machine learning based on the configurational force fatigue model. Y Dong, R Liu, Q Li - International Journal of Fatigue, 2026 - Elsevier. https://www.sciencedirect.com/science/article/pii/S0142112326000459">复制引用</button><button type="button" class="text-button codex-entry" data-local-only data-paper-id="fc714e796fa3" data-paper-title="基于构形力疲劳模型的正向与逆向机器学习：剩余寿命及临界裂纹长度预测">Codex 对话</button></div></header><p class="article-upgrade">全文精读已完成，文章版正在逐步升级。现有内容可继续阅读。</p><div class="article-lead"><p>本文面向延性金属混合型疲劳裂纹，将构形力疲劳关系嵌入物理信息神经网络，正向预测剩余寿命，再以零剩余寿命为目标，通过遗传算法反演临界裂纹长度。铝合金与45钢数据支持其预测潜力，混合型测试集报告R²为0.9623。解读：值得借鉴的是寿命与失效阈值联合评估框架，但原文件公式缺失、拟合图文矛盾及测试集参与调参，限制了复现与可靠性论证。</p></div><section><h2>研究问题</h2><p>混合型裂纹在复杂应力状态下发生偏转，寿命评估需要同时描述增长速率和方向。作者指出经验模型超出标定范围存在“significant predictive scatter”。研究因此聚焦两个关联问题：当前裂纹还能服役多久，以及达到何种长度对应疲劳失效。</p></section><section><h2>方法与路线</h2><p>网络以裂纹长度及构形力分量C1、C2为输入，以剩余寿命为输出；损失由数据均方误差与加权对数物理残差组成，并迭代识别经验参数。推导采用修正因子近似为1及初始裂纹远小于临界长度的假设，随后用遗传算法搜索零剩余寿命对应的长度。</p></section><section><h2>创新与比较</h2><p>作者将构形力的能量驱动与方向信息引入寿命学习，并把训练后的正向模型用于临界长度逆向识别。解读：值得关注的是混合型裂纹物理表征、损失约束和逆向搜索的组合，而非单独使用神经网络或遗传算法；现有资料不足以认定这一组合具有领域首次性。</p></section><section><h2>证据与发现</h2><p>作者报告I型与混合型测试集R²分别为0.8847、0.9623，RMSE分别为5565、3075 cycles。混合型多数相对误差低于20%，临界长度预测点位于实验分布范围内。解读：这些是作者报告的预测表现，并非失效概率或置信区间。</p></section><section><h2>局限与边界</h2><p>原文件公式(5)、(6)仅有MERGEFORMAT占位，影响等效构形力幅及疲劳模型完整表达的核验，不能补造。图16与正文指数符号冲突，影响增长率拟合及饱和解释。此外，测试集参与调参；解读：独立泛化证据受限，缺失公式及相关推导尚未验证。
+原文核对： 原页公式(5)、(6)位置分别显示“3. \* MERGEFORMAT(5)”和“4. \* MERGEFORMAT(6)”，实际公式缺失。分别影响等效构形力幅ΔCeq的计算关系及该处疲劳模型完整表达的核验。P2的增长率关系及P3公式(7)仍可独立识读，但不能据此补造缺失公式。； 已从原页核实图16左下拟合标注为da/dN = −9.8611(1 − e^(0.25844a))，正文却写为da/dN = −9.8611(1 − e^(−0.25844a))，并称其为饱和指数增长。指数符号在图文之间不一致；正文所写式对正a给出负增长率，而图式不呈所述饱和趋势，且所列系数与图示增长率量级存在疑点。原页没有说明应更正哪一项，不补造系数或公式。该缺陷影响增长率—裂纹长度拟合及稳定高速阶段的解释，不妨碍其余内容识读。</p></section><section><h2>方向关联</h2><p>解读：正向寿命预测与逆向裂纹阈值识别，可连接智能运维中的检修安排和结构可靠性中的损伤限值评估。但铝合金采用最终断裂、45钢采用刚度下降20%的失效定义，迁移到结构设计时必须统一判据，不能将确定性寿命直接视为可靠度。</p></section><section><h2>后续研究建议</h2><p>建议先索取数据与实现，核对物理损失推导及统计指标公式；再按试样划分独立测试集，仅在训练和验证集调参，复核预测表现。最后针对变幅载荷开展验证与不确定性量化，检验阈值决策是否稳健；作者也明确超出既有条件需要重新标定。</p></section><aside class="article-source-note"><h2>原文资料边界</h2><ul><li>原页公式(5)、(6)位置分别显示“3. \* MERGEFORMAT(5)”和“4. \* MERGEFORMAT(6)”，实际公式缺失。分别影响等效构形力幅ΔCeq的计算关系及该处疲劳模型完整表达的核验。增长率关系及公式(7)仍可独立识读，但不能据此补造缺失公式。</li><li>已从原页核实图16左下拟合标注为da/dN = −9.8611(1 − e^(0.25844a))，正文却写为da/dN = −9.8611(1 − e^(−0.25844a))，并称其为饱和指数增长。指数符号在图文之间不一致；正文所写式对正a给出负增长率，而图式不呈所述饱和趋势，且所列系数与图示增长率量级存在疑点。原页没有说明应更正哪一项，不补造系数或公式。该缺陷影响增长率—裂纹长度拟合及稳定高速阶段的解释，不妨碍其余内容识读。</li></ul></aside><footer class="article-end"><p>本文依据论文资料整理，研究建议由本站提出。原文、相关文献和图示标注共同说明内容来源。</p></footer></article><dialog class="article-figure-dialog"><form method="dialog"><button type="submit">关闭大图</button></form><img alt="研究思路图放大查看"></dialog>
+      <footer class="site-footer"><p>每日更新，持续关注 AI 与工程可靠性。</p><div><a href="https://tengda-xmu.github.io/">腾达 · 厦门大学</a><a href="https://github.com/tengda-xmu/daily-papers" target="_blank" rel="noopener noreferrer">GitHub</a></div></footer>
+    </main>
+  </div>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <a class="back-to-top" href="#top" aria-label="返回页面顶部" hidden>回到顶部 ↑</a>
+</body>
+</html>

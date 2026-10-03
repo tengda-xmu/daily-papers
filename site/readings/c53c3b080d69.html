@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="聚焦 AI 驱动的智能运维、结构生成式设计与疲劳可靠性，每日追踪科研论文，提供中文摘要与精读要点。">
+  <meta name="theme-color" content="#153e64">
+  <title>通过强化学习引导生成模型发现多样且新颖的晶体 | 全文精读</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css?v=b30c5f17c6">
+  <link rel="stylesheet" href="../assets/paper-chat.css?v=b30c5f17c6">
+  <link rel="stylesheet" href="../assets/paper-library.css?v=b30c5f17c6">
+  <script src="../assets/site.js?v=b30c5f17c6" defer></script>
+  <script src="../assets/paper-library.js?v=b30c5f17c6" defer></script>
+  <script src="../assets/paper-chat.js?v=b30c5f17c6" defer></script>
+  <script src="../assets/daily-update.js?v=b30c5f17c6" defer></script>
+<link rel="stylesheet" href="../assets/reading-article.css?v=b30c5f17c6"><script src="../assets/reading-article.js?v=b30c5f17c6" defer></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main-content">跳至正文</a>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a class="wordmark" href="../"><span>腾达</span><span class="wordmark-divider" aria-hidden="true"></span>科研文献</a>
+      <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false">菜单 <span aria-hidden="true">☰</span></button>
+      <nav id="main-navigation" class="main-navigation" aria-label="主导航">
+        <a href="../" >每日推荐</a>
+        <a href="../search.html" data-local-only >手动检索</a>
+        <a href="../leads.html" >科研线索</a>
+        <a href="../ai.html" >AI 前沿</a>
+        <a href="../library.html" data-local-only >我的文献</a>
+        <a href="../archive/" >历史归档</a>
+        <a href="../setup.html" data-local-only >设置</a>
+      </nav>
+    </div>
+  </header>
+  <div class="site-shell">
+    <main id="main-content" class="main-content" tabindex="-1">
+      <article class="reading-article" data-paper-id="c53c3b080d69"><a class="article-back" href="../">返回每日推荐</a><header class="article-header"><p class="article-type">论文精读</p><h1>通过强化学习引导生成模型发现多样且新颖的晶体</h1><p class="article-original" lang="en">Guiding generative models to uncover diverse and novel crystals via reinforcement learning</p><p class="article-byline">Hyunsoo Park, Aron Walsh<br>Nature Machine Intelligence</p><p class="article-updated">精读更新 2026-09-26 01:00 · 依据论文全文整理</p><div class="article-links"><a href="https://doi.org/10.1038/s42256-026-01262-4" target="_blank" rel="noopener noreferrer">阅读原文</a><button type="button" class="text-button copy-citation" data-citation="Hyunsoo Park, Aron Walsh. Guiding generative models to uncover diverse and novel crystals via reinforcement learning. Nature Machine Intelligence. https://doi.org/10.1038/s42256-026-01262-4">复制引用</button><button type="button" class="text-button codex-entry" data-local-only data-paper-id="c53c3b080d69" data-paper-title="通过强化学习引导生成模型发现多样且新颖的晶体">Codex 对话</button></div></header><p class="article-upgrade">全文精读已完成，文章版正在逐步升级。现有内容可继续阅读。</p><div class="article-lead"><p>本文针对似然驱动生成与新材料发现目标错位，提出Chemeleon2，将潜空间扩散、组相对策略优化与多目标奖励结合，兼顾晶体新颖性、稳定性和多样性。在Alex-MP-20上，亚稳、唯一且新颖的联合比例由15.9%升至61.3%，但唯一性下降；带隙定向生成也获得改善。值得关注的是奖励设计与探索约束，而非将计算稳定性直接等同于可合成性或工程可靠性。</p></div><section><h2>研究问题</h2><p>作者指出，最大化训练数据似然倾向于复现已知材料分布，而材料发现希望进入兼具新颖性与热力学可行性的欠探索区域。原子种类、晶格和坐标又构成耦合的离散—连续空间，使直接策略优化成本较高。核心问题因此是如何改变探索目标，同时维持物理合理性。</p></section><section><h2>方法与路线</h2><p>方法先用VAE统一编码晶体，再把潜空间反向扩散作为策略，以GRPO进行同条件候选的组内优势归一化，冻结解码器。奖励结合AMD创造性、MLFF凸包能量及成分和结构多样性；后者用核分布差异和留一法贡献分配样本奖励，并辅以KL约束与熵奖励。</p></section><section><h2>创新与比较</h2><p>解读：贡献主要是把适合策略梯度的连续潜表示、无需独立价值网络的GRPO和材料领域奖励整合，而非提出全新的强化学习算法。多样性奖励同时约束批内冗余和参考分布偏离，区别于单纯鼓励远离已知样本；模块化设计还支持加入性质目标。</p></section><section><h2>证据与发现</h2><p>每模型生成10,000个未经弛豫的结构：Alex-MP-20上mSUN由15.9%升至61.3%，唯一性却由99.4%降至88.7%。性质生成的512个样本中，82个同时满足mSUN与2.7—3.3 eV带隙区间。结果支持本设置下的综合收益，而非所有指标均改善。</p></section><section><h2>局限与边界</h2><p>作者承认0 K凸包代理未涵盖温度与动力学，模型不能区分有序相和无序固溶体；高元体系可能因竞争相缺失而被高估稳定性。解读：复现还需核对奖励权重遗漏、MMD指标重复及图文数值不一致，不能用潜空间覆盖得分替代真实结构新颖性。</p></section><section><h2>方向关联</h2><p>解读：本文直接契合生成式材料逆向设计，可为结构设计提供先学习生成先验、再用可验证目标优化的思路。对智能运维和可靠性，仅能借鉴多目标权衡及候选去冗余机制；论文没有设备退化、寿命或失效概率验证，晶体热力学稳定性不能直接充当工程安全指标。</p></section><section><h2>后续研究建议</h2><p>建议：先核实公开版本的奖励权重、能量归一化及核函数求和实现，再设置多随机种子和奖励消融，分开报告重复率、原型新颖性及DFT复核结果。对复杂组成加入元素数量约束，并检查竞争无序相；迁移工程设计时另设失效约束，不沿用晶体稳定性标签。</p></section><footer class="article-end"><p>本文依据论文资料整理，研究建议由本站提出。原文、相关文献和图示标注共同说明内容来源。</p></footer></article><dialog class="article-figure-dialog"><form method="dialog"><button type="submit">关闭大图</button></form><img alt="研究思路图放大查看"></dialog>
+      <footer class="site-footer"><p>每日更新，持续关注 AI 与工程可靠性。</p><div><a href="https://tengda-xmu.github.io/">腾达 · 厦门大学</a><a href="https://github.com/tengda-xmu/daily-papers" target="_blank" rel="noopener noreferrer">GitHub</a></div></footer>
+    </main>
+  </div>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <a class="back-to-top" href="#top" aria-label="返回页面顶部" hidden>回到顶部 ↑</a>
+</body>
+</html>

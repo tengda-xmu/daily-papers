@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="聚焦 AI 驱动的智能运维、结构生成式设计与疲劳可靠性，每日追踪科研论文，提供中文摘要与精读要点。">
+  <meta name="theme-color" content="#153e64">
+  <title>从LIF到QIF：面向科学机器学习的可微脉冲神经元 | 全文精读</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css?v=b30c5f17c6">
+  <link rel="stylesheet" href="../assets/paper-chat.css?v=b30c5f17c6">
+  <link rel="stylesheet" href="../assets/paper-library.css?v=b30c5f17c6">
+  <script src="../assets/site.js?v=b30c5f17c6" defer></script>
+  <script src="../assets/paper-library.js?v=b30c5f17c6" defer></script>
+  <script src="../assets/paper-chat.js?v=b30c5f17c6" defer></script>
+  <script src="../assets/daily-update.js?v=b30c5f17c6" defer></script>
+<link rel="stylesheet" href="../assets/reading-article.css?v=b30c5f17c6"><script src="../assets/reading-article.js?v=b30c5f17c6" defer></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main-content">跳至正文</a>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a class="wordmark" href="../"><span>腾达</span><span class="wordmark-divider" aria-hidden="true"></span>科研文献</a>
+      <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false">菜单 <span aria-hidden="true">☰</span></button>
+      <nav id="main-navigation" class="main-navigation" aria-label="主导航">
+        <a href="../" >每日推荐</a>
+        <a href="../search.html" data-local-only >手动检索</a>
+        <a href="../leads.html" >科研线索</a>
+        <a href="../ai.html" >AI 前沿</a>
+        <a href="../library.html" data-local-only >我的文献</a>
+        <a href="../archive/" >历史归档</a>
+        <a href="../setup.html" data-local-only >设置</a>
+      </nav>
+    </div>
+  </header>
+  <div class="site-shell">
+    <main id="main-content" class="main-content" tabindex="-1">
+      <article class="reading-article" data-paper-id="6ca085b27ae8"><a class="article-back" href="../">返回每日推荐</a><header class="article-header"><p class="article-type">论文精读</p><h1>从LIF到QIF：面向科学机器学习的可微脉冲神经元</h1><p class="article-original" lang="en">From LIF to QIF: Toward differentiable spiking neurons for scientific machine learning</p><p class="article-byline">Ruyin Wan, George Em Karniadakis, Panos Stinis<br>npj Artificial Intelligence</p><p class="article-updated">精读更新 2026-09-26 01:26 · 依据论文全文整理</p><div class="article-links"><a href="https://doi.org/10.1038/s44387-026-00121-2" target="_blank" rel="noopener noreferrer">阅读原文</a><button type="button" class="text-button copy-citation" data-citation="Ruyin Wan, George Em Karniadakis, Panos Stinis. From LIF to QIF: Toward differentiable spiking neurons for scientific machine learning. npj Artificial Intelligence. https://doi.org/10.1038/s44387-026-00121-2">复制引用</button><button type="button" class="text-button codex-entry" data-local-only data-paper-id="6ca085b27ae8" data-paper-title="从LIF到QIF：面向科学机器学习的可微脉冲神经元">Codex 对话</button></div></header><p class="article-upgrade">全文精读已完成，文章版正在逐步升级。现有内容可继续阅读。</p><div class="article-lead"><p>本文研究脉冲网络如何胜任科学机器学习中的连续回归，将二次积分发放神经元（QIF）用于MLP、DeepONet和PINN，通过相位动力学、伪脉冲及输入输出时间表示支持梯度训练。实验显示，QIF在函数拟合、算子学习和PDE求解中通常更平滑、误差更低，但存在LIF单项误差更优的例外。解读：其价值在于可微物理代理模型，而非已验证的生成式设计；部分公式、指标定义仍需核对。</p></div><section><h2>研究问题</h2><p>作者关注连续回归所需的平滑输出和可靠梯度，与传统LIF脉冲生成不连续之间的矛盾。替代梯度可能引入估计偏差，权重转换也未必保持物理导数。核心问题是如何让脉冲网络参与函数拟合、算子学习和PDE残差优化，而非仅完成分类。</p></section><section><h2>方法与路线</h2><p>作者采用瞬时耦合的振荡QIF，将膜电位映射为相位，使事件之间满足φ̇=1，并用伪脉冲处理有限模拟窗口后的潜在发放。回归输入归一化后映射为脉冲时刻，输出取两个神经元首次发放时刻之差，以表示正负连续值。</p></section><section><h2>创新与比较</h2><p>解读：贡献主要是将已有QIF精确梯度机制适配科学回归，而非首次提出QIF神经元。作者设计单输入时间映射和双输出时间差接口，并在MLP、DeepONet、PINN中系统比较。原文输出定义为“f(x) = t₂,out − t₁,out”。</p></section><section><h2>证据与发现</h2><p>作者报告Poisson算子学习中QIF与最佳LIF的相对L₂误差分别为2.73%、8.88%；Poisson PINN的QIF误差为0.13%，且二阶导数更符合参考解。不过Beltrami流u分量中，QIF为4.01%，高于校准LIF的3.55%，不能概括为全面最优。</p></section><section><h2>局限与边界</h2><p>解读：证明限定事件顺序固定、无事件重合；式(38)存在原图确认的代数符号问题。表1的“maximum absolute error”多次小于RMSE，Ripple最佳LIF数值也与正文不一致，均需核对。此外，硬件部署属未来方向，不能宣称已验证节能。</p></section><section><h2>方向关联</h2><p>解读：与生成式设计的联系是间接的，可微PDE代理可能支持设计变量灵敏度计算；对智能运维可启发连续状态估计，对可靠性研究可启发响应面建模。但本文未展示设计生成、结构优化闭环、故障诊断或失效概率验证，这些迁移用途不能归为作者成果。</p></section><section><h2>后续研究建议</h2><p>建议：先复核多输入相位递推、式(38)和表1指标，再复现Poisson例题，同时检查解误差、二阶导数和边界条件。随后在统一精度目标下比较训练成本、推理成本及实测能耗；若迁移至结构设计，应新增设计梯度和约束满足性验证。</p></section><footer class="article-end"><p>本文依据论文资料整理，研究建议由本站提出。原文、相关文献和图示标注共同说明内容来源。</p></footer></article><dialog class="article-figure-dialog"><form method="dialog"><button type="submit">关闭大图</button></form><img alt="研究思路图放大查看"></dialog>
+      <footer class="site-footer"><p>每日更新，持续关注 AI 与工程可靠性。</p><div><a href="https://tengda-xmu.github.io/">腾达 · 厦门大学</a><a href="https://github.com/tengda-xmu/daily-papers" target="_blank" rel="noopener noreferrer">GitHub</a></div></footer>
+    </main>
+  </div>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <a class="back-to-top" href="#top" aria-label="返回页面顶部" hidden>回到顶部 ↑</a>
+</body>
+</html>
