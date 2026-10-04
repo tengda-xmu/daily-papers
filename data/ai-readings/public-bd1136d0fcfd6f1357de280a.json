@@ -1,18 +1,18 @@
 {
   "id": "public-bd1136d0fcfd6f1357de280a",
-  "content_version": "23bdb53f82c78bae1a43d8428b935e086732ab0dfd9d35fb2b82c2f5835d0452",
+  "content_version": "eeae6f35561cf9785071ca134985956984e7d3c7c0758cf84aed9cfd00d7113e",
   "analysis": {
-    "title_zh": "Microsoft ThinkingBox：以后台记录检验 AI 智能体是否真正完成任务",
-    "summary": "公告介绍了 Microsoft ThinkingBox，并明确其现已通过 Hugging Face 提供。它不以智能体生成的完成声明作为评分依据，而是让智能体在隔离的 MCP 工具会话中执行任务，检查最终后台状态及其留下的副作用，并考察能否连续二十次完成任务。适用方向是需要实际修改后台记录的智能体评测。所给资料仅为公告片段，未展示具体测试结果、性能提升或完整使用流程。",
-    "application": "建议：科研迁移可考虑将后台状态核验与重复执行测试引入智能运维或可靠性研究，检验智能体是否真正完成操作；这是迁移设想，并非官方已验证效果。公告明确介绍了评测机制，但所给片段未提供智能运维、结构设计或可靠性任务中的验证结果。",
+    "title_zh": "ThinkingBox 已通过 Hugging Face 提供：用后台状态检验 AI 智能体是否真正完成任务",
+    "summary": "【公告原文概述】Microsoft 与 Hugging Face 联合博客宣布，ThinkingBox 现已通过 Hugging Face 提供。它不以智能体生成的完成声明作为评分依据，而是在隔离的 MCP 工具会话中运行智能体，检查任务结束时的后台状态与副作用，并考察其能否连续二十次完成任务。适用于需要核验实际记录变化的智能体评测。所给资料仅为截断片段，未展示具体评测结果或使用方法。",
+    "application": "建议：【科研迁移建议，非官方已验证效果】可借鉴其评测思路，在智能运维研究中检查工单、配置或数据库的最终状态，并通过重复试验研究任务完成的可靠性。【公告明示】ThinkingBox 检查后台终态与副作用；所给片段未提供其提升任务成功率或运维效率的验证结果。",
     "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
       "Microsoft ThinkingBox grades AI agents on the records they leave behind, not the sentences they generate, and then asks whether they can do it twenty times in a row.",
       "It is now available through Hugging Face.",
-      "Figure 1: ThinkingBox runs an agent against isolated MCP tool sessions, then grades the terminal backend state and side effects it leaves behind."
+      "ThinkingBox runs an agent against isolated MCP tool sessions, then grades the terminal backend state and side effects it leaves behind."
     ],
     "basis_url": "https://huggingface.co/blog/microsoft/thinkingbox"
   },
-  "analyzed_at": "2026-10-04T09:24:17.532963+00:00"
+  "analyzed_at": "2026-10-04T11:25:23.237497+00:00"
 }
