@@ -390,7 +390,7 @@
       "reading_status": {
         "paper_id": "9170f18af989",
         "state": "failed",
-        "updated_at": "2026-09-30T09:28:32.880777+00:00",
+        "updated_at": "2026-10-04T14:01:26.549593+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -696,8 +696,10 @@
       "reading_status": {
         "paper_id": "1172e7a5c357",
         "state": "missing_evidence",
-        "updated_at": "2026-09-30T09:27:53.369023+00:00",
+        "updated_at": "2026-10-04T14:01:47.195771+00:00",
         "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
         "reason": "restricted",
         "total": 0,
         "covered": 0,
@@ -906,16 +908,355 @@
       "reading_status": {
         "paper_id": "0e815a1ce338",
         "state": "published",
-        "updated_at": "2026-09-26T01:49:45.288188+00:00",
+        "updated_at": "2026-10-04T14:01:01.453852+00:00",
         "basis": "full_text",
-        "article_state": "retry",
-        "article_stage": "review",
+        "article_state": "complete",
+        "article_stage": "",
         "reason": "",
         "total": 20,
         "covered": 20,
         "pdf_available": true,
         "issues": []
-      }
+      },
+      "article": {
+        "version": 1,
+        "lead": "栓钉疲劳失效会削弱钢—混凝土组合结构的组合作用，而相同应力范围下的寿命离散，又使经验曲线难以满足精细化评估需求。Tan等将断裂力学寿命估计转化为机器学习特征，再通过Stacking融合多个预测器，取得较好的测试集表现。本文的阅读价值不仅在于预测指标，更在于辨清物理特征、集成增益与工程安全裕度之间的边界，为后续疲劳可靠性研究寻找可验证的切入点。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从保守设计曲线走向多参数寿命评估",
+            "paragraphs": [
+              "栓钉承担钢梁与混凝土之间的剪力传递，其疲劳寿命同时受到材料、几何和加载条件影响。作者指出，既有经验模型依赖有限试验，难以充分表达这些因素的耦合作用；常规机器学习则面临物理解释与不确定性分析不足的问题。",
+              "规范曲线与数据驱动模型的任务并不完全相同：前者包含安全裕度，后者主要追求预测误差较小。Eurocode 4采用lgN均值减去两倍标准差的设计曲线，因此，寿命低估不能直接判为模型失效；真正面向工程应用，还需同时考察精度与安全保证水平。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "把LEFM寿命变成第十一个输入",
+            "paragraphs": [
+              "研究汇集文献中的305个推出疲劳试验试件，涵盖常规及高性能材料，但不能直接视为305个统计独立样本。模型使用混凝土强度、栓钉尺寸、钢材强度、抗剪承载力及四项剪应力参数等10个基础输入，以log(Nexp)为目标；RFE-CV采用500棵树的RF和10折验证，最终保留全部基础输入。",
+              "**物理信息通过特征工程进入模型，而非损失函数硬约束。**作者依据式(6)的Nf=∫[a0至af]da/[C(ΔK)^m]计算LEFM寿命，将log10(NLEFM)作为第11个特征；其适用性依赖裂纹扩展、有效剪切面积及根部纯剪失效等假设。",
+              "RF、SVR、GBR和XGBoost分别建立普通与物理信息版本，四个基学习器通过折外预测形成元特征，再由Lasso完成Stacking。输入采用Z-score标准化，数据按8:2随机划分，种子为4，调参仅在训练集进行；标准化统计量的拟合范围和Stacking折数仍未明确。"
+            ]
+          },
+          {
+            "id": "validation",
+            "title": "随机测试支持精度改善，跨来源验证仍待补齐",
+            "paragraphs": [
+              "机器学习验证建立在汇集的实物试验数据上，未报告新增试验、数据增强数量及独立试件核查结果。研究比较四种算法的G/PI版本和PI-Stacking，使用R²、MAE、MAPE、RMSE及倍数误差带；没有报告来源隔离测试、外部验证或固定超参数下的完整消融。",
+              "PI-XGBoost的调参比较采用100次迭代和多次重复10折验证：GP平均耗时209.3 s、最优RMSE为0.436，TPE为90.4 s和0.446。作者选择TPE继续调优，证据支持其在该设置下更省时，但不支持其误差也更低；重复次数与差异区间未报告。",
+              "物理对照另用推出试验有限元模型计算SWT-LEFM寿命，并以荷载—滑移曲线校准模型，仿真及验证试件数量未报告。SWT-LEFM试件并非全部属于机器学习测试集；规范对照的数据对应关系则未报告，两者均不能无条件视为严格同集比较。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "小幅集成增益之外，更重要的是安全边界",
+            "paragraphs": [
+              "按表8，PI-Stacking测试集RMSE为0.33、MAE为0.24、MAPE为4.48%、R²为0.83，PI-XGBoost对应为0.33、0.25、4.61%、0.82。正文另报后者RMSE为0.34，图13的Stacking MAE也与表8不同；因此小幅增益尚缺稳定性证据，且不能将对数目标误差解释为cycles误差或原始寿命相对误差。",
+              "SHAP解释的是模型贡献，不是因果效应：图22中PI-XGBoost的Δτ和log(NLEFM)重要性为20.0%和14.5%，后文又称物理特征最高，存在排序冲突。Sobol则将Δτ、ft、fc和物理特征依次列为前四位；其均匀分布采样及复合特征依赖处理尚不足以代表实际工况不确定性。",
+              "复现还有两处关键障碍：表中LEFM积分与式(6)形式不一致，Vu标准差719.3 kN也与所列范围明显不协调。数据声明为按请求提供；PI-XGBoost虽报告平均误差2.940%，却未内置安全裕度，现阶段更适合作为预测工具，不能直接替代疲劳设计准则。"
+            ]
+          }
+        ],
+        "experiments": [
+          {
+            "name": "普通、物理信息与Stacking模型的寿命预测比较",
+            "data": "汇集自1960年以来文献[24–49]的推出疲劳试验，覆盖常规与高性能材料；数据按请求提供。",
+            "samples": "共305个试件；统计独立数量、去重结果及新增试验、仿真和增强数量未报告，不从比例反推测试数量。",
+            "groups": "比较RF、SVR、GBR、XGBoost的G/PI版本及PI-Stacking；具体材料、几何和加载工况组数量未报告。",
+            "split": "随机8:2训练—测试划分，种子4；训练集内调参及折外Stacking。绝对数量、来源分组和Stacking折数未报告。",
+            "baselines": "同算法G/PI版本及单个PI模型构成对照；未报告固定相同超参数、逐项物理特征及元学习器消融。",
+            "metrics": "R²、MAE、MAPE、RMSE及±3×、±4×误差带；目标为对数寿命，对数底数和误差带严格定义未明确。",
+            "results": "表8：PI-Stacking的RMSE/MAE/MAPE/R²为0.33/0.24/4.48%/0.83，PI-XGBoost为0.33/0.25/4.61%/0.82。",
+            "limitations": "正文与图表存在指标差异；未报告外部测试和增益置信区间，同源泄漏风险及小幅改善稳定性无法核验。"
+          },
+          {
+            "name": "PI-XGBoost的GP与TPE调参效率比较",
+            "data": "使用305个试件数据库的训练子集，输入附加log10(NLEFM)；训练子集绝对记录数未报告。",
+            "samples": "两种方法各设置100次优化迭代，并采用多次重复10折验证；迭代数不是样本数，重复次数未报告。",
+            "groups": "GP与TPE均优化PI-XGBoost的7个超参数；正文报告搜索范围及最优参数，没有独立工况分组。",
+            "split": "调优仅在随机8:2划分后的训练集内执行；种子4，采用重复10折交叉验证，不属于外部测试。",
+            "baselines": "GP与TPE互为搜索策略对照；固定参数、网格搜索及随机搜索的定量对照未报告。",
+            "metrics": "最优训练集交叉验证平均RMSE及平均计算时间；RMSE对应对数目标，不能按循环次数解释。",
+            "results": "GP耗时209.3 s、RMSE为0.436；TPE耗时90.4 s、RMSE为0.446，作者据优化表现选择TPE。",
+            "limitations": "未报告重复次数、耗时离散程度及误差区间；结果体现时间与误差的权衡，而非TPE全面占优。"
+          },
+          {
+            "name": "有限元支持的SWT-LEFM及规范寿命对照",
+            "data": "SWT-LEFM使用文献[38,39,43,45,49,69]的推出试件；规范对照数据的逐条对应关系未报告。",
+            "samples": "物理对照独立试件数、有限元模型数和规范对照统计分母未报告；四分之一模型不代表样本数量。",
+            "groups": "SL1取ΔK=Kmax，SL2取Kmax−Kmin；规范为AASHTO、JSCE、Eurocode 4，并比较不同应力范围。",
+            "split": "SWT-LEFM试件并非全部属于机器学习测试集；规范对照与机器学习数据的对应关系未报告。",
+            "baselines": "PI-XGBoost对照两种SWT-LEFM约定及三种规范；有限元先以引用试验荷载—滑移曲线验证和校准。",
+            "metrics": "物理对照采用RMSE、MAE、MAPE、R²；规范报告存活率。图示log(Npre)/log(Nexp)理想值为1。",
+            "results": "SL1/SL2的RMSE为0.68/0.69、R²为0.14/0.12；AASHTO、JSCE、Eurocode 4存活率为82.67%、65.33%、52.33%。",
+            "limitations": "不能确认严格同集对照；存活率公式、有限元校准误差未报告，规范安全裕度不能与点预测精度混同。"
+          },
+          {
+            "name": "SHAP解释与Morris、Sobol全局敏感性分析",
+            "data": "SHAP比较G/PI的RF和XGBoost；全局分析在观测边界内归一化并假定均匀分布，具体模型未明确。",
+            "samples": "SHAP解释及背景样本数量、Morris轨迹数、Sobol采样数量和模型调用次数均未报告。",
+            "groups": "解释比较四种模型的输入贡献；全局分析涉及11个输入，独立工况分组及分组数量未报告。",
+            "split": "解释样本所属训练或测试集合未报告；敏感性分析属于输入采样传播，不等于独立实物验证。",
+            "baselines": "G/PI模型作解释对照，Morris与Sobol作敏感性互证；未报告解释排序的重复采样稳定性对照。",
+            "metrics": "Pearson相关、SHAP贡献及相对重要性；Morris均值μ和标准差σ，Sobol一阶S1和总阶ST。",
+            "results": "图22的PI-XGBoost中Δτ/物理特征为20.0%/14.5%；Sobol排序为Δτ、ft、fc、物理特征，精确指数未报告。",
+            "limitations": "SHAP排序跨正文与图示冲突；输入相关性和复合特征依赖处理未报告，重要性不能直接解释为因果作用。"
+          }
+        ],
+        "routes": [
+          {
+            "title": "来源隔离与依赖一致的物理特征检验",
+            "direction_id": "fatigue_reliability",
+            "gap": "随机划分尚不能证明跨试验来源泛化，LEFM特征又与应力参数高度相关。建议优先检验增益是否来自可迁移机制，而非同源记录相似性及重复信息。",
+            "mechanism": "先统一式(6)与表中积分、单位和裂纹参数，再按文献来源建立嵌套交叉验证。每折仅用训练数据拟合标准化和筛选过程，敏感性采样时由基础参数重算物理特征。",
+            "innovation": "将来源隔离、物理特征受控消融与依赖一致敏感性分析组合为审计流程。相关混凝土强度Stacking文献摘要已报告折外训练和约束技术，本路线不主张这些技术本身新颖。",
+            "design": "建议设计：申请原文305个试件记录，结合可取得的公开文献核对来源、试件编号与工况。按来源留组测试，另分常规与高强材料；若去重后来源过少，明确缩小验证范围。",
+            "comparison": "对照G-XGBoost、PI-XGBoost和PI-Stacking，并设置固定参数与同预算重新调参两组消融。比较移除LEFM、仅用LEFM及依赖一致与独立均匀采样，分离特征和调参贡献。",
+            "criterion": "以来源留组的对数RMSE、原始寿命倍数误差及分组偏差为判据。建议要求改善的来源级重采样区间不跨零，且高应力与高强材料组无持续恶化，而非只追求总体排名。",
+            "risk": "来源标签不足、裂纹参数缺失及强相关输入可能使贡献不可辨识。替代方案是先完成可追溯子集验证，对缺失参数做区间分析，并将来源不足的结论限定为内部预测。"
+          },
+          {
+            "title": "从平均寿命预测走向校准的疲劳安全下界",
+            "direction_id": "fatigue_reliability",
+            "gap": "较低平均误差不等于较高安全保证，原研究也明确PI-XGBoost未内置安全裕度。建议建立可检验的寿命下界，避免直接把点预测用于检修或设计决策。",
+            "mechanism": "在来源隔离的训练流程上增加分位数预测，并用独立校准集修正下界覆盖率。将疲劳寿命离散与模型预测不确定性分别报告，不把输入均匀扰动产生的范围当作全部风险。",
+            "innovation": "已有混凝土强度Stacking摘要报告分位数区间，栓钉强度退化研究摘要采用贝叶斯估计与可靠性评估。候选贡献是面向栓钉寿命下界的组合与校准，而非宣称区间预测首次提出。",
+            "design": "建议设计：申请原试验数据并按来源分为训练、校准和测试集合，比例随可用来源数确定。需要新增采集时，可建议24个独立试件覆盖两档应力幅与两档材料，每组6个，并先评估试验资源。",
+            "comparison": "同集比较点预测、分位数模型、校准下界与规范曲线，消融物理特征和校准步骤。规范保留其设计安全属性，分别评价寿命误差、安全覆盖及下界保守程度。",
+            "criterion": "建议预先设定90%寿命下界覆盖目标，同时报告覆盖率区间和下界紧致程度。要求总体与关键工况组均无明显欠覆盖，并以完全留出的来源检验是否仍有工程可用性。",
+            "risk": "小样本下分组覆盖难以稳定估计，来源迁移也可能破坏校准条件。替代路径是扩大区间、保留规范控制并标识域外输入；微裂纹检测仅在具备可行采集条件后作为补充研究。"
+          }
+        ],
+        "diagrams": [
+          {
+            "kind": "study",
+            "title": "原研究：物理特征集成与分对象验证",
+            "description": "Stacking用于集成预测；规范与SWT-LEFM对照连接PI-XGBoost，SHAP连接实际解释的RF和XGBoost。敏感性分析的具体模型未明确。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "文献推出疲劳数据",
+                "detail": "305个试件，统计独立性及重复记录处理未报告"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "LEFM特征构造",
+                "detail": "10个基础输入增加log10(NLEFM)，采用裂纹扩展假设"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "划分与训练准备",
+                "detail": "随机8:2、种子4，标准化及训练集内调参"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "G与PI基础模型",
+                "detail": "RF、SVR、GBR、XGBoost分别训练并比较"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "PI-Stacking",
+                "detail": "四个PI基学习器折外预测，Lasso元模型集成"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "物理与规范对照",
+                "detail": "PI-XGBoost对照SWT-LEFM及规范；同集可比性有限"
+              },
+              {
+                "id": "g",
+                "stage": 4,
+                "label": "RF与XGBoost解释",
+                "detail": "SHAP分析G/PI版本，解释贡献而非因果效应"
+              },
+              {
+                "id": "h",
+                "stage": 4,
+                "label": "全局敏感性",
+                "detail": "Morris与Sobol采样分析，具体被分析模型未明确"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "提供基础参数"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "扩展输入"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "独立训练调优"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "PI折外预测"
+              },
+              {
+                "from": "d",
+                "to": "f",
+                "label": "PI-XGBoost对照"
+              },
+              {
+                "from": "d",
+                "to": "g",
+                "label": "选定模型解释"
+              },
+              {
+                "from": "b",
+                "to": "h",
+                "label": "输入域采样"
+              }
+            ]
+          },
+          {
+            "kind": "proposal",
+            "title": "后续路线一：检验物理增益能否跨来源迁移",
+            "description": "拟议流程，不代表已完成实验。先核对数据与公式，再以来源隔离和受控消融检验泛化，并处理复合特征的参数依赖。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "申请数据与来源核对",
+                "detail": "核查试件编号、重复记录、工况及可取得的文献资料"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "统一物理计算",
+                "detail": "核对LEFM积分、单位和裂纹参数，保留缺项标识"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "按来源嵌套划分",
+                "detail": "外层留来源测试，内层筛选调参；预处理只拟合训练集"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "受控特征与集成消融",
+                "detail": "比较G/PI-XGBoost及Stacking，控制参数与搜索预算"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "依赖一致敏感性",
+                "detail": "采样基础参数后重算LEFM，避免复合特征独立扰动"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "来源与工况级评价",
+                "detail": "检验误差、倍数偏差及来源级重采样区间"
+              },
+              {
+                "id": "g",
+                "stage": 5,
+                "label": "限定可迁移结论",
+                "detail": "依据留组结果确定适用域，不预设物理特征必然有效"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "建立可追溯输入"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "锁定计算规则"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "隔离测试信息"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "限定训练输入域"
+              },
+              {
+                "from": "d",
+                "to": "f",
+                "label": "提交留组预测"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "检验解释稳定性"
+              },
+              {
+                "from": "f",
+                "to": "g",
+                "label": "形成证据边界"
+              },
+              {
+                "from": "f",
+                "to": "b",
+                "label": "反馈公式异常"
+              }
+            ]
+          }
+        ],
+        "related": {
+          "status": "ok",
+          "checked_at": "2026-10-04T13:36:03.225121+00:00",
+          "papers": [
+            {
+              "title": "Reliability Fatigue Assessment Based on Electromagnetic Features and Stacking Ensemble Learning",
+              "url": "https://doi.org/10.4018/ijswis.401495",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Physics‐Informed and Uncertainty‐Aware Stacking Ensemble for Robust Prediction of Concrete Compressive Strength",
+              "url": "https://doi.org/10.1155/vib/3817773",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Assessment Of Fatigue Crack Propagation Life Based On Physics-Informed Neural Networks Under Ensemble Learning In Hydrogen Environments",
+              "url": "https://doi.org/10.1142/s0218625x26430018",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Physics-Based Shear-Strength Degradation Model of Stud Connector with the Fatigue Cumulative Damage",
+              "url": "https://doi.org/10.3390/buildings12122141",
+              "year": 2022,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Artificial intelligence-driven physics-informed feature engineering for multiaxial fatigue life prediction of metallic materials with Bayesian optimization",
+              "url": "https://doi.org/10.1186/s40323-026-00334-9",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            }
+          ]
+        }
+      },
+      "article_updated_at": "2026-10-04T14:01:01.449341+00:00",
+      "article_profile": "543ab1b4212a11f93f29c006bad9ad73527870983a18679890eb1753d6505703"
     },
     {
       "source": "Crossref",
@@ -1233,9 +1574,9 @@
       "reading_status": {
         "paper_id": "d10423960846",
         "state": "published",
-        "updated_at": "2026-09-26T09:33:18.237305+00:00",
+        "updated_at": "2026-10-04T13:57:03.940090+00:00",
         "basis": "full_text",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "",
         "total": 17,
@@ -1373,7 +1714,323 @@
             "detail": "参考文献55原页在题名“Micromagnetic simulations on the grain shape effect in Nd-Fe-B magnets”之后直接列“120, 033903 (2016)”，缺少期刊名称。已从图片核实，并非提取遗漏；影响书目定位完整性，不影响本批其他内容识读。该项不涉及公式或图号，不推补缺失期刊名。"
           }
         ]
-      }
+      },
+      "article": {
+        "version": 1,
+        "lead": "SmCo-1:7磁体的高磁晶各向异性，为何没有充分转化为矫顽力？答案不仅在各相本身，也在纳米胞壁、富Zr片层及其交界处如何阻挡畴壁。Yang等将42,300组微磁仿真与正逆向神经网络结合，识别结构和磁性参数的作用，并按目标性能反求几何。本文最值得关注的是：**提高矫顽力与增强钉扎并非同一个优化目标**，而代理模型的一致性也不等于独立物理验证。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从Brown悖论走向三相界面的协同设计",
+            "paragraphs": [
+              "Sm(Co,Fe,Cu,Zr)7±δ的矫顽力潜力受到反磁畴形核和畴壁迁移共同限制，这正是本文讨论Brown悖论的材料背景。作者聚焦胞状2:17基体、条带状1:5相和富Zr的Z片层，试图回答哪些纳米结构最有效，以及能否从指定矫顽力反求结构。",
+              "三相并非简单叠加：1:5相提供较高各向异性，其与2:17相的畴壁能差形成排斥型钉扎；Z相则通过较低畴壁能形成吸引型钉扎。设计价值在于协调形核门槛、界面能垒与相比例，而不是一味增加胞壁或片层。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "把几何、磁性与钉扎份额接入正逆向网络",
+            "paragraphs": [
+              "几何由L、d、wS、wZ描述，采样范围依次为30–150、10–55、3–15、2–10 nm；磁性描述符包括失配角α和三相的Ms、畴壁厚度及畴壁能。Cu、Fe相内替代比例均取0、0.1、0.2、0.3，Z相采用Lit.、DFT、Mod.三套参数，反映其磁性不确定性。",
+              "微磁计算最小化交换、各向异性、静磁及外场能，评估准静态磁滞，而非完整动态演化。统一软磁边界层以K′=0.01Ku提供成核条件，界面交换强度取S=1，并忽略磁弹耦合；Φp=(Hc−Hp)/Hc衡量初始脱钉之后的钉扎贡献，不能直接当作全部反转机制的分解。",
+              "正向网络预测Hc和Φp，逆向网络在固定微磁参数下输出四个几何量。逆向损失同时约束结构误差与正向代理回代误差，权重λ=0.02，非负输出过滤器只保证尺寸非负。作者明确输出是一个代表性候选，而非唯一物理解。"
+            ]
+          },
+          {
+            "id": "validation",
+            "title": "42,300组计算记录，三例独立微磁回验",
+            "paragraphs": [
+              "45,000组参数经过几何过滤得到42,300组有效仿真，每组平均五至十个退磁半周期；这些重复反转不是独立试件。数据按80%训练、20%测试划分，训练记录33,840组；论文另有TEM和HAADF-STEM表征，但独立实物试件数未报告，也没有逆向候选的制样验证。",
+              "作者比较六类算法后选用多层感知机，测试Hc、Φp的R²分别为0.91、0.90，但高于4 T和Φp高于0.5的区域出现系统性低估。每个数据规模进行100次抽样，检验的是均值收敛；学习曲线在N≥10,000时R²约为0.90，不能据此保证稀疏高值区可靠。",
+              "逆向训练使用10,000个正向代理生成点，不是新增微磁仿真。三个候选另做微磁回验，Hc相对误差为3.22%、4.76%、3.21%，Φp误差却为28.20%、41.18%、25.87%；按目标排序，后者并非全部同向偏差。这比代理回代分数更清楚地揭示了双目标设计的短板。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "角度主导性能，最强钉扎不等于最高矫顽力",
+            "paragraphs": [
+              "Spearman与置换分析均指向α的主导作用，角度响应介于Stoner–Wohlfarth和Kondorsky模型之间，支持混合反转机制。Cu添加降低Hc并削弱Φp；Fe使Hc略降、饱和磁化强度上升，并可局部增强钉扎。约70 vol.% 1:5相、20 vol.% Z相对应较高双目标组合，但不是普适最优配比。",
+              "证据边界需要保留：周期几何、平均成分和统一缺陷层没有覆盖真实材料的局部最弱环节。数值检查仅给出两个角度的具体误差；原文还存在14个物理描述符与网络8输入配置不衔接、公式(12)R²定义非常见、学习曲线MSE/MAPE名称冲突，以及局部d趋势和相标识不一致。测试集参与逆向选模，也削弱最终评价独立性；这些问题不能静默修正或据此断言代码错误。"
+            ]
+          }
+        ],
+        "experiments": [
+          {
+            "name": "高通量三相微磁仿真与数值精度检查",
+            "data": "文献结构与磁参数、Z相DFT计算共同支持参数化；仿真结果与工具公开于DOI：10.5281/zenodo.18624659。",
+            "samples": "45,000组初始组合过滤为42,300组仿真，含10,800组L-domain；每组五至十个退磁半周期，独立实物试件数未报告。",
+            "groups": "Cu、Fe替代比例各取0、0.1、0.2、0.3；Z相分Lit.、DFT、Mod.；采用两种计算域并检查0°、30°。",
+            "split": "数值精度检查不涉及训练测试划分；具体对照结构数量未报告，不能将计算作业数视为独立样本数。",
+            "baselines": "以S-domain中0.25×0.25×0.25 nm³网格为参考，对照两域的0.5×0.5×2 nm³网格。",
+            "metrics": "检查Hc相对误差；磁滞分析包括Hn、Hp、Hc和无量纲Φp，场量以μ0H的T单位展示。",
+            "results": "0°时两域相对参考误差为4.65%、6.59%；30°时为0.61%、0.22%，不能推广为全部工况的误差界。",
+            "limitations": "理想周期结构、平均磁参数、统一缺陷层及S=1界面；随机缺陷、非理想界面和磁弹耦合消融未报告。"
+          },
+          {
+            "name": "前向预测、算法比较与数据规模评估",
+            "data": "42,300组微磁记录用于预测Hc、Φp；均值收敛分析以完整数据统计量为参照，不是实物验证。",
+            "samples": "训练33,840组、测试8,460组；各N进行100次独立抽样，不增加独立仿真；增强数量未报告。",
+            "groups": "分别分析两个目标及数据规模；μ0Hc>4 T、Φp>0.5为明显偏差区域，其样本数量未报告。",
+            "split": "80%训练、20%测试；独立验证集、随机种子、按结构或成分分组隔离的策略未报告。",
+            "baselines": "比较K近邻、神经网络、梯度提升、决策树、随机森林、支持向量机；逐模型分数及正式消融未报告。",
+            "metrics": "报告R²、MSE及均值MAPE；公式(12)的R²写法非常见，MSE尺度与单位未明确，学习曲线存在指标名称冲突。",
+            "results": "Hc：R²=0.91、MSE=1.04×10−3；Φp：R²=0.90、MSE=5.80×10−3。N≥10,000时R²约0.90。",
+            "limitations": "高值区系统性低估；均值收敛不保证局部预测可靠。网络8输入配置与正文14描述符的对应关系未说明。"
+          },
+          {
+            "name": "固定微磁参数的逆向设计与独立微磁回验",
+            "data": "固定α=0及SmCo5、Sm2Co17、Lit. Z相参数；10,000个f−NN生成点训练i−NN，另回验三个候选。",
+            "samples": "10,000个点是代理生成数据；展示三个微磁验证案例，查询总数、验证总数及实物试件数未报告。",
+            "groups": "目标(μ0Hc,Φp)为(3.00 T,0.100)、(2.00 T,0.020)、(4.50 T,0.180)；候选均含范围外尺寸。",
+            "split": "逆向任务专用比例未报告；每轮保存模型并以最小测试损失选模，额外独立评价集未报告。",
+            "baselines": "比较目标、f−NN回代与微磁回验；直接优化、其他逆向算法及去除前向损失的消融未报告。",
+            "metrics": "代理回代报告R²、MSE；独立微磁回验报告相对误差RE。RE公式及MSE物理尺度未报告。",
+            "results": "三例微磁Hc为3.10、2.10、4.36 T，RE均<5%；Φp为0.078、0.034、0.143，RE均>25%。",
+            "limitations": "代理参与训练约束，回代不独立；三例不足以证明系统外推。第二例Φp高于目标，不能概括为全部高估。"
+          },
+          {
+            "name": "角度、成分及相分数响应与敏感性分析",
+            "data": "微磁统计、f−NN响应曲面及TPS相分数拟合；图9比较绝对描述符与相间差值、相分数表征。",
+            "samples": "TPS使用10,000个代理预测点，另称模拟与预测各取150点；各成分组分配、数据重叠及置换次数未报告。",
+            "groups": "无掺杂、Cu和Fe系列；角度统计包括0°、30°、45°、60°、85°，并开展固定厚度的L、d扫描。",
+            "split": "响应分析专用划分未报告；代理预测点不构成新增独立微磁验证，不能据点数推断证据强度。",
+            "baselines": "与Stoner–Wohlfarth、Kondorsky模型比较；包含无Cu/Fe对照、微磁散点及两套描述符表征。",
+            "metrics": "分析Hc、Φp、Spearman相关、置换重要性和聚类；曲面误差、排序置信区间与重复次数未报告。",
+            "results": "α总体主导；Δσdw(S−M)对Φp重要性仅次于α。Hc与Φp峰区不重合，约70/20 vol.%相组合表现较高。",
+            "limitations": "相关与置换不等于因果；局部d趋势、相标识及次级重要性顺序存在图文冲突，不能推广为普适规律。"
+          }
+        ],
+        "routes": [
+          {
+            "title": "面向高矫顽力稀疏区的约束逆设与独立回验",
+            "direction_id": "generative_design",
+            "gap": "优先解决高值区低估、Φp回验偏差和测试集选模问题，而非先扩展网络规模。将代理一致性、独立微磁精度与外推失败率分别评价，避免一个总分掩盖双目标失衡。",
+            "mechanism": "以模型集成估计不确定性，主动补充高Hc、强钉扎及分布边缘工况；逆设增加wS≤L、wZ≤d和尺寸边界约束。候选必须通过独立微磁求解，不把代理回代当成最终裁判。",
+            "innovation": "候选创新是把可行域约束、不确定性采样和双目标独立验收组合用于该体系。已检索的magnum.np摘要支持可微微磁逆问题，但不能据此宣称本文已采用该框架或新组合已有效。",
+            "design": "建议先检查公开Zenodo数据与工具，再新增600组微磁工况：高值区、边缘区、域内区各200组。按结构家族隔离训练、验证、测试，另预留60个逆向目标做盲回验，均属建议设计。",
+            "comparison": "复现原f−NN/i−NN作为基线，对照随机加样、主动加样及代理直接优化；逐项移除集成、几何约束和新增高值数据。所有方案使用相同计算预算，独立测试集不参与选模。",
+            "criterion": "建议以盲回验Hc相对误差≤5%、Φp绝对误差≤0.02定义双目标达标，同时报告成功率和置信区间。低Φp区不只用相对误差，并检查区间覆盖率及最差工况。",
+            "risk": "模型可能利用代理偏差生成虚假优解，几何约束也不能保证可制备。若高值区持续失配，转为局部可信域优化和微磁直接搜索；若预算不足，先缩小目标域并明确拒绝外推。"
+          },
+          {
+            "title": "从平均周期结构走向局部最弱环节的鲁棒设计",
+            "direction_id": "generative_design",
+            "gap": "现有平均结构未覆盖局部Cu富集、界面起伏和弱交换接触，三例回验也没有回答制造波动下性能是否保持。后续应检验同一平均几何的不同局部构型是否产生显著性能分散。",
+            "mechanism": "将四个平均尺寸扩展为体素结构与局部成分场，扰动界面形貌、Cu分布及交换强度S。以低分位Hc和Φp共同约束设计，寻找对局部弱区不敏感的候选，而非只优化平均预测。",
+            "innovation": "候选创新是将局部最弱环节表征与三相磁体鲁棒逆设结合。已检索的Nd–Fe–B物理引导机器学习摘要支持实验—仿真融合思路，但其结果不能移植为SmCo体系的效果证据。",
+            "design": "建议选30个域内平均结构，每个生成20个随机构型，共600组新增仿真，并按母结构隔离测试。公开数据用于初始化；真实局部成分与形貌需另行采集，可协作获取TEM/APT资料，不假定现有仪器。",
+            "comparison": "比较平均周期模型、仅几何扰动、仅成分扰动及联合扰动；另消融S变化与低分位目标。控制相体积分数和平均成分，区分局部起伏效应与整体配比改变，避免混杂解释。",
+            "criterion": "建议要求鲁棒候选在独立随机构型上的Hc第10百分位优于等预算名义设计，同时Φp达到预设窗口。报告均值、分位数、失败率及区间；没有制样前仅称计算鲁棒性改善。",
+            "risk": "局部参数映射缺乏实测约束时，扰动幅度可能主导结论。可先用文献区间开展分层敏感性分析，再逐步引入配对表征；若S与成分效应不可辨识，分别给出边界情景而不强行反演。"
+          }
+        ],
+        "diagrams": [
+          {
+            "kind": "study",
+            "title": "原研究：三相微磁数据驱动的正逆向设计",
+            "description": "实线表示原研究已完成的计算流程；代理回代与独立微磁回验分开，未包含逆向候选制样验证。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "结构与磁参数来源",
+                "detail": "文献结构和磁性数据、电子显微表征及Z相DFT计算"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "参数网格与几何过滤",
+                "detail": "45,000组组合剔除非物理几何，得到42,300组有效输入"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "准静态微磁仿真",
+                "detail": "每组平均五至十个退磁半周期，提取Hc与Φp"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "前向预测与敏感性",
+                "detail": "80/20划分；f−NN预测双目标并分析角度、相间差异"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "固定磁参数逆向设计",
+                "detail": "10,000个代理生成点训练i−NN，输出四个几何量"
+              },
+              {
+                "id": "f",
+                "stage": 5,
+                "label": "代理回代检查",
+                "detail": "检查目标一致性，但代理同时参与逆向训练约束"
+              },
+              {
+                "id": "g",
+                "stage": 5,
+                "label": "三个微磁独立回验",
+                "detail": "Hc误差均低于5%，Φp误差均超过25%；无制样验证"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "确定采样依据"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "有效参数输入"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "形成训练数据"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "生成点与损失约束"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "前向代理核验"
+              },
+              {
+                "from": "e",
+                "to": "g",
+                "label": "候选微磁求解"
+              }
+            ]
+          },
+          {
+            "kind": "proposal",
+            "title": "后续路线一：高值区主动补样与双目标盲回验",
+            "description": "所有节点均为拟议研究，补样数量与验收阈值属于建议设计，不表示已经取得性能改善。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "公开数据与定义检查",
+                "detail": "核对输入对应、误差尺度与求解设置，建立结构分组"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "隔离评价与集成代理",
+                "detail": "训练验证测试按结构家族隔离，估计预测不确定性"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "建议新增600组仿真",
+                "detail": "高值区、边缘区、域内区各200组，与随机补样对照"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "可行域约束逆设",
+                "detail": "约束尺寸边界及wS≤L、wZ≤d，生成双目标候选"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "建议60目标盲回验",
+                "detail": "独立微磁求解，不以参与训练的代理充当最终验证"
+              },
+              {
+                "id": "f",
+                "stage": 5,
+                "label": "验收与失败域标记",
+                "detail": "评估双目标成功率、区间覆盖及最差误差，必要时拒绝外推"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "建立独立评价"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "定位稀疏高风险区"
+              },
+              {
+                "from": "c",
+                "to": "b",
+                "label": "补样更新代理"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "预测与优化支持"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "提交可行候选"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "独立双目标验收"
+              },
+              {
+                "from": "f",
+                "to": "c",
+                "label": "失败工况反馈"
+              }
+            ]
+          }
+        ],
+        "related": {
+          "status": "ok",
+          "checked_at": "2026-10-04T13:53:14.814305+00:00",
+          "papers": [
+            {
+              "title": "Physics-Informed Neural Network-Based Inverse Design of Nanophotonic Meta surfaces under Stochastic Fabrication Constraints",
+              "url": "https://doi.org/10.31224/5258",
+              "year": 2025,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "magnum.np: a PyTorch based GPU enhanced finite difference micromagnetic simulation framework for high level development and inverse design",
+              "url": "https://doi.org/10.1038/s41598-023-39192-5",
+              "year": 2023,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Physics-informed machine learning combining experiment and simulation for the design of neodymium-iron-boron permanent magnets with reduced critical-elements content",
+              "url": "https://doi.org/10.3389/fmats.2022.1094055",
+              "year": 2023,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "A Physics-Guided Surrogate Neural Network for Aerodynamic Prediction and Geometry-Aware Inverse Design of CST Airfoils",
+              "url": "https://doi.org/10.2139/ssrn.6992707",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Application of SciML-Adapted PCMM to Deep Neural Network Surrogate Model Used for Aerodynamic Coefficient Prediction",
+              "url": "https://doi.org/10.1115/1.4071802",
+              "year": 2025,
+              "basis": "abstract",
+              "preprint": false
+            }
+          ]
+        }
+      },
+      "article_updated_at": "2026-10-04T13:57:03.938093+00:00",
+      "article_profile": "53fccc449d8da58208cdc6a51bc7036d5b54ee5aba30efb6bb90c17227e7290a"
     }
   ],
   "extended": [
@@ -1479,7 +2136,7 @@
       "reading_status": {
         "paper_id": "846009a34c58",
         "state": "missing_evidence",
-        "updated_at": "2026-09-30T11:46:28.980678+00:00",
+        "updated_at": "2026-10-04T14:04:17.524442+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -1618,8 +2275,8 @@
       "recommended_direction": "generative_design",
       "reading_status": {
         "paper_id": "c8e9f96f8b55",
-        "state": "missing_evidence",
-        "updated_at": "2026-09-30T11:45:35.626472+00:00",
+        "state": "failed",
+        "updated_at": "2026-10-04T14:19:00.071458+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -1751,7 +2408,7 @@
       "reading_status": {
         "paper_id": "c935fc51c706",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-30T09:27:19.728552+00:00",
+        "updated_at": "2026-10-04T14:01:57.954132+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -1866,7 +2523,7 @@
       "reading_status": {
         "paper_id": "f61abfb865f5",
         "state": "missing_evidence",
-        "updated_at": "2026-09-30T11:49:43.045546+00:00",
+        "updated_at": "2026-10-04T14:04:29.235438+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -1895,7 +2552,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "本文聚焦《Fusing generative AI and ML-FFs for inverse design and high-fidelity dynamic simulation of fused-ring aromatic hydrocarbons》，暂未提供可用摘要，请查看原文。",
+      "summary": "稠环芳香烃设计面临化学空间庞大、量子模拟昂贵及生成与动态验证脱节的问题。本文摘要介绍一个整合物理约束生成、多目标筛选和机器学习力场的平台，以化学可行性约束分子生成，并预测电子性质、模拟分子动态。作者报告其专用力场达到密度泛函理论级精度，且分子动力学加速两个数量级。[摘要] 解读：值得关注的是设计与动态验证的衔接；当前仅有摘要，具体性能与适用边界尚不能核验。",
       "raw_metadata": {
         "@_fa": "true",
         "link": [
@@ -2048,17 +2705,25 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议重点阅读其物理约束生成与动力学验证如何衔接，这与生成式设计方向直接相关；但摘要不足以核验性能优势和泛化能力。",
+      "deep_read": {
+        "problem": "摘要将研究障碍归纳为巨大化学空间、昂贵量子模拟及生成与动态验证脱节，原文称存在“a disconnect between generation and dynamic validation”。[摘要] 解读：问题不仅是提出候选分子，还包括如何以可承担的计算成本检查其动态行为。",
+        "method": "平台整合物理约束生成式人工智能、可解释多目标筛选与机器学习力场。物理一致性模块结合Brown-Ladner方法和迭代分子量反演，约束化学与结构可行性；XGBoost预测电子性质，专用力场承担动态模拟。[摘要] 具体训练及筛选配置未提供。",
+        "innovation": "作者以“integrated computational platform”描述方案，强调把生成、筛选与高保真模拟纳入同一流程，并开发面向芳香体系的DeepAsphalt-26。[摘要] 解读：可关注其流程集成及领域专用建模，但摘要没有对照既有方法，不能据此确认首创性。",
+        "findings": "作者报告生成结构具有多样性、新颖性及理论可合成性，并经实验基准验证；力场达到密度泛函理论级精度，使分子动力学加速两个数量级，并复现π-π堆积动态与自由能景观。[摘要] 这些是摘要报告的成果，未提供误差、样本量及测试条件。",
+        "limitations": "当前资料仅为摘要，未说明数据划分、独立测试、计算成本口径及不同分子规模下的表现，也未展示可合成性的判断规则。[摘要] 解读：这些属于证据缺口，不能直接认定为方法缺陷；尤其不能把理论可合成性理解为已完成实际合成。",
+        "connection": "解读：其与给定生成式设计方向直接契合，并可为分子层级结构设计提供“生成—筛选—动态验证”的参考。摘要所述“targeted properties”体现目标性质导向。[摘要] 与智能运维和可靠性的联系仅属潜在迁移，资料未报告故障预测或可靠性评估。",
+        "next_steps": "建议后续获取全文，核对物理约束模块的消融实验、电子性质预测的独立测试及力场精度与速度的比较口径，再检查自由能计算和实验基准的对应关系。若迁移至可靠性研究，建议另行设计动态稳定性指标；这不是作者已报告的研究结论。"
+      },
       "recommended_direction": "generative_design",
-      "title_zh": "融合生成式 AI 与机器学习力场的稠环芳烃逆向设计及高保真动力学模拟",
+      "title_zh": "融合生成式人工智能与机器学习力场的稠环芳香烃逆向设计及高保真动力学模拟",
       "reading_status": {
         "paper_id": "45dbfe9703f1",
-        "state": "missing_evidence",
-        "updated_at": "2026-09-30T09:28:08.236216+00:00",
-        "basis": "missing",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-04T14:03:03.113981+00:00",
+        "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
         "reason": "restricted",
@@ -2066,7 +2731,17 @@
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.xcrp.2026.103452"
+      ],
+      "analyzed_at": "2026-10-04T14:03:03.106468+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "5ebe8c39523efffc61e3ac41de93b64dde74caa2df0734ea4d46a733a0e1b065",
+      "analysis_issues": []
     }
   ],
   "papers": [
@@ -2456,7 +3131,7 @@
       "reading_status": {
         "paper_id": "9170f18af989",
         "state": "failed",
-        "updated_at": "2026-09-30T09:28:32.880777+00:00",
+        "updated_at": "2026-10-04T14:01:26.549593+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -2762,8 +3437,10 @@
       "reading_status": {
         "paper_id": "1172e7a5c357",
         "state": "missing_evidence",
-        "updated_at": "2026-09-30T09:27:53.369023+00:00",
+        "updated_at": "2026-10-04T14:01:47.195771+00:00",
         "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
         "reason": "restricted",
         "total": 0,
         "covered": 0,
@@ -2972,16 +3649,355 @@
       "reading_status": {
         "paper_id": "0e815a1ce338",
         "state": "published",
-        "updated_at": "2026-09-26T01:49:45.288188+00:00",
+        "updated_at": "2026-10-04T14:01:01.453852+00:00",
         "basis": "full_text",
-        "article_state": "retry",
-        "article_stage": "review",
+        "article_state": "complete",
+        "article_stage": "",
         "reason": "",
         "total": 20,
         "covered": 20,
         "pdf_available": true,
         "issues": []
-      }
+      },
+      "article": {
+        "version": 1,
+        "lead": "栓钉疲劳失效会削弱钢—混凝土组合结构的组合作用，而相同应力范围下的寿命离散，又使经验曲线难以满足精细化评估需求。Tan等将断裂力学寿命估计转化为机器学习特征，再通过Stacking融合多个预测器，取得较好的测试集表现。本文的阅读价值不仅在于预测指标，更在于辨清物理特征、集成增益与工程安全裕度之间的边界，为后续疲劳可靠性研究寻找可验证的切入点。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从保守设计曲线走向多参数寿命评估",
+            "paragraphs": [
+              "栓钉承担钢梁与混凝土之间的剪力传递，其疲劳寿命同时受到材料、几何和加载条件影响。作者指出，既有经验模型依赖有限试验，难以充分表达这些因素的耦合作用；常规机器学习则面临物理解释与不确定性分析不足的问题。",
+              "规范曲线与数据驱动模型的任务并不完全相同：前者包含安全裕度，后者主要追求预测误差较小。Eurocode 4采用lgN均值减去两倍标准差的设计曲线，因此，寿命低估不能直接判为模型失效；真正面向工程应用，还需同时考察精度与安全保证水平。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "把LEFM寿命变成第十一个输入",
+            "paragraphs": [
+              "研究汇集文献中的305个推出疲劳试验试件，涵盖常规及高性能材料，但不能直接视为305个统计独立样本。模型使用混凝土强度、栓钉尺寸、钢材强度、抗剪承载力及四项剪应力参数等10个基础输入，以log(Nexp)为目标；RFE-CV采用500棵树的RF和10折验证，最终保留全部基础输入。",
+              "**物理信息通过特征工程进入模型，而非损失函数硬约束。**作者依据式(6)的Nf=∫[a0至af]da/[C(ΔK)^m]计算LEFM寿命，将log10(NLEFM)作为第11个特征；其适用性依赖裂纹扩展、有效剪切面积及根部纯剪失效等假设。",
+              "RF、SVR、GBR和XGBoost分别建立普通与物理信息版本，四个基学习器通过折外预测形成元特征，再由Lasso完成Stacking。输入采用Z-score标准化，数据按8:2随机划分，种子为4，调参仅在训练集进行；标准化统计量的拟合范围和Stacking折数仍未明确。"
+            ]
+          },
+          {
+            "id": "validation",
+            "title": "随机测试支持精度改善，跨来源验证仍待补齐",
+            "paragraphs": [
+              "机器学习验证建立在汇集的实物试验数据上，未报告新增试验、数据增强数量及独立试件核查结果。研究比较四种算法的G/PI版本和PI-Stacking，使用R²、MAE、MAPE、RMSE及倍数误差带；没有报告来源隔离测试、外部验证或固定超参数下的完整消融。",
+              "PI-XGBoost的调参比较采用100次迭代和多次重复10折验证：GP平均耗时209.3 s、最优RMSE为0.436，TPE为90.4 s和0.446。作者选择TPE继续调优，证据支持其在该设置下更省时，但不支持其误差也更低；重复次数与差异区间未报告。",
+              "物理对照另用推出试验有限元模型计算SWT-LEFM寿命，并以荷载—滑移曲线校准模型，仿真及验证试件数量未报告。SWT-LEFM试件并非全部属于机器学习测试集；规范对照的数据对应关系则未报告，两者均不能无条件视为严格同集比较。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "小幅集成增益之外，更重要的是安全边界",
+            "paragraphs": [
+              "按表8，PI-Stacking测试集RMSE为0.33、MAE为0.24、MAPE为4.48%、R²为0.83，PI-XGBoost对应为0.33、0.25、4.61%、0.82。正文另报后者RMSE为0.34，图13的Stacking MAE也与表8不同；因此小幅增益尚缺稳定性证据，且不能将对数目标误差解释为cycles误差或原始寿命相对误差。",
+              "SHAP解释的是模型贡献，不是因果效应：图22中PI-XGBoost的Δτ和log(NLEFM)重要性为20.0%和14.5%，后文又称物理特征最高，存在排序冲突。Sobol则将Δτ、ft、fc和物理特征依次列为前四位；其均匀分布采样及复合特征依赖处理尚不足以代表实际工况不确定性。",
+              "复现还有两处关键障碍：表中LEFM积分与式(6)形式不一致，Vu标准差719.3 kN也与所列范围明显不协调。数据声明为按请求提供；PI-XGBoost虽报告平均误差2.940%，却未内置安全裕度，现阶段更适合作为预测工具，不能直接替代疲劳设计准则。"
+            ]
+          }
+        ],
+        "experiments": [
+          {
+            "name": "普通、物理信息与Stacking模型的寿命预测比较",
+            "data": "汇集自1960年以来文献[24–49]的推出疲劳试验，覆盖常规与高性能材料；数据按请求提供。",
+            "samples": "共305个试件；统计独立数量、去重结果及新增试验、仿真和增强数量未报告，不从比例反推测试数量。",
+            "groups": "比较RF、SVR、GBR、XGBoost的G/PI版本及PI-Stacking；具体材料、几何和加载工况组数量未报告。",
+            "split": "随机8:2训练—测试划分，种子4；训练集内调参及折外Stacking。绝对数量、来源分组和Stacking折数未报告。",
+            "baselines": "同算法G/PI版本及单个PI模型构成对照；未报告固定相同超参数、逐项物理特征及元学习器消融。",
+            "metrics": "R²、MAE、MAPE、RMSE及±3×、±4×误差带；目标为对数寿命，对数底数和误差带严格定义未明确。",
+            "results": "表8：PI-Stacking的RMSE/MAE/MAPE/R²为0.33/0.24/4.48%/0.83，PI-XGBoost为0.33/0.25/4.61%/0.82。",
+            "limitations": "正文与图表存在指标差异；未报告外部测试和增益置信区间，同源泄漏风险及小幅改善稳定性无法核验。"
+          },
+          {
+            "name": "PI-XGBoost的GP与TPE调参效率比较",
+            "data": "使用305个试件数据库的训练子集，输入附加log10(NLEFM)；训练子集绝对记录数未报告。",
+            "samples": "两种方法各设置100次优化迭代，并采用多次重复10折验证；迭代数不是样本数，重复次数未报告。",
+            "groups": "GP与TPE均优化PI-XGBoost的7个超参数；正文报告搜索范围及最优参数，没有独立工况分组。",
+            "split": "调优仅在随机8:2划分后的训练集内执行；种子4，采用重复10折交叉验证，不属于外部测试。",
+            "baselines": "GP与TPE互为搜索策略对照；固定参数、网格搜索及随机搜索的定量对照未报告。",
+            "metrics": "最优训练集交叉验证平均RMSE及平均计算时间；RMSE对应对数目标，不能按循环次数解释。",
+            "results": "GP耗时209.3 s、RMSE为0.436；TPE耗时90.4 s、RMSE为0.446，作者据优化表现选择TPE。",
+            "limitations": "未报告重复次数、耗时离散程度及误差区间；结果体现时间与误差的权衡，而非TPE全面占优。"
+          },
+          {
+            "name": "有限元支持的SWT-LEFM及规范寿命对照",
+            "data": "SWT-LEFM使用文献[38,39,43,45,49,69]的推出试件；规范对照数据的逐条对应关系未报告。",
+            "samples": "物理对照独立试件数、有限元模型数和规范对照统计分母未报告；四分之一模型不代表样本数量。",
+            "groups": "SL1取ΔK=Kmax，SL2取Kmax−Kmin；规范为AASHTO、JSCE、Eurocode 4，并比较不同应力范围。",
+            "split": "SWT-LEFM试件并非全部属于机器学习测试集；规范对照与机器学习数据的对应关系未报告。",
+            "baselines": "PI-XGBoost对照两种SWT-LEFM约定及三种规范；有限元先以引用试验荷载—滑移曲线验证和校准。",
+            "metrics": "物理对照采用RMSE、MAE、MAPE、R²；规范报告存活率。图示log(Npre)/log(Nexp)理想值为1。",
+            "results": "SL1/SL2的RMSE为0.68/0.69、R²为0.14/0.12；AASHTO、JSCE、Eurocode 4存活率为82.67%、65.33%、52.33%。",
+            "limitations": "不能确认严格同集对照；存活率公式、有限元校准误差未报告，规范安全裕度不能与点预测精度混同。"
+          },
+          {
+            "name": "SHAP解释与Morris、Sobol全局敏感性分析",
+            "data": "SHAP比较G/PI的RF和XGBoost；全局分析在观测边界内归一化并假定均匀分布，具体模型未明确。",
+            "samples": "SHAP解释及背景样本数量、Morris轨迹数、Sobol采样数量和模型调用次数均未报告。",
+            "groups": "解释比较四种模型的输入贡献；全局分析涉及11个输入，独立工况分组及分组数量未报告。",
+            "split": "解释样本所属训练或测试集合未报告；敏感性分析属于输入采样传播，不等于独立实物验证。",
+            "baselines": "G/PI模型作解释对照，Morris与Sobol作敏感性互证；未报告解释排序的重复采样稳定性对照。",
+            "metrics": "Pearson相关、SHAP贡献及相对重要性；Morris均值μ和标准差σ，Sobol一阶S1和总阶ST。",
+            "results": "图22的PI-XGBoost中Δτ/物理特征为20.0%/14.5%；Sobol排序为Δτ、ft、fc、物理特征，精确指数未报告。",
+            "limitations": "SHAP排序跨正文与图示冲突；输入相关性和复合特征依赖处理未报告，重要性不能直接解释为因果作用。"
+          }
+        ],
+        "routes": [
+          {
+            "title": "来源隔离与依赖一致的物理特征检验",
+            "direction_id": "fatigue_reliability",
+            "gap": "随机划分尚不能证明跨试验来源泛化，LEFM特征又与应力参数高度相关。建议优先检验增益是否来自可迁移机制，而非同源记录相似性及重复信息。",
+            "mechanism": "先统一式(6)与表中积分、单位和裂纹参数，再按文献来源建立嵌套交叉验证。每折仅用训练数据拟合标准化和筛选过程，敏感性采样时由基础参数重算物理特征。",
+            "innovation": "将来源隔离、物理特征受控消融与依赖一致敏感性分析组合为审计流程。相关混凝土强度Stacking文献摘要已报告折外训练和约束技术，本路线不主张这些技术本身新颖。",
+            "design": "建议设计：申请原文305个试件记录，结合可取得的公开文献核对来源、试件编号与工况。按来源留组测试，另分常规与高强材料；若去重后来源过少，明确缩小验证范围。",
+            "comparison": "对照G-XGBoost、PI-XGBoost和PI-Stacking，并设置固定参数与同预算重新调参两组消融。比较移除LEFM、仅用LEFM及依赖一致与独立均匀采样，分离特征和调参贡献。",
+            "criterion": "以来源留组的对数RMSE、原始寿命倍数误差及分组偏差为判据。建议要求改善的来源级重采样区间不跨零，且高应力与高强材料组无持续恶化，而非只追求总体排名。",
+            "risk": "来源标签不足、裂纹参数缺失及强相关输入可能使贡献不可辨识。替代方案是先完成可追溯子集验证，对缺失参数做区间分析，并将来源不足的结论限定为内部预测。"
+          },
+          {
+            "title": "从平均寿命预测走向校准的疲劳安全下界",
+            "direction_id": "fatigue_reliability",
+            "gap": "较低平均误差不等于较高安全保证，原研究也明确PI-XGBoost未内置安全裕度。建议建立可检验的寿命下界，避免直接把点预测用于检修或设计决策。",
+            "mechanism": "在来源隔离的训练流程上增加分位数预测，并用独立校准集修正下界覆盖率。将疲劳寿命离散与模型预测不确定性分别报告，不把输入均匀扰动产生的范围当作全部风险。",
+            "innovation": "已有混凝土强度Stacking摘要报告分位数区间，栓钉强度退化研究摘要采用贝叶斯估计与可靠性评估。候选贡献是面向栓钉寿命下界的组合与校准，而非宣称区间预测首次提出。",
+            "design": "建议设计：申请原试验数据并按来源分为训练、校准和测试集合，比例随可用来源数确定。需要新增采集时，可建议24个独立试件覆盖两档应力幅与两档材料，每组6个，并先评估试验资源。",
+            "comparison": "同集比较点预测、分位数模型、校准下界与规范曲线，消融物理特征和校准步骤。规范保留其设计安全属性，分别评价寿命误差、安全覆盖及下界保守程度。",
+            "criterion": "建议预先设定90%寿命下界覆盖目标，同时报告覆盖率区间和下界紧致程度。要求总体与关键工况组均无明显欠覆盖，并以完全留出的来源检验是否仍有工程可用性。",
+            "risk": "小样本下分组覆盖难以稳定估计，来源迁移也可能破坏校准条件。替代路径是扩大区间、保留规范控制并标识域外输入；微裂纹检测仅在具备可行采集条件后作为补充研究。"
+          }
+        ],
+        "diagrams": [
+          {
+            "kind": "study",
+            "title": "原研究：物理特征集成与分对象验证",
+            "description": "Stacking用于集成预测；规范与SWT-LEFM对照连接PI-XGBoost，SHAP连接实际解释的RF和XGBoost。敏感性分析的具体模型未明确。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "文献推出疲劳数据",
+                "detail": "305个试件，统计独立性及重复记录处理未报告"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "LEFM特征构造",
+                "detail": "10个基础输入增加log10(NLEFM)，采用裂纹扩展假设"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "划分与训练准备",
+                "detail": "随机8:2、种子4，标准化及训练集内调参"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "G与PI基础模型",
+                "detail": "RF、SVR、GBR、XGBoost分别训练并比较"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "PI-Stacking",
+                "detail": "四个PI基学习器折外预测，Lasso元模型集成"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "物理与规范对照",
+                "detail": "PI-XGBoost对照SWT-LEFM及规范；同集可比性有限"
+              },
+              {
+                "id": "g",
+                "stage": 4,
+                "label": "RF与XGBoost解释",
+                "detail": "SHAP分析G/PI版本，解释贡献而非因果效应"
+              },
+              {
+                "id": "h",
+                "stage": 4,
+                "label": "全局敏感性",
+                "detail": "Morris与Sobol采样分析，具体被分析模型未明确"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "提供基础参数"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "扩展输入"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "独立训练调优"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "PI折外预测"
+              },
+              {
+                "from": "d",
+                "to": "f",
+                "label": "PI-XGBoost对照"
+              },
+              {
+                "from": "d",
+                "to": "g",
+                "label": "选定模型解释"
+              },
+              {
+                "from": "b",
+                "to": "h",
+                "label": "输入域采样"
+              }
+            ]
+          },
+          {
+            "kind": "proposal",
+            "title": "后续路线一：检验物理增益能否跨来源迁移",
+            "description": "拟议流程，不代表已完成实验。先核对数据与公式，再以来源隔离和受控消融检验泛化，并处理复合特征的参数依赖。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "申请数据与来源核对",
+                "detail": "核查试件编号、重复记录、工况及可取得的文献资料"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "统一物理计算",
+                "detail": "核对LEFM积分、单位和裂纹参数，保留缺项标识"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "按来源嵌套划分",
+                "detail": "外层留来源测试，内层筛选调参；预处理只拟合训练集"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "受控特征与集成消融",
+                "detail": "比较G/PI-XGBoost及Stacking，控制参数与搜索预算"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "依赖一致敏感性",
+                "detail": "采样基础参数后重算LEFM，避免复合特征独立扰动"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "来源与工况级评价",
+                "detail": "检验误差、倍数偏差及来源级重采样区间"
+              },
+              {
+                "id": "g",
+                "stage": 5,
+                "label": "限定可迁移结论",
+                "detail": "依据留组结果确定适用域，不预设物理特征必然有效"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "建立可追溯输入"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "锁定计算规则"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "隔离测试信息"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "限定训练输入域"
+              },
+              {
+                "from": "d",
+                "to": "f",
+                "label": "提交留组预测"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "检验解释稳定性"
+              },
+              {
+                "from": "f",
+                "to": "g",
+                "label": "形成证据边界"
+              },
+              {
+                "from": "f",
+                "to": "b",
+                "label": "反馈公式异常"
+              }
+            ]
+          }
+        ],
+        "related": {
+          "status": "ok",
+          "checked_at": "2026-10-04T13:36:03.225121+00:00",
+          "papers": [
+            {
+              "title": "Reliability Fatigue Assessment Based on Electromagnetic Features and Stacking Ensemble Learning",
+              "url": "https://doi.org/10.4018/ijswis.401495",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Physics‐Informed and Uncertainty‐Aware Stacking Ensemble for Robust Prediction of Concrete Compressive Strength",
+              "url": "https://doi.org/10.1155/vib/3817773",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Assessment Of Fatigue Crack Propagation Life Based On Physics-Informed Neural Networks Under Ensemble Learning In Hydrogen Environments",
+              "url": "https://doi.org/10.1142/s0218625x26430018",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Physics-Based Shear-Strength Degradation Model of Stud Connector with the Fatigue Cumulative Damage",
+              "url": "https://doi.org/10.3390/buildings12122141",
+              "year": 2022,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Artificial intelligence-driven physics-informed feature engineering for multiaxial fatigue life prediction of metallic materials with Bayesian optimization",
+              "url": "https://doi.org/10.1186/s40323-026-00334-9",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            }
+          ]
+        }
+      },
+      "article_updated_at": "2026-10-04T14:01:01.449341+00:00",
+      "article_profile": "543ab1b4212a11f93f29c006bad9ad73527870983a18679890eb1753d6505703"
     },
     {
       "source": "Crossref",
@@ -3299,9 +4315,9 @@
       "reading_status": {
         "paper_id": "d10423960846",
         "state": "published",
-        "updated_at": "2026-09-26T09:33:18.237305+00:00",
+        "updated_at": "2026-10-04T13:57:03.940090+00:00",
         "basis": "full_text",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "",
         "total": 17,
@@ -3439,7 +4455,323 @@
             "detail": "参考文献55原页在题名“Micromagnetic simulations on the grain shape effect in Nd-Fe-B magnets”之后直接列“120, 033903 (2016)”，缺少期刊名称。已从图片核实，并非提取遗漏；影响书目定位完整性，不影响本批其他内容识读。该项不涉及公式或图号，不推补缺失期刊名。"
           }
         ]
-      }
+      },
+      "article": {
+        "version": 1,
+        "lead": "SmCo-1:7磁体的高磁晶各向异性，为何没有充分转化为矫顽力？答案不仅在各相本身，也在纳米胞壁、富Zr片层及其交界处如何阻挡畴壁。Yang等将42,300组微磁仿真与正逆向神经网络结合，识别结构和磁性参数的作用，并按目标性能反求几何。本文最值得关注的是：**提高矫顽力与增强钉扎并非同一个优化目标**，而代理模型的一致性也不等于独立物理验证。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从Brown悖论走向三相界面的协同设计",
+            "paragraphs": [
+              "Sm(Co,Fe,Cu,Zr)7±δ的矫顽力潜力受到反磁畴形核和畴壁迁移共同限制，这正是本文讨论Brown悖论的材料背景。作者聚焦胞状2:17基体、条带状1:5相和富Zr的Z片层，试图回答哪些纳米结构最有效，以及能否从指定矫顽力反求结构。",
+              "三相并非简单叠加：1:5相提供较高各向异性，其与2:17相的畴壁能差形成排斥型钉扎；Z相则通过较低畴壁能形成吸引型钉扎。设计价值在于协调形核门槛、界面能垒与相比例，而不是一味增加胞壁或片层。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "把几何、磁性与钉扎份额接入正逆向网络",
+            "paragraphs": [
+              "几何由L、d、wS、wZ描述，采样范围依次为30–150、10–55、3–15、2–10 nm；磁性描述符包括失配角α和三相的Ms、畴壁厚度及畴壁能。Cu、Fe相内替代比例均取0、0.1、0.2、0.3，Z相采用Lit.、DFT、Mod.三套参数，反映其磁性不确定性。",
+              "微磁计算最小化交换、各向异性、静磁及外场能，评估准静态磁滞，而非完整动态演化。统一软磁边界层以K′=0.01Ku提供成核条件，界面交换强度取S=1，并忽略磁弹耦合；Φp=(Hc−Hp)/Hc衡量初始脱钉之后的钉扎贡献，不能直接当作全部反转机制的分解。",
+              "正向网络预测Hc和Φp，逆向网络在固定微磁参数下输出四个几何量。逆向损失同时约束结构误差与正向代理回代误差，权重λ=0.02，非负输出过滤器只保证尺寸非负。作者明确输出是一个代表性候选，而非唯一物理解。"
+            ]
+          },
+          {
+            "id": "validation",
+            "title": "42,300组计算记录，三例独立微磁回验",
+            "paragraphs": [
+              "45,000组参数经过几何过滤得到42,300组有效仿真，每组平均五至十个退磁半周期；这些重复反转不是独立试件。数据按80%训练、20%测试划分，训练记录33,840组；论文另有TEM和HAADF-STEM表征，但独立实物试件数未报告，也没有逆向候选的制样验证。",
+              "作者比较六类算法后选用多层感知机，测试Hc、Φp的R²分别为0.91、0.90，但高于4 T和Φp高于0.5的区域出现系统性低估。每个数据规模进行100次抽样，检验的是均值收敛；学习曲线在N≥10,000时R²约为0.90，不能据此保证稀疏高值区可靠。",
+              "逆向训练使用10,000个正向代理生成点，不是新增微磁仿真。三个候选另做微磁回验，Hc相对误差为3.22%、4.76%、3.21%，Φp误差却为28.20%、41.18%、25.87%；按目标排序，后者并非全部同向偏差。这比代理回代分数更清楚地揭示了双目标设计的短板。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "角度主导性能，最强钉扎不等于最高矫顽力",
+            "paragraphs": [
+              "Spearman与置换分析均指向α的主导作用，角度响应介于Stoner–Wohlfarth和Kondorsky模型之间，支持混合反转机制。Cu添加降低Hc并削弱Φp；Fe使Hc略降、饱和磁化强度上升，并可局部增强钉扎。约70 vol.% 1:5相、20 vol.% Z相对应较高双目标组合，但不是普适最优配比。",
+              "证据边界需要保留：周期几何、平均成分和统一缺陷层没有覆盖真实材料的局部最弱环节。数值检查仅给出两个角度的具体误差；原文还存在14个物理描述符与网络8输入配置不衔接、公式(12)R²定义非常见、学习曲线MSE/MAPE名称冲突，以及局部d趋势和相标识不一致。测试集参与逆向选模，也削弱最终评价独立性；这些问题不能静默修正或据此断言代码错误。"
+            ]
+          }
+        ],
+        "experiments": [
+          {
+            "name": "高通量三相微磁仿真与数值精度检查",
+            "data": "文献结构与磁参数、Z相DFT计算共同支持参数化；仿真结果与工具公开于DOI：10.5281/zenodo.18624659。",
+            "samples": "45,000组初始组合过滤为42,300组仿真，含10,800组L-domain；每组五至十个退磁半周期，独立实物试件数未报告。",
+            "groups": "Cu、Fe替代比例各取0、0.1、0.2、0.3；Z相分Lit.、DFT、Mod.；采用两种计算域并检查0°、30°。",
+            "split": "数值精度检查不涉及训练测试划分；具体对照结构数量未报告，不能将计算作业数视为独立样本数。",
+            "baselines": "以S-domain中0.25×0.25×0.25 nm³网格为参考，对照两域的0.5×0.5×2 nm³网格。",
+            "metrics": "检查Hc相对误差；磁滞分析包括Hn、Hp、Hc和无量纲Φp，场量以μ0H的T单位展示。",
+            "results": "0°时两域相对参考误差为4.65%、6.59%；30°时为0.61%、0.22%，不能推广为全部工况的误差界。",
+            "limitations": "理想周期结构、平均磁参数、统一缺陷层及S=1界面；随机缺陷、非理想界面和磁弹耦合消融未报告。"
+          },
+          {
+            "name": "前向预测、算法比较与数据规模评估",
+            "data": "42,300组微磁记录用于预测Hc、Φp；均值收敛分析以完整数据统计量为参照，不是实物验证。",
+            "samples": "训练33,840组、测试8,460组；各N进行100次独立抽样，不增加独立仿真；增强数量未报告。",
+            "groups": "分别分析两个目标及数据规模；μ0Hc>4 T、Φp>0.5为明显偏差区域，其样本数量未报告。",
+            "split": "80%训练、20%测试；独立验证集、随机种子、按结构或成分分组隔离的策略未报告。",
+            "baselines": "比较K近邻、神经网络、梯度提升、决策树、随机森林、支持向量机；逐模型分数及正式消融未报告。",
+            "metrics": "报告R²、MSE及均值MAPE；公式(12)的R²写法非常见，MSE尺度与单位未明确，学习曲线存在指标名称冲突。",
+            "results": "Hc：R²=0.91、MSE=1.04×10−3；Φp：R²=0.90、MSE=5.80×10−3。N≥10,000时R²约0.90。",
+            "limitations": "高值区系统性低估；均值收敛不保证局部预测可靠。网络8输入配置与正文14描述符的对应关系未说明。"
+          },
+          {
+            "name": "固定微磁参数的逆向设计与独立微磁回验",
+            "data": "固定α=0及SmCo5、Sm2Co17、Lit. Z相参数；10,000个f−NN生成点训练i−NN，另回验三个候选。",
+            "samples": "10,000个点是代理生成数据；展示三个微磁验证案例，查询总数、验证总数及实物试件数未报告。",
+            "groups": "目标(μ0Hc,Φp)为(3.00 T,0.100)、(2.00 T,0.020)、(4.50 T,0.180)；候选均含范围外尺寸。",
+            "split": "逆向任务专用比例未报告；每轮保存模型并以最小测试损失选模，额外独立评价集未报告。",
+            "baselines": "比较目标、f−NN回代与微磁回验；直接优化、其他逆向算法及去除前向损失的消融未报告。",
+            "metrics": "代理回代报告R²、MSE；独立微磁回验报告相对误差RE。RE公式及MSE物理尺度未报告。",
+            "results": "三例微磁Hc为3.10、2.10、4.36 T，RE均<5%；Φp为0.078、0.034、0.143，RE均>25%。",
+            "limitations": "代理参与训练约束，回代不独立；三例不足以证明系统外推。第二例Φp高于目标，不能概括为全部高估。"
+          },
+          {
+            "name": "角度、成分及相分数响应与敏感性分析",
+            "data": "微磁统计、f−NN响应曲面及TPS相分数拟合；图9比较绝对描述符与相间差值、相分数表征。",
+            "samples": "TPS使用10,000个代理预测点，另称模拟与预测各取150点；各成分组分配、数据重叠及置换次数未报告。",
+            "groups": "无掺杂、Cu和Fe系列；角度统计包括0°、30°、45°、60°、85°，并开展固定厚度的L、d扫描。",
+            "split": "响应分析专用划分未报告；代理预测点不构成新增独立微磁验证，不能据点数推断证据强度。",
+            "baselines": "与Stoner–Wohlfarth、Kondorsky模型比较；包含无Cu/Fe对照、微磁散点及两套描述符表征。",
+            "metrics": "分析Hc、Φp、Spearman相关、置换重要性和聚类；曲面误差、排序置信区间与重复次数未报告。",
+            "results": "α总体主导；Δσdw(S−M)对Φp重要性仅次于α。Hc与Φp峰区不重合，约70/20 vol.%相组合表现较高。",
+            "limitations": "相关与置换不等于因果；局部d趋势、相标识及次级重要性顺序存在图文冲突，不能推广为普适规律。"
+          }
+        ],
+        "routes": [
+          {
+            "title": "面向高矫顽力稀疏区的约束逆设与独立回验",
+            "direction_id": "generative_design",
+            "gap": "优先解决高值区低估、Φp回验偏差和测试集选模问题，而非先扩展网络规模。将代理一致性、独立微磁精度与外推失败率分别评价，避免一个总分掩盖双目标失衡。",
+            "mechanism": "以模型集成估计不确定性，主动补充高Hc、强钉扎及分布边缘工况；逆设增加wS≤L、wZ≤d和尺寸边界约束。候选必须通过独立微磁求解，不把代理回代当成最终裁判。",
+            "innovation": "候选创新是把可行域约束、不确定性采样和双目标独立验收组合用于该体系。已检索的magnum.np摘要支持可微微磁逆问题，但不能据此宣称本文已采用该框架或新组合已有效。",
+            "design": "建议先检查公开Zenodo数据与工具，再新增600组微磁工况：高值区、边缘区、域内区各200组。按结构家族隔离训练、验证、测试，另预留60个逆向目标做盲回验，均属建议设计。",
+            "comparison": "复现原f−NN/i−NN作为基线，对照随机加样、主动加样及代理直接优化；逐项移除集成、几何约束和新增高值数据。所有方案使用相同计算预算，独立测试集不参与选模。",
+            "criterion": "建议以盲回验Hc相对误差≤5%、Φp绝对误差≤0.02定义双目标达标，同时报告成功率和置信区间。低Φp区不只用相对误差，并检查区间覆盖率及最差工况。",
+            "risk": "模型可能利用代理偏差生成虚假优解，几何约束也不能保证可制备。若高值区持续失配，转为局部可信域优化和微磁直接搜索；若预算不足，先缩小目标域并明确拒绝外推。"
+          },
+          {
+            "title": "从平均周期结构走向局部最弱环节的鲁棒设计",
+            "direction_id": "generative_design",
+            "gap": "现有平均结构未覆盖局部Cu富集、界面起伏和弱交换接触，三例回验也没有回答制造波动下性能是否保持。后续应检验同一平均几何的不同局部构型是否产生显著性能分散。",
+            "mechanism": "将四个平均尺寸扩展为体素结构与局部成分场，扰动界面形貌、Cu分布及交换强度S。以低分位Hc和Φp共同约束设计，寻找对局部弱区不敏感的候选，而非只优化平均预测。",
+            "innovation": "候选创新是将局部最弱环节表征与三相磁体鲁棒逆设结合。已检索的Nd–Fe–B物理引导机器学习摘要支持实验—仿真融合思路，但其结果不能移植为SmCo体系的效果证据。",
+            "design": "建议选30个域内平均结构，每个生成20个随机构型，共600组新增仿真，并按母结构隔离测试。公开数据用于初始化；真实局部成分与形貌需另行采集，可协作获取TEM/APT资料，不假定现有仪器。",
+            "comparison": "比较平均周期模型、仅几何扰动、仅成分扰动及联合扰动；另消融S变化与低分位目标。控制相体积分数和平均成分，区分局部起伏效应与整体配比改变，避免混杂解释。",
+            "criterion": "建议要求鲁棒候选在独立随机构型上的Hc第10百分位优于等预算名义设计，同时Φp达到预设窗口。报告均值、分位数、失败率及区间；没有制样前仅称计算鲁棒性改善。",
+            "risk": "局部参数映射缺乏实测约束时，扰动幅度可能主导结论。可先用文献区间开展分层敏感性分析，再逐步引入配对表征；若S与成分效应不可辨识，分别给出边界情景而不强行反演。"
+          }
+        ],
+        "diagrams": [
+          {
+            "kind": "study",
+            "title": "原研究：三相微磁数据驱动的正逆向设计",
+            "description": "实线表示原研究已完成的计算流程；代理回代与独立微磁回验分开，未包含逆向候选制样验证。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "结构与磁参数来源",
+                "detail": "文献结构和磁性数据、电子显微表征及Z相DFT计算"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "参数网格与几何过滤",
+                "detail": "45,000组组合剔除非物理几何，得到42,300组有效输入"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "准静态微磁仿真",
+                "detail": "每组平均五至十个退磁半周期，提取Hc与Φp"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "前向预测与敏感性",
+                "detail": "80/20划分；f−NN预测双目标并分析角度、相间差异"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "固定磁参数逆向设计",
+                "detail": "10,000个代理生成点训练i−NN，输出四个几何量"
+              },
+              {
+                "id": "f",
+                "stage": 5,
+                "label": "代理回代检查",
+                "detail": "检查目标一致性，但代理同时参与逆向训练约束"
+              },
+              {
+                "id": "g",
+                "stage": 5,
+                "label": "三个微磁独立回验",
+                "detail": "Hc误差均低于5%，Φp误差均超过25%；无制样验证"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "确定采样依据"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "有效参数输入"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "形成训练数据"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "生成点与损失约束"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "前向代理核验"
+              },
+              {
+                "from": "e",
+                "to": "g",
+                "label": "候选微磁求解"
+              }
+            ]
+          },
+          {
+            "kind": "proposal",
+            "title": "后续路线一：高值区主动补样与双目标盲回验",
+            "description": "所有节点均为拟议研究，补样数量与验收阈值属于建议设计，不表示已经取得性能改善。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "公开数据与定义检查",
+                "detail": "核对输入对应、误差尺度与求解设置，建立结构分组"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "隔离评价与集成代理",
+                "detail": "训练验证测试按结构家族隔离，估计预测不确定性"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "建议新增600组仿真",
+                "detail": "高值区、边缘区、域内区各200组，与随机补样对照"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "可行域约束逆设",
+                "detail": "约束尺寸边界及wS≤L、wZ≤d，生成双目标候选"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "建议60目标盲回验",
+                "detail": "独立微磁求解，不以参与训练的代理充当最终验证"
+              },
+              {
+                "id": "f",
+                "stage": 5,
+                "label": "验收与失败域标记",
+                "detail": "评估双目标成功率、区间覆盖及最差误差，必要时拒绝外推"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "建立独立评价"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "定位稀疏高风险区"
+              },
+              {
+                "from": "c",
+                "to": "b",
+                "label": "补样更新代理"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "预测与优化支持"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "提交可行候选"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "独立双目标验收"
+              },
+              {
+                "from": "f",
+                "to": "c",
+                "label": "失败工况反馈"
+              }
+            ]
+          }
+        ],
+        "related": {
+          "status": "ok",
+          "checked_at": "2026-10-04T13:53:14.814305+00:00",
+          "papers": [
+            {
+              "title": "Physics-Informed Neural Network-Based Inverse Design of Nanophotonic Meta surfaces under Stochastic Fabrication Constraints",
+              "url": "https://doi.org/10.31224/5258",
+              "year": 2025,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "magnum.np: a PyTorch based GPU enhanced finite difference micromagnetic simulation framework for high level development and inverse design",
+              "url": "https://doi.org/10.1038/s41598-023-39192-5",
+              "year": 2023,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Physics-informed machine learning combining experiment and simulation for the design of neodymium-iron-boron permanent magnets with reduced critical-elements content",
+              "url": "https://doi.org/10.3389/fmats.2022.1094055",
+              "year": 2023,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "A Physics-Guided Surrogate Neural Network for Aerodynamic Prediction and Geometry-Aware Inverse Design of CST Airfoils",
+              "url": "https://doi.org/10.2139/ssrn.6992707",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Application of SciML-Adapted PCMM to Deep Neural Network Surrogate Model Used for Aerodynamic Coefficient Prediction",
+              "url": "https://doi.org/10.1115/1.4071802",
+              "year": 2025,
+              "basis": "abstract",
+              "preprint": false
+            }
+          ]
+        }
+      },
+      "article_updated_at": "2026-10-04T13:57:03.938093+00:00",
+      "article_profile": "53fccc449d8da58208cdc6a51bc7036d5b54ee5aba30efb6bb90c17227e7290a"
     },
     {
       "source": "Google Scholar",
@@ -3543,7 +4875,7 @@
       "reading_status": {
         "paper_id": "846009a34c58",
         "state": "missing_evidence",
-        "updated_at": "2026-09-30T11:46:28.980678+00:00",
+        "updated_at": "2026-10-04T14:04:17.524442+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -3682,8 +5014,8 @@
       "recommended_direction": "generative_design",
       "reading_status": {
         "paper_id": "c8e9f96f8b55",
-        "state": "missing_evidence",
-        "updated_at": "2026-09-30T11:45:35.626472+00:00",
+        "state": "failed",
+        "updated_at": "2026-10-04T14:19:00.071458+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -3815,7 +5147,7 @@
       "reading_status": {
         "paper_id": "c935fc51c706",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-30T09:27:19.728552+00:00",
+        "updated_at": "2026-10-04T14:01:57.954132+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -3930,7 +5262,7 @@
       "reading_status": {
         "paper_id": "f61abfb865f5",
         "state": "missing_evidence",
-        "updated_at": "2026-09-30T11:49:43.045546+00:00",
+        "updated_at": "2026-10-04T14:04:29.235438+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -3959,7 +5291,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "本文聚焦《Fusing generative AI and ML-FFs for inverse design and high-fidelity dynamic simulation of fused-ring aromatic hydrocarbons》，暂未提供可用摘要，请查看原文。",
+      "summary": "稠环芳香烃设计面临化学空间庞大、量子模拟昂贵及生成与动态验证脱节的问题。本文摘要介绍一个整合物理约束生成、多目标筛选和机器学习力场的平台，以化学可行性约束分子生成，并预测电子性质、模拟分子动态。作者报告其专用力场达到密度泛函理论级精度，且分子动力学加速两个数量级。[摘要] 解读：值得关注的是设计与动态验证的衔接；当前仅有摘要，具体性能与适用边界尚不能核验。",
       "raw_metadata": {
         "@_fa": "true",
         "link": [
@@ -4112,17 +5444,25 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议重点阅读其物理约束生成与动力学验证如何衔接，这与生成式设计方向直接相关；但摘要不足以核验性能优势和泛化能力。",
+      "deep_read": {
+        "problem": "摘要将研究障碍归纳为巨大化学空间、昂贵量子模拟及生成与动态验证脱节，原文称存在“a disconnect between generation and dynamic validation”。[摘要] 解读：问题不仅是提出候选分子，还包括如何以可承担的计算成本检查其动态行为。",
+        "method": "平台整合物理约束生成式人工智能、可解释多目标筛选与机器学习力场。物理一致性模块结合Brown-Ladner方法和迭代分子量反演，约束化学与结构可行性；XGBoost预测电子性质，专用力场承担动态模拟。[摘要] 具体训练及筛选配置未提供。",
+        "innovation": "作者以“integrated computational platform”描述方案，强调把生成、筛选与高保真模拟纳入同一流程，并开发面向芳香体系的DeepAsphalt-26。[摘要] 解读：可关注其流程集成及领域专用建模，但摘要没有对照既有方法，不能据此确认首创性。",
+        "findings": "作者报告生成结构具有多样性、新颖性及理论可合成性，并经实验基准验证；力场达到密度泛函理论级精度，使分子动力学加速两个数量级，并复现π-π堆积动态与自由能景观。[摘要] 这些是摘要报告的成果，未提供误差、样本量及测试条件。",
+        "limitations": "当前资料仅为摘要，未说明数据划分、独立测试、计算成本口径及不同分子规模下的表现，也未展示可合成性的判断规则。[摘要] 解读：这些属于证据缺口，不能直接认定为方法缺陷；尤其不能把理论可合成性理解为已完成实际合成。",
+        "connection": "解读：其与给定生成式设计方向直接契合，并可为分子层级结构设计提供“生成—筛选—动态验证”的参考。摘要所述“targeted properties”体现目标性质导向。[摘要] 与智能运维和可靠性的联系仅属潜在迁移，资料未报告故障预测或可靠性评估。",
+        "next_steps": "建议后续获取全文，核对物理约束模块的消融实验、电子性质预测的独立测试及力场精度与速度的比较口径，再检查自由能计算和实验基准的对应关系。若迁移至可靠性研究，建议另行设计动态稳定性指标；这不是作者已报告的研究结论。"
+      },
       "recommended_direction": "generative_design",
-      "title_zh": "融合生成式 AI 与机器学习力场的稠环芳烃逆向设计及高保真动力学模拟",
+      "title_zh": "融合生成式人工智能与机器学习力场的稠环芳香烃逆向设计及高保真动力学模拟",
       "reading_status": {
         "paper_id": "45dbfe9703f1",
-        "state": "missing_evidence",
-        "updated_at": "2026-09-30T09:28:08.236216+00:00",
-        "basis": "missing",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-04T14:03:03.113981+00:00",
+        "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
         "reason": "restricted",
@@ -4130,7 +5470,17 @@
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.xcrp.2026.103452"
+      ],
+      "analyzed_at": "2026-10-04T14:03:03.106468+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "5ebe8c39523efffc61e3ac41de93b64dde74caa2df0734ea4d46a733a0e1b065",
+      "analysis_issues": []
     },
     {
       "source": "Crossref",
@@ -12965,7 +14315,7 @@
       "reading_status": {
         "paper_id": "709bdb82c0b5",
         "state": "failed",
-        "updated_at": "2026-10-03T13:17:07.469004+00:00",
+        "updated_at": "2026-10-04T14:04:54.785163+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -13229,7 +14579,7 @@
       "reading_status": {
         "paper_id": "a1515ce3849b",
         "state": "failed",
-        "updated_at": "2026-10-03T13:17:38.307164+00:00",
+        "updated_at": "2026-10-04T14:05:06.311129+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -17281,7 +18631,7 @@
       "reading_status": {
         "paper_id": "c6eb0c75d85e",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-03T14:05:19.502718+00:00",
+        "updated_at": "2026-10-04T14:05:29.633086+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -18275,7 +19625,7 @@
       "reading_status": {
         "paper_id": "932eec332894",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-03T13:16:15.980912+00:00",
+        "updated_at": "2026-10-04T14:04:39.878576+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -18656,7 +20006,7 @@
       "reading_status": {
         "paper_id": "04a29ffa0d97",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-03T14:05:05.118070+00:00",
+        "updated_at": "2026-10-04T14:05:17.981496+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -44397,11 +45747,11 @@
   "analysis_status": {
     "ready_core": 4,
     "target_core": 5,
-    "ready_extended": 2,
+    "ready_extended": 3,
     "target_extended": 5,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 4
+    "pending": 3
   },
   "edition": {
     "id": "37204060456",
