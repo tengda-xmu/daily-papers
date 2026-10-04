@@ -1,18 +1,19 @@
 {
   "id": "public-bd1136d0fcfd6f1357de280a",
-  "content_version": "7d26541ca17470bde435647ce4f08f6f83823cbcae878fe4c7b80bf957fe2f93",
+  "content_version": "016a999476604f74a9dc3c3e653f63819cf63638f13412da1d07d688e9bf08d8",
   "analysis": {
-    "title_zh": "Microsoft ThinkingBox：智能体说完成了，数据库却不同意",
-    "summary": "【公告原文】Microsoft ThinkingBox 已通过 Hugging Face 提供，评估重点不是智能体生成的回答，而是任务执行后留下的记录。它让智能体在隔离的 MCP 工具会话中运行，再评判后端最终状态及副作用，并考察能否连续二十次完成任务。其适用方向是涉及工具调用和后端状态变化的智能体评测；所给节选未提供具体性能结果，也未证明智能体已达到连续成功要求。",
-    "application": "建议：【科研迁移建议】可借鉴其评测思路，在智能运维研究中同时检查工单、数据库等最终状态与非预期副作用，并通过重复运行评估可靠性。【官方已验证效果】所给节选仅介绍评测机制和可用性，未提供效果验证数据，不能据此宣称其提升了任务成功率。",
+    "title_zh": "ThinkingBox：智能体说完成了，数据库却不认同",
+    "summary": "微软与 Hugging Face 的联合博客宣布，ThinkingBox 现已通过 Hugging Face 提供。它不以智能体生成的回答作为评分依据，而是在隔离的 MCP 工具会话中运行智能体，检查最终后端状态及其留下的副作用，并考察能否连续二十次完成任务。适用方向是需要核验实际执行结果的智能体评测。所给资料在案例开头截断，未提供具体测试结果或接入方法。",
+    "application": "建议：科研迁移可考虑将智能运维中的工单记录、配置状态和操作副作用纳入智能体评测，并设计重复执行测试；这属于迁移设想，并非官方已验证效果。原文明示的是 ThinkingBox 的评测机制与可用渠道，没有给出准确率、可靠性提升或运维场景验证结果。",
     "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
-      "Microsoft ThinkingBox grades AI agents on the records they leave behind, not the sentences they generate, and then asks whether they can do it twenty times in a row.",
+      "ThinkingBox grades AI agents on the records they leave behind, not the sentences they generate, and then asks whether they can do it twenty times in a row.",
       "It is now available through Hugging Face.",
-      "Figure 1: ThinkingBox runs an agent against isolated MCP tool sessions, then grades the terminal backend state and side effects it leaves behind."
+      "Figure 1: ThinkingBox runs an agent against isolated MCP tool sessions, then grades the terminal backend state and side effects it leaves behind.",
+      "This is a joint blog by Microsoft and Hugging Face"
     ],
     "basis_url": "https://huggingface.co/blog/microsoft/thinkingbox"
   },
-  "analyzed_at": "2026-10-04T16:06:13.767143+00:00"
+  "analyzed_at": "2026-10-04T18:06:23.071697+00:00"
 }
