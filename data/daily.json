@@ -390,9 +390,9 @@
       "reading_status": {
         "paper_id": "f55569d6c20b",
         "state": "published",
-        "updated_at": "2026-10-05T13:15:19.922673+00:00",
+        "updated_at": "2026-10-05T13:33:00.486158+00:00",
         "basis": "full_text",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "",
         "total": 15,
@@ -538,7 +538,323 @@
           "page": "P11",
           "detail": "式(3)根号和分式结构被打散，式(4)负号被提取为“/C0”。原页核实式(3)为t=(r_Aavg+r_O)/[√2(r_Bavg+r_O)]，式(4)为S_config=−RΣp_i log p_i。纠正影响结构容差筛选与构型熵描述符的计算，原页两式完整。"
         }
-      ]
+      ],
+      "article": {
+        "version": 1,
+        "lead": "无铅弛豫体能否同时拥有高介电常数、低于室温的冻结温度和宽温区稳定性？这篇发表于Nature Communications的研究，把文献中的组成信息与介电曲线转化为统一数据，再以物理描述符和深度集成模型搜索材料空间，最终合成验证低Sn掺杂陶瓷。值得细读的，不只是找到两种达标组成，更是文献挖掘、预测不确定性与实物验证如何衔接，以及这一证据链距离可靠器件设计还有多远。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "高介电响应与温度稳定性，为何难以兼得",
+            "paragraphs": [
+              "高介电常数有利于电容材料的小型化，但尖锐的介电峰往往带来温度敏感性。弛豫体的弥散响应提供了另一条路径，不过提高介电常数、降低冻结温度与拓宽稳定温区并非相互独立，简单增加掺杂量未必能同时改善三者。",
+              "作者选择冻结温度Tf描述可用边界，而不是随频率移动的峰温Tm；强频率色散本身并不被视为缺点，冻结区与工作温区重叠才是关键问题。研究因此定位于温度稳定介电材料下选，而非完整电容器认证，也不以新母体化学体系作为成果前提。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "把文献曲线变成三目标逆向设计空间",
+            "paragraphs": [
+              "研究整理448篇文献，建立1202条记录，并数字化超过1000张ε–T图；NotebookLM与Gemini 2.0辅助提取组成、晶粒尺寸和厚度。随机抽查50篇未发现不一致，但这不是全数据库字段级误差评估，**1202条记录也不等于1202个独立试件**。",
+              "式(1)以f=f₀exp[−Eₐ/{kB(Tm−Tf)}]拟合冻结温度，方法部分式(2)以ε(T)=ε∞+A/{1+[(T−Tf)/Δ]²}提取ε(@Tf)及稳定性Δ/A。Δ/A越大表示响应越弥散，其单位未明确报告；图1a示意式中心写作Tm，与方法式的Tf不同，复现时不能忽略这一差异。",
+              "输入由归一化组成、22个物理描述符及两项微结构变量构成，描述符涵盖半径、电负性、价态、构型熵和轨道代理量。30个bootstrap训练的MLP输出均值与标准差，缺失值填补及缩放均在各折训练部分拟合；虚拟筛选再施加电荷中性、容忍因子、三目标和σ/μ≤0.3约束。"
+            ]
+          },
+          {
+            "id": "validation",
+            "title": "从1.56亿个虚拟组成走向六种合成组成",
+            "paragraphs": [
+              "条目级随机五折交叉验证给出基础MLP的R²>0.8，集成袋外R²分别为0.816、0.783、0.815，对应Tf、ε(@Tf)和log(stability)。两种评价设置不能直接比较增益；未按论文或组成家族隔离，也没有已核对的独立外部测试及模块消融结果。",
+              "156075300个假想组成经物理预筛缩减至943853个，最终保留37个；这是代理模型推断，不是同等数量的实物或原子尺度仿真。筛选固定晶粒尺寸1 μm、坯片厚度1 mm，随后确定(Sr₀.₄₈Na₀.₂₆Bi₀.₂₆)(Ti₁₋ₓSnₓ)O₃窗口，并合成3种主要组成和3种辅助基准组成。",
+              "主要组x=0、0.01、0.02分别记为SNBT、SNBTS1、SNBTS2，另以BTO作正常铁电参考。25 °C、100 Hz下介电常数依次为3952、3422、3307，VFT冻结温度依次为−9.8、−11.9、−13.0 °C；独立试件数与合成批次数未报告，辅助组仅有合并的定性一致性结论。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "突破经验边界，但尚未闭合可靠性证据链",
+            "paragraphs": [
+              "SNBTS1和SNBTS2达到预设三目标，并位于文献经验p95包络之上；该包络并非材料空间的理论极限。两者满足85、105、125 °C处|Δε/ε25|<15%的要求，**这只证明X5R/X6R/X7R高温侧条件，不代表全温区合规**；室温介电常数也不能替代ε(@Tf)。",
+              "Sn增加伴随晶格膨胀、Raman峰红移和局部位移取向分散，PFM撤偏压后恢复则支持主要可逆的极性响应。多尺度观测与“八面体扰动增强极性异质性”的解释一致，但SHAP不是因果证明，STEM仅为二维投影；缺少重复试件统计、校准不确定性及器件级可靠性指标，限制了结论的推广范围。"
+            ]
+          }
+        ],
+        "experiments": [
+          {
+            "name": "文献数据库质量检查与三目标模型评价",
+            "data": "448篇文献形成1202条记录，超过1000张ε–T图数字化；组成、22个物理描述符及微结构变量作为输入。",
+            "samples": "随机抽查50篇论文；独立材料和试件数未报告。30个MLP是模型数量，bootstrap重采样不是新增独立材料。",
+            "groups": "分别预测Tf、ε(@Tf)、log(stability)；网络隐藏层为(128,64,32)，采用ReLU、AdamW、dropout和早停。",
+            "split": "条目级随机五折交叉验证；逐折训练内完成填补与缩放。集成另报告袋外评价，具体样本构造及外部测试未报告。",
+            "baselines": "基础MLP提供不同评价设置的参照；其他模型、描述符、插补策略及不确定性模块消融未报告。",
+            "metrics": "预测采用无量纲R²；Tf单位K，稳定性为Δ/A，单位及log底数未明确报告；抽查缺少字段级误差率。",
+            "results": "抽查未发现不一致；基础MLP交叉验证R²>0.8，集成袋外三目标R²依次为0.816、0.783、0.815。",
+            "limitations": "未按来源论文或家族隔离，存在关联记录跨折风险；曲线数字化误差和不确定性校准未报告，不能证明跨家族泛化。"
+          },
+          {
+            "name": "物理约束虚拟筛选与Sr–Sn窗口细化",
+            "data": "无铅、无稀土钙钛矿组合空间；A位为Ba、Sr、Ca、Bi、Na、K，B位为Ti、Mn、Sn、Fe、Zn、Nb。",
+            "samples": "156075300个假想组成，物理预筛保留943853个，图示Tf筛选后363645个，最终37个；均非实物试件。",
+            "groups": "包含3×1、3×2及低阶组合，计量网格分辨率0.01；固定晶粒1 μm、坯片厚度1 mm，再细化Sr与Sn比例。",
+            "split": "由已训练集成模型推断虚拟候选；候选不是交叉验证测试样本，筛选阶段未报告独立验证集。",
+            "baselines": "比较不同NBT/ST比例及Sn含量的预测曲线；取消电荷、容忍因子或不确定性约束的消融未报告。",
+            "metrics": "|Δq|<10⁻⁴、0.95<t<1.05；Tf<298 K、ε(@Tf)>3300、Δ/A>0.08，各目标σ/μ≤0.3。",
+            "results": "37个候选中SNBTS家族最多，确定Sr=0.48及Sn=1–2 mol%窗口，以0 mol% Sn作为组成对照。",
+            "limitations": "部分正文阈值带等号、流程图使用严格不等号，实际边界实现不能核实；固定微结构不支持直接推广至其他加工条件。"
+          },
+          {
+            "name": "合成陶瓷的介电响应与温度稳定性验证",
+            "data": "固相合成SNBT、SNBTS1、SNBTS2及辅助组成，测量介电频温响应；BTO及文献性能数据作为参照。",
+            "samples": "主要3种、辅助3种组成，另制备BTO参考；每种独立试件和批次数未报告。74条家族文献记录不是试件数。",
+            "groups": "主要组x=0、0.01、0.02；介电频率100 Hz–100 kHz。SNBTS在900 °C煅烧4 h、1200 °C烧结2 h。",
+            "split": "属于合成后核验；与训练文献的重合情况未报告，不能视为已确认的严格独立外部测试。",
+            "baselines": "未掺Sn的SNBT、BTO、文献p95包络及74条家族记录；BTO工艺和晶粒不匹配，不是严格微结构控制对照。",
+            "metrics": "VFT冻结温度、ε(@Tf)、Δ/A、25 °C介电常数及85、105、125 °C处|Δε/ε25|；γ作为弥散性辅助指标。",
+            "results": "主要组Tf依次−9.8、−11.9、−13.0 °C，室温100 Hz介电常数3952、3422、3307；两种掺Sn组达标并超过p95包络。",
+            "limitations": "缺少重复数及精确实测ε(@Tf)、Δ/A数值；高温侧通过不能替代全温区认证，损耗残缺数字不能安全分配给样品。"
+          },
+          {
+            "name": "宏观响应与局部极性结构的联合验证",
+            "data": "主要陶瓷的P–E、S–E、XRD、Raman及HAADF-STEM数据；PFM比较BTO与SNBTS2的偏压响应。",
+            "samples": "STEM比较SNBT与SNBTS2，Raman比较主要3组，每谱平均5次扫描；试件、视场及原子柱统计数量未报告。",
+            "groups": "P–E为20 Hz、20/40/60 kV/cm；S–E为室温10 Hz、最高±60 kV/cm；PFM依次记录初始、10 V及撤偏压即时状态。",
+            "split": "属于物理表征而非训练测试划分；未报告盲法、独立重复批次或机制验证专用外部样本。",
+            "baselines": "SNBT为未掺Sn组成对照，BTO为正常铁电参考；PFM用初始状态作时序参照，没有完整机制消融。",
+            "metrics": "Pr、Ec、Smax及d33*=Smax/Emax；PFM相位，STEM投影位移，Raman峰位及XRD平均结构。",
+            "results": "SNBT/SNBTS呈细瘦回线；SNBTS2撤偏压相位由51.3°回到−109.3°。SNBT与SNBTS2平均投影位移约17.1、14.8 pm。",
+            "limitations": "二维投影不能重建三维极化；位移±项统计定义缺失。Raman拟合R²≈0.998不属于预测性能，也不独立证明结构因果机制。"
+          }
+        ],
+        "routes": [
+          {
+            "title": "来源隔离与误差传播驱动的可信逆向筛选",
+            "direction_id": "generative_design",
+            "gap": "原研究虽控制了折内预处理泄漏，但条目随机划分仍可能共享论文来源和相近组成。建议优先检验来源关联与曲线提取误差，是否使预测精度和候选置信度过于乐观。",
+            "mechanism": "从公开Zenodo数据、代码及可获取原图建立来源索引，区分论文、组成和测量条件。将曲线数字化与拟合扰动传播到目标标签，再以论文分组校准预测区间，避免把集成标准差直接解释为达标概率。",
+            "innovation": "相关建筑能耗代理研究摘要已采用分组共形校准和迁移评价，校准本身并非新技术。候选创新是将来源隔离、曲线误差传播与三目标联合达标筛选组合起来，验证其材料下选价值。",
+            "design": "建议设计：先复用1202条公开记录，实施论文分组五折和留一家族测试；另人工双人复核60张分层抽样曲线。若具备合作测试条件，再采集6种候选、每种3个独立批次的数据，完整保留失败记录。",
+            "comparison": "基线包括原条目随机划分、同架构分组划分和仅均值排序。逐项消融标签误差传播、区间校准与联合约束，并保持候选预算一致；人工复核不能作为新增独立材料样本。",
+            "criterion": "预先登记三目标MAE、R²、90%区间覆盖率及宽度，另比较固定实验预算下的联合达标率。只有覆盖率接近名义水平且未以过宽区间换取，才支持筛选可信度改善。",
+            "risk": "论文分组后可能样本不足，家族外推区间也可能失效。可退回适用域内的局部筛选并增加失败候选采集；无法获得原图时，应单列不可核验记录，而不是默认其标签无误。"
+          },
+          {
+            "title": "把低Sn组成点扩展为加工扰动下的可靠窗口",
+            "direction_id": "generative_design",
+            "gap": "当前筛选固定晶粒和厚度，而两种达标组成的室温介电常数距3300门槛并不宽裕。建议检验烧结、厚度和批次波动是否改变达标判断，再讨论器件层面的可靠性优化。",
+            "mechanism": "建立组成—工艺—微结构的分层代理，将批次变异与测量误差分开。以温度响应、DC偏压保持和击穿风险共同约束稳健窗口，不把原有Δ/A指标直接当作长期可靠性替代量。",
+            "innovation": "《Certification-aware uncertainty-guided inverse design of additively manufactured alloys》摘要已提出不确定性约束的组成窗口。这里拟迁移其窗口思想，组合弛豫介电目标与加工容差评价；这不是原研究已验证的器件方案。",
+            "design": "建议设计：选Sn为0、1、2 mol%，烧结温度为1180、1200、1220 °C，每组3个独立批次，形成27个批次。采用自建或合作测试采集统一厚度、电极、频温和DC偏压数据，试件数按击穿统计需求另行确定。",
+            "comparison": "对照原1200 °C工艺、仅优化名义性能和加入批次风险的设计。消融晶粒变量、工艺变量及风险约束；如加入BTO，应尽量匹配厚度和晶粒，否则仅保留定性参考用途。",
+            "criterion": "先确认三目标在独立批次中的保持率，再比较同等测试条件下的DC偏压衰减和击穿分布。完整温区性能与长期老化须单独验证，成功应体现达标窗口扩大，而非仅最好试件提高。",
+            "risk": "烧结变化可能同时改变Bi挥发、致密度与晶粒，导致归因混杂；击穿和寿命测试也可能成本过高。可先用成分、密度和低场温度响应分阶段淘汰，再对少量稳健窗口开展可靠性试验。"
+          }
+        ],
+        "diagrams": [
+          {
+            "kind": "study",
+            "title": "原研究：文献数据到低Sn陶瓷验证",
+            "description": "虚拟候选数、文献记录数与合成组成数分别表示不同层级，不对应独立试件数量。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "448篇文献",
+                "detail": "多模态提取组成、晶粒、厚度及介电曲线"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "1202条记录",
+                "detail": "VFT与Lorentzian拟合生成三项目标"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "物理描述符与深度集成",
+                "detail": "30个MLP预测均值与标准差，进行条目级评价"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "物理约束虚拟筛选",
+                "detail": "156075300个假想组成经预筛剩943853个"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "37个候选与窗口细化",
+                "detail": "事后家族分析确定Sr=0.48及低Sn窗口"
+              },
+              {
+                "id": "f",
+                "stage": 5,
+                "label": "合成与多尺度核验",
+                "detail": "3种主要加3种辅助组成；两种掺Sn主要组达标"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "提取与数字化"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "训练与评价"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "代理模型推断"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "三目标及不确定性"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "选择实物验证"
+              }
+            ]
+          },
+          {
+            "kind": "proposal",
+            "title": "拟议路线：来源隔离与校准筛选",
+            "description": "对应第一条研究建议；所有新增复核、校准与实验均为拟议设计，不表示已取得改善。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "公开数据与来源索引",
+                "detail": "关联论文、组成及测量条件，标记无法核验记录"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "曲线双人复核",
+                "detail": "建议抽取60张曲线，估计数字化及拟合误差"
+              },
+              {
+                "id": "c",
+                "stage": 1,
+                "label": "论文与家族隔离",
+                "detail": "论文分组五折及留一家族测试，控制来源关联"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "标签误差传播",
+                "detail": "将曲线扰动传入三目标，开展模块消融"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "分组区间校准",
+                "detail": "评价覆盖率与宽度，不预设集成方差已可靠"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "联合达标候选排序",
+                "detail": "以固定实验预算比较均值排序与风险约束"
+              },
+              {
+                "id": "g",
+                "stage": 5,
+                "label": "独立批次核验",
+                "detail": "建议6种候选各3批次，记录成功与失败"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "分层抽样"
+              },
+              {
+                "from": "a",
+                "to": "c",
+                "label": "构建隔离分组"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "估计标签扰动"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "训练内误差建模"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "独立校准评价"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "风险约束筛选"
+              },
+              {
+                "from": "f",
+                "to": "g",
+                "label": "条件允许时采集"
+              },
+              {
+                "from": "g",
+                "to": "a",
+                "label": "回填批次与失败"
+              }
+            ]
+          }
+        ],
+        "related": {
+          "status": "partial",
+          "checked_at": "2026-10-05T13:29:07.964932+00:00",
+          "papers": [
+            {
+              "title": "Bayesian-Optimised, Feature-Augmented Deep Ensemble for Physics-Guided Critical Heat-Flux Prediction with Uncertainty Quantification",
+              "url": "https://doi.org/10.36227/techrxiv.175372774.44091559/v1",
+              "year": 2025,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Physics-guided deep ensemble and inverse design for sustainable concrete",
+              "url": "https://doi.org/10.1007/s41939-025-01154-x",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Physics-guided building-energy surrogates under geographic and temporal shift: multi-source field evidence, uncertainty calibration and safeguarded residential system design",
+              "url": "https://doi.org/10.2139/ssrn.7300710",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Certification-aware uncertainty-guided inverse design of additively manufactured alloys",
+              "url": "https://doi.org/10.2139/ssrn.6954541",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "A Physics-Guided Surrogate Neural Network for Aerodynamic Prediction and Geometry-Aware Inverse Design of CST Airfoils",
+              "url": "https://doi.org/10.2139/ssrn.6992707",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            }
+          ]
+        }
+      },
+      "article_updated_at": "2026-10-05T13:33:00.484062+00:00",
+      "article_profile": "539be3180cc767c26e776ab6673daa578b1b6594bdc2b3e7102ec5c5546b0bac"
     },
     {
       "source": "Crossref",
@@ -784,7 +1100,7 @@
       "reading_status": {
         "paper_id": "eb62449238c8",
         "state": "missing_evidence",
-        "updated_at": "2026-09-30T11:50:09.588932+00:00",
+        "updated_at": "2026-10-05T13:33:42.512644+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -976,7 +1292,7 @@
       "reading_status": {
         "paper_id": "e287fb472485",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-30T11:51:00.273082+00:00",
+        "updated_at": "2026-10-05T13:33:53.085233+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -1092,7 +1408,7 @@
       "reading_status": {
         "paper_id": "f93c5ebdceed",
         "state": "missing_evidence",
-        "updated_at": "2026-09-30T13:11:51.686514+00:00",
+        "updated_at": "2026-10-05T13:34:22.411785+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -1123,7 +1439,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Finite element simulations of structures with nonlinear material behavior require advanced material models to provide accurate predictions. However, the computational costs of these models can be high, as they solve coupled differential algebraic equations at each integration point, in each equilibrium iteration, in every time step. In this study, we propose a machine learning-based framework to accelerate these computations by explicitly calculating the state variable updates with neural networks, enabling large time steps with low computational costs. The neural networks operate on invariant…",
+      "summary": "非线性材料有限元分析需在积分点反复求解耦合微分代数方程，计算成本较高。本文提出神经网络直接更新状态变量的时间积分框架，以不变量为输入，并严格满足塑性一致性条件。作者采用含非线性随动硬化的von Mises模型，通过材料点与有限元算例报告良好的精度、稳定性及计算时间收益。[摘要] 当前仅有摘要，尚不能核对误差、加速幅度和泛化范围。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7214733606",
@@ -1169,11 +1485,43 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐关注其将解析演化方向与神经网络状态更新结合的方法，但对生成式设计仅有间接价值，宜优先核查全文中的误差与效率证据。[摘要；解读]",
+      "deep_read": {
+        "problem": "研究针对非线性材料模型在结构有限元中的积分成本：每个时间步、每次平衡迭代、每个积分点均需求解耦合微分代数方程。摘要以“computational costs”概括这一负担，目标是在保持预测质量的同时降低局部更新开销，而非直接生成结构方案。[摘要]",
+        "method": "框架利用神经网络显式计算状态变量更新，网络作用于不变量；必要且充分的演化方向依据训练数据解析确定，并严格满足塑性一致性条件。摘要表述为“exact fulfillment”。验证采用von Mises屈服准则与非线性随动硬化原型模型。[摘要]",
+        "innovation": "解读：方法特色并非仅用网络替代数值求解，而是把不变量输入、解析确定的演化方向与严格塑性一致性约束共同纳入更新框架。这可能有助于约束学习结果的物理可接受性，但摘要未提供与既有方法的系统比较，不能据此认定首创或普遍优越。[摘要]",
+        "findings": "训练数据仅由10个多轴比例加载循环生成，随后开展材料点和有限元边值问题验证。作者报告“very good accuracy”和数值稳定性，并指出每个加载段采用单个应变增量时有明显计算时间收益；摘要未给出可核对的误差或加速数值。[摘要]",
+        "limitations": "当前资料不足以确认适用边界：摘要未披露网络结构、训练与测试划分、误差指标、对照积分算法及计算配置，也未说明非比例加载或其他塑性模型的表现。这些属于摘要证据缺口，并非已经证明的方法缺陷；不能据此推断长期积分失稳。[摘要；解读]",
+        "connection": "解读：对结构设计，该方法可能降低反复进行非线性有限元分析的成本，间接服务设计搜索；但摘要没有生成式设计实验。对智能运维和可靠性研究，其潜在联系是加速材料响应计算，而非已实现状态诊断、寿命预测或不确定性传播。[摘要]",
+        "next_steps": "建议：重点核查全文中训练数据覆盖、测试加载路径、塑性一致性实现及有限元收敛证据，再比较相同精度要求下的耗时。若迁移至设计或可靠性分析，建议另行验证复杂加载、重复调用与参数变化下的误差，勿将摘要中的性能评价直接视为工程保证。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "机器学习加速塑性模型的时间积分",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.cma.2026.119445"
+      ],
+      "analyzed_at": "2026-10-05T13:35:31.238367+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "a6b40281b35f4de3c4d4c20118538886bc1b1ba89bb71d4b4f0b07ffc13111d5",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "48ba9a38e96c",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-05T13:35:31.242371+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -1311,7 +1659,7 @@
       "reading_status": {
         "paper_id": "a1130ac09906",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-30T11:49:28.702770+00:00",
+        "updated_at": "2026-10-05T13:34:08.812337+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -1447,8 +1795,10 @@
       "reading_status": {
         "paper_id": "b972c8c0d15c",
         "state": "missing_evidence",
-        "updated_at": "2026-09-30T09:27:39.453978+00:00",
+        "updated_at": "2026-10-05T13:36:05.464769+00:00",
         "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
         "reason": "restricted",
         "total": 0,
         "covered": 0,
@@ -1476,7 +1826,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Owing to their ultra-light weight, high compliance, and superior fracture resistance, piezoelectric graded lattice structures hold significant engineering potential for electromechanical devices. However, the three-dimensional (3D) full-scale topology optimization of such structures is severely hindered by the prohibitive computational costs of electromechanical coupling analysis. To address the issue, this paper proposes a machine learning (ML)-accelerated scheme for the large-scale explicit topology optimization of piezoelectric graded lattice structures. By integrating the 3D moving morphab…",
+      "summary": "本文面向压电梯度晶格的三维全尺度拓扑优化，解决机电耦合分析计算成本过高的问题。方法结合显式几何构造、机器学习预测数值形函数与物理残差驱动的在线修正。摘要报告百万自由度结构计算时间由981.01降至6.91秒，并通过三个三维算例验证优化效果。解读：值得关注学习加速与物理校正如何协同服务结构设计，但当前仅有摘要，无法核查训练设置、误差指标及完整计算成本。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7214731434",
@@ -1565,22 +1915,43 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "推荐结构生成设计与机电耦合优化研究者重点阅读，尤其关注数值形函数学习和拓扑边界在线修正的结合；智能运维方向的适用性则需另行验证。[摘要；解读]",
+      "deep_read": {
+        "problem": "研究针对压电梯度晶格的三维全尺度拓扑优化：结构具有机电器件应用潜力，但机电耦合分析的计算成本限制了优化规模。摘要直接将瓶颈描述为“prohibitive computational costs”。解读：核心问题是降低优化所需分析成本，而非直接解决运维诊断问题。[摘要]",
+        "method": "方法将三维移动可变形组件法（MMC）与分区坐标映射（PCM）结合以构造晶格骨架，再用机器学习预测数值形函数。针对不连续0/1拓扑边界的泛化退化，引入“physical residual-driven online correction”。摘要未说明网络架构、训练数据或修正阈值。[摘要]",
+        "innovation": "摘要提出的技术组合是几何构造、数值形函数学习与物理残差在线修正。解读：值得关注的不是单独使用机器学习，而是针对拓扑边界处预测失效配置校正机制，使学习加速适应结构变化；但摘要不足以确认其相对既有子结构方法的首创性或具体新增贡献。[摘要]",
+        "findings": "摘要报告百万自由度结构计算时间从981.01降至6.91秒，并以悬臂梁、悬臂板和封闭圆柱能量采集器验证方法。其称保留全局有限元分析精度，且拓扑重构抑制局部电荷抵消。能量转换率原文为“enhanced by up to 1.56 times”，不据此换算百分比。[摘要]",
+        "limitations": "当前仅能依据摘要评估证据边界，不能认定已核查全文。摘要未提供误差数值、计时覆盖范围、训练成本、硬件配置及对照设计细节；验证明确属于数值算例，不能替代实物试验。以上是资料缺口，并非作者已承认的局限，也不足以否定所报告结果。[摘要；解读]",
+        "connection": "解读：论文与结构设计方向直接相关，其显式拓扑优化和梯度晶格构造契合生成设计主题。物理残差校正可为智能运维中的学习模型校验提供思路，但摘要没有监测或故障诊断研究。开头虽提及抗断裂优势，却未给出可靠性评估结果，不宜据此认定可靠性提升。[摘要]",
+        "next_steps": "建议：后续阅读全文时优先核查训练样本如何覆盖拓扑变化、残差校正何时触发，以及981.01至6.91秒的计时是否包含学习与校正开销。若迁移至可靠性设计，可另设材料或载荷不确定性测试，检验误差对约束满足的影响；这些是研究建议，不是作者结论。[摘要；建议]"
+      },
       "recommended_direction": "generative_design",
       "reading_status": {
         "paper_id": "0b71b4d17bb7",
-        "state": "missing_evidence",
-        "updated_at": "2026-09-30T13:14:14.618944+00:00",
-        "basis": "missing",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-05T13:37:09.787720+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
         "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "机器学习增强子结构方法用于压电梯度晶格结构全尺度拓扑优化",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.compstruct.2026.120945"
+      ],
+      "analyzed_at": "2026-10-05T13:37:09.772821+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "05727fd79c03bb11fc9d01170f2b208061f060d281e764182b8ad5245b1c46b4",
+      "analysis_issues": []
     }
   ],
   "papers": [
@@ -1970,9 +2341,9 @@
       "reading_status": {
         "paper_id": "f55569d6c20b",
         "state": "published",
-        "updated_at": "2026-10-05T13:15:19.922673+00:00",
+        "updated_at": "2026-10-05T13:33:00.486158+00:00",
         "basis": "full_text",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "",
         "total": 15,
@@ -2118,7 +2489,323 @@
           "page": "P11",
           "detail": "式(3)根号和分式结构被打散，式(4)负号被提取为“/C0”。原页核实式(3)为t=(r_Aavg+r_O)/[√2(r_Bavg+r_O)]，式(4)为S_config=−RΣp_i log p_i。纠正影响结构容差筛选与构型熵描述符的计算，原页两式完整。"
         }
-      ]
+      ],
+      "article": {
+        "version": 1,
+        "lead": "无铅弛豫体能否同时拥有高介电常数、低于室温的冻结温度和宽温区稳定性？这篇发表于Nature Communications的研究，把文献中的组成信息与介电曲线转化为统一数据，再以物理描述符和深度集成模型搜索材料空间，最终合成验证低Sn掺杂陶瓷。值得细读的，不只是找到两种达标组成，更是文献挖掘、预测不确定性与实物验证如何衔接，以及这一证据链距离可靠器件设计还有多远。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "高介电响应与温度稳定性，为何难以兼得",
+            "paragraphs": [
+              "高介电常数有利于电容材料的小型化，但尖锐的介电峰往往带来温度敏感性。弛豫体的弥散响应提供了另一条路径，不过提高介电常数、降低冻结温度与拓宽稳定温区并非相互独立，简单增加掺杂量未必能同时改善三者。",
+              "作者选择冻结温度Tf描述可用边界，而不是随频率移动的峰温Tm；强频率色散本身并不被视为缺点，冻结区与工作温区重叠才是关键问题。研究因此定位于温度稳定介电材料下选，而非完整电容器认证，也不以新母体化学体系作为成果前提。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "把文献曲线变成三目标逆向设计空间",
+            "paragraphs": [
+              "研究整理448篇文献，建立1202条记录，并数字化超过1000张ε–T图；NotebookLM与Gemini 2.0辅助提取组成、晶粒尺寸和厚度。随机抽查50篇未发现不一致，但这不是全数据库字段级误差评估，**1202条记录也不等于1202个独立试件**。",
+              "式(1)以f=f₀exp[−Eₐ/{kB(Tm−Tf)}]拟合冻结温度，方法部分式(2)以ε(T)=ε∞+A/{1+[(T−Tf)/Δ]²}提取ε(@Tf)及稳定性Δ/A。Δ/A越大表示响应越弥散，其单位未明确报告；图1a示意式中心写作Tm，与方法式的Tf不同，复现时不能忽略这一差异。",
+              "输入由归一化组成、22个物理描述符及两项微结构变量构成，描述符涵盖半径、电负性、价态、构型熵和轨道代理量。30个bootstrap训练的MLP输出均值与标准差，缺失值填补及缩放均在各折训练部分拟合；虚拟筛选再施加电荷中性、容忍因子、三目标和σ/μ≤0.3约束。"
+            ]
+          },
+          {
+            "id": "validation",
+            "title": "从1.56亿个虚拟组成走向六种合成组成",
+            "paragraphs": [
+              "条目级随机五折交叉验证给出基础MLP的R²>0.8，集成袋外R²分别为0.816、0.783、0.815，对应Tf、ε(@Tf)和log(stability)。两种评价设置不能直接比较增益；未按论文或组成家族隔离，也没有已核对的独立外部测试及模块消融结果。",
+              "156075300个假想组成经物理预筛缩减至943853个，最终保留37个；这是代理模型推断，不是同等数量的实物或原子尺度仿真。筛选固定晶粒尺寸1 μm、坯片厚度1 mm，随后确定(Sr₀.₄₈Na₀.₂₆Bi₀.₂₆)(Ti₁₋ₓSnₓ)O₃窗口，并合成3种主要组成和3种辅助基准组成。",
+              "主要组x=0、0.01、0.02分别记为SNBT、SNBTS1、SNBTS2，另以BTO作正常铁电参考。25 °C、100 Hz下介电常数依次为3952、3422、3307，VFT冻结温度依次为−9.8、−11.9、−13.0 °C；独立试件数与合成批次数未报告，辅助组仅有合并的定性一致性结论。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "突破经验边界，但尚未闭合可靠性证据链",
+            "paragraphs": [
+              "SNBTS1和SNBTS2达到预设三目标，并位于文献经验p95包络之上；该包络并非材料空间的理论极限。两者满足85、105、125 °C处|Δε/ε25|<15%的要求，**这只证明X5R/X6R/X7R高温侧条件，不代表全温区合规**；室温介电常数也不能替代ε(@Tf)。",
+              "Sn增加伴随晶格膨胀、Raman峰红移和局部位移取向分散，PFM撤偏压后恢复则支持主要可逆的极性响应。多尺度观测与“八面体扰动增强极性异质性”的解释一致，但SHAP不是因果证明，STEM仅为二维投影；缺少重复试件统计、校准不确定性及器件级可靠性指标，限制了结论的推广范围。"
+            ]
+          }
+        ],
+        "experiments": [
+          {
+            "name": "文献数据库质量检查与三目标模型评价",
+            "data": "448篇文献形成1202条记录，超过1000张ε–T图数字化；组成、22个物理描述符及微结构变量作为输入。",
+            "samples": "随机抽查50篇论文；独立材料和试件数未报告。30个MLP是模型数量，bootstrap重采样不是新增独立材料。",
+            "groups": "分别预测Tf、ε(@Tf)、log(stability)；网络隐藏层为(128,64,32)，采用ReLU、AdamW、dropout和早停。",
+            "split": "条目级随机五折交叉验证；逐折训练内完成填补与缩放。集成另报告袋外评价，具体样本构造及外部测试未报告。",
+            "baselines": "基础MLP提供不同评价设置的参照；其他模型、描述符、插补策略及不确定性模块消融未报告。",
+            "metrics": "预测采用无量纲R²；Tf单位K，稳定性为Δ/A，单位及log底数未明确报告；抽查缺少字段级误差率。",
+            "results": "抽查未发现不一致；基础MLP交叉验证R²>0.8，集成袋外三目标R²依次为0.816、0.783、0.815。",
+            "limitations": "未按来源论文或家族隔离，存在关联记录跨折风险；曲线数字化误差和不确定性校准未报告，不能证明跨家族泛化。"
+          },
+          {
+            "name": "物理约束虚拟筛选与Sr–Sn窗口细化",
+            "data": "无铅、无稀土钙钛矿组合空间；A位为Ba、Sr、Ca、Bi、Na、K，B位为Ti、Mn、Sn、Fe、Zn、Nb。",
+            "samples": "156075300个假想组成，物理预筛保留943853个，图示Tf筛选后363645个，最终37个；均非实物试件。",
+            "groups": "包含3×1、3×2及低阶组合，计量网格分辨率0.01；固定晶粒1 μm、坯片厚度1 mm，再细化Sr与Sn比例。",
+            "split": "由已训练集成模型推断虚拟候选；候选不是交叉验证测试样本，筛选阶段未报告独立验证集。",
+            "baselines": "比较不同NBT/ST比例及Sn含量的预测曲线；取消电荷、容忍因子或不确定性约束的消融未报告。",
+            "metrics": "|Δq|<10⁻⁴、0.95<t<1.05；Tf<298 K、ε(@Tf)>3300、Δ/A>0.08，各目标σ/μ≤0.3。",
+            "results": "37个候选中SNBTS家族最多，确定Sr=0.48及Sn=1–2 mol%窗口，以0 mol% Sn作为组成对照。",
+            "limitations": "部分正文阈值带等号、流程图使用严格不等号，实际边界实现不能核实；固定微结构不支持直接推广至其他加工条件。"
+          },
+          {
+            "name": "合成陶瓷的介电响应与温度稳定性验证",
+            "data": "固相合成SNBT、SNBTS1、SNBTS2及辅助组成，测量介电频温响应；BTO及文献性能数据作为参照。",
+            "samples": "主要3种、辅助3种组成，另制备BTO参考；每种独立试件和批次数未报告。74条家族文献记录不是试件数。",
+            "groups": "主要组x=0、0.01、0.02；介电频率100 Hz–100 kHz。SNBTS在900 °C煅烧4 h、1200 °C烧结2 h。",
+            "split": "属于合成后核验；与训练文献的重合情况未报告，不能视为已确认的严格独立外部测试。",
+            "baselines": "未掺Sn的SNBT、BTO、文献p95包络及74条家族记录；BTO工艺和晶粒不匹配，不是严格微结构控制对照。",
+            "metrics": "VFT冻结温度、ε(@Tf)、Δ/A、25 °C介电常数及85、105、125 °C处|Δε/ε25|；γ作为弥散性辅助指标。",
+            "results": "主要组Tf依次−9.8、−11.9、−13.0 °C，室温100 Hz介电常数3952、3422、3307；两种掺Sn组达标并超过p95包络。",
+            "limitations": "缺少重复数及精确实测ε(@Tf)、Δ/A数值；高温侧通过不能替代全温区认证，损耗残缺数字不能安全分配给样品。"
+          },
+          {
+            "name": "宏观响应与局部极性结构的联合验证",
+            "data": "主要陶瓷的P–E、S–E、XRD、Raman及HAADF-STEM数据；PFM比较BTO与SNBTS2的偏压响应。",
+            "samples": "STEM比较SNBT与SNBTS2，Raman比较主要3组，每谱平均5次扫描；试件、视场及原子柱统计数量未报告。",
+            "groups": "P–E为20 Hz、20/40/60 kV/cm；S–E为室温10 Hz、最高±60 kV/cm；PFM依次记录初始、10 V及撤偏压即时状态。",
+            "split": "属于物理表征而非训练测试划分；未报告盲法、独立重复批次或机制验证专用外部样本。",
+            "baselines": "SNBT为未掺Sn组成对照，BTO为正常铁电参考；PFM用初始状态作时序参照，没有完整机制消融。",
+            "metrics": "Pr、Ec、Smax及d33*=Smax/Emax；PFM相位，STEM投影位移，Raman峰位及XRD平均结构。",
+            "results": "SNBT/SNBTS呈细瘦回线；SNBTS2撤偏压相位由51.3°回到−109.3°。SNBT与SNBTS2平均投影位移约17.1、14.8 pm。",
+            "limitations": "二维投影不能重建三维极化；位移±项统计定义缺失。Raman拟合R²≈0.998不属于预测性能，也不独立证明结构因果机制。"
+          }
+        ],
+        "routes": [
+          {
+            "title": "来源隔离与误差传播驱动的可信逆向筛选",
+            "direction_id": "generative_design",
+            "gap": "原研究虽控制了折内预处理泄漏，但条目随机划分仍可能共享论文来源和相近组成。建议优先检验来源关联与曲线提取误差，是否使预测精度和候选置信度过于乐观。",
+            "mechanism": "从公开Zenodo数据、代码及可获取原图建立来源索引，区分论文、组成和测量条件。将曲线数字化与拟合扰动传播到目标标签，再以论文分组校准预测区间，避免把集成标准差直接解释为达标概率。",
+            "innovation": "相关建筑能耗代理研究摘要已采用分组共形校准和迁移评价，校准本身并非新技术。候选创新是将来源隔离、曲线误差传播与三目标联合达标筛选组合起来，验证其材料下选价值。",
+            "design": "建议设计：先复用1202条公开记录，实施论文分组五折和留一家族测试；另人工双人复核60张分层抽样曲线。若具备合作测试条件，再采集6种候选、每种3个独立批次的数据，完整保留失败记录。",
+            "comparison": "基线包括原条目随机划分、同架构分组划分和仅均值排序。逐项消融标签误差传播、区间校准与联合约束，并保持候选预算一致；人工复核不能作为新增独立材料样本。",
+            "criterion": "预先登记三目标MAE、R²、90%区间覆盖率及宽度，另比较固定实验预算下的联合达标率。只有覆盖率接近名义水平且未以过宽区间换取，才支持筛选可信度改善。",
+            "risk": "论文分组后可能样本不足，家族外推区间也可能失效。可退回适用域内的局部筛选并增加失败候选采集；无法获得原图时，应单列不可核验记录，而不是默认其标签无误。"
+          },
+          {
+            "title": "把低Sn组成点扩展为加工扰动下的可靠窗口",
+            "direction_id": "generative_design",
+            "gap": "当前筛选固定晶粒和厚度，而两种达标组成的室温介电常数距3300门槛并不宽裕。建议检验烧结、厚度和批次波动是否改变达标判断，再讨论器件层面的可靠性优化。",
+            "mechanism": "建立组成—工艺—微结构的分层代理，将批次变异与测量误差分开。以温度响应、DC偏压保持和击穿风险共同约束稳健窗口，不把原有Δ/A指标直接当作长期可靠性替代量。",
+            "innovation": "《Certification-aware uncertainty-guided inverse design of additively manufactured alloys》摘要已提出不确定性约束的组成窗口。这里拟迁移其窗口思想，组合弛豫介电目标与加工容差评价；这不是原研究已验证的器件方案。",
+            "design": "建议设计：选Sn为0、1、2 mol%，烧结温度为1180、1200、1220 °C，每组3个独立批次，形成27个批次。采用自建或合作测试采集统一厚度、电极、频温和DC偏压数据，试件数按击穿统计需求另行确定。",
+            "comparison": "对照原1200 °C工艺、仅优化名义性能和加入批次风险的设计。消融晶粒变量、工艺变量及风险约束；如加入BTO，应尽量匹配厚度和晶粒，否则仅保留定性参考用途。",
+            "criterion": "先确认三目标在独立批次中的保持率，再比较同等测试条件下的DC偏压衰减和击穿分布。完整温区性能与长期老化须单独验证，成功应体现达标窗口扩大，而非仅最好试件提高。",
+            "risk": "烧结变化可能同时改变Bi挥发、致密度与晶粒，导致归因混杂；击穿和寿命测试也可能成本过高。可先用成分、密度和低场温度响应分阶段淘汰，再对少量稳健窗口开展可靠性试验。"
+          }
+        ],
+        "diagrams": [
+          {
+            "kind": "study",
+            "title": "原研究：文献数据到低Sn陶瓷验证",
+            "description": "虚拟候选数、文献记录数与合成组成数分别表示不同层级，不对应独立试件数量。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "448篇文献",
+                "detail": "多模态提取组成、晶粒、厚度及介电曲线"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "1202条记录",
+                "detail": "VFT与Lorentzian拟合生成三项目标"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "物理描述符与深度集成",
+                "detail": "30个MLP预测均值与标准差，进行条目级评价"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "物理约束虚拟筛选",
+                "detail": "156075300个假想组成经预筛剩943853个"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "37个候选与窗口细化",
+                "detail": "事后家族分析确定Sr=0.48及低Sn窗口"
+              },
+              {
+                "id": "f",
+                "stage": 5,
+                "label": "合成与多尺度核验",
+                "detail": "3种主要加3种辅助组成；两种掺Sn主要组达标"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "提取与数字化"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "训练与评价"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "代理模型推断"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "三目标及不确定性"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "选择实物验证"
+              }
+            ]
+          },
+          {
+            "kind": "proposal",
+            "title": "拟议路线：来源隔离与校准筛选",
+            "description": "对应第一条研究建议；所有新增复核、校准与实验均为拟议设计，不表示已取得改善。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "公开数据与来源索引",
+                "detail": "关联论文、组成及测量条件，标记无法核验记录"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "曲线双人复核",
+                "detail": "建议抽取60张曲线，估计数字化及拟合误差"
+              },
+              {
+                "id": "c",
+                "stage": 1,
+                "label": "论文与家族隔离",
+                "detail": "论文分组五折及留一家族测试，控制来源关联"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "标签误差传播",
+                "detail": "将曲线扰动传入三目标，开展模块消融"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "分组区间校准",
+                "detail": "评价覆盖率与宽度，不预设集成方差已可靠"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "联合达标候选排序",
+                "detail": "以固定实验预算比较均值排序与风险约束"
+              },
+              {
+                "id": "g",
+                "stage": 5,
+                "label": "独立批次核验",
+                "detail": "建议6种候选各3批次，记录成功与失败"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "分层抽样"
+              },
+              {
+                "from": "a",
+                "to": "c",
+                "label": "构建隔离分组"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "估计标签扰动"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "训练内误差建模"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "独立校准评价"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "风险约束筛选"
+              },
+              {
+                "from": "f",
+                "to": "g",
+                "label": "条件允许时采集"
+              },
+              {
+                "from": "g",
+                "to": "a",
+                "label": "回填批次与失败"
+              }
+            ]
+          }
+        ],
+        "related": {
+          "status": "partial",
+          "checked_at": "2026-10-05T13:29:07.964932+00:00",
+          "papers": [
+            {
+              "title": "Bayesian-Optimised, Feature-Augmented Deep Ensemble for Physics-Guided Critical Heat-Flux Prediction with Uncertainty Quantification",
+              "url": "https://doi.org/10.36227/techrxiv.175372774.44091559/v1",
+              "year": 2025,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Physics-guided deep ensemble and inverse design for sustainable concrete",
+              "url": "https://doi.org/10.1007/s41939-025-01154-x",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Physics-guided building-energy surrogates under geographic and temporal shift: multi-source field evidence, uncertainty calibration and safeguarded residential system design",
+              "url": "https://doi.org/10.2139/ssrn.7300710",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Certification-aware uncertainty-guided inverse design of additively manufactured alloys",
+              "url": "https://doi.org/10.2139/ssrn.6954541",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "A Physics-Guided Surrogate Neural Network for Aerodynamic Prediction and Geometry-Aware Inverse Design of CST Airfoils",
+              "url": "https://doi.org/10.2139/ssrn.6992707",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            }
+          ]
+        }
+      },
+      "article_updated_at": "2026-10-05T13:33:00.484062+00:00",
+      "article_profile": "539be3180cc767c26e776ab6673daa578b1b6594bdc2b3e7102ec5c5546b0bac"
     },
     {
       "source": "Crossref",
@@ -2364,7 +3051,7 @@
       "reading_status": {
         "paper_id": "eb62449238c8",
         "state": "missing_evidence",
-        "updated_at": "2026-09-30T11:50:09.588932+00:00",
+        "updated_at": "2026-10-05T13:33:42.512644+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -2556,7 +3243,7 @@
       "reading_status": {
         "paper_id": "e287fb472485",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-30T11:51:00.273082+00:00",
+        "updated_at": "2026-10-05T13:33:53.085233+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -2670,7 +3357,7 @@
       "reading_status": {
         "paper_id": "f93c5ebdceed",
         "state": "missing_evidence",
-        "updated_at": "2026-09-30T13:11:51.686514+00:00",
+        "updated_at": "2026-10-05T13:34:22.411785+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -2701,7 +3388,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Finite element simulations of structures with nonlinear material behavior require advanced material models to provide accurate predictions. However, the computational costs of these models can be high, as they solve coupled differential algebraic equations at each integration point, in each equilibrium iteration, in every time step. In this study, we propose a machine learning-based framework to accelerate these computations by explicitly calculating the state variable updates with neural networks, enabling large time steps with low computational costs. The neural networks operate on invariant…",
+      "summary": "非线性材料有限元分析需在积分点反复求解耦合微分代数方程，计算成本较高。本文提出神经网络直接更新状态变量的时间积分框架，以不变量为输入，并严格满足塑性一致性条件。作者采用含非线性随动硬化的von Mises模型，通过材料点与有限元算例报告良好的精度、稳定性及计算时间收益。[摘要] 当前仅有摘要，尚不能核对误差、加速幅度和泛化范围。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7214733606",
@@ -2747,11 +3434,43 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐关注其将解析演化方向与神经网络状态更新结合的方法，但对生成式设计仅有间接价值，宜优先核查全文中的误差与效率证据。[摘要；解读]",
+      "deep_read": {
+        "problem": "研究针对非线性材料模型在结构有限元中的积分成本：每个时间步、每次平衡迭代、每个积分点均需求解耦合微分代数方程。摘要以“computational costs”概括这一负担，目标是在保持预测质量的同时降低局部更新开销，而非直接生成结构方案。[摘要]",
+        "method": "框架利用神经网络显式计算状态变量更新，网络作用于不变量；必要且充分的演化方向依据训练数据解析确定，并严格满足塑性一致性条件。摘要表述为“exact fulfillment”。验证采用von Mises屈服准则与非线性随动硬化原型模型。[摘要]",
+        "innovation": "解读：方法特色并非仅用网络替代数值求解，而是把不变量输入、解析确定的演化方向与严格塑性一致性约束共同纳入更新框架。这可能有助于约束学习结果的物理可接受性，但摘要未提供与既有方法的系统比较，不能据此认定首创或普遍优越。[摘要]",
+        "findings": "训练数据仅由10个多轴比例加载循环生成，随后开展材料点和有限元边值问题验证。作者报告“very good accuracy”和数值稳定性，并指出每个加载段采用单个应变增量时有明显计算时间收益；摘要未给出可核对的误差或加速数值。[摘要]",
+        "limitations": "当前资料不足以确认适用边界：摘要未披露网络结构、训练与测试划分、误差指标、对照积分算法及计算配置，也未说明非比例加载或其他塑性模型的表现。这些属于摘要证据缺口，并非已经证明的方法缺陷；不能据此推断长期积分失稳。[摘要；解读]",
+        "connection": "解读：对结构设计，该方法可能降低反复进行非线性有限元分析的成本，间接服务设计搜索；但摘要没有生成式设计实验。对智能运维和可靠性研究，其潜在联系是加速材料响应计算，而非已实现状态诊断、寿命预测或不确定性传播。[摘要]",
+        "next_steps": "建议：重点核查全文中训练数据覆盖、测试加载路径、塑性一致性实现及有限元收敛证据，再比较相同精度要求下的耗时。若迁移至设计或可靠性分析，建议另行验证复杂加载、重复调用与参数变化下的误差，勿将摘要中的性能评价直接视为工程保证。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "机器学习加速塑性模型的时间积分",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.cma.2026.119445"
+      ],
+      "analyzed_at": "2026-10-05T13:35:31.238367+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "a6b40281b35f4de3c4d4c20118538886bc1b1ba89bb71d4b4f0b07ffc13111d5",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "48ba9a38e96c",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-05T13:35:31.242371+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -2889,7 +3608,7 @@
       "reading_status": {
         "paper_id": "a1130ac09906",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-30T11:49:28.702770+00:00",
+        "updated_at": "2026-10-05T13:34:08.812337+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -3025,8 +3744,10 @@
       "reading_status": {
         "paper_id": "b972c8c0d15c",
         "state": "missing_evidence",
-        "updated_at": "2026-09-30T09:27:39.453978+00:00",
+        "updated_at": "2026-10-05T13:36:05.464769+00:00",
         "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
         "reason": "restricted",
         "total": 0,
         "covered": 0,
@@ -3054,7 +3775,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Owing to their ultra-light weight, high compliance, and superior fracture resistance, piezoelectric graded lattice structures hold significant engineering potential for electromechanical devices. However, the three-dimensional (3D) full-scale topology optimization of such structures is severely hindered by the prohibitive computational costs of electromechanical coupling analysis. To address the issue, this paper proposes a machine learning (ML)-accelerated scheme for the large-scale explicit topology optimization of piezoelectric graded lattice structures. By integrating the 3D moving morphab…",
+      "summary": "本文面向压电梯度晶格的三维全尺度拓扑优化，解决机电耦合分析计算成本过高的问题。方法结合显式几何构造、机器学习预测数值形函数与物理残差驱动的在线修正。摘要报告百万自由度结构计算时间由981.01降至6.91秒，并通过三个三维算例验证优化效果。解读：值得关注学习加速与物理校正如何协同服务结构设计，但当前仅有摘要，无法核查训练设置、误差指标及完整计算成本。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7214731434",
@@ -3143,22 +3864,43 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "推荐结构生成设计与机电耦合优化研究者重点阅读，尤其关注数值形函数学习和拓扑边界在线修正的结合；智能运维方向的适用性则需另行验证。[摘要；解读]",
+      "deep_read": {
+        "problem": "研究针对压电梯度晶格的三维全尺度拓扑优化：结构具有机电器件应用潜力，但机电耦合分析的计算成本限制了优化规模。摘要直接将瓶颈描述为“prohibitive computational costs”。解读：核心问题是降低优化所需分析成本，而非直接解决运维诊断问题。[摘要]",
+        "method": "方法将三维移动可变形组件法（MMC）与分区坐标映射（PCM）结合以构造晶格骨架，再用机器学习预测数值形函数。针对不连续0/1拓扑边界的泛化退化，引入“physical residual-driven online correction”。摘要未说明网络架构、训练数据或修正阈值。[摘要]",
+        "innovation": "摘要提出的技术组合是几何构造、数值形函数学习与物理残差在线修正。解读：值得关注的不是单独使用机器学习，而是针对拓扑边界处预测失效配置校正机制，使学习加速适应结构变化；但摘要不足以确认其相对既有子结构方法的首创性或具体新增贡献。[摘要]",
+        "findings": "摘要报告百万自由度结构计算时间从981.01降至6.91秒，并以悬臂梁、悬臂板和封闭圆柱能量采集器验证方法。其称保留全局有限元分析精度，且拓扑重构抑制局部电荷抵消。能量转换率原文为“enhanced by up to 1.56 times”，不据此换算百分比。[摘要]",
+        "limitations": "当前仅能依据摘要评估证据边界，不能认定已核查全文。摘要未提供误差数值、计时覆盖范围、训练成本、硬件配置及对照设计细节；验证明确属于数值算例，不能替代实物试验。以上是资料缺口，并非作者已承认的局限，也不足以否定所报告结果。[摘要；解读]",
+        "connection": "解读：论文与结构设计方向直接相关，其显式拓扑优化和梯度晶格构造契合生成设计主题。物理残差校正可为智能运维中的学习模型校验提供思路，但摘要没有监测或故障诊断研究。开头虽提及抗断裂优势，却未给出可靠性评估结果，不宜据此认定可靠性提升。[摘要]",
+        "next_steps": "建议：后续阅读全文时优先核查训练样本如何覆盖拓扑变化、残差校正何时触发，以及981.01至6.91秒的计时是否包含学习与校正开销。若迁移至可靠性设计，可另设材料或载荷不确定性测试，检验误差对约束满足的影响；这些是研究建议，不是作者结论。[摘要；建议]"
+      },
       "recommended_direction": "generative_design",
       "reading_status": {
         "paper_id": "0b71b4d17bb7",
-        "state": "missing_evidence",
-        "updated_at": "2026-09-30T13:14:14.618944+00:00",
-        "basis": "missing",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-05T13:37:09.787720+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
         "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "机器学习增强子结构方法用于压电梯度晶格结构全尺度拓扑优化",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.compstruct.2026.120945"
+      ],
+      "analyzed_at": "2026-10-05T13:37:09.772821+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "05727fd79c03bb11fc9d01170f2b208061f060d281e764182b8ad5245b1c46b4",
+      "analysis_issues": []
     },
     {
       "source": "Crossref",
@@ -10908,7 +11650,7 @@
       "reading_status": {
         "paper_id": "9f42a1c20a27",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-04T13:13:10.754031+00:00",
+        "updated_at": "2026-10-05T13:37:38.844680+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -16844,7 +17586,7 @@
       "reading_status": {
         "paper_id": "229ee813a122",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-04T13:15:42.346431+00:00",
+        "updated_at": "2026-10-05T13:37:51.951030+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -52769,11 +53511,11 @@
   "analysis_status": {
     "ready_core": 4,
     "target_core": 5,
-    "ready_extended": 1,
+    "ready_extended": 3,
     "target_extended": 5,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 5
+    "pending": 3
   },
   "edition": {
     "id": "37313489403",
