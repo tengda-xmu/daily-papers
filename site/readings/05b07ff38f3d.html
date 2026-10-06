@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="聚焦 AI 驱动的智能运维、结构生成式设计与疲劳可靠性，每日追踪科研论文，提供中文摘要与精读要点。">
+  <meta name="theme-color" content="#153e64">
+  <title>自回归Transformer的认知疲劳：形式化与测量 | 全文精读</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css?v=b30c5f17c6">
+  <link rel="stylesheet" href="../assets/paper-chat.css?v=b30c5f17c6">
+  <link rel="stylesheet" href="../assets/paper-library.css?v=b30c5f17c6">
+  <script src="../assets/site.js?v=b30c5f17c6" defer></script>
+  <script src="../assets/paper-library.js?v=b30c5f17c6" defer></script>
+  <script src="../assets/paper-chat.js?v=b30c5f17c6" defer></script>
+  <script src="../assets/daily-update.js?v=b30c5f17c6" defer></script>
+<link rel="stylesheet" href="../assets/reading-article.css?v=b30c5f17c6"><script src="../assets/reading-article.js?v=b30c5f17c6" defer></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main-content">跳至正文</a>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a class="wordmark" href="../"><span>腾达</span><span class="wordmark-divider" aria-hidden="true"></span>科研文献</a>
+      <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false">菜单 <span aria-hidden="true">☰</span></button>
+      <nav id="main-navigation" class="main-navigation" aria-label="主导航">
+        <a href="../" >每日推荐</a>
+        <a href="../search.html" data-local-only >手动检索</a>
+        <a href="../leads.html" >科研线索</a>
+        <a href="../ai.html" >AI 前沿</a>
+        <a href="../library.html" data-local-only >我的文献</a>
+        <a href="../archive/" >历史归档</a>
+        <a href="../setup.html" data-local-only >设置</a>
+      </nav>
+    </div>
+  </header>
+  <div class="site-shell">
+    <main id="main-content" class="main-content" tabindex="-1">
+      <article class="reading-article" data-paper-id="05b07ff38f3d"><a class="article-back" href="../">返回每日推荐</a><header class="article-header"><p class="article-type">论文精读</p><h1>自回归Transformer的认知疲劳：形式化与测量</h1><p class="article-original" lang="en">Cognitive Fatigue in Autoregressive Transformers: Formalization and Measurement</p><p class="article-byline">Riju Marwah, Ritvik Garimella, Vishal Pallagani, Atishay Jain, Michael Charles Stewart, Amit Sheth<br>ICML 2026</p><p class="article-updated">精读更新 2026-10-06 21:22 · 依据论文全文整理</p><div class="article-links"><a href="https://proceedings.mlr.press/v306/marwah26a.html" target="_blank" rel="noopener noreferrer">阅读原文</a><button type="button" class="text-button copy-citation" data-citation="Riju Marwah, Ritvik Garimella, Vishal Pallagani, Atishay Jain, Michael Charles Stewart, Amit Sheth. Cognitive Fatigue in Autoregressive Transformers: Formalization and Measurement. ICML 2026. https://proceedings.mlr.press/v306/marwah26a.html">复制引用</button><button type="button" class="text-button codex-entry" data-local-only data-paper-id="05b07ff38f3d" data-paper-title="自回归Transformer的认知疲劳：形式化与测量">Codex 对话</button></div></header><p class="article-upgrade">全文精读已完成，文章版正在逐步升级。现有内容可继续阅读。</p><div class="article-lead"><p>论文把长时生成中的注意力衰减、表征漂移和熵失准组合为疲劳指数FI，并通过固定校准、平滑与滞回实现在线监测。三个问答数据集支持其检测重复退化及降低告警抖动的价值，但不支持将其视为全面正确性或安全指标。解读：值得作为可靠性监测方法精读，而非直接部署标准；参数缺项、曲线重建及正文与表格不一致，需要在复现前澄清。</p></div><section><h2>研究问题</h2><p>作者关注生成过程中可靠性逐步下降却缺少实时诊断的问题，将其操作化为提示关注减弱、内部表征偏离和输出熵异常。“认知疲劳”只是解释性类比，不涉及模型体验。研究重点是识别退化状态，而非证明模型为何失效。</p></section><section><h2>方法与路线</h2><p>FI聚合末层提示注意力、相对最后提示状态的L2漂移及下一token熵，分别归一化后以0.40、0.25、0.35加权。参数预校准后冻结，再用窗口平滑与启停双阈值告警；表6规定每两个token探测一次。</p></section><section><h2>创新与比较</h2><p>方法特色是以单调性、尺度排序、有界性、时间稳定性和可组合性约束诊断指标，强调分项可解释与无需重训。附录给出加性度量的形式刻画，但不唯一确定权重或因果机制。解读：贡献主要在监测框架整合，而非提出新的训练或解码控制算法。</p></section><section><h2>证据与发现</h2><p>表3完整轨迹与重复的相关性为0.820–0.856，前20个token仅0.375–0.425。表5的FI AUROC为0.976，表4滞回降抖超过91%。P7正文AUROC数值与表5不一致，不能混用；规模趋势也仅为观察性结果。</p></section><section><h2>局限与边界</h2><p>评测限九模型、QA和120个生成token，闭环收益未证。原文缺项：P12表6未列β、κ，妨碍复现；P7图5无所引AUROC证据；P10、P11引用对应待核，影响追溯。P7量化熵曲线为重建；P14定理未附证明。不得补值或视为已验证。
+原文核对： 原页正文写“Figure 5 demonstrates that FI achieves higher AUROC than entropy alone”，但核对图5及图注，其内容仅为三数据集FI随生成位置的轨迹与95%置信区间，没有AUROC或熵基线比较。这是原文图号引用与所指证据不匹配，受影响的是该句用图5支持AUROC优势的论证；不能从图5补造比较结果，也不能擅自确定正确图号。页面其余内容可读。； 原页Dziri等参考文献条目保留“Verify this is the intended citation”及可能对应Faith and Fate的备注，引用对象未最终确认。缺少确定的引用对应关系，影响相关背景论证的文献可追溯性，不直接否定FI实验结果；未访问外部资料或推造正确条目。； 原页Kadem与Zheng参考文献条目保留“Cited as CREST in text; verify arXiv ID matches intended paper before final submission”。正文名称与所列题目、编号的对应关系尚未确认，影响相关工作中CREST来源的可追溯性；不能据此确定正确题目或编号。； 原页表6声称列出所有FI实验的固定默认值，但表内没有熵归一化高端尺度β及漂移归一化上限κ的参数行或数值。缺项影响FI归一化与阈值结果的精确复现；不能从熵带、权重或表7反推。此处仅确认表6未列这些参数，不断言全文其他位置也未提供。其余表格和正文均可读。</p></section><section><h2>方向关联</h2><p>解读：FI对应智能运维的在线健康指标、分项归因和告警防抖，可为运行日志及回退触发提供辅助依据。它不是结构安全或设备失效概率模型，也不能直接迁移绝对阈值；结构设计研究可借鉴多信号监测思路，但需另行建立物理依据与验证。</p></section><section><h2>后续研究建议</h2><p>建议先澄清β、κ、AUROC差异和重建曲线来源，再复现固定校准与告警流程。随后引入独立的事实性、指令遵循指标及外部监测基线，测试长对话、代码和工具任务；最后开展FI触发干预的对照实验，评估收益与误报成本。</p></section><aside class="article-source-note"><h2>原文资料边界</h2><ul><li>原页正文写“Figure 5 demonstrates that FI achieves higher AUROC than entropy alone”，但核对图5及图注，其内容仅为三数据集FI随生成位置的轨迹与95%置信区间，没有AUROC或熵基线比较。这是原文图号引用与所指证据不匹配，受影响的是该句用图5支持AUROC优势的论证；不能从图5补造比较结果，也不能擅自确定正确图号。页面其余内容可读。</li><li>原页Dziri等参考文献条目保留“Verify this is the intended citation”及可能对应Faith and Fate的备注，引用对象未最终确认。缺少确定的引用对应关系，影响相关背景论证的文献可追溯性，不直接否定FI实验结果；未访问外部资料或推造正确条目。</li><li>原页Kadem与Zheng参考文献条目保留“Cited as CREST in text; verify arXiv ID matches intended paper before final submission”。正文名称与所列题目、编号的对应关系尚未确认，影响相关工作中CREST来源的可追溯性；不能据此确定正确题目或编号。</li><li>原页表6声称列出所有FI实验的固定默认值，但表内没有熵归一化高端尺度β及漂移归一化上限κ的参数行或数值。缺项影响FI归一化与阈值结果的精确复现；不能从熵带、权重或表7反推。此处仅确认表6未列这些参数，不断言全文其他位置也未提供。其余表格和正文均可读。</li></ul></aside><footer class="article-end"><p>本文依据论文资料整理，研究建议由本站提出。原文、相关文献和图示标注共同说明内容来源。</p></footer></article><dialog class="article-figure-dialog"><form method="dialog"><button type="submit">关闭大图</button></form><img alt="研究思路图放大查看"></dialog>
+      <footer class="site-footer"><p>每日更新，持续关注 AI 与工程可靠性。</p><div><a href="https://tengda-xmu.github.io/">腾达 · 厦门大学</a><a href="https://github.com/tengda-xmu/daily-papers" target="_blank" rel="noopener noreferrer">GitHub</a></div></footer>
+    </main>
+  </div>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <a class="back-to-top" href="#top" aria-label="返回页面顶部" hidden>回到顶部 ↑</a>
+</body>
+</html>
