@@ -1,0 +1,146 @@
+{
+  "paper_id": "07b63c49c7fb",
+  "fingerprint": "616ba33472a7d9e6e8d7892d3f9d8a2d587e7bea943dc623caa8f274663a8a79",
+  "analysis": {
+    "title_zh": "立场论文：数值精度对科学机器学习的显著影响",
+    "summary": "本文追问科学机器学习中的数值精度是否会改变物理解释，而不只影响预测误差。作者结合水分子优化、电磁模拟、MACE势模型实验及PINNs文献，指出相近MAE可能掩盖几何结构和振动模态归属的差异[P3–P6]。同时，线性介质案例显示高精度并非普遍必要[P19]。论文主张报告精度对照并评估计算成本，但尚未建立通用判据；附录参数缺项也限制部分实验复现[P7–P9、P17]。",
+    "recommendation": "推荐作为科学模型可靠性与评估规范的重点读物：它提示为何平均误差不足以保障派生物理性质一致，但不是生成式设计算法论文[P5–P9]。",
+    "deep_read": {
+      "problem": "科学机器学习常沿用追求效率的低精度策略，但物理任务可能无法容忍微小数值偏差。作者关注精度是否改变收敛、谱峰归属和科学结论，而非仅改变测试误差[P1–P2]。关键问题是哪些任务真正敏感；论文没有预设所有科学模型都应使用FP64[P9]。",
+      "method": "作者用PySCF比较水分子HF与DFT优化，用Meep比较非线性介质及线性圆柱模拟，并在固定超参数和随机种子下分别训练两种精度的MACE模型[P17–P20]。评估覆盖势能面、结构、振动频率和训练成本；PINNs依赖文献，LLMs讨论属于前瞻风险[P4–P8]。",
+      "innovation": "解读：本文贡献主要是评估视角和实践倡议，而非新网络架构。它把精度差异与派生性质、实验谱峰解释联系起来，避免仅凭MAE判定模型等价[P5–P6]。作者提出最低成本精度对照、敏感层混合高精度和跨学科验证，但未把这些设想作为已验证的新算法[P7–P8]。",
+      "findings": "作者报告49804个成功计算分子中85.15%至少出现一次所定义的频率模式错配[P6]。奥司他韦表6所列最大频率差为8.352 cm⁻¹[P22]；H200上FP64训练时间和能耗分别增至1.26倍、1.43倍[P8]。线性圆柱结果近似一致，表明精度需求依赖任务[P19]。",
+      "limitations": "原文件缺项：P17未标输入坐标及五项优化阈值单位，也未给带宽0.15的单位或定义；P17、P19均未给空间分辨率，限制几何、收敛和FDTD复现。公式未缺失。此外，P4图注阈值方向、P19统计差值存在内部不一致；高精度适用判据仍开放，LLM风险非本文实验证实[P9]。\n原文核对：[P17] 附录A.2的Simulation setup未给空间分辨率数值，仅写user-defined；Source and monitor definition将带宽写为0.15，未给单位或说明其为波长、频率等哪种带宽。原页已核实这些信息缺项，公式(1)–(3)完整。缺项限制FDTD网格与激励条件的精确复现，影响对谐波谱和精度阈值结果的独立核验；不自行补为0.15 μm。；[P17] 附录A.1的Simulation setup给出水分子坐标和五项结构优化收敛阈值，但原页未注明坐标、能量、梯度和位移阈值的单位。无对应公式编号，数值本身均可读。缺项限制几何输入和收敛判据的独立复现，不据软件惯例补写单位，也不影响本页现有内容的识读。；[P19] B.2 Simulation parameters原页仅说明沿用非线性研究的空间分辨率，并再次括注user-defined，没有提供具体分辨率数值。图3及吸收密度公式均完整。缺少网格参数限制圆柱附近场分布、吸收密度与FP32/FP64差异的精确复现，不影响本批现有内容的识读。",
+      "connection": "解读：对结构设计和可靠性研究，最直接的联系是检验优化结构、模态及最终物理判断，而非只看模型输出误差[P5、P21]。智能运维也可借鉴精度与硬件记录原则，但本文没有故障诊断实验。对生成式设计，其价值在候选结构的后续可信评估，不在生成方法本身[P7–P9]。",
+      "next_steps": "建议：先选代表性结构和关键派生量，固定超参数进行FP32与FP64对照，同时记录耗时、能耗和硬件；再检查完整模态谱、虚频及决策是否变化[P7–P8、P22]。复现前补齐附录单位与网格参数，并核实底层运算精度；这些是后续研究建议，不是作者已完成的验证[P17、P19]。"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://raw.githubusercontent.com/mlresearch/v306/main/assets/cho26k/cho26k.pdf"
+    ],
+    "analyzed_at": "2026-10-06T13:51:14.373217+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "以给定generative_design标签为方向，本文没有提出或评估生成式设计方法，直接匹配不足；但全文笔记及当前表6原文提供明确精度比较成果，适合重点阅读其可靠性评估思路。证据足以支持这一有限推荐，不足以证明FP64普遍更正确。",
+    "evidence": "The FP32 model\nproduces five imaginary modes, while the FP64 model produces four. ∆ denotes the absolute difference between frequencies computed\nby the FP32 and FP64 models."
+  },
+  "material": {
+    "version": "3be7e52730db8be895c9c0c602e047b3575e40e967efd6594468fba02a382030",
+    "total": 22,
+    "covered": 22,
+    "references": {
+      "problem": [
+        "P1",
+        "P2",
+        "P9"
+      ],
+      "method": [
+        "P4",
+        "P5",
+        "P6",
+        "P7",
+        "P8",
+        "P17",
+        "P18",
+        "P19",
+        "P20"
+      ],
+      "innovation": [
+        "P5",
+        "P6",
+        "P7",
+        "P8"
+      ],
+      "findings": [
+        "P6",
+        "P8",
+        "P19",
+        "P22"
+      ],
+      "limitations": [
+        "P4",
+        "P9",
+        "P17",
+        "P19"
+      ],
+      "connection": [
+        "P5",
+        "P7",
+        "P8",
+        "P9",
+        "P21"
+      ],
+      "next_steps": [
+        "P7",
+        "P8",
+        "P17",
+        "P19",
+        "P22"
+      ]
+    },
+    "excerpt": "The FP32 model\nproduces five imaginary modes, while the FP64 model produces four. ∆ denotes the absolute difference between frequencies computed\nby the FP32 and FP64 models.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P21",
+      "P22"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P4",
+        "detail": "图1(a)提取文本中的键长单位出现乱码，原图可读为Å：FP64 HF为0.941 Å，FP64 DFT为0.962 Å，FP32异常结构标注0.421 Å。已纠正单位及错乱排列；不存在已核实的原页缺项，受影响的是几何尺寸与物理合理性的判读。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P5",
+        "detail": "图2的文字提取漏掉能量刻度负号、差值减号及Å单位。原图能量刻度为−28230、−28235 eV，位移单位Å，力单位eV/Å；下面板为ΔE=E_FP64−E_FP32和ΔF=F_FP64−F_FP32。已据原图纠正；无原页缺项，避免误读能量符号及精度差异的方向。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P17",
+        "detail": "附录A.2的Simulation setup未给空间分辨率数值，仅写user-defined；Source and monitor definition将带宽写为0.15，未给单位或说明其为波长、频率等哪种带宽。原页已核实这些信息缺项，公式(1)–(3)完整。缺项限制FDTD网格与激励条件的精确复现，影响对谐波谱和精度阈值结果的独立核验；不自行补为0.15 μm。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P17",
+        "detail": "附录A.1的Simulation setup给出水分子坐标和五项结构优化收敛阈值，但原页未注明坐标、能量、梯度和位移阈值的单位。无对应公式编号，数值本身均可读。缺项限制几何输入和收敛判据的独立复现，不据软件惯例补写单位，也不影响本页现有内容的识读。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P19",
+        "detail": "B.2吸收功率密度无编号公式的提取文本遗漏复共轭横线并出现括号乱码。原图完整可读为p_abs(f)=2πf Im(Ēz Dz)=2πf Im(ε)|Ez|²，横线位于Ez上方，正文也明确解释其表示复共轭。已纠正；原公式无缺项，遗漏会影响吸收密度后处理公式的实现。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P19",
+        "detail": "B.2 Simulation parameters原页仅说明沿用非线性研究的空间分辨率，并再次括注user-defined，没有提供具体分辨率数值。图3及吸收密度公式均完整。缺少网格参数限制圆柱附近场分布、吸收密度与FP32/FP64差异的精确复现，不影响本批现有内容的识读。"
+      }
+    ]
+  }
+}
