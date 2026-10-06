@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="聚焦 AI 驱动的智能运维、结构生成式设计与疲劳可靠性，每日追踪科研论文，提供中文摘要与精读要点。">
+  <meta name="theme-color" content="#153e64">
+  <title>基于对角流匹配的可拒绝预测生成式逆向设计 | 全文精读</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css?v=b30c5f17c6">
+  <link rel="stylesheet" href="../assets/paper-chat.css?v=b30c5f17c6">
+  <link rel="stylesheet" href="../assets/paper-library.css?v=b30c5f17c6">
+  <script src="../assets/site.js?v=b30c5f17c6" defer></script>
+  <script src="../assets/paper-library.js?v=b30c5f17c6" defer></script>
+  <script src="../assets/paper-chat.js?v=b30c5f17c6" defer></script>
+  <script src="../assets/daily-update.js?v=b30c5f17c6" defer></script>
+<link rel="stylesheet" href="../assets/reading-article.css?v=b30c5f17c6"><script src="../assets/reading-article.js?v=b30c5f17c6" defer></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main-content">跳至正文</a>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a class="wordmark" href="../"><span>腾达</span><span class="wordmark-divider" aria-hidden="true"></span>科研文献</a>
+      <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false">菜单 <span aria-hidden="true">☰</span></button>
+      <nav id="main-navigation" class="main-navigation" aria-label="主导航">
+        <a href="../" >每日推荐</a>
+        <a href="../search.html" data-local-only >手动检索</a>
+        <a href="../leads.html" >科研线索</a>
+        <a href="../ai.html" >AI 前沿</a>
+        <a href="../library.html" data-local-only >我的文献</a>
+        <a href="../archive/" >历史归档</a>
+        <a href="../setup.html" data-local-only >设置</a>
+      </nav>
+    </div>
+  </header>
+  <div class="site-shell">
+    <main id="main-content" class="main-content" tabindex="-1">
+      <article class="reading-article" data-paper-id="9a4dcded0864"><a class="article-back" href="../">返回每日推荐</a><header class="article-header"><p class="article-type">论文精读</p><h1>基于对角流匹配的可拒绝预测生成式逆向设计</h1><p class="article-original" lang="en">Generative Inverse Design with Abstention via Diagonal Flow Matching</p><p class="article-byline">Miguel De Campos, Werner Krebs, Hanno Gottschalk<br>ICML 2026</p><p class="article-updated">精读更新 2026-10-06 22:54 · 依据论文全文整理</p><div class="article-links"><a href="https://proceedings.mlr.press/v306/de-campos26a.html" target="_blank" rel="noopener noreferrer">阅读原文</a><button type="button" class="text-button copy-citation" data-citation="Miguel De Campos, Werner Krebs, Hanno Gottschalk. Generative Inverse Design with Abstention via Diagonal Flow Matching. ICML 2026. https://proceedings.mlr.press/v306/de-campos26a.html">复制引用</button><button type="button" class="text-button codex-entry" data-local-only data-paper-id="9a4dcded0864" data-paper-title="基于对角流匹配的可拒绝预测生成式逆向设计">Codex 对话</button></div></header><p class="article-upgrade">全文精读已完成，文章版正在逐步升级。现有内容可继续阅读。</p><div class="article-lead"><p>本文研究如何直接生成满足性能目标的多样化设计，并识别不可信输出。作者以零锚定改造条件流匹配，使设计配噪声、标签配零，避免任意坐标排序造成训练敏感，并构建零偏差与自一致性指标。 五类任务支持逆向误差改善，部分任务验证候选筛选、拒绝与分布外检测。 但代理评价、指标优势的例外及原文公式缺项限制了结论，不能将内部一致性视为物理可行性保证。</p></div><section><h2>研究问题</h2><p>逆向设计通常多解：少量性能标签对应大量设计参数，单一优化结果难以覆盖备选方案。生成模型又会对不可行目标照常输出，造成工程决策风险。作者因此同时追求条件生成、快速性能预测和可信度筛查，关注无需在线物理仿真的认知不确定性。</p></section><section><h2>方法与路线</h2><p>作者将流状态增广为设计与标签联合空间，从[z;y]输运至[x;0]，训练速度目标为[x−z;−y]。零偏差读取终点标签残差，无需额外模型评价；自一致性把残差替换为精确零后反向积分，比较重建标签与请求目标，避免直接可逆往返产生平凡结果。</p></section><section><h2>创新与比较</h2><p>关键创新是改变配对方式，而非单纯加深网络：标签不再与任意设计坐标相减。命题及证明利用独立同分布噪声建立目标速度分布的置换等变性，并给出标准CFM反例。“learning problem is invariant”限定学习问题，而非具体网络或初始化天然不变。</p></section><section><h2>证据与发现</h2><p>燃烧室往返误差降至1.27×10^−3；DTLZ在P=100时为5.26×10^−3，均低于两基线。薄膜和图像任务也支持逆向优势。拒绝20%样本时零偏差降低误差8–27%，但并非每项最佳；Unifoil近边界检测AUC为0.961。</p></section><section><h2>局限与边界</h2><p>原文DTLZ公式在m=L时涉及未定义x0，缺少其定义且乘积上限为−1，影响按印刷公式复现，不能据此判定代码错误。另有代理评价依赖、正文与表格排序冲突及AUC差异未解释；薄膜和图像未给出对应UQ明细，不能声称全部任务验证。
+原文核对： 附录C.3未编号的DTLZ2目标公式原页写有x_{L−m}及余弦积上限L−1−m，范围为2≤m≤L；m=L时涉及x0，而设计向量仅定义x1至xP，缺少x0定义，乘积上限也成为−1。影响按印刷公式复现解析前向映射；不能据此推定实际代码或实验结果错误，也未补造正确公式。</p></section><section><h2>方向关联</h2><p>解读：对结构设计，条件生成可提供多候选，准确性条件化多样性比原始方差更适合评价有效探索。对可靠性研究，拒绝曲线体现覆盖率与误差的权衡。对智能运维，可借鉴异常目标筛查思路，但论文没有运维实证，OOD判别也不是失效概率或安全保证。</p></section><section><h2>后续研究建议</h2><p>建议：先在可精确评价的结构参数问题复现排序消融和拒绝曲线，再对保留与拒绝样本分别进行高保真验证。结合作者主动学习方向，优先采样高不确定区域；同时补充阈值校准、物理约束及条件偏移测试，并核清DTLZ公式与实现，避免沿用原文缺项。</p></section><aside class="article-source-note"><h2>原文资料边界</h2><ul><li>附录C.3未编号的DTLZ2目标公式原页写有x_{L−m}及余弦积上限L−1−m，范围为2≤m≤L；m=L时涉及x0，而设计向量仅定义x1至xP，缺少x0定义，乘积上限也成为−1。影响按印刷公式复现解析前向映射；不能据此推定实际代码或实验结果错误，也未补造正确公式。</li></ul></aside><footer class="article-end"><p>本文依据论文资料整理，研究建议由本站提出。原文、相关文献和图示标注共同说明内容来源。</p></footer></article><dialog class="article-figure-dialog"><form method="dialog"><button type="submit">关闭大图</button></form><img alt="研究思路图放大查看"></dialog>
+      <footer class="site-footer"><p>每日更新，持续关注 AI 与工程可靠性。</p><div><a href="https://tengda-xmu.github.io/">腾达 · 厦门大学</a><a href="https://github.com/tengda-xmu/daily-papers" target="_blank" rel="noopener noreferrer">GitHub</a></div></footer>
+    </main>
+  </div>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <a class="back-to-top" href="#top" aria-label="返回页面顶部" hidden>回到顶部 ↑</a>
+</body>
+</html>

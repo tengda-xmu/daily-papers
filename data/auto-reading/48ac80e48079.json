@@ -1,0 +1,488 @@
+{
+  "paper_id": "48ac80e48079",
+  "fingerprint": "f5dd46f1fce347dd442ba8b7bc799cea5b6e80e26b7ad194f135e857ee911261",
+  "analysis": {
+    "title_zh": "通过数字孪生市场自博弈演化定量推理",
+    "summary": "论文针对大语言模型定量计算不可靠的问题，将语义规划与数值执行分离，动态生成受约束的分析工具，并在数字孪生市场中反馈改进[P1–P5]。实验涵盖虚拟市场、三个真实金融数据集及模块消融，部分配置取得较高收益和风险调整表现[P7–P8]。但市场机制、公式代码和指标口径存在不一致，不能据此确认可靠性的因果提升。解读：适合借鉴工具评估架构，不宜直接作为智能运维效果证据。",
+    "recommendation": "建议作为方法借鉴与复现审计文献阅读：重点关注工具生成约束、诊断反馈和计算开销，同时核查市场机制及指标一致性；不作为智能运维方向的核心实证论文。",
+    "deep_read": {
+      "problem": "作者关注高层语义推理与决策关键数值计算之间的可靠性鸿沟：不确定性、非线性和阈值规则可能放大小误差[P1]。历史回测又难以区分策略能力与外生行情影响[P3]。研究问题因此不仅是提高收益，还包括如何独立评价计算工具及其迭代改进。",
+      "method": "DeMAgent依次进行市场分析、知识与工具创建、评价与改进；数值计算全部交给工具，禁止自由文本计算，并施加因果性、安全性和接口约束[P5]。工具依据诊断反馈修改，不更新模型参数。附录将自博弈界定为单代理与固定或启发式参与者的绩效驱动交互[P12]。",
+      "innovation": "作者提出将动态生成的工具作为显式中间推理产物，而非固定工具库或一次性代码[P2–P3]；结合不回放历史价格的市场环境，尝试追踪规划、执行与结果之间的关系[P3–P4]。解读：特色在可评价的工具演化闭环，但现有资料不足以证明其全面优于其他工具生成范式。",
+      "findings": "NASDAQ中DeMAgent/GPT-5-mini的TR为8.4876、SR为0.2072；CSI的TR为41.3224，但SR并非表内最高[P17]。加密货币最高TR来自DeepSeek配置，为26.9338，最高SR来自GPT-5-mini配置，为0.2910[P18]。结果支持配置依赖的收益优势，而非所有骨干均提升。",
+      "limitations": "原文件[P15][P16]均缺少“Tables 9 and 10 and ??”中的第三个引用表号，影响证据定位，不能补写。解读：成交守恒与净失衡冲击存在机制矛盾[P12]，AMVR公式代码方向不一[P9]，日期及指标口径冲突[P6][P14][P17–P18]；缺少重复误差和显著性证据，限制因果解释。\n原文核对：[P15] F.1页末原页确有“Tables 9 and 10 and ??”，第三个表格交叉引用未解析，缺少可靠表号。影响跨NASDAQ、CSI及加密货币定量比较的证据定位；不能据此猜测缺失表号，也不能断言相应表格本体缺失。图7与其余正文均可读。；[P16] F.3首句原页再次出现“Tables 9 and 10 and ??”，第三个交叉引用缺少表号。影响收益、Sharpe、Calmar及回撤比较结论的对应证据定位；本批未提供相关性能表，不能补写表号或数值。图8、表8及其他现有内容已读清。",
+      "connection": "解读：规划与计算解耦、工具硬约束及诊断反馈，可对应智能运维中的故障分析、统计检验和工具审查[P5]；成本与延迟评价也适合在线可靠性任务[P16]。但论文只验证金融场景，没有设备退化、结构设计或维护决策实验，方向联系属于可迁移设想而非直接成果。",
+      "next_steps": "建议先审计成交守恒下的价格更新、零成交分母、聚合函数实现及指标计算，统一测试日期，再复现实验[P12–P14][P17–P18]。迁移时选定一个运维诊断任务，比较固定工具、动态工具和完整反馈闭环，联合报告计算正确率、诊断效用、约束失败率及延迟，避免仅以任务收益评价推理。"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://raw.githubusercontent.com/mlresearch/v306/main/assets/ma26m/ma26m.pdf"
+    ],
+    "analyzed_at": "2026-10-06T14:36:37.699047+00:00",
+    "llm_model": "gpt-6.1-sol",
+    "article": {
+      "version": 1,
+      "lead": "让大模型解释市场，并不等于让它可靠地计算风险与收益。这篇论文将语义规划与数值执行分开：LLM生成、组织和解释量化工具，外部程序完成计算，再借助内生价格形成的数字孪生市场迭代修正。其阅读价值不仅在于交易绩效，更在于提出一种可检查的定量推理流程；但历史回测优势、工具正确性与真实部署可靠性，仍须分别讨论。",
+      "sections": [
+        {
+          "id": "context",
+          "title": "从“会解释市场”到“能可靠计算”",
+          "paragraphs": [
+            "金融决策中的数值错误会通过复利、非线性关系和阈值规则放大，流畅解释无法抵消错误计算。论文因此把研究对象从最终交易动作前移到量化工具：分析依据能否转化为可执行、可检查的中间产物，工具失效后又能否被修正。",
+            "固定工具库限制了分析方式，但自由生成代码也可能引入前视偏差和数值异常。本文尝试在两者之间建立受约束的探索空间；相关文献《Automate Strategy Finding with LLM in Quant Investment》的摘要已描述可执行因子生成与筛选，因此这里值得关注的是工具创建、市场反馈与有界迭代的组合，而非把工具生成本身视为全新技术。"
+          ]
+        },
+        {
+          "id": "method",
+          "title": "三阶段工具闭环，参数不更新",
+          "paragraphs": [
+            "DeMAgent依次执行市场分析MA、知识与工具创建KTC、评价与改进ER。MA形成结构化市场描述，KTC生成指标或特征程序，ER结合计算输出与市场响应修订工具；全部数值计算和统计估计交给工具，禁止自由文本计算。其定位是辅助决策模块，而非直接连接实盘的交易执行系统。",
+            "工具须满足语法、数值、因果、执行安全和接口约束，违反硬约束会导致执行失败。闭环调整推理轨迹、工具选择与决策抽象，不更新模型参数；这里的“自博弈”是绩效驱动的合成交互，不是经典对抗式强化学习。执行预算及工具保留阈值未报告，约束如何落实仍影响复现。",
+            "DECOUPLEDMARKET不回放历史价格，也不暴露日历信息，价格由参与者交互产生。式(5)采用Impact=κ·tanh(Δ/L)，再聚合交易价、成交量加权价和短期压力形成下一步参考价。不过，执行买卖量守恒与按执行量定义的非零净需求如何兼容尚待澄清，κ、窗口和聚合函数的具体配置也缺失。"
+          ]
+        },
+        {
+          "id": "validation",
+          "title": "合成市场、历史回测与模块消融",
+          "paragraphs": [
+            "验证包括数字孪生交易比较、三个真实市场回测、模块消融和计算效率分析，没有实盘部署。历史资产共列出九项：美股AAPL、MSFT、NVDA，加密资产BTC、SOL、BNB，以及茅台、宁德时代、隆基绿能；前两类来自YAHOO FINANCE，后一类来自BAOSTOCK，使用日频OHLC、成交量与派生指标。",
+            "九项资产不是九次独立重复试验，API调用量也不是独立样本量。有效记录数、仿真重复、随机种子、增强数量及训练验证测试划分均未报告；正文与附录还对三个市场的评价日期给出不同对应关系。过去值前向填充和内生价格设计有助于减少部分泄漏路径，但不能证明预训练信息与评价期完全隔离。",
+            "基线覆盖传统技术策略、DDPG/PPO/A2C/TD3、独立LLM、StockSim和ArenaTrader；骨干比较保持外围接口与提示结构一致。消融比较无模块、仅MA、仅KTC、MA+KTC和完整模型，没有覆盖全部组合。指标包括总收益TR、胜率WR和SR，其中SR按日收益计算、无风险利率为零，未给年化因子。"
+          ]
+        },
+        {
+          "id": "findings",
+          "title": "收益优势可见，可靠性证据仍不完整",
+          "paragraphs": [
+            "数字孪生中，七种DeMAgent骨干的TR均超过对应独立LLM，Gemini-3-Pro达到正文所述13.95%总收益和1.60的SR，但风险调整收益并非全部改善。历史主比较中，GPT-5-mini配置在三个市场的TR为8.49、41.32、25.21；扩展骨干表中，加密市场最高TR则属于DeepSeek-V3.2的26.9338。",
+            "完整模型在消融表中取得三个市场最高TR和SR，但加密市场MA+KTC的TR低于仅KTC，说明组合并非单调增益。缺少重复统计与完整组合，尚不足以强力支持作者关于机制因果作用的总结；主比较和消融的部分基线数值不同，也不能跨表直接归因。",
+            "复现还受到具体报告问题限制：图6中AMVR动态窗口公式与代码的sigmoid符号相反，MD非负定义与负值表项不一致，未解析的“??”交叉引用影响证据定位。CSI效率分析报告99.6%的硬约束通过率、19.8 s延迟和$0.098总成本，前者不是盈利率。**现有结果支持有限场景下的绩效潜力，尚不能等同于长期稳健性或完整交易安全。**"
+          ]
+        }
+      ],
+      "experiments": [
+        {
+          "name": "数字孪生交易绩效及骨干比较",
+          "data": "集中撮合的内生价格合成市场，不回放历史轨迹；股票配置包含初始价格、波动率和行业等属性。",
+          "samples": "七种DeMAgent骨干属于配置数量；股票总数、智能体总数、独立仿真次数、种子、时长及增强数量未报告。",
+          "groups": "比较传统策略、独立LLM、既有交易智能体与DeMAgent；Stock A/B/C轨迹属于代表性可视化，不另计实验。",
+          "split": "训练验证测试划分未报告；闭环不更新LLM参数，不能据此假定工具开发与评价已隔离。",
+          "baselines": "Buy & Hold、ATR、RSI、ZMR、Bollinger Bands、SMA、MACD；对应独立LLM、StockSim及ArenaTrader。",
+          "metrics": "报告TR、平均日收益、日收益标准差、SR、WR和MD；SR无年化因子，MD表值符号与正文定义不一致。",
+          "results": "七种骨干TR均高于对应独立LLM；Gemini-3-Pro的TR为13.9459，正文解释为13.95%，SR为1.5952。",
+          "limitations": "无重复统计或显著性检验；GPT-5-mini的SR由1.0490降至0.7553，收益增加不代表风险表现全面改善。"
+        },
+        {
+          "name": "三个历史市场主比较及骨干敏感性",
+          "data": "美股与加密资产数据来自YAHOO FINANCE，中国股票来自BAOSTOCK；使用日频OHLC、成交量与派生指标。",
+          "samples": "每市场列出三项资产，共九项；有效记录数、交易总数、独立运行数及增强数量未报告，资产不等于重复样本。",
+          "groups": "NASDAQ：AAPL/MSFT/NVDA；CSI：茅台/宁德时代/隆基绿能；CRYPTOCURRENCY：BTC/SOL/BNB。",
+          "split": "正文依次对应2025-09-01至10-26、10-01至11-30、08-01至10-31；附录改为加密、美股、CSI对应上述窗口。训练验证划分未报告。",
+          "baselines": "传统技术策略、DDPG/PPO/A2C/TD3、七种独立LLM、StockSim、ArenaTrader；另比较七种DeMAgent骨干。",
+          "metrics": "主表报告TR、WR、SR；扩展表增加平均收益、波动率、MD及CR。百分数单位未统一标注，MD符号存在异常。",
+          "results": "GPT-5-mini配置三市场TR/SR为8.49/0.21、41.32/0.29、25.21/0.29；加密市场DeepSeek-V3.2的TR为26.9338。",
+          "limitations": "日期对应冲突、训练预算及交易成本未报告；部分骨干不及对应独立LLM，缺少误差统计，不能认定全面或显著领先。"
+        },
+        {
+          "name": "MA、KTC与ER模块消融",
+          "data": "采用NASDAQ、CSI和CRYPTOCURRENCY历史基准；是否与主比较使用完全相同抽样及执行配置未报告。",
+          "samples": "五种模块配置不是五个独立样本；各组独立运行、随机种子、交易数量及增强数量未报告。",
+          "groups": "GPT-5-mini下比较无模块、仅MA、仅KTC、MA+KTC、MA+KTC+ER；未设置单独ER、MA+ER或KTC+ER。",
+          "split": "训练验证测试划分未报告；主比较与消融部分无模块基线不同，不能默认两表具有完全相同评价条件。",
+          "baselines": "使用本消融表的无模块GPT-5-mini及组件配置作对照，不以主比较中的GPT-5-mini数值替换。",
+          "metrics": "报告TR、WR、SR；未直接报告工具数值误差、生成成功率、信号稳定性或工具执行失败率。",
+          "results": "完整模型三个市场均为本表最高TR和SR；加密市场仅KTC的TR为20.96，MA+KTC为17.30，完整模型为25.21。",
+          "limitations": "未覆盖全部模块组合，无法完整分离ER贡献及交互；无重复统计，CSI与加密市场基线跨表差异原因未报告。"
+        },
+        {
+          "name": "CSI智能体调用成本与延迟分析",
+          "data": "CSI历史评价，效率窗口为2025年9月3日至10月31日；不同于交易绩效窗口，不能合并为同一测量。",
+          "samples": "五组API调用数为36、36、72、108、164；调用不是独立样本，决策总数及重复测量次数未报告。",
+          "groups": "独立GPT-5-mini、GPT-4.1-mini、StockSim/GPT-5-mini、ArenaTrader/GPT-5-mini、DeMAgent/GPT-5-mini。",
+          "split": "报告效率测量日期；训练验证划分未报告，延迟计时边界和重复测量方案亦未报告。",
+          "baselines": "两种独立LLM及StockSim、ArenaTrader；没有单独隔离动态工具创建开销的消融配置。",
+          "metrics": "调用数、硬约束通过率、延迟s、总成本$及单次成本$；成功率分母与延迟汇总口径未报告。",
+          "results": "DeMAgent为164次调用、99.6%通过率、19.8 s、$0.098；独立GPT-5-mini为36次、100.0%、5.2 s、$0.022。",
+          "limitations": "DeMAgent在所列组中调用、延迟与总成本最高；缺少分布和定价时点，通过率不能解释为盈利率或完整安全保证。"
+        }
+      ],
+      "routes": [
+        {
+          "title": "面向预测维护的可审计工具生成闭环",
+          "direction_id": "ai_maintenance",
+          "gap": "原研究以交易绩效间接评价工具，却缺少数值正确性和失败来源的直接测量。迁移至预测维护时，应先检验工具能否忠实处理设备历史，再讨论维护收益；不能把交易结论当作运维有效性证据。",
+          "mechanism": "让LLM提出诊断计划及特征程序，由外部计算器执行；增加单位检查、时间对齐、零方差测试和未来数据访问屏蔽。将失败分为规划、实现、数据与诊断四类，仅允许通过验证的工具进入候选库。",
+          "innovation": "候选创新是把有界工具迭代与故障证据链结合，而非自称首次生成工具。Agent Planning Benchmark摘要强调规划与执行的分离诊断，可借鉴其思路，但须重新定义适用于运维的故障类别。",
+          "design": "建议设计：先选有设备标识和退化标签的公开运行至失效数据，按设备隔离开发、验证和测试，目标至少30个独立测试设备。设置平稳、负载变化及缺失数据工况；窗口增强不计独立设备，不足数量时如实缩小设计。",
+          "comparison": "比较固定特征模型、固定工具LLM、无审计动态工具和完整方案；消融单位检查、时间检查及反馈修订。统一骨干、调用预算和输入窗口，分别报告诊断性能与程序错误，避免仅用终端成绩解释机制。",
+          "criterion": "预先规定故障检测F1、寿命预测误差、非法工具率、延迟和成本；按设备计算置信区间。建议成功判据为预算相同时减少工具错误且不损害测试性能，任何危险建议均须人工复核。",
+          "risk": "公开数据可能缺少真实维护决策与成本，不能据此宣称经济收益。先开展离线诊断和工具审计；若动态生成不稳定，退回受验证算子组合，现场数据需另行采集，不假定已有传感器或运维平台。"
+        },
+        {
+          "title": "疲劳可靠性计算中的约束验证与有界改进",
+          "direction_id": "fatigue_reliability",
+          "gap": "原研究暴露的公式代码不一致及风险口径差异，在疲劳寿命计算中可能转化为非保守判断。后续应先回答生成程序是否忠实实现给定模型，再检验迭代能否改善载荷变化下的可靠性估计。",
+          "mechanism": "让LLM规划载荷处理、损伤累计和不确定性传播，外部程序执行计算。对量纲、载荷顺序、模型适用范围和参数来源建立约束，并用解析算例和数值参考解反馈，不以语言自评替代计算正确性。",
+          "innovation": "候选创新是将工具自适应与参考方法审计、保守性检查组合。Beyond Execution的摘要提出用结构化约束核查实验忠实性；这里借鉴审计原则，疲劳领域约束及验证流程属于拟议设计。",
+          "design": "建议设计：选择公开且参数可追溯的疲劳试验资料，目标至少30个独立试件，按材料或载荷谱留出测试。另建恒幅、变幅和过载数值算例；试件、仿真及重采样分别计数，缺失参数需补充采集。",
+          "comparison": "比较固定损伤计算、固定工具LLM和动态工具方案；消融量纲检查、参考解校验及反馈修订。统一输入、执行预算与参数估计方法，禁止用测试试件调整工具，避免把模型差异混入工具机制效应。",
+          "criterion": "同时报告寿命误差、非保守预测比例、失效概率误差及计算成本，按独立试件汇总不确定性。建议成功判据为保持参考模型一致性，并在留出载荷谱上减少非保守错误，而非仅降低平均误差。",
+          "risk": "疲劳模型偏差可能大于程序误差，计算通过不代表物理有效。若公开数据无法支持可靠性参数估计，先限定为确定性算例；涉及新材料或现场载荷时需补充试验，最终工程判断保留专家审核。"
+        }
+      ],
+      "diagrams": [
+        {
+          "kind": "study",
+          "title": "原研究：市场反馈驱动的工具改进",
+          "description": "展示已提出的方法与验证关系；迭代发生于工具和推理流程，不是LLM参数训练，也不是实盘部署。",
+          "nodes": [
+            {
+              "id": "a",
+              "stage": 0,
+              "label": "市场观察窗口",
+              "detail": "部分可观测市场信号；窗口长度由智能体侧选择"
+            },
+            {
+              "id": "b",
+              "stage": 1,
+              "label": "MA结构化分析",
+              "detail": "归纳趋势、波动、资产信号与订单流"
+            },
+            {
+              "id": "c",
+              "stage": 2,
+              "label": "KTC生成量化工具",
+              "detail": "构建指标和特征程序，接受硬约束检查"
+            },
+            {
+              "id": "d",
+              "stage": 3,
+              "label": "外部计算与ER解释",
+              "detail": "执行数值计算，评价输出并形成决策支持"
+            },
+            {
+              "id": "e",
+              "stage": 4,
+              "label": "数字孪生市场交互",
+              "detail": "统一撮合协议下产生市场响应与内生价格"
+            },
+            {
+              "id": "f",
+              "stage": 5,
+              "label": "绩效与历史数据评价",
+              "detail": "比较交易指标、模块配置与不同骨干；未实盘部署"
+            }
+          ],
+          "edges": [
+            {
+              "from": "a",
+              "to": "b",
+              "label": "提供观察"
+            },
+            {
+              "from": "b",
+              "to": "c",
+              "label": "规划工具"
+            },
+            {
+              "from": "c",
+              "to": "d",
+              "label": "执行与解释"
+            },
+            {
+              "from": "d",
+              "to": "e",
+              "label": "下游决策交互"
+            },
+            {
+              "from": "e",
+              "to": "a",
+              "label": "更新市场信号"
+            },
+            {
+              "from": "e",
+              "to": "d",
+              "label": "反馈市场响应"
+            },
+            {
+              "from": "d",
+              "to": "c",
+              "label": "修订或替换工具"
+            },
+            {
+              "from": "e",
+              "to": "f",
+              "label": "汇总评价证据"
+            }
+          ]
+        },
+        {
+          "kind": "proposal",
+          "title": "拟议路线：预测维护工具的分层审计",
+          "description": "对应第一条研究建议；所有节点为拟议流程，性能改善须通过设备隔离测试确认。",
+          "nodes": [
+            {
+              "id": "a",
+              "stage": 0,
+              "label": "公开设备退化数据",
+              "detail": "核查设备标识与标签，按设备隔离开发和测试"
+            },
+            {
+              "id": "b",
+              "stage": 1,
+              "label": "诊断计划与工具生成",
+              "detail": "LLM提出特征和程序，不自行完成数值运算"
+            },
+            {
+              "id": "c",
+              "stage": 2,
+              "label": "程序与时序审计",
+              "detail": "检查单位、时间对齐、未来访问及零方差行为"
+            },
+            {
+              "id": "d",
+              "stage": 3,
+              "label": "外部执行与错误归类",
+              "detail": "区分规划、实现、数据与诊断错误，保留审计记录"
+            },
+            {
+              "id": "e",
+              "stage": 4,
+              "label": "冻结工具留出测试",
+              "detail": "比较负载变化、缺失数据工况与等预算基线"
+            },
+            {
+              "id": "f",
+              "stage": 5,
+              "label": "性能安全成本判定",
+              "detail": "按设备汇总误差和置信区间，危险建议人工复核"
+            }
+          ],
+          "edges": [
+            {
+              "from": "a",
+              "to": "b",
+              "label": "仅开放开发数据"
+            },
+            {
+              "from": "b",
+              "to": "c",
+              "label": "提交候选程序"
+            },
+            {
+              "from": "c",
+              "to": "d",
+              "label": "合格后执行"
+            },
+            {
+              "from": "c",
+              "to": "b",
+              "label": "失败约束反馈"
+            },
+            {
+              "from": "d",
+              "to": "b",
+              "label": "开发期有界修订"
+            },
+            {
+              "from": "d",
+              "to": "e",
+              "label": "冻结候选方案"
+            },
+            {
+              "from": "a",
+              "to": "e",
+              "label": "提供隔离测试设备"
+            },
+            {
+              "from": "e",
+              "to": "f",
+              "label": "检验预设判据"
+            }
+          ]
+        }
+      ],
+      "related": {
+        "status": "ok",
+        "checked_at": "2026-10-06T14:45:13.300367+00:00",
+        "papers": [
+          {
+            "title": "Agent Planning Benchmark: A Diagnostic Framework for Planning Capabilities in LLM Agents",
+            "url": "https://doi.org/10.48550/arxiv.2606.04874",
+            "year": 2026,
+            "basis": "abstract",
+            "preprint": true
+          },
+          {
+            "title": "Beyond Execution: Auditing Experimental Fidelity in LLM-Driven Scientific Research",
+            "url": "https://doi.org/10.48550/arxiv.2608.26753",
+            "year": 2026,
+            "basis": "abstract",
+            "preprint": true
+          },
+          {
+            "title": "An Adaptive LLM-Based Agent Framework with Self-Extending Tool Library for Automated Building Code Compliance Checking",
+            "url": "https://openalex.org/W7137466442",
+            "year": 2025,
+            "basis": "abstract",
+            "preprint": false
+          },
+          {
+            "title": "Automate Strategy Finding with LLM in Quant Investment",
+            "url": "https://doi.org/10.18653/v1/2025.findings-emnlp.1005",
+            "year": 2025,
+            "basis": "abstract",
+            "preprint": false
+          },
+          {
+            "title": "An LLM-modulo framework for automated PDDL domain model generation",
+            "url": "https://doi.org/10.18419/opus-17516",
+            "year": 2025,
+            "basis": "abstract",
+            "preprint": false
+          }
+        ]
+      }
+    },
+    "article_updated_at": "2026-10-06T14:48:22.132064+00:00",
+    "article_profile": "fb6a0be80eaaaf274aa11eb04c86e08052da3c02dff363c03b14dc8484ed5d3d"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "论文研究金融定量推理而非智能运维，缺少设备与维护场景验证，因此不判为直接切合方向。动态工具生成、独立评价和反馈改进具有明确方法价值，当前资料足以支持方法借鉴型推荐；但机制及指标矛盾使其效果可靠性仍需复核。",
+    "evidence": "By contrast, our\nframework elevates quantitative tools to explicit interme-\ndiate reasoning artifacts that are created, evaluated, and\niteratively adapted within a bounded loop, enabling clearer\nattribution"
+  },
+  "material": {
+    "version": "c5a662591aa0b7387fe74f3a80c917bd5c0b9e0d9835d76ff4c3bc8391dd7a04",
+    "total": 18,
+    "covered": 18,
+    "references": {
+      "problem": [
+        "P1",
+        "P3"
+      ],
+      "method": [
+        "P5",
+        "P12"
+      ],
+      "innovation": [
+        "P2",
+        "P3",
+        "P4"
+      ],
+      "findings": [
+        "P17",
+        "P18"
+      ],
+      "limitations": [
+        "P6",
+        "P9",
+        "P12",
+        "P14",
+        "P15",
+        "P16",
+        "P17",
+        "P18"
+      ],
+      "connection": [
+        "P5",
+        "P16"
+      ],
+      "next_steps": [
+        "P12",
+        "P13",
+        "P14",
+        "P17",
+        "P18"
+      ]
+    },
+    "excerpt": "By contrast, our\nframework elevates quantitative tools to explicit interme-\ndiate reasoning artifacts that are created, evaluated, and\niteratively adapted within a bounded loop, enabling clearer\nattribution",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P3",
+        "detail": "文字提取将式(1)联合行动元组的括号变为异常字符，并打散式(2)上下标。已从原页核对：a_t=(a_t^1,…,a_t^M)，式(2)为T_i^{π_{−i}}(s_{t+1}|s_t,a_t^i)。原页公式完整；纠正后保留联合行动驱动转移及其他代理时变策略引起有效非平稳性的含义。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P4",
+        "detail": "文字提取打散观察窗口、式(4)交易数量和共同参考价格的上下标。已从原页核对为o^i_{t−D+1:t}、q^{buy,t}_{n,i}、q^{sell,t}_{n,i}及带波浪号的P^t_{close,n}。式(4)完整，明确超额需求采用执行交易数量计算，不应误读为提交订单数量。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P5",
+        "detail": "式(5)—(8)的括号、求和限及上下标在文字提取中散乱。原页已读清：式(5)求和范围为τ=t−T至t，式(6)参考价格带波浪号，式(7)左端为P_n^{t+1}，式(8)输入为o^i_{t−D+1:t}。没有缺失公式；纠正后可准确区分近期交易活动、交易价格、下一步估值价和工具输出。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P7",
+        "detail": "表2若干相邻单元格在提取文字中粘连。原页确认Bollinger Bands的WR=35.00、MD=0.0000，SMA为45.00、0.0000；Qwen-3的SR=0.6867、WR=100.00；DeMAgent/DeepSeek-V3.2的R_p=0.5583、σ_p=0.7935、SR=0.7036。不存在缺项，纠正后避免误读胜率、波动率及风险调整收益。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P8",
+        "detail": "表4模块启用圆点被文字提取为#或空白。原页实心圆表示启用、空心圆表示禁用：基线均禁用，MA与KTC版本分别仅启用对应模块，MA+KTC禁用ER，Full全部启用。另已分开表3 Gemini-3-Pro在NASDAQ的−0.66、59.52、−0.05及表5 DeepSeek-V3.2在加密货币的26.93、0.19。纠正后可正确解释消融配置及最高收益归属，无原页缺项。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P9",
+        "detail": "图6评价区域的右列文字在提取结果中被遗漏或替换为孤立圆点。原页可读内容包括“Stability across market regimes”“Sensitivity to volatility shifts”“Interaction effects among agents”及“Robustness under endogenous noise”。没有原页缺项；纠正后可知评价不仅涉及AMVR正负号对应的仓位规则，也包含稳定性、敏感性与交互诊断。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P12",
+        "detail": "式(9)—(12)的集合括号、求和限和上下标在文字提取中散乱。原页式(9)左端为{q^{buy,t}_{n,i},q^{sell,t}_{n,i}}_{n=1}^{N}，右端为M_n(a_t^i,s_t)；式(10)求和范围为τ=t−T至t；式(11)参考价格带波浪号；式(12)左端为P_n^{t+1}。公式均完整，纠正后保留配置映射、成交量缩放与下一步价格聚合的含义。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P13",
+        "detail": "式(13)的求和符号在提取文字中被误呈为类似Pt的字符，且上下标散乱。原页已确认分子为Σ_{τ=t−T}^{t}P_{trade,n}^{τ}V_n^{τ}，分母为Σ_{τ=t−T}^{t}V_n^{τ}；式(14)为交易价减成交量加权价。原页无公式缺项，纠正后可准确识别加权共识价格与趋势压力的定义。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P15",
+        "detail": "F.1页末原页确有“Tables 9 and 10 and ??”，第三个表格交叉引用未解析，缺少可靠表号。影响跨NASDAQ、CSI及加密货币定量比较的证据定位；不能据此猜测缺失表号，也不能断言相应表格本体缺失。图7与其余正文均可读。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P16",
+        "detail": "F.3首句原页再次出现“Tables 9 and 10 and ??”，第三个交叉引用缺少表号。影响收益、Sharpe、Calmar及回撤比较结论的对应证据定位；本批未提供相关性能表，不能补写表号或数值。图8、表8及其他现有内容已读清。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P17",
+        "detail": "表9与表10多个相邻单元格在文字提取中粘连。原页确认表9 Gemini-3-Pro的R_p=−0.0154、σ_p=0.2820、SR=−0.0546、WR=59.52、MD=−1.8522；DeMAgent/GPT-4.1-mini的WR=54.76、MD=−2.4525、CR=7.8150。表10 ArenaTrader/GPT-4.1-mini的R_p=0.1088、σ_p=0.3546、SR=0.3067、WR=58.33、MD=−0.9737。无缺项，纠正后可准确比较风险调整收益与回撤。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P18",
+        "detail": "表11相邻数值在提取文字中粘连。原页确认Qwen-3的R_p=0.0392、σ_p=0.3691、SR=0.1062；StockSim的WR=40.00、MD=正8.6800、CR=0.3520；DeMAgent/GPT-5-mini的σ_p=1.4159、SR=0.2910、WR=67.86、MD=−5.3587、CR=32.6687。无原页缺项；正MD不是遗漏负号的提取错误，保留原值并单独指出口径问题。"
+      }
+    ]
+  }
+}
