@@ -1,0 +1,145 @@
+{
+  "paper_id": "9a4dcded0864",
+  "fingerprint": "cf07ad1ce128e3912988a28bc16f1e9d6552461349fe9b369033cf10e58a5daf",
+  "analysis": {
+    "title_zh": "基于对角流匹配的可拒绝预测生成式逆向设计",
+    "summary": "本文研究如何直接生成满足性能目标的多样化设计，并识别不可信输出。作者以零锚定改造条件流匹配，使设计配噪声、标签配零，避免任意坐标排序造成训练敏感，并构建零偏差与自一致性指标。[P4–P6] 五类任务支持逆向误差改善，部分任务验证候选筛选、拒绝与分布外检测。[P8、P20–P23] 但代理评价、指标优势的例外及原文公式缺项限制了结论，不能将内部一致性视为物理可行性保证。",
+    "recommendation": "推荐重点阅读零锚定构造、置换性质证明及准确性条件化多样性评估，可借鉴于可靠生成式结构设计；运维迁移仍需独立验证。[P4–P6、P12、P18–P20]",
+    "deep_read": {
+      "problem": "逆向设计通常多解：少量性能标签对应大量设计参数，单一优化结果难以覆盖备选方案。生成模型又会对不可行目标照常输出，造成工程决策风险。作者因此同时追求条件生成、快速性能预测和可信度筛查，关注无需在线物理仿真的认知不确定性。[P2–P3]",
+      "method": "作者将流状态增广为设计与标签联合空间，从[z;y]输运至[x;0]，训练速度目标为[x−z;−y]。零偏差读取终点标签残差，无需额外模型评价；自一致性把残差替换为精确零后反向积分，比较重建标签与请求目标，避免直接可逆往返产生平凡结果。[P4、P6]",
+      "innovation": "关键创新是改变配对方式，而非单纯加深网络：标签不再与任意设计坐标相减。命题及证明利用独立同分布噪声建立目标速度分布的置换等变性，并给出标准CFM反例。“learning problem is invariant”限定学习问题，而非具体网络或初始化天然不变。[P5、P12]",
+      "findings": "燃烧室往返误差降至1.27×10^−3；DTLZ在P=100时为5.26×10^−3，均低于两基线。薄膜和图像任务也支持逆向优势。拒绝20%样本时零偏差降低误差8–27%，但并非每项最佳；Unifoil近边界检测AUC为0.961。[P7–P8、P20、P23]",
+      "limitations": "[P14]原文DTLZ公式在m=L时涉及未定义x0，缺少其定义且乘积上限为−1，影响按印刷公式复现，不能据此判定代码错误。另有代理评价依赖、正文与表格排序冲突及AUC差异未解释；薄膜和图像未给出对应UQ明细，不能声称全部任务验证。[P18–P23]\n原文核对：[P14] 附录C.3未编号的DTLZ2目标公式原页写有x_{L−m}及余弦积上限L−1−m，范围为2≤m≤L；m=L时涉及x0，而设计向量仅定义x1至xP，缺少x0定义，乘积上限也成为−1。影响按印刷公式复现解析前向映射；不能据此推定实际代码或实验结果错误，也未补造正确公式。",
+      "connection": "解读：对结构设计，条件生成可提供多候选，准确性条件化多样性比原始方差更适合评价有效探索。对可靠性研究，拒绝曲线体现覆盖率与误差的权衡。对智能运维，可借鉴异常目标筛查思路，但论文没有运维实证，OOD判别也不是失效概率或安全保证。[P18–P23]",
+      "next_steps": "建议：先在可精确评价的结构参数问题复现排序消融和拒绝曲线，再对保留与拒绝样本分别进行高保真验证。结合作者主动学习方向，优先采样高不确定区域；同时补充阈值校准、物理约束及条件偏移测试，并核清DTLZ公式与实现，避免沿用原文缺项。[P9、P14、P22]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://raw.githubusercontent.com/mlresearch/v306/main/assets/de-campos26a/de-campos26a.pdf"
+    ],
+    "analyzed_at": "2026-10-06T14:54:26.168764+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": true,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "零锚定具有明确的方法构造、理论证明和跨任务比较，值得重点阅读；生成筛选与拒绝机制切合结构设计和可靠性研究，智能运维仅属可迁移解读。当前全文笔记及可核对原文足以支持方法价值判断，但不足以支持安全保证或所有UQ任务全面优越的结论。[P5、P12、P20–P23]",
+    "evidence": "Figure 1. Per-coordinate targets in the flow-matching loss. Diag–\nCFM anchors labels to zero and pairs designs with latent noise,\nremoving spurious dependence on coordinate ordering and scale."
+  },
+  "material": {
+    "version": "bb8cb1334719112e5819d8173cd8a349577da93c0827463ddb88829c8a0273e1",
+    "total": 23,
+    "covered": 23,
+    "references": {
+      "problem": [
+        "P2",
+        "P3"
+      ],
+      "method": [
+        "P4",
+        "P6"
+      ],
+      "innovation": [
+        "P5",
+        "P12"
+      ],
+      "findings": [
+        "P7",
+        "P8",
+        "P20",
+        "P23"
+      ],
+      "limitations": [
+        "P14",
+        "P15",
+        "P18",
+        "P19",
+        "P20",
+        "P21",
+        "P22",
+        "P23"
+      ],
+      "connection": [
+        "P18",
+        "P19",
+        "P20",
+        "P21",
+        "P22",
+        "P23"
+      ],
+      "next_steps": [
+        "P9",
+        "P14",
+        "P22"
+      ]
+    },
+    "excerpt": "Figure 1. Per-coordinate targets in the flow-matching loss. Diag–\nCFM anchors labels to zero and pairs designs with latent noise,\nremoving spurious dependence on coordinate ordering and scale.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P21",
+      "P22",
+      "P23"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P4",
+        "detail": "式(3)及其前后状态定义中的上标被文字提取拆成“s gdiag”“u gdiag”等；原页显示为带帽的diag上标，公式并未缺失。核对后端点为[Rz;y]和[x;0_L]，线性路径为两端点的插值，速度为[x−Rz;−y]∈R^(P+L)。该提取错误影响增广状态符号辨识，不改变设计配噪声、标签配零的作者结论。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P5",
+        "detail": "图2纵轴负指数在文字提取中丢失，出现“10 3”“10 2”；原图清楚显示10^−3、10^−2，图注确认采用对数尺度。已按原图纠正，否则会误判往返误差数量级。公式(5)、命题及图注没有缺项。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P7",
+        "detail": "图3横轴文字提取丢失负号，原图误差阈值刻度依次为10^−5、10^−4、10^−3、10^−2、10^−1、10^0。已核对实线对应设计多样性、虚线对应平均有效样本数；负指数丢失会影响严格准确性阈值及有效样本数量趋势的理解。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P14",
+        "detail": "附录C.3未编号的DTLZ2目标公式原页写有x_{L−m}及余弦积上限L−1−m，范围为2≤m≤L；m=L时涉及x0，而设计向量仅定义x1至xP，缺少x0定义，乘积上限也成为−1。影响按印刷公式复现解析前向映射；不能据此推定实际代码或实验结果错误，也未补造正确公式。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P14",
+        "detail": "附录C.3的g函数求和符号被提取成“PP”，目标函数乘积符号被拆成“Y”；原页已核清，分别为Σ_{i=L}^P和对应上下限的乘积符号。薄膜系统矩阵同样为M(λ)=∏_{k=1}^P Mk(λ)。纠正的是运算符提取，不改动原页DTLZ2公式自身的索引问题。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P18",
+        "detail": "图5横轴负指数在文字提取中丢失。原图刻度为10^−5、10^−4、10^−3、10^−2、10^−1、10^0，已核对纠正；实线对应多样性，虚线对应有效样本数。该错误影响严格误差阈值的数量级判断，不影响原图可读性。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P19",
+        "detail": "图6横轴文字提取同样丢失负指数符号；原图误差阈值刻度依次为10^−5至10^0。已按原图纠正，用于判断P=100时各模型达到满额有效样本所需的阈值。表10数值及图注完整可读，正文与表格排序差异不是提取错误。"
+      }
+    ]
+  }
+}
