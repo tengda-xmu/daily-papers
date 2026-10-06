@@ -1,0 +1,126 @@
+{
+  "paper_id": "05b07ff38f3d",
+  "fingerprint": "01f8b43273f0356930a670594f25eee4c73ac5c359c472b7daf327cbeb8e0363",
+  "analysis": {
+    "title_zh": "自回归Transformer的认知疲劳：形式化与测量",
+    "summary": "论文把长时生成中的注意力衰减、表征漂移和熵失准组合为疲劳指数FI，并通过固定校准、平滑与滞回实现在线监测。[P3][P6]三个问答数据集支持其检测重复退化及降低告警抖动的价值，但不支持将其视为全面正确性或安全指标。[P8][P9]解读：值得作为可靠性监测方法精读，而非直接部署标准；参数缺项、曲线重建及正文与表格不一致，需要在复现前澄清。",
+    "recommendation": "推荐重点阅读三信号聚合、退化代理指标与滞回告警设计，适合智能运维和可靠性监测研究；但应同时审查复现缺项及结论边界。[P6][P9][P12]",
+    "deep_read": {
+      "problem": "作者关注生成过程中可靠性逐步下降却缺少实时诊断的问题，将其操作化为提示关注减弱、内部表征偏离和输出熵异常。[P1][P3]“认知疲劳”只是解释性类比，不涉及模型体验。[P10]研究重点是识别退化状态，而非证明模型为何失效。",
+      "method": "FI聚合末层提示注意力、相对最后提示状态的L2漂移及下一token熵，分别归一化后以0.40、0.25、0.35加权。[P5][P6]参数预校准后冻结，再用窗口平滑与启停双阈值告警；表6规定每两个token探测一次。[P12]",
+      "innovation": "方法特色是以单调性、尺度排序、有界性、时间稳定性和可组合性约束诊断指标，强调分项可解释与无需重训。[P4]附录给出加性度量的形式刻画，但不唯一确定权重或因果机制。[P14]解读：贡献主要在监测框架整合，而非提出新的训练或解码控制算法。",
+      "findings": "表3完整轨迹与重复的相关性为0.820–0.856，前20个token仅0.375–0.425。[P8]表5的FI AUROC为0.976，表4滞回降抖超过91%。[P9]P7正文AUROC数值与表5不一致，不能混用；规模趋势也仅为观察性结果。",
+      "limitations": "评测限九模型、QA和120个生成token，闭环收益未证。[P9]原文缺项：P12表6未列β、κ，妨碍复现；P7图5无所引AUROC证据；P10、P11引用对应待核，影响追溯。P7量化熵曲线为重建；P14定理未附证明。不得补值或视为已验证。\n原文核对：[P7] 原页正文写“Figure 5 demonstrates that FI achieves higher AUROC than entropy alone”，但核对图5及图注，其内容仅为三数据集FI随生成位置的轨迹与95%置信区间，没有AUROC或熵基线比较。这是原文图号引用与所指证据不匹配，受影响的是该句用图5支持AUROC优势的论证；不能从图5补造比较结果，也不能擅自确定正确图号。页面其余内容可读。；[P10] 原页Dziri等参考文献条目保留“Verify this is the intended citation”及可能对应Faith and Fate的备注，引用对象未最终确认。缺少确定的引用对应关系，影响相关背景论证的文献可追溯性，不直接否定FI实验结果；未访问外部资料或推造正确条目。；[P11] 原页Kadem与Zheng参考文献条目保留“Cited as CREST in text; verify arXiv ID matches intended paper before final submission”。正文名称与所列题目、编号的对应关系尚未确认，影响相关工作中CREST来源的可追溯性；不能据此确定正确题目或编号。；[P12] 原页表6声称列出所有FI实验的固定默认值，但表内没有熵归一化高端尺度β及漂移归一化上限κ的参数行或数值。缺项影响FI归一化与阈值结果的精确复现；不能从熵带、权重或表7反推。此处仅确认表6未列这些参数，不断言全文其他位置也未提供。其余表格和正文均可读。",
+      "connection": "解读：FI对应智能运维的在线健康指标、分项归因和告警防抖，可为运行日志及回退触发提供辅助依据。[P9][P10]它不是结构安全或设备失效概率模型，也不能直接迁移绝对阈值；结构设计研究可借鉴多信号监测思路，但需另行建立物理依据与验证。",
+      "next_steps": "建议先澄清β、κ、AUROC差异和重建曲线来源，再复现固定校准与告警流程。[P7][P9][P12]随后引入独立的事实性、指令遵循指标及外部监测基线，测试长对话、代码和工具任务；最后开展FI触发干预的对照实验，评估收益与误报成本。"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://raw.githubusercontent.com/mlresearch/v306/main/assets/marwah26a/marwah26a.pdf"
+    ],
+    "analyzed_at": "2026-10-06T13:22:10.557619+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": true,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "论文与智能运维及可靠性方向中的在线监测、告警稳定性直接相关，具有明确三信号方法和可核对的重复退化检测结果，值得重点阅读。证据足以支持这一有限推荐，但不足以支持全面安全性、因果机制或生产闭环收益；复现缺项降低推荐质量。",
+    "evidence": "The aggregated FI substantially outperforms all individual components, confirming that\nmulti-signal integration is necessary for robust detection."
+  },
+  "material": {
+    "version": "ca0cd3eac6d0e93737b5376c5fa4a9ae36a1044b4b7dc63f0985cc647a787c92",
+    "total": 14,
+    "covered": 14,
+    "references": {
+      "problem": [
+        "P1",
+        "P3",
+        "P10"
+      ],
+      "method": [
+        "P5",
+        "P6",
+        "P12"
+      ],
+      "innovation": [
+        "P4",
+        "P14"
+      ],
+      "findings": [
+        "P7",
+        "P8",
+        "P9"
+      ],
+      "limitations": [
+        "P7",
+        "P9",
+        "P10",
+        "P11",
+        "P12",
+        "P14"
+      ],
+      "connection": [
+        "P9",
+        "P10"
+      ],
+      "next_steps": [
+        "P7",
+        "P9",
+        "P12"
+      ]
+    },
+    "excerpt": "The aggregated FI substantially outperforms all individual components, confirming that\nmulti-signal integration is necessary for robust detection.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P2",
+        "detail": "图1的FI公式及权重约束在文字提取中丢失或错置漂移项下标d，出现“w Φ(D)”及游离d。原图可读，纠正为w_dΦ_d(D)，权重约束为wₐ + wₑ + w_d = 1，漂移信号为D_t、Φ_d(D)。原图无此缺项；错误影响三信号聚合公式的准确识读，不改变作者关于FI组成的结论。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P7",
+        "detail": "原页正文写“Figure 5 demonstrates that FI achieves higher AUROC than entropy alone”，但核对图5及图注，其内容仅为三数据集FI随生成位置的轨迹与95%置信区间，没有AUROC或熵基线比较。这是原文图号引用与所指证据不匹配，受影响的是该句用图5支持AUROC优势的论证；不能从图5补造比较结果，也不能擅自确定正确图号。页面其余内容可读。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P10",
+        "detail": "原页Dziri等参考文献条目保留“Verify this is the intended citation”及可能对应Faith and Fate的备注，引用对象未最终确认。缺少确定的引用对应关系，影响相关背景论证的文献可追溯性，不直接否定FI实验结果；未访问外部资料或推造正确条目。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P11",
+        "detail": "原页Kadem与Zheng参考文献条目保留“Cited as CREST in text; verify arXiv ID matches intended paper before final submission”。正文名称与所列题目、编号的对应关系尚未确认，影响相关工作中CREST来源的可追溯性；不能据此确定正确题目或编号。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P12",
+        "detail": "原页表6声称列出所有FI实验的固定默认值，但表内没有熵归一化高端尺度β及漂移归一化上限κ的参数行或数值。缺项影响FI归一化与阈值结果的精确复现；不能从熵带、权重或表7反推。此处仅确认表6未列这些参数，不断言全文其他位置也未提供。其余表格和正文均可读。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P13",
+        "detail": "图8图注的文字提取为“Our chosen definition (red )”，遗漏红色标记符号。原图可读，图例及选定权重位置使用红色×，应识读为红色×标记。该遗漏影响所选权重在AUROC权重景观中的定位说明，不影响公式A + D + E = 1或作者关于权重扰动稳健性的结论。"
+      }
+    ]
+  }
+}
