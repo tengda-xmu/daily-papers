@@ -1,0 +1,19 @@
+{
+  "id": "public-d89ca29fbd41ee94ea5cfbf4",
+  "content_version": "d099f150f761aec77866a5acb68b23f529162e437320a424ed53cee5882c3a91",
+  "analysis": {
+    "title_zh": "Deep Agents 改进 Skills：工具按需加载、运行时固定与线程内重载",
+    "summary": "官方公告介绍 Deep Agents 的三项 Skills 更新：工具可绑定技能，其模式定义在智能体读取对应技能前不进入上下文；对支持会话中途新增工具的模型，添加工具可保持提示缓存完整。应用可在运行时固定技能，使指令在首次模型调用前进入上下文，无需 read_file 往返。技能还可在线程内重载，让长期运行的智能体获取技能增删改，适合持续更新领域知识、准备客户会议及审阅通话记录等任务。",
+    "application": "建议：科研迁移可考虑将文献审阅规范、结构设计检查清单或运维诊断流程组织为技能，探索按需加载工具与长期任务中的知识更新；这些属于迁移设想，并非官方已验证的科研效果。官方公告说明了上下文加载、提示缓存保留和线程内更新能力，但所给节选未提供量化性能或科研任务验证结果。",
+    "requirements": "使用条件见官方文档。原文明示：添加工具时保持提示缓存完整，仅针对支持会话中途新增工具的模型。",
+    "steps": [],
+    "evidence": [
+      "You can now bind tools to skills.",
+      "Tool schemas stay out of context until the agent reads the skill they're bound to, and on models that accept new tools mid-conversation, adding them keeps the prompt cache intact.",
+      "Apps can pin skills at runtime , so the instructions are in context before the first model call, with no read_file round trips.",
+      "Skills can reload mid-thread , so a long-running agent picks up added, edited, or deleted skills without starting a new thread."
+    ],
+    "basis_url": "https://www.langchain.com/blog/revamping-skills-in-deep-agents"
+  },
+  "analyzed_at": "2026-10-08T02:46:33.980309+00:00"
+}
