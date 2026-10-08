@@ -1,0 +1,40 @@
+{
+  "paper_id": "1ae92d7bcd29",
+  "fingerprint": "55129774d596d61ddf925a093045ef28262f89680dcca01634df33b4c35f991d",
+  "analysis": {
+    "title_zh": "SeisMark：面向稳健三维地震断层检测的大规模开放基准",
+    "summary": "本文关注三维地震断层检测中可验证真值与真实纹理难以兼顾的问题，提出开放基准SeisMark。摘要称，其将程序化地质建模与扩散式合成结合，生成具有勘测域特定纹理的三维体数据，并揭示简化物理数据掩盖的模型脆弱性。实验概述指出，该基准能够区分不同架构在真实域偏移下的稳健性，但未提供模型名称、指标或量化结果。[摘要] 解读：其价值主要在于部署前的稳健性评测，而非直接解决设备智能运维任务。",
+    "recommendation": "建议作为域偏移评测与安全关键人工智能验证的交叉参考阅读，而非智能运维核心文献。摘要明确提出数据生成方法及模型区分结果，但重点推荐仍需核对全文实验与基准开放情况。[摘要]",
+    "deep_read": {
+      "problem": "研究问题是如何在三维地震断层检测中兼顾可核验标注与逼真数据纹理。摘要以“verifiable ground truth and realistic texture”概括这一缺口，并指出简化物理数据可能掩盖现有模型的脆弱性。[摘要] 解读：评测数据的真实性会影响对模型部署能力的判断。",
+      "method": "作者将程序化地质建模与基于扩散的合成结合，构建具有特定勘测域纹理的三维体数据；原文称“merging procedural geology with diffusion-based synthesis”。[摘要] 当前未说明生成流程、条件输入、真值保存机制和质量检查，尚不能据此复现。",
+      "innovation": "摘要将合成流程称为“novel pipeline”，并强调开放基准连接可验证真值与真实纹理。[摘要] 解读：可关注的创新定位是同时服务标注可信度与域真实性的基准构建，而非仅更换检测模型；但缺少既有工作对比，无法独立确认其首创性及技术增量。",
+      "findings": "摘要报告，SeisMark能够区分稳健的现代架构与在真实域偏移下出现“performance collapse”的旧式模型。[摘要] 这一发现支持关注传统测试可能遗漏的失效情形，但未列出架构名称、性能降幅、重复实验或统计证据，不能推及所有新旧架构。",
+      "limitations": "当前可确认的是摘要披露范围的不足，而非论文已经证实的方法缺陷：虽称“large-scale open benchmark”，却未提供数据规模、来源范围、评价指标及真实勘测验证细节。[摘要] 因而尚不能判断合成纹理覆盖程度、标注可信度或部署适用边界。",
+      "connection": "解读：该工作与智能运维的联系在于域偏移下的检测可靠性评估，而非设备状态监测或维修决策。摘要面向“safety-critical subsurface applications”。[摘要] 对结构设计也仅有间接启发：可借鉴其可验证数据与真实扰动结合的评测思路，不能直接迁移地质结论。",
+      "next_steps": "建议：后续阅读全文时，优先核对数据与代码是否开放、真值如何验证、域偏移如何划分，以及模型比较是否采用一致训练条件。面向智能运维，可另行研究类似生成流程能否保留故障标签并模拟工况变化；这是迁移设想，摘要未提供对应验证。[摘要]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://proceedings.mlr.press/v306/park26y.html"
+    ],
+    "analyzed_at": "2026-10-08T03:16:46.182240+00:00",
+    "llm_model": "gpt-6-astra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "按给定ai_maintenance方向理解为智能运维，本文直接研究地震断层检测，不涉及设备维护，故不判为直接契合。摘要明确给出合成流程及域偏移评测发现，足以支持其具有交叉方法阅读价值；该肯定仅限摘要级判断，不代表量化效果或部署可靠性已获充分验证。[摘要]",
+    "evidence": "Using a novel pipeline merging procedural geology with diffusion-based synthesis, we produce domain-realistic (survey-specific) textured volumes that expose significant brittleness in existing models masked by simplified physics data."
+  },
+  "material": {
+    "version": "cfadc04c3bf87137ee6d4f3b7e69b00e4e9c6e0514587ae21260dc4e28c0b72e",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "Using a novel pipeline merging procedural geology with diffusion-based synthesis, we produce domain-realistic (survey-specific) textured volumes that expose significant brittleness in existing models masked by simplified physics data."
+  }
+}
