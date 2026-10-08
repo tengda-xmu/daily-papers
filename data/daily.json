@@ -270,7 +270,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Natural load-bearing patterns such as leaf venation, trabecular bone, and spider webs achieve high stiffness per unit mass, yet classical topology optimizers rarely reach such geometries, and few let engineers express structural design intent through natural language. This work treats a frozen text-to-image diffusion model as a training-free source of design knowledge and distills it into the physics loop of density-based topology optimization via score distillation sampling, so that a text prompt becomes an explicit, machine-interpretable representation of engineer intent. The prompt-induced…",
+      "summary": "本文研究如何将自然语言设计意图引入肋结构拓扑优化，而不训练专用生成模型。作者冻结Stable Diffusion 2.1，通过分数蒸馏采样将生成梯度与有限元灵敏度结合，并用调度及投影协调探索、收敛和二值化。[P5—P8]245次主要运行中，49组组合有38组显著改善；机械最佳单次降幅31.5%，热弹性最大平均降幅23.0%。[P12、P16、P24]但提示词可能损害性能，热传导未获益，CAD输出也尚非已验证可制造结构。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7212234730",
@@ -315,11 +315,430 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐结构生成设计与拓扑优化研究者重点阅读：其价值在于可复用的先验—物理梯度耦合、机制干预和负结果，而非宣称全面优于传统优化器。[P13、P24、P38]",
+      "deep_read": {
+        "problem": "传统SIMP面对非凸设计空间容易停留于局部极小值，随机重启又缺乏有组织的探索。工程师熟悉叶脉、网格等结构模式，却难以将这些知识直接交给密度优化器。本文试图同时解决搜索受限与设计意图不可计算的问题，而不是仅生成外观合理的结构图片。[P1—P3]",
+        "method": "冻结扩散模型接收密度图与提示词，经潜空间加噪、条件噪声预测和停止梯度近似得到SDS方向，再与有限元及最大厚度惩罚梯度混合。Adam更新后执行体积投影；预热、余弦衰减、时间步退火和EMA稳定过程，Heaviside延续促使密度二值化。[P6—P9、P29]",
+        "innovation": "作者将创新定位于冻结视觉先验与有限元灵敏度的逐次梯度级耦合，使提示词成为设计意图接口，迁移任务不需重新训练模型。Heaviside投影本身并非新方法，贡献在于诊断生成引导的灰密度倾向并协调调度。解读：其本质是启发式搜索增强，而非精确统一目标的新优化理论。[P2、P8、P22]",
+        "findings": "49组组合中38组显著改善，作者报告经BH校正仍满足q<0.05。带孔机械域最佳单次改善31.5%，热矩形域最大平均改善23.0%；灰密度由42.6%降至2.5%。删除末端平均增加柔顺度5.9%，删除承载肋增加61.5%，支持末端承载贡献较小的解释。[P12、P16、P24、P34、P38]",
+        "limitations": "方法仍限二维且需人工筛选提示词，热弹性采用规定、设计无关载荷；机械调度消融仅一个种子。SDS在矩形域不及MMA，热传导均值未改善。三维重分析不能消除模型差异，制造验证尚缺。核对记录没有确认原文件缺项；P23表格连写属于已纠正提取错误。[P6、P13、P23—P24、P37]",
+        "connection": "解读：本文直接关联结构设计中的知识表达、受约束搜索和CAD衔接，骨架末端与局部应变能可作为设计诊断指标。它不直接研究智能运维，也未验证疲劳寿命或失效概率；若迁移到可靠性优化，需要显式引入载荷不确定性与风险约束，不能用柔顺度收益替代安全性证据。[P18、P31—P32、P38]",
+        "next_steps": "建议：先复现一个板域并采用作者的分类别提示词试运行筛选，再在相同种子与计算时间预算下比较SDS和MMA。随后核对全场滤波梯度及密度—二值—STEP的质量、体积和变形一致性，最后加入不确定载荷与疲劳指标；这些属于新增验证，不是作者已有成果。[P24、P28、P32、P37]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "零样本肋结构设计：融合免训练生成先验与拓扑优化",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://arxiv.org/pdf/2609.10643"
+      ],
+      "analyzed_at": "2026-10-08T14:19:30.528742+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 1,
+        "lead": "树叶脉络、骨小梁和蛛网能够高效承载，但把这些形态写进提示词，并不意味着生成结构就符合工程力学。本文将冻结扩散模型的文本生成梯度嵌入拓扑优化，让有限元反馈持续筛选形态：245次主要运行中，38个提示词—域组合显著降低柔度。阅读价值不仅在于最佳改善幅度，更在于看清生成先验何时有效、为何失效，以及二维优化到三维肋结构之间尚未闭合的验证链。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "肋布局需要的不是更像自然，而是更有效承载",
+            "paragraphs": [
+              "加强筋的数量、方向、间距和分支拓扑共同决定薄壁构件的材料效率。传统SIMP依靠密度灵敏度降低柔度，但惩罚插值带来非凸性，均匀初始化可能停留在局部拓扑；随机重启扩大搜索，却缺少结构化方向。",
+              "本文把自然语言定位为工程意图的表示，而不是边界条件的替代品。Tree、Leaf、Spiderweb等提示提供形态偏置，设计域、载荷、支撑和体积分数仍须分别配置；所谓零样本，是不需要任务专用训练，并非模型没有预训练。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "冻结图像先验，逐步交还物理梯度主导权",
+            "paragraphs": [
+              "优化最小化C=FᵀU，同时满足静力平衡与体积分数约束。三个板域使用Mindlin–Reissner理论和MITC4单元，连接件采用平面应力模型；板域零密度仍保留承载基板，不是空洞，肋存在与否对应的刚度按p=3插值。",
+              "物理密度复制为RGB并缩放至512×512，经Stable Diffusion 2.1的VAE编码后加噪，由冻结U-Net产生SDS梯度。它与有限元梯度原始加权相加，随后用Adam更新；作者明确承认，这一混合是启发式方法，并非单一标量目标的精确梯度。",
+              "每次更新后，二分投影精确满足体积约束，滤波和Heaviside投影控制密度形态。总计1000次迭代，前30次仅用物理梯度，SDS随后余弦冷却至约第530次退出，并采用时间步退火和EMA平滑；β从1逐步升至64，最终由物理优化完成二值化。"
+            ]
+          },
+          {
+            "id": "validation",
+            "title": "245次是优化重复，不是245个独立零件",
+            "paragraphs": [
+              "主要验证包含四个机械域的200次运行，以及三个板域热弹性设置的45次运行，共49个提示词—域组合，每组合五个种子。前三个机械域体积分数为0.20，连接件为0.30；数据来自作者构建的有限元工况，没有报告实体试件或数据增强数量。",
+              "研究不生成任务训练集，预训练来源被描述为LAION-5B，但模型实际预训练样本规模未给出。提示词与超参数先经独立单种子试运行选择，再进行五种子最终评估；这是选择与评估分离，不是监督学习的训练测试划分。",
+              "对照包括Adam-SIMP、每域50次多起点与50次周期扰动、固定图像引导及MMA。五运行子集重采样没有增加独立仿真，运行数匹配也不等于CPU/GPU成本匹配；调度消融仅用D_Rect的Spiderweb和seed=0，不能据此给出跨工况组件排名。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "改善来自探索，但不能承诺普遍胜过强基线",
+            "paragraphs": [
+              "49个组合中38个达到五种子全部优于基线，单侧二项检验p=0.031，经Benjamini–Hochberg校正仍满足q<0.05。机械最大降低31.5%是D_Hole的最佳单次结果，热弹性23.0%是D_Rect的五种子均值；**最佳值与平均收益不能混用**，且D_Rect的最佳SDS仍落后于MMA。",
+              "端点数与柔度跨六设置正相关，但热弹性D_Rect改善时端点反而增多，死端抑制并非普遍规律。九个固定设计的干预提供更直接证据：删除死端平均增加柔度5.9%，删除承载肋增加61.5%；它说明死端贡献较小，不说明事后剪枝必然改善。",
+              "灰密度比例由42.6%降至2.5%，但判定阈值和重复数缺失。由密度场重建的三维实体与二维柔度相关系数为0.82–0.98，并不等于STEP全链条已验证；热传导负结果及失配提示退化进一步限定适用范围，代码也仅承诺合理请求下提供。"
+            ]
+          }
+        ],
+        "experiments": [
+          {
+            "name": "四机械域的提示比较与搜索基线验证",
+            "data": "作者构建D_Rect、D_Circle、D_Hole及汽车悬架连杆二维截面D_Link；参数表网格150×150，工业几何来源未报告。",
+            "samples": "四域各10提示×5种子，共200次主要优化运行；三个板域另各有50次多起点和50次扰动运行。实体试件和增强数量未报告。",
+            "groups": "矩形、圆形中心点载荷，开孔板四侧加载，以及连接件组合拉伸–剪切；板域V*=0.20，连接件V*=0.30。",
+            "split": "无需任务训练；提示与参数经独立单种子预运行选择，再以五种子评估。预运行总数及模型预训练划分未报告。",
+            "baselines": "Adam-SIMP、多起点、周期扰动、固定图像均方误差引导；三个板域另比较单次确定性MMA，工业域无已报告MMA结果。",
+            "metrics": "柔度C=FᵀU、相对变化、五种子均值与标准差、单侧二项检验；柔度单位未报告，最佳运行比较另行报告。",
+            "results": "显著改善提示数依次为5/10、9/10、10/10、7/10。开孔板Spiderweb均值45.22±2.04，降低28.4%；最佳43.20，降低31.5%。",
+            "limitations": "矩形域MMA为7.721，优于最佳SDS的7.886；等运行或等迭代不等计算预算。图像引导重复数、材料与完整几何尺度未报告。"
+          },
+          {
+            "name": "规定热弯矩下的热弹性泛化",
+            "data": "三个板域由均匀厚度方向温度梯度产生规定热弯矩，采用MITC4分析；温差、热膨胀参数具体值未报告。",
+            "samples": "三域×Spiderweb、Voronoi、Tree三提示×五种子，共45次主要运行；独立温度工况数、实体试件及增强数量未报告。",
+            "groups": "V*=0.20、初始SDS权重100；热载荷与设计无关。另在D_Rect的Spiderweb扫描权重10、50、100、200，各五种子。",
+            "split": "冻结生成模型，不进行任务训练；最终五种子评估与单种子选择阶段分开，独立温度条件留出方案未报告。",
+            "baselines": "无SDS Adam/SIMP基线柔度为613.6、818.2、556.9；热弹性MMA对照未报告，权重扫描不应替代优化器比较。",
+            "metrics": "C=F_thᵀU及五种子均值±标准差、相对降低比例、胜出次数；柔度单位未报告，规定热载荷导数为零。",
+            "results": "9组合中7个五种子全部改善，2个为4/5。各域最佳均值降低23.0%、13.9%、8.5%；权重100在所测四档中最优。",
+            "limitations": "仅适用于规定、密度无关热载荷，不能直接外推完整热耦合；权重扫描缺少离散统计，不能证明各提示和域均以100最优。"
+          },
+          {
+            "name": "固定设计的死端与承载肋配对干预",
+            "data": "三个板域的优化设计及其骨架；追踪端点至最近分叉点，修改局部肋结构后，以原板有限元重新分析。",
+            "samples": "共九个固定设计，每域三个种子，每设计实施三类干预；重新分析总次数、实体试件及统计不确定性未报告。",
+            "groups": "删除全部死端、删除最大应变能单根非死端肋、嫁接人工死端；保持周围拓扑及原边界条件不变。",
+            "split": "属于优化后配对力学核验，不涉及任务模型训练；设计选取与种子编号、独立留出规则未报告。",
+            "baselines": "每个未修改设计作为自身基线，删除承载肋提供力学对照，嫁接死端检验新增低效分支的影响。",
+            "metrics": "相对原设计柔度变化及移除材料的应变能占比；作者用ΔC≈pf解释一阶影响，p=3，柔度单位未报告。",
+            "results": "删除死端平均+5.9%，范围+0.6%至+12.1%；删除承载肋平均+61.5%，最大+182%；嫁接变化小于1%。",
+            "limitations": "删除死端仍有性能代价；干预后是否恢复等体积未报告，不能视作等材料重优化。没有该干预的三维或实物验证。"
+          },
+          {
+            "name": "密度场重建凸起肋实体的三维重分析",
+            "data": "三个板域收敛密度场重建带肋基板，在FEniCSx进行三维线弹性分析；不是已验证的STEP全链条分析。",
+            "samples": "各域表列n_prompts=10，相关计算包含基线；独立种子数、实体试件数、三维网格数量及增强数量未报告。",
+            "groups": "二维局部增刚Mindlin板与三维凸起肋实体采用匹配载荷、支撑；基板厚度1、肋高5，长度单位未报告。",
+            "split": "同一设计跨模型重分析，不涉及任务训练；用于相关性计算的种子选择及独立验证划分未报告。",
+            "baselines": "对应域SIMP-only设计，以及同一提示设计的二维分析；比较归一化柔度与最优提示的保持情况。",
+            "metrics": "二维、三维柔度Pearson相关系数及提示表现排序；线性相关并非模型等价或完整排序一致性指标。",
+            "results": "矩形、圆形、开孔域r分别为0.92、0.82、0.98；矩形域最优均为Spiderweb，另两域二维最优在三维中仍表现较强。",
+            "limitations": "完整density–binary–STEP的质量、体积分数和变形场比较仍属未来工作；没有实体制造验证，绝对几何单位等信息缺失。"
+          }
+        ],
+        "routes": [
+          {
+            "title": "用载荷路径兼容性控制SDS，而非固定经验权重",
+            "direction_id": "generative_design",
+            "gap": "提示排名跨域反转，固定权重又随柔度尺度手动调整，现有单种子消融不足以识别稳定策略。建议优先解决生成梯度何时帮助探索、何时阻碍承载的问题，而不是继续扩充提示词清单。",
+            "mechanism": "拟根据体积约束可行方向上的梯度夹角、范数比及短窗柔度变化，在线调整SDS权重；持续冲突时缩短冷却或关闭引导。必须保留最终纯物理阶段，避免把语义一致性当成力学成功。",
+            "innovation": "候选创新是将载荷路径兼容性、尺度归一化与退出规则组合成可审计控制器，替代逐域经验定权。这是针对本文的拟议组合；已检索REPA-P摘要采用训练期物理表征对齐，与此冻结模型在线控制不同。",
+            "design": "建议设计采用可自行构建并公开的四类参数化域，每类三组载荷位置，每工况十个最终种子；另设不重叠载荷条件调参。预训练模型可公开获取，论文代码需申请，不能假定已有可复现实验包。",
+            "comparison": "比较原始固定调度、无SDS的Adam及MMA、多起点和自适应策略，统一墙钟预算并披露硬件。分别移除夹角判据、范数归一化、提前退出，采用匹配随机种子测量组件及其交互。",
+            "criterion": "预先规定以留出工况的平均柔度和退化运行比例为主判据，同时报告置信区间、校正后的显著性及计算成本。只有降低失配退化且不牺牲匹配工况收益，才支持控制器有效。",
+            "risk": "梯度夹角可能受噪声及约束投影影响，局部冲突也可能是必要探索。若即时判据误杀有效先验，可改用短窗累计趋势和迟滞阈值；若收益仍不稳定，则保留纯物理回退并缩小适用范围。"
+          },
+          {
+            "title": "闭合密度、STEP与实体性能的等质量验证链",
+            "direction_id": "generative_design",
+            "gap": "二维与三维柔度正相关尚未说明Bézier拟合、宽度平均和挤出后的性能损失，完整转换链仍未验证。建议把等质量与真实肋截面作为核心条件，区分优化收益、几何转换误差和制造偏差。",
+            "mechanism": "拟在骨架拟合与偏置阶段加入体积校正、曲率和最小宽度约束，再对导出STEP重新网格化。通过逐级比较质量、柔度、变形场和局部应力，将误差定位到二值化、曲线拟合或实体建模环节。",
+            "innovation": "候选创新是把生成先验探索与转换链的可追踪误差预算连接起来，而非另提一种STEP导出工具。本文已有骨架和曲线流程及实体重分析，拟议工作补充的是逐级等质量核验与性能反馈。",
+            "design": "建议设计先在三个可公开构建板域各选五个种子，保留SIMP和SDS配对设计，再记录四级几何。若具备加工与测试条件，可另采集每方法三件重复试件；这些是建议数量，不是已有实验资源。",
+            "comparison": "比较原后处理、体积校正、几何约束及联合方案，三维分析统一材料、载荷、支撑与网格收敛标准。实物阶段按实际质量配对，并消融曲率限制、宽度修正和性能反馈，避免把增重当增刚。",
+            "criterion": "建议预注册转换后体积误差不超过2%、柔度相对重建实体增加不超过5%的验收阈值，另报告排序保持率和应力变化。实测若可开展，应以重复性和仿真误差共同判断，而非只展示成功零件。",
+            "risk": "圆角、连接节点和制造缺陷可能主导误差，过强几何约束也会抹去优化优势。若暂不能制造，可先完成公开STEP与收敛三维仿真的闭环；若转换损失过大，再引入局部重优化而非声称可制造。"
+          }
+        ],
+        "diagrams": [
+          {
+            "kind": "study",
+            "title": "原研究：物理筛选生成形态，两条几何验证支路",
+            "description": "STEP候选导出与密度场重建实体的三维重分析分开表示；后者不构成STEP完整链条验证。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "工程问题与文本提示",
+                "detail": "设计域、载荷、支撑、体积分数及结构形态提示分别输入"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "物理密度与有限元",
+                "detail": "滤波、Heaviside投影后计算柔度及物理灵敏度"
+              },
+              {
+                "id": "c",
+                "stage": 1,
+                "label": "冻结扩散模型SDS",
+                "detail": "密度图编码、加噪、文本引导，提取生成梯度"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "梯度混合与约束更新",
+                "detail": "Adam更新、二分体积投影，SDS冷却后纯物理收敛"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "收敛密度与统计分析",
+                "detail": "五种子柔度统计、骨架相关及固定设计干预"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "候选STEP几何",
+                "detail": "二值化、骨架、Bézier拟合、偏置挤出；全链条待验证"
+              },
+              {
+                "id": "g",
+                "stage": 4,
+                "label": "密度场重建三维实体",
+                "detail": "由密度场重建凸起肋基板，不将STEP导出视为已核验"
+              },
+              {
+                "id": "h",
+                "stage": 5,
+                "label": "三维线弹性重分析",
+                "detail": "FEniCSx比较二维与三维柔度，三个域r为0.82–0.98"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "配置物理问题"
+              },
+              {
+                "from": "a",
+                "to": "c",
+                "label": "提供形态意图"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "物理梯度"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "生成梯度"
+              },
+              {
+                "from": "d",
+                "to": "b",
+                "label": "迭代反馈"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "输出优化设计"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "后处理支路"
+              },
+              {
+                "from": "e",
+                "to": "g",
+                "label": "实体重建支路"
+              },
+              {
+                "from": "g",
+                "to": "h",
+                "label": "匹配载荷重分析"
+              }
+            ]
+          },
+          {
+            "kind": "proposal",
+            "title": "拟议路线：载荷兼容性驱动的SDS在线控制",
+            "description": "对应第一条研究建议；控制规则及预期收益尚未验证，需通过留出工况和等预算比较检验。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "参数化域与留出载荷",
+                "detail": "建议四类域各三组载荷，调参与最终评估条件分离"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "物理与生成梯度",
+                "detail": "保持冻结先验，计算约束可行方向上的两类梯度"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "兼容性在线诊断",
+                "detail": "监测夹角、范数比和短窗柔度趋势，区分噪声与持续冲突"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "自适应权重与退出",
+                "detail": "拟调整SDS强度、冷却长度，保留纯物理回退"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "等预算基线与消融",
+                "detail": "比较固定调度、Adam、MMA及多起点，分别移除控制组件"
+              },
+              {
+                "id": "f",
+                "stage": 5,
+                "label": "留出工况成功判据",
+                "detail": "检验平均柔度、退化比例、置信区间及实际计算成本"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "配置优化任务"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "提取诊断信号"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "触发控制规则"
+              },
+              {
+                "from": "d",
+                "to": "b",
+                "label": "反馈下一轮权重"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "完成候选策略"
+              },
+              {
+                "from": "a",
+                "to": "e",
+                "label": "统一工况与种子"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "评估收益与风险"
+              }
+            ]
+          }
+        ],
+        "related": {
+          "status": "ok",
+          "checked_at": "2026-10-08T14:39:10.981139+00:00",
+          "papers": [
+            {
+              "title": "Cross-modal prior-guided sampling with coverage-aware score calibration for 3D industrial anomaly localization",
+              "url": "https://doi.org/10.2139/ssrn.7541070",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "PhysMAS: Physics-Grounded Multi-Agent Synthesis of Compositional 4D Gaussians",
+              "url": "https://doi.org/10.48550/arxiv.2609.07174",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            },
+            {
+              "title": "Physics consistent conditional flow matching model as a plasma physics surrogate model",
+              "url": "https://doi.org/10.1088/2632-2153/aeaf46",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Learning to Think in Physics: Breaking Shortcut Learning in Scientific Diffusion via Representation Alignment",
+              "url": "https://doi.org/10.48550/arxiv.2605.20780",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            }
+          ]
+        }
+      },
+      "article_updated_at": "2026-10-08T14:51:49.771968+00:00",
+      "article_profile": "875c073f2a6737969df9c26e646f0857eab9002d131ebd08d334c29bacc9a38b",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P6",
+          "P7",
+          "P8",
+          "P9",
+          "P29"
+        ],
+        "innovation": [
+          "P2",
+          "P8",
+          "P22"
+        ],
+        "findings": [
+          "P12",
+          "P16",
+          "P24",
+          "P34",
+          "P38"
+        ],
+        "limitations": [
+          "P6",
+          "P13",
+          "P23",
+          "P24",
+          "P37"
+        ],
+        "connection": [
+          "P18",
+          "P31",
+          "P32",
+          "P38"
+        ],
+        "next_steps": [
+          "P24",
+          "P28",
+          "P32",
+          "P37"
+        ]
+      },
+      "analysis_material_version": "105b5807fb622e9d319bbd2e7aba6677c581c7ac4a8787b4653d2106c38fb108",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P23",
+          "detail": "表10文字提取丢失列间分隔，出现“λ_sds=19.60”“ω=508.28”等连写。原页已核实：λ_sds=1对应C=9.60，λ_sds=5对应8.38，λ_sds=20对应8.45；ω=50对应8.28，ω=10对应8.57，ω=200对应8.67；α=0.5对应8.18。不存在原表缺项，纠正后支持权重与引导强度的消融比较，避免误读为参数19.60或508.28。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "cc45ce56709b",
+        "state": "published",
+        "updated_at": "2026-10-08T14:51:49.774973+00:00",
+        "basis": "full_text",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "",
+        "total": 41,
+        "covered": 41,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P23",
+            "detail": "表10文字提取丢失列间分隔，出现“λ_sds=19.60”“ω=508.28”等连写。原页已核实：λ_sds=1对应C=9.60，λ_sds=5对应8.38，λ_sds=20对应8.45；ω=50对应8.28，ω=10对应8.57，ω=200对应8.67；α=0.5对应8.18。不存在原表缺项，纠正后支持权重与引导强度的消融比较，避免误读为参数19.60或508.28。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -341,7 +760,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Despite the central role of sensor-derived measurements such as imaging traits and plasma biomarkers in biomedical research and clinical practice, existing generative models for disease prediction largely depend on event-level representations from hospital and registry data. Given the multi-factorial nature of human disease, the absence of explicit modeling of social determinants of health (SDoH) limits the capacity for personalized disease modeling and clinical decision support. To address this limitation, we propose a generative model with ICD-coded proxies of SDoH for in silico modeling of…",
+      "summary": "本文提出DiffDT，将医疗事件自回归预测与多器官数字孪生生成结合，以历史疾病条件化生理状态，再预测未来疾病。[P4]脑连接采用Cholesky约束的潜扩散，其他器官采用表格扩散；UKB实验显示预测与生成指标改善。[P6—P7]作者承认社会因素仅由ICD代理表示，个体轨迹主要依赖横断面数据。[P9]解读：适合借鉴结构约束生成方法，但不是智能运维的直接应用证据。",
       "raw_metadata": {
         "conference": {
           "id": "icml",
@@ -398,11 +817,489 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为跨领域方法文献阅读，重点关注结构约束潜扩散、事件与状态融合及消融设计；不宜仅因数字孪生标签将其列为智能运维核心应用论文。[P6—P9]",
+      "deep_read": {
+        "problem": "作者关注仅靠医疗事件预测疾病的不足：事件序列难以直接刻画生理过程，语义距离较大的疾病关系尤其难学。[P2—P3]研究希望以多器官生物标志物连接既往历史和未来疾病。解读：关键问题是事件与连续状态的融合，而非直接建立完整社会环境模型。[P9]",
+        "method": "DiffDT先将病史映射为年龄网格并训练自回归嵌入，再条件化生成器官状态。[P5]表格指标联合使用连续加噪和类别遮蔽；脑连接经量化编码、条件潜扩散和Cholesky解码生成，最后交给预测模型。[P6—P8]作者将该流程表述为生物中介路径。[P4]",
+        "innovation": "作者将SPD-VQVAE作为主要技术贡献，以正对角下三角因子构造正定脑连接，并通过交叉注意力引入历史条件。[P2、P6]双分支进一步分离高低频模式以保留个体差异。[P12—P13]解读：结构有效解码是明确特色，但不能由此自动推出最终频域重建或整个扩散过程的几何保证。",
+        "findings": "表1显示GPT2骨干下DiffDT的AUC为0.9087，Delphi为0.6994；Qwen3下分别为0.9171和0.8931。[P7]表4双分支生成RMSE为0.203，优于所列单分支。[P7]解读：预测与重建结果支持方法价值，但ATE误差七组改善、两组变差、一组相同，不支持逐对优势。[P14]",
+        "limitations": "作者承认健康志愿者偏倚、横断面插值及SDoH代理不足。[P9]核对记录无原文件缺项；但[P5]式(1)上下界均为τ_min，使年龄范围定义不一致。[P3]图2c的p=0.096不支持常用显著性判断；[P9]误差0.007降至0.004也不支持“超过减半”。解读：相关因果措辞须审慎。",
+        "connection": "解读：与智能运维的联系在于将离散告警历史、连续设备状态和后续风险预测串联；SPD解码可能启发协方差等结构状态生成。[P4、P6]但本文验证对象是医疗数据，没有设备故障、结构载荷或寿命试验，不能据此声称已提升工程可靠性或支持结构设计决策。[P7、P9]",
+        "next_steps": "建议先复现结构约束与普通潜扩散的对照，检查双分支逆变换后是否仍正定，并对频率阈值做定量敏感性分析。[P12—P13]迁移运维时应区分无记录与健康状态，采用设备级、时间外验证，并与骨干扩展比较增益；干预解释另需真实干预或明确识别假设。[P5、P9]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "融合医疗事件生成模型与社会健康决定因素数字孪生的疾病推理",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://proceedings.mlr.press/v306/wei26c.html"
+      ],
+      "analyzed_at": "2026-10-08T15:02:12.025626+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 1,
+        "lead": "病史中的诊断代码记录了“发生过什么”，却未必解释“身体为何走向下一种疾病”。DiffDT尝试在医疗事件之间加入可生成的多器官数字孪生：从既往病史推断器官状态，再预测后续疾病。其关键进展是将不规则事件建模与保持脑连接矩阵几何结构的扩散生成结合起来。阅读这项工作的价值，既在于理解生理表征如何改善预测，也在于辨清数字孪生、社会因素代理与真实因果干预之间的证据边界。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从诊断事件走向器官状态：缺失的生理桥梁",
+            "paragraphs": [
+              "仅依赖电子健康记录的自回归模型，可能同时学习疾病进展和医疗服务利用模式。诊断间隔不规则、观测稀疏，使事件序列难以直接表达连续生理变化。DiffDT将“既往病史—当前器官状态—未来疾病”作为建模主线，试图补上事件预测中的生理桥梁。",
+              "论文所谓社会健康决定因素（SDoH），实际采用ICD中的Z及V–Y编码代理，没有输入直接的社会、经济、行为或环境测量。因此，这里的数字孪生首先是病史条件下的器官表征生成，不能直接视为完整的社会因素孪生。代理是否充分覆盖真实社会暴露，仍需要单独验证。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "病史条件扩散与Cholesky几何解码如何衔接",
+            "paragraphs": [
+              "自适应分词覆盖整数年龄，有诊断时放入ICD令牌，否则填入healthy，并允许同龄事件。ICD与年龄嵌入相加后进入因果自注意力Transformer，形成病史条件。这里的“因果”指注意力只读取既往位置，不意味着疾病因果效应已被识别。",
+              "表格器官性状采用混合连续时间扩散：连续变量加入高斯噪声，类别变量逐步被[MASK]吸收。生成时固定观测病史，只去噪器官特征，并利用Classifier-Free Guidance加强条件控制。脑连接则先经SPD-VQVAE压缩，解码器通过正对角Cholesky因子构造M̂=L̂L̂ᵀ，以保证对称正定性。",
+              "双分支版本用FFT拆分高通与低通模式，拼接潜变量后进行病史条件扩散；阈值25由定性消融选择，不能解释为生理频率。随后，BrainMass或表格Transformer读取数字孪生预测疾病。P(Future|Biomarker)·P(Biomarker|History)表达了概率桥接，但没有因此自动获得因果中介或真实干预解释。"
+            ]
+          },
+          {
+            "id": "validation",
+            "title": "受试者级划分下，预测与生成分别检验",
+            "paragraphs": [
+              "研究使用UKB真实医疗记录与影像派生性状，生成数字孪生属于计算模拟，而非实物干预。脑数据为44,834份矩阵、20,057名受试者；心、肝、肾分别为23,987、28,722、32,155份且各自对应同数量受试者，跨器官不能相加去重。AR实验报告448,651名受试者和7,276,575个令牌，词表包含1,944种疾病。",
+              "训练与验证按受试者80%:20%划分，并在AR、扩散和预测微调阶段保持一致；没有报告独立测试集。全局验证集n=3,425，其中两个影像时间点的纵向子集为脑188、心212、肾98、肝229，但未给出对应纵向轨迹误差。疾病预测比较Delphi的GPT2、Qwen3骨干及不同器官中介，脑生成比较普通、SPD与双分支VQVAE。",
+              "作者还检验了替换暴露代码后的do(healthy)生成，以及10组暴露—结局代码对的ATE估计误差。前者比较生成状态与真实健康、患病状态的距离，后者以二值化病史计算的经验ATE为参照。两项都是观察性资料上的计算验证，不是受试者接受干预后的随访结果。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "几何与预测收益明确，因果和泛化仍待补强",
+            "paragraphs": [
+              "Qwen3配置下，DiffDT宏平均AUC为0.9171，Delphi为0.8931；宏平均F1分别为20.92和18.17，正文按百分比解释F1。双分支脑生成RMSE降至0.203、相关系数升至0.726，支持几何约束与模式分解的组合价值。不过，长尾疾病使F1仍低，**较高AUC不等于可靠的下一疾病判定**。",
+              "反事实生成的FID、WD更接近健康参照，但相关系数差异p=0.148，并不显著。ATE平均绝对误差由0.007降至0.004，按表列中心值约降低43%，不支持正文“超过一半”的说法。与经验关联量更一致，也不能替代混杂控制和因果识别。",
+              "端到端推断在单张RTX 6000 Ada（48 GB）上约需1.2秒/受试者/中介，但计时重复次数未报告。UKB健康志愿者偏倚、横断面影像占主导，以及误差项±定义缺失，限制部署与纵向解释。预训练人数和ICD层级亦存在不同口径；当前证据更适合支持生成辅助预测，而非已验证的个体干预系统。"
+            ]
+          }
+        ],
+        "experiments": [
+          {
+            "name": "下一疾病预测与器官数字孪生中介比较",
+            "data": "UKB病史及影像性状；AR词表1,944种疾病。BrainMass另在UKB与两个HCP队列共68,251份矩阵上预训练。",
+            "samples": "AR训练448,651人、7,276,575个令牌；脑20,057人，心23,987人、肝28,722人、肾32,155人。任务实际评估人数及生成数量未报告。",
+            "groups": "Delphi与DiffDT分别使用GPT2、Qwen3；另比较四器官中介的同器官及跨器官疾病预测，补充Qwen3.5对照。",
+            "split": "受试者级训练:验证=80%:20%，各阶段保持一致；全局验证集3,425人，各任务对应人数与独立测试集未报告。",
+            "baselines": "事件预测对照Delphi；器官预测对照NeuroPath和BrainMass。分词与骨干均有比较，完整中介消融未报告。",
+            "metrics": "事件任务报告宏平均AUC、F1；器官任务报告平均F1。F1正文按百分比解释，阈值及±统计含义未报告。",
+            "results": "Qwen3下DiffDT/Delphi：AUC为0.9171±0.0486/0.8931±0.0548，F1为20.92±20.40/18.17±20.67；同器官F1最高值为65.14、58.50、61.65、64.32。",
+            "limitations": "长尾影响宏平均F1；疾病级人数和阈值缺失。Qwen3.5报告增加0.12 AUC，但未给绝对值及误差范围；不能分离所有组件收益。"
+          },
+          {
+            "name": "多器官生成与脑几何、双分支消融",
+            "data": "脑fMRI连接矩阵及UKB MRI表格性状；心112项、肝3项、肾3项特征，表格指标按归一化性状计算。",
+            "samples": "脑44,834份矩阵/20,057人；心23,987人、肝28,722人、肾32,155人。实际生成数量、重复采样及增强数量未报告。",
+            "groups": "脑比较普通VQVAE、SPD-VQVAE、SPD-VQVAE-Dual及阈值25/50/75；表格分别评估心、肝、肾。",
+            "split": "沿用受试者级80%:20%划分；各生成任务实际验证数量未报告。脑纵向子集188人，但未报告纵向生成误差。",
+            "baselines": "脑生成有普通和单分支SPD自编码器对照；表格生成没有列出对照模型。单步耗时另比较SPD-DDPM。",
+            "metrics": "脑使用RMSE、WD、r和mAcc；mAcc在边阈值0.5～0.9、步长0.1下平均。表格使用RMSE、WD，归一化规则及WD细节未报告。",
+            "results": "脑普通/单分支/双分支RMSE为0.261/0.220/0.203，r为0.503/0.677/0.726；双分支mAcc为98.36±0.10。心/肝/肾RMSE为0.265/0.184/0.146。",
+            "limitations": "SPD保证仅是数学有效性；阈值选择主要依赖定性结构。表格缺基线，不宜跨尺度比较误差；单步计时硬件与失败原因未报告。"
+          },
+          {
+            "name": "替换暴露代码后的do(healthy)生成比较",
+            "data": "将患者暴露代码，例如G12，替换为[Healthy]后生成数字孪生；真实患病与健康数字孪生作为参照。",
+            "samples": "独立患病及健康人数、生成反事实数量、重复次数均未报告；展示或统计条目不能替代受试者数量。",
+            "groups": "分别比较do(healthy)与GT disease、do(healthy)与GT healthy；具体器官及健康判定标准未报告。",
+            "split": "该反事实评估的具体样本划分未报告；不能将框架统一划分自动视为此项评估的完整设计。",
+            "baselines": "真实健康与患病状态为参照；其他反事实生成方法对照未报告，也没有真实干预后观测对照。",
+            "metrics": "FID、WD越低越好，Pearson r越高越好；FID特征提取器、检验方法及±含义未报告。",
+            "results": "患病/健康参照：FID为92.96±8.67/51.37±4.13，WD为8.95±0.24/6.91±0.23，r为0.39±0.07/0.40±0.08；p依次为2.5e−5、1.6e−6、0.148。",
+            "limitations": "FID与WD支持更接近健康分布，r不支持显著差异；代码替换不是现实治疗，无法证明个体干预效果。"
+          },
+          {
+            "name": "10组ICD暴露—结局对的ATE误差比较",
+            "data": "二值化ICD序列提供经验ATE；DiffDT使用生成孪生、Delphi使用token嵌入拟合倾向评分MLP。",
+            "samples": "共10个代码对，不是10名受试者；表列暴露人数502或902，结局人数114～238。跨组去重人数及生成数量未报告。",
+            "groups": "包含I10→I25、I10→E78、K57→K64等10组；要求足够共同暴露与结局样本，具体筛选阈值未报告。",
+            "split": "ATE评估的训练验证测试划分未报告；逐组合人数不能直接求和，亦不能推出独立测试规模。",
+            "baselines": "Delphi嵌入加倾向评分MLP为模型对照；经验ATE是误差参照，不是已知真实因果效应。",
+            "metrics": "模型ATE相对经验ATE的绝对误差及跨组合平均值，越低越好；经验ATE公式、单位及±含义未报告。",
+            "results": "DiffDT为0.004±0.004，Delphi为0.007±0.005；I10→E78与I10→I20中DiffDT误差更大，并非所有组合获益。",
+            "limitations": "表列中心值约降低43%，与正文“超过一半”不一致；混杂控制及显著性细节缺失，不能由经验ATE一致性确认因果中介。"
+          }
+        ],
+        "routes": [
+          {
+            "title": "面向健康监测的纵向孪生可靠性评估",
+            "direction_id": "ai_maintenance",
+            "gap": "现有模型主要从横断面配对学习，尚未证明生成轨迹能追踪个体变化。建议先限定为健康状态监测，检验重复影像变化与风险校准，不直接延伸到干预决策。",
+            "mechanism": "保留Cholesky几何解码，增加相邻真实观测间的变化量监督，并通过重复条件采样表达不确定性。稀疏随访只监督已观测时间点，避免将插值轨迹当作标签。",
+            "innovation": "候选创新是把SPD约束、个体变化监督和预测校准联结起来。相关文献Conditioned Graph Reconstruction仅摘要可核验，已涉及条件网络重建；新组合应突出纵向可靠性而非泛称首次生成。",
+            "design": "建议设计：经申请获得UKB重复影像与病史，采用受试者隔离、按时间留后验证。设置单次影像与重复影像训练组，再按随访间隔分层；样本数由授权资料可用性决定，不预设设备。",
+            "comparison": "比较原DiffDT、仅病史AR、最近一次真实影像输入及条件图VAE。消融变化量监督与重复采样，固定训练预算；核查预训练与评估受试者重叠，防止隐性泄漏。",
+            "criterion": "预注册变化量RMSE、网络结构保真度、Brier分数与校准误差，并以受试者bootstrap报告区间。成功要求纵向误差和校准同时改善，且稀有疾病召回不明显下降。",
+            "risk": "重复影像少且随访选择不随机，可能学到回访倾向而非生理变化。若纵向训练不稳定，退回横断面生成加明确不确定性输出，并限定可支持的年龄与间隔范围。"
+          },
+          {
+            "title": "结构参照约束下的个体化脑孪生监测",
+            "direction_id": "ai_maintenance",
+            "gap": "正定性并不能证明脑网络生物合理，双分支个体差异目前主要靠重建与视觉证据。建议检验结构连接参照能否减少貌似合理但偏离个体网络组织的生成。",
+            "mechanism": "在有配对DWI与fMRI的资料中，引入结构连接和脑区几何参照损失，约束功能连接偏离参照的模式，而非强迫功能边逐一匹配结构边，同时保留SPD解码。",
+            "innovation": "Benchmarking functional connectivity by the structure and geometry of the human brain的摘要支持结构几何参照思路。候选新组合是将该参照用于条件扩散训练及失真监测，不宣称结构决定全部功能连接。",
+            "design": "建议设计：申请可用配对影像，或在获批的数据集中整理配对连接矩阵。按受试者分组，设置原双分支、结构约束、结构加几何约束三组，并增加跨采集条件留出评估。",
+            "comparison": "基线采用原DiffDT与单分支SPD模型，另设随机打乱结构参照的负对照。消融结构项、几何项和频率阈值，统一预处理与特征维数，避免尺度变化制造优势。",
+            "criterion": "同时考察SPD有效性、个体辨识率、网络模块保真度与下一疾病校准。成功需参照一致性提高而个体差异不收缩，并在留出采集条件下保持收益，不能仅凭RMSE下降。",
+            "risk": "结构与功能本就存在差异，过强约束可能抹去真实高阶网络模式。若出现个体差异收缩，改用软权重或只将参照作为异常检测指标，并将不适用网络单独报告。"
+          }
+        ],
+        "diagrams": [
+          {
+            "kind": "study",
+            "title": "DiffDT：从病史生成器官状态再预测事件",
+            "description": "原研究的计算流程；表格与脑拓扑生成并行，模拟代码替换不代表真实干预。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "UKB病史与影像",
+                "detail": "真实ICD、诊断年龄与器官影像性状按观测年龄配对"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "自适应病史编码",
+                "detail": "ICD与年龄嵌入经自回归Transformer形成条件"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "表格条件扩散",
+                "detail": "固定病史，生成心、肝、肾连续及类别性状"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "脑潜在扩散",
+                "detail": "双分支SPD-VQVAE与Cholesky解码生成脑连接"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "器官数字孪生",
+                "detail": "生成的器官表征作为概率中介，不是实测随访状态"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "下一疾病预测",
+                "detail": "BrainMass或表格Transformer输出疾病预测"
+              },
+              {
+                "id": "g",
+                "stage": 5,
+                "label": "计算验证",
+                "detail": "评价生成、预测、代码替换与经验ATE一致性"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "病史输入"
+              },
+              {
+                "from": "a",
+                "to": "c",
+                "label": "真实性状训练"
+              },
+              {
+                "from": "a",
+                "to": "d",
+                "label": "真实矩阵训练"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "条件控制"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "交叉注意力"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "表格生成"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "拓扑生成"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "中介表征"
+              },
+              {
+                "from": "f",
+                "to": "g",
+                "label": "性能评估"
+              },
+              {
+                "from": "e",
+                "to": "g",
+                "label": "生成评估"
+              }
+            ]
+          },
+          {
+            "kind": "proposal",
+            "title": "建议路线：以重复观测检验纵向孪生可靠性",
+            "description": "对应第一条研究路线，所有新增监督、分组和判据均为建议设计，不表示已取得改善。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "申请重复影像资料",
+                "detail": "获取获授权的病史与重复影像，核查可用人数"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "受试者与时间隔离",
+                "detail": "隔离个体并留后验证，审计预训练数据重叠"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "纵向变化监督",
+                "detail": "只监督真实观测间变化，保持SPD解码"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "基线与组件消融",
+                "detail": "比较原DiffDT、病史AR、真实影像及条件图VAE"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "重复采样与校准",
+                "detail": "估计生成不确定性，检查疾病概率校准"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "纵向可靠性判据",
+                "detail": "同时评价变化误差、网络保真与稀有疾病召回"
+              },
+              {
+                "id": "g",
+                "stage": 5,
+                "label": "限定使用范围",
+                "detail": "收益不足时退回横断面生成并明确适用边界"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "整理真实观测"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "建议训练组"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "统一评估划分"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "条件重复生成"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "误差与校准"
+              },
+              {
+                "from": "d",
+                "to": "f",
+                "label": "公平比较"
+              },
+              {
+                "from": "f",
+                "to": "g",
+                "label": "确定证据边界"
+              },
+              {
+                "from": "f",
+                "to": "c",
+                "label": "失败反馈调整"
+              }
+            ]
+          }
+        ],
+        "related": {
+          "status": "ok",
+          "checked_at": "2026-10-08T15:11:04.657473+00:00",
+          "papers": [
+            {
+              "title": "Class-Partitioned VQ-VAE and Latent Flow Matching for Point Cloud Scene Generation",
+              "url": "https://doi.org/10.1609/aaai.v40i5.37352",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Benchmarking functional connectivity by the structure and geometry of the human brain",
+              "url": "https://doi.org/10.1101/2021.10.12.464110",
+              "year": 2021,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Conditioned Graph Reconstruction of Brain Functional Network Connectivity Reveals Interpretable Latent Axes of Sex and Fluid Intelligence",
+              "url": "https://doi.org/10.64898/2026.02.20.707025",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            }
+          ]
+        }
+      },
+      "article_updated_at": "2026-10-08T15:14:45.036962+00:00",
+      "article_profile": "e6c89a9b5cf63dc006c9b284416cec34eb65b28396dcdc039ce5d6593bff8331",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3",
+          "P9"
+        ],
+        "method": [
+          "P4",
+          "P5",
+          "P6",
+          "P7",
+          "P8"
+        ],
+        "innovation": [
+          "P2",
+          "P6",
+          "P12",
+          "P13"
+        ],
+        "findings": [
+          "P7",
+          "P14"
+        ],
+        "limitations": [
+          "P3",
+          "P5",
+          "P9"
+        ],
+        "connection": [
+          "P4",
+          "P6",
+          "P7",
+          "P9"
+        ],
+        "next_steps": [
+          "P5",
+          "P9",
+          "P12",
+          "P13"
+        ]
+      },
+      "analysis_material_version": "7ccc81b6d13f60764fb3d5c0953d8d0160e5ad7b8a89dc425bdf304d3b89da96",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "原页中的模型名为SPD-VQVAE及SPD-VQVAE-Dual；文字提取多处写成“SPD-VQV AE”。已按原页纠正，属于术语空格错误，不影响作者关于Cholesky潜空间及SPD约束的贡献表述。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "文字提取遗漏图2散点图中的相关系数与p值。原图可读：a为r=0.04、p=0.000；b为r=0.07、p=0.003；c为r=-0.39、p=0.096；d为r=-0.15、p=0.016。补充原图信息后，图2c不能按常用0.05阈值支持正文所称显著负相关；p=0.000仅忠实记录图示舍入值，不解释为概率严格为零。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "模型名称在文字提取中多次被拆成“SPD-VQV AE”，原页为SPD-VQVAE。已纠正名称空格，不存在模型定义或式(8)内容缺失，不影响对结构约束自编码器的识别。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "图4文字提取未保留颜色与面板对应关系。按Delphi-GPT2、DiffDT-GPT2、Delphi-Qwen3、DiffDT-Qwen3顺序，全部疾病对F1的r分别为-0.236、-0.249、-0.120、-0.217；跨章且阳性比例≥10%的F1之(r,p)分别为(-0.185,0.280)、(-0.388,0.001)、(-0.352,0.003)、(-0.383,0.001)。已按原图纠正归属，影响对语义距离依赖及显著性的判断。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "图5文字提取遗漏GT、DT行标签，原图上行为GT、下行为DT；图6提取遗漏纵轴sec/step及SPD-DDPM、Cholesky-LDM图例。已据原图补足，分别明确真实与生成矩阵对应关系，以及单次扩散步骤而非完整训练或采样耗时。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P12",
+          "detail": "图7文字提取未保留右侧矩阵标签的空间顺序。原图三列依次为Frequency=25、50、75；每列从上至下为Real high-passed、Gen high-passed、Real low-passed、Gen low-passed、Real reconstructed、Gen reconstructed。已按原图纠正对应关系，避免将真实/生成或高频/低频矩阵混配；图像本身无缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P13",
+          "detail": "图8标签的文字提取顺序与原图行序不一致。已核对原图，从上至下为Ground Truth、w/ VQVAE、w/ SPD-VQVAE、w/ SPD-VQVAE-Dual；不存在图像缺项。纠正后避免将普通VQVAE的平滑结果误归给SPD-VQVAE，影响自编码方法的定性比较。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "7555b0049260",
+        "state": "published",
+        "updated_at": "2026-10-08T15:14:45.039041+00:00",
+        "basis": "full_text",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "",
+        "total": 14,
+        "covered": 14,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "原页中的模型名为SPD-VQVAE及SPD-VQVAE-Dual；文字提取多处写成“SPD-VQV AE”。已按原页纠正，属于术语空格错误，不影响作者关于Cholesky潜空间及SPD约束的贡献表述。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "文字提取遗漏图2散点图中的相关系数与p值。原图可读：a为r=0.04、p=0.000；b为r=0.07、p=0.003；c为r=-0.39、p=0.096；d为r=-0.15、p=0.016。补充原图信息后，图2c不能按常用0.05阈值支持正文所称显著负相关；p=0.000仅忠实记录图示舍入值，不解释为概率严格为零。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "模型名称在文字提取中多次被拆成“SPD-VQV AE”，原页为SPD-VQVAE。已纠正名称空格，不存在模型定义或式(8)内容缺失，不影响对结构约束自编码器的识别。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "图4文字提取未保留颜色与面板对应关系。按Delphi-GPT2、DiffDT-GPT2、Delphi-Qwen3、DiffDT-Qwen3顺序，全部疾病对F1的r分别为-0.236、-0.249、-0.120、-0.217；跨章且阳性比例≥10%的F1之(r,p)分别为(-0.185,0.280)、(-0.388,0.001)、(-0.352,0.003)、(-0.383,0.001)。已按原图纠正归属，影响对语义距离依赖及显著性的判断。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "图5文字提取遗漏GT、DT行标签，原图上行为GT、下行为DT；图6提取遗漏纵轴sec/step及SPD-DDPM、Cholesky-LDM图例。已据原图补足，分别明确真实与生成矩阵对应关系，以及单次扩散步骤而非完整训练或采样耗时。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "图7文字提取未保留右侧矩阵标签的空间顺序。原图三列依次为Frequency=25、50、75；每列从上至下为Real high-passed、Gen high-passed、Real low-passed、Gen low-passed、Real reconstructed、Gen reconstructed。已按原图纠正对应关系，避免将真实/生成或高频/低频矩阵混配；图像本身无缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "图8标签的文字提取顺序与原图行序不一致。已核对原图，从上至下为Ground Truth、w/ VQVAE、w/ SPD-VQVAE、w/ SPD-VQVAE-Dual；不存在图像缺项。纠正后避免将普通VQVAE的平滑结果误归给SPD-VQVAE，影响自编码方法的定性比较。"
+          }
+        ]
+      }
     },
     {
       "source": "ResearchGate",
@@ -517,8 +1414,10 @@
       "reading_status": {
         "paper_id": "abf0865db466",
         "state": "missing_evidence",
-        "updated_at": "2026-09-30T13:14:25.299155+00:00",
+        "updated_at": "2026-10-08T14:09:44.160229+00:00",
         "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -581,7 +1480,20 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "fed0a147e220",
+        "state": "missing_evidence",
+        "updated_at": "2026-10-08T14:52:23.368671+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "extended": [
@@ -741,8 +1653,10 @@
       "reading_status": {
         "paper_id": "df76394da208",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-30T13:16:57.085789+00:00",
+        "updated_at": "2026-10-08T15:38:30.253756+00:00",
         "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -774,7 +1688,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "本文关注大语言模型如何参与物理约束本构模型设计。摘要明确描述两类角色：Creator生成本构模型，Inspector审核物理约束，并提及橡胶与软材料测试。[摘要] 解读：其阅读价值在于生成与物理审核的分工，而非已有证据证明的性能提升。当前仅有简短摘要，未披露模型形式、约束清单、测试指标或对照结果，因此不能确认标题所称双智能体优势。",
+      "summary": "本文针对LLM生成本构模型缺乏物理核验的问题，将模型生成与审查分配给Creator和Inspector，并用独立数值验证评价合规性。[P9]两个骨干、四个数据集上，加入审查器使通过率分别由90%升至95%、47%升至60%。[P11]但最简提示也导致Opus双智能体全部失效，说明协作优势依赖领域知识。[P39]精读重点是审查与验证的分离，以及有限采样通过不等于数学保证的边界。[P6]",
       "raw_metadata": {
         "source": "arXiv",
         "source_id": "https://arxiv.org/abs/2605.23754v2",
@@ -847,33 +1761,428 @@
         "大模型",
         "智能体"
       ],
-      "title_zh": "大语言模型驱动的物理约束本构模型设计：双智能体优于单智能体",
-      "recommendation": "建议作为生成式设计与材料建模交叉方向的方法线索阅读：摘要中的“generate constitutive models and audit physical constraints”明确体现生成与审核分工，但尚不足以据此推荐其工程应用或确认性能优势。[摘要]",
+      "title_zh": "大语言模型驱动物理约束本构模型设计：双智能体优于单智能体",
+      "recommendation": "推荐重点阅读流程、数值验证附录与最简提示消融：它们为物理约束生成设计提供可审计的方法，也展示了双智能体可能越改越错的具体反例。[P9][P33][P39]",
       "deep_read": {
-        "problem": "论文围绕本构模型生成与物理约束审核展开，摘要将任务表述为“generate constitutive models and audit physical constraints”。[摘要] 解读：核心关注是让生成式设计同时面对物理要求，而不是仅产出模型表达式；具体针对哪些既有建模困难，摘要没有交代。",
-        "method": "摘要明确采用基于大语言模型的Creator与Inspector两类智能体，分别承担模型生成和物理约束审核，并提及橡胶与软材料测试。[摘要] 解读：这是角色分工式建模流程；两者是否迭代交互、如何传递审核意见，以及是否调用求解器或优化器，均缺少证据。",
-        "innovation": "解读：可关注的方法特色是把本构模型生成与物理审核分配给不同智能体，而非由同一角色包办。[摘要] 但特色不等于已证实的创新，现有资料未提供相关工作比较、独有机制或消融结果，无法判断该分工相对既有方法的新颖程度，也不能确认标题中的优势主张。",
-        "findings": "摘要仅说明存在“tests on rubber and soft materials”，支持作者已在这些材料对象上开展测试的判断。[摘要] 它没有报告测试结果、预测误差、约束满足情况或单智能体对照，因此目前可提取的是验证对象，而非性能结论；不能把开展测试等同于验证有效。",
-        "limitations": "当前可确认的是摘要证据的局限，而不是论文方法已被证明的缺陷：资料未列出物理约束类型、数据规模、评价标准和测试结果。[摘要] 因而无法评估约束审核的完整性、生成模型的稳定性及适用边界；是否存在这些实际问题，仍需更多原文证据。",
-        "connection": "解读：生成本构模型与生成式设计标签直接相关；面向结构设计，它可被视为材料模型构建环节的潜在线索。[摘要] 物理审核也可引出可靠性研究问题，但约束满足并不自动等于可靠性保证。摘要未涉及状态监测、故障诊断或维护决策，不能据此认定智能运维成果。",
-        "next_steps": "建议：取得更多原文后，优先核查物理约束如何定义、Inspector如何判定违反约束，以及双智能体与单智能体是否使用一致测试条件。再检查材料测试的指标与失败案例。以上是后续阅读和验证建议，并非作者已实施的实验，也不是摘要已经支持的研究结论。"
+        "problem": "作者要解决的不是单纯提高应力拟合精度，而是降低本构建模门槛，同时避免LLM实现破坏物理结构。已有模型类别的构造性保证，只有实现正确才能继承；黑箱预测又存在外推与可解释性问题。研究因此追问：生成模型能否经过独立审查，获得更可信的物理合规输出。[P2][P4]",
+        "method": "Creator生成CANN代码，先通过训练、预测及保存加载检查，再由Inspector逐项审查九项约束并反馈修改。初次生成后改进两次，选择最准确模型；独立采样验证器另行评价。实验比较单Creator、双智能体及工具版，并在两个骨干、四个不可压缩超弹性数据集上测试。[P9][P10]",
+        "innovation": "作者提出将构造本构模型与批判性检查明确分工，补足GenCANN仅生成而不系统核验的环节。解读：价值主要在编排、约束提示与外部验证的组合，而非新增能量函数或神经网络类别。作者主张可迁移至PANN、CKAN及符号律，但当前实验证据仍限于CANN。[P8][P23][P41]",
+        "findings": "加入Inspector后，Opus与Kimi数值检查通过率分别为95%和60%；工具版分别为93%和83%。猪皮最佳合规模型平均R²为0.90和0.80，基线为0.83。然而最简提示下，Opus无工具双智能体30个导出模型全部失败。作者结果说明合规改善并非跨提示条件无条件成立。[P11][P12][P16][P39]",
+        "limitations": "验证是有限采样而非证明，椭圆性检查不能证明多凸性；材料仅涵盖不可压缩超弹性，猪皮基线训练划分不同。解读：代码硬截断还需核查全域光滑性。记录未发现原文件缺项；P45的“311”是已纠正的提取错误，实际输出维度为1，不影响原文结论。[P6][P11][P35][P43][P45]",
+        "connection": "解读：与生成设计方向直接相关，但对象是材料本构模型而非结构几何。对结构设计，其价值在于为仿真提供受物理约束的材料代理；对可靠性及智能运维，可迁移的是生成、审查、独立验证分层的准入机制。论文未开展设备运维或结构失效概率实验，不能据此宣称应用效果。[P9][P24]",
+        "next_steps": "建议先复现附录验证器，测试采样密度、容差及面外变形对结论的敏感性，再检查硬截断、梯度缺失置零与压力正则化的边界行为。应同时报告漏检、误拒及多次运行分布，避免仅展示最佳模型。扩展黏弹性前需新增耗散和历史依赖检查，这属于研究建议而非已验证成果。[P24][P33][P43][P46][P47]"
       },
       "analysis_status": "ready",
-      "analysis_basis": "abstract",
+      "analysis_basis": "full_text",
       "analysis_kind": "model",
       "analysis_sources": [
-        "https://arxiv.org/abs/2605.23754v2"
+        "https://arxiv.org/pdf/2605.23754"
       ],
-      "analyzed_at": "2026-09-25T02:32:27.473544+00:00",
-      "llm_model": "gpt-6-astra",
+      "analyzed_at": "2026-10-08T14:59:26.809315+00:00",
+      "llm_model": "gpt-6.1-sol",
       "recommended_direction": "generative_design",
       "reading_status": {
         "paper_id": "69eaf30dcdd5",
-        "state": "failed",
-        "updated_at": "2026-09-25T18:38:00.029328+00:00",
+        "state": "published",
+        "updated_at": "2026-10-08T15:35:25.128220+00:00",
         "basis": "full_text",
-        "reason": ""
-      }
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "",
+        "total": 47,
+        "covered": 47,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P45",
+            "detail": "Listing 2第31行：文字提取显示“311,”，原页清晰显示行号31与代码“1,”分列，正确含义为输出Dense层单元数1，而非311。已纠正；该错误影响网络输出维度和架构识读，不改变作者报告的模型性能结论。"
+          }
+        ]
+      },
+      "article": {
+        "version": 1,
+        "lead": "让大语言模型写出能拟合材料曲线的代码，并不等于得到可信的本构模型：真正困难的是，模型能否保持物理约束，并推广到未见变形。Tacke等提出Creator–Inspector双智能体流程，将模型生成与物理审查分工，再以独立数值检查评估输出。四个材料基准显示，这种分工能够提高经验性物理通过率，但工具、提示知识与模型骨干之间存在明显交互。本文的阅读价值，正在于同时呈现自动建模的进展与可信验证的边界。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从拟合材料曲线，到生成可用的本构关系",
+            "paragraphs": [
+              "本构模型连接材料实验与结构计算，必须从有限、相对简单的加载数据推广到复杂服役状态。传统建模同时依赖连续介质力学、函数构件选择和科学编程知识，自动化因此具有实际价值。作者指出，已有单智能体GenCANN流程缺少系统性的物理检查；黑箱模型可能外推不佳或违反对称性，则属于研究背景，不能当作本文对所有数据驱动方法的实验结论。",
+              "这项研究的目标不是全面超过人类专家，而是让缺少建模经验的用户获得准确且具有物理意义的模型。已验证范围限定为不可压缩超弹性材料，覆盖各向同性脑组织、橡胶和横观各向同性猪皮。本文复用文献数据，没有重新开展人类或动物取样；向黏弹性、符号本构律等对象扩展仍是研究设想。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "生成、审查与数值验证是三道不同关口",
+            "paragraphs": [
+              "Creator生成完整Python模型，先接受执行、实例化、训练、预测和保存加载检查；Inspector随后逐项审查物理约束，发现问题便反馈修改，全部获批才导出。初始模型获批后，根据训练预测及R²、MSE再改进两次，每次重新检查，完整运行形成三个获批模型并选优。**Inspector批准不是数值验证通过**，后者由确定性验证器另行判定。",
+              "模型以CANN为载体，由不变量预测标量应变能，再通过自动微分得到应力：P=∂Ψ/∂F−pF⁻ᵀ。各向同性采用I₁、I₂，横观各向同性增加I₄、I₅并学习纤维方向；九项要求包括热力学一致性、应力对称性、客观性、材料对称性、多凸性、体积增长条件、能量与应力归一化、应变能非负性。架构的物理性质只有正确实现才可继承，不能由网络名称直接保证。",
+              "验证器通过变形、旋转、路径和扰动方向寻找反例，多数比较采用相对容差10⁻³、绝对下限10⁻⁴。基础变形约35个，横观各向同性扩充至约53个；椭圆性检查使用伸长网格及两组各200个Fibonacci方向。多凸性实际以其推论椭圆性作数值探查，而体积增长条件因J=1直接返回通过，二者均有明确适用边界。"
+            ]
+          },
+          {
+            "id": "validation",
+            "title": "四个基准，区分曲线点、材料来源与生成重复",
+            "paragraphs": [
+              "脑组织数据来自Budday等的皮质灰质研究，原始取材涉及10个人脑，每种加载模式17个点，涵盖拉伸、压缩和剪切。Treloar实验橡胶与Linka等的合成橡胶每种协议15个点，采用单轴、等双轴和纯剪切；合成数据具有闭式真值，不是新增实物试验。猪皮数据包含402个点、五种双轴协议和十条方向曲线，这些点与曲线均不能替代独立试件数量。",
+              "橡胶沿用原始CANN训练–测试划分，但具体点数和比例未报告；猪皮随机留出20%数据点，是否隔离试件或整条曲线未报告。两种骨干各比较仅Creator、双智能体及工具版双智能体，每个基准配置进行10次独立运行，另有最小提示消融。图8至图10展示选优预测，图12补充跨运行统计，因此不能把全文概括为只有最佳结果；独立试件数、增强数量和完整选模隔离规则仍缺失。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "双智能体有收益，但审查也可能制造错误",
+            "paragraphs": [
+              "四基准汇总中，加入Inspector后，获批导出模型的数值通过率在Opus上由90%升至95%，Kimi由47%升至60%；开放工具后分别为93%和83%，收益并不一致。合成橡胶最小提示下，Opus无工具双智能体导出的30个模型全部失败，而完整提示对应通过率为100%。作者将该失效归因于错误质疑推动Creator加入不当体积项，说明审查者也需要领域知识与可核查证据。",
+              "精度优势具有材料依赖性：脑组织三个加载条件下，主伸长基底专家模型均优于不变量生成模型，基底差异妨碍直接归因。猪皮平均R²为基线0.83、Opus 0.90、Kimi 0.80，但基线全数据训练、生成模型留出测试点，训练条件并不一致。两个橡胶基准整体接近完美拟合，跨运行统计仍发现Opus双智能体一次R²为0.66的异常，不能用最佳曲线替代稳定性。",
+              "合成橡胶在Treloar不变量平面的路径间与范围外状态上，生成模型精度未明显下降，但缺少精确最大误差及评估边界。**有限采样通过不是全域物理证明**，各组完整分母、网络容量匹配及部分统计细节也不足。展示代码中的硬截断和固定P₃₃=0压力处理，还提示部署前应核查光滑性与边界适配，不能把代码注释视作保证。"
+            ]
+          }
+        ],
+        "experiments": [
+          {
+            "name": "四基准上的物理通过率与工具访问消融",
+            "data": "复用脑组织、实验橡胶、合成橡胶和猪皮数据；比较生成模型的物理检查结果，而非新增材料试验。",
+            "samples": "每基准、每配置10次独立运行，每次三个获批轮次；各判断组完整分母及被拒模型抽样量未报告。",
+            "groups": "Opus与Kimi分别设置仅Creator、Creator–Inspector、带数值工具Inspector三组；被拒模型仅随机导出子集。",
+            "split": "橡胶沿用原始CANN划分；猪皮随机留出20%点；脑组织划分及各组具体点数未报告。",
+            "baselines": "仅Creator为流程基线，无工具双智能体为工具访问消融参照；GenCANN不是这里的直接数值对照。",
+            "metrics": "获批导出模型通过全部数值检查的比例；多凸性以椭圆性探查，增长条件在不可压缩域直接通过。",
+            "results": "仅Creator→双智能体→工具版：Opus为90%→95%→93%，Kimi为47%→60%→83%；均为四基准汇总。",
+            "limitations": "有限采样不能证明全域满足；分母与置信区间缺失。工具版Inspector使用同套验证器，不能据此认定独立审查能力。"
+          },
+          {
+            "name": "脑组织与猪皮的专家基线预测比较",
+            "data": "脑组织采用Budday等皮质灰质数据；猪皮采用Taç等公开双轴数据，分别考察各向同性与纤维各向异性。",
+            "samples": "脑组织原始取材10个人脑，每模式17点；猪皮402点、十条曲线。独立试件数未报告；预测从10次运行选优。",
+            "groups": "脑组织为拉伸、压缩、剪切；猪皮为等双轴、两个strip-axial及两个off-axial协议，各记录两方向应力。",
+            "split": "脑组织具体划分未报告；猪皮随机留出20%点，未报告按试件或曲线隔离；专家猪皮基线使用全部数据。",
+            "baselines": "脑组织为Pierre等主伸长基底CANN；猪皮为Linka等超参数搜索CANN；生成模型统一采用不变量基底。",
+            "metrics": "脑组织分加载条件报告R²，猪皮报告十条曲线平均R²，均无量纲；应力分别以kPa、MPa展示。",
+            "results": "脑组织拉伸/压缩/剪切R²：基线0.96/0.99/1.00，Kimi 0.614/0.651/0.829，Opus 0.453/0.876/0.981；猪皮均值为0.83/0.80/0.90。",
+            "limitations": "脑组织基底不同、猪皮训练数据条件不同，难以分离方法贡献；猪皮弱伸长方向是共同短板，选优结果不代表平均表现。"
+          },
+          {
+            "name": "合成橡胶拟合、未见路径泛化与外推",
+            "data": "Linka等引入的虚构橡胶材料，具有闭式本构真值；在Treloar不变量平面上比较应力预测相对误差。",
+            "samples": "每种训练协议15个点；从10次无工具双智能体运行选最佳合规模型。独立仿真数、平面评估点数未报告。",
+            "groups": "训练为单轴、等双轴和纯剪切三条路径；路径之间状态评估泛化，超出训练范围状态评估外推。",
+            "split": "沿用原始CANN训练–测试划分；三条路径外的平面状态未参与训练，具体划分数量与外推边界未报告。",
+            "baselines": "Linka等原始CANN专家基线，对比Opus和Kimi无工具双智能体；本文未重复网络规模匹配实验。",
+            "metrics": "P₁₁相对误差，单位%；图中色标0%—5%，但误差公式、近零分母处理及汇总统计未报告。",
+            "results": "训练工况预测近乎完美；基线范围外出现可见误差但远低于5%，生成模型在所评估范围未明显降精度。",
+            "limitations": "缺少完整生成公式、评估网格及精确最大误差；容量未匹配，不能扩大为任意变形下的泛化保证。"
+          },
+          {
+            "name": "合成橡胶的领域知识提示消融",
+            "data": "在同一合成橡胶基准上，将解释约束和检查建议的完整提示替换为仅列九项约束名称的最小提示。",
+            "samples": "各配置精度统计涉及三种工况、10次独立运行；最小提示Opus无工具双智能体导出30个模型。",
+            "groups": "两个骨干各含仅Creator、无工具双智能体、工具版双智能体；比较完整与最小提示并按约束诊断失效。",
+            "split": "橡胶沿用原始CANN划分，具体训练测试点数未报告；该消融没有另报告独立验证集。",
+            "baselines": "完整提示是知识供给对照，仅Creator是审查干预对照，无工具双智能体是工具访问对照。",
+            "metrics": "获批导出模型的数值通过率（%）；另汇总平均R²和标准差，但精确柱值未报告，负均值绘图截为零。",
+            "results": "完整→最小提示：Opus三组90%→83%、100%→0%、97%→90%；Kimi三组47%→0%、57%→30%、87%→77%。",
+            "limitations": "Opus失败的30个模型均违反材料对称性；这是特定提示与骨干的失效，不是双智能体普遍结论。其他组分母未报告。"
+          }
+        ],
+        "routes": [
+          {
+            "title": "用独立反例搜索约束双智能体的物理审查",
+            "direction_id": "generative_design",
+            "gap": "现有通过率依赖有限采样，工具版又与评估共享验证器，难以辨别独立审查能力。应优先研究训练检查之外的盲测反例，而不是继续增加未经校准的语言审查。",
+            "mechanism": "保留Creator提出结构的自由度，将Inspector意见转成可执行检查，再由隔离的反例搜索器优化最小秩一响应和最低能量。对可证明构件提供结构证书，对其余候选只声明限定域内经验通过。",
+            "innovation": "候选创新是将结构证书、盲测反例与修复日志组成证据链，而非把验证器调用本身当作创新。相关文献Physics-Audited Agentic Discovery的摘要已提出固定评估和高违例搜索，本路线拟进一步面向本构代码审查组合这些机制。",
+            "design": "建议设计复用公开CANN数据与本文日志，在四基准、两骨干和各配置下各运行20次；独立评估器隐藏旋转、面外剪切及搜索初值。记录全部候选和拒绝模型，生成重复与材料试件分别计数。",
+            "comparison": "对照仅Creator、原双智能体、全量工具审查和隔离反例搜索，匹配训练预算与网络容量。消融结构证书、搜索反馈和隐藏测试，并注入已知错误以评估漏检与误拒。",
+            "criterion": "预注册采样域和容差，以完整分母报告通过率及区间；成功须在匹配预算下减少隐藏反例与错误拒绝，同时不恶化留出误差。未找到反例仍不得表述为全域证明。",
+            "risk": "反例搜索可能代价高或误判浮点噪声，可用双精度复核和分级搜索降低风险。若自动证明不可行，退回人工审核的构件目录，并缩小可声明有效的变形域。"
+          },
+          {
+            "title": "面向未见加载的容量匹配与不确定性评估",
+            "direction_id": "generative_design",
+            "gap": "随机留出曲线点不足以验证跨路径或跨试件泛化，现有比较还混入网络容量和函数基底差异。应将问题转向同预算模型在未见加载下的误差与可信范围。",
+            "mechanism": "按完整加载路径隔离训练与测试，统一不变量基底及参数预算，再让候选集预测分歧提示高风险状态。对具有闭式真值的合成材料可检验区间覆盖，对实物数据则保留来源和试件层级。",
+            "innovation": "候选创新是把物理审查结果与外推不确定性共同用于模型选择，而非只选最高R²。相关岩石本构研究摘要已采用Epinet量化认知不确定性；将其与本流程结合只是待验证方案，不能移用其效果。",
+            "design": "建议设计先复用公开橡胶和猪皮资料，轮流留出整条加载协议，各配置重复20次；若公开资料无试件标识，只评价跨路径。跨试件结论需要补充采集并记录来源，不能默认已有仪器或独立试件。",
+            "comparison": "统一数据、基底和参数预算，对比专家CANN、仅Creator及双智能体；消融点级与路径级划分、容量约束和不确定性筛选。测试集冻结，模型选择只使用另行留出的验证数据。",
+            "criterion": "以未见路径误差、最差方向误差、区间覆盖和物理违例共同判定成功，报告全部运行而非仅最佳者。建议预注册90%预测区间，并检查误差随外推距离增长时能否得到合理预警。",
+            "risk": "候选分歧可能低估共享架构偏差，小样本也会使校准不稳定。可加入不同可接受构件与基底作为敏感性对照；若覆盖不足，则采用保守适用域和拒绝预测，不输出虚假的高置信结论。"
+          }
+        ],
+        "diagrams": [
+          {
+            "kind": "study",
+            "title": "原研究：模型生成与物理审查的分层流程",
+            "description": "Inspector控制修改与导出；确定性数值验证提供后续经验标签，工具变体允许Inspector选择性调用验证器。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "文献材料数据",
+                "detail": "脑组织、实验橡胶、合成橡胶与猪皮四个基准"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "Creator生成CANN",
+                "detail": "提出Python模型、网络结构与训练过程"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "代码功能检查",
+                "detail": "检查执行、实例化、训练、预测及保存加载"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "Inspector物理审查",
+                "detail": "逐项判断九项要求；违规反馈，全部批准才导出"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "两次精度细化",
+                "detail": "依据训练R²与MSE改进，每次重新接受检查"
+              },
+              {
+                "id": "f",
+                "stage": 5,
+                "label": "独立数值评估",
+                "detail": "有限采样检查物理约束，并评估预测与跨运行表现"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "提供拟合数据"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "提交脚本"
+              },
+              {
+                "from": "c",
+                "to": "b",
+                "label": "功能失败修正"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "功能合格"
+              },
+              {
+                "from": "d",
+                "to": "b",
+                "label": "违规反馈"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "批准后细化"
+              },
+              {
+                "from": "e",
+                "to": "c",
+                "label": "改进后复审"
+              },
+              {
+                "from": "d",
+                "to": "f",
+                "label": "导出后评估"
+              },
+              {
+                "from": "f",
+                "to": "d",
+                "label": "工具变体可调用"
+              }
+            ]
+          },
+          {
+            "kind": "proposal",
+            "title": "研究建议：建立与审查隔离的物理证据链",
+            "description": "对应第一条路线。结构证书与隐藏反例评估并行，所有改善均需实验验证，未发现反例不等于全域证明。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "公开数据与预注册域",
+                "detail": "固定预算、容差、评估范围并记录全部生成候选"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "生成与语言审查",
+                "detail": "Creator提出模型，Inspector给出可执行审查意见"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "结构证书检查",
+                "detail": "核查可证明构件、代码实现与边界条件一致性"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "隔离反例搜索",
+                "detail": "隐藏初值及加载状态，搜索负能量和秩一响应违例"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "反例复核与修复",
+                "detail": "双精度复核疑似违例，记录修改原因和修复结果"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "冻结盲测评价",
+                "detail": "比较完整分母通过率、误拒率、预测误差及预算"
+              },
+              {
+                "id": "g",
+                "stage": 5,
+                "label": "限定域证据报告",
+                "detail": "区分数学证书与经验通过，披露残余风险和适用域"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "约束实验设计"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "提交结构与代码"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "提交候选响应"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "定位实现问题"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "提供数值反例"
+              },
+              {
+                "from": "e",
+                "to": "b",
+                "label": "反馈修复"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "冻结候选"
+              },
+              {
+                "from": "f",
+                "to": "g",
+                "label": "形成可核查证据"
+              }
+            ]
+          }
+        ],
+        "related": {
+          "status": "ok",
+          "checked_at": "2026-10-08T15:31:43.489930+00:00",
+          "papers": [
+            {
+              "title": "How Much Physics Should a Neural Network Know? Thermodynamics‐Informed Neural Networks for Rock Constitutive Modeling With Epistemic Uncertainty",
+              "url": "https://doi.org/10.1029/2026jh001463",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "LLM-Based Scientific Equation Discovery via Physics-Informed Token-Regularized Policy Optimization",
+              "url": "https://doi.org/10.1145/3770855.3818869",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "A Constrained Natural-Language Interface for Variational Multi-Physics Finite Element Simulations in FEniCS",
+              "url": "https://doi.org/10.48550/arxiv.2606.10928",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            },
+            {
+              "title": "Agentic Scientific Simulation: Execution-Grounded Model Construction and Reconstruction",
+              "url": "https://doi.org/10.48550/arxiv.2603.00214",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            },
+            {
+              "title": "Physics-Audited Agentic Discovery in Scientific Machine Learning",
+              "url": "https://doi.org/10.48550/arxiv.2607.07379",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            }
+          ]
+        }
+      },
+      "article_updated_at": "2026-10-08T15:35:25.125728+00:00",
+      "article_profile": "38347d56687c3dccc296ab67c7f68cc79bc3304eb17e24d3ecca636fe8c1a690",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P4"
+        ],
+        "method": [
+          "P9",
+          "P10"
+        ],
+        "innovation": [
+          "P8",
+          "P23",
+          "P41"
+        ],
+        "findings": [
+          "P11",
+          "P12",
+          "P16",
+          "P39"
+        ],
+        "limitations": [
+          "P6",
+          "P11",
+          "P35",
+          "P43",
+          "P45"
+        ],
+        "connection": [
+          "P9",
+          "P24"
+        ],
+        "next_steps": [
+          "P24",
+          "P33",
+          "P43",
+          "P46",
+          "P47"
+        ]
+      },
+      "analysis_material_version": "2270b653848661a9091e5d6e0d0d84d997b1d7e8cba82c2220df52bda48f7ff0",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P45",
+          "detail": "Listing 2第31行：文字提取显示“311,”，原页清晰显示行号31与代码“1,”分列，正确含义为输出Dense层单元数1，而非311。已纠正；该错误影响网络输出维度和架构识读，不改变作者报告的模型性能结论。"
+        }
+      ]
     },
     {
       "source": "Semantic Scholar",
@@ -1009,8 +2318,10 @@
       "reading_status": {
         "paper_id": "b26c6aabf051",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-30T13:12:44.564944+00:00",
+        "updated_at": "2026-10-08T15:38:15.958592+00:00",
         "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -1039,7 +2350,7 @@
         "ai_maintenance",
         "fatigue_reliability"
       ],
-      "summary": "Utility-scale wind energy conversion systems are subjected to highly stochastic aerodynamic loading profiles, making drivetrain components-particularly high-speed gearbox shaft bearings and generator stator windings-susceptible to premature failure. Traditional predictive maintenance frameworks rely either on pure data-driven deep learning models, which suffer from high false alarm rates during transient operational profiles and frequently violate thermodynamic boundaries, or first-principles physical models, which fail to capture dynamic boundary variations due to site-specific environmental…",
+      "summary": "风机传动链承受随机气动载荷，纯数据模型与纯物理模型分别面临误报和环境适应问题。本文提出时空物理信息数字孪生，将热力学与疲劳裂纹扩展规律融入深度学习，分别开展热异常检测、振动诊断和剩余寿命预测。摘要报告真实监测数据上的提前预警、低误报及疲劳参数收敛，但未给出具体数值或验证细节。解读：适合关注物理约束智能运维与疲劳可靠性的研究者作为方法线索阅读。[摘要]",
       "raw_metadata": {
         "provider": "PubMed",
         "pmid": "42835956",
@@ -1172,11 +2483,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "推荐重点关注热异常阈值自适应与疲劳规律约束寿命预测的组合，但应获取全文核查性能比较、参数辨识和验证设置，不能仅凭摘要确认工程效果。[摘要]",
+      "deep_read": {
+        "problem": "研究针对随机气动载荷下齿轮箱高速轴轴承与发电机定子绕组的过早失效。摘要指出，纯数据模型在瞬态运行中易产生误报并违反热力学边界，而第一性原理模型难以捕捉场址相关的动态边界变化。核心问题是兼顾运行适应性与物理一致性。[摘要]",
+        "method": "热检测结合稳态热力学基线与带自注意力的因果扩张物理信息时序卷积网络，并以超阈值极值理论拟合广义帕累托分布确定动态阈值；振动诊断结合希尔伯特解调与多尺度卷积长短期记忆自编码器；寿命预测采用物理信息门控循环单元。[摘要]",
+        "innovation": "摘要称框架将“physical thermodynamic principles and material fatigue crack propagation laws”直接融入深度学习。解读：其特色是把热监测、振动诊断和疲劳寿命预测纳入混合孪生框架；仅凭摘要不能确认各模块或整体组合的原创性。[摘要]",
+        "findings": "摘要报告真实SCADA与振动监测数据验证得到提前预警和低误报，并在统计上优于常规监督及无监督基线；还称轴承疲劳参数趋近理论疲劳磨损极限。以上属于作者摘要中的结果陈述，未提供预警时长、误报率、显著性检验或参数误差。[摘要]",
+        "limitations": "当前资料仅为摘要，未交代样本规模、故障类型覆盖、训练测试划分、基线配置及消融实验，无法核查比较是否公平或是否存在数据泄漏。这些是当前证据的缺口，不是已证实的论文缺陷；作者是否讨论跨场址泛化等局限亦不明确。[摘要]",
+        "connection": "解读：热异常检测与振动诊断直接对应智能运维，带单调性和Paris-Erdogan裂纹扩展规律的寿命预测则关联疲劳可靠性。在线材料参数发现可能为状态评估提供物理解释，但摘要没有结构优化或设计验证，因此与结构设计的联系仅属潜在迁移。[摘要]",
+        "next_steps": "建议：取得全文后优先核查物理损失形式、单调性约束实现、极值阈值更新方式，以及材料参数在线辨识所需观测信息。进一步研究可比较不同运行工况下的误报和寿命误差，并检验各物理约束的独立贡献；这些是研究建议，不是作者已完成的实验。"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "用于风力发电机与齿轮箱早期故障预测的时空物理信息数字孪生",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.mex.2026.104171"
+      ],
+      "analyzed_at": "2026-10-08T15:39:34.724697+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "16409eea5a3a61bbafb0200bdc339c1ac7116332bba829db9b6889bec2d66f61",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "c0cf7585af24",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-08T15:39:34.732697+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -1200,7 +2543,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "The construction industry requires sustainable alternatives to conventional concrete to reduce environmental impacts while maintaining structural performance. Jute fiber concrete (JFC) is a promising low-carbon material; however, optimizing its mechanical properties is challenging because of complex nonlinear interactions among fiber characteristics and mix-design parameters. This study proposes an integrated framework combining Generative Artificial Intelligence (GEN-AI) with Decision Tree Boosting (DT-Boosting), Gaussian Process Regression (GPR), and GPR enhanced with Bayesian Optimization (…",
+      "summary": "本文面向黄麻纤维混凝土配合比与力学性能之间的非线性关系，提出生成式人工智能、机器学习预测和逆向优化相结合的框架。摘要称，大语言模型用于扩充实验数据，贝叶斯优化增强的高斯过程回归获得最稳定的预测表现，并与NSGA-II结合生成满足用户性能要求的配合比。其价值在于从性能预测推进到目标驱动设计；但当前仅有摘要，数据扩充可信度与逆向方案的实验验证仍需核查。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7213999642",
@@ -1246,11 +2589,43 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议作为生成式配合比设计方向的候选重点论文阅读，关注其数据扩充、代理模型与多目标逆向优化的衔接；当前摘要不足以确认生成数据和优化配合比的工程可靠性。[摘要]",
+      "deep_read": {
+        "problem": "研究针对可持续混凝土的性能优化问题：黄麻纤维特征与配合比参数之间存在复杂非线性关系，使力学性能优化困难。摘要以“complex nonlinear interactions”说明挑战。解读：核心问题是如何建立可用于目标配合比设计的预测模型，而非单纯比较材料强度。[摘要]",
+        "method": "方法将大语言模型生成式数据扩充与DT-Boosting、GPR及GPR-BO结合，采用分布分析、箱线图比较和Kendall相关分析检查扩充数据，再将GPR-BO接入NSGA-II开展逆向优化。摘要称输入包含六个变量，但未列出完整变量清单与建模设置。[摘要]",
+        "innovation": "摘要将框架贡献概括为“extends forward prediction to practical inverse design”，即从正向性能预测延伸至逆向配合比设计。解读：值得关注的是生成式扩充、预测与优化的流程整合；仅凭摘要不能确认这些组件本身具有原创性，也不能判断相对既有框架的创新程度。[摘要]",
+        "findings": "摘要报告GPR类模型相较DT-Boosting将预测误差降低约40–50%；GPR-BO测试集抗压、抗拉强度R²分别为0.9242和0.9682。SHAP与部分依赖图识别纤维体积分数及纤维含量为重要参数。这些是作者报告的结果，误差指标和测试集规模未在摘要中说明。[摘要]",
+        "limitations": "当前资料仅为摘要，未提供原始样本量、生成数据比例、数据划分方式或逆向方案的实测结果，因此无法判断模型泛化能力及工程落地效果。摘要所述“Probabilistic validation”指向强度分布再现，不能据此认定已完成结构可靠性验证；这些属于证据缺口，而非已证实的研究缺陷。[摘要]",
+        "connection": "与结构设计的直接联系是根据用户力学性能要求反求配合比，摘要明确提出“user-defined mechanical performance requirements”。解读：它可为材料层面的性能驱动设计提供参考；与可靠性研究的联系尚属潜在延伸，当前资料未报告失效概率、耐久性或运维监测结果。[摘要]",
+        "next_steps": "建议后续核查全文中的数据来源、扩充提示与约束、训练测试隔离及优化解实测验证，并检查Pareto解如何选取。可迁移研究建议是将类似逆向设计流程用于材料配合比优化，再另行引入可靠性约束；这属于研究设想，不是摘要已证明的作者结论。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "大语言模型生成式人工智能与混合机器学习驱动的黄麻纤维混凝土性能预测及逆向设计",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.engappai.2026.116274"
+      ],
+      "analyzed_at": "2026-10-08T15:40:58.290352+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "363f6aae8cf3a50e48d93333b1f48a41424aabbc536d284c4c1c378d7ccbaed5",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "40c0ae2fa4ed",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-08T15:40:58.299716+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "papers": [
@@ -1520,7 +2895,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Natural load-bearing patterns such as leaf venation, trabecular bone, and spider webs achieve high stiffness per unit mass, yet classical topology optimizers rarely reach such geometries, and few let engineers express structural design intent through natural language. This work treats a frozen text-to-image diffusion model as a training-free source of design knowledge and distills it into the physics loop of density-based topology optimization via score distillation sampling, so that a text prompt becomes an explicit, machine-interpretable representation of engineer intent. The prompt-induced…",
+      "summary": "本文研究如何将自然语言设计意图引入肋结构拓扑优化，而不训练专用生成模型。作者冻结Stable Diffusion 2.1，通过分数蒸馏采样将生成梯度与有限元灵敏度结合，并用调度及投影协调探索、收敛和二值化。[P5—P8]245次主要运行中，49组组合有38组显著改善；机械最佳单次降幅31.5%，热弹性最大平均降幅23.0%。[P12、P16、P24]但提示词可能损害性能，热传导未获益，CAD输出也尚非已验证可制造结构。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7212234730",
@@ -1565,11 +2940,430 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐结构生成设计与拓扑优化研究者重点阅读：其价值在于可复用的先验—物理梯度耦合、机制干预和负结果，而非宣称全面优于传统优化器。[P13、P24、P38]",
+      "deep_read": {
+        "problem": "传统SIMP面对非凸设计空间容易停留于局部极小值，随机重启又缺乏有组织的探索。工程师熟悉叶脉、网格等结构模式，却难以将这些知识直接交给密度优化器。本文试图同时解决搜索受限与设计意图不可计算的问题，而不是仅生成外观合理的结构图片。[P1—P3]",
+        "method": "冻结扩散模型接收密度图与提示词，经潜空间加噪、条件噪声预测和停止梯度近似得到SDS方向，再与有限元及最大厚度惩罚梯度混合。Adam更新后执行体积投影；预热、余弦衰减、时间步退火和EMA稳定过程，Heaviside延续促使密度二值化。[P6—P9、P29]",
+        "innovation": "作者将创新定位于冻结视觉先验与有限元灵敏度的逐次梯度级耦合，使提示词成为设计意图接口，迁移任务不需重新训练模型。Heaviside投影本身并非新方法，贡献在于诊断生成引导的灰密度倾向并协调调度。解读：其本质是启发式搜索增强，而非精确统一目标的新优化理论。[P2、P8、P22]",
+        "findings": "49组组合中38组显著改善，作者报告经BH校正仍满足q<0.05。带孔机械域最佳单次改善31.5%，热矩形域最大平均改善23.0%；灰密度由42.6%降至2.5%。删除末端平均增加柔顺度5.9%，删除承载肋增加61.5%，支持末端承载贡献较小的解释。[P12、P16、P24、P34、P38]",
+        "limitations": "方法仍限二维且需人工筛选提示词，热弹性采用规定、设计无关载荷；机械调度消融仅一个种子。SDS在矩形域不及MMA，热传导均值未改善。三维重分析不能消除模型差异，制造验证尚缺。核对记录没有确认原文件缺项；P23表格连写属于已纠正提取错误。[P6、P13、P23—P24、P37]",
+        "connection": "解读：本文直接关联结构设计中的知识表达、受约束搜索和CAD衔接，骨架末端与局部应变能可作为设计诊断指标。它不直接研究智能运维，也未验证疲劳寿命或失效概率；若迁移到可靠性优化，需要显式引入载荷不确定性与风险约束，不能用柔顺度收益替代安全性证据。[P18、P31—P32、P38]",
+        "next_steps": "建议：先复现一个板域并采用作者的分类别提示词试运行筛选，再在相同种子与计算时间预算下比较SDS和MMA。随后核对全场滤波梯度及密度—二值—STEP的质量、体积和变形一致性，最后加入不确定载荷与疲劳指标；这些属于新增验证，不是作者已有成果。[P24、P28、P32、P37]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "零样本肋结构设计：融合免训练生成先验与拓扑优化",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://arxiv.org/pdf/2609.10643"
+      ],
+      "analyzed_at": "2026-10-08T14:19:30.528742+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 1,
+        "lead": "树叶脉络、骨小梁和蛛网能够高效承载，但把这些形态写进提示词，并不意味着生成结构就符合工程力学。本文将冻结扩散模型的文本生成梯度嵌入拓扑优化，让有限元反馈持续筛选形态：245次主要运行中，38个提示词—域组合显著降低柔度。阅读价值不仅在于最佳改善幅度，更在于看清生成先验何时有效、为何失效，以及二维优化到三维肋结构之间尚未闭合的验证链。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "肋布局需要的不是更像自然，而是更有效承载",
+            "paragraphs": [
+              "加强筋的数量、方向、间距和分支拓扑共同决定薄壁构件的材料效率。传统SIMP依靠密度灵敏度降低柔度，但惩罚插值带来非凸性，均匀初始化可能停留在局部拓扑；随机重启扩大搜索，却缺少结构化方向。",
+              "本文把自然语言定位为工程意图的表示，而不是边界条件的替代品。Tree、Leaf、Spiderweb等提示提供形态偏置，设计域、载荷、支撑和体积分数仍须分别配置；所谓零样本，是不需要任务专用训练，并非模型没有预训练。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "冻结图像先验，逐步交还物理梯度主导权",
+            "paragraphs": [
+              "优化最小化C=FᵀU，同时满足静力平衡与体积分数约束。三个板域使用Mindlin–Reissner理论和MITC4单元，连接件采用平面应力模型；板域零密度仍保留承载基板，不是空洞，肋存在与否对应的刚度按p=3插值。",
+              "物理密度复制为RGB并缩放至512×512，经Stable Diffusion 2.1的VAE编码后加噪，由冻结U-Net产生SDS梯度。它与有限元梯度原始加权相加，随后用Adam更新；作者明确承认，这一混合是启发式方法，并非单一标量目标的精确梯度。",
+              "每次更新后，二分投影精确满足体积约束，滤波和Heaviside投影控制密度形态。总计1000次迭代，前30次仅用物理梯度，SDS随后余弦冷却至约第530次退出，并采用时间步退火和EMA平滑；β从1逐步升至64，最终由物理优化完成二值化。"
+            ]
+          },
+          {
+            "id": "validation",
+            "title": "245次是优化重复，不是245个独立零件",
+            "paragraphs": [
+              "主要验证包含四个机械域的200次运行，以及三个板域热弹性设置的45次运行，共49个提示词—域组合，每组合五个种子。前三个机械域体积分数为0.20，连接件为0.30；数据来自作者构建的有限元工况，没有报告实体试件或数据增强数量。",
+              "研究不生成任务训练集，预训练来源被描述为LAION-5B，但模型实际预训练样本规模未给出。提示词与超参数先经独立单种子试运行选择，再进行五种子最终评估；这是选择与评估分离，不是监督学习的训练测试划分。",
+              "对照包括Adam-SIMP、每域50次多起点与50次周期扰动、固定图像引导及MMA。五运行子集重采样没有增加独立仿真，运行数匹配也不等于CPU/GPU成本匹配；调度消融仅用D_Rect的Spiderweb和seed=0，不能据此给出跨工况组件排名。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "改善来自探索，但不能承诺普遍胜过强基线",
+            "paragraphs": [
+              "49个组合中38个达到五种子全部优于基线，单侧二项检验p=0.031，经Benjamini–Hochberg校正仍满足q<0.05。机械最大降低31.5%是D_Hole的最佳单次结果，热弹性23.0%是D_Rect的五种子均值；**最佳值与平均收益不能混用**，且D_Rect的最佳SDS仍落后于MMA。",
+              "端点数与柔度跨六设置正相关，但热弹性D_Rect改善时端点反而增多，死端抑制并非普遍规律。九个固定设计的干预提供更直接证据：删除死端平均增加柔度5.9%，删除承载肋增加61.5%；它说明死端贡献较小，不说明事后剪枝必然改善。",
+              "灰密度比例由42.6%降至2.5%，但判定阈值和重复数缺失。由密度场重建的三维实体与二维柔度相关系数为0.82–0.98，并不等于STEP全链条已验证；热传导负结果及失配提示退化进一步限定适用范围，代码也仅承诺合理请求下提供。"
+            ]
+          }
+        ],
+        "experiments": [
+          {
+            "name": "四机械域的提示比较与搜索基线验证",
+            "data": "作者构建D_Rect、D_Circle、D_Hole及汽车悬架连杆二维截面D_Link；参数表网格150×150，工业几何来源未报告。",
+            "samples": "四域各10提示×5种子，共200次主要优化运行；三个板域另各有50次多起点和50次扰动运行。实体试件和增强数量未报告。",
+            "groups": "矩形、圆形中心点载荷，开孔板四侧加载，以及连接件组合拉伸–剪切；板域V*=0.20，连接件V*=0.30。",
+            "split": "无需任务训练；提示与参数经独立单种子预运行选择，再以五种子评估。预运行总数及模型预训练划分未报告。",
+            "baselines": "Adam-SIMP、多起点、周期扰动、固定图像均方误差引导；三个板域另比较单次确定性MMA，工业域无已报告MMA结果。",
+            "metrics": "柔度C=FᵀU、相对变化、五种子均值与标准差、单侧二项检验；柔度单位未报告，最佳运行比较另行报告。",
+            "results": "显著改善提示数依次为5/10、9/10、10/10、7/10。开孔板Spiderweb均值45.22±2.04，降低28.4%；最佳43.20，降低31.5%。",
+            "limitations": "矩形域MMA为7.721，优于最佳SDS的7.886；等运行或等迭代不等计算预算。图像引导重复数、材料与完整几何尺度未报告。"
+          },
+          {
+            "name": "规定热弯矩下的热弹性泛化",
+            "data": "三个板域由均匀厚度方向温度梯度产生规定热弯矩，采用MITC4分析；温差、热膨胀参数具体值未报告。",
+            "samples": "三域×Spiderweb、Voronoi、Tree三提示×五种子，共45次主要运行；独立温度工况数、实体试件及增强数量未报告。",
+            "groups": "V*=0.20、初始SDS权重100；热载荷与设计无关。另在D_Rect的Spiderweb扫描权重10、50、100、200，各五种子。",
+            "split": "冻结生成模型，不进行任务训练；最终五种子评估与单种子选择阶段分开，独立温度条件留出方案未报告。",
+            "baselines": "无SDS Adam/SIMP基线柔度为613.6、818.2、556.9；热弹性MMA对照未报告，权重扫描不应替代优化器比较。",
+            "metrics": "C=F_thᵀU及五种子均值±标准差、相对降低比例、胜出次数；柔度单位未报告，规定热载荷导数为零。",
+            "results": "9组合中7个五种子全部改善，2个为4/5。各域最佳均值降低23.0%、13.9%、8.5%；权重100在所测四档中最优。",
+            "limitations": "仅适用于规定、密度无关热载荷，不能直接外推完整热耦合；权重扫描缺少离散统计，不能证明各提示和域均以100最优。"
+          },
+          {
+            "name": "固定设计的死端与承载肋配对干预",
+            "data": "三个板域的优化设计及其骨架；追踪端点至最近分叉点，修改局部肋结构后，以原板有限元重新分析。",
+            "samples": "共九个固定设计，每域三个种子，每设计实施三类干预；重新分析总次数、实体试件及统计不确定性未报告。",
+            "groups": "删除全部死端、删除最大应变能单根非死端肋、嫁接人工死端；保持周围拓扑及原边界条件不变。",
+            "split": "属于优化后配对力学核验，不涉及任务模型训练；设计选取与种子编号、独立留出规则未报告。",
+            "baselines": "每个未修改设计作为自身基线，删除承载肋提供力学对照，嫁接死端检验新增低效分支的影响。",
+            "metrics": "相对原设计柔度变化及移除材料的应变能占比；作者用ΔC≈pf解释一阶影响，p=3，柔度单位未报告。",
+            "results": "删除死端平均+5.9%，范围+0.6%至+12.1%；删除承载肋平均+61.5%，最大+182%；嫁接变化小于1%。",
+            "limitations": "删除死端仍有性能代价；干预后是否恢复等体积未报告，不能视作等材料重优化。没有该干预的三维或实物验证。"
+          },
+          {
+            "name": "密度场重建凸起肋实体的三维重分析",
+            "data": "三个板域收敛密度场重建带肋基板，在FEniCSx进行三维线弹性分析；不是已验证的STEP全链条分析。",
+            "samples": "各域表列n_prompts=10，相关计算包含基线；独立种子数、实体试件数、三维网格数量及增强数量未报告。",
+            "groups": "二维局部增刚Mindlin板与三维凸起肋实体采用匹配载荷、支撑；基板厚度1、肋高5，长度单位未报告。",
+            "split": "同一设计跨模型重分析，不涉及任务训练；用于相关性计算的种子选择及独立验证划分未报告。",
+            "baselines": "对应域SIMP-only设计，以及同一提示设计的二维分析；比较归一化柔度与最优提示的保持情况。",
+            "metrics": "二维、三维柔度Pearson相关系数及提示表现排序；线性相关并非模型等价或完整排序一致性指标。",
+            "results": "矩形、圆形、开孔域r分别为0.92、0.82、0.98；矩形域最优均为Spiderweb，另两域二维最优在三维中仍表现较强。",
+            "limitations": "完整density–binary–STEP的质量、体积分数和变形场比较仍属未来工作；没有实体制造验证，绝对几何单位等信息缺失。"
+          }
+        ],
+        "routes": [
+          {
+            "title": "用载荷路径兼容性控制SDS，而非固定经验权重",
+            "direction_id": "generative_design",
+            "gap": "提示排名跨域反转，固定权重又随柔度尺度手动调整，现有单种子消融不足以识别稳定策略。建议优先解决生成梯度何时帮助探索、何时阻碍承载的问题，而不是继续扩充提示词清单。",
+            "mechanism": "拟根据体积约束可行方向上的梯度夹角、范数比及短窗柔度变化，在线调整SDS权重；持续冲突时缩短冷却或关闭引导。必须保留最终纯物理阶段，避免把语义一致性当成力学成功。",
+            "innovation": "候选创新是将载荷路径兼容性、尺度归一化与退出规则组合成可审计控制器，替代逐域经验定权。这是针对本文的拟议组合；已检索REPA-P摘要采用训练期物理表征对齐，与此冻结模型在线控制不同。",
+            "design": "建议设计采用可自行构建并公开的四类参数化域，每类三组载荷位置，每工况十个最终种子；另设不重叠载荷条件调参。预训练模型可公开获取，论文代码需申请，不能假定已有可复现实验包。",
+            "comparison": "比较原始固定调度、无SDS的Adam及MMA、多起点和自适应策略，统一墙钟预算并披露硬件。分别移除夹角判据、范数归一化、提前退出，采用匹配随机种子测量组件及其交互。",
+            "criterion": "预先规定以留出工况的平均柔度和退化运行比例为主判据，同时报告置信区间、校正后的显著性及计算成本。只有降低失配退化且不牺牲匹配工况收益，才支持控制器有效。",
+            "risk": "梯度夹角可能受噪声及约束投影影响，局部冲突也可能是必要探索。若即时判据误杀有效先验，可改用短窗累计趋势和迟滞阈值；若收益仍不稳定，则保留纯物理回退并缩小适用范围。"
+          },
+          {
+            "title": "闭合密度、STEP与实体性能的等质量验证链",
+            "direction_id": "generative_design",
+            "gap": "二维与三维柔度正相关尚未说明Bézier拟合、宽度平均和挤出后的性能损失，完整转换链仍未验证。建议把等质量与真实肋截面作为核心条件，区分优化收益、几何转换误差和制造偏差。",
+            "mechanism": "拟在骨架拟合与偏置阶段加入体积校正、曲率和最小宽度约束，再对导出STEP重新网格化。通过逐级比较质量、柔度、变形场和局部应力，将误差定位到二值化、曲线拟合或实体建模环节。",
+            "innovation": "候选创新是把生成先验探索与转换链的可追踪误差预算连接起来，而非另提一种STEP导出工具。本文已有骨架和曲线流程及实体重分析，拟议工作补充的是逐级等质量核验与性能反馈。",
+            "design": "建议设计先在三个可公开构建板域各选五个种子，保留SIMP和SDS配对设计，再记录四级几何。若具备加工与测试条件，可另采集每方法三件重复试件；这些是建议数量，不是已有实验资源。",
+            "comparison": "比较原后处理、体积校正、几何约束及联合方案，三维分析统一材料、载荷、支撑与网格收敛标准。实物阶段按实际质量配对，并消融曲率限制、宽度修正和性能反馈，避免把增重当增刚。",
+            "criterion": "建议预注册转换后体积误差不超过2%、柔度相对重建实体增加不超过5%的验收阈值，另报告排序保持率和应力变化。实测若可开展，应以重复性和仿真误差共同判断，而非只展示成功零件。",
+            "risk": "圆角、连接节点和制造缺陷可能主导误差，过强几何约束也会抹去优化优势。若暂不能制造，可先完成公开STEP与收敛三维仿真的闭环；若转换损失过大，再引入局部重优化而非声称可制造。"
+          }
+        ],
+        "diagrams": [
+          {
+            "kind": "study",
+            "title": "原研究：物理筛选生成形态，两条几何验证支路",
+            "description": "STEP候选导出与密度场重建实体的三维重分析分开表示；后者不构成STEP完整链条验证。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "工程问题与文本提示",
+                "detail": "设计域、载荷、支撑、体积分数及结构形态提示分别输入"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "物理密度与有限元",
+                "detail": "滤波、Heaviside投影后计算柔度及物理灵敏度"
+              },
+              {
+                "id": "c",
+                "stage": 1,
+                "label": "冻结扩散模型SDS",
+                "detail": "密度图编码、加噪、文本引导，提取生成梯度"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "梯度混合与约束更新",
+                "detail": "Adam更新、二分体积投影，SDS冷却后纯物理收敛"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "收敛密度与统计分析",
+                "detail": "五种子柔度统计、骨架相关及固定设计干预"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "候选STEP几何",
+                "detail": "二值化、骨架、Bézier拟合、偏置挤出；全链条待验证"
+              },
+              {
+                "id": "g",
+                "stage": 4,
+                "label": "密度场重建三维实体",
+                "detail": "由密度场重建凸起肋基板，不将STEP导出视为已核验"
+              },
+              {
+                "id": "h",
+                "stage": 5,
+                "label": "三维线弹性重分析",
+                "detail": "FEniCSx比较二维与三维柔度，三个域r为0.82–0.98"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "配置物理问题"
+              },
+              {
+                "from": "a",
+                "to": "c",
+                "label": "提供形态意图"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "物理梯度"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "生成梯度"
+              },
+              {
+                "from": "d",
+                "to": "b",
+                "label": "迭代反馈"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "输出优化设计"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "后处理支路"
+              },
+              {
+                "from": "e",
+                "to": "g",
+                "label": "实体重建支路"
+              },
+              {
+                "from": "g",
+                "to": "h",
+                "label": "匹配载荷重分析"
+              }
+            ]
+          },
+          {
+            "kind": "proposal",
+            "title": "拟议路线：载荷兼容性驱动的SDS在线控制",
+            "description": "对应第一条研究建议；控制规则及预期收益尚未验证，需通过留出工况和等预算比较检验。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "参数化域与留出载荷",
+                "detail": "建议四类域各三组载荷，调参与最终评估条件分离"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "物理与生成梯度",
+                "detail": "保持冻结先验，计算约束可行方向上的两类梯度"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "兼容性在线诊断",
+                "detail": "监测夹角、范数比和短窗柔度趋势，区分噪声与持续冲突"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "自适应权重与退出",
+                "detail": "拟调整SDS强度、冷却长度，保留纯物理回退"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "等预算基线与消融",
+                "detail": "比较固定调度、Adam、MMA及多起点，分别移除控制组件"
+              },
+              {
+                "id": "f",
+                "stage": 5,
+                "label": "留出工况成功判据",
+                "detail": "检验平均柔度、退化比例、置信区间及实际计算成本"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "配置优化任务"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "提取诊断信号"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "触发控制规则"
+              },
+              {
+                "from": "d",
+                "to": "b",
+                "label": "反馈下一轮权重"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "完成候选策略"
+              },
+              {
+                "from": "a",
+                "to": "e",
+                "label": "统一工况与种子"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "评估收益与风险"
+              }
+            ]
+          }
+        ],
+        "related": {
+          "status": "ok",
+          "checked_at": "2026-10-08T14:39:10.981139+00:00",
+          "papers": [
+            {
+              "title": "Cross-modal prior-guided sampling with coverage-aware score calibration for 3D industrial anomaly localization",
+              "url": "https://doi.org/10.2139/ssrn.7541070",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "PhysMAS: Physics-Grounded Multi-Agent Synthesis of Compositional 4D Gaussians",
+              "url": "https://doi.org/10.48550/arxiv.2609.07174",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            },
+            {
+              "title": "Physics consistent conditional flow matching model as a plasma physics surrogate model",
+              "url": "https://doi.org/10.1088/2632-2153/aeaf46",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Learning to Think in Physics: Breaking Shortcut Learning in Scientific Diffusion via Representation Alignment",
+              "url": "https://doi.org/10.48550/arxiv.2605.20780",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            }
+          ]
+        }
+      },
+      "article_updated_at": "2026-10-08T14:51:49.771968+00:00",
+      "article_profile": "875c073f2a6737969df9c26e646f0857eab9002d131ebd08d334c29bacc9a38b",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P6",
+          "P7",
+          "P8",
+          "P9",
+          "P29"
+        ],
+        "innovation": [
+          "P2",
+          "P8",
+          "P22"
+        ],
+        "findings": [
+          "P12",
+          "P16",
+          "P24",
+          "P34",
+          "P38"
+        ],
+        "limitations": [
+          "P6",
+          "P13",
+          "P23",
+          "P24",
+          "P37"
+        ],
+        "connection": [
+          "P18",
+          "P31",
+          "P32",
+          "P38"
+        ],
+        "next_steps": [
+          "P24",
+          "P28",
+          "P32",
+          "P37"
+        ]
+      },
+      "analysis_material_version": "105b5807fb622e9d319bbd2e7aba6677c581c7ac4a8787b4653d2106c38fb108",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P23",
+          "detail": "表10文字提取丢失列间分隔，出现“λ_sds=19.60”“ω=508.28”等连写。原页已核实：λ_sds=1对应C=9.60，λ_sds=5对应8.38，λ_sds=20对应8.45；ω=50对应8.28，ω=10对应8.57，ω=200对应8.67；α=0.5对应8.18。不存在原表缺项，纠正后支持权重与引导强度的消融比较，避免误读为参数19.60或508.28。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "cc45ce56709b",
+        "state": "published",
+        "updated_at": "2026-10-08T14:51:49.774973+00:00",
+        "basis": "full_text",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "",
+        "total": 41,
+        "covered": 41,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P23",
+            "detail": "表10文字提取丢失列间分隔，出现“λ_sds=19.60”“ω=508.28”等连写。原页已核实：λ_sds=1对应C=9.60，λ_sds=5对应8.38，λ_sds=20对应8.45；ω=50对应8.28，ω=10对应8.57，ω=200对应8.67；α=0.5对应8.18。不存在原表缺项，纠正后支持权重与引导强度的消融比较，避免误读为参数19.60或508.28。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -1591,7 +3385,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Despite the central role of sensor-derived measurements such as imaging traits and plasma biomarkers in biomedical research and clinical practice, existing generative models for disease prediction largely depend on event-level representations from hospital and registry data. Given the multi-factorial nature of human disease, the absence of explicit modeling of social determinants of health (SDoH) limits the capacity for personalized disease modeling and clinical decision support. To address this limitation, we propose a generative model with ICD-coded proxies of SDoH for in silico modeling of…",
+      "summary": "本文提出DiffDT，将医疗事件自回归预测与多器官数字孪生生成结合，以历史疾病条件化生理状态，再预测未来疾病。[P4]脑连接采用Cholesky约束的潜扩散，其他器官采用表格扩散；UKB实验显示预测与生成指标改善。[P6—P7]作者承认社会因素仅由ICD代理表示，个体轨迹主要依赖横断面数据。[P9]解读：适合借鉴结构约束生成方法，但不是智能运维的直接应用证据。",
       "raw_metadata": {
         "conference": {
           "id": "icml",
@@ -1648,11 +3442,489 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为跨领域方法文献阅读，重点关注结构约束潜扩散、事件与状态融合及消融设计；不宜仅因数字孪生标签将其列为智能运维核心应用论文。[P6—P9]",
+      "deep_read": {
+        "problem": "作者关注仅靠医疗事件预测疾病的不足：事件序列难以直接刻画生理过程，语义距离较大的疾病关系尤其难学。[P2—P3]研究希望以多器官生物标志物连接既往历史和未来疾病。解读：关键问题是事件与连续状态的融合，而非直接建立完整社会环境模型。[P9]",
+        "method": "DiffDT先将病史映射为年龄网格并训练自回归嵌入，再条件化生成器官状态。[P5]表格指标联合使用连续加噪和类别遮蔽；脑连接经量化编码、条件潜扩散和Cholesky解码生成，最后交给预测模型。[P6—P8]作者将该流程表述为生物中介路径。[P4]",
+        "innovation": "作者将SPD-VQVAE作为主要技术贡献，以正对角下三角因子构造正定脑连接，并通过交叉注意力引入历史条件。[P2、P6]双分支进一步分离高低频模式以保留个体差异。[P12—P13]解读：结构有效解码是明确特色，但不能由此自动推出最终频域重建或整个扩散过程的几何保证。",
+        "findings": "表1显示GPT2骨干下DiffDT的AUC为0.9087，Delphi为0.6994；Qwen3下分别为0.9171和0.8931。[P7]表4双分支生成RMSE为0.203，优于所列单分支。[P7]解读：预测与重建结果支持方法价值，但ATE误差七组改善、两组变差、一组相同，不支持逐对优势。[P14]",
+        "limitations": "作者承认健康志愿者偏倚、横断面插值及SDoH代理不足。[P9]核对记录无原文件缺项；但[P5]式(1)上下界均为τ_min，使年龄范围定义不一致。[P3]图2c的p=0.096不支持常用显著性判断；[P9]误差0.007降至0.004也不支持“超过减半”。解读：相关因果措辞须审慎。",
+        "connection": "解读：与智能运维的联系在于将离散告警历史、连续设备状态和后续风险预测串联；SPD解码可能启发协方差等结构状态生成。[P4、P6]但本文验证对象是医疗数据，没有设备故障、结构载荷或寿命试验，不能据此声称已提升工程可靠性或支持结构设计决策。[P7、P9]",
+        "next_steps": "建议先复现结构约束与普通潜扩散的对照，检查双分支逆变换后是否仍正定，并对频率阈值做定量敏感性分析。[P12—P13]迁移运维时应区分无记录与健康状态，采用设备级、时间外验证，并与骨干扩展比较增益；干预解释另需真实干预或明确识别假设。[P5、P9]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "融合医疗事件生成模型与社会健康决定因素数字孪生的疾病推理",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://proceedings.mlr.press/v306/wei26c.html"
+      ],
+      "analyzed_at": "2026-10-08T15:02:12.025626+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 1,
+        "lead": "病史中的诊断代码记录了“发生过什么”，却未必解释“身体为何走向下一种疾病”。DiffDT尝试在医疗事件之间加入可生成的多器官数字孪生：从既往病史推断器官状态，再预测后续疾病。其关键进展是将不规则事件建模与保持脑连接矩阵几何结构的扩散生成结合起来。阅读这项工作的价值，既在于理解生理表征如何改善预测，也在于辨清数字孪生、社会因素代理与真实因果干预之间的证据边界。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从诊断事件走向器官状态：缺失的生理桥梁",
+            "paragraphs": [
+              "仅依赖电子健康记录的自回归模型，可能同时学习疾病进展和医疗服务利用模式。诊断间隔不规则、观测稀疏，使事件序列难以直接表达连续生理变化。DiffDT将“既往病史—当前器官状态—未来疾病”作为建模主线，试图补上事件预测中的生理桥梁。",
+              "论文所谓社会健康决定因素（SDoH），实际采用ICD中的Z及V–Y编码代理，没有输入直接的社会、经济、行为或环境测量。因此，这里的数字孪生首先是病史条件下的器官表征生成，不能直接视为完整的社会因素孪生。代理是否充分覆盖真实社会暴露，仍需要单独验证。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "病史条件扩散与Cholesky几何解码如何衔接",
+            "paragraphs": [
+              "自适应分词覆盖整数年龄，有诊断时放入ICD令牌，否则填入healthy，并允许同龄事件。ICD与年龄嵌入相加后进入因果自注意力Transformer，形成病史条件。这里的“因果”指注意力只读取既往位置，不意味着疾病因果效应已被识别。",
+              "表格器官性状采用混合连续时间扩散：连续变量加入高斯噪声，类别变量逐步被[MASK]吸收。生成时固定观测病史，只去噪器官特征，并利用Classifier-Free Guidance加强条件控制。脑连接则先经SPD-VQVAE压缩，解码器通过正对角Cholesky因子构造M̂=L̂L̂ᵀ，以保证对称正定性。",
+              "双分支版本用FFT拆分高通与低通模式，拼接潜变量后进行病史条件扩散；阈值25由定性消融选择，不能解释为生理频率。随后，BrainMass或表格Transformer读取数字孪生预测疾病。P(Future|Biomarker)·P(Biomarker|History)表达了概率桥接，但没有因此自动获得因果中介或真实干预解释。"
+            ]
+          },
+          {
+            "id": "validation",
+            "title": "受试者级划分下，预测与生成分别检验",
+            "paragraphs": [
+              "研究使用UKB真实医疗记录与影像派生性状，生成数字孪生属于计算模拟，而非实物干预。脑数据为44,834份矩阵、20,057名受试者；心、肝、肾分别为23,987、28,722、32,155份且各自对应同数量受试者，跨器官不能相加去重。AR实验报告448,651名受试者和7,276,575个令牌，词表包含1,944种疾病。",
+              "训练与验证按受试者80%:20%划分，并在AR、扩散和预测微调阶段保持一致；没有报告独立测试集。全局验证集n=3,425，其中两个影像时间点的纵向子集为脑188、心212、肾98、肝229，但未给出对应纵向轨迹误差。疾病预测比较Delphi的GPT2、Qwen3骨干及不同器官中介，脑生成比较普通、SPD与双分支VQVAE。",
+              "作者还检验了替换暴露代码后的do(healthy)生成，以及10组暴露—结局代码对的ATE估计误差。前者比较生成状态与真实健康、患病状态的距离，后者以二值化病史计算的经验ATE为参照。两项都是观察性资料上的计算验证，不是受试者接受干预后的随访结果。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "几何与预测收益明确，因果和泛化仍待补强",
+            "paragraphs": [
+              "Qwen3配置下，DiffDT宏平均AUC为0.9171，Delphi为0.8931；宏平均F1分别为20.92和18.17，正文按百分比解释F1。双分支脑生成RMSE降至0.203、相关系数升至0.726，支持几何约束与模式分解的组合价值。不过，长尾疾病使F1仍低，**较高AUC不等于可靠的下一疾病判定**。",
+              "反事实生成的FID、WD更接近健康参照，但相关系数差异p=0.148，并不显著。ATE平均绝对误差由0.007降至0.004，按表列中心值约降低43%，不支持正文“超过一半”的说法。与经验关联量更一致，也不能替代混杂控制和因果识别。",
+              "端到端推断在单张RTX 6000 Ada（48 GB）上约需1.2秒/受试者/中介，但计时重复次数未报告。UKB健康志愿者偏倚、横断面影像占主导，以及误差项±定义缺失，限制部署与纵向解释。预训练人数和ICD层级亦存在不同口径；当前证据更适合支持生成辅助预测，而非已验证的个体干预系统。"
+            ]
+          }
+        ],
+        "experiments": [
+          {
+            "name": "下一疾病预测与器官数字孪生中介比较",
+            "data": "UKB病史及影像性状；AR词表1,944种疾病。BrainMass另在UKB与两个HCP队列共68,251份矩阵上预训练。",
+            "samples": "AR训练448,651人、7,276,575个令牌；脑20,057人，心23,987人、肝28,722人、肾32,155人。任务实际评估人数及生成数量未报告。",
+            "groups": "Delphi与DiffDT分别使用GPT2、Qwen3；另比较四器官中介的同器官及跨器官疾病预测，补充Qwen3.5对照。",
+            "split": "受试者级训练:验证=80%:20%，各阶段保持一致；全局验证集3,425人，各任务对应人数与独立测试集未报告。",
+            "baselines": "事件预测对照Delphi；器官预测对照NeuroPath和BrainMass。分词与骨干均有比较，完整中介消融未报告。",
+            "metrics": "事件任务报告宏平均AUC、F1；器官任务报告平均F1。F1正文按百分比解释，阈值及±统计含义未报告。",
+            "results": "Qwen3下DiffDT/Delphi：AUC为0.9171±0.0486/0.8931±0.0548，F1为20.92±20.40/18.17±20.67；同器官F1最高值为65.14、58.50、61.65、64.32。",
+            "limitations": "长尾影响宏平均F1；疾病级人数和阈值缺失。Qwen3.5报告增加0.12 AUC，但未给绝对值及误差范围；不能分离所有组件收益。"
+          },
+          {
+            "name": "多器官生成与脑几何、双分支消融",
+            "data": "脑fMRI连接矩阵及UKB MRI表格性状；心112项、肝3项、肾3项特征，表格指标按归一化性状计算。",
+            "samples": "脑44,834份矩阵/20,057人；心23,987人、肝28,722人、肾32,155人。实际生成数量、重复采样及增强数量未报告。",
+            "groups": "脑比较普通VQVAE、SPD-VQVAE、SPD-VQVAE-Dual及阈值25/50/75；表格分别评估心、肝、肾。",
+            "split": "沿用受试者级80%:20%划分；各生成任务实际验证数量未报告。脑纵向子集188人，但未报告纵向生成误差。",
+            "baselines": "脑生成有普通和单分支SPD自编码器对照；表格生成没有列出对照模型。单步耗时另比较SPD-DDPM。",
+            "metrics": "脑使用RMSE、WD、r和mAcc；mAcc在边阈值0.5～0.9、步长0.1下平均。表格使用RMSE、WD，归一化规则及WD细节未报告。",
+            "results": "脑普通/单分支/双分支RMSE为0.261/0.220/0.203，r为0.503/0.677/0.726；双分支mAcc为98.36±0.10。心/肝/肾RMSE为0.265/0.184/0.146。",
+            "limitations": "SPD保证仅是数学有效性；阈值选择主要依赖定性结构。表格缺基线，不宜跨尺度比较误差；单步计时硬件与失败原因未报告。"
+          },
+          {
+            "name": "替换暴露代码后的do(healthy)生成比较",
+            "data": "将患者暴露代码，例如G12，替换为[Healthy]后生成数字孪生；真实患病与健康数字孪生作为参照。",
+            "samples": "独立患病及健康人数、生成反事实数量、重复次数均未报告；展示或统计条目不能替代受试者数量。",
+            "groups": "分别比较do(healthy)与GT disease、do(healthy)与GT healthy；具体器官及健康判定标准未报告。",
+            "split": "该反事实评估的具体样本划分未报告；不能将框架统一划分自动视为此项评估的完整设计。",
+            "baselines": "真实健康与患病状态为参照；其他反事实生成方法对照未报告，也没有真实干预后观测对照。",
+            "metrics": "FID、WD越低越好，Pearson r越高越好；FID特征提取器、检验方法及±含义未报告。",
+            "results": "患病/健康参照：FID为92.96±8.67/51.37±4.13，WD为8.95±0.24/6.91±0.23，r为0.39±0.07/0.40±0.08；p依次为2.5e−5、1.6e−6、0.148。",
+            "limitations": "FID与WD支持更接近健康分布，r不支持显著差异；代码替换不是现实治疗，无法证明个体干预效果。"
+          },
+          {
+            "name": "10组ICD暴露—结局对的ATE误差比较",
+            "data": "二值化ICD序列提供经验ATE；DiffDT使用生成孪生、Delphi使用token嵌入拟合倾向评分MLP。",
+            "samples": "共10个代码对，不是10名受试者；表列暴露人数502或902，结局人数114～238。跨组去重人数及生成数量未报告。",
+            "groups": "包含I10→I25、I10→E78、K57→K64等10组；要求足够共同暴露与结局样本，具体筛选阈值未报告。",
+            "split": "ATE评估的训练验证测试划分未报告；逐组合人数不能直接求和，亦不能推出独立测试规模。",
+            "baselines": "Delphi嵌入加倾向评分MLP为模型对照；经验ATE是误差参照，不是已知真实因果效应。",
+            "metrics": "模型ATE相对经验ATE的绝对误差及跨组合平均值，越低越好；经验ATE公式、单位及±含义未报告。",
+            "results": "DiffDT为0.004±0.004，Delphi为0.007±0.005；I10→E78与I10→I20中DiffDT误差更大，并非所有组合获益。",
+            "limitations": "表列中心值约降低43%，与正文“超过一半”不一致；混杂控制及显著性细节缺失，不能由经验ATE一致性确认因果中介。"
+          }
+        ],
+        "routes": [
+          {
+            "title": "面向健康监测的纵向孪生可靠性评估",
+            "direction_id": "ai_maintenance",
+            "gap": "现有模型主要从横断面配对学习，尚未证明生成轨迹能追踪个体变化。建议先限定为健康状态监测，检验重复影像变化与风险校准，不直接延伸到干预决策。",
+            "mechanism": "保留Cholesky几何解码，增加相邻真实观测间的变化量监督，并通过重复条件采样表达不确定性。稀疏随访只监督已观测时间点，避免将插值轨迹当作标签。",
+            "innovation": "候选创新是把SPD约束、个体变化监督和预测校准联结起来。相关文献Conditioned Graph Reconstruction仅摘要可核验，已涉及条件网络重建；新组合应突出纵向可靠性而非泛称首次生成。",
+            "design": "建议设计：经申请获得UKB重复影像与病史，采用受试者隔离、按时间留后验证。设置单次影像与重复影像训练组，再按随访间隔分层；样本数由授权资料可用性决定，不预设设备。",
+            "comparison": "比较原DiffDT、仅病史AR、最近一次真实影像输入及条件图VAE。消融变化量监督与重复采样，固定训练预算；核查预训练与评估受试者重叠，防止隐性泄漏。",
+            "criterion": "预注册变化量RMSE、网络结构保真度、Brier分数与校准误差，并以受试者bootstrap报告区间。成功要求纵向误差和校准同时改善，且稀有疾病召回不明显下降。",
+            "risk": "重复影像少且随访选择不随机，可能学到回访倾向而非生理变化。若纵向训练不稳定，退回横断面生成加明确不确定性输出，并限定可支持的年龄与间隔范围。"
+          },
+          {
+            "title": "结构参照约束下的个体化脑孪生监测",
+            "direction_id": "ai_maintenance",
+            "gap": "正定性并不能证明脑网络生物合理，双分支个体差异目前主要靠重建与视觉证据。建议检验结构连接参照能否减少貌似合理但偏离个体网络组织的生成。",
+            "mechanism": "在有配对DWI与fMRI的资料中，引入结构连接和脑区几何参照损失，约束功能连接偏离参照的模式，而非强迫功能边逐一匹配结构边，同时保留SPD解码。",
+            "innovation": "Benchmarking functional connectivity by the structure and geometry of the human brain的摘要支持结构几何参照思路。候选新组合是将该参照用于条件扩散训练及失真监测，不宣称结构决定全部功能连接。",
+            "design": "建议设计：申请可用配对影像，或在获批的数据集中整理配对连接矩阵。按受试者分组，设置原双分支、结构约束、结构加几何约束三组，并增加跨采集条件留出评估。",
+            "comparison": "基线采用原DiffDT与单分支SPD模型，另设随机打乱结构参照的负对照。消融结构项、几何项和频率阈值，统一预处理与特征维数，避免尺度变化制造优势。",
+            "criterion": "同时考察SPD有效性、个体辨识率、网络模块保真度与下一疾病校准。成功需参照一致性提高而个体差异不收缩，并在留出采集条件下保持收益，不能仅凭RMSE下降。",
+            "risk": "结构与功能本就存在差异，过强约束可能抹去真实高阶网络模式。若出现个体差异收缩，改用软权重或只将参照作为异常检测指标，并将不适用网络单独报告。"
+          }
+        ],
+        "diagrams": [
+          {
+            "kind": "study",
+            "title": "DiffDT：从病史生成器官状态再预测事件",
+            "description": "原研究的计算流程；表格与脑拓扑生成并行，模拟代码替换不代表真实干预。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "UKB病史与影像",
+                "detail": "真实ICD、诊断年龄与器官影像性状按观测年龄配对"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "自适应病史编码",
+                "detail": "ICD与年龄嵌入经自回归Transformer形成条件"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "表格条件扩散",
+                "detail": "固定病史，生成心、肝、肾连续及类别性状"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "脑潜在扩散",
+                "detail": "双分支SPD-VQVAE与Cholesky解码生成脑连接"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "器官数字孪生",
+                "detail": "生成的器官表征作为概率中介，不是实测随访状态"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "下一疾病预测",
+                "detail": "BrainMass或表格Transformer输出疾病预测"
+              },
+              {
+                "id": "g",
+                "stage": 5,
+                "label": "计算验证",
+                "detail": "评价生成、预测、代码替换与经验ATE一致性"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "病史输入"
+              },
+              {
+                "from": "a",
+                "to": "c",
+                "label": "真实性状训练"
+              },
+              {
+                "from": "a",
+                "to": "d",
+                "label": "真实矩阵训练"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "条件控制"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "交叉注意力"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "表格生成"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "拓扑生成"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "中介表征"
+              },
+              {
+                "from": "f",
+                "to": "g",
+                "label": "性能评估"
+              },
+              {
+                "from": "e",
+                "to": "g",
+                "label": "生成评估"
+              }
+            ]
+          },
+          {
+            "kind": "proposal",
+            "title": "建议路线：以重复观测检验纵向孪生可靠性",
+            "description": "对应第一条研究路线，所有新增监督、分组和判据均为建议设计，不表示已取得改善。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "申请重复影像资料",
+                "detail": "获取获授权的病史与重复影像，核查可用人数"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "受试者与时间隔离",
+                "detail": "隔离个体并留后验证，审计预训练数据重叠"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "纵向变化监督",
+                "detail": "只监督真实观测间变化，保持SPD解码"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "基线与组件消融",
+                "detail": "比较原DiffDT、病史AR、真实影像及条件图VAE"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "重复采样与校准",
+                "detail": "估计生成不确定性，检查疾病概率校准"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "纵向可靠性判据",
+                "detail": "同时评价变化误差、网络保真与稀有疾病召回"
+              },
+              {
+                "id": "g",
+                "stage": 5,
+                "label": "限定使用范围",
+                "detail": "收益不足时退回横断面生成并明确适用边界"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "整理真实观测"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "建议训练组"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "统一评估划分"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "条件重复生成"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "误差与校准"
+              },
+              {
+                "from": "d",
+                "to": "f",
+                "label": "公平比较"
+              },
+              {
+                "from": "f",
+                "to": "g",
+                "label": "确定证据边界"
+              },
+              {
+                "from": "f",
+                "to": "c",
+                "label": "失败反馈调整"
+              }
+            ]
+          }
+        ],
+        "related": {
+          "status": "ok",
+          "checked_at": "2026-10-08T15:11:04.657473+00:00",
+          "papers": [
+            {
+              "title": "Class-Partitioned VQ-VAE and Latent Flow Matching for Point Cloud Scene Generation",
+              "url": "https://doi.org/10.1609/aaai.v40i5.37352",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Benchmarking functional connectivity by the structure and geometry of the human brain",
+              "url": "https://doi.org/10.1101/2021.10.12.464110",
+              "year": 2021,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Conditioned Graph Reconstruction of Brain Functional Network Connectivity Reveals Interpretable Latent Axes of Sex and Fluid Intelligence",
+              "url": "https://doi.org/10.64898/2026.02.20.707025",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            }
+          ]
+        }
+      },
+      "article_updated_at": "2026-10-08T15:14:45.036962+00:00",
+      "article_profile": "e6c89a9b5cf63dc006c9b284416cec34eb65b28396dcdc039ce5d6593bff8331",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3",
+          "P9"
+        ],
+        "method": [
+          "P4",
+          "P5",
+          "P6",
+          "P7",
+          "P8"
+        ],
+        "innovation": [
+          "P2",
+          "P6",
+          "P12",
+          "P13"
+        ],
+        "findings": [
+          "P7",
+          "P14"
+        ],
+        "limitations": [
+          "P3",
+          "P5",
+          "P9"
+        ],
+        "connection": [
+          "P4",
+          "P6",
+          "P7",
+          "P9"
+        ],
+        "next_steps": [
+          "P5",
+          "P9",
+          "P12",
+          "P13"
+        ]
+      },
+      "analysis_material_version": "7ccc81b6d13f60764fb3d5c0953d8d0160e5ad7b8a89dc425bdf304d3b89da96",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "原页中的模型名为SPD-VQVAE及SPD-VQVAE-Dual；文字提取多处写成“SPD-VQV AE”。已按原页纠正，属于术语空格错误，不影响作者关于Cholesky潜空间及SPD约束的贡献表述。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "文字提取遗漏图2散点图中的相关系数与p值。原图可读：a为r=0.04、p=0.000；b为r=0.07、p=0.003；c为r=-0.39、p=0.096；d为r=-0.15、p=0.016。补充原图信息后，图2c不能按常用0.05阈值支持正文所称显著负相关；p=0.000仅忠实记录图示舍入值，不解释为概率严格为零。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "模型名称在文字提取中多次被拆成“SPD-VQV AE”，原页为SPD-VQVAE。已纠正名称空格，不存在模型定义或式(8)内容缺失，不影响对结构约束自编码器的识别。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "图4文字提取未保留颜色与面板对应关系。按Delphi-GPT2、DiffDT-GPT2、Delphi-Qwen3、DiffDT-Qwen3顺序，全部疾病对F1的r分别为-0.236、-0.249、-0.120、-0.217；跨章且阳性比例≥10%的F1之(r,p)分别为(-0.185,0.280)、(-0.388,0.001)、(-0.352,0.003)、(-0.383,0.001)。已按原图纠正归属，影响对语义距离依赖及显著性的判断。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "图5文字提取遗漏GT、DT行标签，原图上行为GT、下行为DT；图6提取遗漏纵轴sec/step及SPD-DDPM、Cholesky-LDM图例。已据原图补足，分别明确真实与生成矩阵对应关系，以及单次扩散步骤而非完整训练或采样耗时。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P12",
+          "detail": "图7文字提取未保留右侧矩阵标签的空间顺序。原图三列依次为Frequency=25、50、75；每列从上至下为Real high-passed、Gen high-passed、Real low-passed、Gen low-passed、Real reconstructed、Gen reconstructed。已按原图纠正对应关系，避免将真实/生成或高频/低频矩阵混配；图像本身无缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P13",
+          "detail": "图8标签的文字提取顺序与原图行序不一致。已核对原图，从上至下为Ground Truth、w/ VQVAE、w/ SPD-VQVAE、w/ SPD-VQVAE-Dual；不存在图像缺项。纠正后避免将普通VQVAE的平滑结果误归给SPD-VQVAE，影响自编码方法的定性比较。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "7555b0049260",
+        "state": "published",
+        "updated_at": "2026-10-08T15:14:45.039041+00:00",
+        "basis": "full_text",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "",
+        "total": 14,
+        "covered": 14,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "原页中的模型名为SPD-VQVAE及SPD-VQVAE-Dual；文字提取多处写成“SPD-VQV AE”。已按原页纠正，属于术语空格错误，不影响作者关于Cholesky潜空间及SPD约束的贡献表述。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "文字提取遗漏图2散点图中的相关系数与p值。原图可读：a为r=0.04、p=0.000；b为r=0.07、p=0.003；c为r=-0.39、p=0.096；d为r=-0.15、p=0.016。补充原图信息后，图2c不能按常用0.05阈值支持正文所称显著负相关；p=0.000仅忠实记录图示舍入值，不解释为概率严格为零。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "模型名称在文字提取中多次被拆成“SPD-VQV AE”，原页为SPD-VQVAE。已纠正名称空格，不存在模型定义或式(8)内容缺失，不影响对结构约束自编码器的识别。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "图4文字提取未保留颜色与面板对应关系。按Delphi-GPT2、DiffDT-GPT2、Delphi-Qwen3、DiffDT-Qwen3顺序，全部疾病对F1的r分别为-0.236、-0.249、-0.120、-0.217；跨章且阳性比例≥10%的F1之(r,p)分别为(-0.185,0.280)、(-0.388,0.001)、(-0.352,0.003)、(-0.383,0.001)。已按原图纠正归属，影响对语义距离依赖及显著性的判断。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "图5文字提取遗漏GT、DT行标签，原图上行为GT、下行为DT；图6提取遗漏纵轴sec/step及SPD-DDPM、Cholesky-LDM图例。已据原图补足，分别明确真实与生成矩阵对应关系，以及单次扩散步骤而非完整训练或采样耗时。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "图7文字提取未保留右侧矩阵标签的空间顺序。原图三列依次为Frequency=25、50、75；每列从上至下为Real high-passed、Gen high-passed、Real low-passed、Gen low-passed、Real reconstructed、Gen reconstructed。已按原图纠正对应关系，避免将真实/生成或高频/低频矩阵混配；图像本身无缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "图8标签的文字提取顺序与原图行序不一致。已核对原图，从上至下为Ground Truth、w/ VQVAE、w/ SPD-VQVAE、w/ SPD-VQVAE-Dual；不存在图像缺项。纠正后避免将普通VQVAE的平滑结果误归给SPD-VQVAE，影响自编码方法的定性比较。"
+          }
+        ]
+      }
     },
     {
       "source": "ResearchGate",
@@ -1767,8 +4039,10 @@
       "reading_status": {
         "paper_id": "abf0865db466",
         "state": "missing_evidence",
-        "updated_at": "2026-09-30T13:14:25.299155+00:00",
+        "updated_at": "2026-10-08T14:09:44.160229+00:00",
         "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -1831,7 +4105,20 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "fed0a147e220",
+        "state": "missing_evidence",
+        "updated_at": "2026-10-08T14:52:23.368671+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -1989,8 +4276,10 @@
       "reading_status": {
         "paper_id": "df76394da208",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-30T13:16:57.085789+00:00",
+        "updated_at": "2026-10-08T15:38:30.253756+00:00",
         "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -2022,7 +4311,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "本文关注大语言模型如何参与物理约束本构模型设计。摘要明确描述两类角色：Creator生成本构模型，Inspector审核物理约束，并提及橡胶与软材料测试。[摘要] 解读：其阅读价值在于生成与物理审核的分工，而非已有证据证明的性能提升。当前仅有简短摘要，未披露模型形式、约束清单、测试指标或对照结果，因此不能确认标题所称双智能体优势。",
+      "summary": "本文针对LLM生成本构模型缺乏物理核验的问题，将模型生成与审查分配给Creator和Inspector，并用独立数值验证评价合规性。[P9]两个骨干、四个数据集上，加入审查器使通过率分别由90%升至95%、47%升至60%。[P11]但最简提示也导致Opus双智能体全部失效，说明协作优势依赖领域知识。[P39]精读重点是审查与验证的分离，以及有限采样通过不等于数学保证的边界。[P6]",
       "raw_metadata": {
         "source": "arXiv",
         "source_id": "https://arxiv.org/abs/2605.23754v2",
@@ -2095,33 +4384,428 @@
         "大模型",
         "智能体"
       ],
-      "title_zh": "大语言模型驱动的物理约束本构模型设计：双智能体优于单智能体",
-      "recommendation": "建议作为生成式设计与材料建模交叉方向的方法线索阅读：摘要中的“generate constitutive models and audit physical constraints”明确体现生成与审核分工，但尚不足以据此推荐其工程应用或确认性能优势。[摘要]",
+      "title_zh": "大语言模型驱动物理约束本构模型设计：双智能体优于单智能体",
+      "recommendation": "推荐重点阅读流程、数值验证附录与最简提示消融：它们为物理约束生成设计提供可审计的方法，也展示了双智能体可能越改越错的具体反例。[P9][P33][P39]",
       "deep_read": {
-        "problem": "论文围绕本构模型生成与物理约束审核展开，摘要将任务表述为“generate constitutive models and audit physical constraints”。[摘要] 解读：核心关注是让生成式设计同时面对物理要求，而不是仅产出模型表达式；具体针对哪些既有建模困难，摘要没有交代。",
-        "method": "摘要明确采用基于大语言模型的Creator与Inspector两类智能体，分别承担模型生成和物理约束审核，并提及橡胶与软材料测试。[摘要] 解读：这是角色分工式建模流程；两者是否迭代交互、如何传递审核意见，以及是否调用求解器或优化器，均缺少证据。",
-        "innovation": "解读：可关注的方法特色是把本构模型生成与物理审核分配给不同智能体，而非由同一角色包办。[摘要] 但特色不等于已证实的创新，现有资料未提供相关工作比较、独有机制或消融结果，无法判断该分工相对既有方法的新颖程度，也不能确认标题中的优势主张。",
-        "findings": "摘要仅说明存在“tests on rubber and soft materials”，支持作者已在这些材料对象上开展测试的判断。[摘要] 它没有报告测试结果、预测误差、约束满足情况或单智能体对照，因此目前可提取的是验证对象，而非性能结论；不能把开展测试等同于验证有效。",
-        "limitations": "当前可确认的是摘要证据的局限，而不是论文方法已被证明的缺陷：资料未列出物理约束类型、数据规模、评价标准和测试结果。[摘要] 因而无法评估约束审核的完整性、生成模型的稳定性及适用边界；是否存在这些实际问题，仍需更多原文证据。",
-        "connection": "解读：生成本构模型与生成式设计标签直接相关；面向结构设计，它可被视为材料模型构建环节的潜在线索。[摘要] 物理审核也可引出可靠性研究问题，但约束满足并不自动等于可靠性保证。摘要未涉及状态监测、故障诊断或维护决策，不能据此认定智能运维成果。",
-        "next_steps": "建议：取得更多原文后，优先核查物理约束如何定义、Inspector如何判定违反约束，以及双智能体与单智能体是否使用一致测试条件。再检查材料测试的指标与失败案例。以上是后续阅读和验证建议，并非作者已实施的实验，也不是摘要已经支持的研究结论。"
+        "problem": "作者要解决的不是单纯提高应力拟合精度，而是降低本构建模门槛，同时避免LLM实现破坏物理结构。已有模型类别的构造性保证，只有实现正确才能继承；黑箱预测又存在外推与可解释性问题。研究因此追问：生成模型能否经过独立审查，获得更可信的物理合规输出。[P2][P4]",
+        "method": "Creator生成CANN代码，先通过训练、预测及保存加载检查，再由Inspector逐项审查九项约束并反馈修改。初次生成后改进两次，选择最准确模型；独立采样验证器另行评价。实验比较单Creator、双智能体及工具版，并在两个骨干、四个不可压缩超弹性数据集上测试。[P9][P10]",
+        "innovation": "作者提出将构造本构模型与批判性检查明确分工，补足GenCANN仅生成而不系统核验的环节。解读：价值主要在编排、约束提示与外部验证的组合，而非新增能量函数或神经网络类别。作者主张可迁移至PANN、CKAN及符号律，但当前实验证据仍限于CANN。[P8][P23][P41]",
+        "findings": "加入Inspector后，Opus与Kimi数值检查通过率分别为95%和60%；工具版分别为93%和83%。猪皮最佳合规模型平均R²为0.90和0.80，基线为0.83。然而最简提示下，Opus无工具双智能体30个导出模型全部失败。作者结果说明合规改善并非跨提示条件无条件成立。[P11][P12][P16][P39]",
+        "limitations": "验证是有限采样而非证明，椭圆性检查不能证明多凸性；材料仅涵盖不可压缩超弹性，猪皮基线训练划分不同。解读：代码硬截断还需核查全域光滑性。记录未发现原文件缺项；P45的“311”是已纠正的提取错误，实际输出维度为1，不影响原文结论。[P6][P11][P35][P43][P45]",
+        "connection": "解读：与生成设计方向直接相关，但对象是材料本构模型而非结构几何。对结构设计，其价值在于为仿真提供受物理约束的材料代理；对可靠性及智能运维，可迁移的是生成、审查、独立验证分层的准入机制。论文未开展设备运维或结构失效概率实验，不能据此宣称应用效果。[P9][P24]",
+        "next_steps": "建议先复现附录验证器，测试采样密度、容差及面外变形对结论的敏感性，再检查硬截断、梯度缺失置零与压力正则化的边界行为。应同时报告漏检、误拒及多次运行分布，避免仅展示最佳模型。扩展黏弹性前需新增耗散和历史依赖检查，这属于研究建议而非已验证成果。[P24][P33][P43][P46][P47]"
       },
       "analysis_status": "ready",
-      "analysis_basis": "abstract",
+      "analysis_basis": "full_text",
       "analysis_kind": "model",
       "analysis_sources": [
-        "https://arxiv.org/abs/2605.23754v2"
+        "https://arxiv.org/pdf/2605.23754"
       ],
-      "analyzed_at": "2026-09-25T02:32:27.473544+00:00",
-      "llm_model": "gpt-6-astra",
+      "analyzed_at": "2026-10-08T14:59:26.809315+00:00",
+      "llm_model": "gpt-6.1-sol",
       "recommended_direction": "generative_design",
       "reading_status": {
         "paper_id": "69eaf30dcdd5",
-        "state": "failed",
-        "updated_at": "2026-09-25T18:38:00.029328+00:00",
+        "state": "published",
+        "updated_at": "2026-10-08T15:35:25.128220+00:00",
         "basis": "full_text",
-        "reason": ""
-      }
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "",
+        "total": 47,
+        "covered": 47,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P45",
+            "detail": "Listing 2第31行：文字提取显示“311,”，原页清晰显示行号31与代码“1,”分列，正确含义为输出Dense层单元数1，而非311。已纠正；该错误影响网络输出维度和架构识读，不改变作者报告的模型性能结论。"
+          }
+        ]
+      },
+      "article": {
+        "version": 1,
+        "lead": "让大语言模型写出能拟合材料曲线的代码，并不等于得到可信的本构模型：真正困难的是，模型能否保持物理约束，并推广到未见变形。Tacke等提出Creator–Inspector双智能体流程，将模型生成与物理审查分工，再以独立数值检查评估输出。四个材料基准显示，这种分工能够提高经验性物理通过率，但工具、提示知识与模型骨干之间存在明显交互。本文的阅读价值，正在于同时呈现自动建模的进展与可信验证的边界。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从拟合材料曲线，到生成可用的本构关系",
+            "paragraphs": [
+              "本构模型连接材料实验与结构计算，必须从有限、相对简单的加载数据推广到复杂服役状态。传统建模同时依赖连续介质力学、函数构件选择和科学编程知识，自动化因此具有实际价值。作者指出，已有单智能体GenCANN流程缺少系统性的物理检查；黑箱模型可能外推不佳或违反对称性，则属于研究背景，不能当作本文对所有数据驱动方法的实验结论。",
+              "这项研究的目标不是全面超过人类专家，而是让缺少建模经验的用户获得准确且具有物理意义的模型。已验证范围限定为不可压缩超弹性材料，覆盖各向同性脑组织、橡胶和横观各向同性猪皮。本文复用文献数据，没有重新开展人类或动物取样；向黏弹性、符号本构律等对象扩展仍是研究设想。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "生成、审查与数值验证是三道不同关口",
+            "paragraphs": [
+              "Creator生成完整Python模型，先接受执行、实例化、训练、预测和保存加载检查；Inspector随后逐项审查物理约束，发现问题便反馈修改，全部获批才导出。初始模型获批后，根据训练预测及R²、MSE再改进两次，每次重新检查，完整运行形成三个获批模型并选优。**Inspector批准不是数值验证通过**，后者由确定性验证器另行判定。",
+              "模型以CANN为载体，由不变量预测标量应变能，再通过自动微分得到应力：P=∂Ψ/∂F−pF⁻ᵀ。各向同性采用I₁、I₂，横观各向同性增加I₄、I₅并学习纤维方向；九项要求包括热力学一致性、应力对称性、客观性、材料对称性、多凸性、体积增长条件、能量与应力归一化、应变能非负性。架构的物理性质只有正确实现才可继承，不能由网络名称直接保证。",
+              "验证器通过变形、旋转、路径和扰动方向寻找反例，多数比较采用相对容差10⁻³、绝对下限10⁻⁴。基础变形约35个，横观各向同性扩充至约53个；椭圆性检查使用伸长网格及两组各200个Fibonacci方向。多凸性实际以其推论椭圆性作数值探查，而体积增长条件因J=1直接返回通过，二者均有明确适用边界。"
+            ]
+          },
+          {
+            "id": "validation",
+            "title": "四个基准，区分曲线点、材料来源与生成重复",
+            "paragraphs": [
+              "脑组织数据来自Budday等的皮质灰质研究，原始取材涉及10个人脑，每种加载模式17个点，涵盖拉伸、压缩和剪切。Treloar实验橡胶与Linka等的合成橡胶每种协议15个点，采用单轴、等双轴和纯剪切；合成数据具有闭式真值，不是新增实物试验。猪皮数据包含402个点、五种双轴协议和十条方向曲线，这些点与曲线均不能替代独立试件数量。",
+              "橡胶沿用原始CANN训练–测试划分，但具体点数和比例未报告；猪皮随机留出20%数据点，是否隔离试件或整条曲线未报告。两种骨干各比较仅Creator、双智能体及工具版双智能体，每个基准配置进行10次独立运行，另有最小提示消融。图8至图10展示选优预测，图12补充跨运行统计，因此不能把全文概括为只有最佳结果；独立试件数、增强数量和完整选模隔离规则仍缺失。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "双智能体有收益，但审查也可能制造错误",
+            "paragraphs": [
+              "四基准汇总中，加入Inspector后，获批导出模型的数值通过率在Opus上由90%升至95%，Kimi由47%升至60%；开放工具后分别为93%和83%，收益并不一致。合成橡胶最小提示下，Opus无工具双智能体导出的30个模型全部失败，而完整提示对应通过率为100%。作者将该失效归因于错误质疑推动Creator加入不当体积项，说明审查者也需要领域知识与可核查证据。",
+              "精度优势具有材料依赖性：脑组织三个加载条件下，主伸长基底专家模型均优于不变量生成模型，基底差异妨碍直接归因。猪皮平均R²为基线0.83、Opus 0.90、Kimi 0.80，但基线全数据训练、生成模型留出测试点，训练条件并不一致。两个橡胶基准整体接近完美拟合，跨运行统计仍发现Opus双智能体一次R²为0.66的异常，不能用最佳曲线替代稳定性。",
+              "合成橡胶在Treloar不变量平面的路径间与范围外状态上，生成模型精度未明显下降，但缺少精确最大误差及评估边界。**有限采样通过不是全域物理证明**，各组完整分母、网络容量匹配及部分统计细节也不足。展示代码中的硬截断和固定P₃₃=0压力处理，还提示部署前应核查光滑性与边界适配，不能把代码注释视作保证。"
+            ]
+          }
+        ],
+        "experiments": [
+          {
+            "name": "四基准上的物理通过率与工具访问消融",
+            "data": "复用脑组织、实验橡胶、合成橡胶和猪皮数据；比较生成模型的物理检查结果，而非新增材料试验。",
+            "samples": "每基准、每配置10次独立运行，每次三个获批轮次；各判断组完整分母及被拒模型抽样量未报告。",
+            "groups": "Opus与Kimi分别设置仅Creator、Creator–Inspector、带数值工具Inspector三组；被拒模型仅随机导出子集。",
+            "split": "橡胶沿用原始CANN划分；猪皮随机留出20%点；脑组织划分及各组具体点数未报告。",
+            "baselines": "仅Creator为流程基线，无工具双智能体为工具访问消融参照；GenCANN不是这里的直接数值对照。",
+            "metrics": "获批导出模型通过全部数值检查的比例；多凸性以椭圆性探查，增长条件在不可压缩域直接通过。",
+            "results": "仅Creator→双智能体→工具版：Opus为90%→95%→93%，Kimi为47%→60%→83%；均为四基准汇总。",
+            "limitations": "有限采样不能证明全域满足；分母与置信区间缺失。工具版Inspector使用同套验证器，不能据此认定独立审查能力。"
+          },
+          {
+            "name": "脑组织与猪皮的专家基线预测比较",
+            "data": "脑组织采用Budday等皮质灰质数据；猪皮采用Taç等公开双轴数据，分别考察各向同性与纤维各向异性。",
+            "samples": "脑组织原始取材10个人脑，每模式17点；猪皮402点、十条曲线。独立试件数未报告；预测从10次运行选优。",
+            "groups": "脑组织为拉伸、压缩、剪切；猪皮为等双轴、两个strip-axial及两个off-axial协议，各记录两方向应力。",
+            "split": "脑组织具体划分未报告；猪皮随机留出20%点，未报告按试件或曲线隔离；专家猪皮基线使用全部数据。",
+            "baselines": "脑组织为Pierre等主伸长基底CANN；猪皮为Linka等超参数搜索CANN；生成模型统一采用不变量基底。",
+            "metrics": "脑组织分加载条件报告R²，猪皮报告十条曲线平均R²，均无量纲；应力分别以kPa、MPa展示。",
+            "results": "脑组织拉伸/压缩/剪切R²：基线0.96/0.99/1.00，Kimi 0.614/0.651/0.829，Opus 0.453/0.876/0.981；猪皮均值为0.83/0.80/0.90。",
+            "limitations": "脑组织基底不同、猪皮训练数据条件不同，难以分离方法贡献；猪皮弱伸长方向是共同短板，选优结果不代表平均表现。"
+          },
+          {
+            "name": "合成橡胶拟合、未见路径泛化与外推",
+            "data": "Linka等引入的虚构橡胶材料，具有闭式本构真值；在Treloar不变量平面上比较应力预测相对误差。",
+            "samples": "每种训练协议15个点；从10次无工具双智能体运行选最佳合规模型。独立仿真数、平面评估点数未报告。",
+            "groups": "训练为单轴、等双轴和纯剪切三条路径；路径之间状态评估泛化，超出训练范围状态评估外推。",
+            "split": "沿用原始CANN训练–测试划分；三条路径外的平面状态未参与训练，具体划分数量与外推边界未报告。",
+            "baselines": "Linka等原始CANN专家基线，对比Opus和Kimi无工具双智能体；本文未重复网络规模匹配实验。",
+            "metrics": "P₁₁相对误差，单位%；图中色标0%—5%，但误差公式、近零分母处理及汇总统计未报告。",
+            "results": "训练工况预测近乎完美；基线范围外出现可见误差但远低于5%，生成模型在所评估范围未明显降精度。",
+            "limitations": "缺少完整生成公式、评估网格及精确最大误差；容量未匹配，不能扩大为任意变形下的泛化保证。"
+          },
+          {
+            "name": "合成橡胶的领域知识提示消融",
+            "data": "在同一合成橡胶基准上，将解释约束和检查建议的完整提示替换为仅列九项约束名称的最小提示。",
+            "samples": "各配置精度统计涉及三种工况、10次独立运行；最小提示Opus无工具双智能体导出30个模型。",
+            "groups": "两个骨干各含仅Creator、无工具双智能体、工具版双智能体；比较完整与最小提示并按约束诊断失效。",
+            "split": "橡胶沿用原始CANN划分，具体训练测试点数未报告；该消融没有另报告独立验证集。",
+            "baselines": "完整提示是知识供给对照，仅Creator是审查干预对照，无工具双智能体是工具访问对照。",
+            "metrics": "获批导出模型的数值通过率（%）；另汇总平均R²和标准差，但精确柱值未报告，负均值绘图截为零。",
+            "results": "完整→最小提示：Opus三组90%→83%、100%→0%、97%→90%；Kimi三组47%→0%、57%→30%、87%→77%。",
+            "limitations": "Opus失败的30个模型均违反材料对称性；这是特定提示与骨干的失效，不是双智能体普遍结论。其他组分母未报告。"
+          }
+        ],
+        "routes": [
+          {
+            "title": "用独立反例搜索约束双智能体的物理审查",
+            "direction_id": "generative_design",
+            "gap": "现有通过率依赖有限采样，工具版又与评估共享验证器，难以辨别独立审查能力。应优先研究训练检查之外的盲测反例，而不是继续增加未经校准的语言审查。",
+            "mechanism": "保留Creator提出结构的自由度，将Inspector意见转成可执行检查，再由隔离的反例搜索器优化最小秩一响应和最低能量。对可证明构件提供结构证书，对其余候选只声明限定域内经验通过。",
+            "innovation": "候选创新是将结构证书、盲测反例与修复日志组成证据链，而非把验证器调用本身当作创新。相关文献Physics-Audited Agentic Discovery的摘要已提出固定评估和高违例搜索，本路线拟进一步面向本构代码审查组合这些机制。",
+            "design": "建议设计复用公开CANN数据与本文日志，在四基准、两骨干和各配置下各运行20次；独立评估器隐藏旋转、面外剪切及搜索初值。记录全部候选和拒绝模型，生成重复与材料试件分别计数。",
+            "comparison": "对照仅Creator、原双智能体、全量工具审查和隔离反例搜索，匹配训练预算与网络容量。消融结构证书、搜索反馈和隐藏测试，并注入已知错误以评估漏检与误拒。",
+            "criterion": "预注册采样域和容差，以完整分母报告通过率及区间；成功须在匹配预算下减少隐藏反例与错误拒绝，同时不恶化留出误差。未找到反例仍不得表述为全域证明。",
+            "risk": "反例搜索可能代价高或误判浮点噪声，可用双精度复核和分级搜索降低风险。若自动证明不可行，退回人工审核的构件目录，并缩小可声明有效的变形域。"
+          },
+          {
+            "title": "面向未见加载的容量匹配与不确定性评估",
+            "direction_id": "generative_design",
+            "gap": "随机留出曲线点不足以验证跨路径或跨试件泛化，现有比较还混入网络容量和函数基底差异。应将问题转向同预算模型在未见加载下的误差与可信范围。",
+            "mechanism": "按完整加载路径隔离训练与测试，统一不变量基底及参数预算，再让候选集预测分歧提示高风险状态。对具有闭式真值的合成材料可检验区间覆盖，对实物数据则保留来源和试件层级。",
+            "innovation": "候选创新是把物理审查结果与外推不确定性共同用于模型选择，而非只选最高R²。相关岩石本构研究摘要已采用Epinet量化认知不确定性；将其与本流程结合只是待验证方案，不能移用其效果。",
+            "design": "建议设计先复用公开橡胶和猪皮资料，轮流留出整条加载协议，各配置重复20次；若公开资料无试件标识，只评价跨路径。跨试件结论需要补充采集并记录来源，不能默认已有仪器或独立试件。",
+            "comparison": "统一数据、基底和参数预算，对比专家CANN、仅Creator及双智能体；消融点级与路径级划分、容量约束和不确定性筛选。测试集冻结，模型选择只使用另行留出的验证数据。",
+            "criterion": "以未见路径误差、最差方向误差、区间覆盖和物理违例共同判定成功，报告全部运行而非仅最佳者。建议预注册90%预测区间，并检查误差随外推距离增长时能否得到合理预警。",
+            "risk": "候选分歧可能低估共享架构偏差，小样本也会使校准不稳定。可加入不同可接受构件与基底作为敏感性对照；若覆盖不足，则采用保守适用域和拒绝预测，不输出虚假的高置信结论。"
+          }
+        ],
+        "diagrams": [
+          {
+            "kind": "study",
+            "title": "原研究：模型生成与物理审查的分层流程",
+            "description": "Inspector控制修改与导出；确定性数值验证提供后续经验标签，工具变体允许Inspector选择性调用验证器。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "文献材料数据",
+                "detail": "脑组织、实验橡胶、合成橡胶与猪皮四个基准"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "Creator生成CANN",
+                "detail": "提出Python模型、网络结构与训练过程"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "代码功能检查",
+                "detail": "检查执行、实例化、训练、预测及保存加载"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "Inspector物理审查",
+                "detail": "逐项判断九项要求；违规反馈，全部批准才导出"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "两次精度细化",
+                "detail": "依据训练R²与MSE改进，每次重新接受检查"
+              },
+              {
+                "id": "f",
+                "stage": 5,
+                "label": "独立数值评估",
+                "detail": "有限采样检查物理约束，并评估预测与跨运行表现"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "提供拟合数据"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "提交脚本"
+              },
+              {
+                "from": "c",
+                "to": "b",
+                "label": "功能失败修正"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "功能合格"
+              },
+              {
+                "from": "d",
+                "to": "b",
+                "label": "违规反馈"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "批准后细化"
+              },
+              {
+                "from": "e",
+                "to": "c",
+                "label": "改进后复审"
+              },
+              {
+                "from": "d",
+                "to": "f",
+                "label": "导出后评估"
+              },
+              {
+                "from": "f",
+                "to": "d",
+                "label": "工具变体可调用"
+              }
+            ]
+          },
+          {
+            "kind": "proposal",
+            "title": "研究建议：建立与审查隔离的物理证据链",
+            "description": "对应第一条路线。结构证书与隐藏反例评估并行，所有改善均需实验验证，未发现反例不等于全域证明。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "公开数据与预注册域",
+                "detail": "固定预算、容差、评估范围并记录全部生成候选"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "生成与语言审查",
+                "detail": "Creator提出模型，Inspector给出可执行审查意见"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "结构证书检查",
+                "detail": "核查可证明构件、代码实现与边界条件一致性"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "隔离反例搜索",
+                "detail": "隐藏初值及加载状态，搜索负能量和秩一响应违例"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "反例复核与修复",
+                "detail": "双精度复核疑似违例，记录修改原因和修复结果"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "冻结盲测评价",
+                "detail": "比较完整分母通过率、误拒率、预测误差及预算"
+              },
+              {
+                "id": "g",
+                "stage": 5,
+                "label": "限定域证据报告",
+                "detail": "区分数学证书与经验通过，披露残余风险和适用域"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "约束实验设计"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "提交结构与代码"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "提交候选响应"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "定位实现问题"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "提供数值反例"
+              },
+              {
+                "from": "e",
+                "to": "b",
+                "label": "反馈修复"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "冻结候选"
+              },
+              {
+                "from": "f",
+                "to": "g",
+                "label": "形成可核查证据"
+              }
+            ]
+          }
+        ],
+        "related": {
+          "status": "ok",
+          "checked_at": "2026-10-08T15:31:43.489930+00:00",
+          "papers": [
+            {
+              "title": "How Much Physics Should a Neural Network Know? Thermodynamics‐Informed Neural Networks for Rock Constitutive Modeling With Epistemic Uncertainty",
+              "url": "https://doi.org/10.1029/2026jh001463",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "LLM-Based Scientific Equation Discovery via Physics-Informed Token-Regularized Policy Optimization",
+              "url": "https://doi.org/10.1145/3770855.3818869",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "A Constrained Natural-Language Interface for Variational Multi-Physics Finite Element Simulations in FEniCS",
+              "url": "https://doi.org/10.48550/arxiv.2606.10928",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            },
+            {
+              "title": "Agentic Scientific Simulation: Execution-Grounded Model Construction and Reconstruction",
+              "url": "https://doi.org/10.48550/arxiv.2603.00214",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            },
+            {
+              "title": "Physics-Audited Agentic Discovery in Scientific Machine Learning",
+              "url": "https://doi.org/10.48550/arxiv.2607.07379",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            }
+          ]
+        }
+      },
+      "article_updated_at": "2026-10-08T15:35:25.125728+00:00",
+      "article_profile": "38347d56687c3dccc296ab67c7f68cc79bc3304eb17e24d3ecca636fe8c1a690",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P4"
+        ],
+        "method": [
+          "P9",
+          "P10"
+        ],
+        "innovation": [
+          "P8",
+          "P23",
+          "P41"
+        ],
+        "findings": [
+          "P11",
+          "P12",
+          "P16",
+          "P39"
+        ],
+        "limitations": [
+          "P6",
+          "P11",
+          "P35",
+          "P43",
+          "P45"
+        ],
+        "connection": [
+          "P9",
+          "P24"
+        ],
+        "next_steps": [
+          "P24",
+          "P33",
+          "P43",
+          "P46",
+          "P47"
+        ]
+      },
+      "analysis_material_version": "2270b653848661a9091e5d6e0d0d84d997b1d7e8cba82c2220df52bda48f7ff0",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P45",
+          "detail": "Listing 2第31行：文字提取显示“311,”，原页清晰显示行号31与代码“1,”分列，正确含义为输出Dense层单元数1，而非311。已纠正；该错误影响网络输出维度和架构识读，不改变作者报告的模型性能结论。"
+        }
+      ]
     },
     {
       "source": "Semantic Scholar",
@@ -2257,8 +4941,10 @@
       "reading_status": {
         "paper_id": "b26c6aabf051",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-30T13:12:44.564944+00:00",
+        "updated_at": "2026-10-08T15:38:15.958592+00:00",
         "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -2287,7 +4973,7 @@
         "ai_maintenance",
         "fatigue_reliability"
       ],
-      "summary": "Utility-scale wind energy conversion systems are subjected to highly stochastic aerodynamic loading profiles, making drivetrain components-particularly high-speed gearbox shaft bearings and generator stator windings-susceptible to premature failure. Traditional predictive maintenance frameworks rely either on pure data-driven deep learning models, which suffer from high false alarm rates during transient operational profiles and frequently violate thermodynamic boundaries, or first-principles physical models, which fail to capture dynamic boundary variations due to site-specific environmental…",
+      "summary": "风机传动链承受随机气动载荷，纯数据模型与纯物理模型分别面临误报和环境适应问题。本文提出时空物理信息数字孪生，将热力学与疲劳裂纹扩展规律融入深度学习，分别开展热异常检测、振动诊断和剩余寿命预测。摘要报告真实监测数据上的提前预警、低误报及疲劳参数收敛，但未给出具体数值或验证细节。解读：适合关注物理约束智能运维与疲劳可靠性的研究者作为方法线索阅读。[摘要]",
       "raw_metadata": {
         "provider": "PubMed",
         "pmid": "42835956",
@@ -2420,11 +5106,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "推荐重点关注热异常阈值自适应与疲劳规律约束寿命预测的组合，但应获取全文核查性能比较、参数辨识和验证设置，不能仅凭摘要确认工程效果。[摘要]",
+      "deep_read": {
+        "problem": "研究针对随机气动载荷下齿轮箱高速轴轴承与发电机定子绕组的过早失效。摘要指出，纯数据模型在瞬态运行中易产生误报并违反热力学边界，而第一性原理模型难以捕捉场址相关的动态边界变化。核心问题是兼顾运行适应性与物理一致性。[摘要]",
+        "method": "热检测结合稳态热力学基线与带自注意力的因果扩张物理信息时序卷积网络，并以超阈值极值理论拟合广义帕累托分布确定动态阈值；振动诊断结合希尔伯特解调与多尺度卷积长短期记忆自编码器；寿命预测采用物理信息门控循环单元。[摘要]",
+        "innovation": "摘要称框架将“physical thermodynamic principles and material fatigue crack propagation laws”直接融入深度学习。解读：其特色是把热监测、振动诊断和疲劳寿命预测纳入混合孪生框架；仅凭摘要不能确认各模块或整体组合的原创性。[摘要]",
+        "findings": "摘要报告真实SCADA与振动监测数据验证得到提前预警和低误报，并在统计上优于常规监督及无监督基线；还称轴承疲劳参数趋近理论疲劳磨损极限。以上属于作者摘要中的结果陈述，未提供预警时长、误报率、显著性检验或参数误差。[摘要]",
+        "limitations": "当前资料仅为摘要，未交代样本规模、故障类型覆盖、训练测试划分、基线配置及消融实验，无法核查比较是否公平或是否存在数据泄漏。这些是当前证据的缺口，不是已证实的论文缺陷；作者是否讨论跨场址泛化等局限亦不明确。[摘要]",
+        "connection": "解读：热异常检测与振动诊断直接对应智能运维，带单调性和Paris-Erdogan裂纹扩展规律的寿命预测则关联疲劳可靠性。在线材料参数发现可能为状态评估提供物理解释，但摘要没有结构优化或设计验证，因此与结构设计的联系仅属潜在迁移。[摘要]",
+        "next_steps": "建议：取得全文后优先核查物理损失形式、单调性约束实现、极值阈值更新方式，以及材料参数在线辨识所需观测信息。进一步研究可比较不同运行工况下的误报和寿命误差，并检验各物理约束的独立贡献；这些是研究建议，不是作者已完成的实验。"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "用于风力发电机与齿轮箱早期故障预测的时空物理信息数字孪生",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.mex.2026.104171"
+      ],
+      "analyzed_at": "2026-10-08T15:39:34.724697+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "16409eea5a3a61bbafb0200bdc339c1ac7116332bba829db9b6889bec2d66f61",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "c0cf7585af24",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-08T15:39:34.732697+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -2448,7 +5166,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "The construction industry requires sustainable alternatives to conventional concrete to reduce environmental impacts while maintaining structural performance. Jute fiber concrete (JFC) is a promising low-carbon material; however, optimizing its mechanical properties is challenging because of complex nonlinear interactions among fiber characteristics and mix-design parameters. This study proposes an integrated framework combining Generative Artificial Intelligence (GEN-AI) with Decision Tree Boosting (DT-Boosting), Gaussian Process Regression (GPR), and GPR enhanced with Bayesian Optimization (…",
+      "summary": "本文面向黄麻纤维混凝土配合比与力学性能之间的非线性关系，提出生成式人工智能、机器学习预测和逆向优化相结合的框架。摘要称，大语言模型用于扩充实验数据，贝叶斯优化增强的高斯过程回归获得最稳定的预测表现，并与NSGA-II结合生成满足用户性能要求的配合比。其价值在于从性能预测推进到目标驱动设计；但当前仅有摘要，数据扩充可信度与逆向方案的实验验证仍需核查。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7213999642",
@@ -2494,11 +5212,43 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议作为生成式配合比设计方向的候选重点论文阅读，关注其数据扩充、代理模型与多目标逆向优化的衔接；当前摘要不足以确认生成数据和优化配合比的工程可靠性。[摘要]",
+      "deep_read": {
+        "problem": "研究针对可持续混凝土的性能优化问题：黄麻纤维特征与配合比参数之间存在复杂非线性关系，使力学性能优化困难。摘要以“complex nonlinear interactions”说明挑战。解读：核心问题是如何建立可用于目标配合比设计的预测模型，而非单纯比较材料强度。[摘要]",
+        "method": "方法将大语言模型生成式数据扩充与DT-Boosting、GPR及GPR-BO结合，采用分布分析、箱线图比较和Kendall相关分析检查扩充数据，再将GPR-BO接入NSGA-II开展逆向优化。摘要称输入包含六个变量，但未列出完整变量清单与建模设置。[摘要]",
+        "innovation": "摘要将框架贡献概括为“extends forward prediction to practical inverse design”，即从正向性能预测延伸至逆向配合比设计。解读：值得关注的是生成式扩充、预测与优化的流程整合；仅凭摘要不能确认这些组件本身具有原创性，也不能判断相对既有框架的创新程度。[摘要]",
+        "findings": "摘要报告GPR类模型相较DT-Boosting将预测误差降低约40–50%；GPR-BO测试集抗压、抗拉强度R²分别为0.9242和0.9682。SHAP与部分依赖图识别纤维体积分数及纤维含量为重要参数。这些是作者报告的结果，误差指标和测试集规模未在摘要中说明。[摘要]",
+        "limitations": "当前资料仅为摘要，未提供原始样本量、生成数据比例、数据划分方式或逆向方案的实测结果，因此无法判断模型泛化能力及工程落地效果。摘要所述“Probabilistic validation”指向强度分布再现，不能据此认定已完成结构可靠性验证；这些属于证据缺口，而非已证实的研究缺陷。[摘要]",
+        "connection": "与结构设计的直接联系是根据用户力学性能要求反求配合比，摘要明确提出“user-defined mechanical performance requirements”。解读：它可为材料层面的性能驱动设计提供参考；与可靠性研究的联系尚属潜在延伸，当前资料未报告失效概率、耐久性或运维监测结果。[摘要]",
+        "next_steps": "建议后续核查全文中的数据来源、扩充提示与约束、训练测试隔离及优化解实测验证，并检查Pareto解如何选取。可迁移研究建议是将类似逆向设计流程用于材料配合比优化，再另行引入可靠性约束；这属于研究设想，不是摘要已证明的作者结论。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "大语言模型生成式人工智能与混合机器学习驱动的黄麻纤维混凝土性能预测及逆向设计",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.engappai.2026.116274"
+      ],
+      "analyzed_at": "2026-10-08T15:40:58.290352+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "363f6aae8cf3a50e48d93333b1f48a41424aabbc536d284c4c1c378d7ccbaed5",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "40c0ae2fa4ed",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-08T15:40:58.299716+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -65009,13 +67759,13 @@
     "unavailable": 14
   },
   "analysis_status": {
-    "ready_core": 1,
+    "ready_core": 3,
     "target_core": 5,
-    "ready_extended": 3,
+    "ready_extended": 5,
     "target_extended": 5,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 6
+    "pending": 2
   },
   "edition": {
     "id": "37780967550",

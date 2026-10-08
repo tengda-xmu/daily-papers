@@ -921,7 +921,23 @@
       ],
       "release_state": "unknown",
       "content_version": "9a643a35abad6919252b86971d2153861c7d4560358cc968a0feed7cb08cf8fa",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "同一模型家族，两项金牌级成绩：面向 IOI 与 IMO 微调 Nemotron",
+        "summary": "所给公告介绍以 Nemotron 3 为起点构建竞赛专用模型，明确提到监督微调（SFT），但后续训练描述被截断。IOI 面向算法与编程，要求在严格时间和提交次数限制下通过隐藏测试；IMO 面向严谨的自然语言证明。标题宣称取得两项金牌级成绩，正文片段则强调模型作为专用模型基础的适应性，未提供分数、评测设置或完整训练方法，也未说明新版本发布。[S1]",
+        "application": "建议：【你的推断】科研迁移可分别探索算法代码生成与数学证明生成，并针对测试通过情况和证明严谨性设计评估；这些不是公告已验证的科研效果。官方原文称 Nemotron 是构建专用模型的强大、可适配基础，但所给片段不足以核实金牌级成绩的具体指标或其在智能运维、结构设计、可靠性任务中的效果。[S1]",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "One Model Family, Two Gold-Level Results: Fine-Tuning Nemotron for IOI and IMO",
+          "IOI requires algorithms and code that pass hidden tests under strict time and submission limits.",
+          "IMO demands rigorous natural-language proofs.",
+          "Our recent results show that Nemotron is a strong, adaptable foundation for building world-class specialist models.",
+          "Starting from Nemotron 3, our teams used supervised fine-tuning (SFT),"
+        ],
+        "basis_url": "https://huggingface.co/blog/nvidia/nemotron-ioi-and-imo-2026"
+      },
+      "analyzed_at": "2026-10-08T14:09:36.095866+00:00"
     },
     {
       "title": "Introducing Astra for Law",
@@ -1516,7 +1532,22 @@
       ],
       "release_state": "unknown",
       "content_version": "c03a2d326ccdecf13dc6adca2942cab9464312e58f5fce2b0e08650c004a214b",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "面向边缘设备的开放多模态决策模型：d1-3B 与 d1-omni-600M",
+        "summary": "官方宣布发布 d1-3B 与实验性 d1-omni-600M，扩展 d1 决策模型家族。[S1] 前者支持文本和图像，后者支持文本与图像或文本与音频。[S2] 公告报告 d1-3B 在 Decision Index 0.2.1 上得分 48.57，并列出其在三款 NVIDIA Jetson 设备上的回答耗时为16、26和50毫秒。[S3–S4]【推断】可考虑用于边缘端图像问答、多模态状态判断等任务，但所给节选未展示这些应用的验证结果。",
+        "application": "建议：【科研迁移建议】将 d1-3B 作为设备图像问答、巡检状态判断的候选模型；涉及音频的探索可考虑实验性 d1-omni-600M，并自行评估准确率、延迟和可靠性。【官方报告效果】节选仅给出决策基准成绩及指定 Jetson 设备上的回答耗时，未提供智能运维或结构可靠性任务的验证结果。[S1–S4]",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "Today, we release two open decision models in our d1 decision model family : d1-3B and d1-omni-600M (experimental).",
+          "Multimodal: d1-3B supports text and images, while d1-omni-600M supports text and images or text and audio",
+          "Best decision model under 10B on the Decision Index 0.2.1: d1-3B scores 48.57, ahead of every 4B and 9B model and of Decider 35B-A3B (47.11).",
+          "Fast: d1-3B answers a question in 16 ms on an NVIDIA Jetson AGX Thor, 26 ms on a Jetson AGX Orin, and 50ms on a Jetson Orin Nano"
+        ],
+        "basis_url": "https://huggingface.co/blog/LiquidAI/open-d1"
+      },
+      "analyzed_at": "2026-10-08T14:10:20.614272+00:00"
     },
     {
       "title": "Pruning LLMs Like a Physicist: Block Removal as an Ising Optimization Problem",
