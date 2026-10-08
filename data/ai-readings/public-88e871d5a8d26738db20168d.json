@@ -1,19 +1,19 @@
 {
   "id": "public-88e871d5a8d26738db20168d",
-  "content_version": "7a3955ad06bd63d633c1860cc47e18c748e41106b24dfec2f0ebd8763609d75c",
+  "content_version": "c03a2d326ccdecf13dc6adca2942cab9464312e58f5fce2b0e08650c004a214b",
   "analysis": {
-    "title_zh": "LiquidAI 发布面向边缘端的多模态开放决策模型 d1-3B 与 d1-omni-600M",
-    "summary": "官方宣布发布 d1-3B 和实验性 d1-omni-600M，面向边缘端决策任务。前者支持文本与图像，后者支持文本与图像或文本与音频。公告称，d1-3B 在 Decision Index 0.2.1 获得 48.57 分，是该指标上参数量低于 10B 的最佳决策模型；其在三款 NVIDIA Jetson 设备上的单问响应时间为 16、26、50 毫秒。所给资料未说明测试细节，不能据此认定实际业务性能。[S1]",
-    "application": "建议：科研迁移可探索图像辅助设备状态判断，以及文本与音频结合的运维事件分类；这些是迁移设想，并非官方已验证效果。官方报告的是决策基准得分与指定 Jetson 设备上的响应时间，未提供智能运维、结构设计或可靠性任务的验证结果。[S1]",
+    "title_zh": "面向边缘设备的开放多模态决策模型：d1-3B 与 d1-omni-600M",
+    "summary": "官方宣布发布 d1-3B 与实验性 d1-omni-600M，扩展 d1 决策模型家族。[S1] 前者支持文本和图像，后者支持文本与图像或文本与音频。[S2] 公告报告 d1-3B 在 Decision Index 0.2.1 上得分 48.57，并列出其在三款 NVIDIA Jetson 设备上的回答耗时为16、26和50毫秒。[S3–S4]【推断】可考虑用于边缘端图像问答、多模态状态判断等任务，但所给节选未展示这些应用的验证结果。",
+    "application": "建议：【科研迁移建议】将 d1-3B 作为设备图像问答、巡检状态判断的候选模型；涉及音频的探索可考虑实验性 d1-omni-600M，并自行评估准确率、延迟和可靠性。【官方报告效果】节选仅给出决策基准成绩及指定 Jetson 设备上的回答耗时，未提供智能运维或结构可靠性任务的验证结果。[S1–S4]",
     "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
       "Today, we release two open decision models in our d1 decision model family : d1-3B and d1-omni-600M (experimental).",
-      "Best decision model under 10B on the Decision Index 0.2.1: d1-3B scores 48.57, ahead of every 4B and 9B model and of Decider 35B-A3B (47.11).",
       "Multimodal: d1-3B supports text and images, while d1-omni-600M supports text and images or text and audio",
+      "Best decision model under 10B on the Decision Index 0.2.1: d1-3B scores 48.57, ahead of every 4B and 9B model and of Decider 35B-A3B (47.11).",
       "Fast: d1-3B answers a question in 16 ms on an NVIDIA Jetson AGX Thor, 26 ms on a Jetson AGX Orin, and 50ms on a Jetson Orin Nano"
     ],
     "basis_url": "https://huggingface.co/blog/LiquidAI/open-d1"
   },
-  "analyzed_at": "2026-10-08T10:31:55.701658+00:00"
+  "analyzed_at": "2026-10-08T14:10:20.614272+00:00"
 }
