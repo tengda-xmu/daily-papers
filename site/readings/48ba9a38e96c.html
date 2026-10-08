@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="聚焦 AI 驱动的智能运维、结构生成式设计与疲劳可靠性，每日追踪科研论文，提供中文摘要与精读要点。">
+  <meta name="theme-color" content="#153e64">
+  <title>机器学习加速塑性模型的时间积分 | 全文精读</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css?v=b30c5f17c6">
+  <link rel="stylesheet" href="../assets/paper-chat.css?v=b30c5f17c6">
+  <link rel="stylesheet" href="../assets/paper-library.css?v=b30c5f17c6">
+  <script src="../assets/site.js?v=b30c5f17c6" defer></script>
+  <script src="../assets/paper-library.js?v=b30c5f17c6" defer></script>
+  <script src="../assets/paper-chat.js?v=b30c5f17c6" defer></script>
+  <script src="../assets/daily-update.js?v=b30c5f17c6" defer></script>
+<link rel="stylesheet" href="../assets/reading-article.css?v=b30c5f17c6"><script src="../assets/reading-article.js?v=b30c5f17c6" defer></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main-content">跳至正文</a>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a class="wordmark" href="../"><span>腾达</span><span class="wordmark-divider" aria-hidden="true"></span>科研文献</a>
+      <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false">菜单 <span aria-hidden="true">☰</span></button>
+      <nav id="main-navigation" class="main-navigation" aria-label="主导航">
+        <a href="../" >每日推荐</a>
+        <a href="../search.html" data-local-only >手动检索</a>
+        <a href="../leads.html" >科研线索</a>
+        <a href="../ai.html" >AI 前沿</a>
+        <a href="../library.html" data-local-only >我的文献</a>
+        <a href="../archive/" >历史归档</a>
+        <a href="../setup.html" data-local-only >设置</a>
+      </nav>
+    </div>
+  </header>
+  <div class="site-shell">
+    <main id="main-content" class="main-content" tabindex="-1">
+      <article class="reading-article" data-paper-id="48ba9a38e96c"><a class="article-back" href="../">返回每日推荐</a><header class="article-header"><p class="article-type">论文精读</p><h1>机器学习加速塑性模型的时间积分</h1><p class="article-original" lang="en">Machine learning-accelerated time integration of plasticity models</p><p class="article-byline">Nasrin Talebi, Magnus Ekh, Knut Andreas Meyer<br>Computer Methods in Applied Mechanics and Engineering</p><p class="article-updated">精读更新 2026-10-08 11:31 · 依据论文全文整理</p><div class="article-links"><a href="https://doi.org/10.1016/j.cma.2026.119445" target="_blank" rel="noopener noreferrer">阅读原文</a><button type="button" class="text-button copy-citation" data-citation="Nasrin Talebi, Magnus Ekh, Knut Andreas Meyer. Machine learning-accelerated time integration of plasticity models. Computer Methods in Applied Mechanics and Engineering. https://doi.org/10.1016/j.cma.2026.119445">复制引用</button><button type="button" class="text-button codex-entry" data-local-only data-paper-id="48ba9a38e96c" data-paper-title="机器学习加速塑性模型的时间积分">Codex 对话</button></div></header><p class="article-upgrade">全文精读已完成，文章版正在逐步升级。现有内容可继续阅读。</p><div class="article-lead"><p>本文针对循环塑性有限元中本构积分开销高的问题，以神经网络预测状态变量增量，并通过不变量输入、解析演化方向及一致性修正保留物理约束。 作者用10循环生成训练数据，在100循环材料点和带孔板算例中验证。单增量有限元方案最大应力误差为14.3 MPa，相对相近误差的隐式方案加速约3.3倍。 解读：适合作为结构仿真的加速方法阅读，并非直接研究生成式设计；迁移前仍需核验算法记号与切线导数疑点。</p></div><section><h2>研究问题</h2><p>非线性有限元需要在各积分点、平衡迭代及时间步反复求解本构微分代数方程，循环加载进一步放大成本。传统显式积分受小步长限制，隐式积分则通常需要非线性迭代。作者研究如何保持塑性响应精度，同时显著增大应变步长，而非重新学习材料定律。</p></section><section><h2>方法与路线</h2><p>以von Mises屈服和非线性随动硬化为原型，先解析分离弹性子步，再将六个二次不变量输入两个网络，用三个张量方向组合状态增量，并以共同因子修正屈服一致性。训练数据由10循环细步长隐式积分生成，共12012个样本。</p></section><section><h2>创新与比较</h2><p>作者强调把弹塑性分离和塑性一致性直接嵌入积分流程，而非仅在损失中惩罚违约；网络只预测演化方向的标量系数。解读：主要特色是物理结构与学习型积分器的组合。三方向必要充分性的证据来自训练数据拟合，不应扩展为任意路径的普遍定理。</p></section><section><h2>证据与发现</h2><p>表3中，参考8增量方案耗时63.8秒、最大应力误差16.1 MPa；NN单增量方案为19.4秒、14.3 MPa，相近误差下加速约3.3倍。相对100增量基准的34.6倍属于另一比较口径。取消一致性修正还出现后续弹性子步无解，支持该修正的必要性。</p></section><section><h2>局限与边界</h2><p>验证限于所用原型与加载算例；作者承认有限元步内应变非线性违反线性路径假设。 解读：算法1应力更新及式(42)符号仍有一致性疑点，未判定为缺式。 原文件文献[27]缺页码或文章编号，影响引用定位，不直接改变数值结果。
+原文核对： 参考文献[27]经原页核实，仅列至Computers and Geotechnics 159 (April) (2023)，缺少页码或文章编号，下一条直接为[28]。这是原文书目信息缺项，不是提取遗漏；影响引用定位，不影响本批图18的识读或直接改变数值结论。未补造缺失信息。</p></section><section><h2>方向关联</h2><p>解读：对生成式设计而言，本工作提供的只是候选结构非线性评估的潜在加速模块，没有生成几何、拓扑优化或设计搜索验证。它与结构循环响应分析直接相关；与智能运维、可靠性的联系仍需通过损伤指标、参数不确定性及失效概率计算建立，不能由应力精度直接推出。</p></section><section><h2>后续研究建议</h2><p>建议：复现时先检查算法1的增量定义，并用数值差分核验附录切线及式(42)，避免将记号疑点带入实现。随后增加未见加载路径测试，分别统计峰值与全过程误差；若服务设计搜索，再比较相近精度下的总成本，并单列训练开销。这些是后续设想，不是作者已验证成果。</p></section><aside class="article-source-note"><h2>原文资料边界</h2><ul><li>参考文献[27]经原页核实，仅列至Computers and Geotechnics 159 (April) (2023)，缺少页码或文章编号，下一条直接为[28]。这是原文书目信息缺项，不是提取遗漏；影响引用定位，不影响本批图18的识读或直接改变数值结论。未补造缺失信息。</li></ul></aside><footer class="article-end"><p>本文依据论文资料整理，研究建议由本站提出。原文、相关文献和图示标注共同说明内容来源。</p></footer></article><dialog class="article-figure-dialog"><form method="dialog"><button type="submit">关闭大图</button></form><img alt="研究思路图放大查看"></dialog>
+      <footer class="site-footer"><p>每日更新，持续关注 AI 与工程可靠性。</p><div><a href="https://tengda-xmu.github.io/">腾达 · 厦门大学</a><a href="https://github.com/tengda-xmu/daily-papers" target="_blank" rel="noopener noreferrer">GitHub</a></div></footer>
+    </main>
+  </div>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <a class="back-to-top" href="#top" aria-label="返回页面顶部" hidden>回到顶部 ↑</a>
+</body>
+</html>

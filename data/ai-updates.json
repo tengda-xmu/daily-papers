@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "checked_at": "2026-10-08T02:53:16.906796+00:00",
+  "checked_at": "2026-10-08T03:53:56.006263+00:00",
   "entries": [
     {
       "title": "Revamping Skills in Deep Agents",
@@ -13,8 +13,8 @@
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/revamping-skills-in-deep-agents",
       "categories": [
@@ -26,7 +26,22 @@
       ],
       "release_state": "unknown",
       "content_version": "d099f150f761aec77866a5acb68b23f529162e437320a424ed53cee5882c3a91",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "Deep Agents 改进 Skills：工具按需加载、运行时固定与线程内重载",
+        "summary": "官方公告介绍 Deep Agents 的三项 Skills 更新：工具可绑定技能，其模式定义在智能体读取对应技能前不进入上下文；对支持会话中途新增工具的模型，添加工具可保持提示缓存完整。应用可在运行时固定技能，使指令在首次模型调用前进入上下文，无需 read_file 往返。技能还可在线程内重载，让长期运行的智能体获取技能增删改，适合持续更新领域知识、准备客户会议及审阅通话记录等任务。",
+        "application": "建议：科研迁移可考虑将文献审阅规范、结构设计检查清单或运维诊断流程组织为技能，探索按需加载工具与长期任务中的知识更新；这些属于迁移设想，并非官方已验证的科研效果。官方公告说明了上下文加载、提示缓存保留和线程内更新能力，但所给节选未提供量化性能或科研任务验证结果。",
+        "requirements": "使用条件见官方文档。原文明示：添加工具时保持提示缓存完整，仅针对支持会话中途新增工具的模型。",
+        "steps": [],
+        "evidence": [
+          "You can now bind tools to skills.",
+          "Tool schemas stay out of context until the agent reads the skill they're bound to, and on models that accept new tools mid-conversation, adding them keeps the prompt cache intact.",
+          "Apps can pin skills at runtime , so the instructions are in context before the first model call, with no read_file round trips.",
+          "Skills can reload mid-thread , so a long-running agent picks up added, edited, or deleted skills without starting a new thread."
+        ],
+        "basis_url": "https://www.langchain.com/blog/revamping-skills-in-deep-agents"
+      },
+      "analyzed_at": "2026-10-08T02:46:33.980309+00:00"
     },
     {
       "title": "Managed Deep Agents v0.9: schedules, per-run configuration, and Slack reactions",
@@ -39,8 +54,8 @@
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/managed-deep-agents-schedules-per-run-configuration-slack",
       "categories": [
@@ -52,7 +67,23 @@
       ],
       "release_state": "unknown",
       "content_version": "4536dd2465c5b9a1f1b336a5821d5e141763486f509f63b63416625114876689",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "Managed Deep Agents v0.9 发布：任务调度、逐次运行配置与 Slack 消息回应",
+        "summary": "官方宣布发布 Managed Deep Agents v0.9，新增三类能力：智能体可在对话中创建提醒、后续跟进和周期任务；同一部署可为每次运行选择模型、技能与工具；在 Slack 中先回应已收到消息，再给出回复。更新面向驻留于 Slack 或自有渠道的内部智能体，适用于提醒、周期性工作及需要按任务调整配置的场景。所给公告片段末尾被截断，未提供完整操作流程或量化效果。",
+        "application": "建议：科研迁移可考虑文献追踪提醒、周期性实验检查，以及按分析任务选择模型和工具。以上属于迁移设想，并非官方已验证的科研效果；所给官方公告仅说明新增能力与内部智能体适用方向，未提供效果验证数据。",
+        "requirements": "原文明示本次发布版本为 Managed Deep Agents v0.9，并提及新增 Schedules SDK；账号、API 接入、费用及部署前置条件未明确，使用条件见官方文档。",
+        "steps": [],
+        "evidence": [
+          "Today we're releasing Managed Deep Agents v0.9, with new capabilities that let agents schedule their own follow-ups, reconfigure themselves on every run, and react to Slack messages.",
+          "Agent-created schedules: agents can set up reminders and recurring tasks from a conversation.",
+          "Per-run configuration: one deployment can pick its model, skills, and tools for each run.",
+          "Slack reactions: agents acknowledge messages before they reply.",
+          "These updates make it easier to build internal agents that live in Slack or your own channels and work more like teammates."
+        ],
+        "basis_url": "https://www.langchain.com/blog/managed-deep-agents-schedules-per-run-configuration-slack"
+      },
+      "analyzed_at": "2026-10-08T02:47:03.137732+00:00"
     },
     {
       "title": "How Jump Trading is scaling quant research with ChatGPT",
@@ -66,7 +97,7 @@
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/jump-trading",
       "categories": [
@@ -90,8 +121,8 @@
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/allenai/astabrief",
       "categories": [
@@ -104,7 +135,23 @@
       ],
       "release_state": "unknown",
       "content_version": "e3233a14440a561164da846efd4edb2e70fa1456a805f91b86e92a1dbeca1ac1",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "开源 AstaBrief：Asta 中的快速报告生成模型",
+        "summary": "【公告原文】公告标题宣布开源 AstaBrief，将其定位为 Asta 中的快速报告生成模型。所给片段介绍了科研场景的需求：辅助文献检索、证据综合及复杂问题分析，同时保持回答有据可查，不扩大研究结论，并允许研究者核验输出。Asta 用户常携带较多背景和约束，提出跨文献比较方法等任务。片段未提供开源范围、模型规格、速度测试或部署方法，不能据此认定这些需求均已由 AstaBrief 验证满足。",
+        "application": "建议：【科研迁移建议】可将文献比较、结构设计证据整理及可靠性研究综述作为后续评估方向，重点检查引文可核验性和结论边界。【官方已验证效果】所给片段未展示 AstaBrief 的实验结果或量化效果；“快速”是标题中的定位，不代表已提供速度验证。",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "Open-sourcing AstaBrief, the fast report-generation model in Asta",
+          "Language models can already help researchers search the literature, synthesize evidence, and work through complex questions.",
+          "answers need to stay grounded in evidence",
+          "the models need to preserve what the evidence actually supports rather than quietly broadening a study’s conclusions",
+          "researchers need to be able to verify the final outputs."
+        ],
+        "basis_url": "https://huggingface.co/blog/allenai/astabrief"
+      },
+      "analyzed_at": "2026-10-08T02:47:31.766408+00:00"
     },
     {
       "title": "Introducing Olmo-core 3: Open, scalable training infrastructure for large MoEs",
@@ -197,7 +244,7 @@
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/introducing-gpt-6-1-sol",
       "categories": [
@@ -222,8 +269,8 @@
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/Hcompany/holo4",
       "categories": [
@@ -311,7 +358,21 @@
       ],
       "release_state": "unknown",
       "content_version": "a35a0989106da73664877b1826b29d95dd9703bf4296e543f937d3c3f135e83a",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "Falcon-Emirati：当大语言模型学习方言、文化与细微含义",
+        "summary": "所给官方文章片段以 Falcon-Emirati 为主题，关注阿联酋阿拉伯语的方言、文化与细微含义。原文强调，现代标准阿拉伯语常见于新闻和教材，而阿联酋日常交谈、幽默、协商与讲故事使用具有独特词汇、节奏及文化背景的本地方言。这为本地化对话与文化语境理解提供了任务背景。但资料在开篇即截断，未披露模型具体更新、训练方法或评测结果，不能据此确认其相较既有模型的改进与已验证能力。",
+        "application": "建议：科研迁移可考虑构建阿联酋方言对话、幽默理解及文化语境评测任务；这是基于原文背景的研究设想，不是作者已验证结论。所给片段未提供官方效果验证，不能据此声称模型已改善上述任务表现。",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "Falcon-Emirati: When an LLM Learns the Dialect, the Culture, and the Nuance",
+          "Modern Standard Arabic is what you read in the news or a textbook, but it's rarely how people actually talk to each other.",
+          "In the UAE, day-to-day conversation, humor, negotiation, and storytelling happen in Emirati Arabic, a Gulf dialect with its own vocabulary, its own rhythm, and a culture wrapped tightly around it."
+        ],
+        "basis_url": "https://huggingface.co/blog/tiiuae/falcon-emirati"
+      },
+      "analyzed_at": "2026-10-08T02:47:57.570586+00:00"
     },
     {
       "title": "How to Build a Model Router in the Harness",
@@ -445,8 +506,8 @@
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/langsmith-engine-v2-redteam",
       "categories": [
@@ -484,8 +545,8 @@
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/langsmith-trajectories-tracing",
       "categories": [
@@ -527,8 +588,8 @@
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
       "provider": "official",
-      "checked_at": "2026-09-25T14:17:32.475235+00:00",
-      "verified_at": "2026-09-25T14:17:32.475235+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/langsmith-fine-tuning",
       "categories": [
@@ -705,7 +766,7 @@
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/better-prompt-caching-for-gpt-6",
       "categories": [
@@ -742,7 +803,7 @@
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/introducing-gpt-6-sol-and-luna",
       "categories": [
@@ -779,7 +840,7 @@
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/parallel-cuts-time-and-cost-with-astra",
       "categories": [
@@ -915,14 +976,14 @@
       "url": "https://huggingface.co/blog/nvidia/nemotron-ioi-and-imo-2026",
       "published_at": "2026-09-17T02:05:27+00:00",
       "summary": "The International Olympiad in Informatics (IOI) and the International Mathematical Olympiad (IMO) test different skills. IOI requires algorithms and code that pass hidden tests under strict time and submission limits. IM",
-      "evidence_text": "Back to Articles One Model Family, Two Gold-Level Results: Fine-Tuning Nemotron for IOI and IMO Enterprise + Article Published October 7, 2026 Upvote 9 +3 Aleksander aficek Follow nvidia Igor Gitman igitman Follow nvidia Sean Narenthiran SeanNaren Follow nvidia Mehrzad Samadi mehrzads Follow nvidia Somshubra Majumdar smajumdar94 Follow nvidia The International Olympiad in Informatics (IOI) and the International Mathematical Olympiad (IMO) test different skills. IOI requires algorithms and code that pass hidden tests under strict time and submission limits. IMO demands rigorous natural-language proofs. Success at either competition is difficult. Success at both points to something broader. Our recent results show that Nemotron is a strong, adaptable foundation for building world-class specialist models. Starting from Nemotron 3, our teams used supervised fine-tuning (SFT), reinforcement l",
+      "evidence_text": "Back to Articles One Model Family, Two Gold-Level Results: Fine-Tuning Nemotron for IOI and IMO Enterprise + Article Published October 7, 2026 Upvote 10 +4 Aleksander aficek Follow nvidia Igor Gitman igitman Follow nvidia Sean Narenthiran SeanNaren Follow nvidia Mehrzad Samadi mehrzads Follow nvidia Somshubra Majumdar smajumdar94 Follow nvidia The International Olympiad in Informatics (IOI) and the International Mathematical Olympiad (IMO) test different skills. IOI requires algorithms and code that pass hidden tests under strict time and submission limits. IMO demands rigorous natural-language proofs. Success at either competition is difficult. Success at both points to something broader. Our recent results show that Nemotron is a strong, adaptable foundation for building world-class specialist models. Starting from Nemotron 3, our teams used supervised fine-tuning (SFT), reinforcement ",
       "id": "public-67f5f61696a2949df2730f40",
       "source_id": "huggingface",
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/nvidia/nemotron-ioi-and-imo-2026",
       "categories": [
@@ -933,7 +994,7 @@
         "coding"
       ],
       "release_state": "unknown",
-      "content_version": "f50d2f0204f4600a694beaa2c5e194a69db6e46fa1a671afd316dd887fcec4fc",
+      "content_version": "bc5a68bc7da502396b7512e105d21471d2a70bf288978455b3bbb3dc719b95ff",
       "analysis_status": "pending"
     },
     {
@@ -948,7 +1009,7 @@
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/astra-for-law",
       "categories": [
@@ -1132,7 +1193,7 @@
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/using-codex-chatgpt-to-search-for-new-antimicrobials",
       "categories": [
@@ -1227,8 +1288,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-09-10",
       "release_state": "released",
@@ -1285,8 +1346,8 @@
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/microsoft/thinkingbox",
       "categories": [
@@ -1298,7 +1359,21 @@
       ],
       "release_state": "released",
       "content_version": "0a13803adf2ae536ee417616a6773d8c2af427902f31437d5d2f8c43f89f57c5",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "ThinkingBox：智能体说已完成，数据库记录是否一致？",
+        "summary": "微软与 Hugging Face 的联合博客宣布，ThinkingBox 现已通过 Hugging Face 提供。它不依据智能体生成的表述评分，而是让智能体在隔离的 MCP 工具会话中运行，检查最终后端状态及其副作用，并考察能否连续二十次完成任务。适用方向是工具调用型智能体的执行结果与重复可靠性评估。所给资料仅为开头节选，未提供具体实验结果或接入方法。",
+        "application": "建议：科研迁移可考虑在智能运维智能体评估中核对工单、数据库等实际状态，并开展重复试验，而非仅判断回复是否声称完成。这属于迁移设想；原文介绍了官方评估机制，但所给节选没有展示已验证的性能提升或运维应用效果。",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "ThinkingBox grades AI agents on the records they leave behind, not the sentences they generate, and then asks whether they can do it twenty times in a row.",
+          "It is now available through Hugging Face.",
+          "Figure 1: ThinkingBox runs an agent against isolated MCP tool sessions, then grades the terminal backend state and side effects it leaves behind."
+        ],
+        "basis_url": "https://huggingface.co/blog/microsoft/thinkingbox"
+      },
+      "analyzed_at": "2026-10-08T02:48:58.082470+00:00"
     },
     {
       "categories": [
@@ -1319,8 +1394,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-08-21",
       "release_state": "preview",
@@ -1355,8 +1430,8 @@
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/ServiceNow-AI/autosynthdata",
       "categories": [
@@ -1369,7 +1444,22 @@
       ],
       "release_state": "unknown",
       "content_version": "4bb7ffe5eef4ea1b38e5939dd6274c3aad17ee77dac30f591e24f73ada94dd34",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "AutoSynthData：为企业智能体生成训练数据",
+        "summary": "这篇官方文章以 AutoSynthData 为主题，讨论如何把企业智能体在特定环境中的弱点转化为训练数据。原文指出，通用能力较强的模型仍可能处理不好某类工作流、误用工具组合或违反约束；企业系统、业务规则和数据状态共同决定实际任务需求。适用方向是面向企业环境的智能体训练与薄弱环节改进。但所给内容仅为开头截断片段，未披露具体生成方法、产品变化、发布状态或验证结果，不能据此认定相关能力已上线。",
+        "application": "建议：科研迁移可考虑将智能运维中的工作流失败、工具误用和约束违规分类，作为训练数据需求分析的起点；这属于基于资料的研究设想，并非官方已验证效果。所给原文仅说明问题与动机，未提供 AutoSynthData 的实验结果或效果指标。",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "AutoSynthData: Generating Training Data for Enterprise Agents",
+          "The work they ask these agents to do is shaped by the systems they use, the rules they follow, and the state of their data.",
+          "A model may be broadly capable and still struggle with a particular environment: a workflow it handles poorly, a combination of tools it misuses, or a constraint it fails to respect.",
+          "The difficulty is turning those weaknesses into training data."
+        ],
+        "basis_url": "https://huggingface.co/blog/ServiceNow-AI/autosynthdata"
+      },
+      "analyzed_at": "2026-10-08T02:49:27.556498+00:00"
     },
     {
       "categories": [
@@ -1390,8 +1480,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-08-13",
       "release_state": "unknown",
@@ -1434,8 +1524,8 @@
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/own-your-intelligence",
       "categories": [
@@ -1483,8 +1573,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-07-31",
       "release_state": "unknown",
@@ -1517,14 +1607,14 @@
       "url": "https://huggingface.co/blog/LiquidAI/open-d1",
       "published_at": "2026-07-28T13:37:05+00:00",
       "summary": "Today, we release two open decision models in our d1 decision model family : d1-3B and d1-omni-600M (experimental).",
-      "evidence_text": "Back to Articles Multimodal open d1 decision models for the edge Team Article Published October 7, 2026 Upvote 17 +11 Aurelien Lac Aurelien-Lac Follow LiquidAI Fernando Fernandes Neto fernandofernandes Follow LiquidAI Edoardo Mosca EdoardoMosca Follow LiquidAI Maxime Labonne mlabonne Follow LiquidAI Leonie Monigatti iamleonie Follow LiquidAI Today, we release two open decision models in our d1 decision model family : d1-3B and d1-omni-600M (experimental). Best decision model under 10B on the Decision Index 0.2.1: d1-3B scores 48.57, ahead of every 4B and 9B model and of Decider 35B-A3B (47.11). Multimodal: d1-3B supports text and images, while d1-omni-600M supports text and images or text and audio Fast: d1-3B answers a question in 16 ms on an NVIDIA Jetson AGX Thor, 26 ms on a Jetson AGX Orin, and 50ms on a Jetson Orin Nano How we built decision models for the edge These open d1 decisio",
+      "evidence_text": "Back to Articles Multimodal open d1 decision models for the edge Team Article Published October 7, 2026 Upvote 18 +12 Aurelien Lac Aurelien-Lac Follow LiquidAI Fernando Fernandes Neto fernandofernandes Follow LiquidAI Edoardo Mosca EdoardoMosca Follow LiquidAI Maxime Labonne mlabonne Follow LiquidAI Leonie Monigatti iamleonie Follow LiquidAI Today, we release two open decision models in our d1 decision model family : d1-3B and d1-omni-600M (experimental). Best decision model under 10B on the Decision Index 0.2.1: d1-3B scores 48.57, ahead of every 4B and 9B model and of Decider 35B-A3B (47.11). Multimodal: d1-3B supports text and images, while d1-omni-600M supports text and images or text and audio Fast: d1-3B answers a question in 16 ms on an NVIDIA Jetson AGX Thor, 26 ms on a Jetson AGX Orin, and 50ms on a Jetson Orin Nano How we built decision models for the edge These open d1 decisio",
       "id": "public-88e871d5a8d26738db20168d",
       "source_id": "huggingface",
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/LiquidAI/open-d1",
       "categories": [
@@ -1534,7 +1624,7 @@
         "general"
       ],
       "release_state": "unknown",
-      "content_version": "7adba238501a756e383f0d2ce69c1ad0781d92c2e2fd45f4a1a073a24c6001e2",
+      "content_version": "b3c0fe3ef3b9a73662b66e6efd89dd97e9fcee994dc02c61eb2287d36bb52b21",
       "analysis_status": "pending"
     },
     {
@@ -1589,8 +1679,8 @@
       "source": "Anthropic 工程进展",
       "organization": "Anthropic 工程进展",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://www.anthropic.com/engineering/how-we-contain-claude",
       "categories": [
@@ -1641,8 +1731,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-04-24",
       "release_state": "unknown",
@@ -1680,8 +1770,8 @@
       "source": "Anthropic 工程进展",
       "organization": "Anthropic 工程进展",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://www.anthropic.com/engineering/april-23-postmortem",
       "categories": [
@@ -1722,8 +1812,8 @@
       "source": "Anthropic 工程进展",
       "organization": "Anthropic 工程进展",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://www.anthropic.com/engineering/managed-agents",
       "categories": [
@@ -1766,8 +1856,8 @@
       "source": "Anthropic 工程进展",
       "organization": "Anthropic 工程进展",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://www.anthropic.com/engineering/claude-code-auto-mode",
       "categories": [
@@ -1808,8 +1898,8 @@
       "source": "Anthropic 工程进展",
       "organization": "Anthropic 工程进展",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://www.anthropic.com/engineering/harness-design-long-running-apps",
       "categories": [
@@ -1852,8 +1942,8 @@
       "source": "Anthropic 工程进展",
       "organization": "Anthropic 工程进展",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://www.anthropic.com/engineering/eval-awareness-browsecomp",
       "categories": [
@@ -1937,8 +2027,8 @@
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/open-tts-leaderboard",
       "categories": [
@@ -1986,8 +2076,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2025-12-01",
       "release_state": "unknown",
@@ -2021,8 +2111,8 @@
       "source": "Google DeepMind",
       "organization": "Google DeepMind",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://deepmind.google/blog/sima-2-an-agent-that-plays-reasons-and-learns-with-you-in-virtual-3d-worlds/",
       "categories": [
@@ -2054,8 +2144,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2025-09-29",
       "release_state": "preview",
@@ -2095,8 +2185,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2025-09-22",
       "release_state": "unknown",
@@ -2130,8 +2220,8 @@
       "source": "Google DeepMind",
       "organization": "Google DeepMind",
       "provider": "official",
-      "checked_at": "2026-10-07T20:00:28.402660+00:00",
-      "verified_at": "2026-10-07T20:00:28.402660+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://deepmind.google/blog/alphaearth-foundations-helps-map-our-planet-in-unprecedented-detail/",
       "categories": [
@@ -2181,8 +2271,8 @@
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.26",
       "content_version": "2c301ad979bec74794359b1f3b91dd982ae0df5ac8eb3a23d4bb5ffee7850cf0",
@@ -2209,8 +2299,8 @@
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.25",
       "content_version": "3d1b4928b8c3335cb7d414163225c3bf46b6f383659b1bf193dd905d5d04e715",
@@ -2237,8 +2327,8 @@
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.24",
       "content_version": "054f5267296d2b7dcbde36c1419fec06b39b29393c62b8f3ccf34a84245984fb",
@@ -2280,8 +2370,8 @@
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.23",
       "content_version": "a52b6679b34bf97717ff70c47bc0a03c31a22ff7096585e0caf7ee4f987c2fc1",
@@ -2298,8 +2388,8 @@
       "source": "Google DeepMind",
       "organization": "Google DeepMind",
       "provider": "official",
-      "checked_at": "2026-10-07T20:00:28.402660+00:00",
-      "verified_at": "2026-10-07T20:00:28.402660+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/",
       "categories": [
@@ -2353,8 +2443,8 @@
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.22",
       "content_version": "5df7dcf5518ab4068163005fa68fa290f9f3e940e03bc11fe306bad11e64f09c",
@@ -2393,8 +2483,8 @@
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.21",
       "content_version": "88406150221dc889d29c34e2ddf741e6292582b128ecb3997b4e46acba200406",
@@ -2411,8 +2501,8 @@
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
       "provider": "official",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "verified_at": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "verified_at": "2026-10-08T03:53:56.006263+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/MultiverseComputingCAI/getting-the-source-right-not-just-the-fact-source",
       "categories": [
@@ -2447,8 +2537,8 @@
       "id": "openai",
       "name": "OpenAI 官方发布",
       "url": "https://openai.com/news/rss.xml",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "last_success": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "last_success": "2026-10-08T03:53:56.006263+00:00",
       "status": "ok",
       "count": 12
     },
@@ -2456,8 +2546,8 @@
       "id": "anthropic",
       "name": "Anthropic 工程进展",
       "url": "https://www.anthropic.com/engineering",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "last_success": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "last_success": "2026-10-08T03:53:56.006263+00:00",
       "status": "ok",
       "count": 6
     },
@@ -2465,17 +2555,17 @@
       "id": "deepmind",
       "name": "Google DeepMind",
       "url": "https://deepmind.google/blog/",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "last_success": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "last_success": "2026-10-08T03:53:56.006263+00:00",
       "status": "ok",
-      "count": 6
+      "count": 5
     },
     {
       "id": "qwen",
       "name": "Qwen 官方发布",
       "url": "https://qwen.ai/blog",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "last_success": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "last_success": "2026-10-08T03:53:56.006263+00:00",
       "status": "no_data",
       "count": 0
     },
@@ -2483,8 +2573,8 @@
       "id": "qwen-agent",
       "name": "Qwen-Agent 版本发布",
       "url": "https://github.com/QwenLM/Qwen-Agent/releases.atom",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "last_success": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "last_success": "2026-10-08T03:53:56.006263+00:00",
       "status": "ok",
       "count": 6
     },
@@ -2492,8 +2582,8 @@
       "id": "deepseek",
       "name": "DeepSeek 更新日志",
       "url": "https://api-docs.deepseek.com/updates/",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "last_success": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "last_success": "2026-10-08T03:53:56.006263+00:00",
       "status": "ok",
       "count": 8
     },
@@ -2501,8 +2591,8 @@
       "id": "huggingface",
       "name": "Hugging Face 官方博客",
       "url": "https://huggingface.co/blog/feed.xml",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "last_success": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "last_success": "2026-10-08T03:53:56.006263+00:00",
       "status": "ok",
       "count": 8
     },
@@ -2510,8 +2600,8 @@
       "id": "langchain",
       "name": "LangChain 官方发布",
       "url": "https://www.langchain.com/blog",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "last_success": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "last_success": "2026-10-08T03:53:56.006263+00:00",
       "status": "ok",
       "count": 6
     },
@@ -2519,8 +2609,8 @@
       "id": "agent-skills",
       "name": "Agent Skills 规范版本",
       "url": "https://github.com/agentskills/agentskills/releases.atom",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "last_success": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "last_success": "2026-10-08T03:53:56.006263+00:00",
       "status": "no_data",
       "count": 0
     },
@@ -2528,8 +2618,8 @@
       "id": "anthropic-skills",
       "name": "Anthropic Skills 版本",
       "url": "https://github.com/anthropics/skills/releases.atom",
-      "checked_at": "2026-10-08T02:53:16.906796+00:00",
-      "last_success": "2026-10-08T02:53:16.906796+00:00",
+      "checked_at": "2026-10-08T03:53:56.006263+00:00",
+      "last_success": "2026-10-08T03:53:56.006263+00:00",
       "status": "no_data",
       "count": 0
     },
@@ -2540,7 +2630,7 @@
       "status": "partial",
       "count": 11,
       "message": "公开索引已接入：读取 11 条文章元数据，本期 11 条。 微信后台文章列表受限；已通过公开搜索获取线索，链接为检索入口，非已核验全文。 最近同步：10-05 20:35（北京时间）。 公开索引快照超过 24 小时，将尝试刷新。 公开查询完成 3/3 项（复用缓存 0 项）。 最近检查：10-06 20:35（北京时间）。",
-      "checked_at": "2026-10-08T02:53:16.776244+00:00",
+      "checked_at": "2026-10-08T03:53:55.931117+00:00",
       "last_success": "2026-10-07T07:40:59.233364+00:00"
     },
     {
@@ -2550,14 +2640,14 @@
       "status": "no_data",
       "count": 0,
       "message": "公开索引已接入：本期读取 0 条公众号文章线索，按 35 个订阅筛选。 微信后台文章列表受限；线索提供公开检索入口，非已核验全文。 公开查询完成 3/3 项（复用缓存 3 项）。",
-      "checked_at": "2026-10-08T02:53:16.776244+00:00",
+      "checked_at": "2026-10-08T03:53:55.931117+00:00",
       "last_success": "2026-10-07T07:40:59.233364+00:00"
     },
     {
       "id": "xiaohongshu-leads",
       "name": "小红书 · 科研线索",
       "url": "https://www.xiaohongshu.com/",
-      "checked_at": "2026-10-08T02:53:16.776244+00:00",
+      "checked_at": "2026-10-08T03:53:55.931117+00:00",
       "last_success": "2026-10-07T19:13:25.669003+00:00",
       "cached": true,
       "status": "no_data",
@@ -2567,7 +2657,7 @@
       "id": "xiaohongshu-ai",
       "name": "小红书 · AI 前沿",
       "url": "https://www.xiaohongshu.com/",
-      "checked_at": "2026-10-08T02:53:16.776244+00:00",
+      "checked_at": "2026-10-08T03:53:55.931117+00:00",
       "last_success": "2026-10-07T19:13:25.669003+00:00",
       "cached": true,
       "status": "no_data",

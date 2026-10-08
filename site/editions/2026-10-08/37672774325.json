@@ -1190,7 +1190,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Designing impact-resistant responses in heterogeneous multi-material metamaterials remains challenging because the discrete material-layout space is high-dimensional and non-intuitive, particularly when specific energy absorption (SEA) must be increased without amplifying the peak impact force in applications such as unmanned aerial vehicle (UAV) airdrop. Despite recent advances in inverse design, data-driven optimization of impact response remains constrained by the scarcity of high-fidelity datasets that jointly represent dynamic loading and material failure. This study develops a machine-le…",
+      "summary": "本文聚焦异质多材料超材料中提高比吸能且不增大冲击峰值力的设计难题。作者建立考虑断裂的有限元数据集，以Transformer预测材料布局对应的响应，再结合NSGA-II搜索多目标优选布局。摘要报告，比吸能最高提高58%、峰值力降低47.4%，并通过压缩与落锤试验验证预测改进；无人机空投进一步展示冲击后稳定性优势。当前仅有摘要，无法核查数据规模、对比条件及统计稳健性。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7213414005",
@@ -1236,11 +1236,43 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议作为生成式设计方向下的代理模型辅助逆向优化案例重点阅读，尤其关注失效建模、离散材料布局与多目标优化的衔接；但摘要未表明采用生成模型，不宜直接归为生成模型研究。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是在高维离散材料布局空间中，同时提升比吸能并控制冲击峰值力，服务于无人机空投等场景。摘要指出布局空间“high-dimensional and non-intuitive”，且兼顾动态载荷与材料失效的高保真数据稀缺，构成逆向优化的关键障碍。[摘要]",
+        "method": "作者以准静态压缩和动态冲击有限元计算构建数据集，用延性损伤模型描述聚乳酸失效；Transformer学习逐胞元PLA/TPU布局到应力—应变响应及冲击峰值力的映射，再与NSGA-II耦合搜索帕累托最优布局。摘要称其数据集为“fracture-aware”。[摘要]",
+        "innovation": "解读：值得关注的是将失效感知数据、非周期多材料布局代理预测及多目标搜索连成设计流程，而非仅预测单一性能。摘要明确对象为“non-periodic heterogeneous multi-material metamaterials”，但未提供文献对照，不能据此认定首创或算法本身具有新颖性。[摘要]",
+        "findings": "摘要报告可比设计中比吸能“up to 58% higher SEA”、峰值力降低47.4%，且预测改进经压缩和落锤试验验证。空投中优化结构的载荷加速度峰值与纯TPU相当，同时避免了柔性单材料箱明显的反弹和倾覆；摘要未明确两项百分比是否对应同一布局。[摘要]",
+        "limitations": "当前仅有摘要，未给出训练样本量、数据划分、代理误差、损伤参数标定和试验重复次数，也未展开“Across comparable designs”的具体比较条件。这些是现有资料的核查缺口，并非已证实的论文缺陷；尚不能判断结果对不同速度、尺度或制造偏差是否稳健。[摘要]",
+        "connection": "解读：材料空间分布作为设计变量，使本文与结构设计直接相关；“post-impact stability”也提示可靠性评价不应只看吸能指标，还应关注冲击后的功能状态。不过，摘要未涉及失效概率、寿命预测或在线监测，因此与智能运维的联系主要是潜在方法迁移。[摘要]",
+        "next_steps": "建议：取得全文后先核查帕累托解的基准、约束及试验对应关系，再检查代理模型在未见布局上的误差。若迁移至可靠性设计，可研究制造公差、冲击方向与材料参数不确定性下的性能分布，检验优势是否保持；这些属于后续研究设想，并非作者已报告的成果。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "机器学习驱动的异质抗冲击超材料逆向设计",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.ijmecsci.2026.112110"
+      ],
+      "analyzed_at": "2026-10-08T03:08:47.030340+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "3db9b7ab46a743b58a19d84feb47458efdcab6871e27f919d7f27bd33a32bb59",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "925093e117c0",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-08T03:08:47.040651+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -1261,7 +1293,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "A digital twin (DT) is a virtual model of a real-world system that can assist decision-making by simulating scenarios induced by different policies. However, typical machine learning-based DTs do not optimise for this use case. We prove that, when model capacity is limited, training DTs to minimise one-step transition errors can produce suboptimal models for ranking sets of policies according to a reward function. We further show that this holds empirically, even with expressive model classes. To address this, we introduce DT$^2$, a decision-targeted DT training paradigm. Firstly, DT$^2$ uses…",
+      "summary": "数字孪生的预测更准，是否意味着决策更好？本文摘要指出，最小化单步转移误差可能无法得到最优的策略排序模型。作者提出DT²：先通过拟合Q评估从离线数据估计候选策略价值，再训练孪生模型，使模拟轨迹保留这些价值所确定的策略两两排序。摘要报告，该方法改善了训练策略及未见策略的排序表现，并降低策略选择的决策遗憾，同时保持较好的仿真保真度。[摘要]本次仅作摘要级解读，无法核验具体实验设置与改善幅度。",
       "raw_metadata": {
         "conference": {
           "id": "icml",
@@ -1318,11 +1350,43 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议重点阅读其将数字孪生训练目标由单步预测准确性转向策略排序的思路，可为智能运维中的维护策略选择提供方法启发；但摘要未提供运维场景验证，不宜直接认定工程适用性。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是数字孪生的训练目标与决策用途是否一致。摘要指出，有限模型容量下，最小化“one-step transition errors”可能无法最优地按奖励函数排列候选策略；作者还报告，在表达能力较强的模型中也观察到这一现象。[摘要]",
+        "method": "方法分为两步：先用“fitted Q-evaluation”（拟合Q评估）从离线数据估计候选策略价值，作为代理真值；再以不依赖特定架构的损失训练数字孪生，使其生成的模拟轨迹保留策略两两排序。摘要未给出损失公式及具体训练细节。[摘要]",
+        "innovation": "解读：本文值得关注的是把决策相关的策略相对优劣直接纳入孪生训练，而非仅追求状态预测准确。摘要用“preserve pairwise policy rankings”描述这一目标，并强调损失不依赖特定架构；但仅凭摘要无法判断其相较既有方法的独创程度。[摘要]",
+        "findings": "摘要报告，DT²相较常规训练能“improves policy ranking and reduces decision regret”，效果覆盖训练时使用及未见的策略，并保持较好的原始仿真保真度。这些属于作者报告的定性结果；当前没有数值、误差范围或实验表格可核对。[摘要]",
+        "limitations": "当前资料仅有摘要，缺少数据来源、策略构造、基线实现、奖励定义及统计检验，无法评估收益大小和稳定性。解读：价值估计被称为“proxy ground-truth values”，提示排序监督并非真实价值本身；估计误差如何影响训练仍需全文核实。[摘要]",
+        "connection": "解读：与智能运维的联系在于，维护决策往往需要比较候选策略，而不只是重现系统状态。本文针对“ranking sets of policies”的目标可作为方法参考；但摘要没有设备退化、结构设计或可靠性案例，因此不能据此声称它已改善工程系统可靠性。[摘要]",
+        "next_steps": "建议：后续先核查全文中的理论假设、离线数据覆盖和未见策略评估方式，再考虑迁移到维护策略比较。可分别检验价值估计偏差、策略排序与仿真保真度，避免将排序改善直接等同于可靠性提升。以上是研究建议，并非作者已完成的实验或结论。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "DT²：面向决策目标的数字孪生",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://proceedings.mlr.press/v306/amad26a.html"
+      ],
+      "analyzed_at": "2026-10-08T03:10:14.503375+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "1801b3252fe14bee16538a4583692c1a653945b20038ae07afa62742f03933eb",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "b8d36ac1dcaf",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-08T03:10:14.519482+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -1345,7 +1409,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "Reducing unsprung mass in high-performance braking systems is critical for vehicle dynamics, but applying topology optimization (TO) to conventional solid discs under combined thermo-mechanical loading often causes “thermal entrapment” and structural failure. This study addresses this limitation by proposing a floating disc architecture and a two-stage computational framework. First, TO via the SIMP algorithm was applied to the Aluminum 7075-T6 inner carrier strictly under mechanical loads, decoupling artificial thermal stresses and yielding a fixed, optimized geometry. Results show the TO ach…",
+      "summary": "该研究针对制动盘轻量化中的热—机械耦合优化难题，提出浮动盘架构及两阶段计算框架：先对内支架进行纯机械载荷拓扑优化，再针对固定优化几何建立热—机械响应代理模型。摘要报告内支架减重“53%”，应力与温度场预测达到R2≈0.9998，并开展疲劳分析。[摘要] 解读：其阅读价值在于连接结构优化与快速性能评估；当前仅有摘要，尚不能核实预测泛化能力、计算加速幅度或实物验证情况。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7213891802",
@@ -1455,22 +1519,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "推荐结构轻量化与疲劳可靠性研究者重点关注其分阶段优化和代理建模流程；对智能运维的价值主要是方法迁移启发，摘要未展示在线监测应用。[摘要]",
+      "deep_read": {
+        "problem": "研究关注高性能制动系统的簧下质量降低。摘要指出，传统实心盘在热—机械联合载荷下进行拓扑优化，可能出现“thermal entrapment”及结构失效。[摘要] 解读：问题不仅是材料如何去除，还包括优化对象和载荷设置能否适应实际制动中的热—机械作用。",
+        "method": "作者先用SIMP算法对7075-T6铝合金内支架实施纯机械载荷拓扑优化，再为固定几何建立非线性热—机械响应代理模型。训练采用拉丁超立方采样，覆盖“15 design scenarios”，并使用Genetic Aggregation算法；摘要未展开参数与训练细节。[摘要]",
+        "innovation": "摘要提出浮动盘架构与“two-stage computational framework”，将机械减重设计和热—机械快速预测分阶段组织。[摘要] 解读：值得关注的是架构选择与计算流程的组合，而非将所用算法本身视为新算法；现有资料不足以认定其首创性或相对既有方法的优势。",
+        "findings": "摘要报告内支架质量从0.218 kg降至0.102 kg，减重53%，预测精度为“R2≈0.9998”。疲劳分析给出安全系数1.65，循环数原文写为“106”，此处不擅自改成指数形式。上述减重仅对应内支架，不能推广为整个制动盘的减重比例。[摘要]",
+        "limitations": "当前摘要未说明独立测试集、参数范围、极限制动场景判据或实物验证，因此不足以评估模型外推能力与疲劳结论的工程适用范围。[摘要] 解读：这些属于资料层面的证据缺口，并非已确认的研究缺陷；“106”的循环数排版也有待原文进一步核对。",
+        "connection": "结构设计方面，本文提供构件拓扑优化与性能预测的衔接案例；可靠性方面，摘要包含“Fatigue analysis”。[摘要] 解读：快速响应预测可能用于运维工况筛查，但摘要未提供传感数据融合、在线校准或故障诊断证据，作者所称数字孪生不能直接等同于完整运维系统。",
+        "next_steps": "建议后续核对优化载荷与服役校核工况的对应关系、采样空间及独立验证方式，并追踪疲劳分析所用载荷谱和材料依据。若迁移到可靠性研究，建议考察参数不确定性与代理误差对安全裕度的影响；这些是针对摘要证据缺口提出的研究建议，不是作者已完成的结果。[摘要]"
+      },
       "recommended_direction": "fatigue_reliability",
       "reading_status": {
         "paper_id": "c05baf48e37d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-30T09:26:35.695858+00:00",
+        "updated_at": "2026-10-08T03:11:48.235212+00:00",
         "basis": "abstract",
-        "reason": "not_found",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "制动盘内支架拓扑优化与机器学习参数化预测模型开发",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.3390/dynamics6030040"
+      ],
+      "analyzed_at": "2026-10-08T03:11:48.225013+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "c36ba57f4e7e7166f2ca48fecb435a7ade3992d8a961159671eef8175b32bf0b",
+      "analysis_issues": []
     },
     {
       "source": "Crossref",
@@ -1535,7 +1620,20 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "565888b08f8a",
+        "state": "missing_evidence",
+        "updated_at": "2026-10-08T03:12:42.064526+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "extended": [
@@ -1665,8 +1763,10 @@
       "reading_status": {
         "paper_id": "8a095e50b332",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-30T09:26:46.978893+00:00",
+        "updated_at": "2026-10-08T03:12:52.778545+00:00",
         "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -1856,8 +1956,10 @@
       "reading_status": {
         "paper_id": "de48174471ad",
         "state": "missing_evidence",
-        "updated_at": "2026-09-30T13:14:41.434982+00:00",
+        "updated_at": "2026-10-08T03:13:27.024448+00:00",
         "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -1888,7 +1990,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "We introduce SeisMark, a large-scale open benchmark designed to bridge the gap between verifiable ground truth and realistic texture in 3D seismic fault detection. Using a novel pipeline merging procedural geology with diffusion-based synthesis, we produce domain-realistic (survey-specific) textured volumes that expose significant brittleness in existing models masked by simplified physics data. Experiments demonstrate that SeisMark acts as a rigorous discriminator, distinguishing robust modern architecture from legacy model that suffers performance collapse under realistic domain shifts. We r…",
+      "summary": "本文关注三维地震断层检测中可验证真值与真实纹理难以兼顾的问题，提出开放基准SeisMark。摘要称，其将程序化地质建模与扩散式合成结合，生成具有勘测域特定纹理的三维体数据，并揭示简化物理数据掩盖的模型脆弱性。实验概述指出，该基准能够区分不同架构在真实域偏移下的稳健性，但未提供模型名称、指标或量化结果。[摘要] 解读：其价值主要在于部署前的稳健性评测，而非直接解决设备智能运维任务。",
       "raw_metadata": {
         "conference": {
           "id": "icml",
@@ -1945,11 +2047,43 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为域偏移评测与安全关键人工智能验证的交叉参考阅读，而非智能运维核心文献。摘要明确提出数据生成方法及模型区分结果，但重点推荐仍需核对全文实验与基准开放情况。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是如何在三维地震断层检测中兼顾可核验标注与逼真数据纹理。摘要以“verifiable ground truth and realistic texture”概括这一缺口，并指出简化物理数据可能掩盖现有模型的脆弱性。[摘要] 解读：评测数据的真实性会影响对模型部署能力的判断。",
+        "method": "作者将程序化地质建模与基于扩散的合成结合，构建具有特定勘测域纹理的三维体数据；原文称“merging procedural geology with diffusion-based synthesis”。[摘要] 当前未说明生成流程、条件输入、真值保存机制和质量检查，尚不能据此复现。",
+        "innovation": "摘要将合成流程称为“novel pipeline”，并强调开放基准连接可验证真值与真实纹理。[摘要] 解读：可关注的创新定位是同时服务标注可信度与域真实性的基准构建，而非仅更换检测模型；但缺少既有工作对比，无法独立确认其首创性及技术增量。",
+        "findings": "摘要报告，SeisMark能够区分稳健的现代架构与在真实域偏移下出现“performance collapse”的旧式模型。[摘要] 这一发现支持关注传统测试可能遗漏的失效情形，但未列出架构名称、性能降幅、重复实验或统计证据，不能推及所有新旧架构。",
+        "limitations": "当前可确认的是摘要披露范围的不足，而非论文已经证实的方法缺陷：虽称“large-scale open benchmark”，却未提供数据规模、来源范围、评价指标及真实勘测验证细节。[摘要] 因而尚不能判断合成纹理覆盖程度、标注可信度或部署适用边界。",
+        "connection": "解读：该工作与智能运维的联系在于域偏移下的检测可靠性评估，而非设备状态监测或维修决策。摘要面向“safety-critical subsurface applications”。[摘要] 对结构设计也仅有间接启发：可借鉴其可验证数据与真实扰动结合的评测思路，不能直接迁移地质结论。",
+        "next_steps": "建议：后续阅读全文时，优先核对数据与代码是否开放、真值如何验证、域偏移如何划分，以及模型比较是否采用一致训练条件。面向智能运维，可另行研究类似生成流程能否保留故障标签并模拟工况变化；这是迁移设想，摘要未提供对应验证。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "SeisMark：面向稳健三维地震断层检测的大规模开放基准",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://proceedings.mlr.press/v306/park26y.html"
+      ],
+      "analyzed_at": "2026-10-08T03:16:46.182240+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "cfadc04c3bf87137ee6d4f3b7e69b00e4e9c6e0514587ae21260dc4e28c0b72e",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "1ae92d7bcd29",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-08T03:16:46.182241+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -2082,8 +2216,10 @@
       "reading_status": {
         "paper_id": "35b3b0d29b69",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-30T13:13:45.107404+00:00",
+        "updated_at": "2026-10-08T03:13:07.994042+00:00",
         "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -2231,8 +2367,10 @@
       "reading_status": {
         "paper_id": "e1a150bc890d",
         "state": "missing_evidence",
-        "updated_at": "2026-09-30T13:17:27.337222+00:00",
+        "updated_at": "2026-10-08T03:13:40.371963+00:00",
         "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
         "reason": "restricted",
         "total": 0,
         "covered": 0,
@@ -3428,7 +3566,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Designing impact-resistant responses in heterogeneous multi-material metamaterials remains challenging because the discrete material-layout space is high-dimensional and non-intuitive, particularly when specific energy absorption (SEA) must be increased without amplifying the peak impact force in applications such as unmanned aerial vehicle (UAV) airdrop. Despite recent advances in inverse design, data-driven optimization of impact response remains constrained by the scarcity of high-fidelity datasets that jointly represent dynamic loading and material failure. This study develops a machine-le…",
+      "summary": "本文聚焦异质多材料超材料中提高比吸能且不增大冲击峰值力的设计难题。作者建立考虑断裂的有限元数据集，以Transformer预测材料布局对应的响应，再结合NSGA-II搜索多目标优选布局。摘要报告，比吸能最高提高58%、峰值力降低47.4%，并通过压缩与落锤试验验证预测改进；无人机空投进一步展示冲击后稳定性优势。当前仅有摘要，无法核查数据规模、对比条件及统计稳健性。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7213414005",
@@ -3474,11 +3612,43 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议作为生成式设计方向下的代理模型辅助逆向优化案例重点阅读，尤其关注失效建模、离散材料布局与多目标优化的衔接；但摘要未表明采用生成模型，不宜直接归为生成模型研究。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是在高维离散材料布局空间中，同时提升比吸能并控制冲击峰值力，服务于无人机空投等场景。摘要指出布局空间“high-dimensional and non-intuitive”，且兼顾动态载荷与材料失效的高保真数据稀缺，构成逆向优化的关键障碍。[摘要]",
+        "method": "作者以准静态压缩和动态冲击有限元计算构建数据集，用延性损伤模型描述聚乳酸失效；Transformer学习逐胞元PLA/TPU布局到应力—应变响应及冲击峰值力的映射，再与NSGA-II耦合搜索帕累托最优布局。摘要称其数据集为“fracture-aware”。[摘要]",
+        "innovation": "解读：值得关注的是将失效感知数据、非周期多材料布局代理预测及多目标搜索连成设计流程，而非仅预测单一性能。摘要明确对象为“non-periodic heterogeneous multi-material metamaterials”，但未提供文献对照，不能据此认定首创或算法本身具有新颖性。[摘要]",
+        "findings": "摘要报告可比设计中比吸能“up to 58% higher SEA”、峰值力降低47.4%，且预测改进经压缩和落锤试验验证。空投中优化结构的载荷加速度峰值与纯TPU相当，同时避免了柔性单材料箱明显的反弹和倾覆；摘要未明确两项百分比是否对应同一布局。[摘要]",
+        "limitations": "当前仅有摘要，未给出训练样本量、数据划分、代理误差、损伤参数标定和试验重复次数，也未展开“Across comparable designs”的具体比较条件。这些是现有资料的核查缺口，并非已证实的论文缺陷；尚不能判断结果对不同速度、尺度或制造偏差是否稳健。[摘要]",
+        "connection": "解读：材料空间分布作为设计变量，使本文与结构设计直接相关；“post-impact stability”也提示可靠性评价不应只看吸能指标，还应关注冲击后的功能状态。不过，摘要未涉及失效概率、寿命预测或在线监测，因此与智能运维的联系主要是潜在方法迁移。[摘要]",
+        "next_steps": "建议：取得全文后先核查帕累托解的基准、约束及试验对应关系，再检查代理模型在未见布局上的误差。若迁移至可靠性设计，可研究制造公差、冲击方向与材料参数不确定性下的性能分布，检验优势是否保持；这些属于后续研究设想，并非作者已报告的成果。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "机器学习驱动的异质抗冲击超材料逆向设计",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.ijmecsci.2026.112110"
+      ],
+      "analyzed_at": "2026-10-08T03:08:47.030340+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "3db9b7ab46a743b58a19d84feb47458efdcab6871e27f919d7f27bd33a32bb59",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "925093e117c0",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-08T03:08:47.040651+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -3499,7 +3669,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "A digital twin (DT) is a virtual model of a real-world system that can assist decision-making by simulating scenarios induced by different policies. However, typical machine learning-based DTs do not optimise for this use case. We prove that, when model capacity is limited, training DTs to minimise one-step transition errors can produce suboptimal models for ranking sets of policies according to a reward function. We further show that this holds empirically, even with expressive model classes. To address this, we introduce DT$^2$, a decision-targeted DT training paradigm. Firstly, DT$^2$ uses…",
+      "summary": "数字孪生的预测更准，是否意味着决策更好？本文摘要指出，最小化单步转移误差可能无法得到最优的策略排序模型。作者提出DT²：先通过拟合Q评估从离线数据估计候选策略价值，再训练孪生模型，使模拟轨迹保留这些价值所确定的策略两两排序。摘要报告，该方法改善了训练策略及未见策略的排序表现，并降低策略选择的决策遗憾，同时保持较好的仿真保真度。[摘要]本次仅作摘要级解读，无法核验具体实验设置与改善幅度。",
       "raw_metadata": {
         "conference": {
           "id": "icml",
@@ -3556,11 +3726,43 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议重点阅读其将数字孪生训练目标由单步预测准确性转向策略排序的思路，可为智能运维中的维护策略选择提供方法启发；但摘要未提供运维场景验证，不宜直接认定工程适用性。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是数字孪生的训练目标与决策用途是否一致。摘要指出，有限模型容量下，最小化“one-step transition errors”可能无法最优地按奖励函数排列候选策略；作者还报告，在表达能力较强的模型中也观察到这一现象。[摘要]",
+        "method": "方法分为两步：先用“fitted Q-evaluation”（拟合Q评估）从离线数据估计候选策略价值，作为代理真值；再以不依赖特定架构的损失训练数字孪生，使其生成的模拟轨迹保留策略两两排序。摘要未给出损失公式及具体训练细节。[摘要]",
+        "innovation": "解读：本文值得关注的是把决策相关的策略相对优劣直接纳入孪生训练，而非仅追求状态预测准确。摘要用“preserve pairwise policy rankings”描述这一目标，并强调损失不依赖特定架构；但仅凭摘要无法判断其相较既有方法的独创程度。[摘要]",
+        "findings": "摘要报告，DT²相较常规训练能“improves policy ranking and reduces decision regret”，效果覆盖训练时使用及未见的策略，并保持较好的原始仿真保真度。这些属于作者报告的定性结果；当前没有数值、误差范围或实验表格可核对。[摘要]",
+        "limitations": "当前资料仅有摘要，缺少数据来源、策略构造、基线实现、奖励定义及统计检验，无法评估收益大小和稳定性。解读：价值估计被称为“proxy ground-truth values”，提示排序监督并非真实价值本身；估计误差如何影响训练仍需全文核实。[摘要]",
+        "connection": "解读：与智能运维的联系在于，维护决策往往需要比较候选策略，而不只是重现系统状态。本文针对“ranking sets of policies”的目标可作为方法参考；但摘要没有设备退化、结构设计或可靠性案例，因此不能据此声称它已改善工程系统可靠性。[摘要]",
+        "next_steps": "建议：后续先核查全文中的理论假设、离线数据覆盖和未见策略评估方式，再考虑迁移到维护策略比较。可分别检验价值估计偏差、策略排序与仿真保真度，避免将排序改善直接等同于可靠性提升。以上是研究建议，并非作者已完成的实验或结论。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "DT²：面向决策目标的数字孪生",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://proceedings.mlr.press/v306/amad26a.html"
+      ],
+      "analyzed_at": "2026-10-08T03:10:14.503375+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "1801b3252fe14bee16538a4583692c1a653945b20038ae07afa62742f03933eb",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "b8d36ac1dcaf",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-08T03:10:14.519482+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -3583,7 +3785,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "Reducing unsprung mass in high-performance braking systems is critical for vehicle dynamics, but applying topology optimization (TO) to conventional solid discs under combined thermo-mechanical loading often causes “thermal entrapment” and structural failure. This study addresses this limitation by proposing a floating disc architecture and a two-stage computational framework. First, TO via the SIMP algorithm was applied to the Aluminum 7075-T6 inner carrier strictly under mechanical loads, decoupling artificial thermal stresses and yielding a fixed, optimized geometry. Results show the TO ach…",
+      "summary": "该研究针对制动盘轻量化中的热—机械耦合优化难题，提出浮动盘架构及两阶段计算框架：先对内支架进行纯机械载荷拓扑优化，再针对固定优化几何建立热—机械响应代理模型。摘要报告内支架减重“53%”，应力与温度场预测达到R2≈0.9998，并开展疲劳分析。[摘要] 解读：其阅读价值在于连接结构优化与快速性能评估；当前仅有摘要，尚不能核实预测泛化能力、计算加速幅度或实物验证情况。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7213891802",
@@ -3693,22 +3895,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "推荐结构轻量化与疲劳可靠性研究者重点关注其分阶段优化和代理建模流程；对智能运维的价值主要是方法迁移启发，摘要未展示在线监测应用。[摘要]",
+      "deep_read": {
+        "problem": "研究关注高性能制动系统的簧下质量降低。摘要指出，传统实心盘在热—机械联合载荷下进行拓扑优化，可能出现“thermal entrapment”及结构失效。[摘要] 解读：问题不仅是材料如何去除，还包括优化对象和载荷设置能否适应实际制动中的热—机械作用。",
+        "method": "作者先用SIMP算法对7075-T6铝合金内支架实施纯机械载荷拓扑优化，再为固定几何建立非线性热—机械响应代理模型。训练采用拉丁超立方采样，覆盖“15 design scenarios”，并使用Genetic Aggregation算法；摘要未展开参数与训练细节。[摘要]",
+        "innovation": "摘要提出浮动盘架构与“two-stage computational framework”，将机械减重设计和热—机械快速预测分阶段组织。[摘要] 解读：值得关注的是架构选择与计算流程的组合，而非将所用算法本身视为新算法；现有资料不足以认定其首创性或相对既有方法的优势。",
+        "findings": "摘要报告内支架质量从0.218 kg降至0.102 kg，减重53%，预测精度为“R2≈0.9998”。疲劳分析给出安全系数1.65，循环数原文写为“106”，此处不擅自改成指数形式。上述减重仅对应内支架，不能推广为整个制动盘的减重比例。[摘要]",
+        "limitations": "当前摘要未说明独立测试集、参数范围、极限制动场景判据或实物验证，因此不足以评估模型外推能力与疲劳结论的工程适用范围。[摘要] 解读：这些属于资料层面的证据缺口，并非已确认的研究缺陷；“106”的循环数排版也有待原文进一步核对。",
+        "connection": "结构设计方面，本文提供构件拓扑优化与性能预测的衔接案例；可靠性方面，摘要包含“Fatigue analysis”。[摘要] 解读：快速响应预测可能用于运维工况筛查，但摘要未提供传感数据融合、在线校准或故障诊断证据，作者所称数字孪生不能直接等同于完整运维系统。",
+        "next_steps": "建议后续核对优化载荷与服役校核工况的对应关系、采样空间及独立验证方式，并追踪疲劳分析所用载荷谱和材料依据。若迁移到可靠性研究，建议考察参数不确定性与代理误差对安全裕度的影响；这些是针对摘要证据缺口提出的研究建议，不是作者已完成的结果。[摘要]"
+      },
       "recommended_direction": "fatigue_reliability",
       "reading_status": {
         "paper_id": "c05baf48e37d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-30T09:26:35.695858+00:00",
+        "updated_at": "2026-10-08T03:11:48.235212+00:00",
         "basis": "abstract",
-        "reason": "not_found",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "制动盘内支架拓扑优化与机器学习参数化预测模型开发",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.3390/dynamics6030040"
+      ],
+      "analyzed_at": "2026-10-08T03:11:48.225013+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "c36ba57f4e7e7166f2ca48fecb435a7ade3992d8a961159671eef8175b32bf0b",
+      "analysis_issues": []
     },
     {
       "source": "Crossref",
@@ -3773,7 +3996,20 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "565888b08f8a",
+        "state": "missing_evidence",
+        "updated_at": "2026-10-08T03:12:42.064526+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -3901,8 +4137,10 @@
       "reading_status": {
         "paper_id": "8a095e50b332",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-30T09:26:46.978893+00:00",
+        "updated_at": "2026-10-08T03:12:52.778545+00:00",
         "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -4092,8 +4330,10 @@
       "reading_status": {
         "paper_id": "de48174471ad",
         "state": "missing_evidence",
-        "updated_at": "2026-09-30T13:14:41.434982+00:00",
+        "updated_at": "2026-10-08T03:13:27.024448+00:00",
         "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -4124,7 +4364,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "We introduce SeisMark, a large-scale open benchmark designed to bridge the gap between verifiable ground truth and realistic texture in 3D seismic fault detection. Using a novel pipeline merging procedural geology with diffusion-based synthesis, we produce domain-realistic (survey-specific) textured volumes that expose significant brittleness in existing models masked by simplified physics data. Experiments demonstrate that SeisMark acts as a rigorous discriminator, distinguishing robust modern architecture from legacy model that suffers performance collapse under realistic domain shifts. We r…",
+      "summary": "本文关注三维地震断层检测中可验证真值与真实纹理难以兼顾的问题，提出开放基准SeisMark。摘要称，其将程序化地质建模与扩散式合成结合，生成具有勘测域特定纹理的三维体数据，并揭示简化物理数据掩盖的模型脆弱性。实验概述指出，该基准能够区分不同架构在真实域偏移下的稳健性，但未提供模型名称、指标或量化结果。[摘要] 解读：其价值主要在于部署前的稳健性评测，而非直接解决设备智能运维任务。",
       "raw_metadata": {
         "conference": {
           "id": "icml",
@@ -4181,11 +4421,43 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为域偏移评测与安全关键人工智能验证的交叉参考阅读，而非智能运维核心文献。摘要明确提出数据生成方法及模型区分结果，但重点推荐仍需核对全文实验与基准开放情况。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是如何在三维地震断层检测中兼顾可核验标注与逼真数据纹理。摘要以“verifiable ground truth and realistic texture”概括这一缺口，并指出简化物理数据可能掩盖现有模型的脆弱性。[摘要] 解读：评测数据的真实性会影响对模型部署能力的判断。",
+        "method": "作者将程序化地质建模与基于扩散的合成结合，构建具有特定勘测域纹理的三维体数据；原文称“merging procedural geology with diffusion-based synthesis”。[摘要] 当前未说明生成流程、条件输入、真值保存机制和质量检查，尚不能据此复现。",
+        "innovation": "摘要将合成流程称为“novel pipeline”，并强调开放基准连接可验证真值与真实纹理。[摘要] 解读：可关注的创新定位是同时服务标注可信度与域真实性的基准构建，而非仅更换检测模型；但缺少既有工作对比，无法独立确认其首创性及技术增量。",
+        "findings": "摘要报告，SeisMark能够区分稳健的现代架构与在真实域偏移下出现“performance collapse”的旧式模型。[摘要] 这一发现支持关注传统测试可能遗漏的失效情形，但未列出架构名称、性能降幅、重复实验或统计证据，不能推及所有新旧架构。",
+        "limitations": "当前可确认的是摘要披露范围的不足，而非论文已经证实的方法缺陷：虽称“large-scale open benchmark”，却未提供数据规模、来源范围、评价指标及真实勘测验证细节。[摘要] 因而尚不能判断合成纹理覆盖程度、标注可信度或部署适用边界。",
+        "connection": "解读：该工作与智能运维的联系在于域偏移下的检测可靠性评估，而非设备状态监测或维修决策。摘要面向“safety-critical subsurface applications”。[摘要] 对结构设计也仅有间接启发：可借鉴其可验证数据与真实扰动结合的评测思路，不能直接迁移地质结论。",
+        "next_steps": "建议：后续阅读全文时，优先核对数据与代码是否开放、真值如何验证、域偏移如何划分，以及模型比较是否采用一致训练条件。面向智能运维，可另行研究类似生成流程能否保留故障标签并模拟工况变化；这是迁移设想，摘要未提供对应验证。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "SeisMark：面向稳健三维地震断层检测的大规模开放基准",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://proceedings.mlr.press/v306/park26y.html"
+      ],
+      "analyzed_at": "2026-10-08T03:16:46.182240+00:00",
+      "llm_model": "gpt-6-astra",
+      "analysis_references": {},
+      "analysis_material_version": "cfadc04c3bf87137ee6d4f3b7e69b00e4e9c6e0514587ae21260dc4e28c0b72e",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "1ae92d7bcd29",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-08T03:16:46.182241+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -4318,8 +4590,10 @@
       "reading_status": {
         "paper_id": "35b3b0d29b69",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-30T13:13:45.107404+00:00",
+        "updated_at": "2026-10-08T03:13:07.994042+00:00",
         "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -4467,8 +4741,10 @@
       "reading_status": {
         "paper_id": "e1a150bc890d",
         "state": "missing_evidence",
-        "updated_at": "2026-09-30T13:17:27.337222+00:00",
+        "updated_at": "2026-10-08T03:13:40.371963+00:00",
         "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
         "reason": "restricted",
         "total": 0,
         "covered": 0,
@@ -5115,13 +5391,13 @@
     "unavailable": 11
   },
   "analysis_status": {
-    "ready_core": 1,
+    "ready_core": 4,
     "target_core": 5,
-    "ready_extended": 2,
+    "ready_extended": 3,
     "target_extended": 5,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 7
+    "pending": 3
   },
   "edition": {
     "id": "37672774325",
