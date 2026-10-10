@@ -1,19 +1,19 @@
 {
   "id": "public-88e871d5a8d26738db20168d",
-  "content_version": "c03a2d326ccdecf13dc6adca2942cab9464312e58f5fce2b0e08650c004a214b",
+  "content_version": "6960728b6b7d5b6f16a7f1d58f6cecdf29ea0c564e8ca8af8b9c0189dbbca52c",
   "analysis": {
-    "title_zh": "面向边缘设备的开放多模态决策模型：d1-3B 与 d1-omni-600M",
-    "summary": "官方宣布发布 d1-3B 与实验性 d1-omni-600M，扩展 d1 决策模型家族。[S1] 前者支持文本和图像，后者支持文本与图像或文本与音频。[S2] 公告报告 d1-3B 在 Decision Index 0.2.1 上得分 48.57，并列出其在三款 NVIDIA Jetson 设备上的回答耗时为16、26和50毫秒。[S3–S4]【推断】可考虑用于边缘端图像问答、多模态状态判断等任务，但所给节选未展示这些应用的验证结果。",
-    "application": "建议：【科研迁移建议】将 d1-3B 作为设备图像问答、巡检状态判断的候选模型；涉及音频的探索可考虑实验性 d1-omni-600M，并自行评估准确率、延迟和可靠性。【官方报告效果】节选仅给出决策基准成绩及指定 Jetson 设备上的回答耗时，未提供智能运维或结构可靠性任务的验证结果。[S1–S4]",
+    "title_zh": "面向边缘端的多模态开放决策模型：d1-3B 与 d1-omni-600M",
+    "summary": "【公告原文】LiquidAI 宣布发布 d1-3B 和实验性 d1-omni-600M 两款开放决策模型。前者支持文本与图像，后者支持文本与图像或文本与音频，适用于边缘端多模态问答与决策任务。公告报告 d1-3B 在 Decision Index 0.2.1 上得分 48.57，并列出其在三款 NVIDIA Jetson 设备上的单题回答延迟为 16、26 和 50 毫秒；所给片段未说明完整测试条件。",
+    "application": "建议：【你的推断】可探索图文设备巡检、文本与音频联合告警分析等科研迁移方向，但需另行验证领域准确性、延迟与可靠性。【公告原文】官方报告的是决策基准得分与指定 Jetson 设备上的回答延迟，并未提供智能运维或结构设计任务的验证结果。",
     "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
       "Today, we release two open decision models in our d1 decision model family : d1-3B and d1-omni-600M (experimental).",
-      "Multimodal: d1-3B supports text and images, while d1-omni-600M supports text and images or text and audio",
       "Best decision model under 10B on the Decision Index 0.2.1: d1-3B scores 48.57, ahead of every 4B and 9B model and of Decider 35B-A3B (47.11).",
+      "Multimodal: d1-3B supports text and images, while d1-omni-600M supports text and images or text and audio",
       "Fast: d1-3B answers a question in 16 ms on an NVIDIA Jetson AGX Thor, 26 ms on a Jetson AGX Orin, and 50ms on a Jetson Orin Nano"
     ],
     "basis_url": "https://huggingface.co/blog/LiquidAI/open-d1"
   },
-  "analyzed_at": "2026-10-08T14:10:20.614272+00:00"
+  "analyzed_at": "2026-10-10T05:18:21.348475+00:00"
 }
