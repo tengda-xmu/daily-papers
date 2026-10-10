@@ -240,7 +240,7 @@
       "reading_status": {
         "paper_id": "8a095e50b332",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-09T03:13:00.515289+00:00",
+        "updated_at": "2026-10-10T05:13:58.909986+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -445,7 +445,22 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "d2e4438b2f24",
+        "state": "retry",
+        "updated_at": "2026-10-10T09:03:07.307624+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "error_code": "codex_connection",
+        "next_retry_at": "2026-10-10T10:03:07.307624+00:00",
+        "total": 32,
+        "covered": 0,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -469,7 +484,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Deploying high accuracy models on resource-limited edge is essential for industrial applications, yet challenging due to the diverse and dynamic real-world environment. Cloud–edge collaboration helps by training high-capacity models in the cloud and deploying compressed models to edge nodes. However, traditional pipelines assume a fixed setting and lack the flexibility to adapt compression strategies to the heterogeneous and evolving environment. To overcome this, we propose CE-MAC, a cloud–edge collaborative large language model (LLM)-based multiagent system (LLM-MAS) for adaptive edge model…",
+      "summary": "工业边缘设备资源受限，且设备条件与实际环境不断变化，固定压缩策略难以持续适配。本文提出CE-MAC，以基于大语言模型的多智能体系统作为决策中心，结合云端与边缘实时反馈，生成设备专属剪枝策略。摘要报告在图像分类、关键词识别、轴承故障诊断和窃电检测任务上取得先进性能，但未提供具体指标、对照与成本数据。解读：其阅读价值在于压缩决策的动态协作机制；当前仅能进行摘要级判断。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "eb47fbb920afe87bb006cd6f95319970c949b69f",
@@ -510,11 +525,43 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐重点关注实时反馈如何转化为设备专属剪枝策略，以及轴承故障诊断中的适用条件；摘要具有明确方法线索，但性能优势仍需全文核验。[摘要]",
+      "deep_read": {
+        "problem": "论文关注高精度模型在资源受限工业边缘设备上的部署问题。摘要指出传统流程“assume a fixed setting”，难以适应异构且持续变化的环境。解读：研究问题不仅是缩小模型，还包括压缩策略如何随设备条件和环境变化调整；具体资源约束与变化模式尚无说明。[摘要]",
+        "method": "CE-MAC采用基于大语言模型的多智能体系统组织云边协作，并以模型剪枝支持可定制、渐进式压缩。摘要称其“acts as the decision hub”，依据云端与边缘实时反馈生成设备专属策略。尚未交代智能体分工、反馈变量、策略执行流程或剪枝算法细节。[摘要]",
+        "innovation": "摘要呈现的方法特色，是把多智能体决策、实时云边反馈与设备专属剪枝结合起来，而非沿用固定压缩设置。解读：值得关注的创新候选是压缩策略的动态协作生成机制；仅凭摘要不能确认其相对既有自适应压缩方法的原创程度，也不能认定各组件分别具有新颖性。[摘要]",
+        "findings": "摘要列出图像分类、关键词识别、轴承故障诊断和窃电检测四类评测任务，并报告“state-of-the-art performance”，覆盖异构数据与不同压缩水平。当前未给出数据集、指标、基线或结果数值，因此只能确认作者报告了性能优势，不能判断优势幅度、稳定性及统计可信度。[摘要]",
+        "limitations": "当前证据局限来自摘要信息不足，并非已证实的方法缺陷。资料没有说明大语言模型决策开销、云边通信需求、剪枝后的精度变化及异常反馈处理方式，也未呈现消融实验。解读：这些缺口限制了对实际部署收益、决策可靠性与性能优势来源的评估。[摘要]",
+        "connection": "与智能运维的直接联系是摘要明确纳入“bearing fault diagnosis”，同时面向受限边缘设备部署。解读：自适应剪枝可能支持不同现场设备的诊断模型配置；与可靠性的联系仍需验证压缩后漏诊风险及环境变化下的表现，摘要没有提供结构设计方面的直接证据。[摘要]",
+        "next_steps": "建议获取全文后，首先核对设备专属策略的输入、目标和约束，再检查不同压缩水平下的诊断性能及云边协作成本。建议将固定剪枝策略作为比较对象，并考察反馈延迟或异常时的策略表现。这些是后续阅读与研究建议，不是摘要已经报告的实验或作者结论。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "CE-MAC：面向自适应模型剪枝的云边多智能体协作",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1109/tii.2026.3697192"
+      ],
+      "analyzed_at": "2026-10-10T10:01:45.080479+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "437289954608a76eb8a2380d3fc5e7e56d848ca8a7acc853b6b3d9616c73ef4e",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "8a3a74d4605b",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-10T10:01:45.089032+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -538,7 +585,7 @@
         "ai_maintenance",
         "fatigue_reliability"
       ],
-      "summary": "ABSTRACT Fracto‐mechanoluminescence (FML) materials have recently demonstrated great potential as next‐generation interactive optoelectronic systems, while they generally suffer from irreversible fatigue degradation under long‐term cyclic stress, severely limiting their practical applications. Here we design the flexible FML composite films based on the manganese‐based hybrid halide EPB 2 MnBr 4 (EPB = ethyltriphenylphosphonium), exhibiting intense green emission under mechanical stimuli. Notably, the FML intensity that degrades after repeated mechanical cycles can be effectively recovered to…",
+      "summary": "本文针对断裂力致发光材料在长期循环应力下出现不可逆疲劳衰减的问题，设计锰基杂化卤化物柔性复合薄膜。【摘要】薄膜受机械刺激产生强绿色发光，循环后衰减的发光强度经热处理可恢复至初始值约75.5%，作者将其归因于树脂基体中的奥斯特瓦尔德熟化。同时，一维卷积神经网络对四类机械事件的分类准确率达到98.75%。解读：材料恢复与信号识别共同支撑其矿业结构健康监测潜力，但当前仅有摘要，不能据此确认长期现场可靠性。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7220848907",
@@ -585,11 +632,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议重点关注热恢复机制与发光信号分类的结合：其直接关联疲劳可靠性和智能运维，但模型泛化及长期恢复效果仍需全文证据核验。【摘要】",
+      "deep_read": {
+        "problem": "【摘要】研究针对断裂力致发光材料在长期循环应力下的“irreversible fatigue degradation”，这一问题限制实际应用。解读：关键矛盾是机械刺激产生可识别光信号的同时，反复使用会削弱输出，因此监测材料不仅需要灵敏，还需要维持或恢复信号能力。",
+        "method": "【摘要】作者以锰基杂化卤化物EPB 2 MnBr 4制备柔性复合薄膜，其中EPB为乙基三苯基膦鎓；薄膜受机械刺激产生绿色发光。实验路线包括循环后的热处理恢复，以及利用一维卷积神经网络分类发光信号，但摘要未披露制备参数、热处理条件和网络结构。",
+        "innovation": "【摘要】可辨识的贡献是把锰基杂化卤化物的断裂力致发光、热处理恢复与机械事件识别结合起来，作者称其提供“thermal recovery capability”。解读：其特色在于同时处理材料衰减与信号利用，而非仅展示发光；现有摘要不足以判断相对既有研究的首创性。",
+        "findings": "【摘要】循环后衰减的发光强度经热处理恢复至初始值“approximately 75.5%”，作者将恢复归因于树脂基体中的奥斯特瓦尔德熟化；四类机械事件分类准确率为98.75%。两项结果分别支持部分强度恢复和事件识别能力，不能等同于完全恢复或现场监测可靠性。",
+        "limitations": "【摘要】资料未提供循环次数、热处理温度与时长、重复恢复表现，以及模型样本量、数据划分和外部验证。解读：这些是当前资料的证据缺口，并非已证实的论文缺陷；尤其无法判断恢复效果是否长期稳定，或分类准确率能否推广到不同矿业工况。",
+        "connection": "【摘要】应用明确指向“structural health monitoring in mining”。解读：发光信号与机器学习分类对应智能运维中的事件识别，热恢复对应传感材料自身的疲劳可靠性；对结构设计的联系则较间接，摘要没有提供承载性能、结构优化或寿命预测结果。",
+        "next_steps": "建议取得全文后，优先核对恢复机理证据、热处理条件和多轮恢复结果，再检查分类数据划分与跨工况测试。建议后续研究将传感层衰减和被监测结构损伤区分开，并评估热处理对安装环境的适配性；这些属于研究设想，不是作者已报告的结论。"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "用于抗疲劳结构健康监测的锰基杂化卤化物热恢复型断裂力致发光",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1002/adfm.78863"
+      ],
+      "analyzed_at": "2026-10-10T05:17:28.890290+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "eb93ef28b7e27580d3f93f536f6f38cbc5c483d3253f238d2a0c8a777d6b7900",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "4ddc4c6ce195",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-10T05:17:28.898455+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Google Scholar",
@@ -689,7 +768,20 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "d552f4215ad9",
+        "state": "missing_evidence",
+        "updated_at": "2026-10-10T00:34:10.425624+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "extended": [
@@ -715,7 +807,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "The dataset used in this research is a well-curated collection of aluminum and titanium alloy samples, compiled from experimentally reported values and reliable literature sources for UAV structural applications. The dataset created using this methodology can simulate engineering practices that use common material systems found in aerospace structures. The dataset provides a comprehensive evaluation of material properties by integrating information from various sources to capture genuine physical, mechanical, fatigue, and operational properties. The study emphasizes the variety of material att…",
+      "summary": "所给摘要介绍的是水资源工程模拟模型综述，与条目所列无人机铝钛合金及机器学习题名明显不一致。文章关注近几十年科研中使用的水文与水力模拟软件，比较其特征、方法和应用，旨在帮助研究者选择模型并提高结果准确性。[摘要] 当前资料未提供软件清单、比较结果或验证数据，不能据此评价无人机材料性能，也不能确认其对生成式设计和疲劳可靠性研究的贡献。本次仅作摘要级解读。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7213446467",
@@ -775,11 +867,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "不建议按无人机材料、生成式设计或疲劳可靠性方向重点推荐；应先核对题名与摘要的对应关系，再决定是否阅读全文。当前摘要仅支持将其视为水资源模拟软件综述。[摘要]",
+      "deep_read": {
+        "problem": "摘要提出，水资源工程实体模型成本较高且耗时，计算机模拟提供了替代途径。其研究问题是如何理解不同模拟模型的特点，并为具体问题选择合适工具。[摘要] 原文称“costly and time-consuming physical models”，但未涉及无人机结构或合金性能。",
+        "method": "文章采用研究综述方式，梳理近几十年科学研究中使用的水文与水力模拟软件，比较模型特征、方法与应用差异。[摘要] 原文表述为“differences between them in terms of methodology and application”；摘要未说明检索策略、纳入标准或比较指标。",
+        "innovation": "摘要没有明确提出新算法、新材料模型或新的优化框架，只说明综述能够为模型选择提供参考。[摘要] 解读：其潜在价值在于整理不同软件的适用条件，而非已经证明的方法创新；由于缺少具体比较内容，不能确认综述相对既有研究的新增贡献。",
+        "findings": "摘要声称论文能够帮助研究者选择适合问题的模型并提高结果准确性，原文使用“enhance the accuracy of their results”。[摘要] 但没有列出任何模型的优劣、适用边界或精度验证结果，因此这属于作者概括的用途，不能当作已量化证实的性能提升。",
+        "limitations": "当前最直接的资料局限是题名与摘要主题不一致，且仅有摘要，无法核实实际论文对象。摘要也没有提供软件名称、比较结果及验证依据。[摘要] 这些是本次判断的证据限制，并非作者承认的研究缺陷；不能据此断言全文未开展系统比较或验证。",
+        "connection": "所给摘要讨论水文与水力模拟，没有出现生成式设计、疲劳可靠性或智能运维研究内容。[摘要] 解读：模型选型与方法比较的思路可能具有跨领域参考意义，但这种一般性联系不足以证明其切合结构设计方向，更不能据此补写机器学习材料性能结论。",
+        "next_steps": "建议：先核对论文题名、DOI与摘要的对应关系，再获取正确原文。若实际论文确为水资源模拟综述，应重点检查软件分类、比较维度和验证依据；若为无人机合金研究，则需另行核实材料数据、机器学习任务及结构性能证据，当前资料不足以提出具体复现实验。"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "水资源工程水文与水力模拟软件综述（依据所给摘要）",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.56990/bajest/2026.050203"
+      ],
+      "analyzed_at": "2026-10-10T05:19:09.017049+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "a620bff291f667fd682aa32754fb20ecaf0831281444e98c245bc160dfccac65",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "569d913e4413",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-10T05:19:09.031305+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Google Scholar",
@@ -867,7 +991,20 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "97ae87f75cf9",
+        "state": "missing_evidence",
+        "updated_at": "2026-10-10T00:38:59.687234+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -1003,8 +1140,10 @@
       "reading_status": {
         "paper_id": "8564d8ee9066",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-30T13:15:30.419668+00:00",
+        "updated_at": "2026-10-10T00:34:31.120950+00:00",
         "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -1117,10 +1256,18 @@
       "recommended_direction": "fatigue_reliability",
       "reading_status": {
         "paper_id": "93948bc47be6",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-09-25T17:36:20.119600+00:00",
+        "state": "retry",
+        "updated_at": "2026-10-10T09:04:02.305494+00:00",
         "basis": "abstract",
-        "reason": "not_found"
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "error_code": "codex_connection",
+        "next_retry_at": "2026-10-10T10:04:02.305494+00:00",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
       }
     },
     {
@@ -1222,7 +1369,20 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "a013143718c4",
+        "state": "missing_evidence",
+        "updated_at": "2026-10-10T00:40:58.542399+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "papers": [
@@ -1462,7 +1622,7 @@
       "reading_status": {
         "paper_id": "8a095e50b332",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-09T03:13:00.515289+00:00",
+        "updated_at": "2026-10-10T05:13:58.909986+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -1667,7 +1827,22 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "d2e4438b2f24",
+        "state": "retry",
+        "updated_at": "2026-10-10T09:03:07.307624+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "error_code": "codex_connection",
+        "next_retry_at": "2026-10-10T10:03:07.307624+00:00",
+        "total": 32,
+        "covered": 0,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -1691,7 +1866,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Deploying high accuracy models on resource-limited edge is essential for industrial applications, yet challenging due to the diverse and dynamic real-world environment. Cloud–edge collaboration helps by training high-capacity models in the cloud and deploying compressed models to edge nodes. However, traditional pipelines assume a fixed setting and lack the flexibility to adapt compression strategies to the heterogeneous and evolving environment. To overcome this, we propose CE-MAC, a cloud–edge collaborative large language model (LLM)-based multiagent system (LLM-MAS) for adaptive edge model…",
+      "summary": "工业边缘设备资源受限，且设备条件与实际环境不断变化，固定压缩策略难以持续适配。本文提出CE-MAC，以基于大语言模型的多智能体系统作为决策中心，结合云端与边缘实时反馈，生成设备专属剪枝策略。摘要报告在图像分类、关键词识别、轴承故障诊断和窃电检测任务上取得先进性能，但未提供具体指标、对照与成本数据。解读：其阅读价值在于压缩决策的动态协作机制；当前仅能进行摘要级判断。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "eb47fbb920afe87bb006cd6f95319970c949b69f",
@@ -1732,11 +1907,43 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐重点关注实时反馈如何转化为设备专属剪枝策略，以及轴承故障诊断中的适用条件；摘要具有明确方法线索，但性能优势仍需全文核验。[摘要]",
+      "deep_read": {
+        "problem": "论文关注高精度模型在资源受限工业边缘设备上的部署问题。摘要指出传统流程“assume a fixed setting”，难以适应异构且持续变化的环境。解读：研究问题不仅是缩小模型，还包括压缩策略如何随设备条件和环境变化调整；具体资源约束与变化模式尚无说明。[摘要]",
+        "method": "CE-MAC采用基于大语言模型的多智能体系统组织云边协作，并以模型剪枝支持可定制、渐进式压缩。摘要称其“acts as the decision hub”，依据云端与边缘实时反馈生成设备专属策略。尚未交代智能体分工、反馈变量、策略执行流程或剪枝算法细节。[摘要]",
+        "innovation": "摘要呈现的方法特色，是把多智能体决策、实时云边反馈与设备专属剪枝结合起来，而非沿用固定压缩设置。解读：值得关注的创新候选是压缩策略的动态协作生成机制；仅凭摘要不能确认其相对既有自适应压缩方法的原创程度，也不能认定各组件分别具有新颖性。[摘要]",
+        "findings": "摘要列出图像分类、关键词识别、轴承故障诊断和窃电检测四类评测任务，并报告“state-of-the-art performance”，覆盖异构数据与不同压缩水平。当前未给出数据集、指标、基线或结果数值，因此只能确认作者报告了性能优势，不能判断优势幅度、稳定性及统计可信度。[摘要]",
+        "limitations": "当前证据局限来自摘要信息不足，并非已证实的方法缺陷。资料没有说明大语言模型决策开销、云边通信需求、剪枝后的精度变化及异常反馈处理方式，也未呈现消融实验。解读：这些缺口限制了对实际部署收益、决策可靠性与性能优势来源的评估。[摘要]",
+        "connection": "与智能运维的直接联系是摘要明确纳入“bearing fault diagnosis”，同时面向受限边缘设备部署。解读：自适应剪枝可能支持不同现场设备的诊断模型配置；与可靠性的联系仍需验证压缩后漏诊风险及环境变化下的表现，摘要没有提供结构设计方面的直接证据。[摘要]",
+        "next_steps": "建议获取全文后，首先核对设备专属策略的输入、目标和约束，再检查不同压缩水平下的诊断性能及云边协作成本。建议将固定剪枝策略作为比较对象，并考察反馈延迟或异常时的策略表现。这些是后续阅读与研究建议，不是摘要已经报告的实验或作者结论。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "CE-MAC：面向自适应模型剪枝的云边多智能体协作",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1109/tii.2026.3697192"
+      ],
+      "analyzed_at": "2026-10-10T10:01:45.080479+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "437289954608a76eb8a2380d3fc5e7e56d848ca8a7acc853b6b3d9616c73ef4e",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "8a3a74d4605b",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-10T10:01:45.089032+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -1760,7 +1967,7 @@
         "ai_maintenance",
         "fatigue_reliability"
       ],
-      "summary": "ABSTRACT Fracto‐mechanoluminescence (FML) materials have recently demonstrated great potential as next‐generation interactive optoelectronic systems, while they generally suffer from irreversible fatigue degradation under long‐term cyclic stress, severely limiting their practical applications. Here we design the flexible FML composite films based on the manganese‐based hybrid halide EPB 2 MnBr 4 (EPB = ethyltriphenylphosphonium), exhibiting intense green emission under mechanical stimuli. Notably, the FML intensity that degrades after repeated mechanical cycles can be effectively recovered to…",
+      "summary": "本文针对断裂力致发光材料在长期循环应力下出现不可逆疲劳衰减的问题，设计锰基杂化卤化物柔性复合薄膜。【摘要】薄膜受机械刺激产生强绿色发光，循环后衰减的发光强度经热处理可恢复至初始值约75.5%，作者将其归因于树脂基体中的奥斯特瓦尔德熟化。同时，一维卷积神经网络对四类机械事件的分类准确率达到98.75%。解读：材料恢复与信号识别共同支撑其矿业结构健康监测潜力，但当前仅有摘要，不能据此确认长期现场可靠性。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7220848907",
@@ -1807,11 +2014,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议重点关注热恢复机制与发光信号分类的结合：其直接关联疲劳可靠性和智能运维，但模型泛化及长期恢复效果仍需全文证据核验。【摘要】",
+      "deep_read": {
+        "problem": "【摘要】研究针对断裂力致发光材料在长期循环应力下的“irreversible fatigue degradation”，这一问题限制实际应用。解读：关键矛盾是机械刺激产生可识别光信号的同时，反复使用会削弱输出，因此监测材料不仅需要灵敏，还需要维持或恢复信号能力。",
+        "method": "【摘要】作者以锰基杂化卤化物EPB 2 MnBr 4制备柔性复合薄膜，其中EPB为乙基三苯基膦鎓；薄膜受机械刺激产生绿色发光。实验路线包括循环后的热处理恢复，以及利用一维卷积神经网络分类发光信号，但摘要未披露制备参数、热处理条件和网络结构。",
+        "innovation": "【摘要】可辨识的贡献是把锰基杂化卤化物的断裂力致发光、热处理恢复与机械事件识别结合起来，作者称其提供“thermal recovery capability”。解读：其特色在于同时处理材料衰减与信号利用，而非仅展示发光；现有摘要不足以判断相对既有研究的首创性。",
+        "findings": "【摘要】循环后衰减的发光强度经热处理恢复至初始值“approximately 75.5%”，作者将恢复归因于树脂基体中的奥斯特瓦尔德熟化；四类机械事件分类准确率为98.75%。两项结果分别支持部分强度恢复和事件识别能力，不能等同于完全恢复或现场监测可靠性。",
+        "limitations": "【摘要】资料未提供循环次数、热处理温度与时长、重复恢复表现，以及模型样本量、数据划分和外部验证。解读：这些是当前资料的证据缺口，并非已证实的论文缺陷；尤其无法判断恢复效果是否长期稳定，或分类准确率能否推广到不同矿业工况。",
+        "connection": "【摘要】应用明确指向“structural health monitoring in mining”。解读：发光信号与机器学习分类对应智能运维中的事件识别，热恢复对应传感材料自身的疲劳可靠性；对结构设计的联系则较间接，摘要没有提供承载性能、结构优化或寿命预测结果。",
+        "next_steps": "建议取得全文后，优先核对恢复机理证据、热处理条件和多轮恢复结果，再检查分类数据划分与跨工况测试。建议后续研究将传感层衰减和被监测结构损伤区分开，并评估热处理对安装环境的适配性；这些属于研究设想，不是作者已报告的结论。"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "用于抗疲劳结构健康监测的锰基杂化卤化物热恢复型断裂力致发光",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1002/adfm.78863"
+      ],
+      "analyzed_at": "2026-10-10T05:17:28.890290+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "eb93ef28b7e27580d3f93f536f6f38cbc5c483d3253f238d2a0c8a777d6b7900",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "4ddc4c6ce195",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-10T05:17:28.898455+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Google Scholar",
@@ -1911,7 +2150,20 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "d552f4215ad9",
+        "state": "missing_evidence",
+        "updated_at": "2026-10-10T00:34:10.425624+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -1935,7 +2187,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "The dataset used in this research is a well-curated collection of aluminum and titanium alloy samples, compiled from experimentally reported values and reliable literature sources for UAV structural applications. The dataset created using this methodology can simulate engineering practices that use common material systems found in aerospace structures. The dataset provides a comprehensive evaluation of material properties by integrating information from various sources to capture genuine physical, mechanical, fatigue, and operational properties. The study emphasizes the variety of material att…",
+      "summary": "所给摘要介绍的是水资源工程模拟模型综述，与条目所列无人机铝钛合金及机器学习题名明显不一致。文章关注近几十年科研中使用的水文与水力模拟软件，比较其特征、方法和应用，旨在帮助研究者选择模型并提高结果准确性。[摘要] 当前资料未提供软件清单、比较结果或验证数据，不能据此评价无人机材料性能，也不能确认其对生成式设计和疲劳可靠性研究的贡献。本次仅作摘要级解读。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7213446467",
@@ -1995,11 +2247,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "不建议按无人机材料、生成式设计或疲劳可靠性方向重点推荐；应先核对题名与摘要的对应关系，再决定是否阅读全文。当前摘要仅支持将其视为水资源模拟软件综述。[摘要]",
+      "deep_read": {
+        "problem": "摘要提出，水资源工程实体模型成本较高且耗时，计算机模拟提供了替代途径。其研究问题是如何理解不同模拟模型的特点，并为具体问题选择合适工具。[摘要] 原文称“costly and time-consuming physical models”，但未涉及无人机结构或合金性能。",
+        "method": "文章采用研究综述方式，梳理近几十年科学研究中使用的水文与水力模拟软件，比较模型特征、方法与应用差异。[摘要] 原文表述为“differences between them in terms of methodology and application”；摘要未说明检索策略、纳入标准或比较指标。",
+        "innovation": "摘要没有明确提出新算法、新材料模型或新的优化框架，只说明综述能够为模型选择提供参考。[摘要] 解读：其潜在价值在于整理不同软件的适用条件，而非已经证明的方法创新；由于缺少具体比较内容，不能确认综述相对既有研究的新增贡献。",
+        "findings": "摘要声称论文能够帮助研究者选择适合问题的模型并提高结果准确性，原文使用“enhance the accuracy of their results”。[摘要] 但没有列出任何模型的优劣、适用边界或精度验证结果，因此这属于作者概括的用途，不能当作已量化证实的性能提升。",
+        "limitations": "当前最直接的资料局限是题名与摘要主题不一致，且仅有摘要，无法核实实际论文对象。摘要也没有提供软件名称、比较结果及验证依据。[摘要] 这些是本次判断的证据限制，并非作者承认的研究缺陷；不能据此断言全文未开展系统比较或验证。",
+        "connection": "所给摘要讨论水文与水力模拟，没有出现生成式设计、疲劳可靠性或智能运维研究内容。[摘要] 解读：模型选型与方法比较的思路可能具有跨领域参考意义，但这种一般性联系不足以证明其切合结构设计方向，更不能据此补写机器学习材料性能结论。",
+        "next_steps": "建议：先核对论文题名、DOI与摘要的对应关系，再获取正确原文。若实际论文确为水资源模拟综述，应重点检查软件分类、比较维度和验证依据；若为无人机合金研究，则需另行核实材料数据、机器学习任务及结构性能证据，当前资料不足以提出具体复现实验。"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "水资源工程水文与水力模拟软件综述（依据所给摘要）",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.56990/bajest/2026.050203"
+      ],
+      "analyzed_at": "2026-10-10T05:19:09.017049+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "a620bff291f667fd682aa32754fb20ecaf0831281444e98c245bc160dfccac65",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "569d913e4413",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-10T05:19:09.031305+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Google Scholar",
@@ -2087,7 +2371,20 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "97ae87f75cf9",
+        "state": "missing_evidence",
+        "updated_at": "2026-10-10T00:38:59.687234+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -2223,8 +2520,10 @@
       "reading_status": {
         "paper_id": "8564d8ee9066",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-09-30T13:15:30.419668+00:00",
+        "updated_at": "2026-10-10T00:34:31.120950+00:00",
         "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -2337,10 +2636,18 @@
       "recommended_direction": "fatigue_reliability",
       "reading_status": {
         "paper_id": "93948bc47be6",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-09-25T17:36:20.119600+00:00",
+        "state": "retry",
+        "updated_at": "2026-10-10T09:04:02.305494+00:00",
         "basis": "abstract",
-        "reason": "not_found"
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "error_code": "codex_connection",
+        "next_retry_at": "2026-10-10T10:04:02.305494+00:00",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
       }
     },
     {
@@ -2442,7 +2749,20 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "reading_status": {
+        "paper_id": "a013143718c4",
+        "state": "missing_evidence",
+        "updated_at": "2026-10-10T00:40:58.542399+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "source_status": {
@@ -3083,13 +3403,13 @@
     "unavailable": 16
   },
   "analysis_status": {
-    "ready_core": 1,
+    "ready_core": 3,
     "target_core": 5,
-    "ready_extended": 1,
+    "ready_extended": 2,
     "target_extended": 5,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 8
+    "pending": 5
   },
   "edition": {
     "id": "37974816676",
