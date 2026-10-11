@@ -154,7 +154,9 @@ class CodexClient:
                 if (account.get("account") or {}).get("type") != "chatgpt":
                     raise CodexError("需要重新登录：请在本机运行 codex login，使用你的 ChatGPT 账号。", code="codex_auth")
                 await self.refresh_models()
-            except Exception:
+            except (Exception, asyncio.CancelledError):
+                # Foreground chats can preempt a background reader during
+                # initialization. A live process is not yet a ready client.
                 await self.close()
                 raise
 

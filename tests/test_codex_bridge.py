@@ -398,6 +398,51 @@ def test_rpc_start_only_launches_verified_builds(tmp_path, monkeypatch, version,
     asyncio.run(run())
 
 
+@pytest.mark.parametrize('stage', ['initialize', 'account/read', 'model/list'])
+def test_cancelled_initialization_is_closed_and_can_restart(tmp_path, monkeypatch, stage):
+    processes = []
+    class Process:
+        returncode = None
+        stdin = SimpleNamespace(write=lambda _: None)
+        async def communicate(self):
+            return b'codex-cli 0.159.0-alpha.12.1\n', b''
+        def terminate(self):
+            self.returncode = 0
+        async def wait(self):
+            return self.returncode
+    async def spawn(*args, **kwargs):
+        p = Process()
+        processes.append(p)
+        return p
+    monkeypatch.setenv('CODEX_HOME', str(tmp_path))
+    monkeypatch.setattr('connectors.codex_bridge.rpc.executable', lambda: 'codex-test')
+    monkeypatch.setattr('connectors.codex_bridge.rpc.asyncio.create_subprocess_exec', spawn)
+    async def run():
+        client = CodexClient(tmp_path)
+        cancelled = False
+        async def call(method, params, timeout=45):
+            nonlocal cancelled
+            if method == stage and not cancelled:
+                cancelled = True
+                raise asyncio.CancelledError()
+            if method == 'account/read':
+                return {'account': {'type': 'chatgpt'}}
+            if method == 'model/list':
+                return {'data': [{'model': 'test-model', 'isDefault': True}]}
+            return {}
+        async def read():
+            pass
+        client.call, client._read = call, read
+        with pytest.raises(asyncio.CancelledError):
+            await client.start()
+        assert processes[1].returncode == 0
+        await client.start()
+        assert len(processes) == 4 and client.model == 'test-model'
+        await client.close()
+        await client.reader
+    asyncio.run(run())
+
+
 @pytest.mark.parametrize('existing', [None, 'existing-thread'])
 @pytest.mark.parametrize('purpose', ['reading', 'article'])
 @pytest.mark.parametrize('changes,valid', [

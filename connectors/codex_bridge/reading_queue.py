@@ -338,6 +338,10 @@ class ReadingQueue:
             connected = False
             try:
                 await self.client.start()
+                if row.get('connection_failures'):
+                    # Match the reconnect action: a long-lived app-server can
+                    # retain a model catalog that no longer accepts new threads.
+                    await self.client.refresh_models()
                 evidence_retry = row.get('error_code') == 'assessment_evidence' or 'Assessment evidence is not in the provided material' in row.get('error', '')
                 thread = await self.client.thread(None if evidence_retry else row['thread_id'])
                 connected = True

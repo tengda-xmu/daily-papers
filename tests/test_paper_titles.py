@@ -3,7 +3,7 @@ from io import BytesIO
 import json
 
 from src.editions import enrich, read, write
-from src.paper_titles import chinese_title, title_entries, title_key
+from src.paper_titles import chinese_title, chinese_abstract, title_entries, title_key
 from tools.build_site import paper_card
 from tools.translate_paper_titles import translate
 
@@ -45,6 +45,31 @@ def test_existing_title_wins_and_mismatched_identity_is_not_translated():
     assert chinese_title({**paper, 'doi': '10.test/other'}, catalog) == ''
     assert chinese_title({**paper, 'doi': ''}, catalog) == entry['title_zh']
     assert chinese_title({'title': '中文论文题名'}, {}) == '中文论文题名'
+
+
+def test_snippet_translation_preserves_original_and_pending_reading(monkeypatch):
+    row = {'title': 'LLM optimization controllers', 'title_zh': '大语言模型优化控制器',
+           'doi': '10.test/controllers', 'abstract': '… We present a controller …',
+           'abstract_zh': '……我们提出了一种控制器……'}
+    catalog = {title_key(row['title']): row}
+    monkeypatch.setattr('src.paper_titles.title_entries', lambda: catalog)
+    paper = {'id': '123456789abc', 'title': row['title'], 'doi': row['doi'],
+             'abstract': row['abstract'], 'summary': row['abstract'], 'source': 'Google Scholar',
+             'analysis_status': 'pending',
+             'reading_status': {'state': 'retry', 'error_code': 'codex_connection'}}
+    before = deepcopy(paper)
+    html = paper_card(paper, 'core')
+    assert paper == before
+    assert f'<p class="abstract">{row["abstract_zh"]}</p>' in html
+    assert '检索片段译文（非完整摘要）' in html and '英文原文' in html
+    assert row['abstract'] in html and row['title_zh'] in html
+    assert 'Codex 连接暂不可用' in html and '全文精读已完成' not in html
+    assert chinese_abstract({**paper, 'abstract': 'A changed source'}, catalog) == ''
+    assert chinese_abstract({**paper, 'doi': '10.test/other'}, catalog) == ''
+    assert chinese_abstract({**paper, 'title': 'Another paper'}, catalog) == ''
+    html = paper_card({**paper, 'summary': '已有中文导读，不应被片段译文覆盖。'}, 'core')
+    assert '<p class="abstract">已有中文导读，不应被片段译文覆盖。</p>' in html
+    assert row['abstract_zh'] not in html
 
 
 def pending_paper():

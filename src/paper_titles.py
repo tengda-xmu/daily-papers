@@ -44,3 +44,18 @@ def chinese_title(paper, entries=None):
     if doi and recorded_doi and doi != recorded_doi:
         return ''
     return row['title_zh'].strip()
+
+
+def chinese_abstract(paper, entries=None):
+    """A translation of exactly this abstract/snippet is not a reading note."""
+    catalog = title_entries() if entries is None else entries
+    row = catalog.get(title_key(paper.get('title')))
+    if not row or not chinese_title({**paper, 'title_zh': ''}, catalog):
+        return ''
+    original = str(paper.get('abstract') or '').strip()
+    translated = row.get('abstract_zh')
+    if (not original or original != str(row.get('abstract') or '').strip()
+            or not isinstance(translated, str) or not re.search(r'[\u4e00-\u9fff]', translated)
+            or len(translated) > 20000):
+        return ''
+    return translated.strip()

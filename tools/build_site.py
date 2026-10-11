@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import html
 import json
+import re
 import shutil
 import sys
 from collections import Counter
@@ -19,7 +20,7 @@ from src.conferences import CONFERENCES, GROUP as CONFERENCE_GROUP, SOURCE as CO
 from src.catalog import (JOURNALS, SOURCE_CATALOG, STATE_LABELS, TOPIC_CATALOG,
                          VENUE_GROUPS, paper_facets, source_state, string_list)
 from src.research_focus import focus_tags
-from src.paper_titles import chinese_title
+from src.paper_titles import chinese_title, chinese_abstract
 from src.reading_article import without_page_citations
 from src.figures import get_figure, figure_status
 from src.wechat_metadata import public_subscriptions
@@ -159,6 +160,9 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
         for topic in topics
     )
     summary = without_page_citations(paper.get("summary") or paper.get("abstract") or "暂无摘要，请查看原文。")
+    translated_abstract = chinese_abstract(paper) if not re.search(r'[\u4e00-\u9fff]', summary) else ''
+    if translated_abstract:
+        summary = translated_abstract
     if not paper.get('abstract') and summary == f"本文聚焦《{title}》，暂未提供可用摘要，请查看原文。":
         summary = "暂无可用摘要，请查看原文。"
     recommendation = paper.get("recommendation") or ""
@@ -204,6 +208,10 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
     snippet_only = (ready and not paper.get('analysis_material_version') and paper.get('analysis_basis') != 'full_text'
                     and paper.get('source') in ('Google Scholar', 'ResearchGate') and not clean_abstract(paper.get('abstract')))
     summary_label = "中文导读" if ready else "摘要"
+    original_abstract = ''
+    if translated_abstract:
+        summary_label = '摘要译文' if clean_abstract(paper.get('abstract')) else '检索片段译文（非完整摘要）'
+        original_abstract = f'<p class="detail-label">英文原文</p><p class="original-abstract" lang="en">{esc(paper["abstract"])}</p>'
     note_label = ("全文精读" if paper.get('analysis_basis') == 'full_text' else "摘要解读") if ready else "摘要与笔记"
     if snippet_only:
         note_label = '检索片段解读'
@@ -249,7 +257,7 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
   <p class="abstract">{esc(preview)}</p>
 {figure_html}
   <div class="paper-tools">{primary_action}{note_action}{chat_button}</div>
-  <div class="paper-detail-panel" id="{panel_id}" hidden>{provenance}<p class="detail-label">{summary_label}</p><p class="full-abstract">{esc(summary)}</p>{recommendation_html}{full_authors}{deep_html}<div class="tags">{tags}</div><div class="paper-actions">{actions}</div></div>
+  <div class="paper-detail-panel" id="{panel_id}" hidden>{provenance}<p class="detail-label">{summary_label}</p><p class="full-abstract">{esc(summary)}</p>{original_abstract}{recommendation_html}{full_authors}{deep_html}<div class="tags">{tags}</div><div class="paper-actions">{actions}</div></div>
 </article>'''
 
 

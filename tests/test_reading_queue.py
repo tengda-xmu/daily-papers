@@ -28,6 +28,8 @@ class FakeClient:
         self.value = value
     async def start(self):
         pass
+    async def refresh_models(self):
+        pass
     async def thread(self, existing=None):
         return existing or 'task-thread'
     async def turn(self, thread, prompt):
@@ -245,6 +247,27 @@ def test_connection_failure_cannot_overwrite_new_document_revision(tmp_path):
     q.connection_failed(old, TimeoutError())
     assert task(q)['revision'] == old['revision'] + 1
     assert task(q)['state'] == 'pending' and task(q)['connection_failures'] == 0
+
+
+def test_connection_retry_refreshes_catalog_before_creating_thread(tmp_path):
+    p = sample()
+    class StaleCatalog(FakeClient):
+        refreshed = False
+        async def refresh_models(self):
+            self.refreshed = True
+        async def thread(self, existing=None):
+            if not self.refreshed:
+                from connectors.codex_bridge.rpc import CodexError
+                raise CodexError('Cached default model is no longer available')
+            return await super().thread(existing)
+    client = StaleCatalog(response(p))
+    q = ReadingQueue(tmp_path, tmp_path/'runtime', client, asyncio.Lock())
+    q.enqueue(p)
+    asyncio.run(q.generate(task(q)))
+    assert task(q)['state'] == 'retry' and task(q)['attempts'] == 0
+    asyncio.run(q.generate(task(q)))
+    assert client.refreshed and task(q)['state'] == 'ready'
+    assert task(q)['connection_failures'] == 0
 
 
 def test_terminal_failure_does_not_promise_automatic_generation_retry():
