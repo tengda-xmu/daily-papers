@@ -240,11 +240,11 @@
       "reading_status": {
         "paper_id": "8a095e50b332",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-10T05:13:58.909986+00:00",
+        "updated_at": "2026-10-11T05:14:08.572276+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -271,7 +271,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "… We present a framework in which a large language model (LLM) acts as an online adaptive controller for SIMP topology optimization, replacing conventional fixed-schedule …",
+      "summary": "论文研究如何让大语言模型控制结构拓扑优化，而非直接生成结构。内层根据柔顺度、灰度等状态调整四个求解参数，外层跨运行调整控制器规则，并以确定性安全层约束动作。[P4][P11]主要二维、三维实验中，LLM取得最低平均柔顺度，但短预算条件下并非全部最优。[P14][P21][P22]解读：闭环调参架构值得借鉴，但元优化混杂、重启记录缺项及图文矛盾限制了机制归因，不宜把柔顺度改善解释为可靠性提升。",
       "raw_metadata": {
         "position": 3,
         "title": "Large Language Models as Optimization Controllers: Adaptive Continuation for SIMP Topology Optimization",
@@ -441,26 +441,523 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "推荐作为生成式结构设计中的求解器控制案例重点阅读，尤其关注数值动作接口、安全约束与消融设计；不建议直接采信其严格因果和普遍优越性主张。[P11][P25]",
+      "deep_read": {
+        "problem": "三场SIMP的延续计划决定惩罚、滤波与二值化如何推进。作者认为固定计划不观察当前拓扑，过早锐化可能固化较差局部解，过晚则消耗预算。[P2]研究问题因此不是预测最终结构，而是依据运行状态决定何时、以多大幅度调整求解参数。[P5]",
+        "method": "内层默认每五次迭代调用Gemini，输出p、β、r_min、δ及重启标志，仍由有限元与OC完成优化。[P9]安全层限制参数范围、滤波半径单调不增，并在G>0.20时强制β≤8；外层根据运行摘要调整控制器常数。四种延续控制器共享40次尾段，固定基线除外。[P11—P13]",
+        "innovation": "作者提出直接数值控制：LLM不选择预设阶段标签，而是联合给出四参数及审计理由；无需针对拓扑优化训练或微调。[P3]双层架构把运行内决策与跨运行规则调整结合。[P4]解读：价值在工程知识驱动的动态配置，而非新拓扑表示；独立创新性及阶段标签优势仍需更充分对照。",
+        "findings": "五种主要算例中LLM平均柔顺度最低；二维相对固定改善5.65%、7.46%、7.12%，三维改善18.09%、15.55%。[P14][P21]二维相对专家仅优0.09%—1.92%，且部分耗时更高。[P26]短预算下MBB与L形支架并非最优，说明结果不能推广为所有设置均胜出。[P22]",
+        "limitations": "作者承认仅验证单载荷柔顺度目标，且元优化与在线决策贡献未解耦。[P25]原文件缺项：P16表6续表缺重启执行列，理由不能证实逐次重载。P19灰度门穿越时点与图注矛盾，削弱延迟机制证据。模型版本依赖、冗余重启与API开销也限制复现和部署。[P23][P25]\n原文核对：[P16] 表6在P15的图表说明定义“restart=✓”表示请求并执行快照重载，但核对P15及P16续表，实际表头均只有Iter.、p、β、r_min、δ、Gate、理由，没有restart列或对应执行标记。现有勾号位于Gate列，仅表示灰度门激活。理由提及重启不能独立证实执行；缺项影响作者持续重启及恢复机制的逐次证据核验，不影响现有页面识读。",
+        "connection": "解读：与生成式结构设计直接相关，因为LLM控制搜索过程而非替代物理求解器；参数边界和可审计日志适合工程监督。[P11][P23]智能运维可借鉴状态观测、动作约束与反馈审核，但论文未验证该迁移。二值化和柔顺度降低亦不等于应力安全、失效概率下降或可靠性提高。[P25]",
+        "next_steps": "建议：先补齐重启执行日志并核对图文，再分别关闭元优化、灰度门和重启，明确各组件贡献；增加同预算的确定性闭环规则对照。[P16][P19][P25]将网格与迭代预算分开改变，检验短预算退化原因；锁定模型及完整提示后复现，再扩展应力约束与多载荷验证。[P22][P27]"
+      },
       "recommended_direction": "generative_design",
       "reading_status": {
         "paper_id": "d2e4438b2f24",
-        "state": "retry",
-        "updated_at": "2026-10-10T09:03:07.307624+00:00",
+        "state": "published",
+        "updated_at": "2026-10-11T14:11:26.830429+00:00",
         "basis": "full_text",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-10-10T10:03:07.307624+00:00",
         "total": 32,
-        "covered": 0,
+        "covered": 32,
         "pdf_available": true,
-        "issues": []
-      }
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "公式(1)的提取文本将ρ_e的指数p与下标e拆行。原页清楚显示ρ_e^p，已按E(ρ_e)=E_min+ρ_e^p(E_0−E_min)纠正；这关系到SIMP幂律惩罚的定义，并非原文件公式缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "公式(2)在文字提取中丢失分式横线与分子、分母层级。原页完整可读：分子为tanh(βη)+tanh(β(ρ̄_e−η))，分母为tanh(βη)+tanh(β(1−η))。已恢复Heaviside投影表达式，避免误读物理密度映射；原文件无缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "公式(3)、(4)的提取文本丢失分式排版，公式(5)、(6)的指数和转置层级被压平。原页均完整清楚，已恢复加权平均与Heaviside投影的分子/分母、ρ̃_e^p以及FᵀU和UᵀK(ρ̃)U；这些符号影响滤波、刚度插值和柔顺度定义，不是原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "文字资料仅保留图1图注，遗漏流程图内部文字和箭头。已从原页补充核对主循环、Gemini DNC动作及restart、最佳快照条件penal≥3.0且G(ρ*)<0.25、40次尾段参数和外层超参数反馈。遗漏影响对两层控制架构及快照选择条件的理解；原图完整可读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "公式(7)的文字提取压平了4/N_e及求和上下限，已由原页恢复G=(4/N_e)Σ_{e=1}^{N_e}ρ̃_e(1−ρ̃_e)。图2内部文字也未进入提取文本，包括顶部“PDE-based”滤波表述及五项动作范围；遗漏影响灰度定义和滤波实现的核对。原页无缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "图3提取文本仅含图注，遗漏观测数值、中央JSON及右栏应用值。原图已读清：中央请求β=4.0，右栏却写β←8.0（gate-capped），而图注称保持β。已忠实保留该原图矛盾，不能将其解释为提取错误或自行纠正；遗漏影响对安全层实际动作的判断。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "图4内部流程与更新示例未被文字提取保留。已核对五控制器比较、第二次Gemini反思、边界检查与正则写回，以及阈值0.20→0.22、调用周期5→4、β倍增周期10→12。遗漏影响外层更新机制的理解；原图完整，示例不能替代性能实验结果。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "表6第50次迭代的β，文字资料提取为2.0，原页清楚显示1.0，已纠正为(p,β,r_min,δ)=(3.4,1.0,1.50,0.20)。该错误影响β首次升高时点及耐心惩罚阶段的判断；原页理由虽称提高beta，但不能据此覆盖清晰数值。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P16",
+            "detail": "表6在P15的图表说明定义“restart=✓”表示请求并执行快照重载，但核对P15及P16续表，实际表头均只有Iter.、p、β、r_min、δ、Gate、理由，没有restart列或对应执行标记。现有勾号位于Gate列，仅表示灰度门激活。理由提及重启不能独立证实执行；缺项影响作者持续重启及恢复机制的逐次证据核验，不影响现有页面识读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P17",
+            "detail": "图5文字提取仅保留图注，遗漏三个分布面板、控制器标签及均值与区间位置。已从原页核对三个问题均由LLM取得最低均值，仅计划在悬臂梁和MBB梁高于固定基线。缺失的是提取内容，不是原文件；影响对排序和离散程度的图形核验。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P18",
+            "detail": "图6的15个密度场及其配套直方图未进入文字提取。已核对三行问题、五列控制器及中间密度与端点集中现象。提取遗漏影响拓扑差异和二值化证据的核验，原页图形完整可读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P19",
+            "detail": "图7—8的曲线、坐标和图例未进入文字提取，现已从原页核对。图8橙线约45—50次穿越G=0.20、约150次接近零，与图注称150次穿越门槛不一致；图7约160次主要可见向下瞬态。上述矛盾存在于清晰原图与图注之间，不是原文件缺项，也不能据图注覆盖曲线；影响灰度门持续时间及柔顺度瞬态机制的判断。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P20",
+            "detail": "图9四个参数轨迹面板未进入文字提取。已核对LLM较晚降低滤波半径和移动限幅、约145次前保持低β、约200次达到β=32，以及尾段δ回到0.05。提取遗漏影响延后锐化机制的核验；原图无缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P21",
+            "detail": "图10—11的实际投影面板和内部列标签未进入文字提取，仅保留图注。已从原页核对六列控制器，包含表7未列出的tail-only，以及三方向投影。遗漏影响仅尾段对照、结构形态及投影灰度的判断；原图完整。图11代表性C=5.428与表7均值5.430应区分，不是提取错误。"
+          }
+        ]
+      },
+      "title_zh": "大语言模型作为优化控制器：SIMP拓扑优化的自适应延续",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://arxiv.org/abs/2603.25099"
+      ],
+      "analyzed_at": "2026-10-11T13:44:46.385140+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 1,
+        "lead": "拓扑优化不仅要决定材料放在哪里，还要决定何时让灰色密度变成黑白结构。本文把大语言模型接入SIMP求解循环，根据当前状态直接调整延续参数，在五个主要二维、三维基准上获得最低平均柔顺度。阅读价值不只是性能数字，更在于理解状态反馈、确定性安全层与末端锐化如何共同作用，以及现有消融距离证明“必须使用LLM”还有多远。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "锐化时机：黑白结构不等于优质结构",
+            "paragraphs": [
+              "固定延续日程按迭代编号推进，不知道当前拓扑是否已经充分形成。过早提高Heaviside投影锐度β，可能把较差布局锁定在局部极小值；过晚锐化，则持续消耗预算于灰度材料。本文因此关注单载荷柔顺度最小化中的闭环参数控制，而不是直接预测最终拓扑。",
+              "这一问题已有非LLM解决思路。实际检索的《Automatic projection parameter increase for three-field density-based topology optimization》摘要介绍了依据目标变化自动提高β，并配合灰度停止准则和自适应移动限幅的方法。本文值得比较的增量，是同时协调多个参数与重启，而不能把“状态驱动锐化”本身视为独有贡献。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "LLM提出动作，数值求解器与安全层负责执行",
+            "paragraphs": [
+              "三场SIMP先将原始密度ρ滤波为ρ̄，再以阈值η=0.5投影为物理密度ρ̃。刚度采用E(ρ̃_e)=E_min+ρ̃_e^p(E_0−E_min)，其中E_min=10^−9E_0；求解KU=F后最小化柔顺度C=FᵀU。设计更新始终采用OC，LLM既不替代有限元，也不输出密度场。",
+              "内层默认每5次迭代调用gemini-3.1-flash-lite-preview，temperature=0，无拓扑优化数据微调。模型读取柔顺度、灰度、停滞、棋盘格和预算等状态，以JSON直接返回p、β、r_min、δ及restart；解释文本只供审计。确定性安全层裁剪动作，并在G>0.20时强制β≤8，模型无法覆盖。",
+              "公式(7)定义G=(4/N_e)Σρ̃_e(1−ρ̃_e)，是连续灰度指标，并非中间密度单元比例。外层在三个二维几何上每个问题执行5次元优化，调整门限、调用频率和阶段常数，不更新模型权重。四个延续控制器均从最佳有效快照执行40次统一锐化尾段，固定基线没有尾段。"
+            ]
+          },
+          {
+            "id": "validation",
+            "title": "五种控制器、五个主基准与两类关键消融",
+            "paragraphs": [
+              "验证全部来自数值仿真，没有实物制造或力学试验。主要二维悬臂梁、MBB梁、L形支架采用120×60网格，三维悬臂梁和MBB梁采用40×20×10网格，体积分数均为0.40；主循环300次，延续组另加40次尾段。每个问题、每种控制器报告5个随机种子运行，网格单元和API调用均不是独立样本。",
+              "比较组包括固定参数、预设三场延续、专家启发式、Schedule-only及LLM。Schedule-only保留四阶段结构，但不读取实际状态；它在二维悬臂梁和MBB梁上分别比固定基线差0.43%和1.09%。另有60×30、100次主循环的Tail-only消融，其从均匀密度执行尾段，柔顺度劣化114.6%–140.5%，说明仅靠锐化不能替代探索。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "收益成立，但闭环机制与LLM必要性仍需解耦",
+            "paragraphs": [
+              "主要二维结果相对固定基线降低柔顺度5.65%、7.46%、7.12%，三维对应降低18.09%、15.55%。但二维相对专家启发式的优势仅为0.09%、1.92%、0.95%，且未报告显著性检验；低预算消融中，LLM也并非三个问题都最优。**较低柔顺度不意味着普遍更快**：二维悬臂梁、MBB梁及两个三维问题均有时间开销。",
+              "当前证据支持固定阶段结构不足以解释主实验收益，却不能分离LLM、灰度门、快照重启和外层调参的贡献。三个二维几何都参与元优化，未报告独立测试划分；固定组缺少尾段，也使对它的收益不能全部归因于在线决策。图8门限跨越时间存在图文矛盾，表6缺少重启执行列，MBB密度图还标出G=0.0004，因此应保留精度与机制证据的边界。"
+            ]
+          }
+        ],
+        "experiments": [
+          {
+            "name": "二维主基准五控制器比较及Schedule-only消融",
+            "data": "悬臂梁、MBB梁、L形支架数值基准；120×60网格，V_f=0.40、ν=0.3、E_min/E_0=10^−9。",
+            "samples": "每个问题、每个控制器n=5个独立随机种子运行；三种几何不等于15个独立结构。未报告实物试件或增强数据数量。",
+            "groups": "五组分别为Fixed、三场延续、专家启发式、Schedule-only、LLM；主循环300次，除Fixed外追加40次统一尾段。",
+            "split": "无需训练或微调；三个二维几何均参与外层调参。未报告训练、验证、测试划分或独立留出几何。",
+            "baselines": "Fixed保持p=3、β=1、r_min=1.5、δ=0.2；另比较预设延续、专家规则及无状态反馈的四阶段调度。",
+            "metrics": "柔顺度C=FᵀU及均值±标准差、灰度G、相对Fixed均值变化、墙钟时间和最佳快照迭代数；C单位未报告。",
+            "results": "LLM的C依次为76.407±0.021、94.646±0.050、43.028±0.000；相对Fixed为−5.65%、−7.46%、−7.12%。时间依次445.2、562.4、150.1 s。",
+            "limitations": "Fixed无尾段，处理预算不同；未报告显著性检验。正文最小非零标准差表述与表值不符，G=0.000也须结合图中精度解释。"
+          },
+          {
+            "name": "三维悬臂梁与MBB梁五控制器比较",
+            "data": "两个分别评测的三维数值基准，均为40×20×10网格、V_f=0.40；求解采用AMG预条件共轭梯度法。",
+            "samples": "每个问题、每种控制器n=5个种子运行；不是五种独立几何。种子具体值、实物试件及增强数量未报告。",
+            "groups": "Fixed、三场延续、专家启发式、Schedule-only、LLM；N=300主循环，四个延续组采用40次统一尾段。",
+            "split": "由二维迁移至三维时系统提示不变；未报告独立测试划分，也未开展跨LLM模型的定量验证。",
+            "baselines": "固定参数、预设延续、专家启发式及仅日程控制；代表性投影另含Tail-only，但表7没有该组三维统计结果。",
+            "metrics": "柔顺度均值±标准差、平均灰度、相对Fixed变化、时间（s）和最佳有效快照迭代数；柔顺度单位未报告。",
+            "results": "LLM的C为3.981±0.000、5.430±0.001，相对Fixed为−18.09%、−15.55%；专家为3.999±0.001、5.442±0.001。LLM耗时1198、1685 s。",
+            "limitations": "LLM均值最低但并非最快，MBB耗时最长；未报告显著性检验和完整载荷细节。0.000标准差只代表表列精度。"
+          },
+          {
+            "name": "低分辨率、短预算下的Tail-only消融",
+            "data": "二维悬臂梁、MBB梁、L形支架；60×30网格，V_f=0.40，主循环N=100，与主要二维配置不同。",
+            "samples": "各问题、各控制器n=5个种子运行；未报告实体试件和增强数量。迭代次数不是样本数。",
+            "groups": "六组为Fixed、Tail-only、三场延续、专家启发式、Schedule-only、LLM；Tail-only末端从均匀密度开始锐化40次。",
+            "split": "无需训练；未报告该消融的独立留出划分。不得把同一几何的种子重复视为跨几何泛化验证。",
+            "baselines": "Tail-only主循环p=1、β=1，不满足有效快照要求；与Fixed及四种完整延续控制器比较。",
+            "metrics": "最终柔顺度均值±标准差、平均灰度及相对Fixed变化；该表未报告时间，柔顺度单位未报告。",
+            "results": "Tail-only的C为211.777、246.560、105.645，相对Fixed增加140.5%、124.7%、114.6%，G均为0.000；LLM只在悬臂梁最优。",
+            "limitations": "该结果证明此配置下仅尾段不足，不排除其他尾段预算有效。分辨率与预算同时改变，无法分离两者影响。"
+          }
+        ],
+        "routes": [
+          {
+            "title": "用等预算因子实验检验LLM是否不可替代",
+            "direction_id": "generative_design",
+            "gap": "现有消融未分离在线LLM、硬灰度门、重启和外层调参，固定基线又没有尾段。建议首先建立可配对的等预算协议，避免将延续收益误认为语言模型的独立贡献。",
+            "mechanism": "构建透明的状态反馈规则控制器，依据目标变化、G和停滞调整β与δ，再协调p和滤波半径。检索到的自动投影参数研究可作为机制参考，但目前只有摘要，具体实现需取得全文后确认。",
+            "innovation": "候选创新是把LLM决策与同状态、同约束的确定性策略放在统一接口中，分解动作提议和安全层执行的贡献。已有自动锐化机制与这一评测组合须明确区分，不预设LLM必然占优。",
+            "design": "建议设计12个几何—载荷配置，4个用于规则调参、8个冻结留出，每组10个配对种子。自行生成并公开网格、载荷和边界条件，不依赖尚未公开的论文仓库；独立配置与种子重复分别统计。",
+            "comparison": "设置固定、专家规则、状态反馈规则、LLM及动作轨迹回放组，逐项禁用门控、重启和元优化。统一主循环与尾段，再增加等墙钟预算评测，记录失败回退，不将服务失败排除于主要统计。",
+            "criterion": "建议预注册配对柔顺度差及95%置信区间，同时要求体积可行、达到明确灰度容差。只有LLM在留出配置和等时间条件下仍有可靠优势，才支持其额外复杂度；否则优先规则控制器。",
+            "risk": "确定性规则可能对调参几何过拟合，API版本也可能漂移。应冻结提示、记录模型版本并保存逐次状态与应用动作；若优势只见于长预算，转向按预算选择控制器，而不追求统一LLM方案。"
+          },
+          {
+            "title": "把参数安全护栏扩展为可验证的求解可信度护栏",
+            "direction_id": "generative_design",
+            "gap": "本文护栏主要约束参数范围和灰度，尚不能保证三维线性求解准确或重启理由可信。建议先验证数值状态可信度，再讨论多载荷扩展，不能用低柔顺度替代平衡残差和约束可行性。",
+            "mechanism": "在每次参数变化和快照接纳前重算真实残差‖F−KU‖/‖F‖，并核对体积与灰度。实际检索的密度下限研究摘要提示停止残差可能失真，但其FGMRES结果不能直接套用本文AMG预条件CG。",
+            "innovation": "候选创新是将残差验收、动作冲突标记和受限重启统一为独立监督层，LLM只提出动作。真实残差守卫属于已有技术；与延续决策审计的耦合及其成本收益才是需要实验检验的新组合。",
+            "design": "建议设计8个三维配置，各采集20个不同演化阶段的冻结状态，另作每配置10个种子闭环运行。数据需由可公开的自建有限元流程生成，分别保留状态测试与完整轨迹，不混计为独立几何。",
+            "comparison": "比较原安全层、增加残差守卫、增加阈值显式观测、限制晚期重启四组，使用相同求解容差。再与确定性可信度控制器比较，消融残差检查和理由冲突标记，并注入可记录的API失败。",
+            "criterion": "建议以全部接纳状态满足预设残差容差为首要判据，同时报告错误接纳率、无效重启数、柔顺度和墙钟开销。阈值如10^−6仅为建议起点，需经网格与求解器敏感性分析确定。",
+            "risk": "额外残差检查可能抵消优化收益，故先测试冻结状态再进入闭环。若检查昂贵，可按参数突变和停滞触发，但最终状态仍须强制验收；若多载荷成本过高，先限制在单载荷验证可信度。"
+          }
+        ],
+        "diagrams": [
+          {
+            "kind": "study",
+            "title": "原研究：状态条件化延续与统一锐化尾段",
+            "description": "LLM调整数值参数而非预测拓扑；外层跨运行调参，固定无延续基线不执行尾段。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "问题与均匀密度",
+                "detail": "输入设计域、网格、边界、体积分数和迭代预算"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "三场SIMP与OC",
+                "detail": "滤波、投影、有限元求解、灵敏度计算和密度更新"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "状态观测与DNC",
+                "detail": "默认每5次迭代调用Gemini，提出四参数及重启动作"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "确定性安全层",
+                "detail": "裁剪参数；G>0.20时β≤8；有效快照存在才允许重启"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "最佳快照与40次尾段",
+                "detail": "四个延续组统一锐化；固定组不执行尾段"
+              },
+              {
+                "id": "f",
+                "stage": 5,
+                "label": "性能评测与外层更新",
+                "detail": "统计柔顺度、灰度和时间；第二次LLM调用调整跨运行常数"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "初始化"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "提供当前状态"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "提出JSON动作"
+              },
+              {
+                "from": "d",
+                "to": "b",
+                "label": "应用受限动作"
+              },
+              {
+                "from": "b",
+                "to": "e",
+                "label": "主循环完成"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "测量终态性能"
+              },
+              {
+                "from": "f",
+                "to": "c",
+                "label": "更新下一运行规则"
+              }
+            ]
+          },
+          {
+            "kind": "proposal",
+            "title": "拟议路线一：等预算分解闭环控制收益",
+            "description": "以下为建议实验，不代表已验证结果；重点区分LLM提议、安全层和元优化的作用。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "生成并公开配置",
+                "detail": "建议12个几何—载荷配置，4个调参、8个冻结留出"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "冻结评测协议",
+                "detail": "统一状态接口、主循环、尾段、硬件和配对种子"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "LLM与规则控制",
+                "detail": "比较固定、专家、状态反馈规则、LLM和轨迹回放"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "机制因子消融",
+                "detail": "逐项禁用灰度门、重启和外层元优化"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "留出配对评测",
+                "detail": "建议每组10个种子，增加等墙钟条件并纳入API失败"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "统计与部署选择",
+                "detail": "评估置信区间、可行性和成本，决定采用LLM或规则策略"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "隔离调参与测试"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "统一比较条件"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "定义消融因素"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "比较控制策略"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "分离机制贡献"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "检验收益与代价"
+              }
+            ]
+          }
+        ],
+        "related": {
+          "status": "ok",
+          "checked_at": "2026-10-11T14:08:21.772824+00:00",
+          "papers": [
+            {
+              "title": "FORWARD-ACCELERATED SIMP FOR TOPOLOGY OPTIMIZATION OF LOAD-BEARING MACHINE PARTS",
+              "url": "https://doi.org/10.36910/775.24153966.2026.86.24",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Self-Refining Topology Optimization via an LLM-Based Multi-Agent Framework",
+              "url": "https://doi.org/10.2139/ssrn.7162224",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "When a positive SIMP density floor is not enough: solver admissibility and guarded floor selection in matrix-free 3D topology optimization",
+              "url": "https://doi.org/10.48550/arxiv.2607.26382",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            },
+            {
+              "title": "Zero-shot rib design: Merging a training-free generative prior with topology optimization",
+              "url": "https://doi.org/10.1016/j.aei.2026.105276",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Automatic projection parameter increase for three-field density-based topology optimization",
+              "url": "https://doi.org/10.1007/s00158-025-03968-2",
+              "year": 2025,
+              "basis": "abstract",
+              "preprint": false
+            }
+          ]
+        }
+      },
+      "article_updated_at": "2026-10-11T14:11:26.826406+00:00",
+      "article_profile": "2676dd9dac73a6636bdc9b6c89a0ea9554d9fea5f560509b66dacbb1fd327708",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P5"
+        ],
+        "method": [
+          "P9",
+          "P11",
+          "P12",
+          "P13"
+        ],
+        "innovation": [
+          "P3",
+          "P4",
+          "P26"
+        ],
+        "findings": [
+          "P14",
+          "P21",
+          "P22",
+          "P26"
+        ],
+        "limitations": [
+          "P16",
+          "P19",
+          "P23",
+          "P25"
+        ],
+        "connection": [
+          "P11",
+          "P23",
+          "P25"
+        ],
+        "next_steps": [
+          "P16",
+          "P19",
+          "P22",
+          "P25",
+          "P27"
+        ]
+      },
+      "analysis_material_version": "9ce17497097756bd09812eb6ef83fe18391f7cc51f3f113dbe76acbd34ec47f6",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "公式(1)的提取文本将ρ_e的指数p与下标e拆行。原页清楚显示ρ_e^p，已按E(ρ_e)=E_min+ρ_e^p(E_0−E_min)纠正；这关系到SIMP幂律惩罚的定义，并非原文件公式缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "公式(2)在文字提取中丢失分式横线与分子、分母层级。原页完整可读：分子为tanh(βη)+tanh(β(ρ̄_e−η))，分母为tanh(βη)+tanh(β(1−η))。已恢复Heaviside投影表达式，避免误读物理密度映射；原文件无缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "公式(3)、(4)的提取文本丢失分式排版，公式(5)、(6)的指数和转置层级被压平。原页均完整清楚，已恢复加权平均与Heaviside投影的分子/分母、ρ̃_e^p以及FᵀU和UᵀK(ρ̃)U；这些符号影响滤波、刚度插值和柔顺度定义，不是原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "文字资料仅保留图1图注，遗漏流程图内部文字和箭头。已从原页补充核对主循环、Gemini DNC动作及restart、最佳快照条件penal≥3.0且G(ρ*)<0.25、40次尾段参数和外层超参数反馈。遗漏影响对两层控制架构及快照选择条件的理解；原图完整可读。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "公式(7)的文字提取压平了4/N_e及求和上下限，已由原页恢复G=(4/N_e)Σ_{e=1}^{N_e}ρ̃_e(1−ρ̃_e)。图2内部文字也未进入提取文本，包括顶部“PDE-based”滤波表述及五项动作范围；遗漏影响灰度定义和滤波实现的核对。原页无缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P10",
+          "detail": "图3提取文本仅含图注，遗漏观测数值、中央JSON及右栏应用值。原图已读清：中央请求β=4.0，右栏却写β←8.0（gate-capped），而图注称保持β。已忠实保留该原图矛盾，不能将其解释为提取错误或自行纠正；遗漏影响对安全层实际动作的判断。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P12",
+          "detail": "图4内部流程与更新示例未被文字提取保留。已核对五控制器比较、第二次Gemini反思、边界检查与正则写回，以及阈值0.20→0.22、调用周期5→4、β倍增周期10→12。遗漏影响外层更新机制的理解；原图完整，示例不能替代性能实验结果。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "表6第50次迭代的β，文字资料提取为2.0，原页清楚显示1.0，已纠正为(p,β,r_min,δ)=(3.4,1.0,1.50,0.20)。该错误影响β首次升高时点及耐心惩罚阶段的判断；原页理由虽称提高beta，但不能据此覆盖清晰数值。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P16",
+          "detail": "表6在P15的图表说明定义“restart=✓”表示请求并执行快照重载，但核对P15及P16续表，实际表头均只有Iter.、p、β、r_min、δ、Gate、理由，没有restart列或对应执行标记。现有勾号位于Gate列，仅表示灰度门激活。理由提及重启不能独立证实执行；缺项影响作者持续重启及恢复机制的逐次证据核验，不影响现有页面识读。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P17",
+          "detail": "图5文字提取仅保留图注，遗漏三个分布面板、控制器标签及均值与区间位置。已从原页核对三个问题均由LLM取得最低均值，仅计划在悬臂梁和MBB梁高于固定基线。缺失的是提取内容，不是原文件；影响对排序和离散程度的图形核验。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P18",
+          "detail": "图6的15个密度场及其配套直方图未进入文字提取。已核对三行问题、五列控制器及中间密度与端点集中现象。提取遗漏影响拓扑差异和二值化证据的核验，原页图形完整可读。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P19",
+          "detail": "图7—8的曲线、坐标和图例未进入文字提取，现已从原页核对。图8橙线约45—50次穿越G=0.20、约150次接近零，与图注称150次穿越门槛不一致；图7约160次主要可见向下瞬态。上述矛盾存在于清晰原图与图注之间，不是原文件缺项，也不能据图注覆盖曲线；影响灰度门持续时间及柔顺度瞬态机制的判断。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P20",
+          "detail": "图9四个参数轨迹面板未进入文字提取。已核对LLM较晚降低滤波半径和移动限幅、约145次前保持低β、约200次达到β=32，以及尾段δ回到0.05。提取遗漏影响延后锐化机制的核验；原图无缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P21",
+          "detail": "图10—11的实际投影面板和内部列标签未进入文字提取，仅保留图注。已从原页核对六列控制器，包含表7未列出的tail-only，以及三方向投影。遗漏影响仅尾段对照、结构形态及投影灰度的判断；原图完整。图11代表性C=5.428与表7均值5.430应区分，不是提取错误。"
+        }
+      ]
     },
     {
       "source": "Semantic Scholar",
@@ -552,13 +1049,13 @@
       "reading_status": {
         "paper_id": "8a3a74d4605b",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-10T10:01:45.089032+00:00",
+        "updated_at": "2026-10-11T13:11:30.053720+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -659,11 +1156,11 @@
       "reading_status": {
         "paper_id": "4ddc4c6ce195",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-10T05:17:28.898455+00:00",
+        "updated_at": "2026-10-11T05:17:35.777543+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -772,7 +1269,7 @@
       "reading_status": {
         "paper_id": "d552f4215ad9",
         "state": "missing_evidence",
-        "updated_at": "2026-10-10T00:34:10.425624+00:00",
+        "updated_at": "2026-10-11T00:55:23.192278+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -781,7 +1278,8 @@
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "面向可制造设计中结构概念快速生成的大语言模型驱动符号拓扑优化"
     }
   ],
   "extended": [
@@ -807,7 +1305,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "所给摘要介绍的是水资源工程模拟模型综述，与条目所列无人机铝钛合金及机器学习题名明显不一致。文章关注近几十年科研中使用的水文与水力模拟软件，比较其特征、方法和应用，旨在帮助研究者选择模型并提高结果准确性。[摘要] 当前资料未提供软件清单、比较结果或验证数据，不能据此评价无人机材料性能，也不能确认其对生成式设计和疲劳可靠性研究的贡献。本次仅作摘要级解读。",
+      "summary": "本文围绕无人机结构中的铝合金与钛合金选材，汇集实验报告及文献中的材料属性，利用机器学习考察定量、定性参数与设计要求之间的非线性关系。资料涉及强度、疲劳、耐蚀性、成本及供应等因素，体现多准则选材思路。摘要声称模型可靠性与泛化能力有所改善，但未提供算法、样本规模、验证方案或性能数值。因此，适合关注结构材料选择与疲劳可靠性的读者初步阅读，尚不能据此确认模型优势。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7213446467",
@@ -869,36 +1367,36 @@
       "focus_tags": [],
       "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "不建议按无人机材料、生成式设计或疲劳可靠性方向重点推荐；应先核对题名与摘要的对应关系，再决定是否阅读全文。当前摘要仅支持将其视为水资源模拟软件综述。[摘要]",
+      "recommendation": "建议作为无人机结构多属性选材的候选文献阅读，重点核查疲劳属性如何参与建模及模型验证；当前资料不足以支持其生成式设计能力或可靠性提升幅度。[摘要]",
       "deep_read": {
-        "problem": "摘要提出，水资源工程实体模型成本较高且耗时，计算机模拟提供了替代途径。其研究问题是如何理解不同模拟模型的特点，并为具体问题选择合适工具。[摘要] 原文称“costly and time-consuming physical models”，但未涉及无人机结构或合金性能。",
-        "method": "文章采用研究综述方式，梳理近几十年科学研究中使用的水文与水力模拟软件，比较模型特征、方法与应用差异。[摘要] 原文表述为“differences between them in terms of methodology and application”；摘要未说明检索策略、纳入标准或比较指标。",
-        "innovation": "摘要没有明确提出新算法、新材料模型或新的优化框架，只说明综述能够为模型选择提供参考。[摘要] 解读：其潜在价值在于整理不同软件的适用条件，而非已经证明的方法创新；由于缺少具体比较内容，不能确认综述相对既有研究的新增贡献。",
-        "findings": "摘要声称论文能够帮助研究者选择适合问题的模型并提高结果准确性，原文使用“enhance the accuracy of their results”。[摘要] 但没有列出任何模型的优劣、适用边界或精度验证结果，因此这属于作者概括的用途，不能当作已量化证实的性能提升。",
-        "limitations": "当前最直接的资料局限是题名与摘要主题不一致，且仅有摘要，无法核实实际论文对象。摘要也没有提供软件名称、比较结果及验证依据。[摘要] 这些是本次判断的证据限制，并非作者承认的研究缺陷；不能据此断言全文未开展系统比较或验证。",
-        "connection": "所给摘要讨论水文与水力模拟，没有出现生成式设计、疲劳可靠性或智能运维研究内容。[摘要] 解读：模型选型与方法比较的思路可能具有跨领域参考意义，但这种一般性联系不足以证明其切合结构设计方向，更不能据此补写机器学习材料性能结论。",
-        "next_steps": "建议：先核对论文题名、DOI与摘要的对应关系，再获取正确原文。若实际论文确为水资源模拟综述，应重点检查软件分类、比较维度和验证依据；若为无人机合金研究，则需另行核实材料数据、机器学习任务及结构性能证据，当前资料不足以提出具体复现实验。"
+        "problem": "研究关注无人机结构中铝合金与钛合金的性能评估和材料选择。摘要以“complex multi-criteria system”描述选材情境，涉及物理、力学、疲劳与工程使用属性。解读：核心问题是协调多个选材要求，而不是仅按单一强度指标比较材料。[摘要]",
+        "method": "摘要说明数据来自实验报告值与可靠文献，并同时使用定量和定性参数建立机器学习模型。属性清单涵盖密度、弹性模量、强度、疲劳、加工及经济因素。不过，当前资料没有交代具体算法、数据清洗、定性属性编码或训练测试划分，方法尚不能复现。[摘要]",
+        "innovation": "可识别的研究特色是将疲劳指标与耐蚀性、焊接性、成本、供应情况共同纳入无人机材料评估。解读：这种组织方式强调工程选材的多维约束。但摘要未与既有选材方法比较，不能确认其原创性，也未提供生成式设计或新模型架构的证据。[摘要]",
+        "findings": "摘要声称模型具有“improved reliability and generalization”，并能服务无人机结构设计与选材。这是作者报告的结果性判断，当前资料未展示对应指标、比较基线或误差数据，也未说明铝合金与钛合金在何种工况下表现更优，不能提炼具体材料排名。[摘要]",
+        "limitations": "当前资料的主要限制是证据披露不足，并非已经证实研究本身存在缺陷。摘要称每个样本包含“12 attributes”，但随后仅列出十一项，需核对完整属性表；此外，样本数量、来源分布及外部验证均未说明，无法判断数据代表性与结论适用范围。[摘要]",
+        "connection": "解读：疲劳强度和疲劳寿命使该研究与结构疲劳可靠性方向直接相关，多属性选材也能为结构设计提供输入。但摘要中的模型可靠性不等同于结构失效概率评估；资料没有运维监测、故障诊断或生成式结构优化证据，与这些方向的联系仅属潜在应用。[摘要]",
+        "next_steps": "建议后续获取全文，优先核对属性数量、数据来源、疲劳试验条件和模型验证方案，再判断是否值得复用。若开展迁移研究，可比较纳入与排除疲劳属性时的选材结果，并检验跨来源数据上的预测稳定性；这些是研究建议，不是作者已经完成的实验。[摘要]"
       },
       "recommended_direction": "fatigue_reliability",
-      "title_zh": "水资源工程水文与水力模拟软件综述（依据所给摘要）",
+      "title_zh": "基于机器学习的无人机结构铝合金与钛合金性能分析",
       "analysis_basis": "abstract",
       "analysis_kind": "model",
       "analysis_sources": [
         "https://doi.org/10.56990/bajest/2026.050203"
       ],
-      "analyzed_at": "2026-10-10T05:19:09.017049+00:00",
+      "analyzed_at": "2026-10-11T13:26:12.098759+00:00",
       "llm_model": "gpt-6.1-sol",
       "analysis_references": {},
-      "analysis_material_version": "a620bff291f667fd682aa32754fb20ecaf0831281444e98c245bc160dfccac65",
+      "analysis_material_version": "d49b01b571055bc5b741c49ed94ee3b790422865743a99caf86f960b8ec5538a",
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "569d913e4413",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-10T05:19:09.031305+00:00",
+        "updated_at": "2026-10-11T13:26:12.110214+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -995,7 +1493,7 @@
       "reading_status": {
         "paper_id": "97ae87f75cf9",
         "state": "missing_evidence",
-        "updated_at": "2026-10-10T00:38:59.687234+00:00",
+        "updated_at": "2026-10-11T00:56:53.271313+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -1004,7 +1502,8 @@
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "利用多模态大语言模型降维的内嵌式永磁同步电机参数与拓扑优化"
     },
     {
       "source": "Semantic Scholar",
@@ -1140,11 +1639,11 @@
       "reading_status": {
         "paper_id": "8564d8ee9066",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-10T00:34:31.120950+00:00",
+        "updated_at": "2026-10-11T00:56:34.083403+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -1170,7 +1669,7 @@
         "ai_maintenance",
         "fatigue_reliability"
       ],
-      "summary": "Sudden failures of steel bridges are frequently associated with fatigue cracks that initiate at welded joints, geometric discontinuities, bolted connections, orthotropic decks, diaphragm attachments, and corrosion-damaged regions. Although fatigue failure is usually a progressive phenomenon, its final stage can occur abruptly when a subcritical crack reaches a critical size and the stress-intensity factor exceeds the fracture toughness of the material. Under high dynamic loading, the conventional static stress-range approach may be insufficient because structural inertia, resonance, traffic-in…",
+      "summary": "钢桥疲劳裂纹通常渐进扩展，但达到临界尺寸后可能突然失效。本文摘要提出将结构动力学、断裂力学、随机交通荷载、概率可靠性及数字孪生耦合的预测框架，并利用监测数据开展贝叶斯更新与物理信息机器学习。其重点是多层系统协同，而非单一预测算法。当前仅有摘要，可了解方法构成与研究主张，无法核实预测精度、工程验证或维护收益。[摘要]",
       "raw_metadata": {
         "id": "93948bc47be6",
         "title": "Predictive Models of Fatigue Failure in Steel Bridges under Severe Dynamic Loading: An Advanced Fracture-Mechanics, Probabilistic, and Digital-Twin Framework",
@@ -1249,26 +1748,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为钢桥疲劳可靠性与智能运维交叉研究的框架型资料阅读，重点关注裂纹扩展、监测更新和维护决策如何衔接；摘要未提供验证结果，不宜据此认定其方法优于现有技术。[摘要]",
+      "deep_read": {
+        "problem": "研究针对强动态荷载下钢桥疲劳裂纹扩展及最终突发断裂的预测问题。摘要指出，惯性、共振、交通振动、冲击、腐蚀与残余应力等共同作用，传统静态应力幅方法可能不足。其表述为“may be insufficient”，并未证明该方法在所有场景下失效。[摘要]",
+        "method": "框架将运动方程、雨流计数所得应力谱、非线性疲劳损伤累积、Paris–Erdogan与Forman裂纹扩展方程，以及极限状态可靠性函数结合。摘要另列贝叶斯更新和物理信息机器学习，但未给出模型接口、求解流程或训练细节。[摘要]",
+        "innovation": "解读：摘要呈现的潜在特色是将动力响应、裂纹演化、概率推断与数字孪生纳入同一预测体系，而非只估算疲劳寿命。不过，“advanced predictive framework”属于作者对框架的定位；缺少既有方法对比，不能确认各模块或其耦合具有原创性。[摘要]",
+        "findings": "摘要主张可靠预测应依靠多层系统，结合力学分析、连续监测、概率推断与保守维护决策，并强调“not a single predictive algorithm”。这属于方法论结论；当前资料未报告试验、案例、误差指标或可靠性改善幅度，不能当作已验证的性能成果。[摘要]",
+        "limitations": "当前资料只有摘要，未说明桥型、材料参数、荷载数据、裂纹观测与验证方案，也未报告不确定性降低的量化结果。因此无法判断框架的适用边界、计算成本及现场实施条件。这些是现有资料的证据缺口，不应直接认定为作者研究本身已证实的缺陷。[摘要]",
+        "connection": "解读：该框架与智能运维和疲劳可靠性方向直接相关：应变、加速度、声发射、动态称重及机器视觉数据可参与状态评估，概率模型连接裂纹风险与维护决策。对结构设计的联系则较间接，摘要未提供构造优化、尺寸设计或设计规范层面的成果。[摘要]",
+        "next_steps": "建议：后续阅读应核对动态应力谱如何驱动裂纹模型、监测数据如何更新参数，以及极限状态如何对应维护阈值。若开展迁移研究，可先选明确疲劳细节，对比静态模型与耦合模型的预测和不确定性；这些是研究建议，并非摘要已完成的工作。[摘要]"
+      },
       "recommended_direction": "fatigue_reliability",
       "reading_status": {
         "paper_id": "93948bc47be6",
-        "state": "retry",
-        "updated_at": "2026-10-10T09:04:02.305494+00:00",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-11T14:01:18.636537+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
         "reason": "not_found",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-10-10T10:04:02.305494+00:00",
-        "total": 0,
-        "covered": 0,
+        "total": 1,
+        "covered": 1,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "强动态荷载下钢桥疲劳失效预测：断裂力学、概率分析与数字孪生框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.5281/zenodo.22552729"
+      ],
+      "analyzed_at": "2026-10-11T14:01:18.630005+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "328e3f57f6a39de87a120988b1c904f6f42f9d4eadbfc6bc42c230612b82c969",
+      "analysis_issues": []
     },
     {
       "source": "Google Scholar",
@@ -1373,7 +1889,7 @@
       "reading_status": {
         "paper_id": "a013143718c4",
         "state": "missing_evidence",
-        "updated_at": "2026-10-10T00:40:58.542399+00:00",
+        "updated_at": "2026-10-11T00:57:04.332448+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -1382,7 +1898,8 @@
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "大语言模型增强的基于智能体的门诊部门布局生成设计"
     }
   ],
   "papers": [
@@ -1622,11 +2139,11 @@
       "reading_status": {
         "paper_id": "8a095e50b332",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-10T05:13:58.909986+00:00",
+        "updated_at": "2026-10-11T05:14:08.572276+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -1653,7 +2170,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "… We present a framework in which a large language model (LLM) acts as an online adaptive controller for SIMP topology optimization, replacing conventional fixed-schedule …",
+      "summary": "论文研究如何让大语言模型控制结构拓扑优化，而非直接生成结构。内层根据柔顺度、灰度等状态调整四个求解参数，外层跨运行调整控制器规则，并以确定性安全层约束动作。[P4][P11]主要二维、三维实验中，LLM取得最低平均柔顺度，但短预算条件下并非全部最优。[P14][P21][P22]解读：闭环调参架构值得借鉴，但元优化混杂、重启记录缺项及图文矛盾限制了机制归因，不宜把柔顺度改善解释为可靠性提升。",
       "raw_metadata": {
         "position": 3,
         "title": "Large Language Models as Optimization Controllers: Adaptive Continuation for SIMP Topology Optimization",
@@ -1823,26 +2340,523 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "推荐作为生成式结构设计中的求解器控制案例重点阅读，尤其关注数值动作接口、安全约束与消融设计；不建议直接采信其严格因果和普遍优越性主张。[P11][P25]",
+      "deep_read": {
+        "problem": "三场SIMP的延续计划决定惩罚、滤波与二值化如何推进。作者认为固定计划不观察当前拓扑，过早锐化可能固化较差局部解，过晚则消耗预算。[P2]研究问题因此不是预测最终结构，而是依据运行状态决定何时、以多大幅度调整求解参数。[P5]",
+        "method": "内层默认每五次迭代调用Gemini，输出p、β、r_min、δ及重启标志，仍由有限元与OC完成优化。[P9]安全层限制参数范围、滤波半径单调不增，并在G>0.20时强制β≤8；外层根据运行摘要调整控制器常数。四种延续控制器共享40次尾段，固定基线除外。[P11—P13]",
+        "innovation": "作者提出直接数值控制：LLM不选择预设阶段标签，而是联合给出四参数及审计理由；无需针对拓扑优化训练或微调。[P3]双层架构把运行内决策与跨运行规则调整结合。[P4]解读：价值在工程知识驱动的动态配置，而非新拓扑表示；独立创新性及阶段标签优势仍需更充分对照。",
+        "findings": "五种主要算例中LLM平均柔顺度最低；二维相对固定改善5.65%、7.46%、7.12%，三维改善18.09%、15.55%。[P14][P21]二维相对专家仅优0.09%—1.92%，且部分耗时更高。[P26]短预算下MBB与L形支架并非最优，说明结果不能推广为所有设置均胜出。[P22]",
+        "limitations": "作者承认仅验证单载荷柔顺度目标，且元优化与在线决策贡献未解耦。[P25]原文件缺项：P16表6续表缺重启执行列，理由不能证实逐次重载。P19灰度门穿越时点与图注矛盾，削弱延迟机制证据。模型版本依赖、冗余重启与API开销也限制复现和部署。[P23][P25]\n原文核对：[P16] 表6在P15的图表说明定义“restart=✓”表示请求并执行快照重载，但核对P15及P16续表，实际表头均只有Iter.、p、β、r_min、δ、Gate、理由，没有restart列或对应执行标记。现有勾号位于Gate列，仅表示灰度门激活。理由提及重启不能独立证实执行；缺项影响作者持续重启及恢复机制的逐次证据核验，不影响现有页面识读。",
+        "connection": "解读：与生成式结构设计直接相关，因为LLM控制搜索过程而非替代物理求解器；参数边界和可审计日志适合工程监督。[P11][P23]智能运维可借鉴状态观测、动作约束与反馈审核，但论文未验证该迁移。二值化和柔顺度降低亦不等于应力安全、失效概率下降或可靠性提高。[P25]",
+        "next_steps": "建议：先补齐重启执行日志并核对图文，再分别关闭元优化、灰度门和重启，明确各组件贡献；增加同预算的确定性闭环规则对照。[P16][P19][P25]将网格与迭代预算分开改变，检验短预算退化原因；锁定模型及完整提示后复现，再扩展应力约束与多载荷验证。[P22][P27]"
+      },
       "recommended_direction": "generative_design",
       "reading_status": {
         "paper_id": "d2e4438b2f24",
-        "state": "retry",
-        "updated_at": "2026-10-10T09:03:07.307624+00:00",
+        "state": "published",
+        "updated_at": "2026-10-11T14:11:26.830429+00:00",
         "basis": "full_text",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-10-10T10:03:07.307624+00:00",
         "total": 32,
-        "covered": 0,
+        "covered": 32,
         "pdf_available": true,
-        "issues": []
-      }
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "公式(1)的提取文本将ρ_e的指数p与下标e拆行。原页清楚显示ρ_e^p，已按E(ρ_e)=E_min+ρ_e^p(E_0−E_min)纠正；这关系到SIMP幂律惩罚的定义，并非原文件公式缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "公式(2)在文字提取中丢失分式横线与分子、分母层级。原页完整可读：分子为tanh(βη)+tanh(β(ρ̄_e−η))，分母为tanh(βη)+tanh(β(1−η))。已恢复Heaviside投影表达式，避免误读物理密度映射；原文件无缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "公式(3)、(4)的提取文本丢失分式排版，公式(5)、(6)的指数和转置层级被压平。原页均完整清楚，已恢复加权平均与Heaviside投影的分子/分母、ρ̃_e^p以及FᵀU和UᵀK(ρ̃)U；这些符号影响滤波、刚度插值和柔顺度定义，不是原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "文字资料仅保留图1图注，遗漏流程图内部文字和箭头。已从原页补充核对主循环、Gemini DNC动作及restart、最佳快照条件penal≥3.0且G(ρ*)<0.25、40次尾段参数和外层超参数反馈。遗漏影响对两层控制架构及快照选择条件的理解；原图完整可读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "公式(7)的文字提取压平了4/N_e及求和上下限，已由原页恢复G=(4/N_e)Σ_{e=1}^{N_e}ρ̃_e(1−ρ̃_e)。图2内部文字也未进入提取文本，包括顶部“PDE-based”滤波表述及五项动作范围；遗漏影响灰度定义和滤波实现的核对。原页无缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "图3提取文本仅含图注，遗漏观测数值、中央JSON及右栏应用值。原图已读清：中央请求β=4.0，右栏却写β←8.0（gate-capped），而图注称保持β。已忠实保留该原图矛盾，不能将其解释为提取错误或自行纠正；遗漏影响对安全层实际动作的判断。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "图4内部流程与更新示例未被文字提取保留。已核对五控制器比较、第二次Gemini反思、边界检查与正则写回，以及阈值0.20→0.22、调用周期5→4、β倍增周期10→12。遗漏影响外层更新机制的理解；原图完整，示例不能替代性能实验结果。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "表6第50次迭代的β，文字资料提取为2.0，原页清楚显示1.0，已纠正为(p,β,r_min,δ)=(3.4,1.0,1.50,0.20)。该错误影响β首次升高时点及耐心惩罚阶段的判断；原页理由虽称提高beta，但不能据此覆盖清晰数值。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P16",
+            "detail": "表6在P15的图表说明定义“restart=✓”表示请求并执行快照重载，但核对P15及P16续表，实际表头均只有Iter.、p、β、r_min、δ、Gate、理由，没有restart列或对应执行标记。现有勾号位于Gate列，仅表示灰度门激活。理由提及重启不能独立证实执行；缺项影响作者持续重启及恢复机制的逐次证据核验，不影响现有页面识读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P17",
+            "detail": "图5文字提取仅保留图注，遗漏三个分布面板、控制器标签及均值与区间位置。已从原页核对三个问题均由LLM取得最低均值，仅计划在悬臂梁和MBB梁高于固定基线。缺失的是提取内容，不是原文件；影响对排序和离散程度的图形核验。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P18",
+            "detail": "图6的15个密度场及其配套直方图未进入文字提取。已核对三行问题、五列控制器及中间密度与端点集中现象。提取遗漏影响拓扑差异和二值化证据的核验，原页图形完整可读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P19",
+            "detail": "图7—8的曲线、坐标和图例未进入文字提取，现已从原页核对。图8橙线约45—50次穿越G=0.20、约150次接近零，与图注称150次穿越门槛不一致；图7约160次主要可见向下瞬态。上述矛盾存在于清晰原图与图注之间，不是原文件缺项，也不能据图注覆盖曲线；影响灰度门持续时间及柔顺度瞬态机制的判断。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P20",
+            "detail": "图9四个参数轨迹面板未进入文字提取。已核对LLM较晚降低滤波半径和移动限幅、约145次前保持低β、约200次达到β=32，以及尾段δ回到0.05。提取遗漏影响延后锐化机制的核验；原图无缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P21",
+            "detail": "图10—11的实际投影面板和内部列标签未进入文字提取，仅保留图注。已从原页核对六列控制器，包含表7未列出的tail-only，以及三方向投影。遗漏影响仅尾段对照、结构形态及投影灰度的判断；原图完整。图11代表性C=5.428与表7均值5.430应区分，不是提取错误。"
+          }
+        ]
+      },
+      "title_zh": "大语言模型作为优化控制器：SIMP拓扑优化的自适应延续",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://arxiv.org/abs/2603.25099"
+      ],
+      "analyzed_at": "2026-10-11T13:44:46.385140+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 1,
+        "lead": "拓扑优化不仅要决定材料放在哪里，还要决定何时让灰色密度变成黑白结构。本文把大语言模型接入SIMP求解循环，根据当前状态直接调整延续参数，在五个主要二维、三维基准上获得最低平均柔顺度。阅读价值不只是性能数字，更在于理解状态反馈、确定性安全层与末端锐化如何共同作用，以及现有消融距离证明“必须使用LLM”还有多远。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "锐化时机：黑白结构不等于优质结构",
+            "paragraphs": [
+              "固定延续日程按迭代编号推进，不知道当前拓扑是否已经充分形成。过早提高Heaviside投影锐度β，可能把较差布局锁定在局部极小值；过晚锐化，则持续消耗预算于灰度材料。本文因此关注单载荷柔顺度最小化中的闭环参数控制，而不是直接预测最终拓扑。",
+              "这一问题已有非LLM解决思路。实际检索的《Automatic projection parameter increase for three-field density-based topology optimization》摘要介绍了依据目标变化自动提高β，并配合灰度停止准则和自适应移动限幅的方法。本文值得比较的增量，是同时协调多个参数与重启，而不能把“状态驱动锐化”本身视为独有贡献。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "LLM提出动作，数值求解器与安全层负责执行",
+            "paragraphs": [
+              "三场SIMP先将原始密度ρ滤波为ρ̄，再以阈值η=0.5投影为物理密度ρ̃。刚度采用E(ρ̃_e)=E_min+ρ̃_e^p(E_0−E_min)，其中E_min=10^−9E_0；求解KU=F后最小化柔顺度C=FᵀU。设计更新始终采用OC，LLM既不替代有限元，也不输出密度场。",
+              "内层默认每5次迭代调用gemini-3.1-flash-lite-preview，temperature=0，无拓扑优化数据微调。模型读取柔顺度、灰度、停滞、棋盘格和预算等状态，以JSON直接返回p、β、r_min、δ及restart；解释文本只供审计。确定性安全层裁剪动作，并在G>0.20时强制β≤8，模型无法覆盖。",
+              "公式(7)定义G=(4/N_e)Σρ̃_e(1−ρ̃_e)，是连续灰度指标，并非中间密度单元比例。外层在三个二维几何上每个问题执行5次元优化，调整门限、调用频率和阶段常数，不更新模型权重。四个延续控制器均从最佳有效快照执行40次统一锐化尾段，固定基线没有尾段。"
+            ]
+          },
+          {
+            "id": "validation",
+            "title": "五种控制器、五个主基准与两类关键消融",
+            "paragraphs": [
+              "验证全部来自数值仿真，没有实物制造或力学试验。主要二维悬臂梁、MBB梁、L形支架采用120×60网格，三维悬臂梁和MBB梁采用40×20×10网格，体积分数均为0.40；主循环300次，延续组另加40次尾段。每个问题、每种控制器报告5个随机种子运行，网格单元和API调用均不是独立样本。",
+              "比较组包括固定参数、预设三场延续、专家启发式、Schedule-only及LLM。Schedule-only保留四阶段结构，但不读取实际状态；它在二维悬臂梁和MBB梁上分别比固定基线差0.43%和1.09%。另有60×30、100次主循环的Tail-only消融，其从均匀密度执行尾段，柔顺度劣化114.6%–140.5%，说明仅靠锐化不能替代探索。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "收益成立，但闭环机制与LLM必要性仍需解耦",
+            "paragraphs": [
+              "主要二维结果相对固定基线降低柔顺度5.65%、7.46%、7.12%，三维对应降低18.09%、15.55%。但二维相对专家启发式的优势仅为0.09%、1.92%、0.95%，且未报告显著性检验；低预算消融中，LLM也并非三个问题都最优。**较低柔顺度不意味着普遍更快**：二维悬臂梁、MBB梁及两个三维问题均有时间开销。",
+              "当前证据支持固定阶段结构不足以解释主实验收益，却不能分离LLM、灰度门、快照重启和外层调参的贡献。三个二维几何都参与元优化，未报告独立测试划分；固定组缺少尾段，也使对它的收益不能全部归因于在线决策。图8门限跨越时间存在图文矛盾，表6缺少重启执行列，MBB密度图还标出G=0.0004，因此应保留精度与机制证据的边界。"
+            ]
+          }
+        ],
+        "experiments": [
+          {
+            "name": "二维主基准五控制器比较及Schedule-only消融",
+            "data": "悬臂梁、MBB梁、L形支架数值基准；120×60网格，V_f=0.40、ν=0.3、E_min/E_0=10^−9。",
+            "samples": "每个问题、每个控制器n=5个独立随机种子运行；三种几何不等于15个独立结构。未报告实物试件或增强数据数量。",
+            "groups": "五组分别为Fixed、三场延续、专家启发式、Schedule-only、LLM；主循环300次，除Fixed外追加40次统一尾段。",
+            "split": "无需训练或微调；三个二维几何均参与外层调参。未报告训练、验证、测试划分或独立留出几何。",
+            "baselines": "Fixed保持p=3、β=1、r_min=1.5、δ=0.2；另比较预设延续、专家规则及无状态反馈的四阶段调度。",
+            "metrics": "柔顺度C=FᵀU及均值±标准差、灰度G、相对Fixed均值变化、墙钟时间和最佳快照迭代数；C单位未报告。",
+            "results": "LLM的C依次为76.407±0.021、94.646±0.050、43.028±0.000；相对Fixed为−5.65%、−7.46%、−7.12%。时间依次445.2、562.4、150.1 s。",
+            "limitations": "Fixed无尾段，处理预算不同；未报告显著性检验。正文最小非零标准差表述与表值不符，G=0.000也须结合图中精度解释。"
+          },
+          {
+            "name": "三维悬臂梁与MBB梁五控制器比较",
+            "data": "两个分别评测的三维数值基准，均为40×20×10网格、V_f=0.40；求解采用AMG预条件共轭梯度法。",
+            "samples": "每个问题、每种控制器n=5个种子运行；不是五种独立几何。种子具体值、实物试件及增强数量未报告。",
+            "groups": "Fixed、三场延续、专家启发式、Schedule-only、LLM；N=300主循环，四个延续组采用40次统一尾段。",
+            "split": "由二维迁移至三维时系统提示不变；未报告独立测试划分，也未开展跨LLM模型的定量验证。",
+            "baselines": "固定参数、预设延续、专家启发式及仅日程控制；代表性投影另含Tail-only，但表7没有该组三维统计结果。",
+            "metrics": "柔顺度均值±标准差、平均灰度、相对Fixed变化、时间（s）和最佳有效快照迭代数；柔顺度单位未报告。",
+            "results": "LLM的C为3.981±0.000、5.430±0.001，相对Fixed为−18.09%、−15.55%；专家为3.999±0.001、5.442±0.001。LLM耗时1198、1685 s。",
+            "limitations": "LLM均值最低但并非最快，MBB耗时最长；未报告显著性检验和完整载荷细节。0.000标准差只代表表列精度。"
+          },
+          {
+            "name": "低分辨率、短预算下的Tail-only消融",
+            "data": "二维悬臂梁、MBB梁、L形支架；60×30网格，V_f=0.40，主循环N=100，与主要二维配置不同。",
+            "samples": "各问题、各控制器n=5个种子运行；未报告实体试件和增强数量。迭代次数不是样本数。",
+            "groups": "六组为Fixed、Tail-only、三场延续、专家启发式、Schedule-only、LLM；Tail-only末端从均匀密度开始锐化40次。",
+            "split": "无需训练；未报告该消融的独立留出划分。不得把同一几何的种子重复视为跨几何泛化验证。",
+            "baselines": "Tail-only主循环p=1、β=1，不满足有效快照要求；与Fixed及四种完整延续控制器比较。",
+            "metrics": "最终柔顺度均值±标准差、平均灰度及相对Fixed变化；该表未报告时间，柔顺度单位未报告。",
+            "results": "Tail-only的C为211.777、246.560、105.645，相对Fixed增加140.5%、124.7%、114.6%，G均为0.000；LLM只在悬臂梁最优。",
+            "limitations": "该结果证明此配置下仅尾段不足，不排除其他尾段预算有效。分辨率与预算同时改变，无法分离两者影响。"
+          }
+        ],
+        "routes": [
+          {
+            "title": "用等预算因子实验检验LLM是否不可替代",
+            "direction_id": "generative_design",
+            "gap": "现有消融未分离在线LLM、硬灰度门、重启和外层调参，固定基线又没有尾段。建议首先建立可配对的等预算协议，避免将延续收益误认为语言模型的独立贡献。",
+            "mechanism": "构建透明的状态反馈规则控制器，依据目标变化、G和停滞调整β与δ，再协调p和滤波半径。检索到的自动投影参数研究可作为机制参考，但目前只有摘要，具体实现需取得全文后确认。",
+            "innovation": "候选创新是把LLM决策与同状态、同约束的确定性策略放在统一接口中，分解动作提议和安全层执行的贡献。已有自动锐化机制与这一评测组合须明确区分，不预设LLM必然占优。",
+            "design": "建议设计12个几何—载荷配置，4个用于规则调参、8个冻结留出，每组10个配对种子。自行生成并公开网格、载荷和边界条件，不依赖尚未公开的论文仓库；独立配置与种子重复分别统计。",
+            "comparison": "设置固定、专家规则、状态反馈规则、LLM及动作轨迹回放组，逐项禁用门控、重启和元优化。统一主循环与尾段，再增加等墙钟预算评测，记录失败回退，不将服务失败排除于主要统计。",
+            "criterion": "建议预注册配对柔顺度差及95%置信区间，同时要求体积可行、达到明确灰度容差。只有LLM在留出配置和等时间条件下仍有可靠优势，才支持其额外复杂度；否则优先规则控制器。",
+            "risk": "确定性规则可能对调参几何过拟合，API版本也可能漂移。应冻结提示、记录模型版本并保存逐次状态与应用动作；若优势只见于长预算，转向按预算选择控制器，而不追求统一LLM方案。"
+          },
+          {
+            "title": "把参数安全护栏扩展为可验证的求解可信度护栏",
+            "direction_id": "generative_design",
+            "gap": "本文护栏主要约束参数范围和灰度，尚不能保证三维线性求解准确或重启理由可信。建议先验证数值状态可信度，再讨论多载荷扩展，不能用低柔顺度替代平衡残差和约束可行性。",
+            "mechanism": "在每次参数变化和快照接纳前重算真实残差‖F−KU‖/‖F‖，并核对体积与灰度。实际检索的密度下限研究摘要提示停止残差可能失真，但其FGMRES结果不能直接套用本文AMG预条件CG。",
+            "innovation": "候选创新是将残差验收、动作冲突标记和受限重启统一为独立监督层，LLM只提出动作。真实残差守卫属于已有技术；与延续决策审计的耦合及其成本收益才是需要实验检验的新组合。",
+            "design": "建议设计8个三维配置，各采集20个不同演化阶段的冻结状态，另作每配置10个种子闭环运行。数据需由可公开的自建有限元流程生成，分别保留状态测试与完整轨迹，不混计为独立几何。",
+            "comparison": "比较原安全层、增加残差守卫、增加阈值显式观测、限制晚期重启四组，使用相同求解容差。再与确定性可信度控制器比较，消融残差检查和理由冲突标记，并注入可记录的API失败。",
+            "criterion": "建议以全部接纳状态满足预设残差容差为首要判据，同时报告错误接纳率、无效重启数、柔顺度和墙钟开销。阈值如10^−6仅为建议起点，需经网格与求解器敏感性分析确定。",
+            "risk": "额外残差检查可能抵消优化收益，故先测试冻结状态再进入闭环。若检查昂贵，可按参数突变和停滞触发，但最终状态仍须强制验收；若多载荷成本过高，先限制在单载荷验证可信度。"
+          }
+        ],
+        "diagrams": [
+          {
+            "kind": "study",
+            "title": "原研究：状态条件化延续与统一锐化尾段",
+            "description": "LLM调整数值参数而非预测拓扑；外层跨运行调参，固定无延续基线不执行尾段。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "问题与均匀密度",
+                "detail": "输入设计域、网格、边界、体积分数和迭代预算"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "三场SIMP与OC",
+                "detail": "滤波、投影、有限元求解、灵敏度计算和密度更新"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "状态观测与DNC",
+                "detail": "默认每5次迭代调用Gemini，提出四参数及重启动作"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "确定性安全层",
+                "detail": "裁剪参数；G>0.20时β≤8；有效快照存在才允许重启"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "最佳快照与40次尾段",
+                "detail": "四个延续组统一锐化；固定组不执行尾段"
+              },
+              {
+                "id": "f",
+                "stage": 5,
+                "label": "性能评测与外层更新",
+                "detail": "统计柔顺度、灰度和时间；第二次LLM调用调整跨运行常数"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "初始化"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "提供当前状态"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "提出JSON动作"
+              },
+              {
+                "from": "d",
+                "to": "b",
+                "label": "应用受限动作"
+              },
+              {
+                "from": "b",
+                "to": "e",
+                "label": "主循环完成"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "测量终态性能"
+              },
+              {
+                "from": "f",
+                "to": "c",
+                "label": "更新下一运行规则"
+              }
+            ]
+          },
+          {
+            "kind": "proposal",
+            "title": "拟议路线一：等预算分解闭环控制收益",
+            "description": "以下为建议实验，不代表已验证结果；重点区分LLM提议、安全层和元优化的作用。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "生成并公开配置",
+                "detail": "建议12个几何—载荷配置，4个调参、8个冻结留出"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "冻结评测协议",
+                "detail": "统一状态接口、主循环、尾段、硬件和配对种子"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "LLM与规则控制",
+                "detail": "比较固定、专家、状态反馈规则、LLM和轨迹回放"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "机制因子消融",
+                "detail": "逐项禁用灰度门、重启和外层元优化"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "留出配对评测",
+                "detail": "建议每组10个种子，增加等墙钟条件并纳入API失败"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "统计与部署选择",
+                "detail": "评估置信区间、可行性和成本，决定采用LLM或规则策略"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "隔离调参与测试"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "统一比较条件"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "定义消融因素"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "比较控制策略"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "分离机制贡献"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "检验收益与代价"
+              }
+            ]
+          }
+        ],
+        "related": {
+          "status": "ok",
+          "checked_at": "2026-10-11T14:08:21.772824+00:00",
+          "papers": [
+            {
+              "title": "FORWARD-ACCELERATED SIMP FOR TOPOLOGY OPTIMIZATION OF LOAD-BEARING MACHINE PARTS",
+              "url": "https://doi.org/10.36910/775.24153966.2026.86.24",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Self-Refining Topology Optimization via an LLM-Based Multi-Agent Framework",
+              "url": "https://doi.org/10.2139/ssrn.7162224",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "When a positive SIMP density floor is not enough: solver admissibility and guarded floor selection in matrix-free 3D topology optimization",
+              "url": "https://doi.org/10.48550/arxiv.2607.26382",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            },
+            {
+              "title": "Zero-shot rib design: Merging a training-free generative prior with topology optimization",
+              "url": "https://doi.org/10.1016/j.aei.2026.105276",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Automatic projection parameter increase for three-field density-based topology optimization",
+              "url": "https://doi.org/10.1007/s00158-025-03968-2",
+              "year": 2025,
+              "basis": "abstract",
+              "preprint": false
+            }
+          ]
+        }
+      },
+      "article_updated_at": "2026-10-11T14:11:26.826406+00:00",
+      "article_profile": "2676dd9dac73a6636bdc9b6c89a0ea9554d9fea5f560509b66dacbb1fd327708",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P5"
+        ],
+        "method": [
+          "P9",
+          "P11",
+          "P12",
+          "P13"
+        ],
+        "innovation": [
+          "P3",
+          "P4",
+          "P26"
+        ],
+        "findings": [
+          "P14",
+          "P21",
+          "P22",
+          "P26"
+        ],
+        "limitations": [
+          "P16",
+          "P19",
+          "P23",
+          "P25"
+        ],
+        "connection": [
+          "P11",
+          "P23",
+          "P25"
+        ],
+        "next_steps": [
+          "P16",
+          "P19",
+          "P22",
+          "P25",
+          "P27"
+        ]
+      },
+      "analysis_material_version": "9ce17497097756bd09812eb6ef83fe18391f7cc51f3f113dbe76acbd34ec47f6",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "公式(1)的提取文本将ρ_e的指数p与下标e拆行。原页清楚显示ρ_e^p，已按E(ρ_e)=E_min+ρ_e^p(E_0−E_min)纠正；这关系到SIMP幂律惩罚的定义，并非原文件公式缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "公式(2)在文字提取中丢失分式横线与分子、分母层级。原页完整可读：分子为tanh(βη)+tanh(β(ρ̄_e−η))，分母为tanh(βη)+tanh(β(1−η))。已恢复Heaviside投影表达式，避免误读物理密度映射；原文件无缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "公式(3)、(4)的提取文本丢失分式排版，公式(5)、(6)的指数和转置层级被压平。原页均完整清楚，已恢复加权平均与Heaviside投影的分子/分母、ρ̃_e^p以及FᵀU和UᵀK(ρ̃)U；这些符号影响滤波、刚度插值和柔顺度定义，不是原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "文字资料仅保留图1图注，遗漏流程图内部文字和箭头。已从原页补充核对主循环、Gemini DNC动作及restart、最佳快照条件penal≥3.0且G(ρ*)<0.25、40次尾段参数和外层超参数反馈。遗漏影响对两层控制架构及快照选择条件的理解；原图完整可读。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "公式(7)的文字提取压平了4/N_e及求和上下限，已由原页恢复G=(4/N_e)Σ_{e=1}^{N_e}ρ̃_e(1−ρ̃_e)。图2内部文字也未进入提取文本，包括顶部“PDE-based”滤波表述及五项动作范围；遗漏影响灰度定义和滤波实现的核对。原页无缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P10",
+          "detail": "图3提取文本仅含图注，遗漏观测数值、中央JSON及右栏应用值。原图已读清：中央请求β=4.0，右栏却写β←8.0（gate-capped），而图注称保持β。已忠实保留该原图矛盾，不能将其解释为提取错误或自行纠正；遗漏影响对安全层实际动作的判断。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P12",
+          "detail": "图4内部流程与更新示例未被文字提取保留。已核对五控制器比较、第二次Gemini反思、边界检查与正则写回，以及阈值0.20→0.22、调用周期5→4、β倍增周期10→12。遗漏影响外层更新机制的理解；原图完整，示例不能替代性能实验结果。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "表6第50次迭代的β，文字资料提取为2.0，原页清楚显示1.0，已纠正为(p,β,r_min,δ)=(3.4,1.0,1.50,0.20)。该错误影响β首次升高时点及耐心惩罚阶段的判断；原页理由虽称提高beta，但不能据此覆盖清晰数值。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P16",
+          "detail": "表6在P15的图表说明定义“restart=✓”表示请求并执行快照重载，但核对P15及P16续表，实际表头均只有Iter.、p、β、r_min、δ、Gate、理由，没有restart列或对应执行标记。现有勾号位于Gate列，仅表示灰度门激活。理由提及重启不能独立证实执行；缺项影响作者持续重启及恢复机制的逐次证据核验，不影响现有页面识读。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P17",
+          "detail": "图5文字提取仅保留图注，遗漏三个分布面板、控制器标签及均值与区间位置。已从原页核对三个问题均由LLM取得最低均值，仅计划在悬臂梁和MBB梁高于固定基线。缺失的是提取内容，不是原文件；影响对排序和离散程度的图形核验。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P18",
+          "detail": "图6的15个密度场及其配套直方图未进入文字提取。已核对三行问题、五列控制器及中间密度与端点集中现象。提取遗漏影响拓扑差异和二值化证据的核验，原页图形完整可读。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P19",
+          "detail": "图7—8的曲线、坐标和图例未进入文字提取，现已从原页核对。图8橙线约45—50次穿越G=0.20、约150次接近零，与图注称150次穿越门槛不一致；图7约160次主要可见向下瞬态。上述矛盾存在于清晰原图与图注之间，不是原文件缺项，也不能据图注覆盖曲线；影响灰度门持续时间及柔顺度瞬态机制的判断。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P20",
+          "detail": "图9四个参数轨迹面板未进入文字提取。已核对LLM较晚降低滤波半径和移动限幅、约145次前保持低β、约200次达到β=32，以及尾段δ回到0.05。提取遗漏影响延后锐化机制的核验；原图无缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P21",
+          "detail": "图10—11的实际投影面板和内部列标签未进入文字提取，仅保留图注。已从原页核对六列控制器，包含表7未列出的tail-only，以及三方向投影。遗漏影响仅尾段对照、结构形态及投影灰度的判断；原图完整。图11代表性C=5.428与表7均值5.430应区分，不是提取错误。"
+        }
+      ]
     },
     {
       "source": "Semantic Scholar",
@@ -1934,13 +2948,13 @@
       "reading_status": {
         "paper_id": "8a3a74d4605b",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-10T10:01:45.089032+00:00",
+        "updated_at": "2026-10-11T13:11:30.053720+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -2041,11 +3055,11 @@
       "reading_status": {
         "paper_id": "4ddc4c6ce195",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-10T05:17:28.898455+00:00",
+        "updated_at": "2026-10-11T05:17:35.777543+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -2154,7 +3168,7 @@
       "reading_status": {
         "paper_id": "d552f4215ad9",
         "state": "missing_evidence",
-        "updated_at": "2026-10-10T00:34:10.425624+00:00",
+        "updated_at": "2026-10-11T00:55:23.192278+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -2163,7 +3177,8 @@
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "面向可制造设计中结构概念快速生成的大语言模型驱动符号拓扑优化"
     },
     {
       "source": "OpenAlex",
@@ -2187,7 +3202,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "所给摘要介绍的是水资源工程模拟模型综述，与条目所列无人机铝钛合金及机器学习题名明显不一致。文章关注近几十年科研中使用的水文与水力模拟软件，比较其特征、方法和应用，旨在帮助研究者选择模型并提高结果准确性。[摘要] 当前资料未提供软件清单、比较结果或验证数据，不能据此评价无人机材料性能，也不能确认其对生成式设计和疲劳可靠性研究的贡献。本次仅作摘要级解读。",
+      "summary": "本文围绕无人机结构中的铝合金与钛合金选材，汇集实验报告及文献中的材料属性，利用机器学习考察定量、定性参数与设计要求之间的非线性关系。资料涉及强度、疲劳、耐蚀性、成本及供应等因素，体现多准则选材思路。摘要声称模型可靠性与泛化能力有所改善，但未提供算法、样本规模、验证方案或性能数值。因此，适合关注结构材料选择与疲劳可靠性的读者初步阅读，尚不能据此确认模型优势。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7213446467",
@@ -2249,36 +3264,36 @@
       "focus_tags": [],
       "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "不建议按无人机材料、生成式设计或疲劳可靠性方向重点推荐；应先核对题名与摘要的对应关系，再决定是否阅读全文。当前摘要仅支持将其视为水资源模拟软件综述。[摘要]",
+      "recommendation": "建议作为无人机结构多属性选材的候选文献阅读，重点核查疲劳属性如何参与建模及模型验证；当前资料不足以支持其生成式设计能力或可靠性提升幅度。[摘要]",
       "deep_read": {
-        "problem": "摘要提出，水资源工程实体模型成本较高且耗时，计算机模拟提供了替代途径。其研究问题是如何理解不同模拟模型的特点，并为具体问题选择合适工具。[摘要] 原文称“costly and time-consuming physical models”，但未涉及无人机结构或合金性能。",
-        "method": "文章采用研究综述方式，梳理近几十年科学研究中使用的水文与水力模拟软件，比较模型特征、方法与应用差异。[摘要] 原文表述为“differences between them in terms of methodology and application”；摘要未说明检索策略、纳入标准或比较指标。",
-        "innovation": "摘要没有明确提出新算法、新材料模型或新的优化框架，只说明综述能够为模型选择提供参考。[摘要] 解读：其潜在价值在于整理不同软件的适用条件，而非已经证明的方法创新；由于缺少具体比较内容，不能确认综述相对既有研究的新增贡献。",
-        "findings": "摘要声称论文能够帮助研究者选择适合问题的模型并提高结果准确性，原文使用“enhance the accuracy of their results”。[摘要] 但没有列出任何模型的优劣、适用边界或精度验证结果，因此这属于作者概括的用途，不能当作已量化证实的性能提升。",
-        "limitations": "当前最直接的资料局限是题名与摘要主题不一致，且仅有摘要，无法核实实际论文对象。摘要也没有提供软件名称、比较结果及验证依据。[摘要] 这些是本次判断的证据限制，并非作者承认的研究缺陷；不能据此断言全文未开展系统比较或验证。",
-        "connection": "所给摘要讨论水文与水力模拟，没有出现生成式设计、疲劳可靠性或智能运维研究内容。[摘要] 解读：模型选型与方法比较的思路可能具有跨领域参考意义，但这种一般性联系不足以证明其切合结构设计方向，更不能据此补写机器学习材料性能结论。",
-        "next_steps": "建议：先核对论文题名、DOI与摘要的对应关系，再获取正确原文。若实际论文确为水资源模拟综述，应重点检查软件分类、比较维度和验证依据；若为无人机合金研究，则需另行核实材料数据、机器学习任务及结构性能证据，当前资料不足以提出具体复现实验。"
+        "problem": "研究关注无人机结构中铝合金与钛合金的性能评估和材料选择。摘要以“complex multi-criteria system”描述选材情境，涉及物理、力学、疲劳与工程使用属性。解读：核心问题是协调多个选材要求，而不是仅按单一强度指标比较材料。[摘要]",
+        "method": "摘要说明数据来自实验报告值与可靠文献，并同时使用定量和定性参数建立机器学习模型。属性清单涵盖密度、弹性模量、强度、疲劳、加工及经济因素。不过，当前资料没有交代具体算法、数据清洗、定性属性编码或训练测试划分，方法尚不能复现。[摘要]",
+        "innovation": "可识别的研究特色是将疲劳指标与耐蚀性、焊接性、成本、供应情况共同纳入无人机材料评估。解读：这种组织方式强调工程选材的多维约束。但摘要未与既有选材方法比较，不能确认其原创性，也未提供生成式设计或新模型架构的证据。[摘要]",
+        "findings": "摘要声称模型具有“improved reliability and generalization”，并能服务无人机结构设计与选材。这是作者报告的结果性判断，当前资料未展示对应指标、比较基线或误差数据，也未说明铝合金与钛合金在何种工况下表现更优，不能提炼具体材料排名。[摘要]",
+        "limitations": "当前资料的主要限制是证据披露不足，并非已经证实研究本身存在缺陷。摘要称每个样本包含“12 attributes”，但随后仅列出十一项，需核对完整属性表；此外，样本数量、来源分布及外部验证均未说明，无法判断数据代表性与结论适用范围。[摘要]",
+        "connection": "解读：疲劳强度和疲劳寿命使该研究与结构疲劳可靠性方向直接相关，多属性选材也能为结构设计提供输入。但摘要中的模型可靠性不等同于结构失效概率评估；资料没有运维监测、故障诊断或生成式结构优化证据，与这些方向的联系仅属潜在应用。[摘要]",
+        "next_steps": "建议后续获取全文，优先核对属性数量、数据来源、疲劳试验条件和模型验证方案，再判断是否值得复用。若开展迁移研究，可比较纳入与排除疲劳属性时的选材结果，并检验跨来源数据上的预测稳定性；这些是研究建议，不是作者已经完成的实验。[摘要]"
       },
       "recommended_direction": "fatigue_reliability",
-      "title_zh": "水资源工程水文与水力模拟软件综述（依据所给摘要）",
+      "title_zh": "基于机器学习的无人机结构铝合金与钛合金性能分析",
       "analysis_basis": "abstract",
       "analysis_kind": "model",
       "analysis_sources": [
         "https://doi.org/10.56990/bajest/2026.050203"
       ],
-      "analyzed_at": "2026-10-10T05:19:09.017049+00:00",
+      "analyzed_at": "2026-10-11T13:26:12.098759+00:00",
       "llm_model": "gpt-6.1-sol",
       "analysis_references": {},
-      "analysis_material_version": "a620bff291f667fd682aa32754fb20ecaf0831281444e98c245bc160dfccac65",
+      "analysis_material_version": "d49b01b571055bc5b741c49ed94ee3b790422865743a99caf86f960b8ec5538a",
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "569d913e4413",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-10T05:19:09.031305+00:00",
+        "updated_at": "2026-10-11T13:26:12.110214+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -2375,7 +3390,7 @@
       "reading_status": {
         "paper_id": "97ae87f75cf9",
         "state": "missing_evidence",
-        "updated_at": "2026-10-10T00:38:59.687234+00:00",
+        "updated_at": "2026-10-11T00:56:53.271313+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -2384,7 +3399,8 @@
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "利用多模态大语言模型降维的内嵌式永磁同步电机参数与拓扑优化"
     },
     {
       "source": "Semantic Scholar",
@@ -2520,11 +3536,11 @@
       "reading_status": {
         "paper_id": "8564d8ee9066",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-10T00:34:31.120950+00:00",
+        "updated_at": "2026-10-11T00:56:34.083403+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -2550,7 +3566,7 @@
         "ai_maintenance",
         "fatigue_reliability"
       ],
-      "summary": "Sudden failures of steel bridges are frequently associated with fatigue cracks that initiate at welded joints, geometric discontinuities, bolted connections, orthotropic decks, diaphragm attachments, and corrosion-damaged regions. Although fatigue failure is usually a progressive phenomenon, its final stage can occur abruptly when a subcritical crack reaches a critical size and the stress-intensity factor exceeds the fracture toughness of the material. Under high dynamic loading, the conventional static stress-range approach may be insufficient because structural inertia, resonance, traffic-in…",
+      "summary": "钢桥疲劳裂纹通常渐进扩展，但达到临界尺寸后可能突然失效。本文摘要提出将结构动力学、断裂力学、随机交通荷载、概率可靠性及数字孪生耦合的预测框架，并利用监测数据开展贝叶斯更新与物理信息机器学习。其重点是多层系统协同，而非单一预测算法。当前仅有摘要，可了解方法构成与研究主张，无法核实预测精度、工程验证或维护收益。[摘要]",
       "raw_metadata": {
         "id": "93948bc47be6",
         "title": "Predictive Models of Fatigue Failure in Steel Bridges under Severe Dynamic Loading: An Advanced Fracture-Mechanics, Probabilistic, and Digital-Twin Framework",
@@ -2629,26 +3645,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为钢桥疲劳可靠性与智能运维交叉研究的框架型资料阅读，重点关注裂纹扩展、监测更新和维护决策如何衔接；摘要未提供验证结果，不宜据此认定其方法优于现有技术。[摘要]",
+      "deep_read": {
+        "problem": "研究针对强动态荷载下钢桥疲劳裂纹扩展及最终突发断裂的预测问题。摘要指出，惯性、共振、交通振动、冲击、腐蚀与残余应力等共同作用，传统静态应力幅方法可能不足。其表述为“may be insufficient”，并未证明该方法在所有场景下失效。[摘要]",
+        "method": "框架将运动方程、雨流计数所得应力谱、非线性疲劳损伤累积、Paris–Erdogan与Forman裂纹扩展方程，以及极限状态可靠性函数结合。摘要另列贝叶斯更新和物理信息机器学习，但未给出模型接口、求解流程或训练细节。[摘要]",
+        "innovation": "解读：摘要呈现的潜在特色是将动力响应、裂纹演化、概率推断与数字孪生纳入同一预测体系，而非只估算疲劳寿命。不过，“advanced predictive framework”属于作者对框架的定位；缺少既有方法对比，不能确认各模块或其耦合具有原创性。[摘要]",
+        "findings": "摘要主张可靠预测应依靠多层系统，结合力学分析、连续监测、概率推断与保守维护决策，并强调“not a single predictive algorithm”。这属于方法论结论；当前资料未报告试验、案例、误差指标或可靠性改善幅度，不能当作已验证的性能成果。[摘要]",
+        "limitations": "当前资料只有摘要，未说明桥型、材料参数、荷载数据、裂纹观测与验证方案，也未报告不确定性降低的量化结果。因此无法判断框架的适用边界、计算成本及现场实施条件。这些是现有资料的证据缺口，不应直接认定为作者研究本身已证实的缺陷。[摘要]",
+        "connection": "解读：该框架与智能运维和疲劳可靠性方向直接相关：应变、加速度、声发射、动态称重及机器视觉数据可参与状态评估，概率模型连接裂纹风险与维护决策。对结构设计的联系则较间接，摘要未提供构造优化、尺寸设计或设计规范层面的成果。[摘要]",
+        "next_steps": "建议：后续阅读应核对动态应力谱如何驱动裂纹模型、监测数据如何更新参数，以及极限状态如何对应维护阈值。若开展迁移研究，可先选明确疲劳细节，对比静态模型与耦合模型的预测和不确定性；这些是研究建议，并非摘要已完成的工作。[摘要]"
+      },
       "recommended_direction": "fatigue_reliability",
       "reading_status": {
         "paper_id": "93948bc47be6",
-        "state": "retry",
-        "updated_at": "2026-10-10T09:04:02.305494+00:00",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-11T14:01:18.636537+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
         "reason": "not_found",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-10-10T10:04:02.305494+00:00",
-        "total": 0,
-        "covered": 0,
+        "total": 1,
+        "covered": 1,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "强动态荷载下钢桥疲劳失效预测：断裂力学、概率分析与数字孪生框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.5281/zenodo.22552729"
+      ],
+      "analyzed_at": "2026-10-11T14:01:18.630005+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "328e3f57f6a39de87a120988b1c904f6f42f9d4eadbfc6bc42c230612b82c969",
+      "analysis_issues": []
     },
     {
       "source": "Google Scholar",
@@ -2753,7 +3786,7 @@
       "reading_status": {
         "paper_id": "a013143718c4",
         "state": "missing_evidence",
-        "updated_at": "2026-10-10T00:40:58.542399+00:00",
+        "updated_at": "2026-10-11T00:57:04.332448+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -2762,7 +3795,8 @@
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "大语言模型增强的基于智能体的门诊部门布局生成设计"
     }
   ],
   "source_status": {
@@ -3403,13 +4437,13 @@
     "unavailable": 16
   },
   "analysis_status": {
-    "ready_core": 3,
+    "ready_core": 4,
     "target_core": 5,
-    "ready_extended": 2,
+    "ready_extended": 3,
     "target_extended": 5,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 5
+    "pending": 3
   },
   "edition": {
     "id": "37974816676",
