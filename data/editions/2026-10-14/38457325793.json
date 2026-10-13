@@ -26,7 +26,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "ABSTRACT In fatigue delamination growth (FDG), for different fiber bridging intensity and load ratios ( R ‐ratios), the Paris‐type law on FDG rate ( da/dN ) is formulated using strain energy release rate ( SERR ) on the crack tip Δ√ G tip and effective SERR Δ√ G eff as similitude parameters. The resulting da/dN (Δ√ G tip ) and da/dN (Δ√ G eff ) data collapse into a band. Based on this finding, this paper proposes a physics‐informed machine learning (PIML) framework to characterize the FDG scatter. The framework is composed of three PIML models. PIML 1, with integrated modified beam theory (MBT…",
+      "summary": "复合材料层合板的疲劳分层扩展预测需要考虑纤维桥联强度与载荷比引起的离散性。摘要提出三级物理信息机器学习框架：先结合修正梁理论预测应变能释放率，再结合修正Paris关系预测扩展速率及95%置信区间，并用贝叶斯优化调整超参数。解读：其阅读价值在于将物理关系、扩展预测与不确定性表征连接起来；但摘要没有提供误差、区间覆盖率或验证规模，尚不能判断预测性能。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -65,11 +65,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议面向复合材料疲劳可靠性研究重点阅读，尤其关注物理约束如何进入扩展速率与置信区间预测；推荐依据是明确的方法框架，而非已获证实的性能优势。[摘要]",
+      "deep_read": {
+        "problem": "研究针对不同纤维桥联强度和载荷比下的疲劳分层扩展离散性。摘要指出，采用裂尖与有效应变能释放率相关参数后，扩展速率数据仍汇聚为一个带状区域，即“data collapse into a band”。解读：目标不只是拟合单一增长曲线，还包括刻画条件变化下的散布。[摘要]",
+        "method": "框架包含三个模型：PIML 1结合修正梁理论预测应变能释放率；PIML 2‐a与2‐b结合修正Paris关系，分别采用裂尖和有效释放率相关参数，预测扩展速率及95%置信区间。各模型超参数通过贝叶斯优化确定；摘要未交代网络结构及训练细节。[摘要]",
+        "innovation": "摘要明确提出以物理信息机器学习表征疲劳分层扩展散布，并将释放率预测与扩展速率、区间预测连接。解读：值得关注的是物理关系与离散性表征的结合方式，而非仅增加一个预测器。仅凭摘要不能认定其首创性，也不能确认相对既有方法的创新幅度。[摘要]",
+        "findings": "摘要报告，在不同桥联强度和载荷比下，以两类释放率相关参数建立Paris型关系，所得扩展速率数据形成带状分布；框架可预测单一或多个载荷比下的速率及95%置信区间。但未给出数值误差或对照结果，因而不能把这些描述等同于高精度已得到验证。[摘要]",
+        "limitations": "当前资料仅为摘要，未提供试样材料、数据量、载荷比范围、验证划分及区间覆盖率，也未解释95%置信区间的具体构造。解读：这些是现有资料的证据缺口，不是已确认的论文缺陷；尤其无法判断模型对未见桥联条件或其他层合板体系的适用性。[摘要]",
+        "connection": "该工作与疲劳可靠性方向直接相关，因为预测对象是分层扩展速率及其离散性。解读：区间输出可能为结构寿命评估与检修决策提供输入，也可连接智能运维中的损伤演化预测；但摘要没有开展寿命计算、在线监测或结构优化，不能将这些应用列为作者成果。[摘要]",
+        "next_steps": "建议后续阅读全文时优先核查桥联效应如何界定区间、两类相似性参数如何选取，以及不同载荷比下的独立验证。建议迁移研究时进一步检验区间覆盖率，并区分数据散布与模型不确定性；这些属于研究设想，摘要并未证明相关检验已经完成。[摘要]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "物理信息机器学习预测复合材料层合板疲劳分层扩展及纤维桥联定义的置信区间",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1111/ffe.70492"
+      ],
+      "analyzed_at": "2026-10-13T19:57:18.266391+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "343c8f7e0663f435422d60719aca96d035ba45abb9974ea09d2c3006867c5422",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "abd65bfce7b5",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-13T19:57:18.283869+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -1061,7 +1093,7 @@
         "ai_maintenance",
         "generative_design"
       ],
-      "summary": "Manufacturing systems are undergoing a fundamental transformation driven by the convergence of rich data, cyber-physical infrastructure, and artificial intelligence. At the heart of this transformation lies the challenge of embedding physical knowledge into data-driven models to achieve both predictive power and engineering interpretability. Physics-informed machine learning (PIML) has emerged as a paradigm to integrate conservation laws, constitutive equations, and domain constraints with neural architectures. Part I of this special issue addressed process monitoring, fault diagnosis and prog…",
+      "summary": "本次仅作摘要级解读。本文介绍专题第二部分，围绕设计与规划、制造过程以及产品与供应管理，概述六项物理信息机器学习研究。物理知识以几何结构、机理方程或运行约束等形式进入模型，回应预测能力与工程可解释性兼顾的挑战。摘要称这些工作能够减少数据需求、改善泛化并保持预测的物理一致性，但未提供单项研究的模型细节或定量结果，适合作为专题选读入口。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "73aef034b1f1da580525c7497f7d5b92b8fb686e",
@@ -1102,11 +1134,43 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐作为物理信息机器学习在设计制造领域的专题导航，帮助筛选后续重点论文；不宜仅凭本摘要认定具体模型已得到充分验证。[摘要]",
+      "deep_read": {
+        "problem": "摘要将核心挑战表述为把物理知识嵌入数据驱动模型，使其同时具备“predictive power and engineering interpretability”。研究范围覆盖设计规划、制造过程和产品供应管理。解读：关注点不只是预测准确性，而是模型输出能否符合工程机理并便于理解。[摘要]",
+        "method": "摘要指出，PIML将“conservation laws, constitutive equations, and domain constraints”与神经网络架构结合；本部分涉及几何结构、机理方程和运行约束。资料未交代六项工作的网络结构、约束施加方式或训练流程，不能进一步还原具体算法。[摘要]",
+        "innovation": "摘要以“six contributions”和“novel PIML models”描述专题内容，但没有逐项说明创新。解读：可辨认的组织特点是将物理知识融入多个设计制造与管理阶段；这属于专题覆盖范围的概括，不能据此认定某种新架构、新理论或首次应用。[摘要]",
+        "findings": "摘要称整合物理知识可以“reduce data requirements, improve generalization”，并使预测与底层物理保持一致。这些是专题层面的定性成果陈述；当前没有数据规模、对照基线、评价指标或误差数值，因此不能判断收益大小，也不能比较六项工作的效果。[摘要]",
+        "limitations": "当前资料的主要限制是只有摘要，而非可核对全文：没有各项贡献的实验设置、适用条件或失败案例。摘要也未陈述作者认可的具体方法局限。解读：现阶段只能评估主题和阅读潜力，不能把常见的训练困难或计算成本直接归为本文已证实的问题。[摘要]",
+        "connection": "本部分明确转向设计与规划等阶段，与结构设计方向有主题关联；故障诊断和预测则被列为第一部分内容。解读：物理一致性可为可靠性研究提供方法线索，但不能等同于可靠性验证；对智能运维的直接契合程度也弱于设计制造方向。[摘要]",
+        "next_steps": "建议先获取六项贡献的题名和摘要，优先筛选涉及几何约束或机理方程的设计研究，再核对全文中的基线、数据需求与泛化测试。若迁移到智能运维或可靠性研究，建议另行检查故障场景、失效机理及不确定性评价；这些是后续研究建议，不是作者结论。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "面向更智能设计与制造的物理信息机器学习：第二部分",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1115/1.4072757"
+      ],
+      "analyzed_at": "2026-10-13T20:03:00.685075+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "4686b9ddf332f70536db48da5ad18cbc98dc6e0b466a6a68b9a218b12f8d453b",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "448942aa1a69",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-13T20:03:00.691679+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -1131,7 +1195,7 @@
         "ai_maintenance",
         "generative_design"
       ],
-      "summary": "Additive Manufacturing (AM) has grown from a rapid-prototyping tool into a legitimate production technology, yet its broader industrial adoption continues to be constrained by process variability, stochastic defect formation, and the near-impossibility of mapping complex Process Structure Property (PSP) relationships through conventional experimental methods. Artificial Intelligence (AI) and Machine Learning (ML) have emerged as the primary technical response to these constraints, offering data-driven pathways to optimize parameters, detect anomalies in real time, and reduce development lead t…",
+      "summary": "增材制造走向工业生产，仍面临过程波动、随机缺陷及复杂工艺—结构—性能关系难以建模的问题。本文摘要介绍了一篇覆盖全流程的人工智能综述，涉及生成式设计、参数优化、在线监测与数字孪生认证，并讨论数据稀缺、可解释性和标准化障碍。[摘要] 解读：适合用于梳理结构设计与智能质量保障的技术联系，但当前未提供比较表、具体性能数据或全文，不能据此判断各方法的实际优势。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "6ac0ffe038d47cc2f2b8aff005a736a1729712f4",
@@ -1171,11 +1235,43 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐作为增材制造智能设计与质量保障的方向性综述阅读，其覆盖生成式设计、在线监测和数字孪生，便于建立研究框架；具体方法优劣仍需全文核实。[摘要]",
+      "deep_read": {
+        "problem": "研究关注增材制造工业推广中的过程波动、随机缺陷，以及传统实验难以刻画的工艺—结构—性能关系。摘要以“process variability”和“stochastic defect formation”明确问题来源。[摘要] 解读：核心需求是连接制造条件、内部结构与最终性能，而非仅提高预测精度。",
+        "method": "该文自述为“critical-synthesis review”，检索Scopus、Web of Science及Google Scholar，覆盖2015—2026年并侧重2023—2026年工作。[摘要] 方法梳理贯穿设计、制造、监测和认证；摘要未交代筛选数量、完整检索式及质量评价流程。",
+        "innovation": "摘要以“across the complete AM workflow”强调全流程整合，连接生成式设计、代理建模、强化学习、传感器融合和数字孪生。[摘要] 解读：可关注其跨阶段组织与批判性比较价值；现有资料不足以认定首次提出该框架，也未显示原创算法创新。",
+        "findings": "摘要称已将文献中的代表性定量结果整理为比较表，并将“federated learning, edge deployed inference, and explainable AI”列为近期重要方向。[摘要] 这些属于综述归纳与展望；当前未展示表格及对应数据，不能给出性能排序或验证自治制造的实现程度。",
+        "limitations": "摘要指出“data scarcity, model interpretability”及行业标准化缺失是持续障碍。[摘要] 这些是作者讨论的领域挑战，不能直接视为本文研究缺陷。当前材料缺少纳入文献清单、定量比较表与评价细节，因而无法核查综述覆盖度或结论稳健性。",
+        "connection": "生成式设计与拓扑优化直接关联结构设计，“in-situ monitoring”及数字孪生则关联制造质量与可靠性保障。[摘要] 解读：与智能运维的联系主要在异常识别及状态反馈层面；摘要没有设备故障预测、维修决策或服役寿命验证，不能等同于运维研究。",
+        "next_steps": "建议优先核查全文比较表中的任务、数据来源和评价条件，区分参数优化、缺陷检测与性能预测的证据。结合摘要提出的“explainable AI”，可探索异常信号与结构性能之间的可解释关联。[摘要] 此为可迁移研究建议，并非作者已完成或验证的研究成果。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "增材制造中的人工智能：方法、应用与工业挑战的批判性综述",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1142/s0219686728500412"
+      ],
+      "analyzed_at": "2026-10-13T19:59:46.634290+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "dbd11eff361f9de2931a83e1d357607e1fbe299f4ef27a921628f6955909e3e8",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "e4cf9f888b6d",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-13T19:59:46.646743+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -1204,7 +1300,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "Additive manufacturing (AM) enables the production of metal components with complex geometries; however, surface and near-surface defects inherent to powder-based processing limit mechanical performance and component qualification. Surface-related features, such as partially fused particles and near-surface porosity, significantly reduce fatigue life, thereby restricting adoption in high-reliability applications. Improving surface quality through chemical polishing (CP) and chemical-mechanical polishing (CMP) provides a viable pathway to enhance structural reliability. This study evaluates CP…",
+      "summary": "粉末增材制造能够成形复杂金属构件，但表面与近表面缺陷会限制疲劳寿命和构件鉴定。本研究评估化学抛光、化学机械抛光与热等静压联合处理三类不锈钢，考察表面粗糙度及微观组织演变与拉伸性能、高周疲劳表现的关系。摘要称结果建立了清晰的工艺—组织—性能关联，但未报告具体改善幅度、试验参数或统计证据。本文适合作为增材制造构件疲劳可靠性后处理研究的线索，当前仅作摘要级解读。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "15c5e94d67c7d6dd7f2047e8a6db2b8142e2a8ea",
@@ -1242,11 +1338,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议重点关注其表面处理与内部缺陷控制相结合的研究路线，适合增材制造疲劳可靠性研究；但需获取全文后核实性能增益及工艺适用边界。[摘要]",
+      "deep_read": {
+        "problem": "研究针对粉末增材制造构件的表面及近表面缺陷如何限制力学性能与构件鉴定。摘要明确指出，部分熔合颗粒及近表面孔隙会“significantly reduce fatigue life”。核心问题是降低这些缺陷对高可靠性应用的制约，而非仅改善表面外观。[摘要]",
+        "method": "研究评估化学抛光、化学机械抛光与热等静压联合处理，材料包括原文记作“PBF-LB\\17-4 PH”的钢种，以及15-5 PH和316L。考察变量涉及表面粗糙度与微观组织演变，性能指标为拉伸性能和高周疲劳；摘要未交代处理参数及试验分组。[摘要]",
+        "innovation": "解读：值得关注的是把表面处理、热等静压与力学性能评价放入同一研究框架，尝试关联粉末形成的表面状态和后处理效果。不过摘要未提供既有方法对比，也未声称首创，因此不能将联合工艺本身认定为已证实的原创突破。[摘要]",
+        "findings": "摘要报告存在“clear process–structure–property relationships”，关联粉末形成的表面状态、后处理策略及力学性能，并认为结果支持面向构件鉴定的后处理路线。但没有给出粗糙度、强度或疲劳寿命数值，无法判断不同钢种和工艺组合的收益排序。[摘要]",
+        "limitations": "当前证据限制主要来自资料只有摘要：未提供样本量、载荷条件、热等静压制度、抛光去除量或统计分析，也无法核查断裂起源及缺陷变化。上述均是资料缺口，不等同于作者承认的研究局限；不能据此断言试验设计存在缺陷。[摘要]",
+        "connection": "解读：本研究与疲劳可靠性直接相关，可为结构设计中考虑制造缺陷及后处理状态提供研究线索。其工艺—组织—性能关系也可能帮助智能运维区分制造初始状态与服役损伤，但摘要未涉及在线监测、寿命预测模型或运维决策验证。[摘要]",
+        "next_steps": "建议：获取全文后，先核对未处理、单独处理与联合处理的对照设置，再提取粗糙度、缺陷分布及疲劳试验条件，判断性能变化能否归因于特定处理。若开展迁移研究，可进一步考察复杂几何的处理一致性；这属于研究建议，并非作者结论。[摘要]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "化学及化学机械抛光联合热等静压改善激光粉末床熔融不锈钢的力学性能",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.59499/ep267156745"
+      ],
+      "analyzed_at": "2026-10-13T20:01:13.008560+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "254972d731639d9eb916889fce1d9ec9a6f573abc3241acd0b0f17f470a2e3f1",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "6667ad1e6f80",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-13T20:01:13.022488+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "extended": [
@@ -1273,7 +1401,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "Fatigue testing of large wind turbine blades is a critical step in ensuring their operational reliability, however, repeatedly developing loading fixtures for different test phases (such as static and fatigue testing) often entails significant time and financial costs. To achieve reusability of test loading fixtures and comply with the strict load conservative envelope principle specified in the standards, this paper proposes a method for optimizing full‐scale structural fatigue test loading schemes for blades based on Bayesian optimization and mixed‐integer nonlinear programming (MINLP). This…",
+      "summary": "大型风电叶片静力与疲劳试验反复配置加载夹具，增加时间和成本。本文结合贝叶斯优化与混合整数非线性规划，联合选择设备安装位置、激振力幅值及配重质量，并利用静力试验加载点促进夹具复用。摘要报告，百米级叶片全尺寸试验实现了目标设计弯矩的安全包络，挥舞与摆振方向最大正偏差约为8.6%和16.4%。该研究适合关注疲劳试验设计与认证可靠性的读者，但当前仅有摘要，算法细节及成本收益尚无法核对。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "be18410f1f16b48a6661cd06a88fbff53f99cb9f",
@@ -1395,11 +1523,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "推荐重点阅读其离散安装位置与连续加载参数的联合优化方法，以及夹具复用和弯矩安全包络约束的结合方式；这与大型结构疲劳试验设计及可靠性验证直接相关，但暂不能判断算法优势和工程收益的量级。[摘要]",
+      "deep_read": {
+        "problem": "研究针对大型风电叶片不同试验阶段重复开发加载夹具的问题，摘要指出这会产生“significant time and financial costs”。目标是在复用夹具的同时满足标准要求的载荷保守包络原则，而非单纯降低加载幅值。具体成本构成与现有方案不足的量化证据未提供。[摘要]",
+        "method": "方法结合贝叶斯优化与混合整数非线性规划，将激振器和配重安装位置设为离散变量，将激振力幅值、激振点加载鞍座质量及配重质量设为连续变量。静力试验加载点作为候选位置，原鞍座基础质量作为相应质量变量下界；摘要未说明两类优化算法如何协同。[摘要]",
+        "innovation": "解读：值得关注的是将夹具复用要求直接转化为候选安装位置和质量下界，并在混合变量框架内求解加载方案，而不只是调整单一加载参数。挥舞方向动力学模型还考虑预弯和几何非线性造成的刚度软化。摘要缺少文献对比，不能据此认定这些处理具有首创性。[摘要]",
+        "findings": "摘要报告百米级叶片全尺寸疲劳试验验证了方案合理性，并实现目标设计弯矩的“global safety envelope”。挥舞与摆振方向实测弯矩最大正偏差分别约为8.6%和16.4%，满足IEC 61400–23规定的等效疲劳损伤认证要求；这不等于已证明服役寿命提升。[摘要]",
+        "limitations": "当前证据仅为摘要，未给出试验样本数量、目标函数、约束表达、贝叶斯优化配置及对照方案，因此无法评估求解稳定性和相对优势。作者称可减少准备时间，但未提供时间或成本数据。以上属于资料不足，不能写成作者已承认的研究局限。[摘要]",
+        "connection": "解读：与可靠性研究的直接联系是通过全尺寸疲劳加载及标准符合性支持叶片认证；与结构设计的联系主要在试验载荷配置和非线性动力学建模，而非叶片结构本体优化。对智能运维仅有间接参考价值，摘要没有在线监测、故障诊断或剩余寿命预测内容。[摘要]",
+        "next_steps": "建议：后续获取全文，优先核对载荷包络约束、动力学模型校验、算法协同机制及试验测量误差，再评估能否迁移到其他大型结构。若开展扩展研究，可比较复用与新制夹具方案的准备时间、成本和等效疲劳损伤偏差；这些是研究建议，并非作者已验证的结论。[摘要]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "基于贝叶斯优化与混合整数规划的大型风电叶片共振疲劳试验加载方案优化",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1002/qre.70434"
+      ],
+      "analyzed_at": "2026-10-13T20:04:05.518551+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "f7cf65eaea2c50c725d59194c85080cd61aa4345b423358bf177ed0d6f0eb04d",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "7ebe32b91775",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-13T20:04:05.537883+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -1422,7 +1582,7 @@
         "ai_maintenance",
         "generative_design"
       ],
-      "summary": "As the demand for total hip replacement (THR) has continued to rise worldwide, the THR has evolved from the first stainless steel-polyethylene THR in the 1960s to today’s systems with advanced biomaterials, optimized designs, and digital manufacturing to ensure a better longevity, biocompatibility, and patient function. This review aims to consolidate the existing trends and challenges in optimization of hip joint prosthetics, ranging from material improvements, integrated biomechanical design, and testing processes to the new computational and additive manufacturing methodologies. The evidenc…",
+      "summary": "本文综述髋关节假体优化中的材料、力学设计、测试与数字制造路线，关注寿命、生物相容性和患者功能。[摘要]内容涵盖低模量钛合金、表面改性、陶瓷承载材料，以及有限元、机器学习和增材制造。摘要还讨论生成式多孔结构设计、传感监测与预测性维护，但指出长期临床验证、制造重复性和成本仍有障碍。解读：适合作为结构设计与可靠性研究的跨学科入口，而非直接证明某种智能假体方案已具备临床有效性的依据。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "567648ff04e514f14925d8890315c0e5159078f3",
@@ -1463,11 +1623,43 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议重点阅读其生成式多孔结构设计、植入物监测与制造质量控制之间的联系；这些内容切合给定方向，但当前仅有摘要，不能据此确认具体模型和临床证据质量。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是如何协同改善髋关节假体的寿命、生物相容性与患者功能，而非只优化单一材料性能。摘要以“better longevity, biocompatibility, and patient function”概括目标。[摘要]解读：关键在于处理材料、载荷传递和制造之间的相互约束。",
+        "method": "本文属于综述，摘要称其目的是“consolidate the existing trends and challenges”。[摘要]资料覆盖金属与陶瓷材料、表面工程、体外及摩擦腐蚀测试，以及有限元和机器学习工具；但未提供检索策略、纳入标准或证据质量评价，无法核查综述方法的系统性。",
+        "innovation": "摘要涉及“inverse/generative design of porous lattices”和数据驱动合金设计。[摘要]解读：值得关注的是将材料选择、结构优化与数字制造放在同一讨论框架内；这些是综述汇集的技术进展，不能据此认定作者提出了新的生成算法或原创假体设计。",
+        "findings": "摘要列出的效果包括低模量钛合金缓解应力屏蔽、表面改性改善腐蚀抗力与骨整合，以及人工智能辅助优化。其报告“reduce peak interface stress by 36.6%”。[摘要]这一数值缺少对应工况、基线和研究出处，不能推广为所有假体的预期收益。",
+        "limitations": "摘要明确列出“long-term clinical validation”以及磨损腐蚀、碎屑相关骨溶解、多材料打印限制、工艺波动和成本扩展问题。[摘要]解读：这些属于所综述技术面临的挑战；当前资料还不足以判断各项风险的发生频率、严重程度及不同方案间的比较结果。",
+        "connection": "与结构设计方向的直接联系是多孔晶格的逆向及生成式设计；与智能运维和可靠性的联系则是传感植入物、实时模型及“predictive maintenance”。[摘要]解读：其应用对象虽为医疗植入物，但状态监测、失效预警和制造一致性问题具有跨领域参考价值。",
+        "next_steps": "建议后续优先核查生成设计与应力降低结果的原始研究，确认载荷条件、优化约束、制造误差及验证方式；再核查传感数据能否支持可靠的并发症预警。这是研究建议而非作者已完成的成果。摘要提出临床验证数字孪生框架，但未给出其验证细节。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "融合设计、生物材料与数字制造的髋关节假体优化：当前趋势与挑战",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.31354/globalce.v8i3.365"
+      ],
+      "analyzed_at": "2026-10-13T20:05:11.174205+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "9286a756d9e216843fcab0f8e7b07117a1d8d6b2f4e57a5d7cc06ae9cf23c10e",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "d2ad3a94e5bd",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-13T20:05:11.188441+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -1491,7 +1683,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "The rapid development of artificial intelligence (AI), especially the fast iteration and widespread deployment of large language models (LLMs), has ushered in a new paradigm for the intelligent augmentation of electronic test instruments and automatic test systems (ATS). By combining the powerful reasoning and generative capabilities of LLMs with the timeliness and accuracy of external knowledge bases, retrieval-augmented generation (RAG) has emerged as a highly promising approach to addressing knowledge-intensive challenges in the operation and maintenance of electronic test instruments. This…",
+      "summary": "本文是一篇面向电子测试仪器与自动测试系统的检索增强生成（RAG）综述。摘要介绍其检索机制、知识库构建与生成模型，并围绕故障诊断、测试配置和流程规划讨论代表性应用，同时涉及工程实施与效果评价。作者还提出多模态RAG、分布式知识库的联邦学习和边缘部署等未来方向。当前仅有摘要，适合用于建立领域认识，不能据此确认具体系统的性能或工程成熟度。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "f445ff392f2138a9caff3cdb96eaf6dbb74e955b",
@@ -1532,11 +1724,43 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐作为智能运维方向的领域综述阅读，重点关注故障诊断、知识库建设与工程评价问题；但摘要没有具体实验结果，不宜作为RAG性能优势的实证依据。[摘要]",
+      "deep_read": {
+        "problem": "论文关注电子测试仪器及自动测试系统运行维护中的知识密集型挑战，具体涉及故障诊断、测试配置与流程规划。摘要将RAG定位为结合大语言模型能力和外部知识库的潜在解决路径，但没有明确界定现有方案的失效条件或问题发生频率。[摘要]",
+        "method": "本文采用综述方式，而非在摘要中报告新算法实验。内容从RAG基础架构展开，涵盖检索机制、知识库构建与生成模型，再结合仪器运行特点讨论应用，最后涉及工程实施和效果评价。摘要未交代文献检索范围、纳入标准或综述流程。[摘要]",
+        "innovation": "解读：值得关注的是将RAG架构、仪器领域任务与工程实施问题放在同一讨论框架中，形成面向应用的知识梳理。摘要没有宣称新的检索算法、生成模型或系统架构，因此不能将这种组织视角认定为已获验证的技术创新。[摘要]",
+        "findings": "摘要列出的代表性应用包括智能故障诊断系统、自适应测试参数配置和交互式问答助手，并指出多模态RAG、分布式知识库的联邦学习及边缘部署等未来方向。这些属于综述覆盖内容，不是实验发现；摘要未提供准确率、效率或成本变化。[摘要]",
+        "limitations": "当前资料仅为摘要，无法核查综述覆盖是否全面、应用案例的证据质量及评价指标的具体设计。摘要虽提及工程实施和开放问题，却未说明相关限制的详细内容。因此不能据此判断RAG在真实仪器运维中的可靠性，也不能代作者补充局限。[摘要]",
+        "connection": "解读：该文与智能运维方向直接相关，故障诊断和交互问答可对应维护决策及知识获取需求。测试参数配置也与测试流程设计相关，但摘要没有讨论结构设计优化或可靠性建模，因而这些方向的联系只能视为潜在延伸，不能当作论文成果。[摘要]",
+        "next_steps": "建议：后续获取全文时，优先核查故障诊断案例的数据来源、知识库更新方式和效果评价依据。若开展迁移研究，可比较有无检索增强时的诊断正确性、答案可追溯性与响应时延。这些是基于摘要主题提出的研究建议，不是作者已完成的实验。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "检索增强生成在电子测试仪器领域的应用与发展",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.54097/hff4sx30"
+      ],
+      "analyzed_at": "2026-10-13T20:06:23.929784+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "1ad47cc73199c8894d3a4fe2a0bafb5f31d00983dee85efd8680e5bcb018fa80",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "ab9b44c6ecc0",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-13T20:06:23.943844+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -1557,7 +1781,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "Surface roughness ( ) is a significant quality indicator in machined components, influencing performance, fatigue life, and tribological behaviour. Conventional contact-based stylus profilometers are slow, risk micro-scratches, and are impractical for real-time measurement of the surfaces of internally drilled holes. This study proposes a Machine Learning (ML)-based framework that estimates from image-derived texture features, machining parameters, and chip morphology descriptors—specifically addressing drilled hole interiors where curvature and non-uniform illumination render standard planar…",
+      "summary": "钻孔内表面粗糙度影响加工质量与疲劳寿命，但接触式测量难以实时实施。本文以Al-7075合金钻孔图像为对象，比较纹理线性回归、融合纹理与加工参数的XGBoost及切屑形态XGBoost。摘要报告融合模型MAE为0.1425 µm，界面预测约45 ms/图像，并给出模型差异的统计检验。当前仅有摘要，无法核实数据划分与增广流程；其价值在于提供非接触质量估计路径，而非证明疲劳寿命预测能力。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "b83dbec45b0b3a37f9a255ed054ca5384bbb6f04",
@@ -1596,11 +1820,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "推荐作为制造质量感知与疲劳可靠性研究的交叉参考，重点关注图像、加工参数和切屑特征的融合方式；但不宜仅凭摘要将其认定为已验证的疲劳可靠性方法。[摘要][解读]",
+      "deep_read": {
+        "problem": "研究针对钻孔内表面粗糙度的快速测量问题。摘要指出接触式轮廓仪速度慢、存在微划伤风险，且难用于孔内实时测量；孔壁曲率与不均匀照明也使常规平面分析失效。原文将粗糙度与“fatigue life”联系，但未直接研究寿命预测。[摘要]",
+        "method": "方法比较三种组合：GLCM纹理特征与线性回归、纹理及主轴转速和进给率与XGBoost、切屑面积及卷曲指数与XGBoost。数据包含370张Al-7075钻孔图像，增广为1800个样本；摘要未交代增广操作、标签测量和训练测试划分。[摘要]",
+        "innovation": "解读：值得关注的是针对孔内曲率与照明问题，将图像纹理、加工参数和切屑形态组织为可比较的预测路径，而非单纯使用某一种算法。摘要称其为“ML-based framework”，但没有与既有同类框架比较，故不足以确认首创性或技术领先性。[摘要]",
+        "findings": "摘要报告纹理与加工参数XGBoost的MAE为0.1425 µm，单因素ANOVA结果为F (2,537) = 47.3、p<0.001，界面速度约45 ms/图像。三个模型另有数值，但指标符号缺失，不能补认成R²；显著差异也不能替代泛化验证。[摘要]",
+        "limitations": "当前限制主要是证据缺项，而非已证实的方法缺陷。摘要没有说明独立测试集、增广样本隔离、粗糙度测量误差及跨工况验证，因此无法判断是否存在数据泄漏或实际部署偏差。检测成本下降虽被宣称，却未提供成本对照和量化依据。[摘要]",
+        "connection": "解读：该研究与智能运维的联系在于非接触质量感知，与结构设计及可靠性的联系在于孔表面状态可能成为制造质量输入。依据是摘要所述粗糙度影响“performance, fatigue life”。但文中未提供粗糙度到疲劳失效概率的映射或结构验证。[摘要]",
+        "next_steps": "建议：取得全文后，优先核对标签来源、缺失指标符号、增广与数据划分顺序，以及按原始孔或工件隔离的测试结果。若迁移到可靠性研究，可另行设计粗糙度估计误差与疲劳试验关联分析；这属于后续研究建议，不是作者已完成的成果。[摘要]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "基于纹理与切屑形态特征的钻孔内表面粗糙度机器学习预测",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.48084/etasr.18730"
+      ],
+      "analyzed_at": "2026-10-13T20:08:25.785765+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "b6e8b45bd8fdf16e545f61e3230e186cafc1f5170999ca84f85db31d8dd36b34",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "65e1dc5c1243",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-13T20:08:25.795256+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "network",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Web of Science",
@@ -1625,7 +1881,7 @@
         "ai_maintenance",
         "generative_design"
       ],
-      "summary": "本文聚焦《AI-driven inverse design of nanomaterials: A digital twin framework coupling dynamic corona intelligence and safe-by-design architecture for next-generation nanomedicine》，暂未提供可用摘要，请查看原文。",
+      "summary": "本文针对纳米医学经验式开发难以预测生物归宿、毒性和治疗表现的问题，提出概念性框架NanoTwin-AI：从用户定义的治疗或诊断目标出发，联合逆向生成设计、纳米—生物界面预测与机制仿真，探索兼顾疗效、安全和可制造性的材料配方。数字孪生拟结合PBPK/PBTK建模及AI推导的生物分子冠动态。摘要明确称其为“conceptual framework”，尚不足以证明平台实现或性能优势。[摘要]",
       "raw_metadata": {
         "uid": "WOS:001886642400001",
         "title": "AI-driven inverse design of nanomaterials: A digital twin framework coupling dynamic corona intelligence and safe-by-design architecture for next-generation nanomedicine",
@@ -1739,11 +1995,43 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议作为生成式设计与数字孪生架构的概念参考阅读，重点关注安全约束如何进入优化循环；不宜将其作为智能运维应用或已验证算法性能的证据。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是纳米材料的临床转化受经验式开发流程限制，难以可靠预测生物归宿、毒性及治疗表现。摘要以“poorly predict biological fate”概括预测缺口。解读：设计阶段与生物响应之间的脱节，是该框架试图解决的核心问题，而非设备故障诊断。[摘要]",
+        "method": "框架从用户定义的治疗或诊断目标出发，生成优化的纳米材料配方，整合逆向生成设计、纳米—生物界面预测及机制性归宿—功能仿真。候选材料拟由数字孪生评估，结合“PBPK/PBTK modelling”与AI推导的生物分子冠动态；具体算法和实现流程未提供。[摘要]",
+        "innovation": "作者提出的架构特色，是把生成设计、界面预测和机制仿真纳入统一计算体系，并将毒性作为“primary design constraint”嵌入优化循环。解读：其新意主要体现为面向目标的多模块耦合与安全前置；仅凭摘要，无法确认相较既有研究的首创性或技术突破。[摘要]",
+        "findings": "摘要呈现的是概念框架及未来挑战，而非实验验证结果。作者识别出预测性生物分子冠基础模型、动态生物持留数字孪生，以及疗效—安全同步优化三个方向。原文使用“would be subsequently evaluated”，因此不能据此认定已完成候选材料评估或获得性能提升。[摘要]",
+        "limitations": "当前摘要未给出训练数据、模型结构、验证方案、基线比较或量化结果，故无法判断预测精度、生成配方的可行性与临床适用性。这是当前资料的证据边界，不等同于全文必然缺失这些内容。作者明确称其为“conceptual framework”，阅读时应区分框架设想与实证成果。[摘要]",
+        "connection": "解读：该文与生成式设计方向直接相关，因其明确整合“inverse generative design”；与结构设计的联系在于目标驱动的材料配方优化，不是已展示的结构力学设计。安全约束与可靠性研究具有概念关联，但摘要未涉及智能运维、设备退化或维护决策，不能扩大适用范围。[摘要]",
+        "next_steps": "建议后续阅读重点核查各模块的输入输出、耦合方式与安全约束表达，并寻找可核对的验证证据。可迁移研究宜先选择边界明确的材料设计任务，分别检验归宿预测和疗效—安全联合优化，再评估耦合价值；这些是研究建议，不是作者已完成的工作。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "人工智能驱动的纳米材料逆向设计：融合动态生物分子冠与安全设计的数字孪生框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.mtcomm.2026.116178"
+      ],
+      "analyzed_at": "2026-10-13T20:09:33.051233+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "500713039656fa07a0c75d979e4e33c17575e3f74ab714906d14a9be857c9119",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "18ee2d492b5c",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-13T20:09:33.060548+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "papers": [
@@ -1769,7 +2057,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "ABSTRACT In fatigue delamination growth (FDG), for different fiber bridging intensity and load ratios ( R ‐ratios), the Paris‐type law on FDG rate ( da/dN ) is formulated using strain energy release rate ( SERR ) on the crack tip Δ√ G tip and effective SERR Δ√ G eff as similitude parameters. The resulting da/dN (Δ√ G tip ) and da/dN (Δ√ G eff ) data collapse into a band. Based on this finding, this paper proposes a physics‐informed machine learning (PIML) framework to characterize the FDG scatter. The framework is composed of three PIML models. PIML 1, with integrated modified beam theory (MBT…",
+      "summary": "复合材料层合板的疲劳分层扩展预测需要考虑纤维桥联强度与载荷比引起的离散性。摘要提出三级物理信息机器学习框架：先结合修正梁理论预测应变能释放率，再结合修正Paris关系预测扩展速率及95%置信区间，并用贝叶斯优化调整超参数。解读：其阅读价值在于将物理关系、扩展预测与不确定性表征连接起来；但摘要没有提供误差、区间覆盖率或验证规模，尚不能判断预测性能。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -1808,11 +2096,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议面向复合材料疲劳可靠性研究重点阅读，尤其关注物理约束如何进入扩展速率与置信区间预测；推荐依据是明确的方法框架，而非已获证实的性能优势。[摘要]",
+      "deep_read": {
+        "problem": "研究针对不同纤维桥联强度和载荷比下的疲劳分层扩展离散性。摘要指出，采用裂尖与有效应变能释放率相关参数后，扩展速率数据仍汇聚为一个带状区域，即“data collapse into a band”。解读：目标不只是拟合单一增长曲线，还包括刻画条件变化下的散布。[摘要]",
+        "method": "框架包含三个模型：PIML 1结合修正梁理论预测应变能释放率；PIML 2‐a与2‐b结合修正Paris关系，分别采用裂尖和有效释放率相关参数，预测扩展速率及95%置信区间。各模型超参数通过贝叶斯优化确定；摘要未交代网络结构及训练细节。[摘要]",
+        "innovation": "摘要明确提出以物理信息机器学习表征疲劳分层扩展散布，并将释放率预测与扩展速率、区间预测连接。解读：值得关注的是物理关系与离散性表征的结合方式，而非仅增加一个预测器。仅凭摘要不能认定其首创性，也不能确认相对既有方法的创新幅度。[摘要]",
+        "findings": "摘要报告，在不同桥联强度和载荷比下，以两类释放率相关参数建立Paris型关系，所得扩展速率数据形成带状分布；框架可预测单一或多个载荷比下的速率及95%置信区间。但未给出数值误差或对照结果，因而不能把这些描述等同于高精度已得到验证。[摘要]",
+        "limitations": "当前资料仅为摘要，未提供试样材料、数据量、载荷比范围、验证划分及区间覆盖率，也未解释95%置信区间的具体构造。解读：这些是现有资料的证据缺口，不是已确认的论文缺陷；尤其无法判断模型对未见桥联条件或其他层合板体系的适用性。[摘要]",
+        "connection": "该工作与疲劳可靠性方向直接相关，因为预测对象是分层扩展速率及其离散性。解读：区间输出可能为结构寿命评估与检修决策提供输入，也可连接智能运维中的损伤演化预测；但摘要没有开展寿命计算、在线监测或结构优化，不能将这些应用列为作者成果。[摘要]",
+        "next_steps": "建议后续阅读全文时优先核查桥联效应如何界定区间、两类相似性参数如何选取，以及不同载荷比下的独立验证。建议迁移研究时进一步检验区间覆盖率，并区分数据散布与模型不确定性；这些属于研究设想，摘要并未证明相关检验已经完成。[摘要]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "物理信息机器学习预测复合材料层合板疲劳分层扩展及纤维桥联定义的置信区间",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1111/ffe.70492"
+      ],
+      "analyzed_at": "2026-10-13T19:57:18.266391+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "343c8f7e0663f435422d60719aca96d035ba45abb9974ea09d2c3006867c5422",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "abd65bfce7b5",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-13T19:57:18.283869+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -2804,7 +3124,7 @@
         "ai_maintenance",
         "generative_design"
       ],
-      "summary": "Manufacturing systems are undergoing a fundamental transformation driven by the convergence of rich data, cyber-physical infrastructure, and artificial intelligence. At the heart of this transformation lies the challenge of embedding physical knowledge into data-driven models to achieve both predictive power and engineering interpretability. Physics-informed machine learning (PIML) has emerged as a paradigm to integrate conservation laws, constitutive equations, and domain constraints with neural architectures. Part I of this special issue addressed process monitoring, fault diagnosis and prog…",
+      "summary": "本次仅作摘要级解读。本文介绍专题第二部分，围绕设计与规划、制造过程以及产品与供应管理，概述六项物理信息机器学习研究。物理知识以几何结构、机理方程或运行约束等形式进入模型，回应预测能力与工程可解释性兼顾的挑战。摘要称这些工作能够减少数据需求、改善泛化并保持预测的物理一致性，但未提供单项研究的模型细节或定量结果，适合作为专题选读入口。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "73aef034b1f1da580525c7497f7d5b92b8fb686e",
@@ -2845,11 +3165,43 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐作为物理信息机器学习在设计制造领域的专题导航，帮助筛选后续重点论文；不宜仅凭本摘要认定具体模型已得到充分验证。[摘要]",
+      "deep_read": {
+        "problem": "摘要将核心挑战表述为把物理知识嵌入数据驱动模型，使其同时具备“predictive power and engineering interpretability”。研究范围覆盖设计规划、制造过程和产品供应管理。解读：关注点不只是预测准确性，而是模型输出能否符合工程机理并便于理解。[摘要]",
+        "method": "摘要指出，PIML将“conservation laws, constitutive equations, and domain constraints”与神经网络架构结合；本部分涉及几何结构、机理方程和运行约束。资料未交代六项工作的网络结构、约束施加方式或训练流程，不能进一步还原具体算法。[摘要]",
+        "innovation": "摘要以“six contributions”和“novel PIML models”描述专题内容，但没有逐项说明创新。解读：可辨认的组织特点是将物理知识融入多个设计制造与管理阶段；这属于专题覆盖范围的概括，不能据此认定某种新架构、新理论或首次应用。[摘要]",
+        "findings": "摘要称整合物理知识可以“reduce data requirements, improve generalization”，并使预测与底层物理保持一致。这些是专题层面的定性成果陈述；当前没有数据规模、对照基线、评价指标或误差数值，因此不能判断收益大小，也不能比较六项工作的效果。[摘要]",
+        "limitations": "当前资料的主要限制是只有摘要，而非可核对全文：没有各项贡献的实验设置、适用条件或失败案例。摘要也未陈述作者认可的具体方法局限。解读：现阶段只能评估主题和阅读潜力，不能把常见的训练困难或计算成本直接归为本文已证实的问题。[摘要]",
+        "connection": "本部分明确转向设计与规划等阶段，与结构设计方向有主题关联；故障诊断和预测则被列为第一部分内容。解读：物理一致性可为可靠性研究提供方法线索，但不能等同于可靠性验证；对智能运维的直接契合程度也弱于设计制造方向。[摘要]",
+        "next_steps": "建议先获取六项贡献的题名和摘要，优先筛选涉及几何约束或机理方程的设计研究，再核对全文中的基线、数据需求与泛化测试。若迁移到智能运维或可靠性研究，建议另行检查故障场景、失效机理及不确定性评价；这些是后续研究建议，不是作者结论。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "面向更智能设计与制造的物理信息机器学习：第二部分",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1115/1.4072757"
+      ],
+      "analyzed_at": "2026-10-13T20:03:00.685075+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "4686b9ddf332f70536db48da5ad18cbc98dc6e0b466a6a68b9a218b12f8d453b",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "448942aa1a69",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-13T20:03:00.691679+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -2874,7 +3226,7 @@
         "ai_maintenance",
         "generative_design"
       ],
-      "summary": "Additive Manufacturing (AM) has grown from a rapid-prototyping tool into a legitimate production technology, yet its broader industrial adoption continues to be constrained by process variability, stochastic defect formation, and the near-impossibility of mapping complex Process Structure Property (PSP) relationships through conventional experimental methods. Artificial Intelligence (AI) and Machine Learning (ML) have emerged as the primary technical response to these constraints, offering data-driven pathways to optimize parameters, detect anomalies in real time, and reduce development lead t…",
+      "summary": "增材制造走向工业生产，仍面临过程波动、随机缺陷及复杂工艺—结构—性能关系难以建模的问题。本文摘要介绍了一篇覆盖全流程的人工智能综述，涉及生成式设计、参数优化、在线监测与数字孪生认证，并讨论数据稀缺、可解释性和标准化障碍。[摘要] 解读：适合用于梳理结构设计与智能质量保障的技术联系，但当前未提供比较表、具体性能数据或全文，不能据此判断各方法的实际优势。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "6ac0ffe038d47cc2f2b8aff005a736a1729712f4",
@@ -2914,11 +3266,43 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐作为增材制造智能设计与质量保障的方向性综述阅读，其覆盖生成式设计、在线监测和数字孪生，便于建立研究框架；具体方法优劣仍需全文核实。[摘要]",
+      "deep_read": {
+        "problem": "研究关注增材制造工业推广中的过程波动、随机缺陷，以及传统实验难以刻画的工艺—结构—性能关系。摘要以“process variability”和“stochastic defect formation”明确问题来源。[摘要] 解读：核心需求是连接制造条件、内部结构与最终性能，而非仅提高预测精度。",
+        "method": "该文自述为“critical-synthesis review”，检索Scopus、Web of Science及Google Scholar，覆盖2015—2026年并侧重2023—2026年工作。[摘要] 方法梳理贯穿设计、制造、监测和认证；摘要未交代筛选数量、完整检索式及质量评价流程。",
+        "innovation": "摘要以“across the complete AM workflow”强调全流程整合，连接生成式设计、代理建模、强化学习、传感器融合和数字孪生。[摘要] 解读：可关注其跨阶段组织与批判性比较价值；现有资料不足以认定首次提出该框架，也未显示原创算法创新。",
+        "findings": "摘要称已将文献中的代表性定量结果整理为比较表，并将“federated learning, edge deployed inference, and explainable AI”列为近期重要方向。[摘要] 这些属于综述归纳与展望；当前未展示表格及对应数据，不能给出性能排序或验证自治制造的实现程度。",
+        "limitations": "摘要指出“data scarcity, model interpretability”及行业标准化缺失是持续障碍。[摘要] 这些是作者讨论的领域挑战，不能直接视为本文研究缺陷。当前材料缺少纳入文献清单、定量比较表与评价细节，因而无法核查综述覆盖度或结论稳健性。",
+        "connection": "生成式设计与拓扑优化直接关联结构设计，“in-situ monitoring”及数字孪生则关联制造质量与可靠性保障。[摘要] 解读：与智能运维的联系主要在异常识别及状态反馈层面；摘要没有设备故障预测、维修决策或服役寿命验证，不能等同于运维研究。",
+        "next_steps": "建议优先核查全文比较表中的任务、数据来源和评价条件，区分参数优化、缺陷检测与性能预测的证据。结合摘要提出的“explainable AI”，可探索异常信号与结构性能之间的可解释关联。[摘要] 此为可迁移研究建议，并非作者已完成或验证的研究成果。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "增材制造中的人工智能：方法、应用与工业挑战的批判性综述",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1142/s0219686728500412"
+      ],
+      "analyzed_at": "2026-10-13T19:59:46.634290+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "dbd11eff361f9de2931a83e1d357607e1fbe299f4ef27a921628f6955909e3e8",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "e4cf9f888b6d",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-13T19:59:46.646743+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -2947,7 +3331,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "Additive manufacturing (AM) enables the production of metal components with complex geometries; however, surface and near-surface defects inherent to powder-based processing limit mechanical performance and component qualification. Surface-related features, such as partially fused particles and near-surface porosity, significantly reduce fatigue life, thereby restricting adoption in high-reliability applications. Improving surface quality through chemical polishing (CP) and chemical-mechanical polishing (CMP) provides a viable pathway to enhance structural reliability. This study evaluates CP…",
+      "summary": "粉末增材制造能够成形复杂金属构件，但表面与近表面缺陷会限制疲劳寿命和构件鉴定。本研究评估化学抛光、化学机械抛光与热等静压联合处理三类不锈钢，考察表面粗糙度及微观组织演变与拉伸性能、高周疲劳表现的关系。摘要称结果建立了清晰的工艺—组织—性能关联，但未报告具体改善幅度、试验参数或统计证据。本文适合作为增材制造构件疲劳可靠性后处理研究的线索，当前仅作摘要级解读。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "15c5e94d67c7d6dd7f2047e8a6db2b8142e2a8ea",
@@ -2985,11 +3369,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议重点关注其表面处理与内部缺陷控制相结合的研究路线，适合增材制造疲劳可靠性研究；但需获取全文后核实性能增益及工艺适用边界。[摘要]",
+      "deep_read": {
+        "problem": "研究针对粉末增材制造构件的表面及近表面缺陷如何限制力学性能与构件鉴定。摘要明确指出，部分熔合颗粒及近表面孔隙会“significantly reduce fatigue life”。核心问题是降低这些缺陷对高可靠性应用的制约，而非仅改善表面外观。[摘要]",
+        "method": "研究评估化学抛光、化学机械抛光与热等静压联合处理，材料包括原文记作“PBF-LB\\17-4 PH”的钢种，以及15-5 PH和316L。考察变量涉及表面粗糙度与微观组织演变，性能指标为拉伸性能和高周疲劳；摘要未交代处理参数及试验分组。[摘要]",
+        "innovation": "解读：值得关注的是把表面处理、热等静压与力学性能评价放入同一研究框架，尝试关联粉末形成的表面状态和后处理效果。不过摘要未提供既有方法对比，也未声称首创，因此不能将联合工艺本身认定为已证实的原创突破。[摘要]",
+        "findings": "摘要报告存在“clear process–structure–property relationships”，关联粉末形成的表面状态、后处理策略及力学性能，并认为结果支持面向构件鉴定的后处理路线。但没有给出粗糙度、强度或疲劳寿命数值，无法判断不同钢种和工艺组合的收益排序。[摘要]",
+        "limitations": "当前证据限制主要来自资料只有摘要：未提供样本量、载荷条件、热等静压制度、抛光去除量或统计分析，也无法核查断裂起源及缺陷变化。上述均是资料缺口，不等同于作者承认的研究局限；不能据此断言试验设计存在缺陷。[摘要]",
+        "connection": "解读：本研究与疲劳可靠性直接相关，可为结构设计中考虑制造缺陷及后处理状态提供研究线索。其工艺—组织—性能关系也可能帮助智能运维区分制造初始状态与服役损伤，但摘要未涉及在线监测、寿命预测模型或运维决策验证。[摘要]",
+        "next_steps": "建议：获取全文后，先核对未处理、单独处理与联合处理的对照设置，再提取粗糙度、缺陷分布及疲劳试验条件，判断性能变化能否归因于特定处理。若开展迁移研究，可进一步考察复杂几何的处理一致性；这属于研究建议，并非作者结论。[摘要]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "化学及化学机械抛光联合热等静压改善激光粉末床熔融不锈钢的力学性能",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.59499/ep267156745"
+      ],
+      "analyzed_at": "2026-10-13T20:01:13.008560+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "254972d731639d9eb916889fce1d9ec9a6f573abc3241acd0b0f17f470a2e3f1",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "6667ad1e6f80",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-13T20:01:13.022488+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -3014,7 +3430,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "Fatigue testing of large wind turbine blades is a critical step in ensuring their operational reliability, however, repeatedly developing loading fixtures for different test phases (such as static and fatigue testing) often entails significant time and financial costs. To achieve reusability of test loading fixtures and comply with the strict load conservative envelope principle specified in the standards, this paper proposes a method for optimizing full‐scale structural fatigue test loading schemes for blades based on Bayesian optimization and mixed‐integer nonlinear programming (MINLP). This…",
+      "summary": "大型风电叶片静力与疲劳试验反复配置加载夹具，增加时间和成本。本文结合贝叶斯优化与混合整数非线性规划，联合选择设备安装位置、激振力幅值及配重质量，并利用静力试验加载点促进夹具复用。摘要报告，百米级叶片全尺寸试验实现了目标设计弯矩的安全包络，挥舞与摆振方向最大正偏差约为8.6%和16.4%。该研究适合关注疲劳试验设计与认证可靠性的读者，但当前仅有摘要，算法细节及成本收益尚无法核对。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "be18410f1f16b48a6661cd06a88fbff53f99cb9f",
@@ -3136,11 +3552,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "推荐重点阅读其离散安装位置与连续加载参数的联合优化方法，以及夹具复用和弯矩安全包络约束的结合方式；这与大型结构疲劳试验设计及可靠性验证直接相关，但暂不能判断算法优势和工程收益的量级。[摘要]",
+      "deep_read": {
+        "problem": "研究针对大型风电叶片不同试验阶段重复开发加载夹具的问题，摘要指出这会产生“significant time and financial costs”。目标是在复用夹具的同时满足标准要求的载荷保守包络原则，而非单纯降低加载幅值。具体成本构成与现有方案不足的量化证据未提供。[摘要]",
+        "method": "方法结合贝叶斯优化与混合整数非线性规划，将激振器和配重安装位置设为离散变量，将激振力幅值、激振点加载鞍座质量及配重质量设为连续变量。静力试验加载点作为候选位置，原鞍座基础质量作为相应质量变量下界；摘要未说明两类优化算法如何协同。[摘要]",
+        "innovation": "解读：值得关注的是将夹具复用要求直接转化为候选安装位置和质量下界，并在混合变量框架内求解加载方案，而不只是调整单一加载参数。挥舞方向动力学模型还考虑预弯和几何非线性造成的刚度软化。摘要缺少文献对比，不能据此认定这些处理具有首创性。[摘要]",
+        "findings": "摘要报告百米级叶片全尺寸疲劳试验验证了方案合理性，并实现目标设计弯矩的“global safety envelope”。挥舞与摆振方向实测弯矩最大正偏差分别约为8.6%和16.4%，满足IEC 61400–23规定的等效疲劳损伤认证要求；这不等于已证明服役寿命提升。[摘要]",
+        "limitations": "当前证据仅为摘要，未给出试验样本数量、目标函数、约束表达、贝叶斯优化配置及对照方案，因此无法评估求解稳定性和相对优势。作者称可减少准备时间，但未提供时间或成本数据。以上属于资料不足，不能写成作者已承认的研究局限。[摘要]",
+        "connection": "解读：与可靠性研究的直接联系是通过全尺寸疲劳加载及标准符合性支持叶片认证；与结构设计的联系主要在试验载荷配置和非线性动力学建模，而非叶片结构本体优化。对智能运维仅有间接参考价值，摘要没有在线监测、故障诊断或剩余寿命预测内容。[摘要]",
+        "next_steps": "建议：后续获取全文，优先核对载荷包络约束、动力学模型校验、算法协同机制及试验测量误差，再评估能否迁移到其他大型结构。若开展扩展研究，可比较复用与新制夹具方案的准备时间、成本和等效疲劳损伤偏差；这些是研究建议，并非作者已验证的结论。[摘要]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "基于贝叶斯优化与混合整数规划的大型风电叶片共振疲劳试验加载方案优化",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1002/qre.70434"
+      ],
+      "analyzed_at": "2026-10-13T20:04:05.518551+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "f7cf65eaea2c50c725d59194c85080cd61aa4345b423358bf177ed0d6f0eb04d",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "7ebe32b91775",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-13T20:04:05.537883+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -3163,7 +3611,7 @@
         "ai_maintenance",
         "generative_design"
       ],
-      "summary": "As the demand for total hip replacement (THR) has continued to rise worldwide, the THR has evolved from the first stainless steel-polyethylene THR in the 1960s to today’s systems with advanced biomaterials, optimized designs, and digital manufacturing to ensure a better longevity, biocompatibility, and patient function. This review aims to consolidate the existing trends and challenges in optimization of hip joint prosthetics, ranging from material improvements, integrated biomechanical design, and testing processes to the new computational and additive manufacturing methodologies. The evidenc…",
+      "summary": "本文综述髋关节假体优化中的材料、力学设计、测试与数字制造路线，关注寿命、生物相容性和患者功能。[摘要]内容涵盖低模量钛合金、表面改性、陶瓷承载材料，以及有限元、机器学习和增材制造。摘要还讨论生成式多孔结构设计、传感监测与预测性维护，但指出长期临床验证、制造重复性和成本仍有障碍。解读：适合作为结构设计与可靠性研究的跨学科入口，而非直接证明某种智能假体方案已具备临床有效性的依据。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "567648ff04e514f14925d8890315c0e5159078f3",
@@ -3204,11 +3652,43 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议重点阅读其生成式多孔结构设计、植入物监测与制造质量控制之间的联系；这些内容切合给定方向，但当前仅有摘要，不能据此确认具体模型和临床证据质量。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是如何协同改善髋关节假体的寿命、生物相容性与患者功能，而非只优化单一材料性能。摘要以“better longevity, biocompatibility, and patient function”概括目标。[摘要]解读：关键在于处理材料、载荷传递和制造之间的相互约束。",
+        "method": "本文属于综述，摘要称其目的是“consolidate the existing trends and challenges”。[摘要]资料覆盖金属与陶瓷材料、表面工程、体外及摩擦腐蚀测试，以及有限元和机器学习工具；但未提供检索策略、纳入标准或证据质量评价，无法核查综述方法的系统性。",
+        "innovation": "摘要涉及“inverse/generative design of porous lattices”和数据驱动合金设计。[摘要]解读：值得关注的是将材料选择、结构优化与数字制造放在同一讨论框架内；这些是综述汇集的技术进展，不能据此认定作者提出了新的生成算法或原创假体设计。",
+        "findings": "摘要列出的效果包括低模量钛合金缓解应力屏蔽、表面改性改善腐蚀抗力与骨整合，以及人工智能辅助优化。其报告“reduce peak interface stress by 36.6%”。[摘要]这一数值缺少对应工况、基线和研究出处，不能推广为所有假体的预期收益。",
+        "limitations": "摘要明确列出“long-term clinical validation”以及磨损腐蚀、碎屑相关骨溶解、多材料打印限制、工艺波动和成本扩展问题。[摘要]解读：这些属于所综述技术面临的挑战；当前资料还不足以判断各项风险的发生频率、严重程度及不同方案间的比较结果。",
+        "connection": "与结构设计方向的直接联系是多孔晶格的逆向及生成式设计；与智能运维和可靠性的联系则是传感植入物、实时模型及“predictive maintenance”。[摘要]解读：其应用对象虽为医疗植入物，但状态监测、失效预警和制造一致性问题具有跨领域参考价值。",
+        "next_steps": "建议后续优先核查生成设计与应力降低结果的原始研究，确认载荷条件、优化约束、制造误差及验证方式；再核查传感数据能否支持可靠的并发症预警。这是研究建议而非作者已完成的成果。摘要提出临床验证数字孪生框架，但未给出其验证细节。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "融合设计、生物材料与数字制造的髋关节假体优化：当前趋势与挑战",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.31354/globalce.v8i3.365"
+      ],
+      "analyzed_at": "2026-10-13T20:05:11.174205+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "9286a756d9e216843fcab0f8e7b07117a1d8d6b2f4e57a5d7cc06ae9cf23c10e",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "d2ad3a94e5bd",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-13T20:05:11.188441+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -3232,7 +3712,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "The rapid development of artificial intelligence (AI), especially the fast iteration and widespread deployment of large language models (LLMs), has ushered in a new paradigm for the intelligent augmentation of electronic test instruments and automatic test systems (ATS). By combining the powerful reasoning and generative capabilities of LLMs with the timeliness and accuracy of external knowledge bases, retrieval-augmented generation (RAG) has emerged as a highly promising approach to addressing knowledge-intensive challenges in the operation and maintenance of electronic test instruments. This…",
+      "summary": "本文是一篇面向电子测试仪器与自动测试系统的检索增强生成（RAG）综述。摘要介绍其检索机制、知识库构建与生成模型，并围绕故障诊断、测试配置和流程规划讨论代表性应用，同时涉及工程实施与效果评价。作者还提出多模态RAG、分布式知识库的联邦学习和边缘部署等未来方向。当前仅有摘要，适合用于建立领域认识，不能据此确认具体系统的性能或工程成熟度。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "f445ff392f2138a9caff3cdb96eaf6dbb74e955b",
@@ -3273,11 +3753,43 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐作为智能运维方向的领域综述阅读，重点关注故障诊断、知识库建设与工程评价问题；但摘要没有具体实验结果，不宜作为RAG性能优势的实证依据。[摘要]",
+      "deep_read": {
+        "problem": "论文关注电子测试仪器及自动测试系统运行维护中的知识密集型挑战，具体涉及故障诊断、测试配置与流程规划。摘要将RAG定位为结合大语言模型能力和外部知识库的潜在解决路径，但没有明确界定现有方案的失效条件或问题发生频率。[摘要]",
+        "method": "本文采用综述方式，而非在摘要中报告新算法实验。内容从RAG基础架构展开，涵盖检索机制、知识库构建与生成模型，再结合仪器运行特点讨论应用，最后涉及工程实施和效果评价。摘要未交代文献检索范围、纳入标准或综述流程。[摘要]",
+        "innovation": "解读：值得关注的是将RAG架构、仪器领域任务与工程实施问题放在同一讨论框架中，形成面向应用的知识梳理。摘要没有宣称新的检索算法、生成模型或系统架构，因此不能将这种组织视角认定为已获验证的技术创新。[摘要]",
+        "findings": "摘要列出的代表性应用包括智能故障诊断系统、自适应测试参数配置和交互式问答助手，并指出多模态RAG、分布式知识库的联邦学习及边缘部署等未来方向。这些属于综述覆盖内容，不是实验发现；摘要未提供准确率、效率或成本变化。[摘要]",
+        "limitations": "当前资料仅为摘要，无法核查综述覆盖是否全面、应用案例的证据质量及评价指标的具体设计。摘要虽提及工程实施和开放问题，却未说明相关限制的详细内容。因此不能据此判断RAG在真实仪器运维中的可靠性，也不能代作者补充局限。[摘要]",
+        "connection": "解读：该文与智能运维方向直接相关，故障诊断和交互问答可对应维护决策及知识获取需求。测试参数配置也与测试流程设计相关，但摘要没有讨论结构设计优化或可靠性建模，因而这些方向的联系只能视为潜在延伸，不能当作论文成果。[摘要]",
+        "next_steps": "建议：后续获取全文时，优先核查故障诊断案例的数据来源、知识库更新方式和效果评价依据。若开展迁移研究，可比较有无检索增强时的诊断正确性、答案可追溯性与响应时延。这些是基于摘要主题提出的研究建议，不是作者已完成的实验。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "检索增强生成在电子测试仪器领域的应用与发展",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.54097/hff4sx30"
+      ],
+      "analyzed_at": "2026-10-13T20:06:23.929784+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "1ad47cc73199c8894d3a4fe2a0bafb5f31d00983dee85efd8680e5bcb018fa80",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "ab9b44c6ecc0",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-13T20:06:23.943844+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -3298,7 +3810,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "Surface roughness ( ) is a significant quality indicator in machined components, influencing performance, fatigue life, and tribological behaviour. Conventional contact-based stylus profilometers are slow, risk micro-scratches, and are impractical for real-time measurement of the surfaces of internally drilled holes. This study proposes a Machine Learning (ML)-based framework that estimates from image-derived texture features, machining parameters, and chip morphology descriptors—specifically addressing drilled hole interiors where curvature and non-uniform illumination render standard planar…",
+      "summary": "钻孔内表面粗糙度影响加工质量与疲劳寿命，但接触式测量难以实时实施。本文以Al-7075合金钻孔图像为对象，比较纹理线性回归、融合纹理与加工参数的XGBoost及切屑形态XGBoost。摘要报告融合模型MAE为0.1425 µm，界面预测约45 ms/图像，并给出模型差异的统计检验。当前仅有摘要，无法核实数据划分与增广流程；其价值在于提供非接触质量估计路径，而非证明疲劳寿命预测能力。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "b83dbec45b0b3a37f9a255ed054ca5384bbb6f04",
@@ -3337,11 +3849,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "推荐作为制造质量感知与疲劳可靠性研究的交叉参考，重点关注图像、加工参数和切屑特征的融合方式；但不宜仅凭摘要将其认定为已验证的疲劳可靠性方法。[摘要][解读]",
+      "deep_read": {
+        "problem": "研究针对钻孔内表面粗糙度的快速测量问题。摘要指出接触式轮廓仪速度慢、存在微划伤风险，且难用于孔内实时测量；孔壁曲率与不均匀照明也使常规平面分析失效。原文将粗糙度与“fatigue life”联系，但未直接研究寿命预测。[摘要]",
+        "method": "方法比较三种组合：GLCM纹理特征与线性回归、纹理及主轴转速和进给率与XGBoost、切屑面积及卷曲指数与XGBoost。数据包含370张Al-7075钻孔图像，增广为1800个样本；摘要未交代增广操作、标签测量和训练测试划分。[摘要]",
+        "innovation": "解读：值得关注的是针对孔内曲率与照明问题，将图像纹理、加工参数和切屑形态组织为可比较的预测路径，而非单纯使用某一种算法。摘要称其为“ML-based framework”，但没有与既有同类框架比较，故不足以确认首创性或技术领先性。[摘要]",
+        "findings": "摘要报告纹理与加工参数XGBoost的MAE为0.1425 µm，单因素ANOVA结果为F (2,537) = 47.3、p<0.001，界面速度约45 ms/图像。三个模型另有数值，但指标符号缺失，不能补认成R²；显著差异也不能替代泛化验证。[摘要]",
+        "limitations": "当前限制主要是证据缺项，而非已证实的方法缺陷。摘要没有说明独立测试集、增广样本隔离、粗糙度测量误差及跨工况验证，因此无法判断是否存在数据泄漏或实际部署偏差。检测成本下降虽被宣称，却未提供成本对照和量化依据。[摘要]",
+        "connection": "解读：该研究与智能运维的联系在于非接触质量感知，与结构设计及可靠性的联系在于孔表面状态可能成为制造质量输入。依据是摘要所述粗糙度影响“performance, fatigue life”。但文中未提供粗糙度到疲劳失效概率的映射或结构验证。[摘要]",
+        "next_steps": "建议：取得全文后，优先核对标签来源、缺失指标符号、增广与数据划分顺序，以及按原始孔或工件隔离的测试结果。若迁移到可靠性研究，可另行设计粗糙度估计误差与疲劳试验关联分析；这属于后续研究建议，不是作者已完成的成果。[摘要]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "基于纹理与切屑形态特征的钻孔内表面粗糙度机器学习预测",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.48084/etasr.18730"
+      ],
+      "analyzed_at": "2026-10-13T20:08:25.785765+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "b6e8b45bd8fdf16e545f61e3230e186cafc1f5170999ca84f85db31d8dd36b34",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "65e1dc5c1243",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-13T20:08:25.795256+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "network",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Web of Science",
@@ -3366,7 +3910,7 @@
         "ai_maintenance",
         "generative_design"
       ],
-      "summary": "本文聚焦《AI-driven inverse design of nanomaterials: A digital twin framework coupling dynamic corona intelligence and safe-by-design architecture for next-generation nanomedicine》，暂未提供可用摘要，请查看原文。",
+      "summary": "本文针对纳米医学经验式开发难以预测生物归宿、毒性和治疗表现的问题，提出概念性框架NanoTwin-AI：从用户定义的治疗或诊断目标出发，联合逆向生成设计、纳米—生物界面预测与机制仿真，探索兼顾疗效、安全和可制造性的材料配方。数字孪生拟结合PBPK/PBTK建模及AI推导的生物分子冠动态。摘要明确称其为“conceptual framework”，尚不足以证明平台实现或性能优势。[摘要]",
       "raw_metadata": {
         "uid": "WOS:001886642400001",
         "title": "AI-driven inverse design of nanomaterials: A digital twin framework coupling dynamic corona intelligence and safe-by-design architecture for next-generation nanomedicine",
@@ -3480,11 +4024,43 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议作为生成式设计与数字孪生架构的概念参考阅读，重点关注安全约束如何进入优化循环；不宜将其作为智能运维应用或已验证算法性能的证据。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是纳米材料的临床转化受经验式开发流程限制，难以可靠预测生物归宿、毒性及治疗表现。摘要以“poorly predict biological fate”概括预测缺口。解读：设计阶段与生物响应之间的脱节，是该框架试图解决的核心问题，而非设备故障诊断。[摘要]",
+        "method": "框架从用户定义的治疗或诊断目标出发，生成优化的纳米材料配方，整合逆向生成设计、纳米—生物界面预测及机制性归宿—功能仿真。候选材料拟由数字孪生评估，结合“PBPK/PBTK modelling”与AI推导的生物分子冠动态；具体算法和实现流程未提供。[摘要]",
+        "innovation": "作者提出的架构特色，是把生成设计、界面预测和机制仿真纳入统一计算体系，并将毒性作为“primary design constraint”嵌入优化循环。解读：其新意主要体现为面向目标的多模块耦合与安全前置；仅凭摘要，无法确认相较既有研究的首创性或技术突破。[摘要]",
+        "findings": "摘要呈现的是概念框架及未来挑战，而非实验验证结果。作者识别出预测性生物分子冠基础模型、动态生物持留数字孪生，以及疗效—安全同步优化三个方向。原文使用“would be subsequently evaluated”，因此不能据此认定已完成候选材料评估或获得性能提升。[摘要]",
+        "limitations": "当前摘要未给出训练数据、模型结构、验证方案、基线比较或量化结果，故无法判断预测精度、生成配方的可行性与临床适用性。这是当前资料的证据边界，不等同于全文必然缺失这些内容。作者明确称其为“conceptual framework”，阅读时应区分框架设想与实证成果。[摘要]",
+        "connection": "解读：该文与生成式设计方向直接相关，因其明确整合“inverse generative design”；与结构设计的联系在于目标驱动的材料配方优化，不是已展示的结构力学设计。安全约束与可靠性研究具有概念关联，但摘要未涉及智能运维、设备退化或维护决策，不能扩大适用范围。[摘要]",
+        "next_steps": "建议后续阅读重点核查各模块的输入输出、耦合方式与安全约束表达，并寻找可核对的验证证据。可迁移研究宜先选择边界明确的材料设计任务，分别检验归宿预测和疗效—安全联合优化，再评估耦合价值；这些是研究建议，不是作者已完成的工作。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "人工智能驱动的纳米材料逆向设计：融合动态生物分子冠与安全设计的数字孪生框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.mtcomm.2026.116178"
+      ],
+      "analyzed_at": "2026-10-13T20:09:33.051233+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "500713039656fa07a0c75d979e4e33c17575e3f74ab714906d14a9be857c9119",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "18ee2d492b5c",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-13T20:09:33.060548+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "source_status": {
@@ -4145,13 +4721,13 @@
     "unavailable": 27
   },
   "analysis_status": {
-    "ready_core": 1,
+    "ready_core": 5,
     "target_core": 5,
-    "ready_extended": 0,
+    "ready_extended": 5,
     "target_extended": 5,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 9
+    "pending": 0
   },
   "edition": {
     "id": "38457325793",

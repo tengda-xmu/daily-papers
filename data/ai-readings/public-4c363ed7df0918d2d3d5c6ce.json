@@ -1,0 +1,23 @@
+{
+  "id": "public-4c363ed7df0918d2d3d5c6ce",
+  "content_version": "330a857f86b6a3dd1ea191864f5e367c3cd157816503a8706f571454353a8182",
+  "analysis": {
+    "title_zh": "LangSmith 的 AI Search：按行为搜索智能体轨迹",
+    "summary": "官方公告称，LangSmith 的 AI Search 现已支持基于轨迹语义查找对话，而非仅依赖传统检索方式。用户用自然语言描述行为，决策模型读取轨迹并返回匹配结果，例如查找用户受挫或个人身份信息（PII）泄露的对话。LangSmith 使用 trajectories 规范化轨迹、减少上下文膨胀，适用于智能体交互排查与行为分析；所给片段未提供速度或准确率的量化验证。[S1]",
+    "application": "建议：科研迁移方面，可探索用行为描述筛选智能运维助手的异常交互，辅助可靠性失效案例分析；这属于迁移设想，并非官方已验证效果。官方公告描述了语义检索及轨迹规范化能力，但所给片段未提供实验结果或性能指标。[S1]",
+    "requirements": "使用条件见官方文档",
+    "steps": [
+      {
+        "text": "用自然语言描述要查找的行为，由决策模型读取轨迹并返回发生该行为的匹配轨迹。[S1]",
+        "evidence": "Describe a behavior in plain language, and a fast decision model reads traces and returns the ones where it happened."
+      }
+    ],
+    "evidence": [
+      "AI Search now enables users to find conversations based on semantic understanding of traces, like \"did the user get frustrated?\" or \"did PII leak?\"",
+      "Describe a behavior in plain language, and a fast decision model reads traces and returns the ones where it happened.",
+      "LangSmith uses trajectories to normalize traces, reduce context bloat, and deliver query results fast."
+    ],
+    "basis_url": "https://www.langchain.com/blog/agent-traces-ai-search-langsmith"
+  },
+  "analyzed_at": "2026-10-13T19:56:26.749306+00:00"
+}

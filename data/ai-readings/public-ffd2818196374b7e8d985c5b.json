@@ -1,0 +1,20 @@
+{
+  "id": "public-ffd2818196374b7e8d985c5b",
+  "content_version": "22b23c5b4033a413ed318770e049b5b4f5284934f80d7bef21a7b1ae20ac5351",
+  "analysis": {
+    "title_zh": "用 ML Intern 构建原本不存在的小模型：Qwen-Image 2.1 提示词改写案例",
+    "summary": "这段公告介绍作者用 ML Intern 构建小模型的案例，并非新产品发布通知。作者希望替代 Qwen-Image 2.1 配套的9B提示词改写模型，得到可在CPU运行的0.8B版本；文中报告有效输出率为99.7%，使用约四分之一的教师模型词元，整个项目算力支出为16美元。适用方向是图像提示词改写及轻量化专用模型探索；这些数字属于作者案例报告，所给节选未说明评测细节。[S1]",
+    "application": "建议：【你的推断·科研迁移】可探索将类似轻量化思路用于科研图像提示词改写或运维文本规范化，并独立评估语义保真、输出有效性与部署成本。【原文报告】作者给出了单个案例的结果；节选不足以认定这些效果已获官方独立验证，也不能直接推广至结构设计或可靠性任务。[S1]",
+    "requirements": "原文明示：原版9B模型需要约20 GB内存，作者构建的0.8B版本可在CPU运行；整个项目算力支出为USD 16，包括由9B模型标注8,797条示例请求，这不是服务定价。未明确账号、API或其他部署条件，使用条件见官方文档。[S1]",
+    "steps": [],
+    "evidence": [
+      "Last week, I wanted a small version of the prompt rewriter that ships with Qwen-Image 2.1.",
+      "The official one is a 9B model that needs about 20 GB of memory and thinks for thousands of tokens before writing a single paragraph.",
+      "So I described what I wanted to ML Intern , and the next day I had a 0.8B version that runs on a CPU.",
+      "It returns valid output 99.7% of the time and uses about a quarter of the teacher's tokens.",
+      "The compute for the whole project, including having the 9B model label 8,797 example requests, came to USD 16."
+    ],
+    "basis_url": "https://huggingface.co/blog/building-with-ml-intern"
+  },
+  "analyzed_at": "2026-10-13T19:57:54.157612+00:00"
+}
