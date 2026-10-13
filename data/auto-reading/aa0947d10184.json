@@ -1,0 +1,40 @@
+{
+  "paper_id": "aa0947d10184",
+  "fingerprint": "6f62fbce95f96ec32164723f50185de6060977dddc31edcb2b29eb2a7d7c3248",
+  "analysis": {
+    "title_zh": "面向自主智能系统的增量一致性执行",
+    "summary": "长流程自主智能系统依赖语言模型、数据库、外部接口与规则引擎，外部状态变化后全量重跑会造成重复计算。本文提出增量一致性执行方法，结合任务事实契约、字段级依赖掩码和结果不变域，判断结果能否安全复用，并仅重算受影响字段。摘要报告其在工业故障诊断等任务中减少组件调用与延迟，但未提供具体数值或实验细节，效果强度尚无法核验。[摘要]",
+    "recommendation": "建议关注其面向工业故障诊断的局部重算与一致性保障思路，尤其适合研究多工具智能运维流程；当前仅宜作为方法候选，不能据摘要确定实际收益和可靠性边界。[摘要]",
+    "deep_read": {
+      "problem": "研究针对长流程自主系统运行期间外部状态持续变化的问题。摘要指出，每次变化后重新执行整个工作流会产生“substantial redundant computation”。核心问题是在减少重复计算的同时，避免沿用失效结果，而非单纯加快单次模型推理。[摘要]",
+      "method": "方法结合任务事实契约、字段级依赖掩码与状态扰动结果不变域。首次经验证执行后，系统为关键输入构造保守不变域，据此判断结果是否可安全复用；必要时只重算最小受影响输出字段，并由提交时版本一致性关卡约束有副作用的动作。[摘要]",
+      "innovation": "解读：值得关注的是将结果复用判定、字段级重算和提交前一致性检查组合起来，并用“equivalence barrier”阻止不必要的下游传播。这体现了跨组件的增量执行思路，但摘要没有相关工作比较，不能据此确认各机制的首创性。[摘要]",
+      "findings": "摘要报告工业故障诊断、企业分析及基于语言模型的多工具助手实验，称昂贵组件调用与端到端延迟显著下降，同时保持“high consistency”和较低错误复用率。未给出降幅、样本量或统计检验，故只能确认作者报告的效果方向，不能核定收益大小。[摘要]",
+      "limitations": "当前证据限于摘要，缺少契约形式、不变域构造算法、基线设置、数据规模和错误复用率定义，无法检查安全复用判定的适用条件。解读：这些是现有资料的证据缺口，不应直接当作方法已被证实的缺陷，也无法判断复杂状态变化下的表现。[摘要]",
+      "connection": "解读：工业故障诊断实验与智能运维方向直接相关；当监测数据或知识库更新时，局部重算思路可能帮助减少诊断链路重复调用。版本一致性检查也与可靠执行有关。但摘要未涉及结构设计，不能把该方法对结构优化或工程可靠性的收益视为已验证结论。[摘要]",
+      "next_steps": "建议：后续获取全文，优先核查不变域的保守性依据、字段依赖的建立方式及副作用提交条件，再检查故障诊断实验的基线和错误复用定义。若开展迁移研究，可测试传感器更新与知识库变更场景，分别记录调用成本、延迟和错误复用；这些不是作者已报告的实验。[摘要]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "http://arxiv.org/abs/2609.24090v1"
+    ],
+    "analyzed_at": "2026-10-13T02:44:21.593602+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": true,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "摘要明确涉及工业故障诊断，与给定智能运维方向相符；同时提出具体的增量执行机制，具有进一步阅读价值。当前证据足以支持方向匹配和方法价值的初步判断，但不足以验证性能提升幅度、安全性保证或创新优先性。[摘要]",
+    "evidence": "This paper proposes an incremental consistency execution method based on task fact contracts, field-level dependency masks, and state perturbation result invariant domains."
+  },
+  "material": {
+    "version": "26b8b254214003f7b205f76de968659c168db712d01420199de8c7af43e8626d",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "This paper proposes an incremental consistency execution method based on task fact contracts, field-level dependency masks, and state perturbation result invariant domains."
+  }
+}
