@@ -1263,7 +1263,7 @@
       "reading_status": {
         "paper_id": "925093e117c0",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-12T07:19:07.702404+00:00",
+        "updated_at": "2026-10-13T07:26:52.322411+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -1377,11 +1377,11 @@
       "reading_status": {
         "paper_id": "b8d36ac1dcaf",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-12T07:19:23.737385+00:00",
+        "updated_at": "2026-10-13T07:27:14.992841+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -1535,7 +1535,7 @@
       "reading_status": {
         "paper_id": "c05baf48e37d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-12T07:19:37.468220+00:00",
+        "updated_at": "2026-10-13T07:28:24.447351+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -1624,7 +1624,7 @@
       "reading_status": {
         "paper_id": "565888b08f8a",
         "state": "missing_evidence",
-        "updated_at": "2026-10-12T07:19:53.447854+00:00",
+        "updated_at": "2026-10-13T07:28:50.915854+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -1764,7 +1764,7 @@
       "reading_status": {
         "paper_id": "8a095e50b332",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-12T05:41:51.199958+00:00",
+        "updated_at": "2026-10-13T07:00:38.378131+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -1957,7 +1957,7 @@
       "reading_status": {
         "paper_id": "de48174471ad",
         "state": "missing_evidence",
-        "updated_at": "2026-10-12T07:20:33.012181+00:00",
+        "updated_at": "2026-10-13T07:29:24.546461+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -2112,16 +2112,305 @@
       "reading_status": {
         "paper_id": "1ae92d7bcd29",
         "state": "published",
-        "updated_at": "2026-10-12T10:18:11.665377+00:00",
+        "updated_at": "2026-10-13T01:29:43.748739+00:00",
         "basis": "full_text",
-        "article_state": "retry",
-        "article_stage": "facts",
+        "article_state": "complete",
+        "article_stage": "",
         "reason": "",
         "total": 14,
         "covered": 14,
         "pdf_available": true,
         "issues": []
-      }
+      },
+      "article": {
+        "version": 1,
+        "lead": "三维地震断层检测的难题，不只是识别断裂面，而是在标签可信与纹理真实之间取得平衡：实测资料难以核验地下真值，简化合成资料又可能高估模型能力。SeisMark将程序化地质建模、反射率正演与扩散纹理合成串联，在同一地质结构上构造五种纹理条件。其阅读价值在于揭示模型如何随域偏移退化，同时提醒我们：大体素规模、视觉真实性与部署可靠性并不是同一件事。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "可信标签与真实纹理，为何难以兼得",
+            "paragraphs": [
+              "断层是低信噪比地震体中稀疏、细薄的面状结构，采集伪影与非平稳纹理容易造成漏检或误检。F3等公开实测资料的标签依赖解释者，小断层可能遗漏；地下结构又难以直接物理核验，因此真实资料并不天然具备完整真值。",
+              "简化物理合成资料能够提供明确标签，却往往缺少绕射、多次波和复杂噪声，模型可能只学会理想反射背景中的断裂特征。SeisMark试图固定地质结构、单独改变测区纹理，让评价从“能否识别干净断层”转向“纹理变化后还能保留多少检测能力”。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "先建地质骨架，再注入测区纹理",
+            "paragraphs": [
+              "程序化模型以Gorgon地区伸展构造为参考，按事件顺序维护P波速度、地层标识和断层标签。Deposit、Squish、Fault与Stratigraphic等模块分别表达沉积、变形、铲式断层和层序演化；最终体包含14个地层标签、5条主断层和488条次级断层。",
+              "正演先通过Gardner关系估计密度，再由阻抗差得到垂向反射率，与中心频率25 Hz的零相位Ricker子波卷积。该1D近似保留反射几何和断层错移，但并非完整波场模拟；绕射、多次波等复杂响应交由后续学习先验补充，物理准确性仍需独立核验。",
+              "扩散模型分别学习F3与Gorgon实测纹理，以伪地震体作为结构控制，通过部分加噪与迭代去噪完成细化。Low主要改变高频细纹理，High允许修改中频振幅；边缘偏离惩罚旨在保持标签对齐，但损失实现、权重及两档参数值未报告。"
+            ]
+          },
+          {
+            "id": "validation",
+            "title": "一个地质体上的五条件零样本压力测试",
+            "paragraphs": [
+              "发布规格为1500×1500×1200体素、18.75×18.75×6.0 km，体素间距12.5×12.5×5.0 m，总计2.70 billion体素。**独立地质样本只有一个连续体**：Clean及两个测区各自的Low、High变体共享标签，不能算成五个独立样本；实测资料提供纹理先验，并非真实测区检测测试。",
+              "结构保真验证将四个风格化体与伪地震体比较，计算整立方体SSIM和梯度幅值Pearson相关性GMC。检测验证则零样本评估FaultSeg3D、FaultSeg3D+、Fault-Net与RGF，报告IoU、Precision、Recall和F1；位置容差T=0、1、2由3×3×3连接结构的三维膨胀实现。",
+              "模型没有在SeisMark上训练或微调，正文明确V1、V2使用原论文权重。扩散训练切片或patch数量、增强数量、训练验证测试划分、检测分块和阈值均未报告，也没有独立模块消融；Fault-Net使用真实人工标注切片，其他模型仅用合成资料，因而不能把差异单独归于架构。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "纹理暴露漏检，但尚未证明真实部署可靠",
+            "paragraphs": [
+              "Fault-Net在五个条件上的IoU均最高，从Clean的0.441降至F3 High的0.297和Australia High的0.278。FaultSeg3D的Recall在T=1时由Clean的0.804降至Australia High的0.305，支持高强度纹理会加剧漏检；但F3两个条件的T=2 F1由FaultSeg3D+略高，不能概括为Fault-Net所有指标全面领先。",
+              "四个风格体的SSIM为0.88–0.97，GMC为0.87–0.93，支持整体结构相似，却不能证明每条局部断层都没有移动或生成伪边缘。表注阈值表述与部分表值不一致，应以表值为准；单一地质体、缺少重复实验和置信区间，也限制了跨地质泛化与统计稳定性判断。",
+              "本站判断是，这项工作的证据更适合支持“配对纹理压力测试”，而不是部署准确率认证。作者提出的断层区域masked SSIM、更多盆地类型及CycleGAN/NST直接比较仍属未来工作；后续研究应先补齐局部标签保真和独立地质验证，再讨论安全关键场景中的应用可靠性。"
+            ]
+          }
+        ],
+        "experiments": [
+          {
+            "name": "扩散纹理合成的整体结构保真验证",
+            "data": "以程序化速度模型正演得到的伪地震体为参考，比较采用F3、Gorgon实测纹理先验生成的四个风格化体。",
+            "samples": "一个独立连续地质体，1500×1500×1200体素；四个变体共享493条断层标签。扩散训练样本、增强及重复生成数量未报告。",
+            "groups": "F3 Low、F3 High、Gorgon Low、Gorgon High；两个来源域与两档强度形成四个条件，具体强度参数未报告。",
+            "split": "SSIM与GMC在整个立方体计算；扩散训练、验证、测试划分及测区隔离策略未报告。",
+            "baselines": "输入伪地震体作为结构参考；未报告去除结构约束的消融，CycleGAN/NST直接比较仍为未来工作。",
+            "metrics": "SSIM衡量结构相似性；GMC为参考与风格体梯度幅值图的Pearson相关系数，均为无量纲指标。",
+            "results": "按SSIM/GMC排列：F3 Low为0.92/0.91，F3 High为0.88/0.87，Gorgon Low为0.97/0.93，Gorgon High为0.96/0.90。",
+            "limitations": "全局指标不能证明局部断层严格保真；逐断层位移、错距变化、伪边缘及重复生成不确定性未报告，部分阈值文字与表值不一致。"
+          },
+          {
+            "name": "四个预训练检测器的跨纹理零样本比较",
+            "data": "一个18.75×18.75×6.0 km程序化地质体，体素间距12.5×12.5×5.0 m；五种纹理条件均共享真值。",
+            "samples": "一个独立地质体、五个纹理变体；5条主断层和488条次级断层不是独立样本。模型训练样本、测试块及重复次数未报告。",
+            "groups": "Clean、F3 Low/High、Australia Low/High；每组评估四个模型，并报告T=0、1、2的位置容差结果。",
+            "split": "采用预训练模型零样本测试，未报告SeisMark训练或微调；原模型划分及训练资料与纹理来源的潜在重合未报告。",
+            "baselines": "FaultSeg3D、FaultSeg3D+、Fault-Net、RGF；Clean为纹理对照。模型训练资料不对称，未进行统一训练或独立架构消融。",
+            "metrics": "IoU、Precision、Recall、F1；容差Recall膨胀预测、Precision膨胀真值，使用3×3×3连接结构迭代T次。",
+            "results": "Fault-Net五组IoU依次为0.441、0.389、0.297、0.384、0.278，均最高；V1的Recall@T=1从Clean的0.804降至Australia High的0.305。",
+            "limitations": "未报告真实测区检测、置信区间、主次断层分层指标、阈值及分块策略；IoU容差实现未明确，跨模型差异不能单独归因架构。"
+          }
+        ],
+        "routes": [
+          {
+            "title": "用局部几何审计约束扩散纹理生成",
+            "direction_id": "ai_maintenance",
+            "gap": "全局SSIM与GMC可能掩盖细断层附近的偏移和伪边缘，尤其High条件允许改变中频振幅。建议把局部标签保真作为生成样本进入检测基准前的独立验收环节。",
+            "mechanism": "利用已知断层面建立邻域，联合检查局部反射边缘位移、两侧错距及断层连通性。将邻域结构偏离惩罚用于扩散训练，并对不通过几何审计的生成结果拒收或降低强度。",
+            "innovation": "候选创新是把局部几何约束、生成后验收与检测误差定位串成闭环，而非把条件扩散本身当作新技术。masked SSIM已被作者列为未来工作，拟议组合还需验证其增量价值。",
+            "design": "建议设计12个不同种子地质体，按体分为6/3/3个训练、验证、测试体，每体生成四种配对纹理。拟使用许可可核实的公开F3资料；Gorgon需另行取得授权，否则替换为另一公开测区。",
+            "comparison": "比较Clean、原结构条件扩散及增加局部约束的扩散，固定生成预算与检测器。分别移除邻域损失、连通性检查和拒收机制，统计合格率，避免只展示通过筛选的漂亮样本。",
+            "criterion": "预先设定局部位移和错距误差阈值，以测试地质体为统计单位报告置信区间。成功须同时满足保真误差下降、纹理差异仍保留，以及高强度条件下检测Recall不因过度平滑而下降。",
+            "risk": "带限反射会使边缘位置存在歧义，过强约束也可能退回理想化纹理。若边缘匹配不稳定，可转向断层两侧层位对应和局部相位一致性，并保留人工盲审作为辅助证据。"
+          },
+          {
+            "title": "按地质体与测区双重隔离检验泛化",
+            "direction_id": "ai_maintenance",
+            "gap": "单一伸展构造体不能代表不同盆地，既有模型训练来源又不一致。建议把地质变化、纹理变化和真实标注使用量分开控制，判断鲁棒性究竟来自架构还是数据覆盖。",
+            "mechanism": "建立地质类型与纹理域的双因素测试矩阵，分别留出完整地质体和完整测区。采用统一训练预算与阈值选择规则，结合断层尺度分层评价，观察小错距断层是否成为主要失效来源。",
+            "innovation": "候选创新是双重隔离评估与断层级风险分层的组合。已检索的2022年多构造断层预测工作摘要报告三种断层模式及三个中国实测数据集，但不能据摘要认定其采用了这种隔离方案。",
+            "design": "建议设计24个独立程序化体，伸展与挤压类型各12个，按体划分12/6/6个训练、验证、测试体。真实外测拟从许可明确的公开测区选取，并另行组织双解释者标注与争议区域记录。",
+            "comparison": "在可复现条件下统一重训四类检测器，对比Clean训练、风格化训练与混合训练。将真实标注加入作为单独因素，并消融纹理多样性和地质多样性，保持patch数量与训练预算一致。",
+            "criterion": "以未见地质体和未见测区的IoU、Recall、断层连通性及最差组表现为主判据。按地质体报告不确定性，真实标签争议区单列；只有外测收益稳定，才支持更强的泛化判断。",
+            "risk": "公开资料可能缺少完整标签，双解释者一致也不等于地下真值。若外测难以完成，先报告独立合成体结果及实测专家盲评，明确证据等级，不以视觉效果替代真实准确率。"
+          }
+        ],
+        "diagrams": [
+          {
+            "kind": "study",
+            "title": "SeisMark：固定结构的跨纹理压力测试",
+            "description": "原研究从一个程序化地质体生成五个共享标签的纹理条件，分别验证整体结构相似性和预训练检测器鲁棒性。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "事件驱动地质建模",
+                "detail": "构建速度、地层与断层数组，最终包含493条断层"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "反射率卷积正演",
+                "detail": "Gardner关系、阻抗差与25 Hz零相位Ricker子波"
+              },
+              {
+                "id": "c",
+                "stage": 1,
+                "label": "实测纹理先验",
+                "detail": "分别使用F3与Gorgon训练扩散模型"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "五种共享标签条件",
+                "detail": "Clean及两个纹理域的Low、High，非五个独立地质体"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "整体结构保真评价",
+                "detail": "四个风格体与伪地震体比较SSIM和GMC"
+              },
+              {
+                "id": "f",
+                "stage": 3,
+                "label": "四模型零样本检测",
+                "detail": "比较IoU、Precision、Recall和不同容差F1"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "生成伪地震体"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "结构控制及Clean"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "扩散注入纹理"
+              },
+              {
+                "from": "a",
+                "to": "f",
+                "label": "提供体素真值"
+              },
+              {
+                "from": "b",
+                "to": "e",
+                "label": "提供结构参考"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "核验整体相似"
+              },
+              {
+                "from": "d",
+                "to": "f",
+                "label": "纹理压力测试"
+              }
+            ]
+          },
+          {
+            "kind": "proposal",
+            "title": "拟议路线：局部几何审计与生成闭环",
+            "description": "对应第一条研究路线；节点表示建议设计，不代表论文已完成实验或已获得改善。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "独立地质体划分",
+                "detail": "建议12个不同种子体，按体划分6/3/3"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "构建断层邻域参考",
+                "detail": "记录局部层位、错距和连通性，定义验收阈值"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "局部约束扩散生成",
+                "detail": "固定结构，生成测区与强度配对条件"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "生成后几何审计",
+                "detail": "检查位移、错距、伪边缘，记录拒收与合格率"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "基线与模块消融",
+                "detail": "比较原扩散并移除局部损失、连通性检查和拒收"
+              },
+              {
+                "id": "f",
+                "stage": 5,
+                "label": "联合成功判据",
+                "detail": "同时评价局部保真、纹理保留及检测Recall"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "生成已知几何"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "加入邻域约束"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "检查生成结果"
+              },
+              {
+                "from": "d",
+                "to": "c",
+                "label": "失败则调整强度"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "统一记录全部输出"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "检验增量价值"
+              }
+            ]
+          }
+        ],
+        "related": {
+          "status": "ok",
+          "checked_at": "2026-10-13T01:21:08.185744+00:00",
+          "papers": [
+            {
+              "title": "Augmented deep learning workflow for robust fault prediction over multiple tectonic regimes",
+              "url": "https://doi.org/10.1093/jge/gxac056",
+              "year": 2022,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Physics-informed cross-domain image synthesis for microalgae growth phase classification in turbid media",
+              "url": "https://doi.org/10.1016/j.ecoinf.2026.104069",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "AI-based multimodal fusion of geophysical and geochemical data for subsurface characterization",
+              "url": "https://doi.org/10.1007/s12665-026-13089-8",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "A Hybrid Game Engine–Generative AI Framework for Overcoming Data Scarcity in Open-Pit Crack Detection",
+              "url": "https://doi.org/10.3390/make8040099",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": " Pre-Conditioning of 3D Seismic Data Using the Structural Filters for Fault Interpretation",
+              "url": "https://doi.org/10.59150/ibgm2101a09",
+              "year": 2025,
+              "basis": "abstract",
+              "preprint": false
+            }
+          ]
+        }
+      },
+      "article_updated_at": "2026-10-13T01:29:43.746731+00:00",
+      "article_profile": "c565130b6634cdadccdd51d489ed729045567bfb5068033415b105d969d94ad2"
     },
     {
       "source": "Semantic Scholar",
@@ -2254,7 +2543,7 @@
       "reading_status": {
         "paper_id": "35b3b0d29b69",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-12T07:20:15.122845+00:00",
+        "updated_at": "2026-10-13T07:29:02.035014+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -2405,7 +2694,7 @@
       "reading_status": {
         "paper_id": "e1a150bc890d",
         "state": "missing_evidence",
-        "updated_at": "2026-10-12T07:20:57.452729+00:00",
+        "updated_at": "2026-10-13T07:29:40.721603+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -3678,7 +3967,7 @@
       "reading_status": {
         "paper_id": "925093e117c0",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-12T07:19:07.702404+00:00",
+        "updated_at": "2026-10-13T07:26:52.322411+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -3792,11 +4081,11 @@
       "reading_status": {
         "paper_id": "b8d36ac1dcaf",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-12T07:19:23.737385+00:00",
+        "updated_at": "2026-10-13T07:27:14.992841+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -3950,7 +4239,7 @@
       "reading_status": {
         "paper_id": "c05baf48e37d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-12T07:19:37.468220+00:00",
+        "updated_at": "2026-10-13T07:28:24.447351+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -4039,7 +4328,7 @@
       "reading_status": {
         "paper_id": "565888b08f8a",
         "state": "missing_evidence",
-        "updated_at": "2026-10-12T07:19:53.447854+00:00",
+        "updated_at": "2026-10-13T07:28:50.915854+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -4177,7 +4466,7 @@
       "reading_status": {
         "paper_id": "8a095e50b332",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-12T05:41:51.199958+00:00",
+        "updated_at": "2026-10-13T07:00:38.378131+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -4370,7 +4659,7 @@
       "reading_status": {
         "paper_id": "de48174471ad",
         "state": "missing_evidence",
-        "updated_at": "2026-10-12T07:20:33.012181+00:00",
+        "updated_at": "2026-10-13T07:29:24.546461+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -4525,16 +4814,305 @@
       "reading_status": {
         "paper_id": "1ae92d7bcd29",
         "state": "published",
-        "updated_at": "2026-10-12T10:18:11.665377+00:00",
+        "updated_at": "2026-10-13T01:29:43.748739+00:00",
         "basis": "full_text",
-        "article_state": "retry",
-        "article_stage": "facts",
+        "article_state": "complete",
+        "article_stage": "",
         "reason": "",
         "total": 14,
         "covered": 14,
         "pdf_available": true,
         "issues": []
-      }
+      },
+      "article": {
+        "version": 1,
+        "lead": "三维地震断层检测的难题，不只是识别断裂面，而是在标签可信与纹理真实之间取得平衡：实测资料难以核验地下真值，简化合成资料又可能高估模型能力。SeisMark将程序化地质建模、反射率正演与扩散纹理合成串联，在同一地质结构上构造五种纹理条件。其阅读价值在于揭示模型如何随域偏移退化，同时提醒我们：大体素规模、视觉真实性与部署可靠性并不是同一件事。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "可信标签与真实纹理，为何难以兼得",
+            "paragraphs": [
+              "断层是低信噪比地震体中稀疏、细薄的面状结构，采集伪影与非平稳纹理容易造成漏检或误检。F3等公开实测资料的标签依赖解释者，小断层可能遗漏；地下结构又难以直接物理核验，因此真实资料并不天然具备完整真值。",
+              "简化物理合成资料能够提供明确标签，却往往缺少绕射、多次波和复杂噪声，模型可能只学会理想反射背景中的断裂特征。SeisMark试图固定地质结构、单独改变测区纹理，让评价从“能否识别干净断层”转向“纹理变化后还能保留多少检测能力”。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "先建地质骨架，再注入测区纹理",
+            "paragraphs": [
+              "程序化模型以Gorgon地区伸展构造为参考，按事件顺序维护P波速度、地层标识和断层标签。Deposit、Squish、Fault与Stratigraphic等模块分别表达沉积、变形、铲式断层和层序演化；最终体包含14个地层标签、5条主断层和488条次级断层。",
+              "正演先通过Gardner关系估计密度，再由阻抗差得到垂向反射率，与中心频率25 Hz的零相位Ricker子波卷积。该1D近似保留反射几何和断层错移，但并非完整波场模拟；绕射、多次波等复杂响应交由后续学习先验补充，物理准确性仍需独立核验。",
+              "扩散模型分别学习F3与Gorgon实测纹理，以伪地震体作为结构控制，通过部分加噪与迭代去噪完成细化。Low主要改变高频细纹理，High允许修改中频振幅；边缘偏离惩罚旨在保持标签对齐，但损失实现、权重及两档参数值未报告。"
+            ]
+          },
+          {
+            "id": "validation",
+            "title": "一个地质体上的五条件零样本压力测试",
+            "paragraphs": [
+              "发布规格为1500×1500×1200体素、18.75×18.75×6.0 km，体素间距12.5×12.5×5.0 m，总计2.70 billion体素。**独立地质样本只有一个连续体**：Clean及两个测区各自的Low、High变体共享标签，不能算成五个独立样本；实测资料提供纹理先验，并非真实测区检测测试。",
+              "结构保真验证将四个风格化体与伪地震体比较，计算整立方体SSIM和梯度幅值Pearson相关性GMC。检测验证则零样本评估FaultSeg3D、FaultSeg3D+、Fault-Net与RGF，报告IoU、Precision、Recall和F1；位置容差T=0、1、2由3×3×3连接结构的三维膨胀实现。",
+              "模型没有在SeisMark上训练或微调，正文明确V1、V2使用原论文权重。扩散训练切片或patch数量、增强数量、训练验证测试划分、检测分块和阈值均未报告，也没有独立模块消融；Fault-Net使用真实人工标注切片，其他模型仅用合成资料，因而不能把差异单独归于架构。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "纹理暴露漏检，但尚未证明真实部署可靠",
+            "paragraphs": [
+              "Fault-Net在五个条件上的IoU均最高，从Clean的0.441降至F3 High的0.297和Australia High的0.278。FaultSeg3D的Recall在T=1时由Clean的0.804降至Australia High的0.305，支持高强度纹理会加剧漏检；但F3两个条件的T=2 F1由FaultSeg3D+略高，不能概括为Fault-Net所有指标全面领先。",
+              "四个风格体的SSIM为0.88–0.97，GMC为0.87–0.93，支持整体结构相似，却不能证明每条局部断层都没有移动或生成伪边缘。表注阈值表述与部分表值不一致，应以表值为准；单一地质体、缺少重复实验和置信区间，也限制了跨地质泛化与统计稳定性判断。",
+              "本站判断是，这项工作的证据更适合支持“配对纹理压力测试”，而不是部署准确率认证。作者提出的断层区域masked SSIM、更多盆地类型及CycleGAN/NST直接比较仍属未来工作；后续研究应先补齐局部标签保真和独立地质验证，再讨论安全关键场景中的应用可靠性。"
+            ]
+          }
+        ],
+        "experiments": [
+          {
+            "name": "扩散纹理合成的整体结构保真验证",
+            "data": "以程序化速度模型正演得到的伪地震体为参考，比较采用F3、Gorgon实测纹理先验生成的四个风格化体。",
+            "samples": "一个独立连续地质体，1500×1500×1200体素；四个变体共享493条断层标签。扩散训练样本、增强及重复生成数量未报告。",
+            "groups": "F3 Low、F3 High、Gorgon Low、Gorgon High；两个来源域与两档强度形成四个条件，具体强度参数未报告。",
+            "split": "SSIM与GMC在整个立方体计算；扩散训练、验证、测试划分及测区隔离策略未报告。",
+            "baselines": "输入伪地震体作为结构参考；未报告去除结构约束的消融，CycleGAN/NST直接比较仍为未来工作。",
+            "metrics": "SSIM衡量结构相似性；GMC为参考与风格体梯度幅值图的Pearson相关系数，均为无量纲指标。",
+            "results": "按SSIM/GMC排列：F3 Low为0.92/0.91，F3 High为0.88/0.87，Gorgon Low为0.97/0.93，Gorgon High为0.96/0.90。",
+            "limitations": "全局指标不能证明局部断层严格保真；逐断层位移、错距变化、伪边缘及重复生成不确定性未报告，部分阈值文字与表值不一致。"
+          },
+          {
+            "name": "四个预训练检测器的跨纹理零样本比较",
+            "data": "一个18.75×18.75×6.0 km程序化地质体，体素间距12.5×12.5×5.0 m；五种纹理条件均共享真值。",
+            "samples": "一个独立地质体、五个纹理变体；5条主断层和488条次级断层不是独立样本。模型训练样本、测试块及重复次数未报告。",
+            "groups": "Clean、F3 Low/High、Australia Low/High；每组评估四个模型，并报告T=0、1、2的位置容差结果。",
+            "split": "采用预训练模型零样本测试，未报告SeisMark训练或微调；原模型划分及训练资料与纹理来源的潜在重合未报告。",
+            "baselines": "FaultSeg3D、FaultSeg3D+、Fault-Net、RGF；Clean为纹理对照。模型训练资料不对称，未进行统一训练或独立架构消融。",
+            "metrics": "IoU、Precision、Recall、F1；容差Recall膨胀预测、Precision膨胀真值，使用3×3×3连接结构迭代T次。",
+            "results": "Fault-Net五组IoU依次为0.441、0.389、0.297、0.384、0.278，均最高；V1的Recall@T=1从Clean的0.804降至Australia High的0.305。",
+            "limitations": "未报告真实测区检测、置信区间、主次断层分层指标、阈值及分块策略；IoU容差实现未明确，跨模型差异不能单独归因架构。"
+          }
+        ],
+        "routes": [
+          {
+            "title": "用局部几何审计约束扩散纹理生成",
+            "direction_id": "ai_maintenance",
+            "gap": "全局SSIM与GMC可能掩盖细断层附近的偏移和伪边缘，尤其High条件允许改变中频振幅。建议把局部标签保真作为生成样本进入检测基准前的独立验收环节。",
+            "mechanism": "利用已知断层面建立邻域，联合检查局部反射边缘位移、两侧错距及断层连通性。将邻域结构偏离惩罚用于扩散训练，并对不通过几何审计的生成结果拒收或降低强度。",
+            "innovation": "候选创新是把局部几何约束、生成后验收与检测误差定位串成闭环，而非把条件扩散本身当作新技术。masked SSIM已被作者列为未来工作，拟议组合还需验证其增量价值。",
+            "design": "建议设计12个不同种子地质体，按体分为6/3/3个训练、验证、测试体，每体生成四种配对纹理。拟使用许可可核实的公开F3资料；Gorgon需另行取得授权，否则替换为另一公开测区。",
+            "comparison": "比较Clean、原结构条件扩散及增加局部约束的扩散，固定生成预算与检测器。分别移除邻域损失、连通性检查和拒收机制，统计合格率，避免只展示通过筛选的漂亮样本。",
+            "criterion": "预先设定局部位移和错距误差阈值，以测试地质体为统计单位报告置信区间。成功须同时满足保真误差下降、纹理差异仍保留，以及高强度条件下检测Recall不因过度平滑而下降。",
+            "risk": "带限反射会使边缘位置存在歧义，过强约束也可能退回理想化纹理。若边缘匹配不稳定，可转向断层两侧层位对应和局部相位一致性，并保留人工盲审作为辅助证据。"
+          },
+          {
+            "title": "按地质体与测区双重隔离检验泛化",
+            "direction_id": "ai_maintenance",
+            "gap": "单一伸展构造体不能代表不同盆地，既有模型训练来源又不一致。建议把地质变化、纹理变化和真实标注使用量分开控制，判断鲁棒性究竟来自架构还是数据覆盖。",
+            "mechanism": "建立地质类型与纹理域的双因素测试矩阵，分别留出完整地质体和完整测区。采用统一训练预算与阈值选择规则，结合断层尺度分层评价，观察小错距断层是否成为主要失效来源。",
+            "innovation": "候选创新是双重隔离评估与断层级风险分层的组合。已检索的2022年多构造断层预测工作摘要报告三种断层模式及三个中国实测数据集，但不能据摘要认定其采用了这种隔离方案。",
+            "design": "建议设计24个独立程序化体，伸展与挤压类型各12个，按体划分12/6/6个训练、验证、测试体。真实外测拟从许可明确的公开测区选取，并另行组织双解释者标注与争议区域记录。",
+            "comparison": "在可复现条件下统一重训四类检测器，对比Clean训练、风格化训练与混合训练。将真实标注加入作为单独因素，并消融纹理多样性和地质多样性，保持patch数量与训练预算一致。",
+            "criterion": "以未见地质体和未见测区的IoU、Recall、断层连通性及最差组表现为主判据。按地质体报告不确定性，真实标签争议区单列；只有外测收益稳定，才支持更强的泛化判断。",
+            "risk": "公开资料可能缺少完整标签，双解释者一致也不等于地下真值。若外测难以完成，先报告独立合成体结果及实测专家盲评，明确证据等级，不以视觉效果替代真实准确率。"
+          }
+        ],
+        "diagrams": [
+          {
+            "kind": "study",
+            "title": "SeisMark：固定结构的跨纹理压力测试",
+            "description": "原研究从一个程序化地质体生成五个共享标签的纹理条件，分别验证整体结构相似性和预训练检测器鲁棒性。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "事件驱动地质建模",
+                "detail": "构建速度、地层与断层数组，最终包含493条断层"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "反射率卷积正演",
+                "detail": "Gardner关系、阻抗差与25 Hz零相位Ricker子波"
+              },
+              {
+                "id": "c",
+                "stage": 1,
+                "label": "实测纹理先验",
+                "detail": "分别使用F3与Gorgon训练扩散模型"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "五种共享标签条件",
+                "detail": "Clean及两个纹理域的Low、High，非五个独立地质体"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "整体结构保真评价",
+                "detail": "四个风格体与伪地震体比较SSIM和GMC"
+              },
+              {
+                "id": "f",
+                "stage": 3,
+                "label": "四模型零样本检测",
+                "detail": "比较IoU、Precision、Recall和不同容差F1"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "生成伪地震体"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "结构控制及Clean"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "扩散注入纹理"
+              },
+              {
+                "from": "a",
+                "to": "f",
+                "label": "提供体素真值"
+              },
+              {
+                "from": "b",
+                "to": "e",
+                "label": "提供结构参考"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "核验整体相似"
+              },
+              {
+                "from": "d",
+                "to": "f",
+                "label": "纹理压力测试"
+              }
+            ]
+          },
+          {
+            "kind": "proposal",
+            "title": "拟议路线：局部几何审计与生成闭环",
+            "description": "对应第一条研究路线；节点表示建议设计，不代表论文已完成实验或已获得改善。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "独立地质体划分",
+                "detail": "建议12个不同种子体，按体划分6/3/3"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "构建断层邻域参考",
+                "detail": "记录局部层位、错距和连通性，定义验收阈值"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "局部约束扩散生成",
+                "detail": "固定结构，生成测区与强度配对条件"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "生成后几何审计",
+                "detail": "检查位移、错距、伪边缘，记录拒收与合格率"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "基线与模块消融",
+                "detail": "比较原扩散并移除局部损失、连通性检查和拒收"
+              },
+              {
+                "id": "f",
+                "stage": 5,
+                "label": "联合成功判据",
+                "detail": "同时评价局部保真、纹理保留及检测Recall"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "生成已知几何"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "加入邻域约束"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "检查生成结果"
+              },
+              {
+                "from": "d",
+                "to": "c",
+                "label": "失败则调整强度"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "统一记录全部输出"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "检验增量价值"
+              }
+            ]
+          }
+        ],
+        "related": {
+          "status": "ok",
+          "checked_at": "2026-10-13T01:21:08.185744+00:00",
+          "papers": [
+            {
+              "title": "Augmented deep learning workflow for robust fault prediction over multiple tectonic regimes",
+              "url": "https://doi.org/10.1093/jge/gxac056",
+              "year": 2022,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "Physics-informed cross-domain image synthesis for microalgae growth phase classification in turbid media",
+              "url": "https://doi.org/10.1016/j.ecoinf.2026.104069",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "AI-based multimodal fusion of geophysical and geochemical data for subsurface characterization",
+              "url": "https://doi.org/10.1007/s12665-026-13089-8",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": "A Hybrid Game Engine–Generative AI Framework for Overcoming Data Scarcity in Open-Pit Crack Detection",
+              "url": "https://doi.org/10.3390/make8040099",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            },
+            {
+              "title": " Pre-Conditioning of 3D Seismic Data Using the Structural Filters for Fault Interpretation",
+              "url": "https://doi.org/10.59150/ibgm2101a09",
+              "year": 2025,
+              "basis": "abstract",
+              "preprint": false
+            }
+          ]
+        }
+      },
+      "article_updated_at": "2026-10-13T01:29:43.746731+00:00",
+      "article_profile": "c565130b6634cdadccdd51d489ed729045567bfb5068033415b105d969d94ad2"
     },
     {
       "source": "Semantic Scholar",
@@ -4667,7 +5245,7 @@
       "reading_status": {
         "paper_id": "35b3b0d29b69",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-12T07:20:15.122845+00:00",
+        "updated_at": "2026-10-13T07:29:02.035014+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -4818,7 +5396,7 @@
       "reading_status": {
         "paper_id": "e1a150bc890d",
         "state": "missing_evidence",
-        "updated_at": "2026-10-12T07:20:57.452729+00:00",
+        "updated_at": "2026-10-13T07:29:40.721603+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
