@@ -1,0 +1,40 @@
+{
+  "paper_id": "65e1dc5c1243",
+  "fingerprint": "ac16ffcdfc2988fa3302aaf199af0ed53f5946f01520cf3dcbbb368a15881b5f",
+  "analysis": {
+    "title_zh": "基于纹理与切屑形态特征的钻孔内表面粗糙度机器学习预测",
+    "summary": "钻孔内表面粗糙度影响加工质量与疲劳寿命，但接触式测量难以实时实施。本文以Al-7075合金钻孔图像为对象，比较纹理线性回归、融合纹理与加工参数的XGBoost及切屑形态XGBoost。摘要报告融合模型MAE为0.1425 µm，界面预测约45 ms/图像，并给出模型差异的统计检验。当前仅有摘要，无法核实数据划分与增广流程；其价值在于提供非接触质量估计路径，而非证明疲劳寿命预测能力。[摘要]",
+    "recommendation": "推荐作为制造质量感知与疲劳可靠性研究的交叉参考，重点关注图像、加工参数和切屑特征的融合方式；但不宜仅凭摘要将其认定为已验证的疲劳可靠性方法。[摘要][解读]",
+    "deep_read": {
+      "problem": "研究针对钻孔内表面粗糙度的快速测量问题。摘要指出接触式轮廓仪速度慢、存在微划伤风险，且难用于孔内实时测量；孔壁曲率与不均匀照明也使常规平面分析失效。原文将粗糙度与“fatigue life”联系，但未直接研究寿命预测。[摘要]",
+      "method": "方法比较三种组合：GLCM纹理特征与线性回归、纹理及主轴转速和进给率与XGBoost、切屑面积及卷曲指数与XGBoost。数据包含370张Al-7075钻孔图像，增广为1800个样本；摘要未交代增广操作、标签测量和训练测试划分。[摘要]",
+      "innovation": "解读：值得关注的是针对孔内曲率与照明问题，将图像纹理、加工参数和切屑形态组织为可比较的预测路径，而非单纯使用某一种算法。摘要称其为“ML-based framework”，但没有与既有同类框架比较，故不足以确认首创性或技术领先性。[摘要]",
+      "findings": "摘要报告纹理与加工参数XGBoost的MAE为0.1425 µm，单因素ANOVA结果为F (2,537) = 47.3、p<0.001，界面速度约45 ms/图像。三个模型另有数值，但指标符号缺失，不能补认成R²；显著差异也不能替代泛化验证。[摘要]",
+      "limitations": "当前限制主要是证据缺项，而非已证实的方法缺陷。摘要没有说明独立测试集、增广样本隔离、粗糙度测量误差及跨工况验证，因此无法判断是否存在数据泄漏或实际部署偏差。检测成本下降虽被宣称，却未提供成本对照和量化依据。[摘要]",
+      "connection": "解读：该研究与智能运维的联系在于非接触质量感知，与结构设计及可靠性的联系在于孔表面状态可能成为制造质量输入。依据是摘要所述粗糙度影响“performance, fatigue life”。但文中未提供粗糙度到疲劳失效概率的映射或结构验证。[摘要]",
+      "next_steps": "建议：取得全文后，优先核对标签来源、缺失指标符号、增广与数据划分顺序，以及按原始孔或工件隔离的测试结果。若迁移到可靠性研究，可另行设计粗糙度估计误差与疲劳试验关联分析；这属于后续研究建议，不是作者已完成的成果。[摘要]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://doi.org/10.48084/etasr.18730"
+    ],
+    "analyzed_at": "2026-10-13T20:08:25.785765+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": true,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "与fatigue_reliability方向存在间接契合：摘要明确指出粗糙度影响疲劳寿命，并提供三类预测方法、误差及统计检验，值得重点核查。当前证据足以支持摘要级推荐，但不足以确认独立泛化能力、创新领先性或疲劳可靠性改善。",
+    "evidence": "A dataset of 370 drilled-hole images of Al-7075 alloy was augmented to 1800 samples. One-way ANOVA confirmed statistically significant performance differences between models (F (2,537) = 47.3, p<0.001)."
+  },
+  "material": {
+    "version": "b6e8b45bd8fdf16e545f61e3230e186cafc1f5170999ca84f85db31d8dd36b34",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "A dataset of 370 drilled-hole images of Al-7075 alloy was augmented to 1800 samples. One-way ANOVA confirmed statistically significant performance differences between models (F (2,537) = 47.3, p<0.001)."
+  }
+}
