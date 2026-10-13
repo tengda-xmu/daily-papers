@@ -1263,7 +1263,7 @@
       "reading_status": {
         "paper_id": "925093e117c0",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-10T07:15:33.237861+00:00",
+        "updated_at": "2026-10-12T07:19:07.702404+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -1377,7 +1377,7 @@
       "reading_status": {
         "paper_id": "b8d36ac1dcaf",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-10T07:15:50.733392+00:00",
+        "updated_at": "2026-10-12T07:19:23.737385+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -1535,7 +1535,7 @@
       "reading_status": {
         "paper_id": "c05baf48e37d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-10T07:16:15.346630+00:00",
+        "updated_at": "2026-10-12T07:19:37.468220+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -1624,7 +1624,7 @@
       "reading_status": {
         "paper_id": "565888b08f8a",
         "state": "missing_evidence",
-        "updated_at": "2026-10-10T07:16:35.047269+00:00",
+        "updated_at": "2026-10-12T07:19:53.447854+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -1764,7 +1764,7 @@
       "reading_status": {
         "paper_id": "8a095e50b332",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-10T05:13:58.909986+00:00",
+        "updated_at": "2026-10-12T05:41:51.199958+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -1957,7 +1957,7 @@
       "reading_status": {
         "paper_id": "de48174471ad",
         "state": "missing_evidence",
-        "updated_at": "2026-10-10T07:19:34.078518+00:00",
+        "updated_at": "2026-10-12T07:20:33.012181+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -1992,7 +1992,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "本文关注三维地震断层检测中可验证真值与真实纹理难以兼顾的问题，提出开放基准SeisMark。摘要称，其将程序化地质建模与扩散式合成结合，生成具有勘测域特定纹理的三维体数据，并揭示简化物理数据掩盖的模型脆弱性。实验概述指出，该基准能够区分不同架构在真实域偏移下的稳健性，但未提供模型名称、指标或量化结果。[摘要] 解读：其价值主要在于部署前的稳健性评测，而非直接解决设备智能运维任务。",
+      "summary": "SeisMark针对地震断层检测中真实数据标签难验证、合成数据纹理过于理想的问题，将程序化地质建模、一维反射率正演与扩散风格迁移结合，构建包含493条断层的27亿体素基准。[P3–P6] 五种变体共享标签，用于隔离纹理域偏移的影响。四个预训练模型的评估显示，真实纹理能揭示理想数据掩盖的性能差异。[P7–P9] 解读：其主要价值是可控鲁棒性评测，而非证明部署安全；单一地质体与局部标签保真验证不足仍需注意。",
       "raw_metadata": {
         "conference": {
           "id": "icml",
@@ -2051,39 +2051,75 @@
       "focus_tags": [],
       "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "建议作为域偏移评测与安全关键人工智能验证的交叉参考阅读，而非智能运维核心文献。摘要明确提出数据生成方法及模型区分结果，但重点推荐仍需核对全文实验与基准开放情况。[摘要]",
+      "recommendation": "推荐重点阅读其固定结构、改变纹理的配对评测设计及容差指标定义，可借鉴于智能运维模型的域偏移压力测试；不宜将其直接作为工程结构设计或部署安全的证据。[P6–P9]",
       "deep_read": {
-        "problem": "研究问题是如何在三维地震断层检测中兼顾可核验标注与逼真数据纹理。摘要以“verifiable ground truth and realistic texture”概括这一缺口，并指出简化物理数据可能掩盖现有模型的脆弱性。[摘要] 解读：评测数据的真实性会影响对模型部署能力的判断。",
-        "method": "作者将程序化地质建模与基于扩散的合成结合，构建具有特定勘测域纹理的三维体数据；原文称“merging procedural geology with diffusion-based synthesis”。[摘要] 当前未说明生成流程、条件输入、真值保存机制和质量检查，尚不能据此复现。",
-        "innovation": "摘要将合成流程称为“novel pipeline”，并强调开放基准连接可验证真值与真实纹理。[摘要] 解读：可关注的创新定位是同时服务标注可信度与域真实性的基准构建，而非仅更换检测模型；但缺少既有工作对比，无法独立确认其首创性及技术增量。",
-        "findings": "摘要报告，SeisMark能够区分稳健的现代架构与在真实域偏移下出现“performance collapse”的旧式模型。[摘要] 这一发现支持关注传统测试可能遗漏的失效情形，但未列出架构名称、性能降幅、重复实验或统计证据，不能推及所有新旧架构。",
-        "limitations": "当前可确认的是摘要披露范围的不足，而非论文已经证实的方法缺陷：虽称“large-scale open benchmark”，却未提供数据规模、来源范围、评价指标及真实勘测验证细节。[摘要] 因而尚不能判断合成纹理覆盖程度、标注可信度或部署适用边界。",
-        "connection": "解读：该工作与智能运维的联系在于域偏移下的检测可靠性评估，而非设备状态监测或维修决策。摘要面向“safety-critical subsurface applications”。[摘要] 对结构设计也仅有间接启发：可借鉴其可验证数据与真实扰动结合的评测思路，不能直接迁移地质结论。",
-        "next_steps": "建议：后续阅读全文时，优先核对数据与代码是否开放、真值如何验证、域偏移如何划分，以及模型比较是否采用一致训练条件。面向智能运维，可另行研究类似生成流程能否保留故障标签并模拟工况变化；这是迁移设想，摘要未提供对应验证。[摘要]"
+        "problem": "地下断层关系到CO₂封存泄漏风险与地热稳定性，但实测标签依赖解释人员，难以获得可验证真值；简化合成数据虽有精确标签，却缺少真实采集噪声。[P1] 作者因此追问能否同时保证标签准确与纹理真实，使三维分割评测真正暴露域偏移下的脆弱性。[P3]",
+        "method": "程序模块先生成速度体与断层标签，再利用Gardner关系及25 Hz零相位Ricker子波作一维卷积，最后以伪地震体约束扩散风格化。[P3–P4] F3和Gorgon分别提供纹理先验，噪声时间步与引导尺度控制强度；输出一个Clean及四个风格化变体。[P5–P6]",
+        "innovation": "核心设计不是提出新的断层检测网络，而是将地质结构与纹理轴分离：五种变体共享体素标签，让模型在相同断层上接受不同纹理挑战。[P6] 解读：这种配对控制比混合结构和噪声变化更有利于定位性能下降来源；其大体积还保留了长距离地质连续性。",
+        "findings": "Fault-Net的IoU在Clean、F3高强度和澳洲高强度上分别为0.441、0.297、0.278，V1对应为0.262、0.167、0.145。[P7] 作者认为真实纹理拉开模型差距；但解读：Fault-Net同时使用实测标注训练，不能将优势仅归于架构，领先也不涵盖全部容差指标。[P8–P9]",
+        "limitations": "基准只有一个连续地质体；全体积SSIM与GMC不足以排除局部断层位移，作者把断层区域验证及替代风格化比较列为后续工作。[P6–P9] 解读：表3阈值概括与0.88、0.87表值不一致，削弱表述严谨性。[P7] 阅读笔记未确认原文件缺项，不能补造公式。",
+        "connection": "解读：固定真值、改变观测纹理，可迁移为智能运维中的传感器更换、采集条件变化和噪声增强测试；精确率与召回率的共同考察也对应误报与漏报权衡。[P6、P8–P9] 与结构设计的联系较间接，主要是参数化场景生成，而非力学优化或寿命预测。[P13–P14]",
+        "next_steps": "建议：先在膨胀断层区域计算局部结构指标，并按主次断层分别报告漏检、定位误差及交汇处表现；再扩展独立地质体，区分纹理与结构泛化。[P9、P12] 建议用一致训练数据比较架构，并与CycleGAN及NST直接对照，以检验扩散风格化的独立收益。[P8–P9]"
       },
       "recommended_direction": "ai_maintenance",
       "title_zh": "SeisMark：面向稳健三维地震断层检测的大规模开放基准",
-      "analysis_basis": "abstract",
+      "analysis_basis": "full_text",
       "analysis_kind": "model",
       "analysis_sources": [
         "https://proceedings.mlr.press/v306/park26y.html"
       ],
-      "analyzed_at": "2026-10-08T03:16:46.182240+00:00",
-      "llm_model": "gpt-6-astra",
-      "analysis_references": {},
-      "analysis_material_version": "cfadc04c3bf87137ee6d4f3b7e69b00e4e9c6e0514587ae21260dc4e28c0b72e",
+      "analyzed_at": "2026-10-12T10:18:11.650589+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P3"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "innovation": [
+          "P6"
+        ],
+        "findings": [
+          "P7",
+          "P8",
+          "P9"
+        ],
+        "limitations": [
+          "P6",
+          "P7",
+          "P9"
+        ],
+        "connection": [
+          "P6",
+          "P8",
+          "P9",
+          "P13",
+          "P14"
+        ],
+        "next_steps": [
+          "P8",
+          "P9",
+          "P12"
+        ]
+      },
+      "analysis_material_version": "ea440e71e600511add84ec2bfa148db3db20a60774d0216b99d5eda5519ec2a9",
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "1ae92d7bcd29",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-10-10T07:20:55.015059+00:00",
-        "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
-        "reason": "network",
-        "total": 0,
-        "covered": 0,
-        "pdf_available": false,
+        "state": "published",
+        "updated_at": "2026-10-12T10:18:11.665377+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 14,
+        "covered": 14,
+        "pdf_available": true,
         "issues": []
       }
     },
@@ -2218,7 +2254,7 @@
       "reading_status": {
         "paper_id": "35b3b0d29b69",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-10T07:16:45.924815+00:00",
+        "updated_at": "2026-10-12T07:20:15.122845+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -2369,7 +2405,7 @@
       "reading_status": {
         "paper_id": "e1a150bc890d",
         "state": "missing_evidence",
-        "updated_at": "2026-10-10T07:20:44.453684+00:00",
+        "updated_at": "2026-10-12T07:20:57.452729+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -3642,7 +3678,7 @@
       "reading_status": {
         "paper_id": "925093e117c0",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-10T07:15:33.237861+00:00",
+        "updated_at": "2026-10-12T07:19:07.702404+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -3756,7 +3792,7 @@
       "reading_status": {
         "paper_id": "b8d36ac1dcaf",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-10T07:15:50.733392+00:00",
+        "updated_at": "2026-10-12T07:19:23.737385+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -3914,7 +3950,7 @@
       "reading_status": {
         "paper_id": "c05baf48e37d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-10T07:16:15.346630+00:00",
+        "updated_at": "2026-10-12T07:19:37.468220+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -4003,7 +4039,7 @@
       "reading_status": {
         "paper_id": "565888b08f8a",
         "state": "missing_evidence",
-        "updated_at": "2026-10-10T07:16:35.047269+00:00",
+        "updated_at": "2026-10-12T07:19:53.447854+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -4141,7 +4177,7 @@
       "reading_status": {
         "paper_id": "8a095e50b332",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-10T05:13:58.909986+00:00",
+        "updated_at": "2026-10-12T05:41:51.199958+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -4334,7 +4370,7 @@
       "reading_status": {
         "paper_id": "de48174471ad",
         "state": "missing_evidence",
-        "updated_at": "2026-10-10T07:19:34.078518+00:00",
+        "updated_at": "2026-10-12T07:20:33.012181+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -4369,7 +4405,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "本文关注三维地震断层检测中可验证真值与真实纹理难以兼顾的问题，提出开放基准SeisMark。摘要称，其将程序化地质建模与扩散式合成结合，生成具有勘测域特定纹理的三维体数据，并揭示简化物理数据掩盖的模型脆弱性。实验概述指出，该基准能够区分不同架构在真实域偏移下的稳健性，但未提供模型名称、指标或量化结果。[摘要] 解读：其价值主要在于部署前的稳健性评测，而非直接解决设备智能运维任务。",
+      "summary": "SeisMark针对地震断层检测中真实数据标签难验证、合成数据纹理过于理想的问题，将程序化地质建模、一维反射率正演与扩散风格迁移结合，构建包含493条断层的27亿体素基准。[P3–P6] 五种变体共享标签，用于隔离纹理域偏移的影响。四个预训练模型的评估显示，真实纹理能揭示理想数据掩盖的性能差异。[P7–P9] 解读：其主要价值是可控鲁棒性评测，而非证明部署安全；单一地质体与局部标签保真验证不足仍需注意。",
       "raw_metadata": {
         "conference": {
           "id": "icml",
@@ -4428,39 +4464,75 @@
       "focus_tags": [],
       "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "建议作为域偏移评测与安全关键人工智能验证的交叉参考阅读，而非智能运维核心文献。摘要明确提出数据生成方法及模型区分结果，但重点推荐仍需核对全文实验与基准开放情况。[摘要]",
+      "recommendation": "推荐重点阅读其固定结构、改变纹理的配对评测设计及容差指标定义，可借鉴于智能运维模型的域偏移压力测试；不宜将其直接作为工程结构设计或部署安全的证据。[P6–P9]",
       "deep_read": {
-        "problem": "研究问题是如何在三维地震断层检测中兼顾可核验标注与逼真数据纹理。摘要以“verifiable ground truth and realistic texture”概括这一缺口，并指出简化物理数据可能掩盖现有模型的脆弱性。[摘要] 解读：评测数据的真实性会影响对模型部署能力的判断。",
-        "method": "作者将程序化地质建模与基于扩散的合成结合，构建具有特定勘测域纹理的三维体数据；原文称“merging procedural geology with diffusion-based synthesis”。[摘要] 当前未说明生成流程、条件输入、真值保存机制和质量检查，尚不能据此复现。",
-        "innovation": "摘要将合成流程称为“novel pipeline”，并强调开放基准连接可验证真值与真实纹理。[摘要] 解读：可关注的创新定位是同时服务标注可信度与域真实性的基准构建，而非仅更换检测模型；但缺少既有工作对比，无法独立确认其首创性及技术增量。",
-        "findings": "摘要报告，SeisMark能够区分稳健的现代架构与在真实域偏移下出现“performance collapse”的旧式模型。[摘要] 这一发现支持关注传统测试可能遗漏的失效情形，但未列出架构名称、性能降幅、重复实验或统计证据，不能推及所有新旧架构。",
-        "limitations": "当前可确认的是摘要披露范围的不足，而非论文已经证实的方法缺陷：虽称“large-scale open benchmark”，却未提供数据规模、来源范围、评价指标及真实勘测验证细节。[摘要] 因而尚不能判断合成纹理覆盖程度、标注可信度或部署适用边界。",
-        "connection": "解读：该工作与智能运维的联系在于域偏移下的检测可靠性评估，而非设备状态监测或维修决策。摘要面向“safety-critical subsurface applications”。[摘要] 对结构设计也仅有间接启发：可借鉴其可验证数据与真实扰动结合的评测思路，不能直接迁移地质结论。",
-        "next_steps": "建议：后续阅读全文时，优先核对数据与代码是否开放、真值如何验证、域偏移如何划分，以及模型比较是否采用一致训练条件。面向智能运维，可另行研究类似生成流程能否保留故障标签并模拟工况变化；这是迁移设想，摘要未提供对应验证。[摘要]"
+        "problem": "地下断层关系到CO₂封存泄漏风险与地热稳定性，但实测标签依赖解释人员，难以获得可验证真值；简化合成数据虽有精确标签，却缺少真实采集噪声。[P1] 作者因此追问能否同时保证标签准确与纹理真实，使三维分割评测真正暴露域偏移下的脆弱性。[P3]",
+        "method": "程序模块先生成速度体与断层标签，再利用Gardner关系及25 Hz零相位Ricker子波作一维卷积，最后以伪地震体约束扩散风格化。[P3–P4] F3和Gorgon分别提供纹理先验，噪声时间步与引导尺度控制强度；输出一个Clean及四个风格化变体。[P5–P6]",
+        "innovation": "核心设计不是提出新的断层检测网络，而是将地质结构与纹理轴分离：五种变体共享体素标签，让模型在相同断层上接受不同纹理挑战。[P6] 解读：这种配对控制比混合结构和噪声变化更有利于定位性能下降来源；其大体积还保留了长距离地质连续性。",
+        "findings": "Fault-Net的IoU在Clean、F3高强度和澳洲高强度上分别为0.441、0.297、0.278，V1对应为0.262、0.167、0.145。[P7] 作者认为真实纹理拉开模型差距；但解读：Fault-Net同时使用实测标注训练，不能将优势仅归于架构，领先也不涵盖全部容差指标。[P8–P9]",
+        "limitations": "基准只有一个连续地质体；全体积SSIM与GMC不足以排除局部断层位移，作者把断层区域验证及替代风格化比较列为后续工作。[P6–P9] 解读：表3阈值概括与0.88、0.87表值不一致，削弱表述严谨性。[P7] 阅读笔记未确认原文件缺项，不能补造公式。",
+        "connection": "解读：固定真值、改变观测纹理，可迁移为智能运维中的传感器更换、采集条件变化和噪声增强测试；精确率与召回率的共同考察也对应误报与漏报权衡。[P6、P8–P9] 与结构设计的联系较间接，主要是参数化场景生成，而非力学优化或寿命预测。[P13–P14]",
+        "next_steps": "建议：先在膨胀断层区域计算局部结构指标，并按主次断层分别报告漏检、定位误差及交汇处表现；再扩展独立地质体，区分纹理与结构泛化。[P9、P12] 建议用一致训练数据比较架构，并与CycleGAN及NST直接对照，以检验扩散风格化的独立收益。[P8–P9]"
       },
       "recommended_direction": "ai_maintenance",
       "title_zh": "SeisMark：面向稳健三维地震断层检测的大规模开放基准",
-      "analysis_basis": "abstract",
+      "analysis_basis": "full_text",
       "analysis_kind": "model",
       "analysis_sources": [
         "https://proceedings.mlr.press/v306/park26y.html"
       ],
-      "analyzed_at": "2026-10-08T03:16:46.182240+00:00",
-      "llm_model": "gpt-6-astra",
-      "analysis_references": {},
-      "analysis_material_version": "cfadc04c3bf87137ee6d4f3b7e69b00e4e9c6e0514587ae21260dc4e28c0b72e",
+      "analyzed_at": "2026-10-12T10:18:11.650589+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P3"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "innovation": [
+          "P6"
+        ],
+        "findings": [
+          "P7",
+          "P8",
+          "P9"
+        ],
+        "limitations": [
+          "P6",
+          "P7",
+          "P9"
+        ],
+        "connection": [
+          "P6",
+          "P8",
+          "P9",
+          "P13",
+          "P14"
+        ],
+        "next_steps": [
+          "P8",
+          "P9",
+          "P12"
+        ]
+      },
+      "analysis_material_version": "ea440e71e600511add84ec2bfa148db3db20a60774d0216b99d5eda5519ec2a9",
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "1ae92d7bcd29",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-10-10T07:20:55.015059+00:00",
-        "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
-        "reason": "network",
-        "total": 0,
-        "covered": 0,
-        "pdf_available": false,
+        "state": "published",
+        "updated_at": "2026-10-12T10:18:11.665377+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 14,
+        "covered": 14,
+        "pdf_available": true,
         "issues": []
       }
     },
@@ -4595,7 +4667,7 @@
       "reading_status": {
         "paper_id": "35b3b0d29b69",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-10T07:16:45.924815+00:00",
+        "updated_at": "2026-10-12T07:20:15.122845+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -4746,7 +4818,7 @@
       "reading_status": {
         "paper_id": "e1a150bc890d",
         "state": "missing_evidence",
-        "updated_at": "2026-10-10T07:20:44.453684+00:00",
+        "updated_at": "2026-10-12T07:20:57.452729+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",

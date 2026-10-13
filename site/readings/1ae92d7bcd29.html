@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="聚焦 AI 驱动的智能运维、结构生成式设计与疲劳可靠性，每日追踪科研论文，提供中文摘要与精读要点。">
+  <meta name="theme-color" content="#153e64">
+  <title>SeisMark：面向稳健三维地震断层检测的大规模开放基准 | 全文精读</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css?v=29fc6bffec">
+  <link rel="stylesheet" href="../assets/paper-chat.css?v=29fc6bffec">
+  <link rel="stylesheet" href="../assets/paper-library.css?v=29fc6bffec">
+  <script src="../assets/site.js?v=29fc6bffec" defer></script>
+  <script src="../assets/paper-library.js?v=29fc6bffec" defer></script>
+  <script src="../assets/paper-chat.js?v=29fc6bffec" defer></script>
+  <script src="../assets/daily-update.js?v=29fc6bffec" defer></script>
+<link rel="stylesheet" href="../assets/reading-article.css?v=29fc6bffec"><script src="../assets/reading-article.js?v=29fc6bffec" defer></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main-content">跳至正文</a>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a class="wordmark" href="../"><span>腾达</span><span class="wordmark-divider" aria-hidden="true"></span>科研文献</a>
+      <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false">菜单 <span aria-hidden="true">☰</span></button>
+      <nav id="main-navigation" class="main-navigation" aria-label="主导航">
+        <a href="../" >每日推荐</a>
+        <a href="../search.html" data-local-only >手动检索</a>
+        <a href="../leads.html" >科研线索</a>
+        <a href="../ai.html" >AI 前沿</a>
+        <a href="../library.html" data-local-only >我的文献</a>
+        <a href="../archive/" >历史归档</a>
+        <a href="../setup.html" data-local-only >设置</a>
+      </nav>
+    </div>
+  </header>
+  <div class="site-shell">
+    <main id="main-content" class="main-content" tabindex="-1">
+      <article class="reading-article" data-paper-id="1ae92d7bcd29"><a class="article-back" href="../">返回每日推荐</a><header class="article-header"><p class="article-type">论文精读</p><h1>SeisMark：面向稳健三维地震断层检测的大规模开放基准</h1><p class="article-original" lang="en">SeisMark: A Large-Scale Open Benchmark for Robust 3D Seismic Fault Detection</p><p class="article-byline">Min Jun Park, Joseph Stitt, Robert Graham Clapp, Ilan Naiman, Artem Goncharuk, Kevin F. Smith<br>ICML 2026</p><p class="article-updated">精读更新 2026-10-12 18:18 · 依据论文全文整理</p><div class="article-links"><a href="https://proceedings.mlr.press/v306/park26y.html" target="_blank" rel="noopener noreferrer">阅读原文</a><button type="button" class="text-button copy-citation" data-citation="Min Jun Park, Joseph Stitt, Robert Graham Clapp, Ilan Naiman, Artem Goncharuk, Kevin F. Smith. SeisMark: A Large-Scale Open Benchmark for Robust 3D Seismic Fault Detection. ICML 2026. https://proceedings.mlr.press/v306/park26y.html">复制引用</button><button type="button" class="text-button coverage-toggle" aria-expanded="false" aria-controls="paper-coverage-1ae92d7bcd29-article">公众号介绍<span aria-hidden="true">＋</span></button><button type="button" class="text-button codex-entry" data-local-only data-paper-id="1ae92d7bcd29" data-paper-title="SeisMark：面向稳健三维地震断层检测的大规模开放基准">Codex 对话</button></div><section class="paper-coverage-panel" id="paper-coverage-1ae92d7bcd29-article" aria-label="公众号介绍" hidden><p class="coverage-status">公众号搜索排队中，将在后续更新继续。</p><p class="coverage-checked">最近检索 2026-10-13 22:29</p></section></header><p class="article-upgrade">全文精读已完成，文章版正在逐步升级。现有内容可继续阅读。</p><div class="article-lead"><p>SeisMark针对地震断层检测中真实数据标签难验证、合成数据纹理过于理想的问题，将程序化地质建模、一维反射率正演与扩散风格迁移结合，构建包含493条断层的27亿体素基准。 五种变体共享标签，用于隔离纹理域偏移的影响。四个预训练模型的评估显示，真实纹理能揭示理想数据掩盖的性能差异。 解读：其主要价值是可控鲁棒性评测，而非证明部署安全；单一地质体与局部标签保真验证不足仍需注意。</p></div><section><h2>研究问题</h2><p>地下断层关系到CO₂封存泄漏风险与地热稳定性，但实测标签依赖解释人员，难以获得可验证真值；简化合成数据虽有精确标签，却缺少真实采集噪声。 作者因此追问能否同时保证标签准确与纹理真实，使三维分割评测真正暴露域偏移下的脆弱性。</p></section><section><h2>方法与路线</h2><p>程序模块先生成速度体与断层标签，再利用Gardner关系及25 Hz零相位Ricker子波作一维卷积，最后以伪地震体约束扩散风格化。 F3和Gorgon分别提供纹理先验，噪声时间步与引导尺度控制强度；输出一个Clean及四个风格化变体。</p></section><section><h2>创新与比较</h2><p>核心设计不是提出新的断层检测网络，而是将地质结构与纹理轴分离：五种变体共享体素标签，让模型在相同断层上接受不同纹理挑战。 解读：这种配对控制比混合结构和噪声变化更有利于定位性能下降来源；其大体积还保留了长距离地质连续性。</p></section><section><h2>证据与发现</h2><p>Fault-Net的IoU在Clean、F3高强度和澳洲高强度上分别为0.441、0.297、0.278，V1对应为0.262、0.167、0.145。 作者认为真实纹理拉开模型差距；但解读：Fault-Net同时使用实测标注训练，不能将优势仅归于架构，领先也不涵盖全部容差指标。</p></section><section><h2>局限与边界</h2><p>基准只有一个连续地质体；全体积SSIM与GMC不足以排除局部断层位移，作者把断层区域验证及替代风格化比较列为后续工作。 解读：表3阈值概括与0.88、0.87表值不一致，削弱表述严谨性。 阅读笔记未确认原文件缺项，不能补造公式。</p></section><section><h2>方向关联</h2><p>解读：固定真值、改变观测纹理，可迁移为智能运维中的传感器更换、采集条件变化和噪声增强测试；精确率与召回率的共同考察也对应误报与漏报权衡。 与结构设计的联系较间接，主要是参数化场景生成，而非力学优化或寿命预测。</p></section><section><h2>后续研究建议</h2><p>建议：先在膨胀断层区域计算局部结构指标，并按主次断层分别报告漏检、定位误差及交汇处表现；再扩展独立地质体，区分纹理与结构泛化。 建议用一致训练数据比较架构，并与CycleGAN及NST直接对照，以检验扩散风格化的独立收益。</p></section><footer class="article-end"><p>本文依据论文资料整理，研究建议由本站提出。原文、相关文献和图示标注共同说明内容来源。</p></footer></article><dialog class="article-figure-dialog"><form method="dialog"><button type="submit">关闭大图</button></form><img alt="研究思路图放大查看"></dialog>
+      <footer class="site-footer"><p>每日更新，持续关注 AI 与工程可靠性。</p><div><a href="https://tengda-xmu.github.io/">腾达 · 厦门大学</a><a href="https://github.com/tengda-xmu/daily-papers" target="_blank" rel="noopener noreferrer">GitHub</a></div></footer>
+    </main>
+  </div>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <a class="back-to-top" href="#top" aria-label="返回页面顶部" hidden>回到顶部 ↑</a>
+</body>
+</html>
