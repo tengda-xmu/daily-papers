@@ -142,7 +142,7 @@ def paper_figure(paper: dict, root: str = "./") -> str:
   </figure>'''
 
 
-def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_labels=None, deleted_editions=None) -> str:
+def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_labels=None, deleted_editions=None, coverage=None) -> str:
     topic_labels = topic_labels or {k: v['label'] for k, v in TOPIC_CATALOG.items()}
     facets = paper_facets(paper)
     title = paper.get("title") or "未命名论文"
@@ -237,6 +237,8 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
     figure_html = paper_figure(paper, root) if tier == "core" else ""
     chat_button = (f'<button type="button" class="text-button codex-entry" data-local-only data-paper-id="{esc(paper["id"])}" '
                    f'data-paper-title="{esc(display_title)}">Codex 对话</button>') if paper.get("id") else ""
+    from tools.coverage_pages import coverage_panel
+    coverage_button, coverage_html = coverage_panel(paper.get('id', ''), coverage, root=root, suffix=f'{tier}-{rank}')
     note_action = (f'<a class="full-reading-link" href="{root}readings/{esc(paper["id"])}.html">全文精读</a>'
                    if ready and paper.get('analysis_basis') == 'full_text' else
                    f'<button type="button" class="text-button paper-toggle" data-label="{note_label}" aria-expanded="false" aria-controls="{panel_id}">{note_label}<span aria-hidden="true">＋</span></button>')
@@ -256,7 +258,8 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
 {recommendation_context(paper, root, deleted_editions)}
   <p class="abstract">{esc(preview)}</p>
 {figure_html}
-  <div class="paper-tools">{primary_action}{note_action}{chat_button}</div>
+  <div class="paper-tools">{primary_action}{note_action}{coverage_button}{chat_button}</div>
+  {coverage_html}
   <div class="paper-detail-panel" id="{panel_id}" hidden>{provenance}<p class="detail-label">{summary_label}</p><p class="full-abstract">{esc(summary)}</p>{original_abstract}{recommendation_html}{full_authors}{deep_html}<div class="tags">{tags}</div><div class="paper-actions">{actions}</div></div>
 </article>'''
 
@@ -494,7 +497,10 @@ data-subtype="{esc(row.get('subtype', ''))}" data-region="{esc(row.get('region',
         title='科研线索 | 每日论文推荐', active='leads')
 
 
-def render(payload: dict, *, archive_date: str | None = None, deleted_editions=None) -> str:
+def render(payload: dict, *, archive_date: str | None = None, deleted_editions=None, coverage=None) -> str:
+    if coverage is None:
+        from src.paper_coverage import load_public
+        coverage = load_public(DATA.parent)
     core = payload.get("core") or []
     extended = payload.get("extended") or []
     all_papers = core + extended
@@ -532,8 +538,8 @@ def render(payload: dict, *, archive_date: str | None = None, deleted_editions=N
     from src.editions import manifest
     if deleted_editions is None:
         deleted_editions = {e['id'] for e in manifest(DATA)['deleted']}
-    core_html = "".join(paper_card(p, "core", i, root, topic_labels, deleted_editions) for i, p in enumerate(core))
-    extended_html = "".join(paper_card(p, "extended", i, root, topic_labels, deleted_editions) for i, p in enumerate(extended))
+    core_html = "".join(paper_card(p, "core", i, root, topic_labels, deleted_editions, coverage.get(p.get('id'))) for i, p in enumerate(core))
+    extended_html = "".join(paper_card(p, "extended", i, root, topic_labels, deleted_editions, coverage.get(p.get('id'))) for i, p in enumerate(extended))
     direction_chips = ''.join(f'<button type="button" data-topic-filter="{esc(d["id"])}" aria-pressed="false">{esc(d["name"])}<span>{sum(d["id"] in p.get("topic_tags", []) for p in all_papers)}</span></button>' for d in shown_directions)
     direction_bar = (f'<div class="direction-bar"><div class="direction-label"><span>本期方向</span>'
                      f'<a href="{root}directions.html" data-local-only>管理方向</a></div>'
@@ -621,6 +627,8 @@ def build_archive() -> None:
     entries = []
     index = edition_entries(DATA)
     analyses = load_readings(DATA)
+    from tools.coverage_pages import build_coverage
+    build_coverage(DATA.parent, OUT)
     if index or (DATA / 'editions/index.json').exists():
         for day in sorted({e['date'] for e in index}, reverse=True):
             batches = sorted((e for e in index if e['date'] == day), key=lambda e: e['number'], reverse=True)

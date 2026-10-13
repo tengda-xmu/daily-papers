@@ -105,6 +105,10 @@ def figure_priority(title):
 
 
 def nature_figure(doi, fetch):
+    return nature_figures(doi, fetch, maximum=1)[0]
+
+
+def nature_figures(doi, fetch, *, maximum=12):
     url = 'https://www.nature.com/articles/' + doi.split('/', 1)[1]
     soup = BeautifulSoup(fetch(url), 'html.parser')
     identity = soup.select_one('meta[name="citation_doi"]')
@@ -127,6 +131,7 @@ def nature_figure(doi, fetch):
     common = {**licensing, 'credit': authors[0] + (' et al.' if len(authors) > 1 else ''),
               'license_source': url}
     figures = sorted(soup.select('figure'), key=lambda f: figure_priority(plain(f.select_one('figcaption'))))
+    collected = []
     for figure in figures:
         caption = figure.select_one('figcaption')
         label = re.match(r'(Fig\.\s*\d+)', plain(caption))
@@ -140,18 +145,30 @@ def nature_figure(doi, fetch):
         image_url = re.sub(r'/lw\d+/', '/full/', image_url).split('?', 1)[0]
         number = re.search(r'\d+', label[1])[0]
         description = figure.select_one('.c-article-section__figure-description')
-        return {**common, 'figure_label': label[1], 'title': plain(caption)[label.end():].lstrip(': '),
+        metadata = {**common, 'figure_label': label[1], 'title': plain(caption)[label.end():].lstrip(': '),
                 'caption': plain(description) or plain(caption),
-                'source_url': url + '/figures/' + number, 'source_image_url': image_url}, fetch(image_url, 20_000_000)
+                'source_url': url + '/figures/' + number, 'source_image_url': image_url}
+        try:
+            collected.append((metadata, fetch(image_url, 20_000_000)))
+        except (Unavailable, requests.RequestException):
+            continue
+        if len(collected) >= maximum:
+            break
+    if collected:
+        return collected
     # Accepted manuscripts may have figures only in their openly licensed PDF.
     pdf = next((urljoin(url, a['href']) for a in soup.select('a[href]')
                 if a['href'].endswith('.pdf') and doi.split('/', 1)[1] in a['href']), None)
     if pdf:
-        return pdf_figure(doi, pdf, common, fetch(pdf, 30_000_000))
+        return pdf_figures(doi, pdf, common, fetch(pdf, 30_000_000), maximum=maximum)
     raise Unavailable('not_found')
 
 
 def pdf_figure(doi, url, common, data, paper=None):
+    return pdf_figures(doi, url, common, data, paper=paper, maximum=1)[0]
+
+
+def pdf_figures(doi, url, common, data, paper=None, *, maximum=12):
     import fitz
     if not data.startswith(b'%PDF'):
         raise Unavailable('unavailable')
@@ -202,18 +219,21 @@ def pdf_figure(doi, url, common, data, paper=None):
                 continue
             # Rasterize the original figure region, including vector/text labels
             # and all panels; never redraw a chart or publish the source PDF.
-            extracted = page.get_pixmap(matrix=fitz.Matrix(2, 2), clip=region, alpha=False).tobytes('png')
             metadata = {**common, 'figure_label': label, 'title': '原文配图', 'caption': text,
                     'source_url': url + f'#page={index + 1}', 'source_image_url': url,
                     'pdf_page': index + 1, 'extraction': 'original_figure_region', 'region': list(region)}
-            candidates.append((figure_priority(text), index, metadata, extracted))
+            candidates.append((figure_priority(text), index, metadata, region))
         if candidates:
-            best = min(candidates, key=lambda value: value[:2])
-            return best[2], best[3]
+            return [(item[2], document[item[1]].get_pixmap(matrix=fitz.Matrix(2, 2), clip=item[3], alpha=False).tobytes('png'))
+                    for item in sorted(candidates, key=lambda value: value[:2])[:maximum]]
     raise Unavailable('not_found')
 
 
 def publisher_figure(doi, paper, fetch):
+    return publisher_figures(doi, paper, fetch, maximum=1)[0]
+
+
+def publisher_figures(doi, paper, fetch, *, maximum=12):
     """Publisher-declared figures/PDFs for Elsevier, ASME and known OA hosts."""
     from src.paper_sources import allowed
     def get(url, limit=20_000_000):
@@ -237,11 +257,12 @@ def publisher_figure(doi, paper, fetch):
                 continue
             common = {**licensing, 'credit': str(authors[0]) + (' et al.' if len(authors) > 1 else ''), 'license_source': final}
             figures = soup.select('figure, div.fig, .fig-section')
+            collected, labels = [], set()
             for figure in sorted(figures, key=lambda n: figure_priority(plain(n))):
                 caption = figure.select_one('figcaption, .caption, .fig-caption, .fig_caption')
                 label = re.match(r'^(Fig(?:ure)?\.?\s*\d+)', plain(caption), re.I)
                 image = figure.select_one('img[src],img[data-src]')
-                if not label or not image or EXCLUDED_CREDIT.search(plain(figure)):
+                if not label or not image or EXCLUDED_CREDIT.search(plain(figure)) or label[1] in labels:
                     continue
                 image_url = urljoin(final, image.get('data-src') or image.get('src'))
                 larger = next((urljoin(final, a['href']) for a in figure.select('a[href]')
@@ -249,14 +270,23 @@ def publisher_figure(doi, paper, fetch):
                 image_url = larger or image_url
                 if not allowed(image_url):
                     continue
-                return {**common, 'figure_label': label[1], 'title': plain(caption)[label.end():].lstrip('.: '),
+                metadata = {**common, 'figure_label': label[1], 'title': plain(caption)[label.end():].lstrip('.: '),
                         'caption': plain(caption), 'source_url': final + ('#' + figure['id'] if figure.get('id') else ''),
-                        'source_image_url': image_url}, fetch(image_url, 20_000_000)
+                        'source_image_url': image_url}
+                try:
+                    collected.append((metadata, fetch(image_url, 20_000_000)))
+                    labels.add(label[1])
+                except (Unavailable, requests.RequestException):
+                    continue
+                if len(collected) >= maximum:
+                    break
+            if collected:
+                return collected
             pdfs = [urljoin(final, n.get('content', '')) for n in soup.select('meta[name="citation_pdf_url"]')]
             pdfs += [urljoin(final, n['href']) for n in soup.select('a[href]') if re.search(r'\.pdf(?:\?|$)', n['href'])]
             for pdf in list(dict.fromkeys(pdfs))[:2]:
                 if allowed(pdf):
-                    return pdf_figure(doi, pdf, common, fetch(pdf, 30_000_000), paper=paper)
+                    return pdf_figures(doi, pdf, common, fetch(pdf, 30_000_000), paper=paper, maximum=maximum)
         except Unavailable as exc:
             state = exc.state
         except Exception:
@@ -265,6 +295,10 @@ def publisher_figure(doi, paper, fetch):
 
 
 def pmc_figure(doi, fetch):
+    return pmc_figures(doi, fetch, maximum=1)[0]
+
+
+def pmc_figures(doi, fetch, *, maximum=12):
     base = 'https://www.ebi.ac.uk/europepmc/webservices/rest/'
     result = json.loads(fetch(base + 'search?format=json&query=' + quote('DOI:' + doi)))
     rows = result.get('resultList', {}).get('result', [])
@@ -282,6 +316,7 @@ def pmc_figure(doi, fetch):
     credit = ' '.join(author.itertext()) if author is not None else ''
     if not credit.strip():
         raise Unavailable('unavailable')
+    collected, archive = [], None
     for fig in root.findall('.//body//fig'):
         caption = fig.find('caption')
         graphic = fig.find('graphic')
@@ -291,18 +326,25 @@ def pmc_figure(doi, fetch):
         if not re.fullmatch(r'[a-zA-Z0-9_.-]+\.(?:png|jpg|jpeg)', name):
             continue
         bundle_url = base + pmcid + '/supplementaryFiles'
-        with ZipFile(BytesIO(fetch(bundle_url, 100_000_000))) as bundle:
+        if archive is None:
+            archive = fetch(bundle_url, 100_000_000)
+        with ZipFile(BytesIO(archive)) as bundle:
             # Read only the matched figure, never unpack the archive onto disk.
             candidates = [i for i in bundle.infolist() if i.filename == name]
             if len(candidates) != 1 or candidates[0].file_size > 20_000_000:
-                raise Unavailable('not_found')
+                continue
             image = bundle.read(candidates[0])
-        return {**licensing, 'credit': credit.strip() + ' et al.',
+        metadata = {**licensing, 'credit': credit.strip() + ' et al.',
                 'figure_label': fig.findtext('label', 'Figure').rstrip('.'),
                 'title': ''.join(caption.find('title').itertext()) if caption.find('title') is not None else '原文配图',
                 'caption': ' '.join(caption.itertext()), 'license_source': base + pmcid + '/fullTextXML',
                 'source_url': 'https://pmc.ncbi.nlm.nih.gov/articles/' + pmcid + '/#' + fig.get('id', ''),
-                'source_image_url': bundle_url, 'archive_entry': name}, image
+                'source_image_url': bundle_url, 'archive_entry': name}
+        collected.append((metadata, image))
+        if len(collected) >= maximum:
+            break
+    if collected:
+        return collected
     raise Unavailable('not_found')
 
 
@@ -315,7 +357,7 @@ def image_info(data):
         return result
 
 
-def collect(root=ROOT, fetch=None, now=None, *, retry=False):
+def collect(root=ROOT, fetch=None, now=None, *, retry=False, time_budget=400):
     from src.figures import get_figure, figure_key
     from src.paper_identity import paper_doi
     fetch = fetch or Fetcher()
@@ -332,7 +374,7 @@ def collect(root=ROOT, fetch=None, now=None, *, retry=False):
     seen = set()
     started, attempts = time.monotonic(), 0
     for paper in papers:
-        if attempts >= 20 or time.monotonic() - started > 400:
+        if attempts >= 20 or time.monotonic() - started > time_budget:
             break
         doi = paper_doi(paper) if root == ROOT else normalize_doi(paper.get('doi', ''))
         key = figure_key(paper) if root == ROOT or not doi else doi
@@ -387,8 +429,124 @@ def collect(root=ROOT, fetch=None, now=None, *, retry=False):
     return counts
 
 
+class BudgetFetcher:
+    """Bound network work across discovery, image downloads and both collectors."""
+    def __init__(self, fetch, seconds=420, maximum_calls=100):
+        self.fetch = fetch
+        self.deadline = time.monotonic() + max(0, seconds)
+        self.remaining = maximum_calls
+
+    def __call__(self, url, limit=8_000_000):
+        if self.remaining <= 0 or time.monotonic() >= self.deadline:
+            raise Unavailable('budget_exhausted')
+        self.remaining -= 1
+        result = self.fetch(url, limit)
+        self.last_url = getattr(self.fetch, 'last_url', url)
+        return result
+
+
+def collect_article_figures(root=ROOT, fetch=None, now=None, *, retry=False,
+                            time_budget=180, maximum_papers=6):
+    """Collect multiple originals for retained full-text articles, independently
+    of single card thumbnails. Successful assets survive every later failure.
+    """
+    from src.article_figures import MAX_ARTICLE_FIGURES, eligible_article_figures
+    from src.auto_reading import load
+    from src.editions import entries as editions, enrich, relative_path, selected
+    from src.figures import figure_key
+    from src.paper_identity import paper_doi
+
+    root = Path(root)
+    fetch = BudgetFetcher(fetch or Fetcher(), time_budget)
+    now = now or datetime.now(timezone.utc)
+    path = root / 'data/figures/catalog.json'
+    catalog = read(path)
+    entries = catalog.setdefault('article_entries', {})
+    checks = catalog.setdefault('article_checks', {})
+    analyses = load(root / 'data')
+    sources = [read(root / 'data/daily.json')]
+    sources += [read(root / 'data' / relative_path(e)) for e in reversed(editions(root / 'data'))]
+    papers = [paper for source in sources for paper in selected(enrich(source, analyses))
+              if paper.get('analysis_basis') == 'full_text']
+    counts = {'saved': 0, 'existing': 0, 'unavailable': 0}
+    seen, attempts = set(), 0
+    for paper in papers:
+        if attempts >= maximum_papers or time.monotonic() >= fetch.deadline:
+            break
+        key = figure_key(paper)
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        old_check = checks.get(key, {})
+        existing = eligible_article_figures(root, paper)
+        stored = entries.get(key, [])
+        existing_labels = {f['figure_label'] for f in existing}
+        intact = bool(stored) and all(f.get('figure_label') in existing_labels for f in stored)
+        try:
+            age = (now - datetime.fromisoformat(old_check.get('checked_at', ''))).total_seconds()
+        except (ValueError, TypeError):
+            age = float('inf')
+        lifetime = 7 * 86400 if old_check.get('state') in ('ready', 'not_found', 'license_unconfirmed') else 86400
+        if not retry and 0 <= age < lifetime and (old_check.get('state') != 'ready' or intact):
+            counts['existing' if intact else 'unavailable'] += 1
+            continue
+        attempts += 1
+        state = 'unavailable'
+        try:
+            doi = paper_doi(paper)
+            if doi.startswith('10.1038/'):
+                candidates = nature_figures(doi, fetch, maximum=MAX_ARTICLE_FIGURES)
+            else:
+                try:
+                    candidates = publisher_figures(doi, paper, fetch, maximum=MAX_ARTICLE_FIGURES)
+                except Unavailable as publisher_error:
+                    if not doi:
+                        raise
+                    try:
+                        candidates = pmc_figures(doi, fetch, maximum=MAX_ARTICLE_FIGURES)
+                    except Unavailable:
+                        raise publisher_error
+            saved = []
+            for metadata, data in candidates[:MAX_ARTICLE_FIGURES]:
+                try:
+                    width, height, extension = image_info(data)
+                except Exception:
+                    continue
+                digest = hashlib.sha256(data).hexdigest()
+                filename = 'auto-' + hashlib.sha256(key.encode()).hexdigest()[:16] + '-' + digest[:12] + '.' + extension
+                destination = path.parent / 'images' / filename
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                temporary = destination.with_suffix('.tmp')
+                temporary.write_bytes(data)
+                temporary.replace(destination)
+                saved.append({**metadata, 'image_path': 'assets/figures/' + filename,
+                              'width': width, 'height': height, 'sha256': digest,
+                              'modified': False, 'verified_at': now.isoformat()})
+            if saved:
+                # Partial publisher responses cannot remove already usable panels.
+                by_label = {f['figure_label']: f for f in stored if isinstance(f, dict) and f.get('figure_label')}
+                by_label.update({f['figure_label']: f for f in saved})
+                entries[key] = list(by_label.values())[:MAX_ARTICLE_FIGURES]
+                counts['saved'] += len(saved)
+                state = 'ready'
+            else:
+                counts['unavailable'] += 1
+        except Unavailable as error:
+            state = error.state
+            counts['unavailable'] += 1
+        except Exception:
+            counts['unavailable'] += 1
+        checks[key] = {'state': state, 'checked_at': now.isoformat()}
+        write(path, catalog)
+    return counts
+
+
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--retry', action='store_true', help='Retry unavailable figures now; existing images are reused')
-    print(json.dumps(collect(retry=parser.parse_args().retry), ensure_ascii=False))
+    retry = parser.parse_args().retry
+    fetch = BudgetFetcher(Fetcher(), seconds=420)
+    articles = collect_article_figures(fetch=fetch, retry=retry)
+    cards = collect(fetch=fetch, retry=retry, time_budget=max(0, fetch.deadline-time.monotonic()))
+    print(json.dumps({'cards': cards, 'articles': articles}, ensure_ascii=False))

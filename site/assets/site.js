@@ -103,6 +103,14 @@ window.FilterPanels = {
   const sort = $('#sort');
   const importance = $('#importance');
   const cards = $$('.paper');
+  $$('.coverage-toggle').forEach(button => button.addEventListener('click', () => {
+    const panel = document.getElementById(button.getAttribute('aria-controls'));
+    if (!panel) return;
+    panel.hidden = !panel.hidden;
+    button.setAttribute('aria-expanded', String(!panel.hidden));
+    const indicator = button.querySelector('span');
+    if (indicator) indicator.textContent = panel.hidden ? '＋' : '−';
+  }));
   const count = $('#result-count');
   const noData = $('#no-data');
   const noMatch = $('#no-match');

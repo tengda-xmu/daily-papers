@@ -13,6 +13,13 @@
 .reading-article h3{font-family:var(--font);font-size:19px;line-height:1.65;font-weight:700;color:#153e64;margin:25px 0 15px}
 .reading-article p{margin-bottom:20px}.reading-article strong{font-weight:700;color:#153e64}
 .article-diagram{margin:28px 0 32px}.article-diagram h3{font-size:17px}.article-diagram img{display:block;width:100%;height:auto}
+.article-figure-group{margin:28px 0 34px}.article-figure-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 20px;align-items:start}
+.article-figure-grid:has(>.article-original-figure:only-child){grid-template-columns:1fr}
+.article-original-figure{min-width:0;margin:0}.article-original-figure img{display:block;width:100%;height:auto;object-fit:contain}
+.article-original-figure>a{display:block;cursor:zoom-in}.article-original-figure figcaption{font-size:13px;line-height:1.8;color:#526274;margin-top:12px}
+.article-original-figure figcaption p{margin:6px 0 10px}.article-original-figure summary{cursor:pointer;margin-top:8px}
+.wechat-reprint>.article-original-figure{margin:26px 0}.wechat-reprint .article-original-figure img{max-height:none}
+@media(max-width:600px){.article-figure-grid{grid-template-columns:1fr;gap:28px}}
 .article-diagram>a{display:block;cursor:zoom-in}.article-diagram figcaption{font-size:13px;line-height:1.8;margin-top:14px;color:#526274}
 .article-diagram figcaption p{margin:6px 0 10px}.article-diagram details{margin-top:10px}.article-diagram summary{cursor:pointer}
 .experiment-evidence{margin:28px 0}.experiment-evidence table{width:100%;border-collapse:collapse;font-size:14px;margin:0 0 22px;table-layout:fixed}

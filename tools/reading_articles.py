@@ -103,7 +103,43 @@ def diagram_svg(diagram, *, mobile=False):
     return ''.join(output) + '</svg>'
 
 
-def render_article(paper, *, root='../'):
+def original_figure_groups(article, figures, section, root):
+    """Resolve model-selected IDs only against independently validated originals."""
+    from tools.build_site import safe_url
+    available = {f['figure_id']: f for f in figures}
+    output = []
+    for group in article.get('figure_groups', []):
+        if group.get('section') != section:
+            continue
+        panels = []
+        for panel in group.get('panels', [])[:4]:
+            original = available.get(panel.get('figure_id'))
+            if not original:
+                continue
+            asset = original.get('asset') or original.get('image_path', '')
+            if not re.fullmatch(r'assets/figures/[A-Za-z0-9_.-]+\.(?:png|jpe?g|webp)', asset):
+                continue
+            label = original.get('figure_label', '原文图')
+            title = original.get('title_zh') or original.get('title') or label
+            caption = panel.get('caption', '')
+            credit = original.get('credit', '')
+            source_url, license_url = safe_url(original.get('source_url')), safe_url(original.get('license_url'))
+            attribution = (f'<a href="{source_url}" target="_blank" rel="noopener noreferrer">原文图页</a>'
+                           + (f' · <a href="{license_url}" target="_blank" rel="noopener noreferrer">{escape(original.get("license", "许可"))}</a>' if license_url != '#' else ''))
+            panels.append('<figure class="article-original-figure"><a class="article-zoom" '
+                          f'href="{escape(root+asset)}" aria-label="放大查看{escape(label)}">'
+                          f'<img src="{escape(root+asset)}" alt="{escape(title)}" loading="lazy" decoding="async"></a>'
+                          + '<figcaption><strong>' + escape(label) + '</strong>'
+                          + ('<p>图解：' + prose(caption) + '</p>' if caption else '')
+                          + '<details><summary>原文图注与出处</summary><p>' + escape(original.get('caption', '')) + '</p>'
+                          + '<p>' + escape(credit) + '</p>' + attribution + '</details></figcaption></figure>')
+        if panels:
+            output.append('<section class="article-figure-group"><h3>' + escape(group.get('title', '论文原图'))
+                          + '</h3><div class="article-figure-grid">' + ''.join(panels) + '</div></section>')
+    return ''.join(output)
+
+
+def render_article(paper, *, root='../', figures=(), coverage=None):
     from tools.build_site import document, display_time, safe_url
     from src.paper_titles import chinese_title
     article = paper.get('article')
@@ -112,13 +148,15 @@ def render_article(paper, *, root='../'):
     url = safe_url(paper.get('landing_url') or 'https://doi.org/'+paper.get('doi',''))
     authors = ', '.join(paper.get('authors') or [])
     time_label = display_time(paper.get('article_updated_at') or paper.get('analyzed_at'))[1]
+    from tools.coverage_pages import coverage_panel
+    coverage_button, coverage_html = coverage_panel(paper['id'], coverage, root=root, suffix='article')
     header = (f'<article class="reading-article" data-paper-id="{escape(paper["id"])}"><a class="article-back" href="{root}">返回每日推荐</a>'
         f'<header class="article-header"><p class="article-type">论文精读</p><h1>{escape(title)}</h1>{original}'
         f'<p class="article-byline">{escape(authors)}<br>{escape(paper.get("venue", ""))}</p>'
         f'<p class="article-updated">精读更新 {escape(time_label)} · 依据论文全文整理</p>'
         f'<div class="article-links"><a href="{url}" target="_blank" rel="noopener noreferrer">阅读原文</a>'
         f'<button type="button" class="text-button copy-citation" data-citation="{escape(authors+". "+paper["title"]+". "+paper.get("venue","")+". "+url)}">复制引用</button>'
-        f'<button type="button" class="text-button codex-entry" data-local-only data-paper-id="{escape(paper["id"])}" data-paper-title="{escape(title)}">Codex 对话</button></div></header>')
+        f'{coverage_button}<button type="button" class="text-button codex-entry" data-local-only data-paper-id="{escape(paper["id"])}" data-paper-title="{escape(title)}">Codex 对话</button></div>{coverage_html}</header>')
     if not article:
         labels = ('研究问题', '方法与路线', '创新与比较', '证据与发现', '局限与边界', '方向关联', '后续研究建议')
         from src.reading_notes import NOTE_FIELDS
@@ -127,7 +165,9 @@ def render_article(paper, *, root='../'):
         body += ''.join(f'<section><h2>{label}</h2><p>{prose(paper.get("deep_read", {}).get(key, ""))}</p></section>' for key, label in zip(NOTE_FIELDS, labels))
     else:
         def figure(kind):
-            diagram = next(d for d in article['diagrams'] if d['kind'] == kind)
+            diagram = next((d for d in article['diagrams'] if d['kind'] == kind), None)
+            if diagram is None:
+                return ''
             src = f'{root}assets/reading-diagrams/{paper["id"]}-{kind}'
             label = '本站根据论文绘制' if kind == 'study' else '本站提出的研究建议'
             relations = '；'.join(next(n['label'] for n in diagram['nodes'] if n['id']==e['from']) + ' → '
@@ -141,6 +181,7 @@ def render_article(paper, *, root='../'):
             f'<a href="#{s["id"]}">{escape(s["title"])}</a>' for s in article['sections']) + '<a href="#future">从这篇论文走向下一项研究</a><a href="#related">相关研究与资料说明</a></nav></details>'
         for section in article['sections']:
             body += f'<section id="{section["id"]}"><h2>{escape(section["title"])}</h2>' + ''.join('<p>'+prose(p)+'</p>' for p in section['paragraphs'])
+            body += original_figure_groups(article, figures, section['id'], root)
             if section['id'] == 'method':
                 body += figure('study')
             if section['id'] == 'validation':
@@ -189,6 +230,11 @@ def build_articles(data, out, analyses):
                 papers.setdefault(paper['id'], paper)
     directory = out/'readings'; directory.mkdir(parents=True, exist_ok=True)
     images = out/'assets/reading-diagrams'; images.mkdir(parents=True, exist_ok=True)
+    from src.article_figures import eligible_article_figures, copy_article_figures, public_article_figure_manifest
+    from src.paper_coverage import load_public
+    coverage = load_public(data.parent)
+    from src.editions import write
+    write(out/'article-figures.json', public_article_figure_manifest(data.parent, list(papers.values())))
     # Only remove files owned by this generator, after resolving within its directory.
     expected = set(papers)
     for path in directory.glob('*.html'):
@@ -198,7 +244,9 @@ def build_articles(data, out, analyses):
         if re.fullmatch('[a-f0-9]{12}-(?:study|proposal)(?:-mobile)?', path.stem) and path.resolve().parent == images.resolve():
             path.unlink()
     for identifier, paper in papers.items():
-        (directory/(identifier+'.html')).write_text(render_article(paper), encoding='utf-8')
+        figures = eligible_article_figures(data.parent, paper)
+        copy_article_figures(data.parent, paper, out)
+        (directory/(identifier+'.html')).write_text(render_article(paper, figures=figures, coverage=coverage.get(identifier)), encoding='utf-8')
         for diagram in (paper.get('article') or {}).get('diagrams', []):
             for mobile in (False, True):
                 name = identifier+'-'+diagram['kind']+('-mobile' if mobile else '')+'.svg'

@@ -11,7 +11,7 @@ from src.auto_reading import public_analysis, public_status, status_label
 from src.editions import write
 from src.models import RawRecord, SourceStatus
 from src.reading_article import (ARTICLE_VERSION, EXPERIMENT_FIELDS, ROUTE_FIELDS,
-    article_key, profile_context, public_article, without_page_citations)
+    article_claim_targets, article_key, profile_context, public_article, without_page_citations)
 from tests.test_fulltext_reading import FullClient, material
 from tests.test_reading_queue import sample, task
 from connectors.codex_bridge.reading_queue import ReadingQueue
@@ -89,17 +89,29 @@ def test_related_search_budget_cache_and_teasers(tmp_path):
 class ArticleClient(FullClient):
     def __init__(self,p,approve=True):
         super().__init__(p);self.approve=approve;self.article_calls=[]
+        self.fact_quote=p['abstract'][:160]
+        self.fact_detail='物理约束模型使用独立试验结果进行验证。'
+        self.article_value=article_fixture()
+        self.article_images=[]
     async def thread(self,existing=None,*,purpose='reading'):
         assert purpose in ('reading','article')
         return await super().thread(existing)
     async def turn(self,thread,prompt,images=()):
         self.article_calls.append(prompt)
+        self.article_images.append(list(images))
         if prompt.startswith('从以下已核实'):
             labels=list(dict.fromkeys(re.findall(r'\[(P\d+)\]',prompt)))
-            v={'facts':[{'kind':'method','detail':'物理约束模型使用独立试验结果进行验证。','refs':labels}],
-               'experiments':[{**{k:'本批未报告' for k in EXPERIMENT_FIELDS},'refs':labels}], 'queries':['fatigue model']}
-        elif prompt.startswith('撰写一篇'):v=article_fixture()
-        elif prompt.startswith('核验以下'):v={'approved':self.approve,'issues':[] if self.approve else ['对比实验误用数量']}
+            v={'facts':[{'kind':'method','detail':self.fact_detail,'refs':labels,
+                        'evidence':[{'source':'text','page':label,'quote':self.fact_quote} for label in labels]}],
+               'experiments':[{**{k:'本批未报告' for k in EXPERIMENT_FIELDS},'refs':labels,
+                              'evidence':{k:[] for k in EXPERIMENT_FIELDS}}], 'queries':['fatigue model']}
+        elif prompt.startswith('撰写一篇'):
+            v=deepcopy(self.article_value)
+            v['claim_evidence']={key:[] if key.startswith('experiments.') and value=='原文未报告' else ['b0.f0']
+                                 for key,value in article_claim_targets(v).items()}
+        elif prompt.startswith('核验以下'):
+            targets=json.loads(prompt.split('\n待核验目标：',1)[1].split('\n',1)[0])
+            v={'approved':self.approve,'issues':[] if self.approve else ['对比实验误用数量'],'checked_claims':targets}
         else:
             async for e in super().turn(thread,prompt,images):yield e
             return

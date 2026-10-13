@@ -198,6 +198,15 @@ class ReadingQueue:
         for paper in papers.values():
             priority = 200 if paper['id'] in {p['id'] for p in latest.get('core', [])} else 100 if paper['id'] in {p['id'] for p in latest.get('extended', [])} else 0
             self.enqueue(paper, priority=priority)
+        # Share the exact publicly licensed originals used by the static site.
+        # This optional enrichment cannot interrupt recommendation/task sync.
+        try:
+            from src.article_figures import sync_public_article_figures
+            latest_ids = {p['id'] for p in selected(latest)}
+            ordered = sorted(papers.values(), key=lambda p: p['id'] not in latest_ids)
+            sync_public_article_figures(self.root, ordered, fetch)
+        except Exception:
+            pass
         self.sync_state = 'ok'
 
     def document_available(self, identifier):

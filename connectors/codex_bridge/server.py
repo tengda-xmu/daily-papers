@@ -1127,11 +1127,37 @@ def create_app(root=ROOT, runtime=None, rpc=None, automatic_updates=None):
 
     @app.get('/assets/figures/{name}')
     async def recommendation_figure(name: str):
-        directory = (root / 'tools/assets/figures').resolve()
-        path = (directory / name).resolve()
-        if not re.fullmatch(r'[A-Za-z0-9_.-]+\.(?:png|jpg|jpeg|webp)', name) or path.parent != directory or not path.is_file():
+        from src.article_figures import article_figure_file
+        path = article_figure_file(root, {'asset': 'assets/figures/' + name})
+        if path is None:
             raise HTTPException(404)
         return FileResponse(path)
+
+    @app.get('/wechat/{name}')
+    async def wechat_reprint_page(name: str):
+        if not re.fullmatch(r'[a-f0-9]{24}\.html', name):
+            raise HTTPException(404)
+        from src.paper_coverage import load_public
+        from tools.coverage_pages import article_name, render_reprint
+        for record in load_public(root).values():
+            for article in record['articles']:
+                if article.get('display_mode') == 'reprint' and article_name(article) == name[:-5]:
+                    return Response(render_reprint(article), media_type='text/html')
+        raise HTTPException(404, '站内转载暂不可用，请从公众号介绍打开原文。')
+
+    @app.get('/assets/wechat/{name}')
+    async def wechat_reprint_image(name: str):
+        from src.paper_coverage import ASSET, CACHE, load_public, _asset_bytes
+        src = 'assets/wechat/' + name
+        if not ASSET.fullmatch(src):
+            raise HTTPException(404)
+        allowed = any(b.get('src') == src for record in load_public(root).values()
+                      for article in record['articles'] for b in article.get('blocks', []) if b.get('type') == 'image')
+        if allowed:
+            body = _asset_bytes(root / CACHE / 'assets', src) or _asset_bytes(root / 'site/assets/wechat', src)
+            if body:
+                return Response(body, media_type='image/png')
+        raise HTTPException(404)
 
     def published_article(identifier):
         # The local site follows confirmed public results without requiring a
@@ -1156,7 +1182,10 @@ def create_app(root=ROOT, runtime=None, rpc=None, automatic_updates=None):
         paper = published_article(name[:-5])
         if paper:
             from tools.reading_articles import render_article
-            return Response(render_article(paper), media_type='text/html')
+            from src.article_figures import eligible_article_figures
+            from src.paper_coverage import load_public
+            return Response(render_article(paper, figures=eligible_article_figures(root, paper),
+                                           coverage=load_public(root).get(paper['id'])), media_type='text/html')
         path = root / 'site/readings' / name
         if not path.is_file():
             raise HTTPException(404, '精读文章尚未发布，请稍后刷新。')
@@ -1170,7 +1199,9 @@ def create_app(root=ROOT, runtime=None, rpc=None, automatic_updates=None):
         if paper:
             from tools.reading_articles import diagram_svg
             kind = 'proposal' if '-proposal' in name else 'study'
-            diagram = next(d for d in paper['article']['diagrams'] if d['kind'] == kind)
+            diagram = next((d for d in paper['article']['diagrams'] if d['kind'] == kind), None)
+            if diagram is None:
+                raise HTTPException(404)
             return Response(diagram_svg(diagram, mobile='-mobile' in name), media_type='image/svg+xml')
         path = root / 'site/assets/reading-diagrams' / name
         if not path.is_file():
@@ -1196,13 +1227,14 @@ def create_app(root=ROOT, runtime=None, rpc=None, automatic_updates=None):
     @app.get('/recommendations.html')
     async def recommendations_page():
         from tools.build_site import render
+        from src.paper_coverage import load_public
         from src.editions import read, manifest
         path = runtime / 'recommendations.json'
         if not path.exists():
             path = root / 'data/daily.json'
         payload = json.loads(path.read_text(encoding='utf-8')) if path.exists() else {}
         removed = {e['id'] for e in manifest(root / 'data')['deleted'] + read(runtime / 'edition-manifest.json').get('deleted', [])}
-        return Response(render(payload, deleted_editions=removed), media_type='text/html')
+        return Response(render(payload, deleted_editions=removed, coverage=load_public(root)), media_type='text/html')
 
     @app.get('/directions.html')
     async def directions_page():
@@ -1223,6 +1255,7 @@ def create_app(root=ROOT, runtime=None, rpc=None, automatic_updates=None):
     @app.get('/archive/')
     @app.get('/archive/{name}')
     async def archive_page(name: str = 'index.html'):
+        from src.paper_coverage import load_public
         from src.editions import read, archive_name, valid_entry, manifest, current_id
         from tools.build_site import render, archive_index
         cache = read(runtime / 'edition-manifest.json')
@@ -1249,7 +1282,7 @@ def create_app(root=ROOT, runtime=None, rpc=None, automatic_updates=None):
         if match[3] == 'json':
             return payload
         entry = payload['edition']
-        page = render(payload, archive_date=f'{entry["date"]} · 第 {entry["number"]} 批', deleted_editions=deleted)
+        page = render(payload, archive_date=f'{entry["date"]} · 第 {entry["number"]} 批', deleted_editions=deleted, coverage=load_public(root))
         return Response(page.replace('href="../">返回最新一期', 'href="/recommendations.html">返回最新一期'), media_type='text/html')
 
     return app

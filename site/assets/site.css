@@ -215,7 +215,20 @@ select { width: 100%; min-width: 0; padding: 9px 10px; border: 1px solid #ced8e2
 .bibliography { display: flex; flex-wrap: wrap; column-gap: 16px; row-gap: 2px; margin-bottom: 13px; color: var(--muted); font-size: 13px; }
 .venue { color: var(--muted); }
 .abstract { max-width: 76em; margin-bottom: 14px; color: var(--ink); font-size: 16px; line-height: 1.8; overflow-wrap: anywhere; }
-.paper-tools { display: flex; align-items: center; gap: 22px; font-size: 12px; }
+.paper-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px; font-size: 12px; }
+.coverage-toggle { display:inline-flex; align-items:center; gap:7px; font-weight:600; }
+.paper-coverage-panel { margin-top:20px; padding:16px 0; border-top:1px solid var(--line, #e3e9ef); font-size:15px; line-height:1.8; overflow-wrap:anywhere; }
+.paper-coverage-panel[hidden] { display:none; }
+.coverage-status, .coverage-checked, .coverage-source { color:var(--muted); font-size:13px; margin:0 0 8px; }
+.coverage-list { list-style:none; margin:0; padding:0; }
+.coverage-list li { padding:18px 0; border-bottom:1px solid var(--line, #e3e9ef); }
+.coverage-list h4 { font-size:17px; line-height:1.6; margin:0 0 6px; }
+.coverage-list p { margin:6px 0; }
+.coverage-actions { display:flex; flex-wrap:wrap; gap:12px 22px; font-size:14px; margin-top:12px; }
+.coverage-candidates { margin:12px 0; font-size:14px; }
+.coverage-candidates summary { cursor:pointer; }
+html:not(.js) .paper-coverage-panel[hidden] { display:block; }
+html:not(.js) .coverage-toggle { display:none; }
 .paper-tools > a, .paper-tools > .codex-entry, .paper-tools > .paper-toggle, .paper-direction { font-weight:600; }
 .paper-figure { display: grid; grid-template-columns: fit-content(48%) minmax(0, 1fr); align-items: center; gap: 28px; margin: 24px 0; }
 .figure-preview { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; color: var(--muted); cursor: zoom-in; }
