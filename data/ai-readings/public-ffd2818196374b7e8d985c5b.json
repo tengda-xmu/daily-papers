@@ -1,14 +1,13 @@
 {
   "id": "public-ffd2818196374b7e8d985c5b",
-  "content_version": "73885c84b0a08e413efce33e474a19f523fad9174d53fea8a7da1b78982956b1",
+  "content_version": "dd5ef5bc38c608694ba55bafb8ed8baaf8bc3fc1bd636a7dd1d1ab5fe569bd83",
   "analysis": {
-    "title_zh": "借助 ML Intern 构建所需模型：Qwen-Image 2.1 提示词改写器的小型化实践",
-    "summary": "原文作者分享了借助 ML Intern 构建小型提示词改写器的经历：针对 Qwen-Image 2.1 配套的9B模型，作者描述需求后，次日获得可在CPU运行的0.8B版本。作者报告其有效输出率为99.7%，输出token用量约为教师模型的四分之一；整个项目计算开销为16美元，包含教师模型标注8,797条请求。该案例适用于提示词改写与模型轻量化探索，但属于作者实践报告，所给片段未提供完整评测方法。[S1]",
-    "application": "建议：[本站解读]科研中可探索将大型提示词改写器迁移为CPU可运行的小模型，并自行验证格式有效性、语义保真度及资源消耗。原文中的99.7%有效输出率和token节省属于作者案例报告，不应视为 ML Intern 对其他科研任务的官方已验证效果或保证。[S1]",
-    "requirements": "原文明示：作者构建的0.8B版本可在CPU运行；官方9B提示词改写模型约需20 GB内存。USD 16是该案例整个项目的计算开销，并非产品定价。账号、API、软件版本及其他部署条件未明确，使用条件见官方文档。[S1]",
+    "title_zh": "用 ML Intern 构建原本不存在的模型：Qwen-Image 2.1 提示词改写器的小型化案例",
+    "summary": "【原文案例】作者希望将 Qwen-Image 2.1 配套的提示词改写器小型化：原版为9B模型，约需20 GB内存。向 ML Intern 描述需求后，作者称次日获得可在CPU运行的0.8B版本，有效输出率为99.7%，使用的token约为教师模型的四分之一。项目计算费用为16美元，包含教师模型标注8,797条请求。该案例适用于提示词改写与小模型构建探索，但所给节选未提供完整评测方法，不宜视为产品通用性能承诺。",
+    "application": "建议：【你的推断】科研中可借鉴该案例，探索将大型提示词改写器迁移为CPU可运行的小模型，并独立评估输出有效性、改写质量与计算成本。【原文证据边界】上述效果属于作者项目报告；所给节选没有提供官方通用验证结果，也未说明其他任务能否复现。",
+    "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
-      "Last week, I wanted a small version of the prompt rewriter that ships with Qwen-Image 2.1.",
       "The official one is a 9B model that needs about 20 GB of memory and thinks for thousands of tokens before writing a single paragraph.",
       "So I described what I wanted to ML Intern , and the next day I had a 0.8B version that runs on a CPU.",
       "It returns valid output 99.7% of the time and uses about a quarter of the teacher's tokens.",
@@ -16,5 +15,5 @@
     ],
     "basis_url": "https://huggingface.co/blog/building-with-ml-intern"
   },
-  "analyzed_at": "2026-10-13T22:06:54.166653+00:00"
+  "analyzed_at": "2026-10-14T00:08:05.166363+00:00"
 }
