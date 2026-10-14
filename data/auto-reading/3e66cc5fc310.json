@@ -1,0 +1,40 @@
+{
+  "paper_id": "3e66cc5fc310",
+  "fingerprint": "bda4795875c82610819446179e2a223919b63d26787f3ca37c1134861597f6ff",
+  "analysis": {
+    "title_zh": "超越全局类药性：面向靶标家族的FamDLike类药性评分框架",
+    "summary": "全局类药性评分是否适合所有靶标家族？本文摘要指出，不同家族的配体占据不同理化空间，统一标准可能造成系统性奖惩偏差。FamDLike结合期望度函数、广义加性模型和树模型，支持在可解释性与预测灵活性之间选择，并在独立分子集、化合物库筛选及生成任务中测试。其价值在于为生成式药物设计提供靶标感知的评价目标，但摘要未给出量化性能，不能据此认定优于现有方法。[摘要]",
+    "recommendation": "推荐关注生成式分子设计评价与奖励函数的研究者重点阅读：其将靶标家族差异纳入类药性评分，并提供三类可独立使用的模型；是否值得实际采用仍需核对全文实验。[摘要]",
+    "deep_read": {
+      "problem": "论文针对统一类药性标准与靶标家族需求不匹配的问题。摘要指出，不同家族配体占据不同理化空间，单一标准可能“reward some target classes while penalising others”。这涉及筛选及生成奖励中的评价偏差，而非直接预测药效。[摘要]",
+      "method": "FamDLike采用靶标家族特异的类药性建模，结合期望度函数、广义加性模型与树模型。摘要明确三部分“can also be used independently”，可按可解释性或预测灵活性的优先级选择；但未说明输入描述符、训练标签、模型参数和数据划分。[摘要]",
+      "innovation": "解读：主要方法特色是把全局统一评价转向靶标家族条件下的评价，并通过三种互补模型覆盖可解释性与灵活性的不同需求。作者将其定位为现有评分的“target-aware complement”，而非全面替代；摘要不足以核实其相对既有工作的首创性。[摘要]",
+      "findings": "摘要报告测试覆盖DrugBank独立集合、Enamine与KLIFS化合物库筛选，以及通过REINVENT4进行从头分子生成。作者称该方法更具区分性、可解释性和靶标感知能力，但没有提供指标、效应大小或统计检验，因此只能确认测试场景与定性结论。[摘要]",
+      "limitations": "当前仅有摘要，无法核查家族覆盖范围、样本不平衡、外部测试独立性及奖励优化后的分子质量。上述属于资料不足，并非作者已证实的模型缺陷。摘要的“real-world use cases”也不能直接等同于实验活性、药代性质或临床有效性的验证。[摘要]",
+      "connection": "解读：与给定生成式设计标签直接相关，因为类药性评分可作为生成模型的奖励函数，摘要明确提到“reward function for generative chemistry”。若迁移到工程结构设计或可靠性研究，可借鉴按对象类别设置评价标准的思路，但本文未验证这些领域。[摘要]",
+      "next_steps": "建议：获取全文后，优先核对家族定义、数据划分和三类模型的对照实验，再检查生成任务是否同时评价多样性及其他药物发现目标。若开展复现，可比较全局评分与家族评分对候选排序的影响；这些是后续研究建议，不是摘要已经报告的实验。[摘要]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://pubmed.ncbi.nlm.nih.gov/42868667/"
+    ],
+    "analyzed_at": "2026-10-14T13:27:02.242893+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": true,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "按提供的generative_design标签判断，摘要明确将方法用于生成式化学奖励，并给出三类模型和多个测试场景，足以支持方向契合及方法值得重点阅读的判断；但不足以支持量化优越性或实际药效判断。[摘要]",
+    "evidence": "This framework combines three complementary modelling paradigms: desirability functions, generalized additive models and tree-based machine learning models that span the interpretability-flexibility spectrum."
+  },
+  "material": {
+    "version": "88ceccf1d1e409d7ce97404269c1f4cc0cad523829f0e00fd59ee00dcca43282",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "This framework combines three complementary modelling paradigms: desirability functions, generalized additive models and tree-based machine learning models that span the interpretability-flexibility spectrum."
+  }
+}
