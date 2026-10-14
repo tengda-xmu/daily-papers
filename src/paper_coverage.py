@@ -402,7 +402,9 @@ def _public_article(row, grants):
     if re.fullmatch(r'[a-f0-9]{64}', str(row.get('source_version', ''))):
         result['source_version'] = row['source_version']
     if method == 'manual_screenshot' and row.get('summary_status') != 'ready':
-        result['summary'] = '依据用户提供的文章截图核对了论文身份，可通过来源链接阅读公众号原文。'
+        # The UI already explains the screenshot evidence and access status;
+        # do not disguise a repeated source note as a body-based introduction.
+        result['summary'] = ''
     if (row.get('summary_status') == 'ready' and 40 <= len(clean(row.get('summary'))) <= 180
             and re.fullmatch(r'[a-f0-9]{64}', str(row.get('summary_content_version', '')))):
         result.update(summary=clean(row['summary']), summary_status='ready', summary_content_version=row['summary_content_version'])

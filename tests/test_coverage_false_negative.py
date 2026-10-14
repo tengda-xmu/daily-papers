@@ -48,6 +48,7 @@ def test_known_source_survives_captcha_and_wrong_headline_journal(tmp_path):
     assert article['account'] == 'Ai赋能材料' and article['published_at'].startswith('2026-07-22')
     assert article['match_basis'] == 'manual_screenshot' and article['body_status'] == 'challenge'
     assert article['summary_status'] == 'pending' and article['display_mode'] == 'source'
+    assert article['summary'] == ''
     assert 'blocks' not in article and 'last_search_at' not in row
     public = json.dumps(result, ensure_ascii=False)
     assert 'provenance' not in public and 'transcription' not in public

@@ -69,6 +69,25 @@ def test_private_material_never_grants_public_figure_rights(tmp_path):
     assert eligible_article_figures(tmp_path, PAPER, {'figures': [figure], 'basis': 'full_text'}) == []
 
 
+def test_rebuild_preserves_verified_open_original_but_repairs_corruption(tmp_path, monkeypatch):
+    import shutil
+    figure = original(tmp_path, 1)
+    write(tmp_path / 'data/figures/catalog.json', {'article_entries': {DOI: [figure]}})
+    out = tmp_path / 'site'
+    copy_article_figures(tmp_path, PAPER, out)
+    real_copy = shutil.copyfile
+    def mapped_file(*_):
+        raise OSError(22, 'Original is memory mapped by a viewer')
+    monkeypatch.setattr(shutil, 'copyfile', mapped_file)
+    copy_article_figures(tmp_path, PAPER, out)
+    destination = out / figure['image_path']
+    assert destination.read_bytes() == png()
+    destination.write_bytes(b'corrupted image')
+    monkeypatch.setattr(shutil, 'copyfile', real_copy)
+    copy_article_figures(tmp_path, PAPER, out)
+    assert destination.read_bytes() == png()
+
+
 def test_multiple_publisher_originals_keep_labels_and_exclude_third_party_images():
     html = nature_html() + '''<figure><figcaption>Fig. 3: Proposed workflow</figcaption>
     <img src="https://media.springernature.com/lw685/image/10.1038/example/Fig3.png">

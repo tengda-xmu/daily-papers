@@ -156,6 +156,11 @@ def copy_article_figures(root, paper, out, material=None):
         source = article_figure_file(root, figure)
         destination = out / figure['asset']
         destination.parent.mkdir(parents=True, exist_ok=True)
+        # A viewer may memory-map an existing original on Windows. Do not
+        # truncate an already byte-verified asset merely to copy it again.
+        if (destination.is_file() and destination.stat().st_size <= 20_000_000
+                and hashlib.sha256(destination.read_bytes()).hexdigest() == figure['sha256']):
+            continue
         if source != destination.resolve():
             shutil.copyfile(source, destination)
     return figures
