@@ -3,38 +3,38 @@
   "fingerprint": "98a2116ce3b4b22ee2a69df19f6203d356b2ae65807599dc37237a4f4fe1b262",
   "analysis": {
     "title_zh": "面向带式输送机维护知识图谱的线性拓扑感知对齐框架",
-    "summary": "长距离带式输送机部件高度同质，维护知识图谱容易混淆不同位置的实体。本文以大语言模型结合线性空间锚点，构建本体、日志抽取与实体对齐框架，并建立金标准标注流程。摘要报告，抽取、合并及故障追溯指标均优于所列基线，但排障时间收益来自规则模拟。其价值在于将物理位置引入维护知识组织；适用证据限于所评估的非分支输送机场景，本文仅作摘要级解读。[摘要]",
-    "recommendation": "推荐关注其空间锚点与语言模型协同消歧的方法，尤其适合研究重复设备实体的维护知识图谱；但真实排障收益与跨拓扑泛化仍需全文证据核查。[摘要]",
+    "summary": "本文针对长距离带式输送机维护知识图谱中的空间混淆与语义坍塌，结合大语言模型和归一化线性拓扑，为同类部件建立独立空间锚点，并从维护日志提取故障因果与空间信息。[摘要]报告实体合并、故障追溯等指标优于所列基线，但排障时间收益来自规则仿真而非现场实测。解读：适合关注设备身份消歧与知识图谱运维应用的研究者；当前仅依据摘要，不能核查全文实验细节。",
+    "recommendation": "推荐重点阅读其空间锚点、实体对齐和故障追溯方法，尤其适合研究重复部件密集设备的智能运维；但“non-branching”适用范围及仿真排障收益应单独审查。[摘要]",
     "deep_read": {
-      "problem": "论文针对长距离带式输送机维护知识图谱中的空间混淆与语义坍缩。摘要指出，描述相似而物理位置不同的部件可能被错误合并，口语化、含噪日志还隐藏因果与位置关系。解读：核心问题不是单纯识别故障词，而是保留维护知识对应的具体设备位置。[摘要]",
-      "method": "框架构建Physical–Space–Fault–Rule本体，以归一化线性拓扑赋予部件唯一空间锚点；CCAS机制抽取条件、约束、动作与空间信息。LTA-Alignment结合高斯拓扑惩罚和大语言模型灰区仲裁，并利用日志、BOM及维修闭环证据建立金标准标注。[摘要]",
-      "innovation": "摘要呈现的方法特点，是将空间锚点、日志因果重建与实体合并约束放入同一框架，尤其用拓扑惩罚处理语义近似但位置不同的实体。解读：其潜在创新在于物理拓扑与语言推理的协同，而非仅替换抽取模型；是否具有首创性，摘要不足以确认。[摘要]",
-      "findings": "摘要报告三次预定义运行：CCAS全局F1为94.10 ± 0.56%；实体合并F1为95.75 ± 0.53%，簇纯度为96.70 ± 0.53%；故障追溯Accuracy@1为92.78 ± 0.36%。这些结果支持所评估场景中的性能提升，不等于证明跨场景有效。[摘要]",
-      "limitations": "摘要将结论限定为所评估的“non-branching”输送机维护场景，排障时间减少也明确来自“rule-based simulated”测试。当前资料未提供样本规模、数据划分、模型配置及消融细节。解读：尚不能判断数据泄漏风险、模块独立贡献或现场效率收益。[摘要]",
-      "connection": "解读：该研究与智能运维直接相关，空间定位与故障因果关系可支持设备实体消歧和故障追溯；对可靠性研究，可启发维护事件与具体部件的关联组织。但摘要未报告寿命预测、失效概率或结构优化结果，因此不能将其视为可靠性建模或结构设计方法。[摘要]",
-      "next_steps": "建议：取得全文后，优先核查金标准形成过程、训练测试隔离方式，以及拓扑惩罚和灰区仲裁的消融证据。后续可设计分支拓扑、空间锚点缺失与日志噪声变化测试，并用现场排障记录验证模拟时间收益；这些是研究建议，不是作者已完成的实验。[摘要]"
+      "problem": "研究针对长距离带式输送机维护知识图谱构建中的“spatial confusion and semantic collapse”。[摘要]同类部件语义描述相近，却位于不同物理位置，容易被错误合并；日志还存在噪声与口语表达。解读：核心问题是联合恢复部件身份、空间位置和故障关系，而不只是识别故障词。",
+      "method": "框架构建“Physical–Space–Fault–Rule”本体，用归一化线性拓扑分配唯一空间锚点；CCAS机制从非结构化日志重建隐含故障因果链与空间信息。实体对齐则结合高斯拓扑惩罚与大语言模型灰区裁决。[摘要]未提供计算公式、提示词或裁决阈值，具体实现仍需全文核查。",
+      "innovation": "摘要提出“linear topology-aware alignment framework”，其方法特色是把物理位置约束引入语义相似实体的对齐，并配合条件、约束、动作、空间信息抽取。[摘要]解读：值得关注的是拓扑约束与语言推理的协同，而非单独使用大模型；现有资料不足以确认各模块的首创性。",
+      "findings": "摘要报告三次预定义运行中，CCAS全局F1为94.10 ± 0.56%，实体合并F1为95.75 ± 0.53%，故障追溯Accuracy@1为92.78 ± 0.36%。[摘要]“rule-based simulated troubleshooting time”明确排障时间指标来自规则仿真，不能直接解释为现场效率收益。",
+      "limitations": "结果限定于“evaluated non-branching belt conveyor maintenance setting”。[摘要]因此尚不能据此判断分支输送网络中的表现。摘要也未交代样本规模、数据划分、误差项含义及消融结果；这些属于当前资料的证据缺口，而非已证实的方法缺陷。现场排障收益同样缺少实测依据。",
+      "connection": "摘要以“fault-causal reconstruction, and traceability performance”说明其运维价值。[摘要]解读：该方法与智能运维直接相关，可为设备身份定位和故障追溯提供知识组织基础；与可靠性的联系主要是故障知识支持，尚非失效概率建模，也没有证据表明其直接开展结构设计优化。",
+      "next_steps": "建议取得全文后，先核查“structured gold-standard annotation protocol”的标注与数据划分方式，再检查空间锚点、高斯惩罚和灰区裁决的独立贡献。[摘要]建议后续验证分支拓扑、位置记录缺失及现场排障场景，以检验适用边界；这些是研究建议，不是作者已完成的实验。"
     },
     "analysis_status": "ready",
     "analysis_basis": "abstract",
     "analysis_kind": "model",
     "analysis_sources": [
-      "https://pmc.ncbi.nlm.nih.gov/articles/PMC13611643/"
+      "https://doi.org/10.3390/s26185833"
     ],
-    "analyzed_at": "2026-10-13T01:11:51.037658+00:00",
+    "analyzed_at": "2026-10-14T01:13:00.083791+00:00",
     "llm_model": "gpt-6.1-sol"
   },
   "evaluation": {
     "direction_fit": true,
     "research_value": true,
     "evidence_sufficient": true,
-    "reason": "论文直接面向设备维护知识图谱与故障追溯，切合给定的智能运维方向；摘要明确描述空间拓扑对齐方法，并报告抽取及对齐的基线比较，足以支持重点阅读的初步推荐，但不足以确认真实部署效果与广泛泛化能力。[摘要]",
-    "evidence": "Experiments over three predefined runs show that CCAS achieves a global F1-score of 94.10 ± 0.56%, exceeding T5 by 6.20 percentage points."
+    "reason": "面向给定的智能运维方向，本文直接处理维护知识图谱中的部件消歧和故障追溯，提出明确的拓扑对齐方法，并报告实体合并与聚类指标及基线差异。[摘要]这些信息足以支持重点阅读推荐，但不足以确认实验可复现性、现场收益或对结构设计的直接贡献。",
+    "evidence": "LTA-Alignment achieves a Merge F1-score of 95.75 ± 0.53% and an entity cluster purity of 96.70 ± 0.53%, exceeding SCSA by 3.36 and 3.90 percentage points, respectively."
   },
   "material": {
-    "version": "8f26fc6e1e73960beed804083d8229771ab138a57d15777920aded09abc0fa28",
+    "version": "9903c8fe5b081892208a5e105999e0775446305faebe027e91d9b7036f7fd3f3",
     "total": 1,
     "covered": 1,
     "references": {},
-    "excerpt": "Experiments over three predefined runs show that CCAS achieves a global F1-score of 94.10 ± 0.56%, exceeding T5 by 6.20 percentage points."
+    "excerpt": "LTA-Alignment achieves a Merge F1-score of 95.75 ± 0.53% and an entity cluster purity of 96.70 ± 0.53%, exceeding SCSA by 3.36 and 3.90 percentage points, respectively."
   }
 }
