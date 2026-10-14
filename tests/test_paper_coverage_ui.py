@@ -198,6 +198,135 @@ def test_provider_failure_is_not_mislabeled_as_unreadable_article(state, status,
     assert '来源暂时无法读取' not in html
 
 
+def partial_provider_fixture(*, candidate=False):
+    coverage = {
+        'state': 'unavailable', 'search_status': 'partial',
+        'last_search_at': '2026-10-14T11:45:00+00:00',
+        'search_providers': {
+            'sogou': {'state': 'ok', 'queries_completed': 3, 'results': 0,
+                      'checked_at': '2026-10-14T12:30:00+00:00'},
+            'serpapi': {'state': 'blocked', 'queries_completed': 0, 'results': 0,
+                        'retry_at': '2026-10-15T11:50:00+00:00'},
+        },
+    }
+    if candidate:
+        coverage['search_providers']['sogou'].update(results=1, link_resolution='blocked')
+        coverage['candidates'] = [{
+            'url': 'https://weixin.sogou.com/weixin?type=2&query=example',
+            'title': '人工智能与增材制造：方法设计、工业验证和未来挑战的综述介绍（待核实是否对应本篇论文）',
+            'account': '制造研究', 'published_at': '2026-10-14', 'reason': 'index_only',
+        }]
+    return coverage
+
+
+def test_healthy_index_is_not_hidden_by_another_provider_failure():
+    _, html = coverage_panel('abc', partial_provider_fixture())
+    soup = BeautifulSoup(html, 'html.parser')
+    assert '已完成部分渠道检索' in soup.select_one('.coverage-status').get_text()
+    assert '公开索引访问受限' not in html
+    index = soup.select_one('[data-search-provider="sogou"]').get_text()
+    web = soup.select_one('[data-search-provider="serpapi"]').get_text()
+    assert '公众号索引：已完成检索' in index and '2026-10-14 20:30' in index
+    assert '网页搜索：访问受限' in web and '下次重试 2026-10-15 19:50' in web
+    assert '最近检索' not in web
+    assert '2026-10-14 19:45' not in html
+    assert '已核对以下文章' not in html
+
+
+def test_index_candidates_are_visible_and_link_failures_remain_separate():
+    _, html = coverage_panel('abc', partial_provider_fixture(candidate=True))
+    soup = BeautifulSoup(html, 'html.parser')
+    candidates = soup.select_one('.coverage-candidates')
+    assert candidates and candidates.name == 'section'
+    assert not candidates.has_attr('hidden') and not candidates.find_parent('details')
+    assert '制造研究 · 2026-10-14' in candidates.get_text()
+    assert '仅有公开索引线索，论文关联待核实' in candidates.get_text()
+    assert '已保留索引线索' in soup.select_one('[data-search-provider="sogou"]').get_text()
+    assert '已完成部分渠道检索' not in soup.select_one('.coverage-status').get_text()
+    assert '找到候选来源，待核实' in soup.select_one('.coverage-status').get_text()
+    assert not soup.select('.coverage-list')
+
+
+def test_rejected_index_rows_are_not_described_as_visible_candidates():
+    coverage = partial_provider_fixture()
+    coverage['search_providers']['sogou'].update(results=70, link_resolution='blocked')
+    _, html = coverage_panel('abc', coverage)
+    assert '返回内容尚不能确认与本论文对应' in html
+    assert '已返回候选线索' not in html and '已保留索引线索' not in html
+    assert 'coverage-candidates' not in html
+
+
+def multiple_candidate_fixture():
+    coverage = partial_provider_fixture(candidate=True)
+    template = coverage['candidates'][0]
+    coverage['candidates'] = [{**template, 'title': template['title'] + str(index),
+        'published_at': f'2026-10-{index + 1:02d}',
+        'url': template['url'] + str(index)} for index in range(12)]
+    return coverage
+
+
+def test_candidates_keep_all_sources_but_show_the_latest_eight_first():
+    coverage = multiple_candidate_fixture()
+    coverage['candidates'].insert(0, {
+        'title': '日期尚未核实的线索', 'url': 'https://mp.weixin.qq.com/s/undated', 'reason': 'article_unavailable'})
+    _, html = coverage_panel('abc', coverage)
+    soup = BeautifulSoup(html, 'html.parser')
+    candidates = soup.select_one('.coverage-candidates')
+    assert '仅为相关主题的检索线索，尚未确认介绍本论文' in candidates.get_text()
+    assert len(candidates.select(':scope > ul > li')) == 8
+    assert len(candidates.select('li')) == 13
+    assert candidates.select_one('a')['href'] == coverage['candidates'][-1]['url']
+    assert candidates.select('a')[-1]['href'].endswith('/undated')
+    assert candidates.select_one('details summary').get_text() == '其余5条待核实线索'
+    assert not candidates.select_one('details').has_attr('open')
+    assert '日期尚未核实的线索' in html
+
+
+@pytest.mark.parametrize('width', [390, 1440])
+def test_provider_results_and_long_candidates_are_visible_on_home_and_history(browser, width):
+    paper = sample()
+    paper.update(analysis_status='ready', analysis_basis='abstract')
+    coverage = multiple_candidate_fixture()
+    home = render({'core': [paper]}, coverage={paper['id']: coverage})
+    archive = render({'core': [paper]}, archive_date='2026-10-14', coverage={paper['id']: coverage})
+    context = browser.new_context(viewport={'width': width, 'height': 920})
+
+    def route(request):
+        path = urlsplit(request.request.url).path
+        if '/archive/' in path:
+            request.fulfill(body=archive, content_type='text/html')
+        elif path.endswith('index.html'):
+            request.fulfill(body=home, content_type='text/html')
+        elif '/assets/' in path:
+            file = ROOT / 'tools/assets' / path.split('/assets/', 1)[1]
+            if file.is_file():
+                request.fulfill(body=file.read_bytes(), content_type=mimetypes.guess_type(file.name)[0] or 'application/octet-stream')
+            else:
+                request.abort()
+        else:
+            request.abort()
+
+    context.route('**/*', route)
+    page = context.new_page()
+    try:
+        for path in ('index.html', 'archive/2026-10-14.html'):
+            page.goto(BASE + path, wait_until='networkidle')
+            page.locator('.coverage-toggle').click()
+            assert page.locator('.coverage-candidates a:visible').count() == 8
+            assert coverage['candidates'][-1]['title'] in page.locator('.coverage-candidates').inner_text()
+            assert page.locator('[data-search-provider="sogou"]').is_visible()
+            assert page.locator('[data-search-provider="serpapi"]').is_visible()
+            actions = page.locator('.paper-tools > *').all_text_contents()
+            assert next(i for i, text in enumerate(actions) if '公众号介绍' in text) < next(i for i, text in enumerate(actions) if 'Codex 对话' in text)
+            assert not page.evaluate('document.documentElement.scrollWidth > innerWidth + 1')
+            page.locator('.coverage-candidates-more summary').click()
+            assert page.locator('.coverage-candidates a:visible').count() == 12
+            assert coverage['candidates'][0]['title'] in page.locator('.coverage-candidates').inner_text()
+            assert not page.evaluate('document.documentElement.scrollWidth > innerWidth + 1')
+    finally:
+        context.close()
+
+
 def test_reprint_and_figures_escape_external_markup():
     row = coverage_fixture()['articles'][0]
     row['title'] += '<script>alert(1)</script>'

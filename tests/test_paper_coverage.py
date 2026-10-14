@@ -121,7 +121,7 @@ def test_snippet_candidate_remains_unverified_when_body_is_unavailable(tmp_path)
     setup(tmp_path)
     result = coverage.collect(tmp_path, NOW, key='key', searcher=search, fetcher=lambda *_: b'<html>Login</html>')
     row = result['papers'][PAPER['id']]
-    assert row['state'] == 'unavailable' and row['articles'] == []
+    assert row['state'] == 'pending_match' and row['articles'] == []
     assert row['candidates'][0]['reason'] == 'article_unavailable'
 
 
@@ -416,7 +416,8 @@ def test_index_only_local_candidate_has_search_entry_and_no_article_claim(tmp_pa
          'url': 'https://weixin.sogou.com/weixin?type=2&query=test', 'evidence_kind': 'search_snippet'}]})
     result = coverage.collect(tmp_path, NOW, key='')
     row = result['papers'][PAPER['id']]
-    assert not row['articles'] and row['state'] == 'configuration_missing'
+    assert not row['articles'] and row['state'] == 'pending_match'
+    assert row['search_status'] == 'configuration_missing'
     assert row['candidates'][0]['reason'] == 'index_only'
     assert row['candidates'][0]['url'].startswith('https://weixin.sogou.com/weixin?type=2&query=')
 

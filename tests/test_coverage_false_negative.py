@@ -159,8 +159,8 @@ def test_sogou_candidates_survive_partial_block_and_google_empty(tmp_path):
     def index(*_):
         return {'state': 'blocked', 'organic_results': [
             {'link': 'https://weixin.sogou.com/weixin?type=2&query=fixture',
-             'title': '公众号研究', 'account': '科研号', 'reason': 'index_only'},
-            {'link': URL, 'title': '可读来源'}]}
+             'title': PAPER['title'], 'account': '科研号', 'reason': 'index_only'},
+            {'link': URL, 'title': '可读来源', 'snippet': 'DOI: 10.1234/fixture'}]}
     row = coverage.collect(tmp_path, NOW, key='key', searcher=lambda *_: {'organic_results': []},
         index_searcher=index, fetcher=lambda *_: page())['papers'][PAPER['id']]
     assert row['state'] == 'matched' and row['search_status'] == 'partial'
@@ -229,8 +229,133 @@ def test_results_ignoring_domain_filter_are_failure_not_empty_index(tmp_path):
         return {'search_metadata': {'status': 'Success'}, 'organic_results': [
             {'link': 'https://www.researchgate.net/publication/123', 'title': 'Unrelated research'}]}
     result = coverage.collect(tmp_path, NOW, key='key', searcher=broken_scope)
-    assert len(calls) == 1
+    assert len(calls) == 4  # DOI differs; both shared title queries are cached.
     assert all(row['state'] == 'error' for row in result['papers'].values())
     assert all(row['search_status'] == 'error' for row in result['papers'].values())
-    assert not result['papers'][other['id']].get('last_search_at')
-    assert read(tmp_path / coverage.CACHE / 'providers/serpapi.json')['reason'] == 'scope_not_respected'
+    assert result['papers'][other['id']]['last_search_at'] == NOW.isoformat()
+    assert not read(tmp_path / coverage.CACHE / 'providers/serpapi.json')
+
+
+def test_irrelevant_query_does_not_block_later_title_match(tmp_path):
+    setup(tmp_path)
+    calls = []
+    def search(query, _):
+        calls.append(query)
+        return {'organic_results': [{'link': 'https://example.org/unrelated'} if len(calls) == 1 else {'link': URL}]}
+    row = coverage.collect(tmp_path, NOW, key='key', searcher=search,
+                           fetcher=lambda *_: page())['papers'][PAPER['id']]
+    assert len(calls) == 2 and row['state'] == 'matched'
+    assert row['search_providers']['serpapi']['state'] == 'partial'
+
+
+def test_legacy_mixed_sogou_health_is_rechecked_without_clearing_true_limits(tmp_path):
+    setup(tmp_path)
+    future = (NOW + timedelta(days=1)).isoformat()
+    providers = tmp_path / coverage.CACHE / 'providers'
+    write(providers / 'sogou.json', {'state': 'blocked', 'retry_at': future})
+    write(providers / 'serpapi.json', {'state': 'blocked', 'retry_at': future})
+    calls = []
+    row = coverage.collect(tmp_path, NOW, key='key',
+        searcher=lambda *_: pytest.fail('Real API backoff must still be honored'),
+        index_searcher=lambda query, _: calls.append(query) or {'organic_results': []})['papers'][PAPER['id']]
+    assert len(calls) == len(coverage._queries(PAPER))
+    assert row['state'] == 'no_match' and row['search_status'] == 'partial'
+    assert row['search_providers']['sogou']['state'] == 'ok'
+    assert row['search_providers']['sogou']['queries_completed'] == len(calls)
+    assert 'checked_at' not in row['search_providers']['serpapi']
+    assert read(providers / 'sogou.json')['scope'] == 'index'
+    assert read(providers / 'sogou_redirect.json')['scope'] == 'redirect'
+
+
+def test_redirect_backoff_does_not_skip_other_queries_or_papers(tmp_path, monkeypatch):
+    from src import coverage_discovery
+    other = {**PAPER, 'id': 'bbbbccccdddd', 'doi': '10.1234/other'}
+    setup(tmp_path, [PAPER, other])
+    calls = []
+    def index(query, _, *, resolve_links=True):
+        calls.append(resolve_links)
+        return {'organic_results': [{'link': 'https://weixin.sogou.com/weixin?type=2&query=fixture',
+                                     'title': PAPER['title'], 'reason': 'index_only'}],
+                'link_resolution': {'state': 'blocked', 'retry_after': 600, 'attempted': resolve_links}}
+    monkeypatch.setattr(coverage_discovery, 'sogou_search', index)
+    result = coverage.collect(tmp_path, NOW, key='', index_searcher=index)
+    assert calls == [True, False, False, False]
+    for row in result['papers'].values():
+        assert row['state'] == 'pending_match' and row['candidates'] and not row['articles']
+        assert row['search_providers']['sogou']['state'] == 'ok'
+        assert row['search_providers']['sogou']['link_resolution'] == 'blocked'
+    health = read(tmp_path / coverage.CACHE / 'providers/sogou.json')
+    assert health['state'] == 'ok' and 'retry_at' not in health
+
+
+def test_real_index_challenge_still_honors_retry(tmp_path):
+    setup(tmp_path)
+    write(tmp_path / coverage.CACHE / 'providers/sogou.json', {
+        'scope': 'index', 'state': 'blocked', 'retry_at': (NOW + timedelta(hours=1)).isoformat()})
+    row = coverage.collect(tmp_path, NOW, key='',
+        index_searcher=lambda *_: pytest.fail('Index itself is restricted'))['papers'][PAPER['id']]
+    assert row['search_providers']['sogou']['state'] == 'blocked'
+    assert not row.get('last_search_at')
+
+
+def test_blocked_web_channel_does_not_extend_index_negative_cache(tmp_path):
+    setup(tmp_path)
+    calls = []
+    def index(query, _):
+        calls.append(query)
+        return {'organic_results': []}
+    def blocked(*_):
+        return {'organic_results': [], 'state': 'blocked', 'retry_after': 7 * 86400}
+    coverage.collect(tmp_path, NOW, key='key', searcher=blocked, index_searcher=index)
+    coverage.collect(tmp_path, NOW + timedelta(days=2), key='key', searcher=blocked, index_searcher=index)
+    assert len(calls) == 2 * len(coverage._queries(PAPER))
+
+
+def test_redirect_retry_expires_index_cache_without_waiting_seven_days(tmp_path):
+    calls = []
+    def index(*_):
+        calls.append(1)
+        return {'organic_results': [{'link': 'https://weixin.sogou.com/weixin?type=2&query=fixture',
+                                     'title': PAPER['title']}],
+                'link_resolution': {'state': 'blocked', 'attempted': True, 'retry_after': 600}}
+    for minutes in (0, 5, 11):
+        coverage._search(tmp_path, 'title', NOW + timedelta(minutes=minutes), '', index,
+                         provider='sogou', requires_key=False)
+    assert len(calls) == 2
+
+
+def test_provider_timestamp_does_not_go_backwards_on_cache_hit(tmp_path):
+    searcher = lambda *_: {'organic_results': []}
+    coverage._search(tmp_path, 'old', NOW, 'key', searcher)
+    progress = {}
+    later = NOW + timedelta(hours=1)
+    coverage._search(tmp_path, 'new', later, 'key', searcher, progress=progress)
+    coverage._search(tmp_path, 'old', later, 'key', searcher, progress=progress)
+    assert progress['providers']['serpapi']['checked_at'] == later.isoformat()
+
+
+def test_unrelated_index_rows_stay_private_and_snippet_is_not_evidence(tmp_path):
+    setup(tmp_path)
+    def index(*_):
+        return {'organic_results': [
+            {'link': 'https://weixin.sogou.com/weixin?type=2&query=finance', 'title': '金融市场与外科人工智能'},
+            {'link': URL, 'title': '研究进展', 'snippet': 'Private index extract DOI: 10.1234/fixture'}]}
+    row = coverage.collect(tmp_path, NOW, key='', index_searcher=index,
+        fetcher=lambda *_: page('其他研究内容。' * 20))['papers'][PAPER['id']]
+    assert not row['articles'] and len(row['candidates']) == 1
+    assert row['candidates'][0]['url'] == URL
+    assert 'Private index extract' not in json.dumps(row)
+    assert '"_provider"' not in json.dumps(row)
+
+
+def test_restored_provider_resumes_papers_it_never_reached(tmp_path):
+    other = {**PAPER, 'id': 'bbbbccccdddd', 'doi': '10.1234/other'}
+    setup(tmp_path, [PAPER, other])
+    write(tmp_path / coverage.DATA, {'papers': {PAPER['id']: {
+        'state': 'no_match', 'search_version': coverage.SEARCH_VERSION,
+        'last_search_at': (NOW - timedelta(days=2)).isoformat(),
+        'search_providers': {'sogou': {'state': 'ok', 'checked_at': (NOW - timedelta(days=2)).isoformat()}}}}})
+    calls = []
+    coverage.collect(tmp_path, NOW, key='', index_searcher=lambda query, _: calls.append(query) or {'organic_results': []})
+    assert other['doi'] in calls[0]
+    assert any(PAPER['doi'] in query for query in calls)

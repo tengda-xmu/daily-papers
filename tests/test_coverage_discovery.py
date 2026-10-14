@@ -44,6 +44,25 @@ def test_chinese_and_method_queries_follow_normalized_identity_queries():
     assert method_names({'summary': 'PDF DOI P1 P12 AI 95%'}) == []
 
 
+def test_review_subtitle_does_not_hide_concrete_chinese_subject_and_author_query():
+    paper = {
+        'title': 'Artificial Intelligence in Additive Manufacturing: A Critical Review of Methods, Applications and Industrial Challenges',
+        'title_zh': '增材制造中的人工智能：方法、应用与工业挑战的批判性综述',
+        'authors': ['Sarvesh Deshpande', 'Sahas Walvekar'],
+    }
+    queries = paper_queries(paper)
+    assert 'site:mp.weixin.qq.com 增材制造中的人工智能' in queries
+    assert 'site:mp.weixin.qq.com "Artificial Intelligence in Additive Manufacturing" "Sarvesh Deshpande"' in queries
+    assert queries.index('site:mp.weixin.qq.com 增材制造中的人工智能') > queries.index('site:mp.weixin.qq.com ' + paper['title_zh'])
+    assert not any(query in {'site:mp.weixin.qq.com 人工智能', 'site:mp.weixin.qq.com AI'} for query in queries)
+
+
+def test_subtitle_fallback_does_not_use_generic_short_headings():
+    queries = paper_queries({'title': 'AI: A review of new methods', 'title_zh': '人工智能：新方法综述', 'authors': ['A. Author']})
+    assert 'site:mp.weixin.qq.com 人工智能' not in queries
+    assert 'site:mp.weixin.qq.com "AI" "A. Author"' not in queries
+
+
 def test_method_names_exclude_case_insensitive_generic_headings():
     paper = {'abstract': 'ABSTRACT Abstract abstract REFERENCES References METHODS RESULTS Conclusion SERR PIML'}
     assert method_names(paper) == ['SERR', 'PIML']
@@ -51,11 +70,40 @@ def test_method_names_exclude_case_insensitive_generic_headings():
     assert all('ABSTRACT' not in query and 'REFERENCES' not in query for query in paper_queries(paper))
 
 
+def test_funding_identifiers_do_not_generate_method_searches():
+    paper = {'abstract': 'Chemeleon2 uses GNN1278. This work was supported under Contract FA864923P1086, Grant No. DMR-1234567 and Award Number NSF20260123.'}
+    assert method_names(paper) == ['Chemeleon2', 'GNN1278']
+    assert not any('FA864923P1086' in query or 'NSF20260123' in query for query in paper_queries(paper))
+    assert method_names({'method_names': ['GNN1278']}) == ['GNN1278']
+
+
 def test_chinese_rewording_and_method_names_admit_candidates_without_confirming_identity():
     assert local_candidate(PAPER, {'title': HEADLINE})
     assert local_candidate(PAPER, {'title': 'Chemeleon2模型的新进展'})
     assert not local_candidate(PAPER, {'title': '风电齿轮箱故障预测的数字孪生介绍'})
     assert local_candidate({'title': PAPER['title']}, {'title': 'Novel crystals and diverse generative materials exploration'})
+
+
+def test_chinese_review_candidate_requires_specific_subject_not_generic_ai_language():
+    paper = {
+        'title': 'Artificial Intelligence in Additive Manufacturing: A Critical Review of Methods, Applications and Industrial Challenges',
+        'title_zh': '增材制造中的人工智能：方法、应用与工业挑战的批判性综述',
+        'authors': ['Sarvesh Deshpande'],
+    }
+    assert local_candidate(paper, {'title': 'AI赋能增材制造新进展'})
+    assert local_candidate(paper, {'title': '增材制造中的人工智能研究综述'})
+    assert not local_candidate(paper, {'title': '外科人工智能研究综述：方法、应用与挑战'})
+    assert not local_candidate(paper, {'title': '金融人工智能研究综述：方法应用及未来挑战'})
+    assert not local_candidate(paper, {'title': '科学研究期刊影响因子综述', 'summary': '人工智能应用与技术挑战'})
+    assert not local_candidate(PAPER, {'title': '强化学习引导生成外科人工智能模型的最新研究'})
+
+
+def test_specific_topic_filter_preserves_identity_and_named_method_shortcuts():
+    paper = {**PAPER, 'title_zh': '人工智能：最新研究综述'}
+    assert local_candidate(paper, {'title': '新研究', 'summary': '10.1038/s42256-026-01262-4'})
+    assert local_candidate(paper, {'title': PAPER['title']})
+    assert local_candidate(paper, {'title': 'Chemeleon2论文解读'})
+    assert not local_candidate(paper, {'title': '人工智能方法研究：应用技术与挑战'})
 
 
 def test_parser_preserves_result_hrefs_and_next_page_with_missing_metadata():
@@ -80,6 +128,22 @@ def test_regular_http_redirect_resolves_article_and_strips_search_domain():
     assert 'PRIVATE' not in str(result)
 
 
+def test_result_href_spaces_and_chinese_are_encoded_without_double_encoding():
+    calls = []
+    def transport(url):
+        calls.append(url)
+        if urlsplit(url).path == '/weixin':
+            return page(row(href='/link?url=TOKEN&query=%E5%A2%9E材制造 人工智能'))
+        assert ' ' not in url and '材' not in url
+        assert '%25E5' not in url
+        assert parse_qs(urlsplit(url).query)['query'] == ['增材制造 人工智能']
+        return {'body': b'paper body', 'url': ARTICLE, 'status': 200}
+    result = sogou_search('q', transport=transport)
+    assert result['state'] == 'ok' and result['link_resolution']['state'] == 'ok'
+    assert result['organic_results'][0]['link'] == ARTICLE
+    assert len(calls) == 2
+
+
 @pytest.mark.parametrize('body', [f'<meta http-equiv="refresh" content="0; url={ARTICLE}">',
                                  f'<script>window.location.href = "{ARTICLE}";</script>'])
 def test_literal_redirect_is_resolved_without_running_scripts(body):
@@ -89,19 +153,81 @@ def test_literal_redirect_is_resolved_without_running_scripts(body):
     assert result['organic_results'][0]['link'] == ARTICLE
 
 
-def test_captcha_during_redirect_retains_all_index_candidates_and_stops_io():
+def test_captcha_during_redirect_retains_candidates_and_continues_index_pages():
     calls = []
     def transport(url):
         calls.append(url)
         if urlsplit(url).path == '/weixin':
+            if 'page=2' in url:
+                return page(row(title='第二页介绍', href='/link?url=THIRD') + row(title='第二页直链', href=ARTICLE + '2'))
             return page(row() + row(title='另一篇介绍', href='/link?url=SECOND') + row(title='直接链接', href=ARTICLE),
                         '/weixin?type=2&page=2')
         return {'body': b'', 'url': 'https://mp.weixin.qq.com/mp/wappoc_appmsgcaptcha?token=PRIVATE', 'status': 200}
     result = sogou_search('Chemeleon2', transport=transport)
-    assert result['state'] == 'blocked' and len(calls) == 2
-    assert len(result['organic_results']) == 3
+    assert result['state'] == 'ok' and len(calls) == 3
+    assert result['link_resolution'] == {'state': 'blocked', 'reason': 'verification_required', 'attempted': True}
+    assert len(result['organic_results']) == 5
     assert result['organic_results'][0]['reason'] == 'index_only'
     assert result['organic_results'][2]['link'] == ARTICLE
+    assert result['organic_results'][4]['link'] == ARTICLE + '2'
+    assert sum('/link?' in url for url in calls) == 1
+    assert 'PRIVATE' not in str(result)
+
+
+def test_redirect_retry_after_is_separate_from_available_index_health():
+    calls = []
+    def transport(url):
+        calls.append(url)
+        if '/weixin?' in url:
+            return page(row())
+        raise HTTPError(url, 429, 'PRIVATE', {'Retry-After': '3600'}, None)
+    result = sogou_search('q', transport=transport)
+    assert result['state'] == 'ok' and 'retry_after' not in result
+    assert result['link_resolution']['state'] == 'blocked'
+    assert result['link_resolution']['retry_after'] == 3600
+    assert result['organic_results'][0]['reason'] == 'index_only'
+    assert len(calls) == 2
+
+
+def test_link_resolution_cooldown_does_not_disable_index_search_or_direct_links():
+    calls = []
+    def transport(url):
+        calls.append(url)
+        assert '/weixin?' in url
+        return page(row() + row(title='直接链接', href=ARTICLE))
+    result = sogou_search('q', transport=transport, resolve_links=False)
+    assert result['state'] == 'ok'
+    assert result['link_resolution'] == {'state': 'deferred', 'reason': '', 'attempted': False}
+    assert len(calls) == 1
+    assert result['organic_results'][0]['reason'] == 'index_only'
+    assert result['organic_results'][1]['link'] == ARTICLE
+
+
+def test_index_challenge_on_next_page_blocks_index_and_preserves_previous_candidates():
+    calls = []
+    def transport(url):
+        calls.append(url)
+        if 'page=2' in url:
+            return {'body': '请输入验证码', 'url': url, 'status': 429, 'headers': {'Retry-After': '1800'}}
+        return page(row(href=ARTICLE), '/weixin?type=2&page=2')
+    result = sogou_search('q', transport=transport)
+    assert result['state'] == 'blocked' and result['retry_after'] == 1800
+    assert result['link_resolution']['state'] == 'ok'
+    assert result['organic_results'][0]['link'] == ARTICLE
+    assert len(calls) == 2
+
+
+def test_redirect_error_does_not_turn_successful_index_into_provider_error():
+    calls = []
+    def transport(url):
+        calls.append(url)
+        if '/weixin?' in url:
+            return page(row() + row(title='另一篇介绍', href='/link?url=SECOND'))
+        raise TimeoutError('PRIVATE')
+    result = sogou_search('q', transport=transport)
+    assert result['state'] == 'ok'
+    assert result['link_resolution']['state'] == 'error'
+    assert len(calls) == 2 and len(result['organic_results']) == 2
     assert 'PRIVATE' not in str(result)
 
 

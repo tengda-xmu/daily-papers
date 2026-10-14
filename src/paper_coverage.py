@@ -29,7 +29,7 @@ DATA = 'data/paper-coverage.json'
 PERMISSIONS = 'config/wechat-reprints.json'
 CACHE = 'data/cache/paper-coverage'
 SCHEMA_VERSION = 2
-SEARCH_VERSION = 3
+SEARCH_VERSION = 4
 ARTICLE_VERSION = 2
 CHINA = timezone(timedelta(hours=8))
 IMAGE_HOSTS = ['mmbiz.qpic.cn', 'mmbiz.qlogo.cn']
@@ -493,6 +493,24 @@ def _project(payload, grants):
             result[identifier]['next_search_at'] = row['next_search_at']
         if parse_date(row.get('verified_at')):
             result[identifier]['verified_at'] = row['verified_at']
+        providers = {}
+        for name, detail in (row.get('search_providers') or {}).items():
+            if name not in ('serpapi', 'sogou') or not isinstance(detail, dict):
+                continue
+            if detail.get('state') not in ('ok', 'partial', 'blocked', 'error', 'configuration_missing', 'deferred'):
+                continue
+            entry = {'state': detail['state']}
+            for field in ('checked_at', 'retry_at'):
+                if parse_date(detail.get(field)):
+                    entry[field] = detail[field]
+            for field in ('queries_completed', 'results'):
+                if type(detail.get(field)) is int and detail[field] >= 0:
+                    entry[field] = detail[field]
+            if detail.get('link_resolution') in ('blocked', 'error'):
+                entry['link_resolution'] = detail['link_resolution']
+            providers[name] = entry
+        if providers:
+            result[identifier]['search_providers'] = providers
         if parse_date(queued):
             result[identifier]['queued_at'] = queued
         if row.get('deferred_reason') in ('budget_exhausted', 'runtime_limit') and (state == 'deferred' or row.get('last_attempt_state') == 'deferred'):
@@ -587,6 +605,24 @@ def search_cache_path(root, query, provider='serpapi'):
 
 def _search(root, query, now, key, searcher, runtime=None, progress=None, force_refresh=False,
             *, provider='serpapi', requires_key=True):
+    def record(state, rows=(), checked=None, retry=None, link_state=None):
+        if progress is None:
+            return
+        entry = progress.setdefault('providers', {}).setdefault(provider, {'queries_completed': 0, 'results': 0})
+        prior_state = entry.get('state')
+        entry['state'] = ('partial' if prior_state == 'partial' or
+                          (prior_state and prior_state != state and 'ok' in (prior_state, state)) else state)
+        if parse_date(checked) and (not parse_date(entry.get('checked_at'))
+                                   or parse_date(checked) > parse_date(entry['checked_at'])):
+            entry['checked_at'] = checked
+        if state == 'ok':
+            entry['queries_completed'] += 1
+        entry['results'] += len(rows)
+        if parse_date(retry):
+            entry['retry_at'] = retry
+        if link_state in ('blocked', 'error'):
+            entry['link_resolution'] = link_state
+
     def retry_hint(value):
         stamp = parse_date(value)
         if progress is not None and stamp:
@@ -598,30 +634,57 @@ def _search(root, query, now, key, searcher, runtime=None, progress=None, force_
     path = search_cache_path(root, query, provider)
     saved = read(path)
     cached_retry = parse_date(saved.get('retry_at'))
+    link_retry_at = parse_date(saved.get('link_retry_at'))
     fresh = (now < cached_retry if cached_retry and saved.get('state') in ('blocked', 'error') else
-             _fresh(saved.get('checked_at'), now, 7 if saved.get('state') == 'ok' and saved.get('rows') else 1))
+             now < link_retry_at if link_retry_at and saved.get('link_resolution') in ('blocked', 'error') else
+             _fresh(saved.get('checked_at'), now, 7 if saved.get('state') == 'ok' and saved.get('rows')
+                    and saved.get('link_resolution') not in ('blocked', 'error') else 1))
     if (not force_refresh and saved.get('version') == SEARCH_VERSION
             and fresh):
         _record_attempt(progress, saved.get('checked_at'))
         if saved.get('state') in ('blocked', 'error'):
             retry_hint(saved.get('retry_at'))
-        return saved.get('rows', []), saved.get('state', 'error')
+        if saved.get('link_resolution') in ('blocked', 'error'):
+            retry_hint(saved.get('link_retry_at'))
+        record(saved.get('state', 'error'), saved.get('rows', []), saved.get('checked_at'),
+               saved.get('retry_at'), saved.get('link_resolution'))
+        rows = saved.get('rows', [])
+        if provider == 'sogou':
+            rows = [{**r, '_provider': 'sogou'} for r in rows]
+        return rows, saved.get('state', 'error')
     if requires_key and not key:
+        record('configuration_missing')
         return [], 'configuration_missing'
     health_path = base / 'providers' / (provider + '.json')
     health = read(health_path)
+    if health.get('reason') == 'scope_not_respected':
+        # An irrelevant response belongs to one query, not every paper/query.
+        health = {}
+    if provider == 'sogou' and health.get('scope') != 'index':
+        # Legacy health mixed result-link challenges with index failures. Probe
+        # the index once under the new strategy, without retrying blocked links.
+        if health.get('retry_at'):
+            write(base / 'providers/sogou_redirect.json', {**health, 'scope': 'redirect'})
+        health = {}
     retry_at = parse_date(health.get('retry_at'))
     if retry_at and now < retry_at:
         # A real provider challenge/rate limit is not an application quota.
         retry_hint(health.get('retry_at'))
-        return saved.get('rows', []), health.get('state') if health.get('state') in ('blocked', 'error') else 'blocked'
+        state = health.get('state') if health.get('state') in ('blocked', 'error') else 'blocked'
+        record(state, saved.get('rows', []), retry=health.get('retry_at'))
+        return saved.get('rows', []), state
     if runtime and not runtime.begin('search'):
         if progress is not None:
             progress['deferred_reason'] = 'runtime_limit'
+        record('deferred')
         return [], 'deferred'
     _record_attempt(progress, now.isoformat())
     try:
-        payload = searcher(query, key)
+        from src.coverage_discovery import sogou_search
+        redirect_health = read(base / 'providers/sogou_redirect.json') if provider == 'sogou' else {}
+        redirect_retry = parse_date(redirect_health.get('retry_at'))
+        payload = (searcher(query, key, resolve_links=not (redirect_retry and now < redirect_retry))
+                   if searcher is sogou_search else searcher(query, key))
         if not isinstance(payload, dict) or payload.get('error'):
             raise ValueError('Search failed')
         rows, seen = [], set()
@@ -636,6 +699,11 @@ def _search(root, query, now, key, searcher, runtime=None, progress=None, force_
                 'reason': item.get('reason', 'identity_unconfirmed')})
             if candidate and candidate['url'] not in seen:
                 seen.add(candidate['url'])
+                # Search snippets aid candidate admission only, never identity
+                # verification or public summaries. They remain in private cache.
+                if provider == 'sogou':
+                    candidate['_discovery_text'] = clean(item.get('snippet', ''))[:4000]
+                    candidate['_provider'] = provider
                 rows.append(candidate)
         state = payload.get('state', 'ok')
         if state not in ('ok', 'blocked', 'error'):
@@ -648,8 +716,22 @@ def _search(root, query, now, key, searcher, runtime=None, progress=None, force_
         retry_at = payload.get('retry_at')
         if not retry_at and isinstance(payload.get('retry_after'), (int, float)) and payload['retry_after'] >= 0:
             retry_at = (now + timedelta(seconds=payload['retry_after'])).isoformat()
+        link = payload.get('link_resolution', {}) if provider == 'sogou' else {}
+        link_state = link.get('state')
+        if link_state in ('blocked', 'error'):
+            link_retry = parse_date(link.get('retry_at'))
+            if not link_retry and isinstance(link.get('retry_after'), (int, float)) and link['retry_after'] >= 0:
+                link_retry = now + timedelta(seconds=link['retry_after'])
+            write(base / 'providers/sogou_redirect.json', {'scope': 'redirect', 'state': link_state,
+                'checked_at': now.isoformat(), 'retry_at': (link_retry or now + timedelta(days=1)).isoformat()})
+        elif redirect_retry and now < redirect_retry:
+            link_state = redirect_health.get('state')
+        if link_state in ('blocked', 'error'):
+            link_retry_at = parse_date(read(base / 'providers/sogou_redirect.json').get('retry_at'))
+            retry_hint(link_retry_at.isoformat() if link_retry_at else None)
     except Exception as exc:
         rows, state, scope_failed = [], 'error', False
+        link_state = None
         if getattr(exc, 'code', None) in (403, 429):
             state = 'blocked'
             from email.utils import parsedate_to_datetime
@@ -661,13 +743,23 @@ def _search(root, query, now, key, searcher, runtime=None, progress=None, force_
     if state == 'blocked' or scope_failed:
         retry = parse_date(retry_at)
         retry_at = (retry if retry and retry > now else now + timedelta(days=1)).isoformat()
+    if state == 'blocked':
         write(health_path, {'state': state, 'checked_at': now.isoformat(), 'retry_at': retry_at,
-                            'reason': 'scope_not_respected' if scope_failed else 'provider_restricted'})
+                            'version': SEARCH_VERSION,
+                            'scope': 'index' if provider == 'sogou' else 'search',
+                            'reason': 'provider_restricted'})
         retry_hint(retry_at)
+    elif state == 'ok':
+        write(health_path, {'state': 'ok', 'checked_at': now.isoformat(),
+                            'version': SEARCH_VERSION,
+                            'scope': 'index' if provider == 'sogou' else 'search'})
     write(path, {'version': SEARCH_VERSION, 'provider': provider, 'query': query,
                  'checked_at': now.isoformat(), 'rows': rows, 'state': state,
                  **({'retry_at': retry_at} if state == 'blocked' or scope_failed else {}),
+                 **({'link_resolution': link_state} if link_state in ('blocked', 'error') else {}),
+                 **({'link_retry_at': link_retry_at.isoformat()} if link_state in ('blocked', 'error') and link_retry_at else {}),
                  **({'reason': 'scope_not_respected'} if scope_failed else {})})
+    record(state, rows, now.isoformat(), retry_at if state == 'blocked' or scope_failed else None, link_state)
     return rows, state
 
 
@@ -689,6 +781,15 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
     if paper_ids is not None:
         wanted = set(paper_ids)
         papers = [paper for paper in papers if paper['id'] in wanted]
+    else:
+        # Resume papers which never reached a provider before repeating those
+        # already searched. Stable ordering keeps the existing newest/core
+        # priority within each group and avoids repeatedly spending an index's
+        # availability window on the first few papers after a real challenge.
+        def reached_provider(paper):
+            return any(parse_date(detail.get('checked_at'))
+                       for detail in previous.get(paper['id'], {}).get('search_providers', {}).values())
+        papers.sort(key=reached_provider)
     supplied = []
     if source_urls:
         if paper_ids is None or len(set(paper_ids)) != 1 or len(papers) != 1:
@@ -725,6 +826,7 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
         seen, read_failed, read_deferred = set(), False, False
         progress = {'last_attempt_at': old.get('last_attempt_at', '')}
         search_progress = {'last_attempt_at': old.get('last_search_at', '')}
+        provider_results = dict(old.get('search_providers', {}))
         search_status = old.get('search_status', 'not_searched')
         search_version = old.get('search_version', 0)
         queued_at = old.get('queued_at') or result[identifier].get('queued_at', '')
@@ -738,6 +840,8 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
             values = {'checked_at': checked, 'last_attempt_at': checked,
                       'last_search_at': search_progress.get('last_attempt_at', ''),
                       'search_status': search_status, 'search_version': search_version}
+            if provider_results or search_progress.get('providers'):
+                values['search_providers'] = {**provider_results, **search_progress.get('providers', {})}
             if parse_date(search_progress.get('retry_at')):
                 values['next_search_at'] = search_progress['retry_at']
             elif fresh_search_hint := parse_date(old.get('next_search_at')):
@@ -753,6 +857,14 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
         def examine(rows):
             nonlocal read_failed, read_deferred
             for candidate in rows:
+                if candidate.get('_provider') == 'sogou':
+                    from src.coverage_discovery import local_candidate
+                    if not local_candidate(paper, {'title': candidate.get('title'),
+                                                   'summary': candidate.get('_discovery_text', '')}):
+                        # An index may relax a long query to common words and
+                        # return surgery/finance articles for a manufacturing
+                        # paper. Such rows are not useful paper candidates.
+                        continue
                 url = article_url(candidate.get('url'))
                 if not url:
                     candidate = _public_candidate({**candidate, 'reason': 'index_only'})
@@ -826,7 +938,9 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                  and _fresh(old.get('last_search_at') or old.get('checked_at'), now, days))
         next_search = parse_date(old.get('next_search_at'))
         if next_search and not force_refresh and not supplied and old.get('search_version') == SEARCH_VERSION:
-            fresh = now < next_search
+            # One unavailable channel may suggest a long backoff. It must not
+            # extend another channel's one-day negative-result freshness.
+            fresh = fresh and now < next_search
         if retry_state in ('deferred', 'configuration_missing'):
             # Availability can change within a day (cached results, a restored
             # key, or an explicitly interrupted run). Legacy daily quotas do
@@ -863,10 +977,14 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
         if not articles:
             if read_deferred:
                 state = 'deferred'
+            elif candidates:
+                # A failed optional channel must not hide sources returned by
+                # a working index. Their identity remains explicitly pending.
+                state = 'pending_match'
             elif read_failed and state not in ('configuration_missing', 'deferred', 'error'):
                 state = 'unavailable'
-            elif candidates and state == 'no_match':
-                state = 'pending_match'
+            elif state != 'deferred' and any(p.get('state') == 'ok' for p in search_progress.get('providers', {}).values()):
+                state = 'no_match'
         attempt_state = state
         if articles:
             state = 'matched'

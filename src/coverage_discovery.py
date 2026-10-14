@@ -22,13 +22,19 @@ from src.public_sources import clean
 from src.sources.wechat_public_index import parse_search_page, PublicSearchChallenge
 from src.wechat_metadata import article_url, public_index_url
 
-SEARCH_STRATEGY_VERSION = 3
+SEARCH_STRATEGY_VERSION = 4
 HOSTS = {'weixin.sogou.com', 'www.sogou.com', 'mp.weixin.qq.com'}
 MAX_BYTES = 4_000_000
 GENERIC_METHODS = {'DOI', 'PDF', 'HTML', 'HTTP', 'HTTPS', 'AI', 'ML', 'LLM', 'CNS', 'RMSE', 'MAPE',
                    'PMID', 'ISSN', 'ISBN', 'FIG', 'FIGURE', 'TABLE', 'ABSTRACT', 'REFERENCES',
                    'BIBLIOGRAPHY', 'INTRODUCTION', 'METHODS', 'RESULTS', 'DISCUSSION', 'CONCLUSION',
                    'CONCLUSIONS', 'ACKNOWLEDGMENTS', 'ACKNOWLEDGEMENTS', 'SUPPLEMENTARY'}
+GENERIC_CHINESE = (
+    '人工智能', '机器学习', '深度学习', '强化学习', '批判性', '系统性', '最新进展',
+    '研究进展', '研究现状', '研究方法', '研究成果', '中的', '通过', '基于', '面向',
+    '方法', '应用', '研究', '综述', '挑战', '技术', '模型', '引导', '发现', '新颖',
+    '多样', '关于', '介绍', '未来', '展望', '及其', '以及', '智能', '人工', '学习',
+)
 
 
 def _compact(value):
@@ -56,9 +62,14 @@ def method_names(paper):
     explicit = [explicit] if isinstance(explicit, str) else explicit
     names = [clean(n) for n in explicit if isinstance(n, str) and 3 <= len(_compact(n)) <= 60
              and clean(n).upper() not in GENERIC_METHODS] if isinstance(explicit, list) else []
-    for token in re.findall(r'(?<![A-Za-z0-9])[A-Za-z][A-Za-z0-9]*(?:[-_][A-Za-z0-9]+)*', _text(paper)):
+    hint_text = _text(paper)
+    for match in re.finditer(r'(?<![A-Za-z0-9])[A-Za-z][A-Za-z0-9]*(?:[-_][A-Za-z0-9]+)*', hint_text):
+        token = match.group()
         if token.upper() in GENERIC_METHODS or len(token) < 4 or re.fullmatch(r'P\d+', token):
             continue
+        before = hint_text[max(0, match.start() - 100):match.start()]
+        if re.search(r'\b(?:grant|contract|award|funding)(?:\s+(?:number|no\.?|nos\.?))?[\s#:\-]*$', before, re.I):
+            continue  # Funding identifiers are not inferred method names.
         # Named model versions and mixed-case names are useful discovery hints.
         if (re.search(r'[A-Za-z]\d|\d[A-Za-z]', token) or re.fullmatch(r'[A-Z]{4,12}', token)
                 or (re.search('[a-z]', token) and re.search('[a-z][A-Z]', token))):
@@ -90,6 +101,17 @@ def paper_queries(paper):
     if isinstance(authors, str):
         authors = [authors]
     first_author = next((clean(a) for a in authors if isinstance(a, str) and clean(a)), '')
+    # Introductions often paraphrase a review's subtitle. Retain its concrete
+    # subject as another discovery query, while identity confirmation remains
+    # DOI or full title/author based. Do not reduce headings to a generic AI tag.
+    chinese_subject = re.split(r'[:：]', chinese, maxsplit=1)[0].strip()
+    if chinese_subject != chinese and len(re.findall(r'[\u4e00-\u9fff]', chinese_subject)) >= 6:
+        result.append(prefix + chinese_subject)
+    english_subject = re.split(r'[:：]', normalized, maxsplit=1)[0].strip()
+    subject_words = set(re.findall(r'[A-Za-z]{3,}', english_subject.casefold()))
+    subject_words -= {'the', 'and', 'for', 'with', 'from', 'into', 'via'}
+    if english_subject != normalized and first_author and len(subject_words) >= 3:
+        result.append(prefix + '"' + english_subject.replace('"', '') + '" "' + first_author + '"')
     for method in method_names(paper):
         result.append(prefix + '"' + method + '"')
         if first_author:
@@ -109,12 +131,18 @@ def local_candidate(paper, row):
         return True
     if any(_compact(name) in normalized for name in method_names(paper)):
         return True
-    chinese = ''.join(re.findall(r'[\u4e00-\u9fff]', clean(paper.get('title_zh'))))
-    if len(chinese) >= 6:
-        grams = {chinese[i:i + 2] for i in range(len(chinese) - 1)}
+    chinese = clean(paper.get('title_zh'))
+    if len(re.findall(r'[\u4e00-\u9fff]', chinese)) >= 6:
+        # The subject before a subtitle is the useful topical anchor. Remove
+        # whole generic phrases before making grams, so "人工智能" cannot leave
+        # misleading internal "工智" fragments or join unrelated words.
+        subject = re.split(r'[:：]', chinese, maxsplit=1)[0]
+        subject = re.sub('|'.join(sorted(GENERIC_CHINESE, key=len, reverse=True)), ' ', subject)
+        parts = [part.strip('的与和及且在') for part in re.findall(r'[\u4e00-\u9fff]+', subject)]
+        grams = {part[i:i + 2] for part in parts for i in range(len(part) - 1)}
         hits = sum(g in normalized for g in grams)
-        # Paraphrased Chinese headings remain candidates, not confirmed matches.
-        if hits >= 4 and hits / len(grams) >= .2:
+        # Broad topical admission is still distinct from identity confirmation.
+        if grams and hits >= min(2, len(grams)) and hits / len(grams) >= .2:
             return True
     words = {w.casefold() for w in re.findall(r'[A-Za-z]{5,}', str(paper.get('title') or ''))}
     words -= {'using', 'based', 'study', 'towards', 'through', 'approach', 'model', 'models', 'learning'}
@@ -124,7 +152,10 @@ def local_candidate(paper, row):
 
 def _safe_url(value):
     try:
-        parsed = urlsplit(str(value or ''))
+        value = str(value or '')
+        if any(ord(char) < 32 for char in value):
+            return False
+        parsed = urlsplit(value)
         return (parsed.scheme in ('http', 'https') and parsed.hostname in HOSTS
                 and not parsed.username and not parsed.password and parsed.port in (None, 80, 443))
     except ValueError:
@@ -142,6 +173,9 @@ def request_page(url):
                 raise ValueError('Unapproved public index redirect')
             return super().redirect_request(request, fp, code, msg, headers, newurl)
 
+    # Public index hrefs sometimes contain an unescaped query-space or Chinese
+    # text. Encode those characters while preserving existing percent escapes.
+    url = quote(url, safe=":/?#[]@!$&'()*+,;=%")
     request = Request(url, headers={'User-Agent': 'DailyPapers/1.0 (+https://tengda-xmu.github.io/daily-papers/)'})
     with build_opener(Redirects).open(request, timeout=15) as response:
         body = response.read(MAX_BYTES + 1)
@@ -151,6 +185,9 @@ def request_page(url):
 
 
 def _page(transport, url):
+    if not _safe_url(url):
+        raise ValueError('Unapproved public index URL')
+    url = quote(url, safe=":/?#[]@!$&'()*+,;=%")
     response = transport(url)
     if isinstance(response, bytes):
         response = {'body': response, 'url': url, 'status': 200}
@@ -198,11 +235,14 @@ def _resolve(href, base, transport):
     return ''
 
 
-def sogou_search(query, key='', *, transport=None):
-    """Return SerpApi-like candidates plus truthful provider health.
+def sogou_search(query, key='', *, transport=None, resolve_links=True):
+    """Return candidates with independent index and link-resolution health.
 
     Unresolved result links become stable index links with reason=index_only.
     This function has no persistent cache or budget; its caller owns freshness.
+    Top-level state/retry hints describe index requests only. A challenge while
+    following a result link stops that channel, not the available index. Callers
+    may set resolve_links=False during its separate retry interval.
     """
     transport = transport or request_page
     query = clean(re.sub(r'\bsite:mp\.weixin\.qq\.com\s*', '', query, flags=re.I))
@@ -210,15 +250,16 @@ def sogou_search(query, key='', *, transport=None):
     rows, seen_rows, seen_pages, fingerprints = [], set(), set(), set()
     state, reason = 'ok', ''
     retry = {}
+    resolution = {'state': 'ok' if resolve_links else 'deferred', 'reason': '', 'attempted': False}
 
-    def retry_hint(error):
+    def retry_hint(error, target):
         value = next((str(v) for k, v in (getattr(error, 'headers', {}) or {}).items()
                       if k.lower() == 'retry-after'), '')
         if value.isdigit():
-            retry['retry_after'] = int(value)
+            target['retry_after'] = int(value)
         elif value:
             try:
-                retry['retry_at'] = parsedate_to_datetime(value).isoformat()
+                target['retry_at'] = parsedate_to_datetime(value).isoformat()
             except (TypeError, ValueError, OverflowError):
                 pass
 
@@ -241,17 +282,18 @@ def sogou_search(query, key='', *, transport=None):
                 candidate = {'title': row['title'], 'account': row.get('account', ''),
                              'published_at': row.get('published_at', ''), 'snippet': row.get('summary', '')}
                 resolved = article_url(urljoin(final_url, row.get('href', '')))
-                if not resolved and row.get('href') and state != 'blocked':
+                if not resolved and row.get('href') and resolution['state'] == 'ok':
                     try:
+                        resolution['attempted'] = True
                         resolved = _resolve(row['href'], final_url, transport)
                     except (PublicSearchChallenge, HTTPError) as exc:
                         if isinstance(exc, PublicSearchChallenge) or getattr(exc, 'code', None) in (403, 429):
-                            state, reason = 'blocked', 'verification_required'
-                            retry_hint(exc)
+                            resolution.update(state='blocked', reason='verification_required')
+                            retry_hint(exc, resolution)
                         else:
-                            state, reason = 'error', 'http_error'
+                            resolution.update(state='error', reason='http_error')
                     except Exception:
-                        state, reason = 'error', 'redirect_unavailable'
+                        resolution.update(state='error', reason='redirect_unavailable')
                 candidate['link'] = resolved or public_index_url(candidate['account'], candidate['title'])
                 if not resolved:
                     candidate['reason'] = 'index_only'
@@ -262,9 +304,10 @@ def sogou_search(query, key='', *, transport=None):
         except (PublicSearchChallenge, HTTPError) as exc:
             blocked = isinstance(exc, PublicSearchChallenge) or getattr(exc, 'code', None) in (403, 429)
             state, reason = ('blocked', 'verification_required') if blocked else ('error', 'http_error')
-            retry_hint(exc)
+            retry_hint(exc, retry)
             break
         except Exception:
             state, reason = 'error', 'unrecognized_or_unavailable'
             break
-    return {'organic_results': rows, 'state': state, 'provider': 'sogou', 'reason': reason, **retry}
+    return {'organic_results': rows, 'state': state, 'provider': 'sogou', 'reason': reason,
+            'link_resolution': resolution, **retry}

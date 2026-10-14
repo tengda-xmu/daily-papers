@@ -45,6 +45,19 @@ def candidate_status(row):
 
 
 def state_label(state, coverage):
+    providers = coverage.get('search_providers') or {}
+    if state != 'matched' and isinstance(providers, dict):
+        completed = any(isinstance(p, dict) and (p.get('state') == 'ok'
+                        or (p.get('state') == 'partial' and p.get('queries_completed', 0)))
+                        for name, p in providers.items() if name in ('serpapi', 'sogou'))
+        incomplete = any(isinstance(p, dict) and p.get('state') != 'ok'
+                         for name, p in providers.items() if name in ('serpapi', 'sogou'))
+        if coverage.get('candidates'):
+            return STATE_LABELS['pending_match']
+        if completed and incomplete:
+            return '已完成部分渠道检索，暂未找到可核实的对应来源；其余渠道尚未完成。'
+        if completed:
+            return '公开索引暂未返回可确认的对应来源，可能尚未收录；后续将再次检查。'
     search_status = coverage.get('search_status')
     if state == 'unavailable' and search_status == 'blocked':
         return '公开索引访问受限，将在恢复后继续检索。'
@@ -72,6 +85,50 @@ def state_label(state, coverage):
     return STATE_LABELS.get(state, STATE_LABELS['pending'])
 
 
+def search_provider_status(coverage):
+    """Show index access separately from article-link access and other channels."""
+    from tools.build_site import display_time
+    providers = coverage.get('search_providers')
+    if not isinstance(providers, dict):
+        return ''
+    lines = []
+    labels = {'serpapi': '网页搜索', 'sogou': '公众号索引'}
+    for name in ('sogou', 'serpapi'):
+        row = providers.get(name)
+        if not isinstance(row, dict):
+            continue
+        state = row.get('state')
+        if state == 'ok':
+            if row.get('results', 0) and coverage.get('candidates'):
+                description = '已返回候选线索，仍需核实论文关联。'
+            elif row.get('results', 0) and any(a.get('match_status') == 'verified' for a in coverage.get('articles', [])):
+                description = '已完成检索，已核实的来源见上方。'
+            elif row.get('results', 0):
+                description = '已完成检索，返回内容尚不能确认与本论文对应。'
+            else:
+                description = '已完成检索，暂未返回对应来源。'
+        else:
+            description = {
+                'partial': '已完成部分检索，本轮检索尚未完成。',
+                'blocked': '访问受限，待恢复后重试。',
+                'error': '本次检索未完成，将继续重试。',
+                'configuration_missing': '暂不可用。',
+                'deferred': '本轮检索尚未完成。',
+            }.get(state, '尚未检索。')
+        if row.get('link_resolution') in ('blocked', 'error'):
+            description += ('部分候选的原文链接暂时无法读取，已保留索引线索。' if coverage.get('candidates')
+                            else '部分结果的原文链接暂时无法读取。')
+        checked_at = row.get('checked_at')
+        retry_at = row.get('retry_at')
+        timing = ('最近检索 ' + escape(display_time(checked_at)[1])) if checked_at else ''
+        if retry_at and state in ('blocked', 'error', 'deferred'):
+            timing += (' · ' if timing else '') + '下次重试 ' + escape(display_time(retry_at)[1])
+        lines.append('<p class="coverage-checked" data-search-provider="' + name + '">'
+                     + labels[name] + '：' + description
+                     + ('<br>' + timing if timing else '') + '</p>')
+    return '<div class="coverage-search-status" aria-label="检索进展">' + ''.join(lines) + '</div>' if lines else ''
+
+
 def article_name(row):
     # URL-derived identities are independent of paper IDs, permitting one
     # authorized article to introduce several papers without duplicate pages.
@@ -81,6 +138,7 @@ def article_name(row):
 
 def coverage_panel(paper_id, coverage=None, *, root='./', suffix=''):
     from tools.build_site import display_time, safe_url
+    from src.models import parse_date
     coverage = coverage or {}
     identifier = 'paper-coverage-' + re.sub(r'[^a-zA-Z0-9_-]', '', str(paper_id) + '-' + suffix)
     button = (f'<button type="button" class="text-button coverage-toggle" aria-expanded="false" '
@@ -97,7 +155,8 @@ def coverage_panel(paper_id, coverage=None, *, root='./', suffix=''):
     if waiting and not has_search_status and not coverage.get('last_attempt_at'):
         queued_at = queued_at or checked_at
         checked_at = None
-    if checked_at:
+    provider_status = search_provider_status(coverage)
+    if checked_at and not provider_status:
         body += '<p class="coverage-checked">最近检索 ' + escape(display_time(checked_at)[1]) + '</p>'
     if waiting and queued_at:
         body += '<p class="coverage-checked">入队时间 ' + escape(display_time(queued_at)[1]) + '</p>'
@@ -124,14 +183,31 @@ def coverage_panel(paper_id, coverage=None, *, root='./', suffix=''):
     if rows:
         body += '<ul class="coverage-list">' + ''.join(rows) + '</ul>'
     candidates = []
-    for row in coverage.get('candidates', []):
+    def candidate_date(row):
+        stamp = parse_date(row.get('published_at'))
+        return stamp.timestamp() if stamp else float('-inf')
+
+    for row in sorted(coverage.get('candidates', []), key=candidate_date, reverse=True):
         url = safe_url(row.get('url'))
         if url != '#':
+            date = str(row.get('published_at') or '')[:10]
+            meta = escape(row.get('account') or '公众号名称待核实') + (' · ' + escape(date) if date else '')
             candidates.append(f'<li><a href="{url}" target="_blank" rel="noopener noreferrer">'
-                              + escape(row.get('title') or '候选公众号文章') + '</a>（'
-                              + candidate_status(row) + '）</li>')
+                              + escape(row.get('title') or '候选公众号文章') + '</a>'
+                              + '<p class="coverage-source">' + meta + '</p>'
+                              + '<p class="coverage-status">' + candidate_status(row) + '</p></li>')
     if candidates:
-        body += '<details class="coverage-candidates"><summary>待核实的候选来源</summary><ul>' + ''.join(candidates) + '</ul></details>'
+        # Fold older entries for reading comfort; every candidate is retained.
+        body += ('<section class="coverage-candidates" aria-label="待核实的候选来源">'
+                 '<p>待核实的候选来源</p>'
+                 '<p class="coverage-status">仅为相关主题的检索线索，尚未确认介绍本论文。</p>'
+                 '<ul>' + ''.join(candidates[:8]) + '</ul>')
+        if len(candidates) > 8:
+            body += ('<details class="coverage-candidates-more"><summary>其余'
+                     + str(len(candidates) - 8) + '条待核实线索</summary><ul>'
+                     + ''.join(candidates[8:]) + '</ul></details>')
+        body += '</section>'
+    body += provider_status
     if rows and coverage.get('last_attempt_state') not in (None, '', 'matched', 'no_match'):
         body += '<p class="coverage-status">' + state_label(coverage['last_attempt_state'], coverage) + '已保留上次确认的介绍。</p>'
     panel = f'<section class="paper-coverage-panel" id="{identifier}" aria-label="公众号介绍" hidden>{body}</section>'
