@@ -58,6 +58,59 @@ def test_states_do_not_claim_absence_of_coverage(state, text):
     assert '没有公众号' not in panel
 
 
+@pytest.mark.parametrize('reason,text', [
+    ('budget_exhausted', '今日 6 次新增搜索额度已用完'),
+    ('runtime_limit', '本轮处理时间已用完'),
+    ('', '将在后续更新继续'),
+])
+def test_queue_explains_delay_without_claiming_a_search(reason, text):
+    _, panel = coverage_panel('abc', {
+        'state': 'deferred', 'queued_at': '2026-10-14T03:00:00+00:00',
+        'deferred_reason': reason, 'checked_at': '', 'last_attempt_at': '',
+    })
+    assert text in panel and '排队中' in panel
+    assert '入队时间 2026-10-14 11:00' in panel
+    assert '最近检索' not in panel
+
+
+def test_legacy_queue_timestamp_is_not_presented_as_a_search():
+    _, panel = coverage_panel('abc', {
+        'state': 'deferred', 'checked_at': '2026-10-14T03:00:00+00:00',
+    })
+    assert '最近检索' not in panel
+    assert '入队时间 2026-10-14 11:00' in panel
+
+
+def test_partial_search_and_no_match_keep_actual_search_timestamp():
+    coverage = {'state': 'deferred', 'deferred_reason': 'runtime_limit',
+                'checked_at': '2026-10-14T03:00:00+00:00',
+                'last_attempt_at': '2026-10-14T03:00:00+00:00',
+                'queued_at': '2026-10-13T03:00:00+00:00'}
+    _, panel = coverage_panel('abc', coverage)
+    assert '最近检索 2026-10-14 11:00' in panel
+    assert '入队时间 2026-10-13 11:00' in panel
+    coverage['state'] = 'no_match'
+    _, panel = coverage_panel('abc', coverage)
+    assert '暂未检索到可确认的公众号介绍' in panel
+    assert '最近检索 2026-10-14 11:00' in panel
+    assert '入队时间' not in panel and '排队中' not in panel
+
+
+@pytest.mark.parametrize('legacy', [False, True])
+def test_queued_refresh_keeps_confirmed_source_and_explains_delay(legacy):
+    coverage = coverage_fixture()
+    coverage.update(last_attempt_state='deferred', deferred_reason='budget_exhausted',
+                    queued_at='2026-10-14T03:00:00+00:00')
+    if not legacy:
+        coverage['last_attempt_at'] = coverage['checked_at']
+    _, panel = coverage_panel('abc', coverage)
+    assert '今日 6 次新增搜索额度已用完' in panel
+    assert '已保留上次确认的介绍' in panel
+    assert coverage['articles'][0]['url'] in panel and 'coverage-list' in panel
+    assert ('最近检索 2026-10-13 11:00' in panel) is not legacy
+    assert '入队时间 2026-10-14 11:00' in panel
+
+
 def test_pending_sources_cannot_be_presented_as_confirmed_articles():
     c = coverage_fixture(); c['articles'][0]['match_status'] = 'pending'
     c['state'] = 'pending_match'; c['candidates'] = [c['articles'][0]]
@@ -107,7 +160,10 @@ def test_coverage_keyboard_and_original_groups_responsive(browser, width):
         {'figure_id':'original-two','caption':'对照相同工况下的基线方法。'}]}]
     figures=[original_fixture(),{**original_fixture(),'figure_id':'original-two'}]
     html=render_article(p, figures=figures, coverage=coverage_fixture())
-    card=render({'core':[p]}, coverage={p['id']:coverage_fixture()})
+    card=render({'core':[p]}, coverage={p['id']:{
+        'state':'deferred', 'deferred_reason':'budget_exhausted',
+        'queued_at':'2026-10-14T03:00:00+00:00', 'checked_at':'', 'last_attempt_at':'',
+    }})
     context=browser.new_context(viewport={'width':width,'height':920})
     def route(r):
         path=urlsplit(r.request.url).path
@@ -133,6 +189,9 @@ def test_coverage_keyboard_and_original_groups_responsive(browser, width):
         page.locator('.coverage-toggle').focus();page.keyboard.press('Enter')
         assert page.locator('.paper-coverage-panel').is_visible()
         assert page.locator('.coverage-toggle').get_attribute('aria-expanded')=='true'
+        panel_text = page.locator('.paper-coverage-panel').inner_text()
+        assert '今日 6 次新增搜索额度已用完' in panel_text
+        assert '入队时间' in panel_text and '最近检索' not in panel_text
         assert not page.evaluate('document.documentElement.scrollWidth>innerWidth+1')
         page.goto(BASE+'readings/'+p['id']+'.html',wait_until='networkidle')
         assert page.locator('.article-original-figure').count()==2

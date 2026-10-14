@@ -62,6 +62,16 @@ def _fresh(value, now, days):
     return bool(stamp and timedelta(0) <= now - stamp < timedelta(days=days))
 
 
+def _record_attempt(progress, checked_at):
+    """Keep the time of actual I/O, including the original time of cached I/O."""
+    if progress is None:
+        return
+    stamp = parse_date(checked_at)
+    prior = parse_date(progress.get('last_attempt_at'))
+    if stamp and (not prior or stamp > prior):
+        progress['last_attempt_at'] = str(checked_at)
+
+
 def _identity(url):
     return hashlib.sha256(url.encode()).hexdigest()[:24]
 
@@ -187,13 +197,17 @@ def _image_url(url):
         return False
 
 
-def _cached_article(root, url, now, fetcher, runtime=None):
+def _cached_article(root, url, now, fetcher, runtime=None, progress=None):
     path = Path(root) / CACHE / 'articles' / (_identity(url) + '.json')
     saved = read(path)
     if _fresh(saved.get('checked_at'), now, 7 if saved.get('state') == 'ok' else 1):
+        _record_attempt(progress, saved.get('checked_at'))
         return saved.get('article'), saved.get('state', 'error')
     if runtime and not runtime.begin('article'):
+        if progress is not None:
+            progress['deferred_reason'] = 'runtime_limit'
         return None, 'deferred'
+    _record_attempt(progress, now.isoformat())
     try:
         body = fetcher(url, {'hosts': ['mp.weixin.qq.com']})
         article = parse_article(body, url)
@@ -386,8 +400,21 @@ def _project(payload, grants):
             state = 'error'
         if state == 'matched' and not articles:
             state = 'pending_match' if candidates else 'error'
-        result[identifier] = {'state': 'matched' if articles else state, 'checked_at': str(row.get('checked_at') or '')[:40],
+        checked = str(row.get('last_attempt_at') or row.get('checked_at') or '')[:40]
+        queued = str(row.get('queued_at') or '')[:40]
+        if (state in ('deferred', 'configuration_missing') or row.get('last_attempt_state') in ('deferred', 'configuration_missing')) and not row.get('last_attempt_at'):
+            # Version 1 wrote the collection time even for papers never searched.
+            # Preserve that queue timestamp without presenting it as evidence of I/O.
+            queued = queued or checked
+            checked = ''
+        checked = checked if parse_date(checked) else ''
+        result[identifier] = {'state': 'matched' if articles else state, 'checked_at': checked,
+                              'last_attempt_at': checked,
                               'articles': articles, 'candidates': candidates[:20]}
+        if parse_date(queued):
+            result[identifier]['queued_at'] = queued
+        if row.get('deferred_reason') in ('budget_exhausted', 'runtime_limit') and (state == 'deferred' or row.get('last_attempt_state') == 'deferred'):
+            result[identifier]['deferred_reason'] = row['deferred_reason']
         if row.get('last_attempt_state') in ('no_match', 'pending_match', 'unavailable', 'configuration_missing', 'deferred', 'error'):
             result[identifier]['last_attempt_state'] = row['last_attempt_state']
     return result
@@ -472,11 +499,12 @@ def _queries(paper):
     return list(dict.fromkeys('site:mp.weixin.qq.com "' + term.replace('"', '') + '"' for term in terms if term))[:2]
 
 
-def _search(root, query, now, key, searcher, runtime=None):
+def _search(root, query, now, key, searcher, runtime=None, progress=None):
     base = Path(root) / CACHE
     path = base / 'searches' / (hashlib.sha256(query.encode()).hexdigest() + '.json')
     saved = read(path)
     if _fresh(saved.get('checked_at'), now, 7 if saved.get('state') == 'ok' else 1):
+        _record_attempt(progress, saved.get('checked_at'))
         return saved.get('rows', []), saved.get('state', 'error')
     if not key:
         return [], 'configuration_missing'
@@ -485,11 +513,16 @@ def _search(root, query, now, key, searcher, runtime=None):
     if budget.get('day') != day:
         budget = {'day': day, 'count': 0}
     if int(budget.get('count', 0)) >= 6:
+        if progress is not None:
+            progress['deferred_reason'] = 'budget_exhausted'
         return [], 'deferred'
     if runtime and not runtime.begin('search'):
+        if progress is not None:
+            progress['deferred_reason'] = 'runtime_limit'
         return [], 'deferred'
     budget['count'] = int(budget.get('count', 0)) + 1
     write(base / 'budget.json', budget)
+    _record_attempt(progress, now.isoformat())
     try:
         payload = searcher(query, key)
         if not isinstance(payload, dict) or payload.get('error'):
@@ -521,7 +554,8 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
     papers = selected_papers(root)
     runtime = CollectionBudget(max_seconds, monotonic)
     for paper in papers:
-        result.setdefault(paper['id'], {'state': 'deferred', 'checked_at': now.isoformat(), 'articles': [], 'candidates': []})
+        result.setdefault(paper['id'], {'state': 'deferred', 'queued_at': now.isoformat(),
+                                       'checked_at': '', 'last_attempt_at': '', 'articles': [], 'candidates': []})
 
     def checkpoint():
         payload = {'version': 1, 'checked_at': now.isoformat(), 'papers': _project({'papers': result}, grants)}
@@ -529,13 +563,25 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
         return payload
 
     checkpoint()
-    for paper in papers:
+    for index, paper in enumerate(papers):
         if not runtime.available():
+            for pending in papers[index:]:
+                if result[pending['id']]['state'] == 'deferred':
+                    result[pending['id']]['deferred_reason'] = 'runtime_limit'
             break
         identifier = paper['id']
         old = previous.get(identifier, {})
         articles = {a['url']: dict(a) for a in old.get('articles', [])}
         candidates, seen, read_failed, read_deferred = {}, set(), False, False
+        progress = {'last_attempt_at': old.get('last_attempt_at', '')}
+        queued_at = old.get('queued_at') or result[identifier].get('queued_at', '')
+
+        def timing():
+            checked = progress.get('last_attempt_at', '')
+            values = {'checked_at': checked, 'last_attempt_at': checked}
+            if queued_at:
+                values['queued_at'] = queued_at
+            return values
 
         def examine(rows):
             nonlocal read_failed, read_deferred
@@ -549,7 +595,7 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                 if url in seen:
                     continue
                 seen.add(url)
-                article, state = _cached_article(root, url, now, fetcher, runtime)
+                article, state = _cached_article(root, url, now, fetcher, runtime, progress)
                 if not article:
                     read_deferred = read_deferred or state == 'deferred'
                     read_failed = read_failed or state != 'deferred'
@@ -566,7 +612,7 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                 row.update(match_status='verified', match_basis=basis)
                 articles[url] = row
                 candidates.pop(url, None)
-                result[identifier] = {'state': 'matched', 'checked_at': now.isoformat(),
+                result[identifier] = {'state': 'matched', **timing(),
                                       'articles': list(articles.values()), 'candidates': list(candidates.values())}
                 checkpoint()
                 row.update(_summarize(root, article, paper, now, summarizer, summary_budget, prior_article, runtime))
@@ -575,7 +621,7 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                 articles[url] = row
                 candidates.pop(url, None)
                 # Persist optional enrichment before reading another source.
-                result[identifier] = {'state': 'matched', 'checked_at': now.isoformat(),
+                result[identifier] = {'state': 'matched', **timing(),
                                       'articles': list(articles.values()), 'candidates': list(candidates.values())}
                 checkpoint()
 
@@ -586,16 +632,16 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
         retry_state = old.get('last_attempt_state') or old.get('state')
         days = 7 if retry_state in ('matched', 'no_match', 'pending_match') else 1
         fresh = _fresh(old.get('checked_at'), now, days)
-        if retry_state == 'deferred':
-            stamp = parse_date(old.get('checked_at'))
-            fresh = bool(stamp and stamp.astimezone(CHINA).date() == now.astimezone(CHINA).date())
+        if retry_state in ('deferred', 'configuration_missing'):
+            # Availability can change within a day (cached results, a restored
+            # key, a fresh run's time allowance). The request budget gates I/O.
+            fresh = False
         state = old.get('state', 'no_match')
-        checked = old.get('checked_at') if fresh else now.isoformat()
         if not fresh and (not articles or old.get('articles')):
             query_states = []
             known = set(articles)
             for query in _queries(paper):
-                rows, outcome = _search(root, query, now, key, searcher, runtime)
+                rows, outcome = _search(root, query, now, key, searcher, runtime, progress)
                 query_states.append(outcome)
                 examine(rows)
                 if set(articles) - known:
@@ -616,7 +662,7 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
             for candidate in old.get('candidates', []):
                 if candidate.get('url') not in articles:
                     candidates.setdefault(candidate['url'], candidate)
-        row = {'state': state, 'checked_at': checked or now.isoformat(),
+        row = {'state': state, **timing(),
                'articles': list(articles.values()),
                'candidates': [c for url, c in candidates.items() if url not in articles]}
         if articles and read_failed:
@@ -625,6 +671,10 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
             row['last_attempt_state'] = 'deferred'
         elif articles and attempt_state in ('configuration_missing', 'deferred', 'error'):
             row['last_attempt_state'] = attempt_state
+        if state == 'deferred' or row.get('last_attempt_state') == 'deferred':
+            row['queued_at'] = queued_at or now.isoformat()
+            if progress.get('deferred_reason'):
+                row['deferred_reason'] = progress['deferred_reason']
         result[identifier] = row
         checkpoint()
     return checkpoint()

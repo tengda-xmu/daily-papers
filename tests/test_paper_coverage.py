@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+import hashlib
 import io
 import json
 
@@ -163,6 +164,99 @@ def test_daily_budget_is_persisted_and_resets_at_beijing_midnight(tmp_path):
     coverage.collect(tmp_path, before + timedelta(minutes=2), key='key', searcher=empty)
     assert len(calls) == 10
     assert read(tmp_path / coverage.CACHE / 'budget.json')['day'] == '2026-10-14'
+
+
+def test_budget_deferred_papers_have_queue_time_without_fictitious_search_time(tmp_path):
+    setup(tmp_path)
+    write(tmp_path / coverage.CACHE / 'budget.json', {'day': NOW.astimezone(coverage.CHINA).date().isoformat(), 'count': 6})
+    calls = []
+    row = coverage.collect(tmp_path, NOW, key='key', searcher=lambda *_: calls.append(1))['papers'][PAPER['id']]
+    assert calls == [] and row['state'] == 'deferred'
+    assert row['deferred_reason'] == 'budget_exhausted'
+    assert row['queued_at'] == NOW.isoformat()
+    assert row['checked_at'] == row['last_attempt_at'] == ''
+    again = coverage.collect(tmp_path, NOW + timedelta(minutes=10), key='key', searcher=lambda *_: calls.append(1))['papers'][PAPER['id']]
+    assert again == row and calls == []
+
+
+def test_legacy_queue_timestamp_is_migrated_and_does_not_block_same_day_retry(tmp_path):
+    setup(tmp_path)
+    write(tmp_path / coverage.DATA, {'papers': {PAPER['id']: {
+        'state': 'deferred', 'checked_at': NOW.isoformat(), 'articles': [], 'candidates': []}}})
+    old = coverage.load_public(tmp_path, NOW)[PAPER['id']]
+    assert old['queued_at'] == NOW.isoformat()
+    assert old['checked_at'] == old['last_attempt_at'] == ''
+    calls = []
+    later = NOW + timedelta(minutes=10)
+    row = coverage.collect(tmp_path, later, key='key', searcher=lambda query, key: calls.append(query) or {'organic_results': []})['papers'][PAPER['id']]
+    assert len(calls) == 2 and row['state'] == 'no_match'
+    assert row['checked_at'] == row['last_attempt_at'] == later.isoformat()
+    assert row['queued_at'] == NOW.isoformat() and 'deferred_reason' not in row
+
+
+def test_runtime_deferred_paper_can_run_later_the_same_day(tmp_path):
+    setup(tmp_path)
+    calls = []
+    empty = lambda query, key: calls.append(query) or {'organic_results': []}
+    row = coverage.collect(tmp_path, NOW, key='key', searcher=empty, max_seconds=0)['papers'][PAPER['id']]
+    assert row['state'] == 'deferred' and row['deferred_reason'] == 'runtime_limit'
+    assert row['checked_at'] == '' and not calls
+    later = NOW + timedelta(minutes=10)
+    row = coverage.collect(tmp_path, later, key='key', searcher=empty)['papers'][PAPER['id']]
+    assert row['state'] == 'no_match' and len(calls) == 2
+    assert row['checked_at'] == later.isoformat()
+
+
+def test_partial_search_keeps_real_attempt_time_across_same_day_deferrals(tmp_path):
+    setup(tmp_path)
+    write(tmp_path / coverage.CACHE / 'budget.json', {'day': NOW.astimezone(coverage.CHINA).date().isoformat(), 'count': 5})
+    calls = []
+    empty = lambda query, key: calls.append(query) or {'organic_results': []}
+    row = coverage.collect(tmp_path, NOW, key='key', searcher=empty)['papers'][PAPER['id']]
+    assert len(calls) == 1 and row['state'] == 'deferred'
+    assert row['checked_at'] == row['last_attempt_at'] == NOW.isoformat()
+    assert row['deferred_reason'] == 'budget_exhausted'
+    later = coverage.collect(tmp_path, NOW + timedelta(hours=1), key='key', searcher=empty)['papers'][PAPER['id']]
+    assert later == row and len(calls) == 1
+
+
+def test_cached_searches_recover_queued_paper_without_spending_budget_or_redating(tmp_path):
+    setup(tmp_path)
+    stamp = NOW - timedelta(hours=2)
+    write(tmp_path / coverage.DATA, {'papers': {PAPER['id']: {'state': 'deferred', 'checked_at': NOW.isoformat()}}})
+    write(tmp_path / coverage.CACHE / 'budget.json', {'day': NOW.astimezone(coverage.CHINA).date().isoformat(), 'count': 6})
+    for query in coverage._queries(PAPER):
+        path = tmp_path / coverage.CACHE / 'searches' / (hashlib.sha256(query.encode()).hexdigest() + '.json')
+        write(path, {'state': 'ok', 'checked_at': stamp.isoformat(), 'rows': []})
+    def no_search(*_):
+        raise AssertionError('Fresh cached searches must not spend budget')
+    row = coverage.collect(tmp_path, NOW, key='key', searcher=no_search)['papers'][PAPER['id']]
+    assert row['state'] == 'no_match'
+    assert row['checked_at'] == row['last_attempt_at'] == stamp.isoformat()
+    assert read(tmp_path / coverage.CACHE / 'budget.json')['count'] == 6
+
+
+def test_missing_configuration_does_not_invent_attempt_or_delay_restored_key(tmp_path):
+    setup(tmp_path)
+    row = coverage.collect(tmp_path, NOW, key='')['papers'][PAPER['id']]
+    assert row['state'] == 'configuration_missing' and row['checked_at'] == row['last_attempt_at'] == ''
+    calls = []
+    later = NOW + timedelta(minutes=5)
+    row = coverage.collect(tmp_path, later, key='key', searcher=lambda query, key: calls.append(query) or {'organic_results': []})['papers'][PAPER['id']]
+    assert row['state'] == 'no_match' and len(calls) == 2
+    assert row['checked_at'] == later.isoformat()
+
+
+def test_cached_matching_body_retains_its_actual_check_time(tmp_path):
+    setup(tmp_path)
+    write(tmp_path / 'data/social-articles.json', {'entries': [{'url': URL, 'title': PAPER['title']}]})
+    row = coverage.collect(tmp_path, NOW, key='', fetcher=lambda *_: page())['papers'][PAPER['id']]
+    assert row['checked_at'] == NOW.isoformat()
+    def no_fetch(*_):
+        raise AssertionError('Fresh article body must be reused')
+    again = coverage.collect(tmp_path, NOW + timedelta(days=6), key='', fetcher=no_fetch)['papers'][PAPER['id']]
+    assert again['state'] == 'matched'
+    assert again['checked_at'] == again['last_attempt_at'] == NOW.isoformat()
 
 
 def test_success_cache_seven_days_and_failure_cache_one_day(tmp_path):

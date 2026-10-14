@@ -17,6 +17,16 @@ STATE_LABELS = {
 }
 
 
+def state_label(state, coverage):
+    if state == 'deferred':
+        reason = coverage.get('deferred_reason')
+        if reason == 'budget_exhausted':
+            return '公众号搜索排队中：今日 6 次新增搜索额度已用完，额度恢复后按顺序继续。'
+        if reason == 'runtime_limit':
+            return '公众号搜索排队中：本轮处理时间已用完，将在后续更新继续。'
+    return STATE_LABELS.get(state, STATE_LABELS['pending'])
+
+
 def article_name(row):
     # URL-derived identities are independent of paper IDs, permitting one
     # authorized article to introduce several papers without duplicate pages.
@@ -31,9 +41,19 @@ def coverage_panel(paper_id, coverage=None, *, root='./', suffix=''):
     button = (f'<button type="button" class="text-button coverage-toggle" aria-expanded="false" '
               f'aria-controls="{identifier}">公众号介绍<span aria-hidden="true">＋</span></button>')
     state = coverage.get('state', 'pending')
-    body = '<p class="coverage-status">' + STATE_LABELS.get(state, STATE_LABELS['pending']) + '</p>'
-    if coverage.get('checked_at'):
-        body += '<p class="coverage-checked">最近检索 ' + escape(display_time(coverage['checked_at'])[1]) + '</p>'
+    body = '<p class="coverage-status">' + state_label(state, coverage) + '</p>'
+    waiting = state in ('pending', 'deferred', 'configuration_missing') or coverage.get('last_attempt_state') in ('deferred', 'configuration_missing')
+    checked_at = coverage.get('last_attempt_at') or coverage.get('checked_at')
+    queued_at = coverage.get('queued_at')
+    # Older records stamped the collection time even when no search ran.
+    # Keep direct/legacy render callers honest as well as projected records.
+    if waiting and not coverage.get('last_attempt_at'):
+        queued_at = queued_at or checked_at
+        checked_at = None
+    if checked_at:
+        body += '<p class="coverage-checked">最近检索 ' + escape(display_time(checked_at)[1]) + '</p>'
+    if waiting and queued_at:
+        body += '<p class="coverage-checked">入队时间 ' + escape(display_time(queued_at)[1]) + '</p>'
     rows = []
     for row in coverage.get('articles', []):
         if row.get('match_status') != 'verified':
@@ -61,7 +81,7 @@ def coverage_panel(paper_id, coverage=None, *, root='./', suffix=''):
     if candidates:
         body += '<details class="coverage-candidates"><summary>待核实的候选来源</summary><ul>' + ''.join(candidates) + '</ul></details>'
     if rows and coverage.get('last_attempt_state') not in (None, '', 'matched', 'no_match'):
-        body += '<p class="coverage-status">' + STATE_LABELS.get(coverage['last_attempt_state'], STATE_LABELS['error']) + '已保留上次确认的介绍。</p>'
+        body += '<p class="coverage-status">' + state_label(coverage['last_attempt_state'], coverage) + '已保留上次确认的介绍。</p>'
     panel = f'<section class="paper-coverage-panel" id="{identifier}" aria-label="公众号介绍" hidden>{body}</section>'
     return button, panel
 
