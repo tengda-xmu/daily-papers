@@ -232,8 +232,8 @@ def test_cached_searches_recover_queued_paper_without_requests_or_redating(tmp_p
     write(tmp_path / coverage.DATA, {'papers': {PAPER['id']: {'state': 'deferred', 'checked_at': NOW.isoformat()}}})
     write(tmp_path / coverage.CACHE / 'budget.json', {'day': NOW.astimezone(coverage.CHINA).date().isoformat(), 'count': 6})
     for query in coverage._queries(PAPER):
-        path = tmp_path / coverage.CACHE / 'searches' / (hashlib.sha256(query.encode()).hexdigest() + '.json')
-        write(path, {'state': 'ok', 'checked_at': stamp.isoformat(), 'rows': []})
+        path = coverage.search_cache_path(tmp_path, query)
+        write(path, {'version': coverage.SEARCH_VERSION, 'state': 'ok', 'checked_at': stamp.isoformat(), 'rows': []})
     def no_search(*_):
         raise AssertionError('Fresh cached searches must not send requests')
     row = coverage.collect(tmp_path, NOW, key='key', searcher=no_search)['papers'][PAPER['id']]

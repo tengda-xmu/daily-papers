@@ -25,6 +25,8 @@ def test_collection_options_and_progress(monkeypatch, capsys, argv, refresh, ids
     assert len(calls) == 1
     assert calls[0]['force_refresh'] is refresh
     assert calls[0]['paper_ids'] == ids
+    assert calls[0]['source_urls'] is None
+    assert callable(calls[0]['index_searcher'])
     assert 'max_seconds' not in calls[0]
     output = capsys.readouterr().out
     assert '[1/1] no_match: Paper title' in output
@@ -36,6 +38,28 @@ def test_unknown_options_do_not_start_collection(monkeypatch):
     with pytest.raises(SystemExit) as error:
         command.main(['--limit', '6'])
     assert error.value.code == 2
+
+
+@pytest.mark.parametrize('ids', [[], ['--paper-id', 'one', '--paper-id', 'two']])
+def test_source_hint_requires_one_distinct_paper(monkeypatch, ids):
+    monkeypatch.setattr(command, 'collect', lambda **_: pytest.fail('Ambiguous source must not be collected'))
+    with pytest.raises(SystemExit) as error:
+        command.main(ids + ['--source-url', 'https://mp.weixin.qq.com/s/example'])
+    assert error.value.code == 2
+
+
+def test_multiple_source_hints_are_passed_without_count_limit(monkeypatch):
+    monkeypatch.setattr('src.settings.load_env', lambda: None)
+    calls = []
+    monkeypatch.setattr(command, 'collect', lambda **options: calls.append(options) or {'papers': {}})
+    urls = [f'https://mp.weixin.qq.com/s/source-{n}' for n in range(12)]
+    argv = ['--paper-id', 'one', '--paper-id', 'one']
+    for url in urls:
+        argv.extend(['--source-url', url])
+    command.main(argv)
+    assert calls[0]['source_urls'] == urls
+    assert calls[0]['force_refresh'] is False
+    assert 'max_seconds' not in calls[0]
 
 
 @pytest.mark.parametrize('gbk_stream', [True, False])

@@ -78,16 +78,21 @@ def test_fetch_timeout_keeps_polling_without_submitting_again(reader):
     page, context, client, headers, original, *_ = reader
     empty_reader(page, context, client, headers)
     data = client.get(f'/api/papers/{P1}', headers=headers).json()
-    pending_data = dict(data, document=None, pdf_versions=[], reading=None, preparing=True)
+    pending_data = dict(data, document=None, pdf_versions=[], reading=None, preparing=False)
     context.unroute(f'**/api/papers/{P1}')
     context.route(f'**/api/papers/{P1}', lambda route: route.fulfill(json=pending_data))
+    # Background polling can run before the click. The simulated server only
+    # starts preparing once the user's fetch request has actually been sent.
+    page.expose_function('pdfAcquisitionStarted', lambda: pending_data.update(preparing=True))
     page.evaluate('''() => {
       const originalFetch = window.fetch;
       window.pdfFetchAttempts = 0;
       window.fetch = (url, options) => {
         if (String(url).endsWith('/fetch-pdf')) {
           window.pdfFetchAttempts++;
-          return Promise.reject(new DOMException('Timed out', 'TimeoutError'));
+          return window.pdfAcquisitionStarted().then(() => {
+            throw new DOMException('Timed out', 'TimeoutError');
+          });
         }
         return originalFetch(url, options);
       };

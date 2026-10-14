@@ -18,8 +18,11 @@ def publish(root, values, *, statuses=None):
 
 
 def publish_values(root, outputs, directory, key, *, statuses=None):
-    if (directory, key) not in (('auto-reading', 'paper_id'), ('ai-readings', 'id'), ('reading-status', 'paper_id')):
+    if (directory, key) not in (('auto-reading', 'paper_id'), ('ai-readings', 'id'), ('reading-status', 'paper_id'), ('coverage-reviews', 'id')):
         raise ValueError('Unsupported public notes')
+    if directory == 'coverage-reviews':
+        from src.coverage_evidence import public_review
+        outputs = [public_review(value) for value in outputs]
     from src.auto_reading import public_status
     statuses = [public_status(v) for v in (statuses or [])]
     if not outputs and not statuses:

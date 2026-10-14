@@ -81,11 +81,11 @@ def login(client, app):
 def test_shutdown_stops_background_publishers_before_listener(bridge):
     client,app,_=bridge
     closed=[]
-    for name in ('daily_updater','reading_queue','ai_queue','local_figures','edition_manager'):
+    for name in ('daily_updater','reading_queue','ai_queue','coverage_queue','local_figures','edition_manager'):
         async def close(name=name):closed.append(name)
         getattr(app.state,name).close=close
     def shutdown():
-        assert set(closed)=={'daily_updater','reading_queue','ai_queue','local_figures','edition_manager'}
+        assert set(closed)=={'daily_updater','reading_queue','ai_queue','coverage_queue','local_figures','edition_manager'}
         closed.append('listener')
     app.state.shutdown=shutdown
     assert client.post('/api/shutdown',headers=login(client,app)).status_code==200

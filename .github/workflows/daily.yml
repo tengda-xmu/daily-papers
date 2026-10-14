@@ -104,6 +104,7 @@ jobs:
         run: |
           git fetch origin connector-data:refs/remotes/origin/connector-data
           python -m tools.recommendation_data --recover --reconcile --import-readings
+          python -m tools.import_coverage_reviews
       - name: Refresh public AI and research columns
         continue-on-error: true
         env:
@@ -218,6 +219,7 @@ jobs:
         run: |
           git fetch origin connector-data:refs/remotes/origin/connector-data
           python -m tools.recommendation_data --import-readings
+          python -m tools.import_coverage_reviews
           python -m tools.public_updates --import-readings
           python tools/build_site.py
       - name: Publish GitHub Pages

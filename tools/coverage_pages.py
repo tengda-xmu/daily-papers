@@ -8,8 +8,8 @@ import re
 STATE_LABELS = {
     'pending': '尚未检索，将随每日更新自动补充。',
     'matched': '已核对以下文章介绍的是这篇论文。',
-    'no_match': '暂未检索到可确认的公众号介绍，后续将再次检查。',
-    'pending_match': '找到候选文章，尚未确认是否介绍这篇论文。',
+    'no_match': '公开索引暂未返回结果，可能尚未收录；后续将再次检查。',
+    'pending_match': '找到候选来源，待核实是否介绍这篇论文。',
     'unavailable': '来源暂时无法读取，待恢复后继续核对。',
     'configuration_missing': '自动搜索暂不可用，待配置恢复后继续检索。',
     'deferred': '公众号介绍待检索，将在更新时继续。',
@@ -17,7 +17,52 @@ STATE_LABELS = {
 }
 
 
+def article_status(row):
+    """Keep paper identity verification separate from access to article text."""
+    parts = []
+    method = row.get('verification_method')
+    if method == 'manual_screenshot':
+        parts.append('已依据用户提供的截图核实论文关联。')
+    elif method == 'image':
+        parts.append('已依据文章配图核实论文关联。')
+    if row.get('body_status') == 'challenge':
+        parts.append('已确认来源，正文读取受限：微信要求访问验证，请通过原文链接查看。')
+    elif row.get('body_status') == 'unavailable':
+        parts.append('已确认来源，正文读取受限；可通过原文链接查看。')
+    elif row.get('body_status') == 'pending':
+        parts.append('已确认来源，正文尚待读取。')
+    return ''.join(parts)
+
+
+def candidate_status(row):
+    return {
+        'visual_pending': '图片中的论文信息待核实',
+        'article_unavailable': '正文暂时无法读取，论文关联待核实',
+        'article_challenge': '访问验证受限，论文关联待核实',
+        'challenge': '访问验证受限，论文关联待核实',
+        'index_only': '仅有公开索引线索，论文关联待核实',
+    }.get(row.get('reason'), '论文关联待核实')
+
+
 def state_label(state, coverage):
+    search_status = coverage.get('search_status')
+    if state == 'unavailable' and search_status == 'blocked':
+        return '公开索引访问受限，将在恢复后继续检索。'
+    if state == 'configuration_missing' and search_status == 'partial':
+        return '部分搜索渠道暂不可用，已保留其他渠道的检索结果。'
+    if state == 'error' and search_status == 'partial':
+        return '部分公开索引未能完成检索，将在后续更新重试。'
+    if state == 'no_match':
+        if search_status == 'not_searched':
+            return STATE_LABELS['pending']
+        if search_status == 'configuration_missing':
+            return STATE_LABELS['configuration_missing']
+        if search_status == 'legacy_unchecked':
+            return '旧检索结果待复查，将使用更新后的检索方式继续核对。'
+        if search_status == 'blocked':
+            return '公开索引访问受限，尚不能判断是否有公众号介绍。'
+        if search_status in ('partial', 'error'):
+            return '公开索引检索尚未完成，后续将继续检查。'
     if state == 'deferred':
         reason = coverage.get('deferred_reason')
         if reason == 'budget_exhausted':
@@ -43,11 +88,13 @@ def coverage_panel(paper_id, coverage=None, *, root='./', suffix=''):
     state = coverage.get('state', 'pending')
     body = '<p class="coverage-status">' + state_label(state, coverage) + '</p>'
     waiting = state in ('pending', 'deferred', 'configuration_missing') or coverage.get('last_attempt_state') in ('deferred', 'configuration_missing')
-    checked_at = coverage.get('last_attempt_at') or coverage.get('checked_at')
+    has_search_status = 'last_search_at' in coverage or 'search_status' in coverage
+    checked_at = (coverage.get('last_search_at') if has_search_status
+                  else coverage.get('last_attempt_at') or coverage.get('checked_at'))
     queued_at = coverage.get('queued_at')
     # Older records stamped the collection time even when no search ran.
     # Keep direct/legacy render callers honest as well as projected records.
-    if waiting and not coverage.get('last_attempt_at'):
+    if waiting and not has_search_status and not coverage.get('last_attempt_at'):
         queued_at = queued_at or checked_at
         checked_at = None
     if checked_at:
@@ -66,8 +113,12 @@ def coverage_panel(paper_id, coverage=None, *, root='./', suffix=''):
         action = ''
         if row.get('display_mode') == 'reprint':
             action = f'<a href="{root}wechat/{article_name(row)}.html">站内阅读</a>'
+        status = article_status(row)
+        verified_at = row.get('verified_at')
         rows.append('<li><h4>' + escape(row.get('title') or '公众号文章') + '</h4>'
                     + '<p class="coverage-source">' + meta + '</p>'
+                    + ('<p class="coverage-verification">' + escape(status) + '</p>' if status else '')
+                    + ('<p class="coverage-checked">关联核验 ' + escape(display_time(verified_at)[1]) + '</p>' if verified_at else '')
                     + ('<p>' + escape(row['summary']) + '</p>' if row.get('summary') else '')
                     + f'<div class="coverage-actions">{action}<a href="{url}" target="_blank" rel="noopener noreferrer">公众号原文</a></div></li>')
     if rows:
@@ -77,7 +128,8 @@ def coverage_panel(paper_id, coverage=None, *, root='./', suffix=''):
         url = safe_url(row.get('url'))
         if url != '#':
             candidates.append(f'<li><a href="{url}" target="_blank" rel="noopener noreferrer">'
-                              + escape(row.get('title') or '候选公众号文章') + '</a>（待核实）</li>')
+                              + escape(row.get('title') or '候选公众号文章') + '</a>（'
+                              + candidate_status(row) + '）</li>')
     if candidates:
         body += '<details class="coverage-candidates"><summary>待核实的候选来源</summary><ul>' + ''.join(candidates) + '</ul></details>'
     if rows and coverage.get('last_attempt_state') not in (None, '', 'matched', 'no_match'):
@@ -132,4 +184,4 @@ def build_coverage(root, out, coverage=None):
             path.unlink()
     for name, article in articles.items():
         (directory / (name + '.html')).write_text(render_reprint(article), encoding='utf-8')
-    (out / 'paper-coverage.json').write_text(json.dumps({'version': 1, 'papers': coverage}, ensure_ascii=False, indent=2), encoding='utf-8')
+    (out / 'paper-coverage.json').write_text(json.dumps({'version': 2, 'papers': coverage}, ensure_ascii=False, indent=2), encoding='utf-8')

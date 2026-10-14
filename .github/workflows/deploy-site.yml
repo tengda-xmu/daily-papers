@@ -34,6 +34,8 @@ jobs:
           fi
       - name: Import validated reading enrichment and recover published editions
         run: python -m tools.recommendation_data --recover --reconcile --import-readings
+      - name: Import verified public-account associations
+        run: python -m tools.import_coverage_reviews
       - name: Collect missing original paper figures
         timeout-minutes: 8
         continue-on-error: true

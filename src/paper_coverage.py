@@ -17,7 +17,7 @@ import re
 import time
 import unicodedata
 from urllib.parse import unquote, urlsplit
-from urllib.request import Request, urlopen
+from urllib.request import HTTPRedirectHandler, Request, build_opener, urlopen
 
 from bs4 import BeautifulSoup, NavigableString, Tag
 
@@ -28,11 +28,47 @@ from src.wechat_metadata import article_url, public_index_url
 DATA = 'data/paper-coverage.json'
 PERMISSIONS = 'config/wechat-reprints.json'
 CACHE = 'data/cache/paper-coverage'
+SCHEMA_VERSION = 2
+SEARCH_VERSION = 3
+ARTICLE_VERSION = 2
 CHINA = timezone(timedelta(hours=8))
 IMAGE_HOSTS = ['mmbiz.qpic.cn', 'mmbiz.qlogo.cn']
 ASSET = re.compile(r'assets/wechat/([a-f0-9]{64})\.png\Z')
 REFERENCES = re.compile(r'^(?:\d+[.、]\s*)?(?:参考文献|引用文献|文献引用|references|bibliography)(?:\s*[:：]|\s*\[\d+\]|\s*$)', re.I)
 SAFE_ID = re.compile(r'[A-Za-z0-9_-]{1,80}\Z')
+MATCH_BASES = ('doi', 'title_author', 'image_doi', 'image_title_author', 'manual_screenshot')
+BODY_STATES = ('readable', 'challenge', 'unavailable', 'pending')
+
+
+class ArticleChallenge(ValueError):
+    """An access challenge is not an empty or unrelated article."""
+
+
+def fetch_coverage(url, source):
+    if urlsplit(url).hostname != 'mp.weixin.qq.com':
+        return fetch(url, source)
+    from src.public_sources import allowed, MAX_BYTES
+    if not allowed(url, source):
+        raise ValueError('Unapproved source host')
+
+    def check(target):
+        if not allowed(target, source):
+            raise ValueError('Unapproved redirect')
+        if re.search(r'captcha|verify|wappoc', urlsplit(target).path, re.I):
+            raise ArticleChallenge('WeChat requires human verification')
+
+    class Redirects(HTTPRedirectHandler):
+        def redirect_request(self, request, fp, code, msg, headers, target):
+            check(target)
+            return super().redirect_request(request, fp, code, msg, headers, target)
+
+    request = Request(url, headers={'User-Agent': 'DailyPapers/1.0'})
+    with build_opener(Redirects).open(request, timeout=15) as response:
+        check(response.url)
+        body = response.read(MAX_BYTES + 1)
+        if len(body) > MAX_BYTES:
+            raise ValueError('Article too large')
+        return body
 
 
 class CollectionBudget:
@@ -99,9 +135,13 @@ def permissions(root=ROOT, now=None):
 def parse_article(body, url):
     if not isinstance(body, bytes) or len(body) > 4_000_000:
         raise ValueError('Invalid article response')
-    soup = BeautifulSoup(body.decode('utf-8', 'replace'), 'html.parser')
+    decoded = body.decode('utf-8', 'replace')
+    soup = BeautifulSoup(decoded, 'html.parser')
     main = soup.select_one('#js_content')
-    if main is None or len(clean(main.get_text())) < 50:
+    if main is None and any(marker in decoded.lower() for marker in (
+            'wappoc_appmsgcaptcha', 'captcha', '环境异常', '请输入验证码', '访问过于频繁', '完成验证')):
+        raise ArticleChallenge('WeChat requires human verification')
+    if main is None:
         raise ValueError('No readable WeChat article')
     title = soup.select_one('#activity-name')
     account = soup.select_one('#js_name')
@@ -141,7 +181,8 @@ def parse_article(body, url):
             if src.startswith('//'):
                 src = 'https:' + src
             if _image_url(src):
-                blocks.append({'type': 'image', 'remote_url': src, 'alt': clean(node.get('alt'))[:200]})
+                blocks.append({'type': 'image', 'remote_url': src, 'alt': clean(node.get('alt'))[:200],
+                               'reference_section': stopped, 'position': len(blocks)})
             return
         block = node.name in ('p', 'section', 'div', 'blockquote', 'li', 'figure', 'figcaption', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6')
         if block:
@@ -156,9 +197,16 @@ def parse_article(body, url):
             flush('heading' if node.name.startswith('h') and node.name[1:].isdigit() else 'paragraph')
 
     walk(main); flush()
+    if len(clean(main.get_text())) < 50 and not any(b['type'] == 'image' for b in blocks):
+        raise ValueError('No readable WeChat article')
+    for index, block in enumerate(blocks):
+        if block['type'] == 'image':
+            block['context_before'] = ' '.join(b.get('text', '') for b in blocks[max(0, index - 2):index])[-1600:]
+            block['context_after'] = ' '.join(b.get('text', '') for b in blocks[index + 1:index + 3])[:1600]
     return {'url': url, 'title': clean(title.get_text()) if title else '',
             'account': clean(account.get_text()) if account else '', 'author': author_text, 'published_at': published,
-            'match_text': ' '.join(matching), 'blocks': blocks, 'image_count': image_count}
+            'match_text': ' '.join(matching), 'blocks': blocks, 'image_count': image_count,
+            'source_version': hashlib.sha256(body).hexdigest(), 'body_status': 'readable'}
 
 
 def _dois(text):
@@ -195,7 +243,8 @@ def _image_url(url):
 def _cached_article(root, url, now, fetcher, runtime=None, progress=None, force_refresh=False):
     path = Path(root) / CACHE / 'articles' / (_identity(url) + '.json')
     saved = read(path)
-    if not force_refresh and _fresh(saved.get('checked_at'), now, 7 if saved.get('state') == 'ok' else 1):
+    if (not force_refresh and saved.get('version') == ARTICLE_VERSION
+            and _fresh(saved.get('checked_at'), now, 7 if saved.get('state') == 'ok' else 1)):
         _record_attempt(progress, saved.get('checked_at'))
         return saved.get('article'), saved.get('state', 'error')
     if runtime and not runtime.begin('article'):
@@ -206,11 +255,14 @@ def _cached_article(root, url, now, fetcher, runtime=None, progress=None, force_
     try:
         body = fetcher(url, {'hosts': ['mp.weixin.qq.com']})
         article = parse_article(body, url)
-        write(path, {'state': 'ok', 'checked_at': now.isoformat(), 'article': article,
+        write(path, {'version': ARTICLE_VERSION, 'state': 'ok', 'checked_at': now.isoformat(), 'article': article,
                      'raw_body': body.decode('utf-8', 'replace')})
         return article, 'ok'
+    except ArticleChallenge:
+        write(path, {'version': ARTICLE_VERSION, 'state': 'challenge', 'checked_at': now.isoformat()})
+        return None, 'challenge'
     except Exception:
-        write(path, {'state': 'unavailable', 'checked_at': now.isoformat()})
+        write(path, {'version': ARTICLE_VERSION, 'state': 'unavailable', 'checked_at': now.isoformat()})
         return None, 'unavailable'
 
 
@@ -332,13 +384,25 @@ def _summarize(root, article, paper, now, summarizer, previous, runtime=None):
 
 def _public_article(row, grants):
     url = article_url(row.get('url'))
-    if not url or row.get('match_status') != 'verified' or row.get('match_basis') not in ('doi', 'title_author'):
+    if not url or row.get('match_status') != 'verified' or row.get('match_basis') not in MATCH_BASES:
         return None
     account = clean(row.get('account'))[:100]
     result = {'id': _identity(url), 'url': url, 'title': clean(row.get('title'))[:300],
               'account': account, 'author': clean(row.get('author'))[:100], 'published_at': str(row.get('published_at') or '')[:40],
               'summary': _intro(account), 'summary_status': 'pending', 'match_status': 'verified', 'match_basis': row['match_basis'],
               'display_mode': 'source'}
+    method = row.get('verification_method') or ('manual_screenshot' if row['match_basis'] == 'manual_screenshot'
+                                              else 'image' if row['match_basis'].startswith('image_') else 'body')
+    if method in ('body', 'image', 'manual_screenshot'):
+        result['verification_method'] = method
+    body_status = row.get('body_status', 'readable' if method == 'body' else 'pending')
+    result['body_status'] = body_status if body_status in BODY_STATES else 'pending'
+    if parse_date(row.get('verified_at')):
+        result['verified_at'] = row['verified_at']
+    if re.fullmatch(r'[a-f0-9]{64}', str(row.get('source_version', ''))):
+        result['source_version'] = row['source_version']
+    if method == 'manual_screenshot' and row.get('summary_status') != 'ready':
+        result['summary'] = '依据用户提供的文章截图核对了论文身份，可通过来源链接阅读公众号原文。'
     if (row.get('summary_status') == 'ready' and 40 <= len(clean(row.get('summary'))) <= 180
             and re.fullmatch(r'[a-f0-9]{64}', str(row.get('summary_content_version', '')))):
         result.update(summary=clean(row['summary']), summary_status='ready', summary_content_version=row['summary_content_version'])
@@ -377,8 +441,18 @@ def _public_candidate(row):
         url = public_index_url(account, title)
     if not url:
         return None
-    return {'id': _identity(url), 'url': url, 'title': title, 'account': account,
-            'match_status': 'pending', 'reason': reason if reason in ('identity_unconfirmed', 'article_unavailable', 'index_only', 'collection_deferred') else 'identity_unconfirmed'}
+    result = {'id': _identity(url), 'url': url, 'title': title, 'account': account,
+              'match_status': 'pending', 'reason': reason if reason in (
+                  'identity_unconfirmed', 'article_unavailable', 'article_challenge', 'index_only',
+                  'collection_deferred', 'visual_pending') else 'identity_unconfirmed'}
+    for name in ('published_at', 'last_attempt_at'):
+        if parse_date(row.get(name)):
+            result[name] = row[name]
+    if row.get('body_status') in BODY_STATES:
+        result['body_status'] = row['body_status']
+    if re.fullmatch(r'[a-f0-9]{64}', str(row.get('source_version', ''))):
+        result['source_version'] = row['source_version']
+    return result
 
 
 def _project(payload, grants):
@@ -404,6 +478,19 @@ def _project(payload, grants):
         result[identifier] = {'state': 'matched' if articles else state, 'checked_at': checked,
                               'last_attempt_at': checked,
                               'articles': articles, 'candidates': candidates}
+        if type(row.get('search_version')) is int:
+            result[identifier]['search_version'] = row['search_version']
+        if row.get('search_status') in ('not_searched', 'indexed_no_hit', 'candidates_found', 'partial',
+                                       'blocked', 'error', 'configuration_missing', 'complete', 'legacy_unchecked'):
+            result[identifier]['search_status'] = row['search_status']
+        elif state == 'no_match':
+            result[identifier]['search_status'] = 'legacy_unchecked'
+        if parse_date(row.get('last_search_at')):
+            result[identifier]['last_search_at'] = row['last_search_at']
+        if parse_date(row.get('next_search_at')):
+            result[identifier]['next_search_at'] = row['next_search_at']
+        if parse_date(row.get('verified_at')):
+            result[identifier]['verified_at'] = row['verified_at']
         if parse_date(queued):
             result[identifier]['queued_at'] = queued
         if row.get('deferred_reason') in ('budget_exhausted', 'runtime_limit') and (state == 'deferred' or row.get('last_attempt_state') == 'deferred'):
@@ -472,15 +559,14 @@ def selected_papers(root):
 
 
 def _local_candidates(root, paper):
+    from src.coverage_discovery import local_candidate
     rows = read(Path(root) / 'data/social-articles.json').get('entries', [])
     rows += read(Path(root) / 'data/inbox/wechat.json').get('records', [])
     result = []
     for row in rows:
         if row.get('platform') not in (None, 'wechat'):
             continue
-        text = ' '.join(str(row.get(k) or '') for k in ('title', 'summary', 'abstract', 'evidence_text'))
-        doi, title = normalize_doi(paper.get('doi')), compact(paper.get('title'))
-        if not ((doi and doi in _dois(text)) or (len(title) >= 25 and title in compact(text))):
+        if not local_candidate(paper, row):
             continue
         result.append({'url': row.get('url') or row.get('landing_url', ''), 'title': row.get('title', ''),
                        'account': row.get('account') or row.get('venue', ''), 'reason': 'index_only'})
@@ -488,33 +574,45 @@ def _local_candidates(root, paper):
 
 
 def _queries(paper):
-    title = clean(paper.get('title')).rstrip('.')
-    terms = [normalize_doi(paper.get('doi')), title]
-    # Typographic punctuation differs between publisher metadata and reposts.
-    # Keep the complete title; never weaken identity to a few topic keywords.
-    normalized = unicodedata.normalize('NFKC', title).translate(str.maketrans({
-        '‘': "'", '’': "'", '“': '"', '”': '"', '\u00ad': None,
-    }))
-    normalized = re.sub(r'[\u2010-\u2015\u2212]', '-', normalized)
-    if normalized != title:
-        terms.append(normalized)
-    queries = ['site:mp.weixin.qq.com "' + term.replace('"', '') + '"' for term in terms if term]
-    # A complete-title query without phrase quotes tolerates indexing and
-    # formatting differences. Returned bodies still need the same strict match.
-    if normalized:
-        queries.append('site:mp.weixin.qq.com ' + normalized.replace('"', ''))
-    return list(dict.fromkeys(queries))
+    from src.coverage_discovery import paper_queries
+    return paper_queries(paper)
 
 
-def _search(root, query, now, key, searcher, runtime=None, progress=None, force_refresh=False):
+def search_cache_path(root, query, provider='serpapi'):
+    identity = json.dumps([SEARCH_VERSION, provider, query], ensure_ascii=False)
+    return Path(root) / CACHE / 'searches' / (hashlib.sha256(identity.encode()).hexdigest() + '.json')
+
+
+def _search(root, query, now, key, searcher, runtime=None, progress=None, force_refresh=False,
+            *, provider='serpapi', requires_key=True):
+    def retry_hint(value):
+        stamp = parse_date(value)
+        if progress is not None and stamp:
+            prior = parse_date(progress.get('retry_at'))
+            if not prior or stamp < prior:
+                progress['retry_at'] = stamp.isoformat()
+
     base = Path(root) / CACHE
-    path = base / 'searches' / (hashlib.sha256(query.encode()).hexdigest() + '.json')
+    path = search_cache_path(root, query, provider)
     saved = read(path)
-    if not force_refresh and _fresh(saved.get('checked_at'), now, 7 if saved.get('state') == 'ok' else 1):
+    cached_retry = parse_date(saved.get('retry_at'))
+    fresh = (now < cached_retry if cached_retry and saved.get('state') in ('blocked', 'error') else
+             _fresh(saved.get('checked_at'), now, 7 if saved.get('state') == 'ok' and saved.get('rows') else 1))
+    if (not force_refresh and saved.get('version') == SEARCH_VERSION
+            and fresh):
         _record_attempt(progress, saved.get('checked_at'))
+        if saved.get('state') in ('blocked', 'error'):
+            retry_hint(saved.get('retry_at'))
         return saved.get('rows', []), saved.get('state', 'error')
-    if not key:
+    if requires_key and not key:
         return [], 'configuration_missing'
+    health_path = base / 'providers' / (provider + '.json')
+    health = read(health_path)
+    retry_at = parse_date(health.get('retry_at'))
+    if retry_at and now < retry_at:
+        # A real provider challenge/rate limit is not an application quota.
+        retry_hint(health.get('retry_at'))
+        return saved.get('rows', []), health.get('state') if health.get('state') in ('blocked', 'error') else 'blocked'
     if runtime and not runtime.begin('search'):
         if progress is not None:
             progress['deferred_reason'] = 'runtime_limit'
@@ -525,28 +623,61 @@ def _search(root, query, now, key, searcher, runtime=None, progress=None, force_
         if not isinstance(payload, dict) or payload.get('error'):
             raise ValueError('Search failed')
         rows, seen = [], set()
-        for item in payload.get('organic_results', []):
+        organic = payload.get('organic_results', [])
+        if not isinstance(organic, list):
+            raise ValueError('Unrecognized search response')
+        for item in organic:
             if not isinstance(item, dict):
                 continue
-            url = article_url(item.get('link'))
-            if url and url not in seen:
-                seen.add(url)
-                rows.append({'url': url, 'title': clean(item.get('title'))[:300], 'account': ''})
-        state = 'ok'
-    except Exception:
-        rows, state = [], 'error'
-    write(path, {'checked_at': now.isoformat(), 'rows': rows, 'state': state})
+            candidate = _public_candidate({'url': item.get('link'), 'title': item.get('title'),
+                'account': item.get('account'), 'published_at': item.get('published_at'),
+                'reason': item.get('reason', 'identity_unconfirmed')})
+            if candidate and candidate['url'] not in seen:
+                seen.add(candidate['url'])
+                rows.append(candidate)
+        state = payload.get('state', 'ok')
+        if state not in ('ok', 'blocked', 'error'):
+            state = 'error'
+        scope_failed = provider == 'serpapi' and bool(organic) and not rows
+        if scope_failed:
+            # Some upstream responses ignore site: and return unrelated domains.
+            # Filtering those links is not evidence of a genuinely empty index.
+            state = 'error'
+        retry_at = payload.get('retry_at')
+        if not retry_at and isinstance(payload.get('retry_after'), (int, float)) and payload['retry_after'] >= 0:
+            retry_at = (now + timedelta(seconds=payload['retry_after'])).isoformat()
+    except Exception as exc:
+        rows, state, scope_failed = [], 'error', False
+        if getattr(exc, 'code', None) in (403, 429):
+            state = 'blocked'
+            from email.utils import parsedate_to_datetime
+            value = exc.headers.get('Retry-After', '') if getattr(exc, 'headers', None) else ''
+            try:
+                retry_at = (now + timedelta(seconds=int(value))).isoformat() if value.isdigit() else parsedate_to_datetime(value).isoformat()
+            except (TypeError, ValueError, OverflowError):
+                retry_at = None
+    if state == 'blocked' or scope_failed:
+        retry = parse_date(retry_at)
+        retry_at = (retry if retry and retry > now else now + timedelta(days=1)).isoformat()
+        write(health_path, {'state': state, 'checked_at': now.isoformat(), 'retry_at': retry_at,
+                            'reason': 'scope_not_respected' if scope_failed else 'provider_restricted'})
+        retry_hint(retry_at)
+    write(path, {'version': SEARCH_VERSION, 'provider': provider, 'query': query,
+                 'checked_at': now.isoformat(), 'rows': rows, 'state': state,
+                 **({'retry_at': retry_at} if state == 'blocked' or scope_failed else {}),
+                 **({'reason': 'scope_not_respected'} if scope_failed else {})})
     return rows, state
 
 
 def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summarizer=None,
             max_seconds=None, monotonic=None, progress_callback=None, force_refresh=False,
-            paper_ids=None):
+            paper_ids=None, source_urls=None, index_searcher=False):
     from src.xiaohongshu import search
+    from src.coverage_evidence import enqueue_review, load_reviews, merge_review
     root = Path(root)
     live_clock = now is None
     now = now or datetime.now(timezone.utc)
-    searcher, fetcher = searcher or search, fetcher or fetch
+    searcher, fetcher = searcher or search, fetcher or fetch_coverage
     summarizer = summarizer or model_summary
     key = os.getenv('SERPAPI_API_KEY', '') if key is None else key
     grants = permissions(root, now)
@@ -556,13 +687,23 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
     if paper_ids is not None:
         wanted = set(paper_ids)
         papers = [paper for paper in papers if paper['id'] in wanted]
+    supplied = []
+    if source_urls:
+        if paper_ids is None or len(set(paper_ids)) != 1 or len(papers) != 1:
+            raise ValueError('Source URLs require exactly one existing paper ID')
+        for value in source_urls:
+            url = article_url(value)
+            if not url:
+                raise ValueError('Please provide a valid mp.weixin.qq.com article URL')
+            if url not in supplied:
+                supplied.append(url)
     runtime = CollectionBudget(max_seconds, monotonic)
     for paper in papers:
         result.setdefault(paper['id'], {'state': 'deferred', 'queued_at': now.isoformat(),
                                        'checked_at': '', 'last_attempt_at': '', 'articles': [], 'candidates': []})
 
     def checkpoint():
-        payload = {'version': 1, 'checked_at': now.isoformat(), 'papers': _project({'papers': result}, grants)}
+        payload = {'version': SCHEMA_VERSION, 'checked_at': now.isoformat(), 'papers': _project({'papers': result}, grants)}
         write(root / DATA, payload)
         return payload
 
@@ -578,13 +719,31 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
         identifier = paper['id']
         old = previous.get(identifier, {})
         articles = {a['url']: dict(a) for a in old.get('articles', [])}
-        candidates, seen, read_failed, read_deferred = {}, set(), False, False
+        candidates = {a['url']: dict(a) for a in old.get('candidates', [])}
+        seen, read_failed, read_deferred = set(), False, False
         progress = {'last_attempt_at': old.get('last_attempt_at', '')}
+        search_progress = {'last_attempt_at': old.get('last_search_at', '')}
+        search_status = old.get('search_status', 'not_searched')
+        search_version = old.get('search_version', 0)
         queued_at = old.get('queued_at') or result[identifier].get('queued_at', '')
+        for review in load_reviews(root, paper):
+            prior = articles.get(review['url'], {})
+            articles[review['url']] = merge_review(prior, review)
+            candidates.pop(review['url'], None)
 
         def timing():
             checked = progress.get('last_attempt_at', '')
-            values = {'checked_at': checked, 'last_attempt_at': checked}
+            values = {'checked_at': checked, 'last_attempt_at': checked,
+                      'last_search_at': search_progress.get('last_attempt_at', ''),
+                      'search_status': search_status, 'search_version': search_version}
+            if parse_date(search_progress.get('retry_at')):
+                values['next_search_at'] = search_progress['retry_at']
+            elif fresh_search_hint := parse_date(old.get('next_search_at')):
+                if fresh_search_hint > now:
+                    values['next_search_at'] = old['next_search_at']
+            verified = [a.get('verified_at', '') for a in articles.values() if parse_date(a.get('verified_at'))]
+            if verified:
+                values['verified_at'] = max(verified, key=parse_date)
             if queued_at:
                 values['queued_at'] = queued_at
             return values
@@ -601,21 +760,40 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                 if url in seen:
                     continue
                 seen.add(url)
-                article, state = _cached_article(root, url, now, fetcher, runtime, progress, force_refresh)
+                article, state = _cached_article(root, url, now, fetcher, runtime, progress,
+                                                 force_refresh or url in supplied)
                 if not article:
                     read_deferred = read_deferred or state == 'deferred'
                     read_failed = read_failed or state != 'deferred'
+                    if url in articles:
+                        if state != 'deferred':
+                            articles[url]['body_status'] = 'challenge' if state == 'challenge' else 'unavailable'
+                        candidates.pop(url, None)
+                        continue
                     candidates[url] = {**candidate, 'url': url,
-                                       'reason': 'collection_deferred' if state == 'deferred' else 'article_unavailable'}
+                                       'body_status': 'challenge' if state == 'challenge' else 'pending' if state == 'deferred' else 'unavailable',
+                                       'reason': 'collection_deferred' if state == 'deferred' else 'article_challenge' if state == 'challenge' else 'article_unavailable'}
                     continue
                 basis = match_article(paper, article)
                 if not basis:
+                    visual = any(b.get('type') == 'image' and not b.get('reference_section') for b in article.get('blocks', []))
+                    if visual:
+                        enqueue_review(root, paper, article)
+                    if url in articles:
+                        articles[url]['body_status'] = 'readable'
+                        candidates.pop(url, None)
+                        continue
                     candidates[url] = {**candidate, 'url': url, 'title': article.get('title') or candidate.get('title', ''),
-                                       'account': article.get('account', ''), 'reason': 'identity_unconfirmed'}
+                                       'account': article.get('account', ''), 'published_at': article.get('published_at', ''),
+                                       'source_version': article['source_version'], 'body_status': 'readable',
+                                       'reason': 'visual_pending' if visual else 'identity_unconfirmed'}
                     continue
                 prior_article = articles.get(url, {})
                 row = {**prior_article, **{k: article.get(k, '') for k in ('url', 'title', 'account', 'author', 'published_at')}}
-                row.update(match_status='verified', match_basis=basis)
+                row.update(match_status='verified', match_basis=basis, verification_method='body', body_status='readable',
+                           source_version=article['source_version'],
+                           verified_at=prior_article.get('verified_at') if prior_article.get('source_version') == article['source_version']
+                           and prior_article.get('verification_method') == 'body' else now.isoformat())
                 articles[url] = row
                 candidates.pop(url, None)
                 result[identifier] = {'state': 'matched', **timing(),
@@ -631,13 +809,22 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                                       'articles': list(articles.values()), 'candidates': list(candidates.values())}
                 checkpoint()
 
+        # Explicit hints are read immediately even when their old negative
+        # source cache has not expired. They still need identity verification.
+        for url in supplied:
+            candidates.setdefault(url, {'url': url, 'title': '', 'reason': 'identity_unconfirmed'})
         examine(_local_candidates(root, paper))
         # Recheck known sources using the article cache, retaining prior success
         # on failure; newly granted rights can use cached bodies immediately.
         examine(list(articles.values()))
+        examine(list(candidates.values()))
         retry_state = old.get('last_attempt_state') or old.get('state')
-        days = 7 if retry_state in ('matched', 'no_match', 'pending_match') else 1
-        fresh = not force_refresh and _fresh(old.get('checked_at'), now, days)
+        days = 7 if retry_state == 'matched' else 1
+        fresh = (not force_refresh and not supplied and old.get('search_version') == SEARCH_VERSION
+                 and _fresh(old.get('last_search_at') or old.get('checked_at'), now, days))
+        next_search = parse_date(old.get('next_search_at'))
+        if next_search and not force_refresh and not supplied and old.get('search_version') == SEARCH_VERSION:
+            fresh = now < next_search
         if retry_state in ('deferred', 'configuration_missing'):
             # Availability can change within a day (cached results, a restored
             # key, or an explicitly interrupted run). Legacy daily quotas do
@@ -646,15 +833,31 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
         state = old.get('state', 'no_match')
         if not fresh and (not articles or old.get('articles')):
             query_states = []
-            known = set(articles)
-            for query in _queries(paper):
-                rows, outcome = _search(root, query, now, key, searcher, runtime, progress, force_refresh)
-                query_states.append(outcome)
-                examine(rows)
-                if set(articles) - known:
-                    break
+            providers = [('serpapi', searcher, True)]
+            if callable(index_searcher):
+                providers.append(('sogou', index_searcher, False))
+            for provider, query_searcher, requires_key in providers:
+                before = set(articles)
+                for query in _queries(paper):
+                    rows, outcome = _search(root, query, now, key, query_searcher, runtime, search_progress,
+                                            force_refresh or bool(supplied), provider=provider, requires_key=requires_key)
+                    _record_attempt(progress, search_progress.get('last_attempt_at'))
+                    if search_progress.get('deferred_reason'):
+                        progress['deferred_reason'] = search_progress['deferred_reason']
+                    query_states.append(outcome)
+                    examine(rows)
+                    if set(articles) - before or outcome in ('blocked', 'configuration_missing', 'deferred'):
+                        break
+            search_version = SEARCH_VERSION
+            search_status = ('blocked' if query_states and all(s == 'blocked' for s in query_states)
+                             else 'partial' if any(s != 'ok' for s in query_states) and any(s == 'ok' for s in query_states)
+                             else 'configuration_missing' if query_states and all(s == 'configuration_missing' for s in query_states)
+                             else 'blocked' if 'blocked' in query_states else 'error' if 'error' in query_states
+                             else 'partial' if 'deferred' in query_states
+                             else 'candidates_found' if candidates else 'complete' if articles else 'indexed_no_hit')
             state = next((s for s in ('error', 'configuration_missing', 'deferred') if s in query_states),
-                         'deferred' if read_deferred else 'unavailable' if read_failed else 'pending_match' if candidates else 'no_match')
+                         'deferred' if read_deferred else 'unavailable' if read_failed or 'blocked' in query_states
+                         else 'pending_match' if candidates else 'no_match')
         if not articles:
             if read_deferred:
                 state = 'deferred'
@@ -665,10 +868,6 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
         attempt_state = state
         if articles:
             state = 'matched'
-        if fresh:
-            for candidate in old.get('candidates', []):
-                if candidate.get('url') not in articles:
-                    candidates.setdefault(candidate['url'], candidate)
         row = {'state': state, **timing(),
                'articles': list(articles.values()),
                'candidates': [c for url, c in candidates.items() if url not in articles]}
@@ -676,7 +875,7 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
             row['last_attempt_state'] = 'unavailable'
         elif articles and read_deferred:
             row['last_attempt_state'] = 'deferred'
-        elif articles and attempt_state in ('configuration_missing', 'deferred', 'error'):
+        elif articles and attempt_state in ('configuration_missing', 'deferred', 'error', 'unavailable'):
             row['last_attempt_state'] = attempt_state
         if state == 'deferred' or row.get('last_attempt_state') == 'deferred':
             row['queued_at'] = queued_at or now.isoformat()

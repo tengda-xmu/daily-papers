@@ -1,5 +1,6 @@
 """Public-account entry, authorized presentation and responsive source figures."""
 from copy import deepcopy
+import json
 import mimetypes
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -27,6 +28,22 @@ def coverage_fixture():
     }]}
 
 
+def screenshot_coverage_fixture():
+    return {
+        'state': 'matched', 'search_status': 'blocked', 'last_search_at': '',
+        'last_attempt_at': '2026-10-14T08:00:00+00:00',
+        'articles': [{
+            'id': 'wechat-known-crystals',
+            'url': 'https://mp.weixin.qq.com/s/DXvEHDH1FQRqGQkQhBYKyw',
+            'title': 'npj Comput. Mater. | 晶体生成模型的新颖稳定性能协同优化：基于强化学习的未知材料主动探索研究',
+            'account': 'Ai赋能材料', 'published_at': '2026-07-22',
+            'match_status': 'verified', 'display_mode': 'source',
+            'verification_method': 'manual_screenshot', 'body_status': 'challenge',
+            'verified_at': '2026-10-14T08:00:00+00:00',
+        }],
+    }
+
+
 def original_fixture():
     return {'figure_id': 'original-one', 'asset': 'assets/figures/original-one.png',
             'title': 'Experiment and results', 'figure_label': 'Fig. 2',
@@ -51,7 +68,7 @@ def test_action_order_sources_and_archive_paths():
 
 
 @pytest.mark.parametrize('state,text', [('pending','尚未检索'), ('deferred','待检索'),
-    ('no_match','暂未检索到'), ('unavailable','无法读取'), ('configuration_missing','搜索暂不可用')])
+    ('no_match','公开索引暂未返回结果，可能尚未收录'), ('unavailable','无法读取'), ('configuration_missing','搜索暂不可用')])
 def test_states_do_not_claim_absence_of_coverage(state, text):
     _, panel = coverage_panel('abc', {'state': state})
     assert text in panel
@@ -92,7 +109,7 @@ def test_partial_search_and_no_match_keep_actual_search_timestamp():
     assert '入队时间 2026-10-13 11:00' in panel
     coverage['state'] = 'no_match'
     _, panel = coverage_panel('abc', coverage)
-    assert '暂未检索到可确认的公众号介绍' in panel
+    assert '公开索引暂未返回结果，可能尚未收录' in panel
     assert '最近检索 2026-10-14 11:00' in panel
     assert '入队时间' not in panel and '排队中' not in panel
 
@@ -117,6 +134,68 @@ def test_pending_sources_cannot_be_presented_as_confirmed_articles():
     c['state'] = 'pending_match'; c['candidates'] = [c['articles'][0]]
     _, html = coverage_panel('abc', c)
     assert 'coverage-list' not in html and '待核实' in html and '候选来源' in html
+
+
+@pytest.mark.parametrize('root', ['./', '../'])
+def test_known_source_keeps_verified_identity_when_body_is_challenged(root):
+    coverage = screenshot_coverage_fixture()
+    _, html = coverage_panel('c53c3b080d69', coverage, root=root)
+    soup = BeautifulSoup(html, 'html.parser')
+    assert soup.select_one('.coverage-list h4').get_text() == coverage['articles'][0]['title']
+    assert soup.select_one('.coverage-list a')['href'] == coverage['articles'][0]['url']
+    assert 'Ai赋能材料 · 2026-07-22' in html
+    assert '已依据用户提供的截图核实论文关联' in html
+    assert '已确认来源，正文读取受限' in html
+    assert '关联核验 2026-10-14 16:00' in html
+    assert '最近检索' not in html and '站内阅读' not in html
+    assert '全文' not in html and '暂未返回结果' not in html
+
+
+def test_search_time_is_separate_from_verification_time():
+    coverage = screenshot_coverage_fixture()
+    coverage['last_search_at'] = '2026-10-13T03:00:00+00:00'
+    _, html = coverage_panel('c53c3b080d69', coverage)
+    assert '最近检索 2026-10-13 11:00' in html
+    assert '最近检索 2026-10-14 16:00' not in html
+    assert '关联核验 2026-10-14 16:00' in html
+
+
+@pytest.mark.parametrize('reason,text', [
+    ('visual_pending', '图片中的论文信息待核实'),
+    ('article_unavailable', '正文暂时无法读取'),
+    ('article_challenge', '访问验证受限'),
+    ('index_only', '仅有公开索引线索'),
+])
+def test_candidates_explain_why_identity_is_not_confirmed(reason, text):
+    _, html = coverage_panel('abc', {'state': 'pending_match', 'candidates': [{
+        'url': 'https://mp.weixin.qq.com/s/example', 'title': '候选来源', 'reason': reason,
+    }]})
+    assert text in html
+    assert 'coverage-list' not in html
+
+
+@pytest.mark.parametrize('status,text', [
+    ('not_searched', '尚未检索'),
+    ('configuration_missing', '自动搜索暂不可用'),
+    ('legacy_unchecked', '旧检索结果待复查'),
+    ('blocked', '公开索引访问受限'),
+    ('partial', '公开索引检索尚未完成'),
+    ('error', '公开索引检索尚未完成'),
+])
+def test_incomplete_search_does_not_claim_an_empty_public_index(status, text):
+    _, html = coverage_panel('abc', {'state': 'no_match', 'search_status': status})
+    assert text in html and '暂未返回结果' not in html
+
+
+@pytest.mark.parametrize('state,status,text', [
+    ('unavailable', 'blocked', '公开索引访问受限'),
+    ('configuration_missing', 'partial', '部分搜索渠道暂不可用'),
+    ('error', 'partial', '部分公开索引未能完成检索'),
+])
+def test_provider_failure_is_not_mislabeled_as_unreadable_article(state, status, text):
+    _, html = coverage_panel('abc', {'state': state, 'search_status': status})
+    assert text in html
+    assert '来源暂时无法读取' not in html
 
 
 def test_reprint_and_figures_escape_external_markup():
@@ -146,6 +225,7 @@ def test_revocation_removes_generated_page_and_current_index(tmp_path, monkeypat
     monkeypatch.setattr(coverage_module, 'publish_assets', lambda *a: None)
     out=tmp_path/'site'; out.mkdir()
     build_coverage(tmp_path, out)
+    assert json.loads((out/'paper-coverage.json').read_text(encoding='utf-8'))['version'] == 2
     page=out/'wechat'/(article_name(row)+'.html')
     assert page.exists()
     row['display_mode']='source'; row.pop('blocks')
@@ -161,14 +241,14 @@ def test_coverage_keyboard_and_original_groups_responsive(browser, width):
         {'figure_id':'original-two','caption':'对照相同工况下的基线方法。'}]}]
     figures=[original_fixture(),{**original_fixture(),'figure_id':'original-two'}]
     html=render_article(p, figures=figures, coverage=coverage_fixture())
-    card=render({'core':[p]}, coverage={p['id']:{
-        'state':'deferred', 'deferred_reason':'budget_exhausted',
-        'queued_at':'2026-10-14T03:00:00+00:00', 'checked_at':'', 'last_attempt_at':'',
-    }})
+    source = screenshot_coverage_fixture()
+    card=render({'core':[p]}, coverage={p['id']:source})
+    archive=render({'core':[p]}, archive_date='2026-10-14', coverage={p['id']:source})
     context=browser.new_context(viewport={'width':width,'height':920})
     def route(r):
         path=urlsplit(r.request.url).path
         if '/readings/' in path:r.fulfill(body=html,content_type='text/html')
+        elif '/archive/' in path:r.fulfill(body=archive,content_type='text/html')
         elif path.endswith('index.html'):r.fulfill(body=card,content_type='text/html')
         elif '/reading-diagrams/' in path:
             d=next(d for d in p['article']['diagrams'] if d['kind']==('proposal' if '-proposal' in path else 'study'))
@@ -186,14 +266,20 @@ def test_coverage_keyboard_and_original_groups_responsive(browser, width):
     context.route('**/*',route)
     page=context.new_page(); errors=[]; page.on('pageerror', lambda e: errors.append(str(e)))
     try:
-        page.goto(BASE+'index.html',wait_until='networkidle')
-        page.locator('.coverage-toggle').focus();page.keyboard.press('Enter')
-        assert page.locator('.paper-coverage-panel').is_visible()
-        assert page.locator('.coverage-toggle').get_attribute('aria-expanded')=='true'
-        panel_text = page.locator('.paper-coverage-panel').inner_text()
-        assert '待重新检索' in panel_text and '额度' not in panel_text
-        assert '入队时间' in panel_text and '最近检索' not in panel_text
-        assert not page.evaluate('document.documentElement.scrollWidth>innerWidth+1')
+        for path in ['index.html', 'archive/2026-10-14.html']:
+            page.goto(BASE+path,wait_until='networkidle')
+            page.locator('.coverage-toggle').focus();page.keyboard.press('Enter')
+            assert page.locator('.paper-coverage-panel').is_visible()
+            assert page.locator('.coverage-toggle').get_attribute('aria-expanded')=='true'
+            panel_text = page.locator('.paper-coverage-panel').inner_text()
+            assert source['articles'][0]['title'] in panel_text
+            assert 'Ai赋能材料 · 2026-07-22' in panel_text
+            assert '已确认来源，正文读取受限' in panel_text
+            assert '关联核验' in panel_text and '最近检索' not in panel_text
+            assert page.locator('.coverage-actions a').get_attribute('href') == source['articles'][0]['url']
+            actions = page.locator('.paper-tools > *').all_text_contents()
+            assert next(i for i, text in enumerate(actions) if '公众号介绍' in text) < next(i for i, text in enumerate(actions) if 'Codex 对话' in text)
+            assert not page.evaluate('document.documentElement.scrollWidth>innerWidth+1')
         page.goto(BASE+'readings/'+p['id']+'.html',wait_until='networkidle')
         assert page.locator('.article-original-figure').count()==2
         boxes=page.locator('.article-original-figure').evaluate_all('(nodes)=>nodes.map(n=>({x:n.getBoundingClientRect().x,y:n.getBoundingClientRect().y}))')

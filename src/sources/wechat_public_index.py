@@ -53,14 +53,19 @@ class SearchParser(HTMLParser):
     def __init__(self):
         super().__init__(convert_charrefs=True)
         self.rows, self.current, self.field = [], None, None
+        self.next_url = ""
 
     def handle_starttag(self, tag, attributes):
         attrs = dict(attributes)
+        if tag == "a" and attrs.get("id") == "sogou_next":
+            self.next_url = attrs.get("href", "")
         if tag == "li" and attrs.get("id", "").startswith("sogou_vr_"):
             self.current = {"title": "", "summary": "", "account": "", "published_at": ""}
         if self.current is not None:
             if tag == "h3":
                 self.field = "title"
+            elif tag == "a" and self.field == "title" and attrs.get("href"):
+                self.current["href"] = attrs["href"]
             elif tag == "p" and "txt-info" in attrs.get("class", "").split():
                 self.field = "summary"
             elif tag == "span" and "all-time-y2" in attrs.get("class", "").split():
@@ -86,15 +91,25 @@ class SearchParser(HTMLParser):
                 pass
 
 
-def parse_search(body: str) -> list[dict]:
-    if any(marker in body for marker in ("antispider", "此验证码用于", "请输入验证码", "访问过于频繁")):
+def parse_search_page(body: str) -> dict:
+    """Parse public index metadata and links without applying subscription policy.
+
+    Redirect hrefs are private discovery inputs, not approved public article URLs.
+    The caller must resolve them or rebuild a stable public search URL.
+    """
+    if any(marker in body.lower() for marker in ("antispider", "wappoc_appmsgcaptcha", "此验证码用于", "请输入验证码", "访问过于频繁", "环境异常", "访问验证")):
         raise PublicSearchChallenge("Public search requires human verification")
-    if 'class="news-list"' not in body and not any(text in body for text in ("没有找到相关", "未找到相关", "未搜索到相关")):
+    if not re.search(r'class=["\'][^"\']*\bnews-list\b', body) and not any(text in body for text in ("没有找到相关", "未找到相关", "未搜索到相关")):
         raise PublicSearchUnavailable("No recognizable public article results")
     parser = SearchParser()
     parser.feed(body)
-    return [{key: excerpt(value) for key, value in row.items()} for row in parser.rows
-            if row["title"].strip() and row["account"].strip() and row["published_at"]]
+    rows = [{key: value if key == "href" else excerpt(value) for key, value in row.items()}
+            for row in parser.rows if row["title"].strip()]
+    return {"rows": rows, "next_url": parser.next_url}
+
+
+def parse_search(body: str) -> list[dict]:
+    return [row for row in parse_search_page(body)["rows"] if row["account"].strip() and row["published_at"]]
 
 
 class WeChatPublicIndexAdapter:

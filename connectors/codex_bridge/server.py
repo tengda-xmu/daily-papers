@@ -141,6 +141,8 @@ def create_app(root=ROOT, runtime=None, rpc=None, automatic_updates=None):
     reading_queue = ReadingQueue(root, runtime, client, generation_lock, documents=reading_documents, acquired=acquired_pdf)
     from .ai_queue import AIQueue
     ai_queue = AIQueue(root, runtime, client, generation_lock)
+    from .coverage_queue import CoverageQueue
+    coverage_queue = CoverageQueue(root, runtime, client, generation_lock)
     from .local_figures import LocalFigures
     local_figures = LocalFigures(store, busy=lambda: bool(jobs or preparing) or generation_lock.locked())
 
@@ -148,7 +150,7 @@ def create_app(root=ROOT, runtime=None, rpc=None, automatic_updates=None):
         # Stop all dispatchers together. Waiting for one slow monitor must not
         # leave an old reading publisher alive while an upgraded server starts.
         await asyncio.gather(daily_updater.close(), reading_queue.close(), ai_queue.close(),
-                             local_figures.close(), edition_manager.close())
+                             coverage_queue.close(), local_figures.close(), edition_manager.close())
 
     @asynccontextmanager
     async def lifespan(app):
@@ -159,6 +161,7 @@ def create_app(root=ROOT, runtime=None, rpc=None, automatic_updates=None):
                 daily_updater.start_monitor()
             reading_queue.start()
             ai_queue.start()
+            coverage_queue.start()
             local_figures.start()
             edition_manager.start()
         yield
@@ -188,6 +191,7 @@ def create_app(root=ROOT, runtime=None, rpc=None, automatic_updates=None):
     app.state.social_notes = note_manager
     app.state.reading_queue = reading_queue
     app.state.ai_queue = ai_queue
+    app.state.coverage_queue = coverage_queue
     app.state.local_figures = local_figures
 
     @app.middleware("http")
@@ -1020,6 +1024,7 @@ def create_app(root=ROOT, runtime=None, rpc=None, automatic_updates=None):
         if data.paper_id in preparing or library_restoring:
             raise HTTPException(409, "资料正在准备，请等待完成后提问。")
         await reading_queue.preempt()
+        await coverage_queue.preempt()
         await ai_queue.preempt()
         if generation_lock.locked():
             raise HTTPException(409, "已有回答正在生成，请先停止或等待完成。")
