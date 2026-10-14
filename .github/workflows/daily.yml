@@ -92,7 +92,7 @@ jobs:
               fi
             done
           fi
-      - name: Restore paper coverage search budget and reading cache
+      - name: Restore paper coverage search and reading cache
         id: paper_coverage_cache
         uses: actions/cache/restore@v4
         with:
@@ -160,7 +160,6 @@ jobs:
         continue-on-error: true
         run: python -m tools.collect_figures
       - name: Find public-account introductions for recommended papers
-        timeout-minutes: 8
         continue-on-error: true
         env:
           SERPAPI_API_KEY: ${{ secrets.SERPAPI_API_KEY }}
@@ -168,7 +167,7 @@ jobs:
           LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
           LLM_MODEL: ${{ secrets.LLM_MODEL }}
         run: python -m tools.collect_paper_coverage
-      - name: Preserve coverage budget even if the paper update fails
+      - name: Preserve coverage search results even if the paper update fails
         if: always()
         continue-on-error: true
         uses: actions/cache/save@v4

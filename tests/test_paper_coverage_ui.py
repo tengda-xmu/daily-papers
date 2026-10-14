@@ -50,7 +50,7 @@ def test_action_order_sources_and_archive_paths():
     assert f'../wechat/{article_name(coverage["articles"][0])}.html' in html
 
 
-@pytest.mark.parametrize('state,text', [('pending','尚未检索'), ('deferred','排队中'),
+@pytest.mark.parametrize('state,text', [('pending','尚未检索'), ('deferred','待检索'),
     ('no_match','暂未检索到'), ('unavailable','无法读取'), ('configuration_missing','搜索暂不可用')])
 def test_states_do_not_claim_absence_of_coverage(state, text):
     _, panel = coverage_panel('abc', {'state': state})
@@ -59,16 +59,17 @@ def test_states_do_not_claim_absence_of_coverage(state, text):
 
 
 @pytest.mark.parametrize('reason,text', [
-    ('budget_exhausted', '今日 6 次新增搜索额度已用完'),
-    ('runtime_limit', '本轮处理时间已用完'),
-    ('', '将在后续更新继续'),
+    ('budget_exhausted', '待重新检索'),
+    ('runtime_limit', '上次检索尚未完成'),
+    ('', '待检索'),
 ])
 def test_queue_explains_delay_without_claiming_a_search(reason, text):
     _, panel = coverage_panel('abc', {
         'state': 'deferred', 'queued_at': '2026-10-14T03:00:00+00:00',
         'deferred_reason': reason, 'checked_at': '', 'last_attempt_at': '',
     })
-    assert text in panel and '排队中' in panel
+    assert text in panel and '将在更新时继续' in panel
+    assert '额度' not in panel and '6 次' not in panel and '次日' not in panel
     assert '入队时间 2026-10-14 11:00' in panel
     assert '最近检索' not in panel
 
@@ -104,7 +105,7 @@ def test_queued_refresh_keeps_confirmed_source_and_explains_delay(legacy):
     if not legacy:
         coverage['last_attempt_at'] = coverage['checked_at']
     _, panel = coverage_panel('abc', coverage)
-    assert '今日 6 次新增搜索额度已用完' in panel
+    assert '待重新检索' in panel and '额度' not in panel
     assert '已保留上次确认的介绍' in panel
     assert coverage['articles'][0]['url'] in panel and 'coverage-list' in panel
     assert ('最近检索 2026-10-13 11:00' in panel) is not legacy
@@ -190,7 +191,7 @@ def test_coverage_keyboard_and_original_groups_responsive(browser, width):
         assert page.locator('.paper-coverage-panel').is_visible()
         assert page.locator('.coverage-toggle').get_attribute('aria-expanded')=='true'
         panel_text = page.locator('.paper-coverage-panel').inner_text()
-        assert '今日 6 次新增搜索额度已用完' in panel_text
+        assert '待重新检索' in panel_text and '额度' not in panel_text
         assert '入队时间' in panel_text and '最近检索' not in panel_text
         assert not page.evaluate('document.documentElement.scrollWidth>innerWidth+1')
         page.goto(BASE+'readings/'+p['id']+'.html',wait_until='networkidle')

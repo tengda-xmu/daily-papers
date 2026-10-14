@@ -36,21 +36,16 @@ SAFE_ID = re.compile(r'[A-Za-z0-9_-]{1,80}\Z')
 
 
 class CollectionBudget:
-    """A request already in flight may finish; no new call starts after expiry."""
-    def __init__(self, seconds=360, monotonic=None):
+    """Optional caller deadline; collection has no default time or request quota."""
+    def __init__(self, seconds=None, monotonic=None):
         self.clock = monotonic or time.monotonic
-        self.deadline = self.clock() + max(0, seconds)
-        self.article_reads = 0
+        self.deadline = None if seconds is None else self.clock() + max(0, seconds)
 
     def available(self):
-        return self.clock() < self.deadline
+        return self.deadline is None or self.clock() < self.deadline
 
     def begin(self, kind):
-        if not self.available() or (kind == 'article' and self.article_reads >= 20):
-            return False
-        if kind == 'article':
-            self.article_reads += 1
-        return True
+        return self.available()
 
 
 def compact(value):
@@ -197,10 +192,10 @@ def _image_url(url):
         return False
 
 
-def _cached_article(root, url, now, fetcher, runtime=None, progress=None):
+def _cached_article(root, url, now, fetcher, runtime=None, progress=None, force_refresh=False):
     path = Path(root) / CACHE / 'articles' / (_identity(url) + '.json')
     saved = read(path)
-    if _fresh(saved.get('checked_at'), now, 7 if saved.get('state') == 'ok' else 1):
+    if not force_refresh and _fresh(saved.get('checked_at'), now, 7 if saved.get('state') == 'ok' else 1):
         _record_attempt(progress, saved.get('checked_at'))
         return saved.get('article'), saved.get('state', 'error')
     if runtime and not runtime.begin('article'):
@@ -248,15 +243,14 @@ def _image(root, url, fetcher, runtime=None):
 
 
 def _reprint(root, article, grant, fetcher, runtime=None):
-    blocks, image_attempts = [], 0
+    blocks = []
     total = article.get('image_count', sum(b.get('type') == 'image' for b in article.get('blocks', [])))
     clipped = len(article.get('blocks', [])) > 1200
     for block in article.get('blocks', [])[:1200]:
         if block.get('type') in ('paragraph', 'heading'):
             clipped = clipped or len(clean(block.get('text'))) > 20000
             blocks.append({'type': block['type'], 'text': clean(block.get('text'))[:20000]})
-        elif block.get('type') == 'image' and grant.get('images') and image_attempts < 24:
-            image_attempts += 1
+        elif block.get('type') == 'image' and grant.get('images'):
             try:
                 src = _image(root, block.get('remote_url', ''), fetcher, runtime)
                 if src:
@@ -315,7 +309,7 @@ def _valid_summary(value, article):
     return summary
 
 
-def _summarize(root, article, paper, now, summarizer, budget, previous, runtime=None):
+def _summarize(root, article, paper, now, summarizer, previous, runtime=None):
     content = json.dumps({'text': article.get('match_text'), 'paper_title': paper.get('title'), 'schema': 1}, ensure_ascii=False)
     version = hashlib.sha256(content.encode()).hexdigest()
     if previous.get('summary_status') == 'ready' and previous.get('summary_content_version') == version:
@@ -325,8 +319,7 @@ def _summarize(root, article, paper, now, summarizer, budget, previous, runtime=
     if cached.get('summary_status') == 'ready':
         return {k: cached[k] for k in ('summary', 'summary_status', 'summary_content_version')}
     result = {'summary_status': 'pending', 'summary_content_version': version}
-    if budget[0] < 6 and not _fresh(cached.get('checked_at'), now, 1) and (not runtime or runtime.begin('summary')):
-        budget[0] += 1
+    if not _fresh(cached.get('checked_at'), now, 1) and (not runtime or runtime.begin('summary')):
         try:
             value = _valid_summary(summarizer(article, paper), article)
             if value:
@@ -410,7 +403,7 @@ def _project(payload, grants):
         checked = checked if parse_date(checked) else ''
         result[identifier] = {'state': 'matched' if articles else state, 'checked_at': checked,
                               'last_attempt_at': checked,
-                              'articles': articles, 'candidates': candidates[:20]}
+                              'articles': articles, 'candidates': candidates}
         if parse_date(queued):
             result[identifier]['queued_at'] = queued
         if row.get('deferred_reason') in ('budget_exhausted', 'runtime_limit') and (state == 'deferred' or row.get('last_attempt_state') == 'deferred'):
@@ -491,67 +484,78 @@ def _local_candidates(root, paper):
             continue
         result.append({'url': row.get('url') or row.get('landing_url', ''), 'title': row.get('title', ''),
                        'account': row.get('account') or row.get('venue', ''), 'reason': 'index_only'})
-    return result[:10]
+    return result
 
 
 def _queries(paper):
-    terms = [normalize_doi(paper.get('doi')), clean(paper.get('title')).rstrip('.')]
-    return list(dict.fromkeys('site:mp.weixin.qq.com "' + term.replace('"', '') + '"' for term in terms if term))[:2]
+    title = clean(paper.get('title')).rstrip('.')
+    terms = [normalize_doi(paper.get('doi')), title]
+    # Typographic punctuation differs between publisher metadata and reposts.
+    # Keep the complete title; never weaken identity to a few topic keywords.
+    normalized = unicodedata.normalize('NFKC', title).translate(str.maketrans({
+        '‘': "'", '’': "'", '“': '"', '”': '"', '\u00ad': None,
+    }))
+    normalized = re.sub(r'[\u2010-\u2015\u2212]', '-', normalized)
+    if normalized != title:
+        terms.append(normalized)
+    queries = ['site:mp.weixin.qq.com "' + term.replace('"', '') + '"' for term in terms if term]
+    # A complete-title query without phrase quotes tolerates indexing and
+    # formatting differences. Returned bodies still need the same strict match.
+    if normalized:
+        queries.append('site:mp.weixin.qq.com ' + normalized.replace('"', ''))
+    return list(dict.fromkeys(queries))
 
 
-def _search(root, query, now, key, searcher, runtime=None, progress=None):
+def _search(root, query, now, key, searcher, runtime=None, progress=None, force_refresh=False):
     base = Path(root) / CACHE
     path = base / 'searches' / (hashlib.sha256(query.encode()).hexdigest() + '.json')
     saved = read(path)
-    if _fresh(saved.get('checked_at'), now, 7 if saved.get('state') == 'ok' else 1):
+    if not force_refresh and _fresh(saved.get('checked_at'), now, 7 if saved.get('state') == 'ok' else 1):
         _record_attempt(progress, saved.get('checked_at'))
         return saved.get('rows', []), saved.get('state', 'error')
     if not key:
         return [], 'configuration_missing'
-    day = now.astimezone(CHINA).date().isoformat()
-    budget = read(base / 'budget.json')
-    if budget.get('day') != day:
-        budget = {'day': day, 'count': 0}
-    if int(budget.get('count', 0)) >= 6:
-        if progress is not None:
-            progress['deferred_reason'] = 'budget_exhausted'
-        return [], 'deferred'
     if runtime and not runtime.begin('search'):
         if progress is not None:
             progress['deferred_reason'] = 'runtime_limit'
         return [], 'deferred'
-    budget['count'] = int(budget.get('count', 0)) + 1
-    write(base / 'budget.json', budget)
     _record_attempt(progress, now.isoformat())
     try:
         payload = searcher(query, key)
         if not isinstance(payload, dict) or payload.get('error'):
             raise ValueError('Search failed')
-        rows = []
+        rows, seen = [], set()
         for item in payload.get('organic_results', []):
+            if not isinstance(item, dict):
+                continue
             url = article_url(item.get('link'))
-            if url:
+            if url and url not in seen:
+                seen.add(url)
                 rows.append({'url': url, 'title': clean(item.get('title'))[:300], 'account': ''})
         state = 'ok'
     except Exception:
         rows, state = [], 'error'
-    write(path, {'checked_at': now.isoformat(), 'rows': rows[:10], 'state': state})
-    return rows[:10], state
+    write(path, {'checked_at': now.isoformat(), 'rows': rows, 'state': state})
+    return rows, state
 
 
 def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summarizer=None,
-            max_seconds=360, monotonic=None):
+            max_seconds=None, monotonic=None, progress_callback=None, force_refresh=False,
+            paper_ids=None):
     from src.xiaohongshu import search
     root = Path(root)
+    live_clock = now is None
     now = now or datetime.now(timezone.utc)
     searcher, fetcher = searcher or search, fetcher or fetch
     summarizer = summarizer or model_summary
-    summary_budget = [0]
     key = os.getenv('SERPAPI_API_KEY', '') if key is None else key
     grants = permissions(root, now)
     previous = load_public(root, now)
     result = dict(previous)
     papers = selected_papers(root)
+    if paper_ids is not None:
+        wanted = set(paper_ids)
+        papers = [paper for paper in papers if paper['id'] in wanted]
     runtime = CollectionBudget(max_seconds, monotonic)
     for paper in papers:
         result.setdefault(paper['id'], {'state': 'deferred', 'queued_at': now.isoformat(),
@@ -564,6 +568,8 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
 
     checkpoint()
     for index, paper in enumerate(papers):
+        if live_clock:
+            now = datetime.now(timezone.utc)
         if not runtime.available():
             for pending in papers[index:]:
                 if result[pending['id']]['state'] == 'deferred':
@@ -585,7 +591,7 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
 
         def examine(rows):
             nonlocal read_failed, read_deferred
-            for candidate in rows[:5]:
+            for candidate in rows:
                 url = article_url(candidate.get('url'))
                 if not url:
                     candidate = _public_candidate({**candidate, 'reason': 'index_only'})
@@ -595,7 +601,7 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                 if url in seen:
                     continue
                 seen.add(url)
-                article, state = _cached_article(root, url, now, fetcher, runtime, progress)
+                article, state = _cached_article(root, url, now, fetcher, runtime, progress, force_refresh)
                 if not article:
                     read_deferred = read_deferred or state == 'deferred'
                     read_failed = read_failed or state != 'deferred'
@@ -615,7 +621,7 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                 result[identifier] = {'state': 'matched', **timing(),
                                       'articles': list(articles.values()), 'candidates': list(candidates.values())}
                 checkpoint()
-                row.update(_summarize(root, article, paper, now, summarizer, summary_budget, prior_article, runtime))
+                row.update(_summarize(root, article, paper, now, summarizer, prior_article, runtime))
                 if url in grants:
                     row.update(_reprint(root, article, grants[url], fetcher, runtime))
                 articles[url] = row
@@ -631,17 +637,18 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
         examine(list(articles.values()))
         retry_state = old.get('last_attempt_state') or old.get('state')
         days = 7 if retry_state in ('matched', 'no_match', 'pending_match') else 1
-        fresh = _fresh(old.get('checked_at'), now, days)
+        fresh = not force_refresh and _fresh(old.get('checked_at'), now, days)
         if retry_state in ('deferred', 'configuration_missing'):
             # Availability can change within a day (cached results, a restored
-            # key, a fresh run's time allowance). The request budget gates I/O.
+            # key, or an explicitly interrupted run). Legacy daily quotas do
+            # not delay a retry, even if an old budget.json is still present.
             fresh = False
         state = old.get('state', 'no_match')
         if not fresh and (not articles or old.get('articles')):
             query_states = []
             known = set(articles)
             for query in _queries(paper):
-                rows, outcome = _search(root, query, now, key, searcher, runtime, progress)
+                rows, outcome = _search(root, query, now, key, searcher, runtime, progress, force_refresh)
                 query_states.append(outcome)
                 examine(rows)
                 if set(articles) - known:
@@ -676,5 +683,7 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
             if progress.get('deferred_reason'):
                 row['deferred_reason'] = progress['deferred_reason']
         result[identifier] = row
-        checkpoint()
+        saved = checkpoint()
+        if progress_callback:
+            progress_callback(index + 1, len(papers), paper, saved['papers'][identifier])
     return checkpoint()

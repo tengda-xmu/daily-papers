@@ -12,7 +12,7 @@ STATE_LABELS = {
     'pending_match': '找到候选文章，尚未确认是否介绍这篇论文。',
     'unavailable': '来源暂时无法读取，待恢复后继续核对。',
     'configuration_missing': '自动搜索暂不可用，待配置恢复后继续检索。',
-    'deferred': '公众号搜索排队中，将在后续更新继续。',
+    'deferred': '公众号介绍待检索，将在更新时继续。',
     'error': '本次检索未完成，将在后续更新重试。',
 }
 
@@ -21,9 +21,9 @@ def state_label(state, coverage):
     if state == 'deferred':
         reason = coverage.get('deferred_reason')
         if reason == 'budget_exhausted':
-            return '公众号搜索排队中：今日 6 次新增搜索额度已用完，额度恢复后按顺序继续。'
+            return '这篇论文待重新检索，将在更新时继续。'
         if reason == 'runtime_limit':
-            return '公众号搜索排队中：本轮处理时间已用完，将在后续更新继续。'
+            return '上次检索尚未完成，将在更新时继续。'
     return STATE_LABELS.get(state, STATE_LABELS['pending'])
 
 

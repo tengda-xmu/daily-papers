@@ -148,7 +148,7 @@ def test_no_results_missing_configuration_and_errors_are_distinct(tmp_path):
     assert 'private response' not in json.dumps(failed)
 
 
-def test_daily_budget_is_persisted_and_resets_at_beijing_midnight(tmp_path):
+def test_all_papers_are_searched_without_a_daily_quota_and_cached(tmp_path):
     papers = [{**PAPER, 'id': f'{i:012x}', 'doi': f'10.1234/{i}', 'title': PAPER['title'] + f' variant {i}'} for i in range(5)]
     setup(tmp_path, papers)
     calls = []
@@ -157,26 +157,29 @@ def test_daily_budget_is_persisted_and_resets_at_beijing_midnight(tmp_path):
         return {'organic_results': []}
     before = NOW.replace(hour=15, minute=59)
     result = coverage.collect(tmp_path, before, key='key', searcher=empty)
-    assert len(calls) == 6
-    assert result['papers'][papers[3]['id']]['state'] == 'deferred'
+    assert len(calls) == 15
+    assert {row['state'] for row in result['papers'].values()} == {'no_match'}
     coverage.collect(tmp_path, before + timedelta(seconds=15), key='key', searcher=empty)
-    assert len(calls) == 6
+    assert len(calls) == 15
     coverage.collect(tmp_path, before + timedelta(minutes=2), key='key', searcher=empty)
-    assert len(calls) == 10
-    assert read(tmp_path / coverage.CACHE / 'budget.json')['day'] == '2026-10-14'
+    assert len(calls) == 15
+    assert not (tmp_path / coverage.CACHE / 'budget.json').exists()
 
 
-def test_budget_deferred_papers_have_queue_time_without_fictitious_search_time(tmp_path):
+def test_legacy_exhausted_budget_and_recent_deferral_do_not_block_search(tmp_path):
     setup(tmp_path)
-    write(tmp_path / coverage.CACHE / 'budget.json', {'day': NOW.astimezone(coverage.CHINA).date().isoformat(), 'count': 6})
+    budget = {'day': NOW.astimezone(coverage.CHINA).date().isoformat(), 'count': 100000}
+    write(tmp_path / coverage.CACHE / 'budget.json', budget)
+    queued = NOW - timedelta(minutes=10)
+    write(tmp_path / coverage.DATA, {'papers': {PAPER['id']: {
+        'state': 'deferred', 'deferred_reason': 'budget_exhausted', 'queued_at': queued.isoformat(),
+        'checked_at': NOW.isoformat(), 'articles': [], 'candidates': []}}})
     calls = []
-    row = coverage.collect(tmp_path, NOW, key='key', searcher=lambda *_: calls.append(1))['papers'][PAPER['id']]
-    assert calls == [] and row['state'] == 'deferred'
-    assert row['deferred_reason'] == 'budget_exhausted'
-    assert row['queued_at'] == NOW.isoformat()
-    assert row['checked_at'] == row['last_attempt_at'] == ''
-    again = coverage.collect(tmp_path, NOW + timedelta(minutes=10), key='key', searcher=lambda *_: calls.append(1))['papers'][PAPER['id']]
-    assert again == row and calls == []
+    row = coverage.collect(tmp_path, NOW, key='key', searcher=lambda *_: calls.append(1) or {'organic_results': []})['papers'][PAPER['id']]
+    assert len(calls) == 3 and row['state'] == 'no_match'
+    assert 'deferred_reason' not in row and row['queued_at'] == queued.isoformat()
+    assert row['checked_at'] == row['last_attempt_at'] == NOW.isoformat()
+    assert read(tmp_path / coverage.CACHE / 'budget.json') == budget
 
 
 def test_legacy_queue_timestamp_is_migrated_and_does_not_block_same_day_retry(tmp_path):
@@ -189,7 +192,7 @@ def test_legacy_queue_timestamp_is_migrated_and_does_not_block_same_day_retry(tm
     calls = []
     later = NOW + timedelta(minutes=10)
     row = coverage.collect(tmp_path, later, key='key', searcher=lambda query, key: calls.append(query) or {'organic_results': []})['papers'][PAPER['id']]
-    assert len(calls) == 2 and row['state'] == 'no_match'
+    assert len(calls) == 3 and row['state'] == 'no_match'
     assert row['checked_at'] == row['last_attempt_at'] == later.isoformat()
     assert row['queued_at'] == NOW.isoformat() and 'deferred_reason' not in row
 
@@ -203,24 +206,27 @@ def test_runtime_deferred_paper_can_run_later_the_same_day(tmp_path):
     assert row['checked_at'] == '' and not calls
     later = NOW + timedelta(minutes=10)
     row = coverage.collect(tmp_path, later, key='key', searcher=empty)['papers'][PAPER['id']]
-    assert row['state'] == 'no_match' and len(calls) == 2
+    assert row['state'] == 'no_match' and len(calls) == 3
     assert row['checked_at'] == later.isoformat()
 
 
 def test_partial_search_keeps_real_attempt_time_across_same_day_deferrals(tmp_path):
     setup(tmp_path)
-    write(tmp_path / coverage.CACHE / 'budget.json', {'day': NOW.astimezone(coverage.CHINA).date().isoformat(), 'count': 5})
-    calls = []
-    empty = lambda query, key: calls.append(query) or {'organic_results': []}
-    row = coverage.collect(tmp_path, NOW, key='key', searcher=empty)['papers'][PAPER['id']]
+    calls, ticks = [], [0]
+    def empty(query, key):
+        calls.append(query)
+        ticks[0] += 1
+        return {'organic_results': []}
+    row = coverage.collect(tmp_path, NOW, key='key', searcher=empty,
+                           max_seconds=1, monotonic=lambda: ticks[0])['papers'][PAPER['id']]
     assert len(calls) == 1 and row['state'] == 'deferred'
     assert row['checked_at'] == row['last_attempt_at'] == NOW.isoformat()
-    assert row['deferred_reason'] == 'budget_exhausted'
-    later = coverage.collect(tmp_path, NOW + timedelta(hours=1), key='key', searcher=empty)['papers'][PAPER['id']]
+    assert row['deferred_reason'] == 'runtime_limit'
+    later = coverage.collect(tmp_path, NOW + timedelta(hours=1), key='key', searcher=empty, max_seconds=0)['papers'][PAPER['id']]
     assert later == row and len(calls) == 1
 
 
-def test_cached_searches_recover_queued_paper_without_spending_budget_or_redating(tmp_path):
+def test_cached_searches_recover_queued_paper_without_requests_or_redating(tmp_path):
     setup(tmp_path)
     stamp = NOW - timedelta(hours=2)
     write(tmp_path / coverage.DATA, {'papers': {PAPER['id']: {'state': 'deferred', 'checked_at': NOW.isoformat()}}})
@@ -229,7 +235,7 @@ def test_cached_searches_recover_queued_paper_without_spending_budget_or_redatin
         path = tmp_path / coverage.CACHE / 'searches' / (hashlib.sha256(query.encode()).hexdigest() + '.json')
         write(path, {'state': 'ok', 'checked_at': stamp.isoformat(), 'rows': []})
     def no_search(*_):
-        raise AssertionError('Fresh cached searches must not spend budget')
+        raise AssertionError('Fresh cached searches must not send requests')
     row = coverage.collect(tmp_path, NOW, key='key', searcher=no_search)['papers'][PAPER['id']]
     assert row['state'] == 'no_match'
     assert row['checked_at'] == row['last_attempt_at'] == stamp.isoformat()
@@ -243,7 +249,7 @@ def test_missing_configuration_does_not_invent_attempt_or_delay_restored_key(tmp
     calls = []
     later = NOW + timedelta(minutes=5)
     row = coverage.collect(tmp_path, later, key='key', searcher=lambda query, key: calls.append(query) or {'organic_results': []})['papers'][PAPER['id']]
-    assert row['state'] == 'no_match' and len(calls) == 2
+    assert row['state'] == 'no_match' and len(calls) == 3
     assert row['checked_at'] == later.isoformat()
 
 
@@ -428,7 +434,7 @@ def test_asset_hash_must_match_before_preserving_existing_public_file(tmp_path):
     assert not path.exists()
 
 
-def test_uncached_article_reads_are_bounded_at_twenty(tmp_path):
+def test_all_returned_articles_are_read_beyond_twenty_without_deferral(tmp_path):
     papers = [{**PAPER, 'id': f'{i:012x}', 'doi': f'10.1234/{i}', 'title': PAPER['title'] + f' variant {i}'} for i in range(4)]
     setup(tmp_path, papers)
     searches, reads = [], []
@@ -439,10 +445,10 @@ def test_uncached_article_reads_are_bounded_at_twenty(tmp_path):
         reads.append(url)
         return page('与当前论文无关的其他研究内容。' * 10)
     result = coverage.collect(tmp_path, NOW, key='key', searcher=many_results, fetcher=unrelated)
-    assert len(searches) == 6 and len(reads) == 20
+    assert len(searches) == 12 and len(reads) == 60
     third = result['papers'][papers[2]['id']]
-    assert third['state'] == 'deferred'
-    assert {c['reason'] for c in third['candidates']} == {'collection_deferred'}
+    assert third['state'] == 'pending_match'
+    assert {c['reason'] for c in third['candidates']} == {'identity_unconfirmed'}
 
 
 def test_deadline_preserves_each_completed_match_and_unprocessed_history(tmp_path):
@@ -479,8 +485,8 @@ def test_confirmed_match_checkpoint_survives_interrupted_summary(tmp_path):
     assert saved['state'] == 'matched' and saved['articles'][0]['summary_status'] == 'pending'
 
 
-@pytest.mark.parametrize('max_seconds, expected', [(360, 24), (25, 3)])
-def test_reprint_download_limit_and_deadline_report_omitted_images(tmp_path, max_seconds, expected):
+@pytest.mark.parametrize('max_seconds, expected', [(None, 30), (360, 30), (25, 3)])
+def test_reprint_has_no_image_quota_but_honors_explicit_deadline(tmp_path, max_seconds, expected):
     setup(tmp_path)
     grant(tmp_path, scope=['body', 'images'])
     out = io.BytesIO()
@@ -498,6 +504,109 @@ def test_reprint_download_limit_and_deadline_report_omitted_images(tmp_path, max
                               max_seconds=max_seconds, monotonic=lambda: ticks[0])
     article = result['papers'][PAPER['id']]['articles'][0]
     assert len(reads) == expected
-    assert article['reprint_complete'] is False
-    assert f'{expected}/30' in article['reprint_notice']
+    assert article['reprint_complete'] is (expected == 30)
+    if expected < 30:
+        assert f'{expected}/30' in article['reprint_notice']
     assert sum(b['type'] == 'image' for b in article['blocks']) == expected
+
+
+def test_search_reads_the_twelfth_candidate_and_deduplicates_urls(tmp_path):
+    setup(tmp_path)
+    urls = [f'https://mp.weixin.qq.com/s/result-{i}' for i in range(12)]
+    reads = []
+    def discover(*_):
+        return {'organic_results': [{'link': url, 'title': '候选'} for url in urls + urls]}
+    def fetched(url, _):
+        reads.append(url)
+        return page() if url == urls[-1] else page('另一篇研究的详细介绍。' * 20)
+    row = coverage.collect(tmp_path, NOW, key='key', searcher=discover, fetcher=fetched)['papers'][PAPER['id']]
+    assert reads == urls and row['state'] == 'matched'
+    assert [a['url'] for a in row['articles']] == [urls[-1]]
+
+
+def test_local_archive_is_not_truncated_before_matching_source(tmp_path):
+    setup(tmp_path)
+    urls = [f'https://mp.weixin.qq.com/s/local-{i}' for i in range(12)]
+    write(tmp_path / 'data/social-articles.json', {'entries': [
+        {'url': url, 'title': PAPER['title']} for url in urls]})
+    reads = []
+    def fetched(url, _):
+        reads.append(url)
+        return page() if url == urls[-1] else page('另一篇研究的详细介绍。' * 20)
+    row = coverage.collect(tmp_path, NOW, key='', fetcher=fetched)['papers'][PAPER['id']]
+    assert reads == urls and row['state'] == 'matched'
+    assert row['articles'][0]['url'] == urls[-1]
+
+
+def test_all_matched_papers_receive_summaries_without_six_item_quota(tmp_path):
+    papers = [{**PAPER, 'id': f'{i:012x}', 'doi': f'10.1234/{i}', 'title': PAPER['title'] + f' variant {i}'} for i in range(8)]
+    setup(tmp_path, papers)
+    calls = []
+    def discover(query, _):
+        number = query.split('10.1234/')[1].split('"')[0]
+        return {'organic_results': [{'link': f'https://mp.weixin.qq.com/s/{number}'}]}
+    def fetched(url, _):
+        return page('研究团队介绍了风机数字孪生的新研究方法和实验结果。' * 4 + ' DOI: 10.1234/' + url.rsplit('/', 1)[1])
+    def summarize(article, paper):
+        calls.append(paper['id'])
+        return {'summary': '公众号讨论了一项面向风电机组的建模工作：把机理知识引入数字化模型，用于设备故障预测，并结合实验呈现方法效果。具体技术细节与实验条件仍需查阅论文。',
+                'evidence': ['研究团队介绍了风机数字孪生的新研究方法和实验结果。']}
+    result = coverage.collect(tmp_path, NOW, key='key', searcher=discover, fetcher=fetched, summarizer=summarize)
+    assert calls == [p['id'] for p in papers]
+    assert all(row['articles'][0]['summary_status'] == 'ready' for row in result['papers'].values())
+
+
+def test_default_has_no_runtime_cutoff_and_reports_cached_or_completed_papers(tmp_path):
+    papers = [{**PAPER, 'id': f'{i:012x}', 'doi': f'10.1234/{i}', 'title': PAPER['title'] + f' variant {i}'} for i in range(4)]
+    setup(tmp_path, papers)
+    ticks, calls, events = [0], [], []
+    def empty(query, _):
+        calls.append(query)
+        ticks[0] += 500
+        return {'organic_results': []}
+    def progress(done, total, paper, record):
+        events.append((done, total, paper['id'], record['state']))
+        assert read(tmp_path / coverage.DATA)['papers'][paper['id']] == record
+    result = coverage.collect(tmp_path, NOW, key='key', searcher=empty, monotonic=lambda: ticks[0], progress_callback=progress)
+    assert ticks[0] == 6000 and len(calls) == 12
+    assert events == [(i + 1, 4, p['id'], 'no_match') for i, p in enumerate(papers)]
+    events.clear()
+    again = coverage.collect(tmp_path, NOW + timedelta(minutes=1), key='key', searcher=empty, progress_callback=progress)
+    assert len(calls) == 12 and len(events) == 4
+    assert again['papers'] == result['papers']
+
+
+def test_refresh_bypasses_search_cache_and_targeted_run_preserves_other_records(tmp_path):
+    other = {**PAPER, 'id': 'bbbbccccdddd', 'doi': '10.1234/other', 'title': PAPER['title'] + ' other'}
+    setup(tmp_path, [PAPER, other])
+    calls = []
+    empty = lambda query, _: calls.append(query) or {'organic_results': []}
+    first = coverage.collect(tmp_path, NOW, key='key', searcher=empty)
+    assert len(calls) == 6
+    later = NOW + timedelta(minutes=5)
+    result = coverage.collect(tmp_path, later, key='key', searcher=empty, force_refresh=True, paper_ids=[PAPER['id']])
+    assert len(calls) == 9 and result['papers'][PAPER['id']]['checked_at'] == later.isoformat()
+    assert result['papers'][other['id']] == first['papers'][other['id']]
+    reads = []
+    fetched = lambda url, _: reads.append(url) or page()
+    coverage._cached_article(tmp_path, URL, NOW, fetched)
+    coverage._cached_article(tmp_path, URL, later, fetched)
+    coverage._cached_article(tmp_path, URL, later, fetched, force_refresh=True)
+    assert reads == [URL, URL]
+
+
+def test_finite_query_strategy_normalizes_title_punctuation_and_relaxes_phrase_only(tmp_path):
+    paper = {**PAPER, 'title': 'Physics–informed digital twins for wind turbine fault prognosis'}
+    queries = coverage._queries(paper)
+    assert queries == ['site:mp.weixin.qq.com "10.1234/fixture"',
+                       'site:mp.weixin.qq.com "Physics–informed digital twins for wind turbine fault prognosis"',
+                       'site:mp.weixin.qq.com "Physics-informed digital twins for wind turbine fault prognosis"',
+                       'site:mp.weixin.qq.com Physics-informed digital twins for wind turbine fault prognosis']
+    setup(tmp_path, [paper])
+    calls = []
+    def discover(query, _):
+        calls.append(query)
+        return search(query, '') if query == queries[-1] else {'organic_results': []}
+    row = coverage.collect(tmp_path, NOW, key='key', searcher=discover, fetcher=lambda *_: page())['papers'][paper['id']]
+    assert calls == queries and row['state'] == 'matched'
+    assert coverage.match_article(paper, coverage.parse_article(page('另一篇相关研究内容。' * 20), URL)) == ''
