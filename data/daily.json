@@ -22164,7 +22164,7 @@
       "reading_status": {
         "paper_id": "8a3a74d4605b",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T01:08:09.573133+00:00",
+        "updated_at": "2026-10-15T01:08:51.512719+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -44048,7 +44048,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "本文针对长距离带式输送机维护知识图谱中的空间混淆与语义坍塌，结合大语言模型和归一化线性拓扑，为同类部件建立独立空间锚点，并从维护日志提取故障因果与空间信息。[摘要]报告实体合并、故障追溯等指标优于所列基线，但排障时间收益来自规则仿真而非现场实测。解读：适合关注设备身份消歧与知识图谱运维应用的研究者；当前仅依据摘要，不能核查全文实验细节。",
+      "summary": "【摘要】本文针对长距离带式输送机维护知识图谱中的空间混淆与语义坍缩，将大语言模型与线性空间拓扑结合。框架通过本体、空间锚点、维护日志抽取及实体对齐，区分描述相似但位置不同的部件，并重建故障因果关系。摘要报告信息抽取、实体合并和故障追溯指标优于所列基线，但排障时间收益来自规则模拟。解读：适合关注智能运维知识组织与故障追溯的研究者阅读，结论须限定于已评估的非分支输送机场景。",
       "raw_metadata": {
         "source": "PubMed",
         "source_id": "42817408",
@@ -44212,37 +44212,37 @@
         "大模型"
       ],
       "title_zh": "面向带式输送机维护知识图谱的线性拓扑感知对齐框架",
-      "recommendation": "推荐重点阅读其空间锚点、实体对齐和故障追溯方法，尤其适合研究重复部件密集设备的智能运维；但“non-branching”适用范围及仿真排障收益应单独审查。[摘要]",
+      "recommendation": "建议重点关注其利用物理位置约束语义实体合并的思路，以及日志抽取到故障追溯的验证链条；当前仅有摘要，尚不足以核查实验设计与实际部署收益。",
       "deep_read": {
-        "problem": "研究针对长距离带式输送机维护知识图谱构建中的“spatial confusion and semantic collapse”。[摘要]同类部件语义描述相近，却位于不同物理位置，容易被错误合并；日志还存在噪声与口语表达。解读：核心问题是联合恢复部件身份、空间位置和故障关系，而不只是识别故障词。",
-        "method": "框架构建“Physical–Space–Fault–Rule”本体，用归一化线性拓扑分配唯一空间锚点；CCAS机制从非结构化日志重建隐含故障因果链与空间信息。实体对齐则结合高斯拓扑惩罚与大语言模型灰区裁决。[摘要]未提供计算公式、提示词或裁决阈值，具体实现仍需全文核查。",
-        "innovation": "摘要提出“linear topology-aware alignment framework”，其方法特色是把物理位置约束引入语义相似实体的对齐，并配合条件、约束、动作、空间信息抽取。[摘要]解读：值得关注的是拓扑约束与语言推理的协同，而非单独使用大模型；现有资料不足以确认各模块的首创性。",
-        "findings": "摘要报告三次预定义运行中，CCAS全局F1为94.10 ± 0.56%，实体合并F1为95.75 ± 0.53%，故障追溯Accuracy@1为92.78 ± 0.36%。[摘要]“rule-based simulated troubleshooting time”明确排障时间指标来自规则仿真，不能直接解释为现场效率收益。",
-        "limitations": "结果限定于“evaluated non-branching belt conveyor maintenance setting”。[摘要]因此尚不能据此判断分支输送网络中的表现。摘要也未交代样本规模、数据划分、误差项含义及消融结果；这些属于当前资料的证据缺口，而非已证实的方法缺陷。现场排障收益同样缺少实测依据。",
-        "connection": "摘要以“fault-causal reconstruction, and traceability performance”说明其运维价值。[摘要]解读：该方法与智能运维直接相关，可为设备身份定位和故障追溯提供知识组织基础；与可靠性的联系主要是故障知识支持，尚非失效概率建模，也没有证据表明其直接开展结构设计优化。",
-        "next_steps": "建议取得全文后，先核查“structured gold-standard annotation protocol”的标注与数据划分方式，再检查空间锚点、高斯惩罚和灰区裁决的独立贡献。[摘要]建议后续验证分支拓扑、位置记录缺失及现场排障场景，以检验适用边界；这些是研究建议，不是作者已完成的实验。"
+        "problem": "【摘要】研究面向长距离带式输送机维护知识图谱中的“spatial confusion and semantic collapse”。高度同质化部件可能因描述相近而被错误合并，口语化、含噪日志又隐去了位置与故障关系，因此需要同时处理实体身份辨识和因果信息恢复。",
+        "method": "【摘要】框架建立Physical–Space–Fault–Rule本体，以归一化线性拓扑赋予部件唯一空间锚点；CCAS机制抽取条件、约束、动作与空间信息，LTA-Alignment结合高斯拓扑惩罚和大语言模型灰区仲裁，约束实体合并。",
+        "innovation": "【摘要】方法特点是将空间锚点、日志结构化抽取与拓扑约束对齐组合起来，而非仅依赖语义相似性。解读：其值得关注之处在于让物理位置参与实体身份判断；但摘要没有充分的相关工作比较，不能据此确认各模块的首创性或独立贡献。",
+        "findings": "【摘要】三次预定义运行中，CCAS全局F1为94.10 ± 0.56%，实体簇纯度为96.70 ± 0.53%，故障追溯Accuracy@1为92.78 ± 0.36%。摘要报告均有相应基线比较，但排障时间收益属于规则模拟估计。",
+        "limitations": "【摘要】结论明确限定于“non-branching belt conveyor”维护场景，排障时间也并非现场实测。摘要未提供样本规模、数据划分、模型配置、消融实验与运行成本，因而目前无法核查数据泄漏风险、模块贡献或跨场景泛化能力。",
+        "connection": "【摘要】框架直接服务维护知识组织与故障追溯，契合智能运维方向。解读：空间身份约束可为设备级故障证据关联提供参考，但摘要没有结构优化、寿命预测或失效概率结果，不能将其追溯性能直接解释为结构设计或可靠性提升。",
+        "next_steps": "建议：获得全文后优先核查标注协议、训练测试隔离方式、空间锚点来源及灰区仲裁规则，并检查拓扑惩罚与语言模型的消融结果。进一步研究可评估分支拓扑和位置缺失情况，采用真实维修记录检验排障收益；这些不是作者已证实的结论。"
       },
       "analysis_status": "ready",
       "analysis_basis": "abstract",
       "analysis_kind": "model",
       "analysis_sources": [
-        "https://doi.org/10.3390/s26185833"
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC13611643/"
       ],
-      "analyzed_at": "2026-10-14T01:13:00.083791+00:00",
+      "analyzed_at": "2026-10-15T01:13:42.064540+00:00",
       "llm_model": "gpt-6.1-sol",
       "analysis_references": {},
-      "analysis_material_version": "9903c8fe5b081892208a5e105999e0775446305faebe027e91d9b7036f7fd3f3",
+      "analysis_material_version": "8f26fc6e1e73960beed804083d8229771ab138a57d15777920aded09abc0fa28",
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "3b366fc2c48d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T01:13:00.088525+00:00",
+        "updated_at": "2026-10-15T01:13:42.069550+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
         "reason": "not_found",
-        "total": 0,
-        "covered": 0,
+        "total": 1,
+        "covered": 1,
         "pdf_available": false,
         "issues": []
       }
@@ -45766,7 +45766,7 @@
       "reading_status": {
         "paper_id": "9aeec1365697",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T01:03:33.671762+00:00",
+        "updated_at": "2026-10-15T01:03:38.220444+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -46123,7 +46123,7 @@
       "reading_status": {
         "paper_id": "bade6e590a5e",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T01:05:04.556559+00:00",
+        "updated_at": "2026-10-15T01:05:13.461375+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -52670,7 +52670,7 @@
       "reading_status": {
         "paper_id": "438f7c66205e",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T01:00:06.155346+00:00",
+        "updated_at": "2026-10-15T01:00:13.394142+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
