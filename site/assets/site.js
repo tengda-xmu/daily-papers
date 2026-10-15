@@ -170,7 +170,7 @@ window.FilterPanels = {
       const section = $(`#${id}`)?.closest('.paper-section');
       if (!section) return;
       const shown = $$('.paper:not([hidden])', section).length;
-      section.hidden = cards.length > 0 && shown === 0;
+      section.hidden = cards.length > 0 && shown === 0 && !(section.dataset.disabled === 'true' && !filtering);
       const badge = $(`#${id}-count`);
       if (badge) badge.textContent = `${shown} 篇`;
     });

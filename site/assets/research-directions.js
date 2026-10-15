@@ -11,6 +11,48 @@
   let draft = JSON.parse(host.dataset.profile), revision = '', connected = false, busy = false, dirty = false, editing = null;
   const message = text => { $('#directions-status').textContent = text; };
   const node = (tag, text) => { const el = document.createElement(tag); if (text !== undefined) el.textContent = text; return el; };
+  const countFields = [['core', 'core_count', '核心推荐', 1], ['extended', 'extended_count', '扩展阅读', 0]];
+  function clearCountErrors() {
+    for (const [id] of countFields) {
+      const input = $('#directions-' + id + '-count');
+      input.setCustomValidity(''); input.removeAttribute('aria-invalid');
+    }
+  }
+  function validateCounts() {
+    for (const [id, key, label, min] of countFields) {
+      const input = $('#directions-' + id + '-count'), value = input.valueAsNumber;
+      let error = '';
+      if (!input.value.trim()) error = `${label}不能为空，请填写 ${min}–20 的整数。`;
+      else if (!Number.isFinite(value) || !Number.isInteger(value)) error = `${label}请输入 ${min}–20 的整数，不能填写小数。`;
+      else if (value < min || value > 20) error = `${label}范围为 ${min}–20 篇。` + (min === 0 ? '0 表示关闭本期扩展阅读。' : '');
+      input.setCustomValidity(error);
+      if (error) {
+        input.setAttribute('aria-invalid', 'true'); message(error + ' 当前修改尚未保存。');
+        input.focus(); input.reportValidity(); return false;
+      }
+      input.removeAttribute('aria-invalid'); draft[key] = value;
+    }
+    return true;
+  }
+  function showApplication(application) {
+    const validCount = value => Number.isInteger(value) && value >= 0;
+    if (!application || !validCount(application.core_count) || !validCount(application.extended_count)) {
+      $('#directions-application').textContent = '尚未取得本期实际展示数量，保存并应用后可再次确认。';
+      $('#directions-update').hidden = true; return false;
+    }
+    let text = `本期实际展示：核心 ${application.core_count} 篇、扩展 ${application.extended_count} 篇。`;
+    const requested = application.requested || {}, available = application.available || {};
+    if (validCount(available.core_count) && validCount(available.extended_count)) {
+      text += `本期可用：核心 ${available.core_count} 篇、扩展 ${available.extended_count} 篇。`;
+    }
+    const missing = [['core_count', '核心'], ['extended_count', '扩展']].flatMap(([key, label]) =>
+      validCount(requested[key]) && requested[key] > application[key] ? [`${label}缺 ${requested[key] - application[key]} 篇`] : []);
+    if (missing.length) text += `本期现有文献不足，${missing.join('、')}；后续更新继续补充。`;
+    $('#directions-application').textContent = text;
+    const applied = application.local_applied === true && application.scope === 'current_edition' && application.revision === revision;
+    $('#directions-update').hidden = !applied;
+    return applied;
+  }
   function lock(value) {
     busy = value;
     host.querySelectorAll('#directions-list button, #directions-list input, #directions-list select, #direction-form input, #direction-form textarea, #direction-form button, #direction-new, #directions-reload, .direction-counts input').forEach(el => { el.disabled = busy || !connected; });
@@ -75,8 +117,11 @@
     try {
       const data = await api('/api/research-directions');
       draft = data.profile; revision = data.revision; connected = true; dirty = false; closeEditor();
+      clearCountErrors();
       $('#directions-connection').textContent = '已连接本机 · 可管理研究方向'; $('#directions-pairing').hidden = true;
-      $('#directions-state').textContent = data.verified ? '当前设置已应用' : '本机已保存的设置'; message(data.message || ''); draw();
+      const applied = showApplication(data.application);
+      $('#directions-state').textContent = applied ? '本期推荐数量已应用' : '设置已保存，数量尚待应用';
+      message(data.message || '方向与关键词将在下一轮检索中使用。'); draw();
     } catch (error) {
       $('#directions-connection').textContent = '尚未连接本机论文助手'; $('#directions-pairing').hidden = false; message(error.message);
     } finally { lock(false); }
@@ -93,16 +138,23 @@
     if (original) draft.directions = draft.directions.map(d => d.id === editing ? direction : d); else draft.directions.push(direction);
     closeEditor(); changed(); draw(); message('已加入待应用配置，请点击“保存并应用”。');
   };
-  for (const [id, key] of [['core','core_count'], ['extended','extended_count']]) $('#directions-' + id + '-count').oninput = event => { draft[key] = Number(event.target.value); changed(); };
+  for (const [id, key] of countFields) $('#directions-' + id + '-count').oninput = event => {
+    const input = event.target;
+    draft[key] = input.value === '' ? '' : input.valueAsNumber;
+    input.setCustomValidity(''); input.removeAttribute('aria-invalid'); changed();
+  };
   $('#directions-reload').onclick = refresh;
   $('#directions-save').onclick = async () => {
+    if (!validateCounts()) return;
     lock(true); message('正在保存并应用研究方向…');
     try {
       const data = await api('/api/research-directions', {method: 'POST', body: JSON.stringify({revision, profile: draft})});
-      draft = data.profile; revision = data.revision; dirty = false; draw();
-      $('#directions-state').textContent = '已应用于下一次推荐';
-      message('下次每日更新将按这些方向检索。现在可返回首页，点击“手动更新”立即生成。');
-      $('#directions-update').hidden = false;
+      draft = data.profile; revision = data.revision; dirty = false; clearCountErrors(); draw();
+      const applied = showApplication(data.application);
+      $('#directions-state').textContent = applied ? '数量已应用' : '设置已保存，数量应用待确认';
+      message((applied ? '本机首页已按数量设置展示本期推荐。' : '尚未确认本期展示数量，请刷新配置确认。') +
+        (data.commit_url ? '公共站正在自动发布，完成前可能仍显示旧数量。' : '公共站由自动发布流程更新。') +
+        '方向与关键词将在下一轮检索中使用。');
     } catch (error) { message(error.message + ' 当前修改仍保留在此页。'); }
     finally { lock(false); }
   };
@@ -116,7 +168,7 @@
     finally { event.submitter.disabled = false; }
   };
   if (local) {
-    host.querySelectorAll('a[href="./"], #directions-update').forEach(a => { a.href = '/recommendations.html' + (a.id === 'directions-update' ? '#manual-update' : ''); });
+    host.querySelectorAll('a[href="./"], #directions-update').forEach(a => { a.href = '/recommendations.html'; });
   }
   window.addEventListener('beforeunload', event => { if (dirty || !$('#direction-editor').hidden) { event.preventDefault(); event.returnValue = ''; } });
   draw(); refresh();

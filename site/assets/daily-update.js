@@ -55,6 +55,31 @@
       link.href = 'https://github.com/tengda-xmu/daily-papers/actions/runs/' + data.run_id; link.hidden = false;
     }
   }
+  async function refreshCountSettings(data) {
+    const revision = data.display_revision;
+    if (!button || !issue || !revision || issue.dataset.displayRevision === revision) return false;
+    // Settings can change without a new paper edition or a new workflow run.
+    // Leave conversations and unsent edits in place, just like paper updates.
+    if ($('.paper-chat[open]') || $('dialog[open]') || [...document.querySelectorAll('textarea')].some(node => node.value.trim())) return false;
+    const target = local ? new URL('/recommendations.html', base) : new URL('./', location.href);
+    target.searchParams.set('settings', revision);
+    try {
+      const response = await fetch(target, {cache: 'no-store', signal: AbortSignal.timeout(15000)});
+      if (!response.ok) return false;
+      const page = new DOMParser().parseFromString(await response.text(), 'text/html');
+      if (page.querySelector('#recommendation-issue')?.dataset.displayRevision === revision) {
+        location.replace(target.href); return true;
+      }
+      if (!local) {
+        let note = $('#settings-apply-status');
+        if (!note) { note = document.createElement('p'); note.id = 'settings-apply-status'; note.className = 'direction-pending'; issue.prepend(note); }
+        const link = document.createElement('a'); link.href = base + '/recommendations.html';
+        link.textContent = '立即查看已应用的推荐';
+        note.replaceChildren(document.createTextNode('数量设置已保存，公开首页正在发布。'), link);
+      }
+    } catch { /* The current edition stays readable while publishing reconnects. */ }
+    return false;
+  }
   async function showPublished(data) {
     const check = $('#last-update-check');
     if (check && data.checked_at && data.outcome !== 'columns_only') {
@@ -91,6 +116,7 @@
     }
   }
   async function display(data, initial = false) {
+    if (await refreshCountSettings(data)) return;
     if (data.state === 'idle' || data.state === 'current') {
       busy(false);
       if (button && data.outcome === 'published' && data.run_id && issue.dataset.runId !== data.run_id) {
@@ -161,6 +187,7 @@
   }
   window.addEventListener('online', () => catchUp(true));
   window.addEventListener('focus', () => catchUp());
+  window.addEventListener('pageshow', event => { if (event.persisted) catchUp(); });
   document.addEventListener('visibilitychange', () => catchUp());
   document.addEventListener('paper-library-connected', () => catchUp(true));
   window.addEventListener('storage', event => { if (event.key === browserKey) catchUp(true); });
