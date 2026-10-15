@@ -259,7 +259,7 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
   <p class="abstract">{esc(preview)}</p>
 {figure_html}
   <div class="paper-tools">{primary_action}{note_action}{coverage_button}{chat_button}</div>
-  {coverage_html}
+{coverage_html}
   <div class="paper-detail-panel" id="{panel_id}" hidden>{provenance}<p class="detail-label">{summary_label}</p><p class="full-abstract">{esc(summary)}</p>{original_abstract}{recommendation_html}{full_authors}{deep_html}<div class="tags">{tags}</div><div class="paper-actions">{actions}</div></div>
 </article>'''
 
