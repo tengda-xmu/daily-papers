@@ -11,7 +11,8 @@ from pathlib import Path
 
 from src.coverage_evidence import PUBLIC, public_mirrors, public_review
 from src.models import parse_date
-from src.paper_coverage import DATA, SCHEMA_VERSION, _project, load_public, permissions, selected_papers
+from src.paper_coverage import (DATA, SCHEMA_VERSION, _body_checked_at, _project, load_public,
+                                permissions, selected_papers)
 from src.public_sources import ROOT, read, write
 
 
@@ -49,12 +50,12 @@ def _newer(incoming, existing, field='last_attempt_at'):
     return bool(left and (not right or left > right))
 
 
-def _merge_article(existing, incoming, *, newer_record):
+def _merge_article(existing, incoming, *, newer_record, existing_attempt=None, incoming_attempt=None):
     """Merge sanitized article snapshots, not identity-only review receipts.
 
     A new failed read changes accessibility, not the previously proved identity
-    or saved content. A new readable version may replace content only when its
-    paper record and its identity verification are both at least as current.
+    or saved content. Actual per-source read times take precedence over record
+    times; replacing readable content also requires current identity evidence.
     """
     if not existing:
         return deepcopy(incoming)
@@ -63,14 +64,26 @@ def _merge_article(existing, incoming, *, newer_record):
     existing_verified = parse_date(existing.get('verified_at'))
     identity_current = (not existing_verified or
                         bool(incoming_verified and incoming_verified >= existing_verified))
-    if newer_record and identity_current:
-        if incoming.get('body_status') == 'readable':
+    actual_incoming = parse_date(incoming.get('body_checked_at'))
+    old_body = _body_checked_at(existing) or parse_date(existing_attempt)
+    if actual_incoming:
+        body_current = (not old_body or actual_incoming > old_body
+                        or (actual_incoming == old_body and newer_record))
+    else:
+        # Legacy transfers lack a per-source observation. Keep their original
+        # record gate, but never let an older readable verification win either.
+        legacy_incoming = _body_checked_at(incoming) or parse_date(incoming_attempt)
+        body_current = newer_record and (not old_body or bool(legacy_incoming and legacy_incoming >= old_body))
+    if body_current:
+        if incoming.get('body_status') == 'readable' and identity_current:
             # These complete records already passed _project. In particular,
             # adopt the new summary/version and authorized body together; an
             # identity-only merge would incorrectly retain the old body here.
             result = deepcopy(incoming)
         elif incoming.get('body_status') in ('challenge', 'unavailable', 'pending'):
             result['body_status'] = incoming['body_status']
+            if actual_incoming:
+                result['body_checked_at'] = incoming['body_checked_at']
     mirrors = public_mirrors(existing.get('mirrors', []) + incoming.get('mirrors', []))
     if mirrors:
         result['mirrors'] = mirrors
@@ -84,7 +97,8 @@ def _merge_record(existing, incoming):
     articles = {row['url']: row for row in existing.get('articles', [])}
     for row in incoming.get('articles', []):
         articles[row['url']] = _merge_article(articles.get(row['url'], {}), row,
-                                               newer_record=not existing or newer)
+            newer_record=not existing or newer, existing_attempt=existing.get('last_attempt_at'),
+            incoming_attempt=incoming.get('last_attempt_at'))
     # An old snapshot may contain a candidate the current checkout has already
     # reviewed or discarded. Only a newer scan can contribute pending leads.
     candidates = {row['url']: row for row in existing.get('candidates', [])}

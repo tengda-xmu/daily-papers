@@ -105,6 +105,23 @@ def _record_attempt(progress, checked_at):
         progress['last_attempt_at'] = str(checked_at)
 
 
+def _body_checked_at(article):
+    """Actual source I/O time, with a conservative readable legacy fallback."""
+    checked = parse_date(article.get('body_checked_at'))
+    if checked:
+        return checked
+    # A screenshot/account review time is not an observation of body access.
+    if (article.get('body_status') == 'readable'
+            and article.get('verification_method', 'body') == 'body'):
+        return parse_date(article.get('verified_at'))
+    return None
+
+
+def _body_observation_current(article, checked_at):
+    prior, incoming = _body_checked_at(article), parse_date(checked_at)
+    return not prior or bool(incoming and incoming >= prior)
+
+
 def _identity(url):
     return hashlib.sha256(url.encode()).hexdigest()[:24]
 
@@ -456,6 +473,8 @@ def _public_article(row, grants, copy_review=None, linked_review=None):
         result = dict(copy_review)
         if row.get('source_version') == result['source_version'] and row.get('body_status') in BODY_STATES:
             result['body_status'] = row['body_status']
+            if parse_date(row.get('body_checked_at')):
+                result['body_checked_at'] = row['body_checked_at']
         return result
     if row.get('verification_method') == 'official_crosslink':
         # The institutional article and its exact WeChat link must have a
@@ -465,6 +484,8 @@ def _public_article(row, grants, copy_review=None, linked_review=None):
         result = dict(linked_review)
         if row.get('source_version') == result['source_version'] and row.get('body_status') in BODY_STATES:
             result['body_status'] = row['body_status']
+            if parse_date(row.get('body_checked_at')):
+                result['body_checked_at'] = row['body_checked_at']
         return result
     if row.get('source_type', 'wechat') != 'wechat':
         return None
@@ -485,6 +506,8 @@ def _public_article(row, grants, copy_review=None, linked_review=None):
         result['mirrors'] = mirrors
     body_status = row.get('body_status', 'readable' if method == 'body' else 'pending')
     result['body_status'] = body_status if body_status in BODY_STATES else 'pending'
+    if parse_date(row.get('body_checked_at')):
+        result['body_checked_at'] = row['body_checked_at']
     if parse_date(row.get('verified_at')):
         result['verified_at'] = row['verified_at']
     if re.fullmatch(r'[a-f0-9]{64}', str(row.get('source_version', ''))):
@@ -544,7 +567,7 @@ def _public_candidate(row):
     mirrors = public_mirrors(row.get('mirrors'))
     if mirrors:
         result['mirrors'] = mirrors
-    for name in ('published_at', 'last_attempt_at'):
+    for name in ('published_at', 'last_attempt_at', 'body_checked_at'):
         if parse_date(row.get(name)):
             result[name] = row[name]
     if row.get('body_status') in BODY_STATES:
@@ -988,9 +1011,11 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
             return value, detail
 
         source_reader = SourceReader(read_source, concurrent=runtime.deadline is None)
+        source_checked = {}
 
         def source_value(kind, url):
             value, detail = source_reader.get(kind, url)
+            source_checked[(kind, url)] = detail.get('last_attempt_at', '')
             _record_attempt(progress, detail.get('last_attempt_at'))
             if detail.get('deferred_reason'):
                 progress['deferred_reason'] = detail['deferred_reason']
@@ -1027,7 +1052,9 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                 read_failed = read_failed or state != 'deferred'
                 for prior in articles.values():
                     for mirror in prior.get('mirrors', []):
-                        if mirror.get('url') == mirror_url and state != 'deferred':
+                        if (mirror.get('url') == mirror_url and state != 'deferred'
+                                and parse_date(checked) and (not parse_date(mirror.get('checked_at'))
+                                    or parse_date(checked) >= parse_date(mirror['checked_at']))):
                             mirror.update(body_status=state, checked_at=checked)
                 return
             admitted, originals = False, []
@@ -1047,7 +1074,7 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                 mirror = {'url': mirror_url, 'body_status': 'readable',
                           'kind': article.get('mirror_kind', 'collection' if urlsplit(mirror_url).hostname == 'synapse.zhihuiya.com' else 'article'),
                           'checked_at': checked}
-                mirrors = public_mirrors([*[m for m in prior.get('mirrors', []) if m.get('url') != mirror_url], mirror])
+                mirrors = public_mirrors([*prior.get('mirrors', []), mirror])
                 article['mirrors'] = mirrors
                 if not basis and url not in articles:
                     article['body_status'] = prior.get('body_status', 'pending')
@@ -1070,7 +1097,8 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                 articles[url] = row
                 originals.append(row)
                 candidates.pop(url, None)
-                row.update(_summarize(root, article, paper, now, summarizer, prior, runtime))
+                if _body_observation_current(prior, checked):
+                    row.update(_summarize(root, article, paper, now, summarizer, prior, runtime))
                 result[identifier] = {'state': 'matched', **timing(), 'articles': list(articles.values()),
                                       'candidates': list(candidates.values())}
                 checkpoint()
@@ -1108,9 +1136,11 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                     if url in seen:
                         continue
                     seen.add(url)
-                    _, state, _ = source_value('copy', url)
-                    if state != 'deferred':
+                    _, state, checked = source_value('copy', url)
+                    if state != 'deferred' and _body_observation_current(articles[url], checked):
                         articles[url]['body_status'] = 'readable' if state == 'ok' else state
+                        if parse_date(checked):
+                            articles[url]['body_checked_at'] = checked
                     candidates.pop(url, None)
                     read_deferred = read_deferred or state == 'deferred'
                     read_failed = read_failed or state not in ('ok', 'deferred')
@@ -1140,15 +1170,26 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                     continue
                 seen.add(url)
                 article, state = source_value('article', url)
+                checked = source_checked.get(('article', url), '')
+                prior = articles.get(url, candidates.get(url, {}))
+                if state != 'deferred' and not _body_observation_current(prior, checked):
+                    # A cached failure/body predates a browser read or another
+                    # collector. Its actual cache time must not become "now".
+                    if url in articles:
+                        candidates.pop(url, None)
+                    continue
                 if not article:
                     read_deferred = read_deferred or state == 'deferred'
                     read_failed = read_failed or state != 'deferred'
                     if url in articles:
                         if state != 'deferred':
                             articles[url]['body_status'] = 'challenge' if state == 'challenge' else 'unavailable'
+                            if parse_date(checked):
+                                articles[url]['body_checked_at'] = checked
                         candidates.pop(url, None)
                         continue
                     candidates[url] = {**candidate, 'url': url,
+                                       **({'body_checked_at': checked} if parse_date(checked) else {}),
                                        'body_status': 'challenge' if state == 'challenge' else 'pending' if state == 'deferred' else 'unavailable',
                                         'reason': ('visual_pending' if candidate.get('reason') == 'visual_pending' and
                                                    any(m.get('body_status') == 'readable' for m in candidate.get('mirrors', []))
@@ -1161,11 +1202,14 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                         enqueue_review(root, paper, article)
                     if url in articles:
                         articles[url]['body_status'] = 'readable'
+                        if parse_date(checked):
+                            articles[url]['body_checked_at'] = checked
                         candidates.pop(url, None)
                         continue
                     candidates[url] = {**candidate, 'url': url, 'title': article.get('title') or candidate.get('title', ''),
                                        'account': article.get('account', ''), 'published_at': article.get('published_at', ''),
                                        'source_version': article['source_version'], 'body_status': 'readable',
+                                       **({'body_checked_at': checked} if parse_date(checked) else {}),
                                        'reason': 'visual_pending' if visual else 'identity_unconfirmed'}
                     continue
                 prior_article = articles.get(url, {})
@@ -1177,6 +1221,8 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                            source_version=article['source_version'],
                            verified_at=prior_article.get('verified_at') if prior_article.get('source_version') == article['source_version']
                            and prior_article.get('verification_method') == 'body' else now.isoformat())
+                if parse_date(checked):
+                    row['body_checked_at'] = checked
                 articles[url] = row
                 candidates.pop(url, None)
                 result[identifier] = {'state': 'matched', **timing(),
