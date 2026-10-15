@@ -1,0 +1,18 @@
+{
+  "id": "public-eeb5997da7760442a45d067d",
+  "content_version": "d87b9efbcaa3944dfa98f758956737d6648d2298eac95f37e7ef5fc7db13d4fd",
+  "analysis": {
+    "title_zh": "上下文工程：Deep Agents 如何记忆",
+    "summary": "这篇官方概念指南介绍了 LangChain 开源智能体框架 Deep Agents 的上下文管理机制，并非新版本发布公告。针对长任务中信息累积、超出模型容纳能力而导致准确率下降的“上下文腐化”，指南称其通过五种技术将上下文移出活跃窗口，而非删除。记忆以普通文件保存在用户控制的存储中，支持更换模型或提供商时保留已学信息，适用于需要持续积累信息的长时智能体任务。所给节选未展开五种技术或提供量化验证。",
+    "application": "建议：科研迁移可考虑用于长期文献梳理、运维案例积累及跨模型研究助手，并自行评估记忆保留与任务准确率。官方描述的机制是将上下文移出活跃窗口、以普通文件保存记忆；所给资料未提供实验结果，不能将这些迁移建议视为官方已验证效果。",
+    "requirements": "使用条件见官方文档",
+    "steps": [],
+    "evidence": [
+      "\"Context rot\" happens as long-running agents build up more context than the model can hold, resulting in accuracy drops.",
+      "Deep Agents, LangChain's open source agent harness, uses five techniques to move context out of the active window (without deleting it) to prevent context rot.",
+      "An agent's memory in Deep Agents is stored as plain files in storage you control, so you can switch models or providers while keeping everything it has learned."
+    ],
+    "basis_url": "https://www.langchain.com/blog/context-engineering-deep-agents-remember"
+  },
+  "analyzed_at": "2026-10-15T12:00:31.440982+00:00"
+}
