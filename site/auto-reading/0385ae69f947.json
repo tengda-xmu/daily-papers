@@ -1,0 +1,40 @@
+{
+  "paper_id": "0385ae69f947",
+  "fingerprint": "2dcf95ace854e9338f5712322c28e977d41741269ed7f5e2cb5c1138c1cbeacd",
+  "analysis": {
+    "title_zh": "多轴疲劳寿命机器学习预测的经审计留一材料基准：代码、预测与不确定性区间",
+    "summary": "这是一项支持未测试合金多轴疲劳寿命预测研究的数据与代码发布，当前仅作摘要级解读。[摘要]资料提供材料域映射审计、逐试验预测、逐域保形覆盖率及复现配置，并同时包含留一材料与随机划分结果。解读：其阅读价值在于考察跨材料泛化的评估方式和结果可追溯性，而非已有证据证明某种模型更优。摘要未报告预测误差、覆盖率数值或模型排名，原始疲劳测量数据需另行获取。",
+    "recommendation": "建议作为疲劳可靠性研究的基准复现资料重点阅读，尤其关注跨材料验证、数据审计和不确定性评估；但当前不能据此推荐某个模型或认定其工程预测精度。",
+    "deep_read": {
+      "problem": "研究针对未测试合金的多轴疲劳寿命预测，摘要中的“untested alloys”明确了应用对象。[摘要]解读：关键问题是模型能否从已有材料推广到未参与训练的材料，而不只是预测同一数据集合中的留出样本。当前资料未说明载荷范围、输入变量和寿命定义。",
+      "method": "发布内容同时包括留一材料与随机划分的逐试验预测，并提供逐域保形覆盖率、种子评分和网络超参数。[摘要]原文以“LOMO”标识留一材料设置。解读：这些输出支持检查不同划分方式下的表现差异，但摘要未给出模型清单、训练流程或区间构造细节。",
+      "innovation": "资料的明确特色是把材料映射审计与预测结果、代码和配置共同发布，原文称映射为“audited mapping”。[摘要]解读：这种组织方式有助于追查材料域定义及复现过程，但不能据此确认方法原创性；摘要没有提供与既有基准的比较或新算法说明。",
+      "findings": "摘要报告将40个名义合金牌号映射为41个材料条件域，并标出审计发现的12条物理不一致记录，原文称其为“physically inconsistent records”。[摘要]这些是可确认的数据审计信息，不是模型性能结论；资料没有报告误差、覆盖率或模型排名。",
+      "limitations": "当前仅有摘要，缺少模型表现及其统计比较，无法判断跨材料预测是否达到工程可用水平。[摘要]原文说明疲劳测量数据“are not redistributed here”，因此发布包本身不含这些原始测量。资料也未说明异常记录如何处理，不能把这些缺失推定为全文缺陷。",
+      "connection": "与疲劳可靠性方向的联系直接体现在寿命预测和“uncertainty intervals”。[摘要]解读：逐材料域覆盖率可为讨论预测区间在不同材料上的适用性提供入口；结构设计或智能运维可关注其迁移验证思路，但摘要未展示安全系数、在线监测或维护决策应用。",
+      "next_steps": "建议先获取所指原始数据，以发布的校验信息确认版本，再复现材料域划分及两类验证结果。[摘要]原文提到“1170 source files”的校验。建议重点核对异常记录处置、逐域误差及覆盖率差异；这是后续研究安排，并非作者已验证的结论。"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://doi.org/10.5281/zenodo.22973712"
+    ],
+    "analyzed_at": "2026-10-14T13:24:17.765951+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": true,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "该发布直接面向多轴疲劳寿命预测，切合疲劳可靠性方向；摘要明确提供两类划分的逐试验预测、逐域覆盖率及复现配置，足以支持作为验证与复现基准重点阅读的判断。但这些证据不足以确认预测精度、模型优势或工程应用效果。",
+    "evidence": "the full analysis pipeline, the per-test leave-one-material-out (LOMO) and random-split predictions for every model, the per-domain conformal coverage, the individual seed scores and the network hyperparameters."
+  },
+  "material": {
+    "version": "59eca1e22e8e3034389f6b60cb54958625824b5581350e54601f682c8233dbaa",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "the full analysis pipeline, the per-test leave-one-material-out (LOMO) and random-split predictions for every model, the per-domain conformal coverage, the individual seed scores and the network hyperparameters."
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "paper_id": "e777d468cee7",
+  "fingerprint": "5dd32e1f31d88bcbc3059f88beb97d9c0b9a412871c5944cecfd0d79c223e510",
+  "analysis": {
+    "title_zh": "Agentic4PDM：面向工业故障诊断的宿主控制证据准入框架",
+    "summary": "【摘要】本文面向标签稀缺、工况变化下的工业故障诊断，提出Agentic4PDM，将智能体的自适应调查与证据使用控制分离。智能体比较各类别标注参考并提出后续测量，确定性宿主检查请求、约束工具批次并划分证据角色。摘要报告轴承、电机及客户工业测试集上的宏平均F1提升，但未提供具体数值。本文值得关注的重点是诊断证据治理，而非仅依赖语言模型直接给出分类。[摘要]",
+    "recommendation": "【解读】建议重点阅读其工具结果准入、证据角色划分与诊断协议设计，可为智能运维中的智能体诊断流程提供参考；性能提升幅度和工程适用性仍需全文核验。[摘要]",
+    "deep_read": {
+      "problem": "【摘要】研究将传感器时序窗口分配到预定义健康状态或故障类别。标签稀缺和工况变化使专用分类器的反复训练代价较高；同时，智能体的无约束解释可能夸大弱证据或冲突结果。原文以“overstate weak or conflicting results”明确提出证据使用风险。[摘要]",
+      "method": "【摘要】智能体逐类比较标注参考、识别未解决的区别并提出后续测量。确定性宿主执行CCGA：检查请求，要求在看到结果前承诺完整工具批次，并根据工具对标注参考的检查分配证据角色。Judge Agent提出诊断，宿主核查协议合规并记录调查。[摘要]",
+      "innovation": "【解读】值得关注的设计是将调查策略的适应性与证据使用权限分离，而非让智能体自行决定所有结果的证明力。摘要用“corroborative support”和“advisory information”区分证据角色。该机制具有方法阅读价值，但其相对已有方法的首创性尚无充分资料核验。[摘要]",
+      "findings": "【摘要】作者报告，在选定轴承和电机诊断任务及客户提供的未筛选工业测试集上，汇总宏平均F1优于所评估的诊断和智能体基线，并称消融支持受治理流程的价值。摘要未给出分项成绩、提升幅度或统计检验，因此只能确认报告了总体优势，不能量化收益。[摘要]",
+      "limitations": "【解读】当前只有摘要，不能据此认定作者承认了哪些方法局限。资料未提供样本规模、类别分布、基线配置、工具检查规则或消融细节，无法判断优势是否稳定，以及标注参考选择如何影响诊断。原文中的“selected”也不足以支持跨工业场景普遍有效的结论。[摘要]",
+      "connection": "【解读】与智能运维的联系直接体现为工业故障分类及训练模型预测的进一步调查。对可靠性研究，其证据角色和协议记录可启发诊断可追溯性设计，但摘要并未验证可靠性指标改善。与结构设计的联系较间接，未见结构优化或设计验证任务，不能宣称已有相关成果。[摘要]",
+      "next_steps": "【建议】后续重点核对CCGA的具体检查条件、完整工具批次的定义及证据角色判定流程，再检查基线公平性与消融设置。若迁移到自身运维任务，建议同时评估诊断准确性、工具调用成本与冲突证据处理效果；这些是研究建议，并非摘要已报告的实验。[摘要]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "http://arxiv.org/abs/2610.17786v1"
+    ],
+    "analyzed_at": "2026-10-14T13:16:24.044727+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": true,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "论文直接研究工业故障诊断，切合智能运维方向；摘要明确描述宿主控制的证据准入方法，并报告基线比较和消融结果，足以支持优先阅读的判断。但当前证据仅限摘要，不足以确认提升幅度、实验严谨性或工程泛化能力。[摘要]",
+    "evidence": "Experiments on selected bearing and motor diagnosis challenges and an unfiltered industrial test set supplied by our customer show gains in aggregate macro F1 over the evaluated diagnostic and agentic baselines."
+  },
+  "material": {
+    "version": "34afac0dbd54326b9e74c88baca4467fb116df61e31df6fdf32fefe2f0276be1",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "Experiments on selected bearing and motor diagnosis challenges and an unfiltered industrial test set supplied by our customer show gains in aggregate macro F1 over the evaluated diagnostic and agentic baselines."
+  }
+}
