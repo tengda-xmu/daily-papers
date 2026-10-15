@@ -371,7 +371,12 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
     // Metadata refreshes (including clearing chat) must not cancel a pending
     // user-approved switch or replace the current annotation draft.
     if(sameSource && doc && (!preferred || preferred===doc.hash)) {
-      sourceDoc=nextSource;versions=available;displayTitle();if(!switching)versionMenu();return;
+      sourceDoc=nextSource;versions=available;
+      // Re-uploading identical bytes can change the title-derived filename.
+      // Refresh this version's metadata without resetting its PDF or drafts.
+      const refreshed=available.find(v=>v.hash===doc.hash && v.available!==false) || (nextSource?.hash===doc.hash?nextSource:null);
+      if(refreshed)doc={...doc,...refreshed};
+      displayTitle();if(!switching)versionMenu();return;
     }
     const request=++updateRequest;
     let nextRemembered=reading || remembered;
@@ -380,7 +385,7 @@ export function createReader({dialog, assets, api, onSelection, onDocument, onLa
     let chosen=preferred || (sameSource?doc?.hash:sourceChanged?nextSource?.hash:'');
     if(!chosen && !sourceChanged)chosen=nextRemembered.last_version;
     const nextDoc=available.find(v=>v.hash===chosen && v.available!==false) || (nextSource?{...nextSource,view:'original'}:null);
-    if(nextPaper===paper && (nextDoc?.hash || '')===(doc?.hash || '')){sourceDoc=nextSource;versions=available;displayTitle();versionMenu();return;}
+    if(nextPaper===paper && (nextDoc?.hash || '')===(doc?.hash || '')){sourceDoc=nextSource;versions=available;if(nextDoc)doc={...doc,...nextDoc};displayTitle();versionMenu();return;}
     if(!await prepareLeave()){versionMenu();return false;}if(request!==updateRequest)return false;
     if(nextDoc?.source_hash && nextDoc.source_hash!==nextSource?.hash && onSource){nextSource=await onSource(nextDoc.source_hash);if(request!==updateRequest)return;}
     remembered=nextRemembered;rememberedPaper=nextPaper;

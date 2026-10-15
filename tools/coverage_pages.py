@@ -14,7 +14,7 @@ def article_name(row):
 
 def reprint_available(row):
     """Only link a processed, authorized article with renderable body text."""
-    return row.get('display_mode') == 'reprint' and any(
+    return row.get('source_type') != 'public_account_copy' and row.get('display_mode') == 'reprint' and any(
         isinstance(block, dict) and block.get('type') in ('heading', 'paragraph')
         and isinstance(block.get('text'), str) and block['text'].strip()
         for block in (row.get('blocks') or []))
@@ -49,12 +49,21 @@ def coverage_panel(paper_id, coverage=None, *, root='./', suffix=''):
     """An introduction opens its article immediately; extra sources are optional."""
     from src.models import parse_date
     from src.wechat_metadata import article_url
+    from src.coverage_syndication import canonical_syndication_url
     coverage = coverage or {}
     verified = []
     for row in coverage.get('articles', []):
         if not isinstance(row, dict) or row.get('match_status') != 'verified':
             continue
-        url = article_url(row.get('url'))
+        if row.get('source_type') == 'public_account_copy':
+            if (row.get('verification_method') != 'account_copy_review'
+                    or row.get('account_verification') != 'visual_brand'
+                    or row.get('original_url_status') != 'unlocated'
+                    or not re.fullmatch(r'[a-f0-9]{64}', str(row.get('review_id', '')))):
+                continue
+            url = canonical_syndication_url(row.get('url'))
+        else:
+            url = article_url(row.get('url'))
         if not url:
             continue
         verified.append((row, url))
@@ -85,10 +94,14 @@ def coverage_panel(paper_id, coverage=None, *, root='./', suffix=''):
     label = ' · '.join(str(value) for value in (
         first.get('title') or '公众号文章', first.get('account'),
         str(first.get('published_at') or '')[:10]) if value)
-    if first.get('body_status') == 'challenge':
+    copy = first.get('source_type') == 'public_account_copy'
+    if copy:
+        label += ' · 已核实公众号署名；微信原文链接待定位。'
+    elif first.get('body_status') == 'challenge':
         label += ' · 如需访问验证，请在微信原文完成。'
+    entry_label = '公众号介绍（公开同步）' if copy else '公众号介绍'
     entry = (f'<a class="coverage-link" href="{escape(href, quote=True)}"{attributes} '
-             f'title="{escape(label, quote=True)}" aria-label="公众号介绍：{escape(label, quote=True)}">公众号介绍</a>')
+             f'title="{escape(label, quote=True)}" aria-label="{entry_label}：{escape(label, quote=True)}">{entry_label}</a>')
     for row, _ in verified:
         mirrors = readable_mirrors(row)
         if mirrors:
@@ -105,6 +118,8 @@ def coverage_panel(paper_id, coverage=None, *, root='./', suffix=''):
         href, attributes = destination(row, url)
         date = str(row.get('published_at') or '')[:10]
         meta = escape(row.get('account') or '公众号名称待核实') + (' · ' + escape(date) if date else '')
+        if row.get('source_type') == 'public_account_copy':
+            meta += ' · 公开同步全文 · 微信原文链接待定位'
         actions = []
         if reprint_available(row):
             actions.append(f'<a href="{escape(url, quote=True)}" target="_blank" rel="noopener noreferrer">公众号原文</a>')

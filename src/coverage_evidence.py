@@ -28,15 +28,43 @@ def compact(value):
     return ''.join(c for c in unicodedata.normalize('NFKC', str(value or '')).casefold() if c.isalnum())
 
 
-def review_key(paper_id, url, source_version):
-    canonical = article_url(url)
+def visual_author_matches(expected, observed):
+    if len(compact(expected)) >= 5 and compact(expected) == compact(observed):
+        return True
+    # PubMed metadata commonly stores family name first. All name tokens must
+    # still be present, so a full given name cannot collapse to an initial.
+    from collections import Counter
+    expected_words = re.findall(r'[^\W\d_]+(?:-[^\W\d_]+)*', unicodedata.normalize('NFKC', str(expected)).casefold())
+    observed_words = re.findall(r'[^\W\d_]+(?:-[^\W\d_]+)*', unicodedata.normalize('NFKC', str(observed)).casefold())
+    if len(expected_words) >= 2 and Counter(expected_words) == Counter(observed_words):
+        return True
+    # Citation metadata can use "King S.H." while the page prints Samuel H.
+    # King. Require the complete surname and every (at least two) initial;
+    # never weaken two fully spelled names to their common surname/initial.
+    short = re.fullmatch(r'([A-Za-z][A-Za-z\-]+),?\s+((?:[A-Z]\.\s*){2,})', str(expected).strip())
+    if not short:
+        return False
+    words = re.findall(r'[A-Za-z][A-Za-z\-]*', str(observed))
+    return (len(words) >= 3 and compact(words[-1]) == compact(short[1])
+            and ''.join(word[0].casefold() for word in words[:-1]) == compact(short[2]))
+
+
+def review_key(paper_id, url, source_version, *, source_type='wechat'):
+    from src.coverage_syndication import canonical_syndication_url
+    canonical = (article_url(url) if source_type == 'wechat' else
+                 canonical_syndication_url(url) if source_type == 'public_account_copy' else '')
     if not SAFE_ID.fullmatch(str(paper_id)) or not canonical or not HASH.fullmatch(str(source_version)):
         raise ValueError('Invalid coverage evidence identity')
-    return hashlib.sha256(f'{paper_id}\n{canonical}\n{source_version}\nv{VERSION}'.encode()).hexdigest()
+    material = f'{paper_id}\n{canonical}\n{source_version}\nv{VERSION}'
+    if source_type != 'wechat':
+        material += '\n' + source_type
+    return hashlib.sha256(material.encode()).hexdigest()
 
 
 def match_evidence(paper, evidence):
     """Compare independently transcribed identity; topics and journal are not keys."""
+    from src.coverage_discovery import discovery_identity
+    paper = discovery_identity(paper)
     if (not isinstance(evidence, dict) or evidence.get('legible') is not True
             or evidence.get('context') not in CONTEXTS or evidence.get('main_topic') is not True
             or evidence.get('reference_only') is not False or evidence.get('conflict') is not False):
@@ -58,9 +86,9 @@ def match_evidence(paper, evidence):
     authors = paper.get('authors') or []
     if isinstance(authors, str):
         authors = re.split(r'[;；]', authors)
-    observed = compact(' '.join(evidence.get('authors', []))) if isinstance(evidence.get('authors'), list) else ''
+    observed = evidence.get('authors', []) if isinstance(evidence.get('authors'), list) else []
     # Complete author names avoid accidental matches on a common surname.
-    return 'image_title_author' if any(len(compact(a)) >= 5 and compact(a) in observed for a in authors) else ''
+    return 'image_title_author' if any(visual_author_matches(a, b) for a in authors for b in observed) else ''
 
 
 def public_mirrors(value):
@@ -92,6 +120,10 @@ def public_review(value):
         raise ValueError('Unsupported coverage review')
     paper_id, source_version = value.get('paper_id'), value.get('source_version')
     source = value.get('article') or {}
+    if source.get('source_type') == 'public_account_copy':
+        return _public_copy_review(value)
+    if source.get('source_type', 'wechat') != 'wechat':
+        raise ValueError('Unsupported coverage source type')
     url = article_url(source.get('url'))
     key = review_key(paper_id, url, source_version)
     basis = source.get('match_basis')
@@ -126,6 +158,97 @@ def public_review(value):
                               else '已根据文章中的论文图片核对论文身份。')
     return {'version': VERSION, 'id': key, 'paper_id': paper_id,
             'source_version': source_version, 'article': article}
+
+
+def _public_copy_review(value):
+    """A reviewed account-branded copy is distinct from a located WeChat original."""
+    from src.coverage_syndication import canonical_syndication_url
+    source = value.get('article') or {}
+    url = canonical_syndication_url(source.get('url'))
+    key = review_key(value.get('paper_id'), url, value.get('source_version'),
+                     source_type='public_account_copy')
+    title, account = clean(source.get('title'))[:300], clean(source.get('account'))[:160]
+    if (value.get('id') != key or source.get('review_id') != key
+            or source.get('match_status') != 'verified'
+            or source.get('match_basis') not in ('image_doi', 'image_title_author')
+            or source.get('verification_method') != 'account_copy_review'
+            or source.get('account_verification') != 'visual_brand'
+            or source.get('original_url_status') != 'unlocated'
+            or source.get('body_status') not in ('readable', 'challenge', 'unavailable', 'pending')
+            or not title or not account or not parse_date(source.get('verified_at'))):
+        raise ValueError('Public account copy requires a reviewed identity and account attribution')
+    article = {'id': hashlib.sha256(url.encode()).hexdigest()[:24], 'url': url,
+               'title': title, 'account': account, 'published_at': '',
+               'match_status': 'verified', 'match_basis': source['match_basis'],
+               'verification_method': 'account_copy_review', 'account_verification': 'visual_brand',
+               'source_type': 'public_account_copy', 'original_url_status': 'unlocated',
+               'review_id': key, 'verified_at': source['verified_at'],
+               'source_version': value['source_version'], 'body_status': source['body_status'],
+               'display_mode': 'source', 'summary': '', 'blocks': [],
+               'source_note': '已核对论文身份及文章内的公众号署名；微信原文链接待定位，可阅读公开同步全文。'}
+    if parse_date(source.get('published_at')):
+        article['published_at'] = source['published_at']
+    return {'version': VERSION, 'id': key, 'paper_id': value['paper_id'],
+            'source_version': value['source_version'], 'article': article}
+
+
+def save_public_account_copy_review(root, paper, article, evidence, account_evidence):
+    """Approve separately transcribed paper identity and in-article account branding.
+
+    This manual review produces an external-reading link only. A source URL,
+    uploader name or a search snippet cannot substitute for the two proofs.
+    """
+    from src.coverage_syndication import canonical_syndication_url
+    url = canonical_syndication_url(article.get('url'))
+    basis = match_evidence(paper, evidence)
+    account = clean(article.get('account'))
+    proof = account_evidence if isinstance(account_evidence, dict) else {}
+    if (not url or not basis or article.get('body_status') != 'readable'
+            or proof.get('legible') is not True or proof.get('main_brand') is not True
+            or proof.get('non_generic') is not True or not account
+            or compact(proof.get('account')) != compact(account)
+            or proof.get('context') not in ('article_brand', 'article_footer_brand')
+            or canonical_syndication_url(proof.get('source_url')) != url
+            or not HASH.fullmatch(str(proof.get('image_sha256', '')))
+            or compact(account) not in compact(proof.get('transcript'))
+            or not clean(proof.get('provenance'))):
+        raise ValueError('Copy review needs readable main-paper and specific in-article account evidence')
+    html_version = article.get('source_version')
+    if not HASH.fullmatch(str(html_version or '')):
+        raise ValueError('Copy review requires the fetched page version')
+    # Include independently read image material in the version, not just HTML.
+    source_version = hashlib.sha256(json.dumps({'html': html_version, 'identity': evidence,
+        'account': proof}, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+    key = review_key(paper['id'], url, source_version, source_type='public_account_copy')
+    receipt = public_review({'version': VERSION, 'id': key, 'paper_id': paper['id'],
+        'source_version': source_version, 'article': {**article, 'url': url,
+            'source_type': 'public_account_copy', 'original_url_status': 'unlocated',
+            'verification_method': 'account_copy_review', 'account_verification': 'visual_brand',
+            'match_status': 'verified', 'match_basis': basis, 'review_id': key,
+            'verified_at': datetime.now(timezone.utc).isoformat()}})
+    write(Path(root) / PRIVATE / 'reviews' / (key + '.json'),
+          {'receipt': receipt, 'evidence': evidence, 'account_evidence': proof, 'paper': paper,
+           'article': article})
+    write(Path(root) / PUBLIC / (key + '.json'), receipt)
+    return receipt
+
+
+def load_copy_reviews(root):
+    """Only actual reviewed receipts admit this source type to public coverage."""
+    result = {}
+    for path in sorted((Path(root) / PUBLIC).glob('*.json')):
+        try:
+            receipt = public_review(read(path))
+        except (ValueError, TypeError, AttributeError):
+            continue
+        row = receipt['article']
+        if row.get('source_type') != 'public_account_copy':
+            continue
+        key = (receipt['paper_id'], row['url'])
+        old = result.get(key)
+        if not old or parse_date(row['verified_at']) > parse_date(old['verified_at']):
+            result[key] = row
+    return result
 
 
 def enqueue_review(root, paper, article):

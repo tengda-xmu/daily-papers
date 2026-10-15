@@ -29,9 +29,10 @@ class CoverageQueue:
     def sync(self):
         """Recover durable candidates produced in CI, not only local cache tasks."""
         from src.paper_coverage import selected_papers, parse_article, fetch_coverage, _cached_syndication
+        from src.coverage_discovery import discovery_identity
         from tools.recommendation_data import fetch as public_fetch
         get = self.fetcher or public_fetch
-        papers = {p['id']: p for p in selected_papers(self.root)}
+        papers = {p['id']: discovery_identity(p) for p in selected_papers(self.root)}
         coverage = read(self.root / 'data/paper-coverage.json')
         try:
             remote = get('paper-coverage.json')
@@ -45,7 +46,7 @@ class CoverageQueue:
                 combined[paper_id] = {**old, **row, 'candidates': list(candidates.values())}
             coverage = {'papers': combined}
             payload = get('data.json')
-            papers.update({p['id']: p for p in payload.get('core', []) + payload.get('extended', [])})
+            papers.update({p['id']: discovery_identity(p) for p in payload.get('core', []) + payload.get('extended', [])})
             missing = set(combined) - set(papers)
             if missing:
                 from src.editions import relative_path, selected
@@ -59,7 +60,7 @@ class CoverageQueue:
                             continue
                         write(cache, payload)
                     for paper in selected(payload):
-                        papers.setdefault(paper['id'], paper)
+                        papers.setdefault(paper['id'], discovery_identity(paper))
                         missing.discard(paper['id'])
                     if not missing:
                         break
@@ -134,6 +135,7 @@ class CoverageQueue:
 
     def image_file(self, task, image):
         hosts = ['mmbiz.qpic.cn', 'mmbiz.qlogo.cn']
+        generic_copy = False
         article = task.get('article') or {}
         if article.get('evidence_source') == 'syndicated_article' and article_url(article.get('url')):
             from src.coverage_syndication import canonical_syndication_url
@@ -143,7 +145,16 @@ class CoverageQueue:
             # never arbitrary hosts supplied by a candidate or image block.
             hosts.extend({'hub.baai.ac.cn': ['simg.baai.ac.cn'],
                           'cloud.tencent.com': ['developer.qcloudimg.com']}.get(host, []))
-        raw = fetch(image['remote_url'], {'hosts': hosts})
+            from src.coverage_syndication import PATHS
+            generic_copy = bool(mirror and host not in PATHS)
+        if generic_copy:
+            # The image must actually occur in the privately parsed article.
+            if image not in article.get('blocks', []):
+                raise ValueError('Image is not part of the attributed article')
+            from src.coverage_syndication import fetch_syndication
+            raw = fetch_syndication(image['remote_url'])
+        else:
+            raw = fetch(image['remote_url'], {'hosts': hosts})
         with Image.open(io.BytesIO(raw)) as source:
             if source.format not in ('PNG', 'JPEG', 'WEBP') or source.width * source.height > 30_000_000:
                 raise ValueError('Unsupported coverage image')

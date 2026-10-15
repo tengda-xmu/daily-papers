@@ -55,6 +55,29 @@ def test_article_identity_uses_body_and_primary_links_not_search_snippets():
     assert coverage.match_article(PAPER, coverage.parse_article(page('相关内容。' * 40 + 'DOI: https://doi.org/10.1234/FIXTURE.'), URL)) == 'doi'
 
 
+def test_exact_nature_paper_link_is_identity_evidence_in_main_introduction():
+    paper = {**PAPER, 'id': 'a5695ec17eb2', 'doi': '10.1038/s41467-026-78118-3'}
+    body = page('本篇研究提出新的材料设计方法。' * 10 + '<a href="https://www.nature.com/articles/s41467-026-78118-3">论文链接</a>')
+    assert coverage.match_article(paper, coverage.parse_article(body, URL)) == 'doi'
+
+
+@pytest.mark.parametrize('link', [
+    'https://www.nature.com/articles/s41467-026-78118-4',
+    'https://www.nature.com.evil.example/articles/s41467-026-78118-3',
+    'https://evil.example/?url=https://www.nature.com/articles/s41467-026-78118-3',
+    'https://www.nature.com/articles/s41467-026-78118-3-extra',
+])
+def test_wrong_or_embedded_nature_link_does_not_confirm(link):
+    paper = {**PAPER, 'doi': '10.1038/s41467-026-78118-3'}
+    assert coverage.match_article(paper, coverage.parse_article(page('另一篇研究。' * 20 + '<a href="' + link + '">论文链接</a>'), URL)) == ''
+
+
+def test_nature_link_in_reference_section_does_not_confirm():
+    paper = {**PAPER, 'doi': '10.1038/s41467-026-78118-3'}
+    body = page('另一篇研究。' * 20 + '</p><h2>参考文献</h2><p><a href="https://www.nature.com/articles/s41467-026-78118-3">相关文献</a>')
+    assert coverage.match_article(paper, coverage.parse_article(body, URL)) == ''
+
+
 @pytest.mark.parametrize('heading', ['参考文献', 'References', '2. Bibliography'])
 def test_reference_only_identity_is_not_a_confirmed_match(heading):
     body = page('这是另一篇文章。' * 20 + '</p><h2>' + heading + '</h2><p>' + PAPER['title']

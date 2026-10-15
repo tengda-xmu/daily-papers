@@ -40,6 +40,19 @@ def test_unknown_options_do_not_start_collection(monkeypatch):
     assert error.value.code == 2
 
 
+def test_session_import_and_source_only_options(monkeypatch, tmp_path):
+    import json
+    payload = {'version': 1, 'provider': 'codex_session', 'search_strategy_version': 7, 'queries': []}
+    source = tmp_path / 'results.json'
+    source.write_text(json.dumps(payload), encoding='utf-8')
+    monkeypatch.setattr('src.settings.load_env', lambda: None)
+    calls = []
+    monkeypatch.setattr(command, 'collect', lambda **options: calls.append(options) or {'papers': {}})
+    command.main(['--import-search-results', str(source), '--no-search'])
+    assert calls[0]['imported_search_results'] == payload
+    assert calls[0]['perform_search'] is False
+
+
 @pytest.mark.parametrize('ids', [[], ['--paper-id', 'one', '--paper-id', 'two']])
 def test_source_hint_requires_one_distinct_paper(monkeypatch, ids):
     monkeypatch.setattr(command, 'collect', lambda **_: pytest.fail('Ambiguous source must not be collected'))

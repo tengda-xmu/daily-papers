@@ -124,6 +124,17 @@ def test_title_and_author_fallback_rejects_same_title_different_authors():
     assert not match_evidence(PAPER, {**EVIDENCE, 'dois': [], 'authors': ['Different Park']})
 
 
+def test_visual_author_accepts_citation_order_but_requires_all_initials():
+    paper = {**PAPER, 'authors': ['King S.H.']}
+    evidence = {**EVIDENCE, 'dois': [], 'authors': ['Samuel H. King']}
+    assert match_evidence(paper, evidence) == 'image_title_author'
+    assert not match_evidence(paper, {**evidence, 'authors': ['Samuel R. King']})
+    assert not match_evidence(paper, {**evidence, 'authors': ['Samuel King']})
+    assert not match_evidence({**paper, 'authors': ['Samuel Harry King']}, evidence)
+    assert match_evidence({**paper, 'authors': ['Bülbül Emre F']},
+                          {**evidence, 'authors': ['Emre F. Bülbül']}) == 'image_title_author'
+
+
 def test_image_prompt_is_not_primed_with_target_paper_identity():
     prompt = extraction_prompt({'context_before': '研究介绍', 'context_after': ''})
     assert PAPER['doi'] not in prompt and PAPER['title'] not in prompt

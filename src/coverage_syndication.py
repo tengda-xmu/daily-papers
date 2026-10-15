@@ -18,6 +18,7 @@ from bs4 import BeautifulSoup, NavigableString
 from src.models import parse_date
 from src.public_sources import MAX_BYTES, clean
 from src.wechat_metadata import article_url
+from src.coverage_public_page import public_page_url, require_public_host, attributed_article
 
 PATHS = {
     'cloud.tencent.com': re.compile(r'/developer/article/\d+/?\Z'),
@@ -28,9 +29,11 @@ IMAGE_HOSTS = ['mmbiz.qpic.cn', 'mmbiz.qlogo.cn', 'developer.qcloudimg.com', 'si
 
 
 def canonical_syndication_url(value):
-    """Return an exact allowlisted public page URL, without tracking parameters."""
+    """Normalize a public candidate; recognition and attribution happen on read."""
     try:
         parts = urlsplit(str(value or ''))
+        if parts.hostname not in PATHS:
+            return public_page_url(value)
         if (parts.scheme != 'https' or parts.hostname not in PATHS
                 or parts.username or parts.password or parts.port not in (None, 443)
                 or not PATHS[parts.hostname].fullmatch(parts.path)
@@ -42,7 +45,7 @@ def canonical_syndication_url(value):
 
 
 def is_syndication_url(value):
-    """Only normalized, parameter-free mirror links may cross the public boundary."""
+    """Only normalized public links may cross the public boundary."""
     return bool(value and canonical_syndication_url(value) == str(value))
 
 
@@ -51,16 +54,21 @@ def fetch_syndication(url):
     if not url:
         raise ValueError('Unapproved syndicated page')
     host = urlsplit(url).hostname
+    if host not in PATHS:
+        require_public_host(url)
 
     class Redirects(HTTPRedirectHandler):
         def redirect_request(self, request, fp, code, msg, headers, target):
-            if not is_syndication_url(target) or urlsplit(target).hostname != host:
+            target = canonical_syndication_url(target)
+            if not target or (host in PATHS and urlsplit(target).hostname != host):
                 raise ValueError('Unapproved syndicated redirect')
+            if urlsplit(target).hostname not in PATHS:
+                require_public_host(target)
             return super().redirect_request(request, fp, code, msg, headers, target)
 
     request = Request(url, headers={'User-Agent': 'DailyPapers/1.0'})
     with build_opener(Redirects).open(request, timeout=15) as response:
-        if not is_syndication_url(response.url) or urlsplit(response.url).hostname != host:
+        if not canonical_syndication_url(response.url) or (host in PATHS and urlsplit(response.url).hostname != host):
             raise ValueError('Unapproved syndicated response')
         body = response.read(MAX_BYTES + 1)
         if len(body) > MAX_BYTES:
@@ -178,7 +186,15 @@ def _record(content, original, mirror, body, title='', account='', author='', pu
         main = inner.new_tag('div', id='js_content')
         for node in list(inner.contents):
             main.append(node.extract())
-    article = parse_article(str(main).encode('utf-8'), url, image_hosts=IMAGE_HOSTS)
+    image_hosts = list(IMAGE_HOSTS)
+    if urlsplit(mirror).hostname not in PATHS:
+        for node in main.select('img'):
+            remote = node.get('data-src') or node.get('src', '')
+            if remote.startswith('//'):
+                remote = 'https:' + remote
+            if public_page_url(remote):
+                image_hosts.append(urlsplit(remote).hostname)
+    article = parse_article(str(main).encode('utf-8'), url, image_hosts=image_hosts)
     article.update({
         'title': clean(title), 'account': clean(account), 'author': clean(author),
         'published_at': _stamp(published), 'source_version': hashlib.sha256(body).hexdigest(),
@@ -293,6 +309,25 @@ def _synapse(soup, url, body):
     return result
 
 
+def _has_readable_article(soup):
+    """Comment sign-in controls do not make an accessible article a login wall."""
+    main = next((node for selector in ('#js_content', '#mp-editor', '[itemprop="articleBody"]',
+                 '.article-content', '.article_content', '.entry-content',
+                 'td.t_f[id^="postmessage_"]', 'article', 'main')
+                 if (node := soup.select_one(selector)) is not None), None)
+    if main is None:
+        return False
+    content = BeautifulSoup(str(main), 'html.parser')
+    for node in content.select('script, style, form, nav, aside, footer, .comments, #comments, .comment-form'):
+        node.decompose()
+    text = clean(content.get_text(' ', strip=True))
+    if re.search(r'登录后(?:阅读|查看|继续)|请先登录|登录后.{0,12}全文|验证身份|请输入验证码|'
+                 r'captcha\s*(?:required|verification)|login required|sign in to continue', text, re.I):
+        return False
+    paragraphs = [clean(node.get_text(' ', strip=True)) for node in content.select('p, section')]
+    return len(text) >= 400 or (len(text) >= 160 and sum(len(p) >= 40 for p in paragraphs) >= 2)
+
+
 def parse_syndication(body, url):
     """Extract explicitly attributed source articles from a supported copy page."""
     canonical = canonical_syndication_url(url)
@@ -301,6 +336,20 @@ def parse_syndication(body, url):
     decoded = body.decode('utf-8', 'replace')
     soup = BeautifulSoup(decoded, 'html.parser')
     host = urlsplit(canonical).hostname
+    if host not in PATHS:
+        source = attributed_article(soup)
+        if source:
+            row = _record(source['content'], source['original'], canonical, body,
+                          source['title'], source['account'], published=source['published'])
+            return [row] if row else []
+        if _has_readable_article(soup):
+            # Readability is not account attribution. Only a separate review
+            # may confirm an account-branded copy whose original link is absent.
+            return []
+        if re.search(r'captcha|验证码|访问受限|验证身份|登录后|login required|sign in to continue', decoded, re.I):
+            from src.paper_coverage import ArticleChallenge
+            raise ArticleChallenge('Public article requires verification')
+        return []  # A public page without explicit WeChat attribution is only a lead.
     expected = {
         'cloud.tencent.com': soup.select_one('script#__NEXT_DATA__') is not None,
         'hub.baai.ac.cn': any('post_data:' in node.get_text() for node in soup.select('script')),

@@ -96,10 +96,12 @@ def test_image_copy_enters_private_visual_queue_without_auto_confirmation(tmp_pa
     assert 'remote_url' not in json.dumps(result)
 
 
-def test_broad_search_ignores_non_supported_sites_without_global_failure(tmp_path, records):
+def test_broad_search_retains_other_public_sites_as_unverified_leads(tmp_path, records):
     rows, state = coverage._search(tmp_path, 'drug optimization', NOW, 'key',
         lambda *_: {'organic_results': [{'link': 'https://example.org/paper'}]})
-    assert rows == [] and state == 'ok'
+    assert len(rows) == 1 and state == 'ok'
+    assert rows[0]['url'] == 'https://example.org/paper'
+    assert rows[0].get('match_status') != 'verified'
     assert read(tmp_path / coverage.CACHE / 'providers/serpapi.json')['state'] == 'ok'
 
 

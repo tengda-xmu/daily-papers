@@ -79,7 +79,7 @@ def test_hint_bypasses_article_failure_cache_as_well_as_paper_cache(tmp_path):
 
 
 @pytest.mark.parametrize('ids,urls', [(None, [URL]), ([], [URL]), ([PAPER['id'], 'second'], [URL]),
-                                     ([PAPER['id']], ['https://example.com/source'])])
+                                         ([PAPER['id']], ['https://127.0.0.1/source'])])
 def test_hint_rejects_ambiguous_or_unsafe_input_before_writing(tmp_path, ids, urls):
     setup(tmp_path)
     with pytest.raises(ValueError):

@@ -1,0 +1,61 @@
+name: Supplement public-account reports
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '47 13 * * *' # 21:47 Asia/Shanghai; independent of a new paper edition.
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: daily-papers-update
+  cancel-in-progress: false
+jobs:
+  supplement:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: pip install -r requirements.txt
+      - name: Restore source search and reading state
+        id: coverage_cache
+        uses: actions/cache/restore@v4
+        with:
+          path: data/cache/paper-coverage
+          key: paper-coverage-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            paper-coverage-${{ runner.os }}-
+      - name: Import verified local readings and source reviews
+        run: |
+          git fetch origin connector-data:refs/remotes/origin/connector-data
+          python -m tools.recommendation_data --recover --reconcile --import-readings
+          python -m tools.import_coverage_reviews
+      - name: Search and verify due reports across current and retained papers
+        continue-on-error: true
+        env:
+          SERPAPI_API_KEY: ${{ secrets.SERPAPI_API_KEY }}
+        run: python -m tools.collect_paper_coverage
+      - name: Preserve resumable source processing
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: data/cache/paper-coverage
+          key: ${{ steps.coverage_cache.outputs.cache-primary-key }}
+      - name: Build processed public data
+        run: python tools/build_site.py
+      - name: Commit source updates
+        run: |
+          git config user.name github-actions
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data/paper-coverage.json data/coverage-reviews site
+          git diff --cached --quiet || git commit -m "chore: supplement verified public-account reports"
+          git push
+      - uses: actions/upload-pages-artifact@v3
+        with: {path: site}
+      - uses: actions/deploy-pages@v4
+        id: deployment

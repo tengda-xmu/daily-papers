@@ -8,12 +8,13 @@ from __future__ import annotations
 
 import hashlib
 import html
+import json
 import re
 import unicodedata
 from email.utils import parsedate_to_datetime
 from urllib.error import HTTPError
-from urllib.parse import quote, urljoin, urlsplit
-from urllib.request import HTTPRedirectHandler, Request, build_opener
+from urllib.parse import parse_qs, quote, urlencode, urljoin, urlsplit
+from urllib.request import HTTPRedirectHandler, Request, build_opener, urlopen
 
 from bs4 import BeautifulSoup
 
@@ -22,7 +23,7 @@ from src.public_sources import clean
 from src.sources.wechat_public_index import parse_search_page, PublicSearchChallenge
 from src.wechat_metadata import article_url, public_index_url
 
-SEARCH_STRATEGY_VERSION = 6
+SEARCH_STRATEGY_VERSION = 7
 HOSTS = {'weixin.sogou.com', 'www.sogou.com', 'mp.weixin.qq.com'}
 MAX_BYTES = 4_000_000
 GENERIC_METHODS = {'DOI', 'PDF', 'HTML', 'HTTP', 'HTTPS', 'AI', 'ML', 'LLM', 'CNS', 'RMSE', 'MAPE',
@@ -35,6 +36,28 @@ GENERIC_CHINESE = (
     '方法', '应用', '研究', '综述', '挑战', '技术', '模型', '引导', '发现', '新颖',
     '多样', '关于', '介绍', '未来', '展望', '及其', '以及', '智能', '人工', '学习',
 )
+
+
+def discovery_identity(paper):
+    """Correct search-only identities without changing recommendation records.
+
+    Curated DOI aliases are already title-bound. The IISE record's registration
+    date is not its conference year; preserve it as provenance, not a date filter.
+    """
+    from src.paper_identity import paper_doi
+    result = dict(paper)
+    result['doi'] = paper_doi(paper)
+    authors = paper.get('authors') or []
+    if isinstance(authors, str):
+        authors = [authors]
+    result['authors'] = [name for name in authors if isinstance(name, str)
+                         and clean(name).casefold() not in ('unaffiliated', 'unknown', 'anonymous', 'n/a')]
+    if result['doi'] == '10.21872/annual2025_6495':
+        result['search_event'] = '2025 IISE Annual Conference & Expo'
+        result['search_event_year'] = 2025
+        if str(result.get('published_at', '')).startswith('2026-09-30'):
+            result['search_registration_date'] = result.pop('published_at')
+    return result
 
 
 def _compact(value):
@@ -79,6 +102,7 @@ def method_names(paper):
 
 def paper_queries(paper):
     """Keep DOI/English first, then Chinese and existing method-name strategies."""
+    paper = discovery_identity(paper)
     prefix = 'site:mp.weixin.qq.com '
     result = []
     doi = normalize_doi(paper.get('doi'))
@@ -125,11 +149,16 @@ def paper_queries(paper):
         terms = [term for term in subject.split() if len(term) >= 2]
         if len(terms) >= 2:
             broad.append(' '.join(terms))
+    if paper.get('search_event') and title:
+        broad.append('"' + title.replace('"', '') + '" "2025" "IISE"')
+        if first_author:
+            broad.append('"' + first_author + '" "fatigue" "transfer learning" "2025"')
     return list(dict.fromkeys([*result, *broad]))
 
 
 def local_candidate(paper, row):
     """Broad admission only; callers still need DOI or title/author verification."""
+    paper = discovery_identity(paper)
     text = clean(' '.join(str(row.get(k) or '') for k in ('title', 'summary', 'abstract', 'evidence_text')))
     normalized = _compact(text)
     doi = normalize_doi(paper.get('doi'))
@@ -283,6 +312,7 @@ def sogou_search(query, key='', *, transport=None, resolve_links=True):
             if fingerprint in fingerprints:
                 break
             fingerprints.add(fingerprint)
+            before = len(rows)
             for row in parsed['rows']:
                 identity = (row['title'], row.get('account'), row.get('published_at'))
                 if identity in seen_rows:
@@ -312,6 +342,8 @@ def sogou_search(query, key='', *, transport=None, resolve_links=True):
                         # can resume independently after its access restriction.
                         candidate['_redirect_url'] = redirect
                 rows.append(candidate)
+            if len(rows) == before:
+                break
             next_url = urljoin(final_url, parsed.get('next_url', '')) if parsed.get('next_url') else ''
             url = next_url if (state == 'ok' and _safe_url(next_url) and urlsplit(next_url).hostname == 'weixin.sogou.com'
                                and urlsplit(next_url).path == '/weixin') else ''
@@ -325,3 +357,81 @@ def sogou_search(query, key='', *, transport=None, resolve_links=True):
             break
     return {'organic_results': rows, 'state': state, 'provider': 'sogou', 'reason': reason,
             'link_resolution': resolution, **retry}
+
+
+def serpapi_search(query, key, *, transport=None):
+    """Read all available result pages, keeping discoveries if later pages fail.
+
+    Only the numeric pagination offset is accepted from provider links. Requests
+    always use the fixed SerpApi endpoint and original query, preventing returned
+    URLs from redirecting a credential to another host. No page/count quota.
+    """
+    def request(start):
+        if transport:
+            return transport(query, key, start)
+        params = {'engine': 'google', 'q': query, 'api_key': key, 'hl': 'zh-cn', 'num': 10, 'start': start}
+        url = 'https://serpapi.com/search.json?' + urlencode(params)
+        with urlopen(Request(url, headers={'User-Agent': 'DailyPapers/1.0'}), timeout=25) as response:
+            body = response.read(MAX_BYTES + 1)
+        if len(body) > MAX_BYTES:
+            raise ValueError('Search response too large')
+        from src.redaction import public_metadata
+        return public_metadata(json.loads(body), (key,))
+
+    rows, seen, offsets = [], set(), set()
+    start, pages, state, retry = 0, 0, 'ok', {}
+    while start not in offsets:
+        offsets.add(start)
+        try:
+            payload = request(start)
+            if not isinstance(payload, dict):
+                raise ValueError('Unrecognized search response')
+            message = payload.get('error', '')
+            if message and not (payload.get('search_metadata', {}).get('status') == 'Success'
+                                and "hasn't returned any results" in str(message)):
+                raise ValueError('Search unavailable')
+            organic = payload.get('organic_results', [])
+            if not isinstance(organic, list):
+                raise ValueError('Unrecognized search results')
+            pages += 1
+            fresh = []
+            for row in organic:
+                if isinstance(row, dict) and isinstance(row.get('link'), str) and row['link'] not in seen:
+                    seen.add(row['link'])
+                    fresh.append(row)
+            rows.extend(fresh)
+            state = payload.get('state', 'ok')
+            if state not in ('ok', 'blocked', 'error'):
+                state = 'error'
+            if state != 'ok':
+                retry = {k: payload[k] for k in ('retry_at', 'retry_after') if k in payload}
+                break
+            if not fresh:
+                break
+            pagination = payload.get('serpapi_pagination') or {}
+            next_url = pagination.get('next') or pagination.get('next_link')
+            if not next_url:
+                break
+            parts = urlsplit(next_url)
+            values = parse_qs(parts.query)
+            if parts.scheme != 'https' or parts.hostname != 'serpapi.com' or not values.get('start', [''])[0].isdigit():
+                raise ValueError('Invalid search continuation')
+            next_start = int(values['start'][0])
+            if next_start <= start:
+                break
+            start = next_start
+        except HTTPError as exc:
+            state = 'blocked' if exc.code in (403, 429) else 'error'
+            value = str(exc.headers.get('Retry-After', '')) if exc.headers else ''
+            if value.isdigit():
+                retry['retry_after'] = int(value)
+            elif value:
+                try:
+                    retry['retry_at'] = parsedate_to_datetime(value).isoformat()
+                except (TypeError, ValueError, OverflowError):
+                    pass
+            break
+        except Exception:
+            state = 'error'
+            break
+    return {'organic_results': rows, 'state': state, 'provider': 'serpapi', 'pages_completed': pages, **retry}

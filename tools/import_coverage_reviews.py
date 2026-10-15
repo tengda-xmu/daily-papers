@@ -31,7 +31,7 @@ def apply_reviews(root=ROOT):
         if verified:
             record['verified_at'] = max(verified, key=parse_date)
     payload['version'] = SCHEMA_VERSION
-    payload['papers'] = _project(payload, permissions(root))
+    payload['papers'] = _project(payload, permissions(root), root=root)
     write(path, payload)
     return count
 

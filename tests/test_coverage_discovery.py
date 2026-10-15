@@ -3,7 +3,7 @@ from urllib.parse import parse_qs, urlsplit
 
 import pytest
 
-from src.coverage_discovery import local_candidate, method_names, paper_queries, sogou_search
+from src.coverage_discovery import discovery_identity, local_candidate, method_names, paper_queries, sogou_search
 from src.sources.wechat_public_index import parse_search_page
 
 
@@ -13,6 +13,42 @@ PAPER = {'doi': 'https://doi.org/10.1038/S42256-026-01262-4',
          'summary': '研究提出Chemeleon2，通过奖励引导探索晶体。', 'authors': ['Hyunsoo Park', 'Aron Walsh']}
 ARTICLE = 'https://mp.weixin.qq.com/s/DXvEHDH1FQRqGQkQhBYKyw'
 HEADLINE = 'npj Comput. Mater. | 晶体生成模型的新颖稳定性能协同优化：基于强化学习的未知材料主动探索研究'
+
+
+def test_iise_registration_date_and_placeholder_author_do_not_pollute_search():
+    original = {'id': '926b00e39b2b', 'doi': '10.21872/annual2025_6495',
+                'title': 'Transfer learning framework for fatigue life prediction of additively manufactured parts',
+                'authors': ['Unaffiliated', 'Jia Peter Liu'], 'published_at': '2026-09-30'}
+    identity = discovery_identity(original)
+    assert identity['id'] == original['id'] and identity['authors'] == ['Jia Peter Liu']
+    assert identity['search_event_year'] == 2025 and 'published_at' not in identity
+    assert identity['search_registration_date'] == '2026-09-30'
+    assert original['authors'] == ['Unaffiliated', 'Jia Peter Liu'] and original['published_at'] == '2026-09-30'
+    queries = paper_queries(original)
+    assert any('2025' in query and 'IISE' in query for query in queries)
+    assert not any('Unaffiliated' in query or '2026-09-30' in query for query in queries)
+
+
+def test_curated_doi_alias_used_for_search_and_body_identity_without_mutation(monkeypatch, tmp_path):
+    from src import paper_identity
+    from src.paper_coverage import match_article
+    import json
+    catalog = tmp_path / 'identities.json'
+    title = 'Prediction of residual life and critical crack length using the forward/inverse machine learning based on the configurational force fatigue model'
+    catalog.write_text(json.dumps({'entries': [{'paper_ids': ['fc714e796fa3'], 'title': title,
+                                             'doi': '10.1016/j.ijfatigue.2026.109553'}]}), encoding='utf-8')
+    monkeypatch.setattr(paper_identity, 'CATALOG', catalog)
+    original = {'id': 'fc714e796fa3', 'doi': '', 'title': title, 'authors': ['Y Dong']}
+    assert paper_queries(original)[0] == 'site:mp.weixin.qq.com "10.1016/j.ijfatigue.2026.109553"'
+    assert match_article(original, {'match_text': 'DOI 10.1016/j.ijfatigue.2026.109553'}) == 'doi'
+    assert original['doi'] == ''
+    assert not discovery_identity({**original, 'title': 'Different paper'})['doi']
+
+
+def test_placeholder_author_cannot_confirm_article_identity():
+    from src.paper_coverage import match_article
+    paper = {'title': 'Complete long paper title describing fatigue prediction', 'authors': ['Unaffiliated']}
+    assert match_article(paper, {'match_text': paper['title'] + ' Unaffiliated'}) == ''
 
 
 def row(title=HEADLINE, href='/link?url=PRIVATE', account='Ai赋能材料'):

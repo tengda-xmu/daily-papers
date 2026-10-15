@@ -29,8 +29,9 @@ DATA = 'data/paper-coverage.json'
 PERMISSIONS = 'config/wechat-reprints.json'
 CACHE = 'data/cache/paper-coverage'
 SCHEMA_VERSION = 3
-SEARCH_VERSION = 6
+SEARCH_VERSION = 7
 ARTICLE_VERSION = 3
+SYNDICATION_PARSER_VERSION = 4
 CHINA = timezone(timedelta(hours=8))
 IMAGE_HOSTS = ['mmbiz.qpic.cn', 'mmbiz.qlogo.cn']
 ASSET = re.compile(r'assets/wechat/([a-f0-9]{64})\.png\Z')
@@ -210,11 +211,26 @@ def parse_article(body, url, *, image_hosts=None):
 
 
 def _dois(text):
-    return {normalize_doi(d.rstrip(').]}，。；：')) for d in re.findall(r'10\.\d{4,9}/[^\s<>"\'\u4e00-\u9fff]+', unquote(text), re.I)}
+    decoded = unquote(text)
+    result = {normalize_doi(d.rstrip(').]}，。；：')) for d in re.findall(r'10\.\d{4,9}/[^\s<>"\'\u4e00-\u9fff]+', decoded, re.I)}
+    # Nature's canonical article IDs are DOI suffixes. Match exact publisher
+    # hosts and complete paths only, never lookalike hosts or query parameters.
+    for value in re.findall(r'https?://[^\s<>"\'\u4e00-\u9fff]+', decoded, re.I):
+        try:
+            parts = urlsplit(value.rstrip(').]}，。；：'))
+            suffix = re.fullmatch(r'/articles/(s[a-z0-9]+-\d{3,4}-\d+-[a-z0-9]+)(?:\.pdf)?/?', parts.path, re.I)
+            if (parts.hostname in ('nature.com', 'www.nature.com') and not parts.username
+                    and not parts.password and parts.port in (None, 80, 443) and suffix):
+                result.add(normalize_doi('10.1038/' + suffix[1]))
+        except ValueError:
+            continue
+    return result
 
 
 def match_article(paper, article):
     """Only article-body identity counts; reference sections and snippets do not."""
+    from src.coverage_discovery import discovery_identity
+    paper = discovery_identity(paper)
     text = article.get('match_text', '')
     doi = normalize_doi(paper.get('doi'))
     if doi and doi in _dois(text):
@@ -305,6 +321,18 @@ def _cached_syndication(root, url, now, fetcher, runtime=None, progress=None, fo
     if (not force_refresh and saved.get('version') == ARTICLE_VERSION
             and _fresh(saved.get('checked_at'), now, 7 if saved.get('state') == 'ok' else 1)):
         _record_attempt(progress, saved.get('checked_at'))
+        if saved.get('state') == 'ok' and saved.get('parser_version') != SYNDICATION_PARSER_VERSION:
+            # Parser fixes can invalidate provenance. Reprocess stored HTML,
+            # retaining the actual fetch time and never reusing stale records.
+            try:
+                raw = saved.get('raw_body')
+                if not isinstance(raw, str):
+                    raise ValueError('Cached page has no reprocessable body')
+                saved['articles'] = parse_syndication(raw.encode('utf-8'), url)
+            except Exception as exc:
+                saved.update(articles=[], state='challenge' if isinstance(exc, ArticleChallenge) else 'unavailable')
+            saved['parser_version'] = SYNDICATION_PARSER_VERSION
+            write(path, saved)
         return saved.get('articles', []) if saved.get('state') == 'ok' else [], saved.get('state'), saved.get('checked_at', '')
     if runtime and not runtime.begin('syndication'):
         return [], 'deferred', ''
@@ -314,7 +342,8 @@ def _cached_syndication(root, url, now, fetcher, runtime=None, progress=None, fo
         body = (fetch_syndication(url) if fetcher is fetch_coverage else
                 fetcher(url, {'hosts': [urlsplit(url).hostname]}))
         records = parse_syndication(body, url)
-        write(path, {'version': ARTICLE_VERSION, 'state': 'ok', 'checked_at': checked,
+        write(path, {'version': ARTICLE_VERSION, 'parser_version': SYNDICATION_PARSER_VERSION,
+                     'state': 'ok', 'checked_at': checked,
                      'articles': records, 'raw_body': body.decode('utf-8', 'replace')})
         return records, 'ok', checked
     except Exception as exc:
@@ -413,8 +442,19 @@ def _summarize(root, article, paper, now, summarizer, previous, runtime=None):
     return result
 
 
-def _public_article(row, grants):
+def _public_article(row, grants, copy_review=None):
     from src.coverage_evidence import public_mirrors
+    if row.get('source_type') == 'public_account_copy':
+        # A candidate cannot promote itself by setting a source_type flag.
+        # Only a separately loaded and validated review admits public copies.
+        if not copy_review or row.get('match_status') != 'verified':
+            return None
+        result = dict(copy_review)
+        if row.get('source_version') == result['source_version'] and row.get('body_status') in BODY_STATES:
+            result['body_status'] = row['body_status']
+        return result
+    if row.get('source_type', 'wechat') != 'wechat':
+        return None
     url = article_url(row.get('url'))
     if not url or row.get('match_status') != 'verified' or row.get('match_basis') not in MATCH_BASES:
         return None
@@ -501,12 +541,15 @@ def _public_candidate(row):
     return result
 
 
-def _project(payload, grants):
+def _project(payload, grants, *, root=None):
+    from src.coverage_evidence import load_copy_reviews
+    copy_reviews = load_copy_reviews(root) if root is not None else {}
     result = {}
     for identifier, row in payload.get('papers', {}).items():
         if not SAFE_ID.fullmatch(str(identifier)) or not isinstance(row, dict):
             continue
-        articles = [a for a in (_public_article(r, grants) for r in row.get('articles', []) if isinstance(r, dict)) if a]
+        articles = [a for a in (_public_article(r, grants, copy_reviews.get((identifier, r.get('url'))))
+                               for r in row.get('articles', []) if isinstance(r, dict)) if a]
         candidates = [c for c in (_public_candidate(r) for r in row.get('candidates', []) if isinstance(r, dict)) if c]
         state = row.get('state')
         if state not in ('matched', 'no_match', 'pending_match', 'unavailable', 'configuration_missing', 'deferred', 'error'):
@@ -539,7 +582,7 @@ def _project(payload, grants):
             result[identifier]['verified_at'] = row['verified_at']
         providers = {}
         for name, detail in (row.get('search_providers') or {}).items():
-            if name not in ('serpapi', 'sogou') or not isinstance(detail, dict):
+            if name not in ('serpapi', 'sogou', 'codex_session') or not isinstance(detail, dict):
                 continue
             if detail.get('state') not in ('ok', 'partial', 'blocked', 'error', 'configuration_missing', 'deferred'):
                 continue
@@ -565,7 +608,7 @@ def _project(payload, grants):
 
 
 def load_public(root=ROOT, now=None):
-    return _project(read(Path(root) / DATA), permissions(root, now))
+    return _project(read(Path(root) / DATA), permissions(root, now), root=root)
 
 
 def _asset_bytes(directory, src):
@@ -648,7 +691,7 @@ def search_cache_path(root, query, provider='serpapi'):
 
 
 def _search(root, query, now, key, searcher, runtime=None, progress=None, force_refresh=False,
-            *, provider='serpapi', requires_key=True):
+            *, provider='serpapi', requires_key=True, paper_id=None):
     from src.coverage_syndication import canonical_syndication_url
     def record(state, rows=(), checked=None, retry=None, link_state=None):
         if progress is None:
@@ -660,6 +703,8 @@ def _search(root, query, now, key, searcher, runtime=None, progress=None, force_
         if parse_date(checked) and (not parse_date(entry.get('checked_at'))
                                    or parse_date(checked) > parse_date(entry['checked_at'])):
             entry['checked_at'] = checked
+        if parse_date(checked):
+            progress.setdefault('current_queries', set()).add((provider, query))
         if state == 'ok':
             entry['queries_completed'] += 1
         entry['results'] += len(rows)
@@ -810,14 +855,21 @@ def _search(root, query, now, key, searcher, runtime=None, progress=None, force_
                  **({'link_resolution': link_state} if link_state in ('blocked', 'error') else {}),
                  **({'link_retry_at': link_retry_at.isoformat()} if link_state in ('blocked', 'error') and link_retry_at else {}),
                  **({'reason': 'scope_not_respected'} if scope_failed else {})})
+    if paper_id:
+        from src.coverage_search_ledger import record_query
+        record_query(root, {'version': 1, 'provider': provider, 'search_strategy_version': SEARCH_VERSION,
+            'paper_id': paper_id, 'query': query, 'checked_at': now.isoformat(), 'state': state,
+            'results': [{'url': row['url'], 'title': row.get('title', '')} for row in rows]})
     record(state, rows, now.isoformat(), retry_at if state == 'blocked' or scope_failed else None, link_state)
     return rows, state
 
 
 def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summarizer=None,
             max_seconds=None, monotonic=None, progress_callback=None, force_refresh=False,
-            paper_ids=None, source_urls=None, index_searcher=False):
-    from src.xiaohongshu import search
+            paper_ids=None, source_urls=None, index_searcher=False,
+            imported_search_results=None, perform_search=True):
+    from src.coverage_discovery import discovery_identity, serpapi_search
+    from src.coverage_search_ledger import admit_candidate, import_results, load_queries, progress as ledger_progress
     from src.coverage_evidence import enqueue_review, load_reviews, merge_review
     from src.coverage_links import remember, resume, mark_refreshed
     from src.coverage_candidates import build_discovery_index, triage_candidates
@@ -826,14 +878,19 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
     root = Path(root)
     live_clock = now is None
     now = now or datetime.now(timezone.utc)
-    searcher, fetcher = searcher or search, fetcher or fetch_coverage
+    searcher, fetcher = searcher or serpapi_search, fetcher or fetch_coverage
     summarizer = summarizer or model_summary
     key = os.getenv('SERPAPI_API_KEY', '') if key is None else key
     grants = permissions(root, now)
     previous = load_public(root, now)
     discovery_index = build_discovery_index(root)
     result = dict(previous)
-    papers = selected_papers(root)
+    papers = [discovery_identity(paper) for paper in selected_papers(root)]
+    newly_imported = (import_results(root, imported_search_results, {p['id'] for p in papers}, SEARCH_VERSION, now)
+                      if imported_search_results is not None else [])
+    session_queries = load_queries(root, strategy=SEARCH_VERSION)
+    if imported_search_results is not None and paper_ids is None:
+        paper_ids = list(dict.fromkeys(row['paper_id'] for row in imported_search_results['queries']))
     if paper_ids is not None:
         wanted = set(paper_ids)
         papers = [paper for paper in papers if paper['id'] in wanted]
@@ -846,7 +903,7 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
             return any(parse_date(detail.get('checked_at'))
                        for detail in previous.get(paper['id'], {}).get('search_providers', {}).values())
         papers.sort(key=reached_provider)
-    supplied = []
+    explicit_sources = []
     if source_urls:
         if paper_ids is None or len(set(paper_ids)) != 1 or len(papers) != 1:
             raise ValueError('Source URLs require exactly one existing paper ID')
@@ -854,15 +911,15 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
             url = article_url(value) or canonical_syndication_url(value)
             if not url:
                 raise ValueError('Please provide a valid mp.weixin.qq.com article URL or supported public synchronization URL')
-            if url not in supplied:
-                supplied.append(url)
+            if url not in explicit_sources:
+                explicit_sources.append(url)
     runtime = CollectionBudget(max_seconds, monotonic)
     for paper in papers:
         result.setdefault(paper['id'], {'state': 'deferred', 'queued_at': now.isoformat(),
                                        'checked_at': '', 'last_attempt_at': '', 'articles': [], 'candidates': []})
 
     def checkpoint():
-        payload = {'version': SCHEMA_VERSION, 'checked_at': now.isoformat(), 'papers': _project({'papers': result}, grants)}
+        payload = {'version': SCHEMA_VERSION, 'checked_at': now.isoformat(), 'papers': _project({'papers': result}, grants, root=root)}
         write(root / DATA, payload)
         return payload
 
@@ -876,6 +933,11 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                     result[pending['id']]['deferred_reason'] = 'runtime_limit'
             break
         identifier = paper['id']
+        supplied = list(explicit_sources)
+        for query_record in newly_imported:
+            if query_record['paper_id'] == identifier:
+                supplied.extend(url for row in query_record['results']
+                                if (url := article_url(row['url']) or canonical_syndication_url(row['url'])))
         old = previous.get(identifier, {})
         articles = {a['url']: dict(a) for a in old.get('articles', [])}
         candidates = {a['url']: dict(a) for a in triage_candidates(
@@ -886,6 +948,14 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
         provider_results = dict(old.get('search_providers', {}))
         search_status = old.get('search_status', 'not_searched')
         search_version = old.get('search_version', 0)
+        imported_queries = session_queries.get(identifier, [])
+        if imported_queries:
+            detail = ledger_progress(imported_queries)
+            search_progress.setdefault('providers', {})['codex_session'] = detail
+            _record_attempt(search_progress, detail['checked_at'])
+            _record_attempt(progress, detail['checked_at'])
+            search_version = SEARCH_VERSION
+            search_status = ('candidates_found' if detail['results'] else 'indexed_no_hit') if detail['state'] == 'ok' else detail['state']
         queued_at = old.get('queued_at') or result[identifier].get('queued_at', '')
         for review in load_reviews(root, paper):
             prior = articles.get(review['url'], {})
@@ -980,6 +1050,23 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
         def examine(rows, read_mirrors=True):
             nonlocal read_failed, read_deferred
             for candidate in rows:
+                if (candidate.get('source_type') == 'public_account_copy'
+                        and candidate.get('url') in articles):
+                    # The review establishes account attribution independently
+                    # of the missing mp link. Recheck availability without
+                    # asking a generic parser to recreate that manual proof.
+                    url = candidate['url']
+                    if url in seen:
+                        continue
+                    seen.add(url)
+                    _, state, _ = _cached_syndication(root, url, now, fetcher, runtime, progress,
+                                                      force_refresh or url in supplied)
+                    if state != 'deferred':
+                        articles[url]['body_status'] = 'readable' if state == 'ok' else state
+                    candidates.pop(url, None)
+                    read_deferred = read_deferred or state == 'deferred'
+                    read_failed = read_failed or state not in ('ok', 'deferred')
+                    continue
                 mirror_url = canonical_syndication_url(candidate.get('url'))
                 if mirror_url:
                     examine_mirror(mirror_url)
@@ -1060,8 +1147,15 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
 
         # Explicit hints are read immediately even when their old negative
         # source cache has not expired. They still need identity verification.
-        for url in supplied:
+        for url in explicit_sources:
             candidates.setdefault(url, {'url': url, 'title': '', 'reason': 'identity_unconfirmed'})
+        for query_record in imported_queries:
+            for discovery in query_record.get('discovered_results', query_record['results']):
+                if not admit_candidate(root, identifier, discovery, query_record['checked_at']):
+                    continue
+                candidate = _public_candidate({**discovery, 'reason': 'identity_unconfirmed'})
+                if candidate:
+                    candidates.setdefault(candidate['url'], candidate)
         examine(_local_candidates(root, paper))
         recovery = (resume(root, paper, now, before_request=lambda: runtime.begin('link'))
                     if callable(index_searcher) else {'candidates': [], 'refresh_queries': []})
@@ -1089,8 +1183,12 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
             fresh = False
         if recovery['refresh_queries']:
             fresh = False
-        state = old.get('state', 'no_match')
-        if not fresh and (not articles or old.get('articles')):
+        state = old.get('state', 'no_match' if perform_search else 'deferred')
+        if not perform_search and imported_queries:
+            imported_state = ledger_progress(imported_queries)['state']
+            state = ('unavailable' if imported_state == 'blocked'
+                     else 'error' if imported_state in ('error', 'partial') else 'no_match')
+        if perform_search and not fresh and (not articles or old.get('articles')):
             query_states = []
             providers = [('serpapi', searcher, True)]
             if callable(index_searcher):
@@ -1104,7 +1202,7 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                 for query in queries:
                     rows, outcome = _search(root, query, now, key, query_searcher, runtime, search_progress,
                                             force_refresh or bool(supplied) or query in refresh_queries,
-                                            provider=provider, requires_key=requires_key)
+                                            provider=provider, requires_key=requires_key, paper_id=identifier)
                     _record_attempt(progress, search_progress.get('last_attempt_at'))
                     if search_progress.get('deferred_reason'):
                         progress['deferred_reason'] = search_progress['deferred_reason']
@@ -1115,7 +1213,8 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                         mark_refreshed(root, paper, [query], now)
                     if set(articles) - before or outcome in ('blocked', 'configuration_missing', 'deferred'):
                         break
-            search_version = SEARCH_VERSION
+            if search_progress.get('current_queries'):
+                search_version = SEARCH_VERSION
             search_status = ('blocked' if query_states and all(s == 'blocked' for s in query_states)
                              else 'partial' if any(s != 'ok' for s in query_states) and any(s == 'ok' for s in query_states)
                              else 'configuration_missing' if query_states and all(s == 'configuration_missing' for s in query_states)

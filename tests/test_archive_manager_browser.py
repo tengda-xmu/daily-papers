@@ -108,7 +108,13 @@ def test_delete_waits_for_publication_and_reload_resumes_without_resubmission(ar
     page.reload()
     page.locator('#archive-retry').wait_for(state='visible')
     assert len([c for c in calls if c[1].endswith('/delete')]) == 1
-    page.locator('#archive-retry').click()
+    # Retry first reads the operation and only then POSTs /retry. Complete that
+    # server transition before simulating publication; otherwise a late retry
+    # handler overwrites our succeeded state with running after the reload.
+    with page.expect_response(lambda response: response.url.endswith('/retry')
+                              and response.request.method == 'POST') as retried:
+        page.locator('#archive-retry').click()
+    assert retried.value.json()['state'] == 'running'
     state['operation'].update(state='succeeded', message='已删除 2 批，相关论文可重新参与推荐。')
     state['editions'] = [e for e in state['editions'] if e['id'] == '3']
     page.reload()

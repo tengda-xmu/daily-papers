@@ -1,5 +1,6 @@
 """The PDF reader must show document acquisition progress beside its own button."""
 import re
+from urllib.parse import urlsplit
 from tests.test_reader_manual_save import browser, reader, note, playwright, P1, P2
 
 
@@ -131,9 +132,14 @@ def test_successful_acquisition_does_not_hide_pdf_viewer_failure(reader):
 
 
 def test_uploaded_pdf_title_is_used_in_reader_and_download(reader):
+    import hashlib
     import json
-    from tests.test_pdf_annotations import source_pdf
-    page, _, _, _, original, alternative, _, _, root = reader
+    page, _, client, headers, original, alternative, _, _, root = reader
+    # Re-upload identical bytes deliberately: metadata refresh must update the
+    # download name even when the PDF hash and rendered pages are unchanged.
+    original_pdf = client.get(f'/api/papers/{P1}/pdf?version=' + original['hash'], headers=headers)
+    assert original_pdf.status_code == 200
+    assert hashlib.sha256(original_pdf.content).hexdigest()[:16] == original['hash']
     title = ('Prediction of residual life and critical crack length using the forward/inverse '
              'machine learning based on the configurational force fatigue model')
     path = root / 'data/daily.json'
@@ -142,7 +148,13 @@ def test_uploaded_pdf_title_is_used_in_reader_and_download(reader):
     path.write_text(json.dumps(data), encoding='utf-8')
     with page.expect_file_chooser() as chooser:
         page.locator('[data-read="upload"]').click()
-    chooser.value.set_files({'name': '1-s2.0-paper-main (1).pdf', 'mimeType': 'application/pdf', 'buffer': source_pdf()})
+    # The paper-title poll can finish before upload processing and make the
+    # reader heading look current while it still holds the previous document.
+    with page.expect_response(lambda response: urlsplit(response.url).path == f'/api/papers/{P1}/pdf'
+                              and response.request.method == 'POST') as uploaded:
+        chooser.value.set_files({'name': '1-s2.0-paper-main (1).pdf', 'mimeType': 'application/pdf', 'buffer': original_pdf.content})
+    assert uploaded.value.ok
+    playwright.expect(page.locator('.reader-status')).to_contain_text('PDF 已就绪', timeout=20000)
     playwright.expect(page.locator('.reader-name')).to_have_text(title)
     playwright.expect(page.locator('[data-read="download"]')).to_be_enabled()
     with page.expect_download() as download:

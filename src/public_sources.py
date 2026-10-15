@@ -4,6 +4,8 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import tempfile
+import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
@@ -29,9 +31,31 @@ def read(path, default=None):
 def write(path, value):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    temp = path.with_suffix('.tmp')
-    temp.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    temp.replace(path)
+    payload = json.dumps(value, ensure_ascii=False, indent=2) + '\n'
+    temp = None
+    try:
+        # Keep writers independent and close the file before Windows replaces it.
+        with tempfile.NamedTemporaryFile(mode='w', encoding='utf-8', dir=path.parent,
+                prefix=f'.{path.name}.', suffix='.tmp', delete=False) as handle:
+            temp = Path(handle.name)
+            handle.write(payload)
+        delays = (0.05, 0.1, 0.2, 0.4, 0.8)
+        for attempt in range(len(delays) + 1):
+            try:
+                temp.replace(path)
+                break
+            except OSError as exc:
+                # Antivirus/indexers can briefly deny replacement or share-lock it.
+                if (not isinstance(exc, PermissionError) and getattr(exc, 'winerror', None) not in (32, 33)) or attempt == len(delays):
+                    raise
+                time.sleep(delays[attempt])
+    finally:
+        if temp is not None:
+            try:
+                temp.unlink(missing_ok=True)
+            except OSError:
+                # Best-effort cleanup must not mask the original write failure.
+                pass
 
 
 def clean(value):
