@@ -67,6 +67,73 @@ def multiple_source_fixture():
     return coverage
 
 
+def mirror_fixture(**updates):
+    return {'url': 'https://hub.baai.ac.cn/view/53949', 'kind': 'article',
+            'body_status': 'readable', 'title': '让分子“越学越会设计”：渐进式语言模型驱动的药物结构优化',
+            **updates}
+
+
+def test_readable_mirror_is_a_separate_direct_link_before_conversation():
+    paper = sample(); paper.update(analysis_status='ready', analysis_basis='abstract')
+    coverage = screenshot_coverage_fixture()
+    coverage['articles'][0]['mirrors'] = [mirror_fixture()]
+    soup = BeautifulSoup(paper_card(paper, 'core', coverage=coverage), 'html.parser')
+    actions = [node.get_text(strip=True) for node in soup.select('.paper-tools > *')]
+    assert actions.index('公众号介绍') < actions.index('阅读全文（公开同步）') < actions.index('Codex 对话')
+    assert soup.select_one('.coverage-link')['href'] == coverage['articles'][0]['url']
+    mirror = soup.select_one('.coverage-mirror')
+    assert mirror['href'] == mirror_fixture()['url'] and mirror['target'] == '_blank'
+    assert 'noopener' in mirror['rel'] and not soup.select('iframe, .paper-coverage-panel')
+
+
+@pytest.mark.parametrize('mirror', [
+    mirror_fixture(kind='collection'), mirror_fixture(kind='feed'), mirror_fixture(kind=''),
+    mirror_fixture(body_status='challenge'), mirror_fixture(body_status='unavailable'),
+    mirror_fixture(url='https://synapse.zhihuiya.com/organization/b53ea946752160f3c870a15e059df21f'),
+    mirror_fixture(url='javascript:alert(1)'),
+    mirror_fixture(url='https://hub.baai.ac.cn.evil.example/view/53949'),
+    mirror_fixture(url='https://hub.baai.ac.cn@evil.example/view/53949'),
+    mirror_fixture(url='https://cloud.tencent.com/developer/search/article-drug'),
+    mirror_fixture(url='https://hub.baai.ac.cn/view/53949?redirect=https://evil.example'),
+    'not a mirror', None,
+])
+def test_only_safe_readable_full_articles_provide_mirror_shortcuts(mirror):
+    coverage = coverage_fixture()
+    coverage['articles'][0]['mirrors'] = [mirror]
+    entry, panel = coverage_panel('abc', coverage)
+    assert 'coverage-mirror' not in entry + panel
+    assert BeautifulSoup(entry, 'html.parser').a['href'] == coverage['articles'][0]['url']
+
+
+def test_mirror_shortcut_uses_verified_source_and_each_source_keeps_its_own_links():
+    coverage = multiple_source_fixture()
+    coverage['articles'][0]['mirrors'] = [mirror_fixture(), mirror_fixture()]
+    coverage['articles'][1]['mirrors'] = [mirror_fixture(kind='collection')]
+    coverage['articles'][2]['mirrors'] = [mirror_fixture(url='https://cloud.tencent.com/developer/article/2656311')]
+    coverage['articles'][3]['mirrors'] = [mirror_fixture(url='https://hub.baai.ac.cn/view/99999')]
+    entry, panel = coverage_panel('abc', coverage)
+    soup = BeautifulSoup(entry + panel, 'html.parser')
+    assert soup.select_one('.coverage-link')['href'] == coverage['articles'][1]['url']
+    # The preferred WeChat article has a collection page only; the next readable
+    # article still offers a one-click full-text route, without changing primary.
+    assert BeautifulSoup(entry, 'html.parser').select_one('.coverage-mirror')['href'] == coverage['articles'][2]['mirrors'][0]['url']
+    rows = soup.select('.coverage-list li')
+    assert not rows[0].select('.coverage-mirror')
+    assert rows[1].select_one('.coverage-mirror')['href'] == coverage['articles'][2]['mirrors'][0]['url']
+    assert len(rows[2].select('.coverage-mirror')) == 1
+    assert '99999' not in entry + panel
+
+
+def test_mirror_title_escaping_and_no_content_copy():
+    coverage = coverage_fixture()
+    coverage['articles'][0]['mirrors'] = [mirror_fixture(title='<script>untrusted()</script>"',
+        blocks=[{'type': 'paragraph', 'text': 'PRIVATE MIRROR BODY'}], images=['https://example.test/private.png'])]
+    entry, panel = coverage_panel('abc', coverage)
+    soup = BeautifulSoup(entry + panel, 'html.parser')
+    assert not soup.select('script, iframe, img') and 'PRIVATE MIRROR BODY' not in entry + panel
+    assert soup.select_one('.coverage-mirror')['title'] == '<script>untrusted()</script>"'
+
+
 def test_single_source_opens_original_in_one_click_before_conversation():
     paper = sample(); paper.update(analysis_status='ready', analysis_basis='abstract')
     coverage = coverage_fixture()
@@ -178,6 +245,7 @@ def test_source_titles_are_escaped_in_direct_link_and_source_list():
 def test_direct_click_and_optional_source_list_on_home_and_history(browser, width, multiple):
     paper = sample(); paper.update(analysis_status='ready', analysis_basis='abstract')
     coverage = multiple_source_fixture() if multiple else screenshot_coverage_fixture()
+    coverage['articles'][1 if multiple else 0]['mirrors'] = [mirror_fixture()]
     expected_url = coverage['articles'][1 if multiple else 0]['url']
     home = render({'core': [paper]}, coverage={paper['id']: coverage})
     archive = render({'core': [paper]}, archive_date='2026-10-14', coverage={paper['id']: coverage})
@@ -188,6 +256,8 @@ def test_direct_click_and_optional_source_list_on_home_and_history(browser, widt
         path = parsed.path
         if parsed.hostname == 'mp.weixin.qq.com':
             request.fulfill(body='<h1>公众号原文</h1>', content_type='text/html')
+        elif parsed.hostname == 'hub.baai.ac.cn':
+            request.fulfill(body='<h1>公开同步全文</h1>', content_type='text/html')
         elif '/archive/' in path:
             request.fulfill(body=archive, content_type='text/html')
         elif path.endswith('index.html'):
@@ -215,15 +285,25 @@ def test_direct_click_and_optional_source_list_on_home_and_history(browser, widt
             original.wait_for_load_state()
             assert original.url == expected_url
             original.close()
+            mirror = page.locator('.paper-tools > .coverage-mirror')
+            assert mirror.get_attribute('href') == mirror_fixture()['url']
+            with page.expect_popup() as opened:
+                mirror.focus(); page.keyboard.press('Enter')
+            synchronized = opened.value
+            synchronized.wait_for_load_state()
+            assert synchronized.url == mirror_fixture()['url']
+            synchronized.close()
             assert not page.locator('.coverage-candidates, .coverage-search-status').count()
             actions = page.locator('.paper-tools > *').all_text_contents()
             assert next(i for i, text in enumerate(actions) if '公众号介绍' in text) < next(i for i, text in enumerate(actions) if 'Codex 对话' in text)
+            assert actions.index('阅读全文（公开同步）') < next(i for i, text in enumerate(actions) if 'Codex 对话' in text)
             if multiple:
                 assert not page.locator('.paper-coverage-panel').is_visible()
                 page.locator('.coverage-more').focus(); page.keyboard.press('Enter')
                 assert page.locator('.coverage-list li:visible').count() == 3
                 assert coverage['articles'][1]['title'] in page.locator('.coverage-list').inner_text()
                 assert page.locator('.coverage-more').get_attribute('aria-expanded') == 'true'
+                assert page.locator('.coverage-list .coverage-mirror:visible').count() == 1
             else:
                 assert not page.locator('.coverage-toggle, .paper-coverage-panel').count()
             assert not page.evaluate('document.documentElement.scrollWidth > innerWidth + 1')
@@ -259,7 +339,7 @@ def test_revocation_removes_generated_page_and_current_index(tmp_path, monkeypat
     monkeypatch.setattr(coverage_module, 'publish_assets', lambda *a: None)
     out=tmp_path/'site'; out.mkdir()
     build_coverage(tmp_path, out)
-    assert json.loads((out/'paper-coverage.json').read_text(encoding='utf-8'))['version'] == 2
+    assert json.loads((out/'paper-coverage.json').read_text(encoding='utf-8'))['version'] == 3
     page=out/'wechat'/(article_name(row)+'.html')
     assert page.exists()
     row['display_mode']='source'; row.pop('blocks')

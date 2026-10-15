@@ -24,7 +24,7 @@ def main(argv=None):
     parser.add_argument('--paper-id', action='append', dest='paper_ids',
                         help='Recheck this stable paper ID; repeat to select several papers (default: all due papers).')
     parser.add_argument('--source-url', action='append', dest='source_urls',
-                        help='Add a public-account source candidate for one selected paper; repeat for multiple sources.')
+                        help='Add a WeChat article or supported public synchronization URL for one selected paper; repeat for multiple sources.')
     args = parser.parse_args(argv)
     if args.source_urls and len(set(args.paper_ids or [])) != 1:
         parser.error('--source-url requires exactly one distinct --paper-id')

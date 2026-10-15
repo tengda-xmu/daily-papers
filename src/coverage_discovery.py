@@ -22,7 +22,7 @@ from src.public_sources import clean
 from src.sources.wechat_public_index import parse_search_page, PublicSearchChallenge
 from src.wechat_metadata import article_url, public_index_url
 
-SEARCH_STRATEGY_VERSION = 5
+SEARCH_STRATEGY_VERSION = 6
 HOSTS = {'weixin.sogou.com', 'www.sogou.com', 'mp.weixin.qq.com'}
 MAX_BYTES = 4_000_000
 GENERIC_METHODS = {'DOI', 'PDF', 'HTML', 'HTTP', 'HTTPS', 'AI', 'ML', 'LLM', 'CNS', 'RMSE', 'MAPE',
@@ -116,7 +116,16 @@ def paper_queries(paper):
         result.append(prefix + '"' + method + '"')
         if first_author:
             result.append(prefix + '"' + method + '" "' + first_author + '"')
-    return list(dict.fromkeys(result))
+    # Public synchronizations often rank where the WeChat page itself is not
+    # indexed. Keep the exact account queries first, then discover those pages
+    # without a domain restriction; their attributed original still needs proof.
+    broad = [query.removeprefix(prefix) for query in result]
+    if chinese:
+        subject = re.sub(r'通过|利用|基于|面向|驱动|优化|的|与|及|：|:', ' ', chinese)
+        terms = [term for term in subject.split() if len(term) >= 2]
+        if len(terms) >= 2:
+            broad.append(' '.join(terms))
+    return list(dict.fromkeys([*result, *broad]))
 
 
 def local_candidate(paper, row):

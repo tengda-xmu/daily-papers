@@ -20,6 +20,31 @@ def reprint_available(row):
         for block in (row.get('blocks') or []))
 
 
+def readable_mirrors(row):
+    """Only complete, already-read public articles qualify as reading links."""
+    from src.coverage_syndication import is_syndication_url
+    from urllib.parse import urlsplit
+    seen = set()
+    mirrors = []
+    for mirror in row.get('mirrors') or []:
+        if not isinstance(mirror, dict) or mirror.get('kind') != 'article' or mirror.get('body_status') != 'readable':
+            continue
+        url = mirror.get('url')
+        if not is_syndication_url(url) or url in seen or urlsplit(url).path.startswith('/organization/'):
+            continue
+        seen.add(url)
+        mirrors.append(mirror)
+    return mirrors
+
+
+def mirror_link(mirror, *, title=''):
+    label = str(mirror.get('title') or title or '公众号文章')
+    return (f'<a class="coverage-mirror" href="{escape(mirror["url"], quote=True)}" '
+            'target="_blank" rel="noopener noreferrer" '
+            f'title="{escape(label, quote=True)}" aria-label="阅读全文（公开同步）：{escape(label, quote=True)}">'
+            '阅读全文（公开同步）</a>')
+
+
 def coverage_panel(paper_id, coverage=None, *, root='./', suffix=''):
     """An introduction opens its article immediately; extra sources are optional."""
     from src.models import parse_date
@@ -64,6 +89,11 @@ def coverage_panel(paper_id, coverage=None, *, root='./', suffix=''):
         label += ' · 如需访问验证，请在微信原文完成。'
     entry = (f'<a class="coverage-link" href="{escape(href, quote=True)}"{attributes} '
              f'title="{escape(label, quote=True)}" aria-label="公众号介绍：{escape(label, quote=True)}">公众号介绍</a>')
+    for row, _ in verified:
+        mirrors = readable_mirrors(row)
+        if mirrors:
+            entry += mirror_link(mirrors[0], title=row.get('title'))
+            break
     if len(verified) == 1:
         return entry, ''
 
@@ -75,11 +105,14 @@ def coverage_panel(paper_id, coverage=None, *, root='./', suffix=''):
         href, attributes = destination(row, url)
         date = str(row.get('published_at') or '')[:10]
         meta = escape(row.get('account') or '公众号名称待核实') + (' · ' + escape(date) if date else '')
+        actions = []
+        if reprint_available(row):
+            actions.append(f'<a href="{escape(url, quote=True)}" target="_blank" rel="noopener noreferrer">公众号原文</a>')
+        actions.extend(mirror_link(mirror, title=row.get('title')) for mirror in readable_mirrors(row))
         rows.append('<li><h4>' + f'<a href="{escape(href, quote=True)}"{attributes}>'
                     + escape(row.get('title') or '公众号文章') + '</a></h4>'
                     + '<p class="coverage-source">' + meta + '</p>'
-                    + (f'<div class="coverage-actions"><a href="{escape(url, quote=True)}" target="_blank" rel="noopener noreferrer">公众号原文</a></div>'
-                       if reprint_available(row) else '') + '</li>')
+                    + ('<div class="coverage-actions">' + ''.join(actions) + '</div>' if actions else '') + '</li>')
     panel = (f'<section class="paper-coverage-panel" id="{identifier}" aria-label="已核实的公众号来源" hidden>'
              '<ul class="coverage-list">' + ''.join(rows) + '</ul></section>')
     return entry, panel
@@ -112,7 +145,7 @@ def render_reprint(row):
 
 
 def build_coverage(root, out, coverage=None):
-    from src.paper_coverage import load_public, publish_assets
+    from src.paper_coverage import SCHEMA_VERSION, load_public, publish_assets
     coverage = deepcopy(load_public(root) if coverage is None else coverage)
     available = publish_assets(root, out) or set()
     for record in coverage.values():
@@ -131,4 +164,4 @@ def build_coverage(root, out, coverage=None):
             path.unlink()
     for name, article in articles.items():
         (directory / (name + '.html')).write_text(render_reprint(article), encoding='utf-8')
-    (out / 'paper-coverage.json').write_text(json.dumps({'version': 2, 'papers': coverage}, ensure_ascii=False, indent=2), encoding='utf-8')
+    (out / 'paper-coverage.json').write_text(json.dumps({'version': SCHEMA_VERSION, 'papers': coverage}, ensure_ascii=False, indent=2), encoding='utf-8')

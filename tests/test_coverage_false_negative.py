@@ -229,11 +229,11 @@ def test_results_ignoring_domain_filter_are_failure_not_empty_index(tmp_path):
         return {'search_metadata': {'status': 'Success'}, 'organic_results': [
             {'link': 'https://www.researchgate.net/publication/123', 'title': 'Unrelated research'}]}
     result = coverage.collect(tmp_path, NOW, key='key', searcher=broken_scope)
-    assert len(calls) == 4  # DOI differs; both shared title queries are cached.
+    assert len(calls) == 8  # DOI differs; shared title queries are cached in both scopes.
     assert all(row['state'] == 'error' for row in result['papers'].values())
-    assert all(row['search_status'] == 'error' for row in result['papers'].values())
+    assert all(row['search_status'] == 'partial' for row in result['papers'].values())
     assert result['papers'][other['id']]['last_search_at'] == NOW.isoformat()
-    assert not read(tmp_path / coverage.CACHE / 'providers/serpapi.json')
+    assert read(tmp_path / coverage.CACHE / 'providers/serpapi.json')['state'] == 'ok'
 
 
 def test_irrelevant_query_does_not_block_later_title_match(tmp_path):
@@ -258,7 +258,7 @@ def test_legacy_mixed_sogou_health_is_rechecked_without_clearing_true_limits(tmp
     row = coverage.collect(tmp_path, NOW, key='key',
         searcher=lambda *_: pytest.fail('Real API backoff must still be honored'),
         index_searcher=lambda query, _: calls.append(query) or {'organic_results': []})['papers'][PAPER['id']]
-    assert len(calls) == len(coverage._queries(PAPER))
+    assert len(calls) == len([q for q in coverage._queries(PAPER) if q.startswith('site:')])
     assert row['state'] == 'no_match' and row['search_status'] == 'partial'
     assert row['search_providers']['sogou']['state'] == 'ok'
     assert row['search_providers']['sogou']['queries_completed'] == len(calls)
@@ -308,7 +308,7 @@ def test_blocked_web_channel_does_not_extend_index_negative_cache(tmp_path):
         return {'organic_results': [], 'state': 'blocked', 'retry_after': 7 * 86400}
     coverage.collect(tmp_path, NOW, key='key', searcher=blocked, index_searcher=index)
     coverage.collect(tmp_path, NOW + timedelta(days=2), key='key', searcher=blocked, index_searcher=index)
-    assert len(calls) == 2 * len(coverage._queries(PAPER))
+    assert len(calls) == 2 * len([q for q in coverage._queries(PAPER) if q.startswith('site:')])
 
 
 def test_redirect_retry_expires_index_cache_without_waiting_seven_days(tmp_path):

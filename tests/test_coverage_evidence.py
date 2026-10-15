@@ -5,8 +5,8 @@ import json
 import pytest
 
 from src.coverage_evidence import (PRIVATE, PUBLIC, enqueue_review, extraction_prompt,
-                                  load_reviews, match_evidence, public_review,
-                                  review_key, save_manual_review)
+                                  load_reviews, match_evidence, public_review, public_mirrors,
+                                  review_key, save_manual_review, save_syndicated_review)
 from src.public_sources import read, write
 
 URL = 'https://mp.weixin.qq.com/s/DXvEHDH1FQRqGQkQhBYKyw'
@@ -19,6 +19,80 @@ ARTICLE = {'url': URL, 'title': 'npj Comput. Mater. | 晶体生成模型的新�
 EVIDENCE = {'dois': [PAPER['doi']], 'title': PAPER['title'], 'authors': PAPER['authors'],
             'legible': True, 'context': 'paper_front_page', 'main_topic': True,
             'reference_only': False, 'conflict': False, 'provenance': 'User supplied screenshot and original URL'}
+
+MIRROR = {'url': 'https://hub.baai.ac.cn/view/53949', 'body_status': 'readable',
+          'kind': 'article', 'checked_at': '2026-10-15T10:00:00+08:00'}
+
+
+def test_syndicated_body_receipt_keeps_original_challenge_and_never_publishes_body(tmp_path):
+    parsed = {**ARTICLE, 'source_version': 'a' * 64, 'evidence_source': 'syndicated_article',
+              'mirror_url': MIRROR['url'], 'mirror_kind': 'article', 'mirror_body_status': 'readable',
+              'original_body_status': 'challenge', 'match_text': PAPER['title'] + ' by Aron Walsh',
+              'blocks': [{'type': 'paragraph', 'text': 'Private fetched body'}]}
+    receipt = save_syndicated_review(tmp_path, PAPER, parsed)
+    actual = load_reviews(tmp_path, PAPER)[0]
+    assert actual['match_basis'] == 'title_author' and actual['verification_method'] == 'syndication'
+    assert actual['body_status'] == 'challenge' and actual['mirrors'][0]['body_status'] == 'readable'
+    assert actual['blocks'] == [] and actual['summary'] == '' and actual['display_mode'] == 'source'
+    assert 'match_text' not in actual and 'mirror_url' not in actual
+    private = read(tmp_path / PRIVATE / 'reviews' / (receipt['id'] + '.json'))
+    assert private['evidence']['blocks'] == parsed['blocks']
+
+
+@pytest.mark.parametrize('change', [
+    {'mirror_url': 'https://evil.example/53949'}, {'mirror_body_status': 'challenge'},
+    {'evidence_source': 'search_snippet'}, {'match_text': ''},
+    {'match_text': PAPER['title'] + ' by Different Author'},
+])
+def test_syndicated_review_requires_attributed_main_body_identity(tmp_path, change):
+    article = {**ARTICLE, 'source_version': 'a' * 64, 'evidence_source': 'syndicated_article',
+               'mirror_url': MIRROR['url'], 'mirror_kind': 'article', 'mirror_body_status': 'readable',
+               'match_text': PAPER['title'] + ' by Aron Walsh'}
+    with pytest.raises(ValueError):
+        save_syndicated_review(tmp_path, PAPER, {**article, **change})
+    assert not list((tmp_path / PUBLIC).glob('*.json'))
+
+
+def test_mirrors_are_sanitized_and_newer_receipt_does_not_discard_existing_copy(tmp_path):
+    from src.coverage_evidence import merge_review
+    rows = public_mirrors([{**MIRROR, 'url': MIRROR['url'] + '?tracking=secret#private',
+                           'raw_html': '<script>secret</script>', 'local_path': 'secret.png'},
+                          {**MIRROR, 'url': 'https://hub.baai.ac.cn.evil.test/view/53949'},
+                          {**MIRROR, 'url': 'https://user:secret@hub.baai.ac.cn/view/53949'}])
+    assert rows == [MIRROR]
+    receipt = save_manual_review(tmp_path, PAPER, {**ARTICLE, 'mirrors': rows}, EVIDENCE)
+    assert receipt['article']['mirrors'] == rows
+    newer = {**receipt['article'], 'verified_at': '2099-01-01T00:00:00+00:00',
+             'verification_method': 'body', 'match_basis': 'doi', 'body_status': 'readable'}
+    newer.pop('mirrors')
+    merged = merge_review(newer, receipt['article'])
+    assert merged['verification_method'] == 'body' and merged['mirrors'] == rows
+
+
+def test_visual_worker_allows_only_the_attributed_mirror_image_host(tmp_path, monkeypatch):
+    import io
+    from PIL import Image
+    from connectors.codex_bridge import coverage_queue
+    from src.public_sources import allowed
+    payload = io.BytesIO()
+    Image.new('RGB', (2, 2), 'white').save(payload, format='PNG')
+    fetched = []
+    def fetch(url, source):
+        assert allowed(url, source), 'Unapproved source host'
+        fetched.append(url)
+        return payload.getvalue()
+    monkeypatch.setattr(coverage_queue, 'fetch', fetch)
+    queue = coverage_queue.CoverageQueue(tmp_path, tmp_path, None, asyncio.Lock())
+    image = {'remote_url': 'https://simg.baai.ac.cn/hub-detail/front-page.webp'}
+    attributed = {**ARTICLE, 'evidence_source': 'syndicated_article', 'mirror_url': MIRROR['url']}
+    file, digest = queue.image_file({'article': attributed}, image)
+    assert file.exists() and len(digest) == 64 and fetched == [image['remote_url']]
+    for invalid in (ARTICLE, {**attributed, 'mirror_url': 'https://unknown.test/view/53949'},
+                    {**attributed, 'mirror_url': 'https://cloud.tencent.com/developer/article/2656311'}):
+        with pytest.raises(AssertionError, match='Unapproved'):
+            queue.image_file({'article': invalid}, image)
+    with pytest.raises(AssertionError, match='Unapproved'):
+        queue.image_file({'article': attributed}, {'remote_url': 'https://evil.example/front-page.webp'})
 
 
 def test_real_source_manual_screenshot_confirms_identity_despite_wrong_journal_and_captcha(tmp_path):
@@ -174,6 +248,36 @@ def test_worker_recovers_remote_candidate_even_with_existing_local_negative(tmp_
                           fetcher=lambda path: remote if path == 'paper-coverage.json' else {'core': [PAPER]})
     queue.sync()
     assert queue.next_task()['paper']['id'] == PAPER['id']
+
+
+def test_worker_recovers_mirror_images_when_wechat_is_challenged_and_new_copy_bypasses_retry(tmp_path, monkeypatch):
+    from connectors.codex_bridge.coverage_queue import CoverageQueue
+    from src import paper_coverage
+    write(tmp_path / 'data/daily.json', {'core': [PAPER]})
+    candidate = {**ARTICLE, 'reason': 'visual_pending', 'mirrors': [dict(MIRROR)]}
+    remote = {'papers': {PAPER['id']: {'state': 'pending_match', 'candidates': [candidate]}}}
+    fetched = []
+    def cached(root, url, now, fetcher):
+        fetched.append(url)
+        return [{**ARTICLE, 'source_version': ('a' if len(fetched) == 1 else 'b') * 64,
+                 'evidence_source': 'syndicated_article', 'mirror_url': url, 'body_status': 'pending',
+                 'blocks': [{'type': 'image', 'remote_url': 'https://simg.baai.ac.cn/a.png'}]}], 'ok', now.isoformat()
+    def reject_original(*_):
+        raise AssertionError('A readable attributed mirror does not require the challenged original')
+    monkeypatch.setattr(paper_coverage, '_cached_syndication', cached)
+    monkeypatch.setattr(paper_coverage, 'fetch_coverage', reject_original)
+    queue = CoverageQueue(tmp_path, tmp_path, FakeClient(EVIDENCE), asyncio.Lock(),
+                          fetcher=lambda path: remote if path == 'paper-coverage.json' else {'core': [PAPER]})
+    queue.sync()
+    task = queue.next_task()
+    assert task['article']['mirrors'] == [MIRROR]
+    assert task['article']['body_status'] == 'challenge'
+    queue.sync()
+    assert len(fetched) == 1
+    candidate['mirrors'][0]['checked_at'] = '2026-10-16T10:00:00+08:00'
+    queue.sync()
+    assert len(fetched) == 2
+    assert queue.next_task()['article']['source_version'] == 'b' * 64
 
 
 def test_importing_older_manual_receipt_preserves_newer_body_verification(tmp_path):

@@ -28,13 +28,13 @@ from src.wechat_metadata import article_url, public_index_url
 DATA = 'data/paper-coverage.json'
 PERMISSIONS = 'config/wechat-reprints.json'
 CACHE = 'data/cache/paper-coverage'
-SCHEMA_VERSION = 2
-SEARCH_VERSION = 5
-ARTICLE_VERSION = 2
+SCHEMA_VERSION = 3
+SEARCH_VERSION = 6
+ARTICLE_VERSION = 3
 CHINA = timezone(timedelta(hours=8))
 IMAGE_HOSTS = ['mmbiz.qpic.cn', 'mmbiz.qlogo.cn']
 ASSET = re.compile(r'assets/wechat/([a-f0-9]{64})\.png\Z')
-REFERENCES = re.compile(r'^(?:\d+[.、]\s*)?(?:参考文献|引用文献|文献引用|references|bibliography)(?:\s*[:：]|\s*\[\d+\]|\s*$)', re.I)
+REFERENCES = re.compile(r'^(?:\d+[.、]\s*)?(?:参考文献|参考资料|参考链接|引用文献|文献引用|references|bibliography)(?:\s*[:：]|\s*\[\d+\]|\s*$)', re.I)
 SAFE_ID = re.compile(r'[A-Za-z0-9_-]{1,80}\Z')
 MATCH_BASES = ('doi', 'title_author', 'image_doi', 'image_title_author', 'manual_screenshot')
 BODY_STATES = ('readable', 'challenge', 'unavailable', 'pending')
@@ -132,7 +132,7 @@ def permissions(root=ROOT, now=None):
     return result
 
 
-def parse_article(body, url):
+def parse_article(body, url, *, image_hosts=None):
     if not isinstance(body, bytes) or len(body) > 4_000_000:
         raise ValueError('Invalid article response')
     decoded = body.decode('utf-8', 'replace')
@@ -180,7 +180,7 @@ def parse_article(body, url):
             src = node.get('data-src') or node.get('src', '')
             if src.startswith('//'):
                 src = 'https:' + src
-            if _image_url(src):
+            if _image_url(src, image_hosts):
                 blocks.append({'type': 'image', 'remote_url': src, 'alt': clean(node.get('alt'))[:200],
                                'reference_section': stopped, 'position': len(blocks)})
             return
@@ -232,10 +232,10 @@ def match_article(paper, article):
     return ''
 
 
-def _image_url(url):
+def _image_url(url, hosts=None):
     try:
         parts = urlsplit(url)
-        return parts.scheme == 'https' and parts.hostname in IMAGE_HOSTS and not parts.username and not parts.password and parts.port in (None, 443)
+        return parts.scheme == 'https' and parts.hostname in (IMAGE_HOSTS if hosts is None else hosts) and not parts.username and not parts.password and parts.port in (None, 443)
     except ValueError:
         return False
 
@@ -292,6 +292,37 @@ def _image(root, url, fetcher, runtime=None):
     src = 'assets/wechat/' + digest + '.png'
     write(mapping, {'src': src})
     return src
+
+
+def _cached_syndication(root, url, now, fetcher, runtime=None, progress=None, force_refresh=False):
+    """Read attributed public copies independently of search and WeChat health."""
+    from src.coverage_syndication import canonical_syndication_url, parse_syndication, fetch_syndication
+    url = canonical_syndication_url(url)
+    if not url:
+        return [], 'unavailable', ''
+    path = Path(root) / CACHE / 'syndication' / (_identity(url) + '.json')
+    saved = read(path)
+    if (not force_refresh and saved.get('version') == ARTICLE_VERSION
+            and _fresh(saved.get('checked_at'), now, 7 if saved.get('state') == 'ok' else 1)):
+        _record_attempt(progress, saved.get('checked_at'))
+        return saved.get('articles', []) if saved.get('state') == 'ok' else [], saved.get('state'), saved.get('checked_at', '')
+    if runtime and not runtime.begin('syndication'):
+        return [], 'deferred', ''
+    checked = now.isoformat()
+    _record_attempt(progress, checked)
+    try:
+        body = (fetch_syndication(url) if fetcher is fetch_coverage else
+                fetcher(url, {'hosts': [urlsplit(url).hostname]}))
+        records = parse_syndication(body, url)
+        write(path, {'version': ARTICLE_VERSION, 'state': 'ok', 'checked_at': checked,
+                     'articles': records, 'raw_body': body.decode('utf-8', 'replace')})
+        return records, 'ok', checked
+    except Exception as exc:
+        state = 'challenge' if isinstance(exc, ArticleChallenge) else 'unavailable'
+        # Keep previous evidence privately, but do not claim a failed refresh
+        # was a successful read. Public verified associations live separately.
+        write(path, {**saved, 'version': ARTICLE_VERSION, 'state': state, 'checked_at': checked})
+        return [], state, checked
 
 
 def _reprint(root, article, grant, fetcher, runtime=None):
@@ -383,6 +414,7 @@ def _summarize(root, article, paper, now, summarizer, previous, runtime=None):
 
 
 def _public_article(row, grants):
+    from src.coverage_evidence import public_mirrors
     url = article_url(row.get('url'))
     if not url or row.get('match_status') != 'verified' or row.get('match_basis') not in MATCH_BASES:
         return None
@@ -393,8 +425,11 @@ def _public_article(row, grants):
               'display_mode': 'source'}
     method = row.get('verification_method') or ('manual_screenshot' if row['match_basis'] == 'manual_screenshot'
                                               else 'image' if row['match_basis'].startswith('image_') else 'body')
-    if method in ('body', 'image', 'manual_screenshot'):
+    if method in ('body', 'image', 'manual_screenshot', 'syndication'):
         result['verification_method'] = method
+    mirrors = public_mirrors(row.get('mirrors'))
+    if mirrors:
+        result['mirrors'] = mirrors
     body_status = row.get('body_status', 'readable' if method == 'body' else 'pending')
     result['body_status'] = body_status if body_status in BODY_STATES else 'pending'
     if parse_date(row.get('verified_at')):
@@ -436,9 +471,15 @@ def _public_article(row, grants):
 
 
 def _public_candidate(row):
+    from src.coverage_syndication import canonical_syndication_url
+    from src.coverage_evidence import public_mirrors
     url = article_url(row.get('url'))
     title, account = clean(row.get('title'))[:300], clean(row.get('account'))[:100]
     reason = row.get('reason', 'identity_unconfirmed')
+    if not url:
+        url = canonical_syndication_url(row.get('url'))
+        if url:
+            reason = 'syndication_pending'
     if not url and reason == 'index_only' and title:
         url = public_index_url(account, title)
     if not url:
@@ -446,7 +487,10 @@ def _public_candidate(row):
     result = {'id': _identity(url), 'url': url, 'title': title, 'account': account,
               'match_status': 'pending', 'reason': reason if reason in (
                   'identity_unconfirmed', 'article_unavailable', 'article_challenge', 'index_only',
-                  'collection_deferred', 'visual_pending') else 'identity_unconfirmed'}
+                  'collection_deferred', 'visual_pending', 'syndication_pending') else 'identity_unconfirmed'}
+    mirrors = public_mirrors(row.get('mirrors'))
+    if mirrors:
+        result['mirrors'] = mirrors
     for name in ('published_at', 'last_attempt_at'):
         if parse_date(row.get(name)):
             result[name] = row[name]
@@ -605,6 +649,7 @@ def search_cache_path(root, query, provider='serpapi'):
 
 def _search(root, query, now, key, searcher, runtime=None, progress=None, force_refresh=False,
             *, provider='serpapi', requires_key=True):
+    from src.coverage_syndication import canonical_syndication_url
     def record(state, rows=(), checked=None, retry=None, link_state=None):
         if progress is None:
             return
@@ -696,6 +741,8 @@ def _search(root, query, now, key, searcher, runtime=None, progress=None, force_
         for item in organic:
             if not isinstance(item, dict):
                 continue
+            if canonical_syndication_url(item.get('link')) and (provider != 'serpapi' or query.startswith('site:mp.weixin.qq.com ')):
+                continue
             candidate = _public_candidate({'url': item.get('link'), 'title': item.get('title'),
                 'account': item.get('account'), 'published_at': item.get('published_at'),
                 'reason': item.get('reason', 'identity_unconfirmed')})
@@ -712,7 +759,7 @@ def _search(root, query, now, key, searcher, runtime=None, progress=None, force_
         state = payload.get('state', 'ok')
         if state not in ('ok', 'blocked', 'error'):
             state = 'error'
-        scope_failed = provider == 'serpapi' and bool(organic) and not rows
+        scope_failed = provider == 'serpapi' and query.startswith('site:mp.weixin.qq.com ') and bool(organic) and not rows
         if scope_failed:
             # Some upstream responses ignore site: and return unrelated domains.
             # Filtering those links is not evidence of a genuinely empty index.
@@ -774,6 +821,8 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
     from src.coverage_evidence import enqueue_review, load_reviews, merge_review
     from src.coverage_links import remember, resume, mark_refreshed
     from src.coverage_candidates import build_discovery_index, triage_candidates
+    from src.coverage_syndication import canonical_syndication_url
+    from src.coverage_evidence import public_mirrors
     root = Path(root)
     live_clock = now is None
     now = now or datetime.now(timezone.utc)
@@ -802,9 +851,9 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
         if paper_ids is None or len(set(paper_ids)) != 1 or len(papers) != 1:
             raise ValueError('Source URLs require exactly one existing paper ID')
         for value in source_urls:
-            url = article_url(value)
+            url = article_url(value) or canonical_syndication_url(value)
             if not url:
-                raise ValueError('Please provide a valid mp.weixin.qq.com article URL')
+                raise ValueError('Please provide a valid mp.weixin.qq.com article URL or supported public synchronization URL')
             if url not in supplied:
                 supplied.append(url)
     runtime = CollectionBudget(max_seconds, monotonic)
@@ -831,7 +880,7 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
         articles = {a['url']: dict(a) for a in old.get('articles', [])}
         candidates = {a['url']: dict(a) for a in triage_candidates(
             root, paper, old.get('candidates', []), now, discovery_index)}
-        seen, read_failed, read_deferred = set(), False, False
+        seen, seen_mirrors, read_failed, read_deferred = set(), set(), False, False
         progress = {'last_attempt_at': old.get('last_attempt_at', '')}
         search_progress = {'last_attempt_at': old.get('last_search_at', '')}
         provider_results = dict(old.get('search_providers', {}))
@@ -862,9 +911,81 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                 values['queued_at'] = queued_at
             return values
 
-        def examine(rows):
+        def examine_mirror(mirror_url, expected_url=None):
+            nonlocal read_failed, read_deferred
+            identity = (mirror_url, expected_url)
+            if identity in seen_mirrors:
+                return
+            seen_mirrors.add(identity)
+            records, state, checked = _cached_syndication(
+                root, mirror_url, now, fetcher, runtime, progress, force_refresh or mirror_url in supplied)
+            if state != 'ok':
+                read_deferred = read_deferred or state == 'deferred'
+                read_failed = read_failed or state != 'deferred'
+                for prior in articles.values():
+                    for mirror in prior.get('mirrors', []):
+                        if mirror.get('url') == mirror_url and state != 'deferred':
+                            mirror.update(body_status=state, checked_at=checked)
+                return
+            admitted, originals = False, []
+            for article in records:
+                url = article_url(article.get('url'))
+                if not url or (expected_url and expected_url != url):
+                    continue
+                basis = match_article(paper, article)
+                from src.coverage_discovery import local_candidate
+                visual_intro = (article.get('mirror_kind') == 'article' and any(
+                    b.get('type') == 'image' and not b.get('reference_section') for b in article.get('blocks', [])))
+                if not basis and url not in articles and not local_candidate(paper, {
+                        'title': article.get('title'), 'evidence_text': article.get('match_text')}) and not visual_intro:
+                    continue
+                admitted = True
+                prior = articles.get(url, candidates.get(url, {}))
+                mirror = {'url': mirror_url, 'body_status': 'readable',
+                          'kind': article.get('mirror_kind', 'collection' if urlsplit(mirror_url).hostname == 'synapse.zhihuiya.com' else 'article'),
+                          'checked_at': checked}
+                mirrors = public_mirrors([*[m for m in prior.get('mirrors', []) if m.get('url') != mirror_url], mirror])
+                article['mirrors'] = mirrors
+                if not basis and url not in articles:
+                    article['body_status'] = prior.get('body_status', 'pending')
+                    article['original_body_status'] = article['body_status']
+                    if any(b.get('type') == 'image' and not b.get('reference_section') for b in article.get('blocks', [])):
+                        enqueue_review(root, paper, article)
+                    candidates[url] = {'url': url, 'title': article.get('title', ''), 'account': article.get('account', ''),
+                        'published_at': article.get('published_at', ''), 'body_status': 'pending',
+                        'reason': 'visual_pending' if article.get('image_count') else 'identity_unconfirmed', 'mirrors': mirrors}
+                    originals.append(candidates[url])
+                    continue
+                row = {**prior, 'url': url, 'mirrors': mirrors}
+                for field in ('title', 'account', 'author', 'published_at'):
+                    if article.get(field) and not row.get(field):
+                        row[field] = article[field]
+                if basis and url not in articles:
+                    row.update(match_status='verified', match_basis=basis, verification_method='syndication',
+                               body_status=prior.get('body_status', 'pending'), source_version=article['source_version'],
+                               verified_at=checked)
+                articles[url] = row
+                originals.append(row)
+                candidates.pop(url, None)
+                row.update(_summarize(root, article, paper, now, summarizer, prior, runtime))
+                result[identifier] = {'state': 'matched', **timing(), 'articles': list(articles.values()),
+                                      'candidates': list(candidates.values())}
+                checkpoint()
+            if admitted:
+                candidates.pop(mirror_url, None)
+            # Verify original readability separately; a CAPTCHA cannot undo
+            # the identity evidence obtained from the attributed public copy.
+            examine(originals, read_mirrors=False)
+
+        def examine(rows, read_mirrors=True):
             nonlocal read_failed, read_deferred
             for candidate in rows:
+                mirror_url = canonical_syndication_url(candidate.get('url'))
+                if mirror_url:
+                    examine_mirror(mirror_url)
+                    continue
+                for mirror in public_mirrors(candidate.get('mirrors')) if read_mirrors else []:
+                    examine_mirror(mirror['url'], article_url(candidate.get('url')))
                 if candidate.get('_provider') == 'sogou':
                     from src.coverage_discovery import local_candidate
                     if not local_candidate(paper, {'title': candidate.get('title'),
@@ -895,7 +1016,9 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                         continue
                     candidates[url] = {**candidate, 'url': url,
                                        'body_status': 'challenge' if state == 'challenge' else 'pending' if state == 'deferred' else 'unavailable',
-                                       'reason': 'collection_deferred' if state == 'deferred' else 'article_challenge' if state == 'challenge' else 'article_unavailable'}
+                                        'reason': ('visual_pending' if candidate.get('reason') == 'visual_pending' and
+                                                   any(m.get('body_status') == 'readable' for m in candidate.get('mirrors', []))
+                                                   else 'collection_deferred' if state == 'deferred' else 'article_challenge' if state == 'challenge' else 'article_unavailable')}
                     continue
                 basis = match_article(paper, article)
                 if not basis:
@@ -913,6 +1036,9 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                     continue
                 prior_article = articles.get(url, {})
                 row = {**prior_article, **{k: article.get(k, '') for k in ('url', 'title', 'account', 'author', 'published_at')}}
+                mirrors = public_mirrors([*prior_article.get('mirrors', []), *candidate.get('mirrors', [])])
+                if mirrors:
+                    row['mirrors'] = mirrors
                 row.update(match_status='verified', match_basis=basis, verification_method='body', body_status='readable',
                            source_version=article['source_version'],
                            verified_at=prior_article.get('verified_at') if prior_article.get('source_version') == article['source_version']
@@ -973,6 +1099,8 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                 before = set(articles)
                 refresh_queries = recovery['refresh_queries'] if provider == 'sogou' else []
                 queries = list(dict.fromkeys([*refresh_queries, *_queries(paper)]))
+                if provider == 'sogou':
+                    queries = [query for query in queries if query in refresh_queries or query.startswith('site:mp.weixin.qq.com ')]
                 for query in queries:
                     rows, outcome = _search(root, query, now, key, query_searcher, runtime, search_progress,
                                             force_refresh or bool(supplied) or query in refresh_queries,

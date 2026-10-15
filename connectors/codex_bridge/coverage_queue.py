@@ -2,16 +2,18 @@
 from __future__ import annotations
 
 import asyncio
+from datetime import datetime, timezone
 import hashlib
 import io
 import json
 from pathlib import Path
 import time
+from urllib.parse import urlsplit
 
 from PIL import Image
 
 from src.coverage_evidence import (PRIVATE, PUBLIC, enqueue_review, extraction_prompt,
-                                   load_reviews, match_evidence, public_review, review_key, save_review)
+                                   load_reviews, match_evidence, public_mirrors, public_review, review_key, save_review)
 from src.public_sources import fetch, read, write
 from src.wechat_metadata import article_url
 
@@ -26,7 +28,7 @@ class CoverageQueue:
 
     def sync(self):
         """Recover durable candidates produced in CI, not only local cache tasks."""
-        from src.paper_coverage import selected_papers, parse_article, fetch_coverage
+        from src.paper_coverage import selected_papers, parse_article, fetch_coverage, _cached_syndication
         from tools.recommendation_data import fetch as public_fetch
         get = self.fetcher or public_fetch
         papers = {p['id']: p for p in selected_papers(self.root)}
@@ -74,15 +76,46 @@ class CoverageQueue:
                     continue
                 attempts = self.root / PRIVATE / 'discovery' / (hashlib.sha256(f'{paper_id}\n{url}'.encode()).hexdigest() + '.json')
                 previous = read(attempts)
-                if (previous.get('source_version') == candidate.get('source_version')
+                mirrors = public_mirrors(candidate.get('mirrors'))
+                fingerprint = hashlib.sha256(json.dumps({'source_version': candidate.get('source_version'),
+                                                         'mirrors': mirrors}, sort_keys=True).encode()).hexdigest()
+                if (previous.get('fingerprint') == fingerprint
                         and previous.get('next_attempt', 0) > time.time()):
                     continue
                 try:
+                    queued = False
+                    for mirror in mirrors:
+                        records, state, checked = _cached_syndication(
+                            self.root, mirror['url'], datetime.now(timezone.utc), fetch_coverage)
+                        if state != 'ok':
+                            continue
+                        for article in records:
+                            if (article_url(article.get('url')) == url
+                                    and any(b.get('type') == 'image' and not b.get('reference_section')
+                                            for b in article.get('blocks', []))):
+                                article = {**article, 'mirrors': mirrors,
+                                           'body_status': candidate.get('body_status', 'pending'),
+                                           'original_body_status': candidate.get('body_status', 'pending')}
+                                # Candidate metadata can fill missing original
+                                # account/date without trusting mirror uploader names.
+                                for field in ('title', 'account', 'published_at'):
+                                    if not article.get(field) and candidate.get(field):
+                                        article[field] = candidate[field]
+                                enqueue_review(self.root, paper, article)
+                                queued = True
+                                break
+                        if queued:
+                            break
+                    if queued:
+                        write(attempts, {'source_version': candidate.get('source_version'),
+                                         'fingerprint': fingerprint, 'next_attempt': time.time() + 86400})
+                        continue
                     body = fetch_coverage(url, {'hosts': ['mp.weixin.qq.com']})
                     article = parse_article(body, url)
                     if any(b.get('type') == 'image' for b in article.get('blocks', [])):
                         enqueue_review(self.root, paper, article)
-                    write(attempts, {'source_version': candidate.get('source_version'), 'next_attempt': time.time() + 86400})
+                    write(attempts, {'source_version': candidate.get('source_version'),
+                                     'fingerprint': fingerprint, 'next_attempt': time.time() + 86400})
                 except Exception:
                     # Access challenges remain pending; there is no attempt cap.
                     write(attempts, {'source_version': candidate.get('source_version'), 'next_attempt': time.time() + 86400})
@@ -100,7 +133,17 @@ class CoverageQueue:
         write(self.root / PRIVATE / 'tasks' / (task['id'] + '.json'), task)
 
     def image_file(self, task, image):
-        raw = fetch(image['remote_url'], {'hosts': ['mmbiz.qpic.cn', 'mmbiz.qlogo.cn']})
+        hosts = ['mmbiz.qpic.cn', 'mmbiz.qlogo.cn']
+        article = task.get('article') or {}
+        if article.get('evidence_source') == 'syndicated_article' and article_url(article.get('url')):
+            from src.coverage_syndication import canonical_syndication_url
+            mirror = canonical_syndication_url(article.get('mirror_url'))
+            host = urlsplit(mirror).hostname
+            # A trusted article attribution may authorize its own image CDN,
+            # never arbitrary hosts supplied by a candidate or image block.
+            hosts.extend({'hub.baai.ac.cn': ['simg.baai.ac.cn'],
+                          'cloud.tencent.com': ['developer.qcloudimg.com']}.get(host, []))
+        raw = fetch(image['remote_url'], {'hosts': hosts})
         with Image.open(io.BytesIO(raw)) as source:
             if source.format not in ('PNG', 'JPEG', 'WEBP') or source.width * source.height > 30_000_000:
                 raise ValueError('Unsupported coverage image')

@@ -157,12 +157,12 @@ def test_all_papers_are_searched_without_a_daily_quota_and_cached(tmp_path):
         return {'organic_results': []}
     before = NOW.replace(hour=15, minute=59)
     result = coverage.collect(tmp_path, before, key='key', searcher=empty)
-    assert len(calls) == 15
+    assert len(calls) == sum(len(coverage._queries(p)) for p in papers)
     assert {row['state'] for row in result['papers'].values()} == {'no_match'}
     coverage.collect(tmp_path, before + timedelta(seconds=15), key='key', searcher=empty)
-    assert len(calls) == 15
+    assert len(calls) == sum(len(coverage._queries(p)) for p in papers)
     coverage.collect(tmp_path, before + timedelta(minutes=2), key='key', searcher=empty)
-    assert len(calls) == 15
+    assert len(calls) == sum(len(coverage._queries(p)) for p in papers)
     assert not (tmp_path / coverage.CACHE / 'budget.json').exists()
 
 
@@ -176,7 +176,7 @@ def test_legacy_exhausted_budget_and_recent_deferral_do_not_block_search(tmp_pat
         'checked_at': NOW.isoformat(), 'articles': [], 'candidates': []}}})
     calls = []
     row = coverage.collect(tmp_path, NOW, key='key', searcher=lambda *_: calls.append(1) or {'organic_results': []})['papers'][PAPER['id']]
-    assert len(calls) == 3 and row['state'] == 'no_match'
+    assert len(calls) == len(coverage._queries(PAPER)) and row['state'] == 'no_match'
     assert 'deferred_reason' not in row and row['queued_at'] == queued.isoformat()
     assert row['checked_at'] == row['last_attempt_at'] == NOW.isoformat()
     assert read(tmp_path / coverage.CACHE / 'budget.json') == budget
@@ -192,7 +192,7 @@ def test_legacy_queue_timestamp_is_migrated_and_does_not_block_same_day_retry(tm
     calls = []
     later = NOW + timedelta(minutes=10)
     row = coverage.collect(tmp_path, later, key='key', searcher=lambda query, key: calls.append(query) or {'organic_results': []})['papers'][PAPER['id']]
-    assert len(calls) == 3 and row['state'] == 'no_match'
+    assert len(calls) == len(coverage._queries(PAPER)) and row['state'] == 'no_match'
     assert row['checked_at'] == row['last_attempt_at'] == later.isoformat()
     assert row['queued_at'] == NOW.isoformat() and 'deferred_reason' not in row
 
@@ -206,7 +206,7 @@ def test_runtime_deferred_paper_can_run_later_the_same_day(tmp_path):
     assert row['checked_at'] == '' and not calls
     later = NOW + timedelta(minutes=10)
     row = coverage.collect(tmp_path, later, key='key', searcher=empty)['papers'][PAPER['id']]
-    assert row['state'] == 'no_match' and len(calls) == 3
+    assert row['state'] == 'no_match' and len(calls) == len(coverage._queries(PAPER))
     assert row['checked_at'] == later.isoformat()
 
 
@@ -249,7 +249,7 @@ def test_missing_configuration_does_not_invent_attempt_or_delay_restored_key(tmp
     calls = []
     later = NOW + timedelta(minutes=5)
     row = coverage.collect(tmp_path, later, key='key', searcher=lambda query, key: calls.append(query) or {'organic_results': []})['papers'][PAPER['id']]
-    assert row['state'] == 'no_match' and len(calls) == 3
+    assert row['state'] == 'no_match' and len(calls) == len(coverage._queries(PAPER))
     assert row['checked_at'] == later.isoformat()
 
 
@@ -446,7 +446,7 @@ def test_all_returned_articles_are_read_beyond_twenty_without_deferral(tmp_path)
         reads.append(url)
         return page('与当前论文无关的其他研究内容。' * 10)
     result = coverage.collect(tmp_path, NOW, key='key', searcher=many_results, fetcher=unrelated)
-    assert len(searches) == 12 and len(reads) == 60
+    assert len(searches) == sum(len(coverage._queries(p)) for p in papers) and len(reads) == 5 * len(searches)
     third = result['papers'][papers[2]['id']]
     assert third['state'] == 'pending_match'
     assert {c['reason'] for c in third['candidates']} == {'identity_unconfirmed'}
@@ -569,11 +569,11 @@ def test_default_has_no_runtime_cutoff_and_reports_cached_or_completed_papers(tm
         events.append((done, total, paper['id'], record['state']))
         assert read(tmp_path / coverage.DATA)['papers'][paper['id']] == record
     result = coverage.collect(tmp_path, NOW, key='key', searcher=empty, monotonic=lambda: ticks[0], progress_callback=progress)
-    assert ticks[0] == 6000 and len(calls) == 12
+    assert ticks[0] == 500 * sum(len(coverage._queries(p)) for p in papers) and len(calls) == sum(len(coverage._queries(p)) for p in papers)
     assert events == [(i + 1, 4, p['id'], 'no_match') for i, p in enumerate(papers)]
     events.clear()
     again = coverage.collect(tmp_path, NOW + timedelta(minutes=1), key='key', searcher=empty, progress_callback=progress)
-    assert len(calls) == 12 and len(events) == 4
+    assert len(calls) == sum(len(coverage._queries(p)) for p in papers) and len(events) == 4
     assert again['papers'] == result['papers']
 
 
@@ -583,10 +583,10 @@ def test_refresh_bypasses_search_cache_and_targeted_run_preserves_other_records(
     calls = []
     empty = lambda query, _: calls.append(query) or {'organic_results': []}
     first = coverage.collect(tmp_path, NOW, key='key', searcher=empty)
-    assert len(calls) == 6
+    assert len(calls) == len(coverage._queries(PAPER)) + len(coverage._queries(other))
     later = NOW + timedelta(minutes=5)
     result = coverage.collect(tmp_path, later, key='key', searcher=empty, force_refresh=True, paper_ids=[PAPER['id']])
-    assert len(calls) == 9 and result['papers'][PAPER['id']]['checked_at'] == later.isoformat()
+    assert len(calls) == 2 * len(coverage._queries(PAPER)) + len(coverage._queries(other)) and result['papers'][PAPER['id']]['checked_at'] == later.isoformat()
     assert result['papers'][other['id']] == first['papers'][other['id']]
     reads = []
     fetched = lambda url, _: reads.append(url) or page()
@@ -599,7 +599,7 @@ def test_refresh_bypasses_search_cache_and_targeted_run_preserves_other_records(
 def test_finite_query_strategy_normalizes_title_punctuation_and_relaxes_phrase_only(tmp_path):
     paper = {**PAPER, 'title': 'Physics–informed digital twins for wind turbine fault prognosis'}
     queries = coverage._queries(paper)
-    assert queries == ['site:mp.weixin.qq.com "10.1234/fixture"',
+    assert queries[:4] == ['site:mp.weixin.qq.com "10.1234/fixture"',
                        'site:mp.weixin.qq.com "Physics–informed digital twins for wind turbine fault prognosis"',
                        'site:mp.weixin.qq.com "Physics-informed digital twins for wind turbine fault prognosis"',
                        'site:mp.weixin.qq.com Physics-informed digital twins for wind turbine fault prognosis']

@@ -26,12 +26,15 @@ def page(rows='', next_url=''):
             (f'<a id="sogou_next" href="{next_url}">下一页</a>' if next_url else '')).encode()
 
 
-def test_sparse_query_fixture_retains_original_three_strategies():
+def test_sparse_query_fixture_retains_domain_queries_and_adds_open_web_discovery():
     paper = {'doi': '10.1234/fixture', 'title': 'Physics informed digital twins for wind turbine fault prognosis'}
     assert paper_queries(paper) == [
         'site:mp.weixin.qq.com "10.1234/fixture"',
         'site:mp.weixin.qq.com "Physics informed digital twins for wind turbine fault prognosis"',
-        'site:mp.weixin.qq.com Physics informed digital twins for wind turbine fault prognosis']
+        'site:mp.weixin.qq.com Physics informed digital twins for wind turbine fault prognosis',
+        '"10.1234/fixture"',
+        '"Physics informed digital twins for wind turbine fault prognosis"',
+        'Physics informed digital twins for wind turbine fault prognosis']
 
 
 def test_chinese_and_method_queries_follow_normalized_identity_queries():

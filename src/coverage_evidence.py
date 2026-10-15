@@ -63,6 +63,29 @@ def match_evidence(paper, evidence):
     return 'image_title_author' if any(len(compact(a)) >= 5 and compact(a) in observed for a in authors) else ''
 
 
+def public_mirrors(value):
+    """Project readable public copies without body, credentials or tracking data."""
+    from src.coverage_syndication import canonical_syndication_url
+    if not isinstance(value, list):
+        return []
+    result = {}
+    for row in value:
+        if not isinstance(row, dict):
+            continue
+        url = canonical_syndication_url(row.get('url'))
+        checked = parse_date(row.get('checked_at'))
+        status = row.get('body_status')
+        kind = row.get('kind')
+        if (not url or not checked or status not in ('readable', 'challenge', 'unavailable', 'pending')
+                or kind not in ('article', 'collection')):
+            continue
+        previous = result.get(url)
+        if not previous or checked > parse_date(previous['checked_at']):
+            result[url] = {'url': url, 'body_status': status, 'kind': kind,
+                           'checked_at': checked.isoformat()}
+    return list(result.values())
+
+
 def public_review(value):
     """Rebuild rather than copy: safe for publishing untrusted worker output."""
     if not isinstance(value, dict) or value.get('version') != VERSION:
@@ -73,9 +96,12 @@ def public_review(value):
     key = review_key(paper_id, url, source_version)
     basis = source.get('match_basis')
     method = source.get('verification_method')
+    expected = {'manual_screenshot': 'manual_screenshot', 'image_doi': 'image',
+                'image_title_author': 'image', 'doi': 'syndication', 'title_author': 'syndication'}
+    mirrors = public_mirrors(source.get('mirrors'))
     if (value.get('id') != key or source.get('match_status') != 'verified'
-            or basis not in ('image_doi', 'image_title_author', 'manual_screenshot')
-            or method != ('manual_screenshot' if basis == 'manual_screenshot' else 'image')
+            or basis not in expected or method != expected[basis]
+            or (method == 'syndication' and not any(m['body_status'] == 'readable' for m in mirrors))
             or not parse_date(source.get('verified_at'))):
         raise ValueError('Invalid verified coverage review')
     title, account = clean(source.get('title'))[:300], clean(source.get('account'))[:160]
@@ -90,9 +116,13 @@ def public_review(value):
                'display_mode': 'source', 'summary': '', 'blocks': []}
     if parse_date(source.get('published_at')):
         article['published_at'] = source['published_at']
+    if mirrors:
+        article['mirrors'] = mirrors
     # This is a source note, not a paraphrase of inaccessible article content.
     article['source_note'] = ('根据用户提供的截图核对论文身份；公众号正文尚未自动读取。'
                               if method == 'manual_screenshot' and article['body_status'] != 'readable'
+                              else '已根据公开同步报道正文核对论文身份。' if method == 'syndication'
+                              else '已根据公开同步报道中的论文图片核对论文身份。' if mirrors
                               else '已根据文章中的论文图片核对论文身份。')
     return {'version': VERSION, 'id': key, 'paper_id': paper_id,
             'source_version': source_version, 'article': article}
@@ -143,6 +173,35 @@ def save_manual_review(root, paper, article, evidence):
     return save_review(root, paper, article, evidence, manual=True)
 
 
+def save_syndicated_review(root, paper, article):
+    """Approve a parsed attributed copy; mirror readability never proves mp access."""
+    from src.coverage_syndication import canonical_syndication_url
+    from src.paper_coverage import match_article
+    mirror_url = canonical_syndication_url(article.get('mirror_url'))
+    if (not mirror_url or not article_url(article.get('url'))
+            or article.get('mirror_body_status') != 'readable'
+            or article.get('evidence_source') != 'syndicated_article'):
+        raise ValueError('Syndicated evidence needs an attributed readable public copy')
+    basis = match_article(paper, article)
+    if not basis:
+        raise ValueError('Syndicated article body does not confirm the main paper')
+    source_version = article.get('source_version')
+    key = review_key(paper['id'], article['url'], source_version)
+    verified_at = datetime.now(timezone.utc).isoformat()
+    mirrors = public_mirrors(article.get('mirrors', []) + [{
+        'url': mirror_url, 'body_status': 'readable', 'kind': article.get('mirror_kind', 'article'),
+        'checked_at': verified_at}])
+    receipt = public_review({'version': VERSION, 'id': key, 'paper_id': paper['id'],
+                            'source_version': source_version, 'article': {**article,
+                            'match_status': 'verified', 'match_basis': basis,
+                            'verification_method': 'syndication', 'verified_at': verified_at,
+                            'body_status': article.get('original_body_status', 'pending'), 'mirrors': mirrors}})
+    write(Path(root) / PRIVATE / 'reviews' / (key + '.json'),
+          {'receipt': receipt, 'evidence': article, 'paper': paper})
+    write(Path(root) / PUBLIC / (key + '.json'), receipt)
+    return receipt
+
+
 def load_reviews(root, paper):
     latest = {}
     for path in sorted((Path(root) / PUBLIC).glob('*.json')):
@@ -163,8 +222,9 @@ def merge_review(existing, review):
     """Identity-only receipts cannot roll back fresher body verification."""
     old_time = parse_date(existing.get('verified_at'))
     new_time = parse_date(review.get('verified_at'))
+    mirrors = public_mirrors(existing.get('mirrors', []) + review.get('mirrors', []))
     if existing.get('match_status') == 'verified' and old_time and (not new_time or old_time >= new_time):
-        return dict(existing)
+        return {**existing, **({'mirrors': mirrors} if mirrors else {})}
     merged = {**existing, **review}
     # A receipt contains no fetched body, so it cannot discard independently
     # acquired content or downgrade a readable source to its old CAPTCHA state.
@@ -173,6 +233,8 @@ def merge_review(existing, review):
             merged[field] = existing[field]
     if existing.get('body_status') == 'readable':
         merged['body_status'] = 'readable'
+    if mirrors:
+        merged['mirrors'] = mirrors
     return merged
 
 
