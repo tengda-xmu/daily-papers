@@ -11,9 +11,39 @@ from src.sources.wechat_rss import WeChatRSSAdapter
 from src.sources.public_literature import ArxivAdapter, OpenAlexAdapter, CrossrefAdapter, SemanticScholarAdapter, PubMedAdapter, WebOfScienceAdapter
 from src.venues import classify_venue
 from src.catalog import paper_facets
+from src.research_directions import clean_profile
 
 
 FIXTURES = Path(__file__).parent / "fixtures"
+
+
+def fixed_research_profile():
+    """Stable three-direction fixture, independent of editable user settings."""
+    methods = ['machine learning', 'large language model', 'deep learning', 'neural network',
+        'artificial intelligence', 'AI', 'LLM', 'agentic', 'multi-agent', 'generative',
+        'surrogate', 'kriging', 'bayesian', 'physics-informed', '大模型', '智能体', '机器学习']
+    rows = [
+        {'id': 'ai_maintenance', 'name': 'AI 智能运维',
+         'keywords': ['predictive maintenance', 'fault diagnosis', 'maintenance', 'fault detection',
+             'prognostics', 'condition monitoring', 'health monitoring', 'remaining useful life',
+             'digital twin', '智能运维', '故障诊断', '预测维护'],
+         'require_any': methods, 'exclude': ['cancer', 'alzheimer']},
+        {'id': 'generative_design', 'name': '结构生成式设计与可靠性优化',
+         'keywords': ['generative design', 'topology optimization', 'inverse design', 'structural design',
+             'structural optimization', 'constitutive', 'scientific machine learning', 'finite element',
+             'mechanical metamaterials', 'structural reliability optimization', '生成式设计', '拓扑优化', '本构'],
+         'require_any': methods, 'exclude': []},
+        {'id': 'fatigue_reliability', 'name': '结构疲劳与可靠性',
+         'keywords': ['structural fatigue', 'fatigue life', 'fatigue crack', 'fracture mechanics',
+             'damage tolerance', 'probabilistic fatigue', 'structural reliability', 'fatigue strength',
+             'fatigue', '结构疲劳', '疲劳寿命', '疲劳可靠性'],
+         'require_any': ['machine learning', 'reliability', 'probabilistic', 'large language model',
+             'deep learning', 'neural network', 'AI', 'LLM', 'agentic', 'multi-agent', 'surrogate',
+             'kriging', 'bayesian', 'physics-informed', '大模型', '机器学习', '可靠性'],
+         'exclude': ['patient', 'cancer', 'alzheimer']},
+    ]
+    return clean_profile({'version': 1, 'core_count': 5, 'extended_count': 5, 'directions': [
+        {**row, 'enabled': True, 'core': True, 'extended': True, 'weight': 1} for row in rows]})
 
 
 def test_fixture_parsers():
@@ -161,12 +191,12 @@ def test_core_keeps_complete_chinese_notes_when_live_source_fails(monkeypatch, t
         name = "fixture failure"
         def fetch(self, since, until):
             raise TimeoutError("fixture timeout")
-    monkeypatch.setattr("src.pipeline.build_adapters", lambda: [Unavailable()])
+    monkeypatch.setattr("src.pipeline.build_adapters", lambda profile=None: [Unavailable()])
     monkeypatch.delenv("LLM_API_KEY", raising=False)
     monkeypatch.setenv("CNS_LOOKBACK_DAYS", "180")
-    monkeypatch.setenv("MAX_CORE", "5")
-    monkeypatch.setenv("MAX_EXTENDED", "5")
-    result = run_pipeline(until=datetime(2026, 9, 23, tzinfo=timezone.utc), output_path=tmp_path / "daily.json")
+    profile = fixed_research_profile()
+    result = run_pipeline(until=datetime(2026, 9, 23, tzinfo=timezone.utc), output_path=tmp_path / "daily.json",
+                          research_profile=profile)
     assert result["source_status"]["fixture failure"]["status"] == "error"
     assert len(result["core"]) == 5 and all(valid_analysis(p) for p in result["core"])
     assert len(result["extended"]) == 5 and all(valid_analysis(p) for p in result["extended"])
@@ -177,7 +207,7 @@ def test_core_keeps_complete_chinese_notes_when_live_source_fails(monkeypatch, t
     assert all(p["venue_group"] == "CNS 子刊" for p in result["core"])
     assert {tag for p in result["core"] for tag in p["topic_tags"]} == {"ai_maintenance", "generative_design", "fatigue_reliability"}
     assert result["analysis_status"]["llm_attempts"] == 0
-    rendered = render(result)
+    rendered = render(result, current_profile=profile)
     # Full-text notes now have independent article links; abstract notes remain inline.
     assert rendered.count('class="reading-notes"') + rendered.count('class="full-reading-link"') == 10
     assert rendered.count('class="analysis-provenance"') == 10

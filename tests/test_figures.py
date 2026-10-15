@@ -25,9 +25,12 @@ def test_verified_images_match_recorded_dimensions_and_bytes():
 
 
 def test_only_core_has_figures_and_archives_use_relative_asset_paths():
+    from tests.test_research_directions import direction, profile
     papers = [{"doi": doi, "title": "AI structural design", "source": "fixture"}
               for doi in figure_catalog()]
-    html = render({"core": papers, "extended": papers})
+    settings = profile(direction('fixture'), core=20, extended=20)
+    html = ''.join(render({"core": papers[i:i + 20], "extended": papers[i:i + 20]}, current_profile=settings)
+                   for i in range(0, len(papers), 20))
     assert html.count('<figure class="paper-figure">') == len(papers)
     assert html.count('loading="lazy"') == len(papers)
     assert html.count('class="figure-credit"') == len(papers)

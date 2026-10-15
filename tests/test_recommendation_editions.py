@@ -9,9 +9,17 @@ from src.pipeline import run_pipeline
 from src.reading_notes import curated_entries, valid_analysis
 from src.recommendation_heat import DEFAULTS, attention_evidence, citation_evidence, repeat_evidence, refresh, verified_attention
 from src.recommendation_selection import select
-from src.research_directions import load_profile
+from src.research_directions import clean_profile
 
 NOW = datetime(2026, 9, 25, 0, tzinfo=timezone.utc)
+
+
+def recommendation_profile():
+    """Edition tests must not depend on the user's editable display counts."""
+    return clean_profile({'version': 1, 'core_count': 5, 'extended_count': 5,
+        'directions': [{'id': 'ai_maintenance', 'name': '智能运维', 'enabled': True,
+            'core': True, 'extended': True, 'weight': 1,
+            'keywords': ['fault diagnosis', 'bearing'], 'require_any': [], 'exclude': []}]})
 
 
 def paper(i=1):
@@ -137,7 +145,7 @@ def test_shared_historical_slot_and_expanded_never_repeats(tmp_path):
     papers = [old_core, old_extended, *[paper(i) for i in range(3, 15)]]
     analyses = {p['id']: assessment(p) for p in papers[:2]}
     heat = {'papers': {old_core['id']: {'citations': observations()}}}
-    core, extended = select(papers, h, analyses, heat, load_profile(), NOW, DEFAULTS)
+    core, extended = select(papers, h, analyses, heat, recommendation_profile(), NOW, DEFAULTS)
     assert len(core) == len(extended) == 5
     assert sum(bool(p.get('recommendation_decision')) for p in core) == 1
     assert old_core['id'] in {p['id'] for p in core}
@@ -145,7 +153,7 @@ def test_shared_historical_slot_and_expanded_never_repeats(tmp_path):
     assert not ({p['id'] for p in core} & {p['id'] for p in extended})
     # The next publication resets the core cooldown and consumes the same heat.
     append(tmp_path, payload(2, core, extended))
-    core2, extended2 = select(papers, History(tmp_path), analyses, heat, load_profile(), NOW+timedelta(days=1), DEFAULTS)
+    core2, extended2 = select(papers, History(tmp_path), analyses, heat, recommendation_profile(), NOW+timedelta(days=1), DEFAULTS)
     assert old_core['id'] not in {p['id'] for p in core2 + extended2}
     assert next(p for p in core2 if p['id'] == old_extended['id'])['recommendation_decision']['kind'] == 'promotion'
 
@@ -154,9 +162,9 @@ def test_complete_notes_alone_do_not_qualify_for_promotion(tmp_path):
     p = paper()
     append(tmp_path, payload(1, [], [p]))
     a = assessment(p); a['evaluation']['evidence_sufficient'] = False
-    assert select([p], History(tmp_path), {p['id']: a}, {}, load_profile(), NOW, DEFAULTS) == ([], [])
+    assert select([p], History(tmp_path), {p['id']: a}, {}, recommendation_profile(), NOW, DEFAULTS) == ([], [])
     a = assessment(p); a['evaluation']['evidence'] = 'not present in the actual article abstract' * 3
-    assert select([p], History(tmp_path), {p['id']: a}, {}, load_profile(), NOW, DEFAULTS) == ([], [])
+    assert select([p], History(tmp_path), {p['id']: a}, {}, recommendation_profile(), NOW, DEFAULTS) == ([], [])
 
 
 def test_enrichment_preserves_batch_decisions(tmp_path):
@@ -180,17 +188,20 @@ def test_pipeline_new_batches_no_new_and_retries(tmp_path, monkeypatch):
     batches = []
     for run in range(1, 4):
         monkeypatch.setenv('GITHUB_RUN_ID', str(run))
-        batches.append(run_pipeline(until=NOW+timedelta(hours=run), adapters=[Adapter()], output_path=path))
+        batches.append(run_pipeline(until=NOW+timedelta(hours=run), adapters=[Adapter()], output_path=path,
+                                    research_profile=recommendation_profile()))
     sets = [{p['id'] for p in b['core']+b['extended']} for b in batches]
     assert all(len(s) == 10 for s in sets)
     assert not (sets[0] & sets[1] or sets[1] & sets[2] or sets[0] & sets[2])
     monkeypatch.setenv('GITHUB_RUN_ID', '4')
     before = path.read_bytes()
-    result = run_pipeline(until=NOW+timedelta(hours=4), adapters=[Adapter()], output_path=path)
+    result = run_pipeline(until=NOW+timedelta(hours=4), adapters=[Adapter()], output_path=path,
+                          research_profile=recommendation_profile())
     assert result['latest_update']['outcome'] == 'no_new' and path.read_bytes() == before
     assert len(entries(tmp_path)) == 3
     monkeypatch.setenv('GITHUB_RUN_ID', '3')
-    retry = run_pipeline(until=NOW+timedelta(hours=5), adapters=[Adapter()], output_path=path)
+    retry = run_pipeline(until=NOW+timedelta(hours=5), adapters=[Adapter()], output_path=path,
+                         research_profile=recommendation_profile())
     assert retry['edition'] == batches[2]['edition'] and len(entries(tmp_path)) == 3
 
 

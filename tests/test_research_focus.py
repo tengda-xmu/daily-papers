@@ -5,6 +5,7 @@ from src.models import RawRecord, SourceStatus
 from src.pipeline import rank, run_pipeline
 from src.reading_notes import cached_analysis, curated_entries, valid_analysis
 from src.research_focus import focus_tags
+from tests.test_core_pipeline import fixed_research_profile
 
 
 def test_focus_recognizes_plurals_and_hyphens_without_marketing_false_positives():
@@ -75,11 +76,10 @@ def test_recommendations_publish_pending_and_reuse_existing_notes(monkeypatch):
         cache[record.doi] = deepcopy(sample)
         return cache[record.doi]
     monkeypatch.setenv("LLM_API_KEY", "fixture-key")
-    monkeypatch.setenv("MAX_CORE", "5")
-    monkeypatch.setenv("MAX_EXTENDED", "5")
     monkeypatch.setattr("src.pipeline.cached_analysis", lambda record: cache.get(record.doi))
     monkeypatch.setattr("src.pipeline._llm_summary", summarize)
-    args = {"adapters": [Fixture()], "until": datetime(2026, 9, 23, tzinfo=timezone.utc)}
+    args = {"adapters": [Fixture()], "until": datetime(2026, 9, 23, tzinfo=timezone.utc),
+            "research_profile": fixed_research_profile()}
     result = run_pipeline(**args)
     assert len(result["core"]) == len(result["extended"]) == 5
     assert len(calls) == result['analysis_status']['llm_attempts'] == 0

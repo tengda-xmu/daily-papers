@@ -8,6 +8,7 @@ from fastapi import HTTPException
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from src.research_directions import CONFIG_PATH, MAX_DIRECTIONS, clean_profile, load_profile, profile_revision
+from src.recommendation_view import current_recommendations
 from .daily_update import github, REPO
 
 ENDPOINT = f'repos/{REPO}/contents/{CONFIG_PATH}'
@@ -25,8 +26,9 @@ class DirectionChange(BaseModel):
 
 
 class DirectionManager:
-    def __init__(self, root, remote=github):
+    def __init__(self, root, remote=github, *, runtime=None):
         self.root = Path(root)
+        self.runtime = Path(runtime) if runtime is not None else self.root / '.local/codex-bridge'
         self.path = self.root / '.local/research-directions/applied.json'
         self.remote = remote
         self.lock = threading.RLock()
@@ -42,10 +44,25 @@ class DirectionManager:
         temp.write_text(json.dumps(profile, ensure_ascii=False, indent=2), encoding='utf-8')
         temp.replace(self.path)
 
-    @staticmethod
-    def _snapshot(profile, verified, **extra):
+    def _application(self, profile):
+        # Read exactly the current local recommendation source; saving counts
+        # never rewrites an edition or claims that the public site deployed.
+        path = self.runtime / 'recommendations.json'
+        if not path.exists():
+            path = self.root / 'data/daily.json'
+        payload, available = {}, False
+        try:
+            payload = json.loads(path.read_text(encoding='utf-8'))
+            available = (isinstance(payload, dict) and isinstance(payload.get('core'), list)
+                         and isinstance(payload.get('extended'), list))
+        except (OSError, ValueError):
+            pass
+        display = current_recommendations(payload if available else {}, profile)['display_settings']
+        return {'local_applied': available, **display}
+
+    def _snapshot(self, profile, verified, **extra):
         return {'profile': profile, 'revision': profile_revision(profile), 'max_directions': MAX_DIRECTIONS,
-                'verified': verified, **extra}
+                'verified': verified, 'application': self._application(profile), **extra}
 
     def snapshot(self):
         with self.lock:

@@ -112,7 +112,7 @@ def create_app(root=ROOT, runtime=None, rpc=None, automatic_updates=None):
     journal_manager = JournalManager(root)
     daily_updater = DailyUpdater(runtime)
     edition_manager = EditionManager(root, runtime)
-    direction_manager = DirectionManager(root)
+    direction_manager = DirectionManager(root, runtime=runtime)
     subscription_manager = SubscriptionManager(root)
     note_manager = NoteManager(root)
     from .reading_queue import ReadingQueue
@@ -352,11 +352,15 @@ def create_app(root=ROOT, runtime=None, rpc=None, automatic_updates=None):
 
     @app.get('/api/recommendations/update')
     async def recommendation_progress():
-        return await asyncio.to_thread(daily_updater.snapshot)
+        from src.research_directions import load_profile, profile_revision
+        result = await asyncio.to_thread(daily_updater.snapshot)
+        return {**result, 'display_revision': profile_revision(load_profile(root))}
 
     @app.post('/api/recommendations/catch-up')
     async def catch_up_recommendations(data: CatchUpRequest):
-        return await asyncio.to_thread(daily_updater.catch_up, reconnected=data.reconnected)
+        from src.research_directions import load_profile, profile_revision
+        result = await asyncio.to_thread(daily_updater.catch_up, reconnected=data.reconnected)
+        return {**result, 'display_revision': profile_revision(load_profile(root))}
 
     @app.get('/api/recommendations/editions')
     async def recommendation_editions():
@@ -1239,7 +1243,9 @@ def create_app(root=ROOT, runtime=None, rpc=None, automatic_updates=None):
             path = root / 'data/daily.json'
         payload = json.loads(path.read_text(encoding='utf-8')) if path.exists() else {}
         removed = {e['id'] for e in manifest(root / 'data')['deleted'] + read(runtime / 'edition-manifest.json').get('deleted', [])}
-        return Response(render(payload, deleted_editions=removed, coverage=load_public(root)), media_type='text/html')
+        from src.research_directions import load_profile
+        return Response(render(payload, deleted_editions=removed, coverage=load_public(root),
+                               current_profile=load_profile(root)), media_type='text/html')
 
     @app.get('/directions.html')
     async def directions_page():

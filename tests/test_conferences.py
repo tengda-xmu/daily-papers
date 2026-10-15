@@ -17,6 +17,7 @@ from src.editions import History, append, remember_candidates, candidates, delet
 from src.paper_sources import allowed, discover
 from src.manual_search import SOURCES
 from tools.build_site import render, paper_card, source_status_panel
+from tests.test_core_pipeline import fixed_research_profile
 
 NOW = datetime(2026, 9, 28, tzinfo=timezone.utc)
 TITLE = 'Neural networks for bearing fault diagnosis'
@@ -194,14 +195,16 @@ def test_joint_selection_counts_relevance_and_deletion(tmp_path,monkeypatch):
     # Make the unrelated paper unrelated in both title and abstract.
     rows[-1].abstract='Translation of languages in legal documents.'
     monkeypatch.setenv('GITHUB_RUN_ID','conference-first')
-    first=run_pipeline(until=NOW,adapters=[Adapter()],output_path=tmp_path/'daily.json')
+    first=run_pipeline(until=NOW,adapters=[Adapter()],output_path=tmp_path/'daily.json',
+                       research_profile=fixed_research_profile())
     assert len(first['core'])==5 and len(first['extended'])==5
     assert all(info(p) and 'Clinical' not in p['title'] for p in first['core']+first['extended'])
     current=append(tmp_path,{'update_run_id':'keep','generated_at':NOW.isoformat(),'core':[{**record(20).to_dict(),'id':'aaaaaaaaaaaa'}],'extended':[]})
     write(tmp_path/'daily.json',current)
     delete_editions(tmp_path,[first['edition']['id']],revision(manifest(tmp_path)),'test-conference-deletion')
     monkeypatch.setenv('GITHUB_RUN_ID','conference-again')
-    again=run_pipeline(until=NOW,adapters=[],output_path=tmp_path/'daily.json')
+    again=run_pipeline(until=NOW,adapters=[],output_path=tmp_path/'daily.json',
+                       research_profile=fixed_research_profile())
     assert {p['id'] for p in again['core']+again['extended']} == {p['id'] for p in first['core']+first['extended']}
     assert all(info(p) for p in again['core']+again['extended'])
 

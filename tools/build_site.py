@@ -25,7 +25,7 @@ from src.reading_article import without_page_citations
 from src.figures import get_figure, figure_status
 from src.wechat_metadata import public_subscriptions
 from src.wechat_subscriptions import effective_accounts, group_overview, published_accounts
-from src.research_directions import load_profile, active_directions, profile_revision
+from src.research_directions import load_profile, active_directions
 
 DATA = ROOT / "data"
 OUT = ROOT / "site"
@@ -497,14 +497,17 @@ data-subtype="{esc(row.get('subtype', ''))}" data-region="{esc(row.get('region',
         title='科研线索 | 每日论文推荐', active='leads')
 
 
-def render(payload: dict, *, archive_date: str | None = None, deleted_editions=None, coverage=None) -> str:
+def render(payload: dict, *, archive_date: str | None = None, deleted_editions=None, coverage=None, current_profile=None) -> str:
     if coverage is None:
         from src.paper_coverage import load_public
         coverage = load_public(DATA.parent)
+    current_profile = current_profile if current_profile is not None else load_profile(DATA.parent)
+    if not archive_date:
+        from src.recommendation_view import current_recommendations
+        payload = current_recommendations(payload, current_profile)
     core = payload.get("core") or []
     extended = payload.get("extended") or []
     all_papers = core + extended
-    current_profile = load_profile()
     profile = payload.get('research_profile')
     topic_labels = ({d['id']: d['name'] for d in profile['directions']} if profile else
                     {k: v['label'] for k, v in TOPIC_CATALOG.items()})
@@ -545,8 +548,17 @@ def render(payload: dict, *, archive_date: str | None = None, deleted_editions=N
                      f'<a href="{root}directions.html" data-local-only>管理方向</a></div>'
                      f'<div class="direction-chips">{direction_chips}</div></div>')
     direction_pending = ''
-    if not archive_date and profile and profile_revision(profile) != profile_revision(current_profile):
-        direction_pending = '<p class="direction-pending" data-local-only>方向设置已变更，点击“手动更新”后按新设置生成推荐。</p>'
+    display = payload.get('display_settings') if not archive_date else None
+    if display:
+        requested, available = display['requested'], display['available']
+        if any(requested[key] != available[key] for key in ('core_count', 'extended_count')) or requested['extended_count'] == 0:
+            note = f'按当前设置展示：核心 {len(core)} 篇、扩展 {len(extended)} 篇。'
+            if any(requested[key] > available[key] for key in ('core_count', 'extended_count')):
+                note += f'目标为核心 {requested["core_count"]} 篇、扩展 {requested["extended_count"]} 篇；本期文献不足，保留空缺，后续更新继续检索。'
+            note += '完整批次可在历史归档中阅读。'
+            direction_pending = f'<p class="direction-pending">{note}</p>'
+    if not archive_date and profile and profile.get('directions') != current_profile['directions']:
+        direction_pending += '<p class="direction-pending" data-local-only>研究方向设置已保存，下次更新将按新方向检索；本期仍保留原有方向。</p>'
     ok = sum(source_state(s, statuses)[0] in ("ok", "no_data") for s in SOURCE_CATALOG if s["kind"] == "adapter")
     adapter_count = sum(s["kind"] == "adapter" for s in SOURCE_CATALOG)
     cns_children = sum(j["group"] == "CNS 子刊" for j in JOURNALS)
@@ -578,13 +590,19 @@ def render(payload: dict, *, archive_date: str | None = None, deleted_editions=N
         direction_bar=direction_bar, direction_pending=direction_pending,
         edition_label=(f'<a href="{root}archive/">{esc(edition["date"])} · 第 {edition["number"]} 批</a>' if edition else ''),
         generated_at=esc(payload.get('generated_at', '')), update_run_id=esc(payload.get('update_run_id', '')),
+        display_revision=esc(display['revision'] if display else ''),
         source_options="".join(source_options), health_label=f"{ok} / {adapter_count} 类来源正常",
         sources_url='#sources' if archive_date else root + 'setup.html#sources', reference_panels=reference_panels,
         topic_options=topic_options, group_options=group_options, journal_options=journal_options,
         core_count=len(core), extended_count=len(extended), total=len(all_papers),
         core_html=core_html, extended_html=extended_html,
         core_empty="hidden" if core else "", extended_empty="hidden" if extended else "",
+        core_empty_text='本期暂无核心推荐，可浏览历史归档或调整研究方向。' if display and display['requested']['extended_count'] == 0 else '本期暂无符合条件的新核心推荐，可浏览扩展阅读与历史归档。',
+        extended_disabled='true' if display and display['requested']['extended_count'] == 0 else 'false',
+        extended_empty_text='扩展阅读已关闭（0 篇）；可在研究方向中调整。' if display and display['requested']['extended_count'] == 0 else '本期暂无扩展阅读。',
         no_data="" if not all_papers else "hidden", no_match="hidden",
+        no_data_heading='本期暂无核心推荐' if display and display['requested']['extended_count'] == 0 else '本期推荐正在准备',
+        no_data_text='扩展阅读已关闭，可浏览历史归档或调整研究方向。' if display and display['requested']['extended_count'] == 0 else '可先浏览历史归档，或查看来源状态。',
         cns_children=cns_children, root=root,
     )
     return document(content, title=f"{issue} · 每日论文推荐" if archive_date else "每日论文推荐 | 腾达", root=root,

@@ -15,8 +15,9 @@ def clean_profile(value):
     result = {'version': 1}
     for key in ('core_count', 'extended_count'):
         count = value.get(key)
-        if type(count) is not int or not 1 <= count <= 20:
-            raise ValueError('核心推荐和扩展阅读各设置 1–20 篇。')
+        minimum = 1 if key == 'core_count' else 0
+        if type(count) is not int or not minimum <= count <= 20:
+            raise ValueError('核心推荐设置 1–20 篇，扩展阅读设置 0–20 篇。')
         result[key] = count
     rows = value.get('directions')
     if not isinstance(rows, list) or not 1 <= len(rows) <= MAX_DIRECTIONS:
