@@ -22,7 +22,7 @@ from src.public_sources import clean
 from src.sources.wechat_public_index import parse_search_page, PublicSearchChallenge
 from src.wechat_metadata import article_url, public_index_url
 
-SEARCH_STRATEGY_VERSION = 4
+SEARCH_STRATEGY_VERSION = 5
 HOSTS = {'weixin.sogou.com', 'www.sogou.com', 'mp.weixin.qq.com'}
 MAX_BYTES = 4_000_000
 GENERIC_METHODS = {'DOI', 'PDF', 'HTML', 'HTTP', 'HTTPS', 'AI', 'ML', 'LLM', 'CNS', 'RMSE', 'MAPE',
@@ -297,6 +297,11 @@ def sogou_search(query, key='', *, transport=None, resolve_links=True):
                 candidate['link'] = resolved or public_index_url(candidate['account'], candidate['title'])
                 if not resolved:
                     candidate['reason'] = 'index_only'
+                    redirect = urljoin(final_url, html.unescape(row.get('href', '')))
+                    if _safe_url(redirect) and urlsplit(redirect).path == '/link':
+                        # Retain the normal result link privately so resolution
+                        # can resume independently after its access restriction.
+                        candidate['_redirect_url'] = redirect
                 rows.append(candidate)
             next_url = urljoin(final_url, parsed.get('next_url', '')) if parsed.get('next_url') else ''
             url = next_url if (state == 'ok' and _safe_url(next_url) and urlsplit(next_url).hostname == 'weixin.sogou.com'

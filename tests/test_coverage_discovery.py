@@ -171,7 +171,9 @@ def test_captcha_during_redirect_retains_candidates_and_continues_index_pages():
     assert result['organic_results'][2]['link'] == ARTICLE
     assert result['organic_results'][4]['link'] == ARTICLE + '2'
     assert sum('/link?' in url for url in calls) == 1
-    assert 'PRIVATE' not in str(result)
+    assert result['organic_results'][0]['_redirect_url'].endswith('/link?url=PRIVATE')
+    public_rows = [{k: v for k, v in r.items() if k != '_redirect_url'} for r in result['organic_results']]
+    assert 'PRIVATE' not in str(public_rows)
 
 
 def test_redirect_retry_after_is_separate_from_available_index_health():
@@ -223,12 +225,12 @@ def test_redirect_error_does_not_turn_successful_index_into_provider_error():
         calls.append(url)
         if '/weixin?' in url:
             return page(row() + row(title='另一篇介绍', href='/link?url=SECOND'))
-        raise TimeoutError('PRIVATE')
+        raise TimeoutError('ERROR_PRIVATE')
     result = sogou_search('q', transport=transport)
     assert result['state'] == 'ok'
     assert result['link_resolution']['state'] == 'error'
     assert len(calls) == 2 and len(result['organic_results']) == 2
-    assert 'PRIVATE' not in str(result)
+    assert 'ERROR_PRIVATE' not in str(result)
 
 
 def test_unknown_redirect_stays_index_candidate_not_successful_article():

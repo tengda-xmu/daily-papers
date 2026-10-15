@@ -39,6 +39,8 @@ def test_local_card_introduction_is_before_conversation(bridge, monkeypatch):
     from bs4 import BeautifulSoup
     soup=BeautifulSoup(response.text,'html.parser')
     tools=soup.select_one('.paper-tools')
-    assert [n.get('class') for n in tools.select('button')][-2:]==[
-        ['text-button','coverage-toggle'],['text-button','codex-entry']]
-    assert '结构研究' in soup.select_one('.paper-coverage-panel').get_text()
+    entry = tools.select_one('.coverage-link')
+    assert entry.name == 'a' and entry['href'] == coverage_fixture()['articles'][0]['url']
+    assert '结构研究' in entry['title']
+    assert entry.find_next_sibling('button')['class'] == ['text-button', 'codex-entry']
+    assert not soup.select('.paper-coverage-panel')

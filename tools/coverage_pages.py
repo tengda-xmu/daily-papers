@@ -5,130 +5,6 @@ import json
 import re
 
 
-STATE_LABELS = {
-    'pending': '尚未检索，将随每日更新自动补充。',
-    'matched': '已核对以下文章介绍的是这篇论文。',
-    'no_match': '公开索引暂未返回结果，可能尚未收录；后续将再次检查。',
-    'pending_match': '找到候选来源，待核实是否介绍这篇论文。',
-    'unavailable': '来源暂时无法读取，待恢复后继续核对。',
-    'configuration_missing': '自动搜索暂不可用，待配置恢复后继续检索。',
-    'deferred': '公众号介绍待检索，将在更新时继续。',
-    'error': '本次检索未完成，将在后续更新重试。',
-}
-
-
-def article_status(row):
-    """Keep paper identity verification separate from access to article text."""
-    parts = []
-    method = row.get('verification_method')
-    if method == 'manual_screenshot':
-        parts.append('已依据用户提供的截图核实论文关联。')
-    elif method == 'image':
-        parts.append('已依据文章配图核实论文关联。')
-    if row.get('body_status') == 'challenge':
-        parts.append('已确认来源，正文读取受限：微信要求访问验证，请通过原文链接查看。')
-    elif row.get('body_status') == 'unavailable':
-        parts.append('已确认来源，正文读取受限；可通过原文链接查看。')
-    elif row.get('body_status') == 'pending':
-        parts.append('已确认来源，正文尚待读取。')
-    return ''.join(parts)
-
-
-def candidate_status(row):
-    return {
-        'visual_pending': '图片中的论文信息待核实',
-        'article_unavailable': '正文暂时无法读取，论文关联待核实',
-        'article_challenge': '访问验证受限，论文关联待核实',
-        'challenge': '访问验证受限，论文关联待核实',
-        'index_only': '仅有公开索引线索，论文关联待核实',
-    }.get(row.get('reason'), '论文关联待核实')
-
-
-def state_label(state, coverage):
-    providers = coverage.get('search_providers') or {}
-    if state != 'matched' and isinstance(providers, dict):
-        completed = any(isinstance(p, dict) and (p.get('state') == 'ok'
-                        or (p.get('state') == 'partial' and p.get('queries_completed', 0)))
-                        for name, p in providers.items() if name in ('serpapi', 'sogou'))
-        incomplete = any(isinstance(p, dict) and p.get('state') != 'ok'
-                         for name, p in providers.items() if name in ('serpapi', 'sogou'))
-        if coverage.get('candidates'):
-            return STATE_LABELS['pending_match']
-        if completed and incomplete:
-            return '已完成部分渠道检索，暂未找到可核实的对应来源；其余渠道尚未完成。'
-        if completed:
-            return '公开索引暂未返回可确认的对应来源，可能尚未收录；后续将再次检查。'
-    search_status = coverage.get('search_status')
-    if state == 'unavailable' and search_status == 'blocked':
-        return '公开索引访问受限，将在恢复后继续检索。'
-    if state == 'configuration_missing' and search_status == 'partial':
-        return '部分搜索渠道暂不可用，已保留其他渠道的检索结果。'
-    if state == 'error' and search_status == 'partial':
-        return '部分公开索引未能完成检索，将在后续更新重试。'
-    if state == 'no_match':
-        if search_status == 'not_searched':
-            return STATE_LABELS['pending']
-        if search_status == 'configuration_missing':
-            return STATE_LABELS['configuration_missing']
-        if search_status == 'legacy_unchecked':
-            return '旧检索结果待复查，将使用更新后的检索方式继续核对。'
-        if search_status == 'blocked':
-            return '公开索引访问受限，尚不能判断是否有公众号介绍。'
-        if search_status in ('partial', 'error'):
-            return '公开索引检索尚未完成，后续将继续检查。'
-    if state == 'deferred':
-        reason = coverage.get('deferred_reason')
-        if reason == 'budget_exhausted':
-            return '这篇论文待重新检索，将在更新时继续。'
-        if reason == 'runtime_limit':
-            return '上次检索尚未完成，将在更新时继续。'
-    return STATE_LABELS.get(state, STATE_LABELS['pending'])
-
-
-def search_provider_status(coverage):
-    """Show index access separately from article-link access and other channels."""
-    from tools.build_site import display_time
-    providers = coverage.get('search_providers')
-    if not isinstance(providers, dict):
-        return ''
-    lines = []
-    labels = {'serpapi': '网页搜索', 'sogou': '公众号索引'}
-    for name in ('sogou', 'serpapi'):
-        row = providers.get(name)
-        if not isinstance(row, dict):
-            continue
-        state = row.get('state')
-        if state == 'ok':
-            if row.get('results', 0) and coverage.get('candidates'):
-                description = '已返回候选线索，仍需核实论文关联。'
-            elif row.get('results', 0) and any(a.get('match_status') == 'verified' for a in coverage.get('articles', [])):
-                description = '已完成检索，已核实的来源见上方。'
-            elif row.get('results', 0):
-                description = '已完成检索，返回内容尚不能确认与本论文对应。'
-            else:
-                description = '已完成检索，暂未返回对应来源。'
-        else:
-            description = {
-                'partial': '已完成部分检索，本轮检索尚未完成。',
-                'blocked': '访问受限，待恢复后重试。',
-                'error': '本次检索未完成，将继续重试。',
-                'configuration_missing': '暂不可用。',
-                'deferred': '本轮检索尚未完成。',
-            }.get(state, '尚未检索。')
-        if row.get('link_resolution') in ('blocked', 'error'):
-            description += ('部分候选的原文链接暂时无法读取，已保留索引线索。' if coverage.get('candidates')
-                            else '部分结果的原文链接暂时无法读取。')
-        checked_at = row.get('checked_at')
-        retry_at = row.get('retry_at')
-        timing = ('最近检索 ' + escape(display_time(checked_at)[1])) if checked_at else ''
-        if retry_at and state in ('blocked', 'error', 'deferred'):
-            timing += (' · ' if timing else '') + '下次重试 ' + escape(display_time(retry_at)[1])
-        lines.append('<p class="coverage-checked" data-search-provider="' + name + '">'
-                     + labels[name] + '：' + description
-                     + ('<br>' + timing if timing else '') + '</p>')
-    return '<div class="coverage-search-status" aria-label="检索进展">' + ''.join(lines) + '</div>' if lines else ''
-
-
 def article_name(row):
     # URL-derived identities are independent of paper IDs, permitting one
     # authorized article to introduce several papers without duplicate pages.
@@ -136,82 +12,77 @@ def article_name(row):
     return hashlib.sha256(row['url'].encode()).hexdigest()[:24]
 
 
+def reprint_available(row):
+    """Only link a processed, authorized article with renderable body text."""
+    return row.get('display_mode') == 'reprint' and any(
+        isinstance(block, dict) and block.get('type') in ('heading', 'paragraph')
+        and isinstance(block.get('text'), str) and block['text'].strip()
+        for block in (row.get('blocks') or []))
+
+
 def coverage_panel(paper_id, coverage=None, *, root='./', suffix=''):
-    from tools.build_site import display_time, safe_url
+    """An introduction opens its article immediately; extra sources are optional."""
     from src.models import parse_date
+    from src.wechat_metadata import article_url
     coverage = coverage or {}
-    identifier = 'paper-coverage-' + re.sub(r'[^a-zA-Z0-9_-]', '', str(paper_id) + '-' + suffix)
-    button = (f'<button type="button" class="text-button coverage-toggle" aria-expanded="false" '
-              f'aria-controls="{identifier}">公众号介绍<span aria-hidden="true">＋</span></button>')
-    state = coverage.get('state', 'pending')
-    body = '<p class="coverage-status">' + state_label(state, coverage) + '</p>'
-    waiting = state in ('pending', 'deferred', 'configuration_missing') or coverage.get('last_attempt_state') in ('deferred', 'configuration_missing')
-    has_search_status = 'last_search_at' in coverage or 'search_status' in coverage
-    checked_at = (coverage.get('last_search_at') if has_search_status
-                  else coverage.get('last_attempt_at') or coverage.get('checked_at'))
-    queued_at = coverage.get('queued_at')
-    # Older records stamped the collection time even when no search ran.
-    # Keep direct/legacy render callers honest as well as projected records.
-    if waiting and not has_search_status and not coverage.get('last_attempt_at'):
-        queued_at = queued_at or checked_at
-        checked_at = None
-    provider_status = search_provider_status(coverage)
-    if checked_at and not provider_status:
-        body += '<p class="coverage-checked">最近检索 ' + escape(display_time(checked_at)[1]) + '</p>'
-    if waiting and queued_at:
-        body += '<p class="coverage-checked">入队时间 ' + escape(display_time(queued_at)[1]) + '</p>'
-    rows = []
+    verified = []
     for row in coverage.get('articles', []):
-        if row.get('match_status') != 'verified':
+        if not isinstance(row, dict) or row.get('match_status') != 'verified':
             continue
-        url = safe_url(row.get('url'))
-        if url == '#':
+        url = article_url(row.get('url'))
+        if not url:
             continue
+        verified.append((row, url))
+    if not verified:
+        return ('<span class="coverage-pending" aria-disabled="true" '
+                'title="尚未取得已核验的公众号原文，后续自动补充。">公众号待补充</span>', '')
+
+    def preferred(item):
+        row = item[0]
+        published = parse_date(row.get('published_at'))
+        checked = parse_date(row.get('verified_at'))
+        return (reprint_available(row), row.get('body_status') == 'readable',
+                published.timestamp() if published else 0, checked.timestamp() if checked else 0)
+
+    verified.sort(key=preferred, reverse=True)
+    unique = {}
+    for row, url in verified:
+        unique.setdefault(url, (row, url))
+    verified = list(unique.values())
+
+    def destination(row, url):
+        if reprint_available(row):
+            return root + 'wechat/' + article_name(row) + '.html', ''
+        return url, ' target="_blank" rel="noopener noreferrer"'
+
+    first, first_url = verified[0]
+    href, attributes = destination(first, first_url)
+    label = ' · '.join(str(value) for value in (
+        first.get('title') or '公众号文章', first.get('account'),
+        str(first.get('published_at') or '')[:10]) if value)
+    if first.get('body_status') == 'challenge':
+        label += ' · 如需访问验证，请在微信原文完成。'
+    entry = (f'<a class="coverage-link" href="{escape(href, quote=True)}"{attributes} '
+             f'title="{escape(label, quote=True)}" aria-label="公众号介绍：{escape(label, quote=True)}">公众号介绍</a>')
+    if len(verified) == 1:
+        return entry, ''
+
+    identifier = 'paper-coverage-' + re.sub(r'[^a-zA-Z0-9_-]', '', str(paper_id) + '-' + suffix)
+    entry += (f'<button type="button" class="text-button coverage-toggle coverage-more" aria-expanded="false" '
+              f'aria-controls="{identifier}">更多来源<span aria-hidden="true">＋</span></button>')
+    rows = []
+    for row, url in verified:
+        href, attributes = destination(row, url)
         date = str(row.get('published_at') or '')[:10]
         meta = escape(row.get('account') or '公众号名称待核实') + (' · ' + escape(date) if date else '')
-        action = ''
-        if row.get('display_mode') == 'reprint':
-            action = f'<a href="{root}wechat/{article_name(row)}.html">站内阅读</a>'
-        status = article_status(row)
-        verified_at = row.get('verified_at')
-        rows.append('<li><h4>' + escape(row.get('title') or '公众号文章') + '</h4>'
+        rows.append('<li><h4>' + f'<a href="{escape(href, quote=True)}"{attributes}>'
+                    + escape(row.get('title') or '公众号文章') + '</a></h4>'
                     + '<p class="coverage-source">' + meta + '</p>'
-                    + ('<p class="coverage-verification">' + escape(status) + '</p>' if status else '')
-                    + ('<p class="coverage-checked">关联核验 ' + escape(display_time(verified_at)[1]) + '</p>' if verified_at else '')
-                    + ('<p>' + escape(row['summary']) + '</p>' if row.get('summary') else '')
-                    + f'<div class="coverage-actions">{action}<a href="{url}" target="_blank" rel="noopener noreferrer">公众号原文</a></div></li>')
-    if rows:
-        body += '<ul class="coverage-list">' + ''.join(rows) + '</ul>'
-    candidates = []
-    def candidate_date(row):
-        stamp = parse_date(row.get('published_at'))
-        return stamp.timestamp() if stamp else float('-inf')
-
-    for row in sorted(coverage.get('candidates', []), key=candidate_date, reverse=True):
-        url = safe_url(row.get('url'))
-        if url != '#':
-            date = str(row.get('published_at') or '')[:10]
-            meta = escape(row.get('account') or '公众号名称待核实') + (' · ' + escape(date) if date else '')
-            candidates.append(f'<li><a href="{url}" target="_blank" rel="noopener noreferrer">'
-                              + escape(row.get('title') or '候选公众号文章') + '</a>'
-                              + '<p class="coverage-source">' + meta + '</p>'
-                              + '<p class="coverage-status">' + candidate_status(row) + '</p></li>')
-    if candidates:
-        # Fold older entries for reading comfort; every candidate is retained.
-        body += ('<section class="coverage-candidates" aria-label="待核实的候选来源">'
-                 '<p>待核实的候选来源</p>'
-                 '<p class="coverage-status">仅为相关主题的检索线索，尚未确认介绍本论文。</p>'
-                 '<ul>' + ''.join(candidates[:8]) + '</ul>')
-        if len(candidates) > 8:
-            body += ('<details class="coverage-candidates-more"><summary>其余'
-                     + str(len(candidates) - 8) + '条待核实线索</summary><ul>'
-                     + ''.join(candidates[8:]) + '</ul></details>')
-        body += '</section>'
-    body += provider_status
-    if rows and coverage.get('last_attempt_state') not in (None, '', 'matched', 'no_match'):
-        body += '<p class="coverage-status">' + state_label(coverage['last_attempt_state'], coverage) + '已保留上次确认的介绍。</p>'
-    panel = f'<section class="paper-coverage-panel" id="{identifier}" aria-label="公众号介绍" hidden>{body}</section>'
-    return button, panel
+                    + (f'<div class="coverage-actions"><a href="{escape(url, quote=True)}" target="_blank" rel="noopener noreferrer">公众号原文</a></div>'
+                       if reprint_available(row) else '') + '</li>')
+    panel = (f'<section class="paper-coverage-panel" id="{identifier}" aria-label="已核实的公众号来源" hidden>'
+             '<ul class="coverage-list">' + ''.join(rows) + '</ul></section>')
+    return entry, panel
 
 
 def render_reprint(row):
@@ -254,7 +125,7 @@ def build_coverage(root, out, coverage=None):
     directory = out / 'wechat'
     directory.mkdir(parents=True, exist_ok=True)
     articles = {article_name(a): a for record in coverage.values() for a in record.get('articles', [])
-                if a.get('match_status') == 'verified' and a.get('display_mode') == 'reprint'}
+                if a.get('match_status') == 'verified' and reprint_available(a)}
     for path in directory.glob('*.html'):
         if re.fullmatch(r'[a-f0-9]{24}', path.stem) and path.stem not in articles and path.resolve().parent == directory.resolve():
             path.unlink()

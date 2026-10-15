@@ -29,7 +29,7 @@ DATA = 'data/paper-coverage.json'
 PERMISSIONS = 'config/wechat-reprints.json'
 CACHE = 'data/cache/paper-coverage'
 SCHEMA_VERSION = 2
-SEARCH_VERSION = 4
+SEARCH_VERSION = 5
 ARTICLE_VERSION = 2
 CHINA = timezone(timedelta(hours=8))
 IMAGE_HOSTS = ['mmbiz.qpic.cn', 'mmbiz.qlogo.cn']
@@ -679,6 +679,8 @@ def _search(root, query, now, key, searcher, runtime=None, progress=None, force_
         record('deferred')
         return [], 'deferred'
     _record_attempt(progress, now.isoformat())
+    if progress is not None:
+        progress.setdefault('requests', set()).add((provider, query))
     try:
         from src.coverage_discovery import sogou_search
         redirect_health = read(base / 'providers/sogou_redirect.json') if provider == 'sogou' else {}
@@ -704,6 +706,8 @@ def _search(root, query, now, key, searcher, runtime=None, progress=None, force_
                 if provider == 'sogou':
                     candidate['_discovery_text'] = clean(item.get('snippet', ''))[:4000]
                     candidate['_provider'] = provider
+                    if isinstance(item.get('_redirect_url'), str):
+                        candidate['_redirect_url'] = item['_redirect_url']
                 rows.append(candidate)
         state = payload.get('state', 'ok')
         if state not in ('ok', 'blocked', 'error'):
@@ -768,6 +772,8 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
             paper_ids=None, source_urls=None, index_searcher=False):
     from src.xiaohongshu import search
     from src.coverage_evidence import enqueue_review, load_reviews, merge_review
+    from src.coverage_links import remember, resume, mark_refreshed
+    from src.coverage_candidates import build_discovery_index, triage_candidates
     root = Path(root)
     live_clock = now is None
     now = now or datetime.now(timezone.utc)
@@ -776,6 +782,7 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
     key = os.getenv('SERPAPI_API_KEY', '') if key is None else key
     grants = permissions(root, now)
     previous = load_public(root, now)
+    discovery_index = build_discovery_index(root)
     result = dict(previous)
     papers = selected_papers(root)
     if paper_ids is not None:
@@ -822,7 +829,8 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
         identifier = paper['id']
         old = previous.get(identifier, {})
         articles = {a['url']: dict(a) for a in old.get('articles', [])}
-        candidates = {a['url']: dict(a) for a in old.get('candidates', [])}
+        candidates = {a['url']: dict(a) for a in triage_candidates(
+            root, paper, old.get('candidates', []), now, discovery_index)}
         seen, read_failed, read_deferred = set(), False, False
         progress = {'last_attempt_at': old.get('last_attempt_at', '')}
         search_progress = {'last_attempt_at': old.get('last_search_at', '')}
@@ -865,6 +873,7 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                         # return surgery/finance articles for a manufacturing
                         # paper. Such rows are not useful paper candidates.
                         continue
+                remember(root, paper, candidate, now)
                 url = article_url(candidate.get('url'))
                 if not url:
                     candidate = _public_candidate({**candidate, 'reason': 'index_only'})
@@ -928,6 +937,12 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
         for url in supplied:
             candidates.setdefault(url, {'url': url, 'title': '', 'reason': 'identity_unconfirmed'})
         examine(_local_candidates(root, paper))
+        recovery = (resume(root, paper, now, before_request=lambda: runtime.begin('link'))
+                    if callable(index_searcher) else {'candidates': [], 'refresh_queries': []})
+        _record_attempt(progress, recovery.get('attempted_at'))
+        for candidate in recovery['candidates']:
+            candidates.pop(candidate.get('index_url'), None)
+        examine(recovery['candidates'])
         # Recheck known sources using the article cache, retaining prior success
         # on failure; newly granted rights can use cached bodies immediately.
         examine(list(articles.values()))
@@ -946,6 +961,8 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
             # key, or an explicitly interrupted run). Legacy daily quotas do
             # not delay a retry, even if an old budget.json is still present.
             fresh = False
+        if recovery['refresh_queries']:
+            fresh = False
         state = old.get('state', 'no_match')
         if not fresh and (not articles or old.get('articles')):
             query_states = []
@@ -954,14 +971,20 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                 providers.append(('sogou', index_searcher, False))
             for provider, query_searcher, requires_key in providers:
                 before = set(articles)
-                for query in _queries(paper):
+                refresh_queries = recovery['refresh_queries'] if provider == 'sogou' else []
+                queries = list(dict.fromkeys([*refresh_queries, *_queries(paper)]))
+                for query in queries:
                     rows, outcome = _search(root, query, now, key, query_searcher, runtime, search_progress,
-                                            force_refresh or bool(supplied), provider=provider, requires_key=requires_key)
+                                            force_refresh or bool(supplied) or query in refresh_queries,
+                                            provider=provider, requires_key=requires_key)
                     _record_attempt(progress, search_progress.get('last_attempt_at'))
                     if search_progress.get('deferred_reason'):
                         progress['deferred_reason'] = search_progress['deferred_reason']
                     query_states.append(outcome)
                     examine(rows)
+                    if (query in refresh_queries and outcome in ('ok', 'error')
+                            and (provider, query) in search_progress.get('requests', set())):
+                        mark_refreshed(root, paper, [query], now)
                     if set(articles) - before or outcome in ('blocked', 'configuration_missing', 'deferred'):
                         break
             search_version = SEARCH_VERSION
