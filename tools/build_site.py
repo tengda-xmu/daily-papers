@@ -238,7 +238,7 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
     chat_button = (f'<button type="button" class="text-button codex-entry" data-local-only data-paper-id="{esc(paper["id"])}" '
                    f'data-paper-title="{esc(display_title)}">Codex 对话</button>') if paper.get("id") else ""
     from tools.coverage_pages import coverage_panel
-    coverage_button, coverage_html = coverage_panel(paper.get('id', ''), coverage, root=root, suffix=f'{tier}-{rank}')
+    coverage_button, coverage_html = coverage_panel(paper.get('id', ''), coverage, root=root, suffix=f'{tier}-{rank}', paper=paper)
     note_action = (f'<a class="full-reading-link" href="{root}readings/{esc(paper["id"])}.html">全文精读</a>'
                    if ready and paper.get('analysis_basis') == 'full_text' else
                    f'<button type="button" class="text-button paper-toggle" data-label="{note_label}" aria-expanded="false" aria-controls="{panel_id}">{note_label}<span aria-hidden="true">＋</span></button>')

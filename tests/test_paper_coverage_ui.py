@@ -3,7 +3,7 @@ from copy import deepcopy
 import json
 import mimetypes
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import parse_qs, urlsplit
 
 from bs4 import BeautifulSoup
 import pytest
@@ -178,6 +178,73 @@ def test_without_verified_source_only_noninteractive_pending_hint_is_rendered(st
     assert not soup.select('button, a, [tabindex]') and not panel
     assert '访问受限' not in entry and '最近检索' not in entry and '候选文章' not in entry
     assert coverage == before
+
+
+@pytest.mark.parametrize('state', ['pending', 'deferred', 'no_match', 'pending_match',
+                                  'unavailable', 'configuration_missing', 'error'])
+def test_unverified_paper_has_explicit_search_link_not_an_introduction(state):
+    paper = sample()
+    coverage = {'state': state, 'articles': [{**coverage_fixture()['articles'][0],
+                                             'match_status': 'pending'}],
+                'candidates': [{'title': '无关主题推荐', 'url': 'https://mp.weixin.qq.com/s/candidate'}]}
+    before = deepcopy(coverage)
+    entry, panel = coverage_panel(paper['id'], coverage, paper=paper)
+    soup = BeautifulSoup(entry, 'html.parser')
+    link = soup.select_one('a.coverage-search')
+    assert link.get_text() == '搜索公众号'
+    assert parse_qs(urlsplit(link['href']).query) == {'type': ['2'], 'query': [paper['title']]}
+    assert link['target'] == '_blank' and 'noopener' in link['rel']
+    assert not soup.select('.coverage-link, .coverage-pending') and not panel
+    assert '公众号介绍' not in entry and '无关主题推荐' not in entry
+    assert coverage == before
+
+
+@pytest.mark.parametrize('paper,query', [
+    ({'title': 'Agentic4PDM: agents & tools + "RUL" / 寿命预测? #1',
+      'title_zh': '生产维护与人工智能'}, 'Agentic4PDM: agents & tools + "RUL" / 寿命预测? #1'),
+    ({'title': '  ', 'title_zh': '面向“增材制造”的寿命预测：方法 A&B + 验证'},
+     '面向“增材制造”的寿命预测：方法 A&B + 验证'),
+    ({'title': '<script>alert("x")</script> & "paper"'}, '<script>alert("x")</script> & "paper"'),
+])
+def test_search_query_preserves_title_and_encodes_chinese_and_punctuation(paper, query):
+    entry, panel = coverage_panel('paper', paper=paper)
+    soup = BeautifulSoup(entry, 'html.parser')
+    link = soup.select_one('.coverage-search')
+    parts = urlsplit(link['href'])
+    assert parts.scheme == 'https' and parts.netloc == 'weixin.sogou.com'
+    assert parts.path == '/weixin' and not parts.fragment
+    assert parse_qs(parts.query) == {'type': ['2'], 'query': [query]}
+    assert link['aria-label'] == '搜索公众号：' + query
+    assert not soup.select('script') and not panel
+
+
+def test_home_history_and_reading_page_share_the_same_specific_search_url():
+    paper = sample()
+    paper.update(title='Agentic4PDM: Multi-agent Predictive Maintenance & Tool Use',
+                 article=article_fixture(), analysis_status='ready', analysis_basis='full_text')
+    pages = [render({'core': [paper]}), render({'core': [paper]}, archive_date='2026-10-14'),
+             render_article(paper)]
+    urls = []
+    for html in pages:
+        soup = BeautifulSoup(html, 'html.parser')
+        link = soup.select_one('.coverage-search')
+        urls.append(link['href'])
+        assert not soup.select('.coverage-pending, .coverage-link')
+        if soup.select_one('.paper-tools'):
+            actions = [node.get_text(strip=True) for node in soup.select('.paper-tools > *')]
+            assert actions.index('搜索公众号') < actions.index('Codex 对话')
+    assert len(set(urls)) == 1
+    assert parse_qs(urlsplit(urls[0]).query)['query'] == [paper['title']]
+
+
+def test_confirmed_article_keeps_original_destination_when_search_metadata_is_available():
+    paper = sample()
+    coverage = coverage_fixture()
+    entry, panel = coverage_panel(paper['id'], coverage, paper=paper)
+    soup = BeautifulSoup(entry, 'html.parser')
+    assert soup.select_one('.coverage-link')['href'] == coverage['articles'][0]['url']
+    assert soup.select_one('.coverage-link').get_text() == '公众号介绍'
+    assert not soup.select('.coverage-search') and not panel
 
 
 @pytest.mark.parametrize('url', ['javascript:alert(1)', 'https://evil.example/paper',

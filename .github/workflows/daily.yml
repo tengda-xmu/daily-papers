@@ -92,14 +92,6 @@ jobs:
               fi
             done
           fi
-      - name: Restore paper coverage search and reading cache
-        id: paper_coverage_cache
-        uses: actions/cache/restore@v4
-        with:
-          path: data/cache/paper-coverage
-          key: paper-coverage-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
-          restore-keys: |
-            paper-coverage-${{ runner.os }}-
       - name: Import validated paper readings for every update
         run: |
           git fetch origin connector-data:refs/remotes/origin/connector-data
@@ -160,21 +152,6 @@ jobs:
         timeout-minutes: 8
         continue-on-error: true
         run: python -m tools.collect_figures
-      - name: Find public-account introductions for recommended papers
-        continue-on-error: true
-        env:
-          SERPAPI_API_KEY: ${{ secrets.SERPAPI_API_KEY }}
-          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
-          LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
-          LLM_MODEL: ${{ secrets.LLM_MODEL }}
-        run: python -m tools.collect_paper_coverage
-      - name: Preserve coverage search results even if the paper update fails
-        if: always()
-        continue-on-error: true
-        uses: actions/cache/save@v4
-        with:
-          path: data/cache/paper-coverage
-          key: ${{ steps.paper_coverage_cache.outputs.cache-primary-key }}
       - name: Record update results
         env:
           PIPELINE_OUTCOME: ${{ steps.pipeline.outcome }}

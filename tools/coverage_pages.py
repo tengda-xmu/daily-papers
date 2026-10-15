@@ -3,6 +3,7 @@ from html import escape
 from copy import deepcopy
 import json
 import re
+from urllib.parse import urlencode
 
 
 def article_name(row):
@@ -45,7 +46,7 @@ def mirror_link(mirror, *, title=''):
             '阅读全文（公开同步）</a>')
 
 
-def coverage_panel(paper_id, coverage=None, *, root='./', suffix=''):
+def coverage_panel(paper_id, coverage=None, *, root='./', suffix='', paper=None):
     """An introduction opens its article immediately; extra sources are optional."""
     from src.models import parse_date
     from src.wechat_metadata import article_url
@@ -68,6 +69,16 @@ def coverage_panel(paper_id, coverage=None, *, root='./', suffix=''):
             continue
         verified.append((row, url))
     if not verified:
+        # Search the actual paper title, never infer a report from topic candidates.
+        metadata = paper if isinstance(paper, dict) else {}
+        query = next((' '.join(metadata[key].split()) for key in ('title', 'title_zh')
+                      if isinstance(metadata.get(key), str) and metadata[key].strip()), '')
+        if query:
+            url = 'https://weixin.sogou.com/weixin?' + urlencode({'type': '2', 'query': query})
+            return (f'<a class="coverage-search" href="{escape(url, quote=True)}" '
+                    'target="_blank" rel="noopener noreferrer" '
+                    'title="用论文题名搜索公众号文章，检索结果尚未核验。" '
+                    f'aria-label="搜索公众号：{escape(query, quote=True)}">搜索公众号</a>', '')
         return ('<span class="coverage-pending" aria-disabled="true" '
                 'title="尚未取得已核验的公众号原文，后续自动补充。">公众号待补充</span>', '')
 

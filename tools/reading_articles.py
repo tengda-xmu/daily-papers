@@ -149,7 +149,7 @@ def render_article(paper, *, root='../', figures=(), coverage=None):
     authors = ', '.join(paper.get('authors') or [])
     time_label = display_time(paper.get('article_updated_at') or paper.get('analyzed_at'))[1]
     from tools.coverage_pages import coverage_panel
-    coverage_button, coverage_html = coverage_panel(paper['id'], coverage, root=root, suffix='article')
+    coverage_button, coverage_html = coverage_panel(paper['id'], coverage, root=root, suffix='article', paper=paper)
     header = (f'<article class="reading-article" data-paper-id="{escape(paper["id"])}"><a class="article-back" href="{root}">返回每日推荐</a>'
         f'<header class="article-header"><p class="article-type">论文精读</p><h1>{escape(title)}</h1>{original}'
         f'<p class="article-byline">{escape(authors)}<br>{escape(paper.get("venue", ""))}</p>'

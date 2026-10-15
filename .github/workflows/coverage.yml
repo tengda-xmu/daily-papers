@@ -3,19 +3,21 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '47 13 * * *' # 21:47 Asia/Shanghai; independent of a new paper edition.
+  workflow_run:
+    workflows: ['Daily papers']
+    types: [completed]
+    branches: [main]
 permissions:
-  contents: write
-  pages: write
-  id-token: write
-concurrency:
-  group: daily-papers-update
-  cancel-in-progress: false
+  contents: read
 jobs:
-  supplement:
+  collect:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    concurrency:
+      group: paper-coverage-collection
+      cancel-in-progress: false
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    outputs:
+      results_ready: ${{ steps.results.outcome == 'success' }}
     steps:
       - uses: actions/checkout@v4
         with: {ref: main}
@@ -42,10 +44,56 @@ jobs:
         run: python -m tools.collect_paper_coverage
       - name: Preserve resumable source processing
         if: always()
+        continue-on-error: true
         uses: actions/cache/save@v4
         with:
           path: data/cache/paper-coverage
           key: ${{ steps.coverage_cache.outputs.cache-primary-key }}
+      - name: Export only processed public source results
+        run: python -m tools.merge_coverage_results coverage-results --export
+      - name: Save public source results for publication
+        id: results
+        uses: actions/upload-artifact@v4
+        with:
+          name: paper-coverage-results
+          path: |
+            coverage-results/paper-coverage.json
+            coverage-results/coverage-reviews/
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: true
+  publish:
+    needs: collect
+    if: always() && needs.collect.outputs.results_ready == 'true'
+    concurrency:
+      group: daily-papers-update
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      # This job acquires the publishing lock before resolving main. Collection
+      # may have started hours earlier; its paper/site snapshot is never restored.
+      - uses: actions/checkout@v4
+        with: {ref: main}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: pip install -r requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          name: paper-coverage-results
+          path: coverage-results
+      - name: Merge sources into the current published papers
+        run: |
+          git fetch origin connector-data:refs/remotes/origin/connector-data
+          python -m tools.recommendation_data --recover --reconcile --import-readings
+          python -m tools.import_coverage_reviews
+          python -m tools.merge_coverage_results coverage-results
       - name: Build processed public data
         run: python tools/build_site.py
       - name: Commit source updates

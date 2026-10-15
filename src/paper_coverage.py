@@ -32,6 +32,7 @@ SCHEMA_VERSION = 3
 SEARCH_VERSION = 7
 ARTICLE_VERSION = 3
 SYNDICATION_PARSER_VERSION = 4
+MAX_ARTICLE_BYTES = 8_000_000
 CHINA = timezone(timedelta(hours=8))
 IMAGE_HOSTS = ['mmbiz.qpic.cn', 'mmbiz.qlogo.cn']
 ASSET = re.compile(r'assets/wechat/([a-f0-9]{64})\.png\Z')
@@ -48,7 +49,7 @@ class ArticleChallenge(ValueError):
 def fetch_coverage(url, source):
     if urlsplit(url).hostname != 'mp.weixin.qq.com':
         return fetch(url, source)
-    from src.public_sources import allowed, MAX_BYTES
+    from src.public_sources import allowed
     if not allowed(url, source):
         raise ValueError('Unapproved source host')
 
@@ -66,8 +67,8 @@ def fetch_coverage(url, source):
     request = Request(url, headers={'User-Agent': 'DailyPapers/1.0'})
     with build_opener(Redirects).open(request, timeout=15) as response:
         check(response.url)
-        body = response.read(MAX_BYTES + 1)
-        if len(body) > MAX_BYTES:
+        body = response.read(MAX_ARTICLE_BYTES + 1)
+        if len(body) > MAX_ARTICLE_BYTES:
             raise ValueError('Article too large')
         return body
 
@@ -134,7 +135,10 @@ def permissions(root=ROOT, now=None):
 
 
 def parse_article(body, url, *, image_hosts=None):
-    if not isinstance(body, bytes) or len(body) > 4_000_000:
+    # Normal WeChat pages can contain over 4 MB of scripts even with a short
+    # article. Bound the response while allowing that ordinary page overhead;
+    # scripts are never executed or used as paper-identity evidence.
+    if not isinstance(body, bytes) or len(body) > MAX_ARTICLE_BYTES:
         raise ValueError('Invalid article response')
     decoded = body.decode('utf-8', 'replace')
     soup = BeautifulSoup(decoded, 'html.parser')
@@ -442,7 +446,7 @@ def _summarize(root, article, paper, now, summarizer, previous, runtime=None):
     return result
 
 
-def _public_article(row, grants, copy_review=None):
+def _public_article(row, grants, copy_review=None, linked_review=None):
     from src.coverage_evidence import public_mirrors
     if row.get('source_type') == 'public_account_copy':
         # A candidate cannot promote itself by setting a source_type flag.
@@ -450,6 +454,15 @@ def _public_article(row, grants, copy_review=None):
         if not copy_review or row.get('match_status') != 'verified':
             return None
         result = dict(copy_review)
+        if row.get('source_version') == result['source_version'] and row.get('body_status') in BODY_STATES:
+            result['body_status'] = row['body_status']
+        return result
+    if row.get('verification_method') == 'official_crosslink':
+        # The institutional article and its exact WeChat link must have a
+        # separately validated receipt. A flag on a candidate is not evidence.
+        if not linked_review or row.get('match_status') != 'verified':
+            return None
+        result = dict(linked_review)
         if row.get('source_version') == result['source_version'] and row.get('body_status') in BODY_STATES:
             result['body_status'] = row['body_status']
         return result
@@ -542,13 +555,15 @@ def _public_candidate(row):
 
 
 def _project(payload, grants, *, root=None):
-    from src.coverage_evidence import load_copy_reviews
+    from src.coverage_evidence import load_copy_reviews, load_linked_report_reviews
     copy_reviews = load_copy_reviews(root) if root is not None else {}
+    linked_reviews = load_linked_report_reviews(root) if root is not None else {}
     result = {}
     for identifier, row in payload.get('papers', {}).items():
         if not SAFE_ID.fullmatch(str(identifier)) or not isinstance(row, dict):
             continue
-        articles = [a for a in (_public_article(r, grants, copy_reviews.get((identifier, r.get('url'))))
+        articles = [a for a in (_public_article(r, grants, copy_reviews.get((identifier, r.get('url'))),
+                                               linked_reviews.get((identifier, r.get('url'))))
                                for r in row.get('articles', []) if isinstance(r, dict)) if a]
         candidates = [c for c in (_public_candidate(r) for r in row.get('candidates', []) if isinstance(r, dict)) if c]
         state = row.get('state')
@@ -962,6 +977,25 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
             articles[review['url']] = merge_review(prior, review)
             candidates.pop(review['url'], None)
 
+        from src.coverage_source_reader import SourceReader
+
+        def read_source(kind, url):
+            detail = {}
+            checked = datetime.now(timezone.utc) if live_clock else now
+            reader = _cached_syndication if kind == 'copy' else _cached_article
+            value = reader(root, url, checked, fetcher, runtime, detail,
+                           force_refresh or url in supplied)
+            return value, detail
+
+        source_reader = SourceReader(read_source, concurrent=runtime.deadline is None)
+
+        def source_value(kind, url):
+            value, detail = source_reader.get(kind, url)
+            _record_attempt(progress, detail.get('last_attempt_at'))
+            if detail.get('deferred_reason'):
+                progress['deferred_reason'] = detail['deferred_reason']
+            return value
+
         def timing():
             checked = progress.get('last_attempt_at', '')
             values = {'checked_at': checked, 'last_attempt_at': checked,
@@ -987,8 +1021,7 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
             if identity in seen_mirrors:
                 return
             seen_mirrors.add(identity)
-            records, state, checked = _cached_syndication(
-                root, mirror_url, now, fetcher, runtime, progress, force_refresh or mirror_url in supplied)
+            records, state, checked = source_value('copy', mirror_url)
             if state != 'ok':
                 read_deferred = read_deferred or state == 'deferred'
                 read_failed = read_failed or state != 'deferred'
@@ -1049,6 +1082,22 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
 
         def examine(rows, read_mirrors=True):
             nonlocal read_failed, read_deferred
+            rows = list(rows)
+            reads = []
+            from src.coverage_discovery import local_candidate
+            for candidate in rows:
+                if candidate.get('_provider') == 'sogou' and not local_candidate(paper, {
+                        'title': candidate.get('title'), 'summary': candidate.get('_discovery_text', '')}):
+                    continue
+                copy = canonical_syndication_url(candidate.get('url'))
+                original = article_url(candidate.get('url'))
+                if copy:
+                    reads.append(('copy', copy))
+                elif original:
+                    reads.append(('article', original))
+                if read_mirrors and not copy:
+                    reads.extend(('copy', mirror['url']) for mirror in public_mirrors(candidate.get('mirrors')))
+            source_reader.prepare(reads)
             for candidate in rows:
                 if (candidate.get('source_type') == 'public_account_copy'
                         and candidate.get('url') in articles):
@@ -1059,8 +1108,7 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                     if url in seen:
                         continue
                     seen.add(url)
-                    _, state, _ = _cached_syndication(root, url, now, fetcher, runtime, progress,
-                                                      force_refresh or url in supplied)
+                    _, state, _ = source_value('copy', url)
                     if state != 'deferred':
                         articles[url]['body_status'] = 'readable' if state == 'ok' else state
                     candidates.pop(url, None)
@@ -1091,8 +1139,7 @@ def collect(root=ROOT, now=None, *, searcher=None, fetcher=None, key=None, summa
                 if url in seen:
                     continue
                 seen.add(url)
-                article, state = _cached_article(root, url, now, fetcher, runtime, progress,
-                                                 force_refresh or url in supplied)
+                article, state = source_value('article', url)
                 if not article:
                     read_deferred = read_deferred or state == 'deferred'
                     read_failed = read_failed or state != 'deferred'

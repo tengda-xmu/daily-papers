@@ -544,7 +544,7 @@ def test_search_reads_the_twelfth_candidate_and_deduplicates_urls(tmp_path):
         reads.append(url)
         return page() if url == urls[-1] else page('另一篇研究的详细介绍。' * 20)
     row = coverage.collect(tmp_path, NOW, key='key', searcher=discover, fetcher=fetched)['papers'][PAPER['id']]
-    assert reads == urls and row['state'] == 'matched'
+    assert sorted(reads) == sorted(urls) and row['state'] == 'matched'
     assert [a['url'] for a in row['articles']] == [urls[-1]]
 
 
@@ -558,7 +558,7 @@ def test_local_archive_is_not_truncated_before_matching_source(tmp_path):
         reads.append(url)
         return page() if url == urls[-1] else page('另一篇研究的详细介绍。' * 20)
     row = coverage.collect(tmp_path, NOW, key='', fetcher=fetched)['papers'][PAPER['id']]
-    assert reads == urls and row['state'] == 'matched'
+    assert sorted(reads) == sorted(urls) and row['state'] == 'matched'
     assert row['articles'][0]['url'] == urls[-1]
 
 

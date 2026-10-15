@@ -11,6 +11,9 @@ import json
 from pathlib import Path
 import re
 import unicodedata
+from urllib.parse import urlsplit
+
+from bs4 import BeautifulSoup
 
 from src.models import normalize_doi, parse_date
 from src.public_sources import clean, read, write
@@ -131,13 +134,19 @@ def public_review(value):
     expected = {'manual_screenshot': 'manual_screenshot', 'image_doi': 'image',
                 'image_title_author': 'image', 'doi': 'syndication', 'title_author': 'syndication'}
     mirrors = public_mirrors(source.get('mirrors'))
+    linked = method == 'official_crosslink'
+    valid_method = ((basis in ('doi', 'title_author') and source.get('review_id') == key
+                     and source.get('account_status') == 'not_observed' and not clean(source.get('account')))
+                    if linked else method == expected.get(basis))
     if (value.get('id') != key or source.get('match_status') != 'verified'
-            or basis not in expected or method != expected[basis]
-            or (method == 'syndication' and not any(m['body_status'] == 'readable' for m in mirrors))
+            or basis not in expected or not valid_method
+            or (method in ('syndication', 'official_crosslink') and not any(m['body_status'] == 'readable' for m in mirrors))
+            or (linked and not any(m['body_status'] == 'readable' and m['kind'] == 'article'
+                                   and _institution_domain(m['url']) for m in mirrors))
             or not parse_date(source.get('verified_at'))):
         raise ValueError('Invalid verified coverage review')
     title, account = clean(source.get('title'))[:300], clean(source.get('account'))[:160]
-    if not title or not account:
+    if not title or (not account and not linked):
         raise ValueError('Verified coverage needs source metadata')
     article = {'id': hashlib.sha256(url.encode()).hexdigest()[:24], 'url': url,
                'title': title, 'account': account, 'published_at': '',
@@ -150,8 +159,11 @@ def public_review(value):
         article['published_at'] = source['published_at']
     if mirrors:
         article['mirrors'] = mirrors
+    if linked:
+        article.update(account_status='not_observed', review_id=key)
     # This is a source note, not a paraphrase of inaccessible article content.
-    article['source_note'] = ('根据用户提供的截图核对论文身份；公众号正文尚未自动读取。'
+    article['source_note'] = ('已根据高校官网索引中的公众号链接及校方对应报道核对论文身份；公众号名称尚未直接读取。'
+                              if linked else '根据用户提供的截图核对论文身份；公众号正文尚未自动读取。'
                               if method == 'manual_screenshot' and article['body_status'] != 'readable'
                               else '已根据公开同步报道正文核对论文身份。' if method == 'syndication'
                               else '已根据公开同步报道中的论文图片核对论文身份。' if mirrors
@@ -323,6 +335,155 @@ def save_syndicated_review(root, paper, article):
           {'receipt': receipt, 'evidence': article, 'paper': paper})
     write(Path(root) / PUBLIC / (key + '.json'), receipt)
     return receipt
+
+
+def _institution_domain(url):
+    """Recognize academic DNS boundaries, not a caller's assertion of authority."""
+    host = urlsplit(url).hostname or ''
+    labels = host.split('.')
+    for suffix in ('edu.cn', 'ac.uk', 'edu'):
+        if host.endswith('.' + suffix) and len(labels) > len(suffix.split('.')):
+            return '.'.join(labels[-len(suffix.split('.')) - 1:])
+    return ''
+
+
+def _linked_page(evidence):
+    from src.coverage_syndication import canonical_syndication_url
+    if not isinstance(evidence, dict):
+        raise ValueError('Official crosslink requires fetched page evidence')
+    url = canonical_syndication_url(evidence.get('url'))
+    body = evidence.get('html')
+    if isinstance(body, str):
+        body = body.encode('utf-8')
+    if (not url or not _institution_domain(url) or not isinstance(body, bytes)
+            or not body or len(body) > 4_000_000 or not parse_date(evidence.get('fetched_at'))
+            or not clean(evidence.get('provenance'))):
+        raise ValueError('Official crosslink needs actual institutional HTML and read provenance')
+    soup = BeautifulSoup(body.decode('utf-8', 'replace'), 'html.parser')
+    for node in soup.select('script, style, template, noscript, iframe, form'):
+        node.decompose()
+    for node in list(soup.find_all(True)):
+        if node.attrs is not None and (node.has_attr('hidden') or node.get('aria-hidden') == 'true'
+                or re.search(r'(?:display\s*:\s*none|visibility\s*:\s*hidden)', node.get('style', ''), re.I)):
+            node.decompose()
+    return url, body, soup
+
+
+def _linked_headline(title):
+    """Ignore a series/journal prefix, but require an exact substantial headline."""
+    title = clean(title).rsplit('|', 1)[-1].strip()
+    # This handles e.g. Sci. Adv.发文：... versus Science Advances发文：....
+    title = re.split(r'[:：]', title, maxsplit=1)[-1]
+    result = compact(title)
+    return result if len(result) >= 30 else ''
+
+
+def _linked_main(soup, selector):
+    try:
+        nodes = soup.select(selector) if isinstance(selector, str) and selector else []
+    except Exception as exc:
+        raise ValueError('Invalid official report body selector') from exc
+    if len(nodes) != 1 or nodes[0].name in ('html', 'body', 'head', 'nav', 'aside'):
+        raise ValueError('Official report requires one specific article body')
+    main = nodes[0]
+    for node in main.select('aside, nav, footer, .related, .recommend, .recommendations, '
+                            '.related-posts, .references, .reference-list, .footnotes'):
+        node.decompose()
+    # Plain headings also terminate the identity scope; a DOI in recommended
+    # articles or a bibliography is not evidence about this report's main paper.
+    for node in list(main.find_all(['p', 'h1', 'h2', 'h3', 'h4', 'strong', 'b'])):
+        if node.parent is None:
+            continue
+        label = clean(node.get_text(' ', strip=True))
+        if len(label) < 80 and re.match(r'^(?:参考文献|参考资料|参考链接|推荐阅读|相关阅读|references|bibliography|'
+                                       r'(?:related|recommended|further)\s+(?:reading|articles))', label, re.I):
+            cursor = node
+            while cursor is not main:
+                for sibling in list(cursor.next_siblings):
+                    sibling.extract()
+                cursor = cursor.parent
+            node.decompose()
+            break
+    main['id'] = 'js_content'
+    return main
+
+
+def save_linked_report_review(root, paper, article, index_evidence, report_evidence):
+    """Manually review an official index's exact WeChat link and matching report.
+
+    Inputs are fetched HTML plus read provenance and report DOM selectors, not
+    pre-approved identity flags. The institution's name is never an account name.
+    This review grants no body/image republication rights.
+    """
+    from src.paper_coverage import match_article, parse_article
+    original = article_url(article.get('url'))
+    if not original or clean(article.get('account')):
+        raise ValueError('Crosslink review requires a WeChat URL and an unobserved account')
+    index_url, index_body, index_soup = _linked_page(index_evidence)
+    report_url, report_body, report_soup = _linked_page(report_evidence)
+    if _institution_domain(index_url) != _institution_domain(report_url):
+        raise ValueError('Crosslinked report must belong to the same academic institution')
+    requested_title = clean(article.get('title'))
+    anchors = [a for a in index_soup.select('a[href]')
+               if article_url(a.get('href')) == original
+               and clean(a.get_text(' ', strip=True)) == requested_title]
+    if not requested_title or not anchors:
+        raise ValueError('Official index does not contain the visible WeChat headline and link')
+    title_selector = report_evidence.get('title_selector')
+    try:
+        titles = report_soup.select(title_selector) if isinstance(title_selector, str) and title_selector else []
+    except Exception as exc:
+        raise ValueError('Invalid official report title selector') from exc
+    if len(titles) != 1 or titles[0].name not in ('h1', 'h2', 'h3'):
+        raise ValueError('Official report requires its visible article heading')
+    report_title = clean(titles[0].get_text(' ', strip=True))
+    feature = _linked_headline(requested_title)
+    if not feature or feature != _linked_headline(report_title):
+        raise ValueError('Official index and report do not share the exact distinctive headline')
+    main = _linked_main(report_soup, report_evidence.get('body_selector'))
+    parsed = parse_article(str(main).encode('utf-8'), original)
+    basis = match_article(paper, parsed)
+    if not basis:
+        raise ValueError('Official report main body does not confirm the target paper')
+    hashes = {'index': hashlib.sha256(index_body).hexdigest(),
+              'report': hashlib.sha256(report_body).hexdigest()}
+    material = {'method': 'official_crosslink', 'hashes': hashes, 'index_url': index_url,
+                'report_url': report_url, 'original_url': original, 'title': requested_title,
+                'body_selector': report_evidence['body_selector'], 'title_selector': title_selector}
+    version = hashlib.sha256(json.dumps(material, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+    key = review_key(paper['id'], original, version)
+    verified = datetime.now(timezone.utc).isoformat()
+    receipt = public_review({'version': VERSION, 'id': key, 'paper_id': paper['id'],
+        'source_version': version, 'article': {**article, 'url': original, 'title': requested_title,
+        'account': '', 'account_status': 'not_observed', 'published_at': '', 'match_status': 'verified',
+        'match_basis': basis, 'verification_method': 'official_crosslink', 'review_id': key,
+        'verified_at': verified, 'mirrors': [{'url': report_url, 'body_status': 'readable',
+            'kind': 'article', 'checked_at': report_evidence['fetched_at']}]}})
+    write(Path(root) / PRIVATE / 'reviews' / (key + '.json'), {
+        'receipt': receipt, 'paper': paper, 'article': article, 'material': material,
+        'index_evidence': {**index_evidence, 'html': index_body.decode('utf-8', 'replace')},
+        'report_evidence': {**report_evidence, 'html': report_body.decode('utf-8', 'replace')},
+        'identity_evidence': parsed, 'report_title': report_title})
+    write(Path(root) / PUBLIC / (key + '.json'), receipt)
+    return receipt
+
+
+def load_linked_report_reviews(root):
+    """Receipt gate for verified links whose WeChat account was not observed."""
+    result = {}
+    for path in sorted((Path(root) / PUBLIC).glob('*.json')):
+        try:
+            receipt = public_review(read(path))
+        except (ValueError, TypeError, AttributeError):
+            continue
+        row = receipt['article']
+        if row.get('verification_method') != 'official_crosslink':
+            continue
+        key = (receipt['paper_id'], row['url'])
+        previous = result.get(key)
+        if not previous or parse_date(row['verified_at']) > parse_date(previous['verified_at']):
+            result[key] = row
+    return result
 
 
 def load_reviews(root, paper):
