@@ -88,10 +88,14 @@ async def process_abstract_article(worker, row):
         raw = read(draft_path)
         if not raw:
             feedback = read(directory / 'review-feedback.json')
+            original_images = [article_figure_file(q.root, figure) for figure in figures]
+            if any(image is None for image in original_images):
+                raise ValueError('原图不可读取，不能撰写图解')
             raw = await ask(article_prompt(paper, directions, evidence,
                 {'status': 'ok', 'checked_at': datetime.now(timezone.utc).isoformat(), 'papers': []},
                 figures, basis='abstract') +
-                ('\n上次审核需改进：' + json.dumps(feedback, ensure_ascii=False) if feedback else ''))
+                '\n实际原图按原图目录顺序附上；中文图解须通读各面板，不得把整幅图当成仅含其中一个面板。'
+                + ('\n上次审核需改进：' + json.dumps(feedback, ensure_ascii=False) if feedback else ''), original_images)
             if not isinstance(raw, dict):
                 raise ValueError('摘要文章输出必须为JSON对象')
             raw.update(version=ARTICLE_VERSION, basis='abstract')

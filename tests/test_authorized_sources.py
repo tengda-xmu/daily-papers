@@ -1,5 +1,6 @@
 import io
 import json
+import pytest
 from datetime import datetime
 from urllib.error import HTTPError, URLError
 from urllib.parse import parse_qs, urlsplit
@@ -8,7 +9,12 @@ from src.sources.elsevier import ElsevierAdapter
 from src.sources.google_scholar import GoogleScholarAdapter
 
 
-def test_scopus_retries_authorized_standard_view_and_keeps_it(monkeypatch):
+@pytest.mark.parametrize('lookback,expected_years', [(None, '2025-2026'), ('180', '2026'), ('invalid', '2025-2026')])
+def test_scopus_retries_authorized_standard_view_and_keeps_it(monkeypatch, lookback, expected_years):
+    if lookback is None:
+        monkeypatch.delenv('CNS_LOOKBACK_DAYS', raising=False)
+    else:
+        monkeypatch.setenv('CNS_LOOKBACK_DAYS', lookback)
     adapter = ElsevierAdapter(api_key="fixture-secret", queries=['SRCTITLE(Nature)', 'SRCTITLE(Science)'])
     calls = []
     def response(request, timeout):
@@ -25,7 +31,7 @@ def test_scopus_retries_authorized_standard_view_and_keeps_it(monkeypatch):
     monkeypatch.setattr('src.sources.elsevier.urlopen', response)
     records = adapter.fetch(datetime(2026, 8, 24), datetime(2026, 9, 23))
     assert [p['view'][0] for p in calls] == ['COMPLETE', 'STANDARD', 'STANDARD']
-    assert all(p['date'] == ['2026'] for p in calls)
+    assert all(p['date'] == [expected_years] for p in calls)
     assert len(records) == 1 and records[0].landing_url == 'https://doi.org/10/test'
     assert adapter.status.status == 'ok' and 'STANDARD' in adapter.status.message
     assert 'fixture-secret' not in json.dumps(records[0].to_dict())

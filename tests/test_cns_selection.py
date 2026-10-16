@@ -50,7 +50,10 @@ def test_cns_same_tier_date_then_focus_then_weight_without_direction_quota():
     assert extended == [] and rows == original
 
 
-def test_pipeline_does_not_reintroduce_balanced_planning_order(tmp_path):
+def test_pipeline_does_not_reintroduce_balanced_planning_order(tmp_path, monkeypatch):
+    # Simulate distinct workflow runs explicitly, independent of the enclosing
+    # CI job's GITHUB_RUN_ID. Reusing a run ID correctly preserves its edition.
+    monkeypatch.setenv('GITHUB_RUN_ID', 'cns-first')
     rows = [RawRecord.from_mapping(paper(str(i), date='2026-10-10')) for i in range(6)]
     rows.append(RawRecord('fixture', 'climate', 'climate ordinary', venue='Engineering Structures', published_at='2026-10-14'))
     class Source:
@@ -64,8 +67,12 @@ def test_pipeline_does_not_reintroduce_balanced_planning_order(tmp_path):
     stat = next(s for s in result['cns_statistics'] if s['journal'] == 'Nature Communications')
     assert stat['new'] == stat['relevant'] == stat['selected'] == 6
     assert stat['historical_excluded'] == 0
+    retry = run_pipeline(adapters=[Source()], research_profile=settings, until=NOW, output_path=tmp_path / 'daily.json')
+    assert retry['edition'] == result['edition'] and retry['core'] == result['core']
     # A subsequent run cannot republish the six known papers without evidence.
+    monkeypatch.setenv('GITHUB_RUN_ID', 'cns-next')
     again = run_pipeline(adapters=[Source()], research_profile=settings, until=NOW, output_path=tmp_path / 'daily.json')
+    assert again['edition']['id'] != result['edition']['id']
     assert [p['source_id'] for p in again['core']] == ['climate']
     stat = next(s for s in again['cns_statistics'] if s['journal'] == 'Nature Communications')
     assert stat['new'] == stat['selected'] == 0 and stat['historical_excluded'] == 6
