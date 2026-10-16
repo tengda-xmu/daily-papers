@@ -4,7 +4,7 @@ from io import BytesIO
 from urllib.parse import urlsplit
 from PIL import Image
 
-from src.figures import ROOT, figure_catalog, figure_file, get_figure
+from src.figures import ROOT, figure_catalog, figure_file, figure_key, get_figure
 from tools.build_site import paper_card, render
 
 
@@ -24,13 +24,19 @@ def test_verified_images_match_recorded_dimensions_and_bytes():
         assert urlsplit(figure['license_source']).hostname in ('www.nature.com', 'www.ebi.ac.uk')
 
 
-def test_only_core_has_figures_and_archives_use_relative_asset_paths():
+def test_only_core_has_figures_and_archives_use_relative_asset_paths(monkeypatch):
     from tests.test_research_directions import direction, profile
+    # Rendering behavior uses a stable DOI fixture, independent of a live
+    # collector adding conference/source keys or replacing catalog entries.
+    # The preceding test still verifies every real catalog entry and its bytes.
+    entries = dict(list((key, value) for key, value in figure_catalog().items() if key.startswith('10.'))[:2])
+    assert len(entries) == 2
+    monkeypatch.setattr('src.figures.figure_catalog', lambda: entries)
     papers = [{"doi": doi, "title": "AI structural design", "source": "fixture"}
-              for doi in figure_catalog()]
-    settings = profile(direction('fixture'), core=20, extended=20)
-    html = ''.join(render({"core": papers[i:i + 20], "extended": papers[i:i + 20]}, current_profile=settings)
-                   for i in range(0, len(papers), 20))
+              for doi in entries]
+    assert {figure_key(paper) for paper in papers} == set(entries)
+    settings = profile(direction('fixture'), core=5, extended=5)
+    html = render({"core": papers, "extended": papers}, current_profile=settings)
     assert html.count('<figure class="paper-figure">') == len(papers)
     assert html.count('loading="lazy"') == len(papers)
     assert html.count('class="figure-credit"') == len(papers)
@@ -38,7 +44,7 @@ def test_only_core_has_figures_and_archives_use_relative_asset_paths():
         extended = paper_card(paper, 'extended')
         assert '<figure' not in extended and 'figure-unavailable' not in extended
     assert './assets/figures/' in html
-    archive = render({"core": papers}, archive_date="2026-09-23")
+    archive = render({"core": papers}, archive_date="2026-09-23", current_profile=settings)
     assert '../assets/figures/' in archive
     assert 'src="./assets/figures/' not in archive
     assert '<figure' not in paper_card({"doi": "10.unknown/new", "title": "New paper"}, "core")

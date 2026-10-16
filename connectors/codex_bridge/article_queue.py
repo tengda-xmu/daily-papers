@@ -67,18 +67,34 @@ class ArticleWorker:
         q = self.queue
         directions = profile_context(q.root)
         with q.db() as db:
-            rows = db.execute("SELECT * FROM tasks WHERE enabled=1 AND state IN ('ready','published') AND result IS NOT NULL ORDER BY priority DESC,updated_at").fetchall()
+            rows = db.execute("SELECT * FROM tasks WHERE enabled=1 AND state IN ('ready','published','awaiting_fulltext') AND result IS NOT NULL ORDER BY priority DESC,updated_at").fetchall()
             for raw in rows:
                 row = dict(raw)
                 value = json.loads(row['result'])
                 material = json.loads(row['material'] or '{}')
-                if (value.get('analysis', {}).get('analysis_basis') != 'full_text'
+                paper = json.loads(row['paper'])
+                basis = value.get('analysis', {}).get('analysis_basis')
+                if (basis not in ('abstract', 'full_text') or material.get('basis') != basis
                         or value.get('material', {}).get('version') != material.get('version')
-                        or not material.get('document', {}).get('pages') or row['result_revision'] != row['revision']):
+                        or row['result_revision'] != row['revision']):
                     continue
-                figures = eligible_article_figures(q.root, json.loads(row['paper']), material)
-                key = article_key(material['version'], directions, figures)
-                if row['article_key'] != key:
+                if basis == 'abstract':
+                    from .reading_materials import verified_abstract
+                    if not verified_abstract(material, paper):
+                        # Refresh legacy material before it can support a new article.
+                        db.execute('UPDATE tasks SET next_material=0 WHERE paper_id=?', (row['paper_id'],))
+                        continue
+                    published = json.loads(row['published_result'] or '{}')
+                    if published.get('analysis', {}).get('analysis_basis') == 'full_text':
+                        continue
+                elif not material.get('document', {}).get('pages'):
+                    continue
+                figures = eligible_article_figures(q.root, paper, material)
+                key = article_key(material['version'], directions, figures, basis=basis)
+                article_missing = (row['article_state'] == 'complete' and
+                                   (not value.get('analysis', {}).get('article') or
+                                    value['analysis'].get('article_profile') != key))
+                if row['article_key'] != key or article_missing:
                     db.execute("UPDATE tasks SET article_key=?,article_state='pending',article_attempts=0,article_next_attempt=0,article_error='',article_stage='' WHERE paper_id=?", (key, row['paper_id']))
                     row.update(article_key=key, article_state='pending', article_attempts=0, article_next_attempt=0, article_error='')
                 if row['article_next_attempt'] > time.time() or row['article_attempts'] >= 3:
@@ -89,6 +105,9 @@ class ArticleWorker:
         return None
 
     async def process(self, row):
+        if json.loads(row['material']).get('basis') == 'abstract':
+            from .abstract_article_queue import process_abstract_article
+            return await process_abstract_article(self, row)
         q = self.queue
         from .reading_queue import SupersededReading
         from .reading_document import batches
@@ -242,13 +261,13 @@ class ArticleWorker:
             fresh_draft = not article
             if not article:
                 feedback = read(directory / 'review-feedback.json')
-                article = await ask(article_prompt(paper, directions, evidence, chosen, figures)
+                article = await ask(article_prompt(paper, directions, evidence, chosen, figures, basis='full_text')
                                     + ('\n上次校验需改进：' + json.dumps(feedback, ensure_ascii=False) if feedback else ''))
             try:
                 if not isinstance(article, dict):
                     raise ValueError('文章输出必须为JSON对象')
                 if fresh_draft:
-                    article.update(version=ARTICLE_VERSION, related=public_related(chosen))
+                    article.update(version=ARTICLE_VERSION, basis='full_text', related=public_related(chosen))
                 elif article.get('version') != ARTICLE_VERSION:
                     raise ValueError('文章草稿需按当前核验版本重新生成')
                 bindings = article.get('claim_evidence')

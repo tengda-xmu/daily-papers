@@ -128,7 +128,11 @@ def test_crossref_cns_uses_user_query_and_all_configured_issns(monkeypatch, tmp_
     start = datetime(2020, 1, 1, tzinfo=timezone.utc); end = datetime.now(timezone.utc)
     fetch_source('CNS 子刊专项', 'test my actual query', start, end, 10, tmp_path)
     assert seen[0]['query.bibliographic'] == ['test my actual query']
-    assert seen[0]['filter'][0].count('issn:') == 9
+    from src.venues import cns_journals, journal_issns
+    configured = {issn for j in cns_journals() for issn in journal_issns(j)}
+    assert len(cns_journals()) == 19
+    assert {part.removeprefix('issn:') for part in seen[0]['filter'][0].split(',') if part.startswith('issn:')} == configured
+    assert {'0092-8674', '1097-4172', '2405-4712', '2405-4720'} <= configured
     assert 'from-pub-date:2020-01-01' in seen[0]['filter'][0]
 
 

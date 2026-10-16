@@ -23,7 +23,7 @@ def test_journal_priority_is_preserved_and_focus_wins_within_journals():
                RawRecord("test", "llm", "Large language models for structural fatigue", venue="npj Computational Materials"),
                RawRecord("test", "agent", "Multi-agent LLMs for constitutive models", venue="npj Artificial Intelligence"),
                RawRecord("test", "main", "Agentic LLMs for structural fatigue", venue="Nature")]
-    assert [r.source_id for r in rank(records)] == ["agent", "llm", "general", "main"]
+    assert [r.source_id for r in rank(records)] == ["agent", "main", "llm", "general"]
 
 
 def test_irrelevant_llms_do_not_enter_the_recommendation_pool():

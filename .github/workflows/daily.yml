@@ -71,6 +71,13 @@ jobs:
           key: conferences-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
             conferences-${{ runner.os }}-
+      - name: Restore CNS metadata and query cursors
+        uses: actions/cache@v4
+        with:
+          path: data/cache/cns
+          key: cns-v3-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            cns-v3-${{ runner.os }}-
       - name: Restore public WeChat index cache
         uses: actions/cache@v4
         with:
@@ -122,7 +129,7 @@ jobs:
           WECHAT_USE_SHARED_SNAPSHOT: '1'
           ELSEVIER_API_KEY: ${{ secrets.ELSEVIER_API_KEY }}
           ELSEVIER_INSTTOKEN: ${{ secrets.ELSEVIER_INSTTOKEN }}
-          CNS_LOOKBACK_DAYS: 180
+          CNS_LOOKBACK_DAYS: 365
           SERPAPI_API_KEY: ${{ secrets.SERPAPI_API_KEY }}
           WOS_API_KEY: ${{ secrets.WOS_API_KEY }}
           OPENALEX_MAILTO: ${{ secrets.OPENALEX_MAILTO }}

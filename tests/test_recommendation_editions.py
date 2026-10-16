@@ -140,6 +140,12 @@ def test_heat_refresh_daily_cache_and_failures(tmp_path):
 
 def test_shared_historical_slot_and_expanded_never_repeats(tmp_path):
     old_core, old_extended = paper(1), paper(2)
+    # Both historical candidates outrank the new ordinary journals; only one
+    # may use the shared slot even when both independently pass their gates.
+    old_core['venue'] = 'Nature'
+    old_extended['venue'] = 'Nature Communications'
+    old_core['published_at'] = '2026-08-01'
+    old_extended['published_at'] = '2026-07-01'
     append(tmp_path, payload(1, [old_core], [old_extended], NOW-timedelta(days=40)))
     h = History(tmp_path)
     papers = [old_core, old_extended, *[paper(i) for i in range(3, 15)]]

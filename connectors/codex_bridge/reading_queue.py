@@ -252,7 +252,7 @@ class ReadingQueue:
     def retry(self, identifier):
         with self.db() as db:
             row = db.execute('SELECT * FROM tasks WHERE paper_id=? AND enabled=1', (identifier,)).fetchone()
-            if row and self.paper_queue and row['article_state'] in ('failed', 'retry') and row['state'] in ('ready', 'published'):
+            if row and self.paper_queue and row['article_state'] in ('failed', 'retry') and row['state'] in ('ready', 'published', 'awaiting_fulltext'):
                 db.execute("UPDATE tasks SET article_state='pending',article_attempts=0,article_next_attempt=0,article_error='' WHERE paper_id=?", (identifier,))
                 db.commit()
                 return self.snapshot()
@@ -293,6 +293,14 @@ class ReadingQueue:
                 db.execute("UPDATE tasks SET state='fetching',updated_at=? WHERE paper_id=?", (time.time(), identifier))
             material = await asyncio.to_thread(self.resolver, json.loads(row['paper']), force=row['next_material'] == 0)
             self.assert_current(row)
+            old = json.loads(row['result'] or '{}')
+            if old.get('analysis', {}).get('analysis_basis') == 'full_text' and material.get('basis') != 'full_text':
+                # A later source outage must not downgrade an already read paper.
+                with self.db() as db:
+                    db.execute("UPDATE tasks SET state=?,next_material=?,error='' WHERE paper_id=? AND revision=?",
+                               ('published' if row['result'] == row['published_result'] else 'ready',
+                                time.time() + 86400, identifier, row['revision']))
+                return
             if material.get('document', {}).get('kind') == 'pdf' and self.acquired:
                 await asyncio.to_thread(self.acquired, identifier, material)
                 self.assert_current(row)

@@ -54,9 +54,9 @@ class ElsevierAdapter:
         view, restricted = "COMPLETE", False
         error = None
         try:
-            cns_days = max(0, int(os.getenv("CNS_LOOKBACK_DAYS", "180") or "180"))
+            cns_days = max(0, int(os.getenv("CNS_LOOKBACK_DAYS", "365") or "365"))
         except ValueError:
-            cns_days = 180
+            cns_days = 365
         cns_since = until - timedelta(days=cns_days)
         first_year = min(since, cns_since).year
         years = str(until.year) if first_year == until.year else f"{first_year}-{until.year}"

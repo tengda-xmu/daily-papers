@@ -56,9 +56,9 @@ def public_analysis(value):
     analysis['deep_read'] = {k: analysis['deep_read'][k] for k in NOTE_FIELDS}
     if value.get('analysis', {}).get('article') is not None:
         from src.reading_article import public_article
-        if analysis['analysis_basis'] != 'full_text':
-            raise ValueError('Articles require verified full text')
         analysis['article'] = public_article(value['analysis']['article'])
+        if analysis['article'].get('basis', 'full_text') != analysis['analysis_basis']:
+            raise ValueError('Article basis does not match verified reading evidence')
         if not parse_date(value['analysis'].get('article_updated_at')) or not re.fullmatch('[a-f0-9]{64}', str(value['analysis'].get('article_profile', ''))):
             raise ValueError('Invalid article revision')
         analysis.update({k: value['analysis'][k] for k in ('article_updated_at', 'article_profile')})
@@ -191,6 +191,8 @@ def public_status(value):
     if value.get('article_state') in ('pending', 'generating', 'retry', 'failed', 'complete'):
         result['article_state'] = value['article_state']
         result['article_stage'] = value.get('article_stage') if value.get('article_stage') in ('facts', 'research', 'writing', 'review') else ''
+        if value.get('article_basis') in ('abstract', 'full_text'):
+            result['article_basis'] = value['article_basis']
     result['reason'] = value.get('reason') if value.get('reason') in ('restricted', 'network', 'not_found', 'unverified') else ''
     if value.get('error_code') in CONNECTION_ERRORS or value.get('error_code') in READING_ERRORS:
         result['error_code'] = value['error_code']
@@ -212,8 +214,12 @@ def status_label(state):
     progress = f" · {state['covered']}/{state['total']} 页" if state.get('total') else ''
     pages_read = basis == 'full_text' and state.get('total', 0) > 0 and state.get('covered') == state['total']
     if status == 'published':
-        label = '全文精读已完成' + (' · 原文有缺项' if any(i['kind'] == 'source_defect' for i in state.get('issues', [])) else '')
-        stages = {'facts': '正在整理实验事实', 'research': '正在核对同类研究', 'writing': '正在撰写精读文章', 'review': '正在校验文章'}
+        label = ('摘要图文已完成' if basis == 'abstract' and state.get('article_state') == 'complete' else
+                 '摘要解读已完成' if basis == 'abstract' else '全文精读已完成')
+        label += ' · 原文有缺项' if any(i['kind'] == 'source_defect' for i in state.get('issues', [])) else ''
+        stages = {'facts': '正在核对摘要事实' if basis == 'abstract' else '正在整理实验事实',
+                  'research': '正在核对同类研究',
+                  'writing': '正在撰写摘要图文' if basis == 'abstract' else '正在撰写精读文章', 'review': '正在校验文章'}
         if state.get('article_state') == 'generating':
             label += ' · ' + stages.get(state.get('article_stage'), '文章升级中')
         elif state.get('article_state') in ('retry', 'failed'):
@@ -242,5 +248,11 @@ def status_label(state):
     if status == 'fetching':
         return 'PDF 已就绪 · 正在准备精读' if state.get('pdf_available') else '正在获取全文资料'
     if status == 'awaiting_fulltext':
-        return '摘要解读已完成，全文待补充'
+        label = '摘要图文已完成' if state.get('article_state') == 'complete' else '摘要解读已完成'
+        if state.get('article_state') == 'generating':
+            stages = {'facts': '正在核对摘要事实', 'writing': '正在撰写摘要图文', 'review': '正在校验摘要图文'}
+            label += ' · ' + stages.get(state.get('article_stage'), '摘要图文整理中')
+        elif state.get('article_state') in ('retry', 'failed'):
+            label += ' · 摘要图文待完善，现有解读可读'
+        return label + '，全文待补充'
     return '暂时无法获取资料 · 将自动重试'

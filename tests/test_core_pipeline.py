@@ -167,11 +167,11 @@ def test_llm_empty_optional_settings_use_defaults_and_invalid_url_falls_back(mon
     assert pipeline.summarize(paper) == fallback_summary(paper)
 
 
-def test_cns_family_precedes_main_journals_and_more_topic_matches():
+def test_cns_family_shares_priority_and_precedes_more_topic_matches():
     records = [RawRecord("fixture", "multi", "Machine learning structural reliability and generative design for predictive maintenance", venue="Engineering Structures"),
-               RawRecord("fixture", "main", "Neural network for bearing fault diagnosis", venue="Nature"),
-               RawRecord("fixture", "sub", "Neural network for bearing fault diagnosis", authors=["Different author"], venue="Nature Communications")]
-    assert [r.source_id for r in rank(records)] == ["sub", "main", "multi"]
+               RawRecord("fixture", "main", "Neural network for bearing fault diagnosis", venue="Nature", published_at="2026-09-20"),
+               RawRecord("fixture", "sub", "Neural network for bearing fault diagnosis", authors=["Different author"], venue="Nature Communications", published_at="2026-09-19")]
+    assert [r.source_id for r in rank(records)] == ["main", "sub", "multi"]
 
 
 def test_curated_core_notes_are_detailed_chinese_and_match_real_papers():
@@ -200,17 +200,19 @@ def test_core_keeps_complete_chinese_notes_when_live_source_fails(monkeypatch, t
     assert result["source_status"]["fixture failure"]["status"] == "error"
     assert len(result["core"]) == 5 and all(valid_analysis(p) for p in result["core"])
     assert len(result["extended"]) == 5 and all(valid_analysis(p) for p in result["extended"])
-    # The first pass now covers all configured directions, including fatigue
-    # studies without an LLM; focus still breaks ties within each direction.
-    assert len({p['recommended_direction'] for p in result['core'][:3]}) == 3
+    # CNS priority can leave directions uneven; the saved profile still gates
+    # relevance and determines each paper's highest-weight direction label.
+    from src.recommendation_selection import ranking_key, matching_directions
+    assert result['core'] == sorted(result['core'], key=lambda p: ranking_key(p, profile, 'core'), reverse=True)
+    assert all(p['recommended_direction'] == max(matching_directions(p, profile, 'core'), key=lambda d: d['weight'])['id'] for p in result['core'])
     assert not ({p["id"] for p in result["core"]} & {p["id"] for p in result["extended"]})
     assert all(p["venue_group"] == "CNS 子刊" for p in result["core"])
-    assert {tag for p in result["core"] for tag in p["topic_tags"]} == {"ai_maintenance", "generative_design", "fatigue_reliability"}
+    assert {tag for p in result['papers'] for tag in p['topic_tags']} == {'ai_maintenance', 'generative_design', 'fatigue_reliability'}
     assert result["analysis_status"]["llm_attempts"] == 0
     rendered = render(result, current_profile=profile)
-    # Full-text notes now have independent article links; abstract notes remain inline.
-    assert rendered.count('class="reading-notes"') + rendered.count('class="full-reading-link"') == 10
-    assert rendered.count('class="analysis-provenance"') == 10
+    # Every reading uses a stable independent page, including abstract notes.
+    assert rendered.count('class="reading-link"') == 10
+    assert 'class="reading-notes"' not in rendered and 'paper-detail-panel' not in rendered
     assert rendered.count('class="original-title"') == 10
     assert rendered.count('class="publication-type"') == 2
     assert all(len(p["deep_read"]) == len(NOTE_FIELDS) for p in result["core"])

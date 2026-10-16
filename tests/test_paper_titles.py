@@ -5,6 +5,7 @@ import json
 from src.editions import enrich, read, write
 from src.paper_titles import chinese_title, chinese_abstract, title_entries, title_key
 from tools.build_site import paper_card
+from tools.reading_articles import render_article
 from tools.translate_paper_titles import translate
 
 
@@ -61,9 +62,15 @@ def test_snippet_translation_preserves_original_and_pending_reading(monkeypatch)
     html = paper_card(paper, 'core')
     assert paper == before
     assert f'<p class="abstract">{row["abstract_zh"]}</p>' in html
-    assert '检索片段译文（非完整摘要）' in html and '英文原文' in html
-    assert row['abstract'] in html and row['title_zh'] in html
+    assert 'class="reading-link" href="./readings/123456789abc.html"' in html
+    assert 'paper-detail-panel' not in html and row['title_zh'] in html
     assert 'Codex 连接暂不可用' in html and '全文精读已完成' not in html
+    page = render_article(paper)
+    assert paper == before
+    assert '检索片段译文（非完整摘要）' in page and '英文原文（检索片段，非完整摘要）' in page
+    assert row['abstract'] in page and row['abstract_zh'] in page
+    assert '完整摘要与全文尚未取得' in page and '依据论文全文整理' not in page
+    assert '摘要解读已完成' not in page and '全文精读已完成' not in page
     assert chinese_abstract({**paper, 'abstract': 'A changed source'}, catalog) == ''
     assert chinese_abstract({**paper, 'doi': '10.test/other'}, catalog) == ''
     assert chinese_abstract({**paper, 'title': 'Another paper'}, catalog) == ''

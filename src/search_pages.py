@@ -13,6 +13,7 @@ from urllib.error import HTTPError
 import xml.etree.ElementTree as ET
 
 from src.models import SourceStatus, in_date_window
+from src.venues import cns_journals, journal_issns
 from src.manual_search import ROOT, crossref_rows, matches
 from src.sources.public_literature import (
     PublicLiteratureAdapter, CrossrefAdapter, OpenAlexAdapter, ArxivAdapter,
@@ -45,11 +46,15 @@ def fetch_page(source, query, since, until, cache_dir, journal_issn='', sort_by=
         if journal_issn:
             filters.append('issn:' + journal_issn)
         if source == 'CNS 子刊专项':
-            config = json.loads((ROOT / 'config/cns-search.json').read_text(encoding='utf-8'))
-            filters.extend('issn:' + j['issn'] for j in config['journals'])
+            filters.extend('issn:' + issn for j in cns_journals() for issn in journal_issns(j))
         params = {'filter': ','.join(filters), 'rows': BATCH_SIZE, 'cursor': cursor.get('cursor', '*'),
                   'sort': {'relevance': 'relevance' if query else 'published', 'latest': 'published',
                            'citations': 'is-referenced-by-count'}[sort_by], 'order': 'desc'}
+        if params['sort'] == 'published':
+            # Crossref does not support publication-date sorting with cursors.
+            # The interactive search orders the retrieved candidates locally.
+            params.pop('sort'); params.pop('order')
+            message = 'Crossref 按服务默认顺序分页获取；已取得结果在本地按日期排序。'
         if query:
             params['query.bibliographic'] = query
         payload = CrossrefAdapter(queries=[query], timeout=18)._get_json('https://api.crossref.org/works?' + urlencode(params))

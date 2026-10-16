@@ -767,9 +767,11 @@ def test_launch_has_independent_profile_and_disabled_tools(tmp_path, monkeypatch
 
 
 def test_site_chat_entries_current_and_archive_and_escaping():
+    from tests.test_research_directions import direction, profile
+    settings = profile(direction('fixture'), core=5, extended=5)
     paper = {'id': P1, 'title': '<script>unsafe</script>', 'source': 'arXiv'}
     for archived in (None, '2026-09-23'):
-        html = render({'core': [paper], 'extended': [{**paper, 'id': P2}]}, archive_date=archived)
+        html = render({'core': [paper], 'extended': [{**paper, 'id': P2}]}, archive_date=archived, current_profile=settings)
         assert html.count('class="text-button codex-entry"') == 2
         assert '<script>unsafe</script>' not in html
         assert 'paper-chat.js?v=' in html and 'paper-chat.css?v=' in html

@@ -28,7 +28,7 @@ def article_fixture():
     graph=lambda kind:{'kind':kind,'title':'从试验数据到可靠性评价','description':'将试验条件、物理建模与独立验证连接起来，说明各阶段的信息流与检查目标。',
          'nodes':[{'id':chr(97+i),'stage':i//2,'label':label,'detail':'保留真实数据来源与适用条件'} for i,label in enumerate(['试验数据','物理约束','预测模型','独立测试','可靠性评价','外推检查'])],
          'edges':[{'from':a,'to':b,'label':'检验'} for a,b in [('a','c'),('b','c'),('c','d'),('d','e'),('e','f'),('f','c')]]}
-    return {'version':ARTICLE_VERSION,'lead':lead,'sections':[{'id':k,'title':t,'paragraphs':[paragraph,paragraph]}
+    return {'version':ARTICLE_VERSION,'basis':'full_text','lead':lead,'sections':[{'id':k,'title':t,'paragraphs':[paragraph,paragraph]}
         for k,t in zip(('context','method','validation','findings'),('从工程需求理解问题','物理约束怎样进入模型','独立样本如何验证','现有结果支持到哪里'))],
         'experiments':[{k:'原文未报告' for k in EXPERIMENT_FIELDS}],
         'routes':[{'title':'建立物理约束与可靠性校准的闭环','direction_id':'fatigue_reliability',**{k:route for k in ROUTE_FIELDS}}],

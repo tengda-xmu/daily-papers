@@ -9,11 +9,26 @@ import requests
 
 from src.editions import read, write
 from src.paper_sources import PublicFetcher, discover, inspect_html, inspect_xml, matches, clean_abstract
+from src.paper_identity import paper_doi
 from .documents import parse_pdf
 
 
 def local_signature(documents):
     return '|'.join(sorted(str(doc.get('hash', '')) for doc, path in documents if Path(path).is_file()))
+
+
+def abstract_identity(paper):
+    """Bind private acquisition evidence to the exact paper being read."""
+    return hashlib.sha256(json.dumps([paper.get('id'), paper_doi(paper), paper.get('title')],
+                                    ensure_ascii=False).encode()).hexdigest()
+
+
+def verified_abstract(material, paper):
+    text = material.get('text', '')
+    return bool(material.get('basis') == 'abstract' and material.get('abstract_complete') is True
+                and material.get('abstract_identity') == abstract_identity(paper)
+                and clean_abstract(text) and material.get('source_url')
+                and material.get('version') == hashlib.sha256(text.encode()).hexdigest())
 
 
 def bundle(paper, document, directory, *, abstract='', url=''):
@@ -26,7 +41,8 @@ def bundle(paper, document, directory, *, abstract='', url=''):
                 'checked_at': time.time()}
     if abstract:
         return {'basis': 'abstract', 'version': hashlib.sha256(abstract.encode()).hexdigest(),
-                'source_url': url, 'text': abstract, 'checked_at': time.time()}
+                'source_url': url, 'text': abstract, 'checked_at': time.time(),
+                'abstract_identity': abstract_identity(paper), 'abstract_complete': bool(clean_abstract(abstract))}
     return {'basis': 'missing', 'checked_at': time.time()}
 
 
@@ -48,6 +64,7 @@ class MaterialResolver:
         old = read(path)
         signature = self.signature(paper['id'])
         if (not force and old and old.get('local_signature') == signature
+                and (old.get('basis') != 'abstract' or verified_abstract(old, paper))
                 and (old.get('basis') == 'full_text' or time.time() - old.get('checked_at', 0) < 86400)):
             if old.get('basis') != 'full_text' or old['document']['kind'] != 'pdf' or (directory / old['document']['file']).is_file():
                 return old
@@ -97,7 +114,7 @@ class MaterialResolver:
         if not abstract and paper.get('source') in ('Crossref', 'OpenAlex', 'PubMed', 'arXiv', 'Semantic Scholar', 'Nature Portfolio（CNS）'):
             abstract = clean_abstract(paper.get('abstract'))
             abstract_url = paper.get('landing_url') or ('https://doi.org/' + discovered['doi'])
-        if not abstract and old.get('basis') == 'abstract':
+        if not abstract and verified_abstract(old, paper):
             abstract, abstract_url = old['text'], old['source_url']
         value = bundle(paper, None, directory, abstract=abstract, url=abstract_url)
         value['reason_code'] = 'restricted' if 'restricted' in failures else 'network' if 'network' in failures else 'not_found'

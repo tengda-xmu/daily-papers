@@ -145,6 +145,18 @@ def test_provider_continuations_preserve_query_and_never_follow_urls(monkeypatch
         assert calls[0].get(param) == calls[1].get(param)
 
 
+@pytest.mark.parametrize('source', ['Crossref', 'CNS 子刊专项'])
+def test_crossref_latest_cursor_avoids_unsupported_publication_sort(monkeypatch, tmp_path, source):
+    calls = []
+    def fetch(self, url, headers=None):
+        calls.append(parse_qs(urlsplit(url).query))
+        return {'message': {'items': []}}
+    monkeypatch.setattr(pages.PublicLiteratureAdapter, '_get_json', fetch)
+    _, status, following = pages.fetch_page(source, 'Kriging', START, END, tmp_path, sort_by='latest')
+    assert calls[0]['cursor'] == ['*'] and 'sort' not in calls[0]
+    assert '本地按日期排序' in status.message and following is None
+
+
 def test_semantic_bulk_keeps_entire_batch_and_uses_token(monkeypatch, tmp_path):
     calls = []
     def fetch(self, url, headers=None):

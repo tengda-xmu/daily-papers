@@ -44,8 +44,8 @@
         const old = card.querySelector(selector), next = fresh.querySelector(selector);
         if (old && next) { old.innerHTML = next.innerHTML; old.className = next.className; if (next.dataset.label) old.dataset.label = next.dataset.label; }
       }
-      const currentReading = card.querySelector('.full-reading-link, .paper-toggle');
-      const nextReading = fresh.querySelector('.full-reading-link, .paper-toggle');
+      const currentReading = card.querySelector('.reading-link, .full-reading-link, .paper-toggle');
+      const nextReading = fresh.querySelector('.reading-link, .full-reading-link, .paper-toggle');
       if (currentReading && nextReading && currentReading.outerHTML !== nextReading.outerHTML) currentReading.replaceWith(nextReading.cloneNode(true));
       const original = card.querySelector('.original-title'), nextOriginal = fresh.querySelector('.original-title');
       if (nextOriginal) {

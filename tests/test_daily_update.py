@@ -94,6 +94,9 @@ def test_stale_publication_never_counts_as_success_and_failure_preserves_data(tm
 
 
 def test_authentication_fixed_dispatch_and_new_papers_available_to_chat(tmp_path):
+    from src.editions import write
+    from tests.test_research_directions import direction, profile
+    write(tmp_path/'config/research-directions.json', profile(direction('fixture'), core=5, extended=5))
     app = create_app(tmp_path, rpc=FakeCodex())
     remote = Remote()
     app.state.daily_updater.remote = remote

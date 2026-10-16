@@ -29,11 +29,11 @@ from src.catalog import paper_facets
 from src.settings import load_env
 from src.reading_notes import cached_analysis, curated_records, valid_analysis, save_analysis
 from src.research_focus import focus_tags, focus_priority
-from src.research_directions import load_profile, clean_profile, match_directions, select_tiers, query_plan, profile_revision
+from src.research_directions import load_profile, clean_profile, match_directions, query_plan, profile_revision
 from src.editions import History, append as append_edition, read as read_data, write as write_data, edition_id
 from src.auto_reading import load as load_auto_reading, fingerprint
 from src.recommendation_heat import refresh as refresh_heat, settings as heat_settings
-from src.recommendation_selection import select as select_recommendations
+from src.recommendation_selection import select as select_recommendations, ranking_key
 
 load_env()
 
@@ -209,18 +209,8 @@ def classify(record: RawRecord) -> RawRecord:
     return record
 
 
-def _sort_key(record: RawRecord) -> tuple:
-    published = parse_date(record.published_at)
-    return (
-        max(venue_priority(record.venue), 1 if conference_info(record.to_dict()) else 0),
-        focus_priority(record),
-        len(record.topic_tags),
-        bool(record.abstract),
-        published or datetime.min.replace(tzinfo=timezone.utc),
-        record.source_score,
-        record.citation_count or 0,
-        normalize_title(record.title),
-    )
+def _sort_key(record: RawRecord, profile=None) -> tuple:
+    return ranking_key(record.to_dict(), profile)
 
 
 def rank(records: Iterable[RawRecord]) -> list[RawRecord]:
@@ -327,8 +317,7 @@ def build_adapters(profile=None) -> list:
     # The same saved interests drive retrieval and final selection. Manual
     # keyword searches still construct their own adapters independently.
     plan = query_plan(profile or load_profile())
-    cns = CNSJournalAdapter()
-    cns.config = {**cns.config, 'focus_queries': [], 'query': ' '.join(plan['plain'])}
+    cns = CNSJournalAdapter(queries=plan['plain'])
     from src.custom_journals import load_custom_journals
     from src.sources.researchgate import ResearchGateIndexAdapter
     return [
@@ -382,6 +371,10 @@ def run_pipeline(
     all_records: list[RawRecord] = []
     statuses: dict[str, dict] = {}
     collection = (build_adapters(profile) if research_profile is not None else build_adapters()) if adapters is None else adapters
+    if data_dir and adapters is None:
+        for adapter in collection:
+            if isinstance(adapter, CNSJournalAdapter):
+                adapter.cache_dir = data_dir / 'cache/cns'
     for adapter in collection:
         try:
             all_records.extend(adapter.fetch(since, until))
@@ -390,7 +383,7 @@ def run_pipeline(
             status = SourceStatus(getattr(adapter, "name", "unknown"), "error", message=str(exc))
         statuses[status.source] = status.to_dict()
 
-    cns_days = _read_setting("CNS_LOOKBACK_DAYS", 180)
+    cns_days = _read_setting("CNS_LOOKBACK_DAYS", 365)
     if adapters is None:
         all_records.extend(curated_records(until, cns_days))
 
@@ -417,12 +410,8 @@ def run_pipeline(
         if record.topic_tags:
             record.raw_metadata['research_directions'] = [d['name'] for d in profile['directions'] if d['id'] in record.topic_tags]
             ranked.append(record)
-    ranked.sort(key=_sort_key, reverse=True)
+    ranked.sort(key=lambda record: _sort_key(record, profile), reverse=True)
     max_core, max_extended = profile['core_count'], profile['extended_count']
-    # Reserve analysis work across directions before consuming the model budget.
-    planned = select_tiers([{'id': record_id(r), 'topic_tags': r.topic_tags} for r in ranked], profile)
-    planned_ids = [p['id'] for tier in planned for p in tier]
-    ranked.sort(key=lambda r: planned_ids.index(record_id(r)) if record_id(r) in planned_ids else len(planned_ids))
     papers: list[dict] = []
     ready: list[dict] = []
     target = max_core + max_extended
@@ -450,6 +439,21 @@ def run_pipeline(
         papers.append(data)
     core, extended = select_recommendations(papers, history, analyses, heat, profile, until, policy)
     selected_ids = {paper["id"] for paper in core + extended}
+    from src.venues import cns_journals
+    cns_statistics = {j['name']: {'journal': j['name'], 'issn': j['issn'], 'relevant': 0,
+        'new': 0, 'historical_excluded': 0, 'selected': 0} for j in cns_journals()}
+    for adapter in collection:
+        if isinstance(adapter, CNSJournalAdapter):
+            for stat in adapter.statistics:
+                cns_statistics.setdefault(stat['journal'], {}).update(stat)
+    for paper in papers:
+        stat = cns_statistics.get(paper.get('journal'))
+        if stat is not None:
+            stat['relevant'] += 1
+            state = history.find(paper) if history else None
+            stat['new'] += not bool(state)
+            stat['historical_excluded'] += bool(state) and paper['id'] not in selected_ids
+            stat['selected'] += paper['id'] in selected_ids
     remaining = [paper for paper in papers if paper["id"] not in selected_ids]
     payload = {
         "generated_at": (datetime.now(timezone.utc) if adapters is None else until).isoformat(),
@@ -460,12 +464,13 @@ def run_pipeline(
         "extended": extended,
         "papers": core + extended + remaining,
         "source_status": statuses,
+        "cns_statistics": list(cns_statistics.values()),
         "wechat_articles": wechat_articles,
         "research_profile": profile,
         "research_profile_revision": profile_revision(profile),
-        "selection_policy": {"priority": "CNS 子刊 > CNS 正刊 > 其他相关期刊与已核验主会论文",
-                             "direction_allocation": "兼顾各方向，按优先级分配；同篇论文不重复推荐",
-                             "within_venue_priority": "大模型与智能体优先",
+        "selection_policy": {"priority": "CNS 正刊与子刊同档优先，其次其他相关期刊与已核验主会论文",
+                             "direction_allocation": "允许方向不均；归属最高权重的匹配方向；同篇论文不重复推荐",
+                             "within_venue_priority": "发表日期 → 大模型与智能体 → 方向权重",
                              "core_requires_chinese_analysis": False,
                              "extended_requires_chinese_analysis": False, "cns_lookback_days": cns_days,
                              "history": "new_or_evidence_backed", "historical_slots": policy['historical_slots']},
@@ -482,7 +487,8 @@ def run_pipeline(
         snapshot = append_edition(path.parent, payload, trigger=trigger)
         check = {'run_id': os.getenv('GITHUB_RUN_ID', '') or edition_id(payload),
                  'checked_at': payload['generated_at'], 'outcome': 'published' if snapshot else 'no_new',
-                 'heat_status': payload['heat_status'], 'analysis_status': payload['analysis_status']}
+                 'heat_status': payload['heat_status'], 'analysis_status': payload['analysis_status'],
+                 'cns_statistics': payload['cns_statistics']}
         if snapshot:
             payload.update(core=snapshot['core'], extended=snapshot['extended'], edition=snapshot['edition'])
             # Re-running the same workflow must reuse its exact membership/time.
@@ -495,6 +501,7 @@ def run_pipeline(
             # Keep its per-conference status visible while preserving membership.
             if statuses:
                 payload['source_status'] = {**payload.get('source_status', {}), **statuses}
+                payload['cns_statistics'] = list(cns_statistics.values())
                 write_data(path, payload)
         else:
             write_data(path, payload)

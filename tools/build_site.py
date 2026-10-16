@@ -155,74 +155,34 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
     authors = ", ".join(author_names)
     short_authors = ", ".join(author_names[:3]) + (" 等" if len(author_names) > 3 else "")
     topics = string_list(paper.get("topic_tags"))
-    tags = "".join(
-        f'<span class="tag">{esc(topic_labels.get(topic, topic))}</span>'
-        for topic in topics
-    )
     summary = without_page_citations(paper.get("summary") or paper.get("abstract") or "暂无摘要，请查看原文。")
     translated_abstract = chinese_abstract(paper) if not re.search(r'[\u4e00-\u9fff]', summary) else ''
     if translated_abstract:
         summary = translated_abstract
     if not paper.get('abstract') and summary == f"本文聚焦《{title}》，暂未提供可用摘要，请查看原文。":
         summary = "暂无可用摘要，请查看原文。"
-    recommendation = paper.get("recommendation") or ""
-    deep = paper.get("deep_read") or {}
-    deep_items = [(label, deep.get(key)) for key, label in (
-        ("problem", "研究问题"), ("method", "方法与路线"), ("innovation", "创新与比较"), ("findings", "证据与发现"),
-        ("limitations", "局限与边界"), ("connection", "方向关联"), ("next_steps", "后续研究建议"),
-    ) if deep.get(key)]
-    deep_html = ""
-    if deep_items and paper.get("analysis_status") == "ready":
-        deep_html = '<dl class="reading-notes">' + "".join(
-            f'<div><dt>{label}</dt><dd>{esc(without_page_citations(value))}</dd></div>' for label, value in deep_items
-        ) + '</dl>'
-    citation = ". ".join(value for value in (authors, title, venue,
-                                            str(paper.get("published_at") or "")[:4],
-                                            f"https://doi.org/{doi}" if doi else "") if value)
     primary_action = f'<a href="{url}" target="_blank" rel="noopener noreferrer">阅读原文<span class="sr-only">（新窗口）</span></a>' if url != "#" else ""
-    actions = ""
-    if paper.get("oa_url"):
-        oa_url = safe_url(paper["oa_url"])
-        if oa_url != "#":
-            actions += f'<a href="{oa_url}" target="_blank" rel="noopener noreferrer">开放获取</a>'
-    if doi:
-        actions += f'<a href="https://doi.org/{esc(doi)}" target="_blank" rel="noopener noreferrer">DOI</a>'
-    actions += f'<button type="button" class="text-button copy-citation" data-citation="{esc(citation)}">复制引用</button>'
     translated_title = chinese_title(paper)
     display_title = translated_title or title
     title_html = f'<a href="{url}" target="_blank" rel="noopener noreferrer">{esc(display_title)}</a>' if url != "#" else esc(display_title)
     search = " ".join(str(value or "") for value in
                       (title, display_title, authors, venue, summary, paper.get("abstract"), doi))
     venue_line = f'<span class="venue">{esc(venue)}</span>' if venue else ""
-    recommendation_html = f'<p class="recommendation"><strong>阅读建议</strong>{esc(recommendation)}</p>' if recommendation else ""
     preview = str(summary)
     if len(preview) > 230:
         preview = preview[:230]
         if " " in preview[-24:]:
             preview = preview.rsplit(" ", 1)[0]
         preview = preview.rstrip(" ,.;，。；") + "…"
-    panel_id = f"paper-details-{tier}-{rank}"
-    full_authors = f'<p class="full-authors"><strong>作者</strong>{esc(authors)}</p>' if len(author_names) > 3 else ""
     ready = paper.get("analysis_status") == "ready"
     from src.paper_sources import clean_abstract
     snippet_only = (ready and not paper.get('analysis_material_version') and paper.get('analysis_basis') != 'full_text'
                     and paper.get('source') in ('Google Scholar', 'ResearchGate') and not clean_abstract(paper.get('abstract')))
-    summary_label = "中文导读" if ready else "摘要"
-    original_abstract = ''
-    if translated_abstract:
-        summary_label = '摘要译文' if clean_abstract(paper.get('abstract')) else '检索片段译文（非完整摘要）'
-        original_abstract = f'<p class="detail-label">英文原文</p><p class="original-abstract" lang="en">{esc(paper["abstract"])}</p>'
     note_label = ("全文精读" if paper.get('analysis_basis') == 'full_text' else "摘要解读") if ready else "摘要与笔记"
     if snippet_only:
         note_label = '检索片段解读'
     translated_class = " translated" if translated_title else ""
     original = f'<p class="original-title" lang="en">{esc(title)}</p>' if translated_title and translated_title != title else ""
-    basis = "依据论文全文整理" if paper.get("analysis_basis") == "full_text" else "依据公开摘要整理，未核验全文细节"
-    if snippet_only:
-        basis = '依据检索片段整理，完整摘要与全文尚待核实'
-    evidence_links = " · ".join(f'<a href="{safe_url(link)}" target="_blank" rel="noopener noreferrer">论文依据 {i + 1}</a>'
-                                for i, link in enumerate(paper.get("analysis_sources") or []))
-    provenance = f'<p class="analysis-provenance">{basis}。解读与建议不代表作者结论。 {evidence_links}</p>' if ready else ""
     journal_badge = '<span class="journal-priority">CNS 子刊</span>' if facets["venue_group"] == "CNS 子刊" else ""
     conference = conference_info(paper)
     if conference:
@@ -239,11 +199,8 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
                    f'data-paper-title="{esc(display_title)}">Codex 对话</button>') if paper.get("id") else ""
     from tools.coverage_pages import coverage_panel
     coverage_button, coverage_html = coverage_panel(paper.get('id', ''), coverage, root=root, suffix=f'{tier}-{rank}', paper=paper)
-    note_action = (f'<a class="full-reading-link" href="{root}readings/{esc(paper["id"])}.html">全文精读</a>'
-                   if ready and paper.get('analysis_basis') == 'full_text' else
-                   f'<button type="button" class="text-button paper-toggle" data-label="{note_label}" aria-expanded="false" aria-controls="{panel_id}">{note_label}<span aria-hidden="true">＋</span></button>')
-    if ready and paper.get('analysis_basis') == 'full_text':
-        deep_html = ''
+    note_action = (f'<a class="reading-link" href="{root}readings/{esc(paper["id"])}.html">{note_label}</a>'
+                   if re.fullmatch(r'[a-f0-9]{12}', str(paper.get('id', ''))) else '')
     return f'''
 <article class="paper {tier}" data-paper-id="{esc(paper.get('id', ''))}" data-sources="{esc(json.dumps(facets['source_ids'], ensure_ascii=False))}"
  data-topics="{esc(json.dumps(topics, ensure_ascii=False))}" data-venue="{esc(facets['venue_group'])}"
@@ -260,7 +217,6 @@ def paper_card(paper: dict, tier: str, rank: int = 0, root: str = "./", topic_la
 {figure_html}
   <div class="paper-tools">{primary_action}{note_action}{coverage_button}{chat_button}</div>
 {coverage_html}
-  <div class="paper-detail-panel" id="{panel_id}" hidden>{provenance}<p class="detail-label">{summary_label}</p><p class="full-abstract">{esc(summary)}</p>{original_abstract}{recommendation_html}{full_authors}{deep_html}<div class="tags">{tags}</div><div class="paper-actions">{actions}</div></div>
 </article>'''
 
 

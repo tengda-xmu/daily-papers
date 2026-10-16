@@ -10,6 +10,7 @@ import sys
 from urllib.parse import urlencode
 
 from src.catalog import SOURCE_CATALOG
+from src.venues import cns_journals, journal_issns
 from src.models import RawRecord, SourceStatus, in_date_window
 from src.settings import load_env
 from src.search_ranking import SORT_LABELS, order_candidates, sort_note
@@ -27,7 +28,7 @@ from src.sources.wechat_public_index import WeChatPublicIndexAdapter
 ROOT = Path(__file__).resolve().parents[1]
 SOURCES = [dict(id=s['id'], label=s['label']) for s in SOURCE_CATALOG if s['kind'] == 'adapter' and s.get('manual_search', True)]
 MODES = {
-    'CNS 子刊专项': 'Crossref · 配置中的 CNS 子刊 ISSN 专项',
+    'CNS 子刊专项': 'Crossref · 共享目录中的 CNS 正刊与子刊 ISSN 专项',
     'ResearchGate': 'SerpApi 公开索引 + 本机导出；不读取登录页面',
     '微信公众号': '订阅 RSS + 本机历史文章；不足时查询公开索引，不限已订阅公众号',
     'Google Scholar': 'SerpApi Scholar · 支持翻页；日期精度通常为年',
@@ -72,8 +73,7 @@ def fetch_source(source, query, since, until, limit, cache_dir, journal_issn='',
             from src.custom_journals import normalize_issn
             filters.append('issn:' + normalize_issn(journal_issn))
         if source == 'CNS 子刊专项':
-            config = json.loads((ROOT / 'config/cns-search.json').read_text(encoding='utf-8'))
-            filters.extend('issn:' + j['issn'] for j in config['journals'])
+            filters.extend('issn:' + issn for j in cns_journals() for issn in journal_issns(j))
         params = {'filter': ','.join(filters), 'rows': limit}
         if query:
             params['query.bibliographic'] = query

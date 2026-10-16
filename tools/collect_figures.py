@@ -12,6 +12,7 @@ import json
 from pathlib import Path
 import re
 import time
+import tempfile
 from urllib.parse import quote, unquote, urljoin, urlsplit
 from zipfile import ZipFile
 
@@ -43,9 +44,22 @@ def read(path):
 
 def write(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix('.tmp')
-    temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    temporary.replace(path)
+    with tempfile.NamedTemporaryFile(mode='w', encoding='utf-8', dir=path.parent,
+                                     prefix=path.stem + '-', suffix='.tmp', delete=False) as stream:
+        temporary = Path(stream.name)
+        stream.write(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
+    try:
+        # On Windows an active image/catalog reader can briefly block replace.
+        for attempt in range(12):
+            try:
+                temporary.replace(path)
+                break
+            except PermissionError:
+                if attempt == 11:
+                    raise
+                time.sleep(0.1 * (attempt + 1))
+    finally:
+        temporary.unlink(missing_ok=True)
 
 
 class Fetcher:
@@ -446,8 +460,8 @@ class BudgetFetcher:
 
 
 def collect_article_figures(root=ROOT, fetch=None, now=None, *, retry=False,
-                            time_budget=180, maximum_papers=6):
-    """Collect multiple originals for retained full-text articles, independently
+                            time_budget=180, maximum_papers=None, papers=None):
+    """Collect multiple originals for all retained readings, independently
     of single card thumbnails. Successful assets survive every later failure.
     """
     from src.article_figures import MAX_ARTICLE_FIGURES, eligible_article_figures
@@ -463,15 +477,15 @@ def collect_article_figures(root=ROOT, fetch=None, now=None, *, retry=False,
     catalog = read(path)
     entries = catalog.setdefault('article_entries', {})
     checks = catalog.setdefault('article_checks', {})
-    analyses = load(root / 'data')
-    sources = [read(root / 'data/daily.json')]
-    sources += [read(root / 'data' / relative_path(e)) for e in reversed(editions(root / 'data'))]
-    papers = [paper for source in sources for paper in selected(enrich(source, analyses))
-              if paper.get('analysis_basis') == 'full_text']
+    if papers is None:
+        analyses = load(root / 'data')
+        sources = [read(root / 'data/daily.json')]
+        sources += [read(root / 'data' / relative_path(e)) for e in reversed(editions(root / 'data'))]
+        papers = [paper for source in sources for paper in selected(enrich(source, analyses))]
     counts = {'saved': 0, 'existing': 0, 'unavailable': 0}
     seen, attempts = set(), 0
     for paper in papers:
-        if attempts >= maximum_papers or time.monotonic() >= fetch.deadline:
+        if (maximum_papers is not None and attempts >= maximum_papers) or time.monotonic() >= fetch.deadline:
             break
         key = figure_key(paper)
         if not key or key in seen:

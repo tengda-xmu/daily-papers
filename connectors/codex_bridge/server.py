@@ -1177,9 +1177,9 @@ def create_app(root=ROOT, runtime=None, rpc=None, automatic_updates=None):
         if row and row['published_result']:
             try:
                 result = public_analysis(json.loads(row['published_result']))
-                if result['analysis'].get('article'):
-                    return {**public_paper(json.loads(row['paper'])), **result['analysis'],
-                            'analysis_issues': result.get('material', {}).get('issues', [])}
+                return {**public_paper(json.loads(row['paper'])), **result['analysis'],
+                        'analysis_material_version': result.get('material', {}).get('version', ''),
+                        'analysis_issues': result.get('material', {}).get('issues', [])}
             except (ValueError, TypeError):
                 pass
         return None
@@ -1208,7 +1208,7 @@ def create_app(root=ROOT, runtime=None, rpc=None, automatic_updates=None):
         if paper:
             from tools.reading_articles import diagram_svg
             kind = 'proposal' if '-proposal' in name else 'study'
-            diagram = next((d for d in paper['article']['diagrams'] if d['kind'] == kind), None)
+            diagram = next((d for d in paper.get('article', {}).get('diagrams', []) if d['kind'] == kind), None)
             if diagram is None:
                 raise HTTPException(404)
             return Response(diagram_svg(diagram, mobile='-mobile' in name), media_type='image/svg+xml')

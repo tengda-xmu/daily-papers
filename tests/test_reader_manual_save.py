@@ -64,7 +64,8 @@ def reader(tmp_path,monkeypatch,browser):
     app.state.store.set_document(P1,original)
     other=parse_pdf(source_pdf(),app.state.store.directory(P2));app.state.store.set_document(P2,other)
     with patch.object(custom_journals,'load_custom_journals',custom_journals.published_journals):
-        html=render(payload)
+        from tests.test_research_directions import direction, profile
+        html=render(payload, current_profile=profile(direction('fixture'), core=5, extended=5))
     with running_app(app,monkeypatch) as client:
         headers=login(client,app)
         context=browser.new_context(viewport={'width':1440,'height':1000},accept_downloads=True)

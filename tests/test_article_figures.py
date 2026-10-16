@@ -160,7 +160,7 @@ def test_pmc_multiple_figures_fetch_bundle_once_and_skip_missing_archive_entry()
     assert len([url for url in calls if url.endswith('supplementaryFiles')]) == 1
 
 
-def test_article_collection_prioritizes_current_fulltext_and_preserves_after_failure(tmp_path, monkeypatch):
+def test_article_collection_prioritizes_current_core_includes_abstract_and_preserves_after_failure(tmp_path, monkeypatch):
     write(tmp_path / 'data/daily.json', {'core': [PAPER], 'extended': [
         {'id': '222222222222', 'doi': '10.1038/abstract', 'analysis_basis': 'abstract'},
         {'id': '333333333333', 'doi': '10.1038/extended', 'analysis_basis': 'full_text'}]})
@@ -172,13 +172,13 @@ def test_article_collection_prioritizes_current_fulltext_and_preserves_after_fai
     assert collect_article_figures(tmp_path, now=NOW, maximum_papers=1)['saved'] == 2
     assert calls == [DOI]
     assert len(eligible_article_figures(tmp_path, PAPER)) == 2
-    assert collect_article_figures(tmp_path, now=NOW)['saved'] == 2
-    assert calls == [DOI, '10.1038/extended']
-    assert collect_article_figures(tmp_path, now=NOW + timedelta(days=6))['existing'] == 2
+    assert collect_article_figures(tmp_path, now=NOW)['saved'] == 4
+    assert calls == [DOI, '10.1038/abstract', '10.1038/extended']
+    assert collect_article_figures(tmp_path, now=NOW + timedelta(days=6))['existing'] == 3
     def fail(*args, **kwargs):
         raise Unavailable('restricted')
     monkeypatch.setattr('tools.collect_figures.nature_figures', fail)
-    assert collect_article_figures(tmp_path, now=NOW + timedelta(days=7))['unavailable'] == 2
+    assert collect_article_figures(tmp_path, now=NOW + timedelta(days=7))['unavailable'] == 3
     assert len(eligible_article_figures(tmp_path, PAPER)) == 2
     before = (tmp_path / 'data/figures/catalog.json').read_bytes()
     assert collect_article_figures(tmp_path, now=NOW + timedelta(days=7, hours=2))['saved'] == 0

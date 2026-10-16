@@ -61,15 +61,17 @@ def test_queries_cover_every_direction_and_daily_adapters_use_them():
         for name in ('Elsevier', 'Google Scholar', 'OpenAlex', 'Crossref', 'Semantic Scholar', 'PubMed', 'Web of Science'):
             assert term in ' '.join(adapters[name].queries), name
         assert term in adapters['arXiv'].query_expression
-        assert term in adapters['CNS 子刊专项'].config['query']
+        assert term in ' '.join(adapters['CNS 子刊专项'].search_queries)
+        assert all(len(q.split()) < 12 for q in adapters['CNS 子刊专项'].search_queries)
         assert term in ' '.join(adapters['ResearchGate'].index.queries)
     assert len(adapters['Web of Science'].queries) <= 3
 
 
-def test_pipeline_custom_fields_and_analysis_budget_are_balanced(monkeypatch):
+def test_pipeline_custom_fields_respect_tiers_and_publish_without_model_budget(monkeypatch):
     settings = profile(direction('robotics'), direction('climate', core=False), core=2, extended=2)
     rows = [RawRecord('test', str(i), f'robotics material {i}', abstract='Study evidence ' * 12) for i in range(10)]
-    rows += [RawRecord('test', 'climate', 'climate observations', abstract='Independent evidence ' * 12)]
+    rows += [RawRecord('test', 'climate', 'climate observations', abstract='Independent evidence ' * 12,
+                      published_at='2026-09-24')]
     rows += [RawRecord('test', 'offtopic', 'LLM predictive maintenance', abstract='Other topic ' * 12)]
     class Source:
         name = 'test'; status = SourceStatus('test', 'ok', len(rows))
@@ -83,7 +85,8 @@ def test_pipeline_custom_fields_and_analysis_budget_are_balanced(monkeypatch):
     result = run_pipeline(adapters=[Source()], research_profile=settings)
     assert len(result['core']) == len(result['extended']) == 2
     assert any(p['title'] == 'climate observations' for p in result['extended'])
-    assert calls == []  # Local queue now enriches the balanced selection later.
+    assert not any(p['title'] == 'climate observations' for p in result['core'])
+    assert calls == []  # Local queue enriches the selected papers later.
     assert result['analysis_status']['pending'] == 4
     assert all('offtopic' != p['source_id'] for p in result['papers'])
     html = render(result, archive_date='2026-09-24')
