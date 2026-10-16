@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="聚焦 AI 驱动的智能运维、结构生成式设计与疲劳可靠性，每日追踪科研论文，提供中文摘要与精读要点。">
+  <meta name="theme-color" content="#153e64">
+  <title>用于锈蚀钢筋疲劳寿命概率估计的贝叶斯物理信息神经网络 | 摘要解读</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css?v=c966944617">
+  <link rel="stylesheet" href="../assets/paper-chat.css?v=c966944617">
+  <link rel="stylesheet" href="../assets/paper-library.css?v=c966944617">
+  <script src="../assets/site.js?v=c966944617" defer></script>
+  <script src="../assets/paper-library.js?v=c966944617" defer></script>
+  <script src="../assets/paper-chat.js?v=c966944617" defer></script>
+  <script src="../assets/daily-update.js?v=c966944617" defer></script>
+<link rel="stylesheet" href="../assets/reading-article.css?v=c966944617"><script src="../assets/reading-article.js?v=c966944617" defer></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main-content">跳至正文</a>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a class="wordmark" href="../"><span>腾达</span><span class="wordmark-divider" aria-hidden="true"></span>科研文献</a>
+      <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false">菜单 <span aria-hidden="true">☰</span></button>
+      <nav id="main-navigation" class="main-navigation" aria-label="主导航">
+        <a href="../" >每日推荐</a>
+        <a href="../search.html" data-local-only >手动检索</a>
+        <a href="../leads.html" >科研线索</a>
+        <a href="../ai.html" >AI 前沿</a>
+        <a href="../library.html" data-local-only >我的文献</a>
+        <a href="../archive/" >历史归档</a>
+        <a href="../setup.html" data-local-only >设置</a>
+      </nav>
+    </div>
+  </header>
+  <div class="site-shell">
+    <main id="main-content" class="main-content" tabindex="-1">
+      <article class="reading-article" data-paper-id="04a29ffa0d97" data-analysis-basis="abstract" data-article-version=""><a class="article-back" href="../">返回每日推荐</a><header class="article-header"><p class="article-type">摘要解读</p><h1>用于锈蚀钢筋疲劳寿命概率估计的贝叶斯物理信息神经网络</h1><p class="article-original" lang="en">Bayesian Physics‐Informed Neural Networks for Probabilistic Fatigue Life Estimation of Corroded Steel Reinforcement</p><p class="article-byline">Guo-Wen Yao, Yong-Yi Jian, Qian-Ling Wang, Xuanbo He, Fanhua Zeng, Shiyong He, Shi-Cong Yang<br>Fatigue &amp;amp; Fracture of Engineering Materials &amp;amp; Structures</p><p class="article-updated">解读更新 2026-09-26 01:27 · 依据公开摘要整理，未核验全文细节</p><div class="article-links"><a href="https://www.semanticscholar.org/paper/330b40b960b4e4247f65d037270e4269714ed0a1" target="_blank" rel="noopener noreferrer">阅读原文</a><a href="https://onlinelibrary.wiley.com/doi/pdfdirect/10.1111/ffe.70425" target="_blank" rel="noopener noreferrer">开放获取</a><a href="https://doi.org/10.1111/ffe.70425" target="_blank" rel="noopener noreferrer">DOI</a><button type="button" class="text-button copy-citation" data-citation="Guo-Wen Yao, Yong-Yi Jian, Qian-Ling Wang, Xuanbo He, Fanhua Zeng, Shiyong He, Shi-Cong Yang. Bayesian Physics‐Informed Neural Networks for Probabilistic Fatigue Life Estimation of Corroded Steel Reinforcement. Fatigue &amp;amp; Fracture of Engineering Materials &amp;amp; Structures. https://www.semanticscholar.org/paper/330b40b960b4e4247f65d037270e4269714ed0a1">复制引用</button><a class="coverage-search" href="https://weixin.sogou.com/weixin?type=2&amp;query=Bayesian+Physics%E2%80%90Informed+Neural+Networks+for+Probabilistic+Fatigue+Life+Estimation+of+Corroded+Steel+Reinforcement" target="_blank" rel="noopener noreferrer" title="用论文题名搜索公众号文章，检索结果尚未核验。" aria-label="搜索公众号：Bayesian Physics‐Informed Neural Networks for Probabilistic Fatigue Life Estimation of Corroded Steel Reinforcement">搜索公众号</a><button type="button" class="text-button codex-entry" data-local-only data-paper-id="04a29ffa0d97" data-paper-title="用于锈蚀钢筋疲劳寿命概率估计的贝叶斯物理信息神经网络">Codex 对话</button></div></header><p class="article-upgrade">摘要解读已完成，图文文章正在升级。以下保留现有摘要笔记，尚未按图文稿逐项复核。</p><div class="article-lead"><p>本文面向锈蚀钢筋的疲劳寿命概率预测，关注正态分布假设可能掩盖寿命分布特征、物理解释不足的问题。作者将变分贝叶斯推断与训练目标中的物理约束结合，构建贝叶斯物理信息神经网络。摘要报告其预测表现优于传统神经网络，并发现疲劳寿命分布明显偏离正态。原文称“reveals substantial deviations from normality”。本解读仅依据摘要；数据规模、误差指标和验证方案未提供，尚不能判断工程适用边界。[摘要]</p></div><section><h2>研究问题</h2><p>研究针对锈蚀钢筋的腐蚀—疲劳失效及其寿命预测，背景涉及桥梁结构退化。摘要指出传统概率神经网络常“assume a normal distribution”，可能遮蔽实际寿命分布特征。解读：核心问题不仅是预测寿命，还包括预测分布能否恰当服务可靠性决策。[摘要]</p></section><section><h2>方法与路线</h2><p>框架采用贝叶斯物理信息神经网络，以疲劳数据更新先验并获得后验，推断手段为“variational Bayesian inference”。物理约束通过训练目标嵌入网络，引导预测满足物理要求。摘要没有说明具体物理方程、先验设置及损失权重，无法复原实现细节。[摘要]</p></section><section><h2>创新与比较</h2><p>解读：摘要呈现的方法特色，是把物理约束、贝叶斯学习与寿命分布刻画放在同一预测框架中，强调“without imposing a predefined distributional form”。但这不等于模型完全没有分布假设；缺少相关工作比较及模型设定，不能据此认定首创性。[摘要]</p></section><section><h2>证据与发现</h2><p>摘要报告模型在预测表现上“consistently outperforms conventional neural networks”，并称其捕捉到疲劳寿命经验分布的非正态特征。前者属于性能比较，后者涉及分布识别；两项均未附数值、样本量或检验结果，因此只能确认作者报告的发现，不能量化优势。[摘要]</p></section><section><h2>局限与边界</h2><p>目前可确认的是资料局限，而非已证实的模型缺陷。摘要仅以“Experimental results show”引出实验结论，未交代数据来源、腐蚀程度范围、加载条件或独立测试方案，也未说明区间校准情况。因此，跨工况泛化能力与不确定性估计是否可靠，现有证据不足。[摘要]</p></section><section><h2>方向关联</h2><p>解读：该研究与疲劳可靠性方向直接相关，其强调“distribution‐aware modeling”，提示寿命分布形态值得纳入可靠性分析。对结构设计及智能运维，概率寿命输出可作为风险评估的候选输入；但摘要未展示结构级失效概率、巡检策略或设计优化应用。[摘要]</p></section><section><h2>后续研究建议</h2><p>建议：阅读全文时优先核对物理约束形式、后验近似和预测区间验证，并检查数据划分是否支持独立评价。围绕摘要提出的“uncertainty quantification”，可进一步研究不同腐蚀程度与加载条件下的分布校准及尾部预测；这些是后续研究建议，不是作者已完成的成果。[摘要]</p></section><section><h2>阅读建议</h2><p>建议面向疲劳可靠性研究重点阅读，尤其关注寿命分布识别、物理约束与贝叶斯不确定性量化的结合；摘要明确报告“captures the empirical distributional features”，但性能优势仍需全文中的定量验证支撑。[摘要]</p></section><details class="article-material"><summary>查看公开摘要</summary><p>The mechanical properties of reinforcing steel are fundamental to the durability of concrete structures. In service environments, corrosion of reinforcing bars is pervasive, and corrosion–fatigue failure constitutes a major driver of structural degradation, particularly in bridge infrastructure. Conventional data‐driven approaches, such as probabilistic neural networks ( PNN ), often assume a normal distribution to construct point predictions and confidence intervals. This assumption can obscure the intrinsic distributional characteristics of corrosion–fatigue life and offers limited physical interpretability, thereby constraining reliability in engineering decision‐making. To overcome these limitations, this study proposes a fatigue‐life prediction framework for corroded reinforcing bars based on Bayesian Physically Informed Neural Networks ( BPINN ). The proposed approach employs variational Bayesian inference to update priors into posterior distributions directly from fatigue data, enabling rigorous uncertainty quantification without imposing a predefined distributional form. Moreover, physics‐based constraints are embedded into the network through the training objective, guiding learning toward physically admissible solutions and improving both predictive accuracy and interpretability. Experimental results show that BPINN consistently outperforms conventional neural networks in prediction performance. Unlike PNN , BPINN captures the empirical distributional features of fatigue life and reveals substantial deviations from normality. Overall, integrating physical laws with Bayesian learning enhances robustness and interpretability, underscoring the importance of physics‐grounded uncertainty quantification and distribution‐aware modeling for assessing corrosion–fatigue performance of reinforced concrete structures.</p></details><p class="article-evidence-links"><a href="https://doi.org/10.1111/ffe.70425" target="_blank" rel="noopener noreferrer">论文依据 1</a></p><footer class="article-end"><p>本文依据论文资料整理，研究建议由本站提出。原文、相关文献和图示标注共同说明内容来源。</p></footer></article><dialog class="article-figure-dialog"><form method="dialog"><button type="submit">关闭大图</button></form><img alt="论文图示放大查看"></dialog>
+      <footer class="site-footer"><p>每日更新，持续关注 AI 与工程可靠性。</p><div><a href="https://tengda-xmu.github.io/">腾达 · 厦门大学</a><a href="https://github.com/tengda-xmu/daily-papers" target="_blank" rel="noopener noreferrer">GitHub</a></div></footer>
+    </main>
+  </div>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <a class="back-to-top" href="#top" aria-label="返回页面顶部" hidden>回到顶部 ↑</a>
+</body>
+</html>

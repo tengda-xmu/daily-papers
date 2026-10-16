@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="聚焦 AI 驱动的智能运维、结构生成式设计与疲劳可靠性，每日追踪科研论文，提供中文摘要与精读要点。">
+  <meta name="theme-color" content="#153e64">
+  <title>多轴疲劳寿命机器学习预测的经审计留一材料基准：代码、预测与不确定性区间 | 摘要解读</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css?v=c966944617">
+  <link rel="stylesheet" href="../assets/paper-chat.css?v=c966944617">
+  <link rel="stylesheet" href="../assets/paper-library.css?v=c966944617">
+  <script src="../assets/site.js?v=c966944617" defer></script>
+  <script src="../assets/paper-library.js?v=c966944617" defer></script>
+  <script src="../assets/paper-chat.js?v=c966944617" defer></script>
+  <script src="../assets/daily-update.js?v=c966944617" defer></script>
+<link rel="stylesheet" href="../assets/reading-article.css?v=c966944617"><script src="../assets/reading-article.js?v=c966944617" defer></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main-content">跳至正文</a>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a class="wordmark" href="../"><span>腾达</span><span class="wordmark-divider" aria-hidden="true"></span>科研文献</a>
+      <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false">菜单 <span aria-hidden="true">☰</span></button>
+      <nav id="main-navigation" class="main-navigation" aria-label="主导航">
+        <a href="../" >每日推荐</a>
+        <a href="../search.html" data-local-only >手动检索</a>
+        <a href="../leads.html" >科研线索</a>
+        <a href="../ai.html" >AI 前沿</a>
+        <a href="../library.html" data-local-only >我的文献</a>
+        <a href="../archive/" >历史归档</a>
+        <a href="../setup.html" data-local-only >设置</a>
+      </nav>
+    </div>
+  </header>
+  <div class="site-shell">
+    <main id="main-content" class="main-content" tabindex="-1">
+      <article class="reading-article" data-paper-id="0385ae69f947" data-analysis-basis="abstract" data-article-version=""><a class="article-back" href="../">返回每日推荐</a><header class="article-header"><p class="article-type">摘要解读</p><h1>多轴疲劳寿命机器学习预测的经审计留一材料基准：代码、预测与不确定性区间</h1><p class="article-original" lang="en">Audited leave-one-material-out benchmark of machine-learning models for multiaxial fatigue life prediction: code, predictions and uncertainty intervals</p><p class="article-byline">Hamdi Kuleyi̇n, Erkan Caner Ozkat<br>Zenodo (CERN European Organization for Nuclear Research)</p><p class="article-updated">解读更新 2026-10-14 21:24 · 依据公开摘要整理，未核验全文细节</p><div class="article-links"><a href="https://doi.org/10.5281/zenodo.22973712" target="_blank" rel="noopener noreferrer">阅读原文</a><button type="button" class="text-button copy-citation" data-citation="Hamdi Kuleyi̇n, Erkan Caner Ozkat. Audited leave-one-material-out benchmark of machine-learning models for multiaxial fatigue life prediction: code, predictions and uncertainty intervals. Zenodo (CERN European Organization for Nuclear Research). https://doi.org/10.5281/zenodo.22973712">复制引用</button><a class="coverage-search" href="https://weixin.sogou.com/weixin?type=2&amp;query=Audited+leave-one-material-out+benchmark+of+machine-learning+models+for+multiaxial+fatigue+life+prediction%3A+code%2C+predictions+and+uncertainty+intervals" target="_blank" rel="noopener noreferrer" title="用论文题名搜索公众号文章，检索结果尚未核验。" aria-label="搜索公众号：Audited leave-one-material-out benchmark of machine-learning models for multiaxial fatigue life prediction: code, predictions and uncertainty intervals">搜索公众号</a><button type="button" class="text-button codex-entry" data-local-only data-paper-id="0385ae69f947" data-paper-title="多轴疲劳寿命机器学习预测的经审计留一材料基准：代码、预测与不确定性区间">Codex 对话</button></div></header><p class="article-upgrade">摘要解读已完成，图文文章正在升级。以下保留现有摘要笔记，尚未按图文稿逐项复核。</p><div class="article-lead"><p>这是一项支持未测试合金多轴疲劳寿命预测研究的数据与代码发布，当前仅作摘要级解读。[摘要]资料提供材料域映射审计、逐试验预测、逐域保形覆盖率及复现配置，并同时包含留一材料与随机划分结果。解读：其阅读价值在于考察跨材料泛化的评估方式和结果可追溯性，而非已有证据证明某种模型更优。摘要未报告预测误差、覆盖率数值或模型排名，原始疲劳测量数据需另行获取。</p></div><section><h2>研究问题</h2><p>研究针对未测试合金的多轴疲劳寿命预测，摘要中的“untested alloys”明确了应用对象。[摘要]解读：关键问题是模型能否从已有材料推广到未参与训练的材料，而不只是预测同一数据集合中的留出样本。当前资料未说明载荷范围、输入变量和寿命定义。</p></section><section><h2>方法与路线</h2><p>发布内容同时包括留一材料与随机划分的逐试验预测，并提供逐域保形覆盖率、种子评分和网络超参数。[摘要]原文以“LOMO”标识留一材料设置。解读：这些输出支持检查不同划分方式下的表现差异，但摘要未给出模型清单、训练流程或区间构造细节。</p></section><section><h2>创新与比较</h2><p>资料的明确特色是把材料映射审计与预测结果、代码和配置共同发布，原文称映射为“audited mapping”。[摘要]解读：这种组织方式有助于追查材料域定义及复现过程，但不能据此确认方法原创性；摘要没有提供与既有基准的比较或新算法说明。</p></section><section><h2>证据与发现</h2><p>摘要报告将40个名义合金牌号映射为41个材料条件域，并标出审计发现的12条物理不一致记录，原文称其为“physically inconsistent records”。[摘要]这些是可确认的数据审计信息，不是模型性能结论；资料没有报告误差、覆盖率或模型排名。</p></section><section><h2>局限与边界</h2><p>当前仅有摘要，缺少模型表现及其统计比较，无法判断跨材料预测是否达到工程可用水平。[摘要]原文说明疲劳测量数据“are not redistributed here”，因此发布包本身不含这些原始测量。资料也未说明异常记录如何处理，不能把这些缺失推定为全文缺陷。</p></section><section><h2>方向关联</h2><p>与疲劳可靠性方向的联系直接体现在寿命预测和“uncertainty intervals”。[摘要]解读：逐材料域覆盖率可为讨论预测区间在不同材料上的适用性提供入口；结构设计或智能运维可关注其迁移验证思路，但摘要未展示安全系数、在线监测或维护决策应用。</p></section><section><h2>后续研究建议</h2><p>建议先获取所指原始数据，以发布的校验信息确认版本，再复现材料域划分及两类验证结果。[摘要]原文提到“1170 source files”的校验。建议重点核对异常记录处置、逐域误差及覆盖率差异；这是后续研究安排，并非作者已验证的结论。</p></section><section><h2>阅读建议</h2><p>建议作为疲劳可靠性研究的基准复现资料重点阅读，尤其关注跨材料验证、数据审计和不确定性评估；但当前不能据此推荐某个模型或认定其工程预测精度。</p></section><details class="article-material"><summary>查看公开摘要</summary><p>Code, per-test predictions and uncertainty intervals supporting the manuscript &quot;Multiaxial fatigue life prediction for untested alloys: a leave-one-material-out machine-learning benchmark&quot;. The release contains the audited mapping of 40 nominal alloy grades onto 41 material-condition domains, the 12 physically inconsistent records identified by the audit, the full analysis pipeline, the per-test leave-one-material-out (LOMO) and random-split predictions for every model, the per-domain conformal coverage, the individual seed scores and the network hyperparameters. The underlying fatigue measurements are those of Chen et al. (doi:10.24435/materialscloud:ad-xk) and are not redistributed here. code/00_build_dataset.py regenerates the modelling tables from that download, and SOURCE_CHECKSUMS.sha256 lists the SHA-256 of all 1170 source files so users can confirm they hold the identical version.</p></details><p class="article-evidence-links"><a href="https://doi.org/10.5281/zenodo.22973712" target="_blank" rel="noopener noreferrer">论文依据 1</a></p><footer class="article-end"><p>本文依据论文资料整理，研究建议由本站提出。原文、相关文献和图示标注共同说明内容来源。</p></footer></article><dialog class="article-figure-dialog"><form method="dialog"><button type="submit">关闭大图</button></form><img alt="论文图示放大查看"></dialog>
+      <footer class="site-footer"><p>每日更新，持续关注 AI 与工程可靠性。</p><div><a href="https://tengda-xmu.github.io/">腾达 · 厦门大学</a><a href="https://github.com/tengda-xmu/daily-papers" target="_blank" rel="noopener noreferrer">GitHub</a></div></footer>
+    </main>
+  </div>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <a class="back-to-top" href="#top" aria-label="返回页面顶部" hidden>回到顶部 ↑</a>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="聚焦 AI 驱动的智能运维、结构生成式设计与疲劳可靠性，每日追踪科研论文，提供中文摘要与精读要点。">
+  <meta name="theme-color" content="#153e64">
+  <title>基于纹理与切屑形态特征的钻孔内表面粗糙度机器学习预测 | 摘要解读</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css?v=c966944617">
+  <link rel="stylesheet" href="../assets/paper-chat.css?v=c966944617">
+  <link rel="stylesheet" href="../assets/paper-library.css?v=c966944617">
+  <script src="../assets/site.js?v=c966944617" defer></script>
+  <script src="../assets/paper-library.js?v=c966944617" defer></script>
+  <script src="../assets/paper-chat.js?v=c966944617" defer></script>
+  <script src="../assets/daily-update.js?v=c966944617" defer></script>
+<link rel="stylesheet" href="../assets/reading-article.css?v=c966944617"><script src="../assets/reading-article.js?v=c966944617" defer></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main-content">跳至正文</a>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a class="wordmark" href="../"><span>腾达</span><span class="wordmark-divider" aria-hidden="true"></span>科研文献</a>
+      <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false">菜单 <span aria-hidden="true">☰</span></button>
+      <nav id="main-navigation" class="main-navigation" aria-label="主导航">
+        <a href="../" >每日推荐</a>
+        <a href="../search.html" data-local-only >手动检索</a>
+        <a href="../leads.html" >科研线索</a>
+        <a href="../ai.html" >AI 前沿</a>
+        <a href="../library.html" data-local-only >我的文献</a>
+        <a href="../archive/" >历史归档</a>
+        <a href="../setup.html" data-local-only >设置</a>
+      </nav>
+    </div>
+  </header>
+  <div class="site-shell">
+    <main id="main-content" class="main-content" tabindex="-1">
+      <article class="reading-article" data-paper-id="65e1dc5c1243" data-analysis-basis="abstract" data-article-version=""><a class="article-back" href="../">返回每日推荐</a><header class="article-header"><p class="article-type">摘要解读</p><h1>基于纹理与切屑形态特征的钻孔内表面粗糙度机器学习预测</h1><p class="article-original" lang="en">Machine Learning-Based Surface Roughness Prediction of Drilled Hole Surfaces Using Texture and Chip Morphology Features</p><p class="article-byline">Shilpa Karegoudra, V. Yendapalli<br>Engineering, Technology &amp;amp; Applied Science Research</p><p class="article-updated">解读更新 2026-10-14 04:08 · 依据公开摘要整理，未核验全文细节</p><div class="article-links"><a href="https://www.semanticscholar.org/paper/b83dbec45b0b3a37f9a255ed054ca5384bbb6f04" target="_blank" rel="noopener noreferrer">阅读原文</a><a href="https://www.etasr.com/index.php/ETASR/article/download/18730/7080" target="_blank" rel="noopener noreferrer">开放获取</a><a href="https://doi.org/10.48084/etasr.18730" target="_blank" rel="noopener noreferrer">DOI</a><button type="button" class="text-button copy-citation" data-citation="Shilpa Karegoudra, V. Yendapalli. Machine Learning-Based Surface Roughness Prediction of Drilled Hole Surfaces Using Texture and Chip Morphology Features. Engineering, Technology &amp;amp; Applied Science Research. https://www.semanticscholar.org/paper/b83dbec45b0b3a37f9a255ed054ca5384bbb6f04">复制引用</button><a class="coverage-search" href="https://weixin.sogou.com/weixin?type=2&amp;query=Machine+Learning-Based+Surface+Roughness+Prediction+of+Drilled+Hole+Surfaces+Using+Texture+and+Chip+Morphology+Features" target="_blank" rel="noopener noreferrer" title="用论文题名搜索公众号文章，检索结果尚未核验。" aria-label="搜索公众号：Machine Learning-Based Surface Roughness Prediction of Drilled Hole Surfaces Using Texture and Chip Morphology Features">搜索公众号</a><button type="button" class="text-button codex-entry" data-local-only data-paper-id="65e1dc5c1243" data-paper-title="基于纹理与切屑形态特征的钻孔内表面粗糙度机器学习预测">Codex 对话</button></div></header><p class="article-upgrade">摘要解读已完成，图文文章正在升级。以下保留现有摘要笔记，尚未按图文稿逐项复核。</p><div class="article-lead"><p>钻孔内表面粗糙度影响加工质量与疲劳寿命，但接触式测量难以实时实施。本文以Al-7075合金钻孔图像为对象，比较纹理线性回归、融合纹理与加工参数的XGBoost及切屑形态XGBoost。摘要报告融合模型MAE为0.1425 µm，界面预测约45 ms/图像，并给出模型差异的统计检验。当前仅有摘要，无法核实数据划分与增广流程；其价值在于提供非接触质量估计路径，而非证明疲劳寿命预测能力。[摘要]</p></div><section><h2>研究问题</h2><p>研究针对钻孔内表面粗糙度的快速测量问题。摘要指出接触式轮廓仪速度慢、存在微划伤风险，且难用于孔内实时测量；孔壁曲率与不均匀照明也使常规平面分析失效。原文将粗糙度与“fatigue life”联系，但未直接研究寿命预测。[摘要]</p></section><section><h2>方法与路线</h2><p>方法比较三种组合：GLCM纹理特征与线性回归、纹理及主轴转速和进给率与XGBoost、切屑面积及卷曲指数与XGBoost。数据包含370张Al-7075钻孔图像，增广为1800个样本；摘要未交代增广操作、标签测量和训练测试划分。[摘要]</p></section><section><h2>创新与比较</h2><p>解读：值得关注的是针对孔内曲率与照明问题，将图像纹理、加工参数和切屑形态组织为可比较的预测路径，而非单纯使用某一种算法。摘要称其为“ML-based framework”，但没有与既有同类框架比较，故不足以确认首创性或技术领先性。[摘要]</p></section><section><h2>证据与发现</h2><p>摘要报告纹理与加工参数XGBoost的MAE为0.1425 µm，单因素ANOVA结果为F (2,537) = 47.3、p&lt;0.001，界面速度约45 ms/图像。三个模型另有数值，但指标符号缺失，不能补认成R²；显著差异也不能替代泛化验证。[摘要]</p></section><section><h2>局限与边界</h2><p>当前限制主要是证据缺项，而非已证实的方法缺陷。摘要没有说明独立测试集、增广样本隔离、粗糙度测量误差及跨工况验证，因此无法判断是否存在数据泄漏或实际部署偏差。检测成本下降虽被宣称，却未提供成本对照和量化依据。[摘要]</p></section><section><h2>方向关联</h2><p>解读：该研究与智能运维的联系在于非接触质量感知，与结构设计及可靠性的联系在于孔表面状态可能成为制造质量输入。依据是摘要所述粗糙度影响“performance, fatigue life”。但文中未提供粗糙度到疲劳失效概率的映射或结构验证。[摘要]</p></section><section><h2>后续研究建议</h2><p>建议：取得全文后，优先核对标签来源、缺失指标符号、增广与数据划分顺序，以及按原始孔或工件隔离的测试结果。若迁移到可靠性研究，可另行设计粗糙度估计误差与疲劳试验关联分析；这属于后续研究建议，不是作者已完成的成果。[摘要]</p></section><section><h2>阅读建议</h2><p>推荐作为制造质量感知与疲劳可靠性研究的交叉参考，重点关注图像、加工参数和切屑特征的融合方式；但不宜仅凭摘要将其认定为已验证的疲劳可靠性方法。[摘要][解读]</p></section><details class="article-material"><summary>查看公开摘要</summary><p>Surface roughness ( ) is a significant quality indicator in machined components, influencing performance, fatigue life, and tribological behaviour. Conventional contact-based stylus profilometers are slow, risk micro-scratches, and are impractical for real-time measurement of the surfaces of internally drilled holes. This study proposes a Machine Learning (ML)-based framework that estimates from image-derived texture features, machining parameters, and chip morphology descriptors—specifically addressing drilled hole interiors where curvature and non-uniform illumination render standard planar analysis ineffective. Three models were evaluated: (i) Linear Regression (LR) with GLCM texture features ( = 0.7621); (ii) Extreme Gradient Boosting (XGBoost) combining image texture features with spindle speed and feed rate ( = 0.8201, MAE=0.1425 µm); and (iii) XGBoost using chip morphology features with chip area and curl index extracted from chip images ( = 0.8092). A dataset of 370 drilled-hole images of Al-7075 alloy was augmented to 1800 samples. One-way ANOVA confirmed statistically significant performance differences between models (F (2,537) = 47.3, p&lt;0.001). A Streamlit-based interface enables real-time, non-contact prediction at ~45 ms per image, reducing inspection time, cost, and reliance on contact methods.</p></details><p class="article-evidence-links"><a href="https://doi.org/10.48084/etasr.18730" target="_blank" rel="noopener noreferrer">论文依据 1</a></p><footer class="article-end"><p>本文依据论文资料整理，研究建议由本站提出。原文、相关文献和图示标注共同说明内容来源。</p></footer></article><dialog class="article-figure-dialog"><form method="dialog"><button type="submit">关闭大图</button></form><img alt="论文图示放大查看"></dialog>
+      <footer class="site-footer"><p>每日更新，持续关注 AI 与工程可靠性。</p><div><a href="https://tengda-xmu.github.io/">腾达 · 厦门大学</a><a href="https://github.com/tengda-xmu/daily-papers" target="_blank" rel="noopener noreferrer">GitHub</a></div></footer>
+    </main>
+  </div>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <a class="back-to-top" href="#top" aria-label="返回页面顶部" hidden>回到顶部 ↑</a>
+</body>
+</html>

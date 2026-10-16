@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="聚焦 AI 驱动的智能运维、结构生成式设计与疲劳可靠性，每日追踪科研论文，提供中文摘要与精读要点。">
+  <meta name="theme-color" content="#153e64">
+  <title>物理约束下疲劳寿命时间尺度均匀化与循环损伤演化的机器学习加速框架 | 摘要解读</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css?v=c966944617">
+  <link rel="stylesheet" href="../assets/paper-chat.css?v=c966944617">
+  <link rel="stylesheet" href="../assets/paper-library.css?v=c966944617">
+  <script src="../assets/site.js?v=c966944617" defer></script>
+  <script src="../assets/paper-library.js?v=c966944617" defer></script>
+  <script src="../assets/paper-chat.js?v=c966944617" defer></script>
+  <script src="../assets/daily-update.js?v=c966944617" defer></script>
+<link rel="stylesheet" href="../assets/reading-article.css?v=c966944617"><script src="../assets/reading-article.js?v=c966944617" defer></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main-content">跳至正文</a>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a class="wordmark" href="../"><span>腾达</span><span class="wordmark-divider" aria-hidden="true"></span>科研文献</a>
+      <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false">菜单 <span aria-hidden="true">☰</span></button>
+      <nav id="main-navigation" class="main-navigation" aria-label="主导航">
+        <a href="../" >每日推荐</a>
+        <a href="../search.html" data-local-only >手动检索</a>
+        <a href="../leads.html" >科研线索</a>
+        <a href="../ai.html" >AI 前沿</a>
+        <a href="../library.html" data-local-only >我的文献</a>
+        <a href="../archive/" >历史归档</a>
+        <a href="../setup.html" data-local-only >设置</a>
+      </nav>
+    </div>
+  </header>
+  <div class="site-shell">
+    <main id="main-content" class="main-content" tabindex="-1">
+      <article class="reading-article" data-paper-id="932eec332894" data-analysis-basis="abstract" data-article-version=""><a class="article-back" href="../">返回每日推荐</a><header class="article-header"><p class="article-type">摘要解读</p><h1>物理约束下疲劳寿命时间尺度均匀化与循环损伤演化的机器学习加速框架</h1><p class="article-original" lang="en">ML‐Accelerated Framework for Fatigue Life‐Timescale Homogenization and Cyclic Damage Evolution Under Physics Constraints</p><p class="article-byline">Elsayed S. Elsayed, Abedulgader Baktheer, Fadi Aldakheel<br>International Journal for Numerical Methods in Engineering</p><p class="article-updated">解读更新 2026-09-26 01:23 · 依据公开摘要整理，未核验全文细节</p><div class="article-links"><a href="https://doi.org/10.1002/nme.70394" target="_blank" rel="noopener noreferrer">阅读原文</a><button type="button" class="text-button copy-citation" data-citation="Elsayed S. Elsayed, Abedulgader Baktheer, Fadi Aldakheel. ML‐Accelerated Framework for Fatigue Life‐Timescale Homogenization and Cyclic Damage Evolution Under Physics Constraints. International Journal for Numerical Methods in Engineering. https://doi.org/10.1002/nme.70394">复制引用</button><a class="coverage-search" href="https://weixin.sogou.com/weixin?type=2&amp;query=ML%E2%80%90Accelerated+Framework+for+Fatigue+Life%E2%80%90Timescale+Homogenization+and+Cyclic+Damage+Evolution+Under+Physics+Constraints" target="_blank" rel="noopener noreferrer" title="用论文题名搜索公众号文章，检索结果尚未核验。" aria-label="搜索公众号：ML‐Accelerated Framework for Fatigue Life‐Timescale Homogenization and Cyclic Damage Evolution Under Physics Constraints">搜索公众号</a><button type="button" class="text-button codex-entry" data-local-only data-paper-id="932eec332894" data-paper-title="物理约束下疲劳寿命时间尺度均匀化与循环损伤演化的机器学习加速框架">Codex 对话</button></div></header><p class="article-upgrade">摘要解读已完成，图文文章正在升级。以下保留现有摘要笔记，尚未按图文稿逐项复核。</p><div class="article-lead"><p>高周疲劳寿命分析需要处理大量载荷循环，逐循环计算成本高昂。本文提出物理约束机器学习框架，分别预测完整循环历程中的损伤演化，以及寿命尺度上循环块内的累积损伤。两类模型采用双前馈神经网络，并引入能量平衡、损伤演化和退化定律约束。作者报告，相较传统增量疲劳分析，加速最高约2700倍，且与参考解吻合良好。本文适合关注疲劳计算加速与结构寿命评估的读者；当前仅依据摘要，误差指标和验证边界仍待核查。[摘要]</p></div><section><h2>研究问题</h2><p>研究问题是如何在避免逐循环高成本计算的同时，预测复杂载荷下的结构疲劳寿命。摘要以“millions of load cycles”说明计算规模，并指出损伤累积、裂纹萌生与跨尺度扩展共同构成困难；但不能据此认定模型已分别显式求解全部裂纹过程。[摘要]</p></section><section><h2>方法与路线</h2><p>框架包含两个模型：一个预测完整循环加载历程的损伤演化，另一个利用宏观与微观力学启发的退化机制，估计循环块累积损伤。两者均基于“double feed‐forward neural networks”，受能量平衡、损伤演化和退化定律约束；具体网络连接与约束施加方式未披露。[摘要]</p></section><section><h2>创新与比较</h2><p>解读：摘要呈现的方法特色在于，将物理约束学习与寿命尺度循环块预测结合，而非仅用网络替代单步计算。“over blocks of load cycles”体现了跨循环估计的核心思路。不过，缺少相关工作对照，尚不能确认其相对于既有循环跳跃或均匀化方法的原创程度。[摘要]</p></section><section><h2>证据与发现</h2><p>作者报告模型能够复现不同加载历程和材料参数下的非线性损伤演化，并与参考解良好吻合。相较传统增量疲劳分析，计算加速“up to approximately 2700 times”，即最高约2700倍，而非普遍加速水平；摘要未提供对应算例规模与具体误差值。[摘要]</p></section><section><h2>局限与边界</h2><p>目前只能识别摘要证据的不足，不能将其直接视为方法缺陷。摘要虽称对未见材料和载荷具有泛化能力，但未列出训练与测试划分、材料范围、误差统计及计算硬件；也未说明加速比是否包含训练成本。因此，泛化边界和公平计时条件仍无法核实。[摘要]</p></section><section><h2>方向关联</h2><p>解读：循环块级损伤预测与疲劳可靠性方向直接相关，可为大量寿命计算提供潜在加速路径；对结构设计而言，可能降低候选方案评估成本。与智能运维的联系则是潜在的损伤状态预测，但摘要未展示监测数据融合、在线更新或失效概率计算，不能认定这些功能已实现。[摘要]</p></section><section><h2>后续研究建议</h2><p>建议：阅读全文时优先核查循环块长度选择、块间状态传递和物理约束实现，再追踪最高加速比的算例条件。若开展迁移研究，可比较不同循环块长度下的误差与耗时，并检验变幅载荷下的累积偏差；这些是后续验证建议，不是作者已报告的结果。[摘要]</p></section><section><h2>阅读建议</h2><p>推荐重点阅读其循环块损伤预测与物理约束实现方式：这两部分直接对应高周疲劳寿命分析的计算瓶颈，对疲劳可靠性研究具有明确方法价值，但摘要不足以确认工程部署成熟度。[摘要]</p></section><details class="article-material"><summary>查看公开摘要</summary><p>Predicting structural lifetime under complex loading remains a major challenge in computational mechanics, especially for high cycle fatigue in large scale systems such as aircraft, bridges, and wind turbines. This difficulty arises from the need to capture fatigue damage accumulation, crack initiation, crack growth across scales, and life prediction, making direct simulation over millions of load cycles computationally infeasible. To overcome this limitation, the presented work introduces a physics‐based machine learning () framework to accelerate fatigue life‐timescale homogenization and cyclic damage evolution. The first model predicts damage evolution over the full cyclic loading history, while the second operates at the lifetime scale by estimating accumulated damage over blocks of load cycles through the development of macro‐ and micromechanically motivated degradation mechanisms. Both models are built on double feed‐forward neural networks and are guided by physical constraints, including energy balance, damage evolution, and degradation laws, thereby ensuring physically consistent, interpretable, and generalizable predictions for unseen materials and loading conditions. Validation studies of the proposed framework demonstrate that the models accurately reproduce nonlinear damage evolution under diverse loading histories and material parameters. Most importantly, the lifetime‐scale model directly predicts damage over large blocks of load cycles, thereby eliminating the need for costly cycle‐by‐cycle simulations. Quantitative comparisons show computational speed‐ups of up to approximately 2700 times compared with conventional incremental fatigue analyses, while maintaining excellent agreement with reference solutions. As a result, this acceleration makes large‐scale high‐cycle fatigue simulations computationally feasible under physics constrains, providing a pathway toward scalable, reliable, and interpretable lifetime assessment of structural components subjected to cyclic loading.</p></details><p class="article-evidence-links"><a href="https://doi.org/10.1002/nme.70394" target="_blank" rel="noopener noreferrer">论文依据 1</a></p><footer class="article-end"><p>本文依据论文资料整理，研究建议由本站提出。原文、相关文献和图示标注共同说明内容来源。</p></footer></article><dialog class="article-figure-dialog"><form method="dialog"><button type="submit">关闭大图</button></form><img alt="论文图示放大查看"></dialog>
+      <footer class="site-footer"><p>每日更新，持续关注 AI 与工程可靠性。</p><div><a href="https://tengda-xmu.github.io/">腾达 · 厦门大学</a><a href="https://github.com/tengda-xmu/daily-papers" target="_blank" rel="noopener noreferrer">GitHub</a></div></footer>
+    </main>
+  </div>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <a class="back-to-top" href="#top" aria-label="返回页面顶部" hidden>回到顶部 ↑</a>
+</body>
+</html>

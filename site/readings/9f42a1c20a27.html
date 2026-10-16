@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="聚焦 AI 驱动的智能运维、结构生成式设计与疲劳可靠性，每日追踪科研论文，提供中文摘要与精读要点。">
+  <meta name="theme-color" content="#153e64">
+  <title>融合自适应指数插值数据增强与机器学习的疲劳寿命预测方法 | 摘要解读</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css?v=c966944617">
+  <link rel="stylesheet" href="../assets/paper-chat.css?v=c966944617">
+  <link rel="stylesheet" href="../assets/paper-library.css?v=c966944617">
+  <script src="../assets/site.js?v=c966944617" defer></script>
+  <script src="../assets/paper-library.js?v=c966944617" defer></script>
+  <script src="../assets/paper-chat.js?v=c966944617" defer></script>
+  <script src="../assets/daily-update.js?v=c966944617" defer></script>
+<link rel="stylesheet" href="../assets/reading-article.css?v=c966944617"><script src="../assets/reading-article.js?v=c966944617" defer></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main-content">跳至正文</a>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a class="wordmark" href="../"><span>腾达</span><span class="wordmark-divider" aria-hidden="true"></span>科研文献</a>
+      <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false">菜单 <span aria-hidden="true">☰</span></button>
+      <nav id="main-navigation" class="main-navigation" aria-label="主导航">
+        <a href="../" >每日推荐</a>
+        <a href="../search.html" data-local-only >手动检索</a>
+        <a href="../leads.html" >科研线索</a>
+        <a href="../ai.html" >AI 前沿</a>
+        <a href="../library.html" data-local-only >我的文献</a>
+        <a href="../archive/" >历史归档</a>
+        <a href="../setup.html" data-local-only >设置</a>
+      </nav>
+    </div>
+  </header>
+  <div class="site-shell">
+    <main id="main-content" class="main-content" tabindex="-1">
+      <article class="reading-article" data-paper-id="9f42a1c20a27" data-analysis-basis="abstract" data-article-version=""><a class="article-back" href="../">返回每日推荐</a><header class="article-header"><p class="article-type">摘要解读</p><h1>融合自适应指数插值数据增强与机器学习的疲劳寿命预测方法</h1><p class="article-original" lang="en">Fatigue Life Prediction Method Integrating Adaptive Exponential Interpolation Data Augmentation and Machine Learning</p><p class="article-byline">Minqing Zhao, Chi Zhang, Hongxi Wang, Chunhui Gong<br>Fatigue &amp; Fracture of Engineering Materials &amp; Structures</p><p class="article-updated">解读更新 2026-09-26 01:22 · 依据公开摘要整理，未核验全文细节</p><div class="article-links"><a href="https://doi.org/10.1111/ffe.70436" target="_blank" rel="noopener noreferrer">阅读原文</a><a href="https://onlinelibrary.wiley.com/doi/pdfdirect/10.1111/ffe.70436" target="_blank" rel="noopener noreferrer">开放获取</a><button type="button" class="text-button copy-citation" data-citation="Minqing Zhao, Chi Zhang, Hongxi Wang, Chunhui Gong. Fatigue Life Prediction Method Integrating Adaptive Exponential Interpolation Data Augmentation and Machine Learning. Fatigue &amp; Fracture of Engineering Materials &amp; Structures. https://doi.org/10.1111/ffe.70436">复制引用</button><a class="coverage-search" href="https://weixin.sogou.com/weixin?type=2&amp;query=Fatigue+Life+Prediction+Method+Integrating+Adaptive+Exponential+Interpolation+Data+Augmentation+and+Machine+Learning" target="_blank" rel="noopener noreferrer" title="用论文题名搜索公众号文章，检索结果尚未核验。" aria-label="搜索公众号：Fatigue Life Prediction Method Integrating Adaptive Exponential Interpolation Data Augmentation and Machine Learning">搜索公众号</a><button type="button" class="text-button codex-entry" data-local-only data-paper-id="9f42a1c20a27" data-paper-title="融合自适应指数插值数据增强与机器学习的疲劳寿命预测方法">Codex 对话</button></div></header><p class="article-upgrade">摘要解读已完成，图文文章正在升级。以下保留现有摘要笔记，尚未按图文稿逐项复核。</p><div class="article-lead"><p>本文针对传统疲劳累积损伤模型依赖经验参数、试验成本高及精度与适用性难以兼顾的问题，结合自适应指数插值、非线性损伤模型和机器学习开展小样本寿命预测。作者利用虚拟载荷扩充应力域采样，经蒙特卡洛修正建立含可靠性判据的模型，并校准载荷交互系数。摘要报告了12个材料数据集与钢材多级疲劳试验验证，称在85%可靠性下绝对误差小于2.5%。但误差定义、数据划分和泛化边界尚不明确，本解读仅依据摘要。[摘要]</p></div><section><h2>研究问题</h2><p>研究针对经验参数依赖、试验成本高，以及传统疲劳累积损伤模型的精度与适用性权衡。摘要以“empirical parameter dependence”明确指出首项问题。核心任务是在有限试验数据下提高寿命预测能力，而非仅增加试验规模。[摘要]</p></section><section><h2>方法与路线</h2><p>方法先以自适应指数插值构造虚拟载荷，增加应力域采样密度；再经蒙特卡洛修正建立改进AEVILD–Manson模型，纳入可靠性判据与收敛证明；最后用九种机器学习算法自适应校准载荷交互系数。摘要称其为“adaptive calibration”。[摘要]</p></section><section><h2>创新与比较</h2><p>值得关注的是数据增强、损伤模型修正与学习式参数校准的组合，而非单独使用机器学习。摘要称模型具备“reliability criterion and convergence proof”，但未展示判据及证明细节，尚不能据此确认理论贡献的独创性或适用范围。[摘要]</p></section><section><h2>证据与发现</h2><p>摘要报告12个材料数据集及B750L钢多级疲劳试验验证，称“absolute error less than 2.5% at 85% reliability”；LSTM集成模型的R²为0.9668、RMSE为0.0536。摘要称优于传统基准，但未列出逐项比较结果。[摘要]</p></section><section><h2>局限与边界</h2><p>证据局限在于摘要未交代训练测试划分、虚拟样本生成边界、误差定义及RMSE尺度，也未解释85%可靠性的计算方式。“at no extra cost”未说明成本核算范围。这些属于资料缺口，不能直接判定为方法缺陷，更不足以确认工程泛化能力。[摘要]</p></section><section><h2>方向关联</h2><p>摘要以“structural design”为应用目标，与疲劳可靠性及结构设计方向直接契合。若将寿命预测嵌入设计评价，可能辅助方案筛选；但摘要未涉及生成式设计流程。对智能运维的联系也仅属潜在迁移，尚无在线监测或维护决策验证。[摘要]</p></section><section><h2>后续研究建议</h2><p>后续阅读全文时，优先核查插值样本是否仅由训练数据生成，再检查载荷序列覆盖、跨材料验证与可靠性判据定义。可考虑分别移除数据增强、模型修正和学习校准开展消融比较，以辨别各环节贡献；这些是研究建议，并非摘要已报告的实验。[摘要]</p></section><section><h2>阅读建议</h2><p>推荐重点关注其小样本疲劳预测、载荷交互校准与可靠性判据的结合，适合疲劳可靠性和结构设计研究；对生成式设计仅有潜在辅助价值，摘要未展示直接应用。[摘要]</p></section><details class="article-material"><summary>查看公开摘要</summary><p>To address empirical parameter dependence, high test costs, and the accuracy‐applicability trade‐off in traditional fatigue cumulative damage models, this paper proposes a novel fatigue life prediction method integrating adaptive exponential interpolation data enhancement, an improved nonlinear damage model, and machine learning. Based on limited test data, virtual loads are constructed to boost stress‐domain sampling density at no extra cost. An improved AEVILD–Manson model with reliability criterion and convergence proof is established via Monte Carlo correction. Nine machine learning algorithms are integrated for adaptive calibration of load interaction coefficients. Verified by 12 material datasets and B750L steel multilevel fatigue tests, the model achieves absolute error less than 2.5% at 85% reliability; the R 2 value of the LSTM integrated model is 0.9668, and the RMSE is 0.0536, outperforming traditional benchmarks. This method enables high‐precision small‐sample fatigue assessment for low‐cost, high‐reliability structural design.</p></details><p class="article-evidence-links"><a href="https://doi.org/10.1111/ffe.70436" target="_blank" rel="noopener noreferrer">论文依据 1</a></p><footer class="article-end"><p>本文依据论文资料整理，研究建议由本站提出。原文、相关文献和图示标注共同说明内容来源。</p></footer></article><dialog class="article-figure-dialog"><form method="dialog"><button type="submit">关闭大图</button></form><img alt="论文图示放大查看"></dialog>
+      <footer class="site-footer"><p>每日更新，持续关注 AI 与工程可靠性。</p><div><a href="https://tengda-xmu.github.io/">腾达 · 厦门大学</a><a href="https://github.com/tengda-xmu/daily-papers" target="_blank" rel="noopener noreferrer">GitHub</a></div></footer>
+    </main>
+  </div>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <a class="back-to-top" href="#top" aria-label="返回页面顶部" hidden>回到顶部 ↑</a>
+</body>
+</html>

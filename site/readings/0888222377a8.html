@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="聚焦 AI 驱动的智能运维、结构生成式设计与疲劳可靠性，每日追踪科研论文，提供中文摘要与精读要点。">
+  <meta name="theme-color" content="#153e64">
+  <title>通过幻影结构注入隐藏大语言模型多智能体通信拓扑 | 摘要解读</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css?v=c966944617">
+  <link rel="stylesheet" href="../assets/paper-chat.css?v=c966944617">
+  <link rel="stylesheet" href="../assets/paper-library.css?v=c966944617">
+  <script src="../assets/site.js?v=c966944617" defer></script>
+  <script src="../assets/paper-library.js?v=c966944617" defer></script>
+  <script src="../assets/paper-chat.js?v=c966944617" defer></script>
+  <script src="../assets/daily-update.js?v=c966944617" defer></script>
+<link rel="stylesheet" href="../assets/reading-article.css?v=c966944617"><script src="../assets/reading-article.js?v=c966944617" defer></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main-content">跳至正文</a>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a class="wordmark" href="../"><span>腾达</span><span class="wordmark-divider" aria-hidden="true"></span>科研文献</a>
+      <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false">菜单 <span aria-hidden="true">☰</span></button>
+      <nav id="main-navigation" class="main-navigation" aria-label="主导航">
+        <a href="../" >每日推荐</a>
+        <a href="../search.html" data-local-only >手动检索</a>
+        <a href="../leads.html" >科研线索</a>
+        <a href="../ai.html" >AI 前沿</a>
+        <a href="../library.html" data-local-only >我的文献</a>
+        <a href="../archive/" >历史归档</a>
+        <a href="../setup.html" data-local-only >设置</a>
+      </nav>
+    </div>
+  </header>
+  <div class="site-shell">
+    <main id="main-content" class="main-content" tabindex="-1">
+      <article class="reading-article" data-paper-id="0888222377a8" data-analysis-basis="abstract" data-article-version=""><a class="article-back" href="../">返回每日推荐</a><header class="article-header"><p class="article-type">摘要解读</p><h1>通过幻影结构注入隐藏大语言模型多智能体通信拓扑</h1><p class="article-original" lang="en">Concealing LLM-Based Multi-Agent Topology via Phantom Structure Injection</p><p class="article-byline">Longzhu He, Zelang Wen, Xinfeng Li, Sen Su, XiaoFeng Wang<br></p><p class="article-updated">解读更新 2026-10-02 18:04 · 依据公开摘要整理，未核验全文细节</p><div class="article-links"><a href="http://arxiv.org/abs/2609.37567v1" target="_blank" rel="noopener noreferrer">阅读原文</a><button type="button" class="text-button copy-citation" data-citation="Longzhu He, Zelang Wen, Xinfeng Li, Sen Su, XiaoFeng Wang. Concealing LLM-Based Multi-Agent Topology via Phantom Structure Injection. . http://arxiv.org/abs/2609.37567v1">复制引用</button><a class="coverage-search" href="https://weixin.sogou.com/weixin?type=2&amp;query=Concealing+LLM-Based+Multi-Agent+Topology+via+Phantom+Structure+Injection" target="_blank" rel="noopener noreferrer" title="用论文题名搜索公众号文章，检索结果尚未核验。" aria-label="搜索公众号：Concealing LLM-Based Multi-Agent Topology via Phantom Structure Injection">搜索公众号</a><button type="button" class="text-button codex-entry" data-local-only data-paper-id="0888222377a8" data-paper-title="通过幻影结构注入隐藏大语言模型多智能体通信拓扑">Codex 对话</button></div></header><p class="article-upgrade">摘要解读已完成，图文文章正在升级。以下保留现有摘要笔记，尚未按图文稿逐项复核。</p><div class="article-lead"><p>多智能体系统的推理轨迹可能暴露通信拓扑，带来架构知识产权泄露与系统弱点暴露风险。本文提出MIRAGE，在保留真实拓扑执行任务的同时，将攻击者可见的语义证据引向幻影拓扑。框架包括幻影拓扑合成、语义边实现和受保护系统执行三个阶段。作者报告在三个拓扑优化框架、四个基准数据集上降低了拓扑推断攻击效果，并大体保留任务效用；摘要未给出具体数值。[摘要]本解读仅依据摘要。</p></div><section><h2>研究问题</h2><p>研究问题是如何避免多智能体系统的通信拓扑被黑盒攻击者推断。摘要指出攻击可利用“semantic dependencies in observable reasoning traces”，而拓扑可能承载专有架构知识。[摘要]解读：保护对象不仅是回答内容，还包括推理轨迹暴露的智能体协作关系。</p></section><section><h2>方法与路线</h2><p>MIRAGE包含“phantom topology synthesis”、语义边实现和受保护系统执行三个阶段。它构造不同于真实结构的幻影拓扑，将幻影边实现为可信的语义依赖，并抑制可能暴露真实边的来源特定线索。[摘要]摘要未说明具体合成算法、提示策略或执行协议。</p></section><section><h2>创新与比较</h2><p>摘要所述机制特点是保留真实通信拓扑完成任务，同时把攻击者可见证据导向幻影结构，即“shaping adversary-facing semantic evidence”。[摘要]解读：其思路区别于直接改变真实协作网络，但摘要不足以确认相对既有防御的首创性或完整创新边界。</p></section><section><h2>证据与发现</h2><p>作者报告实验覆盖三个拓扑优化框架和四个基准数据集，并称方法“substantially reduces”拓扑推断攻击效果，同时大体保留任务效用。[摘要]这些是定性结果；摘要没有攻击成功率、效用变化或统计信息，因此无法判断收益幅度和不同配置下的稳定性。</p></section><section><h2>局限与边界</h2><p>当前资料的限制是仅有摘要，而非已证实的方法缺陷。摘要未交代攻击者能力、基线设置、数据集名称及额外执行开销，也未给出“大体保留”效用的量化标准。[摘要]解读：尚不能据此评价防御面对自适应攻击的持续有效性或工程部署成本。</p></section><section><h2>方向关联</h2><p>解读：该方法可关联智能运维中的多智能体诊断系统，启发对外推理记录与内部协作架构分离的安全设计，但摘要未验证此场景。[摘要]它研究通信结构保密，并非生成式结构设计；任务效用保持也不能直接视为工程结构可靠性或运维可靠性的提升证据。</p></section><section><h2>后续研究建议</h2><p>建议重点核查全文中的幻影拓扑约束、语义依赖生成机制和来源线索抑制方式，再比较攻击效果、任务效用与运行开销。若迁移到智能运维，建议测试诊断准确性、日志可审计性及自适应攻击下的表现。这些是后续研究设想，并非摘要已经报告的验证结果。[摘要]</p></section><section><h2>阅读建议</h2><p>建议作为多智能体系统安全与架构保密方向的补充阅读：其真实通信结构与外部语义证据分离的机制明确，但与生成式结构设计并不直接契合，暂不宜列为该方向的核心推荐。[摘要]</p></section><details class="article-material"><summary>查看公开摘要</summary><p>Driven by the rapid advancement of large language models (LLMs), LLM-based multi-agent systems (MAS) have emerged as a powerful paradigm for collaborative reasoning over complex tasks. A key design element of MAS is the communication topology, which governs information flow among agents and often encodes proprietary knowledge about the system architecture. However, recent work has shown that such topologies can be inferred even in black-box settings by exploiting semantic dependencies in observable reasoning traces, posing significant risks of intellectual property leakage and exposure of system vulnerabilities. To address this threat, we propose MIRAGE, a topology-concealment framework that preserves the genuine communication topology for task execution while shaping adversary-facing semantic evidence toward a carefully constructed phantom topology. Specifically, MIRAGE operates in three stages: (1) phantom topology synthesis, (2) semantic edge realization, and (3) protected MAS execution. It constructs a phantom topology structurally distinct from the genuine one, materializes phantom edges as plausible semantic dependencies, and suppresses source-specific cues that could reveal genuine edges absent from the phantom topology. Extensive experiments across three topology optimization frameworks and four benchmark datasets demonstrate that MIRAGE substantially reduces the effectiveness of topology inference attacks while largely preserving the task utility of the protected MAS.</p></details><p class="article-evidence-links"><a href="http://arxiv.org/abs/2609.37567v1" target="_blank" rel="noopener noreferrer">论文依据 1</a></p><footer class="article-end"><p>本文依据论文资料整理，研究建议由本站提出。原文、相关文献和图示标注共同说明内容来源。</p></footer></article><dialog class="article-figure-dialog"><form method="dialog"><button type="submit">关闭大图</button></form><img alt="论文图示放大查看"></dialog>
+      <footer class="site-footer"><p>每日更新，持续关注 AI 与工程可靠性。</p><div><a href="https://tengda-xmu.github.io/">腾达 · 厦门大学</a><a href="https://github.com/tengda-xmu/daily-papers" target="_blank" rel="noopener noreferrer">GitHub</a></div></footer>
+    </main>
+  </div>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <a class="back-to-top" href="#top" aria-label="返回页面顶部" hidden>回到顶部 ↑</a>
+</body>
+</html>

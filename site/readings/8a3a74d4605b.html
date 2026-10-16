@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="聚焦 AI 驱动的智能运维、结构生成式设计与疲劳可靠性，每日追踪科研论文，提供中文摘要与精读要点。">
+  <meta name="theme-color" content="#153e64">
+  <title>CE-MAC：面向自适应模型剪枝的云边多智能体协作 | 摘要解读</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css?v=c966944617">
+  <link rel="stylesheet" href="../assets/paper-chat.css?v=c966944617">
+  <link rel="stylesheet" href="../assets/paper-library.css?v=c966944617">
+  <script src="../assets/site.js?v=c966944617" defer></script>
+  <script src="../assets/paper-library.js?v=c966944617" defer></script>
+  <script src="../assets/paper-chat.js?v=c966944617" defer></script>
+  <script src="../assets/daily-update.js?v=c966944617" defer></script>
+<link rel="stylesheet" href="../assets/reading-article.css?v=c966944617"><script src="../assets/reading-article.js?v=c966944617" defer></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main-content">跳至正文</a>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a class="wordmark" href="../"><span>腾达</span><span class="wordmark-divider" aria-hidden="true"></span>科研文献</a>
+      <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false">菜单 <span aria-hidden="true">☰</span></button>
+      <nav id="main-navigation" class="main-navigation" aria-label="主导航">
+        <a href="../" >每日推荐</a>
+        <a href="../search.html" data-local-only >手动检索</a>
+        <a href="../leads.html" >科研线索</a>
+        <a href="../ai.html" >AI 前沿</a>
+        <a href="../library.html" data-local-only >我的文献</a>
+        <a href="../archive/" >历史归档</a>
+        <a href="../setup.html" data-local-only >设置</a>
+      </nav>
+    </div>
+  </header>
+  <div class="site-shell">
+    <main id="main-content" class="main-content" tabindex="-1">
+      <article class="reading-article" data-paper-id="8a3a74d4605b" data-analysis-basis="abstract" data-article-version=""><a class="article-back" href="../">返回每日推荐</a><header class="article-header"><p class="article-type">摘要解读</p><h1>CE-MAC：面向自适应模型剪枝的云边多智能体协作</h1><p class="article-original" lang="en">CE-MAC: Cloud–Edge Multiagent Collaboration for Adaptive Model Pruning</p><p class="article-byline">Qi-Yu Sun, Yang-Cheng Wang, Meng-Chun Gong, Jing Xu, Yang Tang<br>IEEE Transactions on Industrial Informatics</p><p class="article-updated">解读更新 2026-10-10 18:01 · 依据公开摘要整理，未核验全文细节</p><div class="article-links"><a href="https://www.semanticscholar.org/paper/eb47fbb920afe87bb006cd6f95319970c949b69f" target="_blank" rel="noopener noreferrer">阅读原文</a><a href="https://doi.org/10.1109/tii.2026.3697192" target="_blank" rel="noopener noreferrer">DOI</a><button type="button" class="text-button copy-citation" data-citation="Qi-Yu Sun, Yang-Cheng Wang, Meng-Chun Gong, Jing Xu, Yang Tang. CE-MAC: Cloud–Edge Multiagent Collaboration for Adaptive Model Pruning. IEEE Transactions on Industrial Informatics. https://www.semanticscholar.org/paper/eb47fbb920afe87bb006cd6f95319970c949b69f">复制引用</button><a class="coverage-search" href="https://weixin.sogou.com/weixin?type=2&amp;query=CE-MAC%3A+Cloud%E2%80%93Edge+Multiagent+Collaboration+for+Adaptive+Model+Pruning" target="_blank" rel="noopener noreferrer" title="用论文题名搜索公众号文章，检索结果尚未核验。" aria-label="搜索公众号：CE-MAC: Cloud–Edge Multiagent Collaboration for Adaptive Model Pruning">搜索公众号</a><button type="button" class="text-button codex-entry" data-local-only data-paper-id="8a3a74d4605b" data-paper-title="CE-MAC：面向自适应模型剪枝的云边多智能体协作">Codex 对话</button></div></header><p class="article-upgrade">摘要解读已完成，图文文章正在升级。以下保留现有摘要笔记，尚未按图文稿逐项复核。</p><div class="article-lead"><p>工业边缘设备资源受限，且设备条件与实际环境不断变化，固定压缩策略难以持续适配。本文提出CE-MAC，以基于大语言模型的多智能体系统作为决策中心，结合云端与边缘实时反馈，生成设备专属剪枝策略。摘要报告在图像分类、关键词识别、轴承故障诊断和窃电检测任务上取得先进性能，但未提供具体指标、对照与成本数据。解读：其阅读价值在于压缩决策的动态协作机制；当前仅能进行摘要级判断。[摘要]</p></div><section><h2>研究问题</h2><p>论文关注高精度模型在资源受限工业边缘设备上的部署问题。摘要指出传统流程“assume a fixed setting”，难以适应异构且持续变化的环境。解读：研究问题不仅是缩小模型，还包括压缩策略如何随设备条件和环境变化调整；具体资源约束与变化模式尚无说明。[摘要]</p></section><section><h2>方法与路线</h2><p>CE-MAC采用基于大语言模型的多智能体系统组织云边协作，并以模型剪枝支持可定制、渐进式压缩。摘要称其“acts as the decision hub”，依据云端与边缘实时反馈生成设备专属策略。尚未交代智能体分工、反馈变量、策略执行流程或剪枝算法细节。[摘要]</p></section><section><h2>创新与比较</h2><p>摘要呈现的方法特色，是把多智能体决策、实时云边反馈与设备专属剪枝结合起来，而非沿用固定压缩设置。解读：值得关注的创新候选是压缩策略的动态协作生成机制；仅凭摘要不能确认其相对既有自适应压缩方法的原创程度，也不能认定各组件分别具有新颖性。[摘要]</p></section><section><h2>证据与发现</h2><p>摘要列出图像分类、关键词识别、轴承故障诊断和窃电检测四类评测任务，并报告“state-of-the-art performance”，覆盖异构数据与不同压缩水平。当前未给出数据集、指标、基线或结果数值，因此只能确认作者报告了性能优势，不能判断优势幅度、稳定性及统计可信度。[摘要]</p></section><section><h2>局限与边界</h2><p>当前证据局限来自摘要信息不足，并非已证实的方法缺陷。资料没有说明大语言模型决策开销、云边通信需求、剪枝后的精度变化及异常反馈处理方式，也未呈现消融实验。解读：这些缺口限制了对实际部署收益、决策可靠性与性能优势来源的评估。[摘要]</p></section><section><h2>方向关联</h2><p>与智能运维的直接联系是摘要明确纳入“bearing fault diagnosis”，同时面向受限边缘设备部署。解读：自适应剪枝可能支持不同现场设备的诊断模型配置；与可靠性的联系仍需验证压缩后漏诊风险及环境变化下的表现，摘要没有提供结构设计方面的直接证据。[摘要]</p></section><section><h2>后续研究建议</h2><p>建议获取全文后，首先核对设备专属策略的输入、目标和约束，再检查不同压缩水平下的诊断性能及云边协作成本。建议将固定剪枝策略作为比较对象，并考察反馈延迟或异常时的策略表现。这些是后续阅读与研究建议，不是摘要已经报告的实验或作者结论。[摘要]</p></section><section><h2>阅读建议</h2><p>推荐重点关注实时反馈如何转化为设备专属剪枝策略，以及轴承故障诊断中的适用条件；摘要具有明确方法线索，但性能优势仍需全文核验。[摘要]</p></section><details class="article-material"><summary>查看公开摘要</summary><p>Deploying high accuracy models on resource-limited edge is essential for industrial applications, yet challenging due to the diverse and dynamic real-world environment. Cloud–edge collaboration helps by training high-capacity models in the cloud and deploying compressed models to edge nodes. However, traditional pipelines assume a fixed setting and lack the flexibility to adapt compression strategies to the heterogeneous and evolving environment. To overcome this, we propose CE-MAC, a cloud–edge collaborative large language model (LLM)-based multiagent system (LLM-MAS) for adaptive edge model compression. We adopt model pruning for its support of customizable and progressive compression, enabling flexible adaptation in dynamic edge environments. The LLM-MAS acts as the decision hub, generating device-specific pruning policies based on real-time feedback from both cloud and edge, enabling better cloud–edge co-evolution. We evaluate CE-MAC on image classification, keyword spotting, bearing fault diagnosis, and electricity theft detection tasks, achieving state-of-the-art performance across heterogeneous data and varying compression levels.</p></details><p class="article-evidence-links"><a href="https://doi.org/10.1109/tii.2026.3697192" target="_blank" rel="noopener noreferrer">论文依据 1</a></p><footer class="article-end"><p>本文依据论文资料整理，研究建议由本站提出。原文、相关文献和图示标注共同说明内容来源。</p></footer></article><dialog class="article-figure-dialog"><form method="dialog"><button type="submit">关闭大图</button></form><img alt="论文图示放大查看"></dialog>
+      <footer class="site-footer"><p>每日更新，持续关注 AI 与工程可靠性。</p><div><a href="https://tengda-xmu.github.io/">腾达 · 厦门大学</a><a href="https://github.com/tengda-xmu/daily-papers" target="_blank" rel="noopener noreferrer">GitHub</a></div></footer>
+    </main>
+  </div>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <a class="back-to-top" href="#top" aria-label="返回页面顶部" hidden>回到顶部 ↑</a>
+</body>
+</html>
