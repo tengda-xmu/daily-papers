@@ -31,7 +31,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Abstract High-fidelity computational fluid dynamics (CFD) provide detailed substrate gradient predictions in industrial stirred-tank bioreactors but are computationally intensive, limiting their routine application. We developed surrogate models trained on $$760$$ 760 CFD simulations to rapidly predict fully 3-D substrate concentration fields from global operating conditions (e.g., stirring speed, feeding strategy, feeding point location, fluid density and viscosity, liquid height, bio-kinetic parameters, biomass concentration), and local spatial descriptors (e.g., distance to the feeding poin…",
+      "summary": "工业搅拌罐中底物空间分布影响过程设计与控制，但高保真CFD计算成本限制了常规应用。作者以760次CFD模拟训练代理模型，结合全局工况与局部空间描述符预测完整三维浓度场。摘要报告注意力神经网络测试R²≈0.91，并实现毫秒级推理，相比CFD最高加速百万倍。其价值在于支持运行空间探索与数字孪生；当前仅有摘要，尚不能核查误差分布及实际部署效果。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -73,11 +73,154 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐关注其将全局运行条件与局部空间信息共同用于三维场预测的方法，尤其适合数字孪生和快速运行优化研究参考；但不能据此认定其已具备故障诊断或可靠性评估能力。[摘要；解读]",
+      "deep_read": {
+        "problem": "研究针对工业搅拌罐底物梯度预测的精度与计算成本矛盾。摘要指出高保真CFD虽能提供详细预测，却“are computationally intensive”，限制常规应用。核心问题是能否降低空间场预测成本，使其适应更频繁的工况探索，而非直接开展设备故障识别。[摘要；解读]",
+        "method": "作者以760次CFD模拟训练代理模型，输入同时包含全局运行条件与局部空间描述符。前者涉及搅拌速度、进料策略、流体性质及生物动力学参数等，后者例如到进料点的距离；输出为完整三维底物浓度场。摘要明确使用“local spatial descriptors”，但未交代网络细节。[摘要]",
+        "innovation": "解读：值得关注的是将工况信息与空间位置特征结合，让代理模型承担三维浓度场的快速映射，而不只预测单一整体指标。摘要以“couple hydrodynamics and biokinetics”概括模型能力；但缺少既有方法比较及消融结果，不能据此认定其架构具有首创性。[摘要；解读]",
+        "findings": "摘要报告注意力神经网络在所比较方法中精度最高，测试R²≈0.91，并能捕捉关键混合特征；其“millisecond-scale inference”对应相较CFD最高百万倍加速。上述为作者报告的结果，当前资料未提供计算硬件、计时边界或分工况误差，无法进一步核验。[摘要]",
+        "limitations": "当前证据仅为摘要，未提供训练测试划分、模拟覆盖范围、物理约束及实验实测验证信息，因此无法判断对未见工况的泛化能力。这些属于资料缺口，并非已证实的方法缺陷。“trained on $$760$$ 760 CFD simulations”也不足以证明模型已在真实装置中得到验证。[摘要；解读]",
+        "connection": "解读：摘要提出支持“real-time optimization and digital-twin frameworks”，与智能运维中的状态预测和运行优化存在方法联系。其与结构设计的关联主要限于反应器设计决策支持，并非结构力学分析；对于失效概率、寿命预测或可靠性指标，当前资料没有直接证据。[摘要；解读]",
+        "next_steps": "建议：后续获取全文时，优先核查进料位置、黏度和液位变化下的测试设置，以及浓度极值区域的误差与守恒表现。若迁移至智能运维，可研究预测不确定性与优化决策风险的联系，并以实测数据检验适用边界；这些是研究建议，不是摘要已报告的工作。[摘要；建议]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "机器学习代理模型实现工业生物反应器三维底物梯度快速预测",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s41467-026-78273-7"
+      ],
+      "analyzed_at": "2026-10-16T06:55:27.523951+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "工业搅拌罐生物反应器中的底物浓度如何随空间变化，关系到反应器设计与运行控制。这项研究用机器学习代理模型逼近高成本流体计算，探索能否在保留关键混合特征的同时，快速预测三维底物浓度场。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "底物空间梯度预测，难在计算成本",
+            "paragraphs": [
+              "高保真计算流体力学（CFD）能够提供工业搅拌罐生物反应器内细致的底物梯度预测，但计算开销限制了其常规应用。研究关注的不是单一平均浓度，而是完整的三维浓度场：既要描述空间差异，又希望让预测速度适合更频繁的工况探索。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从CFD模拟学习工况与空间位置的关系",
+            "paragraphs": [
+              "作者利用760次CFD模拟训练代理模型，将全局运行条件与局部空间描述共同作为预测依据。前者包括搅拌速度、进料策略、进料点位置、流体密度与黏度、液位、生物动力学参数及生物量浓度；后者例如到进料点的距离。模型的目标输出是完整的三维底物浓度场。",
+              "摘要提到研究比较了多种方法，其中包括基于注意力机制的神经网络。其方法思路是从模拟数据中学习运行条件、局部位置与浓度之间的映射；摘要没有展开网络结构、训练流程或各类方法的具体配置。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "注意力模型兼顾预测精度与毫秒级推理",
+            "paragraphs": [
+              "在摘要所述的方法比较中，基于注意力机制的神经网络取得最高精度，测试集R²约为0.91，并能够捕捉关键混合特征。其推理达到毫秒量级，相比CFD的加速最高可达百万倍。这里的加速针对预测环节，不能据此推断生成训练数据和训练模型的全部成本。",
+              "作者据此认为，数据驱动模型能够有效耦合流体动力学与生物动力学，实现快速、准确的空间预测，并为运行空间探索提供支持。实时优化、数字孪生以及反应器设计与控制是摘要提出的应用价值，不宜直接解读为这些应用均已完成现场验证。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "测试表现尚需结合数据划分与验证范围理解",
+            "paragraphs": [
+              "仅凭摘要，无法判断760次模拟覆盖的反应器构型、工况范围，以及训练集和测试集如何划分；也无法确定比较方法的完整名单、精度指标的具体统计口径和加速测量条件。对未见工况的泛化、真实反应器数据验证及闭环控制表现，摘要均未提供足够信息，需进一步阅读论文核实，不能据此认定论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：区分快速场预测与运维闭环",
+            "paragraphs": [
+              "阅读启发：面向AI智能运维，这项工作的直接启示是用代理模型降低空间状态预测的计算门槛，而不是已经实现故障诊断或预测维护。进一步阅读时，值得关注模型在哪些工况内可靠、局部浓度偏差如何评估，以及快速预测如何接入数字孪生；这些问题有助于界定其工程适用边界。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的三维浓度场预测示意",
+            "description": "概括CFD模拟训练代理模型，以及全局条件、局部空间描述用于预测的关系；不是论文原图，不表示未报告的网络结构。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "CFD模拟数据",
+                "detail": "摘要报告使用760次CFD模拟训练代理模型。"
+              },
+              {
+                "id": "b",
+                "stage": 0,
+                "label": "全局运行条件",
+                "detail": "包括搅拌、进料、流体性质及生物动力学等条件。"
+              },
+              {
+                "id": "c",
+                "stage": 0,
+                "label": "局部空间描述",
+                "detail": "例如到进料点的距离。"
+              },
+              {
+                "id": "d",
+                "stage": 1,
+                "label": "机器学习代理模型",
+                "detail": "比较的方法中，基于注意力机制的神经网络精度最高。"
+              },
+              {
+                "id": "e",
+                "stage": 2,
+                "label": "三维底物浓度场",
+                "detail": "快速预测空间浓度分布，并捕捉关键混合特征。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "d",
+                "label": "用于训练"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "预测输入"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "预测输入"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "快速预测"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-16T07:24:13.221835+00:00",
+      "article_profile": "3c03cd29b6a7ccea0e592659e8ab953ff89b85c46374d12c4824f946edbd5db8",
+      "analysis_references": {},
+      "analysis_material_version": "eacebd0e0881586141ada7cc074948dd3db40c30b64233836e2681d5f216ccff",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "15b8068e8614",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-16T07:24:13.221835+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -102,7 +245,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Acoustic valley-Hall insulators (AVHIs) are an emerging class of acoustic topological materials that enable robust directional wave transport and show promise for applications in communication, sensing and wave manipulation. This study presents a large language model (LLM)-driven inverse design framework consisting of two collaborative agents. The Designer-LLM is fine-tuned on an AVHI database generated through reinforcement learning to perform bandgap-targeted inverse design. The Manager-LLM coordinates task planning, semantic parsing, simulation tool invocation and multimodal result…",
+      "summary": "本文针对声学谷霍尔绝缘体的目标带隙逆向设计，提出双智能体协作框架：设计智能体基于强化学习生成的数据库微调，管理智能体负责需求解析、任务规划、仿真调用及结果生成。系统可输出结构参数、能带、本征模态场和可制造模型文件。摘要称测试集带隙误差分析支持设计精度，但未给出具体数值与对照结果。解读：其阅读价值主要在于连接语言需求、结构生成和数值验证的工作流，而非已获充分量化证明的性能优势。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -147,11 +290,116 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议重点关注生成式结构设计与仿真验证的衔接，以及双智能体的职责划分；当前仅有摘要，尚不能判断其相对传统优化方法的精度或效率优势。[摘要]",
+      "deep_read": {
+        "problem": "研究面向声学谷霍尔绝缘体的目标带隙逆向设计。摘要指出，此类材料能够实现“robust directional wave transport”，并具有通信、传感和波调控应用前景。解读：核心问题是如何把简短设计需求转化为满足带隙目标的结构，而非仅生成语言描述。[摘要]",
+        "method": "框架由两个协作智能体组成。Designer-LLM利用强化学习生成的声学谷霍尔绝缘体数据库进行微调，承担带隙目标驱动的结构设计；Manager-LLM负责规划、语义解析、仿真工具调用和多模态结果生成。摘要未说明模型规模、数据量或微调细节。[摘要]",
+        "innovation": "摘要明确提出“modular LLM-agent framework”，将语义交互、逆向设计、数值验证和多模态输出整合为统一流程。解读：可关注的创新线索是专业设计模型与流程管理模型的分工及集成方式；仅凭摘要不能认定其为首创，也不能确认相对已有框架的优势。[摘要]",
+        "findings": "系统可按简短需求输出结构参数、能带、本征模态场及可制造模型文件。摘要称测试集带隙误差分析表明设计具有“reliable bandgap-matching accuracy”。但未提供误差数值、样本规模或比较基线，因此只能确认作者报告了准确性验证，不能量化其效果。[摘要]",
+        "limitations": "当前证据仅为摘要，未披露数据库覆盖范围、训练与测试划分、误差分布、计算成本及失败案例，也未说明是否进行了实物制造验证。这些属于资料缺口，而非已经证实的方法缺陷。摘要中的可制造模型文件输出，也不能直接等同于制造可行性已经得到验证。[摘要]",
+        "connection": "解读：本文与生成式结构设计直接相关，展示了从需求表达、结构生成到仿真结果输出的集成思路。对智能运维的联系主要是任务编排与工具调用方式可供参考，摘要未涉及运维实验；对可靠性研究，也不能把稳健波传输或带隙匹配精度等同于寿命与失效可靠性证据。[摘要]",
+        "next_steps": "建议后续获取全文，优先核查目标带隙的定义、误差指标、测试集独立性，以及与传统优化和非微调模型的对照。可迁移研究建议是加入制造偏差或材料参数扰动下的设计验证，考察目标匹配与稳健性的关系；该方向属于延伸设想，并非摘要报告的成果。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "大语言模型驱动的声学谷霍尔绝缘体逆向设计",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s41524-026-02349-7"
+      ],
+      "analyzed_at": "2026-10-16T07:04:29.491222+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "如何把简短的声学设计需求转化为满足目标带隙的结构，并衔接数值验证与模型输出？这项研究以声学谷霍尔绝缘体为对象，用两个分工协作的大语言模型智能体组织逆向设计流程，值得关注的是专业设计能力与任务调度如何结合。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从目标带隙出发设计声学拓扑材料",
+            "paragraphs": [
+              "声学谷霍尔绝缘体（AVHI）是一类能够实现稳健定向波传输的声学拓扑材料，在通信、传感和波操控方面具有应用潜力。这里的应用潜力是研究背景，并不等于本研究已经验证了这些场景中的实际效果。",
+              "本文关注以目标带隙为导向的逆向设计：根据设计要求生成相应结构，而不只是描述既有结构的声学性质。研究将语义交互、结构设计、数值验证和结果生成纳入统一工作流。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "设计模型负责结构，管理模型组织流程",
+            "paragraphs": [
+              "框架由两个协作智能体组成。Designer-LLM使用通过强化学习生成的AVHI数据库进行微调，承担面向目标带隙的逆向设计任务。这里应区分数据库生成与模型微调两个环节，不能将其笼统理解为大语言模型自行学习全部物理规律。",
+              "Manager-LLM负责协调任务规划、语义解析、仿真工具调用及多模态结果生成。两个模型的职责不同：前者面向结构设计，后者组织需求理解与工具协作，共同连接用户要求和设计输出。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "输出不止结构参数，精度依据来自带隙误差",
+            "paragraphs": [
+              "摘要报告，该框架能够依据简短设计要求生成结构参数、能带结构、本征模态场以及可制造模型文件。因此，其输出不局限于一组结构参数，也包含用于呈现声学特征和后续制造准备的不同形式结果。",
+              "对于设计准确性，摘要给出的依据是测试集上的带隙误差分析：微调后的Designer-LLM能够生成具有可靠带隙匹配精度的AVHI结构。不过，摘要未给出具体误差数值，不能据此判断精度提升幅度，也不能将带隙匹配直接等同于所有声学性能均得到验证。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不足以界定精度与泛化边界",
+            "paragraphs": [
+              "当前摘要未报告数据库规模、测试集样本数量、数据划分方式、比较基线及误差分布，因此无法据此评估测试覆盖范围或相对其他方法的优势。摘要也不足以界定数值验证的具体条件，以及从模型文件到实际制造、测量的一致性验证范围；这些信息需进一步查阅，不能写成论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：分别审视设计能力与流程组织",
+            "paragraphs": [
+              "阅读启发：对结构生成式设计而言，可以分别关注专业模型能否准确响应目标，以及管理智能体如何把需求、仿真和输出连接起来。进一步阅读时，值得核对带隙误差如何定义、测试目标覆盖哪些范围，以及生成结构如何接受数值检验。",
+              "摘要将向其他声学超材料设计任务扩展定位为未来参考，而非已经完成的通用能力。建议带着这一边界阅读：哪些环节能够复用，哪些仍依赖AVHI专用数据库与验证工具，是理解其可迁移性的关键问题。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [],
+        "figure_groups": [
+          {
+            "section": "method",
+            "title": "双智能体逆向设计框架",
+            "panels": [
+              {
+                "figure_id": "fig-bc04331af565eb5ec4d738bf",
+                "caption": "原图1｜大语言模型驱动的逆向设计框架及声学谷霍尔绝缘体阵列中的声波传输示意。子图a展示框架工作流，其中Designer-LLM根据指定目标带隙生成相应的AVHI结构参数。"
+              }
+            ]
+          },
+          {
+            "section": "findings",
+            "title": "数据集构建与设计模型评估",
+            "panels": [
+              {
+                "figure_id": "fig-f4a6edf6cb2e38a983d9632a",
+                "caption": "原图2｜AVHI数据集构建与微调后Designer-LLM的评估。子图a展示不同σ取值下，即时奖励随相邻优化步骤间相对拓扑带隙差的变化；子图b展示即时奖励关于当前及前一优化步骤相对拓扑带隙值的三维曲面；子图c展示数据集中拓扑带隙下、上边缘频率的分布。"
+              }
+            ]
+          }
+        ]
+      },
+      "article_updated_at": "2026-10-16T07:05:38.792817+00:00",
+      "article_profile": "41f97b97435e0c19add119babf6fe0f3c7fc7f34e7dd36b4d0e560c1f45ccff5",
+      "analysis_references": {},
+      "analysis_material_version": "5a35a9b959ae95271ee4719e1aefb187dedd395ff161fbd9c42fbb999bb99c70",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "d5b8590dae6a",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-16T07:05:38.792817+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -1205,7 +1453,130 @@
         "reason": "与所给generative_design方向直接契合：论文具有物理约束生成与多目标优化的明确方法，并报告候选①的实验、CPFE和机器学习预测一致。[P3、P7]当前连续原文足以支持重点阅读判断，但不能证明全部候选泛化、具体提升幅度或可靠性应用；公式缺项也限制复现。[P9]",
         "heat": null
       },
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "analysis_references": {
+        "problem": [
+          "P2"
+        ],
+        "method": [
+          "P4",
+          "P5",
+          "P9"
+        ],
+        "innovation": [
+          "P1",
+          "P3"
+        ],
+        "findings": [
+          "P4",
+          "P5",
+          "P6",
+          "P7"
+        ],
+        "limitations": [
+          "P3",
+          "P4",
+          "P5",
+          "P7",
+          "P9"
+        ],
+        "connection": [
+          "P3",
+          "P7",
+          "P9"
+        ],
+        "next_steps": [
+          "P5",
+          "P9"
+        ]
+      },
+      "analysis_material_version": "80a4c920d18f033bcc39b53a078e8cf5be9191f3d448bf439a046a44f19109a7",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "原页已核实“Published online: 30 September 2026”，提供的文字提取遗漏该出版日期。已补充识读；不影响方法或性能结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "提供的文字提取遗漏图1内部流程、公式及坐标标签。原页可读：图1a总损失由L_pix、L_edge、L_SSIM三项相加，展开式含像素绝对误差均值、S作用后的边缘差异均值及含均值和协方差的结构相似性分式；图1c明确标注NSGA-II及潜空间外推。遗漏会削弱对损失构成和优化流程的理解，不属于原文件公式缺项。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P5",
+          "detail": "图3i–n的原页图例为蓝圆点Train、红方点Test；原页图注却将蓝圆点和红方点分别对应20个训练、5个测试高分辨率图像，颜色与数据集对应写反。P4正文确认训练20幅、测试5幅。属于原图注对应错误，不是文字提取错误；影响训练与测试聚合点的识别，不妨碍读取六项特征对比。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P6",
+          "detail": "图4c原页图例明确标注延伸率模型Test R²=0.92，而P5正文称两个模型测试R²均“exceeding 0.92”。已核实正文与图示措辞不一致；图示按0.92记录，不能据此确认未经舍入值是否严格超过0.92。影响预测精度的精确表述，不影响页面识读。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "公式(1)–(9)原页清晰，文字提取将减号、卷积乘号、乘幂及数学括号误编码为/C0、/C3、/C138等。已依据原页纠正：公式(1)为绝对差均值，公式(3)为两个方向卷积差绝对值之和的均值，公式(7)为三项乘幂相乘，公式(9)为1−SSIM。影响损失函数准确识别，不是原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "公式(11)–(16)文字提取存在括号、减号、根号、ᾱ_t及上下标编码错误。原页已核实：公式(12)均值含√(1−β_t)，公式(13)均值含√ᾱ_t，协方差为(1−ᾱ_t)I；公式(16)为相对于参考点的两项性能差值乘积的平均。已纠正，不影响读取现有公式。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P9",
+          "detail": "公式(14)原页确实写为p_θ(x_{t−1}|x_t,x_V)=N(x_{t−1};ε_θ(x_t,t,x_V))，仅列一个高斯参数，未给出协方差；随后正文将ε_θ称为预测噪声，却未在该式给出噪声预测到反向分布均值的转换。现有公式和文字均可识读，但不足以完整确定反向采样分布；不补造缺失参数或转换式。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "a5695ec17eb2",
+        "state": "published",
+        "updated_at": "2026-10-03T08:47:30.777168+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 11,
+        "covered": 11,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页已核实“Published online: 30 September 2026”，提供的文字提取遗漏该出版日期。已补充识读；不影响方法或性能结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "提供的文字提取遗漏图1内部流程、公式及坐标标签。原页可读：图1a总损失由L_pix、L_edge、L_SSIM三项相加，展开式含像素绝对误差均值、S作用后的边缘差异均值及含均值和协方差的结构相似性分式；图1c明确标注NSGA-II及潜空间外推。遗漏会削弱对损失构成和优化流程的理解，不属于原文件公式缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P5",
+            "detail": "图3i–n的原页图例为蓝圆点Train、红方点Test；原页图注却将蓝圆点和红方点分别对应20个训练、5个测试高分辨率图像，颜色与数据集对应写反。P4正文确认训练20幅、测试5幅。属于原图注对应错误，不是文字提取错误；影响训练与测试聚合点的识别，不妨碍读取六项特征对比。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P6",
+            "detail": "图4c原页图例明确标注延伸率模型Test R²=0.92，而P5正文称两个模型测试R²均“exceeding 0.92”。已核实正文与图示措辞不一致；图示按0.92记录，不能据此确认未经舍入值是否严格超过0.92。影响预测精度的精确表述，不影响页面识读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "公式(1)–(9)原页清晰，文字提取将减号、卷积乘号、乘幂及数学括号误编码为/C0、/C3、/C138等。已依据原页纠正：公式(1)为绝对差均值，公式(3)为两个方向卷积差绝对值之和的均值，公式(7)为三项乘幂相乘，公式(9)为1−SSIM。影响损失函数准确识别，不是原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "公式(11)–(16)文字提取存在括号、减号、根号、ᾱ_t及上下标编码错误。原页已核实：公式(12)均值含√(1−β_t)，公式(13)均值含√ᾱ_t，协方差为(1−ᾱ_t)I；公式(16)为相对于参考点的两项性能差值乘积的平均。已纠正，不影响读取现有公式。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P9",
+            "detail": "公式(14)原页确实写为p_θ(x_{t−1}|x_t,x_V)=N(x_{t−1};ε_θ(x_t,t,x_V))，仅列一个高斯参数，未给出协方差；随后正文将ε_θ称为预测噪声，却未在该式给出噪声预测到反向分布均值的转换。现有公式和文字均可识读，但不足以完整确定反向采样分布；不补造缺失参数或转换式。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -1246,7 +1617,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Engineering short-range atomic order offers a promising route to design amorphous solids. Here, we establish a boron-assisted amorphization strategy using ApolloX, a theory-guided, short-range-order-constrained generative framework for identifying low-energy configurations in compositionally complex multielement systems. Using FeCoNiMoBO x as a model platform, ApolloX generates candidate amorphous structures across varied boron contents. Ab initio molecular dynamics simulations reveal that increasing the boron content suppresses atomic diffusion and crystallization, accompanied by the stabiliz…",
+      "summary": "【摘要】研究以成分复杂非晶氧化物为对象，将短程原子有序约束引入生成框架 ApolloX，探索硼含量对非晶形成的影响。以 FeCoNiMoBO x 为模型，模拟显示增硼抑制原子扩散与结晶，并稳定以 BO 3 为中心的局部结构。作者合成三种不同硼含量的组成，通过同步辐射散射和电子显微术验证预测的结构演化，并拓展至更多多金属组成。当前仅有摘要，可判断其设计与验证路线，不能评价具体性能及预测精度。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "American Association for the Advancement of Science (AAAS)",
@@ -1288,11 +1659,165 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "【摘要】推荐关注其将局部原子结构约束、生成候选结构和实验验证衔接的材料设计路线。【解读】适合生成式结构设计方向重点初筛，但尚不能据此认定算法优于现有方法。",
+      "deep_read": {
+        "problem": "【摘要】论文研究如何通过调控短程原子有序促进复杂多元素氧化物形成非晶结构，原文将其描述为“Engineering short-range atomic order”。核心问题是硼含量如何影响局部结构、扩散和结晶，以及这种影响能否用于指导可实验验证的材料设计。",
+        "method": "【摘要】作者采用“short-range-order-constrained generative framework”ApolloX，生成不同硼含量的候选非晶结构，再以第一性原理分子动力学分析结构演化。实验合成三种组成，并用同步辐射散射与电子显微术检验成分、均匀性和非晶特征。",
+        "innovation": "【摘要】作者提出硼辅助非晶化策略，并将其与理论引导的生成框架结合。【解读】值得关注的是以短程有序约束连接候选结构搜索和成分调控，而不只是筛选配方；但摘要未交代模型架构、约束实现或基线比较，尚不足以确认算法层面的独创性。",
+        "findings": "【摘要】模拟发现增硼“suppresses atomic diffusion and crystallization”，并伴随以 BO 3 为中心的局部结构稳定。作者称实验验证了预测的硼依赖结构演化，且策略扩展到更多金属组合与硼含量；摘要未给出效应大小或各组成的具体数据。",
+        "limitations": "【摘要】当前材料没有生成模型训练细节、低能构型筛选标准、模拟条件及散射数据，无法核查预测误差与验证强度。【解读】这些是摘要级证据的边界，并非已证实的研究缺陷；策略的适用范围、失败案例及应用性能仍需全文才能判断。",
+        "connection": "【解读】该研究与给定生成式设计方向直接相关：它围绕局部结构约束生成候选构型，并以模拟和实验检验设计结果。对结构设计研究，其参考价值在于物理约束的引入；摘要未涉及智能运维、寿命预测或失效概率，不宜推定其具有可靠性研究成果。",
+        "next_steps": "【建议】后续获取全文时，优先核查短程有序约束的表达方式、候选结构的能量评价，以及不同硼含量下模拟与实验的对应关系。若迁移到其他材料设计任务，应设置无约束生成和常规搜索对照，并记录失败组成，检验约束的实际贡献与适用边界。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "短程有序约束生成设计引导的硼辅助成分复杂非晶氧化物合成",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1126/sciadv.aef4658"
+      ],
+      "analyzed_at": "2026-10-16T07:04:33.319881+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "多元素氧化物的非晶结构，能否通过局部原子排列来引导形成？这项研究将短程有序约束引入生成式设计，以含硼体系连接结构预测与合成验证，探索硼促进非晶化的作用及其适用范围。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从短程原子有序入手设计非晶氧化物",
+            "paragraphs": [
+              "这项研究关注的是：如何利用短程原子有序，设计成分复杂的非晶固体。作者选择 FeCoNiMoBOₓ 作为模型体系，将硼含量作为调节变量，考察局部结构变化与非晶形成之间的联系。阅读重点不仅是能否合成非晶材料，还包括结构预测能否为合成提供可验证的指引。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "ApolloX 生成候选结构，再由模拟指导合成",
+            "paragraphs": [
+              "作者建立了 ApolloX：一个由理论引导、受短程有序约束的生成式框架，用于寻找成分复杂多元素体系中的低能构型。在模型体系中，该框架生成不同硼含量下的候选非晶结构，再通过第一性原理分子动力学模拟考察相关结构演化。",
+              "依据预测，作者合成了三种硼含量不同的 FeCoNiMoBOₓ 组成，并使用同步辐射散射和电子显微学进行表征。研究随后将策略扩展到涵盖不同金属组合与硼含量的多金属 BOₓ 组成库，考察其在更广组成范围内的适用性。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "硼含量增加伴随扩散受抑与局部结构稳定",
+            "paragraphs": [
+              "模拟结果显示，随着硼含量增加，原子扩散和结晶受到抑制，同时以 BO₃ 为中心的局部结构单元趋于稳定，有利于非晶结构形成。这里值得注意的是，摘要把动力学变化与局部结构稳定联系起来，而不只是报告最终是否得到非晶材料。",
+              "摘要报告，实验表征确认了所合成材料的组成符合性、结构均匀性和目标非晶特征，并据此验证了预测的硼含量依赖性结构演化。作者进一步将硼引入概括为促进非晶化的有效、可推广手段；这一结论的具体适用边界，仍需结合各组成的详细证据理解。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "推广范围与生成框架表现仍需更多细节",
+            "paragraphs": [
+              "仅凭摘要，无法判断各组成的具体硼含量、制备条件、独立样本与重复测量规模，也无法核对组成库的完整覆盖范围。摘要未交代 ApolloX 与其他结构搜索方法的比较、预测误差，以及模拟和表征的具体判据；这些属于当前资料无法判断的内容，不代表论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注约束如何连接生成与验证",
+            "paragraphs": [
+              "阅读启发：对于生成式设计，本文值得继续追问的是，短程有序约束如何进入候选结构生成，以及预测中的局部结构特征如何与实验表征对应。进一步阅读时，可重点查看不同金属组合是否支持一致的硼作用解释，而不宜仅凭摘要将材料发现结果外推为结构可靠性或服役性能的改善。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的硼辅助非晶化研究过程",
+            "description": "仅概括摘要明确陈述的生成、模拟、合成与表征关系，是依据摘要整理的示意图，并非论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "不同硼含量的模型体系",
+                "detail": "以 FeCoNiMoBOₓ 为模型平台，考察硼含量变化。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "ApolloX 生成候选结构",
+                "detail": "通过理论引导、短程有序约束的生成式框架寻找低能构型。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "第一性原理分子动力学",
+                "detail": "考察硼含量与原子扩散、结晶及 BO₃ 中心局部结构的关系。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "预测指导材料合成",
+                "detail": "合成三种硼含量不同的 FeCoNiMoBOₓ 组成。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "散射与电子显微学表征",
+                "detail": "核验组成符合性、结构均匀性与目标非晶特征。"
+              },
+              {
+                "id": "f",
+                "stage": 5,
+                "label": "扩展多金属组成库",
+                "detail": "将策略扩展至不同金属组合与硼含量的多金属 BOₓ 组成。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "生成候选非晶结构"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "模拟结构演化"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "预测指导合成"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "表征验证"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "进一步扩展策略"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-16T07:05:26.259093+00:00",
+      "article_profile": "4eb821d9eb4d248d833e2f5f6f4259e0f9da6a47ce8eca6e589ed4bd96e5694e",
+      "analysis_references": {},
+      "analysis_material_version": "a83d613cef523ffaaf212ff271e6c7726b911bbccb314303155772acf8cb445e",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "bff62d107e4c",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-16T07:05:26.259093+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -1315,7 +1840,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Uncertainty quantification in PDE inverse problems is essential in many applications. Scientific machine learning and AI enable data-driven learning of model components while preserving physical structure, and provide the scalability and adaptability needed for emerging imaging technologies and clinical insights. We develop a Bilevel Local Operator Learning framework for Bayesian inference in PDEs (B-BiLO). At the upper level, we sample parameters from the posterior via Hamiltonian Monte Carlo, while at the lower level we fine-tune a neural network via low-rank adaptation (LoRA) to ap…",
+      "summary": "偏微分方程反问题不仅要估计参数，还需刻画推断的不确定性。本文提出贝叶斯双层局部算子学习框架B-BiLO：上层通过哈密顿蒙特卡洛采样参数后验，下层以低秩适配微调神经网络，局部近似解算子。摘要称，该方法无需合成数据或伴随方程，并通过确定性优化权重避免在高维权重空间采样。作者还分析下层近似优化误差对后验精度的影响，并在包含肿瘤生长的PDE模型上开展数值实验；具体精度、加速幅度及适用条件尚无法核实。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -1357,11 +1882,116 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议将其作为物理反问题与贝叶斯不确定性量化的方法论文重点关注，而非直接归入生成式设计成果。双层推断、LoRA局部适配及后验误差分析具有明确阅读价值，但摘要未展示设计生成或优化任务。[摘要；解读]",
+      "deep_read": {
+        "problem": "研究问题是如何高效量化PDE反问题中的参数不确定性，而非仅获得单一参数估计。摘要以“Uncertainty quantification in PDE inverse problems”明确研究对象，并强调保留物理结构的学习方式。解读：其核心关切是后验推断的计算效率与可信程度，不能直接等同于结构生成或设计优化。[摘要]",
+        "method": "方法采用双层分工：上层通过“Hamiltonian Monte Carlo”采样参数后验，下层使用“low-rank adaptation (LoRA)”微调神经网络，局部近似PDE解算子。权重以确定性方式优化，而非作为贝叶斯神经网络的高维采样变量；摘要未说明网络结构、先验及具体更新安排。[摘要]",
+        "innovation": "从摘要可识别的方案特点，是将局部算子近似、LoRA微调与参数后验采样置于双层框架，并声明采样无需合成数据或伴随方程。原文表述为“without synthetic data or adjoint equations”。解读：这是一种值得核查的计算组织方式，但摘要不足以证明各组成技术或组合方案的首创性。[摘要]",
+        "findings": "作者报告，包含肿瘤生长在内的多种PDE模型数值实验显示，该框架可实现“accurate and efficient uncertainty quantification”。此外，作者分析了下层近似优化误差对后验精度的影响。摘要未给出误差界形式、实验规模或对照结果，因此只能确认成果主张，不能判断实际提升幅度。[摘要]",
+        "limitations": "当前限制首先来自资料范围：仅有摘要，未提供观测噪声、参数维度、计算预算、对照方法及误差分析假设。虽然摘要声称实验准确且高效，但不足以判断不同问题上的稳定性。解读：这些属于尚待核实的证据缺口，并非已经证实的方法缺陷，也不能据此断言其泛化能力不足。[摘要]",
+        "connection": "与生成式设计的联系目前属于间接方法关联：摘要研究的是PDE参数反演，并未展示设计变量生成、目标优化或结构性能改进。解读：对于可靠性研究，参数后验可作为传播不确定性的潜在输入；对于智能运维，亦可考虑物理参数辨识场景，但这些应用均不是本摘要已验证的成果。[摘要]",
+        "next_steps": "建议后续阅读优先核查局部算子适配如何随采样更新、下层优化停止条件，以及后验误差分析成立的假设，再检查效率比较是否包含微调成本。若面向结构设计迁移，建议另设参数反演与性能不确定性传播实验，验证后再讨论设计决策价值；这属于研究建议，不是作者已完成的结论。[摘要；建议]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "基于低秩适配的贝叶斯双层算子学习：偏微分方程反问题的高效不确定性量化",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s41467-026-77768-7"
+      ],
+      "analyzed_at": "2026-10-16T06:55:26.851945+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "PDE反问题不仅需要推断参数，还需要量化推断的不确定性。这项研究提出B-BiLO，将贝叶斯后验采样与局部算子学习结合，探索如何在保持推断准确性的同时降低计算负担。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "参数推断之外，还要回答有多不确定",
+            "paragraphs": [
+              "偏微分方程（PDE）反问题中的不确定性量化，是本文关注的核心问题。摘要将科学机器学习的价值概括为：在保留物理结构的同时，以数据驱动方式学习模型组成部分，并为新兴成像技术和临床研究提供所需的可扩展性与适应性。",
+              "本文的切入点不是单纯训练一个预测网络，而是让神经网络参与贝叶斯推断过程：用局部解算子近似支持参数采样，同时关注这种近似会怎样影响最终的后验准确性。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "上层采样参数，下层用LoRA学习局部算子",
+            "paragraphs": [
+              "作者提出用于PDE贝叶斯推断的双层局部算子学习框架B-BiLO。上层通过哈密顿蒙特卡洛从参数后验分布中采样；下层通过低秩适应（LoRA）微调神经网络，在局部近似PDE的解算子。两层分别承担参数推断与局部近似任务。",
+              "摘要强调，该框架无需合成数据或伴随方程即可开展基于梯度的高效采样。网络权重采用确定性优化，而不是像贝叶斯神经网络那样在高维权重空间中采样。作者还分析了下层近似优化产生的误差及其对后验准确性的影响。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "跨PDE模型报告准确且高效的不确定性量化",
+            "paragraphs": [
+              "摘要报告，涵盖肿瘤生长在内的不同PDE模型数值实验表明，B-BiLO能够实现准确且高效的不确定性量化。这是当前资料明确给出的总体结果，但摘要没有提供具体误差、耗时或加速倍数，因此不宜将定性结论扩写为量化优势。",
+              "另一项值得关注的成果是对误差传递的分析：作者不只讨论局部近似如何服务采样，还建立了下层近似优化误差对后验准确性的影响关系。不过，具体误差界及其成立条件仍需进一步阅读正文。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不足以界定性能优势的适用边界",
+            "paragraphs": [
+              "仅凭摘要，无法判断各模型的数据规模、观测噪声设置、重复试验安排，以及比较方法的配置和计算预算是否一致；也无法确定理论分析所需的全部假设。这些属于当前资料的信息边界，不能据此认定论文没有开展相应工作。",
+              "肿瘤生长被列为数值实验对象，但摘要不足以判断患者样本规模、独立验证范围或临床适用性。摘要提及的成像与临床价值属于研究背景，不能直接当作已经验证的临床效果。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：局部近似如何保持后验可信",
+            "paragraphs": [
+              "阅读启发：对关注结构反演与可靠性分析的读者，更值得追问的是，局部算子在什么条件下足以支撑可信的后验采样，以及LoRA近似和下层优化误差如何进入准确性分析。继续阅读时可优先核对这些条件与性能比较口径，而不宜直接推定该方法已适用于结构设计或疲劳可靠性问题。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [],
+        "figure_groups": [
+          {
+            "section": "method",
+            "title": "双层框架中的参数采样与局部算子更新",
+            "panels": [
+              {
+                "figure_id": "fig-47a082000c7598e5a17e4400",
+                "caption": "图1｜BiLO与LoRA求解贝叶斯PDE反问题的框架示意。a展示上层基于梯度的参数后验采样，横轴为PDE参数，纵向表示后验密度，箭头示意局部梯度信息；b以空间位置和参数为自变量，对比灰色全局解算子与蓝色局部近似，强调局部残差及残差梯度条件；c展示下层神经网络学习局部算子，并通过低秩权重更新衔接不同参数位置的近似。"
+              }
+            ]
+          },
+          {
+            "section": "findings",
+            "title": "肿瘤生长示例中的参数后验与空间分布",
+            "panels": [
+              {
+                "figure_id": "fig-a29c6ea2011c9f284eb03824",
+                "caption": "图4｜使用LoRA秩为8的B-BiLO推断患者特异性胶质母细胞瘤生长参数。a比较LoRA与全参数微调所得参数后验，并展示虚线先验；各小图横轴为相应参数值，纵轴表示分布密度。b展示肿瘤细胞密度的后验均值；c比较最大后验估计对应的分割与真实标注；d展示细胞密度的后验标准差。空间图叠加于脑部影像，b、d的色标分别表示均值与标准差。"
+              }
+            ]
+          }
+        ]
+      },
+      "article_updated_at": "2026-10-16T07:24:42.153664+00:00",
+      "article_profile": "2a156f1daaef97b473ab409fb0eb20880768b2bc2b4ab75dc3c3a532bb656704",
+      "analysis_references": {},
+      "analysis_material_version": "85ec45d66b10bc48c62a7a1070b2cec5f0240c8e7d6f2d4cc8514678240d721d",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "fa241d43484d",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-16T07:24:42.153664+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -1389,7 +2019,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Efficient multi-objective collaborative design is a core scientific challenge and a primary obstacle to the development of novel glass materials. Here, we propose IGlasGAN (Inorganic Glass Generative Adversarial Network), a generative artificial intelligence framework for the automatic inverse design of inorganic glass materials subject to box constraints on multiple coupled properties, alongside a full generation-evaluation-validation pipeline. Built upon an improved WGAN-GP-CP architecture, the framework incorporates a property navigation mechanism and an extended normalization strategy to e…",
+      "summary": "【摘要】本文面向无机玻璃多性能协同设计，提出IGlasGAN框架，将性能区间要求直接映射为玻璃组成，并连接生成、评价与验证流程。模型采用改进的WGAN-GP-CP架构，结合性能导航机制与扩展归一化策略，以2445个实验样本训练，在OLED基板玻璃及两个偏离训练分布的目标场景中开展设计。三个场景共实验表征12个生成样本，多数性能偏差在±3.50%以内，但热膨胀系数最大偏差为13.03%。现有依据仅为摘要，不能据此确认全面泛化能力。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -1432,11 +2062,156 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "【解读】推荐围绕生成式设计重点阅读，尤其关注多性能区间约束如何进入生成模型，以及生成组成如何通过实验验证；但应保留对热膨胀系数预测精度和远分布适用边界的判断。[摘要]",
+      "deep_read": {
+        "problem": "【摘要】研究针对玻璃材料多目标协同设计困难，要求生成组成同时满足多个耦合性能的区间约束。OLED基板案例涉及热膨胀系数、杨氏模量、应变点温度和密度；2445个训练样本中仅156个完全满足四项要求，体现了目标可行组成筛选的挑战。[摘要]",
+        "method": "【摘要】IGlasGAN基于改进的WGAN-GP-CP架构，加入性能导航机制和扩展归一化策略，实现从性能要求到玻璃组成的端到端生成，并建立生成、评价、验证流程。摘要未提供损失函数、约束编码或网络参数，尚不能据此复现具体实现。[摘要]",
+        "innovation": "【解读】值得关注的方法组合，是将多项耦合性能的区间约束、按需组成生成及实验验证纳入同一逆向设计框架，而不只是预测已有组成的性能。摘要称其能够覆盖较宽设计空间，但缺少基线比较与消融证据，无法确认各模块的独立贡献或创新幅度。[摘要]",
+        "findings": "【摘要】OLED基板设计识别出相对较高Y₂O₃含量的新组成，并设置两个目标区域逐步远离训练分布的从零设计场景。三个场景共实验表征12个生成样本；除热膨胀系数外，实测与生成值偏差在±3.50%以内，其最大偏差为13.03%。[摘要]",
+        "limitations": "【解读】摘要提供了实验验证，但未交代12个样本在各场景的分配、生成候选总数、筛选比例及重复实验情况，因此难以判断整体成功率与统计稳健性。热膨胀系数偏差较大也是已报告的精度边界；未披露的信息不应直接认定为论文缺陷。[摘要]",
+        "connection": "【解读】与给定生成式设计方向直接相关，其性能需求到组成的映射可作为材料层面的逆向设计案例。对结构设计研究的可迁移启发是处理多目标约束并进行实体验证；但摘要没有涉及结构几何优化、智能运维或服役可靠性，不能将这些应用视为已获验证。[摘要]",
+        "next_steps": "【建议】后续获取全文时，优先核查目标区间定义、数据划分、远分布距离度量、对照模型与消融实验，再判断生成质量是否稳定。若迁移至可靠性研究，可考虑引入性能不确定性与约束满足概率，并设置独立实验检验；这些属于研究建议，并非作者已完成的工作。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "IGlasGAN：基于生成式人工智能的无机玻璃材料逆向设计框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s41524-026-02273-w"
+      ],
+      "analyzed_at": "2026-10-16T07:16:15.521646+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "无机玻璃逆向设计的难点，是让多项耦合性能同时满足要求。IGlasGAN尝试从性能需求直接生成玻璃组成，并通过实验检验生成值，为理解生成式人工智能如何连接材料设计与实测验证提供了具体案例。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "玻璃设计难在多项性能同时达标",
+            "paragraphs": [
+              "摘要将高效的多目标协同设计列为新型玻璃开发的核心挑战。本文面向OLED基板玻璃，同时考虑热膨胀系数（CTE）、杨氏模量（E）、应变点温度（T st）和密度（ρ），研究重点不是单项性能最优，而是多项性能共同满足指定区间。",
+              "训练数据包含2445个实验样本，其中156个完全满足上述四项性能要求。这一数据背景说明，已有样本中包含符合目标的组成，但如何按需求生成候选组成，仍是本文要解决的问题。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从性能区间到组成的生成—评价—验证流程",
+            "paragraphs": [
+              "IGlasGAN基于改进的WGAN-GP-CP架构，引入性能导航机制和扩展归一化策略，在多项耦合性能的箱式约束下开展自动逆向设计。摘要明确描述了从性能需求到玻璃组成的端到端按需设计，以及生成、评价和验证相衔接的完整流程。",
+              "除OLED基板玻璃设计外，研究还设置了两个从零设计场景，其目标区域与训练数据分布的距离逐步增大，用于进一步检验生成能力。摘要未展开性能导航、归一化和评价环节的具体实现。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "实测总体吻合，但CTE偏差需要单独看",
+            "paragraphs": [
+              "在OLED基板玻璃逆向设计中，研究识别出具有相对较高Y₂O₃含量的新组成。三个场景合计对12个生成样本进行了实验表征；这是摘要报告的实验验证范围，不代表所有生成候选均已获得实测确认。",
+              "摘要报告，实测性能与生成值总体吻合：除CTE外，偏差均在±3.50%以内；CTE的最大偏差为13.03%。因此，不能把整体吻合概括为所有性能具有相同精度，CTE应作为理解验证结果时的重点。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "验证覆盖面与比较优势仍需查阅全文",
+            "paragraphs": [
+              "仅凭摘要，无法判断训练样本的组成覆盖、数据划分方式，以及实验表征样本在各场景中的分配和筛选依据。摘要也未提供基线模型比较、重复测量或不确定性信息，因此不能据此量化相对其他方法的优势。",
+              "目标区域逐步远离训练分布，为考察不同目标设置提供了线索，但摘要未给出距离定义、各场景达标情况或更广泛的适用边界。这些信息在摘要中未报告，不等于论文没有开展相关分析。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：分清数值吻合与约束达标",
+            "paragraphs": [
+              "阅读启发：关注生成式逆向设计时，宜区分“生成值与实测值接近”和“实测性能满足全部目标区间”。本文可进一步阅读的重点，是各场景如何判定约束达标、CTE偏差如何影响达标判断，以及性能导航如何支持远离训练分布的目标，而非直接推断其已具备普遍外推能力。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的IGlasGAN逆向设计流程",
+            "description": "示意图仅概括摘要明确描述的性能需求、组成生成及评价验证关系，不是论文原图，也不补充具体实验配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "多项性能需求",
+                "detail": "以CTE、E、T st和ρ的性能区间作为逆向设计目标。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "IGlasGAN逆向设计",
+                "detail": "采用改进的WGAN-GP-CP架构、性能导航机制与扩展归一化策略。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "生成玻璃组成",
+                "detail": "从性能需求出发，按需生成无机玻璃候选组成。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "评价环节",
+                "detail": "属于摘要所述完整流程，具体评价方式未在摘要中展开。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "实验表征与对照",
+                "detail": "对生成样本开展实验表征，比较实测性能与生成值。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "输入性能要求"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "按需生成"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "进入评价"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "衔接验证"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-16T07:25:35.172346+00:00",
+      "article_profile": "267a8b85eb1f427d24175ca83922a66294f4ff6f2a0d70514a34d4e8f03b0b69",
+      "analysis_references": {},
+      "analysis_material_version": "a19c847f94b7ba234477124fd9579006223db66138f26408af64778c2d8c73b7",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "a7897e08db6d",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-16T07:25:35.172346+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "extended": [],
@@ -1468,7 +2243,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Abstract High-fidelity computational fluid dynamics (CFD) provide detailed substrate gradient predictions in industrial stirred-tank bioreactors but are computationally intensive, limiting their routine application. We developed surrogate models trained on $$760$$ 760 CFD simulations to rapidly predict fully 3-D substrate concentration fields from global operating conditions (e.g., stirring speed, feeding strategy, feeding point location, fluid density and viscosity, liquid height, bio-kinetic parameters, biomass concentration), and local spatial descriptors (e.g., distance to the feeding poin…",
+      "summary": "工业搅拌罐中底物空间分布影响过程设计与控制，但高保真CFD计算成本限制了常规应用。作者以760次CFD模拟训练代理模型，结合全局工况与局部空间描述符预测完整三维浓度场。摘要报告注意力神经网络测试R²≈0.91，并实现毫秒级推理，相比CFD最高加速百万倍。其价值在于支持运行空间探索与数字孪生；当前仅有摘要，尚不能核查误差分布及实际部署效果。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -1510,11 +2285,154 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐关注其将全局运行条件与局部空间信息共同用于三维场预测的方法，尤其适合数字孪生和快速运行优化研究参考；但不能据此认定其已具备故障诊断或可靠性评估能力。[摘要；解读]",
+      "deep_read": {
+        "problem": "研究针对工业搅拌罐底物梯度预测的精度与计算成本矛盾。摘要指出高保真CFD虽能提供详细预测，却“are computationally intensive”，限制常规应用。核心问题是能否降低空间场预测成本，使其适应更频繁的工况探索，而非直接开展设备故障识别。[摘要；解读]",
+        "method": "作者以760次CFD模拟训练代理模型，输入同时包含全局运行条件与局部空间描述符。前者涉及搅拌速度、进料策略、流体性质及生物动力学参数等，后者例如到进料点的距离；输出为完整三维底物浓度场。摘要明确使用“local spatial descriptors”，但未交代网络细节。[摘要]",
+        "innovation": "解读：值得关注的是将工况信息与空间位置特征结合，让代理模型承担三维浓度场的快速映射，而不只预测单一整体指标。摘要以“couple hydrodynamics and biokinetics”概括模型能力；但缺少既有方法比较及消融结果，不能据此认定其架构具有首创性。[摘要；解读]",
+        "findings": "摘要报告注意力神经网络在所比较方法中精度最高，测试R²≈0.91，并能捕捉关键混合特征；其“millisecond-scale inference”对应相较CFD最高百万倍加速。上述为作者报告的结果，当前资料未提供计算硬件、计时边界或分工况误差，无法进一步核验。[摘要]",
+        "limitations": "当前证据仅为摘要，未提供训练测试划分、模拟覆盖范围、物理约束及实验实测验证信息，因此无法判断对未见工况的泛化能力。这些属于资料缺口，并非已证实的方法缺陷。“trained on $$760$$ 760 CFD simulations”也不足以证明模型已在真实装置中得到验证。[摘要；解读]",
+        "connection": "解读：摘要提出支持“real-time optimization and digital-twin frameworks”，与智能运维中的状态预测和运行优化存在方法联系。其与结构设计的关联主要限于反应器设计决策支持，并非结构力学分析；对于失效概率、寿命预测或可靠性指标，当前资料没有直接证据。[摘要；解读]",
+        "next_steps": "建议：后续获取全文时，优先核查进料位置、黏度和液位变化下的测试设置，以及浓度极值区域的误差与守恒表现。若迁移至智能运维，可研究预测不确定性与优化决策风险的联系，并以实测数据检验适用边界；这些是研究建议，不是摘要已报告的工作。[摘要；建议]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "机器学习代理模型实现工业生物反应器三维底物梯度快速预测",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s41467-026-78273-7"
+      ],
+      "analyzed_at": "2026-10-16T06:55:27.523951+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "工业搅拌罐生物反应器中的底物浓度如何随空间变化，关系到反应器设计与运行控制。这项研究用机器学习代理模型逼近高成本流体计算，探索能否在保留关键混合特征的同时，快速预测三维底物浓度场。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "底物空间梯度预测，难在计算成本",
+            "paragraphs": [
+              "高保真计算流体力学（CFD）能够提供工业搅拌罐生物反应器内细致的底物梯度预测，但计算开销限制了其常规应用。研究关注的不是单一平均浓度，而是完整的三维浓度场：既要描述空间差异，又希望让预测速度适合更频繁的工况探索。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从CFD模拟学习工况与空间位置的关系",
+            "paragraphs": [
+              "作者利用760次CFD模拟训练代理模型，将全局运行条件与局部空间描述共同作为预测依据。前者包括搅拌速度、进料策略、进料点位置、流体密度与黏度、液位、生物动力学参数及生物量浓度；后者例如到进料点的距离。模型的目标输出是完整的三维底物浓度场。",
+              "摘要提到研究比较了多种方法，其中包括基于注意力机制的神经网络。其方法思路是从模拟数据中学习运行条件、局部位置与浓度之间的映射；摘要没有展开网络结构、训练流程或各类方法的具体配置。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "注意力模型兼顾预测精度与毫秒级推理",
+            "paragraphs": [
+              "在摘要所述的方法比较中，基于注意力机制的神经网络取得最高精度，测试集R²约为0.91，并能够捕捉关键混合特征。其推理达到毫秒量级，相比CFD的加速最高可达百万倍。这里的加速针对预测环节，不能据此推断生成训练数据和训练模型的全部成本。",
+              "作者据此认为，数据驱动模型能够有效耦合流体动力学与生物动力学，实现快速、准确的空间预测，并为运行空间探索提供支持。实时优化、数字孪生以及反应器设计与控制是摘要提出的应用价值，不宜直接解读为这些应用均已完成现场验证。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "测试表现尚需结合数据划分与验证范围理解",
+            "paragraphs": [
+              "仅凭摘要，无法判断760次模拟覆盖的反应器构型、工况范围，以及训练集和测试集如何划分；也无法确定比较方法的完整名单、精度指标的具体统计口径和加速测量条件。对未见工况的泛化、真实反应器数据验证及闭环控制表现，摘要均未提供足够信息，需进一步阅读论文核实，不能据此认定论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：区分快速场预测与运维闭环",
+            "paragraphs": [
+              "阅读启发：面向AI智能运维，这项工作的直接启示是用代理模型降低空间状态预测的计算门槛，而不是已经实现故障诊断或预测维护。进一步阅读时，值得关注模型在哪些工况内可靠、局部浓度偏差如何评估，以及快速预测如何接入数字孪生；这些问题有助于界定其工程适用边界。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的三维浓度场预测示意",
+            "description": "概括CFD模拟训练代理模型，以及全局条件、局部空间描述用于预测的关系；不是论文原图，不表示未报告的网络结构。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "CFD模拟数据",
+                "detail": "摘要报告使用760次CFD模拟训练代理模型。"
+              },
+              {
+                "id": "b",
+                "stage": 0,
+                "label": "全局运行条件",
+                "detail": "包括搅拌、进料、流体性质及生物动力学等条件。"
+              },
+              {
+                "id": "c",
+                "stage": 0,
+                "label": "局部空间描述",
+                "detail": "例如到进料点的距离。"
+              },
+              {
+                "id": "d",
+                "stage": 1,
+                "label": "机器学习代理模型",
+                "detail": "比较的方法中，基于注意力机制的神经网络精度最高。"
+              },
+              {
+                "id": "e",
+                "stage": 2,
+                "label": "三维底物浓度场",
+                "detail": "快速预测空间浓度分布，并捕捉关键混合特征。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "d",
+                "label": "用于训练"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "预测输入"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "预测输入"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "快速预测"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-16T07:24:13.221835+00:00",
+      "article_profile": "3c03cd29b6a7ccea0e592659e8ab953ff89b85c46374d12c4824f946edbd5db8",
+      "analysis_references": {},
+      "analysis_material_version": "eacebd0e0881586141ada7cc074948dd3db40c30b64233836e2681d5f216ccff",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "15b8068e8614",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-16T07:24:13.221835+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -1539,7 +2457,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Acoustic valley-Hall insulators (AVHIs) are an emerging class of acoustic topological materials that enable robust directional wave transport and show promise for applications in communication, sensing and wave manipulation. This study presents a large language model (LLM)-driven inverse design framework consisting of two collaborative agents. The Designer-LLM is fine-tuned on an AVHI database generated through reinforcement learning to perform bandgap-targeted inverse design. The Manager-LLM coordinates task planning, semantic parsing, simulation tool invocation and multimodal result…",
+      "summary": "本文针对声学谷霍尔绝缘体的目标带隙逆向设计，提出双智能体协作框架：设计智能体基于强化学习生成的数据库微调，管理智能体负责需求解析、任务规划、仿真调用及结果生成。系统可输出结构参数、能带、本征模态场和可制造模型文件。摘要称测试集带隙误差分析支持设计精度，但未给出具体数值与对照结果。解读：其阅读价值主要在于连接语言需求、结构生成和数值验证的工作流，而非已获充分量化证明的性能优势。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -1584,11 +2502,116 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议重点关注生成式结构设计与仿真验证的衔接，以及双智能体的职责划分；当前仅有摘要，尚不能判断其相对传统优化方法的精度或效率优势。[摘要]",
+      "deep_read": {
+        "problem": "研究面向声学谷霍尔绝缘体的目标带隙逆向设计。摘要指出，此类材料能够实现“robust directional wave transport”，并具有通信、传感和波调控应用前景。解读：核心问题是如何把简短设计需求转化为满足带隙目标的结构，而非仅生成语言描述。[摘要]",
+        "method": "框架由两个协作智能体组成。Designer-LLM利用强化学习生成的声学谷霍尔绝缘体数据库进行微调，承担带隙目标驱动的结构设计；Manager-LLM负责规划、语义解析、仿真工具调用和多模态结果生成。摘要未说明模型规模、数据量或微调细节。[摘要]",
+        "innovation": "摘要明确提出“modular LLM-agent framework”，将语义交互、逆向设计、数值验证和多模态输出整合为统一流程。解读：可关注的创新线索是专业设计模型与流程管理模型的分工及集成方式；仅凭摘要不能认定其为首创，也不能确认相对已有框架的优势。[摘要]",
+        "findings": "系统可按简短需求输出结构参数、能带、本征模态场及可制造模型文件。摘要称测试集带隙误差分析表明设计具有“reliable bandgap-matching accuracy”。但未提供误差数值、样本规模或比较基线，因此只能确认作者报告了准确性验证，不能量化其效果。[摘要]",
+        "limitations": "当前证据仅为摘要，未披露数据库覆盖范围、训练与测试划分、误差分布、计算成本及失败案例，也未说明是否进行了实物制造验证。这些属于资料缺口，而非已经证实的方法缺陷。摘要中的可制造模型文件输出，也不能直接等同于制造可行性已经得到验证。[摘要]",
+        "connection": "解读：本文与生成式结构设计直接相关，展示了从需求表达、结构生成到仿真结果输出的集成思路。对智能运维的联系主要是任务编排与工具调用方式可供参考，摘要未涉及运维实验；对可靠性研究，也不能把稳健波传输或带隙匹配精度等同于寿命与失效可靠性证据。[摘要]",
+        "next_steps": "建议后续获取全文，优先核查目标带隙的定义、误差指标、测试集独立性，以及与传统优化和非微调模型的对照。可迁移研究建议是加入制造偏差或材料参数扰动下的设计验证，考察目标匹配与稳健性的关系；该方向属于延伸设想，并非摘要报告的成果。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "大语言模型驱动的声学谷霍尔绝缘体逆向设计",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s41524-026-02349-7"
+      ],
+      "analyzed_at": "2026-10-16T07:04:29.491222+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "如何把简短的声学设计需求转化为满足目标带隙的结构，并衔接数值验证与模型输出？这项研究以声学谷霍尔绝缘体为对象，用两个分工协作的大语言模型智能体组织逆向设计流程，值得关注的是专业设计能力与任务调度如何结合。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从目标带隙出发设计声学拓扑材料",
+            "paragraphs": [
+              "声学谷霍尔绝缘体（AVHI）是一类能够实现稳健定向波传输的声学拓扑材料，在通信、传感和波操控方面具有应用潜力。这里的应用潜力是研究背景，并不等于本研究已经验证了这些场景中的实际效果。",
+              "本文关注以目标带隙为导向的逆向设计：根据设计要求生成相应结构，而不只是描述既有结构的声学性质。研究将语义交互、结构设计、数值验证和结果生成纳入统一工作流。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "设计模型负责结构，管理模型组织流程",
+            "paragraphs": [
+              "框架由两个协作智能体组成。Designer-LLM使用通过强化学习生成的AVHI数据库进行微调，承担面向目标带隙的逆向设计任务。这里应区分数据库生成与模型微调两个环节，不能将其笼统理解为大语言模型自行学习全部物理规律。",
+              "Manager-LLM负责协调任务规划、语义解析、仿真工具调用及多模态结果生成。两个模型的职责不同：前者面向结构设计，后者组织需求理解与工具协作，共同连接用户要求和设计输出。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "输出不止结构参数，精度依据来自带隙误差",
+            "paragraphs": [
+              "摘要报告，该框架能够依据简短设计要求生成结构参数、能带结构、本征模态场以及可制造模型文件。因此，其输出不局限于一组结构参数，也包含用于呈现声学特征和后续制造准备的不同形式结果。",
+              "对于设计准确性，摘要给出的依据是测试集上的带隙误差分析：微调后的Designer-LLM能够生成具有可靠带隙匹配精度的AVHI结构。不过，摘要未给出具体误差数值，不能据此判断精度提升幅度，也不能将带隙匹配直接等同于所有声学性能均得到验证。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不足以界定精度与泛化边界",
+            "paragraphs": [
+              "当前摘要未报告数据库规模、测试集样本数量、数据划分方式、比较基线及误差分布，因此无法据此评估测试覆盖范围或相对其他方法的优势。摘要也不足以界定数值验证的具体条件，以及从模型文件到实际制造、测量的一致性验证范围；这些信息需进一步查阅，不能写成论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：分别审视设计能力与流程组织",
+            "paragraphs": [
+              "阅读启发：对结构生成式设计而言，可以分别关注专业模型能否准确响应目标，以及管理智能体如何把需求、仿真和输出连接起来。进一步阅读时，值得核对带隙误差如何定义、测试目标覆盖哪些范围，以及生成结构如何接受数值检验。",
+              "摘要将向其他声学超材料设计任务扩展定位为未来参考，而非已经完成的通用能力。建议带着这一边界阅读：哪些环节能够复用，哪些仍依赖AVHI专用数据库与验证工具，是理解其可迁移性的关键问题。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [],
+        "figure_groups": [
+          {
+            "section": "method",
+            "title": "双智能体逆向设计框架",
+            "panels": [
+              {
+                "figure_id": "fig-bc04331af565eb5ec4d738bf",
+                "caption": "原图1｜大语言模型驱动的逆向设计框架及声学谷霍尔绝缘体阵列中的声波传输示意。子图a展示框架工作流，其中Designer-LLM根据指定目标带隙生成相应的AVHI结构参数。"
+              }
+            ]
+          },
+          {
+            "section": "findings",
+            "title": "数据集构建与设计模型评估",
+            "panels": [
+              {
+                "figure_id": "fig-f4a6edf6cb2e38a983d9632a",
+                "caption": "原图2｜AVHI数据集构建与微调后Designer-LLM的评估。子图a展示不同σ取值下，即时奖励随相邻优化步骤间相对拓扑带隙差的变化；子图b展示即时奖励关于当前及前一优化步骤相对拓扑带隙值的三维曲面；子图c展示数据集中拓扑带隙下、上边缘频率的分布。"
+              }
+            ]
+          }
+        ]
+      },
+      "article_updated_at": "2026-10-16T07:05:38.792817+00:00",
+      "article_profile": "41f97b97435e0c19add119babf6fe0f3c7fc7f34e7dd36b4d0e560c1f45ccff5",
+      "analysis_references": {},
+      "analysis_material_version": "5a35a9b959ae95271ee4719e1aefb187dedd395ff161fbd9c42fbb999bb99c70",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "d5b8590dae6a",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-16T07:05:38.792817+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -2642,7 +3665,130 @@
         "reason": "与所给generative_design方向直接契合：论文具有物理约束生成与多目标优化的明确方法，并报告候选①的实验、CPFE和机器学习预测一致。[P3、P7]当前连续原文足以支持重点阅读判断，但不能证明全部候选泛化、具体提升幅度或可靠性应用；公式缺项也限制复现。[P9]",
         "heat": null
       },
-      "recommended_direction": "generative_design"
+      "recommended_direction": "generative_design",
+      "analysis_references": {
+        "problem": [
+          "P2"
+        ],
+        "method": [
+          "P4",
+          "P5",
+          "P9"
+        ],
+        "innovation": [
+          "P1",
+          "P3"
+        ],
+        "findings": [
+          "P4",
+          "P5",
+          "P6",
+          "P7"
+        ],
+        "limitations": [
+          "P3",
+          "P4",
+          "P5",
+          "P7",
+          "P9"
+        ],
+        "connection": [
+          "P3",
+          "P7",
+          "P9"
+        ],
+        "next_steps": [
+          "P5",
+          "P9"
+        ]
+      },
+      "analysis_material_version": "80a4c920d18f033bcc39b53a078e8cf5be9191f3d448bf439a046a44f19109a7",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "原页已核实“Published online: 30 September 2026”，提供的文字提取遗漏该出版日期。已补充识读；不影响方法或性能结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "提供的文字提取遗漏图1内部流程、公式及坐标标签。原页可读：图1a总损失由L_pix、L_edge、L_SSIM三项相加，展开式含像素绝对误差均值、S作用后的边缘差异均值及含均值和协方差的结构相似性分式；图1c明确标注NSGA-II及潜空间外推。遗漏会削弱对损失构成和优化流程的理解，不属于原文件公式缺项。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P5",
+          "detail": "图3i–n的原页图例为蓝圆点Train、红方点Test；原页图注却将蓝圆点和红方点分别对应20个训练、5个测试高分辨率图像，颜色与数据集对应写反。P4正文确认训练20幅、测试5幅。属于原图注对应错误，不是文字提取错误；影响训练与测试聚合点的识别，不妨碍读取六项特征对比。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P6",
+          "detail": "图4c原页图例明确标注延伸率模型Test R²=0.92，而P5正文称两个模型测试R²均“exceeding 0.92”。已核实正文与图示措辞不一致；图示按0.92记录，不能据此确认未经舍入值是否严格超过0.92。影响预测精度的精确表述，不影响页面识读。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "公式(1)–(9)原页清晰，文字提取将减号、卷积乘号、乘幂及数学括号误编码为/C0、/C3、/C138等。已依据原页纠正：公式(1)为绝对差均值，公式(3)为两个方向卷积差绝对值之和的均值，公式(7)为三项乘幂相乘，公式(9)为1−SSIM。影响损失函数准确识别，不是原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "公式(11)–(16)文字提取存在括号、减号、根号、ᾱ_t及上下标编码错误。原页已核实：公式(12)均值含√(1−β_t)，公式(13)均值含√ᾱ_t，协方差为(1−ᾱ_t)I；公式(16)为相对于参考点的两项性能差值乘积的平均。已纠正，不影响读取现有公式。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P9",
+          "detail": "公式(14)原页确实写为p_θ(x_{t−1}|x_t,x_V)=N(x_{t−1};ε_θ(x_t,t,x_V))，仅列一个高斯参数，未给出协方差；随后正文将ε_θ称为预测噪声，却未在该式给出噪声预测到反向分布均值的转换。现有公式和文字均可识读，但不足以完整确定反向采样分布；不补造缺失参数或转换式。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "a5695ec17eb2",
+        "state": "published",
+        "updated_at": "2026-10-03T08:47:30.777168+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 11,
+        "covered": 11,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页已核实“Published online: 30 September 2026”，提供的文字提取遗漏该出版日期。已补充识读；不影响方法或性能结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "提供的文字提取遗漏图1内部流程、公式及坐标标签。原页可读：图1a总损失由L_pix、L_edge、L_SSIM三项相加，展开式含像素绝对误差均值、S作用后的边缘差异均值及含均值和协方差的结构相似性分式；图1c明确标注NSGA-II及潜空间外推。遗漏会削弱对损失构成和优化流程的理解，不属于原文件公式缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P5",
+            "detail": "图3i–n的原页图例为蓝圆点Train、红方点Test；原页图注却将蓝圆点和红方点分别对应20个训练、5个测试高分辨率图像，颜色与数据集对应写反。P4正文确认训练20幅、测试5幅。属于原图注对应错误，不是文字提取错误；影响训练与测试聚合点的识别，不妨碍读取六项特征对比。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P6",
+            "detail": "图4c原页图例明确标注延伸率模型Test R²=0.92，而P5正文称两个模型测试R²均“exceeding 0.92”。已核实正文与图示措辞不一致；图示按0.92记录，不能据此确认未经舍入值是否严格超过0.92。影响预测精度的精确表述，不影响页面识读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "公式(1)–(9)原页清晰，文字提取将减号、卷积乘号、乘幂及数学括号误编码为/C0、/C3、/C138等。已依据原页纠正：公式(1)为绝对差均值，公式(3)为两个方向卷积差绝对值之和的均值，公式(7)为三项乘幂相乘，公式(9)为1−SSIM。影响损失函数准确识别，不是原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "公式(11)–(16)文字提取存在括号、减号、根号、ᾱ_t及上下标编码错误。原页已核实：公式(12)均值含√(1−β_t)，公式(13)均值含√ᾱ_t，协方差为(1−ᾱ_t)I；公式(16)为相对于参考点的两项性能差值乘积的平均。已纠正，不影响读取现有公式。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P9",
+            "detail": "公式(14)原页确实写为p_θ(x_{t−1}|x_t,x_V)=N(x_{t−1};ε_θ(x_t,t,x_V))，仅列一个高斯参数，未给出协方差；随后正文将ε_θ称为预测噪声，却未在该式给出噪声预测到反向分布均值的转换。现有公式和文字均可识读，但不足以完整确定反向采样分布；不补造缺失参数或转换式。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -2683,7 +3829,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Engineering short-range atomic order offers a promising route to design amorphous solids. Here, we establish a boron-assisted amorphization strategy using ApolloX, a theory-guided, short-range-order-constrained generative framework for identifying low-energy configurations in compositionally complex multielement systems. Using FeCoNiMoBO x as a model platform, ApolloX generates candidate amorphous structures across varied boron contents. Ab initio molecular dynamics simulations reveal that increasing the boron content suppresses atomic diffusion and crystallization, accompanied by the stabiliz…",
+      "summary": "【摘要】研究以成分复杂非晶氧化物为对象，将短程原子有序约束引入生成框架 ApolloX，探索硼含量对非晶形成的影响。以 FeCoNiMoBO x 为模型，模拟显示增硼抑制原子扩散与结晶，并稳定以 BO 3 为中心的局部结构。作者合成三种不同硼含量的组成，通过同步辐射散射和电子显微术验证预测的结构演化，并拓展至更多多金属组成。当前仅有摘要，可判断其设计与验证路线，不能评价具体性能及预测精度。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "American Association for the Advancement of Science (AAAS)",
@@ -2725,11 +3871,165 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "【摘要】推荐关注其将局部原子结构约束、生成候选结构和实验验证衔接的材料设计路线。【解读】适合生成式结构设计方向重点初筛，但尚不能据此认定算法优于现有方法。",
+      "deep_read": {
+        "problem": "【摘要】论文研究如何通过调控短程原子有序促进复杂多元素氧化物形成非晶结构，原文将其描述为“Engineering short-range atomic order”。核心问题是硼含量如何影响局部结构、扩散和结晶，以及这种影响能否用于指导可实验验证的材料设计。",
+        "method": "【摘要】作者采用“short-range-order-constrained generative framework”ApolloX，生成不同硼含量的候选非晶结构，再以第一性原理分子动力学分析结构演化。实验合成三种组成，并用同步辐射散射与电子显微术检验成分、均匀性和非晶特征。",
+        "innovation": "【摘要】作者提出硼辅助非晶化策略，并将其与理论引导的生成框架结合。【解读】值得关注的是以短程有序约束连接候选结构搜索和成分调控，而不只是筛选配方；但摘要未交代模型架构、约束实现或基线比较，尚不足以确认算法层面的独创性。",
+        "findings": "【摘要】模拟发现增硼“suppresses atomic diffusion and crystallization”，并伴随以 BO 3 为中心的局部结构稳定。作者称实验验证了预测的硼依赖结构演化，且策略扩展到更多金属组合与硼含量；摘要未给出效应大小或各组成的具体数据。",
+        "limitations": "【摘要】当前材料没有生成模型训练细节、低能构型筛选标准、模拟条件及散射数据，无法核查预测误差与验证强度。【解读】这些是摘要级证据的边界，并非已证实的研究缺陷；策略的适用范围、失败案例及应用性能仍需全文才能判断。",
+        "connection": "【解读】该研究与给定生成式设计方向直接相关：它围绕局部结构约束生成候选构型，并以模拟和实验检验设计结果。对结构设计研究，其参考价值在于物理约束的引入；摘要未涉及智能运维、寿命预测或失效概率，不宜推定其具有可靠性研究成果。",
+        "next_steps": "【建议】后续获取全文时，优先核查短程有序约束的表达方式、候选结构的能量评价，以及不同硼含量下模拟与实验的对应关系。若迁移到其他材料设计任务，应设置无约束生成和常规搜索对照，并记录失败组成，检验约束的实际贡献与适用边界。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "短程有序约束生成设计引导的硼辅助成分复杂非晶氧化物合成",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1126/sciadv.aef4658"
+      ],
+      "analyzed_at": "2026-10-16T07:04:33.319881+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "多元素氧化物的非晶结构，能否通过局部原子排列来引导形成？这项研究将短程有序约束引入生成式设计，以含硼体系连接结构预测与合成验证，探索硼促进非晶化的作用及其适用范围。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从短程原子有序入手设计非晶氧化物",
+            "paragraphs": [
+              "这项研究关注的是：如何利用短程原子有序，设计成分复杂的非晶固体。作者选择 FeCoNiMoBOₓ 作为模型体系，将硼含量作为调节变量，考察局部结构变化与非晶形成之间的联系。阅读重点不仅是能否合成非晶材料，还包括结构预测能否为合成提供可验证的指引。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "ApolloX 生成候选结构，再由模拟指导合成",
+            "paragraphs": [
+              "作者建立了 ApolloX：一个由理论引导、受短程有序约束的生成式框架，用于寻找成分复杂多元素体系中的低能构型。在模型体系中，该框架生成不同硼含量下的候选非晶结构，再通过第一性原理分子动力学模拟考察相关结构演化。",
+              "依据预测，作者合成了三种硼含量不同的 FeCoNiMoBOₓ 组成，并使用同步辐射散射和电子显微学进行表征。研究随后将策略扩展到涵盖不同金属组合与硼含量的多金属 BOₓ 组成库，考察其在更广组成范围内的适用性。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "硼含量增加伴随扩散受抑与局部结构稳定",
+            "paragraphs": [
+              "模拟结果显示，随着硼含量增加，原子扩散和结晶受到抑制，同时以 BO₃ 为中心的局部结构单元趋于稳定，有利于非晶结构形成。这里值得注意的是，摘要把动力学变化与局部结构稳定联系起来，而不只是报告最终是否得到非晶材料。",
+              "摘要报告，实验表征确认了所合成材料的组成符合性、结构均匀性和目标非晶特征，并据此验证了预测的硼含量依赖性结构演化。作者进一步将硼引入概括为促进非晶化的有效、可推广手段；这一结论的具体适用边界，仍需结合各组成的详细证据理解。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "推广范围与生成框架表现仍需更多细节",
+            "paragraphs": [
+              "仅凭摘要，无法判断各组成的具体硼含量、制备条件、独立样本与重复测量规模，也无法核对组成库的完整覆盖范围。摘要未交代 ApolloX 与其他结构搜索方法的比较、预测误差，以及模拟和表征的具体判据；这些属于当前资料无法判断的内容，不代表论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注约束如何连接生成与验证",
+            "paragraphs": [
+              "阅读启发：对于生成式设计，本文值得继续追问的是，短程有序约束如何进入候选结构生成，以及预测中的局部结构特征如何与实验表征对应。进一步阅读时，可重点查看不同金属组合是否支持一致的硼作用解释，而不宜仅凭摘要将材料发现结果外推为结构可靠性或服役性能的改善。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的硼辅助非晶化研究过程",
+            "description": "仅概括摘要明确陈述的生成、模拟、合成与表征关系，是依据摘要整理的示意图，并非论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "不同硼含量的模型体系",
+                "detail": "以 FeCoNiMoBOₓ 为模型平台，考察硼含量变化。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "ApolloX 生成候选结构",
+                "detail": "通过理论引导、短程有序约束的生成式框架寻找低能构型。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "第一性原理分子动力学",
+                "detail": "考察硼含量与原子扩散、结晶及 BO₃ 中心局部结构的关系。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "预测指导材料合成",
+                "detail": "合成三种硼含量不同的 FeCoNiMoBOₓ 组成。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "散射与电子显微学表征",
+                "detail": "核验组成符合性、结构均匀性与目标非晶特征。"
+              },
+              {
+                "id": "f",
+                "stage": 5,
+                "label": "扩展多金属组成库",
+                "detail": "将策略扩展至不同金属组合与硼含量的多金属 BOₓ 组成。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "生成候选非晶结构"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "模拟结构演化"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "预测指导合成"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "表征验证"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "进一步扩展策略"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-16T07:05:26.259093+00:00",
+      "article_profile": "4eb821d9eb4d248d833e2f5f6f4259e0f9da6a47ce8eca6e589ed4bd96e5694e",
+      "analysis_references": {},
+      "analysis_material_version": "a83d613cef523ffaaf212ff271e6c7726b911bbccb314303155772acf8cb445e",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "bff62d107e4c",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-16T07:05:26.259093+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -2752,7 +4052,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Uncertainty quantification in PDE inverse problems is essential in many applications. Scientific machine learning and AI enable data-driven learning of model components while preserving physical structure, and provide the scalability and adaptability needed for emerging imaging technologies and clinical insights. We develop a Bilevel Local Operator Learning framework for Bayesian inference in PDEs (B-BiLO). At the upper level, we sample parameters from the posterior via Hamiltonian Monte Carlo, while at the lower level we fine-tune a neural network via low-rank adaptation (LoRA) to ap…",
+      "summary": "偏微分方程反问题不仅要估计参数，还需刻画推断的不确定性。本文提出贝叶斯双层局部算子学习框架B-BiLO：上层通过哈密顿蒙特卡洛采样参数后验，下层以低秩适配微调神经网络，局部近似解算子。摘要称，该方法无需合成数据或伴随方程，并通过确定性优化权重避免在高维权重空间采样。作者还分析下层近似优化误差对后验精度的影响，并在包含肿瘤生长的PDE模型上开展数值实验；具体精度、加速幅度及适用条件尚无法核实。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -2794,11 +4094,116 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议将其作为物理反问题与贝叶斯不确定性量化的方法论文重点关注，而非直接归入生成式设计成果。双层推断、LoRA局部适配及后验误差分析具有明确阅读价值，但摘要未展示设计生成或优化任务。[摘要；解读]",
+      "deep_read": {
+        "problem": "研究问题是如何高效量化PDE反问题中的参数不确定性，而非仅获得单一参数估计。摘要以“Uncertainty quantification in PDE inverse problems”明确研究对象，并强调保留物理结构的学习方式。解读：其核心关切是后验推断的计算效率与可信程度，不能直接等同于结构生成或设计优化。[摘要]",
+        "method": "方法采用双层分工：上层通过“Hamiltonian Monte Carlo”采样参数后验，下层使用“low-rank adaptation (LoRA)”微调神经网络，局部近似PDE解算子。权重以确定性方式优化，而非作为贝叶斯神经网络的高维采样变量；摘要未说明网络结构、先验及具体更新安排。[摘要]",
+        "innovation": "从摘要可识别的方案特点，是将局部算子近似、LoRA微调与参数后验采样置于双层框架，并声明采样无需合成数据或伴随方程。原文表述为“without synthetic data or adjoint equations”。解读：这是一种值得核查的计算组织方式，但摘要不足以证明各组成技术或组合方案的首创性。[摘要]",
+        "findings": "作者报告，包含肿瘤生长在内的多种PDE模型数值实验显示，该框架可实现“accurate and efficient uncertainty quantification”。此外，作者分析了下层近似优化误差对后验精度的影响。摘要未给出误差界形式、实验规模或对照结果，因此只能确认成果主张，不能判断实际提升幅度。[摘要]",
+        "limitations": "当前限制首先来自资料范围：仅有摘要，未提供观测噪声、参数维度、计算预算、对照方法及误差分析假设。虽然摘要声称实验准确且高效，但不足以判断不同问题上的稳定性。解读：这些属于尚待核实的证据缺口，并非已经证实的方法缺陷，也不能据此断言其泛化能力不足。[摘要]",
+        "connection": "与生成式设计的联系目前属于间接方法关联：摘要研究的是PDE参数反演，并未展示设计变量生成、目标优化或结构性能改进。解读：对于可靠性研究，参数后验可作为传播不确定性的潜在输入；对于智能运维，亦可考虑物理参数辨识场景，但这些应用均不是本摘要已验证的成果。[摘要]",
+        "next_steps": "建议后续阅读优先核查局部算子适配如何随采样更新、下层优化停止条件，以及后验误差分析成立的假设，再检查效率比较是否包含微调成本。若面向结构设计迁移，建议另设参数反演与性能不确定性传播实验，验证后再讨论设计决策价值；这属于研究建议，不是作者已完成的结论。[摘要；建议]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "基于低秩适配的贝叶斯双层算子学习：偏微分方程反问题的高效不确定性量化",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s41467-026-77768-7"
+      ],
+      "analyzed_at": "2026-10-16T06:55:26.851945+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "PDE反问题不仅需要推断参数，还需要量化推断的不确定性。这项研究提出B-BiLO，将贝叶斯后验采样与局部算子学习结合，探索如何在保持推断准确性的同时降低计算负担。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "参数推断之外，还要回答有多不确定",
+            "paragraphs": [
+              "偏微分方程（PDE）反问题中的不确定性量化，是本文关注的核心问题。摘要将科学机器学习的价值概括为：在保留物理结构的同时，以数据驱动方式学习模型组成部分，并为新兴成像技术和临床研究提供所需的可扩展性与适应性。",
+              "本文的切入点不是单纯训练一个预测网络，而是让神经网络参与贝叶斯推断过程：用局部解算子近似支持参数采样，同时关注这种近似会怎样影响最终的后验准确性。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "上层采样参数，下层用LoRA学习局部算子",
+            "paragraphs": [
+              "作者提出用于PDE贝叶斯推断的双层局部算子学习框架B-BiLO。上层通过哈密顿蒙特卡洛从参数后验分布中采样；下层通过低秩适应（LoRA）微调神经网络，在局部近似PDE的解算子。两层分别承担参数推断与局部近似任务。",
+              "摘要强调，该框架无需合成数据或伴随方程即可开展基于梯度的高效采样。网络权重采用确定性优化，而不是像贝叶斯神经网络那样在高维权重空间中采样。作者还分析了下层近似优化产生的误差及其对后验准确性的影响。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "跨PDE模型报告准确且高效的不确定性量化",
+            "paragraphs": [
+              "摘要报告，涵盖肿瘤生长在内的不同PDE模型数值实验表明，B-BiLO能够实现准确且高效的不确定性量化。这是当前资料明确给出的总体结果，但摘要没有提供具体误差、耗时或加速倍数，因此不宜将定性结论扩写为量化优势。",
+              "另一项值得关注的成果是对误差传递的分析：作者不只讨论局部近似如何服务采样，还建立了下层近似优化误差对后验准确性的影响关系。不过，具体误差界及其成立条件仍需进一步阅读正文。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不足以界定性能优势的适用边界",
+            "paragraphs": [
+              "仅凭摘要，无法判断各模型的数据规模、观测噪声设置、重复试验安排，以及比较方法的配置和计算预算是否一致；也无法确定理论分析所需的全部假设。这些属于当前资料的信息边界，不能据此认定论文没有开展相应工作。",
+              "肿瘤生长被列为数值实验对象，但摘要不足以判断患者样本规模、独立验证范围或临床适用性。摘要提及的成像与临床价值属于研究背景，不能直接当作已经验证的临床效果。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：局部近似如何保持后验可信",
+            "paragraphs": [
+              "阅读启发：对关注结构反演与可靠性分析的读者，更值得追问的是，局部算子在什么条件下足以支撑可信的后验采样，以及LoRA近似和下层优化误差如何进入准确性分析。继续阅读时可优先核对这些条件与性能比较口径，而不宜直接推定该方法已适用于结构设计或疲劳可靠性问题。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [],
+        "figure_groups": [
+          {
+            "section": "method",
+            "title": "双层框架中的参数采样与局部算子更新",
+            "panels": [
+              {
+                "figure_id": "fig-47a082000c7598e5a17e4400",
+                "caption": "图1｜BiLO与LoRA求解贝叶斯PDE反问题的框架示意。a展示上层基于梯度的参数后验采样，横轴为PDE参数，纵向表示后验密度，箭头示意局部梯度信息；b以空间位置和参数为自变量，对比灰色全局解算子与蓝色局部近似，强调局部残差及残差梯度条件；c展示下层神经网络学习局部算子，并通过低秩权重更新衔接不同参数位置的近似。"
+              }
+            ]
+          },
+          {
+            "section": "findings",
+            "title": "肿瘤生长示例中的参数后验与空间分布",
+            "panels": [
+              {
+                "figure_id": "fig-a29c6ea2011c9f284eb03824",
+                "caption": "图4｜使用LoRA秩为8的B-BiLO推断患者特异性胶质母细胞瘤生长参数。a比较LoRA与全参数微调所得参数后验，并展示虚线先验；各小图横轴为相应参数值，纵轴表示分布密度。b展示肿瘤细胞密度的后验均值；c比较最大后验估计对应的分割与真实标注；d展示细胞密度的后验标准差。空间图叠加于脑部影像，b、d的色标分别表示均值与标准差。"
+              }
+            ]
+          }
+        ]
+      },
+      "article_updated_at": "2026-10-16T07:24:42.153664+00:00",
+      "article_profile": "2a156f1daaef97b473ab409fb0eb20880768b2bc2b4ab75dc3c3a532bb656704",
+      "analysis_references": {},
+      "analysis_material_version": "85ec45d66b10bc48c62a7a1070b2cec5f0240c8e7d6f2d4cc8514678240d721d",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "fa241d43484d",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-16T07:24:42.153664+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -2826,7 +4231,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Efficient multi-objective collaborative design is a core scientific challenge and a primary obstacle to the development of novel glass materials. Here, we propose IGlasGAN (Inorganic Glass Generative Adversarial Network), a generative artificial intelligence framework for the automatic inverse design of inorganic glass materials subject to box constraints on multiple coupled properties, alongside a full generation-evaluation-validation pipeline. Built upon an improved WGAN-GP-CP architecture, the framework incorporates a property navigation mechanism and an extended normalization strategy to e…",
+      "summary": "【摘要】本文面向无机玻璃多性能协同设计，提出IGlasGAN框架，将性能区间要求直接映射为玻璃组成，并连接生成、评价与验证流程。模型采用改进的WGAN-GP-CP架构，结合性能导航机制与扩展归一化策略，以2445个实验样本训练，在OLED基板玻璃及两个偏离训练分布的目标场景中开展设计。三个场景共实验表征12个生成样本，多数性能偏差在±3.50%以内，但热膨胀系数最大偏差为13.03%。现有依据仅为摘要，不能据此确认全面泛化能力。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -2869,11 +4274,156 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "【解读】推荐围绕生成式设计重点阅读，尤其关注多性能区间约束如何进入生成模型，以及生成组成如何通过实验验证；但应保留对热膨胀系数预测精度和远分布适用边界的判断。[摘要]",
+      "deep_read": {
+        "problem": "【摘要】研究针对玻璃材料多目标协同设计困难，要求生成组成同时满足多个耦合性能的区间约束。OLED基板案例涉及热膨胀系数、杨氏模量、应变点温度和密度；2445个训练样本中仅156个完全满足四项要求，体现了目标可行组成筛选的挑战。[摘要]",
+        "method": "【摘要】IGlasGAN基于改进的WGAN-GP-CP架构，加入性能导航机制和扩展归一化策略，实现从性能要求到玻璃组成的端到端生成，并建立生成、评价、验证流程。摘要未提供损失函数、约束编码或网络参数，尚不能据此复现具体实现。[摘要]",
+        "innovation": "【解读】值得关注的方法组合，是将多项耦合性能的区间约束、按需组成生成及实验验证纳入同一逆向设计框架，而不只是预测已有组成的性能。摘要称其能够覆盖较宽设计空间，但缺少基线比较与消融证据，无法确认各模块的独立贡献或创新幅度。[摘要]",
+        "findings": "【摘要】OLED基板设计识别出相对较高Y₂O₃含量的新组成，并设置两个目标区域逐步远离训练分布的从零设计场景。三个场景共实验表征12个生成样本；除热膨胀系数外，实测与生成值偏差在±3.50%以内，其最大偏差为13.03%。[摘要]",
+        "limitations": "【解读】摘要提供了实验验证，但未交代12个样本在各场景的分配、生成候选总数、筛选比例及重复实验情况，因此难以判断整体成功率与统计稳健性。热膨胀系数偏差较大也是已报告的精度边界；未披露的信息不应直接认定为论文缺陷。[摘要]",
+        "connection": "【解读】与给定生成式设计方向直接相关，其性能需求到组成的映射可作为材料层面的逆向设计案例。对结构设计研究的可迁移启发是处理多目标约束并进行实体验证；但摘要没有涉及结构几何优化、智能运维或服役可靠性，不能将这些应用视为已获验证。[摘要]",
+        "next_steps": "【建议】后续获取全文时，优先核查目标区间定义、数据划分、远分布距离度量、对照模型与消融实验，再判断生成质量是否稳定。若迁移至可靠性研究，可考虑引入性能不确定性与约束满足概率，并设置独立实验检验；这些属于研究建议，并非作者已完成的工作。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "IGlasGAN：基于生成式人工智能的无机玻璃材料逆向设计框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s41524-026-02273-w"
+      ],
+      "analyzed_at": "2026-10-16T07:16:15.521646+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "无机玻璃逆向设计的难点，是让多项耦合性能同时满足要求。IGlasGAN尝试从性能需求直接生成玻璃组成，并通过实验检验生成值，为理解生成式人工智能如何连接材料设计与实测验证提供了具体案例。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "玻璃设计难在多项性能同时达标",
+            "paragraphs": [
+              "摘要将高效的多目标协同设计列为新型玻璃开发的核心挑战。本文面向OLED基板玻璃，同时考虑热膨胀系数（CTE）、杨氏模量（E）、应变点温度（T st）和密度（ρ），研究重点不是单项性能最优，而是多项性能共同满足指定区间。",
+              "训练数据包含2445个实验样本，其中156个完全满足上述四项性能要求。这一数据背景说明，已有样本中包含符合目标的组成，但如何按需求生成候选组成，仍是本文要解决的问题。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从性能区间到组成的生成—评价—验证流程",
+            "paragraphs": [
+              "IGlasGAN基于改进的WGAN-GP-CP架构，引入性能导航机制和扩展归一化策略，在多项耦合性能的箱式约束下开展自动逆向设计。摘要明确描述了从性能需求到玻璃组成的端到端按需设计，以及生成、评价和验证相衔接的完整流程。",
+              "除OLED基板玻璃设计外，研究还设置了两个从零设计场景，其目标区域与训练数据分布的距离逐步增大，用于进一步检验生成能力。摘要未展开性能导航、归一化和评价环节的具体实现。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "实测总体吻合，但CTE偏差需要单独看",
+            "paragraphs": [
+              "在OLED基板玻璃逆向设计中，研究识别出具有相对较高Y₂O₃含量的新组成。三个场景合计对12个生成样本进行了实验表征；这是摘要报告的实验验证范围，不代表所有生成候选均已获得实测确认。",
+              "摘要报告，实测性能与生成值总体吻合：除CTE外，偏差均在±3.50%以内；CTE的最大偏差为13.03%。因此，不能把整体吻合概括为所有性能具有相同精度，CTE应作为理解验证结果时的重点。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "验证覆盖面与比较优势仍需查阅全文",
+            "paragraphs": [
+              "仅凭摘要，无法判断训练样本的组成覆盖、数据划分方式，以及实验表征样本在各场景中的分配和筛选依据。摘要也未提供基线模型比较、重复测量或不确定性信息，因此不能据此量化相对其他方法的优势。",
+              "目标区域逐步远离训练分布，为考察不同目标设置提供了线索，但摘要未给出距离定义、各场景达标情况或更广泛的适用边界。这些信息在摘要中未报告，不等于论文没有开展相关分析。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：分清数值吻合与约束达标",
+            "paragraphs": [
+              "阅读启发：关注生成式逆向设计时，宜区分“生成值与实测值接近”和“实测性能满足全部目标区间”。本文可进一步阅读的重点，是各场景如何判定约束达标、CTE偏差如何影响达标判断，以及性能导航如何支持远离训练分布的目标，而非直接推断其已具备普遍外推能力。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的IGlasGAN逆向设计流程",
+            "description": "示意图仅概括摘要明确描述的性能需求、组成生成及评价验证关系，不是论文原图，也不补充具体实验配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "多项性能需求",
+                "detail": "以CTE、E、T st和ρ的性能区间作为逆向设计目标。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "IGlasGAN逆向设计",
+                "detail": "采用改进的WGAN-GP-CP架构、性能导航机制与扩展归一化策略。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "生成玻璃组成",
+                "detail": "从性能需求出发，按需生成无机玻璃候选组成。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "评价环节",
+                "detail": "属于摘要所述完整流程，具体评价方式未在摘要中展开。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "实验表征与对照",
+                "detail": "对生成样本开展实验表征，比较实测性能与生成值。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "输入性能要求"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "按需生成"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "进入评价"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "衔接验证"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-16T07:25:35.172346+00:00",
+      "article_profile": "267a8b85eb1f427d24175ca83922a66294f4ff6f2a0d70514a34d4e8f03b0b69",
+      "analysis_references": {},
+      "analysis_material_version": "a19c847f94b7ba234477124fd9579006223db66138f26408af64778c2d8c73b7",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "a7897e08db6d",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-16T07:25:35.172346+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "source_status": {
@@ -3350,13 +4900,13 @@
     "unavailable": 30
   },
   "analysis_status": {
-    "ready_core": 1,
+    "ready_core": 6,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 5
+    "pending": 0
   },
   "edition": {
     "id": "legacy-b68cbac2cc99fe2ead9e",

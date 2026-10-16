@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="聚焦 AI 驱动的智能运维、结构生成式设计与疲劳可靠性，每日追踪科研论文，提供中文摘要与精读要点。">
+  <meta name="theme-color" content="#153e64">
+  <title>大语言模型驱动的声学谷霍尔绝缘体逆向设计 | 摘要解读</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css?v=8bd62a4a1e">
+  <link rel="stylesheet" href="../assets/paper-chat.css?v=8bd62a4a1e">
+  <link rel="stylesheet" href="../assets/paper-library.css?v=8bd62a4a1e">
+  <script src="../assets/site.js?v=8bd62a4a1e" defer></script>
+  <script src="../assets/paper-library.js?v=8bd62a4a1e" defer></script>
+  <script src="../assets/paper-chat.js?v=8bd62a4a1e" defer></script>
+  <script src="../assets/daily-update.js?v=8bd62a4a1e" defer></script>
+<link rel="stylesheet" href="../assets/reading-article.css?v=8bd62a4a1e"><script src="../assets/reading-article.js?v=8bd62a4a1e" defer></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main-content">跳至正文</a>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a class="wordmark" href="../"><span>腾达</span><span class="wordmark-divider" aria-hidden="true"></span>科研文献</a>
+      <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false">菜单 <span aria-hidden="true">☰</span></button>
+      <nav id="main-navigation" class="main-navigation" aria-label="主导航">
+        <a href="../" >每日推荐</a>
+        <a href="../search.html" data-local-only >手动检索</a>
+        <a href="../leads.html" >科研线索</a>
+        <a href="../ai.html" >AI 前沿</a>
+        <a href="../library.html" data-local-only >我的文献</a>
+        <a href="../archive/" >历史归档</a>
+        <a href="../setup.html" data-local-only >设置</a>
+      </nav>
+    </div>
+  </header>
+  <div class="site-shell">
+    <main id="main-content" class="main-content" tabindex="-1">
+      <article class="reading-article" data-paper-id="d5b8590dae6a" data-analysis-basis="abstract" data-article-version="3"><a class="article-back" href="../">返回每日推荐</a><header class="article-header"><p class="article-type">摘要解读</p><h1>大语言模型驱动的声学谷霍尔绝缘体逆向设计</h1><p class="article-original" lang="en">Large language model-driven inverse design of acoustic valley-Hall insulators</p><p class="article-byline">Yinchu Wang, Xiaofeng Li, Silin Wang, Jiashuo Xu, Liang Gao, Mi Xiao<br>npj Computational Materials</p><p class="article-updated">解读更新 2026-10-16 15:05 · 依据公开摘要整理，未核验全文细节</p><div class="article-links"><a href="https://doi.org/10.1038/s41524-026-02349-7" target="_blank" rel="noopener noreferrer">阅读原文</a><button type="button" class="text-button copy-citation" data-citation="Yinchu Wang, Xiaofeng Li, Silin Wang, Jiashuo Xu, Liang Gao, Mi Xiao. Large language model-driven inverse design of acoustic valley-Hall insulators. npj Computational Materials. https://doi.org/10.1038/s41524-026-02349-7">复制引用</button><a class="coverage-search" href="https://weixin.sogou.com/weixin?type=2&amp;query=Large+language+model-driven+inverse+design+of+acoustic+valley-Hall+insulators" target="_blank" rel="noopener noreferrer" title="用论文题名搜索公众号文章，检索结果尚未核验。" aria-label="搜索公众号：Large language model-driven inverse design of acoustic valley-Hall insulators">搜索公众号</a><button type="button" class="text-button codex-entry" data-local-only data-paper-id="d5b8590dae6a" data-paper-title="大语言模型驱动的声学谷霍尔绝缘体逆向设计">Codex 对话</button></div></header><div class="article-lead"><p>如何把简短的声学设计需求转化为满足目标带隙的结构，并衔接数值验证与模型输出？这项研究以声学谷霍尔绝缘体为对象，用两个分工协作的大语言模型智能体组织逆向设计流程，值得关注的是专业设计能力与任务调度如何结合。</p></div><details class="article-toc"><summary>文章目录</summary><nav aria-label="文章目录"><a href="#context">从目标带隙出发设计声学拓扑材料</a><a href="#method">设计模型负责结构，管理模型组织流程</a><a href="#findings">输出不止结构参数，精度依据来自带隙误差</a><a href="#limitations">摘要尚不足以界定精度与泛化边界</a><a href="#inspiration">阅读启发：分别审视设计能力与流程组织</a></nav></details><section id="context"><h2>从目标带隙出发设计声学拓扑材料</h2><p>声学谷霍尔绝缘体（AVHI）是一类能够实现稳健定向波传输的声学拓扑材料，在通信、传感和波操控方面具有应用潜力。这里的应用潜力是研究背景，并不等于本研究已经验证了这些场景中的实际效果。</p><p>本文关注以目标带隙为导向的逆向设计：根据设计要求生成相应结构，而不只是描述既有结构的声学性质。研究将语义交互、结构设计、数值验证和结果生成纳入统一工作流。</p></section><section id="method"><h2>设计模型负责结构，管理模型组织流程</h2><p>框架由两个协作智能体组成。Designer-LLM使用通过强化学习生成的AVHI数据库进行微调，承担面向目标带隙的逆向设计任务。这里应区分数据库生成与模型微调两个环节，不能将其笼统理解为大语言模型自行学习全部物理规律。</p><p>Manager-LLM负责协调任务规划、语义解析、仿真工具调用及多模态结果生成。两个模型的职责不同：前者面向结构设计，后者组织需求理解与工具协作，共同连接用户要求和设计输出。</p><section class="article-figure-group"><h3>双智能体逆向设计框架</h3><div class="article-figure-grid"><figure class="article-original-figure"><a class="article-zoom" href="../assets/figures/auto-568d4a8d17ced698-070646a715ce.png" aria-label="放大查看Fig. 1"><img src="../assets/figures/auto-568d4a8d17ced698-070646a715ce.png" alt="原文配图" loading="lazy" decoding="async"></a><figcaption><strong>Fig. 1</strong><p>图解：原图1｜大语言模型驱动的逆向设计框架及声学谷霍尔绝缘体阵列中的声波传输示意。子图a展示框架工作流，其中Designer-LLM根据指定目标带隙生成相应的AVHI结构参数。</p><details><summary>原文图注与出处</summary><p>Fig. 1 | Schematic of the large language model (LLM)-driven inverse-design framework and acoustic wave transport in an acoustic valley-Hall insulator array (AVHI). a Workﬂow of the proposed LLM-agent framework. The Designer-LLM generates corresponding AVHI structural parameters from speciﬁed target band- gaps. The Manager-LLM is responsible for semantic parsing, task planning, and</p><p>Wang, Yinchu et al.</p><a href="https://www.nature.com/articles/s41524-026-02349-7_reference.pdf#page=2" target="_blank" rel="noopener noreferrer">原文图页</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a></details></figcaption></figure></div></section></section><section id="findings"><h2>输出不止结构参数，精度依据来自带隙误差</h2><p>摘要报告，该框架能够依据简短设计要求生成结构参数、能带结构、本征模态场以及可制造模型文件。因此，其输出不局限于一组结构参数，也包含用于呈现声学特征和后续制造准备的不同形式结果。</p><p>对于设计准确性，摘要给出的依据是测试集上的带隙误差分析：微调后的Designer-LLM能够生成具有可靠带隙匹配精度的AVHI结构。不过，摘要未给出具体误差数值，不能据此判断精度提升幅度，也不能将带隙匹配直接等同于所有声学性能均得到验证。</p><section class="article-figure-group"><h3>数据集构建与设计模型评估</h3><div class="article-figure-grid"><figure class="article-original-figure"><a class="article-zoom" href="../assets/figures/auto-568d4a8d17ced698-ff8e612236d6.png" aria-label="放大查看Fig. 2"><img src="../assets/figures/auto-568d4a8d17ced698-ff8e612236d6.png" alt="原文配图" loading="lazy" decoding="async"></a><figcaption><strong>Fig. 2</strong><p>图解：原图2｜AVHI数据集构建与微调后Designer-LLM的评估。子图a展示不同σ取值下，即时奖励随相邻优化步骤间相对拓扑带隙差的变化；子图b展示即时奖励关于当前及前一优化步骤相对拓扑带隙值的三维曲面；子图c展示数据集中拓扑带隙下、上边缘频率的分布。</p><details><summary>原文图注与出处</summary><p>Fig. 2 | Construction of the acoustic valley-Hall insulator (AVHI) dataset and evaluation of the ﬁne-tuned Designer-LLM. a Variation of the immediate reward with the relative topological bandgap difference between two consecutive optimi- zation steps under different values of σ. b Three-dimensional surface of the immediate reward as a function of the relative topological bandgap values at the current and previous optimization steps. c Distributions of the lower and upper band-edge frequencies of the topological bandgaps in the dataset. d Visualization of</p><p>Wang, Yinchu et al.</p><a href="https://www.nature.com/articles/s41524-026-02349-7_reference.pdf#page=3" target="_blank" rel="noopener noreferrer">原文图页</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a></details></figcaption></figure></div></section></section><section id="limitations"><h2>摘要尚不足以界定精度与泛化边界</h2><p>当前摘要未报告数据库规模、测试集样本数量、数据划分方式、比较基线及误差分布，因此无法据此评估测试覆盖范围或相对其他方法的优势。摘要也不足以界定数值验证的具体条件，以及从模型文件到实际制造、测量的一致性验证范围；这些信息需进一步查阅，不能写成论文没有开展相关工作。</p></section><section id="inspiration"><h2>阅读启发：分别审视设计能力与流程组织</h2><p>阅读启发：对结构生成式设计而言，可以分别关注专业模型能否准确响应目标，以及管理智能体如何把需求、仿真和输出连接起来。进一步阅读时，值得核对带隙误差如何定义、测试目标覆盖哪些范围，以及生成结构如何接受数值检验。</p><p>摘要将向其他声学超材料设计任务扩展定位为未来参考，而非已经完成的通用能力。建议带着这一边界阅读：哪些环节能够复用，哪些仍依赖AVHI专用数据库与验证工具，是理解其可迁移性的关键问题。</p><p class="article-editor-note">以上为本站阅读启发与建议，不是论文已验证的结论。</p></section><footer class="article-end"><p>本文依据论文资料整理，研究建议由本站提出。原文、相关文献和图示标注共同说明内容来源。</p></footer></article><dialog class="article-figure-dialog"><form method="dialog"><button type="submit">关闭大图</button></form><img alt="论文图示放大查看"></dialog>
+      <footer class="site-footer"><p>每日更新，持续关注 AI 与工程可靠性。</p><div><a href="https://tengda-xmu.github.io/">腾达 · 厦门大学</a><a href="https://github.com/tengda-xmu/daily-papers" target="_blank" rel="noopener noreferrer">GitHub</a></div></footer>
+    </main>
+  </div>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <a class="back-to-top" href="#top" aria-label="返回页面顶部" hidden>回到顶部 ↑</a>
+</body>
+</html>
