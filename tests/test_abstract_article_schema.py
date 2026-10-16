@@ -165,6 +165,27 @@ def test_abstract_prompt_uses_actual_abstract_and_original_caption_ids():
     assert '"basis": "abstract"' in prompt
 
 
+def test_abstract_prompt_diagram_example_passes_schema_and_explains_short_ids():
+    prompt = article_prompt({'title': 'Fixture'}, [], evidence={'abstract': 'Source'}, basis='abstract')
+    marker = '图结构示例仅说明格式，不得把示例中的内容当作研究事实：'
+    example, _ = json.JSONDecoder().raw_decode(prompt.split(marker, 1)[1])
+    draft = abstract_article()
+    draft['diagrams'] = [example]
+    assert public_article(draft)['diagrams'] == [example]
+    assert '节点id使用a到h中的单个小写字母且不重复' in prompt
+    assert '连线from和to严格引用这些id' in prompt
+    draft['diagrams'][0]['nodes'][0]['id'] = 'requirements'
+    with pytest.raises(ValueError, match='节点标识'):
+        public_article(draft)
+
+
+def test_abstract_prompt_handles_truncated_caption_without_inventing_numeric_support():
+    prompt = article_prompt({'title': 'Fixture'}, [], evidence={'abstract': 'Source'}, basis='abstract')
+    assert '只在图片可见、尚无绑定文字证据的精确数字不转写' in prompt
+    assert '不得将数字改写成汉字绕过证据核验' in prompt
+    assert '所有数值和单位必须在绑定的摘要或原始图注中实际出现' in prompt
+
+
 def test_legacy_full_text_prompt_ignores_stale_abstract_assessment_in_paper_metadata():
     prompt = article_prompt({'title': 'Fixture', 'analysis_basis': 'abstract'}, [], {'verified_full_text': True},
                             {'status': 'ok', 'checked_at': '2026-10-16T00:00:00+00:00', 'papers': []})

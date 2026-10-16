@@ -24,11 +24,23 @@ def check_numbers(claim, quotes):
     """Conservative guard: keep source numbers/units; semantic checks follow."""
     def normal(value):
         return unicodedata.normalize('NFKC', value).replace('−', '-').replace('，', ',').replace('**', '')
+    # A hyphen in a material identifier is not a negative measurement. Publisher
+    # HTML can space R / S -5011/F8BT differently from a faithful translation.
+    # Compare the complete identifier and remove it from quantity tokens, so its
+    # digits cannot support an unrelated measurement or a changed compound name.
+    identifier = re.compile(r'(?<![A-Za-z0-9_])[A-Z]{1,4}(?:[ \t]*/[ \t]*[A-Z]{1,4})?'
+                            r'[ \t]*-[ \t]*\d+[A-Za-z0-9]*'
+                            r'(?:[ \t]*/[ \t]*[A-Za-z][A-Za-z0-9]*)*(?![A-Za-z0-9_.%]|[-+]\d)')
     pattern = r'(?<![A-Za-z0-9_.])[-+]?\d+(?:,\d{3})*(?:\.\d+)?(?:[eE][-+]?\d+)?(?:\s*%)?'
     def tokens(value):
-        return {re.sub(r'[\s,]', '', n) for n in re.findall(pattern, normal(value))}
+        value = normal(value)
+        names = {re.sub(r'[ \t]', '', match.group()) for match in identifier.finditer(value)}
+        numbers = {re.sub(r'[\s,]', '', n) for n in re.findall(pattern, identifier.sub(' ', value))}
+        return names, numbers
     source = '\n'.join(quotes)
-    if not tokens(claim) <= tokens(source):
+    claim_names, claim_numbers = tokens(claim)
+    source_names, source_numbers = tokens(source)
+    if not claim_names <= source_names or not claim_numbers <= source_numbers:
         raise ValueError('关键数字与对应原文证据不一致')
     units = r'(?:GPa|MPa|kPa|mPa|Pa|GJ|MJ|kJ|J|kN|mN|N|mm|cm|km|nm|μm|µm|m|ms|ns|s|Hz|kHz|MHz|GHz|kg|mg|g|K|°C|kV|mV|V|mA|A|GW|MW|kW|mW|W)'
     quantity = r'([-+]?\d+(?:\.\d+)?)\s*(' + units + r')(?![A-Za-z])'
