@@ -169,3 +169,15 @@ def test_local_published_abstract_uses_public_material_proof_when_index_has_only
         assert response.status_code == 200
         assert '这项研究关注工程预测中的数据与物理关系' in response.text
         assert '研究为何关注这一问题' in response.text
+
+
+def test_nature_abstract_heading_does_not_hide_complete_sibling_content():
+    from connectors.codex_bridge.reading_materials import inspect_html
+    paper = sample()
+    source = 'The framework predicts material properties and validates the inverse design with independently measured compositions. ' * 3
+    body = ('<meta name="citation_doi" content="' + paper['doi'] + '">'
+            '<div id="Abs1-section"><h2 id="Abs1">Abstract</h2><div id="Abs1-content"><p>'
+            + source + '</p></div></div><aside>Unrelated recommended paper</aside>').encode()
+    abstract, _, _ = inspect_html(body, paper['landing_url'], paper)
+    assert abstract == source.strip()
+    assert 'Unrelated' not in abstract

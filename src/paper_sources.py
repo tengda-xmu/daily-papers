@@ -175,7 +175,7 @@ def inspect_html(body, url, paper):
     if not page_identity(soup, paper):
         raise ValueError('Article identity mismatch')
     abstract = ''
-    for node in soup.select('#Abs1, section#abstract, .abstract, #abstract, meta[name="citation_abstract"]'):
+    for node in soup.select('#Abs1-content, #Abs1, section#abstract, .abstract, #abstract, meta[name="citation_abstract"]'):
         abstract = clean_abstract(node.get('content') or node.get_text(' ', strip=True))
         if abstract:
             break
