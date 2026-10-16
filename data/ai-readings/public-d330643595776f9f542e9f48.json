@@ -1,20 +1,19 @@
 {
   "id": "public-d330643595776f9f542e9f48",
-  "content_version": "370f7de93004a299ed5013409a86e31edbb3793e91c87be586aa169358754d2a",
+  "content_version": "d20e552a0fa1a102683db17aa9c471c3161f0b9011370ca1f680a4b41dd8a43e",
   "analysis": {
-    "title_zh": "Granite Switch 4.1：通过单一端点支持对话、决策与语音转写",
-    "summary": "【公告原文】Granite Switch 4.1 延续模块化模型开发路线，让自然语言回复、通用与专用决策、语音转文字任务共用一个托管端点。公告列出 Granite-Switch-4.1-8B 和 -30B 两种模型配置，包含新增的通用决策 Decision aLoRA，以及专用 Guardian aLoRA。适用方向包括对话服务、决策任务和语音转写；所给文本在 Guardian 性能描述处截断，无法确认其完整比较结论。",
-    "application": "建议：【科研迁移建议】可评估单端点多任务方案用于科研助手、运维决策辅助与语音记录转写，并自行验证任务准确率及切换开销。【官方效果陈述】公告称其可在自然语言回复、决策与语音转写任务间高效切换；所给片段未提供实验细节，不能据此认定上述科研场景已获验证。",
+    "title_zh": "Granite Switch 4.1：通过一个端点处理对话、决策与语音转写",
+    "summary": "公告介绍 Granite Switch 4.1 的模块化能力：Granite-Switch-4.1-8B 与 30B 模型配置新增通用决策 Decision aLoRA，并包含专用 Guardian aLoRA，可通过同一托管端点切换自然语言响应、通用及专用决策和语音转文字任务。原文称其 ASR 模型在 OpenASR 榜单上速度最快，但所给片段未展示测试配置或数值；Guardian 的性能比较句被截断，无法确认完整结论。",
+    "application": "建议：科研迁移可探索将文献问答、运维事件决策与语音记录转写接入统一服务，并分别评估准确性、延迟和任务切换成本；这些属于迁移设想，不是官方已验证效果。官方片段报告了统一端点的多任务能力及 ASR 榜单速度表现，但未提供科研或智能运维场景的验证结果。",
     "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
       "Introduced last spring, the Granite Switch project enables a modular approach to model development.",
       "Now Granite Switch 4.1 models, armed with a Decision adapter and the fastest ASR model on the OpenASR leaderboard, can move efficiently between natural-language responses, general and specialized decisions, and speech-to-text tasks—all from one hosted endpoint.",
       "Specifically, Granite-Switch-4.1-8B and -30B models are configured to include:",
-      "A new Decision aLoRA for general-purpose decision-making (e.g. v1/systemone),",
-      "A specialized Guardian aLoRA"
+      "A new Decision aLoRA for general-purpose decision-making (e.g. v1/systemone),"
     ],
     "basis_url": "https://huggingface.co/blog/ibm-granite/granite-switch-4-1"
   },
-  "analyzed_at": "2026-10-16T05:25:30.553321+00:00"
+  "analyzed_at": "2026-10-16T06:35:31.711850+00:00"
 }
