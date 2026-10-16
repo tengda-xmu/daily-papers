@@ -359,8 +359,8 @@
         "article_state": "pending",
         "article_stage": "",
         "reason": "restricted",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -463,8 +463,8 @@
         "article_state": "pending",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -567,8 +567,8 @@
         "article_state": "pending",
         "article_stage": "",
         "reason": "restricted",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -591,7 +591,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Electric bus operators must limit charging-infrastructure investment while supplying enough layover energy to preserve battery reserves during service. Climate changes both energy demand and charging acceptance, linking forecasts to control and infrastructure selection. We propose a scientific machine learning (SciML) framework for climate-adaptive co-design that predicts bus energy from an equipment-based physical prior and multimodal residual learning. Day-level calibration converts forecasts into upper energies that determine inventory targets and charging-window commitments; linear-program…",
+      "summary": "本文研究气候影响下电动公交充电设施投资与运营电量保障的协同设计。作者结合设备物理先验与多模态残差学习预测能耗，通过逐日校准、线性规划筛选和闭环验证选择站点及控制方案。摘要报告，预测误差最低的模型并不一定带来最少的运营失效，匹配预测器的控制可显著改善结果。合格的八站点方案相对全站点参考降低年度充电子系统成本28.2%。证据来自重构任务的连续全年仿真，不能视为实地验证。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -629,11 +629,43 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议重点阅读预测模型与控制策略配对、站点闭环验证这两部分：它们直接揭示预测精度与运营可靠性可能不一致，但与生成式设计方向仅有间接联系。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是如何在限制充电设施投资的同时，保障公交运营中的电池储备。摘要指出气候同时影响能耗需求与充电接受能力，即“Climate changes both energy demand and charging acceptance”。解读：设施选择不能脱离天气预测和运行控制单独优化。[摘要]",
+        "method": "方法以设备层面的物理先验结合多模态残差学习预测能耗，再用逐日校准形成能量上界，确定库存目标与充电窗口承诺。站点集合先经“linear-programming screening”，再做闭环资格验证。摘要未提供模型结构、校准公式或具体约束，尚不能复现完整流程。[摘要]",
+        "innovation": "解读：值得关注的特色是将物理先验、迁移预测、能量上界校准与设施控制协同设计串联，而非只比较预测器。摘要用“climate-adaptive co-design”界定框架，但没有提供与既有协同设计方法的系统比较，因此不足以确认各组成环节的首创性。[摘要]",
+        "findings": "摘要报告，新加坡八站点设计中，迁移模型配对专属控制后，失效天数由9.80降至0.30；合格预测设计的年度充电子系统成本相对全站点参考降低28.2%。这些属于摘要中的仿真结果；其中“lost days”有专门统计口径，不宜直接等同实际停运天数。[摘要]",
+        "limitations": "摘要明确仿真采用“one vehicle configuration”，任务来自重构的蒙特利尔与新加坡运营安排。解读：当前证据覆盖两个气候环境，但不足以判断异构车队、真实运营扰动下的有效性。摘要也未给出统计不确定性、成本明细及完整基线设置，相关结论需全文核查。[摘要]",
+        "connection": "解读：与生成式设计的联系主要在基础设施候选方案筛选及控制协同评价，而非已证实采用生成模型。摘要描述“qualification of site sets”，更接近约束下的方案选择。对可靠性研究，其启发是以运营储备结果评价预测器，而不只以预测误差排序。[摘要]",
+        "next_steps": "建议取得全文后，优先核对失效天数定义、全站点参考、控制配对规则及成本边界，再检查站点筛选与闭环验证是否使用独立数据。若迁移到生成式设计，可考虑把运营可靠性作为候选方案评价条件；这是研究建议，并非作者已完成或验证的工作。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "基于科学机器学习的气候自适应电动公交充电基础设施与控制协同设计",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.20944/preprints202610.0947.v1"
+      ],
+      "analyzed_at": "2026-10-15T14:38:51.338267+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "b2681b8f147eb70883e61bb31b82ba9b7c882e85852f9a181e50d5bac3034498",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "a0aeb1682003",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-15T14:38:51.355287+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -653,7 +685,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Η παρούσα εργασία εξετάζει την εξέλιξη της συντήρησης του βιομηχανικού εξοπλισμού από τις παραδοσιακές στρατηγικές προς την προγνωστική συντήρηση. Αρχικά παρουσιάζονται η διορθωτική, η προληπτική, η βάσει κατάστασης και η προγνωστική συντήρηση καθώς και ο ρόλος των λειτουργικών δεδομένων, των αισθητήρων και της παρακολούθησης κατάστασης.Στη συνέχεια εξετάζεται η χρήση της Μηχανικής Μάθησης για την αναγνώριση βλαβών και παρουσιάζονται η Λογιστική Παλινδρόμηση, το Δέντρο Απόφασης, το Τυχαίο Δάσος και το Πολυεπίπεδο Perceptron. Στο εφαρμοσμένο μέρος χρησιμοποιείται το συνθετικό σύνολο δεδομένων A…",
+      "summary": "本文围绕工业设备由传统维护转向预测性维护，介绍维护策略及运行数据、传感器和状态监测的作用，并在合成数据集AI4I 2020上比较四类机器学习模型。故障观测仅占3.39%，类别明显不平衡。随机森林在精确率、F1和PR-AUC上表现最佳，多层感知机则在召回率和ROC-AUC上领先，检出68次真实故障中的61次。核心启示是模型选择需兼顾故障检出与误报，而非追求单一指标。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7221841322",
@@ -694,11 +726,43 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐作为智能运维中不平衡故障识别与模型选型的比较案例阅读，重点关注不同评价指标对应的检出和误报权衡；当前仅有摘要，不宜据此认定其算法创新或工业部署效果。[摘要]",
+      "deep_read": {
+        "problem": "研究关注工业设备维护如何从传统策略转向预测性维护，并讨论机器学习用于故障识别的问题。摘要指出故障观测仅占“3.39%”。解读：这种类别不平衡使少数故障的检出能力与误报控制成为模型比较的重要关注点。[摘要]",
+        "method": "应用部分使用合成数据集AI4I 2020，对逻辑回归、决策树、随机森林和多层感知机进行比较。摘要说明经过预处理后，四个模型在同一测试集上评价，但未交代预处理步骤、数据划分比例、超参数或训练重复次数，尚不能据此复现实验。[摘要]",
+        "innovation": "摘要呈现的主要贡献是将维护策略介绍与四类模型的应用比较结合，未明确提出新算法或新数据集。解读：其阅读价值更偏向比较研究与评价指标的应用，而非方法原创性；仅凭当前摘要，不能将常规模型组合或预处理认定为创新。[摘要]",
+        "findings": "随机森林取得最高精确率、F1和PR-AUC；多层感知机取得最高召回率和ROC-AUC，并检出68次真实故障中的61次。摘要据此强调兼顾检出能力与误报数量，但未提供各指标完整数值，因此无法判断模型差距大小或统计显著性。[摘要]",
+        "limitations": "当前资料仅为摘要，且应用数据被明确称为“συνθετικό”，即合成数据。解读：这些结果不足以证明模型在真实工业设备上的泛化表现。摘要也未披露误报数量、阈值及不确定性分析；这是当前证据的边界，不能据此断言全文没有相关内容。[摘要]",
+        "connection": "解读：该研究与智能运维中的故障识别、告警模型选型直接相关，其检出与误报权衡也可启发可靠性研究中的监测决策。不过，摘要报告的是故障分类比较，未展示寿命预测、失效概率建模或结构优化，不能直接推及结构设计效果。[摘要]",
+        "next_steps": "建议：后续阅读全文时优先核对数据划分、预处理是否仅使用训练数据，以及分类阈值和完整混淆矩阵。若开展迁移研究，可在真实设备数据上比较漏报与误报成本，并检验跨工况稳定性；这些属于研究建议，并非作者已完成的实验。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "从预防性维护到预测性维护：机器学习模型的应用与比较",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://openalex.org/W7221841322"
+      ],
+      "analyzed_at": "2026-10-16T02:03:50.674480+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "62623ff2c7e0b1c5d63cf59a768d9daea2a6dd5da5ed07ba3440bf7fd7c7594e",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "6ce46b4ac683",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-16T02:03:50.681482+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "extended": [],
@@ -1058,8 +1122,8 @@
         "article_state": "pending",
         "article_stage": "",
         "reason": "restricted",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -1162,8 +1226,8 @@
         "article_state": "pending",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -1266,8 +1330,8 @@
         "article_state": "pending",
         "article_stage": "",
         "reason": "restricted",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -1290,7 +1354,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Electric bus operators must limit charging-infrastructure investment while supplying enough layover energy to preserve battery reserves during service. Climate changes both energy demand and charging acceptance, linking forecasts to control and infrastructure selection. We propose a scientific machine learning (SciML) framework for climate-adaptive co-design that predicts bus energy from an equipment-based physical prior and multimodal residual learning. Day-level calibration converts forecasts into upper energies that determine inventory targets and charging-window commitments; linear-program…",
+      "summary": "本文研究气候影响下电动公交充电设施投资与运营电量保障的协同设计。作者结合设备物理先验与多模态残差学习预测能耗，通过逐日校准、线性规划筛选和闭环验证选择站点及控制方案。摘要报告，预测误差最低的模型并不一定带来最少的运营失效，匹配预测器的控制可显著改善结果。合格的八站点方案相对全站点参考降低年度充电子系统成本28.2%。证据来自重构任务的连续全年仿真，不能视为实地验证。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -1328,11 +1392,43 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议重点阅读预测模型与控制策略配对、站点闭环验证这两部分：它们直接揭示预测精度与运营可靠性可能不一致，但与生成式设计方向仅有间接联系。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是如何在限制充电设施投资的同时，保障公交运营中的电池储备。摘要指出气候同时影响能耗需求与充电接受能力，即“Climate changes both energy demand and charging acceptance”。解读：设施选择不能脱离天气预测和运行控制单独优化。[摘要]",
+        "method": "方法以设备层面的物理先验结合多模态残差学习预测能耗，再用逐日校准形成能量上界，确定库存目标与充电窗口承诺。站点集合先经“linear-programming screening”，再做闭环资格验证。摘要未提供模型结构、校准公式或具体约束，尚不能复现完整流程。[摘要]",
+        "innovation": "解读：值得关注的特色是将物理先验、迁移预测、能量上界校准与设施控制协同设计串联，而非只比较预测器。摘要用“climate-adaptive co-design”界定框架，但没有提供与既有协同设计方法的系统比较，因此不足以确认各组成环节的首创性。[摘要]",
+        "findings": "摘要报告，新加坡八站点设计中，迁移模型配对专属控制后，失效天数由9.80降至0.30；合格预测设计的年度充电子系统成本相对全站点参考降低28.2%。这些属于摘要中的仿真结果；其中“lost days”有专门统计口径，不宜直接等同实际停运天数。[摘要]",
+        "limitations": "摘要明确仿真采用“one vehicle configuration”，任务来自重构的蒙特利尔与新加坡运营安排。解读：当前证据覆盖两个气候环境，但不足以判断异构车队、真实运营扰动下的有效性。摘要也未给出统计不确定性、成本明细及完整基线设置，相关结论需全文核查。[摘要]",
+        "connection": "解读：与生成式设计的联系主要在基础设施候选方案筛选及控制协同评价，而非已证实采用生成模型。摘要描述“qualification of site sets”，更接近约束下的方案选择。对可靠性研究，其启发是以运营储备结果评价预测器，而不只以预测误差排序。[摘要]",
+        "next_steps": "建议取得全文后，优先核对失效天数定义、全站点参考、控制配对规则及成本边界，再检查站点筛选与闭环验证是否使用独立数据。若迁移到生成式设计，可考虑把运营可靠性作为候选方案评价条件；这是研究建议，并非作者已完成或验证的工作。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "基于科学机器学习的气候自适应电动公交充电基础设施与控制协同设计",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.20944/preprints202610.0947.v1"
+      ],
+      "analyzed_at": "2026-10-15T14:38:51.338267+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "b2681b8f147eb70883e61bb31b82ba9b7c882e85852f9a181e50d5bac3034498",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "a0aeb1682003",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-15T14:38:51.355287+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -1352,7 +1448,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Η παρούσα εργασία εξετάζει την εξέλιξη της συντήρησης του βιομηχανικού εξοπλισμού από τις παραδοσιακές στρατηγικές προς την προγνωστική συντήρηση. Αρχικά παρουσιάζονται η διορθωτική, η προληπτική, η βάσει κατάστασης και η προγνωστική συντήρηση καθώς και ο ρόλος των λειτουργικών δεδομένων, των αισθητήρων και της παρακολούθησης κατάστασης.Στη συνέχεια εξετάζεται η χρήση της Μηχανικής Μάθησης για την αναγνώριση βλαβών και παρουσιάζονται η Λογιστική Παλινδρόμηση, το Δέντρο Απόφασης, το Τυχαίο Δάσος και το Πολυεπίπεδο Perceptron. Στο εφαρμοσμένο μέρος χρησιμοποιείται το συνθετικό σύνολο δεδομένων A…",
+      "summary": "本文围绕工业设备由传统维护转向预测性维护，介绍维护策略及运行数据、传感器和状态监测的作用，并在合成数据集AI4I 2020上比较四类机器学习模型。故障观测仅占3.39%，类别明显不平衡。随机森林在精确率、F1和PR-AUC上表现最佳，多层感知机则在召回率和ROC-AUC上领先，检出68次真实故障中的61次。核心启示是模型选择需兼顾故障检出与误报，而非追求单一指标。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7221841322",
@@ -1393,11 +1489,43 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐作为智能运维中不平衡故障识别与模型选型的比较案例阅读，重点关注不同评价指标对应的检出和误报权衡；当前仅有摘要，不宜据此认定其算法创新或工业部署效果。[摘要]",
+      "deep_read": {
+        "problem": "研究关注工业设备维护如何从传统策略转向预测性维护，并讨论机器学习用于故障识别的问题。摘要指出故障观测仅占“3.39%”。解读：这种类别不平衡使少数故障的检出能力与误报控制成为模型比较的重要关注点。[摘要]",
+        "method": "应用部分使用合成数据集AI4I 2020，对逻辑回归、决策树、随机森林和多层感知机进行比较。摘要说明经过预处理后，四个模型在同一测试集上评价，但未交代预处理步骤、数据划分比例、超参数或训练重复次数，尚不能据此复现实验。[摘要]",
+        "innovation": "摘要呈现的主要贡献是将维护策略介绍与四类模型的应用比较结合，未明确提出新算法或新数据集。解读：其阅读价值更偏向比较研究与评价指标的应用，而非方法原创性；仅凭当前摘要，不能将常规模型组合或预处理认定为创新。[摘要]",
+        "findings": "随机森林取得最高精确率、F1和PR-AUC；多层感知机取得最高召回率和ROC-AUC，并检出68次真实故障中的61次。摘要据此强调兼顾检出能力与误报数量，但未提供各指标完整数值，因此无法判断模型差距大小或统计显著性。[摘要]",
+        "limitations": "当前资料仅为摘要，且应用数据被明确称为“συνθετικό”，即合成数据。解读：这些结果不足以证明模型在真实工业设备上的泛化表现。摘要也未披露误报数量、阈值及不确定性分析；这是当前证据的边界，不能据此断言全文没有相关内容。[摘要]",
+        "connection": "解读：该研究与智能运维中的故障识别、告警模型选型直接相关，其检出与误报权衡也可启发可靠性研究中的监测决策。不过，摘要报告的是故障分类比较，未展示寿命预测、失效概率建模或结构优化，不能直接推及结构设计效果。[摘要]",
+        "next_steps": "建议：后续阅读全文时优先核对数据划分、预处理是否仅使用训练数据，以及分类阈值和完整混淆矩阵。若开展迁移研究，可在真实设备数据上比较漏报与误报成本，并检验跨工况稳定性；这些属于研究建议，并非作者已完成的实验。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "从预防性维护到预测性维护：机器学习模型的应用与比较",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://openalex.org/W7221841322"
+      ],
+      "analyzed_at": "2026-10-16T02:03:50.674480+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "62623ff2c7e0b1c5d63cf59a768d9daea2a6dd5da5ed07ba3440bf7fd7c7594e",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "6ce46b4ac683",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-16T02:03:50.681482+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -3736,7 +3864,7 @@
       "reading_status": {
         "paper_id": "c6e1f2105665",
         "state": "failed",
-        "updated_at": "2026-10-14T14:15:57.431424+00:00",
+        "updated_at": "2026-10-16T01:35:20.695904+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -9244,7 +9372,7 @@
       "reading_status": {
         "paper_id": "709bdb82c0b5",
         "state": "failed",
-        "updated_at": "2026-10-14T14:31:33.327742+00:00",
+        "updated_at": "2026-10-16T01:45:27.418146+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -9508,7 +9636,7 @@
       "reading_status": {
         "paper_id": "a1515ce3849b",
         "state": "failed",
-        "updated_at": "2026-10-14T14:33:08.811058+00:00",
+        "updated_at": "2026-10-16T01:45:42.102325+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -13780,7 +13908,7 @@
       "reading_status": {
         "paper_id": "9170f18af989",
         "state": "failed",
-        "updated_at": "2026-10-14T14:27:58.529459+00:00",
+        "updated_at": "2026-10-16T01:42:38.420865+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -14199,11 +14327,11 @@
       "reading_status": {
         "paper_id": "229ee813a122",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:24:55.170214+00:00",
+        "updated_at": "2026-10-16T01:40:52.050287+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -17082,11 +17210,11 @@
       "reading_status": {
         "paper_id": "45dbfe9703f1",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:29:16.073864+00:00",
+        "updated_at": "2026-10-16T01:44:27.851159+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -18461,7 +18589,7 @@
       "reading_status": {
         "paper_id": "c6eb0c75d85e",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:33:39.305585+00:00",
+        "updated_at": "2026-10-16T01:46:09.791069+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -18801,7 +18929,7 @@
       "reading_status": {
         "paper_id": "e287fb472485",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:20:03.292241+00:00",
+        "updated_at": "2026-10-16T01:37:47.721020+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -20209,7 +20337,7 @@
       "reading_status": {
         "paper_id": "8a3a74d4605b",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-15T01:08:51.512719+00:00",
+        "updated_at": "2026-10-16T01:54:41.853509+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -21494,7 +21622,7 @@
       "reading_status": {
         "paper_id": "1172e7a5c357",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T14:28:34.624276+00:00",
+        "updated_at": "2026-10-16T01:43:56.120768+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -21717,7 +21845,7 @@
       "reading_status": {
         "paper_id": "c935fc51c706",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:28:46.538505+00:00",
+        "updated_at": "2026-10-16T01:44:07.982201+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -21917,7 +22045,7 @@
       "reading_status": {
         "paper_id": "448942aa1a69",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T20:03:04.346547+00:00",
+        "updated_at": "2026-10-16T01:50:54.076458+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -22430,7 +22558,7 @@
       "reading_status": {
         "paper_id": "533cdd3a344d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:34:02.100739+00:00",
+        "updated_at": "2026-10-16T01:46:27.329446+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -22787,11 +22915,11 @@
       "reading_status": {
         "paper_id": "9f42a1c20a27",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:24:33.125800+00:00",
+        "updated_at": "2026-10-16T01:40:39.064484+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -22981,7 +23109,7 @@
       "reading_status": {
         "paper_id": "abd65bfce7b5",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T19:57:30.548577+00:00",
+        "updated_at": "2026-10-16T01:50:11.678157+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -23292,11 +23420,11 @@
       "reading_status": {
         "paper_id": "0b71b4d17bb7",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:23:55.304347+00:00",
+        "updated_at": "2026-10-16T01:40:21.202146+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -23516,11 +23644,11 @@
       "reading_status": {
         "paper_id": "b8d36ac1dcaf",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:34:58.763453+00:00",
+        "updated_at": "2026-10-16T01:47:57.064221+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -30370,7 +30498,7 @@
       "reading_status": {
         "paper_id": "dfc9b7fc8847",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:19:35.224357+00:00",
+        "updated_at": "2026-10-16T01:37:20.110552+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -31586,7 +31714,7 @@
       "reading_status": {
         "paper_id": "a1130ac09906",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:20:25.433884+00:00",
+        "updated_at": "2026-10-16T01:38:05.051286+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -31826,11 +31954,11 @@
       "reading_status": {
         "paper_id": "b26c6aabf051",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:01:06.067183+00:00",
+        "updated_at": "2026-10-16T01:24:37.142809+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -32045,7 +32173,7 @@
       "reading_status": {
         "paper_id": "925093e117c0",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:34:30.160786+00:00",
+        "updated_at": "2026-10-16T01:47:39.519919+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -32278,7 +32406,7 @@
       "reading_status": {
         "paper_id": "932eec332894",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:30:12.244069+00:00",
+        "updated_at": "2026-10-16T01:45:14.119532+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -32518,11 +32646,11 @@
       "reading_status": {
         "paper_id": "8564d8ee9066",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T13:59:56.822619+00:00",
+        "updated_at": "2026-10-16T01:23:20.951186+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -32869,7 +32997,7 @@
       "reading_status": {
         "paper_id": "04a29ffa0d97",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:33:23.299190+00:00",
+        "updated_at": "2026-10-16T01:45:56.657480+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -35773,11 +35901,11 @@
       "reading_status": {
         "paper_id": "5f759a434d00",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T14:14:48.513156+00:00",
+        "updated_at": "2026-10-16T01:31:23.447997+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -35958,7 +36086,7 @@
       "reading_status": {
         "paper_id": "846009a34c58",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T14:29:47.252699+00:00",
+        "updated_at": "2026-10-16T01:44:46.533702+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -36146,7 +36274,7 @@
       "reading_status": {
         "paper_id": "f61abfb865f5",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T14:30:00.682507+00:00",
+        "updated_at": "2026-10-16T01:45:00.202157+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -36336,11 +36464,11 @@
       "reading_status": {
         "paper_id": "eb62449238c8",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T14:19:51.680013+00:00",
+        "updated_at": "2026-10-16T01:37:35.681253+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -36523,11 +36651,11 @@
       "reading_status": {
         "paper_id": "f93c5ebdceed",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T14:21:01.673827+00:00",
+        "updated_at": "2026-10-16T01:38:32.345234+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -37231,7 +37359,7 @@
       "reading_status": {
         "paper_id": "9ac433bc8bba",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:18:11.836436+00:00",
+        "updated_at": "2026-10-16T01:36:34.510287+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -37517,7 +37645,7 @@
       "reading_status": {
         "paper_id": "f0e890e1abac",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:18:45.534470+00:00",
+        "updated_at": "2026-10-16T01:37:02.632402+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -37844,7 +37972,7 @@
       "reading_status": {
         "paper_id": "565888b08f8a",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T14:35:51.357889+00:00",
+        "updated_at": "2026-10-16T01:48:32.845733+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -38001,11 +38129,11 @@
       "reading_status": {
         "paper_id": "0e496acb319d",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T13:15:25.022624+00:00",
+        "updated_at": "2026-10-16T01:13:18.480226+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -38138,11 +38266,11 @@
       "reading_status": {
         "paper_id": "fed0a147e220",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T14:00:54.266207+00:00",
+        "updated_at": "2026-10-16T01:24:24.815184+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -38357,11 +38485,11 @@
       "reading_status": {
         "paper_id": "b972c8c0d15c",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T14:21:27.344466+00:00",
+        "updated_at": "2026-10-16T01:38:49.630017+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -38554,11 +38682,11 @@
       "reading_status": {
         "paper_id": "a71884573e77",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T14:15:08.398608+00:00",
+        "updated_at": "2026-10-16T01:31:46.706761+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -38823,11 +38951,11 @@
       "reading_status": {
         "paper_id": "de48174471ad",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T14:36:33.102947+00:00",
+        "updated_at": "2026-10-16T01:49:06.012116+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -39179,11 +39307,11 @@
       "reading_status": {
         "paper_id": "253f818f3079",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T13:51:38.916296+00:00",
+        "updated_at": "2026-10-16T01:16:46.099510+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -39424,11 +39552,11 @@
       "reading_status": {
         "paper_id": "e1a150bc890d",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T14:36:54.276383+00:00",
+        "updated_at": "2026-10-16T01:49:20.446141+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -39615,7 +39743,7 @@
       "reading_status": {
         "paper_id": "664553b0f6bb",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T14:15:45.844177+00:00",
+        "updated_at": "2026-10-16T01:32:38.844314+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -39814,7 +39942,7 @@
       "reading_status": {
         "paper_id": "e777d468cee7",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T13:16:24.048777+00:00",
+        "updated_at": "2026-10-16T01:13:30.287283+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -40029,7 +40157,7 @@
       "reading_status": {
         "paper_id": "0e633438a2da",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T13:19:01.049312+00:00",
+        "updated_at": "2026-10-16T01:14:22.296172+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -40225,11 +40353,11 @@
       "reading_status": {
         "paper_id": "7a6650541667",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T13:55:32.413179+00:00",
+        "updated_at": "2026-10-16T01:20:01.121069+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -40429,7 +40557,7 @@
       "reading_status": {
         "paper_id": "0888222377a8",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:18:33.385954+00:00",
+        "updated_at": "2026-10-16T01:36:50.795945+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -41757,7 +41885,7 @@
       "reading_status": {
         "paper_id": "aa68a4a89b0e",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T14:13:24.617927+00:00",
+        "updated_at": "2026-10-16T01:26:06.467104+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -44010,11 +44138,11 @@
       "reading_status": {
         "paper_id": "8309db0ac1cd",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:15:20.861591+00:00",
+        "updated_at": "2026-10-16T01:32:00.306851+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -44206,7 +44334,7 @@
       "reading_status": {
         "paper_id": "ab9b44c6ecc0",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T20:06:35.902702+00:00",
+        "updated_at": "2026-10-16T01:51:38.879745+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -44376,7 +44504,7 @@
       "reading_status": {
         "paper_id": "6fd3604394f8",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:34:18.189969+00:00",
+        "updated_at": "2026-10-16T01:46:52.447832+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -44583,11 +44711,11 @@
       "reading_status": {
         "paper_id": "40c0ae2fa4ed",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:12:29.732865+00:00",
+        "updated_at": "2026-10-16T01:25:19.192699+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -44776,7 +44904,7 @@
       "reading_status": {
         "paper_id": "aa0947d10184",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T13:48:03.622312+00:00",
+        "updated_at": "2026-10-16T01:16:22.300383+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -44996,7 +45124,7 @@
       "reading_status": {
         "paper_id": "3b366fc2c48d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-15T01:13:42.069550+00:00",
+        "updated_at": "2026-10-16T01:54:57.564145+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -46526,7 +46654,7 @@
       "reading_status": {
         "paper_id": "9aeec1365697",
         "state": "missing_evidence",
-        "updated_at": "2026-10-15T01:03:38.220444+00:00",
+        "updated_at": "2026-10-16T01:54:14.703397+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -46709,7 +46837,7 @@
       "reading_status": {
         "paper_id": "d552f4215ad9",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T13:59:43.984871+00:00",
+        "updated_at": "2026-10-16T01:23:09.362006+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -46883,7 +47011,7 @@
       "reading_status": {
         "paper_id": "bade6e590a5e",
         "state": "missing_evidence",
-        "updated_at": "2026-10-15T01:05:13.461375+00:00",
+        "updated_at": "2026-10-16T01:54:28.400897+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -47057,7 +47185,7 @@
       "reading_status": {
         "paper_id": "97ae87f75cf9",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T14:00:14.980376+00:00",
+        "updated_at": "2026-10-16T01:23:40.672922+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -47243,7 +47371,7 @@
       "reading_status": {
         "paper_id": "a013143718c4",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T14:00:26.593244+00:00",
+        "updated_at": "2026-10-16T01:23:52.164504+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -47426,7 +47554,7 @@
       "reading_status": {
         "paper_id": "884dc58e05e9",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T13:48:16.349849+00:00",
+        "updated_at": "2026-10-16T01:16:34.219747+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -47614,7 +47742,7 @@
       "reading_status": {
         "paper_id": "7574c80175f8",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T13:51:55.442751+00:00",
+        "updated_at": "2026-10-16T01:17:16.300814+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -47763,7 +47891,7 @@
       "reading_status": {
         "paper_id": "d8b5dc20c71e",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T13:52:35.030219+00:00",
+        "updated_at": "2026-10-16T01:19:39.296537+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -47914,7 +48042,7 @@
       "reading_status": {
         "paper_id": "60a117ea5303",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T13:56:07.051266+00:00",
+        "updated_at": "2026-10-16T01:20:41.492550+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -48121,11 +48249,11 @@
       "reading_status": {
         "paper_id": "1bb556bb038f",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T13:22:48.506773+00:00",
+        "updated_at": "2026-10-16T01:15:18.242112+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -48334,7 +48462,7 @@
       "reading_status": {
         "paper_id": "72fb0744c384",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:16:11.538339+00:00",
+        "updated_at": "2026-10-16T01:35:55.188177+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -48687,7 +48815,7 @@
       "reading_status": {
         "paper_id": "c05baf48e37d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:35:17.147865+00:00",
+        "updated_at": "2026-10-16T01:48:13.861496+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -49028,11 +49156,11 @@
       "reading_status": {
         "paper_id": "8a095e50b332",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:14:06.571862+00:00",
+        "updated_at": "2026-10-16T01:28:30.427004+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -49265,7 +49393,7 @@
       "reading_status": {
         "paper_id": "35b3b0d29b69",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:36:03.076989+00:00",
+        "updated_at": "2026-10-16T01:48:45.228094+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -49467,7 +49595,7 @@
       "reading_status": {
         "paper_id": "abf0865db466",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T14:00:38.554708+00:00",
+        "updated_at": "2026-10-16T01:24:03.652625+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -49676,11 +49804,11 @@
       "reading_status": {
         "paper_id": "4ddc4c6ce195",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:14:19.827571+00:00",
+        "updated_at": "2026-10-16T01:28:52.109385+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -49872,7 +50000,7 @@
       "reading_status": {
         "paper_id": "e4cf9f888b6d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T19:59:57.649283+00:00",
+        "updated_at": "2026-10-16T01:50:25.059003+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -50062,7 +50190,7 @@
       "reading_status": {
         "paper_id": "f5d9c5d173ef",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:20:40.545667+00:00",
+        "updated_at": "2026-10-16T01:38:18.158196+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -50267,7 +50395,7 @@
       "reading_status": {
         "paper_id": "dabc96bfedf6",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:17:57.175193+00:00",
+        "updated_at": "2026-10-16T01:36:20.669559+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -50461,7 +50589,7 @@
       "reading_status": {
         "paper_id": "d2ad3a94e5bd",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T20:05:33.497851+00:00",
+        "updated_at": "2026-10-16T01:51:25.390711+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -50839,7 +50967,7 @@
       "reading_status": {
         "paper_id": "21c8f639c597",
         "state": "failed",
-        "updated_at": "2026-10-14T13:58:10.251332+00:00",
+        "updated_at": "2026-10-16T01:22:26.940177+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -51321,11 +51449,11 @@
       "reading_status": {
         "paper_id": "df76394da208",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:01:20.858659+00:00",
+        "updated_at": "2026-10-16T01:24:58.940094+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -51763,7 +51891,7 @@
       "reading_status": {
         "paper_id": "c0cf7585af24",
         "state": "failed",
-        "updated_at": "2026-10-14T14:49:54.561682+00:00",
+        "updated_at": "2026-10-16T01:49:59.965047+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -51797,7 +51925,7 @@
         "ai_maintenance",
         "generative_design"
       ],
-      "summary": "【摘要】本文讨论结构健康监测如何从依赖分布式传感器与外部处理，转向由超材料架构参与感知和信息转换。综述按视觉、电磁和波动信息组织相关进展，并介绍逆向设计、拓扑优化、增材制造、机器学习与数字孪生等支撑技术。解读：其价值在于建立材料架构与监测信息之间的分类框架，而非证明某种方案优于传统系统。当前仅有摘要，无法核实具体实验、性能比较及工程成熟度。",
+      "summary": "【摘要】本文关注结构健康监测从外置传感系统向材料自身参与感知的转变，梳理人工设计的超材料结构如何编码、转换和传递结构信息。综述按视觉、电磁和波动三类信息组织相关进展，并讨论逆向设计、拓扑优化、增材制造、机器学习及数字孪生等支撑技术。【解读】其阅读价值在于连接材料架构设计与监测信息链路；当前仅有摘要，不能据此判断各路线的性能优劣或工程成熟度。",
       "raw_metadata": {
         "source": "Semantic Scholar",
         "source_id": "cfa77d66687109ca3f0d12b7f660517eea7956bd",
@@ -52110,36 +52238,36 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "title_zh": "作为结构健康监测换能器的超材料：批判性综述与展望",
-      "recommendation": "建议作为结构健康监测与生成式结构设计交叉方向的框架性读物，重点关注信息换能机制和设计工具的对应关系；不宜据此直接选择工程监测方案。",
+      "title_zh": "超材料作为结构健康监测换能器：批判性综述与展望",
+      "recommendation": "【解读】推荐作为结构设计与智能运维交叉方向的框架性读物，重点关注材料架构如何承担感知和信息处理功能；若需选择工程方案或比较检测性能，当前摘要证据不足。",
       "deep_read": {
-        "problem": "【摘要】传统结构健康监测依赖分布式传感器、采集系统、信号传输和外部处理。原文指出其受到“system complexity, wiring, power consumption”等因素限制。本文关注材料架构能否参与感知，将结构响应转化为可测信息，而非仅承担被监测对象的角色。",
-        "method": "【摘要】本文是综述，按生成信息的物理域组织研究：视觉信息包括形状变化与颜色、发光响应；电磁信息包括电学及无线响应；波动信息包括带隙、共振变化和局域化等。该分类关注信息如何被编码、转换与传递；摘要未交代检索策略和文献筛选标准。",
-        "innovation": "【摘要】文章强调材料在信息到达常规电子系统之前参与物理处理与通信。解读：值得关注的是将超材料视为监测换能器及信息处理载体的概念组织方式，而非单一传感器改进。仅凭摘要不能确认该框架的首创性，也不能认定作者提出了新的结构或算法。",
-        "findings": "【摘要】综述归纳了超材料产生视觉、电磁和波动信息的多类机制，并指出逆向设计、拓扑优化等技术可支持多功能材料开发，目标功能包括感知、滤波、放大和通信。摘要未提供灵敏度、误差、寿命或对照结果，因此这些内容是研究进展概括，不是定量性能结论。",
-        "limitations": "【摘要】作者表示讨论了材料中心监测的未来机会与挑战，但未在摘要中列出具体挑战及论据。当前资料无法核对案例覆盖、机制间比较或部署条件。解读：不能由概念上的集成潜力推定其已经降低功耗、维护成本或提高可靠性，相关判断仍需全文证据。",
-        "connection": "【摘要】原文明确涉及机器学习、数字孪生、逆向设计和拓扑优化。解读：这与智能运维中的状态信息获取、结构设计中的架构优化存在直接联系；与可靠性研究的联系则在于潜在的损伤监测信息来源。摘要未展示故障预测、生成式模型或可靠性指标的验证结果。",
-        "next_steps": "建议：后续阅读全文时，按信息域建立机制、输出信号、设计工具和验证条件的对照表，区分概念演示与工程验证。若开展迁移研究，可选择一种换能机制，检验架构参数与监测输出的关系，并与传统传感方案比较；这些是研究建议，不是作者已完成的工作。"
+        "problem": "【摘要】传统结构健康监测依赖分布式传感器、采集、传输及外部处理，受复杂度、布线、功耗、维护和扩展性制约。原文提出让“the material itself participates in sensing”。【解读】核心问题是能否通过材料架构承担部分感知功能，而非仅增加外部传感器。",
+        "method": "【摘要】本文是综述，按所生成信息的物理域整理研究，原文分类为“visual information”“electromagnetic information”和“wave information”。视觉类包含形变与变色等，电磁类包含电容及无线响应等，波动类包含带隙与共振偏移等；摘要未交代文献检索和筛选程序。",
+        "innovation": "【解读】摘要呈现的框架特点，是将超材料视作结构信息的换能与处理载体，而不只关注承载或单一传感性能。依据是原文“encode, transform, and communicate structural information”。这属于综述视角的归纳，尚不足以确认其相较既有综述的首创性。",
+        "findings": "【摘要】作者强调多功能超材料可承担“sensing, filtering, amplifying, and communicating”结构信息的功能，并列出逆向设计、拓扑优化等支撑技术。【解读】这些内容支持对研究路线的概览，但摘要没有提供检测精度、实验对照或耐久性数据，不能解释为已验证的性能提升。",
+        "limitations": "【摘要】末句说明文章讨论了“future opportunities and challenges”，但未展开具体挑战。【解读】当前资料无法核查各技术的适用工况、标定需求、长期稳定性和规模化验证情况；这些是本次评估的证据缺口，不应直接写成作者已确认的技术缺陷或全文遗漏。",
+        "connection": "【解读】与智能运维的联系在于将部分信息处理前移至材料端；与结构设计的联系则由摘要列出的“inverse design, topology optimization”直接支撑。对可靠性研究，可关注架构响应能否稳定表征损伤，但摘要未提供误报、漏报或寿命方面的证据。",
+        "next_steps": "【建议】后续阅读可选取一种信息域，追踪结构输入、架构响应与可测输出之间的对应关系，再核查其标定方法和损伤识别证据。若开展研究，建议比较环境扰动与损伤引起的响应变化，并评估制造偏差的影响；这些是迁移设想，不是摘要报告的成果。"
       },
       "analysis_status": "ready",
       "analysis_basis": "abstract",
       "analysis_kind": "model",
       "analysis_sources": [
-        "https://doi.org/10.1088/1361-665x/aea9fc"
+        "https://www.semanticscholar.org/paper/cfa77d66687109ca3f0d12b7f660517eea7956bd"
       ],
-      "analyzed_at": "2026-10-13T07:02:10.226621+00:00",
+      "analyzed_at": "2026-10-16T01:59:14.441006+00:00",
       "llm_model": "gpt-6.1-sol",
       "analysis_references": {},
-      "analysis_material_version": "c289457ad129cf9a3b313c75353152bbf57832e39f9bbae3d7b0f222a288aa0b",
+      "analysis_material_version": "aacbfc53ecc7977468e6ac40b26d4088f8f284125a92078cfabd6f308ece5941",
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "a68d0bb8b100",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:14:33.260400+00:00",
+        "updated_at": "2026-10-16T01:59:14.466559+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -52168,7 +52296,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "本次仅提供完整摘要，不能据此声称读过全文。题名涉及无人机结构、铝钛合金与机器学习，但摘要实际介绍水资源工程仿真模型综述，二者明显不一致。[摘要]其重点是比较水文与水力仿真软件的方法和应用特征，为模型选择提供指导。解读：该资料更适合了解水资源仿真工具的选型思路，不能支撑对题名所述材料性能、生成式设计或疲劳可靠性成果的评价，应先核对题名与摘要的对应关系。",
+      "summary": "该研究面向无人机结构选材，整合实验报告和文献中的铝合金、钛合金数据，将物理、力学、疲劳及工程应用属性纳入机器学习分析。[摘要] 原文强调同时考虑定量与定性参数，以描述设计要求之间的非线性交互。其潜在价值是支持多准则材料选择，而非直接生成结构方案。摘要声称模型可靠性与泛化能力得到改善，但未提供模型名称、样本规模、验证方案或量化结果，因而目前只能识别研究思路，不能确认性能优势。",
       "raw_metadata": {
         "source": "OpenAlex",
         "source_id": "https://openalex.org/W7213446467",
@@ -52325,16 +52453,16 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "title_zh": "基于机器学习模型的无人机结构铝合金与钛合金性能分析",
-      "recommendation": "建议暂缓将其列为生成式设计或疲劳可靠性方向的重点阅读文献：当前摘要讨论水文与水力仿真，无法验证题名所述无人机合金及机器学习研究。[摘要]",
+      "title_zh": "基于机器学习的无人机结构铝合金与钛合金性能分析",
+      "recommendation": "建议作为无人机结构多属性选材与疲劳相关数据建模的候选阅读材料；若用于支撑生成式设计或可靠性方法比较，应先核查全文的数据来源、模型实现与验证证据。",
       "deep_read": {
-        "problem": "摘要关注水资源工程中物理模型成本高、耗时长，以及计算机仿真模型如何选择的问题，原文称其为“an alternative to costly and time-consuming physical models”。[摘要]研究对象并非可确认的无人机材料问题，题名与摘要的对应关系仍待核实。",
-        "method": "论文自述采用综述方式，梳理仿真模型及其科研应用，重点分析水文与水力软件，比较方法和适用场景。原文使用“reviews research efforts”。[摘要]但没有说明检索数据库、文献筛选标准或比较指标，因此无法判断综述覆盖范围与可复核性。",
-        "innovation": "摘要将贡献定位为解释模型特征及方法、应用差异，并为研究者选型提供指导。[摘要]解读：其潜在价值在于整理已有工具的适用性，而非摘要已证实的新算法或新材料结论。资料未给出与既有综述的比较，不能认定其创新程度。",
-        "findings": "摘要声称提供模型选型指导，并以“enhance the accuracy of their results”描述预期用途。[摘要]但未列出具体软件、优劣排序、适用条件或精度数据。因此可确认的是作者宣称的综述价值，不能把准确性提升写成已经验证的实验发现。",
-        "limitations": "当前最直接的资料限制是题名涉及无人机合金性能，而摘要讨论水资源仿真，无法确认二者属于同一研究。[摘要]此外，摘要没有提供纳入文献数量、验证过程或量化结果。这些是当前证据缺口，并不等同于作者已经承认的研究局限。",
-        "connection": "解读：比较仿真工具的方法与应用边界，在思路上可联系结构设计中的模型选型，以及可靠性研究中的模型适用性判断。[摘要]但所给摘要没有生成式设计、疲劳损伤、寿命预测或智能运维内容，不能据此建立具体技术关联或迁移成效。",
-        "next_steps": "建议先核对题名、DOI与完整摘要是否对应，再决定阅读对象。若目标确为无人机合金研究，应补充其实际摘要或全文；若目标是水资源综述，则进一步查验软件清单、比较标准与验证依据。上述是阅读建议，不是作者提出的研究结论。"
+        "problem": "研究围绕无人机结构的铝合金、钛合金选材，关注多类材料属性与设计要求之间的相互作用。[摘要] 原文称其为“complex multi-criteria system”。解读：核心问题是多准则选材建模，不能直接等同于结构拓扑优化或生成式设计。",
+        "method": "研究将实验报告值与文献来源整合为材料样本，并让机器学习同时考虑定量及定性参数。[摘要] 原文表述为“both quantitative and qualitative parameters”。但摘要未交代具体算法、类别属性编码、缺失值处理及训练测试划分，暂无法复现。",
+        "innovation": "可辨识的研究特点是把疲劳性能与成本、可获得性等工程因素共同纳入无人机材料分析。[摘要] 解读：这体现了多属性整合思路，但现有资料没有与既有方法比较，也未说明新算法或新机制，不能据此确认方法原创性或创新幅度。",
+        "findings": "摘要声称模型具有“improved reliability and generalization”，并可支持结构设计与选材。[摘要] 然而没有提供评价指标、误差、对照模型或独立验证结果。这只能视为作者的定性结论，不能推导预测精度、泛化提升幅度或结构安全收益。",
+        "limitations": "当前摘要缺少样本数量、合金牌号、试验条件及数据质量控制信息，无法判断材料覆盖范围。[摘要] 此外，原文称每个样本包含“12 attributes”，但随后仅列出十一项属性。该表述需核实，不能自行补齐，也不能认定全文同样缺失。",
+        "connection": "解读：疲劳强度与疲劳寿命属性使研究与疲劳可靠性方向相关，多准则选材也可服务结构设计。[摘要] 但材料预测模型的可靠性不等于结构失效概率评估；资料未展示在线监测、故障诊断或生成式设计流程，相关联系应限于潜在应用。",
+        "next_steps": "建议优先核查全文的数据清单、属性数量及疲劳试验条件，并确认同源文献样本是否跨训练集与测试集分布。若进一步迁移到可靠性研究，建议增加不确定性量化和独立试验验证；这些属于后续研究设想，并非摘要已报告的方法或成果。"
       },
       "analysis_status": "ready",
       "analysis_basis": "abstract",
@@ -52342,19 +52470,19 @@
       "analysis_sources": [
         "https://doi.org/10.56990/bajest/2026.050203"
       ],
-      "analyzed_at": "2026-10-14T13:57:14.594744+00:00",
+      "analyzed_at": "2026-10-16T01:58:00.629947+00:00",
       "llm_model": "gpt-6.1-sol",
       "analysis_references": {},
-      "analysis_material_version": "a620bff291f667fd682aa32754fb20ecaf0831281444e98c245bc160dfccac65",
+      "analysis_material_version": "d49b01b571055bc5b741c49ed94ee3b790422865743a99caf86f960b8ec5538a",
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "569d913e4413",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T13:57:14.604447+00:00",
+        "updated_at": "2026-10-16T01:58:00.636613+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -52582,11 +52710,11 @@
       "reading_status": {
         "paper_id": "93948bc47be6",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T13:58:27.833071+00:00",
+        "updated_at": "2026-10-16T01:22:49.376962+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -52817,11 +52945,11 @@
       "reading_status": {
         "paper_id": "abaabd246a73",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:13:37.490193+00:00",
+        "updated_at": "2026-10-16T01:26:18.740912+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -53039,11 +53167,11 @@
       "reading_status": {
         "paper_id": "e491af2cc89d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:13:53.147135+00:00",
+        "updated_at": "2026-10-16T01:28:08.684729+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -53272,11 +53400,11 @@
       "reading_status": {
         "paper_id": "464700d767e8",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T13:52:07.508966+00:00",
+        "updated_at": "2026-10-16T01:18:46.383494+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -53427,7 +53555,7 @@
       "reading_status": {
         "paper_id": "438f7c66205e",
         "state": "missing_evidence",
-        "updated_at": "2026-10-15T01:00:13.394142+00:00",
+        "updated_at": "2026-10-16T01:53:18.111556+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -53578,7 +53706,7 @@
       "reading_status": {
         "paper_id": "bc2a1ce81aff",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T13:52:21.844207+00:00",
+        "updated_at": "2026-10-16T01:19:17.304761+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -53735,11 +53863,11 @@
       "reading_status": {
         "paper_id": "109bf46dbf46",
         "state": "missing_evidence",
-        "updated_at": "2026-10-14T13:55:55.167005+00:00",
+        "updated_at": "2026-10-16T01:20:29.552753+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -54079,7 +54207,7 @@
       "reading_status": {
         "paper_id": "18ee2d492b5c",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T20:09:44.725400+00:00",
+        "updated_at": "2026-10-16T01:52:05.097757+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -54512,7 +54640,7 @@
       "reading_status": {
         "paper_id": "f669445800e6",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T13:21:28.972934+00:00",
+        "updated_at": "2026-10-16T01:15:05.316835+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -55033,7 +55161,7 @@
       "reading_status": {
         "paper_id": "6667ad1e6f80",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T20:01:25.415114+00:00",
+        "updated_at": "2026-10-16T01:50:39.743655+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -55333,11 +55461,11 @@
       "reading_status": {
         "paper_id": "3e66cc5fc310",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T13:27:02.247468+00:00",
+        "updated_at": "2026-10-16T01:16:00.260896+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -55958,7 +56086,7 @@
       "reading_status": {
         "paper_id": "7ebe32b91775",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T20:04:08.682279+00:00",
+        "updated_at": "2026-10-16T01:51:12.064382+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -56169,7 +56297,7 @@
       "reading_status": {
         "paper_id": "ca3b95f43cb0",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:39:21.191844+00:00",
+        "updated_at": "2026-10-16T01:49:45.238832+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -56681,7 +56809,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "【摘要】本文面向柔性纳米电子器件可靠性，研究单壁二硫化钼纳米管在拉伸—扭转耦合载荷下的疲劳行为。摘要报告，疲劳寿命随扭转角和轴向激励频率增大而下降，但频率影响并非单调：低中频区出现两个寿命极小值，分别关联拉伸固有频率及其第一谐波；高频区则出现由应变率效应主导的宽谷平台。作者还提出耦合载荷下的固有频率计算方法，并从声子耗散解释共振减寿。本解读仅依据摘要，不能核验具体模型与结果幅度。",
+      "summary": "本次仅提供一句摘要资料，关注单壁二硫化钼纳米管在双轴拉伸—扭转耦合作用下的疲劳行为。原文称，该耦合会触发严重疲劳共振，并使寿命在临界频率处骤降[摘要]。解读：其阅读价值在于提示多轴载荷与频率条件可能共同影响纳米结构可靠性。但资料未交代研究方法、载荷参数、寿命定义及验证过程，目前只能识别研究主题和定性发现，不能判断结果的稳健性或适用范围。",
       "raw_metadata": {
         "provider": "PubMed",
         "pmid": "42740586",
@@ -56893,15 +57021,15 @@
       ],
       "focus_tags": [],
       "title_zh": "单壁二硫化钼纳米管双轴拉伸—扭转耦合疲劳共振",
-      "recommendation": "【解读】推荐作为疲劳可靠性方向的专题阅读材料：它把耦合载荷、固有频率与疲劳寿命联系起来，并区分共振和高频应变率效应；但当前证据仅为摘要，不宜直接据此制定工程设计阈值。",
+      "recommendation": "建议围绕多轴疲劳与频率敏感可靠性问题定向阅读，重点核查原文所称“sharp life drops at critical frequencies”的判定依据；当前资料不足以支持直接采用其结论[摘要]。",
       "deep_read": {
-        "problem": "【摘要】研究问题是拉伸与扭转共同作用时，激励频率如何影响单壁二硫化钼纳米管的疲劳寿命。原文以“reliability of flexible nanoelectronic devices”说明应用背景。【解读】重点不仅是载荷增加是否减寿，还包括频率匹配是否形成特别危险的工作区间。",
-        "method": "【摘要】作者系统研究双轴拉伸—扭转耦合加载，并提出固有频率计算方法，原文表述为“calculating natural frequencies”。摘要还分析疲劳能量在激励频率和固有频率处的分布与耗散，但未说明计算框架、材料模型、边界条件及疲劳寿命判据，无法复核实现细节。",
-        "innovation": "【摘要】值得关注的方法贡献，是把耦合加载条件下的固有频率计算与疲劳寿命低谷对应起来，摘要明确提及“first harmonic”。【解读】其潜在新意在于结合动力学频率特征解释疲劳减寿，而不是仅描述载荷趋势；没有全文及相关文献比较，不能认定其首创性。",
-        "findings": "【摘要】寿命随扭转角增加而降低，频率影响呈“non-monotonic decrease”，低中频区存在两个极小值。高频区则出现宽谷平台，原文将其归于“strain-rate effects”。共振时多数固有频率声子耗散，被作者用于解释寿命最低现象；摘要未提供降幅或误差。",
-        "limitations": "【解读】当前限制首先是证据范围：只有摘要，未见载荷幅值、频率范围、样本设置或验证过程，因此不能判断结果稳健性与适用边界。原文研究对象限定为“single-walled MoS2 nanotubes”；向其他材料或器件推广仍需证据，这不是作者已报告的局限结论。",
-        "connection": "【解读】与疲劳可靠性研究的联系直接，依据是摘要中的“fatigue resonance”。对结构设计，其启示是耦合受载时需关注工作频率与固有频率的关系；对智能运维，可考虑频率特征与寿命风险的关联。但摘要没有监测、故障诊断或预测算法，不能视作已有运维成果。",
-        "next_steps": "【建议】后续阅读应优先核对固有频率计算、疲劳失效判据和能量耗散分析，并检查“first harmonic”的具体定义及频率对应证据。可迁移研究宜在明确模型与适用尺度后，检验耦合载荷下危险频带能否作为寿命预测特征；这属于研究建议，并非作者已完成的工作。"
+        "problem": "研究问题是单壁二硫化钼纳米管在拉伸与扭转共同作用下，是否出现与加载频率相关的疲劳寿命突变。原文将对象与现象概括为“fatigue resonance”[摘要]。解读：重点不仅是是否失效，还在于何种频率条件对应寿命急剧恶化。",
+        "method": "资料仅以“Biaxial tension–torsion coupling”说明载荷耦合类型，未交代采用实验、理论分析还是数值模拟[摘要]。加载控制方式、频率扫描程序、边界条件与疲劳终止判据均无可核对信息，因此不能复原技术路线或评价方法是否充分。",
+        "innovation": "可识别的研究切入点，是将拉伸—扭转耦合与单壁二硫化钼纳米管的疲劳共振联系起来[摘要]。解读：这种联系可能具有多轴疲劳研究价值，但资料没有既有研究对比，不能据此认定首次发现、提出新模型，或证明其相对已有工作的创新程度。",
+        "findings": "原文给出的定性发现是耦合作用“triggers severe fatigue resonance”，并导致“sharp life drops at critical frequencies”[摘要]。这支持存在临界频率处寿命骤降的报告，但没有频率数值、下降幅度或误差资料，无法进一步量化效应强弱。",
+        "limitations": "当前能够确认的是资料层面的局限，而非作者已证明存在的研究缺陷：仅有一句摘要，未提供对照组、重复性、统计不确定性及适用条件[摘要]。因此，尚不能判断共振识别是否可靠，也不能把未披露的信息直接当作原研究没有开展的工作。",
+        "connection": "解读：对疲劳可靠性研究，该资料提示应关注多轴载荷条件下的频率敏感寿命变化；对结构设计，可将其视为核查危险频段的线索[摘要]。智能运维关联则属于延伸设想，原文未涉及在线监测、状态识别或寿命预测，不能称其已形成运维方案。",
+        "next_steps": "建议后续优先核查临界频率的定义、共振判据及寿命骤降的对照证据，再确认载荷幅值、耦合关系和边界条件。若考虑迁移到结构可靠性研究，建议另行验证尺度与材料适用性；这些是阅读和研究建议，并非当前摘要已经支持的作者结论。"
       },
       "analysis_status": "ready",
       "analysis_basis": "abstract",
@@ -56909,19 +57037,19 @@
       "analysis_sources": [
         "https://doi.org/10.1039/d6cp03148j"
       ],
-      "analyzed_at": "2026-10-14T14:26:25.397747+00:00",
+      "analyzed_at": "2026-10-16T01:41:47.759977+00:00",
       "llm_model": "gpt-6.1-sol",
       "analysis_references": {},
-      "analysis_material_version": "aa2c1d4fd670f1ae96f484ef7584e4d5f9b82e410be953d427b10fc47a846453",
+      "analysis_material_version": "c285e452c2dd4ed3e0b047500a253dee826fe980c3e31c3e62b28f44166ce188",
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "35342cc51c6b",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:26:25.403702+00:00",
+        "updated_at": "2026-10-16T01:41:47.787531+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -57714,7 +57842,7 @@
       "reading_status": {
         "paper_id": "86cf61a99b1a",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:38:59.770827+00:00",
+        "updated_at": "2026-10-16T01:49:32.258643+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -58032,7 +58160,7 @@
       "reading_status": {
         "paper_id": "65e1dc5c1243",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T20:08:32.001323+00:00",
+        "updated_at": "2026-10-16T01:51:52.107411+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -58446,11 +58574,11 @@
       "reading_status": {
         "paper_id": "8cda7806bfac",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T14:13:04.474304+00:00",
+        "updated_at": "2026-10-16T01:25:41.361832+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -58701,7 +58829,7 @@
       "reading_status": {
         "paper_id": "5feece63bb7a",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-15T01:14:57.414753+00:00",
+        "updated_at": "2026-10-16T01:55:14.225829+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -58731,7 +58859,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "增材制造零件的长期服役性能与疲劳试验数据稀缺，是本文关注的核心问题。摘要将原始成形表面的深谷描述为应力集中与裂纹萌生位置，并提出利用迁移学习、表面粗糙度数据和疲劳试验数据预测疲劳寿命。[摘要] 解读：研究价值在于探索小样本条件下的寿命建模，但当前资料仅说明框架目标和潜在用途，没有提供模型结构、试验规模或预测结果，不能据此认定其有效性已得到验证。",
+      "summary": "增材制造零件的表面粗糙度可能削弱其长期服役表现，而疲劳试验耗时、成本高，进一步限制了预测模型的数据来源。[摘要]本文拟结合迁移学习、表面粗糙度数据与疲劳试验数据，建立疲劳寿命预测框架。摘要以“aims to”描述研究目标，并未报告模型结构、数据规模或验证结果。解读：其阅读价值主要在于面向小样本疲劳可靠性问题的方法思路，尚不能据此确认预测精度或工程适用性。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7214988495",
@@ -58866,15 +58994,15 @@
       ],
       "focus_tags": [],
       "title_zh": "面向增材制造零件疲劳寿命预测的迁移学习框架",
-      "recommendation": "推荐作为疲劳可靠性与小样本寿命预测的方法线索阅读；摘要明确关联表面粗糙度、疲劳寿命和迁移学习，但重点推荐仍需核查具体实现及验证证据。[摘要]",
+      "recommendation": "建议关注小样本疲劳寿命预测的研究者进一步阅读，重点核查迁移来源、粗糙度表征与验证设计；当前推荐依据是摘要提出的方法方向，而非已经证实的性能优势。[摘要]",
       "deep_read": {
-        "problem": "本文针对增材制造零件长期性能不足及疲劳数据稀缺的问题。摘要指出，表面深谷会成为“stress concentration areas”，进而形成裂纹萌生位置；疲劳试验又耗费时间与成本。[摘要] 解读：问题同时涉及表面特征引起的失效风险与寿命模型训练数据不足。",
-        "method": "摘要提出结合迁移学习与疲劳试验数据，构建从表面粗糙度数据预测疲劳寿命的框架，并以“a related task”说明迁移学习借用相关任务模型的基本思路。[摘要] 但未交代源任务、目标任务、特征表达、模型结构及迁移操作，因此只能确认方法路线，不能复原算法。",
-        "innovation": "解读：可关注的研究切入点是把迁移学习用于表面粗糙度驱动的疲劳寿命预测，以回应增材制造领域的数据稀缺问题。[摘要] 不过摘要没有给出与已有研究的比较，也未说明新的迁移机制或模型设计；因此不能将这一应用组合直接认定为已证实的原创突破。",
-        "findings": "摘要没有报告预测误差、对照实验或疲劳试验结果，其成果表述仍是研究目标与潜在作用。原文使用“can potentially solve”描述框架缓解数据稀缺的可能性。[摘要] 因而目前可确认的是作者提出了研究方向，而非框架已提高预测精度或已满足关键任务应用要求。",
-        "limitations": "当前资料的主要限制是证据粒度仅到摘要级：没有材料类型、制造工艺、载荷条件、样本规模和验证方案，也未提供迁移学习失效情形。[摘要] 这些属于本次无法核查的信息，不应当作作者确认的研究缺陷；现有资料不足以判断泛化能力与适用边界。",
-        "connection": "解读：该研究与疲劳可靠性方向直接相关，寿命预测也可为结构设计中的表面质量控制提供研究线索。[摘要] 与智能运维的联系则是潜在的寿命评估用途，并非摘要已验证的应用；资料没有涉及在线监测、维修决策或可靠度计算，不能把寿命预测等同于完整运维体系。",
-        "next_steps": "建议：后续阅读应优先核查源任务与目标任务如何选择、粗糙度如何表征，以及是否采用无迁移模型进行对照；再检查数据划分是否能够评价跨条件预测能力。上述是审查方案而非作者结论。当前摘要未提供相关细节，尚不能据此设计可直接复现的研究流程。[摘要]"
+        "problem": "研究针对增材制造零件长期性能不足与疲劳数据稀缺的双重问题。摘要指出，表面深谷可成为应力集中及裂纹萌生位置，而疲劳试验又具有较高时间和经济成本。[摘要]解读：核心需求是利用有限试验数据，建立表面状态与疲劳寿命之间的预测联系。",
+        "method": "摘要提出将迁移学习用于疲劳寿命预测，利用相关任务中学得的模型支持目标任务训练，并结合表面粗糙度与疲劳试验数据构建框架。[摘要]原文表述为“aims to use”，未交代源任务、目标任务、模型结构或迁移策略，因此目前只能识别方法路线，不能复现。",
+        "innovation": "解读：值得关注的方法组合，是将迁移学习引入增材制造零件的表面粗糙度—疲劳寿命建模，以回应疲劳数据不足的问题。[摘要]但摘要未提供与既有工作的比较，也未说明新的迁移机制，不能据此认定其具有首创性、算法创新或已验证的技术突破。",
+        "findings": "摘要没有报告可核对的实验发现、误差指标或基线比较。作者仅称该框架“can potentially solve”数据稀缺问题，属于潜在作用而非验证结论。[摘要]因此，当前能够确认的是研究目标和预期用途，不能推断其预测精度更高或试验需求已经减少。",
+        "limitations": "当前资料仅为摘要，未提供材料类型、制造工艺、载荷条件、样本数量及验证方案。[摘要]这些缺项限制了对方法可靠性和适用范围的判断，但不等于论文研究本身必然存在相应缺陷。是否发生负迁移、是否具有跨条件泛化能力，现有资料均不足以判断。",
+        "connection": "解读：该研究与疲劳可靠性方向直接相关，关注零件表面状态与寿命预测之间的联系，可为结构设计中的寿命评估提供方法参考。[摘要]但将其进一步用于智能运维、检修决策或失效概率计算，还需要服役监测、寿命不确定性等证据，摘要并未涉及。",
+        "next_steps": "建议：后续阅读优先核查源域与目标域的定义、粗糙度输入形式，以及疲劳数据如何用于训练和独立验证；再检查是否设置不迁移模型作为对照。这些是针对摘要信息缺口的阅读问题，并非作者已完成的工作，也不意味着文中必然缺少相关设计。[摘要]"
       },
       "analysis_status": "ready",
       "analysis_basis": "abstract",
@@ -58882,19 +59010,19 @@
       "analysis_sources": [
         "https://doi.org/10.21872/annual2025_6495"
       ],
-      "analyzed_at": "2026-10-14T13:17:47.013674+00:00",
+      "analyzed_at": "2026-10-16T01:56:02.519106+00:00",
       "llm_model": "gpt-6.1-sol",
       "analysis_references": {},
-      "analysis_material_version": "0117fbcc048320cd0e7eeafd254d9c5d8d9723ffb7a6e3297df067551b982bc7",
+      "analysis_material_version": "278d7013ad15c157418a93cad17171d7bc06bf9a28ffcaecc3ad28816581505f",
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "926b00e39b2b",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T13:17:47.024192+00:00",
+        "updated_at": "2026-10-16T01:56:02.545091+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -59762,11 +59890,11 @@
       "reading_status": {
         "paper_id": "e09d9ccb18ad",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T13:20:17.859309+00:00",
+        "updated_at": "2026-10-16T01:14:43.998205+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -60257,11 +60385,11 @@
       "reading_status": {
         "paper_id": "0385ae69f947",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-14T13:24:17.773071+00:00",
+        "updated_at": "2026-10-16T01:15:38.558733+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -66611,13 +66739,13 @@
     "unavailable": 30
   },
   "analysis_status": {
-    "ready_core": 4,
+    "ready_core": 6,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 2
+    "pending": 0
   },
   "edition": {
     "id": "38739045879",

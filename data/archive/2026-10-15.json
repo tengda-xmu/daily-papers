@@ -359,8 +359,8 @@
         "article_state": "pending",
         "article_stage": "",
         "reason": "restricted",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -463,8 +463,8 @@
         "article_state": "pending",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -567,8 +567,8 @@
         "article_state": "pending",
         "article_stage": "",
         "reason": "restricted",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -591,7 +591,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Electric bus operators must limit charging-infrastructure investment while supplying enough layover energy to preserve battery reserves during service. Climate changes both energy demand and charging acceptance, linking forecasts to control and infrastructure selection. We propose a scientific machine learning (SciML) framework for climate-adaptive co-design that predicts bus energy from an equipment-based physical prior and multimodal residual learning. Day-level calibration converts forecasts into upper energies that determine inventory targets and charging-window commitments; linear-program…",
+      "summary": "本文研究气候影响下电动公交充电设施投资与运营电量保障的协同设计。作者结合设备物理先验与多模态残差学习预测能耗，通过逐日校准、线性规划筛选和闭环验证选择站点及控制方案。摘要报告，预测误差最低的模型并不一定带来最少的运营失效，匹配预测器的控制可显著改善结果。合格的八站点方案相对全站点参考降低年度充电子系统成本28.2%。证据来自重构任务的连续全年仿真，不能视为实地验证。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -629,11 +629,43 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议重点阅读预测模型与控制策略配对、站点闭环验证这两部分：它们直接揭示预测精度与运营可靠性可能不一致，但与生成式设计方向仅有间接联系。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是如何在限制充电设施投资的同时，保障公交运营中的电池储备。摘要指出气候同时影响能耗需求与充电接受能力，即“Climate changes both energy demand and charging acceptance”。解读：设施选择不能脱离天气预测和运行控制单独优化。[摘要]",
+        "method": "方法以设备层面的物理先验结合多模态残差学习预测能耗，再用逐日校准形成能量上界，确定库存目标与充电窗口承诺。站点集合先经“linear-programming screening”，再做闭环资格验证。摘要未提供模型结构、校准公式或具体约束，尚不能复现完整流程。[摘要]",
+        "innovation": "解读：值得关注的特色是将物理先验、迁移预测、能量上界校准与设施控制协同设计串联，而非只比较预测器。摘要用“climate-adaptive co-design”界定框架，但没有提供与既有协同设计方法的系统比较，因此不足以确认各组成环节的首创性。[摘要]",
+        "findings": "摘要报告，新加坡八站点设计中，迁移模型配对专属控制后，失效天数由9.80降至0.30；合格预测设计的年度充电子系统成本相对全站点参考降低28.2%。这些属于摘要中的仿真结果；其中“lost days”有专门统计口径，不宜直接等同实际停运天数。[摘要]",
+        "limitations": "摘要明确仿真采用“one vehicle configuration”，任务来自重构的蒙特利尔与新加坡运营安排。解读：当前证据覆盖两个气候环境，但不足以判断异构车队、真实运营扰动下的有效性。摘要也未给出统计不确定性、成本明细及完整基线设置，相关结论需全文核查。[摘要]",
+        "connection": "解读：与生成式设计的联系主要在基础设施候选方案筛选及控制协同评价，而非已证实采用生成模型。摘要描述“qualification of site sets”，更接近约束下的方案选择。对可靠性研究，其启发是以运营储备结果评价预测器，而不只以预测误差排序。[摘要]",
+        "next_steps": "建议取得全文后，优先核对失效天数定义、全站点参考、控制配对规则及成本边界，再检查站点筛选与闭环验证是否使用独立数据。若迁移到生成式设计，可考虑把运营可靠性作为候选方案评价条件；这是研究建议，并非作者已完成或验证的工作。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "基于科学机器学习的气候自适应电动公交充电基础设施与控制协同设计",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.20944/preprints202610.0947.v1"
+      ],
+      "analyzed_at": "2026-10-15T14:38:51.338267+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "b2681b8f147eb70883e61bb31b82ba9b7c882e85852f9a181e50d5bac3034498",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "a0aeb1682003",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-15T14:38:51.355287+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -653,7 +685,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Η παρούσα εργασία εξετάζει την εξέλιξη της συντήρησης του βιομηχανικού εξοπλισμού από τις παραδοσιακές στρατηγικές προς την προγνωστική συντήρηση. Αρχικά παρουσιάζονται η διορθωτική, η προληπτική, η βάσει κατάστασης και η προγνωστική συντήρηση καθώς και ο ρόλος των λειτουργικών δεδομένων, των αισθητήρων και της παρακολούθησης κατάστασης.Στη συνέχεια εξετάζεται η χρήση της Μηχανικής Μάθησης για την αναγνώριση βλαβών και παρουσιάζονται η Λογιστική Παλινδρόμηση, το Δέντρο Απόφασης, το Τυχαίο Δάσος και το Πολυεπίπεδο Perceptron. Στο εφαρμοσμένο μέρος χρησιμοποιείται το συνθετικό σύνολο δεδομένων A…",
+      "summary": "本文围绕工业设备由传统维护转向预测性维护，介绍维护策略及运行数据、传感器和状态监测的作用，并在合成数据集AI4I 2020上比较四类机器学习模型。故障观测仅占3.39%，类别明显不平衡。随机森林在精确率、F1和PR-AUC上表现最佳，多层感知机则在召回率和ROC-AUC上领先，检出68次真实故障中的61次。核心启示是模型选择需兼顾故障检出与误报，而非追求单一指标。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7221841322",
@@ -694,11 +726,43 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐作为智能运维中不平衡故障识别与模型选型的比较案例阅读，重点关注不同评价指标对应的检出和误报权衡；当前仅有摘要，不宜据此认定其算法创新或工业部署效果。[摘要]",
+      "deep_read": {
+        "problem": "研究关注工业设备维护如何从传统策略转向预测性维护，并讨论机器学习用于故障识别的问题。摘要指出故障观测仅占“3.39%”。解读：这种类别不平衡使少数故障的检出能力与误报控制成为模型比较的重要关注点。[摘要]",
+        "method": "应用部分使用合成数据集AI4I 2020，对逻辑回归、决策树、随机森林和多层感知机进行比较。摘要说明经过预处理后，四个模型在同一测试集上评价，但未交代预处理步骤、数据划分比例、超参数或训练重复次数，尚不能据此复现实验。[摘要]",
+        "innovation": "摘要呈现的主要贡献是将维护策略介绍与四类模型的应用比较结合，未明确提出新算法或新数据集。解读：其阅读价值更偏向比较研究与评价指标的应用，而非方法原创性；仅凭当前摘要，不能将常规模型组合或预处理认定为创新。[摘要]",
+        "findings": "随机森林取得最高精确率、F1和PR-AUC；多层感知机取得最高召回率和ROC-AUC，并检出68次真实故障中的61次。摘要据此强调兼顾检出能力与误报数量，但未提供各指标完整数值，因此无法判断模型差距大小或统计显著性。[摘要]",
+        "limitations": "当前资料仅为摘要，且应用数据被明确称为“συνθετικό”，即合成数据。解读：这些结果不足以证明模型在真实工业设备上的泛化表现。摘要也未披露误报数量、阈值及不确定性分析；这是当前证据的边界，不能据此断言全文没有相关内容。[摘要]",
+        "connection": "解读：该研究与智能运维中的故障识别、告警模型选型直接相关，其检出与误报权衡也可启发可靠性研究中的监测决策。不过，摘要报告的是故障分类比较，未展示寿命预测、失效概率建模或结构优化，不能直接推及结构设计效果。[摘要]",
+        "next_steps": "建议：后续阅读全文时优先核对数据划分、预处理是否仅使用训练数据，以及分类阈值和完整混淆矩阵。若开展迁移研究，可在真实设备数据上比较漏报与误报成本，并检验跨工况稳定性；这些属于研究建议，并非作者已完成的实验。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "从预防性维护到预测性维护：机器学习模型的应用与比较",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://openalex.org/W7221841322"
+      ],
+      "analyzed_at": "2026-10-16T02:03:50.674480+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "62623ff2c7e0b1c5d63cf59a768d9daea2a6dd5da5ed07ba3440bf7fd7c7594e",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "6ce46b4ac683",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-16T02:03:50.681482+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "extended": [],
@@ -1058,8 +1122,8 @@
         "article_state": "pending",
         "article_stage": "",
         "reason": "restricted",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -1162,8 +1226,8 @@
         "article_state": "pending",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -1266,8 +1330,8 @@
         "article_state": "pending",
         "article_stage": "",
         "reason": "restricted",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -1290,7 +1354,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Electric bus operators must limit charging-infrastructure investment while supplying enough layover energy to preserve battery reserves during service. Climate changes both energy demand and charging acceptance, linking forecasts to control and infrastructure selection. We propose a scientific machine learning (SciML) framework for climate-adaptive co-design that predicts bus energy from an equipment-based physical prior and multimodal residual learning. Day-level calibration converts forecasts into upper energies that determine inventory targets and charging-window commitments; linear-program…",
+      "summary": "本文研究气候影响下电动公交充电设施投资与运营电量保障的协同设计。作者结合设备物理先验与多模态残差学习预测能耗，通过逐日校准、线性规划筛选和闭环验证选择站点及控制方案。摘要报告，预测误差最低的模型并不一定带来最少的运营失效，匹配预测器的控制可显著改善结果。合格的八站点方案相对全站点参考降低年度充电子系统成本28.2%。证据来自重构任务的连续全年仿真，不能视为实地验证。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -1328,11 +1392,43 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议重点阅读预测模型与控制策略配对、站点闭环验证这两部分：它们直接揭示预测精度与运营可靠性可能不一致，但与生成式设计方向仅有间接联系。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是如何在限制充电设施投资的同时，保障公交运营中的电池储备。摘要指出气候同时影响能耗需求与充电接受能力，即“Climate changes both energy demand and charging acceptance”。解读：设施选择不能脱离天气预测和运行控制单独优化。[摘要]",
+        "method": "方法以设备层面的物理先验结合多模态残差学习预测能耗，再用逐日校准形成能量上界，确定库存目标与充电窗口承诺。站点集合先经“linear-programming screening”，再做闭环资格验证。摘要未提供模型结构、校准公式或具体约束，尚不能复现完整流程。[摘要]",
+        "innovation": "解读：值得关注的特色是将物理先验、迁移预测、能量上界校准与设施控制协同设计串联，而非只比较预测器。摘要用“climate-adaptive co-design”界定框架，但没有提供与既有协同设计方法的系统比较，因此不足以确认各组成环节的首创性。[摘要]",
+        "findings": "摘要报告，新加坡八站点设计中，迁移模型配对专属控制后，失效天数由9.80降至0.30；合格预测设计的年度充电子系统成本相对全站点参考降低28.2%。这些属于摘要中的仿真结果；其中“lost days”有专门统计口径，不宜直接等同实际停运天数。[摘要]",
+        "limitations": "摘要明确仿真采用“one vehicle configuration”，任务来自重构的蒙特利尔与新加坡运营安排。解读：当前证据覆盖两个气候环境，但不足以判断异构车队、真实运营扰动下的有效性。摘要也未给出统计不确定性、成本明细及完整基线设置，相关结论需全文核查。[摘要]",
+        "connection": "解读：与生成式设计的联系主要在基础设施候选方案筛选及控制协同评价，而非已证实采用生成模型。摘要描述“qualification of site sets”，更接近约束下的方案选择。对可靠性研究，其启发是以运营储备结果评价预测器，而不只以预测误差排序。[摘要]",
+        "next_steps": "建议取得全文后，优先核对失效天数定义、全站点参考、控制配对规则及成本边界，再检查站点筛选与闭环验证是否使用独立数据。若迁移到生成式设计，可考虑把运营可靠性作为候选方案评价条件；这是研究建议，并非作者已完成或验证的工作。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "基于科学机器学习的气候自适应电动公交充电基础设施与控制协同设计",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.20944/preprints202610.0947.v1"
+      ],
+      "analyzed_at": "2026-10-15T14:38:51.338267+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "b2681b8f147eb70883e61bb31b82ba9b7c882e85852f9a181e50d5bac3034498",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "a0aeb1682003",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-15T14:38:51.355287+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -1352,7 +1448,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Η παρούσα εργασία εξετάζει την εξέλιξη της συντήρησης του βιομηχανικού εξοπλισμού από τις παραδοσιακές στρατηγικές προς την προγνωστική συντήρηση. Αρχικά παρουσιάζονται η διορθωτική, η προληπτική, η βάσει κατάστασης και η προγνωστική συντήρηση καθώς και ο ρόλος των λειτουργικών δεδομένων, των αισθητήρων και της παρακολούθησης κατάστασης.Στη συνέχεια εξετάζεται η χρήση της Μηχανικής Μάθησης για την αναγνώριση βλαβών και παρουσιάζονται η Λογιστική Παλινδρόμηση, το Δέντρο Απόφασης, το Τυχαίο Δάσος και το Πολυεπίπεδο Perceptron. Στο εφαρμοσμένο μέρος χρησιμοποιείται το συνθετικό σύνολο δεδομένων A…",
+      "summary": "本文围绕工业设备由传统维护转向预测性维护，介绍维护策略及运行数据、传感器和状态监测的作用，并在合成数据集AI4I 2020上比较四类机器学习模型。故障观测仅占3.39%，类别明显不平衡。随机森林在精确率、F1和PR-AUC上表现最佳，多层感知机则在召回率和ROC-AUC上领先，检出68次真实故障中的61次。核心启示是模型选择需兼顾故障检出与误报，而非追求单一指标。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7221841322",
@@ -1393,11 +1489,43 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐作为智能运维中不平衡故障识别与模型选型的比较案例阅读，重点关注不同评价指标对应的检出和误报权衡；当前仅有摘要，不宜据此认定其算法创新或工业部署效果。[摘要]",
+      "deep_read": {
+        "problem": "研究关注工业设备维护如何从传统策略转向预测性维护，并讨论机器学习用于故障识别的问题。摘要指出故障观测仅占“3.39%”。解读：这种类别不平衡使少数故障的检出能力与误报控制成为模型比较的重要关注点。[摘要]",
+        "method": "应用部分使用合成数据集AI4I 2020，对逻辑回归、决策树、随机森林和多层感知机进行比较。摘要说明经过预处理后，四个模型在同一测试集上评价，但未交代预处理步骤、数据划分比例、超参数或训练重复次数，尚不能据此复现实验。[摘要]",
+        "innovation": "摘要呈现的主要贡献是将维护策略介绍与四类模型的应用比较结合，未明确提出新算法或新数据集。解读：其阅读价值更偏向比较研究与评价指标的应用，而非方法原创性；仅凭当前摘要，不能将常规模型组合或预处理认定为创新。[摘要]",
+        "findings": "随机森林取得最高精确率、F1和PR-AUC；多层感知机取得最高召回率和ROC-AUC，并检出68次真实故障中的61次。摘要据此强调兼顾检出能力与误报数量，但未提供各指标完整数值，因此无法判断模型差距大小或统计显著性。[摘要]",
+        "limitations": "当前资料仅为摘要，且应用数据被明确称为“συνθετικό”，即合成数据。解读：这些结果不足以证明模型在真实工业设备上的泛化表现。摘要也未披露误报数量、阈值及不确定性分析；这是当前证据的边界，不能据此断言全文没有相关内容。[摘要]",
+        "connection": "解读：该研究与智能运维中的故障识别、告警模型选型直接相关，其检出与误报权衡也可启发可靠性研究中的监测决策。不过，摘要报告的是故障分类比较，未展示寿命预测、失效概率建模或结构优化，不能直接推及结构设计效果。[摘要]",
+        "next_steps": "建议：后续阅读全文时优先核对数据划分、预处理是否仅使用训练数据，以及分类阈值和完整混淆矩阵。若开展迁移研究，可在真实设备数据上比较漏报与误报成本，并检验跨工况稳定性；这些属于研究建议，并非作者已完成的实验。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "从预防性维护到预测性维护：机器学习模型的应用与比较",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://openalex.org/W7221841322"
+      ],
+      "analyzed_at": "2026-10-16T02:03:50.674480+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "62623ff2c7e0b1c5d63cf59a768d9daea2a6dd5da5ed07ba3440bf7fd7c7594e",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "6ce46b4ac683",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-16T02:03:50.681482+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "source_status": {
@@ -2018,13 +2146,13 @@
     "unavailable": 30
   },
   "analysis_status": {
-    "ready_core": 4,
+    "ready_core": 6,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 2
+    "pending": 0
   },
   "edition": {
     "id": "38739045879",
