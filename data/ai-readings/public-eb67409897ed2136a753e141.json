@@ -1,0 +1,25 @@
+{
+  "id": "public-eb67409897ed2136a753e141",
+  "content_version": "4660549431da81525727dfa7b02f2b43d98ccd622c37c74efd67a2eb0c5cc9c8",
+  "analysis": {
+    "title_zh": "FLUX.3 Image Klein 发布，首日支持 Diffusers 与布局控制",
+    "summary": "官方公告介绍了已发布的 FLUX.3 Image Klein，并说明其发布首日即可在 Diffusers 中运行。同一模型支持文生图和多参考图生图，新增布局控制：通过提示词中的边界框指定图像各部分的位置，或指定参考图中需要移动的部分。公告列出两个开放检查点：时间步蒸馏版面向快速推理，默认16步、不使用CFG；基础版默认50步、使用CFG。适用于需要参考图引导或明确空间布局的图像生成任务。",
+    "application": "建议：科研迁移可探索论文配图的布局草案生成、多参考图引导的视觉方案设计；这些属于迁移建议，并非官方已验证的科研效果。所给公告仅说明模型功能与默认配置，未提供科研任务评测、速度对比或质量指标。",
+    "requirements": "使用条件见官方文档",
+    "steps": [
+      {
+        "text": "在提示词中写入边界框，指定图像各部分的位置，或指定参考图中需要移动的部分；所给资料未提供具体语法。",
+        "evidence": "You write bounding boxes into the prompt to say where each part of the image should go, or which parts of a reference image to move."
+      }
+    ],
+    "evidence": [
+      "Black Forest Labs FLUX.3 Image Klein is here, and it runs in Diffusers from day one.",
+      "One model does text-to-image and multi-reference image-to-image, and it adds something new, the layout control .",
+      "You write bounding boxes into the prompt to say where each part of the image should go, or which parts of a reference image to move.",
+      "black-forest-labs/flux-3-image-klein Time step distilled, for fast inference 16 steps, no CFG",
+      "black-forest-labs/flux-3-image-klein-base Base model 50 steps, CFG"
+    ],
+    "basis_url": "https://huggingface.co/blog/flux-3"
+  },
+  "analyzed_at": "2026-10-16T02:24:11.662516+00:00"
+}
