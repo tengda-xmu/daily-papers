@@ -1,19 +1,19 @@
 {
   "id": "public-d330643595776f9f542e9f48",
-  "content_version": "1a75ff454de401b7e4c7cd790d240aac8079257478b8310ceea2c82d6b99e7bb",
+  "content_version": "20eeed88e58bc0ee8c00c1be4009d70dab66e74e8df40f520eb4bbae884998b7",
   "analysis": {
-    "title_zh": "Granite Switch 4.1：通过同一端点处理对话、决策与语音转写",
-    "summary": "公告介绍 Granite Switch 4.1 的模块化能力更新：8B 与 30B 模型配置新增通用决策 Decision aLoRA，并包含专用 Guardian aLoRA。[S2–S4] 官方称，模型可通过同一托管端点切换自然语言回复、通用及专用决策、语音转文字任务，适合需要组合这些能力的工作流。[S1] 所给资料在 Guardian 性能比较处截断，无法确认完整比较结果或测试条件。",
-    "application": "建议：科研迁移可探索将语音记录转写、自然语言交互与规则化决策串联，用于运维记录整理或研究辅助；这是迁移设想，并非官方已验证效果。官方所述能力是同一托管端点支持多类任务，但给定片段未提供科研场景验证或完整性能证据。[S1]",
+    "title_zh": "Granite Switch 4.1：通过单一端点处理对话、决策与语音转写",
+    "summary": "公告介绍 Granite Switch 4.1 的模块化能力更新：8B 与 30B 模型配置新增通用决策 Decision aLoRA，并包含专用 Guardian aLoRA，可通过同一托管端点切换自然语言回复、通用及专用决策和语音转写任务。官方称其 ASR 模型在 OpenASR 排行榜上速度最快，但所给片段未提供测试条件或具体指标；Guardian 的性能比较原文被截断，无法据此判断优势。",
+    "application": "建议：科研迁移可探索将语音记录转写、实验助手对话与规则决策整合到统一服务入口，并自行评估准确率、延迟及任务切换表现。上述属于迁移设想，并非官方已验证的科研效果；官方材料声明了单端点多任务能力及 OpenASR 排行榜速度领先，但当前片段不足以独立核验。",
     "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
+      "Introduced last spring, the Granite Switch project enables a modular approach to model development.",
       "Now Granite Switch 4.1 models, armed with a Decision adapter and the fastest ASR model on the OpenASR leaderboard, can move efficiently between natural-language responses, general and specialized decisions, and speech-to-text tasks—all from one hosted endpoint.",
       "Specifically, Granite-Switch-4.1-8B and -30B models are configured to include:",
-      "A new Decision aLoRA for general-purpose decision-making (e.g. v1/systemone),",
-      "A specialized Guardian aLoRA"
+      "A new Decision aLoRA for general-purpose decision-making (e.g. v1/systemone),"
     ],
     "basis_url": "https://huggingface.co/blog/ibm-granite/granite-switch-4-1"
   },
-  "analyzed_at": "2026-10-17T01:04:30.764775+00:00"
+  "analyzed_at": "2026-10-17T02:08:01.422586+00:00"
 }
