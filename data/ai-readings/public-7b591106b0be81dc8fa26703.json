@@ -1,33 +1,33 @@
 {
   "id": "public-7b591106b0be81dc8fa26703",
-  "content_version": "74799fcef70a8bdb1e2680d54e1106551a679e820ba6a01b6bdcaad10ab986b8",
+  "content_version": "292a1921c666293f9ef33c81e502b6ffbcb0750713893a08ca74c5f824e29f09",
   "analysis": {
-    "title_zh": "LangSmith：智能体评估常见问题解答",
-    "summary": "本公告介绍智能体评估方法，并非新版本发布：通过为运行过程评分检查行为是否符合预期，从单一行为、真实轨迹构成的小数据集和基线开始。上线前采用离线评估，生产中采用在线评估，并将新失败案例补入数据集。评估器优先使用代码，难以编码时使用大模型裁判，再以人工复核。适用于多步骤智能体的完整会话、执行轨迹和最终状态评估；文中还介绍 Harbor 将基准结果记录到 LangSmith 实验。[S1]",
-    "application": "建议：[本站解读／科研迁移建议] 可将上述流程迁移到智能运维智能体，分别检查故障诊断过程、工具调用轨迹与最终处置状态，并把失败案例纳入回归评估集。[S1／官方内容边界] 所给原文提供方法建议及工具用途说明，未提供科研场景的验证结果、量化性能或效果保证。",
+    "title_zh": "LangSmith：Agent Evals 常见问题解答",
+    "summary": "这是一篇智能体评估方法答疑，并非新版本发布。所给节选介绍：通过评估运行记录检查智能体行为；从单一行为、真实轨迹构成的小数据集和基线开始，上线前开展离线评估，生产中开展在线评估，并将新增失败纳入数据集。多步骤任务应检查完整会话、执行轨迹及最终状态；评估可结合代码、LLM 裁判和人工复核，适用于智能体上线验证与持续回归测试。[S1]",
+    "application": "建议：【科研迁移建议／你的推断】可将上述流程用于科研助手或智能运维智能体的回归测试，优先积累真实失败案例，分别检查执行过程与最终结果；这属于迁移设想。【官方资料】节选提供评估实践建议，但未提供实验数据，不能据此声称已验证准确率、可靠性或效率提升。[S1]",
     "requirements": "使用条件见官方文档",
     "steps": [
       {
-        "text": "选择一种待检查行为，从真实轨迹构建小数据集，并运行基线评估。",
+        "text": "选择一个待检查的行为，从真实轨迹建立小型数据集，并运行基线。[S1]",
         "evidence": "To get started, pick one behavior, build a small dataset from real traces, and run a baseline."
       },
       {
-        "text": "上线前运行离线评估，生产中运行在线评估，并将新失败案例转为数据集样例。",
+        "text": "上线前进行离线评估，生产环境中进行在线评估，并把新出现的失败转成数据集样例。[S1]",
         "evidence": "Use offline evals before you ship and online evals in production, and turn new failures into dataset examples."
       },
       {
-        "text": "能用代码评估时优先使用代码，否则使用大模型裁判，并通过人工复核检查两者。",
+        "text": "能用代码评估器时优先使用；无法使用时采用 LLM 裁判，并以人工复核检查两者。[S1]",
         "evidence": "Use code evaluators where you can, LLM judges where you can't, and human review to check both."
       }
     ],
     "evidence": [
+      "Evals score your agent's runs so you can check that it behaves the way you expect.",
       "To get started, pick one behavior, build a small dataset from real traces, and run a baseline.",
       "Use offline evals before you ship and online evals in production, and turn new failures into dataset examples.",
       "Use code evaluators where you can, LLM judges where you can't, and human review to check both.",
-      "For agents that take many steps, evaluate full threads, trajectories, and final state.",
-      "Harbor runs them and logs the results to LangSmith experiments."
+      "For agents that take many steps, evaluate full threads, trajectories, and final state."
     ],
     "basis_url": "https://www.langchain.com/blog/common-questions-about-agent-evals"
   },
-  "analyzed_at": "2026-10-15T11:59:59.307935+00:00"
+  "analyzed_at": "2026-10-17T01:03:41.827975+00:00"
 }
