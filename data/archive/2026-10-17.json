@@ -920,7 +920,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "本文聚焦《Causal AI digital twin for bioprocess bottleneck diagnosis via metabolic flexibility and rigidification maps》，暂未提供可用摘要，请查看原文。",
+      "summary": "非模式微生物培养表现不佳时，如何利用稀疏观测定位瓶颈？本文构建干预感知、基因组信息驱动的数字孪生，以收获时生长表型为锚点，通过通量变异分析提取灵活性特征，结合可解释学习和因果结构发现形成诊断图谱。摘要报告，多类条件下验证获得工况层面的诊断一致性，并将系统性失配视为非化学计量约束的信号。[摘要]解读：其价值在于连接模型状态与可解释诊断，但当前资料不足以评价诊断精度及因果可靠性。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Elsevier BV",
@@ -962,11 +962,171 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议重点关注稀疏观测下数字孪生、约束特征与可解释诊断的组合方法，适合作为智能运维研究的跨领域参考；目前仅有摘要，不能据此确认工程部署价值或性能优势。[摘要]",
+      "deep_read": {
+        "problem": "研究针对非模式微生物培养表现不佳却难以诊断的问题，摘要明确指出“Diagnosing underperforming non-model microbial cultures remains difficult”。目标是把稀疏观测转化为可行动的诊断产物，而非仅预测生长表现。[摘要]",
+        "method": "作者以菌株SO-1在乙酸最小培养基中的好氧培养为试验平台，用32 h时OD 600生长表型锚定孪生模型；再以拉丁超立方采样生成干预标记设计空间，按活跃约束集标注工况，并提取30个反应或模块的FVA宽度。[摘要]",
+        "innovation": "摘要呈现的方法组合是：将干预信息、基因组模型、代谢灵活性特征、可解释学习与因果结构发现连接起来。解读：特色在于不仅识别关联特征，还尝试组织瓶颈的上下游关系；但摘要没有对比结果，不能认定其首创性或相对优势。[摘要]",
+        "findings": "XGBoost与SHAP识别出工况特异性特征及与灵活性崩塌一致的类临界转折模式；因果结构发现进一步生成瓶颈假设的刚化图谱。摘要称验证取得“regime-level diagnostic agreement”，但未提供一致性指标或统计结果。[摘要]",
+        "limitations": "当前仅有摘要，未交代实验重复、数据规模、基线比较、诊断误差或因果结构的验证细节，因此无法判断稳定性及泛化能力。作者将图谱表述为瓶颈假设，而非已确认的因果机制；系统性失配被解释为非化学计量约束信号，尚缺具体证据展开。[摘要]",
+        "connection": "解读：与智能运维的联系在于利用数字孪生和可解释特征诊断运行瓶颈，并把模型失配作为遗漏约束的线索。其对象是微生物培养，不是机械设备；对结构设计和可靠性研究的联系仅属方法迁移，摘要没有结构优化或寿命评估结果。[摘要]",
+        "next_steps": "建议后续获取全文，核查实验锚点如何约束模型、工况标签如何形成，以及刚化图谱是否接受独立干预检验。若迁移至智能运维，可研究约束裕度特征能否辅助故障定位，并检验模型失配能否区分遗漏机理与测量误差；这些均非作者已证实的成果。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "基于代谢灵活性与刚化图谱的生物过程瓶颈诊断因果人工智能数字孪生",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.isci.2026.116820"
+      ],
+      "analyzed_at": "2026-10-17T02:02:18.186534+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "非模式微生物培养表现不佳，究竟受什么环节限制？这项研究将稀疏生长表型与基因组信息支持的数字孪生结合，尝试把代谢灵活性的变化转化为可解释的瓶颈诊断线索。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从生长不佳追问代谢瓶颈",
+            "paragraphs": [
+              "非模式微生物培养性能不足时，定位限制环节仍然困难。研究围绕这一问题，构建能够考虑干预条件的数字孪生，将有限的观测锚点、可解释特征和因果结构发现结合起来，目标是形成可用于诊断的结果，而不只是预测生长表现。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "以生长表型锚定模型，用通量宽度描述状态",
+            "paragraphs": [
+              "研究以嗜麦芽窄食单胞菌（Stenotrophomonas maltophilia）SO-1为受控试验对象，在乙酸最小培养基上进行好氧培养，并以32 h收获时的标准化生长表型OD 600锚定数字孪生。",
+              "随后，作者通过拉丁超立方采样（LHS）生成带干预标签的设计空间，用活跃约束集合标记不同状态区间，并以覆盖30个反应或模块的定向通量变异分析（FVA）宽度编码胞内状态。分析端结合XGBoost与SHAP开展可解释学习，同时使用因果结构发现整理瓶颈假说。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "灵活性塌缩特征与瓶颈刚化图",
+            "paragraphs": [
+              "摘要报告，可解释学习识别出了不同状态区间的特异性特征，以及与代谢灵活性塌缩相一致的类临界转变模式。因果结构发现进一步生成了“刚化图”，将瓶颈假说组织成从上游到下游的级联关系。这里得到的是可供诊断的结构化假说，不能直接等同于已被逐条验证的因果机制。",
+              "在乙酸胁迫、营养受限和氧传递条件下，验证得到状态区间层面的诊断一致性。研究还将系统性不匹配作为非化学计量约束的信号：模型解释不了的偏差，也被纳入瓶颈诊断，而不是只关注一致的部分。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "诊断一致性的具体范围仍需查阅全文",
+            "paragraphs": [
+              "本解读仅依据所提供的完整摘要。摘要未交代独立培养样本数、重复设置、比较基线、诊断一致性的定量指标及不确定性，也不足以判断各验证条件的具体覆盖范围。这些是当前资料无法确认的信息，不代表论文没有开展相关工作。",
+              "LHS生成的设计空间不能当作新增的独立培养样本；类临界转变模式也不等于已经确证的临界点。刚化图中的因果方向如何确定、具体瓶颈是否经过直接干预检验，以及结论能否推广至其他菌株或培养体系，均无法仅凭摘要判断。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注不匹配如何参与诊断",
+            "paragraphs": [
+              "阅读启发：对智能运维中的数字孪生与故障诊断而言，值得关注的是这项研究如何连接“可解释状态特征”与“瓶颈假说”，以及如何解释系统性不匹配。进一步阅读可重点查看状态区间的判定依据、刚化图的证据边界，以及作者如何区分非化学计量约束与其他误差来源；目前不宜据此宣称其已适用于一般工业故障诊断。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的数字孪生诊断流程",
+            "description": "仅概括摘要明确陈述的研究环节与分析关系，并非论文原图，不表示瓶颈假说已获逐项因果验证。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "培养表型锚定数字孪生",
+                "detail": "以乙酸最小培养基好氧培养的生长表型，锚定基因组信息支持的数字孪生。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "生成并标记设计空间",
+                "detail": "通过LHS生成带干预标签的设计空间，以活跃约束集合标记状态区间。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "编码代谢灵活性",
+                "detail": "采用定向FVA宽度表征胞内状态。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "识别可解释特征",
+                "detail": "XGBoost与SHAP识别区间特异性特征及与灵活性塌缩一致的模式。"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "整理瓶颈刚化图",
+                "detail": "通过因果结构发现，将瓶颈假说组织为上游至下游的级联关系。"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "检验诊断与分析不匹配",
+                "detail": "在乙酸胁迫、营养受限及氧传递条件下验证，并关注系统性不匹配。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "构建设计空间"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "编码胞内状态"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "可解释学习"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "因果结构发现"
+              },
+              {
+                "from": "d",
+                "to": "f",
+                "label": "诊断验证"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "诊断验证"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-17T02:04:11.820528+00:00",
+      "article_profile": "b58885b4733e6dffe37159de93fc20853e774dc9d010f3a3c6a1acd81c629949",
+      "analysis_references": {},
+      "analysis_material_version": "59be3dffaa1ed91bc99191ac846c4d481871ef48e432fb2af9630b65c0ff2366",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "3683b73cdb01",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-17T02:04:11.822581+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -996,7 +1156,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Flexible pressure sensors are key components of Internet of Things systems for monitoring environmental and physiological signals, yet simultaneously achieving a high sensitivity, a fast response time, and a high mechanical durability remains challenging owing to the lack of sophisticated structural designs that balance sensing performance and robustness. Here, we demonstrate a multiscale artificial spider web (MASW) fabricated via copper-mesh-assisted electrospinning of biodegradable polylactic acid, forming a nanofiber network that efficiently transmits stress while enhancing mechan…",
+      "summary": "本文针对柔性压力传感器灵敏度、响应速度与机械稳定性难以兼顾的问题，以铜网辅助静电纺丝构建PLA多尺度骨架，再引入碳墨与银纳米线导电网络。优化器件在0–100 kPa内平均灵敏度为39.85 kPa⁻¹，响应时间为42 ms，并展示循环稳定性、生理信号识别及机械手控制。[P2–P11]解读：适合作为仿生结构与传感可靠性的案例，但不属于生成式设计方法研究，康复效果和跨对象泛化尚未得到充分证明。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -1038,11 +1198,174 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议作为多尺度结构设计与传感可靠性的交叉案例阅读，重点比较图3的结构对照与图4的耐久证据；若主要寻找生成式设计算法，则不宜列为核心推荐。[P5–P7]",
+      "deep_read": {
+        "problem": "柔性压力传感器需同时识别微弱刺激、快速响应并承受重复变形，简单平面或随机结构却容易出现传力低效和机械退化。作者将矛盾归结为传感性能与结构稳定性的权衡，目标是通过层级结构协调两者，而非仅增加导电填料以提高灵敏度。[P1–P2]",
+        "method": "铜网辅助静电纺丝形成PLA多层纤维及网状骨架，脱模后浸涂碳墨与银纳米线，最终采用小网孔、两次浸涂。作者结合接触、渗流和隧穿模型解释降阻，并通过填料与网孔对照、有限元模拟及循环测试评价结构作用。[P2、P5–P7、P10]",
+        "innovation": "作者的设计特点是将多层纤维、网状骨架与核壳导电网络组合，使宏观传力和微纳导电接触协同变化。解读：创新重点在结构与材料的集成，以及点、线、面接触逐步演化的解释，不在Transformer算法或自动生成结构的设计流程。[P2–P3、P11]",
+        "findings": "优化器件在0–100 kPa内平均灵敏度为39.85 kPa⁻¹，R²为0.9851，T₉₀为42 ms；6000次循环前后电阻变化低于2.26%。须区分图4g的3000次连续循环与图4h的6000次前后比较；100天后初始电阻变化为12.48%。[P6–P7]",
+        "limitations": "未记录已核实的原文件缺项，乱码公式已按原页纠正。P5、P7存在末位数标注差异；P11注意力模块衔接及测试集角色仍需澄清。解读：随机样本划分不证明跨人泛化，碱性降解不证明整器件自然完全降解，机械手演示不证明临床康复效果。[P4–P11]",
+        "connection": "解读：与结构设计和可靠性研究的联系较直接，可参考骨架几何、填料负载和应力传递对电学稳定性的耦合作用；无线采集与多通道控制也可启发智能运维接口。但论文没有生成式设计算法或工业设备验证，与所给方向仅有间接联系。[P5–P11]",
+        "next_steps": "建议先复核结构对照及归一化灵敏度定义，再开展跨器件、跨时段和跨受试者测试。若迁移至生成式设计，可将网孔几何作为变量，以灵敏度、应力均匀性及循环漂移为多目标开展实验闭环；这是后续设想，并非作者已完成的成果。[P5–P11]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "用于综合压力感知与人机交互的多尺度人工蛛网",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s41467-026-74200-y"
+      ],
+      "analyzed_at": "2026-10-17T02:07:19.331400+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P2",
+          "P5",
+          "P6",
+          "P7",
+          "P10"
+        ],
+        "innovation": [
+          "P2",
+          "P3",
+          "P11"
+        ],
+        "findings": [
+          "P6",
+          "P7"
+        ],
+        "limitations": [
+          "P4",
+          "P5",
+          "P6",
+          "P7",
+          "P8",
+          "P9",
+          "P10",
+          "P11"
+        ],
+        "connection": [
+          "P5",
+          "P6",
+          "P7",
+          "P8",
+          "P9",
+          "P10",
+          "P11"
+        ],
+        "next_steps": [
+          "P5",
+          "P6",
+          "P7",
+          "P8",
+          "P9",
+          "P10",
+          "P11"
+        ]
+      },
+      "analysis_material_version": "e63063bfc528070e2bb28665aff65a1fd1752ad4f535d1d93a257a8d504093f6",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "原页可读出“Published online: 04 July 2026”，提供的文字提取未保留该行；作者姓名中的异常字间空格亦属提取问题。不影响论文身份与摘要结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "公式(2)–(5)及正文局部符号提取失真。原页核实为a=(3FR/(4E*))^(1/3)、R_contact∝F^(−2/3)、σ∝(φ−φ_c)^t、R_t∝e^(βd)，局部填料体积分数为φ=φ₀+Δφ(P)。提取中的/C18、/C19、/C0等不是原文公式缺项；错误会影响接触力学、渗流与隧穿机理的理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "文字提取未完整保留图2a–f的图内内容，且图2e出现脱离版面的坐标数字。原页图2e包含降解前及“7 Days later”的C1s谱和拟合分量，图2b包含初始、3天、7天照片，图2f包含三种网孔样品。应以原页图形为准，不将游离数字当作可靠拟合结果；此问题不构成原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "图3的文字提取将坐标标题倒序、刻度粘连并打乱分图顺序。原页核实b、f、i的横轴为Pressure (kPa)、纵轴为ΔI/I₀；c、g为灵敏度比较，d、h为R²，k的应力单位为N/mm²。未发现公式占位或图注缺项；纠正后可区分响应曲线、线性度与有限元证据。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "图4提取中的“P=5 0k P a”“T90 =4 2m s”“0-1 0k P a”属于空格或刻度分割错误。原页图4d为P=50 kPa、T₉₀=42 ms，图4a插图标注0–10 kPa；图4b拟合完整为Y=39.85×X−95.58。不存在缺失公式，不应将错误分词解读为不同测试压力或响应时间。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "公式(6)文字提取出现/C0、/C1等乱码。原页公式完整且清楚，为θ=θ₀+S×(P−P₀)，无缺项。括号与减号决定基准压力校正方式，不能把乱码解释为除法或另一个运算。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "图6c的纵轴在提供的文字提取中未正确保留；原页为Current (μA)，横轴为Time (s)，不是压力—时间曲线。Pressure (Pa)与Angle (°)属于图6e的控制映射示意。图6j另为Voltage (V)—Time (s)五通道记录，混淆分图会改变对传感信号及控制增益的理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P10",
+          "detail": "公式(7)及其说明中的Δ被部分提取为4，分式层级也被压平。原页核实为S=(ΔI/I₀)/ΔP，说明中的符号为ΔI、ΔP。公式完整，无源文件缺项；误读会影响归一化灵敏度的计算与量纲判断。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "02d02b33979e",
+        "state": "published",
+        "updated_at": "2026-10-17T02:07:19.355954+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 13,
+        "covered": 13,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页可读出“Published online: 04 July 2026”，提供的文字提取未保留该行；作者姓名中的异常字间空格亦属提取问题。不影响论文身份与摘要结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "公式(2)–(5)及正文局部符号提取失真。原页核实为a=(3FR/(4E*))^(1/3)、R_contact∝F^(−2/3)、σ∝(φ−φ_c)^t、R_t∝e^(βd)，局部填料体积分数为φ=φ₀+Δφ(P)。提取中的/C18、/C19、/C0等不是原文公式缺项；错误会影响接触力学、渗流与隧穿机理的理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "文字提取未完整保留图2a–f的图内内容，且图2e出现脱离版面的坐标数字。原页图2e包含降解前及“7 Days later”的C1s谱和拟合分量，图2b包含初始、3天、7天照片，图2f包含三种网孔样品。应以原页图形为准，不将游离数字当作可靠拟合结果；此问题不构成原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "图3的文字提取将坐标标题倒序、刻度粘连并打乱分图顺序。原页核实b、f、i的横轴为Pressure (kPa)、纵轴为ΔI/I₀；c、g为灵敏度比较，d、h为R²，k的应力单位为N/mm²。未发现公式占位或图注缺项；纠正后可区分响应曲线、线性度与有限元证据。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "图4提取中的“P=5 0k P a”“T90 =4 2m s”“0-1 0k P a”属于空格或刻度分割错误。原页图4d为P=50 kPa、T₉₀=42 ms，图4a插图标注0–10 kPa；图4b拟合完整为Y=39.85×X−95.58。不存在缺失公式，不应将错误分词解读为不同测试压力或响应时间。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "公式(6)文字提取出现/C0、/C1等乱码。原页公式完整且清楚，为θ=θ₀+S×(P−P₀)，无缺项。括号与减号决定基准压力校正方式，不能把乱码解释为除法或另一个运算。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "图6c的纵轴在提供的文字提取中未正确保留；原页为Current (μA)，横轴为Time (s)，不是压力—时间曲线。Pressure (Pa)与Angle (°)属于图6e的控制映射示意。图6j另为Voltage (V)—Time (s)五通道记录，混淆分图会改变对传感信号及控制增益的理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "公式(7)及其说明中的Δ被部分提取为4，分式层级也被压平。原页核实为S=(ΔI/I₀)/ΔP，说明中的符号为ΔI、ΔP。公式完整，无源文件缺项；误读会影响归一化灵敏度的计算与量纲判断。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -1270,8 +1593,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "restricted",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -1423,8 +1746,8 @@
         "state": "published",
         "updated_at": "2026-10-17T01:40:51.927242+00:00",
         "basis": "full_text",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "facts",
         "reason": "",
         "total": 14,
         "covered": 14,
@@ -1469,7 +1792,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Covalent organic frameworks (COFs) are promising photocatalysts for solar hydrogen production, yet the most electronically favorable linkages, imines,hydrolyze rapidly in water, creating a stability-activity trade-off that limits practical deployment. Navigating the combinatorial design space of nodes, linkers, linkages, and functional groups to identify candidates that are simultaneously active and durable remains a formidable challenge. Here we introduce Ara , a large-language-model (LLM) agent that leverages pretrained chemical knowledge, donor-acceptor theory, conjugation effects,…",
+      "summary": "本文针对共价有机框架光催化剂的电子性能与耐水解稳定性冲突，提出Ara语言模型智能体，在820个兼容性约束候选中迭代选择材料，并通过片段量化计算反馈调整搜索。其计算命中率达到52.7%，但允许重复选择，独特命中覆盖低于贝叶斯优化。解读：论文值得关注的是化学先验驱动的多约束逆向筛选及探索—利用权衡，而非已经证实的耐久材料发现；周期DFT与实验验证仍待完成。[P1–P8]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -1513,11 +1836,151 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐重点阅读方法、提示消融和独特命中覆盖分析，可借鉴其多约束逆向设计框架，但须审慎区分重复命中收益与真实新材料发现效率。[P3–P8]",
+      "deep_read": {
+        "problem": "亚胺连接有利于COF电子性能，却容易在水中水解，使光催化活性与长期稳定性发生冲突。作者因此将目标设为同时满足带隙、导带位置和稳定性要求，而非优化单一描述符。原文称这一矛盾为“hydrolysis trap”，组合空间与计算成本进一步增加了筛选难度。[P1–P2]",
+        "method": "Ara在预枚举候选中提出组合，接收最近评估及历史高奖励结果，再调整选择；底层用RDKit组装片段、GFN1-xTB计算IP−EA并校准带隙，同时计算CBM与稳定性代理。与随机搜索、BO各比较五种子两百轮，采用共享缓存，但仅BO强制候选去重。[P7–P8]",
+        "innovation": "方法特色是把语言模型化学先验嵌入多约束筛选闭环，并用提示消融与推理轨迹分析选择机制，而非只报告最优奖励。解读：创新重点在化学知识引导的离散组合决策及其可检查性，不是开放式结构生成；消融支持预训练先验解释，但不能彻底排除其他机制。[P4–P5、P8]",
+        "findings": "Ara计算命中率为52.7%，随机与BO分别为4.6%、14.1%；但BO独特命中覆盖更高。穷举成功计算的670个候选得到38个命中，其中30个属乙烯基连接、8个属β-酮烯胺连接。作者据此强调“complementary, not competing, strengths”，即高产利用与广泛探索互补。[P3–P5]",
+        "limitations": "带隙预测区间约±0.8 eV，超过命中窗口；稳定性未实验验证，重复采样限制覆盖。P5图4随机分布与图注不符，图5随机比例20%与正文19%冲突，影响基线解读。记录未见公式缺项，乱码已纠正；仅测试单模型，亦限制泛化判断。[P3、P5–P8]\n原文核对：[P5] 图4原图与图注、P4正文存在分布描述不一致：图注称随机搜索各连接类型保持“roughly uniform distribution”，但原图随机搜索面板中亚胺占比约0.64–0.77，明显高于其他类型。无公式或图形缺项；受影响的是随机基线分布均匀性的表述，不能据图注将其概括为四类近似等比例。；[P5] 图5原图Random柱内稳定连接合计标注为20%，正文及图注却均写19%。已核实原页存在数值不一致，无缺失图项；受影响的是随机基线稳定连接选择比例的精确报告。本批无法确定应采用哪一个数值，不自行归因于四舍五入或修正原文。",
+        "connection": "解读：对生成式设计研究，本文提供了先施加化学兼容性约束、再利用反馈调节组合的实例；对结构设计与可靠性研究，可借鉴性能—耐久性联合筛选。它并非智能运维研究，也未建立失效概率或寿命模型，因此稳定性代理分数不能直接迁移为工程可靠度。[P1、P7–P8]",
+        "next_steps": "建议优先对高排名候选开展周期DFT及水相光催化实验，再比较强制去重后的Ara与BO，统一独特评估预算并报告新命中覆盖。作者已提出混合搜索和跨模型验证；进一步建议量化校准误差对阈值判定的影响，并核清P5图文差异，避免将代理命中当作实证耐久性。[P5–P6、P8]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "逃离水解陷阱：利用ReAct智能体逆向设计耐久光催化共价有机框架",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41524-026-02168-w.pdf"
+      ],
+      "analyzed_at": "2026-10-17T01:55:52.683851+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P7",
+          "P8"
+        ],
+        "innovation": [
+          "P4",
+          "P5",
+          "P8"
+        ],
+        "findings": [
+          "P3",
+          "P4",
+          "P5"
+        ],
+        "limitations": [
+          "P3",
+          "P5",
+          "P6",
+          "P7",
+          "P8"
+        ],
+        "connection": [
+          "P1",
+          "P7",
+          "P8"
+        ],
+        "next_steps": [
+          "P5",
+          "P6",
+          "P8"
+        ]
+      },
+      "analysis_material_version": "d4edc9bee3b1cc951f99931a415960deb3a774df64d20ec463636d14760e40a4",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "公式(1)文字提取出现“/C25”“/C0”“ð”等乱码。已核对原页，正确表达为 gap_DFT ≈ 0.65 × gap_xTB − 0.70（R² = 0.62）。原公式完整，无原文件缺项；纠正涉及带隙转移校准及后续命中判定，不能将乱码解释为缺失公式。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P5",
+          "detail": "图4原图与图注、P4正文存在分布描述不一致：图注称随机搜索各连接类型保持“roughly uniform distribution”，但原图随机搜索面板中亚胺占比约0.64–0.77，明显高于其他类型。无公式或图形缺项；受影响的是随机基线分布均匀性的表述，不能据图注将其概括为四类近似等比例。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P5",
+          "detail": "图5原图Random柱内稳定连接合计标注为20%，正文及图注却均写19%。已核实原页存在数值不一致，无缺失图项；受影响的是随机基线稳定连接选择比例的精确报告。本批无法确定应采用哪一个数值，不自行归因于四舍五入或修正原文。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "公式(2)提取文本中的“¼/C0”“þ”“ð2Þ”为字符提取乱码。原页公式完整可读，正确为CBM_vsNHE = −EA_xTB + 2.62 V。无原文件缺项；负号与偏移量影响CBM估计及带边命中判定，须保留。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "公式(3)提取文本中的等号、加号、小数点及编号出现编码乱码；原页核实为S_CSI = 0.50 S_linkage + 0.30 S_shielding + 0.20 S_hydrophobicity。无公式缺项；纠正涉及稳定性综合评分和阈值筛选。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "公式(4)–(6)提取出现“¼”“/C0”“/C18”等编码乱码。原页公式完整，核实为r = 0.35 g_score + 0.30 cbm_score + 0.35 S_CSI；g_score = exp[−(1/2)((g−2.0)/0.3)²]；cbm_score = 1/[1+exp(5.0×CBM_vsNHE)]。无原文件缺项；纠正涉及奖励权重、带隙偏离惩罚及CBM评分方向。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "原页收稿、接收日期下方清晰载有“Published online: 03 June 2026”，所给文字提取遗漏此行。无公式或图号，不影响筛选结论，但影响发表日期记录；属于提取遗漏而非原文件缺项。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "727d7838f1f5",
+        "state": "published",
+        "updated_at": "2026-10-17T01:55:52.704417+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 10,
+        "covered": 10,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "公式(1)文字提取出现“/C25”“/C0”“ð”等乱码。已核对原页，正确表达为 gap_DFT ≈ 0.65 × gap_xTB − 0.70（R² = 0.62）。原公式完整，无原文件缺项；纠正涉及带隙转移校准及后续命中判定，不能将乱码解释为缺失公式。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P5",
+            "detail": "图4原图与图注、P4正文存在分布描述不一致：图注称随机搜索各连接类型保持“roughly uniform distribution”，但原图随机搜索面板中亚胺占比约0.64–0.77，明显高于其他类型。无公式或图形缺项；受影响的是随机基线分布均匀性的表述，不能据图注将其概括为四类近似等比例。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P5",
+            "detail": "图5原图Random柱内稳定连接合计标注为20%，正文及图注却均写19%。已核实原页存在数值不一致，无缺失图项；受影响的是随机基线稳定连接选择比例的精确报告。本批无法确定应采用哪一个数值，不自行归因于四舍五入或修正原文。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "公式(2)提取文本中的“¼/C0”“þ”“ð2Þ”为字符提取乱码。原页公式完整可读，正确为CBM_vsNHE = −EA_xTB + 2.62 V。无原文件缺项；负号与偏移量影响CBM估计及带边命中判定，须保留。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "公式(3)提取文本中的等号、加号、小数点及编号出现编码乱码；原页核实为S_CSI = 0.50 S_linkage + 0.30 S_shielding + 0.20 S_hydrophobicity。无公式缺项；纠正涉及稳定性综合评分和阈值筛选。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "公式(4)–(6)提取出现“¼”“/C0”“/C18”等编码乱码。原页公式完整，核实为r = 0.35 g_score + 0.30 cbm_score + 0.35 S_CSI；g_score = exp[−(1/2)((g−2.0)/0.3)²]；cbm_score = 1/[1+exp(5.0×CBM_vsNHE)]。无原文件缺项；纠正涉及奖励权重、带隙偏离惩罚及CBM评分方向。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "原页收稿、接收日期下方清晰载有“Published online: 03 June 2026”，所给文字提取遗漏此行。无公式或图号，不影响筛选结论，但影响发表日期记录；属于提取遗漏而非原文件缺项。"
+          }
+        ]
+      }
     }
   ],
   "extended": [],
@@ -2438,7 +2901,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "本文聚焦《Causal AI digital twin for bioprocess bottleneck diagnosis via metabolic flexibility and rigidification maps》，暂未提供可用摘要，请查看原文。",
+      "summary": "非模式微生物培养表现不佳时，如何利用稀疏观测定位瓶颈？本文构建干预感知、基因组信息驱动的数字孪生，以收获时生长表型为锚点，通过通量变异分析提取灵活性特征，结合可解释学习和因果结构发现形成诊断图谱。摘要报告，多类条件下验证获得工况层面的诊断一致性，并将系统性失配视为非化学计量约束的信号。[摘要]解读：其价值在于连接模型状态与可解释诊断，但当前资料不足以评价诊断精度及因果可靠性。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Elsevier BV",
@@ -2480,11 +2943,171 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议重点关注稀疏观测下数字孪生、约束特征与可解释诊断的组合方法，适合作为智能运维研究的跨领域参考；目前仅有摘要，不能据此确认工程部署价值或性能优势。[摘要]",
+      "deep_read": {
+        "problem": "研究针对非模式微生物培养表现不佳却难以诊断的问题，摘要明确指出“Diagnosing underperforming non-model microbial cultures remains difficult”。目标是把稀疏观测转化为可行动的诊断产物，而非仅预测生长表现。[摘要]",
+        "method": "作者以菌株SO-1在乙酸最小培养基中的好氧培养为试验平台，用32 h时OD 600生长表型锚定孪生模型；再以拉丁超立方采样生成干预标记设计空间，按活跃约束集标注工况，并提取30个反应或模块的FVA宽度。[摘要]",
+        "innovation": "摘要呈现的方法组合是：将干预信息、基因组模型、代谢灵活性特征、可解释学习与因果结构发现连接起来。解读：特色在于不仅识别关联特征，还尝试组织瓶颈的上下游关系；但摘要没有对比结果，不能认定其首创性或相对优势。[摘要]",
+        "findings": "XGBoost与SHAP识别出工况特异性特征及与灵活性崩塌一致的类临界转折模式；因果结构发现进一步生成瓶颈假设的刚化图谱。摘要称验证取得“regime-level diagnostic agreement”，但未提供一致性指标或统计结果。[摘要]",
+        "limitations": "当前仅有摘要，未交代实验重复、数据规模、基线比较、诊断误差或因果结构的验证细节，因此无法判断稳定性及泛化能力。作者将图谱表述为瓶颈假设，而非已确认的因果机制；系统性失配被解释为非化学计量约束信号，尚缺具体证据展开。[摘要]",
+        "connection": "解读：与智能运维的联系在于利用数字孪生和可解释特征诊断运行瓶颈，并把模型失配作为遗漏约束的线索。其对象是微生物培养，不是机械设备；对结构设计和可靠性研究的联系仅属方法迁移，摘要没有结构优化或寿命评估结果。[摘要]",
+        "next_steps": "建议后续获取全文，核查实验锚点如何约束模型、工况标签如何形成，以及刚化图谱是否接受独立干预检验。若迁移至智能运维，可研究约束裕度特征能否辅助故障定位，并检验模型失配能否区分遗漏机理与测量误差；这些均非作者已证实的成果。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "基于代谢灵活性与刚化图谱的生物过程瓶颈诊断因果人工智能数字孪生",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.isci.2026.116820"
+      ],
+      "analyzed_at": "2026-10-17T02:02:18.186534+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "非模式微生物培养表现不佳，究竟受什么环节限制？这项研究将稀疏生长表型与基因组信息支持的数字孪生结合，尝试把代谢灵活性的变化转化为可解释的瓶颈诊断线索。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从生长不佳追问代谢瓶颈",
+            "paragraphs": [
+              "非模式微生物培养性能不足时，定位限制环节仍然困难。研究围绕这一问题，构建能够考虑干预条件的数字孪生，将有限的观测锚点、可解释特征和因果结构发现结合起来，目标是形成可用于诊断的结果，而不只是预测生长表现。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "以生长表型锚定模型，用通量宽度描述状态",
+            "paragraphs": [
+              "研究以嗜麦芽窄食单胞菌（Stenotrophomonas maltophilia）SO-1为受控试验对象，在乙酸最小培养基上进行好氧培养，并以32 h收获时的标准化生长表型OD 600锚定数字孪生。",
+              "随后，作者通过拉丁超立方采样（LHS）生成带干预标签的设计空间，用活跃约束集合标记不同状态区间，并以覆盖30个反应或模块的定向通量变异分析（FVA）宽度编码胞内状态。分析端结合XGBoost与SHAP开展可解释学习，同时使用因果结构发现整理瓶颈假说。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "灵活性塌缩特征与瓶颈刚化图",
+            "paragraphs": [
+              "摘要报告，可解释学习识别出了不同状态区间的特异性特征，以及与代谢灵活性塌缩相一致的类临界转变模式。因果结构发现进一步生成了“刚化图”，将瓶颈假说组织成从上游到下游的级联关系。这里得到的是可供诊断的结构化假说，不能直接等同于已被逐条验证的因果机制。",
+              "在乙酸胁迫、营养受限和氧传递条件下，验证得到状态区间层面的诊断一致性。研究还将系统性不匹配作为非化学计量约束的信号：模型解释不了的偏差，也被纳入瓶颈诊断，而不是只关注一致的部分。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "诊断一致性的具体范围仍需查阅全文",
+            "paragraphs": [
+              "本解读仅依据所提供的完整摘要。摘要未交代独立培养样本数、重复设置、比较基线、诊断一致性的定量指标及不确定性，也不足以判断各验证条件的具体覆盖范围。这些是当前资料无法确认的信息，不代表论文没有开展相关工作。",
+              "LHS生成的设计空间不能当作新增的独立培养样本；类临界转变模式也不等于已经确证的临界点。刚化图中的因果方向如何确定、具体瓶颈是否经过直接干预检验，以及结论能否推广至其他菌株或培养体系，均无法仅凭摘要判断。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注不匹配如何参与诊断",
+            "paragraphs": [
+              "阅读启发：对智能运维中的数字孪生与故障诊断而言，值得关注的是这项研究如何连接“可解释状态特征”与“瓶颈假说”，以及如何解释系统性不匹配。进一步阅读可重点查看状态区间的判定依据、刚化图的证据边界，以及作者如何区分非化学计量约束与其他误差来源；目前不宜据此宣称其已适用于一般工业故障诊断。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的数字孪生诊断流程",
+            "description": "仅概括摘要明确陈述的研究环节与分析关系，并非论文原图，不表示瓶颈假说已获逐项因果验证。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "培养表型锚定数字孪生",
+                "detail": "以乙酸最小培养基好氧培养的生长表型，锚定基因组信息支持的数字孪生。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "生成并标记设计空间",
+                "detail": "通过LHS生成带干预标签的设计空间，以活跃约束集合标记状态区间。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "编码代谢灵活性",
+                "detail": "采用定向FVA宽度表征胞内状态。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "识别可解释特征",
+                "detail": "XGBoost与SHAP识别区间特异性特征及与灵活性塌缩一致的模式。"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "整理瓶颈刚化图",
+                "detail": "通过因果结构发现，将瓶颈假说组织为上游至下游的级联关系。"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "检验诊断与分析不匹配",
+                "detail": "在乙酸胁迫、营养受限及氧传递条件下验证，并关注系统性不匹配。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "构建设计空间"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "编码胞内状态"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "可解释学习"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "因果结构发现"
+              },
+              {
+                "from": "d",
+                "to": "f",
+                "label": "诊断验证"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "诊断验证"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-17T02:04:11.820528+00:00",
+      "article_profile": "b58885b4733e6dffe37159de93fc20853e774dc9d010f3a3c6a1acd81c629949",
+      "analysis_references": {},
+      "analysis_material_version": "59be3dffaa1ed91bc99191ac846c4d481871ef48e432fb2af9630b65c0ff2366",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "3683b73cdb01",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-17T02:04:11.822581+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -2514,7 +3137,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Flexible pressure sensors are key components of Internet of Things systems for monitoring environmental and physiological signals, yet simultaneously achieving a high sensitivity, a fast response time, and a high mechanical durability remains challenging owing to the lack of sophisticated structural designs that balance sensing performance and robustness. Here, we demonstrate a multiscale artificial spider web (MASW) fabricated via copper-mesh-assisted electrospinning of biodegradable polylactic acid, forming a nanofiber network that efficiently transmits stress while enhancing mechan…",
+      "summary": "本文针对柔性压力传感器灵敏度、响应速度与机械稳定性难以兼顾的问题，以铜网辅助静电纺丝构建PLA多尺度骨架，再引入碳墨与银纳米线导电网络。优化器件在0–100 kPa内平均灵敏度为39.85 kPa⁻¹，响应时间为42 ms，并展示循环稳定性、生理信号识别及机械手控制。[P2–P11]解读：适合作为仿生结构与传感可靠性的案例，但不属于生成式设计方法研究，康复效果和跨对象泛化尚未得到充分证明。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -2556,11 +3179,174 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议作为多尺度结构设计与传感可靠性的交叉案例阅读，重点比较图3的结构对照与图4的耐久证据；若主要寻找生成式设计算法，则不宜列为核心推荐。[P5–P7]",
+      "deep_read": {
+        "problem": "柔性压力传感器需同时识别微弱刺激、快速响应并承受重复变形，简单平面或随机结构却容易出现传力低效和机械退化。作者将矛盾归结为传感性能与结构稳定性的权衡，目标是通过层级结构协调两者，而非仅增加导电填料以提高灵敏度。[P1–P2]",
+        "method": "铜网辅助静电纺丝形成PLA多层纤维及网状骨架，脱模后浸涂碳墨与银纳米线，最终采用小网孔、两次浸涂。作者结合接触、渗流和隧穿模型解释降阻，并通过填料与网孔对照、有限元模拟及循环测试评价结构作用。[P2、P5–P7、P10]",
+        "innovation": "作者的设计特点是将多层纤维、网状骨架与核壳导电网络组合，使宏观传力和微纳导电接触协同变化。解读：创新重点在结构与材料的集成，以及点、线、面接触逐步演化的解释，不在Transformer算法或自动生成结构的设计流程。[P2–P3、P11]",
+        "findings": "优化器件在0–100 kPa内平均灵敏度为39.85 kPa⁻¹，R²为0.9851，T₉₀为42 ms；6000次循环前后电阻变化低于2.26%。须区分图4g的3000次连续循环与图4h的6000次前后比较；100天后初始电阻变化为12.48%。[P6–P7]",
+        "limitations": "未记录已核实的原文件缺项，乱码公式已按原页纠正。P5、P7存在末位数标注差异；P11注意力模块衔接及测试集角色仍需澄清。解读：随机样本划分不证明跨人泛化，碱性降解不证明整器件自然完全降解，机械手演示不证明临床康复效果。[P4–P11]",
+        "connection": "解读：与结构设计和可靠性研究的联系较直接，可参考骨架几何、填料负载和应力传递对电学稳定性的耦合作用；无线采集与多通道控制也可启发智能运维接口。但论文没有生成式设计算法或工业设备验证，与所给方向仅有间接联系。[P5–P11]",
+        "next_steps": "建议先复核结构对照及归一化灵敏度定义，再开展跨器件、跨时段和跨受试者测试。若迁移至生成式设计，可将网孔几何作为变量，以灵敏度、应力均匀性及循环漂移为多目标开展实验闭环；这是后续设想，并非作者已完成的成果。[P5–P11]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "用于综合压力感知与人机交互的多尺度人工蛛网",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s41467-026-74200-y"
+      ],
+      "analyzed_at": "2026-10-17T02:07:19.331400+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P2",
+          "P5",
+          "P6",
+          "P7",
+          "P10"
+        ],
+        "innovation": [
+          "P2",
+          "P3",
+          "P11"
+        ],
+        "findings": [
+          "P6",
+          "P7"
+        ],
+        "limitations": [
+          "P4",
+          "P5",
+          "P6",
+          "P7",
+          "P8",
+          "P9",
+          "P10",
+          "P11"
+        ],
+        "connection": [
+          "P5",
+          "P6",
+          "P7",
+          "P8",
+          "P9",
+          "P10",
+          "P11"
+        ],
+        "next_steps": [
+          "P5",
+          "P6",
+          "P7",
+          "P8",
+          "P9",
+          "P10",
+          "P11"
+        ]
+      },
+      "analysis_material_version": "e63063bfc528070e2bb28665aff65a1fd1752ad4f535d1d93a257a8d504093f6",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "原页可读出“Published online: 04 July 2026”，提供的文字提取未保留该行；作者姓名中的异常字间空格亦属提取问题。不影响论文身份与摘要结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "公式(2)–(5)及正文局部符号提取失真。原页核实为a=(3FR/(4E*))^(1/3)、R_contact∝F^(−2/3)、σ∝(φ−φ_c)^t、R_t∝e^(βd)，局部填料体积分数为φ=φ₀+Δφ(P)。提取中的/C18、/C19、/C0等不是原文公式缺项；错误会影响接触力学、渗流与隧穿机理的理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "文字提取未完整保留图2a–f的图内内容，且图2e出现脱离版面的坐标数字。原页图2e包含降解前及“7 Days later”的C1s谱和拟合分量，图2b包含初始、3天、7天照片，图2f包含三种网孔样品。应以原页图形为准，不将游离数字当作可靠拟合结果；此问题不构成原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "图3的文字提取将坐标标题倒序、刻度粘连并打乱分图顺序。原页核实b、f、i的横轴为Pressure (kPa)、纵轴为ΔI/I₀；c、g为灵敏度比较，d、h为R²，k的应力单位为N/mm²。未发现公式占位或图注缺项；纠正后可区分响应曲线、线性度与有限元证据。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "图4提取中的“P=5 0k P a”“T90 =4 2m s”“0-1 0k P a”属于空格或刻度分割错误。原页图4d为P=50 kPa、T₉₀=42 ms，图4a插图标注0–10 kPa；图4b拟合完整为Y=39.85×X−95.58。不存在缺失公式，不应将错误分词解读为不同测试压力或响应时间。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "公式(6)文字提取出现/C0、/C1等乱码。原页公式完整且清楚，为θ=θ₀+S×(P−P₀)，无缺项。括号与减号决定基准压力校正方式，不能把乱码解释为除法或另一个运算。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "图6c的纵轴在提供的文字提取中未正确保留；原页为Current (μA)，横轴为Time (s)，不是压力—时间曲线。Pressure (Pa)与Angle (°)属于图6e的控制映射示意。图6j另为Voltage (V)—Time (s)五通道记录，混淆分图会改变对传感信号及控制增益的理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P10",
+          "detail": "公式(7)及其说明中的Δ被部分提取为4，分式层级也被压平。原页核实为S=(ΔI/I₀)/ΔP，说明中的符号为ΔI、ΔP。公式完整，无源文件缺项；误读会影响归一化灵敏度的计算与量纲判断。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "02d02b33979e",
+        "state": "published",
+        "updated_at": "2026-10-17T02:07:19.355954+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 13,
+        "covered": 13,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页可读出“Published online: 04 July 2026”，提供的文字提取未保留该行；作者姓名中的异常字间空格亦属提取问题。不影响论文身份与摘要结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "公式(2)–(5)及正文局部符号提取失真。原页核实为a=(3FR/(4E*))^(1/3)、R_contact∝F^(−2/3)、σ∝(φ−φ_c)^t、R_t∝e^(βd)，局部填料体积分数为φ=φ₀+Δφ(P)。提取中的/C18、/C19、/C0等不是原文公式缺项；错误会影响接触力学、渗流与隧穿机理的理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "文字提取未完整保留图2a–f的图内内容，且图2e出现脱离版面的坐标数字。原页图2e包含降解前及“7 Days later”的C1s谱和拟合分量，图2b包含初始、3天、7天照片，图2f包含三种网孔样品。应以原页图形为准，不将游离数字当作可靠拟合结果；此问题不构成原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "图3的文字提取将坐标标题倒序、刻度粘连并打乱分图顺序。原页核实b、f、i的横轴为Pressure (kPa)、纵轴为ΔI/I₀；c、g为灵敏度比较，d、h为R²，k的应力单位为N/mm²。未发现公式占位或图注缺项；纠正后可区分响应曲线、线性度与有限元证据。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "图4提取中的“P=5 0k P a”“T90 =4 2m s”“0-1 0k P a”属于空格或刻度分割错误。原页图4d为P=50 kPa、T₉₀=42 ms，图4a插图标注0–10 kPa；图4b拟合完整为Y=39.85×X−95.58。不存在缺失公式，不应将错误分词解读为不同测试压力或响应时间。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "公式(6)文字提取出现/C0、/C1等乱码。原页公式完整且清楚，为θ=θ₀+S×(P−P₀)，无缺项。括号与减号决定基准压力校正方式，不能把乱码解释为除法或另一个运算。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "图6c的纵轴在提供的文字提取中未正确保留；原页为Current (μA)，横轴为Time (s)，不是压力—时间曲线。Pressure (Pa)与Angle (°)属于图6e的控制映射示意。图6j另为Voltage (V)—Time (s)五通道记录，混淆分图会改变对传感信号及控制增益的理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "公式(7)及其说明中的Δ被部分提取为4，分式层级也被压平。原页核实为S=(ΔI/I₀)/ΔP，说明中的符号为ΔI、ΔP。公式完整，无源文件缺项；误读会影响归一化灵敏度的计算与量纲判断。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -2788,8 +3574,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "restricted",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -2941,8 +3727,8 @@
         "state": "published",
         "updated_at": "2026-10-17T01:40:51.927242+00:00",
         "basis": "full_text",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "facts",
         "reason": "",
         "total": 14,
         "covered": 14,
@@ -2987,7 +3773,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Covalent organic frameworks (COFs) are promising photocatalysts for solar hydrogen production, yet the most electronically favorable linkages, imines,hydrolyze rapidly in water, creating a stability-activity trade-off that limits practical deployment. Navigating the combinatorial design space of nodes, linkers, linkages, and functional groups to identify candidates that are simultaneously active and durable remains a formidable challenge. Here we introduce Ara , a large-language-model (LLM) agent that leverages pretrained chemical knowledge, donor-acceptor theory, conjugation effects,…",
+      "summary": "本文针对共价有机框架光催化剂的电子性能与耐水解稳定性冲突，提出Ara语言模型智能体，在820个兼容性约束候选中迭代选择材料，并通过片段量化计算反馈调整搜索。其计算命中率达到52.7%，但允许重复选择，独特命中覆盖低于贝叶斯优化。解读：论文值得关注的是化学先验驱动的多约束逆向筛选及探索—利用权衡，而非已经证实的耐久材料发现；周期DFT与实验验证仍待完成。[P1–P8]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -3031,11 +3817,151 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐重点阅读方法、提示消融和独特命中覆盖分析，可借鉴其多约束逆向设计框架，但须审慎区分重复命中收益与真实新材料发现效率。[P3–P8]",
+      "deep_read": {
+        "problem": "亚胺连接有利于COF电子性能，却容易在水中水解，使光催化活性与长期稳定性发生冲突。作者因此将目标设为同时满足带隙、导带位置和稳定性要求，而非优化单一描述符。原文称这一矛盾为“hydrolysis trap”，组合空间与计算成本进一步增加了筛选难度。[P1–P2]",
+        "method": "Ara在预枚举候选中提出组合，接收最近评估及历史高奖励结果，再调整选择；底层用RDKit组装片段、GFN1-xTB计算IP−EA并校准带隙，同时计算CBM与稳定性代理。与随机搜索、BO各比较五种子两百轮，采用共享缓存，但仅BO强制候选去重。[P7–P8]",
+        "innovation": "方法特色是把语言模型化学先验嵌入多约束筛选闭环，并用提示消融与推理轨迹分析选择机制，而非只报告最优奖励。解读：创新重点在化学知识引导的离散组合决策及其可检查性，不是开放式结构生成；消融支持预训练先验解释，但不能彻底排除其他机制。[P4–P5、P8]",
+        "findings": "Ara计算命中率为52.7%，随机与BO分别为4.6%、14.1%；但BO独特命中覆盖更高。穷举成功计算的670个候选得到38个命中，其中30个属乙烯基连接、8个属β-酮烯胺连接。作者据此强调“complementary, not competing, strengths”，即高产利用与广泛探索互补。[P3–P5]",
+        "limitations": "带隙预测区间约±0.8 eV，超过命中窗口；稳定性未实验验证，重复采样限制覆盖。P5图4随机分布与图注不符，图5随机比例20%与正文19%冲突，影响基线解读。记录未见公式缺项，乱码已纠正；仅测试单模型，亦限制泛化判断。[P3、P5–P8]\n原文核对：[P5] 图4原图与图注、P4正文存在分布描述不一致：图注称随机搜索各连接类型保持“roughly uniform distribution”，但原图随机搜索面板中亚胺占比约0.64–0.77，明显高于其他类型。无公式或图形缺项；受影响的是随机基线分布均匀性的表述，不能据图注将其概括为四类近似等比例。；[P5] 图5原图Random柱内稳定连接合计标注为20%，正文及图注却均写19%。已核实原页存在数值不一致，无缺失图项；受影响的是随机基线稳定连接选择比例的精确报告。本批无法确定应采用哪一个数值，不自行归因于四舍五入或修正原文。",
+        "connection": "解读：对生成式设计研究，本文提供了先施加化学兼容性约束、再利用反馈调节组合的实例；对结构设计与可靠性研究，可借鉴性能—耐久性联合筛选。它并非智能运维研究，也未建立失效概率或寿命模型，因此稳定性代理分数不能直接迁移为工程可靠度。[P1、P7–P8]",
+        "next_steps": "建议优先对高排名候选开展周期DFT及水相光催化实验，再比较强制去重后的Ara与BO，统一独特评估预算并报告新命中覆盖。作者已提出混合搜索和跨模型验证；进一步建议量化校准误差对阈值判定的影响，并核清P5图文差异，避免将代理命中当作实证耐久性。[P5–P6、P8]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "逃离水解陷阱：利用ReAct智能体逆向设计耐久光催化共价有机框架",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41524-026-02168-w.pdf"
+      ],
+      "analyzed_at": "2026-10-17T01:55:52.683851+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P7",
+          "P8"
+        ],
+        "innovation": [
+          "P4",
+          "P5",
+          "P8"
+        ],
+        "findings": [
+          "P3",
+          "P4",
+          "P5"
+        ],
+        "limitations": [
+          "P3",
+          "P5",
+          "P6",
+          "P7",
+          "P8"
+        ],
+        "connection": [
+          "P1",
+          "P7",
+          "P8"
+        ],
+        "next_steps": [
+          "P5",
+          "P6",
+          "P8"
+        ]
+      },
+      "analysis_material_version": "d4edc9bee3b1cc951f99931a415960deb3a774df64d20ec463636d14760e40a4",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "公式(1)文字提取出现“/C25”“/C0”“ð”等乱码。已核对原页，正确表达为 gap_DFT ≈ 0.65 × gap_xTB − 0.70（R² = 0.62）。原公式完整，无原文件缺项；纠正涉及带隙转移校准及后续命中判定，不能将乱码解释为缺失公式。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P5",
+          "detail": "图4原图与图注、P4正文存在分布描述不一致：图注称随机搜索各连接类型保持“roughly uniform distribution”，但原图随机搜索面板中亚胺占比约0.64–0.77，明显高于其他类型。无公式或图形缺项；受影响的是随机基线分布均匀性的表述，不能据图注将其概括为四类近似等比例。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P5",
+          "detail": "图5原图Random柱内稳定连接合计标注为20%，正文及图注却均写19%。已核实原页存在数值不一致，无缺失图项；受影响的是随机基线稳定连接选择比例的精确报告。本批无法确定应采用哪一个数值，不自行归因于四舍五入或修正原文。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "公式(2)提取文本中的“¼/C0”“þ”“ð2Þ”为字符提取乱码。原页公式完整可读，正确为CBM_vsNHE = −EA_xTB + 2.62 V。无原文件缺项；负号与偏移量影响CBM估计及带边命中判定，须保留。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "公式(3)提取文本中的等号、加号、小数点及编号出现编码乱码；原页核实为S_CSI = 0.50 S_linkage + 0.30 S_shielding + 0.20 S_hydrophobicity。无公式缺项；纠正涉及稳定性综合评分和阈值筛选。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "公式(4)–(6)提取出现“¼”“/C0”“/C18”等编码乱码。原页公式完整，核实为r = 0.35 g_score + 0.30 cbm_score + 0.35 S_CSI；g_score = exp[−(1/2)((g−2.0)/0.3)²]；cbm_score = 1/[1+exp(5.0×CBM_vsNHE)]。无原文件缺项；纠正涉及奖励权重、带隙偏离惩罚及CBM评分方向。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "原页收稿、接收日期下方清晰载有“Published online: 03 June 2026”，所给文字提取遗漏此行。无公式或图号，不影响筛选结论，但影响发表日期记录；属于提取遗漏而非原文件缺项。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "727d7838f1f5",
+        "state": "published",
+        "updated_at": "2026-10-17T01:55:52.704417+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 10,
+        "covered": 10,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "公式(1)文字提取出现“/C25”“/C0”“ð”等乱码。已核对原页，正确表达为 gap_DFT ≈ 0.65 × gap_xTB − 0.70（R² = 0.62）。原公式完整，无原文件缺项；纠正涉及带隙转移校准及后续命中判定，不能将乱码解释为缺失公式。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P5",
+            "detail": "图4原图与图注、P4正文存在分布描述不一致：图注称随机搜索各连接类型保持“roughly uniform distribution”，但原图随机搜索面板中亚胺占比约0.64–0.77，明显高于其他类型。无公式或图形缺项；受影响的是随机基线分布均匀性的表述，不能据图注将其概括为四类近似等比例。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P5",
+            "detail": "图5原图Random柱内稳定连接合计标注为20%，正文及图注却均写19%。已核实原页存在数值不一致，无缺失图项；受影响的是随机基线稳定连接选择比例的精确报告。本批无法确定应采用哪一个数值，不自行归因于四舍五入或修正原文。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "公式(2)提取文本中的“¼/C0”“þ”“ð2Þ”为字符提取乱码。原页公式完整可读，正确为CBM_vsNHE = −EA_xTB + 2.62 V。无原文件缺项；负号与偏移量影响CBM估计及带边命中判定，须保留。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "公式(3)提取文本中的等号、加号、小数点及编号出现编码乱码；原页核实为S_CSI = 0.50 S_linkage + 0.30 S_shielding + 0.20 S_hydrophobicity。无公式缺项；纠正涉及稳定性综合评分和阈值筛选。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "公式(4)–(6)提取出现“¼”“/C0”“/C18”等编码乱码。原页公式完整，核实为r = 0.35 g_score + 0.30 cbm_score + 0.35 S_CSI；g_score = exp[−(1/2)((g−2.0)/0.3)²]；cbm_score = 1/[1+exp(5.0×CBM_vsNHE)]。无原文件缺项；纠正涉及奖励权重、带隙偏离惩罚及CBM评分方向。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "原页收稿、接收日期下方清晰载有“Published online: 03 June 2026”，所给文字提取遗漏此行。无公式或图号，不影响筛选结论，但影响发表日期记录；属于提取遗漏而非原文件缺项。"
+          }
+        ]
+      }
     }
   ],
   "source_status": {
@@ -3942,13 +4868,13 @@
     "unavailable": 30
   },
   "analysis_status": {
-    "ready_core": 3,
+    "ready_core": 6,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 3
+    "pending": 0
   },
   "edition": {
     "id": "38937677937",
