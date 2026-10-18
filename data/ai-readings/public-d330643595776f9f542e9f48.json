@@ -1,19 +1,19 @@
 {
   "id": "public-d330643595776f9f542e9f48",
-  "content_version": "0075c21a79a1b810a0690ec24edfc0fedd3443c5071e9c2d8b78d526bf0c5a45",
+  "content_version": "3f80e60e16e88bc2b17fd4d47eb45a12236ecc9b5e06660eaa05cef05d95d4f2",
   "analysis": {
-    "title_zh": "Granite Switch 4.1：通过统一端点处理对话、决策与语音转文字",
-    "summary": "公告介绍 Granite Switch 4.1 的模块化能力：8B 与 30B 型号配置新增的通用决策 Decision aLoRA，以及专用 Guardian aLoRA。[S2–S4] 模型可通过同一托管端点，在自然语言回答、通用及专用决策、语音转文字任务间切换。[S1] 所给原文末尾截断，未完整展示 Guardian 的比较结果，也未提供测试配置或部署方法，因此不能据此判断具体性能优势与落地成本。",
-    "application": "建议：科研迁移可考虑将对话问答、决策分类与语音记录转写整合为统一服务，并自行评估任务切换质量、延迟及可靠性；这是迁移设想，不是官方已验证的科研效果。官方公告介绍了统一端点能力，但所给片段未提供足以独立核验效果的实验细节。[S1]",
+    "title_zh": "Granite Switch 4.1：通过单一端点支持对话、决策与语音转写",
+    "summary": "公告介绍 Granite Switch 4.1 的模块化能力：Granite-Switch-4.1-8B 与 -30B 配置新增通用决策 Decision aLoRA，并包含专用 Guardian aLoRA，可通过单一托管端点切换自然语言响应、通用及专用决策和语音转文字任务。官方还称其 ASR 模型在 OpenASR 排行榜上速度最快，但所给节选未提供测试配置、具体指标或完整比较结果，不能据此推断实际部署性能。",
+    "application": "建议：科研迁移可探索将语音记录转写、自然语言问答与规则化决策接入同一研究工作流，并自行评估准确性、延迟和任务切换表现。官方公告明确宣称单一托管端点支持上述任务，并给出 ASR 排行榜速度主张；所给节选不足以确认其在科研、智能运维或可靠性任务中的已验证效果。",
     "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
-      "natural-language responses, general and specialized decisions, and speech-to-text tasks—all from one hosted endpoint.",
+      "Introduced last spring, the Granite Switch project enables a modular approach to model development.",
+      "Now Granite Switch 4.1 models, armed with a Decision adapter and the fastest ASR model on the OpenASR leaderboard, can move efficiently between natural-language responses, general and specialized decisions, and speech-to-text tasks—all from one hosted endpoint.",
       "Specifically, Granite-Switch-4.1-8B and -30B models are configured to include:",
-      "A new Decision aLoRA for general-purpose decision-making (e.g. v1/systemone),",
-      "A specialized Guardian aLoRA"
+      "A new Decision aLoRA for general-purpose decision-making (e.g. v1/systemone)"
     ],
     "basis_url": "https://huggingface.co/blog/ibm-granite/granite-switch-4-1"
   },
-  "analyzed_at": "2026-10-18T07:43:43.439217+00:00"
+  "analyzed_at": "2026-10-18T09:45:48.826352+00:00"
 }
