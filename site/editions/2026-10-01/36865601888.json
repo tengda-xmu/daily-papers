@@ -1073,8 +1073,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       },
@@ -1324,16 +1324,140 @@
       "reading_status": {
         "paper_id": "9ac433bc8bba",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:36:34.510287+00:00",
+        "updated_at": "2026-10-18T00:44:34.277611+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "restricted",
-        "total": 0,
-        "covered": 0,
+        "total": 1,
+        "covered": 1,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "轴承振动信号能否支持跨工况、含噪条件下的零样本故障诊断？本文摘要介绍了一种物理信息引导的深度编码—解析方法，并报告其在未知域比较中的表现，为理解跨域诊断思路提供了线索。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "跨工况诊断的难点在于域适应",
+            "paragraphs": [
+              "轴承振动信号故障诊断被视为提升复杂装备运行安全的重要途径。但摘要指出，现有面向不同工况的零样本诊断方法通常需要大量学习样本，也未能充分建模轴承失效的物理机制及含噪传感器信号特征，这限制了诊断模型的域适应能力。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "把物理线索融入特征解耦与解析",
+            "paragraphs": [
+              "作者提出基于物理信息机器学习的零样本轴承故障诊断方法，目标是在含噪传感器数据下改善跨域诊断表现。其一，将相关性分析操作整合进神经网络，建立自动物理信息学习模块，以物理信息引导故障属性分离。",
+              "其二，利用故障轴承周期性信号脉冲的物理特征，设计深度编码—解析网络，用于自动生成故障属性并分析失效特征，服务于滚动轴承故障诊断。摘要没有进一步说明网络结构、相关性分析的具体形式或训练细节。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要报告未知域含噪比较中的优势",
+            "paragraphs": [
+              "摘要称，与先进方法的比较显示，所提方法在未知域中表现更好，即使传感器数据含噪也是如此。这里是摘要给出的定性结论；摘要未列出具体指标、提升幅度或比较对象名称。",
+              "摘要还称该方法显示出跨设备实施的潜力，并可能应对无数据的跨设备自适应故障诊断问题。这是潜力判断，不等同于已验证的跨设备效果。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要不足以界定验证范围",
+            "paragraphs": [
+              "仅凭摘要无法判断样本来源与规模、具体工况和噪声设置、未知域如何划分，以及比较方法和评价指标。摘要未报告这些细节，不代表论文正文没有涉及。",
+              "摘要也没有交代跨设备实施潜力是否经过直接验证，或“无数据”情形的具体定义。因此，现阶段不宜把这一潜力表述为已证实的无数据迁移能力。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：追问零样本与跨设备的边界",
+            "paragraphs": [
+              "阅读启发：进一步阅读时，可关注正文如何定义零样本与未知域、如何构造含噪条件，以及比较方法是否覆盖不同工况。这些信息有助于理解摘要所称优势适用于何种诊断场景。",
+              "阅读启发：还可核对跨设备潜力对应的证据类型，并区分实际验证与作者对应用前景的判断；摘要本身没有给出足以回答这些问题的细节。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的研究过程示意",
+            "description": "仅概括摘要明确陈述的方法环节，不表达未报告的实验配置或结果。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "轴承振动信号",
+                "detail": "面向滚动轴承故障诊断"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "相关性分析入网",
+                "detail": "在神经网络中整合相关性分析操作"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "物理引导属性分离",
+                "detail": "自动学习物理信息并分离故障属性"
+              },
+              {
+                "id": "d",
+                "stage": 1,
+                "label": "周期性信号脉冲",
+                "detail": "利用故障轴承信号的物理特征"
+              },
+              {
+                "id": "e",
+                "stage": 2,
+                "label": "深度编码—解析网络",
+                "detail": "自动生成故障属性并分析失效特征"
+              },
+              {
+                "id": "f",
+                "stage": 3,
+                "label": "滚动轴承故障诊断",
+                "detail": "摘要所述方法的诊断用途"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "信号作为输入"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "物理信息引导"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "利用周期特征"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "属性学习"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "用于诊断"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-18T00:44:34.268694+00:00",
+      "article_profile": "19ae4721cb336fd0e6a8f74f8a372123d22e9d2bffcd071cf933952f2960db77"
     },
     {
       "source": "AI 顶会论文",
@@ -1526,10 +1650,10 @@
       "reading_status": {
         "paper_id": "dabc96bfedf6",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:36:20.669559+00:00",
+        "updated_at": "2026-10-17T07:27:22.885476+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "retry",
+        "article_stage": "writing",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -1637,10 +1761,10 @@
       "reading_status": {
         "paper_id": "0888222377a8",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:36:50.795945+00:00",
+        "updated_at": "2026-10-18T00:39:21.307732+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "retry",
+        "article_stage": "writing",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -1960,10 +2084,10 @@
       "reading_status": {
         "paper_id": "f0e890e1abac",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:37:02.632402+00:00",
+        "updated_at": "2026-10-18T00:43:15.549393+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "retry",
+        "article_stage": "writing",
         "reason": "restricted",
         "total": 0,
         "covered": 0,
@@ -3463,8 +3587,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       },
@@ -3714,16 +3838,140 @@
       "reading_status": {
         "paper_id": "9ac433bc8bba",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:36:34.510287+00:00",
+        "updated_at": "2026-10-18T00:44:34.277611+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "restricted",
-        "total": 0,
-        "covered": 0,
+        "total": 1,
+        "covered": 1,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "轴承振动信号能否支持跨工况、含噪条件下的零样本故障诊断？本文摘要介绍了一种物理信息引导的深度编码—解析方法，并报告其在未知域比较中的表现，为理解跨域诊断思路提供了线索。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "跨工况诊断的难点在于域适应",
+            "paragraphs": [
+              "轴承振动信号故障诊断被视为提升复杂装备运行安全的重要途径。但摘要指出，现有面向不同工况的零样本诊断方法通常需要大量学习样本，也未能充分建模轴承失效的物理机制及含噪传感器信号特征，这限制了诊断模型的域适应能力。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "把物理线索融入特征解耦与解析",
+            "paragraphs": [
+              "作者提出基于物理信息机器学习的零样本轴承故障诊断方法，目标是在含噪传感器数据下改善跨域诊断表现。其一，将相关性分析操作整合进神经网络，建立自动物理信息学习模块，以物理信息引导故障属性分离。",
+              "其二，利用故障轴承周期性信号脉冲的物理特征，设计深度编码—解析网络，用于自动生成故障属性并分析失效特征，服务于滚动轴承故障诊断。摘要没有进一步说明网络结构、相关性分析的具体形式或训练细节。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要报告未知域含噪比较中的优势",
+            "paragraphs": [
+              "摘要称，与先进方法的比较显示，所提方法在未知域中表现更好，即使传感器数据含噪也是如此。这里是摘要给出的定性结论；摘要未列出具体指标、提升幅度或比较对象名称。",
+              "摘要还称该方法显示出跨设备实施的潜力，并可能应对无数据的跨设备自适应故障诊断问题。这是潜力判断，不等同于已验证的跨设备效果。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要不足以界定验证范围",
+            "paragraphs": [
+              "仅凭摘要无法判断样本来源与规模、具体工况和噪声设置、未知域如何划分，以及比较方法和评价指标。摘要未报告这些细节，不代表论文正文没有涉及。",
+              "摘要也没有交代跨设备实施潜力是否经过直接验证，或“无数据”情形的具体定义。因此，现阶段不宜把这一潜力表述为已证实的无数据迁移能力。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：追问零样本与跨设备的边界",
+            "paragraphs": [
+              "阅读启发：进一步阅读时，可关注正文如何定义零样本与未知域、如何构造含噪条件，以及比较方法是否覆盖不同工况。这些信息有助于理解摘要所称优势适用于何种诊断场景。",
+              "阅读启发：还可核对跨设备潜力对应的证据类型，并区分实际验证与作者对应用前景的判断；摘要本身没有给出足以回答这些问题的细节。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的研究过程示意",
+            "description": "仅概括摘要明确陈述的方法环节，不表达未报告的实验配置或结果。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "轴承振动信号",
+                "detail": "面向滚动轴承故障诊断"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "相关性分析入网",
+                "detail": "在神经网络中整合相关性分析操作"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "物理引导属性分离",
+                "detail": "自动学习物理信息并分离故障属性"
+              },
+              {
+                "id": "d",
+                "stage": 1,
+                "label": "周期性信号脉冲",
+                "detail": "利用故障轴承信号的物理特征"
+              },
+              {
+                "id": "e",
+                "stage": 2,
+                "label": "深度编码—解析网络",
+                "detail": "自动生成故障属性并分析失效特征"
+              },
+              {
+                "id": "f",
+                "stage": 3,
+                "label": "滚动轴承故障诊断",
+                "detail": "摘要所述方法的诊断用途"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "信号作为输入"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "物理信息引导"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "利用周期特征"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "属性学习"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "用于诊断"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-18T00:44:34.268694+00:00",
+      "article_profile": "19ae4721cb336fd0e6a8f74f8a372123d22e9d2bffcd071cf933952f2960db77"
     },
     {
       "source": "AI 顶会论文",
@@ -3916,10 +4164,10 @@
       "reading_status": {
         "paper_id": "dabc96bfedf6",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:36:20.669559+00:00",
+        "updated_at": "2026-10-17T07:27:22.885476+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "retry",
+        "article_stage": "writing",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -4025,10 +4273,10 @@
       "reading_status": {
         "paper_id": "0888222377a8",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:36:50.795945+00:00",
+        "updated_at": "2026-10-18T00:39:21.307732+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "retry",
+        "article_stage": "writing",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -4348,10 +4596,10 @@
       "reading_status": {
         "paper_id": "f0e890e1abac",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:37:02.632402+00:00",
+        "updated_at": "2026-10-18T00:43:15.549393+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "retry",
+        "article_stage": "writing",
         "reason": "restricted",
         "total": 0,
         "covered": 0,
