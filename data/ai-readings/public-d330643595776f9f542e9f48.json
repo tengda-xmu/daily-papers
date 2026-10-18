@@ -1,19 +1,19 @@
 {
   "id": "public-d330643595776f9f542e9f48",
-  "content_version": "d63dabdd0c8f2877e3279a492f92fcc6b97e8cadd9b84c171293b0f4e944cfc7",
+  "content_version": "c9147d5cc2be5341f56b7301e7ca94d565ec16b7fef94357d604e9a8ebd0ca99",
   "analysis": {
-    "title_zh": "Granite Switch 4.1：通过单一端点处理对话、决策与语音",
-    "summary": "官方公告介绍 Granite Switch 4.1，称 Granite-Switch-4.1-8B 和 -30B 配置了面向通用决策的新 Decision aLoRA，以及专用 Guardian aLoRA；项目还强调 ASR 模型在 OpenASR 排行榜上的表现。其目标是在同一托管端点间切换自然语言响应、通用及专用决策和语音转文本任务，适用于需要汇集多类模型能力的应用。所给资料在 Guardian 效果描述处截断，无法据此补全比较结论或验证整体性能。",
-    "application": "建议：科研迁移可考虑在需要对话、决策与语音转写的任务中评估单端点、多适配器方案，并分别设计任务级对照测试；这属于研究设想。官方公告声称其 ASR 模型为 OpenASR 排行榜上最快，但当前资料未给出具体指标、测评条件或完整证据，不能视为独立验证；Guardian aLoRA 的比较描述也因原文截断而无法确认。",
+    "title_zh": "Granite Switch 4.1：通过同一端点处理对话、决策与语音",
+    "summary": "公告介绍 Granite Switch 4.1 的模块化能力更新：Granite-Switch-4.1-8B 与 -30B 配置新增通用决策 Decision aLoRA，并包含专用 Guardian aLoRA，可通过同一托管端点在自然语言回复、通用及专用决策、语音转文字任务之间切换。原文还宣称其 ASR 模型在 OpenASR 排行榜上速度最快，但给定节选未提供测试条件；Guardian 的性能比较句被截断，无法确认完整结论。",
+    "application": "建议：科研迁移可探索将语音记录转写、对话查询与规则决策接入统一工作流，用于科研资料整理或智能运维交互；这些属于迁移设想，并非官方已验证效果。官方已验证效果方面，给定节选未提供实验细节，仅包含功能介绍及 ASR 排行榜速度宣称，不能据此认定科研任务中的准确率或效率提升。",
     "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
-      "Granite Switch 4.1 models, armed with a Decision adapter and the fastest ASR model on the OpenASR leaderboard",
-      "all from one hosted endpoint",
-      "Granite-Switch-4.1-8B and -30B models are configured to include:",
-      "A new Decision aLoRA for general-purpose decision-making"
+      "Introduced last spring, the Granite Switch project enables a modular approach to model development.",
+      "Now Granite Switch 4.1 models, armed with a Decision adapter and the fastest ASR model on the OpenASR leaderboard, can move efficiently between natural-language responses, general and specialized decisions, and speech-to-text tasks—all from one hosted endpoint.",
+      "Specifically, Granite-Switch-4.1-8B and -30B models are configured to include:",
+      "A new Decision aLoRA for general-purpose decision-making (e.g. v1/systemone),"
     ],
     "basis_url": "https://huggingface.co/blog/ibm-granite/granite-switch-4-1"
   },
-  "analyzed_at": "2026-10-18T01:31:38.448478+00:00"
+  "analyzed_at": "2026-10-18T05:33:15.460008+00:00"
 }
