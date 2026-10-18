@@ -431,8 +431,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "restricted",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       },
@@ -539,7 +539,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "本文聚焦《Spiking neural networks with fatigue spike-timing-dependent plasticity learning using hybrid memristor arrays》，暂未提供可用摘要，请查看原文。",
+      "summary": "本文针对脉冲时序依赖可塑性学习难以适应高频输入的问题，提出混合忆阻器突触架构，将短时疲劳与长期记忆结合，以增强脉冲神经网络的时序学习能力。摘要报告，该网络支持无监督在线学习，能够适应频率编码和时序编码脉冲，并具有噪声鲁棒性。这里的“疲劳”指突触动态，而非工程结构疲劳。当前仅有摘要，无法核查性能增益、能耗及实验条件。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -581,11 +581,143 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议作为神经形态学习硬件的交叉方向参考，而非疲劳可靠性方向的重点推荐；其短时动态与长期记忆协同机制值得关注，但摘要未涉及结构损伤或寿命预测。[摘要；解读]",
+      "deep_read": {
+        "problem": "摘要指出，基于脉冲时序依赖可塑性的神经形态系统虽具有节能学习优势，却难以适应高频输入，限制了复杂时序信息处理。研究问题是如何将类似生物短时可塑性的突触疲劳有效纳入硬件，而不是处理材料循环载荷损伤或结构失效。[摘要]",
+        "method": "作者将具有不同动态特性的忆阻器阵列配对，构成兼具短时疲劳和长期记忆的突触单元。其中，具有高均匀性及固有疲劳行为的界面型动态忆阻器，与氧化铪基一晶体管—一非易失性忆阻器耦合，用于实现疲劳脉冲时序依赖可塑性学习。[摘要]",
+        "innovation": "摘要层面可辨识的特色是用异质器件动态协同承载不同时间尺度的突触功能，原文称“short-term fatigue and long-term memory”。解读：其价值在于器件特性与学习机制的联合设计；仅凭摘要不能判断相对既有工作的首创程度。[摘要]",
+        "findings": "摘要报告，所得网络可开展无监督在线学习，对频率编码和时序编码脉冲均有较高适应性，并具有较强噪声鲁棒性；作者还称其优于传统脉冲时序依赖可塑性方法。这些属于摘要中的定性结果，未提供数据集、性能指标或提升幅度。[摘要]",
+        "limitations": "当前证据的局限是摘要没有给出阵列规模、测试任务、对照设置、统计结果或能耗测量，因而无法判断性能优势的幅度与适用边界。上述属于资料不足，不等同于论文已确认的技术缺陷，也不能据此认定器件存在耐久性或扩展性问题。[摘要；解读]",
+        "connection": "解读：对智能运维而言，在线学习与噪声适应能力可能启发传感时序处理，但摘要没有展示运维场景。对结构设计和可靠性研究，不能将突触“fatigue”直接对应为材料疲劳；当前未提供载荷、裂纹、损伤累积或寿命预测方面的证据。[摘要]",
+        "next_steps": "建议：若继续阅读，应优先核查高频输入的定义、编码任务设置、噪声模型及对照公平性，再判断其是否适合运维数据。若探索可靠性应用，应另行设计退化监测任务，并区分突触短时动态与设备长期退化；这属于迁移设想，非作者已验证结论。[摘要；建议]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "基于混合忆阻器阵列与疲劳脉冲时序依赖可塑性学习的脉冲神经网络",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41928-025-01554-4"
+      ],
+      "analyzed_at": "2026-10-18T13:36:39.789984+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "脉冲神经网络如何在保持节能学习优势的同时，更好地处理高频输入和复杂时序信息？这项研究将具有不同动态特性的忆阻器配对，让短期突触疲劳与长期记忆共存，为理解器件动态如何支持时序学习提供了一个具体案例。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "高频输入为何成为时序学习的难点",
+            "paragraphs": [
+              "基于脉冲时序依赖可塑性（STDP）的神经形态系统具有节能学习优势，但对高频输入的适应能力有限，这会限制其处理复杂时序信息的有效性。研究关注的不是单纯存储更多权重，而是如何让突触的动态响应参与学习。",
+              "摘要指出，类似生物短期可塑性的突触疲劳动态能够改善这一问题，难点在于如何将其高效融入硬件。这里的“疲劳”属于突触动态概念，不能直接理解为工程结构的疲劳损伤或寿命退化。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "用两类忆阻器承载短期疲劳与长期记忆",
+            "paragraphs": [
+              "作者提出混合架构，将动态特性不同的忆阻器阵列配对，构成同时具有短期疲劳和长期记忆的突触单元。其中，一类是具有高均匀性和内禀疲劳行为的界面型动态忆阻器，另一类是基于氧化铪的一晶体管—一非易失性忆阻器。",
+              "这种设计将不同器件的动态特性结合起来，用于硬件高效实现疲劳脉冲时序依赖可塑性。摘要给出的技术主线是器件配对、形成混合突触，再利用该突触支持脉冲神经网络的时序学习。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要报告了编码适应性与抗噪表现",
+            "paragraphs": [
+              "作者报告，所得神经网络能够用于无监督在线学习，对频率编码和时序编码的脉冲均具有较强适应性，同时表现出较强的噪声鲁棒性。摘要还指出，其性能优于传统STDP方法，并将该设计与时序学习能力的增强联系起来。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "性能结论仍需结合具体比较条件阅读",
+            "paragraphs": [
+              "当前依据仅为完整摘要，无法判断器件与阵列的样本规模、具体学习任务、数据构成、噪声设置，以及比较方法的实现和参数是否匹配。摘要也未给出性能增益、能耗或硬件开销的量化数据，因此不能据此推断优势幅度及验证范围；这些信息未在摘要中报告，不代表论文没有开展相应工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注动态机制，而非“疲劳”同名",
+            "paragraphs": [
+              "阅读启发：进一步阅读时，可重点追问短期疲劳如何与长期记忆共同影响学习，以及频率编码、时序编码和噪声条件下的优势分别如何得到验证。对于关注智能运维或结构可靠性的读者，本文可提供时序学习机制的阅读线索，但当前摘要不足以支持其已改善故障诊断或结构疲劳预测的结论。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "从混合忆阻器到时序学习的研究过程示意",
+            "description": "依据摘要整理器件配对与学习功能之间的关系，仅为示意图，并非论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "两类不同动态的忆阻器",
+                "detail": "界面型动态忆阻器与基于氧化铪的一晶体管—一非易失性忆阻器"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "混合突触单元",
+                "detail": "兼具短期疲劳与长期记忆"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "疲劳STDP",
+                "detail": "利用混合架构实现硬件高效的疲劳脉冲时序依赖可塑性"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "脉冲神经网络在线学习",
+                "detail": "用于无监督在线学习，适应频率编码与时序编码脉冲"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "配对形成"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "支持硬件实现"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "增强时序学习"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-18T13:37:54.432602+00:00",
+      "article_profile": "3e0155d9dd8914a494dcdd02110c6e2a68c891a953c98dc01eb3d2847c310cda",
+      "analysis_references": {},
+      "analysis_material_version": "273a17e6bb6e6a1da092e15c1037fd93f098e83c1d5bfc5d335cba56405420ba",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "096a7a3cbb61",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-18T13:37:54.434678+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -1154,8 +1286,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "restricted",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       },
@@ -1262,7 +1394,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "本文聚焦《Spiking neural networks with fatigue spike-timing-dependent plasticity learning using hybrid memristor arrays》，暂未提供可用摘要，请查看原文。",
+      "summary": "本文针对脉冲时序依赖可塑性学习难以适应高频输入的问题，提出混合忆阻器突触架构，将短时疲劳与长期记忆结合，以增强脉冲神经网络的时序学习能力。摘要报告，该网络支持无监督在线学习，能够适应频率编码和时序编码脉冲，并具有噪声鲁棒性。这里的“疲劳”指突触动态，而非工程结构疲劳。当前仅有摘要，无法核查性能增益、能耗及实验条件。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -1304,11 +1436,143 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议作为神经形态学习硬件的交叉方向参考，而非疲劳可靠性方向的重点推荐；其短时动态与长期记忆协同机制值得关注，但摘要未涉及结构损伤或寿命预测。[摘要；解读]",
+      "deep_read": {
+        "problem": "摘要指出，基于脉冲时序依赖可塑性的神经形态系统虽具有节能学习优势，却难以适应高频输入，限制了复杂时序信息处理。研究问题是如何将类似生物短时可塑性的突触疲劳有效纳入硬件，而不是处理材料循环载荷损伤或结构失效。[摘要]",
+        "method": "作者将具有不同动态特性的忆阻器阵列配对，构成兼具短时疲劳和长期记忆的突触单元。其中，具有高均匀性及固有疲劳行为的界面型动态忆阻器，与氧化铪基一晶体管—一非易失性忆阻器耦合，用于实现疲劳脉冲时序依赖可塑性学习。[摘要]",
+        "innovation": "摘要层面可辨识的特色是用异质器件动态协同承载不同时间尺度的突触功能，原文称“short-term fatigue and long-term memory”。解读：其价值在于器件特性与学习机制的联合设计；仅凭摘要不能判断相对既有工作的首创程度。[摘要]",
+        "findings": "摘要报告，所得网络可开展无监督在线学习，对频率编码和时序编码脉冲均有较高适应性，并具有较强噪声鲁棒性；作者还称其优于传统脉冲时序依赖可塑性方法。这些属于摘要中的定性结果，未提供数据集、性能指标或提升幅度。[摘要]",
+        "limitations": "当前证据的局限是摘要没有给出阵列规模、测试任务、对照设置、统计结果或能耗测量，因而无法判断性能优势的幅度与适用边界。上述属于资料不足，不等同于论文已确认的技术缺陷，也不能据此认定器件存在耐久性或扩展性问题。[摘要；解读]",
+        "connection": "解读：对智能运维而言，在线学习与噪声适应能力可能启发传感时序处理，但摘要没有展示运维场景。对结构设计和可靠性研究，不能将突触“fatigue”直接对应为材料疲劳；当前未提供载荷、裂纹、损伤累积或寿命预测方面的证据。[摘要]",
+        "next_steps": "建议：若继续阅读，应优先核查高频输入的定义、编码任务设置、噪声模型及对照公平性，再判断其是否适合运维数据。若探索可靠性应用，应另行设计退化监测任务，并区分突触短时动态与设备长期退化；这属于迁移设想，非作者已验证结论。[摘要；建议]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "基于混合忆阻器阵列与疲劳脉冲时序依赖可塑性学习的脉冲神经网络",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41928-025-01554-4"
+      ],
+      "analyzed_at": "2026-10-18T13:36:39.789984+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "脉冲神经网络如何在保持节能学习优势的同时，更好地处理高频输入和复杂时序信息？这项研究将具有不同动态特性的忆阻器配对，让短期突触疲劳与长期记忆共存，为理解器件动态如何支持时序学习提供了一个具体案例。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "高频输入为何成为时序学习的难点",
+            "paragraphs": [
+              "基于脉冲时序依赖可塑性（STDP）的神经形态系统具有节能学习优势，但对高频输入的适应能力有限，这会限制其处理复杂时序信息的有效性。研究关注的不是单纯存储更多权重，而是如何让突触的动态响应参与学习。",
+              "摘要指出，类似生物短期可塑性的突触疲劳动态能够改善这一问题，难点在于如何将其高效融入硬件。这里的“疲劳”属于突触动态概念，不能直接理解为工程结构的疲劳损伤或寿命退化。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "用两类忆阻器承载短期疲劳与长期记忆",
+            "paragraphs": [
+              "作者提出混合架构，将动态特性不同的忆阻器阵列配对，构成同时具有短期疲劳和长期记忆的突触单元。其中，一类是具有高均匀性和内禀疲劳行为的界面型动态忆阻器，另一类是基于氧化铪的一晶体管—一非易失性忆阻器。",
+              "这种设计将不同器件的动态特性结合起来，用于硬件高效实现疲劳脉冲时序依赖可塑性。摘要给出的技术主线是器件配对、形成混合突触，再利用该突触支持脉冲神经网络的时序学习。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要报告了编码适应性与抗噪表现",
+            "paragraphs": [
+              "作者报告，所得神经网络能够用于无监督在线学习，对频率编码和时序编码的脉冲均具有较强适应性，同时表现出较强的噪声鲁棒性。摘要还指出，其性能优于传统STDP方法，并将该设计与时序学习能力的增强联系起来。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "性能结论仍需结合具体比较条件阅读",
+            "paragraphs": [
+              "当前依据仅为完整摘要，无法判断器件与阵列的样本规模、具体学习任务、数据构成、噪声设置，以及比较方法的实现和参数是否匹配。摘要也未给出性能增益、能耗或硬件开销的量化数据，因此不能据此推断优势幅度及验证范围；这些信息未在摘要中报告，不代表论文没有开展相应工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注动态机制，而非“疲劳”同名",
+            "paragraphs": [
+              "阅读启发：进一步阅读时，可重点追问短期疲劳如何与长期记忆共同影响学习，以及频率编码、时序编码和噪声条件下的优势分别如何得到验证。对于关注智能运维或结构可靠性的读者，本文可提供时序学习机制的阅读线索，但当前摘要不足以支持其已改善故障诊断或结构疲劳预测的结论。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "从混合忆阻器到时序学习的研究过程示意",
+            "description": "依据摘要整理器件配对与学习功能之间的关系，仅为示意图，并非论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "两类不同动态的忆阻器",
+                "detail": "界面型动态忆阻器与基于氧化铪的一晶体管—一非易失性忆阻器"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "混合突触单元",
+                "detail": "兼具短期疲劳与长期记忆"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "疲劳STDP",
+                "detail": "利用混合架构实现硬件高效的疲劳脉冲时序依赖可塑性"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "脉冲神经网络在线学习",
+                "detail": "用于无监督在线学习，适应频率编码与时序编码脉冲"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "配对形成"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "支持硬件实现"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "增强时序学习"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-18T13:37:54.432602+00:00",
+      "article_profile": "3e0155d9dd8914a494dcdd02110c6e2a68c891a953c98dc01eb3d2847c310cda",
+      "analysis_references": {},
+      "analysis_material_version": "273a17e6bb6e6a1da092e15c1037fd93f098e83c1d5bfc5d335cba56405420ba",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "096a7a3cbb61",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-18T13:37:54.434678+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -2352,13 +2616,13 @@
     "unavailable": 30
   },
   "analysis_status": {
-    "ready_core": 3,
+    "ready_core": 4,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 3
+    "pending": 2
   },
   "edition": {
     "id": "39129636453",
