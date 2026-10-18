@@ -1,20 +1,20 @@
 {
   "id": "public-ffd2818196374b7e8d985c5b",
-  "content_version": "2cbe5e8039bf776438df0732a99852f8862ea2759b59a4ddee28e102c003a1cb",
+  "content_version": "80f1aa6fa8580689664cef3ab7f554d3c14acf5ccfdd4a90d70946bf057c96e8",
   "analysis": {
-    "title_zh": "借助 ML Intern 构建小型模型：Qwen-Image 2.1 提示词改写案例",
-    "summary": "所给官方博客片段介绍作者借助 ML Intern，将 Qwen-Image 2.1 的提示词改写需求做成小型模型的实践，而非新产品发布公告。作者称，原官方模型为9B、约需20 GB内存，定制版本为0.8B并可在CPU运行；其输出有效率为99.7%，token用量约为教师模型的四分之一，整个项目计算支出为16美元。该案例适合参考提示词改写、教师模型标注与轻量模型定制，但所给片段未交代完整评测方法。",
-    "application": "建议：科研迁移可探索利用教师模型标注数据，构建适配特定提示词改写任务的轻量模型，并独立评估输出有效性、语义保真度与资源消耗。这属于迁移设想；原文数据是作者在官方博客中报告的单个项目结果，不代表官方已验证其对其他科研任务同样有效。",
-    "requirements": "原文明示：原官方9B模型约需20 GB内存，作者构建的0.8B版本可在CPU运行。16美元是该项目的计算支出，不是服务定价。账号、API、产品使用版本及部署流程未明确；使用条件见官方文档。",
+    "title_zh": "那个不存在的模型，于是你亲手做了出来（ML Intern）",
+    "summary": "【官方公告】作者称，自己希望获得一个较小版本的 Qwen-Image 2.1 提示词改写器；官方模型为 9B，约需 20 GB 内存，而 Hub 上只有同一 9B 模型的压缩副本。作者将需求描述给 ML Intern，次日得到可在 CPU 上运行的 0.8B 版本。据作者报告，该模型 99.7% 的情况下返回有效输出，使用的 token 约为教师模型的四分之一；包括 9B 模型标注 8,797 条请求在内，整个项目计算成本为 16 美元。作者还称随后以类似方式制作了五个模型。",
+    "application": "建议：科研迁移可将 ML Intern 作为按任务需求探索小型模型的案例，关注教师模型生成标注数据、学生模型缩小规模等思路；但是否适用于具体科研任务，需自行验证。99.7% 有效输出、token 用量和成本均为作者在公告中的报告，不应视为对其他任务或环境的官方验证效果。",
+    "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
-      "Last week, I wanted a small version of the prompt rewriter that ships with Qwen-Image 2.1.",
-      "The official one is a 9B model that needs about 20 GB of memory and thinks for thousands of tokens before writing a single paragraph.",
-      "So I described what I wanted to ML Intern , and the next day I had a 0.8B version that runs on a CPU.",
+      "The official one is a 9B model that needs about 20 GB of memory",
+      "the next day I had a 0.8B version that runs on a CPU.",
       "It returns valid output 99.7% of the time and uses about a quarter of the teacher's tokens.",
-      "The compute for the whole project, including having the 9B model label 8,797 example requests, came to USD 16."
+      "The compute for the whole project, including having the 9B model label 8,797 example requests, came to USD 16.",
+      "Over the course of the next few days, I made five more models the same way."
     ],
     "basis_url": "https://huggingface.co/blog/building-with-ml-intern"
   },
-  "analyzed_at": "2026-10-17T01:05:28.231631+00:00"
+  "analyzed_at": "2026-10-18T00:28:10.061884+00:00"
 }
