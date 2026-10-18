@@ -27,7 +27,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "本文聚焦《A multi-agent AI framework for explainable battery system maintenance》，暂未提供可用摘要，请查看原文。",
+      "summary": "【摘要】本文关注大型电池储能系统运维仍依赖事后诊断和专家经验、难以将电芯不一致性信号转化为实际行动的问题。作者提出由多维不一致性评估与大语言模型语义推理构成的运维框架，并以包含3,564个电芯的在役电池系统八个月现场数据为例，说明其如何形成结构化记录和维护建议。摘要称，该方法能回应真实运维问题，且相较传统专家驱动实践将响应时间和运营成本降低超过80%。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Elsevier BV",
@@ -71,11 +71,157 @@
       "focus_tags": [
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "【解读】若研究关注储能系统智能运维、可解释诊断或多智能体决策支持，本文摘要呈现了从电芯状态信号到维护行动的完整应用路径及现场数据验证，值得优先阅读；但具体评估仍需全文核实。",
+      "deep_read": {
+        "problem": "【摘要】研究针对大型电池储能系统运维对事后诊断和专家经验依赖较强的问题。电芯层面的不一致性可提示退化与安全风险，但摘要指出，缺少可扩展且可解释的决策支持框架，使这些信号难以有效转化为运维行动。摘要未提供更细的故障类型或既有流程分析。",
+        "method": "【摘要】作者提出不一致性驱动的运维范式，将常规监测数据转化为可解释、面向决策的指导。框架结合多维不一致性评估与基于大语言模型的语义推理，并采用多智能体框架生成可操作的维护见解。验证使用在役电池系统八个月现场数据，涉及电气、热及老化相关不一致性；更具体的模型与流程细节资料不足。",
+        "innovation": "【解读】从摘要可见，其主要方法特点是将定量不一致性诊断与语言模型语义推理相结合，并以多智能体框架面向实际运维查询输出可解释回答。该设计强调从监测数据到运维指导的衔接。摘要没有给出与其他方法的系统比较或创新性论证，不能据此判断其相对既有工作的原创程度。",
+        "findings": "【摘要】作者报告，该框架能够将电气、热及老化相关的不一致性整理为结构化运维记录，并转化为维护见解；对真实运维问题可提供准确且可解释的回应。摘要还称，相较传统专家驱动实践，响应时间和运营成本降低超过80%。具体指标定义、对照设置及误差数据未在所给资料中提供。",
+        "limitations": "【解读】当前资料仅为摘要，无法核查准确性如何衡量、专家对照如何设定、成本与响应时间的统计口径，也未说明现场系统和数据是否足以代表其他储能场景。摘要未报告失败案例、部署约束或安全风险评估细节。因此这些是现有资料的证据边界，并非作者在全文中明确承认的局限。",
+        "connection": "【解读】该研究与智能运维直接相关：它试图将电芯监测中的不一致性转化为可解释的维护决策。对可靠性研究而言，摘要涉及退化与安全风险预警；对结构设计的联系则较间接，可能体现在如何组织监测数据与决策接口。摘要没有证明其能改进结构设计或可靠性指标，相关效果仍需全文证据。",
+        "next_steps": "【建议】后续阅读宜核对不一致性指标的定义、数据处理及多智能体协作流程，并重点查看准确性、响应时间和成本的计算方式，以及专家对照与验证范围。若开展迁移研究，可建议在不同电池系统和运行条件下检验稳健性，并评估建议对安全与可靠性的实际影响；这些属于研究建议，不是摘要报告的结论。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "面向可解释电池系统维护的多智能体人工智能框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://arxiv.org/abs/2601.03007"
+      ],
+      "analyzed_at": "2026-10-18T00:29:11.050329+00:00",
+      "llm_model": "gpt-6-luna",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "电池储能系统的运维如何从电芯异常信号走向可解释、可执行的维护决策？这项研究提出一套多智能体 AI 框架，尝试把日常监测数据中的不一致性转化为面向运维问题的指导，并报告了现场数据应用结果。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从电芯不一致性到运维行动",
+            "paragraphs": [
+              "电池储能系统（BESSs）对电力系统稳定性日益重要，但摘要指出，其运维仍以被动响应和依赖专家诊断为主。电芯层面的不一致性可能预示退化与安全风险；难点在于，如何把这些定量信号转化为规模化、可解释的实际行动。",
+              "研究聚焦的正是这一衔接问题：让常规监测数据不止用于发现异常，还能形成面向运维决策的指导。摘要将其称为“不一致性驱动”的大型 BESS 运维范式。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "量化评估与语义推理相衔接",
+            "paragraphs": [
+              "框架将多维不一致性评估与基于大语言模型的语义推理结合，意在连接定量诊断与实际维护决策。摘要提到，电气、热和老化相关的不一致性先被整理为结构化运维记录，再经多智能体框架转化为维护洞见。",
+              "验证所用数据来自一套正在运行的电池系统，覆盖八个月现场数据、共 3,564 个电芯。摘要没有进一步说明各处理环节的具体算法、智能体分工或运维查询的构成，因此不宜据此补写实现细节。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "现场数据上的运维问答与效率表现",
+            "paragraphs": [
+              "摘要报告，该方法能够针对真实运维查询给出准确且可解释的响应，并将响应时间和运维成本相较传统专家驱动做法降低了 80% 以上。这是摘要陈述的总体比较结果；摘要未提供指标定义、计算方式或分项结果，因而不应将其外推为所有场景下的固定收益。",
+              "作者据此提出，这一框架为电池储能系统智能运维提供了可扩展路径，并指出其可能关联系统可靠性、安全性及储能的经济性整合。这些是摘要所述的应用意义，不等同于已逐项验证上述长期效果。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚未展开的验证边界",
+            "paragraphs": [
+              "摘要给出了单套在役电池系统、八个月数据和 3,564 个电芯的信息，但无法据此判断系统的具体类型、数据采集与筛选方式，也无法判断不同电芯或异常事件如何分布。摘要同样未说明是否有其他系统或场景参与验证。",
+              "虽然报告了与传统专家驱动实践的效率比较，摘要没有交代比较对象、基线流程、样本范围及统计方法，也未说明“准确”和“可解释”的评价标准。因此，现有摘要信息不足以判断效果在不同运维任务中的稳定性或可迁移范围；未报告这些细节不代表论文全文没有相关内容。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：追问决策链条如何被核验",
+            "paragraphs": [
+              "阅读启发：进一步阅读时，可关注多维不一致性如何被定义并整理成结构化记录，以及多智能体如何把记录用于回答运维查询。这些环节决定了定量诊断与自然语言建议之间的衔接是否清晰可追溯。",
+              "也值得核对论文对准确性、可解释性和效率比较的具体定义与验证范围，并留意建议如何对应可靠性与安全风险。以上是基于摘要提出的阅读问题，不代表摘要已给出这些问题的答案。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的研究过程示意",
+            "description": "仅概括摘要明确陈述的数据、分析衔接与应用环节，不表达未报告的实验配置或结果；此图为摘要示意，并非论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "现场监测数据",
+                "detail": "在役电池系统八个月数据，涉及3,564个电芯"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "多维不一致性评估",
+                "detail": "涵盖电气、热和老化相关不一致性"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "结构化运维记录",
+                "detail": "将不一致性整理为结构化记录"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "语义推理与多智能体",
+                "detail": "结合大语言模型语义推理和多智能体框架"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "运维查询响应",
+                "detail": "形成面向真实运维查询的可解释响应与维护洞见"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "用于评估"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "整理为记录"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "提供推理依据"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "转化为响应"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-18T00:38:23.817489+00:00",
+      "article_profile": "da269e27f007bc761dec0b1eedd058e0fd9473426379410442b10ab880a9c065",
+      "analysis_references": {},
+      "analysis_material_version": "93dbceed99a81297098f73030518065a341415dfae9e3412f09c2b04d78c3b3f",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "844574fe5c84",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-18T00:38:23.818883+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -100,7 +246,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract The discovery of high-performance multicomponent alloys is constrained by the vastness of composition space and the scarcity of experimentally validated data. We develop VIBANN, a variational information bottleneck-augmented attention-based neural network framework, for uncertainty-aware inverse design of exceptionally hard bulk multicomponent metallic glasses. The model learns chemically structured latent representations of alloy composition and indentation load to search the candidate space under constraints of chemical plausibility, novelty, and predictive uncertainty. Guided by th…",
+      "summary": "本文针对多组元合金成分空间庞大、实验数据稀缺且极值硬度难以可靠外推的问题，提出VIBANN，将自注意力、变分信息瓶颈、潜空间生成与不确定性筛选结合。作者以该框架设计并实验制备五种硼、铌、铁及难熔元素富集的块体金属玻璃，报告其形成直径2 mm的非晶棒材，A1在0.5 N下实测硬度2447±44 HV。模拟与结构表征显示，高硬度与致密堆积及局部结构特征相关。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -142,11 +288,79 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐给关注材料生成式设计、机器学习辅助合金发现及不确定性量化的读者，重点阅读其潜空间约束、候选筛选和实验闭环验证，并留意高硬度尾部低估及结论适用域限制。",
+      "deep_read": {
+        "problem": "[P1][P2] 作者聚焦块体多组元金属玻璃的高硬度设计：成分维度高、已验证数据稀少，且不同实验条件会影响硬度比较。既有经验准则难以系统优化高阶合金，常规预测方法也可能在训练样本稀疏的高硬度尾部过度自信或失准。本文要解决的是在兼顾非晶形成可行性的前提下，如何有约束地寻找高硬度新成分。",
+        "method": "[P14][P15][P16] VIBANN以56维成分和压痕载荷为输入，通过注意力加权、16维变分信息瓶颈、硬度预测及成分解码联合学习；设计阶段以GMM表示潜空间支持域，结合MCMC采样、梯度优化及可行性、新颖性、不确定性和保守硬度门槛筛选。作者还用MC dropout估计不确定性，并以AFM接触面积校正压痕硬度。",
+        "innovation": "[P3][P5][P15] 方法特色在于把信息压缩与预测、成分重构和潜空间搜索串成闭环，并将不确定性和数据支持度纳入候选接受条件，而非仅进行前向性能预测。作者还分析潜变量敏感性及元素归因，试图让生成方向可解释。解读：这些设计构成工作流层面的整合创新；其普适性仍需独立数据和不同合金家族验证。",
+        "findings": "[P6][P8][P9][P10] 作者报告筛得并制备五种候选合金，形成直径2 mm的非晶棒材；A1在0.5 N下实测2447±44 HV，且四种合金在10 N时仍高于1700 HV。MD结构分析显示硬度与致密配位、二十面体及类晶体局部结构、键长和键角规则性相关。作者用“higher fractions of densely coordinated environments”概括相关结构趋势。",
+        "limitations": "[P4][P13] 作者明确指出高硬度尾部覆盖变弱：最高10%真实硬度样本的平均有符号误差为−122.14 HV，2500 HV以上数据稀疏；潜变量对应的具体冶金含义也未确定。结论限于数据集所覆盖的块体MMG化学与工艺空间，并非所有非晶材料的普遍规律。原文件缺项：资料范围未报告已核实的原页缺项，故无可列页码或受影响结论；不得据此断言存在缺失公式。",
+        "connection": "[P5][P11][P12][P13] 对智能运维与可靠性研究的联系主要是方法迁移：可借鉴潜空间可行域、不确定性惩罚和保守下置信界筛选高风险候选；对结构设计可参考将成分及局部结构描述符与性能映射结合。解读：本文对象是新材料发现，不是设备运维或结构可靠性验证，不能直接视作这些领域的实证结论。",
+        "next_steps": "[P4][P13][P15] 建议在独立合金家族和更高硬度区间扩充实验数据，专门评估预测区间覆盖与极值偏差；同时对候选进行跨批次、跨载荷复测，并检验潜变量方向能否对应可测的局部结构量。建议比较不同不确定性估计和可行域模型对候选稳定性的影响；这些是后续研究设想，并非作者已报告的结果。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "面向高硬度块体多组元金属玻璃发现的注意力增强变分学习",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s41467-026-73008-0"
+      ],
+      "analyzed_at": "2026-10-18T00:33:52.124808+00:00",
+      "llm_model": "gpt-6-luna",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P14",
+          "P15",
+          "P16"
+        ],
+        "innovation": [
+          "P3",
+          "P5",
+          "P15"
+        ],
+        "findings": [
+          "P6",
+          "P8",
+          "P9",
+          "P10"
+        ],
+        "limitations": [
+          "P4",
+          "P13"
+        ],
+        "connection": [
+          "P5",
+          "P11",
+          "P12",
+          "P13"
+        ],
+        "next_steps": [
+          "P4",
+          "P13",
+          "P15"
+        ]
+      },
+      "analysis_material_version": "7407958e0a42d2d754337e7366172a3ee459a12ba3974fd18ceb0837a6fdd249",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "7d2eb31fa0cd",
+        "state": "published",
+        "updated_at": "2026-10-18T00:33:52.140649+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 19,
+        "covered": 19,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -168,7 +382,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Generative machine learning models have revolutionized material discovery by capturing complex structure–property relationships, yet extending these approaches to the inverse design of three-dimensional metamaterials remains limited by computational complexity and underexplored design spaces due to the lack of expressive representations. Here we present DiffuMeta, a generative framework integrating diffusion transformers with an algebraic language representation, encoding three-dimensional geometries as mathematical sentences. This compact, unified parameterization spans diverse topol…",
+      "summary": "本文提出DiffuMeta，将三维壳超材料的隐式几何方程表示为代数token序列，并用扩散Transformer学习结构与力学性能之间复杂关系。作者报告其可针对非线性应力–应变响应及有效泊松比进行条件生成，并处理训练分布外的目标组合；有限元分析和3D打印压缩实验用于验证设计效果。论文同时指出，目标须在物理可达设计空间内，当前生成过程尚未显式纳入物理约束。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -210,11 +424,75 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "若研究关注生成式设计、超材料逆问题或结构性能多目标控制，值得重点阅读：论文兼具明确的序列化表示、条件扩散方法、外推案例和打印实验验证，也讨论了物理可达性与制造约束。",
+      "deep_read": {
+        "problem": "壳超材料在大变形下涉及屈曲、接触等复杂机制，隐式方程到性能的映射高度非线性且存在一对多关系；依赖固定方程模板或逐一有限元搜索，难以覆盖多样拓扑并同时满足线性与非线性目标。作者试图解决这一逆向设计难题。[P1][P2]",
+        "method": "作者将周期节点曲面隐式方程拆分为函数组、数值系数和运算符构成的token序列，嵌入连续空间后以DiT逐步去噪生成设计，并以分类器自由引导条件化性能。训练数据包含隐式结构、压缩响应和均匀化刚度，响应及泊松比作为目标属性。[P3][P11]",
+        "innovation": "核心方法特点是以代数语言统一表达多种三维壳拓扑，而非仅在少数预设方程模板中调参，再以扩散Transformer学习序列与性能关系。作者还将线性弹性目标与大变形非线性响应联合条件化，并利用概率生成提供同一目标的多种候选解。[P2][P5][P8]",
+        "findings": "作者报告无条件生成有效率74.0%，新颖度与唯一性均为100%；对未见应力响应，生成设计误差优于训练集最佳匹配，并展示极端负泊松比与非线性响应的联合设计。3D打印压缩结果总体与模拟及目标曲线吻合。以上为作者报告，外推证据主要来自所展示案例。[P3][P7][P10][P12]",
+        "limitations": "作者明确指出目标必须在壳超材料设计空间内物理可达，外推受训练数据所含物理机制限制；生成时未显式施加物理约束，可能出现难以制造的结构。实验与模拟存在由材料差异、几何缺陷及残余应力造成的偏差；补充材料细节在当前资料中不可核验。[P10][P11]",
+        "connection": "【解读】该工作与生成式结构设计和智能运维中的“目标性能—结构方案”映射有关，也可为可靠性研究提供候选结构生成思路；但本文证据集中于超材料设计、力学仿真和压缩实验，不直接研究运维决策、服役寿命或可靠性指标，不能据此声称已解决这些问题。[P1][P9][P10]",
+        "next_steps": "【建议】可在作者提出的方向上，将可制造性或物理约束嵌入生成流程，针对训练数据覆盖不足的机制扩充样本，并用主动学习迭代选取仿真对象。若迁移至可靠性或智能运维，建议另行验证不确定性、缺陷敏感性及服役条件变化下的性能；这些是研究设想，不是本文结论。[P10]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "扩散Transformer驱动的超材料逆向设计代数语言模型",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s42256-026-01218-8"
+      ],
+      "analyzed_at": "2026-10-18T00:35:54.050787+00:00",
+      "llm_model": "gpt-6-luna",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P3",
+          "P11"
+        ],
+        "innovation": [
+          "P2",
+          "P5",
+          "P8"
+        ],
+        "findings": [
+          "P3",
+          "P7",
+          "P10",
+          "P12"
+        ],
+        "limitations": [
+          "P10",
+          "P11"
+        ],
+        "connection": [
+          "P1",
+          "P9",
+          "P10"
+        ],
+        "next_steps": [
+          "P10"
+        ]
+      },
+      "analysis_material_version": "4e5ef8d74c46072f97b3c175b2cc632f34c6277a7674edc7d1b105a9f77d358d",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "deb68601b0a1",
+        "state": "published",
+        "updated_at": "2026-10-18T00:35:54.067074+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 16,
+        "covered": 16,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -244,7 +522,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Artificial intelligence (AI)–assisted workflows have transformed materials discovery, enabling rapid exploration of chemical spaces of functional materials. Endowed with extraordinary optoelectronic properties, two-dimensional (2D) hybrid perovskites represent an exciting frontier, but current efforts to design 2D perovskites rely heavily on trial-and-error and expert intuition approaches, leaving most of the chemical space unexplored and compromising the design of hybrid materials with desired properties. Here, we introduce an inverse design workflow for Dion-Jacobson perovskites that is buil…",
+      "summary": "本文针对二维 Dion–Jacobson（DJ）杂化钙钛矿有机间隔分子的探索依赖试错、难以定向获得目标能级排列的问题，提出以可逆的 12 位分子指纹连接结构与性质。作者结合分子形变生成、高通量 DFT、可解释机器学习和合成可行性筛选，并通过约束指纹开展逆向搜索，报告了 Ib、IIa、IIb 类型候选。研究展示了面向目标性质的材料设计流程，但候选主要由计算预测，作者明确指出实验合成与能级表征尚未完成。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "American Association for the Advancement of Science (AAAS)",
@@ -286,11 +564,80 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐关注生成式材料设计、可解释机器学习或杂化钙钛矿的读者精读：文章将紧凑分子表示、性质预测、可行性筛选与逆向搜索串成完整流程，并呈现了具体设计规则及其验证边界。",
+      "deep_read": {
+        "problem": "[P2–P3] 作者指出，DJ 钙钛矿有机间隔分子的探索主要依赖试错，既有工作多采用正向搜索；面向能级排列的 AI 系统探索仍处早期。研究问题是如何从有限已知分子出发，建立能连接结构与目标能级、并能反向产生候选分子的设计流程，而非仅扩展已知化学结构。",
+        "method": "[P3–P8][P12] 作者以已报道间隔分子为起点，通过 13 种 morphing 操作扩展候选空间，以 12 位指纹编码结构；对 3,239 个分子计算前线能级并训练回归模型，选用 LASSO 进行可解释分析。之后结合 PubChem 可及性和 formability score 筛选，再对目标候选开展 HSE+SOC DFT 验证。",
+        "innovation": "[P3–P4][P18] 作者强调其贡献是针对 DJ 间隔分子设计可逆且可解释的紧凑指纹，使分子结构与指纹能够双向映射，并将该表示接入计算、机器学习与可行性筛选流程。不同分子可能共享指纹，因此目标是生成符合条件的候选集合，而非恢复唯一分子；这也是其设计思路的边界。",
+        "findings": "[P5–P10][P22] 作者报告 G0–G6 生成约 4.89 百万个假想间隔分子，覆盖 21 种已报道分子；以指纹约束逆向搜索后，得到 2 个 Ib、12 个 IIa、42 个 IIb 候选。文中提出 Ib 倾向需要至少五个线性稠合苯环，IIa 可由延长共轭提高 HOMO，IIb 倾向吡啶型氮取代以降低 LUMO；这些为计算筛选结果。",
+        "limitations": "[P4][P8–P11] 作者说明指纹所定义的化学空间并不穷尽，遗漏如烷基骨架和非连续共轭结构；PubChem 可及性只是合成可及性的代理，formability 筛选未考虑溶剂、配比、温度、pH 与溶解度。作者还称合成与能级表征实验验证超出本文范围。所给资料未指出原文件缺项，故无可据以列出的缺页或缺失公式。",
+        "connection": "[P1][P3–P4][P11] 研究与生成式材料设计方向直接相关：以结构表示承载目标性质，再通过约束表示反向搜索候选。解读：这种“特征表示—性质模型—筛选”的框架可供其他材料设计任务借鉴；但资料没有给出智能运维、服役寿命或可靠性验证，不能据此认定其已适用于这些方向。",
+        "next_steps": "[P8][P11] 建议优先对筛选候选开展受控合成与能级表征，并将实验结果反馈给预测流程；同时补入溶解度及实际合成条件等信息，检验代理筛选与实验可行性的对应关系。作者也建议进一步表示复杂分子的三维构型和动态特征，并将流程扩展至电荷输运等目标性质。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "面向目标能级的二维杂化钙钛矿有机分子指纹与逆向设计",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://arxiv.org/pdf/2509.25728"
+      ],
+      "analyzed_at": "2026-10-18T00:23:02.167001+00:00",
+      "llm_model": "gpt-6-luna",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P3",
+          "P8",
+          "P12"
+        ],
+        "innovation": [
+          "P3",
+          "P4",
+          "P18"
+        ],
+        "findings": [
+          "P5",
+          "P6",
+          "P9",
+          "P10",
+          "P22"
+        ],
+        "limitations": [
+          "P4",
+          "P8",
+          "P9",
+          "P11"
+        ],
+        "connection": [
+          "P1",
+          "P3",
+          "P11"
+        ],
+        "next_steps": [
+          "P8",
+          "P11"
+        ]
+      },
+      "analysis_material_version": "319a90e4865cf25609908a50725ef2dffebd9cdfd7b824942ad5f6d1d710907e",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "58ea00d358bc",
+        "state": "published",
+        "updated_at": "2026-10-18T00:23:02.201331+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 22,
+        "covered": 22,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -317,7 +664,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "本文聚焦《Large language model-based fault diagnosis for lithium-ion batteries in cloud-edge systems》，暂未提供可用摘要，请查看原文。",
+      "summary": "论文摘要介绍一种用于锂离子电池故障诊断的云边框架，目标是应对复杂条件下边缘方法表现受限的问题。方法包含基于数据无序度的下采样（DDP）和分层微调的大语言模型，依次进行故障检测、故障类型识别与严重程度分级。作者称评估使用五种电池的3000多个样本，兼有实验室测量和真实储能数据；7B参数、4-bit量化配置在准确性与效率间取得最佳权衡，并报告故障分类和分级准确率分别为99.2%和96.8%。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Elsevier BV",
@@ -361,11 +708,43 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "若你关注电池智能运维或云边协同诊断，可重点阅读其信号压缩与分层诊断流程，以及模型规模、量化和准确率之间的权衡；但摘要不足以判断实际部署条件和结果可复现性。",
+      "deep_read": {
+        "problem": "【摘要】作者将锂离子电池安全事件与可靠性担忧相联系，并指出边缘方法在复杂条件下可能遇到困难，因而提出稳健故障诊断需求。摘要没有具体列出安全事件类型、复杂工况定义或现有边缘方法失效案例，问题背景的细节仍需阅读全文核对。",
+        "method": "【摘要】框架采用云边架构，包含基于数据无序度（DDP）的下采样信号压缩，以及分层微调的大语言模型；模型按故障检测、故障类型识别、严重程度分级的顺序执行任务。摘要未说明云端与边缘端的具体分工、训练细节或DDP计算形式。",
+        "innovation": "【解读】从摘要可辨认的设计特点是把信号下采样与分阶段LLM诊断纳入云边故障诊断框架，并比较模型规模及量化配置。作者没有在摘要中明确宣称这些组成分别构成何种理论创新，也未提供与既有研究的系统比较细节，因此不宜据此扩大创新主张。",
+        "findings": "【摘要】评估涵盖五种电池的3000多个样本，数据来源包括实验室测量和真实储能数据。作者报告7-billion-parameter、4-bit量化模型在准确性与效率之间权衡最佳，故障分类与分级准确率分别为99.2%和96.8%，并称其显著优于传统方法；未给出对照方法名称或统计细节。",
+        "limitations": "【摘要】当前材料只有摘要，未提供数据划分、样本构成、类别分布、指标定义、基线设置、置信区间或部署测试细节，无法独立核验准确率及“显著优于”的依据。以上是资料范围带来的判断限制，并非作者明确报告的研究局限；其他局限证据不足。",
+        "connection": "【解读】该研究与智能运维的联系较直接：其任务链覆盖故障检测、类型识别和严重程度分级，可能对应从异常发现到维护决策的信息环节。对结构设计和可靠性研究的意义则不能由摘要直接确认；摘要仅提及电池可靠性关切，没有报告设计优化或可靠性建模结论。",
+        "next_steps": "【建议】后续精读可核查DDP压缩前后的信号保留情况、云边任务划分、跨电池类型验证方式，以及分类和分级准确率的统计口径；还应查看传统方法对照与推理效率的具体结果。若开展迁移研究，可评估该分层流程在不同储能工况中的适用性，但摘要未证明其泛化能力。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "云边系统中基于大语言模型的锂离子电池故障诊断",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.xcrp.2026.103210"
+      ],
+      "analyzed_at": "2026-10-18T00:24:31.124302+00:00",
+      "llm_model": "gpt-6-luna",
+      "analysis_references": {},
+      "analysis_material_version": "2f2dc57fa6887264f5f99e43d8dd9aa425e29fe8951f2743e140a51161fbd47e",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "a921eaaa3fb4",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-18T00:24:31.130085+00:00",
+        "basis": "abstract",
+        "article_state": "failed",
+        "article_stage": "writing",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -388,7 +767,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Generative molecular design for drug discovery has recently achieved a wave of experimental validation. Language models operating on string-based representations of molecules are amongst the most successful architectures. The most important factor for downstream success is whether an in silico oracle (computational predictor of a molecule property) is well correlated with the desired end point (such as binding affinity). To this end, current methods use cheaper proxy oracles with a higher throughput before evaluating the most promising subset with high-fidelity oracles. The ability to…",
+      "summary": "本文提出 Saturn，将 Mamba 语言模型与强化学习、经验回放及 SMILES 增强结合，用于预算受限的生成式分子优化。作者分析了样本效率与分子多样性的权衡，并在蛋白靶点多参数优化及 DFT 电子性质优化中进行评估。结果显示，Saturn 在若干优化指标上表现突出，但局部利用可能牺牲多样性，且其对更高精度结合亲和力评估及分子可合成性的适用性仍有待验证。[P1–P9]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -499,11 +878,80 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐关注生成式分子设计、强化学习或高成本模拟优化的读者阅读：论文不仅提出 Saturn，还结合基准比较、DFT 案例和效率—多样性分析讨论其效果与适用边界。[P2–P9]",
+      "deep_read": {
+        "problem": "[P1–P2] 论文关注生成式分子设计中的样本效率问题：高保真 oracle 计算昂贵，通常只能先用较便宜的代理评估筛选候选。作者进一步考察如何在有限 oracle 预算下直接优化目标，并分析生成质量、评估成本与分子多样性之间的关系；本文没有直接研究运维或结构可靠性问题。",
+        "method": "[P2–P6][P9] Saturn 以 Mamba 作为 SMILES 自回归生成骨干，结合强化学习、经验回放和 SMILES 随机化增强；回放缓冲区保存高奖励分子，并可选用遗传算法。评估包括 toy MPO、五个蛋白靶点的 docking 目标，以及 DFT 计算的 HOMO–LUMO gap 优化；各实验预算和种子数依任务而异。",
+        "innovation": "[P3–P5][P9] 作者的主要贡献是提出 Saturn 框架，并解释 Augmented Memory 的作用机制：增强回放分子的不同 SMILES 表达会提高相应生成可能性。论文还将 Mamba 的生成行为概括为“hop and locally exploit”，并系统讨论批量大小、增强轮数与多样性之间的关联；这些是作者在本文实验范围内提出的解释。",
+        "findings": "[P2–P8][P13–P14] 作者报告增加增强轮数通常可提高样本效率，但可能降低多样性；加入遗传算法有助于维持多样性，产率提升则较有限。Saturn 在若干 docking 与严格筛选指标上表现较好，并在 DFT 案例中将 HOMO–LUMO gap 分布推向较低值。扩展表格提供了架构效率和 novel hit ratio 的比较证据。",
+        "limitations": "[P8–P9] 作者指出，本文尚未将 Saturn 验证于准确度更高的结合亲和力 oracle，且仅用合成可及性分数不足以充分判断分子是否可合成。局部利用也未必适用于所有目标；面对活性悬崖时，相似分子可能具有显著不同的性质。资料未报告原文件缺项，故此处没有可确认的缺页或缺公式需要补列。",
+        "connection": "[P2–P9] 【解读】本文与智能运维、结构设计和可靠性研究没有直接实验联系。其有限预算下结合回放、代理或高保真评估以及探索—利用权衡的思路，可能为其他昂贵目标优化提供方法参考；但迁移到工程领域的有效性不能由本文结果直接推出，仍需针对任务验证。",
+        "next_steps": "[P9] 【建议】可在新的工程优化问题中，将昂贵仿真设为高保真评估器，比较回放与探索策略对预算利用和解集多样性的影响；尤其应设计能识别目标突变或局部失效的评估，并报告重复实验及不确定性。此为研究设想，不是作者已完成或验证的工作。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "记忆操控下的高样本效率生成式分子设计",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s42256-026-01200-4.pdf"
+      ],
+      "analyzed_at": "2026-10-18T00:27:44.321841+00:00",
+      "llm_model": "gpt-6-luna",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P2",
+          "P6",
+          "P9"
+        ],
+        "innovation": [
+          "P3",
+          "P4",
+          "P5",
+          "P9"
+        ],
+        "findings": [
+          "P2",
+          "P3",
+          "P5",
+          "P6",
+          "P7",
+          "P8",
+          "P13",
+          "P14"
+        ],
+        "limitations": [
+          "P8",
+          "P9"
+        ],
+        "connection": [
+          "P2",
+          "P9"
+        ],
+        "next_steps": [
+          "P9"
+        ]
+      },
+      "analysis_material_version": "22a0538d2dcda1e28d9d3645223e54b3dfe4897dee18be61c224b1d3e8b716a7",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "867bcae40076",
+        "state": "published",
+        "updated_at": "2026-10-18T00:27:44.341567+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 17,
+        "covered": 17,
+        "pdf_available": true,
+        "issues": []
+      }
     }
   ],
   "extended": [],
@@ -531,7 +979,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "本文聚焦《A multi-agent AI framework for explainable battery system maintenance》，暂未提供可用摘要，请查看原文。",
+      "summary": "【摘要】本文关注大型电池储能系统运维仍依赖事后诊断和专家经验、难以将电芯不一致性信号转化为实际行动的问题。作者提出由多维不一致性评估与大语言模型语义推理构成的运维框架，并以包含3,564个电芯的在役电池系统八个月现场数据为例，说明其如何形成结构化记录和维护建议。摘要称，该方法能回应真实运维问题，且相较传统专家驱动实践将响应时间和运营成本降低超过80%。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Elsevier BV",
@@ -575,11 +1023,157 @@
       "focus_tags": [
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "【解读】若研究关注储能系统智能运维、可解释诊断或多智能体决策支持，本文摘要呈现了从电芯状态信号到维护行动的完整应用路径及现场数据验证，值得优先阅读；但具体评估仍需全文核实。",
+      "deep_read": {
+        "problem": "【摘要】研究针对大型电池储能系统运维对事后诊断和专家经验依赖较强的问题。电芯层面的不一致性可提示退化与安全风险，但摘要指出，缺少可扩展且可解释的决策支持框架，使这些信号难以有效转化为运维行动。摘要未提供更细的故障类型或既有流程分析。",
+        "method": "【摘要】作者提出不一致性驱动的运维范式，将常规监测数据转化为可解释、面向决策的指导。框架结合多维不一致性评估与基于大语言模型的语义推理，并采用多智能体框架生成可操作的维护见解。验证使用在役电池系统八个月现场数据，涉及电气、热及老化相关不一致性；更具体的模型与流程细节资料不足。",
+        "innovation": "【解读】从摘要可见，其主要方法特点是将定量不一致性诊断与语言模型语义推理相结合，并以多智能体框架面向实际运维查询输出可解释回答。该设计强调从监测数据到运维指导的衔接。摘要没有给出与其他方法的系统比较或创新性论证，不能据此判断其相对既有工作的原创程度。",
+        "findings": "【摘要】作者报告，该框架能够将电气、热及老化相关的不一致性整理为结构化运维记录，并转化为维护见解；对真实运维问题可提供准确且可解释的回应。摘要还称，相较传统专家驱动实践，响应时间和运营成本降低超过80%。具体指标定义、对照设置及误差数据未在所给资料中提供。",
+        "limitations": "【解读】当前资料仅为摘要，无法核查准确性如何衡量、专家对照如何设定、成本与响应时间的统计口径，也未说明现场系统和数据是否足以代表其他储能场景。摘要未报告失败案例、部署约束或安全风险评估细节。因此这些是现有资料的证据边界，并非作者在全文中明确承认的局限。",
+        "connection": "【解读】该研究与智能运维直接相关：它试图将电芯监测中的不一致性转化为可解释的维护决策。对可靠性研究而言，摘要涉及退化与安全风险预警；对结构设计的联系则较间接，可能体现在如何组织监测数据与决策接口。摘要没有证明其能改进结构设计或可靠性指标，相关效果仍需全文证据。",
+        "next_steps": "【建议】后续阅读宜核对不一致性指标的定义、数据处理及多智能体协作流程，并重点查看准确性、响应时间和成本的计算方式，以及专家对照与验证范围。若开展迁移研究，可建议在不同电池系统和运行条件下检验稳健性，并评估建议对安全与可靠性的实际影响；这些属于研究建议，不是摘要报告的结论。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "面向可解释电池系统维护的多智能体人工智能框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://arxiv.org/abs/2601.03007"
+      ],
+      "analyzed_at": "2026-10-18T00:29:11.050329+00:00",
+      "llm_model": "gpt-6-luna",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "电池储能系统的运维如何从电芯异常信号走向可解释、可执行的维护决策？这项研究提出一套多智能体 AI 框架，尝试把日常监测数据中的不一致性转化为面向运维问题的指导，并报告了现场数据应用结果。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从电芯不一致性到运维行动",
+            "paragraphs": [
+              "电池储能系统（BESSs）对电力系统稳定性日益重要，但摘要指出，其运维仍以被动响应和依赖专家诊断为主。电芯层面的不一致性可能预示退化与安全风险；难点在于，如何把这些定量信号转化为规模化、可解释的实际行动。",
+              "研究聚焦的正是这一衔接问题：让常规监测数据不止用于发现异常，还能形成面向运维决策的指导。摘要将其称为“不一致性驱动”的大型 BESS 运维范式。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "量化评估与语义推理相衔接",
+            "paragraphs": [
+              "框架将多维不一致性评估与基于大语言模型的语义推理结合，意在连接定量诊断与实际维护决策。摘要提到，电气、热和老化相关的不一致性先被整理为结构化运维记录，再经多智能体框架转化为维护洞见。",
+              "验证所用数据来自一套正在运行的电池系统，覆盖八个月现场数据、共 3,564 个电芯。摘要没有进一步说明各处理环节的具体算法、智能体分工或运维查询的构成，因此不宜据此补写实现细节。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "现场数据上的运维问答与效率表现",
+            "paragraphs": [
+              "摘要报告，该方法能够针对真实运维查询给出准确且可解释的响应，并将响应时间和运维成本相较传统专家驱动做法降低了 80% 以上。这是摘要陈述的总体比较结果；摘要未提供指标定义、计算方式或分项结果，因而不应将其外推为所有场景下的固定收益。",
+              "作者据此提出，这一框架为电池储能系统智能运维提供了可扩展路径，并指出其可能关联系统可靠性、安全性及储能的经济性整合。这些是摘要所述的应用意义，不等同于已逐项验证上述长期效果。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚未展开的验证边界",
+            "paragraphs": [
+              "摘要给出了单套在役电池系统、八个月数据和 3,564 个电芯的信息，但无法据此判断系统的具体类型、数据采集与筛选方式，也无法判断不同电芯或异常事件如何分布。摘要同样未说明是否有其他系统或场景参与验证。",
+              "虽然报告了与传统专家驱动实践的效率比较，摘要没有交代比较对象、基线流程、样本范围及统计方法，也未说明“准确”和“可解释”的评价标准。因此，现有摘要信息不足以判断效果在不同运维任务中的稳定性或可迁移范围；未报告这些细节不代表论文全文没有相关内容。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：追问决策链条如何被核验",
+            "paragraphs": [
+              "阅读启发：进一步阅读时，可关注多维不一致性如何被定义并整理成结构化记录，以及多智能体如何把记录用于回答运维查询。这些环节决定了定量诊断与自然语言建议之间的衔接是否清晰可追溯。",
+              "也值得核对论文对准确性、可解释性和效率比较的具体定义与验证范围，并留意建议如何对应可靠性与安全风险。以上是基于摘要提出的阅读问题，不代表摘要已给出这些问题的答案。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的研究过程示意",
+            "description": "仅概括摘要明确陈述的数据、分析衔接与应用环节，不表达未报告的实验配置或结果；此图为摘要示意，并非论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "现场监测数据",
+                "detail": "在役电池系统八个月数据，涉及3,564个电芯"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "多维不一致性评估",
+                "detail": "涵盖电气、热和老化相关不一致性"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "结构化运维记录",
+                "detail": "将不一致性整理为结构化记录"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "语义推理与多智能体",
+                "detail": "结合大语言模型语义推理和多智能体框架"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "运维查询响应",
+                "detail": "形成面向真实运维查询的可解释响应与维护洞见"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "用于评估"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "整理为记录"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "提供推理依据"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "转化为响应"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-18T00:38:23.817489+00:00",
+      "article_profile": "da269e27f007bc761dec0b1eedd058e0fd9473426379410442b10ab880a9c065",
+      "analysis_references": {},
+      "analysis_material_version": "93dbceed99a81297098f73030518065a341415dfae9e3412f09c2b04d78c3b3f",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "844574fe5c84",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-18T00:38:23.818883+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -604,7 +1198,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract The discovery of high-performance multicomponent alloys is constrained by the vastness of composition space and the scarcity of experimentally validated data. We develop VIBANN, a variational information bottleneck-augmented attention-based neural network framework, for uncertainty-aware inverse design of exceptionally hard bulk multicomponent metallic glasses. The model learns chemically structured latent representations of alloy composition and indentation load to search the candidate space under constraints of chemical plausibility, novelty, and predictive uncertainty. Guided by th…",
+      "summary": "本文针对多组元合金成分空间庞大、实验数据稀缺且极值硬度难以可靠外推的问题，提出VIBANN，将自注意力、变分信息瓶颈、潜空间生成与不确定性筛选结合。作者以该框架设计并实验制备五种硼、铌、铁及难熔元素富集的块体金属玻璃，报告其形成直径2 mm的非晶棒材，A1在0.5 N下实测硬度2447±44 HV。模拟与结构表征显示，高硬度与致密堆积及局部结构特征相关。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -646,11 +1240,79 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐给关注材料生成式设计、机器学习辅助合金发现及不确定性量化的读者，重点阅读其潜空间约束、候选筛选和实验闭环验证，并留意高硬度尾部低估及结论适用域限制。",
+      "deep_read": {
+        "problem": "[P1][P2] 作者聚焦块体多组元金属玻璃的高硬度设计：成分维度高、已验证数据稀少，且不同实验条件会影响硬度比较。既有经验准则难以系统优化高阶合金，常规预测方法也可能在训练样本稀疏的高硬度尾部过度自信或失准。本文要解决的是在兼顾非晶形成可行性的前提下，如何有约束地寻找高硬度新成分。",
+        "method": "[P14][P15][P16] VIBANN以56维成分和压痕载荷为输入，通过注意力加权、16维变分信息瓶颈、硬度预测及成分解码联合学习；设计阶段以GMM表示潜空间支持域，结合MCMC采样、梯度优化及可行性、新颖性、不确定性和保守硬度门槛筛选。作者还用MC dropout估计不确定性，并以AFM接触面积校正压痕硬度。",
+        "innovation": "[P3][P5][P15] 方法特色在于把信息压缩与预测、成分重构和潜空间搜索串成闭环，并将不确定性和数据支持度纳入候选接受条件，而非仅进行前向性能预测。作者还分析潜变量敏感性及元素归因，试图让生成方向可解释。解读：这些设计构成工作流层面的整合创新；其普适性仍需独立数据和不同合金家族验证。",
+        "findings": "[P6][P8][P9][P10] 作者报告筛得并制备五种候选合金，形成直径2 mm的非晶棒材；A1在0.5 N下实测2447±44 HV，且四种合金在10 N时仍高于1700 HV。MD结构分析显示硬度与致密配位、二十面体及类晶体局部结构、键长和键角规则性相关。作者用“higher fractions of densely coordinated environments”概括相关结构趋势。",
+        "limitations": "[P4][P13] 作者明确指出高硬度尾部覆盖变弱：最高10%真实硬度样本的平均有符号误差为−122.14 HV，2500 HV以上数据稀疏；潜变量对应的具体冶金含义也未确定。结论限于数据集所覆盖的块体MMG化学与工艺空间，并非所有非晶材料的普遍规律。原文件缺项：资料范围未报告已核实的原页缺项，故无可列页码或受影响结论；不得据此断言存在缺失公式。",
+        "connection": "[P5][P11][P12][P13] 对智能运维与可靠性研究的联系主要是方法迁移：可借鉴潜空间可行域、不确定性惩罚和保守下置信界筛选高风险候选；对结构设计可参考将成分及局部结构描述符与性能映射结合。解读：本文对象是新材料发现，不是设备运维或结构可靠性验证，不能直接视作这些领域的实证结论。",
+        "next_steps": "[P4][P13][P15] 建议在独立合金家族和更高硬度区间扩充实验数据，专门评估预测区间覆盖与极值偏差；同时对候选进行跨批次、跨载荷复测，并检验潜变量方向能否对应可测的局部结构量。建议比较不同不确定性估计和可行域模型对候选稳定性的影响；这些是后续研究设想，并非作者已报告的结果。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "面向高硬度块体多组元金属玻璃发现的注意力增强变分学习",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s41467-026-73008-0"
+      ],
+      "analyzed_at": "2026-10-18T00:33:52.124808+00:00",
+      "llm_model": "gpt-6-luna",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P14",
+          "P15",
+          "P16"
+        ],
+        "innovation": [
+          "P3",
+          "P5",
+          "P15"
+        ],
+        "findings": [
+          "P6",
+          "P8",
+          "P9",
+          "P10"
+        ],
+        "limitations": [
+          "P4",
+          "P13"
+        ],
+        "connection": [
+          "P5",
+          "P11",
+          "P12",
+          "P13"
+        ],
+        "next_steps": [
+          "P4",
+          "P13",
+          "P15"
+        ]
+      },
+      "analysis_material_version": "7407958e0a42d2d754337e7366172a3ee459a12ba3974fd18ceb0837a6fdd249",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "7d2eb31fa0cd",
+        "state": "published",
+        "updated_at": "2026-10-18T00:33:52.140649+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 19,
+        "covered": 19,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -672,7 +1334,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Generative machine learning models have revolutionized material discovery by capturing complex structure–property relationships, yet extending these approaches to the inverse design of three-dimensional metamaterials remains limited by computational complexity and underexplored design spaces due to the lack of expressive representations. Here we present DiffuMeta, a generative framework integrating diffusion transformers with an algebraic language representation, encoding three-dimensional geometries as mathematical sentences. This compact, unified parameterization spans diverse topol…",
+      "summary": "本文提出DiffuMeta，将三维壳超材料的隐式几何方程表示为代数token序列，并用扩散Transformer学习结构与力学性能之间复杂关系。作者报告其可针对非线性应力–应变响应及有效泊松比进行条件生成，并处理训练分布外的目标组合；有限元分析和3D打印压缩实验用于验证设计效果。论文同时指出，目标须在物理可达设计空间内，当前生成过程尚未显式纳入物理约束。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -714,11 +1376,75 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "若研究关注生成式设计、超材料逆问题或结构性能多目标控制，值得重点阅读：论文兼具明确的序列化表示、条件扩散方法、外推案例和打印实验验证，也讨论了物理可达性与制造约束。",
+      "deep_read": {
+        "problem": "壳超材料在大变形下涉及屈曲、接触等复杂机制，隐式方程到性能的映射高度非线性且存在一对多关系；依赖固定方程模板或逐一有限元搜索，难以覆盖多样拓扑并同时满足线性与非线性目标。作者试图解决这一逆向设计难题。[P1][P2]",
+        "method": "作者将周期节点曲面隐式方程拆分为函数组、数值系数和运算符构成的token序列，嵌入连续空间后以DiT逐步去噪生成设计，并以分类器自由引导条件化性能。训练数据包含隐式结构、压缩响应和均匀化刚度，响应及泊松比作为目标属性。[P3][P11]",
+        "innovation": "核心方法特点是以代数语言统一表达多种三维壳拓扑，而非仅在少数预设方程模板中调参，再以扩散Transformer学习序列与性能关系。作者还将线性弹性目标与大变形非线性响应联合条件化，并利用概率生成提供同一目标的多种候选解。[P2][P5][P8]",
+        "findings": "作者报告无条件生成有效率74.0%，新颖度与唯一性均为100%；对未见应力响应，生成设计误差优于训练集最佳匹配，并展示极端负泊松比与非线性响应的联合设计。3D打印压缩结果总体与模拟及目标曲线吻合。以上为作者报告，外推证据主要来自所展示案例。[P3][P7][P10][P12]",
+        "limitations": "作者明确指出目标必须在壳超材料设计空间内物理可达，外推受训练数据所含物理机制限制；生成时未显式施加物理约束，可能出现难以制造的结构。实验与模拟存在由材料差异、几何缺陷及残余应力造成的偏差；补充材料细节在当前资料中不可核验。[P10][P11]",
+        "connection": "【解读】该工作与生成式结构设计和智能运维中的“目标性能—结构方案”映射有关，也可为可靠性研究提供候选结构生成思路；但本文证据集中于超材料设计、力学仿真和压缩实验，不直接研究运维决策、服役寿命或可靠性指标，不能据此声称已解决这些问题。[P1][P9][P10]",
+        "next_steps": "【建议】可在作者提出的方向上，将可制造性或物理约束嵌入生成流程，针对训练数据覆盖不足的机制扩充样本，并用主动学习迭代选取仿真对象。若迁移至可靠性或智能运维，建议另行验证不确定性、缺陷敏感性及服役条件变化下的性能；这些是研究设想，不是本文结论。[P10]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "扩散Transformer驱动的超材料逆向设计代数语言模型",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s42256-026-01218-8"
+      ],
+      "analyzed_at": "2026-10-18T00:35:54.050787+00:00",
+      "llm_model": "gpt-6-luna",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P3",
+          "P11"
+        ],
+        "innovation": [
+          "P2",
+          "P5",
+          "P8"
+        ],
+        "findings": [
+          "P3",
+          "P7",
+          "P10",
+          "P12"
+        ],
+        "limitations": [
+          "P10",
+          "P11"
+        ],
+        "connection": [
+          "P1",
+          "P9",
+          "P10"
+        ],
+        "next_steps": [
+          "P10"
+        ]
+      },
+      "analysis_material_version": "4e5ef8d74c46072f97b3c175b2cc632f34c6277a7674edc7d1b105a9f77d358d",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "deb68601b0a1",
+        "state": "published",
+        "updated_at": "2026-10-18T00:35:54.067074+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 16,
+        "covered": 16,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -748,7 +1474,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Artificial intelligence (AI)–assisted workflows have transformed materials discovery, enabling rapid exploration of chemical spaces of functional materials. Endowed with extraordinary optoelectronic properties, two-dimensional (2D) hybrid perovskites represent an exciting frontier, but current efforts to design 2D perovskites rely heavily on trial-and-error and expert intuition approaches, leaving most of the chemical space unexplored and compromising the design of hybrid materials with desired properties. Here, we introduce an inverse design workflow for Dion-Jacobson perovskites that is buil…",
+      "summary": "本文针对二维 Dion–Jacobson（DJ）杂化钙钛矿有机间隔分子的探索依赖试错、难以定向获得目标能级排列的问题，提出以可逆的 12 位分子指纹连接结构与性质。作者结合分子形变生成、高通量 DFT、可解释机器学习和合成可行性筛选，并通过约束指纹开展逆向搜索，报告了 Ib、IIa、IIb 类型候选。研究展示了面向目标性质的材料设计流程，但候选主要由计算预测，作者明确指出实验合成与能级表征尚未完成。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "American Association for the Advancement of Science (AAAS)",
@@ -790,11 +1516,80 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐关注生成式材料设计、可解释机器学习或杂化钙钛矿的读者精读：文章将紧凑分子表示、性质预测、可行性筛选与逆向搜索串成完整流程，并呈现了具体设计规则及其验证边界。",
+      "deep_read": {
+        "problem": "[P2–P3] 作者指出，DJ 钙钛矿有机间隔分子的探索主要依赖试错，既有工作多采用正向搜索；面向能级排列的 AI 系统探索仍处早期。研究问题是如何从有限已知分子出发，建立能连接结构与目标能级、并能反向产生候选分子的设计流程，而非仅扩展已知化学结构。",
+        "method": "[P3–P8][P12] 作者以已报道间隔分子为起点，通过 13 种 morphing 操作扩展候选空间，以 12 位指纹编码结构；对 3,239 个分子计算前线能级并训练回归模型，选用 LASSO 进行可解释分析。之后结合 PubChem 可及性和 formability score 筛选，再对目标候选开展 HSE+SOC DFT 验证。",
+        "innovation": "[P3–P4][P18] 作者强调其贡献是针对 DJ 间隔分子设计可逆且可解释的紧凑指纹，使分子结构与指纹能够双向映射，并将该表示接入计算、机器学习与可行性筛选流程。不同分子可能共享指纹，因此目标是生成符合条件的候选集合，而非恢复唯一分子；这也是其设计思路的边界。",
+        "findings": "[P5–P10][P22] 作者报告 G0–G6 生成约 4.89 百万个假想间隔分子，覆盖 21 种已报道分子；以指纹约束逆向搜索后，得到 2 个 Ib、12 个 IIa、42 个 IIb 候选。文中提出 Ib 倾向需要至少五个线性稠合苯环，IIa 可由延长共轭提高 HOMO，IIb 倾向吡啶型氮取代以降低 LUMO；这些为计算筛选结果。",
+        "limitations": "[P4][P8–P11] 作者说明指纹所定义的化学空间并不穷尽，遗漏如烷基骨架和非连续共轭结构；PubChem 可及性只是合成可及性的代理，formability 筛选未考虑溶剂、配比、温度、pH 与溶解度。作者还称合成与能级表征实验验证超出本文范围。所给资料未指出原文件缺项，故无可据以列出的缺页或缺失公式。",
+        "connection": "[P1][P3–P4][P11] 研究与生成式材料设计方向直接相关：以结构表示承载目标性质，再通过约束表示反向搜索候选。解读：这种“特征表示—性质模型—筛选”的框架可供其他材料设计任务借鉴；但资料没有给出智能运维、服役寿命或可靠性验证，不能据此认定其已适用于这些方向。",
+        "next_steps": "[P8][P11] 建议优先对筛选候选开展受控合成与能级表征，并将实验结果反馈给预测流程；同时补入溶解度及实际合成条件等信息，检验代理筛选与实验可行性的对应关系。作者也建议进一步表示复杂分子的三维构型和动态特征，并将流程扩展至电荷输运等目标性质。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "面向目标能级的二维杂化钙钛矿有机分子指纹与逆向设计",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://arxiv.org/pdf/2509.25728"
+      ],
+      "analyzed_at": "2026-10-18T00:23:02.167001+00:00",
+      "llm_model": "gpt-6-luna",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P3",
+          "P8",
+          "P12"
+        ],
+        "innovation": [
+          "P3",
+          "P4",
+          "P18"
+        ],
+        "findings": [
+          "P5",
+          "P6",
+          "P9",
+          "P10",
+          "P22"
+        ],
+        "limitations": [
+          "P4",
+          "P8",
+          "P9",
+          "P11"
+        ],
+        "connection": [
+          "P1",
+          "P3",
+          "P11"
+        ],
+        "next_steps": [
+          "P8",
+          "P11"
+        ]
+      },
+      "analysis_material_version": "319a90e4865cf25609908a50725ef2dffebd9cdfd7b824942ad5f6d1d710907e",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "58ea00d358bc",
+        "state": "published",
+        "updated_at": "2026-10-18T00:23:02.201331+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 22,
+        "covered": 22,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -821,7 +1616,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "本文聚焦《Large language model-based fault diagnosis for lithium-ion batteries in cloud-edge systems》，暂未提供可用摘要，请查看原文。",
+      "summary": "论文摘要介绍一种用于锂离子电池故障诊断的云边框架，目标是应对复杂条件下边缘方法表现受限的问题。方法包含基于数据无序度的下采样（DDP）和分层微调的大语言模型，依次进行故障检测、故障类型识别与严重程度分级。作者称评估使用五种电池的3000多个样本，兼有实验室测量和真实储能数据；7B参数、4-bit量化配置在准确性与效率间取得最佳权衡，并报告故障分类和分级准确率分别为99.2%和96.8%。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Elsevier BV",
@@ -865,11 +1660,43 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "若你关注电池智能运维或云边协同诊断，可重点阅读其信号压缩与分层诊断流程，以及模型规模、量化和准确率之间的权衡；但摘要不足以判断实际部署条件和结果可复现性。",
+      "deep_read": {
+        "problem": "【摘要】作者将锂离子电池安全事件与可靠性担忧相联系，并指出边缘方法在复杂条件下可能遇到困难，因而提出稳健故障诊断需求。摘要没有具体列出安全事件类型、复杂工况定义或现有边缘方法失效案例，问题背景的细节仍需阅读全文核对。",
+        "method": "【摘要】框架采用云边架构，包含基于数据无序度（DDP）的下采样信号压缩，以及分层微调的大语言模型；模型按故障检测、故障类型识别、严重程度分级的顺序执行任务。摘要未说明云端与边缘端的具体分工、训练细节或DDP计算形式。",
+        "innovation": "【解读】从摘要可辨认的设计特点是把信号下采样与分阶段LLM诊断纳入云边故障诊断框架，并比较模型规模及量化配置。作者没有在摘要中明确宣称这些组成分别构成何种理论创新，也未提供与既有研究的系统比较细节，因此不宜据此扩大创新主张。",
+        "findings": "【摘要】评估涵盖五种电池的3000多个样本，数据来源包括实验室测量和真实储能数据。作者报告7-billion-parameter、4-bit量化模型在准确性与效率之间权衡最佳，故障分类与分级准确率分别为99.2%和96.8%，并称其显著优于传统方法；未给出对照方法名称或统计细节。",
+        "limitations": "【摘要】当前材料只有摘要，未提供数据划分、样本构成、类别分布、指标定义、基线设置、置信区间或部署测试细节，无法独立核验准确率及“显著优于”的依据。以上是资料范围带来的判断限制，并非作者明确报告的研究局限；其他局限证据不足。",
+        "connection": "【解读】该研究与智能运维的联系较直接：其任务链覆盖故障检测、类型识别和严重程度分级，可能对应从异常发现到维护决策的信息环节。对结构设计和可靠性研究的意义则不能由摘要直接确认；摘要仅提及电池可靠性关切，没有报告设计优化或可靠性建模结论。",
+        "next_steps": "【建议】后续精读可核查DDP压缩前后的信号保留情况、云边任务划分、跨电池类型验证方式，以及分类和分级准确率的统计口径；还应查看传统方法对照与推理效率的具体结果。若开展迁移研究，可评估该分层流程在不同储能工况中的适用性，但摘要未证明其泛化能力。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "云边系统中基于大语言模型的锂离子电池故障诊断",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.xcrp.2026.103210"
+      ],
+      "analyzed_at": "2026-10-18T00:24:31.124302+00:00",
+      "llm_model": "gpt-6-luna",
+      "analysis_references": {},
+      "analysis_material_version": "2f2dc57fa6887264f5f99e43d8dd9aa425e29fe8951f2743e140a51161fbd47e",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "a921eaaa3fb4",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-18T00:24:31.130085+00:00",
+        "basis": "abstract",
+        "article_state": "failed",
+        "article_stage": "writing",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -892,7 +1719,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Generative molecular design for drug discovery has recently achieved a wave of experimental validation. Language models operating on string-based representations of molecules are amongst the most successful architectures. The most important factor for downstream success is whether an in silico oracle (computational predictor of a molecule property) is well correlated with the desired end point (such as binding affinity). To this end, current methods use cheaper proxy oracles with a higher throughput before evaluating the most promising subset with high-fidelity oracles. The ability to…",
+      "summary": "本文提出 Saturn，将 Mamba 语言模型与强化学习、经验回放及 SMILES 增强结合，用于预算受限的生成式分子优化。作者分析了样本效率与分子多样性的权衡，并在蛋白靶点多参数优化及 DFT 电子性质优化中进行评估。结果显示，Saturn 在若干优化指标上表现突出，但局部利用可能牺牲多样性，且其对更高精度结合亲和力评估及分子可合成性的适用性仍有待验证。[P1–P9]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -1003,11 +1830,80 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐关注生成式分子设计、强化学习或高成本模拟优化的读者阅读：论文不仅提出 Saturn，还结合基准比较、DFT 案例和效率—多样性分析讨论其效果与适用边界。[P2–P9]",
+      "deep_read": {
+        "problem": "[P1–P2] 论文关注生成式分子设计中的样本效率问题：高保真 oracle 计算昂贵，通常只能先用较便宜的代理评估筛选候选。作者进一步考察如何在有限 oracle 预算下直接优化目标，并分析生成质量、评估成本与分子多样性之间的关系；本文没有直接研究运维或结构可靠性问题。",
+        "method": "[P2–P6][P9] Saturn 以 Mamba 作为 SMILES 自回归生成骨干，结合强化学习、经验回放和 SMILES 随机化增强；回放缓冲区保存高奖励分子，并可选用遗传算法。评估包括 toy MPO、五个蛋白靶点的 docking 目标，以及 DFT 计算的 HOMO–LUMO gap 优化；各实验预算和种子数依任务而异。",
+        "innovation": "[P3–P5][P9] 作者的主要贡献是提出 Saturn 框架，并解释 Augmented Memory 的作用机制：增强回放分子的不同 SMILES 表达会提高相应生成可能性。论文还将 Mamba 的生成行为概括为“hop and locally exploit”，并系统讨论批量大小、增强轮数与多样性之间的关联；这些是作者在本文实验范围内提出的解释。",
+        "findings": "[P2–P8][P13–P14] 作者报告增加增强轮数通常可提高样本效率，但可能降低多样性；加入遗传算法有助于维持多样性，产率提升则较有限。Saturn 在若干 docking 与严格筛选指标上表现较好，并在 DFT 案例中将 HOMO–LUMO gap 分布推向较低值。扩展表格提供了架构效率和 novel hit ratio 的比较证据。",
+        "limitations": "[P8–P9] 作者指出，本文尚未将 Saturn 验证于准确度更高的结合亲和力 oracle，且仅用合成可及性分数不足以充分判断分子是否可合成。局部利用也未必适用于所有目标；面对活性悬崖时，相似分子可能具有显著不同的性质。资料未报告原文件缺项，故此处没有可确认的缺页或缺公式需要补列。",
+        "connection": "[P2–P9] 【解读】本文与智能运维、结构设计和可靠性研究没有直接实验联系。其有限预算下结合回放、代理或高保真评估以及探索—利用权衡的思路，可能为其他昂贵目标优化提供方法参考；但迁移到工程领域的有效性不能由本文结果直接推出，仍需针对任务验证。",
+        "next_steps": "[P9] 【建议】可在新的工程优化问题中，将昂贵仿真设为高保真评估器，比较回放与探索策略对预算利用和解集多样性的影响；尤其应设计能识别目标突变或局部失效的评估，并报告重复实验及不确定性。此为研究设想，不是作者已完成或验证的工作。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "记忆操控下的高样本效率生成式分子设计",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s42256-026-01200-4.pdf"
+      ],
+      "analyzed_at": "2026-10-18T00:27:44.321841+00:00",
+      "llm_model": "gpt-6-luna",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P2",
+          "P6",
+          "P9"
+        ],
+        "innovation": [
+          "P3",
+          "P4",
+          "P5",
+          "P9"
+        ],
+        "findings": [
+          "P2",
+          "P3",
+          "P5",
+          "P6",
+          "P7",
+          "P8",
+          "P13",
+          "P14"
+        ],
+        "limitations": [
+          "P8",
+          "P9"
+        ],
+        "connection": [
+          "P2",
+          "P9"
+        ],
+        "next_steps": [
+          "P9"
+        ]
+      },
+      "analysis_material_version": "22a0538d2dcda1e28d9d3645223e54b3dfe4897dee18be61c224b1d3e8b716a7",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "867bcae40076",
+        "state": "published",
+        "updated_at": "2026-10-18T00:27:44.341567+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 17,
+        "covered": 17,
+        "pdf_available": true,
+        "issues": []
+      }
     }
   ],
   "source_status": {
@@ -1914,13 +2810,13 @@
     "unavailable": 30
   },
   "analysis_status": {
-    "ready_core": 0,
+    "ready_core": 6,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 6
+    "pending": 0
   },
   "edition": {
     "id": "39048142063",
