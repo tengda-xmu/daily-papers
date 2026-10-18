@@ -1932,7 +1932,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "工业搅拌罐中底物空间分布影响过程设计与控制，但高保真CFD计算成本限制了常规应用。作者以760次CFD模拟训练代理模型，结合全局工况与局部空间描述符预测完整三维浓度场。摘要报告注意力神经网络测试R²≈0.91，并实现毫秒级推理，相比CFD最高加速百万倍。其价值在于支持运行空间探索与数字孪生；当前仅有摘要，尚不能核查误差分布及实际部署效果。[摘要]",
+      "summary": "本文针对工业搅拌罐中CFD预测三维底物浓度场耗时的问题，训练监督式代理模型，将全局操作条件与局部空间特征映射为浓度场。作者比较多种模型后报告，Modified-Attention NN在留出测试集上表现最佳；但误差仍集中于进料极值区和叶轮间高剪切区。研究未做实验验证，且模型受单一几何及单相MRF/RANS、Monod动力学设定限制。其价值在于展示快速筛查潜力，而非证明可替代CFD或跨尺度通用。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -2190,25 +2190,25 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "title_zh": "机器学习代理模型实现工业生物反应器三维底物梯度快速预测",
-      "recommendation": "推荐关注其将全局运行条件与局部空间信息共同用于三维场预测的方法，尤其适合数字孪生和快速运行优化研究参考；但不能据此认定其已具备故障诊断或可靠性评估能力。[摘要；解读]",
+      "title_zh": "工业生物反应器三维底物梯度的机器学习快速预测",
+      "recommendation": "建议阅读，尤其适合关注反应器建模、CFD代理模型及机器学习验证设计的读者；文中对局部误差、留出测试和适用边界的讨论，可帮助判断快速预测结果能否支撑工程决策。",
       "deep_read": {
-        "problem": "研究针对工业搅拌罐底物梯度预测的精度与计算成本矛盾。摘要指出高保真CFD虽能提供详细预测，却“are computationally intensive”，限制常规应用。核心问题是能否降低空间场预测成本，使其适应更频繁的工况探索，而非直接开展设备故障识别。[摘要；解读]",
-        "method": "作者以760次CFD模拟训练代理模型，输入同时包含全局运行条件与局部空间描述符。前者涉及搅拌速度、进料策略、流体性质及生物动力学参数等，后者例如到进料点的距离；输出为完整三维底物浓度场。摘要明确使用“local spatial descriptors”，但未交代网络细节。[摘要]",
-        "innovation": "解读：值得关注的是将工况信息与空间位置特征结合，让代理模型承担三维浓度场的快速映射，而不只预测单一整体指标。摘要以“couple hydrodynamics and biokinetics”概括模型能力；但缺少既有方法比较及消融结果，不能据此认定其架构具有首创性。[摘要；解读]",
-        "findings": "摘要报告注意力神经网络在所比较方法中精度最高，测试R²≈0.91，并能捕捉关键混合特征；其“millisecond-scale inference”对应相较CFD最高百万倍加速。上述为作者报告的结果，当前资料未提供计算硬件、计时边界或分工况误差，无法进一步核验。[摘要]",
-        "limitations": "当前证据仅为摘要，未提供训练测试划分、模拟覆盖范围、物理约束及实验实测验证信息，因此无法判断对未见工况的泛化能力。这些属于资料缺口，并非已证实的方法缺陷。“trained on $$760$$ 760 CFD simulations”也不足以证明模型已在真实装置中得到验证。[摘要；解读]",
-        "connection": "解读：摘要提出支持“real-time optimization and digital-twin frameworks”，与智能运维中的状态预测和运行优化存在方法联系。其与结构设计的关联主要限于反应器设计决策支持，并非结构力学分析；对于失效概率、寿命预测或可靠性指标，当前资料没有直接证据。[摘要；解读]",
-        "next_steps": "建议：后续获取全文时，优先核查进料位置、黏度和液位变化下的测试设置，以及浓度极值区域的误差与守恒表现。若迁移至智能运维，可研究预测不确定性与优化决策风险的联系，并以实测数据检验适用边界；这些是研究建议，不是摘要已报告的工作。[摘要；建议]"
+        "problem": "[P1][P7] 作者希望解决高保真CFD预测工业搅拌罐三维底物梯度计算成本高、难以用于常规优化的问题，并指出既有方法多关注低维输出或二维流场。研究目标是依据工况及空间位置直接预测完整三维浓度分布；作者称目前缺少可直接比较的同类体积场代理模型，因此以底层CFD作基准，而非与其他三维代理横向比较。",
+        "method": "[P2][P8-P13] 作者基于760组CFD模拟构建监督学习数据，采用LHS覆盖全局工况，并把全局参数与局部空间描述符共同用于预测。比较线性、树模型、SVR及多种神经网络结构；以qS/qS,max作为主要目标，按模拟分组进行交叉验证，并保留独立测试模拟。作者还用体积加权KDE检查子样本分布。",
+        "innovation": "[P7][P12] 作者强调方法直接从全局操作条件映射到完整三维浓度场，并设计不同神经网络输入拓扑，使全局工况能够调制局部空间特征。相较聚焦低维指标或二维流场的既有工作，这是空间预测粒度上的推进。解读：本文贡献侧重代理建模框架及目标变量表示，而非提出新的CFD方程或实验验证体系。",
+        "findings": "[P3-P6] 作者报告Modified-Attention NN在独立测试集上MSE为0.0054、R²为0.91；Focused-Attention NN的空间界面呈现较清晰，而前者全局MSE略低。学习曲线显示高容量模型继续受益于更多模拟，但边际改善减小。图示及正文指出误差集中在进料附近、耗竭区与叶轮间边界，因此作者将模型定位为快速筛查工具。",
+        "limitations": "[P6-P9][P13] 作者明确未进行实验验证，数据来自单一几何、单相RANS/MRF和Monod动力学，模型因此是CFD一致的模拟器而非实验验证的反应器预测器；局部极值及高剪切区可靠性较弱。原页[P8]同时写明采用96 m³几何并称总容积170 m³，表述不一致，可能影响对设备规模的理解；本资料未提供可据以消解该差异的信息。",
+        "connection": "[P6-P7] 与智能运维方向的联系主要是潜在的快速工况扫描、在线设定值优化和数字孪生集成，作者将其视为应用前景，而非已验证的运维系统。与结构设计和可靠性研究的联系较间接：三维梯度及局部误差可提示需重点检查的区域，但现有证据不足以证明其能直接支持设备可靠性判定或结构改型。",
+        "next_steps": "[P7][P9] 建议先针对进料极值区、底部耗竭区及叶轮间高剪切区开展定向CFD采样，并用实验测量检验预测偏差；再评估不同尺度、几何、流体性质及动力学条件下的迁移能力。若用于智能运维，应进一步验证在线数据输入、工况域外识别与不确定性告警。以上为建议，作者提出的扩展方向不等同于本文已完成的验证。"
       },
       "analysis_status": "ready",
-      "analysis_basis": "abstract",
+      "analysis_basis": "full_text",
       "analysis_kind": "model",
       "analysis_sources": [
-        "https://doi.org/10.1038/s41467-026-78273-7"
+        "https://www.nature.com/articles/s41467-026-78273-7_reference.pdf"
       ],
-      "analyzed_at": "2026-10-16T06:55:27.523951+00:00",
-      "llm_model": "gpt-6.1-sol",
+      "analyzed_at": "2026-10-18T02:16:31.282671+00:00",
+      "llm_model": "gpt-6-luna",
       "article": {
         "version": 3,
         "basis": "abstract",
@@ -2320,20 +2320,59 @@
       },
       "article_updated_at": "2026-10-16T07:24:13.221835+00:00",
       "article_profile": "3c03cd29b6a7ccea0e592659e8ab953ff89b85c46374d12c4824f946edbd5db8",
-      "analysis_references": {},
-      "analysis_material_version": "eacebd0e0881586141ada7cc074948dd3db40c30b64233836e2681d5f216ccff",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P7"
+        ],
+        "method": [
+          "P2",
+          "P8",
+          "P9",
+          "P10",
+          "P11",
+          "P12",
+          "P13"
+        ],
+        "innovation": [
+          "P7",
+          "P12"
+        ],
+        "findings": [
+          "P3",
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "limitations": [
+          "P6",
+          "P7",
+          "P8",
+          "P9",
+          "P13"
+        ],
+        "connection": [
+          "P6",
+          "P7"
+        ],
+        "next_steps": [
+          "P7",
+          "P9"
+        ]
+      },
+      "analysis_material_version": "e1d0b6635c542a3b060890650b52a2169ea07b9b396efdb2949bfdd452384ce0",
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "15b8068e8614",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T07:24:13.221835+00:00",
-        "basis": "abstract",
-        "article_state": "failed",
-        "article_stage": "review",
+        "state": "published",
+        "updated_at": "2026-10-18T02:16:31.322333+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
         "reason": "",
-        "total": 0,
-        "covered": 0,
-        "pdf_available": false,
+        "total": 15,
+        "covered": 15,
+        "pdf_available": true,
         "issues": []
       }
     },
@@ -2850,7 +2889,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "本文针对声学谷霍尔绝缘体的目标带隙逆向设计，提出双智能体协作框架：设计智能体基于强化学习生成的数据库微调，管理智能体负责需求解析、任务规划、仿真调用及结果生成。系统可输出结构参数、能带、本征模态场和可制造模型文件。摘要称测试集带隙误差分析支持设计精度，但未给出具体数值与对照结果。解读：其阅读价值主要在于连接语言需求、结构生成和数值验证的工作流，而非已获充分量化证明的性能优势。[摘要]",
+      "summary": "本文提出面向声学谷霍尔绝缘体（AVHI）的双智能体逆向设计框架：Designer-LLM根据目标带隙生成结构参数，Manager-LLM解析需求并协调仿真和多模态输出。作者以强化学习构建结构—带隙数据库，并用其微调模型；测试集评估及可编程阵列实验用于检验带隙匹配与声波路径调控。作者报告实验与模拟的主要传播路径总体一致，同时指出实测带宽和响应幅值存在偏差。[P1–P8]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -3073,24 +3112,24 @@
         "智能体"
       ],
       "title_zh": "大语言模型驱动的声学谷霍尔绝缘体逆向设计",
-      "recommendation": "建议重点关注生成式结构设计与仿真验证的衔接，以及双智能体的职责划分；当前仅有摘要，尚不能判断其相对传统优化方法的精度或效率优势。[摘要]",
+      "recommendation": "推荐关注声学超材料逆向设计、LLM智能体协作或仿真—实验闭环的读者，尤其是希望了解自然语言需求如何连接结构生成、数值验证和实体声波调控的研究者。",
       "deep_read": {
-        "problem": "研究面向声学谷霍尔绝缘体的目标带隙逆向设计。摘要指出，此类材料能够实现“robust directional wave transport”，并具有通信、传感和波调控应用前景。解读：核心问题是如何把简短设计需求转化为满足带隙目标的结构，而非仅生成语言描述。[摘要]",
-        "method": "框架由两个协作智能体组成。Designer-LLM利用强化学习生成的声学谷霍尔绝缘体数据库进行微调，承担带隙目标驱动的结构设计；Manager-LLM负责规划、语义解析、仿真工具调用和多模态结果生成。摘要未说明模型规模、数据量或微调细节。[摘要]",
-        "innovation": "摘要明确提出“modular LLM-agent framework”，将语义交互、逆向设计、数值验证和多模态输出整合为统一流程。解读：可关注的创新线索是专业设计模型与流程管理模型的分工及集成方式；仅凭摘要不能认定其为首创，也不能确认相对已有框架的优势。[摘要]",
-        "findings": "系统可按简短需求输出结构参数、能带、本征模态场及可制造模型文件。摘要称测试集带隙误差分析表明设计具有“reliable bandgap-matching accuracy”。但未提供误差数值、样本规模或比较基线，因此只能确认作者报告了准确性验证，不能量化其效果。[摘要]",
-        "limitations": "当前证据仅为摘要，未披露数据库覆盖范围、训练与测试划分、误差分布、计算成本及失败案例，也未说明是否进行了实物制造验证。这些属于资料缺口，而非已经证实的方法缺陷。摘要中的可制造模型文件输出，也不能直接等同于制造可行性已经得到验证。[摘要]",
-        "connection": "解读：本文与生成式结构设计直接相关，展示了从需求表达、结构生成到仿真结果输出的集成思路。对智能运维的联系主要是任务编排与工具调用方式可供参考，摘要未涉及运维实验；对可靠性研究，也不能把稳健波传输或带隙匹配精度等同于寿命与失效可靠性证据。[摘要]",
-        "next_steps": "建议后续获取全文，优先核查目标带隙的定义、误差指标、测试集独立性，以及与传统优化和非微调模型的对照。可迁移研究建议是加入制造偏差或材料参数扰动下的设计验证，考察目标匹配与稳健性的关系；该方向属于延伸设想，并非摘要报告的成果。[摘要]"
+        "problem": "[P1–P2] AVHI的拓扑带隙依赖散射体几何构型，目标频段因而需要针对性设计；传统拓扑优化和深度学习方法是作者讨论的既有路线。本文将问题设定为如何从自然语言带隙需求得到结构参数，并进一步完成仿真验证与多模态结果交付。作者指出，AVHI界面可支持方向性声波传输，但现有页面未提供对既有方法的定量比较结论。",
+        "method": "[P2–P4][P8] 作者构建Manager-LLM与Designer-LLM协作架构：前者解析需求、规划任务和调用工具，后者依据目标带隙生成结构参数。训练数据来自强化学习探索并经筛选的结构—带隙映射；模型以Meta-Llama-3-8B为基础，采用LoRA监督微调。工具链校验几何、重建完整单元并调用COMSOL计算能带与场分布，最终输出图表及模型文件。",
+        "innovation": "[P1–P2][P8] 作者的主要方法贡献是把自然语言交互、专用结构生成模型、数值模拟和可制造文件生成组织到双智能体工作流中，而非仅输出候选参数。结构数据用原几何的六分之一表示以降低参数维度，随后通过镜像和旋转对称重建完整单元。作者还报告双智能体配置的任务成功率高于单模型配置；此处是作者报告，不能据此推断所有任务均有提升。",
+        "findings": "[P3–P6] 作者报告筛选后的训练集包含57,556个结构，四个分层测试集各含500个样本；归一化误差在不同频率范围保持可比，作者据此认为设计精度相对稳定。架构消融中，双智能体配置成功率高于单模型配置。实体验证采用6×6可编程阵列，作者称实测与模拟的主要传播路径及频谱趋势总体一致，并展示不同阵列状态下的路径切换。[P6–P7]",
+        "limitations": "[P6][P8] 作者指出实验有效带宽较理想数值模型更窄，传输响应幅值也有偏差，并将其可能原因归于机械间隙、热黏性损耗、打印表面粗糙度和有限阵列边界效应。数据集与代码未公开，仅可向通讯作者合理申请，独立复核因此受限。逐页核对记录还指出P3公式(1)的文字提取存在乱码，已依据原页纠正；记录未报告原文件缺项，不应把该提取错误说成缺失公式。",
+        "connection": "[P2][P6–P8] 解读：该框架与智能运维、结构设计和可靠性研究的联系，在于将需求解析、参数生成、仿真验证和实体测量串成可检查的工作流。对工程应用而言，几何校验、目标频段带隙识别及实验对照可作为候选验证环节；但本文研究对象是AVHI，现有资料没有证明该流程已用于设备运维或一般结构可靠性评估。",
+        "next_steps": "[P6][P8] 建议：后续可在获取数据与代码的前提下，独立复核带隙误差和架构消融结果，并针对实验中带宽变窄及幅值偏差分析机械间隙、材料损耗和有限尺寸因素的影响。也可进一步检验不同目标频段或设计条件下的有效性；这些属于研究建议，现有资料并未报告相关扩展实验或结果。"
       },
       "analysis_status": "ready",
-      "analysis_basis": "abstract",
+      "analysis_basis": "full_text",
       "analysis_kind": "model",
       "analysis_sources": [
-        "https://doi.org/10.1038/s41524-026-02349-7"
+        "https://www.nature.com/articles/s41524-026-02349-7_reference.pdf"
       ],
-      "analyzed_at": "2026-10-16T07:04:29.491222+00:00",
-      "llm_model": "gpt-6.1-sol",
+      "analyzed_at": "2026-10-18T02:20:08.025989+00:00",
+      "llm_model": "gpt-6-luna",
       "article": {
         "version": 3,
         "basis": "abstract",
@@ -3164,21 +3203,68 @@
       },
       "article_updated_at": "2026-10-16T07:38:50.869816+00:00",
       "article_profile": "cf0ca83567d5c43d55b7c24519aba8c1ee08e7bb761d0ef940fb64c059048e53",
-      "analysis_references": {},
-      "analysis_material_version": "5a35a9b959ae95271ee4719e1aefb187dedd395ff161fbd9c42fbb999bb99c70",
-      "analysis_issues": [],
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P2",
+          "P4",
+          "P8"
+        ],
+        "innovation": [
+          "P1",
+          "P2",
+          "P8"
+        ],
+        "findings": [
+          "P3",
+          "P4",
+          "P6",
+          "P7"
+        ],
+        "limitations": [
+          "P3",
+          "P6",
+          "P8"
+        ],
+        "connection": [
+          "P2",
+          "P6",
+          "P8"
+        ],
+        "next_steps": [
+          "P6",
+          "P8"
+        ]
+      },
+      "analysis_material_version": "83ceef596d6b702e92e717d785bd99f6032ef647a3ed0e65f7de68401d7db719",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "公式(1)原图可读；文字提取将分段奖励公式中的指数、平方项及条件符号错乱。原图公式可辨为条件分段形式，且正文定义 f_t、f_{t-1} 与 σ；据此不沿用提取文本的乱码公式。"
+        }
+      ],
       "reading_status": {
         "paper_id": "d5b8590dae6a",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T07:38:50.869816+00:00",
-        "basis": "abstract",
-        "article_state": "complete",
-        "article_stage": "",
+        "state": "published",
+        "updated_at": "2026-10-18T02:20:08.038195+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
         "reason": "",
-        "total": 0,
-        "covered": 0,
-        "pdf_available": false,
-        "issues": []
+        "total": 9,
+        "covered": 9,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "公式(1)原图可读；文字提取将分段奖励公式中的指数、平方项及条件符号错乱。原图公式可辨为条件分段形式，且正文定义 f_t、f_{t-1} 与 σ；据此不沿用提取文本的乱码公式。"
+          }
+        ]
       }
     },
     {
@@ -4968,13 +5054,14 @@
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "bff62d107e4c",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T07:05:26.259093+00:00",
-        "basis": "abstract",
+        "state": "retry",
+        "updated_at": "2026-10-18T02:13:12.473204+00:00",
+        "basis": "full_text",
         "article_state": "complete",
         "article_stage": "",
         "reason": "",
-        "total": 0,
+        "next_retry_at": "2026-10-18T02:18:12.473204+00:00",
+        "total": 107,
         "covered": 0,
         "pdf_available": false,
         "issues": []
@@ -6198,15 +6285,17 @@
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "fa241d43484d",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T07:49:14.615885+00:00",
-        "basis": "abstract",
+        "state": "retry",
+        "updated_at": "2026-10-18T02:22:52.740024+00:00",
+        "basis": "full_text",
         "article_state": "complete",
         "article_stage": "",
         "reason": "",
-        "total": 0,
-        "covered": 0,
-        "pdf_available": false,
+        "error_code": "assessment_evidence",
+        "next_retry_at": "2026-10-18T02:27:52.740024+00:00",
+        "total": 14,
+        "covered": 14,
+        "pdf_available": true,
         "issues": []
       }
     },
@@ -7085,8 +7174,8 @@
         "state": "awaiting_fulltext",
         "updated_at": "2026-10-18T01:00:55.375636+00:00",
         "basis": "abstract",
-        "article_state": "retry",
-        "article_stage": "review",
+        "article_state": "failed",
+        "article_stage": "writing",
         "reason": "restricted",
         "total": 0,
         "covered": 0,
@@ -10166,11 +10255,11 @@
       "reading_status": {
         "paper_id": "a7897e08db6d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T07:25:35.172346+00:00",
+        "updated_at": "2026-10-18T02:17:40.928607+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -17475,11 +17564,11 @@
       "reading_status": {
         "paper_id": "229ee813a122",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T06:46:50.136283+00:00",
+        "updated_at": "2026-10-18T02:09:44.205443+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -22536,8 +22625,8 @@
         "state": "awaiting_fulltext",
         "updated_at": "2026-10-18T01:09:27.551288+00:00",
         "basis": "abstract",
-        "article_state": "retry",
-        "article_stage": "writing",
+        "article_state": "failed",
+        "article_stage": "review",
         "reason": "restricted",
         "total": 0,
         "covered": 0,
@@ -26035,10 +26124,10 @@
       "reading_status": {
         "paper_id": "8a3a74d4605b",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:54:41.853509+00:00",
+        "updated_at": "2026-10-18T01:49:38.710389+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "writing",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -27896,10 +27985,10 @@
       "reading_status": {
         "paper_id": "448942aa1a69",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:50:54.076458+00:00",
+        "updated_at": "2026-10-18T01:35:45.695637+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "review",
         "reason": "restricted",
         "total": 0,
         "covered": 0,
@@ -28411,7 +28500,7 @@
         "state": "awaiting_fulltext",
         "updated_at": "2026-10-18T01:10:11.084702+00:00",
         "basis": "abstract",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "writing",
         "reason": "not_found",
         "total": 0,
@@ -29119,10 +29208,10 @@
       "reading_status": {
         "paper_id": "abd65bfce7b5",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:50:11.678157+00:00",
+        "updated_at": "2026-10-18T01:28:19.246401+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "review",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -29656,8 +29745,8 @@
         "state": "awaiting_fulltext",
         "updated_at": "2026-10-18T01:16:27.528640+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "writing",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -38485,8 +38574,8 @@
         "state": "awaiting_fulltext",
         "updated_at": "2026-10-18T01:13:42.136916+00:00",
         "basis": "abstract",
-        "article_state": "retry",
-        "article_stage": "review",
+        "article_state": "failed",
+        "article_stage": "writing",
         "reason": "restricted",
         "total": 0,
         "covered": 0,
@@ -38718,7 +38807,7 @@
         "state": "awaiting_fulltext",
         "updated_at": "2026-10-18T01:02:28.788496+00:00",
         "basis": "abstract",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "review",
         "reason": "not_found",
         "total": 0,
@@ -39511,8 +39600,8 @@
         "state": "awaiting_fulltext",
         "updated_at": "2026-10-18T01:07:58.884218+00:00",
         "basis": "abstract",
-        "article_state": "retry",
-        "article_stage": "writing",
+        "article_state": "failed",
+        "article_stage": "review",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -44622,7 +44711,7 @@
       "reading_status": {
         "paper_id": "565888b08f8a",
         "state": "missing_evidence",
-        "updated_at": "2026-10-16T01:48:32.845733+00:00",
+        "updated_at": "2026-10-18T01:22:58.012652+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -45444,7 +45533,7 @@
       "reading_status": {
         "paper_id": "de48174471ad",
         "state": "missing_evidence",
-        "updated_at": "2026-10-16T01:49:06.012116+00:00",
+        "updated_at": "2026-10-18T01:24:19.649016+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -46084,7 +46173,7 @@
       "reading_status": {
         "paper_id": "e1a150bc890d",
         "state": "missing_evidence",
-        "updated_at": "2026-10-16T01:49:20.446141+00:00",
+        "updated_at": "2026-10-18T01:24:34.796862+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -48266,7 +48355,7 @@
       "reading_status": {
         "paper_id": "0b617d13cb6b",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T07:43:38.953805+00:00",
+        "updated_at": "2026-10-18T02:21:25.306044+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -52107,16 +52196,64 @@
       "reading_status": {
         "paper_id": "ab9b44c6ecc0",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:51:38.879745+00:00",
+        "updated_at": "2026-10-18T01:51:40.869730+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "电子测试仪器与自动测试系统（ATS）的运维涉及故障诊断、测试配置和流程规划等知识密集型任务。本文综述检索增强生成（RAG）如何结合大语言模型与外部知识库，为理解这些应用及其工程落地问题提供了框架。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从通用大模型走向测试领域知识支持",
+            "paragraphs": [
+              "大语言模型（LLM）发展迅速，但电子测试仪器的运行与维护依赖及时、准确的领域知识。摘要将RAG视为一种有前景的路径：把LLM的推理与生成能力，同外部知识库的时效性和准确性结合起来，以应对知识密集型挑战。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "综述架构、任务与工程考量",
+            "paragraphs": [
+              "本文是一篇关于RAG及其在电子测试仪器领域应用的综述。摘要说明，文章回顾RAG的基本架构，包括检索机制、知识库构建和生成模型；结合仪器与ATS的运行特点，分析故障诊断、测试配置、流程规划等任务，并讨论代表性RAG应用及知识库构建、效果评估等工程实施考量。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "归纳应用形态并指出开放方向",
+            "paragraphs": [
+              "摘要列出的代表性应用包括智能故障诊断系统、自适应测试参数配置和交互式问答助手。文章还概述了开放问题与未来研究方向，包括多模态RAG、面向分布式知识库的联邦学习和边缘部署。摘要将这些内容定位为应用讨论与研究展望，并未报告具体系统的量化性能或验证结果。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要不足以判断应用验证边界",
+            "paragraphs": [
+              "现有材料是完整摘要，而非论文全文，因此无法据此判断综述纳入文献的数量与筛选方式，也无法确认各应用案例所用数据、比较基线、评价指标及验证范围。摘要提到效果评估这一工程议题，但没有给出具体评估结果；这不等于论文没有报告相关细节。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注知识与部署如何衔接",
+            "paragraphs": [
+              "阅读启发：可进一步阅读全文，了解作者如何界定电子测试领域知识库的构建与更新，以及如何讨论RAG效果评估。摘要提出多模态、分布式知识库和边缘部署等方向；读者可据此留意这些方向分别对应哪些实际需求，以及综述如何描述其待解决问题，而不将研究展望视为已经验证的能力。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-18T01:51:40.867721+00:00",
+      "article_profile": "e3cd5e59ccebf73e51b7e6ef827d0b5d5289c643beaff28821571b68ee086cbe"
     },
     {
       "source": "Semantic Scholar",
@@ -52349,7 +52486,7 @@
         "state": "awaiting_fulltext",
         "updated_at": "2026-10-18T01:13:05.560185+00:00",
         "basis": "abstract",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "writing",
         "reason": "not_found",
         "total": 0,
@@ -53821,7 +53958,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "【摘要】本文针对长距离带式输送机维护知识图谱中的空间混淆与语义坍缩，将大语言模型与线性空间拓扑结合。框架通过本体、空间锚点、维护日志抽取及实体对齐，区分描述相似但位置不同的部件，并重建故障因果关系。摘要报告信息抽取、实体合并和故障追溯指标优于所列基线，但排障时间收益来自规则模拟。解读：适合关注智能运维知识组织与故障追溯的研究者阅读，结论须限定于已评估的非分支输送机场景。",
+      "summary": "本文摘要介绍一种面向长距离带式输送机维护知识图谱的线性拓扑感知对齐框架，针对空间混淆与语义坍缩，构建 Physical–Space–Fault–Rule 本体，并以 CCAS 抽取故障因果链和空间信息、以 LTA-Alignment 对齐实体。摘要报告三组预定义运行中的抽取、聚类及故障追溯结果，并指出验证场景为非分支带式输送机维护。以上为摘要级导读，不代表阅读全文。",
       "raw_metadata": {
         "source": "PubMed",
         "source_id": "42817408",
@@ -53984,41 +54121,158 @@
       "focus_tags": [
         "大模型"
       ],
-      "title_zh": "面向带式输送机维护知识图谱的线性拓扑感知对齐框架",
-      "recommendation": "建议重点关注其利用物理位置约束语义实体合并的思路，以及日志抽取到故障追溯的验证链条；当前仅有摘要，尚不足以核查实验设计与实际部署收益。",
+      "title_zh": "面向带式输送机维护的线性拓扑感知对齐框架",
+      "recommendation": "若研究方向涉及智能运维知识图谱、设备实体消歧或故障追溯，摘要提供了可关注的拓扑建模、日志信息抽取与对齐方案及量化结果；但适用范围和完整实验设计仍需阅读全文核验。",
       "deep_read": {
-        "problem": "【摘要】研究面向长距离带式输送机维护知识图谱中的“spatial confusion and semantic collapse”。高度同质化部件可能因描述相近而被错误合并，口语化、含噪日志又隐去了位置与故障关系，因此需要同时处理实体身份辨识和因果信息恢复。",
-        "method": "【摘要】框架建立Physical–Space–Fault–Rule本体，以归一化线性拓扑赋予部件唯一空间锚点；CCAS机制抽取条件、约束、动作与空间信息，LTA-Alignment结合高斯拓扑惩罚和大语言模型灰区仲裁，约束实体合并。",
-        "innovation": "【摘要】方法特点是将空间锚点、日志结构化抽取与拓扑约束对齐组合起来，而非仅依赖语义相似性。解读：其值得关注之处在于让物理位置参与实体身份判断；但摘要没有充分的相关工作比较，不能据此确认各模块的首创性或独立贡献。",
-        "findings": "【摘要】三次预定义运行中，CCAS全局F1为94.10 ± 0.56%，实体簇纯度为96.70 ± 0.53%，故障追溯Accuracy@1为92.78 ± 0.36%。摘要报告均有相应基线比较，但排障时间收益属于规则模拟估计。",
-        "limitations": "【摘要】结论明确限定于“non-branching belt conveyor”维护场景，排障时间也并非现场实测。摘要未提供样本规模、数据划分、模型配置、消融实验与运行成本，因而目前无法核查数据泄漏风险、模块贡献或跨场景泛化能力。",
-        "connection": "【摘要】框架直接服务维护知识组织与故障追溯，契合智能运维方向。解读：空间身份约束可为设备级故障证据关联提供参考，但摘要没有结构优化、寿命预测或失效概率结果，不能将其追溯性能直接解释为结构设计或可靠性提升。",
-        "next_steps": "建议：获得全文后优先核查标注协议、训练测试隔离方式、空间锚点来源及灰区仲裁规则，并检查拓扑惩罚与语言模型的消融结果。进一步研究可评估分支拓扑和位置缺失情况，采用真实维修记录检验排障收益；这些不是作者已证实的结论。"
+        "problem": "【摘要原文】研究针对长距离带式输送机维护知识图谱构建中的空间混淆与语义坍缩。对于描述相近而物理位置不同的部件，摘要特别指出存在错误合并风险；非结构化、嘈杂且口语化的维护记录也使故障因果链和空间信息难以恢复。摘要没有提供问题发生频率等背景数据。",
+        "method": "【摘要原文】框架先构建 Physical–Space–Fault–Rule 本体，并用归一化线性拓扑映射给高同质性部件分配唯一空间锚点；再以 CCAS 抽取状态、约束、动作和空间信息；最后由 LTA-Alignment 结合高斯拓扑惩罚与大语言模型灰区裁决进行实体对齐。摘要还描述了包含维护日志、BOM、空间锚点和闭环维修证据的标注方案。",
+        "innovation": "【摘要原文】摘要呈现的主要设计特点，是把线性空间拓扑纳入实体对齐，并将其与大语言模型对模糊情形的裁决相结合；同时通过 CCAS 从口语化日志恢复隐含故障因果链及位置信息。此处仅概括摘要所述机制，不能据此断定其相对既有研究的首创性或完整创新边界。",
+        "findings": "【摘要原文】三组预定义运行中，CCAS 全局 F1 为 94.10 ± 0.56%，高于 T5 6.20 个百分点；LTA-Alignment 的 Merge F1 为 95.75 ± 0.53%，实体簇纯度为 96.70 ± 0.53%。下游 Accuracy@1 为 92.78 ± 0.36%，相对 R-GCN 高 10.16 个百分点；摘要还报告相对 Keyword Retrieval 的模拟排故时间估计减少 68.50 ± 0.73%。",
+        "limitations": "【摘要原文】摘要将结论限定在“evaluated non-branching belt conveyor maintenance setting”，即所评估的非分支带式输送机维护场景。摘要没有交代跨设备或跨场景泛化、数据规模、基线配置、误差来源等细节，也未明确列出作者的局限讨论；因此这些不能视为已证实的缺陷或结论。",
+        "connection": "【解读】该工作与智能运维的联系较直接：将维护记录转成带空间锚点的实体及故障关系，可为故障追溯和知识组织提供方法参考。对结构设计和可靠性研究，摘要仅显示空间拓扑与故障追溯的关联，未提供结构优化或可靠性建模结果，不能据此声称已验证这些用途。",
+        "next_steps": "【建议】后续阅读可核对标注协议、三组运行的划分方式、比较基线设置及不确定性计算，并检查拓扑映射对真实设备位置的依赖。若要迁移到分支输送系统或其他设备，建议另行开展跨场景验证；这些是阅读与研究建议，并非摘要报告的实验。"
       },
       "analysis_status": "ready",
       "analysis_basis": "abstract",
       "analysis_kind": "model",
       "analysis_sources": [
-        "https://pmc.ncbi.nlm.nih.gov/articles/PMC13611643/"
+        "https://doi.org/10.3390/s26185833"
       ],
-      "analyzed_at": "2026-10-15T01:13:42.064540+00:00",
-      "llm_model": "gpt-6.1-sol",
+      "analyzed_at": "2026-10-18T01:50:32.958476+00:00",
+      "llm_model": "gpt-6-luna",
       "analysis_references": {},
-      "analysis_material_version": "8f26fc6e1e73960beed804083d8229771ab138a57d15777920aded09abc0fa28",
+      "analysis_material_version": "9903c8fe5b081892208a5e105999e0775446305faebe027e91d9b7036f7fd3f3",
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "3b366fc2c48d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:54:57.564145+00:00",
+        "updated_at": "2026-10-18T02:05:26.599624+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "长距离带式输送机的部件描述可能相似，位置却不同；如何避免知识图谱把它们混为一谈，并从口语化维修记录中还原故障关系？本文摘要介绍了一种结合线性空间拓扑与大语言模型的对齐框架，并报告其在故障追溯任务中的评估结果。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "位置差异为何会被知识图谱抹平",
+            "paragraphs": [
+              "长距离带式输送机的维修知识图谱构建面临空间混淆与语义坍塌：不同物理位置的部件，可能在文字描述上高度相似；非结构化维修记录又可能嘈杂、口语化，省略故障因果链和空间信息。研究因此聚焦于如何同时保留部件的空间位置与维修语义，避免相似描述导致错误合并。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "用空间锚点和维修语义协同对齐",
+            "paragraphs": [
+              "摘要称，框架构建了 Physical–Space–Fault–Rule 本体，并以归一化线性拓扑映射为高度同质的部件分配唯一空间锚点。针对维修日志，Condition–Constraint–Action–Space（CCAS）机制从非结构化文本中提取信息，重建隐含故障因果链与空间信息。",
+              "为减少不同位置的相似部件被错误合并，LTA-Alignment 将高斯拓扑惩罚与基于大语言模型的灰区仲裁结合。摘要还介绍了一套结构化金标准标注方案，其依据包括维修日志、BOM 记录、空间锚点和闭环维修证据。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要报告了抽取、对齐与追溯表现",
+            "paragraphs": [
+              "在三次预设运行中，CCAS 的全局 F1-score 为 94.10 ± 0.56%，比 T5 高 6.20 个百分点。LTA-Alignment 的 Merge F1-score 为 95.75 ± 0.53%，实体簇纯度为 96.70 ± 0.53%；相较 SCSA，分别高 3.36 和 3.90 个百分点。",
+              "在下游故障追溯中，动态时空知识图谱的 Accuracy@1 为 92.78 ± 0.36%，比 R-GCN 高 10.16 个百分点。相较 Keyword Retrieval，基于规则的模拟故障排查时间估计减少 68.50 ± 0.73%。这些结果对应摘要所述的非分支带式输送机维护场景。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要结果的适用范围仍需结合全文判断",
+            "paragraphs": [
+              "摘要将评估描述为三次预设运行，但没有说明这些运行如何划分、数据规模或场景构成；因此，单凭摘要无法判断评估样本的代表性及结果在其他输送机系统中的可迁移程度。",
+              "摘要也未提供基线的具体配置、完整评估流程或独立外部验证信息。故障排查时间的降幅被表述为相对于 Keyword Retrieval 的规则模拟估计，不应直接解读为实际现场节时效果；这些方面是否在论文其他部分报告，需进一步阅读确认。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：空间信息如何支撑维修追溯",
+            "paragraphs": [
+              "阅读启发：这项工作把部件所在位置作为区分相似实体的重要信息，并将日志抽取、实体对齐与故障追溯联系起来。进一步阅读时，可关注金标准标注如何利用闭环维修证据，以及三次预设运行和各基线比较的具体设置；这些细节有助于理解摘要所报指标适用的范围。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的研究过程示意",
+            "description": "仅概括摘要明确陈述的方法环节与评估对象，不表示未报告的实验配置或结果。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "维修日志与部件信息",
+                "detail": "摘要提及维修日志、BOM记录、空间锚点和维修证据"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "线性拓扑映射",
+                "detail": "为高度同质部件分配唯一空间锚点"
+              },
+              {
+                "id": "c",
+                "stage": 1,
+                "label": "CCAS信息抽取",
+                "detail": "从非结构化日志重建因果链与空间信息"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "拓扑感知对齐",
+                "detail": "结合高斯拓扑惩罚与大语言模型灰区仲裁"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "故障追溯评估",
+                "detail": "摘要报告动态时空知识图谱的追溯表现"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "定位部件"
+              },
+              {
+                "from": "a",
+                "to": "c",
+                "label": "抽取日志"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "提供空间锚点"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "提供故障语义"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "用于追溯"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-18T02:05:26.596468+00:00",
+      "article_profile": "e6967500e2f26e942c93e785badac02e60f390bc1faaa8f59cb50cd7cba7d59e"
     },
     {
       "source": "Google Scholar",
@@ -55480,7 +55734,7 @@
       "reading_status": {
         "paper_id": "9aeec1365697",
         "state": "missing_evidence",
-        "updated_at": "2026-10-16T01:54:14.703397+00:00",
+        "updated_at": "2026-10-18T01:49:09.673259+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -55837,7 +56091,7 @@
       "reading_status": {
         "paper_id": "bade6e590a5e",
         "state": "missing_evidence",
-        "updated_at": "2026-10-16T01:54:28.400897+00:00",
+        "updated_at": "2026-10-18T01:49:24.519364+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -58645,10 +58899,10 @@
       "reading_status": {
         "paper_id": "c05baf48e37d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:48:13.861496+00:00",
+        "updated_at": "2026-10-18T01:20:08.253748+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "review",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -59399,10 +59653,10 @@
       "reading_status": {
         "paper_id": "35b3b0d29b69",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:48:45.228094+00:00",
+        "updated_at": "2026-10-18T01:23:35.510902+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "writing",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -60322,10 +60576,10 @@
       "reading_status": {
         "paper_id": "e4cf9f888b6d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:50:25.059003+00:00",
+        "updated_at": "2026-10-18T01:34:14.112103+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "writing",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -60921,10 +61175,10 @@
       "reading_status": {
         "paper_id": "d2ad3a94e5bd",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:51:25.390711+00:00",
+        "updated_at": "2026-10-18T01:38:49.130461+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "review",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -62402,7 +62656,7 @@
       "reading_status": {
         "paper_id": "c0cf7585af24",
         "state": "failed",
-        "updated_at": "2026-10-16T01:49:59.965047+00:00",
+        "updated_at": "2026-10-18T01:28:06.427462+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -62817,11 +63071,11 @@
       "reading_status": {
         "paper_id": "5333022c127f",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T06:44:09.132632+00:00",
+        "updated_at": "2026-10-18T02:02:13.776150+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -62851,7 +63105,7 @@
         "ai_maintenance",
         "generative_design"
       ],
-      "summary": "【摘要】本文关注结构健康监测从外置传感系统向材料自身参与感知的转变，梳理人工设计的超材料结构如何编码、转换和传递结构信息。综述按视觉、电磁和波动三类信息组织相关进展，并讨论逆向设计、拓扑优化、增材制造、机器学习及数字孪生等支撑技术。【解读】其阅读价值在于连接材料架构设计与监测信息链路；当前仅有摘要，不能据此判断各路线的性能优劣或工程成熟度。",
+      "summary": "本文是一篇关于超材料用于结构健康监测的批判性综述与展望。它将传统依赖分布式传感器、数据采集和外部处理的监测方式，与由材料结构直接转导结构响应的材料中心思路相对照；按视觉、电磁和波信息三类整理相关发展，并提及逆向设计、拓扑优化、增材制造、机器学习和数字孪生等使能技术。摘要提出的方向是让材料在信息进入常规电子系统前参与处理和传递；具体证据与效果仍需阅读全文核对。",
       "raw_metadata": {
         "source": "Semantic Scholar",
         "source_id": "cfa77d66687109ca3f0d12b7f660517eea7956bd",
@@ -63165,36 +63419,36 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "title_zh": "超材料作为结构健康监测换能器：批判性综述与展望",
-      "recommendation": "【解读】推荐作为结构设计与智能运维交叉方向的框架性读物，重点关注材料架构如何承担感知和信息处理功能；若需选择工程方案或比较检测性能，当前摘要证据不足。",
+      "title_zh": "结构健康监测中的超材料传感器",
+      "recommendation": "若你关注智能运维或结构设计，可重点阅读其材料中心监测框架及视觉、电磁、波信息分类，并核对各路线的实际证据、工程适用性与挑战；当前仅有摘要，不能据此确认性能优劣。",
       "deep_read": {
-        "problem": "【摘要】传统结构健康监测依赖分布式传感器、采集、传输及外部处理，受复杂度、布线、功耗、维护和扩展性制约。原文提出让“the material itself participates in sensing”。【解读】核心问题是能否通过材料架构承担部分感知功能，而非仅增加外部传感器。",
-        "method": "【摘要】本文是综述，按所生成信息的物理域整理研究，原文分类为“visual information”“electromagnetic information”和“wave information”。视觉类包含形变与变色等，电磁类包含电容及无线响应等，波动类包含带隙与共振偏移等；摘要未交代文献检索和筛选程序。",
-        "innovation": "【解读】摘要呈现的框架特点，是将超材料视作结构信息的换能与处理载体，而不只关注承载或单一传感性能。依据是原文“encode, transform, and communicate structural information”。这属于综述视角的归纳，尚不足以确认其相较既有综述的首创性。",
-        "findings": "【摘要】作者强调多功能超材料可承担“sensing, filtering, amplifying, and communicating”结构信息的功能，并列出逆向设计、拓扑优化等支撑技术。【解读】这些内容支持对研究路线的概览，但摘要没有提供检测精度、实验对照或耐久性数据，不能解释为已验证的性能提升。",
-        "limitations": "【摘要】末句说明文章讨论了“future opportunities and challenges”，但未展开具体挑战。【解读】当前资料无法核查各技术的适用工况、标定需求、长期稳定性和规模化验证情况；这些是本次评估的证据缺口，不应直接写成作者已确认的技术缺陷或全文遗漏。",
-        "connection": "【解读】与智能运维的联系在于将部分信息处理前移至材料端；与结构设计的联系则由摘要列出的“inverse design, topology optimization”直接支撑。对可靠性研究，可关注架构响应能否稳定表征损伤，但摘要未提供误报、漏报或寿命方面的证据。",
-        "next_steps": "【建议】后续阅读可选取一种信息域，追踪结构输入、架构响应与可测输出之间的对应关系，再核查其标定方法和损伤识别证据。若开展研究，建议比较环境扰动与损伤引起的响应变化，并评估制造偏差的影响；这些是迁移设想，不是摘要报告的成果。"
+        "problem": "【摘要】文章讨论传统结构健康监测依赖分布式传感器、数据采集、信号传输和外部处理的模式，并指出其局限涉及系统复杂度、布线、能耗、维护和可扩展性。其研究问题可概括为：能否让超材料的工程化结构参与感知，将结构响应转化为可测信息。此为摘要层面的归纳，未见全文中的问题定义或论证细节。",
+        "method": "【摘要】本文自述为综述，按生成信息的物理域组织进展：视觉信息涵盖形状变化、结构色、机械致色和机械致发光；电磁信息涵盖电学、电容、压电、摩擦电、射频、超表面及无源无线响应；波信息涵盖弹性波传播、带隙、共振变化、模态转换、局域化和机械滤波。摘要未提供检索策略、纳入标准或案例比较方法，不能补推。",
+        "innovation": "【解读】摘要呈现的组织视角，是围绕材料如何编码、转换和传递结构信息，以视觉、电磁、波三类信息域梳理超材料在监测中的作用，并联系逆向设计、拓扑优化、增材制造、机器学习和数字孪生等技术。摘要未给出与既有综述的比较，因此不能断言该分类或整合框架具有首创性。",
+        "findings": "【摘要】作者将材料中心结构健康监测描述为一种发展方向：架构化材料可感知结构响应，并可能承担信息筛选、放大和传递；摘要还提出材料可从被动结构部件演进为内在智能系统。以上是综述摘要的概括性主张，当前没有具体实验、性能数值或跨路线比较，不能视作已验证的统一结论。",
+        "limitations": "【资料限制】当前仅提供摘要级解读，没有全文、图表、参考文献或各研究案例的结果，无法核验综述检索覆盖、证据质量、方法比较和作者明确列出的局限。摘要虽称文章将概述未来机会与挑战，却未具体列出内容；因此不应代作者补写技术瓶颈或评价其结论可靠性。",
+        "connection": "【解读】与智能运维的联系在于材料可能直接把结构响应转化为可观测信息，减少对传统传感与外部处理链条的依赖；与结构设计的联系在于架构化材料及逆向设计、拓扑优化等被列为相关使能技术。摘要未展示可靠性评估或运维验证，故其对可靠性研究的价值仍需全文及实证文献确认。",
+        "next_steps": "【建议】精读时可逐项核查三类信息域的代表性实现、测量对象、信息读取方式及其证据来源，并关注作者如何界定摘要所称的机会与挑战。面向研究迁移，可建议比较材料内处理与传统传感链的复杂度、能耗、维护和可扩展性；这属于后续研究设想，不是摘要报告的研究结果。"
       },
       "analysis_status": "ready",
       "analysis_basis": "abstract",
       "analysis_kind": "model",
       "analysis_sources": [
-        "https://www.semanticscholar.org/paper/cfa77d66687109ca3f0d12b7f660517eea7956bd"
+        "https://doi.org/10.1088/1361-665x/aea9fc"
       ],
-      "analyzed_at": "2026-10-16T01:59:14.441006+00:00",
-      "llm_model": "gpt-6.1-sol",
+      "analyzed_at": "2026-10-18T02:01:21.214830+00:00",
+      "llm_model": "gpt-6-luna",
       "analysis_references": {},
-      "analysis_material_version": "aacbfc53ecc7977468e6ac40b26d4088f8f284125a92078cfabd6f308ece5941",
+      "analysis_material_version": "c289457ad129cf9a3b313c75353152bbf57832e39f9bbae3d7b0f222a288aa0b",
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "a68d0bb8b100",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:59:14.466559+00:00",
+        "updated_at": "2026-10-18T02:01:21.223745+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
-        "reason": "network",
+        "article_state": "failed",
+        "article_stage": "writing",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -63223,7 +63477,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "该研究面向无人机结构选材，整合实验报告和文献中的铝合金、钛合金数据，将物理、力学、疲劳及工程应用属性纳入机器学习分析。[摘要] 原文强调同时考虑定量与定性参数，以描述设计要求之间的非线性交互。其潜在价值是支持多准则材料选择，而非直接生成结构方案。摘要声称模型可靠性与泛化能力得到改善，但未提供模型名称、样本规模、验证方案或量化结果，因而目前只能识别研究思路，不能确认性能优势。",
+      "summary": "【摘要】资料中的摘要介绍了一篇关于水资源工程计算机模拟模型的综述，称此类模型可替代成本高、耗时长的物理模型。文章回顾模型在科研中的应用，比较水文与水力模拟软件的特征、方法和应用，并旨在帮助研究者选择适合具体问题的模型、提高结果准确性。注意：该摘要与所列无人机铝钛合金论文题名和研究方向不一致，不能据此认定摘要描述的就是该题名论文。",
       "raw_metadata": {
         "source": "OpenAlex",
         "source_id": "https://openalex.org/W7213446467",
@@ -63380,16 +63634,16 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "title_zh": "基于机器学习的无人机结构铝合金与钛合金性能分析",
-      "recommendation": "建议作为无人机结构多属性选材与疲劳相关数据建模的候选阅读材料；若用于支撑生成式设计或可靠性方法比较，应先核查全文的数据来源、模型实现与验证证据。",
+      "title_zh": "水资源工程模拟模型研究综述",
+      "recommendation": "【解读】不建议将当前资料作为无人机结构材料、生成式设计或疲劳可靠性研究的可靠推荐依据；摘要内容聚焦水资源模拟，与题名及标签明显不一致，宜先核验论文摘要与元数据是否匹配。",
       "deep_read": {
-        "problem": "研究围绕无人机结构的铝合金、钛合金选材，关注多类材料属性与设计要求之间的相互作用。[摘要] 原文称其为“complex multi-criteria system”。解读：核心问题是多准则选材建模，不能直接等同于结构拓扑优化或生成式设计。",
-        "method": "研究将实验报告值与文献来源整合为材料样本，并让机器学习同时考虑定量及定性参数。[摘要] 原文表述为“both quantitative and qualitative parameters”。但摘要未交代具体算法、类别属性编码、缺失值处理及训练测试划分，暂无法复现。",
-        "innovation": "可辨识的研究特点是把疲劳性能与成本、可获得性等工程因素共同纳入无人机材料分析。[摘要] 解读：这体现了多属性整合思路，但现有资料没有与既有方法比较，也未说明新算法或新机制，不能据此确认方法原创性或创新幅度。",
-        "findings": "摘要声称模型具有“improved reliability and generalization”，并可支持结构设计与选材。[摘要] 然而没有提供评价指标、误差、对照模型或独立验证结果。这只能视为作者的定性结论，不能推导预测精度、泛化提升幅度或结构安全收益。",
-        "limitations": "当前摘要缺少样本数量、合金牌号、试验条件及数据质量控制信息，无法判断材料覆盖范围。[摘要] 此外，原文称每个样本包含“12 attributes”，但随后仅列出十一项属性。该表述需核实，不能自行补齐，也不能认定全文同样缺失。",
-        "connection": "解读：疲劳强度与疲劳寿命属性使研究与疲劳可靠性方向相关，多准则选材也可服务结构设计。[摘要] 但材料预测模型的可靠性不等于结构失效概率评估；资料未展示在线监测、故障诊断或生成式设计流程，相关联系应限于潜在应用。",
-        "next_steps": "建议优先核查全文的数据清单、属性数量及疲劳试验条件，并确认同源文献样本是否跨训练集与测试集分布。若进一步迁移到可靠性研究，建议增加不确定性量化和独立试验验证；这些属于后续研究设想，并非摘要已报告的方法或成果。"
+        "problem": "【摘要】文章所关注的问题是水资源工程中模拟模型的研究与应用，以及研究者如何根据待解决的问题选择合适模型。摘要还将这些模型视为物理模型的替代方案，理由是物理模型成本高且耗时。资料没有进一步说明具体工程问题或研究缺口。",
+        "method": "【摘要】摘要称论文回顾了科研中已实施的模拟模型及其应用，并分析近几十年科研使用的重要水文和水力模拟软件。比较维度包括模型特征、方法和应用。当前资料未列明文献检索策略、纳入标准、软件名称或比较指标，因此不能补充这些方法细节。",
+        "innovation": "【解读】从摘要可确认的贡献定位是综述和比较：归纳模拟软件特征，并讨论方法与应用差异。摘要没有宣称新算法、新模型或定量评估，故不能据此判断存在方法创新；也没有提供可用于评估综述完整性或原创性的细节。",
+        "findings": "【摘要】摘要所述产出是为研究者提供洞见与指导，以便为具体问题选择更合适的模型，并提高结果准确性。这是摘要对论文用途的概括，不是具体实验发现；当前资料没有报告模型性能对比、案例结果或准确率变化。",
+        "limitations": "【解读】当前资料仅有摘要级内容，无法核实综述的覆盖范围、证据质量、筛选流程或结论边界。尤其题名指向无人机合金结构，而摘要谈水资源工程，存在明显不一致；在摘要来源未核验前，不宜把摘要结论归于题名所示论文。",
+        "connection": "【解读】按题名和标签看，目标方向涉及无人机结构材料、生成式设计与疲劳可靠性；按摘要看，内容是水文和水力模拟软件综述。现有资料没有提供二者之间的联系，因而不能据摘要推导其对结构设计或疲劳可靠性研究的直接价值。",
+        "next_steps": "【建议】先核验摘要是否对应所列题名、作者与 DOI，再决定是否纳入无人机结构研究的阅读清单。若确认摘要确属该条目，应补充与题名一致的原文或摘要后再评估材料性能、机器学习方法及疲劳证据；这些内容目前均无依据。"
       },
       "analysis_status": "ready",
       "analysis_basis": "abstract",
@@ -63397,19 +63651,19 @@
       "analysis_sources": [
         "https://doi.org/10.56990/bajest/2026.050203"
       ],
-      "analyzed_at": "2026-10-16T01:58:00.629947+00:00",
-      "llm_model": "gpt-6.1-sol",
+      "analyzed_at": "2026-10-18T02:00:12.383493+00:00",
+      "llm_model": "gpt-6-luna",
       "analysis_references": {},
-      "analysis_material_version": "d49b01b571055bc5b741c49ed94ee3b790422865743a99caf86f960b8ec5538a",
+      "analysis_material_version": "a620bff291f667fd682aa32754fb20ecaf0831281444e98c245bc160dfccac65",
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "569d913e4413",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:58:00.636613+00:00",
+        "updated_at": "2026-10-18T02:00:12.397672+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
-        "reason": "network",
+        "article_state": "failed",
+        "article_stage": "review",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -65088,7 +65342,7 @@
       "reading_status": {
         "paper_id": "438f7c66205e",
         "state": "missing_evidence",
-        "updated_at": "2026-10-16T01:53:18.111556+00:00",
+        "updated_at": "2026-10-18T01:48:39.902843+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -65740,10 +65994,10 @@
       "reading_status": {
         "paper_id": "18ee2d492b5c",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:52:05.097757+00:00",
+        "updated_at": "2026-10-18T01:47:53.893791+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "writing",
         "reason": "restricted",
         "total": 0,
         "covered": 0,
@@ -66245,7 +66499,7 @@
       "reading_status": {
         "paper_id": "801189691014",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T07:45:11.902800+00:00",
+        "updated_at": "2026-10-18T02:21:44.282901+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -66816,11 +67070,11 @@
       "reading_status": {
         "paper_id": "778026f1c783",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T06:50:10.169476+00:00",
+        "updated_at": "2026-10-18T02:10:01.553231+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -67107,11 +67361,11 @@
       "reading_status": {
         "paper_id": "6ce46b4ac683",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T06:45:45.239447+00:00",
+        "updated_at": "2026-10-18T02:09:15.603810+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -68527,16 +68781,67 @@
       "reading_status": {
         "paper_id": "6667ad1e6f80",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:50:39.743655+00:00",
+        "updated_at": "2026-10-18T01:52:27.089210+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "粉末床熔融激光束（PBF-LB）不锈钢的表面与近表面缺陷可能限制疲劳表现和构件资格认定。本文关注化学抛光、化学机械抛光与热等静压组合处理，为理解后处理与力学性能的联系提供线索。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "表面缺陷为何牵动疲劳可靠性",
+            "paragraphs": [
+              "增材制造能够制造复杂几何形状的金属构件，但粉末加工带来的表面及近表面缺陷会限制力学性能与构件资格认定。摘要特别提到未完全熔合颗粒和近表面孔隙，并指出这类表面特征会显著降低疲劳寿命，进而制约其在高可靠性应用中的采用。",
+              "改善表面质量被视为提升结构可靠性的可行途径。本文聚焦PBF-LB制造的17-4 PH、15-5 PH和316L不锈钢，考察化学抛光（CP）、化学机械抛光（CMP）与热等静压（HIP）的组合策略。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "围绕后处理、组织与性能展开考察",
+            "paragraphs": [
+              "摘要说明，研究评估CP和CMP结合HIP，以减轻表面及亚表面缺陷；同时考察表面粗糙度和微观组织演变对拉伸性能与高周疲劳表现的影响。其研究框架将粉末加工形成的表面状态、后处理策略与力学表现联系起来。",
+              "摘要没有给出具体抛光或HIP参数，也没有展开试样制备、测试流程等细节，因此本文解读仅限于其明确列出的处理类别与考察指标。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要报告工艺—组织—性能联系",
+            "paragraphs": [
+              "作者报告了清晰的工艺—组织—性能关系，连接粉末加工形成的表面状态、后处理策略和力学性能。摘要据此认为，这些发现支持为增材制造不锈钢构件制定稳健、面向资格认定的后处理路线。",
+              "不过，摘要没有列出具体粗糙度、拉伸或疲劳结果，也未说明不同材料或处理组合的效果方向与幅度。因而这里能确认的是作者报告了上述关系及其应用指向，不能据此推定某种处理带来多大性能提升。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要能支持的判断边界",
+            "paragraphs": [
+              "仅凭摘要，无法判断样本安排、具体比较条件、统计处理及验证范围；这些内容是否在论文其他部分交代，也不能由摘要确定。摘要虽提及三种不锈钢和多项性能考察，但未提供足以比较各材料、处理组合或应用场景的细节。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：追问关系如何落到资格认定",
+            "paragraphs": [
+              "阅读启发：进一步阅读全文时，可关注作者如何呈现表面状态、微观组织与拉伸及高周疲劳表现之间的证据，以及不同不锈钢和后处理组合的比较边界。摘要提出面向资格认定的应用指向，但具体依据与适用范围仍需结合论文正文判断。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-18T01:52:27.089210+00:00",
+      "article_profile": "78c2237d88fa01091c239ba8b4e5c899a628bd1115fbb85951eab4c17b0d761c"
     },
     {
       "source": "Semantic Scholar",
@@ -68959,11 +69264,11 @@
       "reading_status": {
         "paper_id": "a0aeb1682003",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T06:45:45.731591+00:00",
+        "updated_at": "2026-10-18T02:09:28.611872+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -69610,10 +69915,10 @@
       "reading_status": {
         "paper_id": "7ebe32b91775",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:51:12.064382+00:00",
+        "updated_at": "2026-10-18T01:37:08.051388+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "review",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -69962,10 +70267,10 @@
       "reading_status": {
         "paper_id": "ca3b95f43cb0",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:49:45.238832+00:00",
+        "updated_at": "2026-10-18T01:25:25.371300+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "writing",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -72150,10 +72455,10 @@
       "reading_status": {
         "paper_id": "86cf61a99b1a",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:49:32.258643+00:00",
+        "updated_at": "2026-10-18T01:24:47.469817+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "writing",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -72543,10 +72848,10 @@
       "reading_status": {
         "paper_id": "65e1dc5c1243",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:51:52.107411+00:00",
+        "updated_at": "2026-10-18T01:46:37.080568+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "writing",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -74275,11 +74580,11 @@
       "reading_status": {
         "paper_id": "54c83aaa7f13",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T06:44:09.357466+00:00",
+        "updated_at": "2026-10-18T02:02:31.614981+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -74929,16 +75234,159 @@
       "reading_status": {
         "paper_id": "5feece63bb7a",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:55:14.225829+00:00",
+        "updated_at": "2026-10-18T02:06:46.812338+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "复杂非比例载荷下，金属多轴疲劳损伤难以可靠预测。本文摘要介绍了一种并行融合材料属性、加载历史与应变波动信息的深度学习框架，并报告了其在公开数据集上的评估结果。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "非比例载荷下的路径依赖损伤难题",
+            "paragraphs": [
+              "多轴疲劳是金属工程构件可靠设计面临的挑战之一，尤其在复杂非比例加载路径下，损伤演化具有路径依赖性。摘要指出，传统临界面和基于能量的模型较依赖经验假设，捕捉这类演化时面临困难，准确性与泛化能力因此受限。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "三路并行提取异质信息",
+            "paragraphs": [
+              "框架由三个并行分支组成：深度神经网络（DNN）提取材料静态内在属性；加入多头自注意力机制的双向门控循环单元（BiGRU）捕捉加载历史中的长期时间依赖，并自适应赋予关键阶段权重；一维卷积神经网络（1D-CNN）提取局部应变波动模式。三路特征融合为损伤表征，用于端到端疲劳寿命预测；模型输出为疲劳寿命的以 −10 为底的对数 lg(Nf)。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "固定划分表现与消融提示",
+            "paragraphs": [
+              "在包含40种金属、1167个样本的公开多轴疲劳数据集上，摘要报告模型在固定数据划分上的决定系数 R2 = 0.9052。消融研究显示三个特征提取分支具有互补性；摘要还指出，多源融合策略与注意力机制对性能提升起关键作用。",
+              "摘要提到的5折交叉验证提示，性能增益仍需在更大的数据集上进一步验证。因而，固定划分上的结果值得关注，但不能单凭摘要将其视为对更广泛材料或载荷情形的充分验证。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要未交代的评估边界",
+            "paragraphs": [
+              "摘要没有说明固定划分的具体构成、训练与测试样本如何划分，也未给出不同基线模型、各分支消融结果或5折交叉验证的详细数值。样本与载荷路径覆盖范围、独立外部验证情况及误差分布，也无法仅凭摘要判断；这表示摘要未报告这些细节，不代表论文没有进行相关分析。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注泛化与物理知识结合",
+            "paragraphs": [
+              "**阅读启发：**进一步阅读时，可关注交叉验证和消融分析的具体设置与结果，以及模型面对不同材料、加载路径时的适用范围。摘要提出未来可整合物理知识，以增强外推能力与透明度；这些方向的实现方式和实际效果，摘要并未提供，需结合论文后续内容判断。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的三分支预测流程",
+            "description": "仅呈现摘要明确说明的信息输入、特征提取、融合与输出关系；这是摘要整理的示意图，不是论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "材料静态属性",
+                "detail": "摘要所述材料内在属性信息"
+              },
+              {
+                "id": "b",
+                "stage": 0,
+                "label": "加载历史",
+                "detail": "摘要所述加载过程信息"
+              },
+              {
+                "id": "c",
+                "stage": 0,
+                "label": "应变波动",
+                "detail": "摘要所述局部应变变化信息"
+              },
+              {
+                "id": "d",
+                "stage": 1,
+                "label": "DNN分支",
+                "detail": "提取材料静态属性特征"
+              },
+              {
+                "id": "e",
+                "stage": 1,
+                "label": "BiGRU与注意力",
+                "detail": "捕捉长期依赖并加权关键阶段"
+              },
+              {
+                "id": "f",
+                "stage": 1,
+                "label": "1D-CNN分支",
+                "detail": "提取局部应变波动模式"
+              },
+              {
+                "id": "g",
+                "stage": 2,
+                "label": "融合损伤表征",
+                "detail": "融合三个分支的信息"
+              },
+              {
+                "id": "h",
+                "stage": 3,
+                "label": "寿命输出",
+                "detail": "输出疲劳寿命的以−10为底对数lg(Nf)"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "d",
+                "label": "输入"
+              },
+              {
+                "from": "b",
+                "to": "e",
+                "label": "输入"
+              },
+              {
+                "from": "c",
+                "to": "f",
+                "label": "输入"
+              },
+              {
+                "from": "d",
+                "to": "g",
+                "label": "特征融合"
+              },
+              {
+                "from": "e",
+                "to": "g",
+                "label": "特征融合"
+              },
+              {
+                "from": "f",
+                "to": "g",
+                "label": "特征融合"
+              },
+              {
+                "from": "g",
+                "to": "h",
+                "label": "端到端预测"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-18T02:06:46.812337+00:00",
+      "article_profile": "bf22f3255fc891a442afa7e99cc3448465105e72697955cbb51372e9ceb85094"
     },
     {
       "source": "Semantic Scholar",
@@ -75082,7 +75530,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "增材制造零件的表面粗糙度可能削弱其长期服役表现，而疲劳试验耗时、成本高，进一步限制了预测模型的数据来源。[摘要]本文拟结合迁移学习、表面粗糙度数据与疲劳试验数据，建立疲劳寿命预测框架。摘要以“aims to”描述研究目标，并未报告模型结构、数据规模或验证结果。解读：其阅读价值主要在于面向小样本疲劳可靠性问题的方法思路，尚不能据此确认预测精度或工程适用性。",
+      "summary": "【摘要】本文关注增材制造零件长期性能相对传统制造零件较差、限制其用于关键任务场景的问题，指出成形表面粗糙及疲劳试验数据稀缺是研究背景。作者拟利用迁移学习，构建从表面粗糙度数据预测疲劳寿命的框架，以应对小数据问题。摘要未报告框架的具体实现、实验验证或预测效果，不能据此判断其实际性能。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7214988495",
@@ -75216,16 +75664,16 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "title_zh": "面向增材制造零件疲劳寿命预测的迁移学习框架",
-      "recommendation": "建议关注小样本疲劳寿命预测的研究者进一步阅读，重点核查迁移来源、粗糙度表征与验证设计；当前推荐依据是摘要提出的方法方向，而非已经证实的性能优势。[摘要]",
+      "title_zh": "增材制造零件疲劳寿命预测的迁移学习框架",
+      "recommendation": "推荐疲劳可靠性及增材制造研究者关注其迁移学习与表面粗糙度数据结合的预测思路；但摘要没有给出验证结果，适合先了解研究设想，不宜据此认定方法已有效。",
       "deep_read": {
-        "problem": "研究针对增材制造零件长期性能不足与疲劳数据稀缺的双重问题。摘要指出，表面深谷可成为应力集中及裂纹萌生位置，而疲劳试验又具有较高时间和经济成本。[摘要]解读：核心需求是利用有限试验数据，建立表面状态与疲劳寿命之间的预测联系。",
-        "method": "摘要提出将迁移学习用于疲劳寿命预测，利用相关任务中学得的模型支持目标任务训练，并结合表面粗糙度与疲劳试验数据构建框架。[摘要]原文表述为“aims to use”，未交代源任务、目标任务、模型结构或迁移策略，因此目前只能识别方法路线，不能复现。",
-        "innovation": "解读：值得关注的方法组合，是将迁移学习引入增材制造零件的表面粗糙度—疲劳寿命建模，以回应疲劳数据不足的问题。[摘要]但摘要未提供与既有工作的比较，也未说明新的迁移机制，不能据此认定其具有首创性、算法创新或已验证的技术突破。",
-        "findings": "摘要没有报告可核对的实验发现、误差指标或基线比较。作者仅称该框架“can potentially solve”数据稀缺问题，属于潜在作用而非验证结论。[摘要]因此，当前能够确认的是研究目标和预期用途，不能推断其预测精度更高或试验需求已经减少。",
-        "limitations": "当前资料仅为摘要，未提供材料类型、制造工艺、载荷条件、样本数量及验证方案。[摘要]这些缺项限制了对方法可靠性和适用范围的判断，但不等于论文研究本身必然存在相应缺陷。是否发生负迁移、是否具有跨条件泛化能力，现有资料均不足以判断。",
-        "connection": "解读：该研究与疲劳可靠性方向直接相关，关注零件表面状态与寿命预测之间的联系，可为结构设计中的寿命评估提供方法参考。[摘要]但将其进一步用于智能运维、检修决策或失效概率计算，还需要服役监测、寿命不确定性等证据，摘要并未涉及。",
-        "next_steps": "建议：后续阅读优先核查源域与目标域的定义、粗糙度输入形式，以及疲劳数据如何用于训练和独立验证；再检查是否设置不迁移模型作为对照。这些是针对摘要信息缺口的阅读问题，并非作者已完成的工作，也不意味着文中必然缺少相关设计。[摘要]"
+        "problem": "【摘要】文章提出的核心问题是增材制造零件长期性能逊于传统制造零件，因而难以在关键任务应用中推广。摘要将成形表面的粗糙度与疲劳失效联系起来：表面深谷会形成应力集中区并成为裂纹起始位置；同时疲劳试验耗时且成本高，测试数据稀缺进一步加重研究困难。",
+        "method": "【摘要】作者拟采用迁移学习处理疲劳训练数据较少的问题，利用与目标任务相关任务中已学习的模型，并结合疲劳试验数据，建立由表面粗糙度数据预测疲劳寿命的框架。摘要没有说明源任务、目标任务、模型结构、数据规模、特征处理或训练与验证流程，具体实施细节缺少证据。",
+        "innovation": "【解读】从摘要可确认的研究特点，是将迁移学习用于增材制造零件疲劳寿命预测，并以表面粗糙度数据作为框架的学习依据。摘要称该框架旨在应对数据稀缺，但未提供与既有方法的比较或明确的创新性论证，因此不能进一步断言其相对已有工作的原创程度或优势。",
+        "findings": "【摘要】资料呈现的是研究目标与预期用途，而非已报告的实验发现。作者希望框架学习表面粗糙度数据并预测疲劳寿命，并认为这可能缓解研究增材制造零件疲劳行为时的数据稀缺。摘要没有提供预测精度、试验样本、对照结果或应用验证，故无法判断效果是否实现。",
+        "limitations": "【资料局限】当前仅有摘要，未见全文，不能确认模型细节、数据来源、适用材料与工艺范围、验证设计及结果。摘要也未讨论方法限制或潜在失效情形，因此这些内容不能当作作者已承认的论文局限；当前可指出的只是资料不足以评估框架的可靠性与泛化能力。",
+        "connection": "【解读】该研究与疲劳可靠性方向直接相关：它试图从表面粗糙度出发预测疲劳寿命，而摘要将表面深谷描述为应力集中和裂纹起始位置。对智能运维而言，这一思路可能与寿命评估衔接；但摘要没有涉及在线监测或维护决策，不能据此认定已实现相关应用。",
+        "next_steps": "【建议】后续阅读全文时，可核查迁移学习所用源任务与目标任务、疲劳试验数据规模、粗糙度表征方式及验证方案，并重点确认是否与非迁移方法比较。若开展延伸研究，可检验不同材料或工艺条件下预测是否稳定，并评估预测结果如何服务可靠性决策；这些均为建议，非摘要报告的工作。"
       },
       "analysis_status": "ready",
       "analysis_basis": "abstract",
@@ -75233,19 +75681,19 @@
       "analysis_sources": [
         "https://doi.org/10.21872/annual2025_6495"
       ],
-      "analyzed_at": "2026-10-16T01:56:02.519106+00:00",
-      "llm_model": "gpt-6.1-sol",
+      "analyzed_at": "2026-10-18T01:59:03.369242+00:00",
+      "llm_model": "gpt-6-luna",
       "analysis_references": {},
-      "analysis_material_version": "278d7013ad15c157418a93cad17171d7bc06bf9a28ffcaecc3ad28816581505f",
+      "analysis_material_version": "0117fbcc048320cd0e7eeafd254d9c5d8d9723ffb7a6e3297df067551b982bc7",
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "926b00e39b2b",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T01:56:02.545091+00:00",
+        "updated_at": "2026-10-18T01:59:03.380819+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
-        "reason": "network",
+        "article_state": "failed",
+        "article_stage": "writing",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -81990,11 +82438,11 @@
       "reading_status": {
         "paper_id": "e0c00d903e6a",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T06:45:00.667087+00:00",
+        "updated_at": "2026-10-18T02:08:56.525360+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,

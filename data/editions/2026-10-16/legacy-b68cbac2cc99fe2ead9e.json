@@ -31,7 +31,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "工业搅拌罐中底物空间分布影响过程设计与控制，但高保真CFD计算成本限制了常规应用。作者以760次CFD模拟训练代理模型，结合全局工况与局部空间描述符预测完整三维浓度场。摘要报告注意力神经网络测试R²≈0.91，并实现毫秒级推理，相比CFD最高加速百万倍。其价值在于支持运行空间探索与数字孪生；当前仅有摘要，尚不能核查误差分布及实际部署效果。[摘要]",
+      "summary": "本文针对工业搅拌罐中CFD预测三维底物浓度场耗时的问题，训练监督式代理模型，将全局操作条件与局部空间特征映射为浓度场。作者比较多种模型后报告，Modified-Attention NN在留出测试集上表现最佳；但误差仍集中于进料极值区和叶轮间高剪切区。研究未做实验验证，且模型受单一几何及单相MRF/RANS、Monod动力学设定限制。其价值在于展示快速筛查潜力，而非证明可替代CFD或跨尺度通用。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -75,25 +75,25 @@
       "focus_tags": [],
       "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "推荐关注其将全局运行条件与局部空间信息共同用于三维场预测的方法，尤其适合数字孪生和快速运行优化研究参考；但不能据此认定其已具备故障诊断或可靠性评估能力。[摘要；解读]",
+      "recommendation": "建议阅读，尤其适合关注反应器建模、CFD代理模型及机器学习验证设计的读者；文中对局部误差、留出测试和适用边界的讨论，可帮助判断快速预测结果能否支撑工程决策。",
       "deep_read": {
-        "problem": "研究针对工业搅拌罐底物梯度预测的精度与计算成本矛盾。摘要指出高保真CFD虽能提供详细预测，却“are computationally intensive”，限制常规应用。核心问题是能否降低空间场预测成本，使其适应更频繁的工况探索，而非直接开展设备故障识别。[摘要；解读]",
-        "method": "作者以760次CFD模拟训练代理模型，输入同时包含全局运行条件与局部空间描述符。前者涉及搅拌速度、进料策略、流体性质及生物动力学参数等，后者例如到进料点的距离；输出为完整三维底物浓度场。摘要明确使用“local spatial descriptors”，但未交代网络细节。[摘要]",
-        "innovation": "解读：值得关注的是将工况信息与空间位置特征结合，让代理模型承担三维浓度场的快速映射，而不只预测单一整体指标。摘要以“couple hydrodynamics and biokinetics”概括模型能力；但缺少既有方法比较及消融结果，不能据此认定其架构具有首创性。[摘要；解读]",
-        "findings": "摘要报告注意力神经网络在所比较方法中精度最高，测试R²≈0.91，并能捕捉关键混合特征；其“millisecond-scale inference”对应相较CFD最高百万倍加速。上述为作者报告的结果，当前资料未提供计算硬件、计时边界或分工况误差，无法进一步核验。[摘要]",
-        "limitations": "当前证据仅为摘要，未提供训练测试划分、模拟覆盖范围、物理约束及实验实测验证信息，因此无法判断对未见工况的泛化能力。这些属于资料缺口，并非已证实的方法缺陷。“trained on $$760$$ 760 CFD simulations”也不足以证明模型已在真实装置中得到验证。[摘要；解读]",
-        "connection": "解读：摘要提出支持“real-time optimization and digital-twin frameworks”，与智能运维中的状态预测和运行优化存在方法联系。其与结构设计的关联主要限于反应器设计决策支持，并非结构力学分析；对于失效概率、寿命预测或可靠性指标，当前资料没有直接证据。[摘要；解读]",
-        "next_steps": "建议：后续获取全文时，优先核查进料位置、黏度和液位变化下的测试设置，以及浓度极值区域的误差与守恒表现。若迁移至智能运维，可研究预测不确定性与优化决策风险的联系，并以实测数据检验适用边界；这些是研究建议，不是摘要已报告的工作。[摘要；建议]"
+        "problem": "[P1][P7] 作者希望解决高保真CFD预测工业搅拌罐三维底物梯度计算成本高、难以用于常规优化的问题，并指出既有方法多关注低维输出或二维流场。研究目标是依据工况及空间位置直接预测完整三维浓度分布；作者称目前缺少可直接比较的同类体积场代理模型，因此以底层CFD作基准，而非与其他三维代理横向比较。",
+        "method": "[P2][P8-P13] 作者基于760组CFD模拟构建监督学习数据，采用LHS覆盖全局工况，并把全局参数与局部空间描述符共同用于预测。比较线性、树模型、SVR及多种神经网络结构；以qS/qS,max作为主要目标，按模拟分组进行交叉验证，并保留独立测试模拟。作者还用体积加权KDE检查子样本分布。",
+        "innovation": "[P7][P12] 作者强调方法直接从全局操作条件映射到完整三维浓度场，并设计不同神经网络输入拓扑，使全局工况能够调制局部空间特征。相较聚焦低维指标或二维流场的既有工作，这是空间预测粒度上的推进。解读：本文贡献侧重代理建模框架及目标变量表示，而非提出新的CFD方程或实验验证体系。",
+        "findings": "[P3-P6] 作者报告Modified-Attention NN在独立测试集上MSE为0.0054、R²为0.91；Focused-Attention NN的空间界面呈现较清晰，而前者全局MSE略低。学习曲线显示高容量模型继续受益于更多模拟，但边际改善减小。图示及正文指出误差集中在进料附近、耗竭区与叶轮间边界，因此作者将模型定位为快速筛查工具。",
+        "limitations": "[P6-P9][P13] 作者明确未进行实验验证，数据来自单一几何、单相RANS/MRF和Monod动力学，模型因此是CFD一致的模拟器而非实验验证的反应器预测器；局部极值及高剪切区可靠性较弱。原页[P8]同时写明采用96 m³几何并称总容积170 m³，表述不一致，可能影响对设备规模的理解；本资料未提供可据以消解该差异的信息。",
+        "connection": "[P6-P7] 与智能运维方向的联系主要是潜在的快速工况扫描、在线设定值优化和数字孪生集成，作者将其视为应用前景，而非已验证的运维系统。与结构设计和可靠性研究的联系较间接：三维梯度及局部误差可提示需重点检查的区域，但现有证据不足以证明其能直接支持设备可靠性判定或结构改型。",
+        "next_steps": "[P7][P9] 建议先针对进料极值区、底部耗竭区及叶轮间高剪切区开展定向CFD采样，并用实验测量检验预测偏差；再评估不同尺度、几何、流体性质及动力学条件下的迁移能力。若用于智能运维，应进一步验证在线数据输入、工况域外识别与不确定性告警。以上为建议，作者提出的扩展方向不等同于本文已完成的验证。"
       },
       "recommended_direction": "ai_maintenance",
-      "title_zh": "机器学习代理模型实现工业生物反应器三维底物梯度快速预测",
-      "analysis_basis": "abstract",
+      "title_zh": "工业生物反应器三维底物梯度的机器学习快速预测",
+      "analysis_basis": "full_text",
       "analysis_kind": "model",
       "analysis_sources": [
-        "https://doi.org/10.1038/s41467-026-78273-7"
+        "https://www.nature.com/articles/s41467-026-78273-7_reference.pdf"
       ],
-      "analyzed_at": "2026-10-16T06:55:27.523951+00:00",
-      "llm_model": "gpt-6.1-sol",
+      "analyzed_at": "2026-10-18T02:16:31.282671+00:00",
+      "llm_model": "gpt-6-luna",
       "article": {
         "version": 3,
         "basis": "abstract",
@@ -205,20 +205,59 @@
       },
       "article_updated_at": "2026-10-16T07:24:13.221835+00:00",
       "article_profile": "3c03cd29b6a7ccea0e592659e8ab953ff89b85c46374d12c4824f946edbd5db8",
-      "analysis_references": {},
-      "analysis_material_version": "eacebd0e0881586141ada7cc074948dd3db40c30b64233836e2681d5f216ccff",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P7"
+        ],
+        "method": [
+          "P2",
+          "P8",
+          "P9",
+          "P10",
+          "P11",
+          "P12",
+          "P13"
+        ],
+        "innovation": [
+          "P7",
+          "P12"
+        ],
+        "findings": [
+          "P3",
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "limitations": [
+          "P6",
+          "P7",
+          "P8",
+          "P9",
+          "P13"
+        ],
+        "connection": [
+          "P6",
+          "P7"
+        ],
+        "next_steps": [
+          "P7",
+          "P9"
+        ]
+      },
+      "analysis_material_version": "e1d0b6635c542a3b060890650b52a2169ea07b9b396efdb2949bfdd452384ce0",
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "15b8068e8614",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T07:24:13.221835+00:00",
-        "basis": "abstract",
-        "article_state": "failed",
-        "article_stage": "review",
+        "state": "published",
+        "updated_at": "2026-10-18T02:16:31.322333+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
         "reason": "",
-        "total": 0,
-        "covered": 0,
-        "pdf_available": false,
+        "total": 15,
+        "covered": 15,
+        "pdf_available": true,
         "issues": []
       }
     },
@@ -245,7 +284,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "本文针对声学谷霍尔绝缘体的目标带隙逆向设计，提出双智能体协作框架：设计智能体基于强化学习生成的数据库微调，管理智能体负责需求解析、任务规划、仿真调用及结果生成。系统可输出结构参数、能带、本征模态场和可制造模型文件。摘要称测试集带隙误差分析支持设计精度，但未给出具体数值与对照结果。解读：其阅读价值主要在于连接语言需求、结构生成和数值验证的工作流，而非已获充分量化证明的性能优势。[摘要]",
+      "summary": "本文提出面向声学谷霍尔绝缘体（AVHI）的双智能体逆向设计框架：Designer-LLM根据目标带隙生成结构参数，Manager-LLM解析需求并协调仿真和多模态输出。作者以强化学习构建结构—带隙数据库，并用其微调模型；测试集评估及可编程阵列实验用于检验带隙匹配与声波路径调控。作者报告实验与模拟的主要传播路径总体一致，同时指出实测带宽和响应幅值存在偏差。[P1–P8]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -292,25 +331,25 @@
       ],
       "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "建议重点关注生成式结构设计与仿真验证的衔接，以及双智能体的职责划分；当前仅有摘要，尚不能判断其相对传统优化方法的精度或效率优势。[摘要]",
+      "recommendation": "推荐关注声学超材料逆向设计、LLM智能体协作或仿真—实验闭环的读者，尤其是希望了解自然语言需求如何连接结构生成、数值验证和实体声波调控的研究者。",
       "deep_read": {
-        "problem": "研究面向声学谷霍尔绝缘体的目标带隙逆向设计。摘要指出，此类材料能够实现“robust directional wave transport”，并具有通信、传感和波调控应用前景。解读：核心问题是如何把简短设计需求转化为满足带隙目标的结构，而非仅生成语言描述。[摘要]",
-        "method": "框架由两个协作智能体组成。Designer-LLM利用强化学习生成的声学谷霍尔绝缘体数据库进行微调，承担带隙目标驱动的结构设计；Manager-LLM负责规划、语义解析、仿真工具调用和多模态结果生成。摘要未说明模型规模、数据量或微调细节。[摘要]",
-        "innovation": "摘要明确提出“modular LLM-agent framework”，将语义交互、逆向设计、数值验证和多模态输出整合为统一流程。解读：可关注的创新线索是专业设计模型与流程管理模型的分工及集成方式；仅凭摘要不能认定其为首创，也不能确认相对已有框架的优势。[摘要]",
-        "findings": "系统可按简短需求输出结构参数、能带、本征模态场及可制造模型文件。摘要称测试集带隙误差分析表明设计具有“reliable bandgap-matching accuracy”。但未提供误差数值、样本规模或比较基线，因此只能确认作者报告了准确性验证，不能量化其效果。[摘要]",
-        "limitations": "当前证据仅为摘要，未披露数据库覆盖范围、训练与测试划分、误差分布、计算成本及失败案例，也未说明是否进行了实物制造验证。这些属于资料缺口，而非已经证实的方法缺陷。摘要中的可制造模型文件输出，也不能直接等同于制造可行性已经得到验证。[摘要]",
-        "connection": "解读：本文与生成式结构设计直接相关，展示了从需求表达、结构生成到仿真结果输出的集成思路。对智能运维的联系主要是任务编排与工具调用方式可供参考，摘要未涉及运维实验；对可靠性研究，也不能把稳健波传输或带隙匹配精度等同于寿命与失效可靠性证据。[摘要]",
-        "next_steps": "建议后续获取全文，优先核查目标带隙的定义、误差指标、测试集独立性，以及与传统优化和非微调模型的对照。可迁移研究建议是加入制造偏差或材料参数扰动下的设计验证，考察目标匹配与稳健性的关系；该方向属于延伸设想，并非摘要报告的成果。[摘要]"
+        "problem": "[P1–P2] AVHI的拓扑带隙依赖散射体几何构型，目标频段因而需要针对性设计；传统拓扑优化和深度学习方法是作者讨论的既有路线。本文将问题设定为如何从自然语言带隙需求得到结构参数，并进一步完成仿真验证与多模态结果交付。作者指出，AVHI界面可支持方向性声波传输，但现有页面未提供对既有方法的定量比较结论。",
+        "method": "[P2–P4][P8] 作者构建Manager-LLM与Designer-LLM协作架构：前者解析需求、规划任务和调用工具，后者依据目标带隙生成结构参数。训练数据来自强化学习探索并经筛选的结构—带隙映射；模型以Meta-Llama-3-8B为基础，采用LoRA监督微调。工具链校验几何、重建完整单元并调用COMSOL计算能带与场分布，最终输出图表及模型文件。",
+        "innovation": "[P1–P2][P8] 作者的主要方法贡献是把自然语言交互、专用结构生成模型、数值模拟和可制造文件生成组织到双智能体工作流中，而非仅输出候选参数。结构数据用原几何的六分之一表示以降低参数维度，随后通过镜像和旋转对称重建完整单元。作者还报告双智能体配置的任务成功率高于单模型配置；此处是作者报告，不能据此推断所有任务均有提升。",
+        "findings": "[P3–P6] 作者报告筛选后的训练集包含57,556个结构，四个分层测试集各含500个样本；归一化误差在不同频率范围保持可比，作者据此认为设计精度相对稳定。架构消融中，双智能体配置成功率高于单模型配置。实体验证采用6×6可编程阵列，作者称实测与模拟的主要传播路径及频谱趋势总体一致，并展示不同阵列状态下的路径切换。[P6–P7]",
+        "limitations": "[P6][P8] 作者指出实验有效带宽较理想数值模型更窄，传输响应幅值也有偏差，并将其可能原因归于机械间隙、热黏性损耗、打印表面粗糙度和有限阵列边界效应。数据集与代码未公开，仅可向通讯作者合理申请，独立复核因此受限。逐页核对记录还指出P3公式(1)的文字提取存在乱码，已依据原页纠正；记录未报告原文件缺项，不应把该提取错误说成缺失公式。",
+        "connection": "[P2][P6–P8] 解读：该框架与智能运维、结构设计和可靠性研究的联系，在于将需求解析、参数生成、仿真验证和实体测量串成可检查的工作流。对工程应用而言，几何校验、目标频段带隙识别及实验对照可作为候选验证环节；但本文研究对象是AVHI，现有资料没有证明该流程已用于设备运维或一般结构可靠性评估。",
+        "next_steps": "[P6][P8] 建议：后续可在获取数据与代码的前提下，独立复核带隙误差和架构消融结果，并针对实验中带宽变窄及幅值偏差分析机械间隙、材料损耗和有限尺寸因素的影响。也可进一步检验不同目标频段或设计条件下的有效性；这些属于研究建议，现有资料并未报告相关扩展实验或结果。"
       },
       "recommended_direction": "generative_design",
       "title_zh": "大语言模型驱动的声学谷霍尔绝缘体逆向设计",
-      "analysis_basis": "abstract",
+      "analysis_basis": "full_text",
       "analysis_kind": "model",
       "analysis_sources": [
-        "https://doi.org/10.1038/s41524-026-02349-7"
+        "https://www.nature.com/articles/s41524-026-02349-7_reference.pdf"
       ],
-      "analyzed_at": "2026-10-16T07:04:29.491222+00:00",
-      "llm_model": "gpt-6.1-sol",
+      "analyzed_at": "2026-10-18T02:20:08.025989+00:00",
+      "llm_model": "gpt-6-luna",
       "article": {
         "version": 3,
         "basis": "abstract",
@@ -384,21 +423,68 @@
       },
       "article_updated_at": "2026-10-16T07:38:50.869816+00:00",
       "article_profile": "cf0ca83567d5c43d55b7c24519aba8c1ee08e7bb761d0ef940fb64c059048e53",
-      "analysis_references": {},
-      "analysis_material_version": "5a35a9b959ae95271ee4719e1aefb187dedd395ff161fbd9c42fbb999bb99c70",
-      "analysis_issues": [],
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P2",
+          "P4",
+          "P8"
+        ],
+        "innovation": [
+          "P1",
+          "P2",
+          "P8"
+        ],
+        "findings": [
+          "P3",
+          "P4",
+          "P6",
+          "P7"
+        ],
+        "limitations": [
+          "P3",
+          "P6",
+          "P8"
+        ],
+        "connection": [
+          "P2",
+          "P6",
+          "P8"
+        ],
+        "next_steps": [
+          "P6",
+          "P8"
+        ]
+      },
+      "analysis_material_version": "83ceef596d6b702e92e717d785bd99f6032ef647a3ed0e65f7de68401d7db719",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "公式(1)原图可读；文字提取将分段奖励公式中的指数、平方项及条件符号错乱。原图公式可辨为条件分段形式，且正文定义 f_t、f_{t-1} 与 σ；据此不沿用提取文本的乱码公式。"
+        }
+      ],
       "reading_status": {
         "paper_id": "d5b8590dae6a",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T07:38:50.869816+00:00",
-        "basis": "abstract",
-        "article_state": "complete",
-        "article_stage": "",
+        "state": "published",
+        "updated_at": "2026-10-18T02:20:08.038195+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
         "reason": "",
-        "total": 0,
-        "covered": 0,
-        "pdf_available": false,
-        "issues": []
+        "total": 9,
+        "covered": 9,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "公式(1)原图可读；文字提取将分段奖励公式中的指数、平方项及条件符号错乱。原图公式可辨为条件分段形式，且正文定义 f_t、f_{t-1} 与 σ；据此不沿用提取文本的乱码公式。"
+          }
+        ]
       }
     },
     {
@@ -1807,13 +1893,14 @@
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "bff62d107e4c",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T07:05:26.259093+00:00",
-        "basis": "abstract",
+        "state": "retry",
+        "updated_at": "2026-10-18T02:13:12.473204+00:00",
+        "basis": "full_text",
         "article_state": "complete",
         "article_stage": "",
         "reason": "",
-        "total": 0,
+        "next_retry_at": "2026-10-18T02:18:12.473204+00:00",
+        "total": 107,
         "covered": 0,
         "pdf_available": false,
         "issues": []
@@ -1979,15 +2066,17 @@
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "fa241d43484d",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T07:49:14.615885+00:00",
-        "basis": "abstract",
+        "state": "retry",
+        "updated_at": "2026-10-18T02:22:52.740024+00:00",
+        "basis": "full_text",
         "article_state": "complete",
         "article_stage": "",
         "reason": "",
-        "total": 0,
-        "covered": 0,
-        "pdf_available": false,
+        "error_code": "assessment_evidence",
+        "next_retry_at": "2026-10-18T02:27:52.740024+00:00",
+        "total": 14,
+        "covered": 14,
+        "pdf_available": true,
         "issues": []
       }
     },
@@ -2200,11 +2289,11 @@
       "reading_status": {
         "paper_id": "a7897e08db6d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T07:25:35.172346+00:00",
+        "updated_at": "2026-10-18T02:17:40.928607+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -2241,7 +2330,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "工业搅拌罐中底物空间分布影响过程设计与控制，但高保真CFD计算成本限制了常规应用。作者以760次CFD模拟训练代理模型，结合全局工况与局部空间描述符预测完整三维浓度场。摘要报告注意力神经网络测试R²≈0.91，并实现毫秒级推理，相比CFD最高加速百万倍。其价值在于支持运行空间探索与数字孪生；当前仅有摘要，尚不能核查误差分布及实际部署效果。[摘要]",
+      "summary": "本文针对工业搅拌罐中CFD预测三维底物浓度场耗时的问题，训练监督式代理模型，将全局操作条件与局部空间特征映射为浓度场。作者比较多种模型后报告，Modified-Attention NN在留出测试集上表现最佳；但误差仍集中于进料极值区和叶轮间高剪切区。研究未做实验验证，且模型受单一几何及单相MRF/RANS、Monod动力学设定限制。其价值在于展示快速筛查潜力，而非证明可替代CFD或跨尺度通用。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -2285,25 +2374,25 @@
       "focus_tags": [],
       "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "推荐关注其将全局运行条件与局部空间信息共同用于三维场预测的方法，尤其适合数字孪生和快速运行优化研究参考；但不能据此认定其已具备故障诊断或可靠性评估能力。[摘要；解读]",
+      "recommendation": "建议阅读，尤其适合关注反应器建模、CFD代理模型及机器学习验证设计的读者；文中对局部误差、留出测试和适用边界的讨论，可帮助判断快速预测结果能否支撑工程决策。",
       "deep_read": {
-        "problem": "研究针对工业搅拌罐底物梯度预测的精度与计算成本矛盾。摘要指出高保真CFD虽能提供详细预测，却“are computationally intensive”，限制常规应用。核心问题是能否降低空间场预测成本，使其适应更频繁的工况探索，而非直接开展设备故障识别。[摘要；解读]",
-        "method": "作者以760次CFD模拟训练代理模型，输入同时包含全局运行条件与局部空间描述符。前者涉及搅拌速度、进料策略、流体性质及生物动力学参数等，后者例如到进料点的距离；输出为完整三维底物浓度场。摘要明确使用“local spatial descriptors”，但未交代网络细节。[摘要]",
-        "innovation": "解读：值得关注的是将工况信息与空间位置特征结合，让代理模型承担三维浓度场的快速映射，而不只预测单一整体指标。摘要以“couple hydrodynamics and biokinetics”概括模型能力；但缺少既有方法比较及消融结果，不能据此认定其架构具有首创性。[摘要；解读]",
-        "findings": "摘要报告注意力神经网络在所比较方法中精度最高，测试R²≈0.91，并能捕捉关键混合特征；其“millisecond-scale inference”对应相较CFD最高百万倍加速。上述为作者报告的结果，当前资料未提供计算硬件、计时边界或分工况误差，无法进一步核验。[摘要]",
-        "limitations": "当前证据仅为摘要，未提供训练测试划分、模拟覆盖范围、物理约束及实验实测验证信息，因此无法判断对未见工况的泛化能力。这些属于资料缺口，并非已证实的方法缺陷。“trained on $$760$$ 760 CFD simulations”也不足以证明模型已在真实装置中得到验证。[摘要；解读]",
-        "connection": "解读：摘要提出支持“real-time optimization and digital-twin frameworks”，与智能运维中的状态预测和运行优化存在方法联系。其与结构设计的关联主要限于反应器设计决策支持，并非结构力学分析；对于失效概率、寿命预测或可靠性指标，当前资料没有直接证据。[摘要；解读]",
-        "next_steps": "建议：后续获取全文时，优先核查进料位置、黏度和液位变化下的测试设置，以及浓度极值区域的误差与守恒表现。若迁移至智能运维，可研究预测不确定性与优化决策风险的联系，并以实测数据检验适用边界；这些是研究建议，不是摘要已报告的工作。[摘要；建议]"
+        "problem": "[P1][P7] 作者希望解决高保真CFD预测工业搅拌罐三维底物梯度计算成本高、难以用于常规优化的问题，并指出既有方法多关注低维输出或二维流场。研究目标是依据工况及空间位置直接预测完整三维浓度分布；作者称目前缺少可直接比较的同类体积场代理模型，因此以底层CFD作基准，而非与其他三维代理横向比较。",
+        "method": "[P2][P8-P13] 作者基于760组CFD模拟构建监督学习数据，采用LHS覆盖全局工况，并把全局参数与局部空间描述符共同用于预测。比较线性、树模型、SVR及多种神经网络结构；以qS/qS,max作为主要目标，按模拟分组进行交叉验证，并保留独立测试模拟。作者还用体积加权KDE检查子样本分布。",
+        "innovation": "[P7][P12] 作者强调方法直接从全局操作条件映射到完整三维浓度场，并设计不同神经网络输入拓扑，使全局工况能够调制局部空间特征。相较聚焦低维指标或二维流场的既有工作，这是空间预测粒度上的推进。解读：本文贡献侧重代理建模框架及目标变量表示，而非提出新的CFD方程或实验验证体系。",
+        "findings": "[P3-P6] 作者报告Modified-Attention NN在独立测试集上MSE为0.0054、R²为0.91；Focused-Attention NN的空间界面呈现较清晰，而前者全局MSE略低。学习曲线显示高容量模型继续受益于更多模拟，但边际改善减小。图示及正文指出误差集中在进料附近、耗竭区与叶轮间边界，因此作者将模型定位为快速筛查工具。",
+        "limitations": "[P6-P9][P13] 作者明确未进行实验验证，数据来自单一几何、单相RANS/MRF和Monod动力学，模型因此是CFD一致的模拟器而非实验验证的反应器预测器；局部极值及高剪切区可靠性较弱。原页[P8]同时写明采用96 m³几何并称总容积170 m³，表述不一致，可能影响对设备规模的理解；本资料未提供可据以消解该差异的信息。",
+        "connection": "[P6-P7] 与智能运维方向的联系主要是潜在的快速工况扫描、在线设定值优化和数字孪生集成，作者将其视为应用前景，而非已验证的运维系统。与结构设计和可靠性研究的联系较间接：三维梯度及局部误差可提示需重点检查的区域，但现有证据不足以证明其能直接支持设备可靠性判定或结构改型。",
+        "next_steps": "[P7][P9] 建议先针对进料极值区、底部耗竭区及叶轮间高剪切区开展定向CFD采样，并用实验测量检验预测偏差；再评估不同尺度、几何、流体性质及动力学条件下的迁移能力。若用于智能运维，应进一步验证在线数据输入、工况域外识别与不确定性告警。以上为建议，作者提出的扩展方向不等同于本文已完成的验证。"
       },
       "recommended_direction": "ai_maintenance",
-      "title_zh": "机器学习代理模型实现工业生物反应器三维底物梯度快速预测",
-      "analysis_basis": "abstract",
+      "title_zh": "工业生物反应器三维底物梯度的机器学习快速预测",
+      "analysis_basis": "full_text",
       "analysis_kind": "model",
       "analysis_sources": [
-        "https://doi.org/10.1038/s41467-026-78273-7"
+        "https://www.nature.com/articles/s41467-026-78273-7_reference.pdf"
       ],
-      "analyzed_at": "2026-10-16T06:55:27.523951+00:00",
-      "llm_model": "gpt-6.1-sol",
+      "analyzed_at": "2026-10-18T02:16:31.282671+00:00",
+      "llm_model": "gpt-6-luna",
       "article": {
         "version": 3,
         "basis": "abstract",
@@ -2415,20 +2504,59 @@
       },
       "article_updated_at": "2026-10-16T07:24:13.221835+00:00",
       "article_profile": "3c03cd29b6a7ccea0e592659e8ab953ff89b85c46374d12c4824f946edbd5db8",
-      "analysis_references": {},
-      "analysis_material_version": "eacebd0e0881586141ada7cc074948dd3db40c30b64233836e2681d5f216ccff",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P7"
+        ],
+        "method": [
+          "P2",
+          "P8",
+          "P9",
+          "P10",
+          "P11",
+          "P12",
+          "P13"
+        ],
+        "innovation": [
+          "P7",
+          "P12"
+        ],
+        "findings": [
+          "P3",
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "limitations": [
+          "P6",
+          "P7",
+          "P8",
+          "P9",
+          "P13"
+        ],
+        "connection": [
+          "P6",
+          "P7"
+        ],
+        "next_steps": [
+          "P7",
+          "P9"
+        ]
+      },
+      "analysis_material_version": "e1d0b6635c542a3b060890650b52a2169ea07b9b396efdb2949bfdd452384ce0",
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "15b8068e8614",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T07:24:13.221835+00:00",
-        "basis": "abstract",
-        "article_state": "failed",
-        "article_stage": "review",
+        "state": "published",
+        "updated_at": "2026-10-18T02:16:31.322333+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
         "reason": "",
-        "total": 0,
-        "covered": 0,
-        "pdf_available": false,
+        "total": 15,
+        "covered": 15,
+        "pdf_available": true,
         "issues": []
       }
     },
@@ -2455,7 +2583,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "本文针对声学谷霍尔绝缘体的目标带隙逆向设计，提出双智能体协作框架：设计智能体基于强化学习生成的数据库微调，管理智能体负责需求解析、任务规划、仿真调用及结果生成。系统可输出结构参数、能带、本征模态场和可制造模型文件。摘要称测试集带隙误差分析支持设计精度，但未给出具体数值与对照结果。解读：其阅读价值主要在于连接语言需求、结构生成和数值验证的工作流，而非已获充分量化证明的性能优势。[摘要]",
+      "summary": "本文提出面向声学谷霍尔绝缘体（AVHI）的双智能体逆向设计框架：Designer-LLM根据目标带隙生成结构参数，Manager-LLM解析需求并协调仿真和多模态输出。作者以强化学习构建结构—带隙数据库，并用其微调模型；测试集评估及可编程阵列实验用于检验带隙匹配与声波路径调控。作者报告实验与模拟的主要传播路径总体一致，同时指出实测带宽和响应幅值存在偏差。[P1–P8]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -2502,25 +2630,25 @@
       ],
       "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "建议重点关注生成式结构设计与仿真验证的衔接，以及双智能体的职责划分；当前仅有摘要，尚不能判断其相对传统优化方法的精度或效率优势。[摘要]",
+      "recommendation": "推荐关注声学超材料逆向设计、LLM智能体协作或仿真—实验闭环的读者，尤其是希望了解自然语言需求如何连接结构生成、数值验证和实体声波调控的研究者。",
       "deep_read": {
-        "problem": "研究面向声学谷霍尔绝缘体的目标带隙逆向设计。摘要指出，此类材料能够实现“robust directional wave transport”，并具有通信、传感和波调控应用前景。解读：核心问题是如何把简短设计需求转化为满足带隙目标的结构，而非仅生成语言描述。[摘要]",
-        "method": "框架由两个协作智能体组成。Designer-LLM利用强化学习生成的声学谷霍尔绝缘体数据库进行微调，承担带隙目标驱动的结构设计；Manager-LLM负责规划、语义解析、仿真工具调用和多模态结果生成。摘要未说明模型规模、数据量或微调细节。[摘要]",
-        "innovation": "摘要明确提出“modular LLM-agent framework”，将语义交互、逆向设计、数值验证和多模态输出整合为统一流程。解读：可关注的创新线索是专业设计模型与流程管理模型的分工及集成方式；仅凭摘要不能认定其为首创，也不能确认相对已有框架的优势。[摘要]",
-        "findings": "系统可按简短需求输出结构参数、能带、本征模态场及可制造模型文件。摘要称测试集带隙误差分析表明设计具有“reliable bandgap-matching accuracy”。但未提供误差数值、样本规模或比较基线，因此只能确认作者报告了准确性验证，不能量化其效果。[摘要]",
-        "limitations": "当前证据仅为摘要，未披露数据库覆盖范围、训练与测试划分、误差分布、计算成本及失败案例，也未说明是否进行了实物制造验证。这些属于资料缺口，而非已经证实的方法缺陷。摘要中的可制造模型文件输出，也不能直接等同于制造可行性已经得到验证。[摘要]",
-        "connection": "解读：本文与生成式结构设计直接相关，展示了从需求表达、结构生成到仿真结果输出的集成思路。对智能运维的联系主要是任务编排与工具调用方式可供参考，摘要未涉及运维实验；对可靠性研究，也不能把稳健波传输或带隙匹配精度等同于寿命与失效可靠性证据。[摘要]",
-        "next_steps": "建议后续获取全文，优先核查目标带隙的定义、误差指标、测试集独立性，以及与传统优化和非微调模型的对照。可迁移研究建议是加入制造偏差或材料参数扰动下的设计验证，考察目标匹配与稳健性的关系；该方向属于延伸设想，并非摘要报告的成果。[摘要]"
+        "problem": "[P1–P2] AVHI的拓扑带隙依赖散射体几何构型，目标频段因而需要针对性设计；传统拓扑优化和深度学习方法是作者讨论的既有路线。本文将问题设定为如何从自然语言带隙需求得到结构参数，并进一步完成仿真验证与多模态结果交付。作者指出，AVHI界面可支持方向性声波传输，但现有页面未提供对既有方法的定量比较结论。",
+        "method": "[P2–P4][P8] 作者构建Manager-LLM与Designer-LLM协作架构：前者解析需求、规划任务和调用工具，后者依据目标带隙生成结构参数。训练数据来自强化学习探索并经筛选的结构—带隙映射；模型以Meta-Llama-3-8B为基础，采用LoRA监督微调。工具链校验几何、重建完整单元并调用COMSOL计算能带与场分布，最终输出图表及模型文件。",
+        "innovation": "[P1–P2][P8] 作者的主要方法贡献是把自然语言交互、专用结构生成模型、数值模拟和可制造文件生成组织到双智能体工作流中，而非仅输出候选参数。结构数据用原几何的六分之一表示以降低参数维度，随后通过镜像和旋转对称重建完整单元。作者还报告双智能体配置的任务成功率高于单模型配置；此处是作者报告，不能据此推断所有任务均有提升。",
+        "findings": "[P3–P6] 作者报告筛选后的训练集包含57,556个结构，四个分层测试集各含500个样本；归一化误差在不同频率范围保持可比，作者据此认为设计精度相对稳定。架构消融中，双智能体配置成功率高于单模型配置。实体验证采用6×6可编程阵列，作者称实测与模拟的主要传播路径及频谱趋势总体一致，并展示不同阵列状态下的路径切换。[P6–P7]",
+        "limitations": "[P6][P8] 作者指出实验有效带宽较理想数值模型更窄，传输响应幅值也有偏差，并将其可能原因归于机械间隙、热黏性损耗、打印表面粗糙度和有限阵列边界效应。数据集与代码未公开，仅可向通讯作者合理申请，独立复核因此受限。逐页核对记录还指出P3公式(1)的文字提取存在乱码，已依据原页纠正；记录未报告原文件缺项，不应把该提取错误说成缺失公式。",
+        "connection": "[P2][P6–P8] 解读：该框架与智能运维、结构设计和可靠性研究的联系，在于将需求解析、参数生成、仿真验证和实体测量串成可检查的工作流。对工程应用而言，几何校验、目标频段带隙识别及实验对照可作为候选验证环节；但本文研究对象是AVHI，现有资料没有证明该流程已用于设备运维或一般结构可靠性评估。",
+        "next_steps": "[P6][P8] 建议：后续可在获取数据与代码的前提下，独立复核带隙误差和架构消融结果，并针对实验中带宽变窄及幅值偏差分析机械间隙、材料损耗和有限尺寸因素的影响。也可进一步检验不同目标频段或设计条件下的有效性；这些属于研究建议，现有资料并未报告相关扩展实验或结果。"
       },
       "recommended_direction": "generative_design",
       "title_zh": "大语言模型驱动的声学谷霍尔绝缘体逆向设计",
-      "analysis_basis": "abstract",
+      "analysis_basis": "full_text",
       "analysis_kind": "model",
       "analysis_sources": [
-        "https://doi.org/10.1038/s41524-026-02349-7"
+        "https://www.nature.com/articles/s41524-026-02349-7_reference.pdf"
       ],
-      "analyzed_at": "2026-10-16T07:04:29.491222+00:00",
-      "llm_model": "gpt-6.1-sol",
+      "analyzed_at": "2026-10-18T02:20:08.025989+00:00",
+      "llm_model": "gpt-6-luna",
       "article": {
         "version": 3,
         "basis": "abstract",
@@ -2594,21 +2722,68 @@
       },
       "article_updated_at": "2026-10-16T07:38:50.869816+00:00",
       "article_profile": "cf0ca83567d5c43d55b7c24519aba8c1ee08e7bb761d0ef940fb64c059048e53",
-      "analysis_references": {},
-      "analysis_material_version": "5a35a9b959ae95271ee4719e1aefb187dedd395ff161fbd9c42fbb999bb99c70",
-      "analysis_issues": [],
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P2",
+          "P4",
+          "P8"
+        ],
+        "innovation": [
+          "P1",
+          "P2",
+          "P8"
+        ],
+        "findings": [
+          "P3",
+          "P4",
+          "P6",
+          "P7"
+        ],
+        "limitations": [
+          "P3",
+          "P6",
+          "P8"
+        ],
+        "connection": [
+          "P2",
+          "P6",
+          "P8"
+        ],
+        "next_steps": [
+          "P6",
+          "P8"
+        ]
+      },
+      "analysis_material_version": "83ceef596d6b702e92e717d785bd99f6032ef647a3ed0e65f7de68401d7db719",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "公式(1)原图可读；文字提取将分段奖励公式中的指数、平方项及条件符号错乱。原图公式可辨为条件分段形式，且正文定义 f_t、f_{t-1} 与 σ；据此不沿用提取文本的乱码公式。"
+        }
+      ],
       "reading_status": {
         "paper_id": "d5b8590dae6a",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T07:38:50.869816+00:00",
-        "basis": "abstract",
-        "article_state": "complete",
-        "article_stage": "",
+        "state": "published",
+        "updated_at": "2026-10-18T02:20:08.038195+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
         "reason": "",
-        "total": 0,
-        "covered": 0,
-        "pdf_available": false,
-        "issues": []
+        "total": 9,
+        "covered": 9,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "公式(1)原图可读；文字提取将分段奖励公式中的指数、平方项及条件符号错乱。原图公式可辨为条件分段形式，且正文定义 f_t、f_{t-1} 与 σ；据此不沿用提取文本的乱码公式。"
+          }
+        ]
       }
     },
     {
@@ -4017,13 +4192,14 @@
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "bff62d107e4c",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T07:05:26.259093+00:00",
-        "basis": "abstract",
+        "state": "retry",
+        "updated_at": "2026-10-18T02:13:12.473204+00:00",
+        "basis": "full_text",
         "article_state": "complete",
         "article_stage": "",
         "reason": "",
-        "total": 0,
+        "next_retry_at": "2026-10-18T02:18:12.473204+00:00",
+        "total": 107,
         "covered": 0,
         "pdf_available": false,
         "issues": []
@@ -4189,15 +4365,17 @@
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "fa241d43484d",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T07:49:14.615885+00:00",
-        "basis": "abstract",
+        "state": "retry",
+        "updated_at": "2026-10-18T02:22:52.740024+00:00",
+        "basis": "full_text",
         "article_state": "complete",
         "article_stage": "",
         "reason": "",
-        "total": 0,
-        "covered": 0,
-        "pdf_available": false,
+        "error_code": "assessment_evidence",
+        "next_retry_at": "2026-10-18T02:27:52.740024+00:00",
+        "total": 14,
+        "covered": 14,
+        "pdf_available": true,
         "issues": []
       }
     },
@@ -4410,11 +4588,11 @@
       "reading_status": {
         "paper_id": "a7897e08db6d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-16T07:25:35.172346+00:00",
+        "updated_at": "2026-10-18T02:17:40.928607+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
