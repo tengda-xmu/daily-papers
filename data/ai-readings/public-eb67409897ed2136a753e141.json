@@ -1,14 +1,14 @@
 {
   "id": "public-eb67409897ed2136a753e141",
-  "content_version": "6cdef2dfdcb1bc9e615c729ebc5324441c0dcc7d41291f8a2d651f704d29f199",
+  "content_version": "d4b9c506ca4ce53f25d62ef65c2c085427f322c3147dd3b56bb12380cb94e476",
   "analysis": {
-    "title_zh": "FLUX.3 Image Klein 发布：Diffusers 首日支持，新增布局控制",
-    "summary": "Black Forest Labs 发布 FLUX.3 Image Klein，Diffusers 自发布首日即提供支持。同一模型支持文生图和多参考图的图生图，并新增布局控制：通过提示词中的边界框指定图像各部分的位置，或指定参考图中需要移动的部分。公告列出两个开放检查点：时间步蒸馏版面向快速推理，默认16步、不使用CFG；基础版默认50步、使用CFG。适用于多参考图创作和需要明确空间布局的生成任务。",
-    "application": "建议：科研迁移可探索用布局控制生成位置可控的结构示意图，或构建视觉检测的合成样本；这些属于研究设想，并非官方已验证效果。官方明确支持文生图、多参考图的图生图及布局控制，但所给片段未提供科研任务效果或定量性能验证。",
-    "requirements": "使用条件见官方文档",
+    "title_zh": "FLUX.3 Image Klein 已支持 Diffusers：新增布局控制的开放图像生成模型",
+    "summary": "公告宣布，Black Forest Labs 的 FLUX.3 Image Klein 已发布，并从首日支持 Diffusers。[S1] 同一模型可完成文生图、多参考图像到图像生成，并新增布局控制：通过提示词中的边界框指定各部分的位置，或指定参考图中哪些部分需要移动。[S2][S3] 公告列出蒸馏版与基础版两个开放检查点，分别面向快速推理和基础模型使用；这些能力适用于有明确构图约束的生成与参考图编辑任务。[S4][S5]",
+    "application": "建议：科研迁移可探索用布局控制生成结构示意图或构建位置可控的合成图像数据，但这属于迁移设想，不是官方已验证的科研效果。公告明确介绍了生成、参考图编辑和布局控制能力，但所给片段未提供性能对比、可靠性或科研任务验证结果。",
+    "requirements": "使用条件见官方文档。",
     "steps": [
       {
-        "text": "在提示词中写入边界框，指定图像各部分的位置，或指定参考图中需要移动的部分；所给片段未提供具体语法。",
+        "text": "在提示词中写入边界框，指定图像各部分的位置，或指定参考图中需要移动的部分。[S3]",
         "evidence": "You write bounding boxes into the prompt to say where each part of the image should go, or which parts of a reference image to move."
       }
     ],
@@ -16,10 +16,10 @@
       "Black Forest Labs FLUX.3 Image Klein is here, and it runs in Diffusers from day one.",
       "One model does text-to-image and multi-reference image-to-image, and it adds something new, the layout control .",
       "You write bounding boxes into the prompt to say where each part of the image should go, or which parts of a reference image to move.",
-      "black-forest-labs/flux-3-image-klein Time step distilled, for fast inference 16 steps, no CFG",
-      "black-forest-labs/flux-3-image-klein-base Base model 50 steps, CFG"
+      "Both open checkpoints are in the FLUX.3 Image Klein collection",
+      "black-forest-labs/flux-3-image-klein Time step distilled, for fast inference 16 steps, no CFG black-forest-labs/flux-3-image-klein-base Base model 50 steps, CFG"
     ],
     "basis_url": "https://huggingface.co/blog/flux-3"
   },
-  "analyzed_at": "2026-10-17T01:02:35.204329+00:00"
+  "analyzed_at": "2026-10-18T06:33:12.634137+00:00"
 }
