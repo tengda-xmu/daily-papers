@@ -140,7 +140,7 @@
         "state": "published",
         "updated_at": "2026-10-18T13:23:36.135375+00:00",
         "basis": "full_text",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "facts",
         "reason": "",
         "total": 33,
@@ -713,8 +713,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -741,7 +741,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Superconducting motors offer high power density, compactness, and efficiency for hydrogen-powered cryo-electric aircraft, but AC operation in cryogenic temperatures produces thermal losses that must be estimated accurately and rapidly at the design stage to optimize efficiency, minimize cryogenic heat load, and maximize specific power density. Traditional modeling approaches fall short—Finite-element is too slow/costly for system-level models, analytical models and look-up tables lack accuracy/flexibility, and earlier intelligent models gave only cycle-averaged (static) losses. Here w…",
+      "summary": "超导电机的低温交流损耗影响飞机冷却负担与系统重量，传统有限元却难以支撑快速系统仿真。本文利用2816种电机配置的有限元数据，比较14种AI方法与2种数学拟合方法，再以级联前馈神经网络预测半周期损耗波形。作者报告静态、动态R²分别为99.994%和99.973%，并开展范围外测试与Simulink集成。解读：其价值主要是快速性能评估，而非生成式设计；实机可靠性仍缺少验证证据。[P2][P4][P8][P10–P13]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -783,11 +783,153 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐作为电机设计快速评估与动态代理建模的方法参考，重点阅读算法对比、有限范围外推和系统集成；若目标严格限定为生成式设计，则不宜作为核心推荐。[P8][P10–P12]",
+      "deep_read": {
+        "problem": "超导电机交流损耗在低温环境释放，冷却能力又受设备重量与机载液氢储量约束，因此必须联合权衡损耗、尺寸和功率密度。作者关注“morphology of AC loss waveforms”：仅有周期平均值不足以支持需要时间变化信息的系统级仿真。[P2–P3]",
+        "method": "作者以COMSOL的T–A有限元槽模型生成2816种配置数据，动态样本采用半周期51个时间步。CFNN接收磁场、气隙半径、线圈电流密度、纵横比及时间，以Levenberg–Marquardt训练，并通过5折交叉验证搜索超参数。[P3–P5][P7]",
+        "innovation": "解读：贡献主要是将超导推进电机损耗代理从周期平均值扩展到时间相关波形，并结合多算法比较、参数范围外测试与Simulink实现。它采用已有CFNN结构，不是提出新的神经网络，也不是自动生成电机几何；时间作为输入亦不等于显式建模历史状态。[P5][P8][P10–P12]",
+        "findings": "静态CFNN的R²为99.994%、MARE为0.316%，动态模型对应为99.973%、2.79%。1059种范围外配置上，两者R²分别为97.31%和99.54%。作者认为模型能学习波形形态，但这些精度均相对于有限元参考值，不能直接解释为实测精度。[P8][P10]",
+        "limitations": "解读：外推参考值仍来自同一有限元模型，实机及故障工况验证不足；代码受保密限制。原文件缺项为[P14]文献37、39、40、41、47未列页码或文章编号，影响文献定位，不直接否定性能结果。[P5]公式(16)范数未印平方，应保留而非擅补。[P10][P13]\n原文核对：[P14] 原页参考文献37、39、40、41、47均仅列期刊卷号与年份，未列页码或文章编号；已核实并非文字提取遗漏。本项不涉及公式或图号，也不影响页面识读及本论文性能结论，但使相关数值建模与机器学习文献的定位信息不完整；不推补缺失内容。",
+        "connection": "解读：对结构设计，该模型可作为参数扫描与多目标权衡的性能评估器，但尚未构成生成式设计流程。对智能运维与可靠性，可将损耗波形接入热—机械模型以研究热负荷和寿命；作者将这些列为应用前景，未报告维护策略或寿命预测的验证结果。[P12]",
+        "next_steps": "建议：先按电机配置分组划分数据，检查同一波形的时间点跨集合是否影响评价；再用独立实验核验峰值、相位与周期积分误差。若用于生成式设计，应另设几何生成与约束优化模块，并对候选设计回调有限元校核，这不是论文已完成的工作。[P4][P8][P10–P12]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "面向氢能低温电动飞机超导推进电机交流损耗时变预测的先进深度学习模型",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s44172-025-00554-8"
+      ],
+      "analyzed_at": "2026-10-19T12:18:59.897777+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P5",
+          "P7"
+        ],
+        "innovation": [
+          "P5",
+          "P8",
+          "P10",
+          "P11",
+          "P12"
+        ],
+        "findings": [
+          "P8",
+          "P10"
+        ],
+        "limitations": [
+          "P5",
+          "P10",
+          "P13",
+          "P14"
+        ],
+        "connection": [
+          "P12"
+        ],
+        "next_steps": [
+          "P4",
+          "P8",
+          "P10",
+          "P11",
+          "P12"
+        ]
+      },
+      "analysis_material_version": "1df1af9d816fa64125106d07d44df106da452cb41f7715339ad98d9e98886b1b",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "原页已读清：公式(1)、(5)、(6)中的减号被文字提取误写为“/C0”。应分别读作A_z=A_0 sin(πx/T_p−ωt)、∇²A=−μ_rμ_0J、∇×ρ∇×T=−∂B/∂t。公式(2)原页明确为A_0=B_g/(π·T_p)，应保留原式，不能自行改写。上述纠正涉及磁场源相位与控制方程符号；原页公式未见缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "公式(8)的指数在文字提取中出现“/C18/C19”和“/C0”等乱码；原页可读，指数为n−1，电阻率前因子为E_c/J_c(B)。公式(9)可读为Q=∫从t₀到t₀+δt dt ∫_S E·J ds。无公式缺项；纠正涉及幂律非线性及损耗积分的准确转录，不改变本页数据规模与划分的作者陈述。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "公式(14)至(16)的核函数括号与减号被提取为编码乱码。原页公式(16)为K(x,x_j)=exp(‖x−x_j‖/(−2α²))，范数没有印平方；只能照录，不能自行补成平方范数。这影响GRNN核函数的复现表述，但本页未提供可据此核验的预测结果。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "公式(18)的函数括号及公式(19)至(20)的括号、减号、点积和星号存在提取乱码。原页可读：T(x_i)=Σ_{k=1}^K f_k(x_i)；SVR目标为(1/2)‖w‖²+CΣ(ξ_i+ξ_i*)，约束为y_i−(w·x_i+b)≤ε+ξ_i、(w·x_i+b)−y_i≤ε+ξ_i*、ξ_i及ξ_i*≥0。无缺项；纠正保障SVR优化问题的准确转录。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "公式(21)至(26)中的减号、预测值帽号、实际值均值横线、绝对值及根号出现文字提取乱码。原页可明确读为：R²=1−Σ(y_i−ŷ_i)²/Σ(y_i−ȳ)²；RV=1−R²；绝对误差=|y_i−ŷ_i|；MAE为其算术平均；RMSE=√[(1/n)Σ(y_i−ŷ_i)²]；MARE=(1/n)Σ|(y_i−ŷ_i)/y_i|×100。原页公式无缺项，纠正影响评价指标的准确解释，不改变表1数值。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P13",
+          "detail": "文字提取遗漏了原页收稿、接收日期之后的“Published online: 17 December 2025”。已从原页核实并补正；无公式或图号涉及，不影响损耗预测结论，但影响论文出版元数据的完整性。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P14",
+          "detail": "原页参考文献37、39、40、41、47均仅列期刊卷号与年份，未列页码或文章编号；已核实并非文字提取遗漏。本项不涉及公式或图号，也不影响页面识读及本论文性能结论，但使相关数值建模与机器学习文献的定位信息不完整；不推补缺失内容。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "ed8807405730",
+        "state": "published",
+        "updated_at": "2026-10-19T12:18:59.933913+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 16,
+        "covered": 16,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "原页已读清：公式(1)、(5)、(6)中的减号被文字提取误写为“/C0”。应分别读作A_z=A_0 sin(πx/T_p−ωt)、∇²A=−μ_rμ_0J、∇×ρ∇×T=−∂B/∂t。公式(2)原页明确为A_0=B_g/(π·T_p)，应保留原式，不能自行改写。上述纠正涉及磁场源相位与控制方程符号；原页公式未见缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "公式(8)的指数在文字提取中出现“/C18/C19”和“/C0”等乱码；原页可读，指数为n−1，电阻率前因子为E_c/J_c(B)。公式(9)可读为Q=∫从t₀到t₀+δt dt ∫_S E·J ds。无公式缺项；纠正涉及幂律非线性及损耗积分的准确转录，不改变本页数据规模与划分的作者陈述。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "公式(14)至(16)的核函数括号与减号被提取为编码乱码。原页公式(16)为K(x,x_j)=exp(‖x−x_j‖/(−2α²))，范数没有印平方；只能照录，不能自行补成平方范数。这影响GRNN核函数的复现表述，但本页未提供可据此核验的预测结果。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "公式(18)的函数括号及公式(19)至(20)的括号、减号、点积和星号存在提取乱码。原页可读：T(x_i)=Σ_{k=1}^K f_k(x_i)；SVR目标为(1/2)‖w‖²+CΣ(ξ_i+ξ_i*)，约束为y_i−(w·x_i+b)≤ε+ξ_i、(w·x_i+b)−y_i≤ε+ξ_i*、ξ_i及ξ_i*≥0。无缺项；纠正保障SVR优化问题的准确转录。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "公式(21)至(26)中的减号、预测值帽号、实际值均值横线、绝对值及根号出现文字提取乱码。原页可明确读为：R²=1−Σ(y_i−ŷ_i)²/Σ(y_i−ȳ)²；RV=1−R²；绝对误差=|y_i−ŷ_i|；MAE为其算术平均；RMSE=√[(1/n)Σ(y_i−ŷ_i)²]；MARE=(1/n)Σ|(y_i−ŷ_i)/y_i|×100。原页公式无缺项，纠正影响评价指标的准确解释，不改变表1数值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "文字提取遗漏了原页收稿、接收日期之后的“Published online: 17 December 2025”。已从原页核实并补正；无公式或图号涉及，不影响损耗预测结论，但影响论文出版元数据的完整性。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P14",
+            "detail": "原页参考文献37、39、40、41、47均仅列期刊卷号与年份，未列页码或文章编号；已核实并非文字提取遗漏。本项不涉及公式或图号，也不影响页面识读及本论文性能结论，但使相关数值建模与机器学习文献的定位信息不完整；不推补缺失内容。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -808,7 +950,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Generative models show great promise for the inverse design of molecules and inorganic crystals, but remain largely ineffective within more complex structures such as amorphous materials. Here, we present a diffusion model that reliably generates amorphous structures up to 3 orders of magnitude times faster than conventional simulations across processing conditions, compositions, and data sources. Generated structures recovered the short- and medium-range order, sampling diversity, and macroscopic properties of silica glass, as validated by simulations and an information-theoretical s…",
+      "summary": "非晶材料缺乏晶体的周期性，其结构生成与逆向设计更具挑战。本文提出扩散模型，摘要称其跨加工条件、成分和数据来源生成非晶结构，速度最高比常规模拟快三个数量级，并恢复硅玻璃的结构有序性、采样多样性与宏观性质。条件生成进一步用于低冷却速率结构及介孔二氧化硅探索，并扩展至金属玻璃。本文值得作为材料生成设计的方法线索阅读，但当前仅有摘要，模型细节与验证强度仍待核查。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -850,11 +992,43 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐关注其面向非晶材料的条件生成方法，以及结构、性质和采样多样性的联合验证思路；这些内容直接切合生成式设计方向，但重点推荐仍应以全文核查为前提。[摘要]",
+      "deep_read": {
+        "problem": "【论文摘要】研究针对生成模型在复杂非晶结构中效果有限的问题。原文指出其在此类体系中“remain largely ineffective”。目标不仅是生成原子结构，还包括覆盖不同加工条件、成分和数据来源，为非晶材料设计与模拟提供更可行的路径。[摘要]",
+        "method": "【论文摘要】作者采用扩散模型生成非晶结构，并通过条件生成探索特定冷却条件下的体系；验证结合模拟与信息论策略，随后扩展至金属玻璃及实验数据来源。摘要未说明网络架构、条件编码、训练规模和信息论指标，尚不能据此复现方法。[摘要]",
+        "innovation": "【解读】值得关注的创新线索，是将扩散生成从分子和晶体拓展至非晶体系，并尝试衔接加工条件与表征数据。摘要以“synthetic data can be generated from characterization results”概括后一能力，但其相对既有方法的新颖程度仍需全文与文献对照。[摘要]",
+        "findings": "【论文摘要】作者报告生成速度最高提升三个数量级，并恢复硅玻璃的短程与中程有序、采样多样性和宏观性质。条件生成涉及低至10 −2 K/ps的冷却速率，并揭示韧脆转变及介孔二氧化硅结构；摘要未给出误差、样本数或具体比较结果。[摘要]",
+        "limitations": "【资料局限】当前只有摘要，不能判断速度优势的计时边界、硬件条件及比较公平性，也无法核查性质误差、数据划分和跨体系泛化。摘要中的“reliably generates”属于作者概括，尚缺可独立审查的细节；这些是证据缺口，不应直接认定为模型缺陷。[摘要]",
+        "connection": "【解读】该研究与生成式材料设计直接相关；条件生成和宏观性质恢复也为结构设计提供了方法联系。韧脆转变涉及力学行为，但摘要未讨论构件承载、失效概率或运维监测，因此与结构可靠性、智能运维的关系目前属于潜在迁移，而非已验证应用。[摘要]",
+        "next_steps": "【建议】优先核查全文中的条件变量、结构有效性约束、信息论验证和速度对比设置，再判断是否适合迁移。面向可靠性研究，可进一步检验生成样本能否保持力学响应分布及极端失效特征；这些属于后续研究设想，并非作者已报告的成果。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "面向非晶材料结构生成的扩散模型",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s41524-025-01901-1"
+      ],
+      "analyzed_at": "2026-10-19T12:04:28.298891+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "31b3aeec2cf0c4a14ba658ce0988ff7c3a95fe3458b99fe06f6ef12ea12c7001",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "5f02341b933a",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-19T12:04:28.304992+00:00",
+        "basis": "abstract",
+        "article_state": "failed",
+        "article_stage": "writing",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "extended": [],
@@ -995,7 +1169,7 @@
         "state": "published",
         "updated_at": "2026-10-18T13:23:36.135375+00:00",
         "basis": "full_text",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "facts",
         "reason": "",
         "total": 33,
@@ -1568,8 +1742,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -1596,7 +1770,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Superconducting motors offer high power density, compactness, and efficiency for hydrogen-powered cryo-electric aircraft, but AC operation in cryogenic temperatures produces thermal losses that must be estimated accurately and rapidly at the design stage to optimize efficiency, minimize cryogenic heat load, and maximize specific power density. Traditional modeling approaches fall short—Finite-element is too slow/costly for system-level models, analytical models and look-up tables lack accuracy/flexibility, and earlier intelligent models gave only cycle-averaged (static) losses. Here w…",
+      "summary": "超导电机的低温交流损耗影响飞机冷却负担与系统重量，传统有限元却难以支撑快速系统仿真。本文利用2816种电机配置的有限元数据，比较14种AI方法与2种数学拟合方法，再以级联前馈神经网络预测半周期损耗波形。作者报告静态、动态R²分别为99.994%和99.973%，并开展范围外测试与Simulink集成。解读：其价值主要是快速性能评估，而非生成式设计；实机可靠性仍缺少验证证据。[P2][P4][P8][P10–P13]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -1638,11 +1812,153 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐作为电机设计快速评估与动态代理建模的方法参考，重点阅读算法对比、有限范围外推和系统集成；若目标严格限定为生成式设计，则不宜作为核心推荐。[P8][P10–P12]",
+      "deep_read": {
+        "problem": "超导电机交流损耗在低温环境释放，冷却能力又受设备重量与机载液氢储量约束，因此必须联合权衡损耗、尺寸和功率密度。作者关注“morphology of AC loss waveforms”：仅有周期平均值不足以支持需要时间变化信息的系统级仿真。[P2–P3]",
+        "method": "作者以COMSOL的T–A有限元槽模型生成2816种配置数据，动态样本采用半周期51个时间步。CFNN接收磁场、气隙半径、线圈电流密度、纵横比及时间，以Levenberg–Marquardt训练，并通过5折交叉验证搜索超参数。[P3–P5][P7]",
+        "innovation": "解读：贡献主要是将超导推进电机损耗代理从周期平均值扩展到时间相关波形，并结合多算法比较、参数范围外测试与Simulink实现。它采用已有CFNN结构，不是提出新的神经网络，也不是自动生成电机几何；时间作为输入亦不等于显式建模历史状态。[P5][P8][P10–P12]",
+        "findings": "静态CFNN的R²为99.994%、MARE为0.316%，动态模型对应为99.973%、2.79%。1059种范围外配置上，两者R²分别为97.31%和99.54%。作者认为模型能学习波形形态，但这些精度均相对于有限元参考值，不能直接解释为实测精度。[P8][P10]",
+        "limitations": "解读：外推参考值仍来自同一有限元模型，实机及故障工况验证不足；代码受保密限制。原文件缺项为[P14]文献37、39、40、41、47未列页码或文章编号，影响文献定位，不直接否定性能结果。[P5]公式(16)范数未印平方，应保留而非擅补。[P10][P13]\n原文核对：[P14] 原页参考文献37、39、40、41、47均仅列期刊卷号与年份，未列页码或文章编号；已核实并非文字提取遗漏。本项不涉及公式或图号，也不影响页面识读及本论文性能结论，但使相关数值建模与机器学习文献的定位信息不完整；不推补缺失内容。",
+        "connection": "解读：对结构设计，该模型可作为参数扫描与多目标权衡的性能评估器，但尚未构成生成式设计流程。对智能运维与可靠性，可将损耗波形接入热—机械模型以研究热负荷和寿命；作者将这些列为应用前景，未报告维护策略或寿命预测的验证结果。[P12]",
+        "next_steps": "建议：先按电机配置分组划分数据，检查同一波形的时间点跨集合是否影响评价；再用独立实验核验峰值、相位与周期积分误差。若用于生成式设计，应另设几何生成与约束优化模块，并对候选设计回调有限元校核，这不是论文已完成的工作。[P4][P8][P10–P12]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "面向氢能低温电动飞机超导推进电机交流损耗时变预测的先进深度学习模型",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s44172-025-00554-8"
+      ],
+      "analyzed_at": "2026-10-19T12:18:59.897777+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P5",
+          "P7"
+        ],
+        "innovation": [
+          "P5",
+          "P8",
+          "P10",
+          "P11",
+          "P12"
+        ],
+        "findings": [
+          "P8",
+          "P10"
+        ],
+        "limitations": [
+          "P5",
+          "P10",
+          "P13",
+          "P14"
+        ],
+        "connection": [
+          "P12"
+        ],
+        "next_steps": [
+          "P4",
+          "P8",
+          "P10",
+          "P11",
+          "P12"
+        ]
+      },
+      "analysis_material_version": "1df1af9d816fa64125106d07d44df106da452cb41f7715339ad98d9e98886b1b",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "原页已读清：公式(1)、(5)、(6)中的减号被文字提取误写为“/C0”。应分别读作A_z=A_0 sin(πx/T_p−ωt)、∇²A=−μ_rμ_0J、∇×ρ∇×T=−∂B/∂t。公式(2)原页明确为A_0=B_g/(π·T_p)，应保留原式，不能自行改写。上述纠正涉及磁场源相位与控制方程符号；原页公式未见缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "公式(8)的指数在文字提取中出现“/C18/C19”和“/C0”等乱码；原页可读，指数为n−1，电阻率前因子为E_c/J_c(B)。公式(9)可读为Q=∫从t₀到t₀+δt dt ∫_S E·J ds。无公式缺项；纠正涉及幂律非线性及损耗积分的准确转录，不改变本页数据规模与划分的作者陈述。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "公式(14)至(16)的核函数括号与减号被提取为编码乱码。原页公式(16)为K(x,x_j)=exp(‖x−x_j‖/(−2α²))，范数没有印平方；只能照录，不能自行补成平方范数。这影响GRNN核函数的复现表述，但本页未提供可据此核验的预测结果。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "公式(18)的函数括号及公式(19)至(20)的括号、减号、点积和星号存在提取乱码。原页可读：T(x_i)=Σ_{k=1}^K f_k(x_i)；SVR目标为(1/2)‖w‖²+CΣ(ξ_i+ξ_i*)，约束为y_i−(w·x_i+b)≤ε+ξ_i、(w·x_i+b)−y_i≤ε+ξ_i*、ξ_i及ξ_i*≥0。无缺项；纠正保障SVR优化问题的准确转录。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "公式(21)至(26)中的减号、预测值帽号、实际值均值横线、绝对值及根号出现文字提取乱码。原页可明确读为：R²=1−Σ(y_i−ŷ_i)²/Σ(y_i−ȳ)²；RV=1−R²；绝对误差=|y_i−ŷ_i|；MAE为其算术平均；RMSE=√[(1/n)Σ(y_i−ŷ_i)²]；MARE=(1/n)Σ|(y_i−ŷ_i)/y_i|×100。原页公式无缺项，纠正影响评价指标的准确解释，不改变表1数值。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P13",
+          "detail": "文字提取遗漏了原页收稿、接收日期之后的“Published online: 17 December 2025”。已从原页核实并补正；无公式或图号涉及，不影响损耗预测结论，但影响论文出版元数据的完整性。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P14",
+          "detail": "原页参考文献37、39、40、41、47均仅列期刊卷号与年份，未列页码或文章编号；已核实并非文字提取遗漏。本项不涉及公式或图号，也不影响页面识读及本论文性能结论，但使相关数值建模与机器学习文献的定位信息不完整；不推补缺失内容。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "ed8807405730",
+        "state": "published",
+        "updated_at": "2026-10-19T12:18:59.933913+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 16,
+        "covered": 16,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "原页已读清：公式(1)、(5)、(6)中的减号被文字提取误写为“/C0”。应分别读作A_z=A_0 sin(πx/T_p−ωt)、∇²A=−μ_rμ_0J、∇×ρ∇×T=−∂B/∂t。公式(2)原页明确为A_0=B_g/(π·T_p)，应保留原式，不能自行改写。上述纠正涉及磁场源相位与控制方程符号；原页公式未见缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "公式(8)的指数在文字提取中出现“/C18/C19”和“/C0”等乱码；原页可读，指数为n−1，电阻率前因子为E_c/J_c(B)。公式(9)可读为Q=∫从t₀到t₀+δt dt ∫_S E·J ds。无公式缺项；纠正涉及幂律非线性及损耗积分的准确转录，不改变本页数据规模与划分的作者陈述。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "公式(14)至(16)的核函数括号与减号被提取为编码乱码。原页公式(16)为K(x,x_j)=exp(‖x−x_j‖/(−2α²))，范数没有印平方；只能照录，不能自行补成平方范数。这影响GRNN核函数的复现表述，但本页未提供可据此核验的预测结果。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "公式(18)的函数括号及公式(19)至(20)的括号、减号、点积和星号存在提取乱码。原页可读：T(x_i)=Σ_{k=1}^K f_k(x_i)；SVR目标为(1/2)‖w‖²+CΣ(ξ_i+ξ_i*)，约束为y_i−(w·x_i+b)≤ε+ξ_i、(w·x_i+b)−y_i≤ε+ξ_i*、ξ_i及ξ_i*≥0。无缺项；纠正保障SVR优化问题的准确转录。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "公式(21)至(26)中的减号、预测值帽号、实际值均值横线、绝对值及根号出现文字提取乱码。原页可明确读为：R²=1−Σ(y_i−ŷ_i)²/Σ(y_i−ȳ)²；RV=1−R²；绝对误差=|y_i−ŷ_i|；MAE为其算术平均；RMSE=√[(1/n)Σ(y_i−ŷ_i)²]；MARE=(1/n)Σ|(y_i−ŷ_i)/y_i|×100。原页公式无缺项，纠正影响评价指标的准确解释，不改变表1数值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "文字提取遗漏了原页收稿、接收日期之后的“Published online: 17 December 2025”。已从原页核实并补正；无公式或图号涉及，不影响损耗预测结论，但影响论文出版元数据的完整性。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P14",
+            "detail": "原页参考文献37、39、40、41、47均仅列期刊卷号与年份，未列页码或文章编号；已核实并非文字提取遗漏。本项不涉及公式或图号，也不影响页面识读及本论文性能结论，但使相关数值建模与机器学习文献的定位信息不完整；不推补缺失内容。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -1663,7 +1979,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Generative models show great promise for the inverse design of molecules and inorganic crystals, but remain largely ineffective within more complex structures such as amorphous materials. Here, we present a diffusion model that reliably generates amorphous structures up to 3 orders of magnitude times faster than conventional simulations across processing conditions, compositions, and data sources. Generated structures recovered the short- and medium-range order, sampling diversity, and macroscopic properties of silica glass, as validated by simulations and an information-theoretical s…",
+      "summary": "非晶材料缺乏晶体的周期性，其结构生成与逆向设计更具挑战。本文提出扩散模型，摘要称其跨加工条件、成分和数据来源生成非晶结构，速度最高比常规模拟快三个数量级，并恢复硅玻璃的结构有序性、采样多样性与宏观性质。条件生成进一步用于低冷却速率结构及介孔二氧化硅探索，并扩展至金属玻璃。本文值得作为材料生成设计的方法线索阅读，但当前仅有摘要，模型细节与验证强度仍待核查。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -1705,11 +2021,43 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐关注其面向非晶材料的条件生成方法，以及结构、性质和采样多样性的联合验证思路；这些内容直接切合生成式设计方向，但重点推荐仍应以全文核查为前提。[摘要]",
+      "deep_read": {
+        "problem": "【论文摘要】研究针对生成模型在复杂非晶结构中效果有限的问题。原文指出其在此类体系中“remain largely ineffective”。目标不仅是生成原子结构，还包括覆盖不同加工条件、成分和数据来源，为非晶材料设计与模拟提供更可行的路径。[摘要]",
+        "method": "【论文摘要】作者采用扩散模型生成非晶结构，并通过条件生成探索特定冷却条件下的体系；验证结合模拟与信息论策略，随后扩展至金属玻璃及实验数据来源。摘要未说明网络架构、条件编码、训练规模和信息论指标，尚不能据此复现方法。[摘要]",
+        "innovation": "【解读】值得关注的创新线索，是将扩散生成从分子和晶体拓展至非晶体系，并尝试衔接加工条件与表征数据。摘要以“synthetic data can be generated from characterization results”概括后一能力，但其相对既有方法的新颖程度仍需全文与文献对照。[摘要]",
+        "findings": "【论文摘要】作者报告生成速度最高提升三个数量级，并恢复硅玻璃的短程与中程有序、采样多样性和宏观性质。条件生成涉及低至10 −2 K/ps的冷却速率，并揭示韧脆转变及介孔二氧化硅结构；摘要未给出误差、样本数或具体比较结果。[摘要]",
+        "limitations": "【资料局限】当前只有摘要，不能判断速度优势的计时边界、硬件条件及比较公平性，也无法核查性质误差、数据划分和跨体系泛化。摘要中的“reliably generates”属于作者概括，尚缺可独立审查的细节；这些是证据缺口，不应直接认定为模型缺陷。[摘要]",
+        "connection": "【解读】该研究与生成式材料设计直接相关；条件生成和宏观性质恢复也为结构设计提供了方法联系。韧脆转变涉及力学行为，但摘要未讨论构件承载、失效概率或运维监测，因此与结构可靠性、智能运维的关系目前属于潜在迁移，而非已验证应用。[摘要]",
+        "next_steps": "【建议】优先核查全文中的条件变量、结构有效性约束、信息论验证和速度对比设置，再判断是否适合迁移。面向可靠性研究，可进一步检验生成样本能否保持力学响应分布及极端失效特征；这些属于后续研究设想，并非作者已报告的成果。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "面向非晶材料结构生成的扩散模型",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s41524-025-01901-1"
+      ],
+      "analyzed_at": "2026-10-19T12:04:28.298891+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "31b3aeec2cf0c4a14ba658ce0988ff7c3a95fe3458b99fe06f6ef12ea12c7001",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "5f02341b933a",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-19T12:04:28.304992+00:00",
+        "basis": "abstract",
+        "article_state": "failed",
+        "article_stage": "writing",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -6262,7 +6610,7 @@
       "reading_status": {
         "paper_id": "709bdb82c0b5",
         "state": "failed",
-        "updated_at": "2026-10-18T01:07:24.949487+00:00",
+        "updated_at": "2026-10-19T11:39:02.862747+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -6866,11 +7214,11 @@
       "reading_status": {
         "paper_id": "45dbfe9703f1",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:00:55.375636+00:00",
+        "updated_at": "2026-10-19T11:37:37.633999+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -7099,7 +7447,7 @@
       "reading_status": {
         "paper_id": "a1515ce3849b",
         "state": "failed",
-        "updated_at": "2026-10-18T01:07:41.059049+00:00",
+        "updated_at": "2026-10-19T11:39:24.645994+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -9515,11 +9863,11 @@
       "reading_status": {
         "paper_id": "e287fb472485",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T00:46:20.710849+00:00",
+        "updated_at": "2026-10-19T09:43:57.065281+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -9949,7 +10297,7 @@
       "reading_status": {
         "paper_id": "a7897e08db6d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T02:17:40.928607+00:00",
+        "updated_at": "2026-10-19T12:22:25.790077+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -15567,7 +15915,7 @@
       "reading_status": {
         "paper_id": "9170f18af989",
         "state": "failed",
-        "updated_at": "2026-10-18T00:58:34.895301+00:00",
+        "updated_at": "2026-10-19T11:35:58.096215+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -17258,7 +17606,7 @@
       "reading_status": {
         "paper_id": "229ee813a122",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T02:09:44.205443+00:00",
+        "updated_at": "2026-10-19T12:21:48.236917+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -21390,11 +21738,11 @@
       "reading_status": {
         "paper_id": "844574fe5c84",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T00:38:23.818883+00:00",
+        "updated_at": "2026-10-19T09:42:17.324824+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -23025,11 +23373,11 @@
       "reading_status": {
         "paper_id": "c6eb0c75d85e",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:09:27.551288+00:00",
+        "updated_at": "2026-10-19T11:40:08.098943+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -25110,11 +25458,11 @@
       "reading_status": {
         "paper_id": "a921eaaa3fb4",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T00:24:31.130085+00:00",
+        "updated_at": "2026-10-19T09:41:53.115287+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -27273,7 +27621,7 @@
       "reading_status": {
         "paper_id": "8a3a74d4605b",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:49:38.710389+00:00",
+        "updated_at": "2026-10-19T12:06:40.802629+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
@@ -28558,11 +28906,11 @@
       "reading_status": {
         "paper_id": "1172e7a5c357",
         "state": "missing_evidence",
-        "updated_at": "2026-10-18T00:58:56.374366+00:00",
+        "updated_at": "2026-10-19T11:36:31.657735+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -28781,11 +29129,11 @@
       "reading_status": {
         "paper_id": "c935fc51c706",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:00:01.820365+00:00",
+        "updated_at": "2026-10-19T11:37:12.412897+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": true,
@@ -29132,7 +29480,7 @@
       "reading_status": {
         "paper_id": "448942aa1a69",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:35:45.695637+00:00",
+        "updated_at": "2026-10-19T11:51:07.127018+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
@@ -29645,11 +29993,11 @@
       "reading_status": {
         "paper_id": "533cdd3a344d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:10:11.084702+00:00",
+        "updated_at": "2026-10-19T11:41:41.193555+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": true,
@@ -30002,11 +30350,11 @@
       "reading_status": {
         "paper_id": "9f42a1c20a27",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T00:57:11.357151+00:00",
+        "updated_at": "2026-10-19T11:34:12.986948+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -30374,11 +30722,11 @@
       "reading_status": {
         "paper_id": "abd65bfce7b5",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:28:19.246401+00:00",
+        "updated_at": "2026-10-19T11:50:19.846074+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -30685,11 +31033,11 @@
       "reading_status": {
         "paper_id": "0b71b4d17bb7",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T00:56:30.670754+00:00",
+        "updated_at": "2026-10-19T11:33:47.278160+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -30909,11 +31257,11 @@
       "reading_status": {
         "paper_id": "b8d36ac1dcaf",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:16:27.528640+00:00",
+        "updated_at": "2026-10-19T11:43:22.668720+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -37763,11 +38111,11 @@
       "reading_status": {
         "paper_id": "dfc9b7fc8847",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T00:45:27.648862+00:00",
+        "updated_at": "2026-10-19T09:43:19.014127+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -39197,11 +39545,11 @@
       "reading_status": {
         "paper_id": "a1130ac09906",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T00:54:26.671368+00:00",
+        "updated_at": "2026-10-19T09:44:39.613101+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -39847,11 +40195,11 @@
       "reading_status": {
         "paper_id": "925093e117c0",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:13:42.136916+00:00",
+        "updated_at": "2026-10-19T11:42:55.214658+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -40080,11 +40428,11 @@
       "reading_status": {
         "paper_id": "932eec332894",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:02:28.788496+00:00",
+        "updated_at": "2026-10-19T11:38:38.994760+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -40873,11 +41221,11 @@
       "reading_status": {
         "paper_id": "04a29ffa0d97",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:07:58.884218+00:00",
+        "updated_at": "2026-10-19T11:39:45.033672+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -43962,11 +44310,11 @@
       "reading_status": {
         "paper_id": "846009a34c58",
         "state": "missing_evidence",
-        "updated_at": "2026-10-18T01:01:37.637411+00:00",
+        "updated_at": "2026-10-19T11:38:05.425480+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -44150,11 +44498,11 @@
       "reading_status": {
         "paper_id": "f61abfb865f5",
         "state": "missing_evidence",
-        "updated_at": "2026-10-18T01:01:52.958130+00:00",
+        "updated_at": "2026-10-19T11:38:23.649995+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -44340,11 +44688,11 @@
       "reading_status": {
         "paper_id": "eb62449238c8",
         "state": "missing_evidence",
-        "updated_at": "2026-10-18T00:46:08.357854+00:00",
+        "updated_at": "2026-10-19T09:43:43.704585+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -44527,11 +44875,11 @@
       "reading_status": {
         "paper_id": "f93c5ebdceed",
         "state": "missing_evidence",
-        "updated_at": "2026-10-18T00:54:55.113478+00:00",
+        "updated_at": "2026-10-19T09:45:03.596840+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -45618,11 +45966,11 @@
       "reading_status": {
         "paper_id": "f0e890e1abac",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T00:43:15.549393+00:00",
+        "updated_at": "2026-10-19T09:42:55.548929+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -45945,11 +46293,11 @@
       "reading_status": {
         "paper_id": "565888b08f8a",
         "state": "missing_evidence",
-        "updated_at": "2026-10-18T01:22:58.012652+00:00",
+        "updated_at": "2026-10-19T11:44:15.329440+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -46458,11 +46806,11 @@
       "reading_status": {
         "paper_id": "b972c8c0d15c",
         "state": "missing_evidence",
-        "updated_at": "2026-10-18T00:56:18.012935+00:00",
+        "updated_at": "2026-10-19T09:45:55.247451+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -46924,11 +47272,11 @@
       "reading_status": {
         "paper_id": "de48174471ad",
         "state": "missing_evidence",
-        "updated_at": "2026-10-18T01:24:19.649016+00:00",
+        "updated_at": "2026-10-19T11:45:03.720907+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -47564,11 +47912,11 @@
       "reading_status": {
         "paper_id": "e1a150bc890d",
         "state": "missing_evidence",
-        "updated_at": "2026-10-18T01:24:34.796862+00:00",
+        "updated_at": "2026-10-19T11:45:21.927896+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -48224,7 +48572,7 @@
       "reading_status": {
         "paper_id": "e777d468cee7",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T02:26:02.209960+00:00",
+        "updated_at": "2026-10-19T12:31:50.994730+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -49287,7 +49635,7 @@
       "reading_status": {
         "paper_id": "0888222377a8",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T00:39:21.307732+00:00",
+        "updated_at": "2026-10-19T09:42:41.869296+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
@@ -49732,7 +50080,7 @@
       "reading_status": {
         "paper_id": "0b617d13cb6b",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T02:21:25.306044+00:00",
+        "updated_at": "2026-10-19T12:30:49.053321+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -53527,7 +53875,7 @@
       "reading_status": {
         "paper_id": "ab9b44c6ecc0",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:51:40.869730+00:00",
+        "updated_at": "2026-10-19T12:07:00.765658+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -53697,7 +54045,7 @@
       "reading_status": {
         "paper_id": "6fd3604394f8",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:13:05.560185+00:00",
+        "updated_at": "2026-10-19T11:42:41.033340+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
@@ -54633,7 +54981,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "本文摘要介绍一种面向长距离带式输送机维护知识图谱的线性拓扑感知对齐框架，针对空间混淆与语义坍缩，构建 Physical–Space–Fault–Rule 本体，并以 CCAS 抽取故障因果链和空间信息、以 LTA-Alignment 对齐实体。摘要报告三组预定义运行中的抽取、聚类及故障追溯结果，并指出验证场景为非分支带式输送机维护。以上为摘要级导读，不代表阅读全文。",
+      "summary": "长距离带式输送机的同类部件容易因描述相似而被错误合并，维护日志又常省略故障条件与空间位置。本文以大语言模型结合线性拓扑，为部件分配空间锚点，通过CCAS抽取和拓扑感知对齐构建维护知识图谱。[摘要]报告抽取、实体合并及故障追溯指标优于所列基线，但排障时间收益来自规则模拟，并非现场实测。本解读仅依据摘要，适合关注设备维护知识组织与故障追溯的研究者。",
       "raw_metadata": {
         "source": "PubMed",
         "source_id": "42817408",
@@ -54913,66 +55261,66 @@
       "focus_tags": [
         "大模型"
       ],
-      "title_zh": "面向带式输送机维护的线性拓扑感知对齐框架",
-      "recommendation": "若研究方向涉及智能运维知识图谱、设备实体消歧或故障追溯，摘要提供了可关注的拓扑建模、日志信息抽取与对齐方案及量化结果；但适用范围和完整实验设计仍需阅读全文核验。",
+      "title_zh": "面向带式输送机维护知识图谱的线性拓扑感知对齐框架",
+      "recommendation": "推荐重点关注空间锚点如何约束语义对齐，以及维护日志如何转化为故障因果信息；这些方法直接关联智能运维知识图谱的实体消歧问题，但实际部署价值仍需全文与现场证据支持。[摘要]",
       "deep_read": {
-        "problem": "【摘要原文】研究针对长距离带式输送机维护知识图谱构建中的空间混淆与语义坍缩。对于描述相近而物理位置不同的部件，摘要特别指出存在错误合并风险；非结构化、嘈杂且口语化的维护记录也使故障因果链和空间信息难以恢复。摘要没有提供问题发生频率等背景数据。",
-        "method": "【摘要原文】框架先构建 Physical–Space–Fault–Rule 本体，并用归一化线性拓扑映射给高同质性部件分配唯一空间锚点；再以 CCAS 抽取状态、约束、动作和空间信息；最后由 LTA-Alignment 结合高斯拓扑惩罚与大语言模型灰区裁决进行实体对齐。摘要还描述了包含维护日志、BOM、空间锚点和闭环维修证据的标注方案。",
-        "innovation": "【摘要原文】摘要呈现的主要设计特点，是把线性空间拓扑纳入实体对齐，并将其与大语言模型对模糊情形的裁决相结合；同时通过 CCAS 从口语化日志恢复隐含故障因果链及位置信息。此处仅概括摘要所述机制，不能据此断定其相对既有研究的首创性或完整创新边界。",
-        "findings": "【摘要原文】三组预定义运行中，CCAS 全局 F1 为 94.10 ± 0.56%，高于 T5 6.20 个百分点；LTA-Alignment 的 Merge F1 为 95.75 ± 0.53%，实体簇纯度为 96.70 ± 0.53%。下游 Accuracy@1 为 92.78 ± 0.36%，相对 R-GCN 高 10.16 个百分点；摘要还报告相对 Keyword Retrieval 的模拟排故时间估计减少 68.50 ± 0.73%。",
-        "limitations": "【摘要原文】摘要将结论限定在“evaluated non-branching belt conveyor maintenance setting”，即所评估的非分支带式输送机维护场景。摘要没有交代跨设备或跨场景泛化、数据规模、基线配置、误差来源等细节，也未明确列出作者的局限讨论；因此这些不能视为已证实的缺陷或结论。",
-        "connection": "【解读】该工作与智能运维的联系较直接：将维护记录转成带空间锚点的实体及故障关系，可为故障追溯和知识组织提供方法参考。对结构设计和可靠性研究，摘要仅显示空间拓扑与故障追溯的关联，未提供结构优化或可靠性建模结果，不能据此声称已验证这些用途。",
-        "next_steps": "【建议】后续阅读可核对标注协议、三组运行的划分方式、比较基线设置及不确定性计算，并检查拓扑映射对真实设备位置的依赖。若要迁移到分支输送系统或其他设备，建议另行开展跨场景验证；这些是阅读与研究建议，并非摘要报告的实验。"
+        "problem": "研究针对长距离带式输送机维护知识图谱中的“spatial confusion and semantic collapse”。[摘要]同类部件语义描述相近，却可能位于不同物理位置；维护日志还存在噪声、口语化和信息隐含问题。核心任务是保留部件身份与空间差异，同时恢复可用于故障追溯的关联。",
+        "method": "框架建立Physical–Space–Fault–Rule本体，以归一化线性拓扑映射赋予同质部件唯一空间锚点；CCAS机制抽取条件、约束、动作和空间信息。对齐阶段结合“Gaussian topological penalties”与大语言模型灰区仲裁，另以多源维护资料建立金标准标注协议。[摘要]",
+        "innovation": "【解读】摘要呈现的方法特色，是把物理空间约束嵌入语义实体对齐，而非仅按文本相似性合并部件；“unique spatial anchors”使同类异位部件具有区分依据。[摘要]同时联合日志抽取与疑难对齐仲裁，但缺少相关工作比较，不能据此确认其首创性或各模块的独立贡献。",
+        "findings": "摘要报告三次预定义运行中，CCAS全局F1为94.10 ± 0.56%，实体合并F1为95.75 ± 0.53%。[摘要]下游追溯Accuracy@1为92.78 ± 0.36%；排障时间估计减少68.50 ± 0.73%，但依据是“rule-based simulated troubleshooting time”，不能等同现场效率收益。",
+        "limitations": "证据范围限定于摘要所称“evaluated non-branching belt conveyor maintenance setting”，不能直接外推至分支输送网络。[摘要]当前资料未给出样本规模、数据划分、消融实验或模型配置，无法核查泛化能力、潜在数据泄漏及模块贡献；这些属于资料不足，并非已证实的方法缺陷。",
+        "connection": "【解读】该研究与智能运维直接相关：通过空间身份与故障链组织维护知识，为部件定位和故障追溯提供支持。[摘要]其“fault-causal reconstruction”也可启发可靠性事件关联研究，但摘要没有寿命预测、失效概率估计或结构优化证据，不能将其表述为结构设计或定量可靠性方法。",
+        "next_steps": "【建议】后续优先核查全文的数据划分、空间锚点生成规则、灰区仲裁触发条件及标注一致性，并查看是否设置去除拓扑惩罚和大语言模型仲裁的消融实验。若开展迁移研究，可分别验证分支拓扑与日志位置缺失情形，再用真实维修记录检验模拟排障收益；这些不是作者已报告的结论。"
       },
       "analysis_status": "ready",
       "analysis_basis": "abstract",
       "analysis_kind": "model",
       "analysis_sources": [
-        "https://doi.org/10.3390/s26185833"
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC13611643/"
       ],
-      "analyzed_at": "2026-10-18T01:50:32.958476+00:00",
-      "llm_model": "gpt-6-luna",
+      "analyzed_at": "2026-10-19T12:09:54.298573+00:00",
+      "llm_model": "gpt-6.1-sol",
       "article": {
         "version": 3,
         "basis": "abstract",
-        "lead": "长距离带式输送机的部件描述可能相似，位置却不同；如何避免知识图谱把它们混为一谈，并从口语化维修记录中还原故障关系？本文摘要介绍了一种结合线性空间拓扑与大语言模型的对齐框架，并报告其在故障追溯任务中的评估结果。",
+        "lead": "长距离带式输送机中，描述相近但物理位置不同的部件，可能在维护知识图谱中被错误合并。这项研究将线性空间拓扑与大语言模型结合，探索如何区分实体、重建故障因果关系，并改善故障追溯。",
         "sections": [
           {
             "id": "context",
-            "title": "位置差异为何会被知识图谱抹平",
+            "title": "描述相近，不代表是同一处设备",
             "paragraphs": [
-              "长距离带式输送机的维修知识图谱构建面临空间混淆与语义坍塌：不同物理位置的部件，可能在文字描述上高度相似；非结构化维修记录又可能嘈杂、口语化，省略故障因果链和空间信息。研究因此聚焦于如何同时保留部件的空间位置与维修语义，避免相似描述导致错误合并。"
+              "研究针对维护知识图谱构建中的空间混淆与语义坍缩问题：高度同质化的部件需要被准确区分，而含噪、口语化的维护日志又包含隐含的故障因果关系与空间信息。仅凭相近描述合并实体，可能混淆不同物理位置的部件，因此研究将空间位置纳入实体区分过程。"
             ]
           },
           {
             "id": "method",
-            "title": "用空间锚点和维修语义协同对齐",
+            "title": "空间锚点、日志抽取与实体对齐",
             "paragraphs": [
-              "摘要称，框架构建了 Physical–Space–Fault–Rule 本体，并以归一化线性拓扑映射为高度同质的部件分配唯一空间锚点。针对维修日志，Condition–Constraint–Action–Space（CCAS）机制从非结构化文本中提取信息，重建隐含故障因果链与空间信息。",
-              "为减少不同位置的相似部件被错误合并，LTA-Alignment 将高斯拓扑惩罚与基于大语言模型的灰区仲裁结合。摘要还介绍了一套结构化金标准标注方案，其依据包括维修日志、BOM 记录、空间锚点和闭环维修证据。"
+              "框架构建“物理—空间—故障—规则”本体，通过归一化线性拓扑映射，为高度同质化的部件分配唯一空间锚点。针对维护日志，研究提出“条件—约束—动作—空间”（CCAS）抽取机制，从非结构化文本中重建隐含故障因果链与空间信息。",
+              "在实体对齐环节，LTA-Alignment将高斯拓扑惩罚与大语言模型灰区仲裁结合，避免把语义描述相近、物理位置不同的部件错误合并。研究还利用维护日志、物料清单（BOM）记录、空间锚点及闭环维修证据，建立结构化金标准标注协议。"
             ]
           },
           {
             "id": "findings",
-            "title": "摘要报告了抽取、对齐与追溯表现",
+            "title": "抽取、合并与故障追溯的摘要结果",
             "paragraphs": [
-              "在三次预设运行中，CCAS 的全局 F1-score 为 94.10 ± 0.56%，比 T5 高 6.20 个百分点。LTA-Alignment 的 Merge F1-score 为 95.75 ± 0.53%，实体簇纯度为 96.70 ± 0.53%；相较 SCSA，分别高 3.36 和 3.90 个百分点。",
-              "在下游故障追溯中，动态时空知识图谱的 Accuracy@1 为 92.78 ± 0.36%，比 R-GCN 高 10.16 个百分点。相较 Keyword Retrieval，基于规则的模拟故障排查时间估计减少 68.50 ± 0.73%。这些结果对应摘要所述的非分支带式输送机维护场景。"
+              "在三次预定义运行中，CCAS的全局F1为94.10 ± 0.56%，比T5高6.20个百分点。LTA-Alignment的合并F1为95.75 ± 0.53%，实体聚类纯度为96.70 ± 0.53%，分别比SCSA高3.36和3.90个百分点。",
+              "下游故障追溯中，动态时空知识图谱的Accuracy@1为92.78 ± 0.36%，比R-GCN高10.16个百分点。相较关键词检索，基于规则的模拟排障时间估计减少68.50 ± 0.73%。**这一时间收益来自模拟估计，不能直接视为现场维修耗时的实测降幅。**"
             ]
           },
           {
             "id": "limitations",
-            "title": "摘要结果的适用范围仍需结合全文判断",
+            "title": "非分支场景与模拟收益的边界",
             "paragraphs": [
-              "摘要将评估描述为三次预设运行，但没有说明这些运行如何划分、数据规模或场景构成；因此，单凭摘要无法判断评估样本的代表性及结果在其他输送机系统中的可迁移程度。",
-              "摘要也未提供基线的具体配置、完整评估流程或独立外部验证信息。故障排查时间的降幅被表述为相对于 Keyword Retrieval 的规则模拟估计，不应直接解读为实际现场节时效果；这些方面是否在论文其他部分报告，需进一步阅读确认。"
+              "摘要将结论限定于所评估的非分支带式输送机维护场景，尚不能据此判断框架在分支拓扑、其他设备或不同日志来源中的表现。摘要未交代样本规模、数据划分、标注一致性，以及结果中“±”的统计含义；三次运行也不等于三个独立数据集。",
+              "虽然摘要报告了与T5、SCSA、R-GCN及关键词检索的比较，但训练配置、输入条件和比较公平性仍需查阅正文。各模块的独立贡献、模拟排障规则及现场验证范围，也无法仅凭摘要判断；这些信息未在摘要报告，不代表论文没有开展相关工作。"
             ]
           },
           {
             "id": "inspiration",
-            "title": "阅读启发：空间信息如何支撑维修追溯",
+            "title": "阅读启发：关注语义与位置如何共同判别",
             "paragraphs": [
-              "阅读启发：这项工作把部件所在位置作为区分相似实体的重要信息，并将日志抽取、实体对齐与故障追溯联系起来。进一步阅读时，可关注金标准标注如何利用闭环维修证据，以及三次预设运行和各基线比较的具体设置；这些细节有助于理解摘要所报指标适用的范围。"
+              "阅读启发：本文值得关注的不只是语言模型抽取信息的能力，还包括空间拓扑如何参与实体区分。进一步阅读时，可重点核对空间锚点的定义、拓扑惩罚与灰区仲裁的配合方式，以及闭环维修证据如何支撑标注；同时区分追溯准确率提升与真实运维效率改善所需的证据。"
             ]
           }
         ],
@@ -54982,80 +55330,64 @@
           {
             "kind": "study",
             "basis": "abstract",
-            "title": "依据摘要整理的研究过程示意",
-            "description": "仅概括摘要明确陈述的方法环节与评估对象，不表示未报告的实验配置或结果。",
+            "title": "依据摘要整理的空间感知维护知识图谱示意",
+            "description": "概括空间表征、日志抽取、实体对齐与下游追溯的关系；并非论文原图，不表示摘要未披露的具体实现。",
             "nodes": [
               {
                 "id": "a",
                 "stage": 0,
-                "label": "维修日志与部件信息",
-                "detail": "摘要提及维修日志、BOM记录、空间锚点和维修证据"
+                "label": "部件空间表征",
+                "detail": "归一化线性拓扑映射为高度同质化部件分配唯一空间锚点。"
               },
               {
                 "id": "b",
-                "stage": 1,
-                "label": "线性拓扑映射",
-                "detail": "为高度同质部件分配唯一空间锚点"
+                "stage": 0,
+                "label": "维护日志与CCAS抽取",
+                "detail": "从含噪、口语化文本中重建隐含故障因果链及空间信息。"
               },
               {
                 "id": "c",
                 "stage": 1,
-                "label": "CCAS信息抽取",
-                "detail": "从非结构化日志重建因果链与空间信息"
+                "label": "LTA-Alignment实体对齐",
+                "detail": "结合高斯拓扑惩罚与大语言模型灰区仲裁，避免异地部件错误合并。"
               },
               {
                 "id": "d",
                 "stage": 2,
-                "label": "拓扑感知对齐",
-                "detail": "结合高斯拓扑惩罚与大语言模型灰区仲裁"
-              },
-              {
-                "id": "e",
-                "stage": 3,
-                "label": "故障追溯评估",
-                "detail": "摘要报告动态时空知识图谱的追溯表现"
+                "label": "动态时空知识图谱",
+                "detail": "用于下游故障追溯，并评估基于规则的模拟排障时间。"
               }
             ],
             "edges": [
               {
                 "from": "a",
-                "to": "b",
-                "label": "定位部件"
-              },
-              {
-                "from": "a",
                 "to": "c",
-                "label": "抽取日志"
+                "label": "空间拓扑参与对齐"
               },
               {
                 "from": "b",
-                "to": "d",
-                "label": "提供空间锚点"
+                "to": "c",
+                "label": "抽取与对齐衔接"
               },
               {
                 "from": "c",
                 "to": "d",
-                "label": "提供故障语义"
-              },
-              {
-                "from": "d",
-                "to": "e",
-                "label": "用于追溯"
+                "label": "支持下游故障追溯"
               }
             ]
           }
         ],
         "figure_groups": []
       },
-      "article_updated_at": "2026-10-18T02:05:26.596468+00:00",
-      "article_profile": "e6967500e2f26e942c93e785badac02e60f390bc1faaa8f59cb50cd7cba7d59e",
+      "article_updated_at": "2026-10-19T12:17:41.426177+00:00",
+      "article_profile": "aafc530c6e38de42bfc9b3a60b72469eb40b776aa5dbef655e940a5c76d3e480",
       "analysis_references": {},
-      "analysis_material_version": "9903c8fe5b081892208a5e105999e0775446305faebe027e91d9b7036f7fd3f3",
+      "analysis_material_version": "8f26fc6e1e73960beed804083d8229771ab138a57d15777920aded09abc0fa28",
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "3b366fc2c48d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T02:05:26.599624+00:00",
+        "updated_at": "2026-10-19T12:17:41.428185+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -56526,7 +56858,7 @@
       "reading_status": {
         "paper_id": "9aeec1365697",
         "state": "missing_evidence",
-        "updated_at": "2026-10-18T01:49:09.673259+00:00",
+        "updated_at": "2026-10-19T12:06:09.236976+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -56883,7 +57215,7 @@
       "reading_status": {
         "paper_id": "bade6e590a5e",
         "state": "missing_evidence",
-        "updated_at": "2026-10-18T01:49:24.519364+00:00",
+        "updated_at": "2026-10-19T12:06:26.806239+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -59483,11 +59815,11 @@
       "reading_status": {
         "paper_id": "c05baf48e37d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:20:08.253748+00:00",
+        "updated_at": "2026-10-19T11:43:41.290619+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -60237,11 +60569,11 @@
       "reading_status": {
         "paper_id": "35b3b0d29b69",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:23:35.510902+00:00",
+        "updated_at": "2026-10-19T11:44:30.522177+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -61158,11 +61490,11 @@
       "reading_status": {
         "paper_id": "e4cf9f888b6d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:34:14.112103+00:00",
+        "updated_at": "2026-10-19T11:50:43.369541+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -61348,11 +61680,11 @@
       "reading_status": {
         "paper_id": "f5d9c5d173ef",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T00:49:19.518784+00:00",
+        "updated_at": "2026-10-19T09:44:18.897281+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -61747,7 +62079,7 @@
       "reading_status": {
         "paper_id": "d2ad3a94e5bd",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:38:49.130461+00:00",
+        "updated_at": "2026-10-19T11:51:46.220562+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
@@ -63227,7 +63559,7 @@
       "reading_status": {
         "paper_id": "c0cf7585af24",
         "state": "failed",
-        "updated_at": "2026-10-18T01:28:06.427462+00:00",
+        "updated_at": "2026-10-19T11:50:07.135592+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -63642,7 +63974,7 @@
       "reading_status": {
         "paper_id": "5333022c127f",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T02:02:13.776150+00:00",
+        "updated_at": "2026-10-19T12:08:31.803668+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -64014,7 +64346,7 @@
       "reading_status": {
         "paper_id": "a68d0bb8b100",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T02:01:21.223745+00:00",
+        "updated_at": "2026-10-19T12:08:16.519070+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
@@ -64229,7 +64561,7 @@
       "reading_status": {
         "paper_id": "569d913e4413",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T02:00:12.397672+00:00",
+        "updated_at": "2026-10-19T12:07:50.968090+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
@@ -65912,7 +66244,7 @@
       "reading_status": {
         "paper_id": "438f7c66205e",
         "state": "missing_evidence",
-        "updated_at": "2026-10-18T01:48:39.902843+00:00",
+        "updated_at": "2026-10-19T12:02:03.633879+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -66564,7 +66896,7 @@
       "reading_status": {
         "paper_id": "18ee2d492b5c",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:47:53.893791+00:00",
+        "updated_at": "2026-10-19T11:59:55.390344+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
@@ -67069,7 +67401,7 @@
       "reading_status": {
         "paper_id": "801189691014",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T02:21:44.282901+00:00",
+        "updated_at": "2026-10-19T12:31:15.913697+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -67453,7 +67785,7 @@
       "reading_status": {
         "paper_id": "54c83aaa7f13",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T02:02:31.614981+00:00",
+        "updated_at": "2026-10-19T12:08:51.156312+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -67760,7 +68092,7 @@
       "reading_status": {
         "paper_id": "778026f1c783",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T02:10:01.553231+00:00",
+        "updated_at": "2026-10-19T12:22:08.262775+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -68051,7 +68383,7 @@
       "reading_status": {
         "paper_id": "6ce46b4ac683",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T02:09:15.603810+00:00",
+        "updated_at": "2026-10-19T12:21:14.392919+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -68809,7 +69141,7 @@
       "reading_status": {
         "paper_id": "e5a2fd5f4238",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T02:25:45.464137+00:00",
+        "updated_at": "2026-10-19T12:31:34.191575+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -69248,7 +69580,7 @@
       "reading_status": {
         "paper_id": "6667ad1e6f80",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:52:27.089210+00:00",
+        "updated_at": "2026-10-19T12:07:18.481405+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -69613,7 +69945,7 @@
       "reading_status": {
         "paper_id": "a0aeb1682003",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T02:09:28.611872+00:00",
+        "updated_at": "2026-10-19T12:21:28.357022+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -70686,7 +71018,7 @@
       "reading_status": {
         "paper_id": "7ebe32b91775",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:37:08.051388+00:00",
+        "updated_at": "2026-10-19T11:51:31.102370+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
@@ -70897,11 +71229,11 @@
       "reading_status": {
         "paper_id": "ca3b95f43cb0",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:25:25.371300+00:00",
+        "updated_at": "2026-10-19T11:49:45.577501+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -71644,12 +71976,14 @@
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "35342cc51c6b",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T00:57:57.067154+00:00",
+        "state": "retry",
+        "updated_at": "2026-10-19T11:34:58.766797+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
-        "reason": "not_found",
+        "reason": "network",
+        "error_code": "codex_connection",
+        "next_retry_at": "2026-10-19T11:39:58.766797+00:00",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -72510,11 +72844,11 @@
       "reading_status": {
         "paper_id": "86cf61a99b1a",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:24:47.469817+00:00",
+        "updated_at": "2026-10-19T11:49:22.862885+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -72911,7 +73245,7 @@
       "reading_status": {
         "paper_id": "65e1dc5c1243",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:46:37.080568+00:00",
+        "updated_at": "2026-10-19T11:52:01.518440+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
@@ -74134,7 +74468,7 @@
       "reading_status": {
         "paper_id": "5feece63bb7a",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T02:06:46.812338+00:00",
+        "updated_at": "2026-10-19T12:16:11.128359+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -74323,7 +74657,7 @@
       "reading_status": {
         "paper_id": "926b00e39b2b",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T01:59:03.380819+00:00",
+        "updated_at": "2026-10-19T12:07:34.732644+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
@@ -78056,7 +78390,7 @@
       "reading_status": {
         "paper_id": "e0c00d903e6a",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-18T02:08:56.525360+00:00",
+        "updated_at": "2026-10-19T12:16:30.399588+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -82641,13 +82975,13 @@
     "unavailable": 30
   },
   "analysis_status": {
-    "ready_core": 4,
+    "ready_core": 6,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 2
+    "pending": 0
   },
   "edition": {
     "id": "39129636453",
