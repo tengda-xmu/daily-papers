@@ -1,19 +1,17 @@
 {
   "id": "public-d330643595776f9f542e9f48",
-  "content_version": "17ab295060903fc50d6e702705fdfe28828c2b29387b4aeac6327f6d4bf207ea",
+  "content_version": "971c77d8bafe62ee6709be9c45de212681461989a797d02cabb257953134f4f3",
   "analysis": {
-    "title_zh": "Granite Switch 4.1：通过单一端点处理对话、决策与语音",
-    "summary": "公告介绍 Granite Switch 4.1 的模块化能力：8B 与 30B 模型配置新增通用决策 Decision aLoRA，并包含专用 Guardian aLoRA；通过单一托管端点，可在自然语言回复、通用与专用决策、语音转文字任务间切换。原文称其 ASR 模型在 OpenASR 排行榜上速度最快，但所给片段未提供测试配置与数值，且 Guardian 的性能比较句被截断，无法据此确认完整比较结论。",
-    "application": "建议：科研迁移可探索将文献问答、运维事件决策与语音记录转写接入同一服务入口，并自行评估准确性、延迟及任务切换表现；这些是迁移设想，不是官方已验证效果。公告明确宣称支持单一端点处理上述任务，并称 ASR 模型在 OpenASR 排行榜上速度最快，但给定资料不足以核验该排名或证明科研、运维场景的收益。",
+    "title_zh": "Granite Switch 4.1：通过同一端点处理对话、决策与语音",
+    "summary": "公告介绍了 Granite Switch 4.1 的模块化能力扩展：模型可通过同一托管端点，在自然语言回答、通用及专用决策、语音转文本任务之间切换。[S1] 其中，Granite-Switch-4.1-8B 和 -30B 配置新增面向通用决策的 Decision aLoRA，并包含专用 Guardian aLoRA。[S2] 所给资料末尾截断，无法确认后者的完整比较结果或其他配置细节。",
+    "application": "建议：【科研迁移建议】可考虑评估同一端点承接科研问答、运维事件决策和语音记录转写的可行性；这些是迁移设想，并非公告已验证的科研效果。【官方陈述】资料明确介绍多任务切换能力，但未提供上述科研场景的验证结果。[S1]",
     "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
-      "Introduced last spring, the Granite Switch project enables a modular approach to model development.",
       "Now Granite Switch 4.1 models, armed with a Decision adapter and the fastest ASR model on the OpenASR leaderboard, can move efficiently between natural-language responses, general and specialized decisions, and speech-to-text tasks—all from one hosted endpoint.",
-      "Specifically, Granite-Switch-4.1-8B and -30B models are configured to include:",
-      "A new Decision aLoRA for general-purpose decision-making (e.g. v1/systemone)"
+      "Specifically, Granite-Switch-4.1-8B and -30B models are configured to include: A new Decision aLoRA for general-purpose decision-making (e.g. v1/systemone), A specialized Guardian aLoRA"
     ],
     "basis_url": "https://huggingface.co/blog/ibm-granite/granite-switch-4-1"
   },
-  "analyzed_at": "2026-10-20T01:09:25.380016+00:00"
+  "analyzed_at": "2026-10-20T03:12:12.182217+00:00"
 }
