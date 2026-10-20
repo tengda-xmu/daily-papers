@@ -184,7 +184,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "本文聚焦《A fabrication-aware vectorized generative representation for topology optimization of path-defined MEMS microstructures》，暂未提供可用摘要，请查看原文。",
+      "summary": "本文针对路径型MEMS设计中拓扑自由度与制造可行性的矛盾，将连通性、线宽及间距约束嵌入几何生成过程，以44维变量联合控制路径组织和局部线宽，再用形貌图像代理加速进化搜索。[P3–P8]微加热器红外实验显示，温度变异系数由4.04%降至1.22%；微弹簧有限元验证显示位移增加、峰值应力降低。[P12–P14]核心阅读价值在于制造约束下的结构表示，而非通用生成模型；机械实验、寿命改善及任意三维几何适用性尚无证据。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -226,11 +226,214 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐结构设计与可靠性研究者重点阅读：其将制造规则前置到解码过程，并以代理对照、实物热成像及机械有限元形成验证链；但不宜作为智能运维或寿命提升的直接证据。[P6–P15]",
+      "deep_read": {
+        "problem": "路径型MEMS的响应受连通路径、空间部署和局部截面共同支配。固定模板限制组织变化，像素化自由设计又可能产生断连和不可制造细节。[P2–P3]作者进一步指出，规则几何覆盖不必然带来均匀温度场，设计需要补偿边界与支撑区域的不均匀散热。[P5]",
+        "method": "固定边界后，以32维拓扑变量和12维线宽变量驱动生成：先筛除不可行走向，再评分选取节点，并以三次B样条调制线宽。[P5–P6]布局经DXF进入有限元，同时栅格化训练ResNet-18；热学使用分层GA，机械使用约束NSGA-II搜索。[P14–P16]",
+        "innovation": "作者将贡献定位于几何表示：制造规则内置于连续变量到离散布局的映射，而非依靠优化后修补。[P3、P14]另一关键是双表示分工，潜变量保障可搜索性，实例化形貌图像提供预测所需空间信息。解读：创新不在单独采用CNN或进化算法，而在二者与约束生成器的接口。",
+        "findings": "热学有限元中TCV约由0.85%降至0.19%，等温面积比由41.47%升至99.79%；红外实验对应指标为4.04%至1.22%、34.7%至95.6%。[P10、P12]机械有限元显示位移389.56至508.91 μm，峰值应力1841.9至1541.3 MPa，支持跨物理目标迁移。[P14]",
+        "limitations": "适用范围限于路径型MEMS，任意自由形状、非连通及完全三维几何不在当前实现范围。[P15]机械案例仅有有限元验证；热学实测均温不同，指标相对各自均温计算，不能称严格同温实验。[P14]核对记录未报告原文件缺项，提取乱码已纠正；亦无寿命改善的直接证据。",
+        "connection": "解读：与结构设计的联系最直接，可将连通梁、悬簧和加热路径的制造条件转为生成先验。[P2–P6]与可靠性的联系在于提供热点、应力集中相关性能的优化入口，但这些指标不能替代失效概率或疲劳寿命。智能运维方面仅具方法迁移启发，论文未验证在线监测、诊断或维护决策。",
+        "next_steps": "建议：先在目标器件上重建边界条件和制造规则，复核代理误差，再比较同温与同功耗工况，避免混淆均匀性和节能。[P10、P16]若面向可靠性，应补充工艺扰动下的性能分布及寿命试验；主动采样与不确定性感知可参考作者展望，但应作为待验证扩展，而非已有能力。[P15]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "面向路径型MEMS微结构拓扑优化的制造感知矢量化生成表示",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41378-026-01470-3.pdf"
+      ],
+      "analyzed_at": "2026-10-20T01:13:05.913018+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3",
+          "P5"
+        ],
+        "method": [
+          "P5",
+          "P6",
+          "P14",
+          "P15",
+          "P16"
+        ],
+        "innovation": [
+          "P3",
+          "P7",
+          "P8",
+          "P14"
+        ],
+        "findings": [
+          "P10",
+          "P12",
+          "P14"
+        ],
+        "limitations": [
+          "P14",
+          "P15"
+        ],
+        "connection": [
+          "P2",
+          "P3",
+          "P6",
+          "P14"
+        ],
+        "next_steps": [
+          "P10",
+          "P15",
+          "P16"
+        ]
+      },
+      "analysis_material_version": "cb6248d53c59dd8e8a5bb2f945a8fed6dcf154b7ead00c9150a95ea6ef735dc9",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "式(1)提取为“Θ ¼½ B; Z; W/C138”等乱码；原页清楚显示Θ=[B,Z,W]。已依原页纠正，公式无缺项，不影响边界条件、拓扑潜变量和线宽变量组成统一控制向量的结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "图2的线宽坐标单位及制造约束标注被提取为“/g80m”“/g116/g35/g3”等编码乱码；原图可读为Track width (μm)、Width > 5 μm、Spacing ≥ 5 μm。已纠正；不属于原文件缺项，图示仍支持生成布局满足所示线宽与间距约束的说明。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "可搜索变量被提取为“½Z; W/C138”，原页为[Z,W]；式(2)中的等号、条件分隔符及Φ(·)也出现字符编码错误。已核对原页纠正为S(c_t,c|Z)=Φ(Z,f(c_t,c))，无公式缺项，不影响44维控制空间与确定性候选评分的说明。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "式(3)、式(4)的下标、求和及最大化排版在提取文本中散乱，原页均完整可读。表1的W取值区间及三次B样条名称含编码乱码，已核实为[Wmin,Wmax]及3（Cubic B-spline）；设计区域为400×400 μm²、网格80×80。无缺项，不影响制造约束和线宽合成结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "图3在文字提取中子图标题、坐标及柱状图数值排列混杂。原图核实b、c、d分别对应Tmean、TCV、P；e中CNN训练/验证/测试平均NRMSE为0.012/0.026/0.040，MLP为0.036/0.242/0.245。已纠正数值归属，支持CNN预测优于MLP的结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "式(5)预测性能向量的帽号被提取为“bt”，原页可辨为带帽的t向量，公式为t̂_CNN=f_CNN(I(Θ))；式(6)分式为TCV=σT/Tmean。两式均无缺项，已纠正提取符号，不影响图像到性能预测及温度均匀性指标的定义。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "图4b代数刻度被提取为“0 2 55 07 5 1 0 0 1 2 5”，原图可读为0、25、50、75、100、125；图4d目标空间中的连接符被提取为“/C0”，原图为P–TCV。已纠正，无原文缺项，不影响进化趋势与种群均值的解释。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P11",
+          "detail": "图5坐标单位“/g80m”应为μm；图5d的“/g171T–Tmean/g171”及图注中的“jT/C0Tmeanj”应为|T−Tmean|；图5e“/g114”应为±。原图完整清楚，已纠正，不影响2 K累计面积阈值及均温±2 K带的定义。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P12",
+          "detail": "图6d横坐标单位被提取为“/g80m”，原图为μm。已核对图6d、e及图注，确认剖面温度与±2 °C范围使用摄氏度，TCV和面积比例数值无缺项；不影响实验均匀性改善的结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P13",
+          "detail": "图7坐标及色标在提取文本中顺序混杂，“/g80m”应为μm。原图核实a横轴为峰值von Mises应力（MPa）、纵轴为目标方向位移（μm）；b、c为应力场，d、e为Y位移场。无缺项，已纠正坐标与子图归属，避免颠倒位移—应力权衡关系。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "方法中的“400 ´ 400”及训练超参数指数因提取排版分离，原页清楚显示400×400采样网格、学习率3×10⁻⁴及权重衰减1×10⁻⁴。已核对纠正，无公式缺项，不影响数据生成和代理训练设置。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P16",
+          "detail": "红外方法中“8/C0 14μm”“7:5μm”“±0:7%”为提取错误，原页分别为8–14 μm、7.5 μm、±0.7%。此外文字提取遗漏原页“Published online: 19 October 2026”。已纠正；不属于原文件缺项，涉及测量规格、不确定度及出版信息。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P17",
+          "detail": "参考文献34末尾被提取为“JM3. 1 15, 035003 (2016)”，原页显示“JM3. 15, 035003 (2016)”。已纠正多余字符；该问题涉及参考文献卷号，不影响本文微弹簧优化结果，无公式或图表缺项。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "d92c421e85ee",
+        "state": "published",
+        "updated_at": "2026-10-20T01:13:05.969951+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 17,
+        "covered": 17,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "式(1)提取为“Θ ¼½ B; Z; W/C138”等乱码；原页清楚显示Θ=[B,Z,W]。已依原页纠正，公式无缺项，不影响边界条件、拓扑潜变量和线宽变量组成统一控制向量的结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "图2的线宽坐标单位及制造约束标注被提取为“/g80m”“/g116/g35/g3”等编码乱码；原图可读为Track width (μm)、Width > 5 μm、Spacing ≥ 5 μm。已纠正；不属于原文件缺项，图示仍支持生成布局满足所示线宽与间距约束的说明。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "可搜索变量被提取为“½Z; W/C138”，原页为[Z,W]；式(2)中的等号、条件分隔符及Φ(·)也出现字符编码错误。已核对原页纠正为S(c_t,c|Z)=Φ(Z,f(c_t,c))，无公式缺项，不影响44维控制空间与确定性候选评分的说明。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "式(3)、式(4)的下标、求和及最大化排版在提取文本中散乱，原页均完整可读。表1的W取值区间及三次B样条名称含编码乱码，已核实为[Wmin,Wmax]及3（Cubic B-spline）；设计区域为400×400 μm²、网格80×80。无缺项，不影响制造约束和线宽合成结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "图3在文字提取中子图标题、坐标及柱状图数值排列混杂。原图核实b、c、d分别对应Tmean、TCV、P；e中CNN训练/验证/测试平均NRMSE为0.012/0.026/0.040，MLP为0.036/0.242/0.245。已纠正数值归属，支持CNN预测优于MLP的结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "式(5)预测性能向量的帽号被提取为“bt”，原页可辨为带帽的t向量，公式为t̂_CNN=f_CNN(I(Θ))；式(6)分式为TCV=σT/Tmean。两式均无缺项，已纠正提取符号，不影响图像到性能预测及温度均匀性指标的定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "图4b代数刻度被提取为“0 2 55 07 5 1 0 0 1 2 5”，原图可读为0、25、50、75、100、125；图4d目标空间中的连接符被提取为“/C0”，原图为P–TCV。已纠正，无原文缺项，不影响进化趋势与种群均值的解释。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "图5坐标单位“/g80m”应为μm；图5d的“/g171T–Tmean/g171”及图注中的“jT/C0Tmeanj”应为|T−Tmean|；图5e“/g114”应为±。原图完整清楚，已纠正，不影响2 K累计面积阈值及均温±2 K带的定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "图6d横坐标单位被提取为“/g80m”，原图为μm。已核对图6d、e及图注，确认剖面温度与±2 °C范围使用摄氏度，TCV和面积比例数值无缺项；不影响实验均匀性改善的结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "图7坐标及色标在提取文本中顺序混杂，“/g80m”应为μm。原图核实a横轴为峰值von Mises应力（MPa）、纵轴为目标方向位移（μm）；b、c为应力场，d、e为Y位移场。无缺项，已纠正坐标与子图归属，避免颠倒位移—应力权衡关系。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "方法中的“400 ´ 400”及训练超参数指数因提取排版分离，原页清楚显示400×400采样网格、学习率3×10⁻⁴及权重衰减1×10⁻⁴。已核对纠正，无公式缺项，不影响数据生成和代理训练设置。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P16",
+            "detail": "红外方法中“8/C0 14μm”“7:5μm”“±0:7%”为提取错误，原页分别为8–14 μm、7.5 μm、±0.7%。此外文字提取遗漏原页“Published online: 19 October 2026”。已纠正；不属于原文件缺项，涉及测量规格、不确定度及出版信息。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P17",
+            "detail": "参考文献34末尾被提取为“JM3. 1 15, 035003 (2016)”，原页显示“JM3. 15, 035003 (2016)”。已纠正多余字符；该问题涉及参考文献卷号，不影响本文微弹簧优化结果，无公式或图表缺项。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -252,7 +455,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Polymer material jetting enables the fabrication of voxelated, multi-material structures with material control at the microscale. However, current work often neglects viscoelastic effects and designing voxelated digital materials remains challenging due to the complexity of the vast design freedom and intractability of efficiently modeling macroscale voxel structures. We present an efficient representation of stochastically mixed, voxelated digital materials and develop a generalized viscoelastic temperature-dependent material model to design and simulate digital materials mixed from…",
+      "summary": "如何让同一打印结构既抵抗瞬时冲击，又能长期柔顺变形？本文将随机混合体素材料表示为介观粗网格，以温度、频率相关渗流模型描述两种聚合物的黏弹性，再通过神经网络从性能需求反推混合比例。[P2–P4]阻尼器与腕部矫形器展示了滞回预测及分区选材能力，但阻尼器高频误差上升，矫形器冲击仅经模拟验证。[P5–P6]其价值在于连接材料配比、跨时间尺度响应与结构仿真，而非证明任意材料泛化或临床有效性。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -294,11 +497,134 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐重点阅读介观表示、渗流模型标定及双网络逆向选材流程，适合生成式材料设计与阻尼结构研究；须同时核对高频误差和案例验证边界。[P2–P8]",
+      "deep_read": {
+        "problem": "随机体素混合既带来庞大的材料分配空间，又产生难以逐体素模拟的复杂界面。作者指出，既有方法常局限于弹性或单一工况，缺少从目标黏弹性响应到混合比例的可扩展映射。[P1–P2]核心问题是兼顾计算效率、制造真实性与跨温度和时间尺度的性能设计。",
+        "method": "作者以粗网格保存局部混合比例，制造时再随机分配体素；通过DMA、时温叠加及Prony系列标定温频相关渗流模型。ANN_mix估计需求对应配比，ANN_E生成刚度主曲线，再拟合含超弹性元件的黏弹模型用于有限元分析。[P2–P5、P8]",
+        "innovation": "方法特色是把介观材料表示、扩展渗流关系与逆向选材串成统一流程，而非直接优化每个体素。渗流系数随温度和频率变化，使混合规律能够描述不同响应区间。[P3–P4]解读：其创新重心是材料行为的任务独立参数化，不是新增几何生成算法或实测训练大数据库。",
+        "findings": "阻尼器在0.1、1、10 Hz下跨两温度的平均反力误差分别为5.6%、20.0%、26.6%，说明预测能力随频率变化。[P5]腕屈实验与模拟位移分别为1和0.923 mm；长期柔顺性有实验比较，冲击则仅有仿真。[P6]这些证据支持特定材料体系下的结构响应预测。",
+        "limitations": "验证限于两种聚合物及特定打印工艺，更换材料需重新标定；单一移位因子存在拟合局限。[P5、P7]患者特异需求缺失，补充循环数据未提供。[P6]未记录原文件缺项，公式乱码均已纠正；另有图6d比较量口径差异及数据缩减数量级疑点，不能据此扩大验证结论。[P6–P8]",
+        "connection": "解读：该研究直接契合生成式设计中的需求到材料参数映射，可为渐变界面、阻尼器和个性化柔顺结构提供选材框架。[P2、P5–P7]对可靠性研究，其跨温度和时间尺度建模有参考价值，但尚未建立失效概率或寿命模型；与智能运维的联系属于潜在迁移，而非本文成果。",
+        "next_steps": "建议：先利用已声明开放的代码和处理数据复现配比预测与有限元接口，再对目标工况补做独立材料和结构测试。[P8–P9]优先检查高频、高温及小特征尺寸的误差，量化制造波动，并实验核验冲击响应；若转向可靠性设计，还需另行获取损伤与失效数据。[P5–P7]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "随机体素化热黏弹性数字材料的逆向设计",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41467-025-66744-2.pdf"
+      ],
+      "analyzed_at": "2026-10-20T01:16:57.383582+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P2",
+          "P3",
+          "P4",
+          "P5",
+          "P8"
+        ],
+        "innovation": [
+          "P3",
+          "P4"
+        ],
+        "findings": [
+          "P5",
+          "P6"
+        ],
+        "limitations": [
+          "P5",
+          "P6",
+          "P7",
+          "P8"
+        ],
+        "connection": [
+          "P2",
+          "P5",
+          "P6",
+          "P7"
+        ],
+        "next_steps": [
+          "P5",
+          "P6",
+          "P7",
+          "P8",
+          "P9"
+        ]
+      },
+      "analysis_material_version": "345f85eb8d1e24d9ab5351fbaf9771fe89fb401faeb45479c919808f2a8555c1",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "公式(1)的文字提取出现“/C0”“/C1”等乱码；原页公式完整可读，已核正为 r=(ρ₁−ρc)^μ/(1−ρc)^μ。分子、分母及指数均未缺失，不属于原文件缺项；该式决定混合比例与有效性质比的非线性映射。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "图3a样品序号及图3b用途表在文字提取中发生串接、错序。原图可读：样品依次为I、II、III、IV*、V、VI*、VII；μ拟合使用I、III、V、VII，ρc拟合使用II，验证使用IV、VI。已按原图纠正，避免混淆拟合数据与独立验证数据。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "阻尼器体素数量在提取文字中显示为“273 :3 /C1 106”。核对原页正文及图5a，正确为273.3×10⁶个体素，图内写作273.3M Voxels；对应405,769个粗网格点。原页数量完整，无公式或数值缺项；纠正后可正确理解介观表示的数据压缩规模。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "公式(2)文字提取含“/C0”“/C16”等乱码；原页分段公式完整。核正为：T<Tg时log₁₀α_T=C₃(1/T−1/Tg)，T≥Tg时log₁₀α_T=−C₁(T−Tg)/(C₂+T−Tg)。无原文件缺项；该式控制Arrhenius/WLF温度移位及松弛时间缩放。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "机械测试段将储能模量、损耗模量提取为“E0”“E00”；原页清晰标为E′、E″，耗散因子为tan(δ)。已纠正，避免将撇号误认作数字或下标，影响黏弹性测试量的理解。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "a1b63142c701",
+        "state": "published",
+        "updated_at": "2026-10-20T01:16:57.403756+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 10,
+        "covered": 10,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "公式(1)的文字提取出现“/C0”“/C1”等乱码；原页公式完整可读，已核正为 r=(ρ₁−ρc)^μ/(1−ρc)^μ。分子、分母及指数均未缺失，不属于原文件缺项；该式决定混合比例与有效性质比的非线性映射。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "图3a样品序号及图3b用途表在文字提取中发生串接、错序。原图可读：样品依次为I、II、III、IV*、V、VI*、VII；μ拟合使用I、III、V、VII，ρc拟合使用II，验证使用IV、VI。已按原图纠正，避免混淆拟合数据与独立验证数据。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "阻尼器体素数量在提取文字中显示为“273 :3 /C1 106”。核对原页正文及图5a，正确为273.3×10⁶个体素，图内写作273.3M Voxels；对应405,769个粗网格点。原页数量完整，无公式或数值缺项；纠正后可正确理解介观表示的数据压缩规模。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "公式(2)文字提取含“/C0”“/C16”等乱码；原页分段公式完整。核正为：T<Tg时log₁₀α_T=C₃(1/T−1/Tg)，T≥Tg时log₁₀α_T=−C₁(T−Tg)/(C₂+T−Tg)。无原文件缺项；该式控制Arrhenius/WLF温度移位及松弛时间缩放。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "机械测试段将储能模量、损耗模量提取为“E0”“E00”；原页清晰标为E′、E″，耗散因子为tan(δ)。已纠正，避免将撇号误认作数字或下标，影响黏弹性测试量的理解。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -327,7 +653,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Layered composite structures inspired by biological tissues can exhibit out-of-plane negative Poisson’s ratio, but identifying layups that maximize auxetic performance is challenging in high-dimensional designs. Here, we introduce an inverse design framework that searches for laminate layups with minimum Poisson’s ratio. The approach combines multi-start resampling with machine learning–guided clustering to map layup families across layer numbers. Analytical relations from laminate mechanics link ply angles to effective properties, and computer simulations with laboratory measurements…",
+      "summary": "本文针对多层复合结构铺层角度维数高、最小面外泊松比难以搜索的问题，将层合力学、多起点重采样、局部优化与层次聚类结合，提炼三类铺层规律，并利用规律降低高层数设计的搜索维数。[P3—P6] 作者通过有限元、超声测量和数字图像相关分析验证设计及变形机制，报告4K层结构最小泊松比为−0.3367。[P7—P9] 阅读重点是物理模型与解族发现的结合，但解析表达和铺层符号存在不一致，补充证明亦未随资料提供。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -369,11 +695,151 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐结构逆向设计研究者重点阅读其“搜索—聚类—规则降维—实验核验”流程；可靠性研究可借鉴机制分析，但不能将其视为疲劳寿命或运维诊断成果。[P5—P9]",
+      "deep_read": {
+        "problem": "作者研究如何在层数增加、铺层角度组合迅速扩大的情况下，寻找最小面外泊松比及对应铺层。预先限定对称性或角度顺序虽然便于求解，却可能限制候选范围。[P3] 目标不仅是获得较强负泊松比响应，还要解释最优解随层数变化的规律，而非仅比较少量既定构型。",
+        "method": "研究以层合力学显式计算角度对应的泊松比，采用距离平方加权重采样选择初始点，再以BFGS开展局部搜索。[P3][P5] 各层数保留最低泊松比的十个铺层，通过对称性、角度数量等特征实施层次聚类，并将所得规则用于高维搜索降维。[P6]",
+        "innovation": "解读：值得关注的贡献不是提出新的神经网络，而是让物理计算、优化搜索与可解释分类形成反馈。聚类发现的铺层家族进一步转化为搜索约束，使4K类仅需优化一个角度变量。[P5][P6] 作者还以层间取向导致的应变失配解释厚度方向膨胀，将设计规律与力学机制联系起来。[P9]",
+        "findings": "作者将最优铺层分为4K、奇数层和4K+2三类，报告4K类最小泊松比为−0.3367。[P8] 在高维算例中，N=100和N=99的搜索时间分别降至原来的1/30和约1/55。[P6] 超声实验与理论、有限元趋势一致；DIC支持面内剪切应变分布的模拟结果，而非直接测量上述最小泊松比。[P8][P9]",
+        "limitations": "核对记录列出[P4]图2b反解公式根号位置错误，影响最优角解析表达，并非公式空缺；[P7][P8]正负角数量文字与实例相反；[P9]六层铺层末层符号图文不一，影响复现。不能据此声称解析验证完整。补充证明未提供，有限采样找全最优解及超声换算适用条件仍需核查。[P6][P7]\n原文核对：[P4] 图2b“Optimal Angle”框内，原图将根号置于 arcsin(x) 外，显示为 θ=±√(arcsin(x))=±24.5；这与同图 x=sin²θ 的反解关系不一致。由该代换应得到 θ=±arcsin(√x)，但这是核对推导所得纠正，不是原图写法。缺陷影响最优角解析表达的准确性，不妨碍读取该页其余内容，也不能据此否定其数值搜索结果。",
+        "connection": "解读：对结构设计，本文展示了从数值最优解提炼对称性规则、再用于降维的路径；对可靠性研究，完全黏结约束失配的机制提示界面状态可能影响负泊松比响应。[P6][P9] 与智能运维的联系目前仅是潜在迁移：剪切应变场可作为监测候选信息，但本文没有验证损伤识别能力。",
+        "next_steps": "建议：复现前先核对最优角反解、奇数层符号计数及六层铺层末层符号，再检查超声换算对各向异性层合板的适用性。[P4][P7—P9] 后续可在制造角度偏差、界面退化与循环载荷下比较性能稳定性；这些属于研究设想，并非作者已完成的可靠性验证。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "机器学习辅助仿生层状复合结构最大负泊松比性能逆向设计",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s44172-025-00557-5.pdf"
+      ],
+      "analyzed_at": "2026-10-20T01:27:32.567022+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P3"
+        ],
+        "method": [
+          "P3",
+          "P5",
+          "P6"
+        ],
+        "innovation": [
+          "P5",
+          "P6",
+          "P9"
+        ],
+        "findings": [
+          "P6",
+          "P8",
+          "P9"
+        ],
+        "limitations": [
+          "P4",
+          "P6",
+          "P7",
+          "P8",
+          "P9"
+        ],
+        "connection": [
+          "P6",
+          "P9"
+        ],
+        "next_steps": [
+          "P4",
+          "P7",
+          "P8",
+          "P9"
+        ]
+      },
+      "analysis_material_version": "6a308c68399bf0224a248ab8b19acdf8e3c3e33420623dbab9ca14bc0666f28b",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "式(1)至式(3)的文字提取含 /C0 等编码及上下标错位。原页可辨；尤其式(2)应为 J=A⁻¹+A⁻¹B(D−BA⁻¹B)⁻¹BA⁻¹，提取文本遗漏了括号项的逆矩阵标记。式(3)为 ν13=−J31/J11。错误影响刚度到泊松比的计算表达，不是原页公式缺失。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "图2b的矩阵简化、三角函数、极值条件与求根公式在文字提取中大量丢失，但原图存在可读表达，包括 x=sin²θ、dν13/dθ=0、F(θ)=h′(θ)g(θ)−h(θ)g′(θ)=sin(2θ)p4(x)=0，以及四次多项式有效根 x=0.1687。不得把提取空白判为原文件缺项。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P4",
+          "detail": "图2b“Optimal Angle”框内，原图将根号置于 arcsin(x) 外，显示为 θ=±√(arcsin(x))=±24.5；这与同图 x=sin²θ 的反解关系不一致。由该代换应得到 θ=±arcsin(√x)，但这是核对推导所得纠正，不是原图写法。缺陷影响最优角解析表达的准确性，不妨碍读取该页其余内容，也不能据此否定其数值搜索结果。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "式(4)及采样步骤中的概率公式被提取为含/C0等编码的错位文本。原页可辨，正确表达为 P(xi)=D²(xi)/Σx∈ΩD²(x)，其中D为到已采样点的最小距离。该纠正影响重采样权重的理解；原页公式没有缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "全局最优命中概率的减号及指数、各类搜索空间的维数在提取中错位。原页为1−(1−p)^ns；4K类变量由4K降至1，2K+1类降至2，4K+2类降至2K+1。铺层模式为[−θ/θ/θ/−θ]K。错误影响概率论证及降维规模的读取，不是原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "式(5)的上下标、减号与括号在文字提取中损坏。核对原页应为 ν=(Vl²−2Vt²)/[2(Vl²−Vt²)]，Vl、Vt分别为纵波和横波速度。原页表达完整；错误影响超声测量到泊松比的换算。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P10",
+          "detail": "日期栏文字提取遗漏整行“Published online: 24 November 2025”，原页可清楚读取。已补记在线发表日期为2025年11月24日；该遗漏影响出版信息完整性，不影响图7机制分析及实验结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "454698628e66",
+        "state": "published",
+        "updated_at": "2026-10-20T01:27:32.586926+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 11,
+        "covered": 11,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "式(1)至式(3)的文字提取含 /C0 等编码及上下标错位。原页可辨；尤其式(2)应为 J=A⁻¹+A⁻¹B(D−BA⁻¹B)⁻¹BA⁻¹，提取文本遗漏了括号项的逆矩阵标记。式(3)为 ν13=−J31/J11。错误影响刚度到泊松比的计算表达，不是原页公式缺失。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "图2b的矩阵简化、三角函数、极值条件与求根公式在文字提取中大量丢失，但原图存在可读表达，包括 x=sin²θ、dν13/dθ=0、F(θ)=h′(θ)g(θ)−h(θ)g′(θ)=sin(2θ)p4(x)=0，以及四次多项式有效根 x=0.1687。不得把提取空白判为原文件缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P4",
+            "detail": "图2b“Optimal Angle”框内，原图将根号置于 arcsin(x) 外，显示为 θ=±√(arcsin(x))=±24.5；这与同图 x=sin²θ 的反解关系不一致。由该代换应得到 θ=±arcsin(√x)，但这是核对推导所得纠正，不是原图写法。缺陷影响最优角解析表达的准确性，不妨碍读取该页其余内容，也不能据此否定其数值搜索结果。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "式(4)及采样步骤中的概率公式被提取为含/C0等编码的错位文本。原页可辨，正确表达为 P(xi)=D²(xi)/Σx∈ΩD²(x)，其中D为到已采样点的最小距离。该纠正影响重采样权重的理解；原页公式没有缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "全局最优命中概率的减号及指数、各类搜索空间的维数在提取中错位。原页为1−(1−p)^ns；4K类变量由4K降至1，2K+1类降至2，4K+2类降至2K+1。铺层模式为[−θ/θ/θ/−θ]K。错误影响概率论证及降维规模的读取，不是原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "式(5)的上下标、减号与括号在文字提取中损坏。核对原页应为 ν=(Vl²−2Vt²)/[2(Vl²−Vt²)]，Vl、Vt分别为纵波和横波速度。原页表达完整；错误影响超声测量到泊松比的换算。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "日期栏文字提取遗漏整行“Published online: 24 November 2025”，原页可清楚读取。已补记在线发表日期为2025年11月24日；该遗漏影响出版信息完整性，不影响图7机制分析及实验结论。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -396,7 +862,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Abstract 4D printed labels that change color and shape were developed to achieve the dual functions of quality assessment and maintenance of respiring climacteric fruits. The effect of addition of essential oil emulsion and different geometric structures on deformation as well as the corresponding mechanisms were explored. Cast, 3D printed, and 4D printed labels were compared based on their responses to fruit quality and compatibility with machine learning. The addition of emulsion significantly affected the degree of deformation by altering the printing fidelity, hydrophilicity, and flexibili…",
+      "summary": "本文围绕水果品质转折难以直观识别的问题，将二氧化碳响应变色、湿度驱动变形及精油释放集成到双层4D打印标签中，并比较浇铸、3D与4D标签及四种轻量分类网络。[P2][P10]结果支持材料配方与几何设计共同调控变形和释放，MobileNet组合表现最佳，但正文准确率与矩阵重算略有差异。[P8][P12]解读：其价值在于感知结构与算法协同设计，而非直接提供设备智能运维方案。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -438,11 +904,179 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐作为响应结构与视觉识别协同设计的跨领域案例阅读，重点关注配方—几何—变形—释放证据链；若目标是设备故障诊断或剩余寿命预测，则不宜列为核心方向文献。[P6–P12]",
+      "deep_read": {
+        "problem": "作者针对单一颜色标签难以清楚区分水果品质转折、传统保鲜措施缺乏实时反馈的问题，尝试同时实现品质监测与主动保鲜。[P1][P2]关键不只是提高分类准确率，还包括解释环境变化如何转化为可见形变，以及形变能否进一步改善精油释放。",
+        "method": "研究以MAKGM构建双层标签，配置显色剂及大蒜精油乳液，分别改变上层层数、填充率和交叉角。[P14]通过显微结构、含水量、接触角与释放动力学分析响应机制，再结合水果品质分级及四种轻量网络比较监测效果，设置浇铸与3D打印对照。[P2][P15]",
+        "innovation": "解读：相对本文比较的单纯变色标签，主要增量是将形状作为额外识别信息，并利用形变引起的微结构变化促进保鲜剂释放。[P8][P10]材料、结构和分类模型由此形成协同设计关系；现有资料不支持将其表述为首次提出4D打印或首次使用机器学习监测食品。",
+        "findings": "作者选定10%乳液及单层、30%填充率、60°交叉角方案；该几何方案第10天累计释放量较四层对照高42.32%。[P6][P8]MobileNet最佳，正文报告97.90%，图9计数重算约97.92%。[P10][P12]较高精油释放伴随后期较低菌落总数，支持保鲜优势。[P11]",
+        "limitations": "[P15]式(6)缺A定义，影响复现。[P4]图3配方矛盾；[P6]图5C硬度轴与作用力解释不一致；[P7]峰值日期概括有例外；[P9]n低于正文下限，影响机制判断。方法以凝胶强度差间接表征作用力[P15]。另需专用包装空间，仅验证三类水果，补充资料未核验。[P10]\n原文核对：[P4] 图3原页图注明写“The lower structure of all labels contained 10% (w/w) emulsion”，但同图行标签明确为0%、6%、8%、10%、12%、14%乳液，正文也讨论不同含量。这是原页配方描述不一致，而非提取错误；影响各实验组下层配方的准确复现，不能将所有组解释为10%。未发现公式缺失。；[P6] 图5C原页纵轴为“Hardness (N)”，而横轴、图注及正文均将其解释为氢键、疏水及静电相互作用。原页未在该图说明硬度读数与分子作用力的换算或对应关系，存在指标标注不一致；影响纵轴物理量及分子作用力降幅的直接解释，不应自行改写轴名或单位。；[P7] 图6C中0°组平均曲率在约第3天达峰，第4天已下降；与P6正文笼统表述“the labels reached their maximum curvature on 4th day”不完全一致。原图数据点及图例可辨，非提取错误；影响“全部几何设计均在第4天达峰”的概括，不影响几何参数改变变形过程的总体观察。；[P9] 图7C原页参数表中“1 upper layer-70%-90°”组扩散指数n=0.4209，低于P8正文所称全部样本“0.43≤n<0.85”的下限。原表数值清晰，属于原文范围表述与表格不一致，非提取错误。该组不能直接套用作者所写区间来支持全部样本均为非Fick扩散的结论；不能擅自改动n或补造模型公式。；[P15] 式(6)原页含加和项A，但紧随公式的变量说明仅解释Mₜ/M∞、k和n，未定义A的含义、单位或处理方式。公式本身完整；缺失的是参数说明，影响释放动力学模型的解释与复现，不能自行认定A的物理意义。",
+        "connection": "解读：与智能运维的联系主要是方法迁移，即以环境响应结构提供多维状态信息，再由视觉模型识别状态转折；并非已经验证设备故障预警。[P10][P12]对结构设计与可靠性研究，更直接的启示是响应幅度、网络完整性和功能释放之间存在需要联合优化的权衡。[P4–P9]",
+        "next_steps": "建议：先澄清公式参数、配方及指标定义，再按独立包装和采集批次隔离训练测试，并以人工复核检验模型辅助清洗标签的可靠性。[P4][P15]随后检验跨包装、光照与储藏条件的性能，并结合作者提出的自动供料、输送及质控需求评估规模化可行性。[P13]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "结合机器学习的4D打印变形标签用于呼吸跃变型水果监测与保鲜",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41467-025-66554-6.pdf"
+      ],
+      "analyzed_at": "2026-10-20T01:40:25.245813+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P2",
+          "P14",
+          "P15"
+        ],
+        "innovation": [
+          "P8",
+          "P10"
+        ],
+        "findings": [
+          "P6",
+          "P8",
+          "P10",
+          "P11",
+          "P12"
+        ],
+        "limitations": [
+          "P4",
+          "P6",
+          "P7",
+          "P9",
+          "P10",
+          "P15"
+        ],
+        "connection": [
+          "P4",
+          "P5",
+          "P6",
+          "P7",
+          "P8",
+          "P9",
+          "P10",
+          "P12"
+        ],
+        "next_steps": [
+          "P4",
+          "P13",
+          "P15"
+        ]
+      },
+      "analysis_material_version": "35e6d57baa64a59bf0307b5454548010822fe0009e0ccd1b5630a2626a3eae4e",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "原页明确载有“Published online: 21 November 2025”，所给文字提取遗漏该项；已按图片补核。此遗漏影响发表时间信息的完整性，不影响标签响应、识别准确率或保鲜机制结论。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P4",
+          "detail": "图3原页图注明写“The lower structure of all labels contained 10% (w/w) emulsion”，但同图行标签明确为0%、6%、8%、10%、12%、14%乳液，正文也讨论不同含量。这是原页配方描述不一致，而非提取错误；影响各实验组下层配方的准确复现，不能将所有组解释为10%。未发现公式缺失。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P6",
+          "detail": "图5C原页纵轴为“Hardness (N)”，而横轴、图注及正文均将其解释为氢键、疏水及静电相互作用。原页未在该图说明硬度读数与分子作用力的换算或对应关系，存在指标标注不一致；影响纵轴物理量及分子作用力降幅的直接解释，不应自行改写轴名或单位。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P7",
+          "detail": "图6C中0°组平均曲率在约第3天达峰，第4天已下降；与P6正文笼统表述“the labels reached their maximum curvature on 4th day”不完全一致。原图数据点及图例可辨，非提取错误；影响“全部几何设计均在第4天达峰”的概括，不影响几何参数改变变形过程的总体观察。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P9",
+          "detail": "图7C原页参数表中“1 upper layer-70%-90°”组扩散指数n=0.4209，低于P8正文所称全部样本“0.43≤n<0.85”的下限。原表数值清晰，属于原文范围表述与表格不一致，非提取错误。该组不能直接套用作者所写区间来支持全部样本均为非Fick扩散的结论；不能擅自改动n或补造模型公式。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P14",
+          "detail": "式(1)文字提取出现/C0、/C12等乱码，原页公式完整且可辨。按原页纠正为：打印保真度(%)=[1−|打印物底面积−模型底面积|×打印物高度/(模型底面积×模型高度)]×100。绝对值仅包围两底面积之差。不存在原页公式缺项；乱码影响保真度指标的计算与复现。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "式(2)–(5)文字提取中的/C0、/C18等为乱码，原页可清楚恢复为：含水量=[(W₀−W₁)/W₀]×100；体积密度=干样质量/干样体积；颗粒密度=0.864×(m₃−m₁)/[m₂+(m₃−m₁)−m₄]；总孔隙率=(1−体积密度/颗粒密度)×100。原页无公式缺项，提取错误影响含水量和孔隙率计算的复现。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "式(6)提取将分母M∞误呈为M1，并损坏模型名称中的连接符。原页为Ritger–Peppas：Mₜ/M∞=ktⁿ+A，幂指数n清晰。已据原页纠正；影响释放分数归一化及模型复现，非原文件公式缺失。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P15",
+          "detail": "式(6)原页含加和项A，但紧随公式的变量说明仅解释Mₜ/M∞、k和n，未定义A的含义、单位或处理方式。公式本身完整；缺失的是参数说明，影响释放动力学模型的解释与复现，不能自行认定A的物理意义。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "e7609dfd92b1",
+        "state": "published",
+        "updated_at": "2026-10-20T01:40:25.261611+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 17,
+        "covered": 17,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页明确载有“Published online: 21 November 2025”，所给文字提取遗漏该项；已按图片补核。此遗漏影响发表时间信息的完整性，不影响标签响应、识别准确率或保鲜机制结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P4",
+            "detail": "图3原页图注明写“The lower structure of all labels contained 10% (w/w) emulsion”，但同图行标签明确为0%、6%、8%、10%、12%、14%乳液，正文也讨论不同含量。这是原页配方描述不一致，而非提取错误；影响各实验组下层配方的准确复现，不能将所有组解释为10%。未发现公式缺失。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P6",
+            "detail": "图5C原页纵轴为“Hardness (N)”，而横轴、图注及正文均将其解释为氢键、疏水及静电相互作用。原页未在该图说明硬度读数与分子作用力的换算或对应关系，存在指标标注不一致；影响纵轴物理量及分子作用力降幅的直接解释，不应自行改写轴名或单位。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P7",
+            "detail": "图6C中0°组平均曲率在约第3天达峰，第4天已下降；与P6正文笼统表述“the labels reached their maximum curvature on 4th day”不完全一致。原图数据点及图例可辨，非提取错误；影响“全部几何设计均在第4天达峰”的概括，不影响几何参数改变变形过程的总体观察。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P9",
+            "detail": "图7C原页参数表中“1 upper layer-70%-90°”组扩散指数n=0.4209，低于P8正文所称全部样本“0.43≤n<0.85”的下限。原表数值清晰，属于原文范围表述与表格不一致，非提取错误。该组不能直接套用作者所写区间来支持全部样本均为非Fick扩散的结论；不能擅自改动n或补造模型公式。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "式(1)文字提取出现/C0、/C12等乱码，原页公式完整且可辨。按原页纠正为：打印保真度(%)=[1−|打印物底面积−模型底面积|×打印物高度/(模型底面积×模型高度)]×100。绝对值仅包围两底面积之差。不存在原页公式缺项；乱码影响保真度指标的计算与复现。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "式(2)–(5)文字提取中的/C0、/C18等为乱码，原页可清楚恢复为：含水量=[(W₀−W₁)/W₀]×100；体积密度=干样质量/干样体积；颗粒密度=0.864×(m₃−m₁)/[m₂+(m₃−m₁)−m₄]；总孔隙率=(1−体积密度/颗粒密度)×100。原页无公式缺项，提取错误影响含水量和孔隙率计算的复现。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "式(6)提取将分母M∞误呈为M1，并损坏模型名称中的连接符。原页为Ritger–Peppas：Mₜ/M∞=ktⁿ+A，幂指数n清晰。已据原页纠正；影响释放分数归一化及模型复现，非原文件公式缺失。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P15",
+            "detail": "式(6)原页含加和项A，但紧随公式的变量说明仅解释Mₜ/M∞、k和n，未定义A的含义、单位或处理方式。公式本身完整；缺失的是参数说明，影响释放动力学模型的解释与复现，不能自行认定A的物理意义。"
+          }
+        ]
+      }
     }
   ],
   "extended": [],
@@ -627,7 +1261,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "本文聚焦《A fabrication-aware vectorized generative representation for topology optimization of path-defined MEMS microstructures》，暂未提供可用摘要，请查看原文。",
+      "summary": "本文针对路径型MEMS设计中拓扑自由度与制造可行性的矛盾，将连通性、线宽及间距约束嵌入几何生成过程，以44维变量联合控制路径组织和局部线宽，再用形貌图像代理加速进化搜索。[P3–P8]微加热器红外实验显示，温度变异系数由4.04%降至1.22%；微弹簧有限元验证显示位移增加、峰值应力降低。[P12–P14]核心阅读价值在于制造约束下的结构表示，而非通用生成模型；机械实验、寿命改善及任意三维几何适用性尚无证据。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -669,11 +1303,214 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐结构设计与可靠性研究者重点阅读：其将制造规则前置到解码过程，并以代理对照、实物热成像及机械有限元形成验证链；但不宜作为智能运维或寿命提升的直接证据。[P6–P15]",
+      "deep_read": {
+        "problem": "路径型MEMS的响应受连通路径、空间部署和局部截面共同支配。固定模板限制组织变化，像素化自由设计又可能产生断连和不可制造细节。[P2–P3]作者进一步指出，规则几何覆盖不必然带来均匀温度场，设计需要补偿边界与支撑区域的不均匀散热。[P5]",
+        "method": "固定边界后，以32维拓扑变量和12维线宽变量驱动生成：先筛除不可行走向，再评分选取节点，并以三次B样条调制线宽。[P5–P6]布局经DXF进入有限元，同时栅格化训练ResNet-18；热学使用分层GA，机械使用约束NSGA-II搜索。[P14–P16]",
+        "innovation": "作者将贡献定位于几何表示：制造规则内置于连续变量到离散布局的映射，而非依靠优化后修补。[P3、P14]另一关键是双表示分工，潜变量保障可搜索性，实例化形貌图像提供预测所需空间信息。解读：创新不在单独采用CNN或进化算法，而在二者与约束生成器的接口。",
+        "findings": "热学有限元中TCV约由0.85%降至0.19%，等温面积比由41.47%升至99.79%；红外实验对应指标为4.04%至1.22%、34.7%至95.6%。[P10、P12]机械有限元显示位移389.56至508.91 μm，峰值应力1841.9至1541.3 MPa，支持跨物理目标迁移。[P14]",
+        "limitations": "适用范围限于路径型MEMS，任意自由形状、非连通及完全三维几何不在当前实现范围。[P15]机械案例仅有有限元验证；热学实测均温不同，指标相对各自均温计算，不能称严格同温实验。[P14]核对记录未报告原文件缺项，提取乱码已纠正；亦无寿命改善的直接证据。",
+        "connection": "解读：与结构设计的联系最直接，可将连通梁、悬簧和加热路径的制造条件转为生成先验。[P2–P6]与可靠性的联系在于提供热点、应力集中相关性能的优化入口，但这些指标不能替代失效概率或疲劳寿命。智能运维方面仅具方法迁移启发，论文未验证在线监测、诊断或维护决策。",
+        "next_steps": "建议：先在目标器件上重建边界条件和制造规则，复核代理误差，再比较同温与同功耗工况，避免混淆均匀性和节能。[P10、P16]若面向可靠性，应补充工艺扰动下的性能分布及寿命试验；主动采样与不确定性感知可参考作者展望，但应作为待验证扩展，而非已有能力。[P15]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "面向路径型MEMS微结构拓扑优化的制造感知矢量化生成表示",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41378-026-01470-3.pdf"
+      ],
+      "analyzed_at": "2026-10-20T01:13:05.913018+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3",
+          "P5"
+        ],
+        "method": [
+          "P5",
+          "P6",
+          "P14",
+          "P15",
+          "P16"
+        ],
+        "innovation": [
+          "P3",
+          "P7",
+          "P8",
+          "P14"
+        ],
+        "findings": [
+          "P10",
+          "P12",
+          "P14"
+        ],
+        "limitations": [
+          "P14",
+          "P15"
+        ],
+        "connection": [
+          "P2",
+          "P3",
+          "P6",
+          "P14"
+        ],
+        "next_steps": [
+          "P10",
+          "P15",
+          "P16"
+        ]
+      },
+      "analysis_material_version": "cb6248d53c59dd8e8a5bb2f945a8fed6dcf154b7ead00c9150a95ea6ef735dc9",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "式(1)提取为“Θ ¼½ B; Z; W/C138”等乱码；原页清楚显示Θ=[B,Z,W]。已依原页纠正，公式无缺项，不影响边界条件、拓扑潜变量和线宽变量组成统一控制向量的结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "图2的线宽坐标单位及制造约束标注被提取为“/g80m”“/g116/g35/g3”等编码乱码；原图可读为Track width (μm)、Width > 5 μm、Spacing ≥ 5 μm。已纠正；不属于原文件缺项，图示仍支持生成布局满足所示线宽与间距约束的说明。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "可搜索变量被提取为“½Z; W/C138”，原页为[Z,W]；式(2)中的等号、条件分隔符及Φ(·)也出现字符编码错误。已核对原页纠正为S(c_t,c|Z)=Φ(Z,f(c_t,c))，无公式缺项，不影响44维控制空间与确定性候选评分的说明。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "式(3)、式(4)的下标、求和及最大化排版在提取文本中散乱，原页均完整可读。表1的W取值区间及三次B样条名称含编码乱码，已核实为[Wmin,Wmax]及3（Cubic B-spline）；设计区域为400×400 μm²、网格80×80。无缺项，不影响制造约束和线宽合成结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "图3在文字提取中子图标题、坐标及柱状图数值排列混杂。原图核实b、c、d分别对应Tmean、TCV、P；e中CNN训练/验证/测试平均NRMSE为0.012/0.026/0.040，MLP为0.036/0.242/0.245。已纠正数值归属，支持CNN预测优于MLP的结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "式(5)预测性能向量的帽号被提取为“bt”，原页可辨为带帽的t向量，公式为t̂_CNN=f_CNN(I(Θ))；式(6)分式为TCV=σT/Tmean。两式均无缺项，已纠正提取符号，不影响图像到性能预测及温度均匀性指标的定义。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "图4b代数刻度被提取为“0 2 55 07 5 1 0 0 1 2 5”，原图可读为0、25、50、75、100、125；图4d目标空间中的连接符被提取为“/C0”，原图为P–TCV。已纠正，无原文缺项，不影响进化趋势与种群均值的解释。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P11",
+          "detail": "图5坐标单位“/g80m”应为μm；图5d的“/g171T–Tmean/g171”及图注中的“jT/C0Tmeanj”应为|T−Tmean|；图5e“/g114”应为±。原图完整清楚，已纠正，不影响2 K累计面积阈值及均温±2 K带的定义。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P12",
+          "detail": "图6d横坐标单位被提取为“/g80m”，原图为μm。已核对图6d、e及图注，确认剖面温度与±2 °C范围使用摄氏度，TCV和面积比例数值无缺项；不影响实验均匀性改善的结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P13",
+          "detail": "图7坐标及色标在提取文本中顺序混杂，“/g80m”应为μm。原图核实a横轴为峰值von Mises应力（MPa）、纵轴为目标方向位移（μm）；b、c为应力场，d、e为Y位移场。无缺项，已纠正坐标与子图归属，避免颠倒位移—应力权衡关系。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "方法中的“400 ´ 400”及训练超参数指数因提取排版分离，原页清楚显示400×400采样网格、学习率3×10⁻⁴及权重衰减1×10⁻⁴。已核对纠正，无公式缺项，不影响数据生成和代理训练设置。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P16",
+          "detail": "红外方法中“8/C0 14μm”“7:5μm”“±0:7%”为提取错误，原页分别为8–14 μm、7.5 μm、±0.7%。此外文字提取遗漏原页“Published online: 19 October 2026”。已纠正；不属于原文件缺项，涉及测量规格、不确定度及出版信息。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P17",
+          "detail": "参考文献34末尾被提取为“JM3. 1 15, 035003 (2016)”，原页显示“JM3. 15, 035003 (2016)”。已纠正多余字符；该问题涉及参考文献卷号，不影响本文微弹簧优化结果，无公式或图表缺项。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "d92c421e85ee",
+        "state": "published",
+        "updated_at": "2026-10-20T01:13:05.969951+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 17,
+        "covered": 17,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "式(1)提取为“Θ ¼½ B; Z; W/C138”等乱码；原页清楚显示Θ=[B,Z,W]。已依原页纠正，公式无缺项，不影响边界条件、拓扑潜变量和线宽变量组成统一控制向量的结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "图2的线宽坐标单位及制造约束标注被提取为“/g80m”“/g116/g35/g3”等编码乱码；原图可读为Track width (μm)、Width > 5 μm、Spacing ≥ 5 μm。已纠正；不属于原文件缺项，图示仍支持生成布局满足所示线宽与间距约束的说明。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "可搜索变量被提取为“½Z; W/C138”，原页为[Z,W]；式(2)中的等号、条件分隔符及Φ(·)也出现字符编码错误。已核对原页纠正为S(c_t,c|Z)=Φ(Z,f(c_t,c))，无公式缺项，不影响44维控制空间与确定性候选评分的说明。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "式(3)、式(4)的下标、求和及最大化排版在提取文本中散乱，原页均完整可读。表1的W取值区间及三次B样条名称含编码乱码，已核实为[Wmin,Wmax]及3（Cubic B-spline）；设计区域为400×400 μm²、网格80×80。无缺项，不影响制造约束和线宽合成结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "图3在文字提取中子图标题、坐标及柱状图数值排列混杂。原图核实b、c、d分别对应Tmean、TCV、P；e中CNN训练/验证/测试平均NRMSE为0.012/0.026/0.040，MLP为0.036/0.242/0.245。已纠正数值归属，支持CNN预测优于MLP的结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "式(5)预测性能向量的帽号被提取为“bt”，原页可辨为带帽的t向量，公式为t̂_CNN=f_CNN(I(Θ))；式(6)分式为TCV=σT/Tmean。两式均无缺项，已纠正提取符号，不影响图像到性能预测及温度均匀性指标的定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "图4b代数刻度被提取为“0 2 55 07 5 1 0 0 1 2 5”，原图可读为0、25、50、75、100、125；图4d目标空间中的连接符被提取为“/C0”，原图为P–TCV。已纠正，无原文缺项，不影响进化趋势与种群均值的解释。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "图5坐标单位“/g80m”应为μm；图5d的“/g171T–Tmean/g171”及图注中的“jT/C0Tmeanj”应为|T−Tmean|；图5e“/g114”应为±。原图完整清楚，已纠正，不影响2 K累计面积阈值及均温±2 K带的定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "图6d横坐标单位被提取为“/g80m”，原图为μm。已核对图6d、e及图注，确认剖面温度与±2 °C范围使用摄氏度，TCV和面积比例数值无缺项；不影响实验均匀性改善的结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "图7坐标及色标在提取文本中顺序混杂，“/g80m”应为μm。原图核实a横轴为峰值von Mises应力（MPa）、纵轴为目标方向位移（μm）；b、c为应力场，d、e为Y位移场。无缺项，已纠正坐标与子图归属，避免颠倒位移—应力权衡关系。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "方法中的“400 ´ 400”及训练超参数指数因提取排版分离，原页清楚显示400×400采样网格、学习率3×10⁻⁴及权重衰减1×10⁻⁴。已核对纠正，无公式缺项，不影响数据生成和代理训练设置。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P16",
+            "detail": "红外方法中“8/C0 14μm”“7:5μm”“±0:7%”为提取错误，原页分别为8–14 μm、7.5 μm、±0.7%。此外文字提取遗漏原页“Published online: 19 October 2026”。已纠正；不属于原文件缺项，涉及测量规格、不确定度及出版信息。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P17",
+            "detail": "参考文献34末尾被提取为“JM3. 1 15, 035003 (2016)”，原页显示“JM3. 15, 035003 (2016)”。已纠正多余字符；该问题涉及参考文献卷号，不影响本文微弹簧优化结果，无公式或图表缺项。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -695,7 +1532,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Polymer material jetting enables the fabrication of voxelated, multi-material structures with material control at the microscale. However, current work often neglects viscoelastic effects and designing voxelated digital materials remains challenging due to the complexity of the vast design freedom and intractability of efficiently modeling macroscale voxel structures. We present an efficient representation of stochastically mixed, voxelated digital materials and develop a generalized viscoelastic temperature-dependent material model to design and simulate digital materials mixed from…",
+      "summary": "如何让同一打印结构既抵抗瞬时冲击，又能长期柔顺变形？本文将随机混合体素材料表示为介观粗网格，以温度、频率相关渗流模型描述两种聚合物的黏弹性，再通过神经网络从性能需求反推混合比例。[P2–P4]阻尼器与腕部矫形器展示了滞回预测及分区选材能力，但阻尼器高频误差上升，矫形器冲击仅经模拟验证。[P5–P6]其价值在于连接材料配比、跨时间尺度响应与结构仿真，而非证明任意材料泛化或临床有效性。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -737,11 +1574,134 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐重点阅读介观表示、渗流模型标定及双网络逆向选材流程，适合生成式材料设计与阻尼结构研究；须同时核对高频误差和案例验证边界。[P2–P8]",
+      "deep_read": {
+        "problem": "随机体素混合既带来庞大的材料分配空间，又产生难以逐体素模拟的复杂界面。作者指出，既有方法常局限于弹性或单一工况，缺少从目标黏弹性响应到混合比例的可扩展映射。[P1–P2]核心问题是兼顾计算效率、制造真实性与跨温度和时间尺度的性能设计。",
+        "method": "作者以粗网格保存局部混合比例，制造时再随机分配体素；通过DMA、时温叠加及Prony系列标定温频相关渗流模型。ANN_mix估计需求对应配比，ANN_E生成刚度主曲线，再拟合含超弹性元件的黏弹模型用于有限元分析。[P2–P5、P8]",
+        "innovation": "方法特色是把介观材料表示、扩展渗流关系与逆向选材串成统一流程，而非直接优化每个体素。渗流系数随温度和频率变化，使混合规律能够描述不同响应区间。[P3–P4]解读：其创新重心是材料行为的任务独立参数化，不是新增几何生成算法或实测训练大数据库。",
+        "findings": "阻尼器在0.1、1、10 Hz下跨两温度的平均反力误差分别为5.6%、20.0%、26.6%，说明预测能力随频率变化。[P5]腕屈实验与模拟位移分别为1和0.923 mm；长期柔顺性有实验比较，冲击则仅有仿真。[P6]这些证据支持特定材料体系下的结构响应预测。",
+        "limitations": "验证限于两种聚合物及特定打印工艺，更换材料需重新标定；单一移位因子存在拟合局限。[P5、P7]患者特异需求缺失，补充循环数据未提供。[P6]未记录原文件缺项，公式乱码均已纠正；另有图6d比较量口径差异及数据缩减数量级疑点，不能据此扩大验证结论。[P6–P8]",
+        "connection": "解读：该研究直接契合生成式设计中的需求到材料参数映射，可为渐变界面、阻尼器和个性化柔顺结构提供选材框架。[P2、P5–P7]对可靠性研究，其跨温度和时间尺度建模有参考价值，但尚未建立失效概率或寿命模型；与智能运维的联系属于潜在迁移，而非本文成果。",
+        "next_steps": "建议：先利用已声明开放的代码和处理数据复现配比预测与有限元接口，再对目标工况补做独立材料和结构测试。[P8–P9]优先检查高频、高温及小特征尺寸的误差，量化制造波动，并实验核验冲击响应；若转向可靠性设计，还需另行获取损伤与失效数据。[P5–P7]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "随机体素化热黏弹性数字材料的逆向设计",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41467-025-66744-2.pdf"
+      ],
+      "analyzed_at": "2026-10-20T01:16:57.383582+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P2",
+          "P3",
+          "P4",
+          "P5",
+          "P8"
+        ],
+        "innovation": [
+          "P3",
+          "P4"
+        ],
+        "findings": [
+          "P5",
+          "P6"
+        ],
+        "limitations": [
+          "P5",
+          "P6",
+          "P7",
+          "P8"
+        ],
+        "connection": [
+          "P2",
+          "P5",
+          "P6",
+          "P7"
+        ],
+        "next_steps": [
+          "P5",
+          "P6",
+          "P7",
+          "P8",
+          "P9"
+        ]
+      },
+      "analysis_material_version": "345f85eb8d1e24d9ab5351fbaf9771fe89fb401faeb45479c919808f2a8555c1",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "公式(1)的文字提取出现“/C0”“/C1”等乱码；原页公式完整可读，已核正为 r=(ρ₁−ρc)^μ/(1−ρc)^μ。分子、分母及指数均未缺失，不属于原文件缺项；该式决定混合比例与有效性质比的非线性映射。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "图3a样品序号及图3b用途表在文字提取中发生串接、错序。原图可读：样品依次为I、II、III、IV*、V、VI*、VII；μ拟合使用I、III、V、VII，ρc拟合使用II，验证使用IV、VI。已按原图纠正，避免混淆拟合数据与独立验证数据。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "阻尼器体素数量在提取文字中显示为“273 :3 /C1 106”。核对原页正文及图5a，正确为273.3×10⁶个体素，图内写作273.3M Voxels；对应405,769个粗网格点。原页数量完整，无公式或数值缺项；纠正后可正确理解介观表示的数据压缩规模。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "公式(2)文字提取含“/C0”“/C16”等乱码；原页分段公式完整。核正为：T<Tg时log₁₀α_T=C₃(1/T−1/Tg)，T≥Tg时log₁₀α_T=−C₁(T−Tg)/(C₂+T−Tg)。无原文件缺项；该式控制Arrhenius/WLF温度移位及松弛时间缩放。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "机械测试段将储能模量、损耗模量提取为“E0”“E00”；原页清晰标为E′、E″，耗散因子为tan(δ)。已纠正，避免将撇号误认作数字或下标，影响黏弹性测试量的理解。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "a1b63142c701",
+        "state": "published",
+        "updated_at": "2026-10-20T01:16:57.403756+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 10,
+        "covered": 10,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "公式(1)的文字提取出现“/C0”“/C1”等乱码；原页公式完整可读，已核正为 r=(ρ₁−ρc)^μ/(1−ρc)^μ。分子、分母及指数均未缺失，不属于原文件缺项；该式决定混合比例与有效性质比的非线性映射。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "图3a样品序号及图3b用途表在文字提取中发生串接、错序。原图可读：样品依次为I、II、III、IV*、V、VI*、VII；μ拟合使用I、III、V、VII，ρc拟合使用II，验证使用IV、VI。已按原图纠正，避免混淆拟合数据与独立验证数据。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "阻尼器体素数量在提取文字中显示为“273 :3 /C1 106”。核对原页正文及图5a，正确为273.3×10⁶个体素，图内写作273.3M Voxels；对应405,769个粗网格点。原页数量完整，无公式或数值缺项；纠正后可正确理解介观表示的数据压缩规模。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "公式(2)文字提取含“/C0”“/C16”等乱码；原页分段公式完整。核正为：T<Tg时log₁₀α_T=C₃(1/T−1/Tg)，T≥Tg时log₁₀α_T=−C₁(T−Tg)/(C₂+T−Tg)。无原文件缺项；该式控制Arrhenius/WLF温度移位及松弛时间缩放。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "机械测试段将储能模量、损耗模量提取为“E0”“E00”；原页清晰标为E′、E″，耗散因子为tan(δ)。已纠正，避免将撇号误认作数字或下标，影响黏弹性测试量的理解。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -770,7 +1730,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Layered composite structures inspired by biological tissues can exhibit out-of-plane negative Poisson’s ratio, but identifying layups that maximize auxetic performance is challenging in high-dimensional designs. Here, we introduce an inverse design framework that searches for laminate layups with minimum Poisson’s ratio. The approach combines multi-start resampling with machine learning–guided clustering to map layup families across layer numbers. Analytical relations from laminate mechanics link ply angles to effective properties, and computer simulations with laboratory measurements…",
+      "summary": "本文针对多层复合结构铺层角度维数高、最小面外泊松比难以搜索的问题，将层合力学、多起点重采样、局部优化与层次聚类结合，提炼三类铺层规律，并利用规律降低高层数设计的搜索维数。[P3—P6] 作者通过有限元、超声测量和数字图像相关分析验证设计及变形机制，报告4K层结构最小泊松比为−0.3367。[P7—P9] 阅读重点是物理模型与解族发现的结合，但解析表达和铺层符号存在不一致，补充证明亦未随资料提供。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -812,11 +1772,151 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐结构逆向设计研究者重点阅读其“搜索—聚类—规则降维—实验核验”流程；可靠性研究可借鉴机制分析，但不能将其视为疲劳寿命或运维诊断成果。[P5—P9]",
+      "deep_read": {
+        "problem": "作者研究如何在层数增加、铺层角度组合迅速扩大的情况下，寻找最小面外泊松比及对应铺层。预先限定对称性或角度顺序虽然便于求解，却可能限制候选范围。[P3] 目标不仅是获得较强负泊松比响应，还要解释最优解随层数变化的规律，而非仅比较少量既定构型。",
+        "method": "研究以层合力学显式计算角度对应的泊松比，采用距离平方加权重采样选择初始点，再以BFGS开展局部搜索。[P3][P5] 各层数保留最低泊松比的十个铺层，通过对称性、角度数量等特征实施层次聚类，并将所得规则用于高维搜索降维。[P6]",
+        "innovation": "解读：值得关注的贡献不是提出新的神经网络，而是让物理计算、优化搜索与可解释分类形成反馈。聚类发现的铺层家族进一步转化为搜索约束，使4K类仅需优化一个角度变量。[P5][P6] 作者还以层间取向导致的应变失配解释厚度方向膨胀，将设计规律与力学机制联系起来。[P9]",
+        "findings": "作者将最优铺层分为4K、奇数层和4K+2三类，报告4K类最小泊松比为−0.3367。[P8] 在高维算例中，N=100和N=99的搜索时间分别降至原来的1/30和约1/55。[P6] 超声实验与理论、有限元趋势一致；DIC支持面内剪切应变分布的模拟结果，而非直接测量上述最小泊松比。[P8][P9]",
+        "limitations": "核对记录列出[P4]图2b反解公式根号位置错误，影响最优角解析表达，并非公式空缺；[P7][P8]正负角数量文字与实例相反；[P9]六层铺层末层符号图文不一，影响复现。不能据此声称解析验证完整。补充证明未提供，有限采样找全最优解及超声换算适用条件仍需核查。[P6][P7]\n原文核对：[P4] 图2b“Optimal Angle”框内，原图将根号置于 arcsin(x) 外，显示为 θ=±√(arcsin(x))=±24.5；这与同图 x=sin²θ 的反解关系不一致。由该代换应得到 θ=±arcsin(√x)，但这是核对推导所得纠正，不是原图写法。缺陷影响最优角解析表达的准确性，不妨碍读取该页其余内容，也不能据此否定其数值搜索结果。",
+        "connection": "解读：对结构设计，本文展示了从数值最优解提炼对称性规则、再用于降维的路径；对可靠性研究，完全黏结约束失配的机制提示界面状态可能影响负泊松比响应。[P6][P9] 与智能运维的联系目前仅是潜在迁移：剪切应变场可作为监测候选信息，但本文没有验证损伤识别能力。",
+        "next_steps": "建议：复现前先核对最优角反解、奇数层符号计数及六层铺层末层符号，再检查超声换算对各向异性层合板的适用性。[P4][P7—P9] 后续可在制造角度偏差、界面退化与循环载荷下比较性能稳定性；这些属于研究设想，并非作者已完成的可靠性验证。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "机器学习辅助仿生层状复合结构最大负泊松比性能逆向设计",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s44172-025-00557-5.pdf"
+      ],
+      "analyzed_at": "2026-10-20T01:27:32.567022+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P3"
+        ],
+        "method": [
+          "P3",
+          "P5",
+          "P6"
+        ],
+        "innovation": [
+          "P5",
+          "P6",
+          "P9"
+        ],
+        "findings": [
+          "P6",
+          "P8",
+          "P9"
+        ],
+        "limitations": [
+          "P4",
+          "P6",
+          "P7",
+          "P8",
+          "P9"
+        ],
+        "connection": [
+          "P6",
+          "P9"
+        ],
+        "next_steps": [
+          "P4",
+          "P7",
+          "P8",
+          "P9"
+        ]
+      },
+      "analysis_material_version": "6a308c68399bf0224a248ab8b19acdf8e3c3e33420623dbab9ca14bc0666f28b",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "式(1)至式(3)的文字提取含 /C0 等编码及上下标错位。原页可辨；尤其式(2)应为 J=A⁻¹+A⁻¹B(D−BA⁻¹B)⁻¹BA⁻¹，提取文本遗漏了括号项的逆矩阵标记。式(3)为 ν13=−J31/J11。错误影响刚度到泊松比的计算表达，不是原页公式缺失。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "图2b的矩阵简化、三角函数、极值条件与求根公式在文字提取中大量丢失，但原图存在可读表达，包括 x=sin²θ、dν13/dθ=0、F(θ)=h′(θ)g(θ)−h(θ)g′(θ)=sin(2θ)p4(x)=0，以及四次多项式有效根 x=0.1687。不得把提取空白判为原文件缺项。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P4",
+          "detail": "图2b“Optimal Angle”框内，原图将根号置于 arcsin(x) 外，显示为 θ=±√(arcsin(x))=±24.5；这与同图 x=sin²θ 的反解关系不一致。由该代换应得到 θ=±arcsin(√x)，但这是核对推导所得纠正，不是原图写法。缺陷影响最优角解析表达的准确性，不妨碍读取该页其余内容，也不能据此否定其数值搜索结果。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "式(4)及采样步骤中的概率公式被提取为含/C0等编码的错位文本。原页可辨，正确表达为 P(xi)=D²(xi)/Σx∈ΩD²(x)，其中D为到已采样点的最小距离。该纠正影响重采样权重的理解；原页公式没有缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "全局最优命中概率的减号及指数、各类搜索空间的维数在提取中错位。原页为1−(1−p)^ns；4K类变量由4K降至1，2K+1类降至2，4K+2类降至2K+1。铺层模式为[−θ/θ/θ/−θ]K。错误影响概率论证及降维规模的读取，不是原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "式(5)的上下标、减号与括号在文字提取中损坏。核对原页应为 ν=(Vl²−2Vt²)/[2(Vl²−Vt²)]，Vl、Vt分别为纵波和横波速度。原页表达完整；错误影响超声测量到泊松比的换算。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P10",
+          "detail": "日期栏文字提取遗漏整行“Published online: 24 November 2025”，原页可清楚读取。已补记在线发表日期为2025年11月24日；该遗漏影响出版信息完整性，不影响图7机制分析及实验结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "454698628e66",
+        "state": "published",
+        "updated_at": "2026-10-20T01:27:32.586926+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 11,
+        "covered": 11,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "式(1)至式(3)的文字提取含 /C0 等编码及上下标错位。原页可辨；尤其式(2)应为 J=A⁻¹+A⁻¹B(D−BA⁻¹B)⁻¹BA⁻¹，提取文本遗漏了括号项的逆矩阵标记。式(3)为 ν13=−J31/J11。错误影响刚度到泊松比的计算表达，不是原页公式缺失。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "图2b的矩阵简化、三角函数、极值条件与求根公式在文字提取中大量丢失，但原图存在可读表达，包括 x=sin²θ、dν13/dθ=0、F(θ)=h′(θ)g(θ)−h(θ)g′(θ)=sin(2θ)p4(x)=0，以及四次多项式有效根 x=0.1687。不得把提取空白判为原文件缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P4",
+            "detail": "图2b“Optimal Angle”框内，原图将根号置于 arcsin(x) 外，显示为 θ=±√(arcsin(x))=±24.5；这与同图 x=sin²θ 的反解关系不一致。由该代换应得到 θ=±arcsin(√x)，但这是核对推导所得纠正，不是原图写法。缺陷影响最优角解析表达的准确性，不妨碍读取该页其余内容，也不能据此否定其数值搜索结果。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "式(4)及采样步骤中的概率公式被提取为含/C0等编码的错位文本。原页可辨，正确表达为 P(xi)=D²(xi)/Σx∈ΩD²(x)，其中D为到已采样点的最小距离。该纠正影响重采样权重的理解；原页公式没有缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "全局最优命中概率的减号及指数、各类搜索空间的维数在提取中错位。原页为1−(1−p)^ns；4K类变量由4K降至1，2K+1类降至2，4K+2类降至2K+1。铺层模式为[−θ/θ/θ/−θ]K。错误影响概率论证及降维规模的读取，不是原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "式(5)的上下标、减号与括号在文字提取中损坏。核对原页应为 ν=(Vl²−2Vt²)/[2(Vl²−Vt²)]，Vl、Vt分别为纵波和横波速度。原页表达完整；错误影响超声测量到泊松比的换算。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "日期栏文字提取遗漏整行“Published online: 24 November 2025”，原页可清楚读取。已补记在线发表日期为2025年11月24日；该遗漏影响出版信息完整性，不影响图7机制分析及实验结论。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -839,7 +1939,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Abstract 4D printed labels that change color and shape were developed to achieve the dual functions of quality assessment and maintenance of respiring climacteric fruits. The effect of addition of essential oil emulsion and different geometric structures on deformation as well as the corresponding mechanisms were explored. Cast, 3D printed, and 4D printed labels were compared based on their responses to fruit quality and compatibility with machine learning. The addition of emulsion significantly affected the degree of deformation by altering the printing fidelity, hydrophilicity, and flexibili…",
+      "summary": "本文围绕水果品质转折难以直观识别的问题，将二氧化碳响应变色、湿度驱动变形及精油释放集成到双层4D打印标签中，并比较浇铸、3D与4D标签及四种轻量分类网络。[P2][P10]结果支持材料配方与几何设计共同调控变形和释放，MobileNet组合表现最佳，但正文准确率与矩阵重算略有差异。[P8][P12]解读：其价值在于感知结构与算法协同设计，而非直接提供设备智能运维方案。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -881,11 +1981,179 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐作为响应结构与视觉识别协同设计的跨领域案例阅读，重点关注配方—几何—变形—释放证据链；若目标是设备故障诊断或剩余寿命预测，则不宜列为核心方向文献。[P6–P12]",
+      "deep_read": {
+        "problem": "作者针对单一颜色标签难以清楚区分水果品质转折、传统保鲜措施缺乏实时反馈的问题，尝试同时实现品质监测与主动保鲜。[P1][P2]关键不只是提高分类准确率，还包括解释环境变化如何转化为可见形变，以及形变能否进一步改善精油释放。",
+        "method": "研究以MAKGM构建双层标签，配置显色剂及大蒜精油乳液，分别改变上层层数、填充率和交叉角。[P14]通过显微结构、含水量、接触角与释放动力学分析响应机制，再结合水果品质分级及四种轻量网络比较监测效果，设置浇铸与3D打印对照。[P2][P15]",
+        "innovation": "解读：相对本文比较的单纯变色标签，主要增量是将形状作为额外识别信息，并利用形变引起的微结构变化促进保鲜剂释放。[P8][P10]材料、结构和分类模型由此形成协同设计关系；现有资料不支持将其表述为首次提出4D打印或首次使用机器学习监测食品。",
+        "findings": "作者选定10%乳液及单层、30%填充率、60°交叉角方案；该几何方案第10天累计释放量较四层对照高42.32%。[P6][P8]MobileNet最佳，正文报告97.90%，图9计数重算约97.92%。[P10][P12]较高精油释放伴随后期较低菌落总数，支持保鲜优势。[P11]",
+        "limitations": "[P15]式(6)缺A定义，影响复现。[P4]图3配方矛盾；[P6]图5C硬度轴与作用力解释不一致；[P7]峰值日期概括有例外；[P9]n低于正文下限，影响机制判断。方法以凝胶强度差间接表征作用力[P15]。另需专用包装空间，仅验证三类水果，补充资料未核验。[P10]\n原文核对：[P4] 图3原页图注明写“The lower structure of all labels contained 10% (w/w) emulsion”，但同图行标签明确为0%、6%、8%、10%、12%、14%乳液，正文也讨论不同含量。这是原页配方描述不一致，而非提取错误；影响各实验组下层配方的准确复现，不能将所有组解释为10%。未发现公式缺失。；[P6] 图5C原页纵轴为“Hardness (N)”，而横轴、图注及正文均将其解释为氢键、疏水及静电相互作用。原页未在该图说明硬度读数与分子作用力的换算或对应关系，存在指标标注不一致；影响纵轴物理量及分子作用力降幅的直接解释，不应自行改写轴名或单位。；[P7] 图6C中0°组平均曲率在约第3天达峰，第4天已下降；与P6正文笼统表述“the labels reached their maximum curvature on 4th day”不完全一致。原图数据点及图例可辨，非提取错误；影响“全部几何设计均在第4天达峰”的概括，不影响几何参数改变变形过程的总体观察。；[P9] 图7C原页参数表中“1 upper layer-70%-90°”组扩散指数n=0.4209，低于P8正文所称全部样本“0.43≤n<0.85”的下限。原表数值清晰，属于原文范围表述与表格不一致，非提取错误。该组不能直接套用作者所写区间来支持全部样本均为非Fick扩散的结论；不能擅自改动n或补造模型公式。；[P15] 式(6)原页含加和项A，但紧随公式的变量说明仅解释Mₜ/M∞、k和n，未定义A的含义、单位或处理方式。公式本身完整；缺失的是参数说明，影响释放动力学模型的解释与复现，不能自行认定A的物理意义。",
+        "connection": "解读：与智能运维的联系主要是方法迁移，即以环境响应结构提供多维状态信息，再由视觉模型识别状态转折；并非已经验证设备故障预警。[P10][P12]对结构设计与可靠性研究，更直接的启示是响应幅度、网络完整性和功能释放之间存在需要联合优化的权衡。[P4–P9]",
+        "next_steps": "建议：先澄清公式参数、配方及指标定义，再按独立包装和采集批次隔离训练测试，并以人工复核检验模型辅助清洗标签的可靠性。[P4][P15]随后检验跨包装、光照与储藏条件的性能，并结合作者提出的自动供料、输送及质控需求评估规模化可行性。[P13]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "结合机器学习的4D打印变形标签用于呼吸跃变型水果监测与保鲜",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41467-025-66554-6.pdf"
+      ],
+      "analyzed_at": "2026-10-20T01:40:25.245813+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P2",
+          "P14",
+          "P15"
+        ],
+        "innovation": [
+          "P8",
+          "P10"
+        ],
+        "findings": [
+          "P6",
+          "P8",
+          "P10",
+          "P11",
+          "P12"
+        ],
+        "limitations": [
+          "P4",
+          "P6",
+          "P7",
+          "P9",
+          "P10",
+          "P15"
+        ],
+        "connection": [
+          "P4",
+          "P5",
+          "P6",
+          "P7",
+          "P8",
+          "P9",
+          "P10",
+          "P12"
+        ],
+        "next_steps": [
+          "P4",
+          "P13",
+          "P15"
+        ]
+      },
+      "analysis_material_version": "35e6d57baa64a59bf0307b5454548010822fe0009e0ccd1b5630a2626a3eae4e",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "原页明确载有“Published online: 21 November 2025”，所给文字提取遗漏该项；已按图片补核。此遗漏影响发表时间信息的完整性，不影响标签响应、识别准确率或保鲜机制结论。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P4",
+          "detail": "图3原页图注明写“The lower structure of all labels contained 10% (w/w) emulsion”，但同图行标签明确为0%、6%、8%、10%、12%、14%乳液，正文也讨论不同含量。这是原页配方描述不一致，而非提取错误；影响各实验组下层配方的准确复现，不能将所有组解释为10%。未发现公式缺失。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P6",
+          "detail": "图5C原页纵轴为“Hardness (N)”，而横轴、图注及正文均将其解释为氢键、疏水及静电相互作用。原页未在该图说明硬度读数与分子作用力的换算或对应关系，存在指标标注不一致；影响纵轴物理量及分子作用力降幅的直接解释，不应自行改写轴名或单位。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P7",
+          "detail": "图6C中0°组平均曲率在约第3天达峰，第4天已下降；与P6正文笼统表述“the labels reached their maximum curvature on 4th day”不完全一致。原图数据点及图例可辨，非提取错误；影响“全部几何设计均在第4天达峰”的概括，不影响几何参数改变变形过程的总体观察。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P9",
+          "detail": "图7C原页参数表中“1 upper layer-70%-90°”组扩散指数n=0.4209，低于P8正文所称全部样本“0.43≤n<0.85”的下限。原表数值清晰，属于原文范围表述与表格不一致，非提取错误。该组不能直接套用作者所写区间来支持全部样本均为非Fick扩散的结论；不能擅自改动n或补造模型公式。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P14",
+          "detail": "式(1)文字提取出现/C0、/C12等乱码，原页公式完整且可辨。按原页纠正为：打印保真度(%)=[1−|打印物底面积−模型底面积|×打印物高度/(模型底面积×模型高度)]×100。绝对值仅包围两底面积之差。不存在原页公式缺项；乱码影响保真度指标的计算与复现。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "式(2)–(5)文字提取中的/C0、/C18等为乱码，原页可清楚恢复为：含水量=[(W₀−W₁)/W₀]×100；体积密度=干样质量/干样体积；颗粒密度=0.864×(m₃−m₁)/[m₂+(m₃−m₁)−m₄]；总孔隙率=(1−体积密度/颗粒密度)×100。原页无公式缺项，提取错误影响含水量和孔隙率计算的复现。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "式(6)提取将分母M∞误呈为M1，并损坏模型名称中的连接符。原页为Ritger–Peppas：Mₜ/M∞=ktⁿ+A，幂指数n清晰。已据原页纠正；影响释放分数归一化及模型复现，非原文件公式缺失。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P15",
+          "detail": "式(6)原页含加和项A，但紧随公式的变量说明仅解释Mₜ/M∞、k和n，未定义A的含义、单位或处理方式。公式本身完整；缺失的是参数说明，影响释放动力学模型的解释与复现，不能自行认定A的物理意义。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "e7609dfd92b1",
+        "state": "published",
+        "updated_at": "2026-10-20T01:40:25.261611+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 17,
+        "covered": 17,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页明确载有“Published online: 21 November 2025”，所给文字提取遗漏该项；已按图片补核。此遗漏影响发表时间信息的完整性，不影响标签响应、识别准确率或保鲜机制结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P4",
+            "detail": "图3原页图注明写“The lower structure of all labels contained 10% (w/w) emulsion”，但同图行标签明确为0%、6%、8%、10%、12%、14%乳液，正文也讨论不同含量。这是原页配方描述不一致，而非提取错误；影响各实验组下层配方的准确复现，不能将所有组解释为10%。未发现公式缺失。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P6",
+            "detail": "图5C原页纵轴为“Hardness (N)”，而横轴、图注及正文均将其解释为氢键、疏水及静电相互作用。原页未在该图说明硬度读数与分子作用力的换算或对应关系，存在指标标注不一致；影响纵轴物理量及分子作用力降幅的直接解释，不应自行改写轴名或单位。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P7",
+            "detail": "图6C中0°组平均曲率在约第3天达峰，第4天已下降；与P6正文笼统表述“the labels reached their maximum curvature on 4th day”不完全一致。原图数据点及图例可辨，非提取错误；影响“全部几何设计均在第4天达峰”的概括，不影响几何参数改变变形过程的总体观察。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P9",
+            "detail": "图7C原页参数表中“1 upper layer-70%-90°”组扩散指数n=0.4209，低于P8正文所称全部样本“0.43≤n<0.85”的下限。原表数值清晰，属于原文范围表述与表格不一致，非提取错误。该组不能直接套用作者所写区间来支持全部样本均为非Fick扩散的结论；不能擅自改动n或补造模型公式。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "式(1)文字提取出现/C0、/C12等乱码，原页公式完整且可辨。按原页纠正为：打印保真度(%)=[1−|打印物底面积−模型底面积|×打印物高度/(模型底面积×模型高度)]×100。绝对值仅包围两底面积之差。不存在原页公式缺项；乱码影响保真度指标的计算与复现。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "式(2)–(5)文字提取中的/C0、/C18等为乱码，原页可清楚恢复为：含水量=[(W₀−W₁)/W₀]×100；体积密度=干样质量/干样体积；颗粒密度=0.864×(m₃−m₁)/[m₂+(m₃−m₁)−m₄]；总孔隙率=(1−体积密度/颗粒密度)×100。原页无公式缺项，提取错误影响含水量和孔隙率计算的复现。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "式(6)提取将分母M∞误呈为M1，并损坏模型名称中的连接符。原页为Ritger–Peppas：Mₜ/M∞=ktⁿ+A，幂指数n清晰。已据原页纠正；影响释放分数归一化及模型复现，非原文件公式缺失。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P15",
+            "detail": "式(6)原页含加和项A，但紧随公式的变量说明仅解释Mₜ/M∞、k和n，未定义A的含义、单位或处理方式。公式本身完整；缺失的是参数说明，影响释放动力学模型的解释与复现，不能自行认定A的物理意义。"
+          }
+        ]
+      }
     }
   ],
   "source_status": {
@@ -1792,13 +3060,13 @@
     "unavailable": 30
   },
   "analysis_status": {
-    "ready_core": 0,
+    "ready_core": 4,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 6
+    "pending": 2
   },
   "edition": {
     "id": "39307614095",
