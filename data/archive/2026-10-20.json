@@ -27,7 +27,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Abstract Designing efficient photoreactors remains challenging due to the complex interplay of reflection, scattering, and absorption. Here, we introduce a closed-loop workflow integrating ray-tracing digital twins with multi-objective Bayesian optimization to design photoreactors with high photon capture and uniform irradiation. A digital 3D reactor model is calibrated using measured emission characteristics, reflectivity data, and geometrical properties and validated against potassium ferrioxalate actinometry. The validated model explores reflector shape and vial positioning, identifying geo…",
+      "summary": "光反应器的反射、散射与吸收相互耦合，使几何设计难以凭直觉优化。本文将经实验校准的光线追踪数字孪生与多目标贝叶斯优化结合，联合调整反射器形状和样品瓶位置，兼顾16瓶光子通量与辐照均匀性[P2—P4]。作者通过光量计及光子受限交叉偶联实验检验预测，并利用逐瓶吸收校正开展量子产率筛选[P5—P7]。其价值主要在于减少实体试制、连接结构寻优与定量化学表征；新系统仍须重新验证，不能直接等同于智能运维成果[P8]。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -69,11 +69,130 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为数字孪生辅助结构优化的方法迁移文献重点阅读，尤其关注实验校准、多目标寻优和逐瓶光学校正；若仅筛选智能运维直接成果，则不宜优先推荐[P3—P8]。",
+      "deep_read": {
+        "problem": "研究问题是如何在复杂光传输条件下，同时提高多瓶反应器的光子捕获与辐照一致性。反射器曲率、样品位置、光源发射及材料反射性质共同影响结果，传统设计需要反复打印和表征。作者强调这些权衡不能预先凭直觉判断，因此需要可定量评估的设计流程[P1、P2、P5]。",
+        "method": "作者以实测光源发射和材料反射率校准COMSOL光线追踪模型，并用草酸铁钾光量计验证。高斯过程代理模型以总入射光子通量及最小、最大瓶通量之比为双目标，经9个拉丁超立方初始样本和56次贝叶斯优化迭代，筛选反射器与瓶位置组合[P3、P4]。",
+        "innovation": "解读：创新重点不是单独采用机器学习，而是将实验校准、物理模拟、参数化几何搜索和实体检验组成虚拟协同设计流程。优化后的反应器还保留逐瓶光学表征信息，可进一步校正吸收差异并开展量子产率研究，使结构设计与化学解释相衔接[P2、P6、P7]。",
+        "findings": "独立光量计验证中，模拟每瓶约25 mW，实验约26 mW；代表性设计的数值收敛差异低于3%[P3—P5]。反应器β在光子受限实验中表现最佳，但约10%的实验误差限制细微比较[P6]。量子产率均低于1%，镍用量与溶剂变化揭示了条件限定的化学效应[P7]。",
+        "limitations": "约10%的实验误差限制反应器间差异判别，均匀性目标改善也较小[P4、P6]。作者要求每个新系统重新验证，不能直接外推至其他光源或材料[P8]。当前未提供补充资料与代码实际内容；逐页记录无原文件缺项，公式乱码已纠正，不构成缺式证据。",
+        "connection": "解读：与结构设计的联系较强，可借鉴以物理模型替代大量实体试制、同时处理性能权衡的策略。与智能运维和可靠性的联系则是间接的：实验校准与新系统验证具有方法启发，但本文没有故障诊断、退化预测、维护决策或长期可靠性测试，不能据数字孪生标签认定直接契合[P4、P8]。",
+        "next_steps": "建议：迁移时先明确目标设备的可测性能和模型校准条件，再比较模拟寻优与实体基线，并检验测量误差是否足以区分候选方案。若面向智能运维，可另行引入退化状态、在线观测和维护目标，检验模型更新后的决策效果；这些属于新增研究，并非作者已验证结论[P6、P8]。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "机器学习与数字孪生赋能的闭环光反应器设计",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s41467-026-78785-2"
+      ],
+      "analyzed_at": "2026-10-20T02:10:26.066614+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P5"
+        ],
+        "method": [
+          "P3",
+          "P4"
+        ],
+        "innovation": [
+          "P2",
+          "P6",
+          "P7"
+        ],
+        "findings": [
+          "P3",
+          "P4",
+          "P5",
+          "P6",
+          "P7"
+        ],
+        "limitations": [
+          "P4",
+          "P6",
+          "P8"
+        ],
+        "connection": [
+          "P4",
+          "P8"
+        ],
+        "next_steps": [
+          "P6",
+          "P8"
+        ]
+      },
+      "analysis_material_version": "342ba539b25979ad9da04bbfeca10ae5769d3331c1096342605be0940702e7d2",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "原页明确列出“Published online: 19 October 2026”，所给文字提取未保留该行，现据原页补正。影响出版信息完整性，不影响研究结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "图2B光量计实验曲线的时间轴在文字提取中出现数字粘连；原图可辨为0、20、40、60、80、100、120，单位s。现据原图纠正，不据此额外推算斜率或效率；图中38%与36%的效率标注完整。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "图4B横轴在文字提取中出现数字粘连，原图可读为Evaluation number，刻度0、10、20、30、40、50、60。图4A—C及图注均完整，无缺项；纠正后不改变优化轨迹及收敛性结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "公式(3)—(5)中的/C0、/C1、/C22等为提取乱码，原图无公式缺项。式(3)含前置负号及吸收项1−exp(−κ_A,λ C_A l̄)；式(4)为两速率之比乘100%；式(5)吸收项为1−10^[−(A_mixture,λ/l_cuvette)l̄]，求和范围410—590 nm。表1单位可读：C_A为mol m⁻³、q为mol s⁻¹、κ_i,λ为m² mol⁻¹。纠正关系到有效光程及量子产率计算，不应将乱码视为原文件缺式。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "图6文字提取将三乙基硼及氯化镍的下标转换为/g3674、/g3676。原图可读为Et₃B及NiCl₂·glyme；标准条件含NiCl₂·glyme（10 mol%）。原图结构式、条件和量子产率数据完整；纠正影响试剂身份及条件复现，不改变图示比较结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "80e291965c13",
+        "state": "published",
+        "updated_at": "2026-10-20T02:10:26.083830+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 10,
+        "covered": 10,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页明确列出“Published online: 19 October 2026”，所给文字提取未保留该行，现据原页补正。影响出版信息完整性，不影响研究结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "图2B光量计实验曲线的时间轴在文字提取中出现数字粘连；原图可辨为0、20、40、60、80、100、120，单位s。现据原图纠正，不据此额外推算斜率或效率；图中38%与36%的效率标注完整。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "图4B横轴在文字提取中出现数字粘连，原图可读为Evaluation number，刻度0、10、20、30、40、50、60。图4A—C及图注均完整，无缺项；纠正后不改变优化轨迹及收敛性结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "公式(3)—(5)中的/C0、/C1、/C22等为提取乱码，原图无公式缺项。式(3)含前置负号及吸收项1−exp(−κ_A,λ C_A l̄)；式(4)为两速率之比乘100%；式(5)吸收项为1−10^[−(A_mixture,λ/l_cuvette)l̄]，求和范围410—590 nm。表1单位可读：C_A为mol m⁻³、q为mol s⁻¹、κ_i,λ为m² mol⁻¹。纠正关系到有效光程及量子产率计算，不应将乱码视为原文件缺式。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "图6文字提取将三乙基硼及氯化镍的下标转换为/g3674、/g3676。原图可读为Et₃B及NiCl₂·glyme；标准条件含NiCl₂·glyme（10 mol%）。原图结构式、条件和量子产率数据完整；纠正影响试剂身份及条件复现，不改变图示比较结论。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -112,7 +231,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "本文聚焦《Intelligent generative design framework for semantic driven mechanical design》，暂未提供可用摘要，请查看原文。",
+      "summary": "论文提出IGD框架，将自然语言需求转化为零件设计、CAD代码、装配及运动学分析。系统通过知识检索、专用智能体、蚁群启发调度和建模检查反馈连接设计环节。[P2、P13—P15] 作者报告检查器提升几何重建精度，并展示减速器改型、起落架和抽油机案例。[P4—P11] 其价值主要在概念到几何阶段的自动化，尚不包含完整制造、公差及多物理场验证，不能等同于生产就绪或可靠性认证。[P12]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -154,11 +273,185 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐结构设计与工程智能体研究者重点阅读其知识约束、装配关系迁移及检查闭环；可靠性与智能运维研究者宜将其作为设计接口参考，而非性能验证方案。[P12—P15]",
+      "deep_read": {
+        "problem": "机械设计不仅需要理解功能需求，还必须处理尺寸、空间配合、任务依赖及机构运动。论文针对通用LLM缺乏工程约束意识、专用网络任务覆盖狭窄的问题，研究如何把语言意图转化为可执行且机械一致的多阶段流程，而非仅生成外观模型。[P1—P2]",
+        "method": "IGD由TP规划、PD设计、PM建模及PA装配智能体协作。ACBAC用信息素共享记忆协调任务；PM结合CRP参考检索、CGP微调生成与检查器反馈；PA通过GART检索装配子图，并以位姿优化约束装配一致性。[P2、P13—P15]",
+        "innovation": "解读：创新重点是工程知识与执行流程的系统整合，而非提出全新的语言模型。框架将共享记忆调度、互补建模提示、装配关系迁移和运动学分析串联，使语言生成受到几何与关系先验约束；但现有资料不足以证明各模块贡献均被独立隔离验证。[P8、P11—P15]",
+        "findings": "作者报告无检查器至GPT-4o检查配置的IoU由0.55升至0.92，CD由0.85降至0.12；1000个样本均在10轮以内满足自动验收。三项装配任务中所提方法准确率均为100%，但跨模型、跨任务结果并非全部满分，不能外推为普遍可靠。[P4—P6]",
+        "limitations": "作者明确尚未纳入详细DFM、完整公差链及耦合多物理场仿真；知识库覆盖、大规模装配和全新设计仍受限。装配误差阈值在所供笔记中无具体数值，部分模型和部署组件不公开。核对记录未确认原文件缺项，公式乱码均属已纠正的提取错误。[P12、P15]",
+        "connection": "解读：对结构设计，价值在于把需求变化快速落实为可执行CAD改型；对智能运维，可作为故障工况到设计调整的潜在接口。可靠性研究则需区分几何、运动学一致与承载安全：文中尺寸强化案例并未提供疲劳寿命或可靠性指标验证。[P9—P12]",
+        "next_steps": "建议：选取具有明确载荷与失效模式的减速器任务，将生成几何接入应力、疲劳和公差分析，以安全裕度作为独立验收条件；固定模型与预算，对比检索、检查器和信息素调度的消融效果，同时报告失败类型与成本。这是后续研究设想，并非作者已验证成果。[P12—P15]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "面向语义驱动机械设计的智能生成式设计框架",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s44172-026-00808-z"
+      ],
+      "analyzed_at": "2026-10-20T02:27:33.572632+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P2",
+          "P13",
+          "P14",
+          "P15"
+        ],
+        "innovation": [
+          "P8",
+          "P11",
+          "P12",
+          "P13",
+          "P14",
+          "P15"
+        ],
+        "findings": [
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "limitations": [
+          "P12",
+          "P15"
+        ],
+        "connection": [
+          "P9",
+          "P10",
+          "P11",
+          "P12"
+        ],
+        "next_steps": [
+          "P12",
+          "P13",
+          "P14",
+          "P15"
+        ]
+      },
+      "analysis_material_version": "11c74d67fa708211acee9f91c56f7938ba2f58b6d69dadb3cfadd644011774a9",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "Fig. 1c的文字提取包含倒序黏连字符串“MLLrekcehCMLLgniledoM”；原图可清晰核对为PM模块中的“Modelling LLM”和“Checker LLM”。正文在原页位于图及图注下方，而提取文本将其置于图前。已按原页纠正标签与阅读顺序，不影响对建模—检查反馈机制的理解；未发现由此导致的原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "Fig. 2d—f的数值图在所给文字提取中基本缺失，但原页清晰可读：已补核IoU/CD柱线图、平均迭代轮数热图及四方法雷达图。Fig. 2c原图上部为CRP、下部为CGP，文字提取顺序混乱，已按原图纠正。影响建模精度、迭代效率及方法比较的证据读取，不是原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "Fig. 3e—g的柱线图数据及图例未被文字提取完整保留；Fig. 3d状态编号被提取为异常字符。原页可核对①—⑤与图注中的前后倾角、三个行程状态对应关系，并已读取三任务提示策略准确率及跨模型比较。影响装配准确率与状态验证证据，未发现原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "上方多面板图的文字提取遗漏了大部分流程、坐标和图例，仅残留零散面板字母及模型名称；原页可辨识a—i面板、四类智能体时序、雷达图、token/时间图和失败示例，已依图纠正理解。本页无完整图注，图号不作推定；不将跨页图注缺席认定为原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "Fig. 4图注在原页顶部，文字提取却置于正文之后。已按原页恢复阅读关系，确认其解释前页a—i面板，而非本页新增图。影响图文对应，不涉及原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P10",
+          "detail": "Fig. 5c、e、f的坐标、数据和图例在文字提取中大量遗漏。原页已核清Fig. 5c四项尺寸增幅及原始尺寸，确认e左侧为Input Byte、右侧为Output Token，f为Time (s)。这些信息影响优化幅度与计算负担的解读，属于提取遗漏而非原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P11",
+          "detail": "Fig. 6f的两条运动学公式在文字提取中遗漏，原图可读：θ₂关系含arctan2(30sinθ₁−70,30cosθ₁+50)及arccos项；θ₃关系为arctan2(70+80sinθ₂−30sinθ₁,−50+80cosθ₂−30cosθ₁)−θ₁。已确认公式存在，影响抽油机闭式运动学建模证据的识别，不是原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P13",
+          "detail": "式(1)、式(2)中的减号和乘号被提取为“/C0”“/C1”等乱码。原页核实式(1)为τᵢ(t+1)=(1−ρ)τᵢ(t)+Q·f(qᵢ)；式(2)为φⱼ=α·Confidence+β·History+γ·Plan+δ·Capability+ε·Time。纠正后明确了信息素蒸发—强化与五指标加权机制；无公式缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P14",
+          "detail": "式(3)—(9)存在文字提取乱码：Y*、负号、求和/连乘、条件符号、转置、范数和矩阵括号未正确保留。原页均清晰完整。已核实式(3)为负对数似然，式(4)为概率连乘，式(7)为λtype(e)·(uᵢⱼᵀuₑ)/(‖uᵢⱼ‖‖uₑ‖)，式(9)为上行[Rᵢⱼ,tᵢⱼ]、下行[0,1]的分块矩阵。影响训练目标、检索评分及位姿表达的理解，不属于原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "式(10)—(12)的逆矩阵、负号、范数及集合符号提取失真。原页核实式(10)残差为Tᵢ⁻¹Tⱼ−Tᵢⱼ，并取加权平方Frobenius范数；式(11)分子为|A∩B|，不是差集；式(12)使用双向最近邻平方欧氏距离。另，文字提取遗漏原页“Published online: 19 October 2026”。均已据原页纠正，无公式缺项。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "78d90a1d0519",
+        "state": "published",
+        "updated_at": "2026-10-20T02:27:33.587870+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 17,
+        "covered": 17,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "Fig. 1c的文字提取包含倒序黏连字符串“MLLrekcehCMLLgniledoM”；原图可清晰核对为PM模块中的“Modelling LLM”和“Checker LLM”。正文在原页位于图及图注下方，而提取文本将其置于图前。已按原页纠正标签与阅读顺序，不影响对建模—检查反馈机制的理解；未发现由此导致的原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "Fig. 2d—f的数值图在所给文字提取中基本缺失，但原页清晰可读：已补核IoU/CD柱线图、平均迭代轮数热图及四方法雷达图。Fig. 2c原图上部为CRP、下部为CGP，文字提取顺序混乱，已按原图纠正。影响建模精度、迭代效率及方法比较的证据读取，不是原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "Fig. 3e—g的柱线图数据及图例未被文字提取完整保留；Fig. 3d状态编号被提取为异常字符。原页可核对①—⑤与图注中的前后倾角、三个行程状态对应关系，并已读取三任务提示策略准确率及跨模型比较。影响装配准确率与状态验证证据，未发现原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "上方多面板图的文字提取遗漏了大部分流程、坐标和图例，仅残留零散面板字母及模型名称；原页可辨识a—i面板、四类智能体时序、雷达图、token/时间图和失败示例，已依图纠正理解。本页无完整图注，图号不作推定；不将跨页图注缺席认定为原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "Fig. 4图注在原页顶部，文字提取却置于正文之后。已按原页恢复阅读关系，确认其解释前页a—i面板，而非本页新增图。影响图文对应，不涉及原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "Fig. 5c、e、f的坐标、数据和图例在文字提取中大量遗漏。原页已核清Fig. 5c四项尺寸增幅及原始尺寸，确认e左侧为Input Byte、右侧为Output Token，f为Time (s)。这些信息影响优化幅度与计算负担的解读，属于提取遗漏而非原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "Fig. 6f的两条运动学公式在文字提取中遗漏，原图可读：θ₂关系含arctan2(30sinθ₁−70,30cosθ₁+50)及arccos项；θ₃关系为arctan2(70+80sinθ₂−30sinθ₁,−50+80cosθ₂−30cosθ₁)−θ₁。已确认公式存在，影响抽油机闭式运动学建模证据的识别，不是原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "式(1)、式(2)中的减号和乘号被提取为“/C0”“/C1”等乱码。原页核实式(1)为τᵢ(t+1)=(1−ρ)τᵢ(t)+Q·f(qᵢ)；式(2)为φⱼ=α·Confidence+β·History+γ·Plan+δ·Capability+ε·Time。纠正后明确了信息素蒸发—强化与五指标加权机制；无公式缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "式(3)—(9)存在文字提取乱码：Y*、负号、求和/连乘、条件符号、转置、范数和矩阵括号未正确保留。原页均清晰完整。已核实式(3)为负对数似然，式(4)为概率连乘，式(7)为λtype(e)·(uᵢⱼᵀuₑ)/(‖uᵢⱼ‖‖uₑ‖)，式(9)为上行[Rᵢⱼ,tᵢⱼ]、下行[0,1]的分块矩阵。影响训练目标、检索评分及位姿表达的理解，不属于原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "式(10)—(12)的逆矩阵、负号、范数及集合符号提取失真。原页核实式(10)残差为Tᵢ⁻¹Tⱼ−Tᵢⱼ，并取加权平方Frobenius范数；式(11)分子为|A∩B|，不是差集；式(12)使用双向最近邻平方欧氏距离。另，文字提取遗漏原页“Published online: 19 October 2026”。均已据原页纠正，无公式缺项。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -591,7 +884,7 @@
         "state": "published",
         "updated_at": "2026-10-20T01:16:57.403756+00:00",
         "basis": "full_text",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "facts",
         "reason": "",
         "total": 10,
@@ -796,7 +1089,7 @@
         "state": "published",
         "updated_at": "2026-10-20T01:27:32.586926+00:00",
         "basis": "full_text",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "facts",
         "reason": "",
         "total": 11,
@@ -1023,8 +1316,8 @@
         "state": "published",
         "updated_at": "2026-10-20T01:40:25.261611+00:00",
         "basis": "full_text",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "facts",
         "reason": "",
         "total": 17,
         "covered": 17,
@@ -1104,7 +1397,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Abstract Designing efficient photoreactors remains challenging due to the complex interplay of reflection, scattering, and absorption. Here, we introduce a closed-loop workflow integrating ray-tracing digital twins with multi-objective Bayesian optimization to design photoreactors with high photon capture and uniform irradiation. A digital 3D reactor model is calibrated using measured emission characteristics, reflectivity data, and geometrical properties and validated against potassium ferrioxalate actinometry. The validated model explores reflector shape and vial positioning, identifying geo…",
+      "summary": "光反应器的反射、散射与吸收相互耦合，使几何设计难以凭直觉优化。本文将经实验校准的光线追踪数字孪生与多目标贝叶斯优化结合，联合调整反射器形状和样品瓶位置，兼顾16瓶光子通量与辐照均匀性[P2—P4]。作者通过光量计及光子受限交叉偶联实验检验预测，并利用逐瓶吸收校正开展量子产率筛选[P5—P7]。其价值主要在于减少实体试制、连接结构寻优与定量化学表征；新系统仍须重新验证，不能直接等同于智能运维成果[P8]。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -1146,11 +1439,130 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为数字孪生辅助结构优化的方法迁移文献重点阅读，尤其关注实验校准、多目标寻优和逐瓶光学校正；若仅筛选智能运维直接成果，则不宜优先推荐[P3—P8]。",
+      "deep_read": {
+        "problem": "研究问题是如何在复杂光传输条件下，同时提高多瓶反应器的光子捕获与辐照一致性。反射器曲率、样品位置、光源发射及材料反射性质共同影响结果，传统设计需要反复打印和表征。作者强调这些权衡不能预先凭直觉判断，因此需要可定量评估的设计流程[P1、P2、P5]。",
+        "method": "作者以实测光源发射和材料反射率校准COMSOL光线追踪模型，并用草酸铁钾光量计验证。高斯过程代理模型以总入射光子通量及最小、最大瓶通量之比为双目标，经9个拉丁超立方初始样本和56次贝叶斯优化迭代，筛选反射器与瓶位置组合[P3、P4]。",
+        "innovation": "解读：创新重点不是单独采用机器学习，而是将实验校准、物理模拟、参数化几何搜索和实体检验组成虚拟协同设计流程。优化后的反应器还保留逐瓶光学表征信息，可进一步校正吸收差异并开展量子产率研究，使结构设计与化学解释相衔接[P2、P6、P7]。",
+        "findings": "独立光量计验证中，模拟每瓶约25 mW，实验约26 mW；代表性设计的数值收敛差异低于3%[P3—P5]。反应器β在光子受限实验中表现最佳，但约10%的实验误差限制细微比较[P6]。量子产率均低于1%，镍用量与溶剂变化揭示了条件限定的化学效应[P7]。",
+        "limitations": "约10%的实验误差限制反应器间差异判别，均匀性目标改善也较小[P4、P6]。作者要求每个新系统重新验证，不能直接外推至其他光源或材料[P8]。当前未提供补充资料与代码实际内容；逐页记录无原文件缺项，公式乱码已纠正，不构成缺式证据。",
+        "connection": "解读：与结构设计的联系较强，可借鉴以物理模型替代大量实体试制、同时处理性能权衡的策略。与智能运维和可靠性的联系则是间接的：实验校准与新系统验证具有方法启发，但本文没有故障诊断、退化预测、维护决策或长期可靠性测试，不能据数字孪生标签认定直接契合[P4、P8]。",
+        "next_steps": "建议：迁移时先明确目标设备的可测性能和模型校准条件，再比较模拟寻优与实体基线，并检验测量误差是否足以区分候选方案。若面向智能运维，可另行引入退化状态、在线观测和维护目标，检验模型更新后的决策效果；这些属于新增研究，并非作者已验证结论[P6、P8]。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "机器学习与数字孪生赋能的闭环光反应器设计",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s41467-026-78785-2"
+      ],
+      "analyzed_at": "2026-10-20T02:10:26.066614+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P5"
+        ],
+        "method": [
+          "P3",
+          "P4"
+        ],
+        "innovation": [
+          "P2",
+          "P6",
+          "P7"
+        ],
+        "findings": [
+          "P3",
+          "P4",
+          "P5",
+          "P6",
+          "P7"
+        ],
+        "limitations": [
+          "P4",
+          "P6",
+          "P8"
+        ],
+        "connection": [
+          "P4",
+          "P8"
+        ],
+        "next_steps": [
+          "P6",
+          "P8"
+        ]
+      },
+      "analysis_material_version": "342ba539b25979ad9da04bbfeca10ae5769d3331c1096342605be0940702e7d2",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "原页明确列出“Published online: 19 October 2026”，所给文字提取未保留该行，现据原页补正。影响出版信息完整性，不影响研究结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "图2B光量计实验曲线的时间轴在文字提取中出现数字粘连；原图可辨为0、20、40、60、80、100、120，单位s。现据原图纠正，不据此额外推算斜率或效率；图中38%与36%的效率标注完整。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "图4B横轴在文字提取中出现数字粘连，原图可读为Evaluation number，刻度0、10、20、30、40、50、60。图4A—C及图注均完整，无缺项；纠正后不改变优化轨迹及收敛性结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "公式(3)—(5)中的/C0、/C1、/C22等为提取乱码，原图无公式缺项。式(3)含前置负号及吸收项1−exp(−κ_A,λ C_A l̄)；式(4)为两速率之比乘100%；式(5)吸收项为1−10^[−(A_mixture,λ/l_cuvette)l̄]，求和范围410—590 nm。表1单位可读：C_A为mol m⁻³、q为mol s⁻¹、κ_i,λ为m² mol⁻¹。纠正关系到有效光程及量子产率计算，不应将乱码视为原文件缺式。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "图6文字提取将三乙基硼及氯化镍的下标转换为/g3674、/g3676。原图可读为Et₃B及NiCl₂·glyme；标准条件含NiCl₂·glyme（10 mol%）。原图结构式、条件和量子产率数据完整；纠正影响试剂身份及条件复现，不改变图示比较结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "80e291965c13",
+        "state": "published",
+        "updated_at": "2026-10-20T02:10:26.083830+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 10,
+        "covered": 10,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页明确列出“Published online: 19 October 2026”，所给文字提取未保留该行，现据原页补正。影响出版信息完整性，不影响研究结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "图2B光量计实验曲线的时间轴在文字提取中出现数字粘连；原图可辨为0、20、40、60、80、100、120，单位s。现据原图纠正，不据此额外推算斜率或效率；图中38%与36%的效率标注完整。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "图4B横轴在文字提取中出现数字粘连，原图可读为Evaluation number，刻度0、10、20、30、40、50、60。图4A—C及图注均完整，无缺项；纠正后不改变优化轨迹及收敛性结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "公式(3)—(5)中的/C0、/C1、/C22等为提取乱码，原图无公式缺项。式(3)含前置负号及吸收项1−exp(−κ_A,λ C_A l̄)；式(4)为两速率之比乘100%；式(5)吸收项为1−10^[−(A_mixture,λ/l_cuvette)l̄]，求和范围410—590 nm。表1单位可读：C_A为mol m⁻³、q为mol s⁻¹、κ_i,λ为m² mol⁻¹。纠正关系到有效光程及量子产率计算，不应将乱码视为原文件缺式。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "图6文字提取将三乙基硼及氯化镍的下标转换为/g3674、/g3676。原图可读为Et₃B及NiCl₂·glyme；标准条件含NiCl₂·glyme（10 mol%）。原图结构式、条件和量子产率数据完整；纠正影响试剂身份及条件复现，不改变图示比较结论。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -1189,7 +1601,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "本文聚焦《Intelligent generative design framework for semantic driven mechanical design》，暂未提供可用摘要，请查看原文。",
+      "summary": "论文提出IGD框架，将自然语言需求转化为零件设计、CAD代码、装配及运动学分析。系统通过知识检索、专用智能体、蚁群启发调度和建模检查反馈连接设计环节。[P2、P13—P15] 作者报告检查器提升几何重建精度，并展示减速器改型、起落架和抽油机案例。[P4—P11] 其价值主要在概念到几何阶段的自动化，尚不包含完整制造、公差及多物理场验证，不能等同于生产就绪或可靠性认证。[P12]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -1231,11 +1643,185 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐结构设计与工程智能体研究者重点阅读其知识约束、装配关系迁移及检查闭环；可靠性与智能运维研究者宜将其作为设计接口参考，而非性能验证方案。[P12—P15]",
+      "deep_read": {
+        "problem": "机械设计不仅需要理解功能需求，还必须处理尺寸、空间配合、任务依赖及机构运动。论文针对通用LLM缺乏工程约束意识、专用网络任务覆盖狭窄的问题，研究如何把语言意图转化为可执行且机械一致的多阶段流程，而非仅生成外观模型。[P1—P2]",
+        "method": "IGD由TP规划、PD设计、PM建模及PA装配智能体协作。ACBAC用信息素共享记忆协调任务；PM结合CRP参考检索、CGP微调生成与检查器反馈；PA通过GART检索装配子图，并以位姿优化约束装配一致性。[P2、P13—P15]",
+        "innovation": "解读：创新重点是工程知识与执行流程的系统整合，而非提出全新的语言模型。框架将共享记忆调度、互补建模提示、装配关系迁移和运动学分析串联，使语言生成受到几何与关系先验约束；但现有资料不足以证明各模块贡献均被独立隔离验证。[P8、P11—P15]",
+        "findings": "作者报告无检查器至GPT-4o检查配置的IoU由0.55升至0.92，CD由0.85降至0.12；1000个样本均在10轮以内满足自动验收。三项装配任务中所提方法准确率均为100%，但跨模型、跨任务结果并非全部满分，不能外推为普遍可靠。[P4—P6]",
+        "limitations": "作者明确尚未纳入详细DFM、完整公差链及耦合多物理场仿真；知识库覆盖、大规模装配和全新设计仍受限。装配误差阈值在所供笔记中无具体数值，部分模型和部署组件不公开。核对记录未确认原文件缺项，公式乱码均属已纠正的提取错误。[P12、P15]",
+        "connection": "解读：对结构设计，价值在于把需求变化快速落实为可执行CAD改型；对智能运维，可作为故障工况到设计调整的潜在接口。可靠性研究则需区分几何、运动学一致与承载安全：文中尺寸强化案例并未提供疲劳寿命或可靠性指标验证。[P9—P12]",
+        "next_steps": "建议：选取具有明确载荷与失效模式的减速器任务，将生成几何接入应力、疲劳和公差分析，以安全裕度作为独立验收条件；固定模型与预算，对比检索、检查器和信息素调度的消融效果，同时报告失败类型与成本。这是后续研究设想，并非作者已验证成果。[P12—P15]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "面向语义驱动机械设计的智能生成式设计框架",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/s44172-026-00808-z"
+      ],
+      "analyzed_at": "2026-10-20T02:27:33.572632+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P2",
+          "P13",
+          "P14",
+          "P15"
+        ],
+        "innovation": [
+          "P8",
+          "P11",
+          "P12",
+          "P13",
+          "P14",
+          "P15"
+        ],
+        "findings": [
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "limitations": [
+          "P12",
+          "P15"
+        ],
+        "connection": [
+          "P9",
+          "P10",
+          "P11",
+          "P12"
+        ],
+        "next_steps": [
+          "P12",
+          "P13",
+          "P14",
+          "P15"
+        ]
+      },
+      "analysis_material_version": "11c74d67fa708211acee9f91c56f7938ba2f58b6d69dadb3cfadd644011774a9",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "Fig. 1c的文字提取包含倒序黏连字符串“MLLrekcehCMLLgniledoM”；原图可清晰核对为PM模块中的“Modelling LLM”和“Checker LLM”。正文在原页位于图及图注下方，而提取文本将其置于图前。已按原页纠正标签与阅读顺序，不影响对建模—检查反馈机制的理解；未发现由此导致的原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "Fig. 2d—f的数值图在所给文字提取中基本缺失，但原页清晰可读：已补核IoU/CD柱线图、平均迭代轮数热图及四方法雷达图。Fig. 2c原图上部为CRP、下部为CGP，文字提取顺序混乱，已按原图纠正。影响建模精度、迭代效率及方法比较的证据读取，不是原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "Fig. 3e—g的柱线图数据及图例未被文字提取完整保留；Fig. 3d状态编号被提取为异常字符。原页可核对①—⑤与图注中的前后倾角、三个行程状态对应关系，并已读取三任务提示策略准确率及跨模型比较。影响装配准确率与状态验证证据，未发现原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "上方多面板图的文字提取遗漏了大部分流程、坐标和图例，仅残留零散面板字母及模型名称；原页可辨识a—i面板、四类智能体时序、雷达图、token/时间图和失败示例，已依图纠正理解。本页无完整图注，图号不作推定；不将跨页图注缺席认定为原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "Fig. 4图注在原页顶部，文字提取却置于正文之后。已按原页恢复阅读关系，确认其解释前页a—i面板，而非本页新增图。影响图文对应，不涉及原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P10",
+          "detail": "Fig. 5c、e、f的坐标、数据和图例在文字提取中大量遗漏。原页已核清Fig. 5c四项尺寸增幅及原始尺寸，确认e左侧为Input Byte、右侧为Output Token，f为Time (s)。这些信息影响优化幅度与计算负担的解读，属于提取遗漏而非原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P11",
+          "detail": "Fig. 6f的两条运动学公式在文字提取中遗漏，原图可读：θ₂关系含arctan2(30sinθ₁−70,30cosθ₁+50)及arccos项；θ₃关系为arctan2(70+80sinθ₂−30sinθ₁,−50+80cosθ₂−30cosθ₁)−θ₁。已确认公式存在，影响抽油机闭式运动学建模证据的识别，不是原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P13",
+          "detail": "式(1)、式(2)中的减号和乘号被提取为“/C0”“/C1”等乱码。原页核实式(1)为τᵢ(t+1)=(1−ρ)τᵢ(t)+Q·f(qᵢ)；式(2)为φⱼ=α·Confidence+β·History+γ·Plan+δ·Capability+ε·Time。纠正后明确了信息素蒸发—强化与五指标加权机制；无公式缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P14",
+          "detail": "式(3)—(9)存在文字提取乱码：Y*、负号、求和/连乘、条件符号、转置、范数和矩阵括号未正确保留。原页均清晰完整。已核实式(3)为负对数似然，式(4)为概率连乘，式(7)为λtype(e)·(uᵢⱼᵀuₑ)/(‖uᵢⱼ‖‖uₑ‖)，式(9)为上行[Rᵢⱼ,tᵢⱼ]、下行[0,1]的分块矩阵。影响训练目标、检索评分及位姿表达的理解，不属于原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "式(10)—(12)的逆矩阵、负号、范数及集合符号提取失真。原页核实式(10)残差为Tᵢ⁻¹Tⱼ−Tᵢⱼ，并取加权平方Frobenius范数；式(11)分子为|A∩B|，不是差集；式(12)使用双向最近邻平方欧氏距离。另，文字提取遗漏原页“Published online: 19 October 2026”。均已据原页纠正，无公式缺项。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "78d90a1d0519",
+        "state": "published",
+        "updated_at": "2026-10-20T02:27:33.587870+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 17,
+        "covered": 17,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "Fig. 1c的文字提取包含倒序黏连字符串“MLLrekcehCMLLgniledoM”；原图可清晰核对为PM模块中的“Modelling LLM”和“Checker LLM”。正文在原页位于图及图注下方，而提取文本将其置于图前。已按原页纠正标签与阅读顺序，不影响对建模—检查反馈机制的理解；未发现由此导致的原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "Fig. 2d—f的数值图在所给文字提取中基本缺失，但原页清晰可读：已补核IoU/CD柱线图、平均迭代轮数热图及四方法雷达图。Fig. 2c原图上部为CRP、下部为CGP，文字提取顺序混乱，已按原图纠正。影响建模精度、迭代效率及方法比较的证据读取，不是原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "Fig. 3e—g的柱线图数据及图例未被文字提取完整保留；Fig. 3d状态编号被提取为异常字符。原页可核对①—⑤与图注中的前后倾角、三个行程状态对应关系，并已读取三任务提示策略准确率及跨模型比较。影响装配准确率与状态验证证据，未发现原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "上方多面板图的文字提取遗漏了大部分流程、坐标和图例，仅残留零散面板字母及模型名称；原页可辨识a—i面板、四类智能体时序、雷达图、token/时间图和失败示例，已依图纠正理解。本页无完整图注，图号不作推定；不将跨页图注缺席认定为原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "Fig. 4图注在原页顶部，文字提取却置于正文之后。已按原页恢复阅读关系，确认其解释前页a—i面板，而非本页新增图。影响图文对应，不涉及原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "Fig. 5c、e、f的坐标、数据和图例在文字提取中大量遗漏。原页已核清Fig. 5c四项尺寸增幅及原始尺寸，确认e左侧为Input Byte、右侧为Output Token，f为Time (s)。这些信息影响优化幅度与计算负担的解读，属于提取遗漏而非原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "Fig. 6f的两条运动学公式在文字提取中遗漏，原图可读：θ₂关系含arctan2(30sinθ₁−70,30cosθ₁+50)及arccos项；θ₃关系为arctan2(70+80sinθ₂−30sinθ₁,−50+80cosθ₂−30cosθ₁)−θ₁。已确认公式存在，影响抽油机闭式运动学建模证据的识别，不是原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "式(1)、式(2)中的减号和乘号被提取为“/C0”“/C1”等乱码。原页核实式(1)为τᵢ(t+1)=(1−ρ)τᵢ(t)+Q·f(qᵢ)；式(2)为φⱼ=α·Confidence+β·History+γ·Plan+δ·Capability+ε·Time。纠正后明确了信息素蒸发—强化与五指标加权机制；无公式缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "式(3)—(9)存在文字提取乱码：Y*、负号、求和/连乘、条件符号、转置、范数和矩阵括号未正确保留。原页均清晰完整。已核实式(3)为负对数似然，式(4)为概率连乘，式(7)为λtype(e)·(uᵢⱼᵀuₑ)/(‖uᵢⱼ‖‖uₑ‖)，式(9)为上行[Rᵢⱼ,tᵢⱼ]、下行[0,1]的分块矩阵。影响训练目标、检索评分及位姿表达的理解，不属于原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "式(10)—(12)的逆矩阵、负号、范数及集合符号提取失真。原页核实式(10)残差为Tᵢ⁻¹Tⱼ−Tᵢⱼ，并取加权平方Frobenius范数；式(11)分子为|A∩B|，不是差集；式(12)使用双向最近邻平方欧氏距离。另，文字提取遗漏原页“Published online: 19 October 2026”。均已据原页纠正，无公式缺项。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -1668,7 +2254,7 @@
         "state": "published",
         "updated_at": "2026-10-20T01:16:57.403756+00:00",
         "basis": "full_text",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "facts",
         "reason": "",
         "total": 10,
@@ -1873,7 +2459,7 @@
         "state": "published",
         "updated_at": "2026-10-20T01:27:32.586926+00:00",
         "basis": "full_text",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "facts",
         "reason": "",
         "total": 11,
@@ -2100,8 +2686,8 @@
         "state": "published",
         "updated_at": "2026-10-20T01:40:25.261611+00:00",
         "basis": "full_text",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "facts",
         "reason": "",
         "total": 17,
         "covered": 17,
@@ -3060,13 +3646,13 @@
     "unavailable": 30
   },
   "analysis_status": {
-    "ready_core": 4,
+    "ready_core": 6,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 2
+    "pending": 0
   },
   "edition": {
     "id": "39307614095",
