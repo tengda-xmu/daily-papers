@@ -1,17 +1,18 @@
 {
   "id": "public-d330643595776f9f542e9f48",
-  "content_version": "971c77d8bafe62ee6709be9c45de212681461989a797d02cabb257953134f4f3",
+  "content_version": "dda2df4117bbd9ceb09f9876ae86107f492091d69c4efc4d67797ff3f2cb787f",
   "analysis": {
-    "title_zh": "Granite Switch 4.1：通过同一端点处理对话、决策与语音",
-    "summary": "公告介绍了 Granite Switch 4.1 的模块化能力扩展：模型可通过同一托管端点，在自然语言回答、通用及专用决策、语音转文本任务之间切换。[S1] 其中，Granite-Switch-4.1-8B 和 -30B 配置新增面向通用决策的 Decision aLoRA，并包含专用 Guardian aLoRA。[S2] 所给资料末尾截断，无法确认后者的完整比较结果或其他配置细节。",
-    "application": "建议：【科研迁移建议】可考虑评估同一端点承接科研问答、运维事件决策和语音记录转写的可行性；这些是迁移设想，并非公告已验证的科研效果。【官方陈述】资料明确介绍多任务切换能力，但未提供上述科研场景的验证结果。[S1]",
+    "title_zh": "Granite Switch 4.1：通过单一端点支持对话、决策与语音转写",
+    "summary": "公告介绍 Granite Switch 4.1 的模块化能力：8B 与 30B 模型通过同一托管端点，在自然语言回答、通用及专用决策、语音转文字任务之间切换。新增 Decision aLoRA 面向通用决策，配置还包括专用 Guardian aLoRA。适用方向包括对话服务、决策辅助和语音转写。所给原文在 Guardian 性能比较处截断，未提供完整比较结果或具体接入方法。[S1]",
+    "application": "建议：科研迁移可考虑评估同一端点承接运维问答、事件决策辅助与语音记录转写的可行性，此为迁移设想，并非官方已验证效果。官方公告宣称模型支持上述任务切换，但给定片段未展示科研或智能运维场景的验证结果。[S1]",
     "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
       "Now Granite Switch 4.1 models, armed with a Decision adapter and the fastest ASR model on the OpenASR leaderboard, can move efficiently between natural-language responses, general and specialized decisions, and speech-to-text tasks—all from one hosted endpoint.",
-      "Specifically, Granite-Switch-4.1-8B and -30B models are configured to include: A new Decision aLoRA for general-purpose decision-making (e.g. v1/systemone), A specialized Guardian aLoRA"
+      "Specifically, Granite-Switch-4.1-8B and -30B models are configured to include:",
+      "A new Decision aLoRA for general-purpose decision-making (e.g. v1/systemone),"
     ],
     "basis_url": "https://huggingface.co/blog/ibm-granite/granite-switch-4-1"
   },
-  "analyzed_at": "2026-10-20T03:12:12.182217+00:00"
+  "analyzed_at": "2026-10-20T07:14:14.998549+00:00"
 }
