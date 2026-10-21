@@ -539,7 +539,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "本文针对脉冲时序依赖可塑性学习难以适应高频输入的问题，提出混合忆阻器突触架构，将短时疲劳与长期记忆结合，以增强脉冲神经网络的时序学习能力。摘要报告，该网络支持无监督在线学习，能够适应频率编码和时序编码脉冲，并具有噪声鲁棒性。这里的“疲劳”指突触动态，而非工程结构疲劳。当前仅有摘要，无法核查性能增益、能耗及实验条件。[摘要]",
+      "summary": "本文研究传统脉冲时序依赖可塑性学习易受高频输入干扰的问题，将具有短期疲劳行为的界面动态忆阻器与长期存储忆阻器栅极耦合，实现自适应突触学习。[P2–P6]作者通过相关性检测、字母事件识别和数字语音二分类展示抗噪能力。[P7–P9]解读：这里的“疲劳”是可恢复的突触功能抑制，不是结构损伤；论文适合作为抗噪事件处理的交叉参考，而非机械疲劳可靠性的核心文献。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -583,24 +583,24 @@
       "focus_tags": [],
       "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "建议作为神经形态学习硬件的交叉方向参考，而非疲劳可靠性方向的重点推荐；其短时动态与长期记忆协同机制值得关注，但摘要未涉及结构损伤或寿命预测。[摘要；解读]",
+      "recommendation": "建议作为智能运维事件流抗噪与类脑硬件的交叉文献阅读；若目标是机械疲劳寿命或结构可靠性，不宜仅因“fatigue”关键词而重点推荐。[P2、P7–P9]",
       "deep_read": {
-        "problem": "摘要指出，基于脉冲时序依赖可塑性的神经形态系统虽具有节能学习优势，却难以适应高频输入，限制了复杂时序信息处理。研究问题是如何将类似生物短时可塑性的突触疲劳有效纳入硬件，而不是处理材料循环载荷损伤或结构失效。[摘要]",
-        "method": "作者将具有不同动态特性的忆阻器阵列配对，构成兼具短时疲劳和长期记忆的突触单元。其中，具有高均匀性及固有疲劳行为的界面型动态忆阻器，与氧化铪基一晶体管—一非易失性忆阻器耦合，用于实现疲劳脉冲时序依赖可塑性学习。[摘要]",
-        "innovation": "摘要层面可辨识的特色是用异质器件动态协同承载不同时间尺度的突触功能，原文称“short-term fatigue and long-term memory”。解读：其价值在于器件特性与学习机制的联合设计；仅凭摘要不能判断相对既有工作的首创程度。[摘要]",
-        "findings": "摘要报告，所得网络可开展无监督在线学习，对频率编码和时序编码脉冲均有较高适应性，并具有较强噪声鲁棒性；作者还称其优于传统脉冲时序依赖可塑性方法。这些属于摘要中的定性结果，未提供数据集、性能指标或提升幅度。[摘要]",
-        "limitations": "当前证据的局限是摘要没有给出阵列规模、测试任务、对照设置、统计结果或能耗测量，因而无法判断性能优势的幅度与适用边界。上述属于资料不足，不等同于论文已确认的技术缺陷，也不能据此认定器件存在耐久性或扩展性问题。[摘要；解读]",
-        "connection": "解读：对智能运维而言，在线学习与噪声适应能力可能启发传感时序处理，但摘要没有展示运维场景。对结构设计和可靠性研究，不能将突触“fatigue”直接对应为材料疲劳；当前未提供载荷、裂纹、损伤累积或寿命预测方面的证据。[摘要]",
-        "next_steps": "建议：若继续阅读，应优先核查高频输入的定义、编码任务设置、噪声模型及对照公平性，再判断其是否适合运维数据。若探索可靠性应用，应另行设计退化监测任务，并区分突触短时动态与设备长期退化；这属于迁移设想，非作者已验证结论。[摘要；建议]"
+        "problem": "传统STDP依赖突触前后脉冲时序，但输入同时携带频率与时间编码时，高频活动容易干扰时序关联学习。作者要解决的是如何以简洁硬件引入可恢复的突触疲劳，降低高频刺激的影响，而非预测材料损伤或疲劳寿命。[P1–P2]",
+        "method": "作者采用W/α-IGZO/MgO/W动态忆阻器产生疲劳栅压，调节氧化铪基1T1R非易失忆阻器的权重更新。氧离子迁移与回扩散提供短期动态，NVM保存长期权重；系统结合转换电路、控制逻辑及软件LIF神经元开展在线学习。[P3–P6、P10]",
+        "innovation": "创新重点是把不同器件动力学通过栅极耦合整合为疲劳STDP突触，减少独立读取及权重乘法电路，而不是首次提出疲劳STDP规则。参考文献已列出该规则的先行研究。解读：贡献主要在器件机制与学习功能的硬件协同实现。[P2、P5、P11]",
+        "findings": "作者报告循环间与器件间电流变异系数分别为0.04%和0.15%，并报告2 × 10^8次开关循环稳定性。相关性检测中，疲劳STDP分离相关与非相关通道；语音实验无噪声时两种方法准确率均超过91.5%，加噪后疲劳STDP下降较小。[P5、P7、P9]",
+        "limitations": "未记录原文件公式缺项；但P8正文频率列表与图5横轴不一致，限制宽频结果对应；P2与P3的ADC位数、P6阵列规模也不一致。补充材料未提供，耐久性底层曲线不能独立核对；语音仅验证0和1，不能推广至全部类别。[P2–P3、P5–P6、P8–P10]",
+        "connection": "解读：突触疲劳是短期可恢复的功能变化，与机械循环载荷导致的累积损伤不同。器件耐久性属于硬件可靠性线索，但不能替代结构寿命模型。其抑制高频非相关活动的机制，可启发智能运维告警关联分析；本文没有直接运维验证。[P4–P5、P7、P9]",
+        "next_steps": "建议先核实频率、阵列规模及量化位数的不一致，再研究迁移。可用带时间关联标签的运维事件流，对比普通STDP与疲劳STDP，并检验高频真实故障是否被误抑制；另将器件漂移、失效与任务准确率结合评估，避免只看开关次数。[P5、P8、P10]"
       },
       "recommended_direction": "fatigue_reliability",
-      "title_zh": "基于混合忆阻器阵列与疲劳脉冲时序依赖可塑性学习的脉冲神经网络",
-      "analysis_basis": "abstract",
+      "title_zh": "利用混合忆阻器阵列实现疲劳脉冲时序依赖可塑性学习的脉冲神经网络",
+      "analysis_basis": "full_text",
       "analysis_kind": "model",
       "analysis_sources": [
-        "https://www.nature.com/articles/s41928-025-01554-4"
+        "https://www.nature.com/articles/s41928-025-01554-4.pdf"
       ],
-      "analyzed_at": "2026-10-18T13:36:39.789984+00:00",
+      "analyzed_at": "2026-10-21T03:30:31.996544+00:00",
       "llm_model": "gpt-6.1-sol",
       "article": {
         "version": 3,
@@ -702,21 +702,85 @@
       },
       "article_updated_at": "2026-10-18T13:37:54.432602+00:00",
       "article_profile": "3e0155d9dd8914a494dcdd02110c6e2a68c891a953c98dc01eb3d2847c310cda",
-      "analysis_references": {},
-      "analysis_material_version": "273a17e6bb6e6a1da092e15c1037fd93f098e83c1d5bfc5d335cba56405420ba",
-      "analysis_issues": [],
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P5",
+          "P6",
+          "P10"
+        ],
+        "innovation": [
+          "P2",
+          "P5",
+          "P11"
+        ],
+        "findings": [
+          "P5",
+          "P7",
+          "P9"
+        ],
+        "limitations": [
+          "P2",
+          "P3",
+          "P5",
+          "P6",
+          "P8",
+          "P9",
+          "P10"
+        ],
+        "connection": [
+          "P4",
+          "P5",
+          "P7",
+          "P9"
+        ],
+        "next_steps": [
+          "P5",
+          "P8",
+          "P10"
+        ]
+      },
+      "analysis_material_version": "aa420d9d81f0682abba0f85c55f65d6257145ff9cb58829df37d3a1c0d12a1d6",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "正文双栏提取顺序颠倒。原页左栏以“patterns with diverse spike rates and timings”承接P1，末尾“hardware implementations of fatigue STDP”再接右栏“face additional challenges”。已按原页纠正，涉及疲劳STDP原理、既有硬件复杂性及本文方案的论述顺序，不改变作者结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "图1c上方原图标题为“Hybrid memristor array”，文字提取出现“Hybrid memristorst array”。已据原图纠正；不影响阵列组成、规模或功能结论。"
+        }
+      ],
       "reading_status": {
         "paper_id": "096a7a3cbb61",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-10-20T00:58:13.276643+00:00",
-        "basis": "abstract",
-        "article_state": "complete",
-        "article_stage": "",
-        "reason": "network",
-        "total": 0,
-        "covered": 0,
-        "pdf_available": false,
-        "issues": []
+        "state": "published",
+        "updated_at": "2026-10-21T03:30:32.014623+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 12,
+        "covered": 12,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "正文双栏提取顺序颠倒。原页左栏以“patterns with diverse spike rates and timings”承接P1，末尾“hardware implementations of fatigue STDP”再接右栏“face additional challenges”。已按原页纠正，涉及疲劳STDP原理、既有硬件复杂性及本文方案的论述顺序，不改变作者结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "图1c上方原图标题为“Hybrid memristor array”，文字提取出现“Hybrid memristorst array”。已据原图纠正；不影响阵列组成、规模或功能结论。"
+          }
+        ]
       }
     },
     {
@@ -1643,7 +1707,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "本文针对脉冲时序依赖可塑性学习难以适应高频输入的问题，提出混合忆阻器突触架构，将短时疲劳与长期记忆结合，以增强脉冲神经网络的时序学习能力。摘要报告，该网络支持无监督在线学习，能够适应频率编码和时序编码脉冲，并具有噪声鲁棒性。这里的“疲劳”指突触动态，而非工程结构疲劳。当前仅有摘要，无法核查性能增益、能耗及实验条件。[摘要]",
+      "summary": "本文研究传统脉冲时序依赖可塑性学习易受高频输入干扰的问题，将具有短期疲劳行为的界面动态忆阻器与长期存储忆阻器栅极耦合，实现自适应突触学习。[P2–P6]作者通过相关性检测、字母事件识别和数字语音二分类展示抗噪能力。[P7–P9]解读：这里的“疲劳”是可恢复的突触功能抑制，不是结构损伤；论文适合作为抗噪事件处理的交叉参考，而非机械疲劳可靠性的核心文献。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -1687,24 +1751,24 @@
       "focus_tags": [],
       "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "建议作为神经形态学习硬件的交叉方向参考，而非疲劳可靠性方向的重点推荐；其短时动态与长期记忆协同机制值得关注，但摘要未涉及结构损伤或寿命预测。[摘要；解读]",
+      "recommendation": "建议作为智能运维事件流抗噪与类脑硬件的交叉文献阅读；若目标是机械疲劳寿命或结构可靠性，不宜仅因“fatigue”关键词而重点推荐。[P2、P7–P9]",
       "deep_read": {
-        "problem": "摘要指出，基于脉冲时序依赖可塑性的神经形态系统虽具有节能学习优势，却难以适应高频输入，限制了复杂时序信息处理。研究问题是如何将类似生物短时可塑性的突触疲劳有效纳入硬件，而不是处理材料循环载荷损伤或结构失效。[摘要]",
-        "method": "作者将具有不同动态特性的忆阻器阵列配对，构成兼具短时疲劳和长期记忆的突触单元。其中，具有高均匀性及固有疲劳行为的界面型动态忆阻器，与氧化铪基一晶体管—一非易失性忆阻器耦合，用于实现疲劳脉冲时序依赖可塑性学习。[摘要]",
-        "innovation": "摘要层面可辨识的特色是用异质器件动态协同承载不同时间尺度的突触功能，原文称“short-term fatigue and long-term memory”。解读：其价值在于器件特性与学习机制的联合设计；仅凭摘要不能判断相对既有工作的首创程度。[摘要]",
-        "findings": "摘要报告，所得网络可开展无监督在线学习，对频率编码和时序编码脉冲均有较高适应性，并具有较强噪声鲁棒性；作者还称其优于传统脉冲时序依赖可塑性方法。这些属于摘要中的定性结果，未提供数据集、性能指标或提升幅度。[摘要]",
-        "limitations": "当前证据的局限是摘要没有给出阵列规模、测试任务、对照设置、统计结果或能耗测量，因而无法判断性能优势的幅度与适用边界。上述属于资料不足，不等同于论文已确认的技术缺陷，也不能据此认定器件存在耐久性或扩展性问题。[摘要；解读]",
-        "connection": "解读：对智能运维而言，在线学习与噪声适应能力可能启发传感时序处理，但摘要没有展示运维场景。对结构设计和可靠性研究，不能将突触“fatigue”直接对应为材料疲劳；当前未提供载荷、裂纹、损伤累积或寿命预测方面的证据。[摘要]",
-        "next_steps": "建议：若继续阅读，应优先核查高频输入的定义、编码任务设置、噪声模型及对照公平性，再判断其是否适合运维数据。若探索可靠性应用，应另行设计退化监测任务，并区分突触短时动态与设备长期退化；这属于迁移设想，非作者已验证结论。[摘要；建议]"
+        "problem": "传统STDP依赖突触前后脉冲时序，但输入同时携带频率与时间编码时，高频活动容易干扰时序关联学习。作者要解决的是如何以简洁硬件引入可恢复的突触疲劳，降低高频刺激的影响，而非预测材料损伤或疲劳寿命。[P1–P2]",
+        "method": "作者采用W/α-IGZO/MgO/W动态忆阻器产生疲劳栅压，调节氧化铪基1T1R非易失忆阻器的权重更新。氧离子迁移与回扩散提供短期动态，NVM保存长期权重；系统结合转换电路、控制逻辑及软件LIF神经元开展在线学习。[P3–P6、P10]",
+        "innovation": "创新重点是把不同器件动力学通过栅极耦合整合为疲劳STDP突触，减少独立读取及权重乘法电路，而不是首次提出疲劳STDP规则。参考文献已列出该规则的先行研究。解读：贡献主要在器件机制与学习功能的硬件协同实现。[P2、P5、P11]",
+        "findings": "作者报告循环间与器件间电流变异系数分别为0.04%和0.15%，并报告2 × 10^8次开关循环稳定性。相关性检测中，疲劳STDP分离相关与非相关通道；语音实验无噪声时两种方法准确率均超过91.5%，加噪后疲劳STDP下降较小。[P5、P7、P9]",
+        "limitations": "未记录原文件公式缺项；但P8正文频率列表与图5横轴不一致，限制宽频结果对应；P2与P3的ADC位数、P6阵列规模也不一致。补充材料未提供，耐久性底层曲线不能独立核对；语音仅验证0和1，不能推广至全部类别。[P2–P3、P5–P6、P8–P10]",
+        "connection": "解读：突触疲劳是短期可恢复的功能变化，与机械循环载荷导致的累积损伤不同。器件耐久性属于硬件可靠性线索，但不能替代结构寿命模型。其抑制高频非相关活动的机制，可启发智能运维告警关联分析；本文没有直接运维验证。[P4–P5、P7、P9]",
+        "next_steps": "建议先核实频率、阵列规模及量化位数的不一致，再研究迁移。可用带时间关联标签的运维事件流，对比普通STDP与疲劳STDP，并检验高频真实故障是否被误抑制；另将器件漂移、失效与任务准确率结合评估，避免只看开关次数。[P5、P8、P10]"
       },
       "recommended_direction": "fatigue_reliability",
-      "title_zh": "基于混合忆阻器阵列与疲劳脉冲时序依赖可塑性学习的脉冲神经网络",
-      "analysis_basis": "abstract",
+      "title_zh": "利用混合忆阻器阵列实现疲劳脉冲时序依赖可塑性学习的脉冲神经网络",
+      "analysis_basis": "full_text",
       "analysis_kind": "model",
       "analysis_sources": [
-        "https://www.nature.com/articles/s41928-025-01554-4"
+        "https://www.nature.com/articles/s41928-025-01554-4.pdf"
       ],
-      "analyzed_at": "2026-10-18T13:36:39.789984+00:00",
+      "analyzed_at": "2026-10-21T03:30:31.996544+00:00",
       "llm_model": "gpt-6.1-sol",
       "article": {
         "version": 3,
@@ -1806,21 +1870,85 @@
       },
       "article_updated_at": "2026-10-18T13:37:54.432602+00:00",
       "article_profile": "3e0155d9dd8914a494dcdd02110c6e2a68c891a953c98dc01eb3d2847c310cda",
-      "analysis_references": {},
-      "analysis_material_version": "273a17e6bb6e6a1da092e15c1037fd93f098e83c1d5bfc5d335cba56405420ba",
-      "analysis_issues": [],
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P5",
+          "P6",
+          "P10"
+        ],
+        "innovation": [
+          "P2",
+          "P5",
+          "P11"
+        ],
+        "findings": [
+          "P5",
+          "P7",
+          "P9"
+        ],
+        "limitations": [
+          "P2",
+          "P3",
+          "P5",
+          "P6",
+          "P8",
+          "P9",
+          "P10"
+        ],
+        "connection": [
+          "P4",
+          "P5",
+          "P7",
+          "P9"
+        ],
+        "next_steps": [
+          "P5",
+          "P8",
+          "P10"
+        ]
+      },
+      "analysis_material_version": "aa420d9d81f0682abba0f85c55f65d6257145ff9cb58829df37d3a1c0d12a1d6",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "正文双栏提取顺序颠倒。原页左栏以“patterns with diverse spike rates and timings”承接P1，末尾“hardware implementations of fatigue STDP”再接右栏“face additional challenges”。已按原页纠正，涉及疲劳STDP原理、既有硬件复杂性及本文方案的论述顺序，不改变作者结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "图1c上方原图标题为“Hybrid memristor array”，文字提取出现“Hybrid memristorst array”。已据原图纠正；不影响阵列组成、规模或功能结论。"
+        }
+      ],
       "reading_status": {
         "paper_id": "096a7a3cbb61",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-10-20T00:58:13.276643+00:00",
-        "basis": "abstract",
-        "article_state": "complete",
-        "article_stage": "",
-        "reason": "network",
-        "total": 0,
-        "covered": 0,
-        "pdf_available": false,
-        "issues": []
+        "state": "published",
+        "updated_at": "2026-10-21T03:30:32.014623+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 12,
+        "covered": 12,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "正文双栏提取顺序颠倒。原页左栏以“patterns with diverse spike rates and timings”承接P1，末尾“hardware implementations of fatigue STDP”再接右栏“face additional challenges”。已按原页纠正，涉及疲劳STDP原理、既有硬件复杂性及本文方案的论述顺序，不改变作者结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "图1c上方原图标题为“Hybrid memristor array”，文字提取出现“Hybrid memristorst array”。已据原图纠正；不影响阵列组成、规模或功能结论。"
+          }
+        ]
       }
     },
     {
