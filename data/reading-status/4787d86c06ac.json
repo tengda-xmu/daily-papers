@@ -1,15 +1,39 @@
 {
   "paper_id": "4787d86c06ac",
-  "state": "retry",
-  "updated_at": "2026-10-21T01:30:39.055959+00:00",
+  "state": "published",
+  "updated_at": "2026-10-21T02:02:19.072876+00:00",
   "basis": "full_text",
   "article_state": "pending",
   "article_stage": "",
   "reason": "",
-  "error_code": "codex_connection",
-  "next_retry_at": "2026-10-21T01:35:39.055959+00:00",
   "total": 11,
-  "covered": 0,
+  "covered": 11,
   "pdf_available": true,
-  "issues": []
+  "issues": [
+    {
+      "kind": "extraction_error",
+      "page": "P2",
+      "detail": "统一评分说明中的MSE_min被文字提取为“10/C0 6”；原页可清楚读为10⁻⁶。已纠正为MSE_min=10⁻⁶，表示作者采用的CFD数值精度参照，影响评分上限100的解释；不是原文件公式缺项。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P6",
+      "detail": "M3定义处的动量残差表达式在文字提取中出现根号乱码及“/C18/C19”；原页可清楚读为括号内√(r_x²+r_y²)，正文称其为动量残差的L2范数。已纠正该表达式；原页不存在公式占位或缺项，不应据提取乱码判断物理一致性指标缺失。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P7",
+      "detail": "已从原页核实，Key takeaways第一项跨栏句子写为“smaller neural operator models are faster to train and deploy, and larger models in terms of physical consistency (M3).”，在“and”与“larger models”之间缺少完整比较谓语，导致该句关于M3优势的比较关系不完整。此为原文句子缺项而非提取遗漏；未补写缺失词语，相关结论依据邻近正文与图7另行理解，不影响其余页面识读。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P9",
+      "detail": "无编号评分公式的减号、分式和括号在文字提取中出现“/C0”“/C18/C19”等乱码。原页可完整读为score=100×[1−(log(MSE)−log(MSE_min))/(log(MSE_max)−log(MSE_min))]，MSE_max=1、MSE_min=10⁻⁶。不存在公式缺项；纠正影响误差与评分之间的换算及跨页数值一致性核验。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P9",
+      "detail": "日期栏文字提取遗漏“Published online: 31 October 2025”；原页在Received及Accepted日期下方清楚显示该行。已补充识读，仅影响出版时间记录，不影响实验结论。"
+    }
+  ]
 }
