@@ -1,0 +1,40 @@
+{
+  "paper_id": "8894f9a8ff07",
+  "fingerprint": "11283f46fe25e392e194d2834abd8130f4990a76dd99023875e74a4828d7e504",
+  "analysis": {
+    "title_zh": "融合大语言模型与扩散模型的启动子理性设计框架",
+    "summary": "高性能启动子的理性设计受制于庞大的序列组合空间。本文摘要提出融合大语言模型与扩散模型的框架：先预测启动子强度，通过系统性突变识别核心区域，再以核心区域为条件生成完整序列。摘要报告，在大肠杆菌实验中，7.78%的设计启动子优于基准BBa_J23119，最佳变体表达水平约为其2.5倍。[摘要] 解读：其阅读价值在于连接可解释分析与条件生成，但当前资料不足以评估模型泛化和各模块的独立贡献。",
+    "recommendation": "推荐作为生成式设计的方法案例阅读，重点关注如何将预测模型识别的核心区域转为扩散生成条件，以及如何以实验检验生成结果；但不能据此认定其适用于工程结构设计或可靠性优化。[摘要；解读]",
+    "deep_read": {
+      "problem": "研究针对启动子理性设计：既要精确调节基因表达，又要在庞大的序列组合空间中寻找高性能方案。摘要以“vast combinatorial sequence space”概括难点。[摘要] 解读：问题不仅是预测已有序列的强度，还包括如何利用预测信息约束新序列生成。",
+      "method": "框架先微调大语言模型预测启动子强度，再通过系统性序列突变定位生物学关键核心区域；扩散模型以这些区域为条件重建非核心区域，生成完整启动子。随后在大肠杆菌中使用高通量条形码启动子活性测序验证。[摘要] 当前未提供训练规模、模型结构或条件编码细节。",
+      "innovation": "摘要将方法特点概括为“coupling interpretability with generative design”，即显式连接可解释性与生成式设计。[摘要] 解读：其值得关注的组合方式，是让核心区域识别结果直接约束生成过程，而非仅用于事后解释；但缺少相关工作比较，不能确认其首创性或相对优势。",
+      "findings": "摘要报告，设计启动子中7.78%优于基准BBa_J23119，最佳变体表达水平约为该基准的2.5倍，并明确使用实验验证。[摘要] 这些结果支持框架能产生优于该基准的候选序列，但摘要未给出样本总数、重复次数或误差范围，无法进一步判断结果稳定性。",
+      "limitations": "当前仅有摘要，不能核查训练与测试划分、数据泄漏控制、比较基线及消融实验。摘要虽称预测具有“high accuracy”，却未提供指标数值。[摘要] 解读：这些属于证据范围限制，不等于论文没有相关实验；向其他调控序列任务迁移也仍是可能性，而非已验证结论。",
+      "connection": "与给定的生成式设计方向直接相关：该研究用功能预测与核心区域识别指导条件生成。[摘要] 解读：对结构设计，可借鉴保留关键区域、生成其余部分的思路；对智能运维和可靠性研究，仅存在方法层面的潜在联系，摘要没有工程约束、失效概率或运维数据验证。",
+      "next_steps": "建议后续获取全文，优先核查核心区域判定依据、预测性能指标、生成样本总数，以及是否通过消融区分各模块贡献。建议迁移到结构或可靠性任务时，另行定义关键区域、约束和验证指标；这些是阅读与研究建议，不是摘要已经完成的工作或作者结论。"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://doi.org/10.1021/acssynbio.6c00128"
+    ],
+    "analyzed_at": "2026-10-21T14:21:48.994945+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": true,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "以给定标签generative_design为研究方向，该研究直接涉及条件生成设计，且摘要明确描述混合建模方法并报告实验成果，足以支持重点阅读的初步判断。证据充足仅限这一摘要级推荐，不代表足以确认方法领先性、泛化能力或工程可靠性价值。",
+    "evidence": "7.78% of the designed promoters outperformed the benchmark promoter BBa_J23119, with the best variants reaching approximately 2.5-fold the expression level of BBa_J23119."
+  },
+  "material": {
+    "version": "01c7c217f1702501775cfda8294a0aae2caca84173c4dfc122e0d75d0e2f7e4c",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "7.78% of the designed promoters outperformed the benchmark promoter BBa_J23119, with the best variants reaching approximately 2.5-fold the expression level of BBa_J23119."
+  }
+}
