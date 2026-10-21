@@ -1,0 +1,123 @@
+{
+  "paper_id": "4787d86c06ac",
+  "fingerprint": "b9fbc2551700137f313193d245502be5d24f154bba43f4ffc551877fb809e7fc",
+  "analysis": {
+    "title_zh": "复杂几何周围流动预测的科学机器学习方法基准评测",
+    "summary": "本文围绕复杂几何流动代理模型的选型，比较神经算子与视觉Transformer，并系统考察几何编码、训练数据规模及雷诺数外推。[P3–P6] 实验显示，掩码与SDF的优劣依赖模型架构，分布内场预测优势也不等于物理残差或外推优势。[P7–P9] 解读：其价值主要在多维评测与失效诊断，而非提出生成式设计方法；评分换算、数据划分及部分概括存在一致性疑问，阅读时应以公式和表格交叉核验。",
+    "recommendation": "建议作为生成式设计中流场代理模型的评测参考阅读，重点关注几何编码、数据效率与外推失效；不宜将其视为生成式设计算法论文。[P3–P9]",
+    "deep_read": {
+      "problem": "复杂几何附近存在陡峭梯度与精细边界相互作用，简单几何上的预测表现不足以支撑实际应用。作者关注三类问题：如何编码几何、需要多少训练数据，以及模型能否预测训练范围之外的流动。[P1–P2] 研究对象是流场预测，并非几何生成或设计优化闭环。",
+      "method": "采用FlowBench二维顶盖驱动方腔子集，共300种几何、3000个样本，输出为512×512的速度和压力场。比较11种模型配置及SDF、掩码两类输入，改变训练规模并设置雷诺数外推测试；以全局误差、近边界误差和动量残差评价。[P4–P9]",
+      "innovation": "主要贡献是将复杂几何表示、数据充分性与分布外测试纳入同一比较框架，并同时观察场值精度和物理一致性，而非仅报告整体预测误差。[P2–P6] 解读：这是基准组织与评价视角的贡献，资料不支持将其描述为新型网络架构或新的生成式设计方法。",
+      "findings": "掩码随机划分下，scOT-T的全局评分为67.8，Poseidon-T的近边界评分为76.1；不同几何编码的优势依赖架构。[P3–P5] 所列模型外推评分均明显下降，物理一致性排名也不同于场值精度排名。[P6–P8] 作者关于DeepONet始终最优的概括并未获全部表格支持。",
+      "limitations": "原文件[P7]要点句缺少比较谓语，物理一致性比较关系不完整，不能补写。另有[P9]评分公式与正文误差换算、训练划分口径不一致，以及[P6]最优性概括与表格不符。[P7–P8] 比较未控制参数量，补充资料未提供，故不宜作普遍架构优劣判断。\n原文核对：[P7] 已从原页核实，Key takeaways第一项跨栏句子写为“smaller neural operator models are faster to train and deploy, and larger models in terms of physical consistency (M3).”，在“and”与“larger models”之间缺少完整比较谓语，导致该句关于M3优势的比较关系不完整。此为原文句子缺项而非提取遗漏；未补写缺失词语，相关结论依据邻近正文与图7另行理解，不影响其余页面识读。",
+      "connection": "解读：与生成式设计的联系在于候选几何性能评估，而非候选生成本身；几何编码和快速流场预测可为设计代理模型选型提供依据。[P3、P8] 对结构可靠性与智能运维，多指标和外推测试具有方法借鉴意义，但本文没有验证结构失效概率、监测诊断或设计优化收益。",
+      "next_steps": "建议先复核评分公式、训练与验证样本口径、推理计时范围，再复现主要表格。[P7–P9] 面向设计应用，可另设未见几何测试，并检查力学功能量与物理残差。作者提出物理约束和多物理场扩展方向，但约束加权可能扰动训练，不能预设这些改动有效。[P8]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://doi.org/10.1038/s44172-025-00513-3"
+    ],
+    "analyzed_at": "2026-10-21T02:02:19.057494+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "给定方向为生成式设计，本文研究复杂几何上的正向流场预测，没有几何生成、优化搜索或设计闭环，因此不属直接匹配。但几何编码对比、多指标评测及外推失效分析，具有明确的代理模型研究价值；当前资料足以支持这一有条件推荐。",
+    "evidence": "As shown in Fig. 3, scOT-T, poseidon-T, and CNO achieve\nhigher scores with the mask representation, while other neural operators\ntend to perform better with the SDF."
+  },
+  "material": {
+    "version": "b920db7623d4590ece45c1fcbb45eaaeb0d3cd4627d23ffdcaafd872edbe54ce",
+    "total": 11,
+    "covered": 11,
+    "references": {
+      "problem": [
+        "P1",
+        "P2"
+      ],
+      "method": [
+        "P4",
+        "P5",
+        "P6",
+        "P8",
+        "P9"
+      ],
+      "innovation": [
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6"
+      ],
+      "findings": [
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P7",
+        "P8"
+      ],
+      "limitations": [
+        "P6",
+        "P7",
+        "P8",
+        "P9"
+      ],
+      "connection": [
+        "P3",
+        "P8"
+      ],
+      "next_steps": [
+        "P7",
+        "P8",
+        "P9"
+      ]
+    },
+    "excerpt": "As shown in Fig. 3, scOT-T, poseidon-T, and CNO achieve\nhigher scores with the mask representation, while other neural operators\ntend to perform better with the SDF.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P2",
+        "detail": "统一评分说明中的MSE_min被文字提取为“10/C0 6”；原页可清楚读为10⁻⁶。已纠正为MSE_min=10⁻⁶，表示作者采用的CFD数值精度参照，影响评分上限100的解释；不是原文件公式缺项。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P6",
+        "detail": "M3定义处的动量残差表达式在文字提取中出现根号乱码及“/C18/C19”；原页可清楚读为括号内√(r_x²+r_y²)，正文称其为动量残差的L2范数。已纠正该表达式；原页不存在公式占位或缺项，不应据提取乱码判断物理一致性指标缺失。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P7",
+        "detail": "已从原页核实，Key takeaways第一项跨栏句子写为“smaller neural operator models are faster to train and deploy, and larger models in terms of physical consistency (M3).”，在“and”与“larger models”之间缺少完整比较谓语，导致该句关于M3优势的比较关系不完整。此为原文句子缺项而非提取遗漏；未补写缺失词语，相关结论依据邻近正文与图7另行理解，不影响其余页面识读。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P9",
+        "detail": "无编号评分公式的减号、分式和括号在文字提取中出现“/C0”“/C18/C19”等乱码。原页可完整读为score=100×[1−(log(MSE)−log(MSE_min))/(log(MSE_max)−log(MSE_min))]，MSE_max=1、MSE_min=10⁻⁶。不存在公式缺项；纠正影响误差与评分之间的换算及跨页数值一致性核验。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P9",
+        "detail": "日期栏文字提取遗漏“Published online: 31 October 2025”；原页在Received及Accepted日期下方清楚显示该行。已补充识读，仅影响出版时间记录，不影响实验结论。"
+      }
+    ]
+  }
+}
