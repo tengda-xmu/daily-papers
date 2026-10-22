@@ -920,7 +920,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "The prevailing scaling paradigm of Large Language Models (LLMs) rests on a substrate of \"Fuzzy\" floating-point arithmetic. To mitigate the inherent instability of this approximate foundation, modern architectures have erected a complex scaffolding of structural and numerical heuristics--Complex Residuals, Pre-RMSNorm, Attention Scaling, and Gradient Clipping--consuming significant compute solely to prevent numerical collapse. We propose a paradigm shift to the \"Exact\". We introduce the Halo Architecture, grounded in the Rational Field (Q) and powered by a custom Exact Inference Unit (EIU). To…",
+      "summary": "本文提出以有理数域和定制精确推理单元构建Halo架构，试图替代浮点计算及相关数值稳定措施。其双环机制分别通过丢番图逼近控制内存复杂度、通过周期性状态坍缩约束逻辑一致性。作者还宣称消除梯度噪声可能显著缩短收敛时间，但摘要没有提供实验设置、量化结果或硬件实现证据。解读：值得关注精确算术与近似控制如何兼容，不能据此认定其已实现无限深度推理。[摘要]",
       "raw_metadata": {
         "provider": "arXiv",
         "method": "rss",
@@ -961,11 +961,160 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为数值计算与推理架构的探索性论文选择性阅读，重点核查双环机制的误差控制及效率证据；其与智能运维的直接关联尚不明确。[摘要]",
+      "deep_read": {
+        "problem": "作者将大语言模型的数值稳定问题归因于浮点运算的近似基础，并认为归一化、注意力缩放及梯度裁剪等措施带来额外计算负担。摘要用“Fuzzy”描述这一基础。解读：核心问题是能否以不同算术基础减少稳定性开销，而非直接解决运维故障诊断。[摘要]",
+        "method": "Halo以有理数域和定制精确推理单元为基础，采用双环拓扑：微环通过丢番图逼近约束内存复杂度，宏环通过周期性状态坍缩约束逻辑一致性。摘要称其为“Dual-Ring Topology”，但未交代逼近精度、坍缩规则或单元实现细节。[摘要]",
+        "innovation": "作者提出的创新主张，是将有理数运算、精确推理单元与双环控制整合为替代浮点稳定措施的架构，而非仅调整某个归一化模块。其目标被称为“Great Dismantling”。解读：这属于架构层面的路线主张，摘要不足以确认其相对既有工作的原创性与优势。[摘要]",
+        "findings": "摘要宣称验证了“Efficiency Paradox”：消除梯度噪声后可使用宏观学习率，并可能将总收敛时间降低若干数量级。但资料未列出任务、基线、测量结果或统计证据。解读：当前只能确认作者提出这一效率结论，不能将其视为已独立核实的实验成果。[摘要]",
+        "limitations": "当前仅有摘要，未提供可核查的实验和实现资料，因此无法评价有理数位宽控制的实际代价、逼近误差是否累积，以及逻辑一致性的检验标准。摘要虽称“strictly bounds memory complexity”，但没有给出界限条件；这些是证据缺口，并非已证实的架构缺陷。[摘要]",
+        "connection": "解读：该工作与可靠性研究的潜在联系在于数值误差传播和长链推理稳定性，而非已有运维应用证据。摘要提出“logical consistency”，但没有涉及设备监测、故障预测或结构设计任务，不能直接推导其能提高工程系统可靠性或智能运维效果。[摘要]",
+        "next_steps": "建议后续获取全文后，优先核对双环算法定义、复杂度证明和精确推理单元实现，再检查相同任务与计算预算下的收敛时间比较。若迁移至智能运维，建议另设长序列诊断任务，同时测量误差、内存与时延；这些是研究建议，不是作者已报告的结果。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "从模糊到精确：基于有理数运算的无限深度推理Halo架构",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://arxiv.org/abs/2601.18702"
+      ],
+      "analyzed_at": "2026-10-22T13:21:29.561068+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "大语言模型能否通过改变底层算术，减少为数值稳定付出的架构与计算代价？Halo将有理数运算与双环控制结合，尝试重新组织Transformer的计算基础。阅读价值在于理解其设计逻辑，同时分清架构主张、摘要报告与尚待核实的效率收益。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从浮点近似出发，重问稳定性的代价",
+            "paragraphs": [
+              "作者将现有大语言模型的计算基础称为“模糊”的浮点算术，并认为复杂残差、Pre-RMSNorm、注意力缩放和梯度裁剪等结构与数值策略，承担了防止数值崩溃的额外成本。这是本文提出架构替代方案的问题框架，不宜直接视为对这些机制全部作用的完整解释。",
+              "转向有理数域Q也带来新的困难：摘要指出，有理数算术存在位宽指数增长问题。因此，Halo不仅要处理运算的精确性，还必须控制表示与存储开销。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "有理数底座与分工互补的双环控制",
+            "paragraphs": [
+              "Halo以有理数域为基础，由定制的精确推理单元（EIU）提供支持。摘要明确描述了双环拓扑：微环负责“连续性维护”，通过丢番图逼近严格约束内存复杂度；宏环负责“符号对齐”，通过周期性状态坍缩施加逻辑一致性约束。",
+              "两种机制被组织为互补的控制方式，而非彼此替代。需要注意，“精确”算术与“逼近”机制同时出现在方案中；摘要没有展开二者如何衔接，也未给出误差控制、状态坍缩规则或EIU的具体实现。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "结构简化与收敛提速：报告和预期须分开",
+            "paragraphs": [
+              "摘要称，稳定的双环底座允许拆除数值稳定性“脚手架”，将Transformer块化简为作者称作Tabula Rasa的“干净”代数形式。但摘要没有展示具体删减后的模块、任务表现或比较结果，不能据此认定所有相关机制都已被证明可以普遍移除。",
+              "作者还称验证了“效率悖论”：梯度噪声趋于消除时，可以采用宏观学习率，并可能使总收敛时间降低数个数量级。这里的**潜在提速不等于已展示的端到端加速**；摘要未提供对应测量值及验证配置。关于通用智能需要连续场与离散链结合的表述，也应视为作者的总体论断。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要不足以判定验证规模与适用边界",
+            "paragraphs": [
+              "本解读仅依据所提供的完整摘要，未据此声称阅读全文。摘要未交代数据集、样本规模、模型规模、比较基线、硬件条件和重复验证范围，也不足以判断标题所指的无限深度推理得到何种验证。这些属于当前资料无法判断的信息，不意味着论文没有开展相应工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：精确运算如何转化为实际收益",
+            "paragraphs": [
+              "阅读启发：后续阅读可聚焦三个相连的问题——丢番图逼近如何与精确运算共存，周期性状态坍缩如何界定逻辑一致性，以及收敛所需更新与单次运算成本如何共同决定总耗时。当前摘要尚不能回答这些问题，也不足以将所述收益外推至智能运维或结构可靠性等具体任务。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的Halo双环机制示意",
+            "description": "概括有理数计算底座、互补双环及作者所述的结构简化关系；这是摘要示意，不是论文原图，也不表示具体执行时序。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "有理数域Q与EIU",
+                "detail": "以有理数算术为基础，由定制精确推理单元提供支持。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "双环拓扑",
+                "detail": "整合连续性维护与符号对齐两种互补控制机制。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "微环：连续性维护",
+                "detail": "通过丢番图逼近严格约束内存复杂度。"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "宏环：符号对齐",
+                "detail": "通过周期性状态坍缩施加逻辑一致性约束。"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "Transformer代数形式简化",
+                "detail": "作者称稳定双环底座允许移除数值稳定性脚手架。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "引入互补控制"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "连续性维护"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "符号对齐"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "共同支撑结构简化"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "共同支撑结构简化"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-22T13:23:00.527344+00:00",
+      "article_profile": "513109a2784fa1ada1b469dea68f16f6754df80c2b791f1be75ad736717d7706",
+      "analysis_references": {},
+      "analysis_material_version": "6db51fa922378a1a37095095400616aa4cc3f85bcce04f8ee4c3c0c8c041836b",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "205a9f36689d",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-22T13:23:00.529346+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "arXiv",
@@ -1034,7 +1183,22 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "5fab3a155e35",
+        "state": "retry",
+        "updated_at": "2026-10-22T14:21:19.117298+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "error_code": "codex_connection",
+        "next_retry_at": "2026-10-22T14:26:19.117298+00:00",
+        "total": 11,
+        "covered": 0,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -1059,7 +1223,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "With the advancement of the ‘carbon peaking and carbon neutrality’ targets and the construction of new power systems, the operating environment of power equipment is becoming increasingly complex, rendering traditional operation and maintenance strategies insufficient to meet the demands of safe and stable grid operation. This paper systematically reviews the application status and latest advancements of state‐of‐the‐art artificial intelligence in the field of power equipment condition perception, focussing primarily on two core dimensions: condition assessment and fault diagnosis. First, the…",
+      "summary": "本文围绕电力设备状态感知，综述人工智能在状态评估与故障诊断中的应用，涉及复杂信号特征提取、小样本诊断及大语言模型。[摘要]文章旨在为相关研究和工程实践提供系统参考，而非在摘要中报告一种经过验证的新算法。解读：适合作为智能运维方向的研究地图，但现有资料不能支撑算法优劣、工程收益或大模型可靠性的定量判断；本次仅依据摘要，未阅读全文。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "979b10409d99e6d4db9da055466847b3cc6733a1",
@@ -1100,11 +1264,133 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐作为电力设备智能运维的综述入口，重点关注状态评估、故障诊断与大语言模型应用之间的联系；具体算法效果仍需全文核查。[摘要]",
+      "deep_read": {
+        "problem": "论文关注复杂运行环境下电力设备的状态感知问题，背景是新型电力系统建设使传统运维策略难以满足安全稳定运行需求。[摘要]原文将核心任务界定为“condition assessment and fault diagnosis”，即状态评估与故障诊断，而非设备结构优化。",
+        "method": "文章采用系统综述的组织方式：先梳理状态评估与故障诊断方法的演进，再分析智能算法在复杂信号特征提取、小样本诊断等工程应用中的表现，随后总结电力领域大语言模型的发展与应用。[摘要]摘要未说明文献检索策略、纳入标准或比较流程。",
+        "innovation": "解读：摘要可辨识的特点，是把传统智能诊断方法与大语言模型应用纳入同一状态感知框架，兼顾方法演进、工程应用及未来趋势。[摘要]这属于综述视角的组织特点，不能据此认定其提出原创算法、首次建立分类体系或取得领先性能。",
+        "findings": "摘要称文章分析了智能算法的工程应用成效，并强调大语言模型在设备智能感知中的“advantages and potential”。[摘要]但未列出具体模型、数据集、评价指标或比较结果，因此当前能够确认的是综述覆盖范围与作者的积极判断，不能确认性能增益及其适用条件。",
+        "limitations": "当前资料仅为摘要，未提供案例细节、文献覆盖情况、量化比较或工程验证证据。[摘要]这些是本次评估的信息边界，不等同于论文全文缺陷。摘要虽提及未来挑战，却未具体展开，因而不能将数据偏移、解释性或部署成本等问题直接归为作者结论。",
+        "connection": "解读：状态评估与故障诊断直接对应智能运维中的状态识别和故障辨识，复杂信号处理及小样本问题也具有明确关联。[摘要]与可靠性研究的联系可延伸至失效风险评估，但摘要未涉及寿命预测、失效概率或可靠度计算；同样缺乏直接服务结构设计的证据。",
+        "next_steps": "建议：若后续取得全文，优先核查算法分类、工程案例来源及小样本诊断的验证设置，并区分大语言模型的已验证应用与前景讨论。用于自身研究时，可据此建立任务、数据和评价指标的对照表；这些是阅读与选题建议，并非摘要已经给出的研究结论。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "面向电力设备状态感知的前沿人工智能：应用与趋势",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.semanticscholar.org/paper/979b10409d99e6d4db9da055466847b3cc6733a1"
+      ],
+      "analyzed_at": "2026-10-22T14:59:01.115857+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "电力设备运行环境日趋复杂，人工智能如何帮助判断设备状态、识别故障？这篇综述围绕状态评估与故障诊断梳理技术演进，并讨论大语言模型的应用潜力，为理解智能运维的研究版图提供入口。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "复杂运行环境对设备状态感知提出新要求",
+            "paragraphs": [
+              "随着碳达峰、碳中和目标推进及新型电力系统建设，电力设备面临更加复杂的运行环境。摘要指出，传统运维策略已难以满足电网安全稳定运行的需求，设备状态感知因此成为值得关注的问题。",
+              "本文将讨论聚焦于**状态评估与故障诊断**两条主线。对于智能运维读者，这一框架有助于明确综述的任务范围，而不是把不同用途的人工智能方法笼统视为同一种解决方案。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "沿方法演进、工程应用与大模型展开综述",
+            "paragraphs": [
+              "这是一篇综述，摘要明确介绍的是文献梳理与分析框架，而非一套新提出的诊断算法。作者首先回顾电力设备状态评估和故障诊断方法的演进，并分析智能算法在复杂信号特征提取、小样本诊断等工程应用中的效能。",
+              "随后，文章总结大语言模型在电力领域的发展与应用，讨论其用于设备智能感知的优势和潜力，最后展望相关技术的发展趋势与挑战。摘要未交代文献检索、筛选及质量评价的具体流程。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要强调大模型潜力，未给出算法优劣排名",
+            "paragraphs": [
+              "摘要传达的主要认识是：复杂信号特征提取与小样本诊断是智能算法的重要应用议题，大语言模型也已进入电力领域的应用讨论。作者特别强调了大语言模型在电力设备智能感知中的优势与潜力。",
+              "不过，摘要没有报告具体算法的比较结果、性能指标或改善幅度。因此，不能据此认定某类模型优于传统方法，也不能将大语言模型的潜力表述为已经验证的运维效果。本文在摘要层面呈现的价值，主要是系统梳理与趋势讨论。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "样本、比较条件与验证范围仍需查阅正文",
+            "paragraphs": [
+              "仅凭摘要，无法判断所涉及研究的设备类型、样本规模、数据来源、比较基线，以及验证是否覆盖不同运行条件；也无法确认各类算法的工程效能如何被衡量。这些属于当前资料无法核实的范围，不意味着论文没有讨论或相关研究没有开展验证。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：把应用潜力与工程证据分开看",
+            "paragraphs": [
+              "阅读启发：进一步阅读时，可沿状态评估和故障诊断两条主线，关注复杂信号处理与小样本问题分别对应哪些方法和证据。对于大语言模型，建议重点核对其具体承担的任务、支持优势判断的比较依据，以及作者如何区分已有应用与未来展望，而不先预设它能够替代现有诊断方法。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的综述展开顺序",
+            "description": "仅概括摘要明确陈述的综述环节及先后关系，不代表实验流程，也不是论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "评估与诊断方法",
+                "detail": "梳理方法演进，分析复杂信号特征提取与小样本诊断等应用中的算法效能。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "电力领域大语言模型",
+                "detail": "总结发展与应用，讨论其在电力设备智能感知中的优势与潜力。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "发展趋势与挑战",
+                "detail": "展望电力设备智能感知技术的未来发展趋势及面临的挑战。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "随后讨论"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "最后展望"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-22T15:03:52.195360+00:00",
+      "article_profile": "651487f9d19ea2a08b23fb648cdda010e753c873ec5e8b36728c8a97039aa46d",
+      "analysis_references": {},
+      "analysis_material_version": "90040b1cba23eb2bac97db8626badc98448b2869612c2242fa0895d8fae54c3d",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "8cbe65d69ab9",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-22T15:03:52.195361+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -1173,7 +1459,22 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "2cbdfd75804d",
+        "state": "retry",
+        "updated_at": "2026-10-22T14:19:40.544770+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "network",
+        "error_code": "codex_connection",
+        "next_retry_at": "2026-10-22T14:24:40.544770+00:00",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -1238,7 +1539,22 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "a3bed94312e4",
+        "state": "retry",
+        "updated_at": "2026-10-22T14:20:35.711894+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "network",
+        "error_code": "codex_connection",
+        "next_retry_at": "2026-10-22T14:25:35.711894+00:00",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "extended": [],
@@ -2159,7 +2475,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "The prevailing scaling paradigm of Large Language Models (LLMs) rests on a substrate of \"Fuzzy\" floating-point arithmetic. To mitigate the inherent instability of this approximate foundation, modern architectures have erected a complex scaffolding of structural and numerical heuristics--Complex Residuals, Pre-RMSNorm, Attention Scaling, and Gradient Clipping--consuming significant compute solely to prevent numerical collapse. We propose a paradigm shift to the \"Exact\". We introduce the Halo Architecture, grounded in the Rational Field (Q) and powered by a custom Exact Inference Unit (EIU). To…",
+      "summary": "本文提出以有理数域和定制精确推理单元构建Halo架构，试图替代浮点计算及相关数值稳定措施。其双环机制分别通过丢番图逼近控制内存复杂度、通过周期性状态坍缩约束逻辑一致性。作者还宣称消除梯度噪声可能显著缩短收敛时间，但摘要没有提供实验设置、量化结果或硬件实现证据。解读：值得关注精确算术与近似控制如何兼容，不能据此认定其已实现无限深度推理。[摘要]",
       "raw_metadata": {
         "provider": "arXiv",
         "method": "rss",
@@ -2200,11 +2516,160 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为数值计算与推理架构的探索性论文选择性阅读，重点核查双环机制的误差控制及效率证据；其与智能运维的直接关联尚不明确。[摘要]",
+      "deep_read": {
+        "problem": "作者将大语言模型的数值稳定问题归因于浮点运算的近似基础，并认为归一化、注意力缩放及梯度裁剪等措施带来额外计算负担。摘要用“Fuzzy”描述这一基础。解读：核心问题是能否以不同算术基础减少稳定性开销，而非直接解决运维故障诊断。[摘要]",
+        "method": "Halo以有理数域和定制精确推理单元为基础，采用双环拓扑：微环通过丢番图逼近约束内存复杂度，宏环通过周期性状态坍缩约束逻辑一致性。摘要称其为“Dual-Ring Topology”，但未交代逼近精度、坍缩规则或单元实现细节。[摘要]",
+        "innovation": "作者提出的创新主张，是将有理数运算、精确推理单元与双环控制整合为替代浮点稳定措施的架构，而非仅调整某个归一化模块。其目标被称为“Great Dismantling”。解读：这属于架构层面的路线主张，摘要不足以确认其相对既有工作的原创性与优势。[摘要]",
+        "findings": "摘要宣称验证了“Efficiency Paradox”：消除梯度噪声后可使用宏观学习率，并可能将总收敛时间降低若干数量级。但资料未列出任务、基线、测量结果或统计证据。解读：当前只能确认作者提出这一效率结论，不能将其视为已独立核实的实验成果。[摘要]",
+        "limitations": "当前仅有摘要，未提供可核查的实验和实现资料，因此无法评价有理数位宽控制的实际代价、逼近误差是否累积，以及逻辑一致性的检验标准。摘要虽称“strictly bounds memory complexity”，但没有给出界限条件；这些是证据缺口，并非已证实的架构缺陷。[摘要]",
+        "connection": "解读：该工作与可靠性研究的潜在联系在于数值误差传播和长链推理稳定性，而非已有运维应用证据。摘要提出“logical consistency”，但没有涉及设备监测、故障预测或结构设计任务，不能直接推导其能提高工程系统可靠性或智能运维效果。[摘要]",
+        "next_steps": "建议后续获取全文后，优先核对双环算法定义、复杂度证明和精确推理单元实现，再检查相同任务与计算预算下的收敛时间比较。若迁移至智能运维，建议另设长序列诊断任务，同时测量误差、内存与时延；这些是研究建议，不是作者已报告的结果。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "从模糊到精确：基于有理数运算的无限深度推理Halo架构",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://arxiv.org/abs/2601.18702"
+      ],
+      "analyzed_at": "2026-10-22T13:21:29.561068+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "大语言模型能否通过改变底层算术，减少为数值稳定付出的架构与计算代价？Halo将有理数运算与双环控制结合，尝试重新组织Transformer的计算基础。阅读价值在于理解其设计逻辑，同时分清架构主张、摘要报告与尚待核实的效率收益。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从浮点近似出发，重问稳定性的代价",
+            "paragraphs": [
+              "作者将现有大语言模型的计算基础称为“模糊”的浮点算术，并认为复杂残差、Pre-RMSNorm、注意力缩放和梯度裁剪等结构与数值策略，承担了防止数值崩溃的额外成本。这是本文提出架构替代方案的问题框架，不宜直接视为对这些机制全部作用的完整解释。",
+              "转向有理数域Q也带来新的困难：摘要指出，有理数算术存在位宽指数增长问题。因此，Halo不仅要处理运算的精确性，还必须控制表示与存储开销。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "有理数底座与分工互补的双环控制",
+            "paragraphs": [
+              "Halo以有理数域为基础，由定制的精确推理单元（EIU）提供支持。摘要明确描述了双环拓扑：微环负责“连续性维护”，通过丢番图逼近严格约束内存复杂度；宏环负责“符号对齐”，通过周期性状态坍缩施加逻辑一致性约束。",
+              "两种机制被组织为互补的控制方式，而非彼此替代。需要注意，“精确”算术与“逼近”机制同时出现在方案中；摘要没有展开二者如何衔接，也未给出误差控制、状态坍缩规则或EIU的具体实现。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "结构简化与收敛提速：报告和预期须分开",
+            "paragraphs": [
+              "摘要称，稳定的双环底座允许拆除数值稳定性“脚手架”，将Transformer块化简为作者称作Tabula Rasa的“干净”代数形式。但摘要没有展示具体删减后的模块、任务表现或比较结果，不能据此认定所有相关机制都已被证明可以普遍移除。",
+              "作者还称验证了“效率悖论”：梯度噪声趋于消除时，可以采用宏观学习率，并可能使总收敛时间降低数个数量级。这里的**潜在提速不等于已展示的端到端加速**；摘要未提供对应测量值及验证配置。关于通用智能需要连续场与离散链结合的表述，也应视为作者的总体论断。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要不足以判定验证规模与适用边界",
+            "paragraphs": [
+              "本解读仅依据所提供的完整摘要，未据此声称阅读全文。摘要未交代数据集、样本规模、模型规模、比较基线、硬件条件和重复验证范围，也不足以判断标题所指的无限深度推理得到何种验证。这些属于当前资料无法判断的信息，不意味着论文没有开展相应工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：精确运算如何转化为实际收益",
+            "paragraphs": [
+              "阅读启发：后续阅读可聚焦三个相连的问题——丢番图逼近如何与精确运算共存，周期性状态坍缩如何界定逻辑一致性，以及收敛所需更新与单次运算成本如何共同决定总耗时。当前摘要尚不能回答这些问题，也不足以将所述收益外推至智能运维或结构可靠性等具体任务。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的Halo双环机制示意",
+            "description": "概括有理数计算底座、互补双环及作者所述的结构简化关系；这是摘要示意，不是论文原图，也不表示具体执行时序。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "有理数域Q与EIU",
+                "detail": "以有理数算术为基础，由定制精确推理单元提供支持。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "双环拓扑",
+                "detail": "整合连续性维护与符号对齐两种互补控制机制。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "微环：连续性维护",
+                "detail": "通过丢番图逼近严格约束内存复杂度。"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "宏环：符号对齐",
+                "detail": "通过周期性状态坍缩施加逻辑一致性约束。"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "Transformer代数形式简化",
+                "detail": "作者称稳定双环底座允许移除数值稳定性脚手架。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "引入互补控制"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "连续性维护"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "符号对齐"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "共同支撑结构简化"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "共同支撑结构简化"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-22T13:23:00.527344+00:00",
+      "article_profile": "513109a2784fa1ada1b469dea68f16f6754df80c2b791f1be75ad736717d7706",
+      "analysis_references": {},
+      "analysis_material_version": "6db51fa922378a1a37095095400616aa4cc3f85bcce04f8ee4c3c0c8c041836b",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "205a9f36689d",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-22T13:23:00.529346+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "arXiv",
@@ -2273,7 +2738,22 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "5fab3a155e35",
+        "state": "retry",
+        "updated_at": "2026-10-22T14:21:19.117298+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "error_code": "codex_connection",
+        "next_retry_at": "2026-10-22T14:26:19.117298+00:00",
+        "total": 11,
+        "covered": 0,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -2298,7 +2778,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "With the advancement of the ‘carbon peaking and carbon neutrality’ targets and the construction of new power systems, the operating environment of power equipment is becoming increasingly complex, rendering traditional operation and maintenance strategies insufficient to meet the demands of safe and stable grid operation. This paper systematically reviews the application status and latest advancements of state‐of‐the‐art artificial intelligence in the field of power equipment condition perception, focussing primarily on two core dimensions: condition assessment and fault diagnosis. First, the…",
+      "summary": "本文围绕电力设备状态感知，综述人工智能在状态评估与故障诊断中的应用，涉及复杂信号特征提取、小样本诊断及大语言模型。[摘要]文章旨在为相关研究和工程实践提供系统参考，而非在摘要中报告一种经过验证的新算法。解读：适合作为智能运维方向的研究地图，但现有资料不能支撑算法优劣、工程收益或大模型可靠性的定量判断；本次仅依据摘要，未阅读全文。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "979b10409d99e6d4db9da055466847b3cc6733a1",
@@ -2339,11 +2819,133 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐作为电力设备智能运维的综述入口，重点关注状态评估、故障诊断与大语言模型应用之间的联系；具体算法效果仍需全文核查。[摘要]",
+      "deep_read": {
+        "problem": "论文关注复杂运行环境下电力设备的状态感知问题，背景是新型电力系统建设使传统运维策略难以满足安全稳定运行需求。[摘要]原文将核心任务界定为“condition assessment and fault diagnosis”，即状态评估与故障诊断，而非设备结构优化。",
+        "method": "文章采用系统综述的组织方式：先梳理状态评估与故障诊断方法的演进，再分析智能算法在复杂信号特征提取、小样本诊断等工程应用中的表现，随后总结电力领域大语言模型的发展与应用。[摘要]摘要未说明文献检索策略、纳入标准或比较流程。",
+        "innovation": "解读：摘要可辨识的特点，是把传统智能诊断方法与大语言模型应用纳入同一状态感知框架，兼顾方法演进、工程应用及未来趋势。[摘要]这属于综述视角的组织特点，不能据此认定其提出原创算法、首次建立分类体系或取得领先性能。",
+        "findings": "摘要称文章分析了智能算法的工程应用成效，并强调大语言模型在设备智能感知中的“advantages and potential”。[摘要]但未列出具体模型、数据集、评价指标或比较结果，因此当前能够确认的是综述覆盖范围与作者的积极判断，不能确认性能增益及其适用条件。",
+        "limitations": "当前资料仅为摘要，未提供案例细节、文献覆盖情况、量化比较或工程验证证据。[摘要]这些是本次评估的信息边界，不等同于论文全文缺陷。摘要虽提及未来挑战，却未具体展开，因而不能将数据偏移、解释性或部署成本等问题直接归为作者结论。",
+        "connection": "解读：状态评估与故障诊断直接对应智能运维中的状态识别和故障辨识，复杂信号处理及小样本问题也具有明确关联。[摘要]与可靠性研究的联系可延伸至失效风险评估，但摘要未涉及寿命预测、失效概率或可靠度计算；同样缺乏直接服务结构设计的证据。",
+        "next_steps": "建议：若后续取得全文，优先核查算法分类、工程案例来源及小样本诊断的验证设置，并区分大语言模型的已验证应用与前景讨论。用于自身研究时，可据此建立任务、数据和评价指标的对照表；这些是阅读与选题建议，并非摘要已经给出的研究结论。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "面向电力设备状态感知的前沿人工智能：应用与趋势",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.semanticscholar.org/paper/979b10409d99e6d4db9da055466847b3cc6733a1"
+      ],
+      "analyzed_at": "2026-10-22T14:59:01.115857+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "电力设备运行环境日趋复杂，人工智能如何帮助判断设备状态、识别故障？这篇综述围绕状态评估与故障诊断梳理技术演进，并讨论大语言模型的应用潜力，为理解智能运维的研究版图提供入口。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "复杂运行环境对设备状态感知提出新要求",
+            "paragraphs": [
+              "随着碳达峰、碳中和目标推进及新型电力系统建设，电力设备面临更加复杂的运行环境。摘要指出，传统运维策略已难以满足电网安全稳定运行的需求，设备状态感知因此成为值得关注的问题。",
+              "本文将讨论聚焦于**状态评估与故障诊断**两条主线。对于智能运维读者，这一框架有助于明确综述的任务范围，而不是把不同用途的人工智能方法笼统视为同一种解决方案。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "沿方法演进、工程应用与大模型展开综述",
+            "paragraphs": [
+              "这是一篇综述，摘要明确介绍的是文献梳理与分析框架，而非一套新提出的诊断算法。作者首先回顾电力设备状态评估和故障诊断方法的演进，并分析智能算法在复杂信号特征提取、小样本诊断等工程应用中的效能。",
+              "随后，文章总结大语言模型在电力领域的发展与应用，讨论其用于设备智能感知的优势和潜力，最后展望相关技术的发展趋势与挑战。摘要未交代文献检索、筛选及质量评价的具体流程。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要强调大模型潜力，未给出算法优劣排名",
+            "paragraphs": [
+              "摘要传达的主要认识是：复杂信号特征提取与小样本诊断是智能算法的重要应用议题，大语言模型也已进入电力领域的应用讨论。作者特别强调了大语言模型在电力设备智能感知中的优势与潜力。",
+              "不过，摘要没有报告具体算法的比较结果、性能指标或改善幅度。因此，不能据此认定某类模型优于传统方法，也不能将大语言模型的潜力表述为已经验证的运维效果。本文在摘要层面呈现的价值，主要是系统梳理与趋势讨论。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "样本、比较条件与验证范围仍需查阅正文",
+            "paragraphs": [
+              "仅凭摘要，无法判断所涉及研究的设备类型、样本规模、数据来源、比较基线，以及验证是否覆盖不同运行条件；也无法确认各类算法的工程效能如何被衡量。这些属于当前资料无法核实的范围，不意味着论文没有讨论或相关研究没有开展验证。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：把应用潜力与工程证据分开看",
+            "paragraphs": [
+              "阅读启发：进一步阅读时，可沿状态评估和故障诊断两条主线，关注复杂信号处理与小样本问题分别对应哪些方法和证据。对于大语言模型，建议重点核对其具体承担的任务、支持优势判断的比较依据，以及作者如何区分已有应用与未来展望，而不先预设它能够替代现有诊断方法。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的综述展开顺序",
+            "description": "仅概括摘要明确陈述的综述环节及先后关系，不代表实验流程，也不是论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "评估与诊断方法",
+                "detail": "梳理方法演进，分析复杂信号特征提取与小样本诊断等应用中的算法效能。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "电力领域大语言模型",
+                "detail": "总结发展与应用，讨论其在电力设备智能感知中的优势与潜力。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "发展趋势与挑战",
+                "detail": "展望电力设备智能感知技术的未来发展趋势及面临的挑战。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "随后讨论"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "最后展望"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-22T15:03:52.195360+00:00",
+      "article_profile": "651487f9d19ea2a08b23fb648cdda010e753c873ec5e8b36728c8a97039aa46d",
+      "analysis_references": {},
+      "analysis_material_version": "90040b1cba23eb2bac97db8626badc98448b2869612c2242fa0895d8fae54c3d",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "8cbe65d69ab9",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-22T15:03:52.195361+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -2412,7 +3014,22 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "2cbdfd75804d",
+        "state": "retry",
+        "updated_at": "2026-10-22T14:19:40.544770+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "network",
+        "error_code": "codex_connection",
+        "next_retry_at": "2026-10-22T14:24:40.544770+00:00",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -2477,7 +3094,22 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "a3bed94312e4",
+        "state": "retry",
+        "updated_at": "2026-10-22T14:20:35.711894+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "network",
+        "error_code": "codex_connection",
+        "next_retry_at": "2026-10-22T14:25:35.711894+00:00",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "source_status": {
@@ -3344,13 +3976,13 @@
     "unavailable": 30
   },
   "analysis_status": {
-    "ready_core": 1,
+    "ready_core": 3,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 5
+    "pending": 3
   },
   "edition": {
     "id": "39783046372",
