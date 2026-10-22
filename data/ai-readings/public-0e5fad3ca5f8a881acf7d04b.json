@@ -1,18 +1,18 @@
 {
   "id": "public-0e5fad3ca5f8a881acf7d04b",
-  "content_version": "de0ce756dd853cc9f0effaf2f1b02da8f1630a55b6987cbadbee6863d98fdfed",
+  "content_version": "4e580a919543f2f17a769649eebc91b48d58b6fd6a1393f513ca99d4f3a5b8fa",
   "analysis": {
     "title_zh": "IBM Granite 时间序列模型的集成预测",
-    "summary": "原文介绍四个开放的 Granite 模型及一个可扩展的预测接口，旨在减少时间序列预测中的模型选择摸索。预训练模型无需在用户数据集上训练即可预测，但仍需根据任务选择模型：适合平滑工业信号的模型，可能难以处理噪声较大的零售需求或较长的季节性预测跨度。所给片段末尾截断，未展示具体集成机制、模型名称、使用步骤或效果评测，不能据此判断集成预测的实际收益。",
-    "application": "建议：科研迁移可围绕工业监测、运维指标和需求预测，比较不同模型在噪声、季节性及预测跨度变化下的误差与稳定性；这是研究建议，不是官方已验证效果。所给原文未提供集成预测优于单模型的实验结果，也未验证结构可靠性等科研任务。",
+    "summary": "[本站解读]所给官方文章片段介绍四个开放的 Granite 模型与一个可扩展预测接口，旨在减少时间序列预测中的模型选择困扰。原文指出，预训练模型无需在用户数据集上训练即可预测，但不同信号与预测跨度仍影响模型适用性，涉及平滑工业信号、噪声零售需求和长季节性预测。片段尚未展示集成机制、发布状态或量化效果，不能据此认定集成方案已验证优于单模型。",
+    "application": "建议：[本站解读]科研迁移可围绕设备状态、负荷或需求预测，设计单模型与集成方案的对照实验，考察噪声和预测跨度的影响。官方原文仅说明预训练预测能力与模型选择问题；所给片段未提供集成效果的验证结果，不应将上述研究建议视为官方已验证效果。",
     "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
+      "Ensemble forecasting with IBM Granite time-series models",
       "Four open Granite models, one extensible forecasting interface, and less guesswork about which model to use.",
-      "Pre-trained time-series models can forecast without training on your dataset, but you still have to choose one.",
-      "A model that handles smooth industrial signals well may struggle with noisy retail demand or a long seasonal horizon, and the best choic"
+      "Pre-trained time-series models can forecast without training on your dataset, but you still have to choose one."
     ],
     "basis_url": "https://huggingface.co/blog/ibm-research/granite-timeseries-ensemble-r1"
   },
-  "analyzed_at": "2026-10-22T08:13:27.030446+00:00"
+  "analyzed_at": "2026-10-22T09:22:17.983788+00:00"
 }
