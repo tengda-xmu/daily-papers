@@ -1,0 +1,19 @@
+{
+  "id": "public-40a01666d562060bfdf96e1b",
+  "content_version": "fd9b70ac27eb6df9b9f2ab964587b9ffbc4866af526d36649d68fe95de3e6fca",
+  "analysis": {
+    "title_zh": "VocabX 研究预告：通过专门化 SLMs 词表降低实际应用推理成本",
+    "summary": "原文介绍了尚待发表的 VocabX 论文部分结果，而非产品正式发布。针对由 Qwen、Gemma 等通用开源模型微调而来的领域模型，作者指出，继承的通用词表会将常见输出拆成较多 token。团队在生产环境中的作文评分应用里，围绕每个 token 的成本而非出现频率进行词表专门化，报告实测推理成本降低 77%。该结果对应特定应用，不能据此认定其他任务也能获得同等降幅。[S1]",
+    "application": "建议：科研迁移可优先考察输出内容重复、领域用语集中的评分或评审任务，评估词表切分与推理成本的关系；这是迁移设想，并非官方已验证效果。原文报告的实测效果仅对应团队运行的作文评分应用，所给片段未提供完整实验条件。[S1]",
+    "requirements": "使用条件见官方文档",
+    "steps": [],
+    "evidence": [
+      "Models specialized for a domain or a task by fine-tuning general open-source models, such as Qwen and Gemma, inherit a vocabulary built for many domains and general applications.",
+      "In an essay grader we run in production, that vocabulary split the text the model writes most into many tokens.",
+      "This article previews some results from the VocabX paper, which we will publish soon:",
+      "how we specialized the vocabulary around the cost of each token rather than its frequency, and cut measured inference cost by 77%"
+    ],
+    "basis_url": "https://huggingface.co/blog/Dharma-AI/vocabx-vocabulary-specialization"
+  },
+  "analyzed_at": "2026-10-22T00:56:14.795188+00:00"
+}
