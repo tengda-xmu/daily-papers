@@ -1,18 +1,19 @@
 {
   "id": "public-40a01666d562060bfdf96e1b",
-  "content_version": "9c16e328c0076a58857726566949e4916a5b59743bda342775ef3377f7d3e888",
+  "content_version": "72cbb2b71994057f1a91258c6e9e4702e1f70b3ecfc760aac02754f392446ee8",
   "analysis": {
-    "title_zh": "VocabX 研究预告：专化 SLM 词表，实测推理成本降低 77%",
-    "summary": "通用开源模型经领域或任务微调后，仍继承面向广泛应用的词表。[S1] 团队发现，其生产环境中的作文评分模型，常生成的文本会被拆成许多 token。[S2] 本文预告 VocabX 论文的部分结果：按每个 token 的成本而非频率进行词表专化，并报告实测推理成本降低 77%。这一结果对应文中应用，不能直接推广至所有模型与任务；所给资料未披露测量细节，论文尚待发布。[S3]",
-    "application": "建议：科研迁移可考虑在作文评分、结构巡检报告或运维文本生成等输出较固定的任务中，研究词表切分与推理成本的关系；这是迁移设想，并非官方已验证效果。原文仅报告作者应用中实测推理成本降低 77%，未提供其他任务的验证依据。[S2][S3]",
+    "title_zh": "VocabX 研究预告：通过词表专门化降低小语言模型推理成本",
+    "summary": "Dharma-AI 团队文章预告了 VocabX 论文的部分结果：针对由 Qwen、Gemma 等通用开源模型微调得到的领域或任务模型，按每个 token 的成本而非频率进行词表专门化。作者指出，通用词表会将其生产环境中作文评分模型经常生成的文本拆成多个 token，并报告实测推理成本降低 77%。该结果来自特定应用，不能直接推广到其他任务；所给资料仅为论文预告，未说明工具发布或完整评测细节。",
+    "application": "建议：科研迁移可考虑在智能运维报告生成、结构设计说明等领域文本任务中，研究词表切分与推理成本的关系，并独立评估输出质量及成本变化。这属于迁移设想；原文作者报告的效果仅涉及其生产应用，不能将降低 77% 视为上述科研任务已获官方验证的效果。",
     "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
       "Models specialized for a domain or a task by fine-tuning general open-source models, such as Qwen and Gemma, inherit a vocabulary built for many domains and general applications.",
       "In an essay grader we run in production, that vocabulary split the text the model writes most into many tokens.",
-      "This article previews some results from the VocabX paper, which we will publish soon: how we specialized the vocabulary around the cost of each token rather than its frequency, and cut measured inference cost by 77%"
+      "This article previews some results from the VocabX paper, which we will publish soon:",
+      "how we specialized the vocabulary around the cost of each token rather than its frequency, and cut measured inference cost by 77%"
     ],
     "basis_url": "https://huggingface.co/blog/Dharma-AI/vocabx-vocabulary-specialization"
   },
-  "analyzed_at": "2026-10-22T12:14:15.232592+00:00"
+  "analyzed_at": "2026-10-22T13:15:40.338636+00:00"
 }
