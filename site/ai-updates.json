@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "checked_at": "2026-10-22T00:45:33.548373+00:00",
+  "checked_at": "2026-10-22T01:46:53.392634+00:00",
   "entries": [
     {
       "title": "NVIDIA Kumo Relational Outperforms Supervised Machine Learning on Relational Data, No Training Required",
@@ -13,8 +13,8 @@
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/nvidia/kumo-relational",
       "categories": [
@@ -26,21 +26,35 @@
       ],
       "release_state": "unknown",
       "content_version": "e301f2cd70050c2741a31c01d542dd9c2e780e4824116f73df16defeea3dd0b9",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "NVIDIA Kumo Relational：无需任务专属训练，直接面向企业关系数据库预测",
+        "summary": "公告介绍了预训练关系基础模型 NVIDIA Kumo Relational：接收预测查询后，收集最多10,000个历史样例作为上下文，通过单次前向传播预测客户流失、需求或欺诈等结果。其主要变化是无需任务专属训练、特征工程或将多张表展平，可直接面向企业数据库开展预测。所给原文仅为截断片段，虽标题宣称优于监督机器学习，但未提供评测数据、对比设置或适用边界，不能据此确认性能优势。",
+        "application": "建议：科研迁移可考虑探索设备、维修与故障等关联表上的风险预测，检验其对智能运维和可靠性研究的适用性；这属于迁移设想，并非官方已验证效果。官方片段列举的任务包括客户流失、需求和欺诈预测，但未展示这些任务的验证结果。",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "NVIDIA Kumo Relational is a pre-trained relational foundation model that makes predictions directly on enterprise databases.",
+          "Given a predictive query, it gathers up to 10,000 historical examples as context and predicts outcomes such as churn, demand, or fraud in a single forward pass.",
+          "It needs no task-specific training, no feature engineering, and no flattening of tables."
+        ],
+        "basis_url": "https://huggingface.co/blog/nvidia/kumo-relational"
+      },
+      "analyzed_at": "2026-10-22T00:55:36.406707+00:00"
     },
     {
       "title": "How Specializing the Vocabulary of SLMs Can Cut Inference Cost by 77% in Real Applications",
       "url": "https://huggingface.co/blog/Dharma-AI/vocabx-vocabulary-specialization",
       "published_at": "2026-10-21T17:35:36.666000+00:00",
       "summary": "Models specialized for a domain or a task by fine-tuning general open-source models, such as Qwen and Gemma, inherit a vocabulary built for many domains and general applications.",
-      "evidence_text": "Back to Articles How Specializing the Vocabulary of SLMs Can Cut Inference Cost by 77% in Real Applications Team Article Published October 21, 2026 Upvote 14 +8 Bernardo França de Aguiar bernardoaguiar Follow Dharma-AI Gabriel Pimenta de Freitas Cardoso GabrielPimenta99 Follow Dharma-AI Bruno Duarte brunoduarte01 Follow Dharma-AI Francisco de Almeida Rocha Alves falves9101 Follow Dharma-AI Models specialized for a domain or a task by fine-tuning general open-source models, such as Qwen and Gemma, inherit a vocabulary built for many domains and general applications. In an essay grader we run in production, that vocabulary split the text the model writes most into many tokens. This article previews some results from the VocabX paper, which we will publish soon: how we specialized the vocabulary around the cost of each token rather than its frequency, and cut measured inference cost by 77% ",
+      "evidence_text": "Back to Articles How Specializing the Vocabulary of SLMs Can Cut Inference Cost by 77% in Real Applications Team Article Published October 21, 2026 Upvote 15 +9 Bernardo França de Aguiar bernardoaguiar Follow Dharma-AI Gabriel Pimenta de Freitas Cardoso GabrielPimenta99 Follow Dharma-AI Bruno Duarte brunoduarte01 Follow Dharma-AI Francisco de Almeida Rocha Alves falves9101 Follow Dharma-AI Models specialized for a domain or a task by fine-tuning general open-source models, such as Qwen and Gemma, inherit a vocabulary built for many domains and general applications. In an essay grader we run in production, that vocabulary split the text the model writes most into many tokens. This article previews some results from the VocabX paper, which we will publish soon: how we specialized the vocabulary around the cost of each token rather than its frequency, and cut measured inference cost by 77% ",
       "id": "public-40a01666d562060bfdf96e1b",
       "source_id": "huggingface",
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/Dharma-AI/vocabx-vocabulary-specialization",
       "categories": [
@@ -50,7 +64,7 @@
         "general"
       ],
       "release_state": "unknown",
-      "content_version": "fd9b70ac27eb6df9b9f2ab964587b9ffbc4866af526d36649d68fe95de3e6fca",
+      "content_version": "5dfa7c66682fe4c75c21edb82ad2c99eecc14275a6d7609dd964d9ad018a5a37",
       "analysis_status": "pending"
     },
     {
@@ -77,10 +91,25 @@
       ],
       "release_state": "unknown",
       "content_version": "3a6d872acd1b9e4d6e5b5281c0dc74f3e7dd6d9d7dc6e1c7cc41a3916a6541ae",
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "related_urls": [
         "https://huggingface.co/blog/amazon/profiling-torchneuron-part-1"
-      ]
+      ],
+      "analysis": {
+        "title_zh": "TorchNeuron 性能剖析（第一部分）：AWS Trainium 上的系统级性能分析",
+        "summary": "本文是面向零性能剖析经验读者的系列首篇，介绍如何系统分析推理性能、定位时间消耗，而非宣布新版本发布。示例采用 AWS Trainium 与其开源原生 PyTorch 后端 TorchNeuron。原文说明，该后端支持即时执行、torch.compile 和标准 PyTorch API，仅需少量代码修改。适用于推理耗时诊断与性能瓶颈分析；所给资料已截断，未呈现具体操作或性能测试结果。",
+        "application": "建议：科研迁移可考虑将系统级耗时分析用于智能运维模型的推理瓶颈诊断，作为优化前的测量环节；这属于迁移设想，并非本文已验证结论。官方提供的片段说明了工作流支持与教程目标，未给出已验证的加速幅度或科研任务效果。",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "In Part 1 of this series, you will learn how to systematically analyze inference performance and identify where the time is spent.",
+          "This post starts from scratch and assumes no prior profiling experience.",
+          "The walkthrough uses AWS Trainium, a purpose-built AI chip for deep learning training and inference workloads, and TorchNeuron , its open source native PyTorch backend.",
+          "TorchNeuron supports standard PyTorch workflows on Trainium, including eager execution, torch.compile , and standard PyTorch APIs, with minimal code changes."
+        ],
+        "basis_url": "https://huggingface.co/blog/amazon/profiling-torchneuron-part-1-system-level-profilin"
+      },
+      "analyzed_at": "2026-10-21T16:16:05.687090+00:00"
     },
     {
       "title": "Granite Speech 5.0: Transcribe, Translate, and Attribute more Accurately and Faster",
@@ -93,8 +122,8 @@
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/ibm-granite/granite-speech-5",
       "categories": [
@@ -105,7 +134,22 @@
       ],
       "release_state": "unknown",
       "content_version": "ff9df0a52490539a6d50a254928e50a04283dc2f7c99175dcde36b99e471d8e3",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "Granite Speech 5.0：语音转写、翻译与归属识别更新",
+        "summary": "公告介绍 IBM Granite Speech 系列的三项更新，包括新的语音语言模型 granite-speech-5.0-2b，以及两个模型的修订版本。标题将语音转写、翻译与归属识别列为适用任务，并宣称准确性和速度有所提升。但所给正文在更新介绍处截断，未展示另外两个模型的名称、具体改动、评测结果或使用方法，因此无法据此判断提升幅度及实际部署适用性。",
+        "application": "建议：科研迁移可考虑评估其在访谈转写、多语言语音资料翻译和说话人归属识别中的适用性；这些属于迁移设想，并非所给资料已验证的效果。官方标题宣称更准确、更快，但当前摘录未提供评测证据，不能据此认定具体性能优势。",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "Granite Speech 5.0: Transcribe, Translate, and Attribute more Accurately and Faster",
+          "We're excited to share three updates to IBM's Granite Speech collection:",
+          "a new speech-language model, granite-speech-5.0-2b",
+          "and revised versions of two models"
+        ],
+        "basis_url": "https://huggingface.co/blog/ibm-granite/granite-speech-5"
+      },
+      "analyzed_at": "2026-10-22T00:56:39.282882+00:00"
     },
     {
       "title": "Announcing SimReady Central: An Open Library of Simulation-Ready 3D Assets for Robotics and AI Factories",
@@ -157,7 +201,21 @@
       ],
       "release_state": "unknown",
       "content_version": "684a5396f7eccf76c070dbbbe128fb964a22f64038195af6e3606b6cfff9f666",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "NVIDIA Kumo Forecast：结合预训练时序表示、历史模式检索与可解释性的预测模型",
+        "summary": "官方公告介绍，NVIDIA Kumo Forecast 原名 NV-Tesseract Forecasting，面向多变量时间序列预测。其以 MOMENT-1-large 为骨干，将预训练 Transformer 与领域感知表示和检索（DARR）结合，通过上下文增强预测模式融合模型直接预测和历史数据检索模式，并提供结果可解释性。所给片段未展示效果对比或具体使用流程，不能据此判断预测精度提升幅度。[S1]",
+        "application": "建议：科研迁移可考虑将其用于设备多变量监测序列预测，评估历史模式检索对异常工况预测及结果解释的帮助；这是研究设想，并非官方已验证效果。官方原文明示的是模型机制与可解释性，所给片段没有提供智能运维、结构设计或可靠性任务的验证结果。[S1]",
+        "requirements": "使用条件见官方文档",
+        "steps": [],
+        "evidence": [
+          "NVIDIA Kumo Forecast (formerly known as NV-Tesseract Forecasting) is a multi-variate time-series forecasting model that combines a pretrained Transformer backbone with Domain-Aware Representation and Retrieval (DARR), a context-enhanced forecasting mode that blends direct model predictions with patterns retrieved from historical data.",
+          "This includes interpretability of the results.",
+          "Built on the MOMENT-1-large backbone"
+        ],
+        "basis_url": "https://huggingface.co/blog/nvidia/kumo-forecast"
+      },
+      "analyzed_at": "2026-10-22T00:57:06.523392+00:00"
     },
     {
       "title": "ALTK-Evolve: How learned memory tops the τ²-bench leaderboard on customer service tasks without a frontier model",
@@ -170,8 +228,8 @@
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/ibm-research/altk-evolve-bc",
       "categories": [
@@ -183,7 +241,19 @@
       ],
       "release_state": "unknown",
       "content_version": "1fa7fbe83a0d218baa0600368bb6b0152ef413130582dd297e14de9bcf9613ce",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "ALTK-Evolve：借助学习型记忆提升 τ²-bench 客服任务表现，无需前沿模型",
+        "summary": "公告介绍，ALTK-Evolve 使用 GPT-4.1 学习并应用任务策略手册，无需更新模型权重，即在客服智能体基准 τ²-bench 上超过零售领域参评方案。其核心变化是通过学习型记忆辅助任务执行，而非调整模型权重，适用方向为客服智能体任务。所给正文被截断，未提供具体分数、对照设置或完整方法，不能据此推断其他领域的效果。",
+        "application": "建议：科研迁移可探索将历史处置经验整理为可复用策略手册，用于智能运维中的故障诊断与处置辅助，并单独验证准确性和可靠性；这属于迁移设想，不是官方已验证效果。官方所述结果仅涉及使用 GPT-4.1、无需更新模型权重，在 τ²-bench 零售领域超过参评方案。",
+        "requirements": "原文明示使用 GPT-4.1；未明确账号、API、费用或部署条件。使用条件见官方文档。",
+        "steps": [],
+        "evidence": [
+          "ALTK-Evolve learns and applies a playbook using GPT-4.1, outperforming the retail entries on τ²-bench, a customer service agent benchmark—without updating model weights."
+        ],
+        "basis_url": "https://huggingface.co/blog/ibm-research/altk-evolve-bc"
+      },
+      "analyzed_at": "2026-10-22T00:57:30.206019+00:00"
     },
     {
       "title": "FairStress: A deeper evaluation of fairness in LLM decision-making",
@@ -196,8 +266,8 @@
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/allenai/fairstress",
       "categories": [
@@ -236,8 +306,8 @@
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/hf-torchtpu",
       "categories": [
@@ -249,7 +319,27 @@
       ],
       "release_state": "unknown",
       "content_version": "3ea12a290137b52e4feb9099897a001a212228cd28059b93da40568bcd7bd1e9",
-      "analysis_status": "pending"
+      "analysis_status": "ready",
+      "analysis": {
+        "title_zh": "Hugging Face ❤️ TorchTPU：TPU 原生支持",
+        "summary": "公告介绍原生 PyTorch 后端 TorchTPU，使 TPU 成为 PyTorch 可直接使用的设备，并将原生支持扩展至 Hugging Face 生态。原文称 Transformers、Diffusers 和 Kernels 已可在 TPU 上原生运行，并给出从 Hub 选择模型、将其发送到“tpu”的使用路径。其适用方向是让已有 PyTorch 模型在 TPU 上运行；所给片段未提供性能、成本或模型兼容范围的测试结果。",
+        "application": "建议：科研迁移可优先评估现有 PyTorch 模型及依赖 Transformers、Diffusers 的工作流在 TPU 上的兼容性，这是迁移建议而非官方验证结论。官方明确宣称的是相关组件原生支持 TPU；所给资料未展示速度、成本或精度方面的验证结果。",
+        "requirements": "使用条件见官方文档",
+        "steps": [
+          {
+            "text": "从 Hugging Face Hub 选择模型，并将其发送到“tpu”设备；所给片段未提供具体代码。",
+            "evidence": "Pick a model from the Hub, send it to \"tpu\" , and you're done."
+          }
+        ],
+        "evidence": [
+          "With TorchTPU , a native PyTorch backend, TPU is now just another device.",
+          "It opens up native support of TPU in the Hugging Face ecosystem.",
+          "Transformers, Diffusers and Kernels run natively on TPU.",
+          "Pick a model from the Hub, send it to \"tpu\" , and you're done."
+        ],
+        "basis_url": "https://huggingface.co/blog/hf-torchtpu"
+      },
+      "analyzed_at": "2026-10-22T00:57:55.661237+00:00"
     },
     {
       "title": "MPS in PyTorch 2.15",
@@ -389,8 +479,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-10-17",
       "release_state": "unknown",
@@ -452,7 +542,7 @@
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/introducing-the-rosalind-academic-plan",
       "categories": [
@@ -684,7 +774,7 @@
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/third-moment-research",
       "categories": [
@@ -777,8 +867,8 @@
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/common-questions-about-agent-evals",
       "categories": [
@@ -833,8 +923,8 @@
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/how-numan-built-an-eval-first-ai-health-coach-with-langgraph-and-langsmith",
       "categories": [
@@ -1082,7 +1172,7 @@
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/jump-trading",
       "categories": [
@@ -1268,7 +1358,7 @@
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/introducing-gpt-6-1-sol",
       "categories": [
@@ -1494,8 +1584,8 @@
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/langsmith-engine-v2-redteam",
       "categories": [
@@ -1533,8 +1623,8 @@
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/langsmith-trajectories-tracing",
       "categories": [
@@ -1576,8 +1666,8 @@
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/langsmith-fine-tuning",
       "categories": [
@@ -1799,7 +1889,7 @@
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/better-prompt-caching-for-gpt-6",
       "categories": [
@@ -1835,8 +1925,8 @@
       "source": "Hugging Face 官方博客",
       "organization": "Hugging Face 官方博客",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://huggingface.co/blog/anylanguagemodel-1-0",
       "categories": [
@@ -1875,7 +1965,7 @@
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/introducing-gpt-6-sol-and-luna",
       "categories": [
@@ -1953,7 +2043,7 @@
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/parallel-cuts-time-and-cost-with-astra",
       "categories": [
@@ -2100,7 +2190,7 @@
       "source": "OpenAI 官方发布",
       "organization": "OpenAI 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
       "verified_at": "",
       "evidence_url": "https://openai.com/index/astra-for-law",
       "categories": [
@@ -2385,8 +2475,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-09-10",
       "release_state": "released",
@@ -2532,8 +2622,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-08-21",
       "release_state": "preview",
@@ -2618,8 +2708,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-08-13",
       "release_state": "unknown",
@@ -2662,8 +2752,8 @@
       "source": "LangChain 官方发布",
       "organization": "LangChain 官方发布",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://www.langchain.com/blog/own-your-intelligence",
       "categories": [
@@ -2750,8 +2840,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-07-31",
       "release_state": "unknown",
@@ -2965,8 +3055,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2026-04-24",
       "release_state": "unknown",
@@ -3309,8 +3399,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2025-12-01",
       "release_state": "unknown",
@@ -3377,8 +3467,8 @@
       "source": "DeepSeek 更新日志",
       "organization": "DeepSeek 更新日志",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://api-docs.deepseek.com/updates/#date-2025-09-29",
       "release_state": "preview",
@@ -3504,8 +3594,8 @@
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.26",
       "content_version": "2c301ad979bec74794359b1f3b91dd982ae0df5ac8eb3a23d4bb5ffee7850cf0",
@@ -3532,8 +3622,8 @@
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.25",
       "content_version": "3d1b4928b8c3335cb7d414163225c3bf46b6f383659b1bf193dd905d5d04e715",
@@ -3560,8 +3650,8 @@
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.24",
       "content_version": "054f5267296d2b7dcbde36c1419fec06b39b29393c62b8f3ccf34a84245984fb",
@@ -3603,8 +3693,8 @@
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.23",
       "content_version": "a52b6679b34bf97717ff70c47bc0a03c31a22ff7096585e0caf7ee4f987c2fc1",
@@ -3676,8 +3766,8 @@
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.22",
       "content_version": "5df7dcf5518ab4068163005fa68fa290f9f3e940e03bc11fe306bad11e64f09c",
@@ -3716,8 +3806,8 @@
       "source": "Qwen-Agent 版本发布",
       "organization": "Qwen-Agent 版本发布",
       "provider": "official",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "verified_at": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "verified_at": "2026-10-22T01:46:53.392634+00:00",
       "verification": "verified",
       "evidence_url": "https://github.com/QwenLM/Qwen-Agent/releases/tag/v0.0.21",
       "content_version": "88406150221dc889d29c34e2ddf741e6292582b128ecb3997b4e46acba200406",
@@ -3919,8 +4009,8 @@
       "id": "openai",
       "name": "OpenAI 官方发布",
       "url": "https://openai.com/news/rss.xml",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "last_success": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "last_success": "2026-10-22T01:46:53.392634+00:00",
       "status": "ok",
       "count": 12
     },
@@ -3928,8 +4018,8 @@
       "id": "anthropic",
       "name": "Anthropic 工程进展",
       "url": "https://www.anthropic.com/engineering",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "last_success": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "last_success": "2026-10-22T01:46:53.392634+00:00",
       "status": "no_data",
       "count": 0
     },
@@ -3937,8 +4027,8 @@
       "id": "deepmind",
       "name": "Google DeepMind",
       "url": "https://deepmind.google/blog/",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "last_success": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "last_success": "2026-10-22T01:46:53.392634+00:00",
       "status": "no_data",
       "count": 0
     },
@@ -3946,8 +4036,8 @@
       "id": "qwen",
       "name": "Qwen 官方发布",
       "url": "https://qwen.ai/blog",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "last_success": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "last_success": "2026-10-22T01:46:53.392634+00:00",
       "status": "no_data",
       "count": 0
     },
@@ -3955,8 +4045,8 @@
       "id": "qwen-agent",
       "name": "Qwen-Agent 版本发布",
       "url": "https://github.com/QwenLM/Qwen-Agent/releases.atom",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "last_success": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "last_success": "2026-10-22T01:46:53.392634+00:00",
       "status": "ok",
       "count": 6
     },
@@ -3964,8 +4054,8 @@
       "id": "deepseek",
       "name": "DeepSeek 更新日志",
       "url": "https://api-docs.deepseek.com/updates/",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "last_success": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "last_success": "2026-10-22T01:46:53.392634+00:00",
       "status": "ok",
       "count": 8
     },
@@ -3973,8 +4063,8 @@
       "id": "huggingface",
       "name": "Hugging Face 官方博客",
       "url": "https://huggingface.co/blog/feed.xml",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "last_success": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "last_success": "2026-10-22T01:46:53.392634+00:00",
       "status": "ok",
       "count": 8
     },
@@ -3982,8 +4072,8 @@
       "id": "langchain",
       "name": "LangChain 官方发布",
       "url": "https://www.langchain.com/blog",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "last_success": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "last_success": "2026-10-22T01:46:53.392634+00:00",
       "status": "ok",
       "count": 6
     },
@@ -3991,8 +4081,8 @@
       "id": "agent-skills",
       "name": "Agent Skills 规范版本",
       "url": "https://github.com/agentskills/agentskills/releases.atom",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "last_success": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "last_success": "2026-10-22T01:46:53.392634+00:00",
       "status": "no_data",
       "count": 0
     },
@@ -4000,8 +4090,8 @@
       "id": "anthropic-skills",
       "name": "Anthropic Skills 版本",
       "url": "https://github.com/anthropics/skills/releases.atom",
-      "checked_at": "2026-10-22T00:45:33.548373+00:00",
-      "last_success": "2026-10-22T00:45:33.548373+00:00",
+      "checked_at": "2026-10-22T01:46:53.392634+00:00",
+      "last_success": "2026-10-22T01:46:53.392634+00:00",
       "status": "no_data",
       "count": 0
     },
@@ -4012,8 +4102,8 @@
       "status": "ok",
       "count": 11,
       "message": "公开索引已接入：读取 11 条文章元数据，本期 11 条。 微信后台文章列表受限；已通过公开搜索获取线索，链接为检索入口，非已核验全文。 最近同步：10-05 20:35（北京时间）。 导出超过 3 天，请检查同步任务；将尝试公开索引。 公开查询完成 3/3 项（复用缓存 0 项）。 最近检查：10-21 20:35（北京时间）。",
-      "checked_at": "2026-10-22T00:45:33.393913+00:00",
-      "last_success": "2026-10-22T00:45:33.393913+00:00"
+      "checked_at": "2026-10-22T01:46:53.298313+00:00",
+      "last_success": "2026-10-22T01:46:53.298313+00:00"
     },
     {
       "id": "wechat-index",
@@ -4022,14 +4112,14 @@
       "status": "no_data",
       "count": 0,
       "message": "公开索引已接入：本期读取 0 条公众号文章线索，按 35 个订阅筛选。 微信后台文章列表受限；线索提供公开检索入口，非已核验全文。 公开查询完成 3/3 项（复用缓存 3 项）。",
-      "checked_at": "2026-10-22T00:45:33.393913+00:00",
+      "checked_at": "2026-10-22T01:46:53.298313+00:00",
       "last_success": "2026-10-19T12:33:08.934390+00:00"
     },
     {
       "id": "xiaohongshu-leads",
       "name": "小红书 · 科研线索",
       "url": "https://www.xiaohongshu.com/",
-      "checked_at": "2026-10-22T00:45:33.393913+00:00",
+      "checked_at": "2026-10-22T01:46:53.298313+00:00",
       "last_success": "2026-10-13T19:45:35.538088+00:00",
       "status": "quota_exhausted",
       "message": "今日两个发现查询已执行，下一日轮换主题；可继续手动添加笔记。",
@@ -4039,7 +4129,7 @@
       "id": "xiaohongshu-ai",
       "name": "小红书 · AI 前沿",
       "url": "https://www.xiaohongshu.com/",
-      "checked_at": "2026-10-22T00:45:33.393913+00:00",
+      "checked_at": "2026-10-22T01:46:53.298313+00:00",
       "last_success": "2026-10-13T19:45:35.538088+00:00",
       "status": "quota_exhausted",
       "message": "今日两个发现查询已执行，下一日轮换主题；可继续手动添加笔记。",
