@@ -1,0 +1,3870 @@
+{
+  "generated_at": "2026-10-23T14:45:49.953924+00:00",
+  "update_run_id": "39970944205",
+  "since": "2026-09-23T14:36:53.273478+00:00",
+  "until": "2026-10-23T14:36:53.273478+00:00",
+  "core": [
+    {
+      "source": "Crossref",
+      "source_id": "10.55529/jaimlnn.62.106.119",
+      "title": "Calibrated but not safe: Conformal prediction intervals for turbofan remaining useful life near end of life and under operating shift",
+      "authors": [
+        "Nuno Alexandre Soares Domingues",
+        "Danish Ather"
+      ],
+      "venue": "Journal of Artificial Intelligence Machine Learning and Neural Network",
+      "abstract": "Machine learning models that predict the remaining useful life (RUL) of aircraft engines are increasingly paired with conformal prediction, which converts point predictions into intervals with a guaranteed average coverage. In a safety-critical maintenance setting, however, an average guarantee is not sufficient: what matters is whether the interval is reliable and informative for engines that are close to failure, and whether it remains valid when the fleet differs from the data used for calibration. This study evaluates five interval methods built on ridge regression, random forest, gradient boosting and multilayer-perceptron predictors using the NASA C-MAPSS turbofan benchmark (FD001–FD004, 707 test engines), with repeated engine-level calibration splits. Coverage, width and the rate at which the interval overestimated the true RUL were measured overall and for engines with a true RUL of 30 cycles or less. Global split conformal prediction met the nominal 90% coverage on average (89–92%) and covered almost every engine near failure, but with intervals about 44 cycles wide, which is uninformative when only 30 cycles remain; it also undercovered engines with 61–90 cycles of remaining life (68–76%). Calibrating separately within bands of predicted RUL (Mondrian conformal prediction) halved the width near failure for tree ensembles (from 43.7 to 20.7 cycles for gradient boosting, p = 3 × 10−8) while keeping near-failure coverage at 96.5–97.8%, but failed for ridge regression (77%). Uncalibrated quantile regression overestimated the remaining life of 20% of near-failure engines, and conformalised quantile regression restored average coverage, but its near-failure coverage fell as low as 80% and its near-failure intervals averaged over 90 cycles. When models calibrated on FD001 were applied to engines with an additional fault mode (FD003), near-failure coverage collapsed to 37–50%, and 95% of all miscoverage under shift was overestimation of remaining life, the unsafe direction. Conformal guarantees are therefore marginal and conditional on exchangeability; prognostic intervals should be evaluated near end of life and under realistic shift before they are used for maintenance decisions.",
+      "published_at": "2026-10-22",
+      "doi": "10.55529/jaimlnn.62.106.119",
+      "landing_url": "https://doi.org/10.55529/jaimlnn.62.106.119",
+      "oa_url": "",
+      "citation_count": 0,
+      "source_score": 0.58,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "Machine learning models that predict the remaining useful life (RUL) of aircraft engines are increasingly paired with conformal prediction, which converts point predictions into intervals with a guaranteed average coverage. In a safety-critical maintenance setting, however, an average guarantee is not sufficient: what matters is whether the interval is reliable and informative for engines that are close to failure, and whether it remains valid when the fleet differs from the data used for calibration. This study evaluates five interval methods built on ridge regression, random forest, gradient…",
+      "raw_metadata": {
+        "provider": "Crossref",
+        "publisher": "",
+        "sources": [
+          "Crossref"
+        ],
+        "source_links": [
+          "https://doi.org/10.55529/jaimlnn.62.106.119"
+        ],
+        "identity_aliases": [
+          [
+            "doi",
+            "10.55529/jaimlnn.62.106.119"
+          ],
+          [
+            "title_author_names",
+            "calibratedbutnotsafeconformalpredictionintervalsforturbofanremainingusefullifenearendoflifeandunderoperatingshift|ather:d|domingues:n"
+          ],
+          [
+            "title_authors",
+            "calibratedbutnotsafeconformalpredictionintervalsforturbofanremainingusefullifenearendoflifeandunderoperatingshift|danishather|nunoalexandresoaresdomingues"
+          ]
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "d54dc74f6718",
+      "source_ids": [
+        "Crossref",
+        "Springer Nature Link"
+      ],
+      "venue_group": "Springer Nature 工程期刊",
+      "journal": "Machine Learning",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [],
+      "analysis_status": "pending",
+      "method": "基于原文摘要的规则摘要",
+      "recommendation": "",
+      "deep_read": {},
+      "recommended_direction": "ai_maintenance"
+    },
+    {
+      "source": "AI 顶会论文",
+      "source_id": "https://proceedings.mlr.press/v306/rashed26a.html",
+      "title": "On the Generalization in Topology Optimization via Sensitivity-Conditioned Bernoulli Flow Matching",
+      "authors": [
+        "Mohammad Rashed",
+        "Duarte F. Valoroso Madeira",
+        "Babak Gholami",
+        "Caglar Guerbuez",
+        "Yunjia Yang",
+        "Nils Thuerey"
+      ],
+      "venue": "ICML 2026",
+      "abstract": "Surrogate models for topology optimization (TO) exhibit highly variable out-of-distribution (OOD) generalization under distribution shifts such as changing loads or boundary conditions, yet the source of this variability remains unclear. We hypothesize that OOD performance is governed by how much information the conditioning signal preserves about the adjoint sensitivity (reduced gradient) that drives classical TO. Modeling the TO pipeline as a causal Markov chain, the Data Processing Inequality establishes that, under this abstraction, the sensitivity field is an information-theoretically optimal conditioning signal for topology prediction. However, computing exact adjoint sensitivities can be expensive or unavailable in practice; we observe that certain physical fields can approximate sensitivities through monotone transformations. To formalize this, we introduce pseudo-sensitivities to characterize which fields enable generalization versus those that are information-poor. We then show that a sensitivity-conditioned Bernoulli flow-matching generator empirically confirms these predictions: conditioning on sensitivities yields state-of-the-art OOD performance, while increasingly distant physical fields degrade toward raw parameter conditioning. Results hold across structural TO benchmarks under load shifts and our new CFD-TO dataset under boundary-condition shifts such as multi-outlet configurations. Code and datasets are available at https://github.com/tum-pbs/topotransformer.",
+      "published_at": "2026-09-29",
+      "doi": "",
+      "landing_url": "https://proceedings.mlr.press/v306/rashed26a.html",
+      "oa_url": "https://raw.githubusercontent.com/mlresearch/v306/main/assets/rashed26a/rashed26a.pdf",
+      "citation_count": null,
+      "source_score": 0.68,
+      "topic_tags": [
+        "generative_design"
+      ],
+      "summary": "本文追问拓扑优化代理模型为何在载荷或边界条件变化后泛化失稳，将解释重点从生成架构转向条件信号。作者在Markov假设下推导灵敏度的信息优势，以应变能密度和速度模平方构造伪灵敏度，并结合伯努利流匹配生成二元拓扑。[P3–P5]结构与多出口CFD实验支持该思路，但并非所有指标最优。[P6–P8]解读：值得借鉴的是物理条件选择与跨工况评估；充分性证明、流体伴随符号和过滤后的误差统计仍需审慎核查。[P12–P16]",
+      "raw_metadata": {
+        "conference": {
+          "id": "icml",
+          "name": "ICML",
+          "year": 2026,
+          "track": "main",
+          "verified": true,
+          "proof_url": "https://proceedings.mlr.press/v306/rashed26a.html",
+          "paper_url": "https://proceedings.mlr.press/v306/rashed26a.html",
+          "doi": "",
+          "pdf_url": "https://raw.githubusercontent.com/mlresearch/v306/main/assets/rashed26a/rashed26a.pdf",
+          "date_kind": "publication",
+          "date_precision": "day"
+        },
+        "abstract_kind": "publisher_abstract",
+        "date_precision": "day",
+        "date_kind": "publication",
+        "bibliography": {
+          "type": "proceedings-article"
+        },
+        "sources": [
+          "AI 顶会论文"
+        ],
+        "source_links": [
+          "https://openreview.net/forum?id=1e3gI1ibcn",
+          "https://proceedings.mlr.press/v306/rashed26a.html",
+          "https://raw.githubusercontent.com/mlresearch/v306/main/assets/rashed26a/rashed26a.pdf"
+        ],
+        "source": "AI 顶会论文",
+        "source_id": "https://proceedings.mlr.press/v306/rashed26a.html",
+        "title": "On the Generalization in Topology Optimization via Sensitivity-Conditioned Bernoulli Flow Matching",
+        "authors": [
+          "Mohammad Rashed",
+          "Duarte F. Valoroso Madeira",
+          "Babak Gholami",
+          "Caglar Guerbuez",
+          "Yunjia Yang",
+          "Nils Thuerey"
+        ],
+        "venue": "ICML 2026",
+        "abstract": "Surrogate models for topology optimization (TO) exhibit highly variable out-of-distribution (OOD) generalization under distribution shifts such as changing loads or boundary conditions, yet the source of this variability remains unclear. We hypothesize that OOD performance is governed by how much information the conditioning signal preserves about the adjoint sensitivity (reduced gradient) that drives classical TO. Modeling the TO pipeline as a causal Markov chain, the Data Processing Inequality establishes that, under this abstraction, the sensitivity field is an information-theoretically optimal conditioning signal for topology prediction. However, computing exact adjoint sensitivities can be expensive or unavailable in practice; we observe that certain physical fields can approximate sensitivities through monotone transformations. To formalize this, we introduce pseudo-sensitivities to characterize which fields enable generalization versus those that are information-poor. We then show that a sensitivity-conditioned Bernoulli flow-matching generator empirically confirms these predictions: conditioning on sensitivities yields state-of-the-art OOD performance, while increasingly distant physical fields degrade toward raw parameter conditioning. Results hold across structural TO benchmarks under load shifts and our new CFD-TO dataset under boundary-condition shifts such as multi-outlet configurations. Code and datasets are available at https://github.com/tum-pbs/topotransformer.",
+        "published_at": "2026-09-29",
+        "doi": "",
+        "landing_url": "https://proceedings.mlr.press/v306/rashed26a.html",
+        "oa_url": "https://raw.githubusercontent.com/mlresearch/v306/main/assets/rashed26a/rashed26a.pdf",
+        "citation_count": null,
+        "source_score": 0.68,
+        "topic_tags": [
+          "generative_design"
+        ],
+        "summary": "本文追问拓扑优化代理模型为何在载荷或边界条件变化后泛化失稳，将解释重点从生成架构转向条件信号。作者在Markov假设下推导灵敏度的信息优势，以应变能密度和速度模平方构造伪灵敏度，并结合伯努利流匹配生成二元拓扑。[P3–P5]结构与多出口CFD实验支持该思路，但并非所有指标最优。[P6–P8]解读：值得借鉴的是物理条件选择与跨工况评估；充分性证明、流体伴随符号和过滤后的误差统计仍需审慎核查。[P12–P16]",
+        "raw_metadata": {
+          "conference": {
+            "id": "icml",
+            "name": "ICML",
+            "year": 2026,
+            "track": "main",
+            "verified": true,
+            "proof_url": "https://proceedings.mlr.press/v306/rashed26a.html",
+            "paper_url": "https://proceedings.mlr.press/v306/rashed26a.html",
+            "doi": "",
+            "pdf_url": "https://raw.githubusercontent.com/mlresearch/v306/main/assets/rashed26a/rashed26a.pdf",
+            "date_kind": "publication",
+            "date_precision": "day"
+          },
+          "abstract_kind": "publisher_abstract",
+          "date_precision": "day",
+          "date_kind": "publication",
+          "bibliography": {
+            "type": "proceedings-article"
+          },
+          "sources": [
+            "AI 顶会论文"
+          ],
+          "source_links": [
+            "https://openreview.net/forum?id=1e3gI1ibcn",
+            "https://proceedings.mlr.press/v306/rashed26a.html",
+            "https://raw.githubusercontent.com/mlresearch/v306/main/assets/rashed26a/rashed26a.pdf"
+          ],
+          "identity_aliases": [
+            [
+              "openreview",
+              "1e3gI1ibcn"
+            ],
+            [
+              "title_author_names",
+              "onthegeneralizationintopologyoptimizationviasensitivityconditionedbernoulliflowmatching|gholami:b|guerbuez:c|madeira:d|rashed:m|thuerey:n|yang:y"
+            ],
+            [
+              "title_authors",
+              "onthegeneralizationintopologyoptimizationviasensitivityconditionedbernoulliflowmatching|babakgholami|caglarguerbuez|duartefvalorosomadeira|mohammadrashed|nilsthuerey|yunjiayang"
+            ]
+          ],
+          "research_directions": [
+            "结构生成式设计与可靠性优化"
+          ]
+        },
+        "id": "304acf33a546",
+        "source_ids": [
+          "AI 顶会论文"
+        ],
+        "venue_group": "AI 顶会主会论文",
+        "journal": "ICML",
+        "topic_ids": [
+          "generative_design"
+        ],
+        "focus_tags": [],
+        "analysis_status": "ready",
+        "method": "基于原文摘要的规则摘要",
+        "recommendation": "推荐重点阅读条件信号消融与结构柔顺度实验，学习如何将伴随灵敏度转化为生成设计条件；同时核查理论假设、样本过滤和端到端计时，避免把经验优势理解为普遍可靠性保证。[P7–P9][P12–P16]",
+        "deep_read": {
+          "problem": "作者研究拓扑优化代理模型在未见载荷和边界条件下的泛化差异，核心问题是哪些输入保留了决定最优材料布局的信息，而非单纯比较网络容量。经典迭代优化需反复求解正向与伴随PDE，湍流场景尤其昂贵，因此直接预测必须兼顾计算节省与工况变化。[P1–P3]",
+          "method": "方法以初始灵敏度或伪灵敏度为条件，沿伯努利线性概率路径扰动二元拓扑，用二元交叉熵训练去噪器。分层Transformer通过交叉注意力注入物理条件、AdaLN注入时间；推理采用50步采样，末步确定性阈值化，并可在采样中渐进剪枝控制体积分数。[P5–P6][P18–P20]",
+          "innovation": "作者将条件场选择置于伴随理论与信息论框架：在Markov假设下用DPI排序预测不确定性，再以单调映射定义伪灵敏度，联系结构应变能与流体速度模平方。贡献还包括多出口CFD数据和二元生成流程；伯努利流模型本身来自既有工作，不宜归为本文原创。[P2–P5][P11]",
+          "findings": "结构OOD测试中，本文平均柔顺度误差为5.73%，TopoDiff为8.57%；灵敏度与SED条件的中位误差分别0.54%和0.53%。三出口CFD测试中本文准确率74.5%，但ID并非最佳。消融还显示灵敏度条件确定性模型优于仅用物理参数的确定性模型。[P6][P8]",
+          "limitations": "作者仅验证二维问题，条件输入仍需物理求解，冻结湍流存在近似误差。[P9]解读：Markov假设与高AUC不等于普遍充分性；伴随符号、相关系数符号及计时比较待澄清，样本过滤影响可靠性解释。[P12–P16][P20–P21]核对记录未确认原文件缺项。",
+          "connection": "解读：对结构设计，最直接的联系是用目标约化梯度指导条件输入，比较其在未见载荷下的表现；对可靠性研究，可关注跨工况失败而非仅平均误差。智能运维可借鉴物理对齐表征思想，但论文没有故障诊断、寿命预测或失效概率证据，不能声称已验证这些应用。[P7–P8][P16–P17]",
+          "next_steps": "建议先复现固定架构下的条件场消融，分别比较灵敏度、SED、位移与原始参数，再报告未过滤误差、保留率和失败案例。随后核查CFD伴随符号与相关性定义，并测试禁入区和体积约束的实际违约率；最后再扩展三维及可靠性目标，避免直接照搬充分性结论。[P14–P21]"
+        },
+        "recommended_direction": "generative_design",
+        "title_zh": "灵敏度条件化伯努利流匹配驱动的拓扑优化泛化研究",
+        "analysis_basis": "full_text",
+        "analysis_kind": "model",
+        "analysis_sources": [
+          "https://raw.githubusercontent.com/mlresearch/v306/main/assets/rashed26a/rashed26a.pdf"
+        ],
+        "analyzed_at": "2026-10-06T14:17:44.329388+00:00",
+        "llm_model": "gpt-6.1-sol",
+        "article": {
+          "version": 1,
+          "lead": "拓扑优化代理模型为何在训练工况内表现出色，换一组载荷或出口却可能失效？本文把解释重点从网络规模转向条件信号：它是否保留了驱动经典优化的灵敏度信息。作者结合信息论分析、伪灵敏度与Bernoulli流匹配，在二维结构和流体任务中验证这一思路。阅读价值不仅在于误差改善，更在于辨清初始物理场、生成机制与物理可行性各自能解决什么问题。",
+          "sections": [
+            {
+              "id": "context",
+              "title": "泛化瓶颈可能藏在条件场，而非网络容量",
+              "paragraphs": [
+                "经典拓扑优化通过反复求解正向与伴随PDE更新材料分布，代理模型则希望直接预测优化后的拓扑。困难在于，载荷和边界配置变化会同时改变物理响应与目标几何；仅输入原始参数，未必能让网络识别新的材料布局规律。",
+                "本文提出以条件信号保留的灵敏度信息解释泛化差异，并区分条件、架构和生成方式的贡献。其主要生成验证限定于二维线弹性结构与二维稳态RANS流动，不能直接外推到三维、瞬态或路径依赖问题。"
+              ]
+            },
+            {
+              "id": "method",
+              "title": "从初始灵敏度到二值拓扑的生成链条",
+              "paragraphs": [
+                "作者将优化过程抽象为Θ→X→S₀→ρ⋆，分别对应问题参数、初始物理场、初始灵敏度和收敛拓扑。数据处理不等式在该Markov假设下给出条件信息排序，但不是无条件的OOD性能保证；附录的KKT论证针对终端灵敏度，也不能直接证明S₀严格充分。",
+                "伪灵敏度允许用单调变换后的物理场近似S₀，从而避免额外伴随求解。结构柔顺度问题中，均匀初始设计的应变能密度与负灵敏度成正比；流体速度模平方的近似则依赖冻结湍流和局部Stokes型平衡，不能仅凭高全局雷诺数成立。",
+                "生成器采用αₜ=(1−t)·0.5+t·x₁的Bernoulli概率路径，以BCE训练条件去噪器，层级Transformer通过交叉注意力读取条件场。推理使用50步采样，终步贪心投影减少孤立像素；采样内渐进剪枝控制体积分数，但这些组件尚缺独立的大样本可行性验证。"
+              ]
+            },
+            {
+              "id": "validation",
+              "title": "单出口训练，多出口测试：验证究竟覆盖了什么",
+              "paragraphs": [
+                "CFD数据由STAR-CCM+稳态RANS和realizable k–ε模型生成，统一到128×128网格。单出口训练10,000例、ID测试1,000例，双出口和三出口各测试500例；入口数量与物性也变化，验证集、增强数量及独立性核查未报告，不能把实例数等同于独立求解次数。",
+                "CFD比较DiT、UDiT和PDE-T，并交叉改变灵敏度、速度平方与压力条件；各模型最终训练预算不同，不是严格等预算对照。结构沿用TopoDiffusion和NITO基准，包含未见载荷及新边界配置，但训练测试规模未报告；所给证据均为数值验证，没有实物试件实验。",
+                "两类物理误差均为**有符号相对误差**，均值可能掩盖正负抵消。CFD排除相对初始几何偏离超过50%的预测，结构排除柔顺度误差超过1000%的预测；剔除比例和筛选前结果未报告，因此表中表现不能代表全部生成样本。"
+              ]
+            },
+            {
+              "id": "findings",
+              "title": "条件信息的证据较强，可行性与效率仍须限定口径",
+              "paragraphs": [
+                "本文模型在三出口OOD中的平均压降误差为6.12%、中位数2.70%，但ID不如神经基线，双出口准确率也低于DiT。结构OOD平均柔顺度误差为5.73%，低于TopoDiff的8.57%和NITO的9.33%；不同条件表的0.54%与基准表的0.53%中位数应分别保留。",
+                "条件消融支持灵敏度相关场更稳健，但交叉熵只是条件熵上界，不能直接测量真实互信息。速度平方相关图显示强负相关，不能照正文简写成正相关；本站判断，流体附录的伴随符号及比例系数解释仍需澄清，高相关也不等于最终设计可行。",
+                "纯网络推理为0.65 ms/样本，获取伪灵敏度并推理约3.2 s，精确灵敏度路线约8.5 s，说明物理求解仍主导成本。硬件已有报告，但相对NITO的计时边界未统一；禁入区、预算收紧和终步投影各展示4例，尚不足以证明普遍连通或严格约束满足。"
+              ]
+            }
+          ],
+          "experiments": [
+            {
+              "name": "CFD多出口OOD性能比较与计算成本",
+              "data": "STAR-CCM+生成二维稳态RANS通道数据，采用realizable k–ε模型，场插值至128×128。",
+              "samples": "训练10,000例，ID测试1,000例，双出口及三出口各500例；独立求解总次数、增强数量及计时重复次数未报告。",
+              "groups": "训练单出口、入口1–11个；双出口测试入口1–10个，三出口入口1–9个；密度和黏度独立均匀采样。",
+              "split": "只有单出口参与训练；三个工况组分别测试。验证集、去重规则及几何配置隔离细节未报告。",
+              "baselines": "灵敏度条件DiT、UDiT、PDE-T及STAR-CCM+单次优化迭代；计时另列完整优化和NITO加5步SIMP。",
+              "metrics": "有符号压降相对误差的均值±标准差、中位数，以及误差在目标值10%以内的比例；另报告每样本耗时。",
+              "results": "本文ID、双出口、三出口平均误差分别3.68%、6.38%、6.12%；三出口中位数2.70%、准确率74.5%。伪灵敏度端到端约3.2 s，精确灵敏度约8.5 s，完整优化113.94 s。",
+              "limitations": "ID并非最佳，双出口准确率72.3%低于DiT的79.4%；几何偏离超过50%的样本被排除，数量未报告。训练预算不同，NITO计时边界未统一。"
+            },
+            {
+              "name": "CFD条件信号与架构交叉消融",
+              "data": "CFD-TO数据上的条件比较、架构交叉比较与累加消融；不同表的测试配置不能直接互换。",
+              "samples": "总体测试规模为ID 1,000例、双出口及三出口各500例；各子实验实际使用数量、重复训练次数未报告。",
+              "groups": "压力、速度模平方伪灵敏度、灵敏度三个条件组，覆盖DiT、UDiT、PDE-T及本文模型。",
+              "split": "采用单出口训练和ID、双出口、三出口测试；条件仿真表中OOD的具体构成未报告。",
+              "baselines": "条件与架构交叉对照；另依次加入伪灵敏度条件、架构增强和BFM，后者属于累加而非完整因子消融。",
+              "metrics": "中位BCE、压降有符号相对误差及定性通道布局；BCE聚合细节与边界违例率未报告。",
+              "results": "本文三出口中位BCE：灵敏度0.22、速度0.38、压力0.46。另一交叉表中，UDiT伪灵敏度中位压降误差7.0%，本文压力条件为100.0%。",
+              "limitations": "不同表的压力结果不能合并；ID存在灵敏度与速度并列或速度略优的情况。累加消融不能完全分离模块交互，未提供统计显著性。"
+            },
+            {
+              "name": "结构柔顺度条件消融与OOD基准比较",
+              "data": "沿用TopoDiffusion和NITO的二维线弹性基准，包含悬臂、桥状结构及未见载荷和边界配置。",
+              "samples": "独立结构、训练验证测试数量、仿真总次数与增强数量未报告；代表性图展示数量不等于测试集规模。",
+              "groups": "灵敏度、SED、位移、物理参数条件；生成与确定性模型对照；另比较各方法的结构OOD性能。",
+              "split": "包含未见载荷模式与新边界配置的OOD测试，具体划分数量、参数范围和隔离规则未报告。",
+              "baselines": "条件与确定性模型消融；基准为TopoDiff、TopoDiff w/ G和NITO，NITO输出后增加5步SIMP。",
+              "metrics": "交叉熵标度×10⁻¹，温度T=15；有符号柔顺度相对误差的均值和中位数；参数量及额外SIMP步数。",
+              "results": "灵敏度、SED条件中位误差为0.54%、0.53%；灵敏度确定性模型2.27%。OOD基准平均/中位误差：本文5.73%/0.53%，TopoDiff 8.57%/1.14%，NITO 9.33%/2.37%。",
+              "limitations": "误差超过1000%的样本被排除，比例未报告；重复训练与置信区间缺失。参数量及后处理步数不能单独证明速度优势。"
+            },
+            {
+              "name": "跨PDE初始灵敏度排序判别力验证",
+              "data": "热传导、NS三出口、特征频率和柔顺度四类PDE；热传导与特征频率为新生成数据。",
+              "samples": "四类PDE是任务类别数量，不是独立样本数；各类别样本、仿真和增强数量未报告。",
+              "groups": "每类分别比较初始灵敏度S₀、收敛灵敏度S⋆和仅按体积分数阈值化的结果。",
+              "split": "各类数据的训练验证测试划分及是否独立于生成模型训练数据未报告。",
+              "baselines": "收敛灵敏度作为排序能力对照，体积分数阈值作为不学习空间拓扑的直接提取基线。",
+              "metrics": "ROC AUC：衡量最终实体单元与空隙单元的排序判别力；Δ为AUC(S⋆)−AUC(S₀)，均无量纲。",
+              "results": "热传导、NS三出口、特征频率、柔顺度的S₀/S⋆ AUC依次为0.972/0.986、0.993/1.000、0.957/0.868、0.915/0.918。",
+              "limitations": "没有样本量、误差条及重复统计；特征频率的终端AUC反而下降。排序能力不能直接证明拓扑重建质量或物理可行性。"
+            }
+          ],
+          "routes": [
+            {
+              "title": "面向过渡流动的伪灵敏度可信度与选择性伴随校正",
+              "direction_id": "generative_design",
+              "gap": "原研究对冻结湍流灵敏度的相关性较强，却缺少过渡雷诺数、回流区域的失败统计。建议首先回答何时速度平方不再足够，而不是继续扩大生成器容量。",
+              "mechanism": "建议由速度、压力和回流特征估计伪灵敏度的局部误差及置信度，低置信工况才调用伴随求解。训练校正场时统一负号约定，并区分冻结湍流导数与完整设计导数。",
+              "innovation": "候选创新是把条件可信度、选择性伴随计算与Bernoulli生成组合成可拒绝预测的流程。各单项机制并非新颖性结论，需验证组合是否改善成本与失败风险的权衡。",
+              "design": "可先使用作者声明公开的CFD数据，核实许可与字段；建议新增300例，按低、过渡、高Re各100例并平衡出口配置。按几何隔离测试，新增完整导数需另行采集且取决于求解器能力。",
+              "comparison": "固定生成架构与采样预算，比较原速度平方、始终精确灵敏度、学习校正和置信门控。消融去掉回流特征、校正及拒绝机制，并统一计入条件求解和失败重算耗时。",
+              "criterion": "建议预注册以全样本绝对误差尾部、边界违例率和可仿真率为主指标，辅以有符号误差。只有失败风险下降且总耗时低于始终伴随路线，才支持机制有效。",
+              "risk": "完整湍流导数可能不稳定或无法取得，置信度也可能在新几何下失准。替代方案是有限差分抽查局部导数，并对高风险样本回退传统优化，不把拒绝样本隐藏于均值。"
+            },
+            {
+              "title": "检验初始灵敏度在路径依赖结构设计中的充分性边界",
+              "direction_id": "generative_design",
+              "gap": "原文从终端KKT关系解释初始条件，却未充分验证多目标和历史依赖约束。建议研究相似S₀是否对应不同可行终态，明确单场条件何时出现不可约歧义。",
+              "mechanism": "建议给生成器补充早期梯度变化、体积乘子和约束余量，通过短优化轨迹提供历史信息。保持二值生成主干不变，用受控信息增量检验性能变化来自历史还是容量。",
+              "innovation": "候选创新是建立初始场充分性的诊断与最小历史条件选择。相关预印本《Structure-agnostic Causal Representation Learning》的摘要提示结构误设风险，但不能据此认定其方法已适用于拓扑优化。",
+              "design": "建议先复用可获得的线弹性基准，再仿真采集240组载荷—支承配置，每组分别求解柔顺度和带路径约束目标。按配置而非像素划分测试，并保存相同初始化下的早期梯度。",
+              "comparison": "比较仅S₀、S₀加约束参数、加入早期轨迹和完整传统优化；配平网络容量与计算预算。消融打乱轨迹顺序、移除乘子及仅增加参数量，以排除额外输入规模的影响。",
+              "criterion": "建议以未见配置的绝对目标误差、约束违例率和失败尾部为判据，报告多随机种子区间。只有历史条件在相似S₀子集仍稳定获益，才支持初始场存在信息缺口。",
+              "risk": "所谓相似初始场可能只是归一化或网格插值造成，轨迹输入也增加求解成本。替代路径是先用受控小规模问题核查歧义，再评估短轨迹收益是否抵消物理计算开销。"
+            }
+          ],
+          "diagrams": [
+            {
+              "kind": "study",
+              "title": "原研究：灵敏度相关条件驱动二值拓扑生成",
+              "description": "展示已实现的方法与验证链条；条件信息排序依赖Markov假设，生成结果仍需物理评估。",
+              "nodes": [
+                {
+                  "id": "a",
+                  "stage": 0,
+                  "label": "载荷与边界配置",
+                  "detail": "二维结构或流体问题，固定均匀初始设计"
+                },
+                {
+                  "id": "b",
+                  "stage": 1,
+                  "label": "初始正向PDE求解",
+                  "detail": "获得位移、应变能、速度及压力等物理场"
+                },
+                {
+                  "id": "c",
+                  "stage": 2,
+                  "label": "初始伴随灵敏度",
+                  "detail": "流体采用冻结湍流伴随，结构采用柔顺度梯度"
+                },
+                {
+                  "id": "d",
+                  "stage": 2,
+                  "label": "伪灵敏度条件",
+                  "detail": "结构SED；流体速度模平方，后者具有近似适用条件"
+                },
+                {
+                  "id": "e",
+                  "stage": 3,
+                  "label": "条件Bernoulli生成",
+                  "detail": "Transformer去噪，BCE训练，推理采用50步采样"
+                },
+                {
+                  "id": "f",
+                  "stage": 4,
+                  "label": "采样内控制与终步投影",
+                  "detail": "渐进剪枝控制体积分数，贪心终步减少孤立像素"
+                },
+                {
+                  "id": "g",
+                  "stage": 5,
+                  "label": "OOD物理与拓扑评估",
+                  "detail": "多出口及结构工况偏移；报告有符号误差与BCE"
+                }
+              ],
+              "edges": [
+                {
+                  "from": "a",
+                  "to": "b",
+                  "label": "求解初始响应"
+                },
+                {
+                  "from": "b",
+                  "to": "c",
+                  "label": "伴随求导"
+                },
+                {
+                  "from": "b",
+                  "to": "d",
+                  "label": "提取替代条件"
+                },
+                {
+                  "from": "c",
+                  "to": "e",
+                  "label": "精确条件路线"
+                },
+                {
+                  "from": "d",
+                  "to": "e",
+                  "label": "近似条件路线"
+                },
+                {
+                  "from": "e",
+                  "to": "f",
+                  "label": "迭代采样"
+                },
+                {
+                  "from": "f",
+                  "to": "g",
+                  "label": "评估生成拓扑"
+                }
+              ]
+            },
+            {
+              "kind": "proposal",
+              "title": "拟议路线：置信门控的伪灵敏度校正",
+              "description": "对应第一条研究建议，所有性能改善均待实验验证，不代表原论文实测结果。",
+              "nodes": [
+                {
+                  "id": "a",
+                  "stage": 0,
+                  "label": "公开数据与新增工况",
+                  "detail": "核实公开字段，建议增采300例并按几何隔离测试"
+                },
+                {
+                  "id": "b",
+                  "stage": 1,
+                  "label": "速度平方与回流特征",
+                  "detail": "从初始正向求解提取条件，统一灵敏度负号约定"
+                },
+                {
+                  "id": "c",
+                  "stage": 2,
+                  "label": "条件可信度估计",
+                  "detail": "学习局部误差及工况级置信度，预注册门控阈值"
+                },
+                {
+                  "id": "d",
+                  "stage": 3,
+                  "label": "高置信校正条件",
+                  "detail": "使用学习校正场，避免每例额外伴随求解"
+                },
+                {
+                  "id": "e",
+                  "stage": 3,
+                  "label": "低置信伴随回退",
+                  "detail": "调用伴随或传统优化；不可用时进行有限差分抽查"
+                },
+                {
+                  "id": "f",
+                  "stage": 4,
+                  "label": "固定生成器对照",
+                  "detail": "统一架构、采样步数及训练预算，执行门控消融"
+                },
+                {
+                  "id": "g",
+                  "stage": 5,
+                  "label": "全样本风险与成本",
+                  "detail": "统计绝对误差尾部、违例率、仿真成功率及总耗时"
+                }
+              ],
+              "edges": [
+                {
+                  "from": "a",
+                  "to": "b",
+                  "label": "采集初始物理场"
+                },
+                {
+                  "from": "b",
+                  "to": "c",
+                  "label": "估计近似风险"
+                },
+                {
+                  "from": "c",
+                  "to": "d",
+                  "label": "高置信"
+                },
+                {
+                  "from": "c",
+                  "to": "e",
+                  "label": "低置信"
+                },
+                {
+                  "from": "d",
+                  "to": "f",
+                  "label": "输入校正场"
+                },
+                {
+                  "from": "e",
+                  "to": "f",
+                  "label": "输入伴随场"
+                },
+                {
+                  "from": "f",
+                  "to": "g",
+                  "label": "统一物理验证"
+                },
+                {
+                  "from": "g",
+                  "to": "c",
+                  "label": "校准门控"
+                }
+              ]
+            }
+          ],
+          "related": {
+            "status": "ok",
+            "checked_at": "2026-10-06T14:28:41.976956+00:00",
+            "papers": [
+              {
+                "title": "Time Series Causal Discovery via Context-Conditioned and Causality-Augmented Pretraining",
+                "url": "https://doi.org/10.48550/arxiv.2605.26759",
+                "year": 2026,
+                "basis": "abstract",
+                "preprint": true
+              },
+              {
+                "title": "Structure-agnostic Causal Representation Learning",
+                "url": "https://doi.org/10.48550/arxiv.2610.00968",
+                "year": 2026,
+                "basis": "abstract",
+                "preprint": true
+              },
+              {
+                "title": "Acoustic fault diagnosis in heterogeneous environments via causal disentanglement",
+                "url": "https://doi.org/10.1088/1361-6501/ae7aaa",
+                "year": 2026,
+                "basis": "abstract",
+                "preprint": false
+              }
+            ]
+          }
+        },
+        "article_updated_at": "2026-10-06T14:31:59.847669+00:00",
+        "article_profile": "0dc2056d3cac894b7e716218c7ffe8022679250058fdbf8cd9647fb31ad3bd5e",
+        "analysis_references": {
+          "problem": [
+            "P1",
+            "P2",
+            "P3"
+          ],
+          "method": [
+            "P5",
+            "P6",
+            "P18",
+            "P19",
+            "P20"
+          ],
+          "innovation": [
+            "P2",
+            "P3",
+            "P4",
+            "P5",
+            "P11"
+          ],
+          "findings": [
+            "P6",
+            "P8"
+          ],
+          "limitations": [
+            "P9",
+            "P12",
+            "P13",
+            "P14",
+            "P15",
+            "P16",
+            "P20",
+            "P21"
+          ],
+          "connection": [
+            "P7",
+            "P8",
+            "P16",
+            "P17"
+          ],
+          "next_steps": [
+            "P14",
+            "P15",
+            "P16",
+            "P17",
+            "P18",
+            "P19",
+            "P20",
+            "P21"
+          ]
+        },
+        "analysis_material_version": "7bd459d14171d3891c9752345157a6d4333aaa521941e393ef6924efcd678f1d",
+        "analysis_issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "定义1后的向量场标量不变量及命题1第2项，文字提取将‖v‖²展平为“∥v∥ 2”。原页可清楚辨认2为平方上标，已核正为速度模平方；命题为S₀∝−‖v‖²，并限定于冻结湍流与高雷诺数渐近条件。此纠正影响CFD伪灵敏度的具体形式，原页没有缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "表3伪灵敏度条件的文字提取“∥v∥2”未保留平方上标；原页清楚显示‖v‖²，已核正为速度模平方。两列误差分别为UDiT 7.0%、本文2.7%；无原文件缺项，此纠正影响条件信号的物理定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "表6的NITO行被文字提取合并为“NITO225 9.33 2.37”。原页清楚分列为参数22M、额外SIMP步骤FS=5、平均柔顺度误差9.33%、中位误差2.37%。已纠正列合并错误；无原文件缺项，影响参数规模与额外优化成本的比较。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "式(20)、(22)、(25)及A.6.5–A.6.7中的速度范数平方，文字提取多处展平为“∥v∥ 2”；原页明确为‖v‖²，已核正。式(24)分母也明确为(1+qρ)²。无原文件缺项，平方上标影响耗散目标与伪灵敏度的具体数学形式。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P16",
+            "detail": "表8有效批量与学习率、表9批量与学习率在文字提取中粘连，例如“2565×10 −4”。原页列界清楚：批量或有效批量为256，学习率另列为5×10⁻⁴；DiT学习率为3×10⁻⁴。已纠正分列及负指数排版，无原文件缺项，影响训练配置的复现。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P17",
+            "detail": "表10文字提取将UDiT与本文的伪灵敏度、压力相邻列粘连。原页已清楚核正：UDiT伪灵敏度为0.08/0.20/0.36，压力为0.24/1.01/1.67；本文伪灵敏度为0.04/0.15/0.38，压力为0.07/0.23/0.46，顺序均为ID/OOD-M/OOD-H。无原页缺项，影响条件模态的BCE比较。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P20",
+            "detail": "C.6中速度模平方的文字提取展平为“∥v∥ 2”；原页明确为‖v‖²，理论关系为S∝−‖v‖²。已保留平方与负号，无原页缺项，影响伪灵敏度定义及相关性报告的解释。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P21",
+            "detail": "图11文字提取丢失Pearson r纵轴的负号，列为1.0、0.9等。原页清楚显示−1.0、−0.9、−0.8、−0.7、−0.6、−0.5；已核正为速度模平方与灵敏度的负相关。无原页缺项，影响相关方向及S∝−‖v‖²理论与图证的一致性判断；图中未提供可直接读取的总体平均相关值。"
+          }
+        ],
+        "reading_status": {
+          "paper_id": "304acf33a546",
+          "state": "published",
+          "updated_at": "2026-10-06T14:31:59.849663+00:00",
+          "basis": "full_text",
+          "article_state": "failed",
+          "article_stage": "facts",
+          "reason": "",
+          "total": 28,
+          "covered": 28,
+          "pdf_available": true,
+          "issues": [
+            {
+              "kind": "extraction_error",
+              "page": "P4",
+              "detail": "定义1后的向量场标量不变量及命题1第2项，文字提取将‖v‖²展平为“∥v∥ 2”。原页可清楚辨认2为平方上标，已核正为速度模平方；命题为S₀∝−‖v‖²，并限定于冻结湍流与高雷诺数渐近条件。此纠正影响CFD伪灵敏度的具体形式，原页没有缺项。"
+            },
+            {
+              "kind": "extraction_error",
+              "page": "P7",
+              "detail": "表3伪灵敏度条件的文字提取“∥v∥2”未保留平方上标；原页清楚显示‖v‖²，已核正为速度模平方。两列误差分别为UDiT 7.0%、本文2.7%；无原文件缺项，此纠正影响条件信号的物理定义。"
+            },
+            {
+              "kind": "extraction_error",
+              "page": "P8",
+              "detail": "表6的NITO行被文字提取合并为“NITO225 9.33 2.37”。原页清楚分列为参数22M、额外SIMP步骤FS=5、平均柔顺度误差9.33%、中位误差2.37%。已纠正列合并错误；无原文件缺项，影响参数规模与额外优化成本的比较。"
+            },
+            {
+              "kind": "extraction_error",
+              "page": "P15",
+              "detail": "式(20)、(22)、(25)及A.6.5–A.6.7中的速度范数平方，文字提取多处展平为“∥v∥ 2”；原页明确为‖v‖²，已核正。式(24)分母也明确为(1+qρ)²。无原文件缺项，平方上标影响耗散目标与伪灵敏度的具体数学形式。"
+            },
+            {
+              "kind": "extraction_error",
+              "page": "P16",
+              "detail": "表8有效批量与学习率、表9批量与学习率在文字提取中粘连，例如“2565×10 −4”。原页列界清楚：批量或有效批量为256，学习率另列为5×10⁻⁴；DiT学习率为3×10⁻⁴。已纠正分列及负指数排版，无原文件缺项，影响训练配置的复现。"
+            },
+            {
+              "kind": "extraction_error",
+              "page": "P17",
+              "detail": "表10文字提取将UDiT与本文的伪灵敏度、压力相邻列粘连。原页已清楚核正：UDiT伪灵敏度为0.08/0.20/0.36，压力为0.24/1.01/1.67；本文伪灵敏度为0.04/0.15/0.38，压力为0.07/0.23/0.46，顺序均为ID/OOD-M/OOD-H。无原页缺项，影响条件模态的BCE比较。"
+            },
+            {
+              "kind": "extraction_error",
+              "page": "P20",
+              "detail": "C.6中速度模平方的文字提取展平为“∥v∥ 2”；原页明确为‖v‖²，理论关系为S∝−‖v‖²。已保留平方与负号，无原页缺项，影响伪灵敏度定义及相关性报告的解释。"
+            },
+            {
+              "kind": "extraction_error",
+              "page": "P21",
+              "detail": "图11文字提取丢失Pearson r纵轴的负号，列为1.0、0.9等。原页清楚显示−1.0、−0.9、−0.8、−0.7、−0.6、−0.5；已核正为速度模平方与灵敏度的负相关。无原页缺项，影响相关方向及S∝−‖v‖²理论与图证的一致性判断；图中未提供可直接读取的总体平均相关值。"
+            }
+          ]
+        },
+        "identity_aliases": [
+          [
+            "openreview",
+            "1e3gI1ibcn"
+          ],
+          [
+            "title_author_names",
+            "onthegeneralizationintopologyoptimizationviasensitivityconditionedbernoulliflowmatching|gholami:b|guerbuez:c|madeira:d|rashed:m|thuerey:n|yang:y"
+          ],
+          [
+            "title_authors",
+            "onthegeneralizationintopologyoptimizationviasensitivityconditionedbernoulliflowmatching|babakgholami|caglarguerbuez|duartefvalorosomadeira|mohammadrashed|nilsthuerey|yunjiayang"
+          ]
+        ],
+        "research_directions": [
+          "结构生成式设计与可靠性优化"
+        ]
+      },
+      "id": "304acf33a546",
+      "source_ids": [
+        "AI 顶会论文"
+      ],
+      "venue_group": "AI 顶会主会论文",
+      "journal": "ICML",
+      "topic_ids": [
+        "generative_design"
+      ],
+      "focus_tags": [],
+      "title_zh": "灵敏度条件化伯努利流匹配驱动的拓扑优化泛化研究",
+      "recommendation": "推荐重点阅读条件信号消融与结构柔顺度实验，学习如何将伴随灵敏度转化为生成设计条件；同时核查理论假设、样本过滤和端到端计时，避免把经验优势理解为普遍可靠性保证。[P7–P9][P12–P16]",
+      "deep_read": {
+        "problem": "作者研究拓扑优化代理模型在未见载荷和边界条件下的泛化差异，核心问题是哪些输入保留了决定最优材料布局的信息，而非单纯比较网络容量。经典迭代优化需反复求解正向与伴随PDE，湍流场景尤其昂贵，因此直接预测必须兼顾计算节省与工况变化。[P1–P3]",
+        "method": "方法以初始灵敏度或伪灵敏度为条件，沿伯努利线性概率路径扰动二元拓扑，用二元交叉熵训练去噪器。分层Transformer通过交叉注意力注入物理条件、AdaLN注入时间；推理采用50步采样，末步确定性阈值化，并可在采样中渐进剪枝控制体积分数。[P5–P6][P18–P20]",
+        "innovation": "作者将条件场选择置于伴随理论与信息论框架：在Markov假设下用DPI排序预测不确定性，再以单调映射定义伪灵敏度，联系结构应变能与流体速度模平方。贡献还包括多出口CFD数据和二元生成流程；伯努利流模型本身来自既有工作，不宜归为本文原创。[P2–P5][P11]",
+        "findings": "结构OOD测试中，本文平均柔顺度误差为5.73%，TopoDiff为8.57%；灵敏度与SED条件的中位误差分别0.54%和0.53%。三出口CFD测试中本文准确率74.5%，但ID并非最佳。消融还显示灵敏度条件确定性模型优于仅用物理参数的确定性模型。[P6][P8]",
+        "limitations": "作者仅验证二维问题，条件输入仍需物理求解，冻结湍流存在近似误差。[P9]解读：Markov假设与高AUC不等于普遍充分性；伴随符号、相关系数符号及计时比较待澄清，样本过滤影响可靠性解释。[P12–P16][P20–P21]核对记录未确认原文件缺项。",
+        "connection": "解读：对结构设计，最直接的联系是用目标约化梯度指导条件输入，比较其在未见载荷下的表现；对可靠性研究，可关注跨工况失败而非仅平均误差。智能运维可借鉴物理对齐表征思想，但论文没有故障诊断、寿命预测或失效概率证据，不能声称已验证这些应用。[P7–P8][P16–P17]",
+        "next_steps": "建议先复现固定架构下的条件场消融，分别比较灵敏度、SED、位移与原始参数，再报告未过滤误差、保留率和失败案例。随后核查CFD伴随符号与相关性定义，并测试禁入区和体积约束的实际违约率；最后再扩展三维及可靠性目标，避免直接照搬充分性结论。[P14–P21]"
+      },
+      "analysis_status": "ready",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://raw.githubusercontent.com/mlresearch/v306/main/assets/rashed26a/rashed26a.pdf"
+      ],
+      "analyzed_at": "2026-10-06T14:17:44.329388+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 1,
+        "lead": "拓扑优化代理模型为何在训练工况内表现出色，换一组载荷或出口却可能失效？本文把解释重点从网络规模转向条件信号：它是否保留了驱动经典优化的灵敏度信息。作者结合信息论分析、伪灵敏度与Bernoulli流匹配，在二维结构和流体任务中验证这一思路。阅读价值不仅在于误差改善，更在于辨清初始物理场、生成机制与物理可行性各自能解决什么问题。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "泛化瓶颈可能藏在条件场，而非网络容量",
+            "paragraphs": [
+              "经典拓扑优化通过反复求解正向与伴随PDE更新材料分布，代理模型则希望直接预测优化后的拓扑。困难在于，载荷和边界配置变化会同时改变物理响应与目标几何；仅输入原始参数，未必能让网络识别新的材料布局规律。",
+              "本文提出以条件信号保留的灵敏度信息解释泛化差异，并区分条件、架构和生成方式的贡献。其主要生成验证限定于二维线弹性结构与二维稳态RANS流动，不能直接外推到三维、瞬态或路径依赖问题。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从初始灵敏度到二值拓扑的生成链条",
+            "paragraphs": [
+              "作者将优化过程抽象为Θ→X→S₀→ρ⋆，分别对应问题参数、初始物理场、初始灵敏度和收敛拓扑。数据处理不等式在该Markov假设下给出条件信息排序，但不是无条件的OOD性能保证；附录的KKT论证针对终端灵敏度，也不能直接证明S₀严格充分。",
+              "伪灵敏度允许用单调变换后的物理场近似S₀，从而避免额外伴随求解。结构柔顺度问题中，均匀初始设计的应变能密度与负灵敏度成正比；流体速度模平方的近似则依赖冻结湍流和局部Stokes型平衡，不能仅凭高全局雷诺数成立。",
+              "生成器采用αₜ=(1−t)·0.5+t·x₁的Bernoulli概率路径，以BCE训练条件去噪器，层级Transformer通过交叉注意力读取条件场。推理使用50步采样，终步贪心投影减少孤立像素；采样内渐进剪枝控制体积分数，但这些组件尚缺独立的大样本可行性验证。"
+            ]
+          },
+          {
+            "id": "validation",
+            "title": "单出口训练，多出口测试：验证究竟覆盖了什么",
+            "paragraphs": [
+              "CFD数据由STAR-CCM+稳态RANS和realizable k–ε模型生成，统一到128×128网格。单出口训练10,000例、ID测试1,000例，双出口和三出口各测试500例；入口数量与物性也变化，验证集、增强数量及独立性核查未报告，不能把实例数等同于独立求解次数。",
+              "CFD比较DiT、UDiT和PDE-T，并交叉改变灵敏度、速度平方与压力条件；各模型最终训练预算不同，不是严格等预算对照。结构沿用TopoDiffusion和NITO基准，包含未见载荷及新边界配置，但训练测试规模未报告；所给证据均为数值验证，没有实物试件实验。",
+              "两类物理误差均为**有符号相对误差**，均值可能掩盖正负抵消。CFD排除相对初始几何偏离超过50%的预测，结构排除柔顺度误差超过1000%的预测；剔除比例和筛选前结果未报告，因此表中表现不能代表全部生成样本。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "条件信息的证据较强，可行性与效率仍须限定口径",
+            "paragraphs": [
+              "本文模型在三出口OOD中的平均压降误差为6.12%、中位数2.70%，但ID不如神经基线，双出口准确率也低于DiT。结构OOD平均柔顺度误差为5.73%，低于TopoDiff的8.57%和NITO的9.33%；不同条件表的0.54%与基准表的0.53%中位数应分别保留。",
+              "条件消融支持灵敏度相关场更稳健，但交叉熵只是条件熵上界，不能直接测量真实互信息。速度平方相关图显示强负相关，不能照正文简写成正相关；本站判断，流体附录的伴随符号及比例系数解释仍需澄清，高相关也不等于最终设计可行。",
+              "纯网络推理为0.65 ms/样本，获取伪灵敏度并推理约3.2 s，精确灵敏度路线约8.5 s，说明物理求解仍主导成本。硬件已有报告，但相对NITO的计时边界未统一；禁入区、预算收紧和终步投影各展示4例，尚不足以证明普遍连通或严格约束满足。"
+            ]
+          }
+        ],
+        "experiments": [
+          {
+            "name": "CFD多出口OOD性能比较与计算成本",
+            "data": "STAR-CCM+生成二维稳态RANS通道数据，采用realizable k–ε模型，场插值至128×128。",
+            "samples": "训练10,000例，ID测试1,000例，双出口及三出口各500例；独立求解总次数、增强数量及计时重复次数未报告。",
+            "groups": "训练单出口、入口1–11个；双出口测试入口1–10个，三出口入口1–9个；密度和黏度独立均匀采样。",
+            "split": "只有单出口参与训练；三个工况组分别测试。验证集、去重规则及几何配置隔离细节未报告。",
+            "baselines": "灵敏度条件DiT、UDiT、PDE-T及STAR-CCM+单次优化迭代；计时另列完整优化和NITO加5步SIMP。",
+            "metrics": "有符号压降相对误差的均值±标准差、中位数，以及误差在目标值10%以内的比例；另报告每样本耗时。",
+            "results": "本文ID、双出口、三出口平均误差分别3.68%、6.38%、6.12%；三出口中位数2.70%、准确率74.5%。伪灵敏度端到端约3.2 s，精确灵敏度约8.5 s，完整优化113.94 s。",
+            "limitations": "ID并非最佳，双出口准确率72.3%低于DiT的79.4%；几何偏离超过50%的样本被排除，数量未报告。训练预算不同，NITO计时边界未统一。"
+          },
+          {
+            "name": "CFD条件信号与架构交叉消融",
+            "data": "CFD-TO数据上的条件比较、架构交叉比较与累加消融；不同表的测试配置不能直接互换。",
+            "samples": "总体测试规模为ID 1,000例、双出口及三出口各500例；各子实验实际使用数量、重复训练次数未报告。",
+            "groups": "压力、速度模平方伪灵敏度、灵敏度三个条件组，覆盖DiT、UDiT、PDE-T及本文模型。",
+            "split": "采用单出口训练和ID、双出口、三出口测试；条件仿真表中OOD的具体构成未报告。",
+            "baselines": "条件与架构交叉对照；另依次加入伪灵敏度条件、架构增强和BFM，后者属于累加而非完整因子消融。",
+            "metrics": "中位BCE、压降有符号相对误差及定性通道布局；BCE聚合细节与边界违例率未报告。",
+            "results": "本文三出口中位BCE：灵敏度0.22、速度0.38、压力0.46。另一交叉表中，UDiT伪灵敏度中位压降误差7.0%，本文压力条件为100.0%。",
+            "limitations": "不同表的压力结果不能合并；ID存在灵敏度与速度并列或速度略优的情况。累加消融不能完全分离模块交互，未提供统计显著性。"
+          },
+          {
+            "name": "结构柔顺度条件消融与OOD基准比较",
+            "data": "沿用TopoDiffusion和NITO的二维线弹性基准，包含悬臂、桥状结构及未见载荷和边界配置。",
+            "samples": "独立结构、训练验证测试数量、仿真总次数与增强数量未报告；代表性图展示数量不等于测试集规模。",
+            "groups": "灵敏度、SED、位移、物理参数条件；生成与确定性模型对照；另比较各方法的结构OOD性能。",
+            "split": "包含未见载荷模式与新边界配置的OOD测试，具体划分数量、参数范围和隔离规则未报告。",
+            "baselines": "条件与确定性模型消融；基准为TopoDiff、TopoDiff w/ G和NITO，NITO输出后增加5步SIMP。",
+            "metrics": "交叉熵标度×10⁻¹，温度T=15；有符号柔顺度相对误差的均值和中位数；参数量及额外SIMP步数。",
+            "results": "灵敏度、SED条件中位误差为0.54%、0.53%；灵敏度确定性模型2.27%。OOD基准平均/中位误差：本文5.73%/0.53%，TopoDiff 8.57%/1.14%，NITO 9.33%/2.37%。",
+            "limitations": "误差超过1000%的样本被排除，比例未报告；重复训练与置信区间缺失。参数量及后处理步数不能单独证明速度优势。"
+          },
+          {
+            "name": "跨PDE初始灵敏度排序判别力验证",
+            "data": "热传导、NS三出口、特征频率和柔顺度四类PDE；热传导与特征频率为新生成数据。",
+            "samples": "四类PDE是任务类别数量，不是独立样本数；各类别样本、仿真和增强数量未报告。",
+            "groups": "每类分别比较初始灵敏度S₀、收敛灵敏度S⋆和仅按体积分数阈值化的结果。",
+            "split": "各类数据的训练验证测试划分及是否独立于生成模型训练数据未报告。",
+            "baselines": "收敛灵敏度作为排序能力对照，体积分数阈值作为不学习空间拓扑的直接提取基线。",
+            "metrics": "ROC AUC：衡量最终实体单元与空隙单元的排序判别力；Δ为AUC(S⋆)−AUC(S₀)，均无量纲。",
+            "results": "热传导、NS三出口、特征频率、柔顺度的S₀/S⋆ AUC依次为0.972/0.986、0.993/1.000、0.957/0.868、0.915/0.918。",
+            "limitations": "没有样本量、误差条及重复统计；特征频率的终端AUC反而下降。排序能力不能直接证明拓扑重建质量或物理可行性。"
+          }
+        ],
+        "routes": [
+          {
+            "title": "面向过渡流动的伪灵敏度可信度与选择性伴随校正",
+            "direction_id": "generative_design",
+            "gap": "原研究对冻结湍流灵敏度的相关性较强，却缺少过渡雷诺数、回流区域的失败统计。建议首先回答何时速度平方不再足够，而不是继续扩大生成器容量。",
+            "mechanism": "建议由速度、压力和回流特征估计伪灵敏度的局部误差及置信度，低置信工况才调用伴随求解。训练校正场时统一负号约定，并区分冻结湍流导数与完整设计导数。",
+            "innovation": "候选创新是把条件可信度、选择性伴随计算与Bernoulli生成组合成可拒绝预测的流程。各单项机制并非新颖性结论，需验证组合是否改善成本与失败风险的权衡。",
+            "design": "可先使用作者声明公开的CFD数据，核实许可与字段；建议新增300例，按低、过渡、高Re各100例并平衡出口配置。按几何隔离测试，新增完整导数需另行采集且取决于求解器能力。",
+            "comparison": "固定生成架构与采样预算，比较原速度平方、始终精确灵敏度、学习校正和置信门控。消融去掉回流特征、校正及拒绝机制，并统一计入条件求解和失败重算耗时。",
+            "criterion": "建议预注册以全样本绝对误差尾部、边界违例率和可仿真率为主指标，辅以有符号误差。只有失败风险下降且总耗时低于始终伴随路线，才支持机制有效。",
+            "risk": "完整湍流导数可能不稳定或无法取得，置信度也可能在新几何下失准。替代方案是有限差分抽查局部导数，并对高风险样本回退传统优化，不把拒绝样本隐藏于均值。"
+          },
+          {
+            "title": "检验初始灵敏度在路径依赖结构设计中的充分性边界",
+            "direction_id": "generative_design",
+            "gap": "原文从终端KKT关系解释初始条件，却未充分验证多目标和历史依赖约束。建议研究相似S₀是否对应不同可行终态，明确单场条件何时出现不可约歧义。",
+            "mechanism": "建议给生成器补充早期梯度变化、体积乘子和约束余量，通过短优化轨迹提供历史信息。保持二值生成主干不变，用受控信息增量检验性能变化来自历史还是容量。",
+            "innovation": "候选创新是建立初始场充分性的诊断与最小历史条件选择。相关预印本《Structure-agnostic Causal Representation Learning》的摘要提示结构误设风险，但不能据此认定其方法已适用于拓扑优化。",
+            "design": "建议先复用可获得的线弹性基准，再仿真采集240组载荷—支承配置，每组分别求解柔顺度和带路径约束目标。按配置而非像素划分测试，并保存相同初始化下的早期梯度。",
+            "comparison": "比较仅S₀、S₀加约束参数、加入早期轨迹和完整传统优化；配平网络容量与计算预算。消融打乱轨迹顺序、移除乘子及仅增加参数量，以排除额外输入规模的影响。",
+            "criterion": "建议以未见配置的绝对目标误差、约束违例率和失败尾部为判据，报告多随机种子区间。只有历史条件在相似S₀子集仍稳定获益，才支持初始场存在信息缺口。",
+            "risk": "所谓相似初始场可能只是归一化或网格插值造成，轨迹输入也增加求解成本。替代路径是先用受控小规模问题核查歧义，再评估短轨迹收益是否抵消物理计算开销。"
+          }
+        ],
+        "diagrams": [
+          {
+            "kind": "study",
+            "title": "原研究：灵敏度相关条件驱动二值拓扑生成",
+            "description": "展示已实现的方法与验证链条；条件信息排序依赖Markov假设，生成结果仍需物理评估。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "载荷与边界配置",
+                "detail": "二维结构或流体问题，固定均匀初始设计"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "初始正向PDE求解",
+                "detail": "获得位移、应变能、速度及压力等物理场"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "初始伴随灵敏度",
+                "detail": "流体采用冻结湍流伴随，结构采用柔顺度梯度"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "伪灵敏度条件",
+                "detail": "结构SED；流体速度模平方，后者具有近似适用条件"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "条件Bernoulli生成",
+                "detail": "Transformer去噪，BCE训练，推理采用50步采样"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "采样内控制与终步投影",
+                "detail": "渐进剪枝控制体积分数，贪心终步减少孤立像素"
+              },
+              {
+                "id": "g",
+                "stage": 5,
+                "label": "OOD物理与拓扑评估",
+                "detail": "多出口及结构工况偏移；报告有符号误差与BCE"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "求解初始响应"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "伴随求导"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "提取替代条件"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "精确条件路线"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "近似条件路线"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "迭代采样"
+              },
+              {
+                "from": "f",
+                "to": "g",
+                "label": "评估生成拓扑"
+              }
+            ]
+          },
+          {
+            "kind": "proposal",
+            "title": "拟议路线：置信门控的伪灵敏度校正",
+            "description": "对应第一条研究建议，所有性能改善均待实验验证，不代表原论文实测结果。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "公开数据与新增工况",
+                "detail": "核实公开字段，建议增采300例并按几何隔离测试"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "速度平方与回流特征",
+                "detail": "从初始正向求解提取条件，统一灵敏度负号约定"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "条件可信度估计",
+                "detail": "学习局部误差及工况级置信度，预注册门控阈值"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "高置信校正条件",
+                "detail": "使用学习校正场，避免每例额外伴随求解"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "低置信伴随回退",
+                "detail": "调用伴随或传统优化；不可用时进行有限差分抽查"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "固定生成器对照",
+                "detail": "统一架构、采样步数及训练预算，执行门控消融"
+              },
+              {
+                "id": "g",
+                "stage": 5,
+                "label": "全样本风险与成本",
+                "detail": "统计绝对误差尾部、违例率、仿真成功率及总耗时"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "采集初始物理场"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "估计近似风险"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "高置信"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "低置信"
+              },
+              {
+                "from": "d",
+                "to": "f",
+                "label": "输入校正场"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "输入伴随场"
+              },
+              {
+                "from": "f",
+                "to": "g",
+                "label": "统一物理验证"
+              },
+              {
+                "from": "g",
+                "to": "c",
+                "label": "校准门控"
+              }
+            ]
+          }
+        ],
+        "related": {
+          "status": "ok",
+          "checked_at": "2026-10-06T14:28:41.976956+00:00",
+          "papers": [
+            {
+              "title": "Time Series Causal Discovery via Context-Conditioned and Causality-Augmented Pretraining",
+              "url": "https://doi.org/10.48550/arxiv.2605.26759",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            },
+            {
+              "title": "Structure-agnostic Causal Representation Learning",
+              "url": "https://doi.org/10.48550/arxiv.2610.00968",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            },
+            {
+              "title": "Acoustic fault diagnosis in heterogeneous environments via causal disentanglement",
+              "url": "https://doi.org/10.1088/1361-6501/ae7aaa",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            }
+          ]
+        }
+      },
+      "article_updated_at": "2026-10-06T14:31:59.847669+00:00",
+      "article_profile": "0dc2056d3cac894b7e716218c7ffe8022679250058fdbf8cd9647fb31ad3bd5e",
+      "recommendation_decision": {
+        "kind": "promotion",
+        "previous": {
+          "id": "37467390827",
+          "date": "2026-10-06",
+          "number": 1,
+          "generated_at": "2026-10-06T13:07:31.301005+00:00",
+          "trigger": "scheduled",
+          "core_count": 5,
+          "extended_count": 5,
+          "tier": "extended"
+        },
+        "reason": "与结构设计和跨工况泛化方向直接相关，包含明确的条件化生成方法、结构柔顺度比较及CFD消融，足以支持重点阅读推荐。[P6–P8]资料依据为覆盖全文的逐页笔记及当前可核对摘录，并非本轮重新阅读全文；推荐不代表认可全部理论，也不代表已有智能运维或可靠性验证。",
+        "heat": null
+      },
+      "recommended_direction": "generative_design",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P5",
+          "P6",
+          "P18",
+          "P19",
+          "P20"
+        ],
+        "innovation": [
+          "P2",
+          "P3",
+          "P4",
+          "P5",
+          "P11"
+        ],
+        "findings": [
+          "P6",
+          "P8"
+        ],
+        "limitations": [
+          "P9",
+          "P12",
+          "P13",
+          "P14",
+          "P15",
+          "P16",
+          "P20",
+          "P21"
+        ],
+        "connection": [
+          "P7",
+          "P8",
+          "P16",
+          "P17"
+        ],
+        "next_steps": [
+          "P14",
+          "P15",
+          "P16",
+          "P17",
+          "P18",
+          "P19",
+          "P20",
+          "P21"
+        ]
+      },
+      "analysis_material_version": "7bd459d14171d3891c9752345157a6d4333aaa521941e393ef6924efcd678f1d",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "定义1后的向量场标量不变量及命题1第2项，文字提取将‖v‖²展平为“∥v∥ 2”。原页可清楚辨认2为平方上标，已核正为速度模平方；命题为S₀∝−‖v‖²，并限定于冻结湍流与高雷诺数渐近条件。此纠正影响CFD伪灵敏度的具体形式，原页没有缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "表3伪灵敏度条件的文字提取“∥v∥2”未保留平方上标；原页清楚显示‖v‖²，已核正为速度模平方。两列误差分别为UDiT 7.0%、本文2.7%；无原文件缺项，此纠正影响条件信号的物理定义。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "表6的NITO行被文字提取合并为“NITO225 9.33 2.37”。原页清楚分列为参数22M、额外SIMP步骤FS=5、平均柔顺度误差9.33%、中位误差2.37%。已纠正列合并错误；无原文件缺项，影响参数规模与额外优化成本的比较。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "式(20)、(22)、(25)及A.6.5–A.6.7中的速度范数平方，文字提取多处展平为“∥v∥ 2”；原页明确为‖v‖²，已核正。式(24)分母也明确为(1+qρ)²。无原文件缺项，平方上标影响耗散目标与伪灵敏度的具体数学形式。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P16",
+          "detail": "表8有效批量与学习率、表9批量与学习率在文字提取中粘连，例如“2565×10 −4”。原页列界清楚：批量或有效批量为256，学习率另列为5×10⁻⁴；DiT学习率为3×10⁻⁴。已纠正分列及负指数排版，无原文件缺项，影响训练配置的复现。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P17",
+          "detail": "表10文字提取将UDiT与本文的伪灵敏度、压力相邻列粘连。原页已清楚核正：UDiT伪灵敏度为0.08/0.20/0.36，压力为0.24/1.01/1.67；本文伪灵敏度为0.04/0.15/0.38，压力为0.07/0.23/0.46，顺序均为ID/OOD-M/OOD-H。无原页缺项，影响条件模态的BCE比较。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P20",
+          "detail": "C.6中速度模平方的文字提取展平为“∥v∥ 2”；原页明确为‖v‖²，理论关系为S∝−‖v‖²。已保留平方与负号，无原页缺项，影响伪灵敏度定义及相关性报告的解释。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P21",
+          "detail": "图11文字提取丢失Pearson r纵轴的负号，列为1.0、0.9等。原页清楚显示−1.0、−0.9、−0.8、−0.7、−0.6、−0.5；已核正为速度模平方与灵敏度的负相关。无原页缺项，影响相关方向及S∝−‖v‖²理论与图证的一致性判断；图中未提供可直接读取的总体平均相关值。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "304acf33a546",
+        "state": "published",
+        "updated_at": "2026-10-06T14:31:59.849663+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 28,
+        "covered": 28,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "定义1后的向量场标量不变量及命题1第2项，文字提取将‖v‖²展平为“∥v∥ 2”。原页可清楚辨认2为平方上标，已核正为速度模平方；命题为S₀∝−‖v‖²，并限定于冻结湍流与高雷诺数渐近条件。此纠正影响CFD伪灵敏度的具体形式，原页没有缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "表3伪灵敏度条件的文字提取“∥v∥2”未保留平方上标；原页清楚显示‖v‖²，已核正为速度模平方。两列误差分别为UDiT 7.0%、本文2.7%；无原文件缺项，此纠正影响条件信号的物理定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "表6的NITO行被文字提取合并为“NITO225 9.33 2.37”。原页清楚分列为参数22M、额外SIMP步骤FS=5、平均柔顺度误差9.33%、中位误差2.37%。已纠正列合并错误；无原文件缺项，影响参数规模与额外优化成本的比较。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "式(20)、(22)、(25)及A.6.5–A.6.7中的速度范数平方，文字提取多处展平为“∥v∥ 2”；原页明确为‖v‖²，已核正。式(24)分母也明确为(1+qρ)²。无原文件缺项，平方上标影响耗散目标与伪灵敏度的具体数学形式。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P16",
+            "detail": "表8有效批量与学习率、表9批量与学习率在文字提取中粘连，例如“2565×10 −4”。原页列界清楚：批量或有效批量为256，学习率另列为5×10⁻⁴；DiT学习率为3×10⁻⁴。已纠正分列及负指数排版，无原文件缺项，影响训练配置的复现。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P17",
+            "detail": "表10文字提取将UDiT与本文的伪灵敏度、压力相邻列粘连。原页已清楚核正：UDiT伪灵敏度为0.08/0.20/0.36，压力为0.24/1.01/1.67；本文伪灵敏度为0.04/0.15/0.38，压力为0.07/0.23/0.46，顺序均为ID/OOD-M/OOD-H。无原页缺项，影响条件模态的BCE比较。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P20",
+            "detail": "C.6中速度模平方的文字提取展平为“∥v∥ 2”；原页明确为‖v‖²，理论关系为S∝−‖v‖²。已保留平方与负号，无原页缺项，影响伪灵敏度定义及相关性报告的解释。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P21",
+            "detail": "图11文字提取丢失Pearson r纵轴的负号，列为1.0、0.9等。原页清楚显示−1.0、−0.9、−0.8、−0.7、−0.6、−0.5；已核正为速度模平方与灵敏度的负相关。无原页缺项，影响相关方向及S∝−‖v‖²理论与图证的一致性判断；图中未提供可直接读取的总体平均相关值。"
+          }
+        ]
+      }
+    },
+    {
+      "source": "Semantic Scholar",
+      "source_id": "ea2f2bbecb60512a635ce872a829f11f275df208",
+      "title": "Compound Fault Diagnosis for Industrial Machinery: Data-Driven Methods, Challenges, and LLM-Enhanced Perspectives",
+      "authors": [
+        "Zi-Han Weng"
+      ],
+      "venue": "Applied and Computational Engineering",
+      "abstract": "Compound faults occur when several local faults exist at the same time in industrial machinery and affect condition-monitoring signals together. Their signatures become mixed through modulation, structural transmission, operating-condition variation, and sensor response, which makes feature separation and state recognition more difficult. This paper reviews data-driven compound fault diagnosis from a scenario-oriented perspective. It first summarizes the task formulation and three main difficulties: coupled fault signatures, combinatorial growth of fault states, and distribution shifts across operating conditions and machines. The review then groups representative methods into three areas: signal representation, multi-label and fault-semantic modeling, and generalization under changing domains and unseen fault combinations. The paper also examines the emerging role of large language models, focusing on retrieval-augmented knowledge integration, evidence-grounded reasoning, tool-using diagnostic agents, and deployment reliability. It then points to several directions for future work, including compositional generalization, cross-machine transfer, multimodal sensing, industrial foundation models, and autonomous maintenance. Overall, the review argues that practical compound fault diagnosis depends on combining signal-level intelligence with reusable fault semantics and verifiable knowledge-based reasoning.",
+      "published_at": "2026-10-20",
+      "doi": "10.54254/2755-2721/2026.gf37867",
+      "landing_url": "https://www.semanticscholar.org/paper/ea2f2bbecb60512a635ce872a829f11f275df208",
+      "oa_url": "https://ace.ewapub.com/article/view/37867.pdf",
+      "citation_count": 0,
+      "source_score": 0.64,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "Compound faults occur when several local faults exist at the same time in industrial machinery and affect condition-monitoring signals together. Their signatures become mixed through modulation, structural transmission, operating-condition variation, and sensor response, which makes feature separation and state recognition more difficult. This paper reviews data-driven compound fault diagnosis from a scenario-oriented perspective. It first summarizes the task formulation and three main difficulties: coupled fault signatures, combinatorial growth of fault states, and distribution shifts across…",
+      "raw_metadata": {
+        "provider": "Semantic Scholar",
+        "paperId": "ea2f2bbecb60512a635ce872a829f11f275df208",
+        "sources": [
+          "Semantic Scholar"
+        ],
+        "source_links": [
+          "https://ace.ewapub.com/article/view/37867.pdf",
+          "https://www.semanticscholar.org/paper/ea2f2bbecb60512a635ce872a829f11f275df208"
+        ],
+        "identity_aliases": [
+          [
+            "doi",
+            "10.54254/2755-2721/2026.gf37867"
+          ],
+          [
+            "title_author_names",
+            "compoundfaultdiagnosisforindustrialmachinerydatadrivenmethodschallengesandllmenhancedperspectives|weng:z"
+          ],
+          [
+            "title_authors",
+            "compoundfaultdiagnosisforindustrialmachinerydatadrivenmethodschallengesandllmenhancedperspectives|zihanweng"
+          ]
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "b810820af1e9",
+      "source_ids": [
+        "Semantic Scholar"
+      ],
+      "venue_group": "其他／未分类",
+      "journal": "Applied and Computational Engineering",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [
+        "大模型"
+      ],
+      "analysis_status": "pending",
+      "method": "基于原文摘要的规则摘要",
+      "recommendation": "",
+      "deep_read": {},
+      "recommended_direction": "ai_maintenance"
+    },
+    {
+      "source": "Semantic Scholar",
+      "source_id": "663bc055cfdf9e614fbabb2ec146ceced896a0ff",
+      "title": "Digitalization in Industrial Facilities and the Classification of Maintenance Types: A Review",
+      "authors": [
+        "Faruk Açmalı"
+      ],
+      "venue": "International Journal of New Findings in Engineering, Science and Technology",
+      "abstract": "The digitalization of industrial facilities, driven by Industry 4.0 technologies, is fundamentally changing how production assets are monitored, modeled, and managed, and its strongest effect is felt in maintenance management, where traditional corrective and time-based practices are giving way to data-driven, condition-based, and predictive maintenance strategies. This review addresses two linked questions: how industrial maintenance types can be organized within a consistent framework, and how digital enablers such as cyber-physical systems, the Industrial Internet of Things (IIoT), the digital twin, machine learning, and remaining-useful-life (RUL) estimation reshape these types. The study is designed as a narrative (non-systematic) review of seventy-one peer-reviewed journal articles published between 1995 and 2026, complemented by the primary sources of the reliability centered maintenance literature. Maintenance strategies are classified and compared along a reactiveproactive axis as corrective, planned/periodic, condition-based, predictive, reliability-centered (RCM), risk-based (RBM), and opportunistic maintenance. We show that digitalization repositions these types within a continuous condition-monitoring–diagnosis–prognosis–decision loop. The review also surveys recent developments (large language models and generative artificial intelligence, federated and edge learning, explainable AI, digital-twin interoperability standards, and the human-centric maintenance perspective of Industry 4.0) and discusses their implications for maintenance management. As an original contribution, we propose a conceptual digital-maintenance framework that couples the digital twin, RUL-based maintenance-interval computation, and an expected profit-loss indicator (ePLI) with a reminder/alarm decision layer; the ePLI is formalized through an expected-loss expression, a threshold-based reminder/alarm rule, and an illustrative application scenario. The findings indicate that digitalization turns maintenance types from mutually exclusive choices into elements of an integrated asset-management continuum, and that Industry 4.0 and trustworthy-AI research adds a human-centric dimension to this continuum. For practitioners, the r",
+      "published_at": "2026-09-29",
+      "doi": "10.61150/ijonfest.2001152",
+      "landing_url": "https://www.semanticscholar.org/paper/663bc055cfdf9e614fbabb2ec146ceced896a0ff",
+      "oa_url": "https://dergipark.org.tr/tr/download/article-file/6253822",
+      "citation_count": 0,
+      "source_score": 0.64,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "The digitalization of industrial facilities, driven by Industry 4.0 technologies, is fundamentally changing how production assets are monitored, modeled, and managed, and its strongest effect is felt in maintenance management, where traditional corrective and time-based practices are giving way to data-driven, condition-based, and predictive maintenance strategies. This review addresses two linked questions: how industrial maintenance types can be organized within a consistent framework, and how digital enablers such as cyber-physical systems, the Industrial Internet of Things (IIoT), the digi…",
+      "raw_metadata": {
+        "provider": "Semantic Scholar",
+        "paperId": "663bc055cfdf9e614fbabb2ec146ceced896a0ff",
+        "sources": [
+          "Semantic Scholar"
+        ],
+        "source_links": [
+          "https://dergipark.org.tr/tr/download/article-file/6253822",
+          "https://www.semanticscholar.org/paper/663bc055cfdf9e614fbabb2ec146ceced896a0ff"
+        ],
+        "identity_aliases": [
+          [
+            "doi",
+            "10.61150/ijonfest.2001152"
+          ],
+          [
+            "title_author_names",
+            "digitalizationinindustrialfacilitiesandtheclassificationofmaintenancetypesareview|amal:f"
+          ],
+          [
+            "title_authors",
+            "digitalizationinindustrialfacilitiesandtheclassificationofmaintenancetypesareview|farukamal"
+          ]
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "7448066edf1f",
+      "source_ids": [
+        "Semantic Scholar"
+      ],
+      "venue_group": "其他／未分类",
+      "journal": "International Journal of New Findings in Engineering, Science and Technology",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [
+        "大模型"
+      ],
+      "analysis_status": "pending",
+      "method": "基于原文摘要的规则摘要",
+      "recommendation": "",
+      "deep_read": {},
+      "recommended_direction": "ai_maintenance"
+    },
+    {
+      "source": "Semantic Scholar",
+      "source_id": "1b2c462984bfaff99c02c4fa9dbaca53c092ca5c",
+      "title": "Analysis of Intelligent Operation and Maintenance Technology Strategy of Communication Networks Based on Large Language Models",
+      "authors": [
+        "Yeermaike Mulati"
+      ],
+      "venue": "Applied and Computational Engineering",
+      "abstract": "With the continuous improvement of communication network scale and business complexity, the traditional operation and maintenance methods relying on manual experience and rules face certain limitations in multi-source information processing and complex fault analysis. The ability of large language model in natural language understanding, knowledge association and cross-task processing provides a new research path for intelligent operation and maintenance of communication networks. This paper takes the application of large language model in intelligent operation and maintenance of communication network as the research topic, adopts the method of literature review and comparative analysis, combs the basic system of intelligent operation and maintenance of communication network, and summarizes relevant research and typical applications from four aspects: intelligent question answering, fault diagnosis, network optimization and network security. It is found that the large language model can enhance the interaction ability between the operation and maintenance personnel and the network system, and improve the knowledge association and auxiliary decision-making ability in complex network tasks. However, there are still some limitations in real-time performance, computing cost, domain knowledge adaptation, output reliability and data security. According to the research, the big language model is more suitable as the capabilities of traditional intelligent operation and maintenance system at the present stage. By cooperating with the professional model, knowledge base and automatic operation and maintenance technology, it is expected to further promote the development of intelligent operation and maintenance of communication network to the direction of intelligence and automation.",
+      "published_at": "2026-09-29",
+      "doi": "10.54254/2755-2721/2026.37355",
+      "landing_url": "https://www.semanticscholar.org/paper/1b2c462984bfaff99c02c4fa9dbaca53c092ca5c",
+      "oa_url": "https://ace.ewapub.com/article/view/37355.pdf",
+      "citation_count": 0,
+      "source_score": 0.64,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "With the continuous improvement of communication network scale and business complexity, the traditional operation and maintenance methods relying on manual experience and rules face certain limitations in multi-source information processing and complex fault analysis. The ability of large language model in natural language understanding, knowledge association and cross-task processing provides a new research path for intelligent operation and maintenance of communication networks. This paper takes the application of large language model in intelligent operation and maintenance of communication…",
+      "raw_metadata": {
+        "provider": "Semantic Scholar",
+        "paperId": "1b2c462984bfaff99c02c4fa9dbaca53c092ca5c",
+        "sources": [
+          "Semantic Scholar"
+        ],
+        "source_links": [
+          "https://ace.ewapub.com/article/view/37355.pdf",
+          "https://www.semanticscholar.org/paper/1b2c462984bfaff99c02c4fa9dbaca53c092ca5c"
+        ],
+        "identity_aliases": [
+          [
+            "doi",
+            "10.54254/2755-2721/2026.37355"
+          ],
+          [
+            "title_author_names",
+            "analysisofintelligentoperationandmaintenancetechnologystrategyofcommunicationnetworksbasedonlargelanguagemodels|mulati:y"
+          ],
+          [
+            "title_authors",
+            "analysisofintelligentoperationandmaintenancetechnologystrategyofcommunicationnetworksbasedonlargelanguagemodels|yeermaikemulati"
+          ]
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "22c7cd147987",
+      "source_ids": [
+        "Semantic Scholar"
+      ],
+      "venue_group": "其他／未分类",
+      "journal": "Applied and Computational Engineering",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [
+        "大模型"
+      ],
+      "analysis_status": "pending",
+      "method": "基于原文摘要的规则摘要",
+      "recommendation": "",
+      "deep_read": {},
+      "recommended_direction": "ai_maintenance"
+    },
+    {
+      "source": "Semantic Scholar",
+      "source_id": "f391efb60f93238773449d59966778ac5c9c2c99",
+      "title": "Dynamic knowledge graph enhanced large language model with cascade relation extraction optimized for aviation equipment fault diagnosis",
+      "authors": [
+        "Auwal Haruna",
+        "Lun-Yong Li",
+        "Khandaker Noman",
+        "Tao Liu",
+        "Yong-Bo Li",
+        "Fatin Abrar Shams"
+      ],
+      "venue": "Engineering applications of artificial intelligence",
+      "abstract": "",
+      "published_at": "2026-10-01",
+      "doi": "10.1016/j.engappai.2026.115762",
+      "landing_url": "https://www.semanticscholar.org/paper/f391efb60f93238773449d59966778ac5c9c2c99",
+      "oa_url": "https://doi.org/10.1016/j.engappai.2026.115762",
+      "citation_count": 2,
+      "source_score": 0.64,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "本文聚焦《Dynamic knowledge graph enhanced large language model with cascade relation extraction optimized for aviation equipment fault diagnosis》，暂未提供可用摘要，请查看原文。",
+      "raw_metadata": {
+        "provider": "Semantic Scholar",
+        "paperId": "f391efb60f93238773449d59966778ac5c9c2c99",
+        "sources": [
+          "Semantic Scholar"
+        ],
+        "source_links": [
+          "https://doi.org/10.1016/j.engappai.2026.115762",
+          "https://www.semanticscholar.org/paper/f391efb60f93238773449d59966778ac5c9c2c99"
+        ],
+        "identity_aliases": [
+          [
+            "doi",
+            "10.1016/j.engappai.2026.115762"
+          ],
+          [
+            "title_author_names",
+            "dynamicknowledgegraphenhancedlargelanguagemodelwithcascaderelationextractionoptimizedforaviationequipmentfaultdiagnosis|haruna:a|li:l|li:y|liu:t|noman:k|shams:f"
+          ],
+          [
+            "title_authors",
+            "dynamicknowledgegraphenhancedlargelanguagemodelwithcascaderelationextractionoptimizedforaviationequipmentfaultdiagnosis|auwalharuna|fatinabrarshams|khandakernoman|lunyongli|taoliu|yongboli"
+          ]
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "5c83c63d41f1",
+      "source_ids": [
+        "Semantic Scholar"
+      ],
+      "venue_group": "其他／未分类",
+      "journal": "Engineering applications of artificial intelligence",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [
+        "大模型"
+      ],
+      "analysis_status": "pending",
+      "method": "原文未提供摘要，基于标题生成",
+      "recommendation": "",
+      "deep_read": {},
+      "recommended_direction": "ai_maintenance"
+    }
+  ],
+  "extended": [],
+  "papers": [
+    {
+      "source": "Crossref",
+      "source_id": "10.55529/jaimlnn.62.106.119",
+      "title": "Calibrated but not safe: Conformal prediction intervals for turbofan remaining useful life near end of life and under operating shift",
+      "authors": [
+        "Nuno Alexandre Soares Domingues",
+        "Danish Ather"
+      ],
+      "venue": "Journal of Artificial Intelligence Machine Learning and Neural Network",
+      "abstract": "Machine learning models that predict the remaining useful life (RUL) of aircraft engines are increasingly paired with conformal prediction, which converts point predictions into intervals with a guaranteed average coverage. In a safety-critical maintenance setting, however, an average guarantee is not sufficient: what matters is whether the interval is reliable and informative for engines that are close to failure, and whether it remains valid when the fleet differs from the data used for calibration. This study evaluates five interval methods built on ridge regression, random forest, gradient boosting and multilayer-perceptron predictors using the NASA C-MAPSS turbofan benchmark (FD001–FD004, 707 test engines), with repeated engine-level calibration splits. Coverage, width and the rate at which the interval overestimated the true RUL were measured overall and for engines with a true RUL of 30 cycles or less. Global split conformal prediction met the nominal 90% coverage on average (89–92%) and covered almost every engine near failure, but with intervals about 44 cycles wide, which is uninformative when only 30 cycles remain; it also undercovered engines with 61–90 cycles of remaining life (68–76%). Calibrating separately within bands of predicted RUL (Mondrian conformal prediction) halved the width near failure for tree ensembles (from 43.7 to 20.7 cycles for gradient boosting, p = 3 × 10−8) while keeping near-failure coverage at 96.5–97.8%, but failed for ridge regression (77%). Uncalibrated quantile regression overestimated the remaining life of 20% of near-failure engines, and conformalised quantile regression restored average coverage, but its near-failure coverage fell as low as 80% and its near-failure intervals averaged over 90 cycles. When models calibrated on FD001 were applied to engines with an additional fault mode (FD003), near-failure coverage collapsed to 37–50%, and 95% of all miscoverage under shift was overestimation of remaining life, the unsafe direction. Conformal guarantees are therefore marginal and conditional on exchangeability; prognostic intervals should be evaluated near end of life and under realistic shift before they are used for maintenance decisions.",
+      "published_at": "2026-10-22",
+      "doi": "10.55529/jaimlnn.62.106.119",
+      "landing_url": "https://doi.org/10.55529/jaimlnn.62.106.119",
+      "oa_url": "",
+      "citation_count": 0,
+      "source_score": 0.58,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "Machine learning models that predict the remaining useful life (RUL) of aircraft engines are increasingly paired with conformal prediction, which converts point predictions into intervals with a guaranteed average coverage. In a safety-critical maintenance setting, however, an average guarantee is not sufficient: what matters is whether the interval is reliable and informative for engines that are close to failure, and whether it remains valid when the fleet differs from the data used for calibration. This study evaluates five interval methods built on ridge regression, random forest, gradient…",
+      "raw_metadata": {
+        "provider": "Crossref",
+        "publisher": "",
+        "sources": [
+          "Crossref"
+        ],
+        "source_links": [
+          "https://doi.org/10.55529/jaimlnn.62.106.119"
+        ],
+        "identity_aliases": [
+          [
+            "doi",
+            "10.55529/jaimlnn.62.106.119"
+          ],
+          [
+            "title_author_names",
+            "calibratedbutnotsafeconformalpredictionintervalsforturbofanremainingusefullifenearendoflifeandunderoperatingshift|ather:d|domingues:n"
+          ],
+          [
+            "title_authors",
+            "calibratedbutnotsafeconformalpredictionintervalsforturbofanremainingusefullifenearendoflifeandunderoperatingshift|danishather|nunoalexandresoaresdomingues"
+          ]
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "d54dc74f6718",
+      "source_ids": [
+        "Crossref",
+        "Springer Nature Link"
+      ],
+      "venue_group": "Springer Nature 工程期刊",
+      "journal": "Machine Learning",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [],
+      "analysis_status": "pending",
+      "method": "基于原文摘要的规则摘要",
+      "recommendation": "",
+      "deep_read": {},
+      "recommended_direction": "ai_maintenance"
+    },
+    {
+      "source": "AI 顶会论文",
+      "source_id": "https://proceedings.mlr.press/v306/rashed26a.html",
+      "title": "On the Generalization in Topology Optimization via Sensitivity-Conditioned Bernoulli Flow Matching",
+      "authors": [
+        "Mohammad Rashed",
+        "Duarte F. Valoroso Madeira",
+        "Babak Gholami",
+        "Caglar Guerbuez",
+        "Yunjia Yang",
+        "Nils Thuerey"
+      ],
+      "venue": "ICML 2026",
+      "abstract": "Surrogate models for topology optimization (TO) exhibit highly variable out-of-distribution (OOD) generalization under distribution shifts such as changing loads or boundary conditions, yet the source of this variability remains unclear. We hypothesize that OOD performance is governed by how much information the conditioning signal preserves about the adjoint sensitivity (reduced gradient) that drives classical TO. Modeling the TO pipeline as a causal Markov chain, the Data Processing Inequality establishes that, under this abstraction, the sensitivity field is an information-theoretically optimal conditioning signal for topology prediction. However, computing exact adjoint sensitivities can be expensive or unavailable in practice; we observe that certain physical fields can approximate sensitivities through monotone transformations. To formalize this, we introduce pseudo-sensitivities to characterize which fields enable generalization versus those that are information-poor. We then show that a sensitivity-conditioned Bernoulli flow-matching generator empirically confirms these predictions: conditioning on sensitivities yields state-of-the-art OOD performance, while increasingly distant physical fields degrade toward raw parameter conditioning. Results hold across structural TO benchmarks under load shifts and our new CFD-TO dataset under boundary-condition shifts such as multi-outlet configurations. Code and datasets are available at https://github.com/tum-pbs/topotransformer.",
+      "published_at": "2026-09-29",
+      "doi": "",
+      "landing_url": "https://proceedings.mlr.press/v306/rashed26a.html",
+      "oa_url": "https://raw.githubusercontent.com/mlresearch/v306/main/assets/rashed26a/rashed26a.pdf",
+      "citation_count": null,
+      "source_score": 0.68,
+      "topic_tags": [
+        "generative_design"
+      ],
+      "summary": "本文追问拓扑优化代理模型为何在载荷或边界条件变化后泛化失稳，将解释重点从生成架构转向条件信号。作者在Markov假设下推导灵敏度的信息优势，以应变能密度和速度模平方构造伪灵敏度，并结合伯努利流匹配生成二元拓扑。[P3–P5]结构与多出口CFD实验支持该思路，但并非所有指标最优。[P6–P8]解读：值得借鉴的是物理条件选择与跨工况评估；充分性证明、流体伴随符号和过滤后的误差统计仍需审慎核查。[P12–P16]",
+      "raw_metadata": {
+        "conference": {
+          "id": "icml",
+          "name": "ICML",
+          "year": 2026,
+          "track": "main",
+          "verified": true,
+          "proof_url": "https://proceedings.mlr.press/v306/rashed26a.html",
+          "paper_url": "https://proceedings.mlr.press/v306/rashed26a.html",
+          "doi": "",
+          "pdf_url": "https://raw.githubusercontent.com/mlresearch/v306/main/assets/rashed26a/rashed26a.pdf",
+          "date_kind": "publication",
+          "date_precision": "day"
+        },
+        "abstract_kind": "publisher_abstract",
+        "date_precision": "day",
+        "date_kind": "publication",
+        "bibliography": {
+          "type": "proceedings-article"
+        },
+        "sources": [
+          "AI 顶会论文"
+        ],
+        "source_links": [
+          "https://openreview.net/forum?id=1e3gI1ibcn",
+          "https://proceedings.mlr.press/v306/rashed26a.html",
+          "https://raw.githubusercontent.com/mlresearch/v306/main/assets/rashed26a/rashed26a.pdf"
+        ],
+        "source": "AI 顶会论文",
+        "source_id": "https://proceedings.mlr.press/v306/rashed26a.html",
+        "title": "On the Generalization in Topology Optimization via Sensitivity-Conditioned Bernoulli Flow Matching",
+        "authors": [
+          "Mohammad Rashed",
+          "Duarte F. Valoroso Madeira",
+          "Babak Gholami",
+          "Caglar Guerbuez",
+          "Yunjia Yang",
+          "Nils Thuerey"
+        ],
+        "venue": "ICML 2026",
+        "abstract": "Surrogate models for topology optimization (TO) exhibit highly variable out-of-distribution (OOD) generalization under distribution shifts such as changing loads or boundary conditions, yet the source of this variability remains unclear. We hypothesize that OOD performance is governed by how much information the conditioning signal preserves about the adjoint sensitivity (reduced gradient) that drives classical TO. Modeling the TO pipeline as a causal Markov chain, the Data Processing Inequality establishes that, under this abstraction, the sensitivity field is an information-theoretically optimal conditioning signal for topology prediction. However, computing exact adjoint sensitivities can be expensive or unavailable in practice; we observe that certain physical fields can approximate sensitivities through monotone transformations. To formalize this, we introduce pseudo-sensitivities to characterize which fields enable generalization versus those that are information-poor. We then show that a sensitivity-conditioned Bernoulli flow-matching generator empirically confirms these predictions: conditioning on sensitivities yields state-of-the-art OOD performance, while increasingly distant physical fields degrade toward raw parameter conditioning. Results hold across structural TO benchmarks under load shifts and our new CFD-TO dataset under boundary-condition shifts such as multi-outlet configurations. Code and datasets are available at https://github.com/tum-pbs/topotransformer.",
+        "published_at": "2026-09-29",
+        "doi": "",
+        "landing_url": "https://proceedings.mlr.press/v306/rashed26a.html",
+        "oa_url": "https://raw.githubusercontent.com/mlresearch/v306/main/assets/rashed26a/rashed26a.pdf",
+        "citation_count": null,
+        "source_score": 0.68,
+        "topic_tags": [
+          "generative_design"
+        ],
+        "summary": "本文追问拓扑优化代理模型为何在载荷或边界条件变化后泛化失稳，将解释重点从生成架构转向条件信号。作者在Markov假设下推导灵敏度的信息优势，以应变能密度和速度模平方构造伪灵敏度，并结合伯努利流匹配生成二元拓扑。[P3–P5]结构与多出口CFD实验支持该思路，但并非所有指标最优。[P6–P8]解读：值得借鉴的是物理条件选择与跨工况评估；充分性证明、流体伴随符号和过滤后的误差统计仍需审慎核查。[P12–P16]",
+        "raw_metadata": {
+          "conference": {
+            "id": "icml",
+            "name": "ICML",
+            "year": 2026,
+            "track": "main",
+            "verified": true,
+            "proof_url": "https://proceedings.mlr.press/v306/rashed26a.html",
+            "paper_url": "https://proceedings.mlr.press/v306/rashed26a.html",
+            "doi": "",
+            "pdf_url": "https://raw.githubusercontent.com/mlresearch/v306/main/assets/rashed26a/rashed26a.pdf",
+            "date_kind": "publication",
+            "date_precision": "day"
+          },
+          "abstract_kind": "publisher_abstract",
+          "date_precision": "day",
+          "date_kind": "publication",
+          "bibliography": {
+            "type": "proceedings-article"
+          },
+          "sources": [
+            "AI 顶会论文"
+          ],
+          "source_links": [
+            "https://openreview.net/forum?id=1e3gI1ibcn",
+            "https://proceedings.mlr.press/v306/rashed26a.html",
+            "https://raw.githubusercontent.com/mlresearch/v306/main/assets/rashed26a/rashed26a.pdf"
+          ],
+          "identity_aliases": [
+            [
+              "openreview",
+              "1e3gI1ibcn"
+            ],
+            [
+              "title_author_names",
+              "onthegeneralizationintopologyoptimizationviasensitivityconditionedbernoulliflowmatching|gholami:b|guerbuez:c|madeira:d|rashed:m|thuerey:n|yang:y"
+            ],
+            [
+              "title_authors",
+              "onthegeneralizationintopologyoptimizationviasensitivityconditionedbernoulliflowmatching|babakgholami|caglarguerbuez|duartefvalorosomadeira|mohammadrashed|nilsthuerey|yunjiayang"
+            ]
+          ],
+          "research_directions": [
+            "结构生成式设计与可靠性优化"
+          ]
+        },
+        "id": "304acf33a546",
+        "source_ids": [
+          "AI 顶会论文"
+        ],
+        "venue_group": "AI 顶会主会论文",
+        "journal": "ICML",
+        "topic_ids": [
+          "generative_design"
+        ],
+        "focus_tags": [],
+        "analysis_status": "ready",
+        "method": "基于原文摘要的规则摘要",
+        "recommendation": "推荐重点阅读条件信号消融与结构柔顺度实验，学习如何将伴随灵敏度转化为生成设计条件；同时核查理论假设、样本过滤和端到端计时，避免把经验优势理解为普遍可靠性保证。[P7–P9][P12–P16]",
+        "deep_read": {
+          "problem": "作者研究拓扑优化代理模型在未见载荷和边界条件下的泛化差异，核心问题是哪些输入保留了决定最优材料布局的信息，而非单纯比较网络容量。经典迭代优化需反复求解正向与伴随PDE，湍流场景尤其昂贵，因此直接预测必须兼顾计算节省与工况变化。[P1–P3]",
+          "method": "方法以初始灵敏度或伪灵敏度为条件，沿伯努利线性概率路径扰动二元拓扑，用二元交叉熵训练去噪器。分层Transformer通过交叉注意力注入物理条件、AdaLN注入时间；推理采用50步采样，末步确定性阈值化，并可在采样中渐进剪枝控制体积分数。[P5–P6][P18–P20]",
+          "innovation": "作者将条件场选择置于伴随理论与信息论框架：在Markov假设下用DPI排序预测不确定性，再以单调映射定义伪灵敏度，联系结构应变能与流体速度模平方。贡献还包括多出口CFD数据和二元生成流程；伯努利流模型本身来自既有工作，不宜归为本文原创。[P2–P5][P11]",
+          "findings": "结构OOD测试中，本文平均柔顺度误差为5.73%，TopoDiff为8.57%；灵敏度与SED条件的中位误差分别0.54%和0.53%。三出口CFD测试中本文准确率74.5%，但ID并非最佳。消融还显示灵敏度条件确定性模型优于仅用物理参数的确定性模型。[P6][P8]",
+          "limitations": "作者仅验证二维问题，条件输入仍需物理求解，冻结湍流存在近似误差。[P9]解读：Markov假设与高AUC不等于普遍充分性；伴随符号、相关系数符号及计时比较待澄清，样本过滤影响可靠性解释。[P12–P16][P20–P21]核对记录未确认原文件缺项。",
+          "connection": "解读：对结构设计，最直接的联系是用目标约化梯度指导条件输入，比较其在未见载荷下的表现；对可靠性研究，可关注跨工况失败而非仅平均误差。智能运维可借鉴物理对齐表征思想，但论文没有故障诊断、寿命预测或失效概率证据，不能声称已验证这些应用。[P7–P8][P16–P17]",
+          "next_steps": "建议先复现固定架构下的条件场消融，分别比较灵敏度、SED、位移与原始参数，再报告未过滤误差、保留率和失败案例。随后核查CFD伴随符号与相关性定义，并测试禁入区和体积约束的实际违约率；最后再扩展三维及可靠性目标，避免直接照搬充分性结论。[P14–P21]"
+        },
+        "recommended_direction": "generative_design",
+        "title_zh": "灵敏度条件化伯努利流匹配驱动的拓扑优化泛化研究",
+        "analysis_basis": "full_text",
+        "analysis_kind": "model",
+        "analysis_sources": [
+          "https://raw.githubusercontent.com/mlresearch/v306/main/assets/rashed26a/rashed26a.pdf"
+        ],
+        "analyzed_at": "2026-10-06T14:17:44.329388+00:00",
+        "llm_model": "gpt-6.1-sol",
+        "article": {
+          "version": 1,
+          "lead": "拓扑优化代理模型为何在训练工况内表现出色，换一组载荷或出口却可能失效？本文把解释重点从网络规模转向条件信号：它是否保留了驱动经典优化的灵敏度信息。作者结合信息论分析、伪灵敏度与Bernoulli流匹配，在二维结构和流体任务中验证这一思路。阅读价值不仅在于误差改善，更在于辨清初始物理场、生成机制与物理可行性各自能解决什么问题。",
+          "sections": [
+            {
+              "id": "context",
+              "title": "泛化瓶颈可能藏在条件场，而非网络容量",
+              "paragraphs": [
+                "经典拓扑优化通过反复求解正向与伴随PDE更新材料分布，代理模型则希望直接预测优化后的拓扑。困难在于，载荷和边界配置变化会同时改变物理响应与目标几何；仅输入原始参数，未必能让网络识别新的材料布局规律。",
+                "本文提出以条件信号保留的灵敏度信息解释泛化差异，并区分条件、架构和生成方式的贡献。其主要生成验证限定于二维线弹性结构与二维稳态RANS流动，不能直接外推到三维、瞬态或路径依赖问题。"
+              ]
+            },
+            {
+              "id": "method",
+              "title": "从初始灵敏度到二值拓扑的生成链条",
+              "paragraphs": [
+                "作者将优化过程抽象为Θ→X→S₀→ρ⋆，分别对应问题参数、初始物理场、初始灵敏度和收敛拓扑。数据处理不等式在该Markov假设下给出条件信息排序，但不是无条件的OOD性能保证；附录的KKT论证针对终端灵敏度，也不能直接证明S₀严格充分。",
+                "伪灵敏度允许用单调变换后的物理场近似S₀，从而避免额外伴随求解。结构柔顺度问题中，均匀初始设计的应变能密度与负灵敏度成正比；流体速度模平方的近似则依赖冻结湍流和局部Stokes型平衡，不能仅凭高全局雷诺数成立。",
+                "生成器采用αₜ=(1−t)·0.5+t·x₁的Bernoulli概率路径，以BCE训练条件去噪器，层级Transformer通过交叉注意力读取条件场。推理使用50步采样，终步贪心投影减少孤立像素；采样内渐进剪枝控制体积分数，但这些组件尚缺独立的大样本可行性验证。"
+              ]
+            },
+            {
+              "id": "validation",
+              "title": "单出口训练，多出口测试：验证究竟覆盖了什么",
+              "paragraphs": [
+                "CFD数据由STAR-CCM+稳态RANS和realizable k–ε模型生成，统一到128×128网格。单出口训练10,000例、ID测试1,000例，双出口和三出口各测试500例；入口数量与物性也变化，验证集、增强数量及独立性核查未报告，不能把实例数等同于独立求解次数。",
+                "CFD比较DiT、UDiT和PDE-T，并交叉改变灵敏度、速度平方与压力条件；各模型最终训练预算不同，不是严格等预算对照。结构沿用TopoDiffusion和NITO基准，包含未见载荷及新边界配置，但训练测试规模未报告；所给证据均为数值验证，没有实物试件实验。",
+                "两类物理误差均为**有符号相对误差**，均值可能掩盖正负抵消。CFD排除相对初始几何偏离超过50%的预测，结构排除柔顺度误差超过1000%的预测；剔除比例和筛选前结果未报告，因此表中表现不能代表全部生成样本。"
+              ]
+            },
+            {
+              "id": "findings",
+              "title": "条件信息的证据较强，可行性与效率仍须限定口径",
+              "paragraphs": [
+                "本文模型在三出口OOD中的平均压降误差为6.12%、中位数2.70%，但ID不如神经基线，双出口准确率也低于DiT。结构OOD平均柔顺度误差为5.73%，低于TopoDiff的8.57%和NITO的9.33%；不同条件表的0.54%与基准表的0.53%中位数应分别保留。",
+                "条件消融支持灵敏度相关场更稳健，但交叉熵只是条件熵上界，不能直接测量真实互信息。速度平方相关图显示强负相关，不能照正文简写成正相关；本站判断，流体附录的伴随符号及比例系数解释仍需澄清，高相关也不等于最终设计可行。",
+                "纯网络推理为0.65 ms/样本，获取伪灵敏度并推理约3.2 s，精确灵敏度路线约8.5 s，说明物理求解仍主导成本。硬件已有报告，但相对NITO的计时边界未统一；禁入区、预算收紧和终步投影各展示4例，尚不足以证明普遍连通或严格约束满足。"
+              ]
+            }
+          ],
+          "experiments": [
+            {
+              "name": "CFD多出口OOD性能比较与计算成本",
+              "data": "STAR-CCM+生成二维稳态RANS通道数据，采用realizable k–ε模型，场插值至128×128。",
+              "samples": "训练10,000例，ID测试1,000例，双出口及三出口各500例；独立求解总次数、增强数量及计时重复次数未报告。",
+              "groups": "训练单出口、入口1–11个；双出口测试入口1–10个，三出口入口1–9个；密度和黏度独立均匀采样。",
+              "split": "只有单出口参与训练；三个工况组分别测试。验证集、去重规则及几何配置隔离细节未报告。",
+              "baselines": "灵敏度条件DiT、UDiT、PDE-T及STAR-CCM+单次优化迭代；计时另列完整优化和NITO加5步SIMP。",
+              "metrics": "有符号压降相对误差的均值±标准差、中位数，以及误差在目标值10%以内的比例；另报告每样本耗时。",
+              "results": "本文ID、双出口、三出口平均误差分别3.68%、6.38%、6.12%；三出口中位数2.70%、准确率74.5%。伪灵敏度端到端约3.2 s，精确灵敏度约8.5 s，完整优化113.94 s。",
+              "limitations": "ID并非最佳，双出口准确率72.3%低于DiT的79.4%；几何偏离超过50%的样本被排除，数量未报告。训练预算不同，NITO计时边界未统一。"
+            },
+            {
+              "name": "CFD条件信号与架构交叉消融",
+              "data": "CFD-TO数据上的条件比较、架构交叉比较与累加消融；不同表的测试配置不能直接互换。",
+              "samples": "总体测试规模为ID 1,000例、双出口及三出口各500例；各子实验实际使用数量、重复训练次数未报告。",
+              "groups": "压力、速度模平方伪灵敏度、灵敏度三个条件组，覆盖DiT、UDiT、PDE-T及本文模型。",
+              "split": "采用单出口训练和ID、双出口、三出口测试；条件仿真表中OOD的具体构成未报告。",
+              "baselines": "条件与架构交叉对照；另依次加入伪灵敏度条件、架构增强和BFM，后者属于累加而非完整因子消融。",
+              "metrics": "中位BCE、压降有符号相对误差及定性通道布局；BCE聚合细节与边界违例率未报告。",
+              "results": "本文三出口中位BCE：灵敏度0.22、速度0.38、压力0.46。另一交叉表中，UDiT伪灵敏度中位压降误差7.0%，本文压力条件为100.0%。",
+              "limitations": "不同表的压力结果不能合并；ID存在灵敏度与速度并列或速度略优的情况。累加消融不能完全分离模块交互，未提供统计显著性。"
+            },
+            {
+              "name": "结构柔顺度条件消融与OOD基准比较",
+              "data": "沿用TopoDiffusion和NITO的二维线弹性基准，包含悬臂、桥状结构及未见载荷和边界配置。",
+              "samples": "独立结构、训练验证测试数量、仿真总次数与增强数量未报告；代表性图展示数量不等于测试集规模。",
+              "groups": "灵敏度、SED、位移、物理参数条件；生成与确定性模型对照；另比较各方法的结构OOD性能。",
+              "split": "包含未见载荷模式与新边界配置的OOD测试，具体划分数量、参数范围和隔离规则未报告。",
+              "baselines": "条件与确定性模型消融；基准为TopoDiff、TopoDiff w/ G和NITO，NITO输出后增加5步SIMP。",
+              "metrics": "交叉熵标度×10⁻¹，温度T=15；有符号柔顺度相对误差的均值和中位数；参数量及额外SIMP步数。",
+              "results": "灵敏度、SED条件中位误差为0.54%、0.53%；灵敏度确定性模型2.27%。OOD基准平均/中位误差：本文5.73%/0.53%，TopoDiff 8.57%/1.14%，NITO 9.33%/2.37%。",
+              "limitations": "误差超过1000%的样本被排除，比例未报告；重复训练与置信区间缺失。参数量及后处理步数不能单独证明速度优势。"
+            },
+            {
+              "name": "跨PDE初始灵敏度排序判别力验证",
+              "data": "热传导、NS三出口、特征频率和柔顺度四类PDE；热传导与特征频率为新生成数据。",
+              "samples": "四类PDE是任务类别数量，不是独立样本数；各类别样本、仿真和增强数量未报告。",
+              "groups": "每类分别比较初始灵敏度S₀、收敛灵敏度S⋆和仅按体积分数阈值化的结果。",
+              "split": "各类数据的训练验证测试划分及是否独立于生成模型训练数据未报告。",
+              "baselines": "收敛灵敏度作为排序能力对照，体积分数阈值作为不学习空间拓扑的直接提取基线。",
+              "metrics": "ROC AUC：衡量最终实体单元与空隙单元的排序判别力；Δ为AUC(S⋆)−AUC(S₀)，均无量纲。",
+              "results": "热传导、NS三出口、特征频率、柔顺度的S₀/S⋆ AUC依次为0.972/0.986、0.993/1.000、0.957/0.868、0.915/0.918。",
+              "limitations": "没有样本量、误差条及重复统计；特征频率的终端AUC反而下降。排序能力不能直接证明拓扑重建质量或物理可行性。"
+            }
+          ],
+          "routes": [
+            {
+              "title": "面向过渡流动的伪灵敏度可信度与选择性伴随校正",
+              "direction_id": "generative_design",
+              "gap": "原研究对冻结湍流灵敏度的相关性较强，却缺少过渡雷诺数、回流区域的失败统计。建议首先回答何时速度平方不再足够，而不是继续扩大生成器容量。",
+              "mechanism": "建议由速度、压力和回流特征估计伪灵敏度的局部误差及置信度，低置信工况才调用伴随求解。训练校正场时统一负号约定，并区分冻结湍流导数与完整设计导数。",
+              "innovation": "候选创新是把条件可信度、选择性伴随计算与Bernoulli生成组合成可拒绝预测的流程。各单项机制并非新颖性结论，需验证组合是否改善成本与失败风险的权衡。",
+              "design": "可先使用作者声明公开的CFD数据，核实许可与字段；建议新增300例，按低、过渡、高Re各100例并平衡出口配置。按几何隔离测试，新增完整导数需另行采集且取决于求解器能力。",
+              "comparison": "固定生成架构与采样预算，比较原速度平方、始终精确灵敏度、学习校正和置信门控。消融去掉回流特征、校正及拒绝机制，并统一计入条件求解和失败重算耗时。",
+              "criterion": "建议预注册以全样本绝对误差尾部、边界违例率和可仿真率为主指标，辅以有符号误差。只有失败风险下降且总耗时低于始终伴随路线，才支持机制有效。",
+              "risk": "完整湍流导数可能不稳定或无法取得，置信度也可能在新几何下失准。替代方案是有限差分抽查局部导数，并对高风险样本回退传统优化，不把拒绝样本隐藏于均值。"
+            },
+            {
+              "title": "检验初始灵敏度在路径依赖结构设计中的充分性边界",
+              "direction_id": "generative_design",
+              "gap": "原文从终端KKT关系解释初始条件，却未充分验证多目标和历史依赖约束。建议研究相似S₀是否对应不同可行终态，明确单场条件何时出现不可约歧义。",
+              "mechanism": "建议给生成器补充早期梯度变化、体积乘子和约束余量，通过短优化轨迹提供历史信息。保持二值生成主干不变，用受控信息增量检验性能变化来自历史还是容量。",
+              "innovation": "候选创新是建立初始场充分性的诊断与最小历史条件选择。相关预印本《Structure-agnostic Causal Representation Learning》的摘要提示结构误设风险，但不能据此认定其方法已适用于拓扑优化。",
+              "design": "建议先复用可获得的线弹性基准，再仿真采集240组载荷—支承配置，每组分别求解柔顺度和带路径约束目标。按配置而非像素划分测试，并保存相同初始化下的早期梯度。",
+              "comparison": "比较仅S₀、S₀加约束参数、加入早期轨迹和完整传统优化；配平网络容量与计算预算。消融打乱轨迹顺序、移除乘子及仅增加参数量，以排除额外输入规模的影响。",
+              "criterion": "建议以未见配置的绝对目标误差、约束违例率和失败尾部为判据，报告多随机种子区间。只有历史条件在相似S₀子集仍稳定获益，才支持初始场存在信息缺口。",
+              "risk": "所谓相似初始场可能只是归一化或网格插值造成，轨迹输入也增加求解成本。替代路径是先用受控小规模问题核查歧义，再评估短轨迹收益是否抵消物理计算开销。"
+            }
+          ],
+          "diagrams": [
+            {
+              "kind": "study",
+              "title": "原研究：灵敏度相关条件驱动二值拓扑生成",
+              "description": "展示已实现的方法与验证链条；条件信息排序依赖Markov假设，生成结果仍需物理评估。",
+              "nodes": [
+                {
+                  "id": "a",
+                  "stage": 0,
+                  "label": "载荷与边界配置",
+                  "detail": "二维结构或流体问题，固定均匀初始设计"
+                },
+                {
+                  "id": "b",
+                  "stage": 1,
+                  "label": "初始正向PDE求解",
+                  "detail": "获得位移、应变能、速度及压力等物理场"
+                },
+                {
+                  "id": "c",
+                  "stage": 2,
+                  "label": "初始伴随灵敏度",
+                  "detail": "流体采用冻结湍流伴随，结构采用柔顺度梯度"
+                },
+                {
+                  "id": "d",
+                  "stage": 2,
+                  "label": "伪灵敏度条件",
+                  "detail": "结构SED；流体速度模平方，后者具有近似适用条件"
+                },
+                {
+                  "id": "e",
+                  "stage": 3,
+                  "label": "条件Bernoulli生成",
+                  "detail": "Transformer去噪，BCE训练，推理采用50步采样"
+                },
+                {
+                  "id": "f",
+                  "stage": 4,
+                  "label": "采样内控制与终步投影",
+                  "detail": "渐进剪枝控制体积分数，贪心终步减少孤立像素"
+                },
+                {
+                  "id": "g",
+                  "stage": 5,
+                  "label": "OOD物理与拓扑评估",
+                  "detail": "多出口及结构工况偏移；报告有符号误差与BCE"
+                }
+              ],
+              "edges": [
+                {
+                  "from": "a",
+                  "to": "b",
+                  "label": "求解初始响应"
+                },
+                {
+                  "from": "b",
+                  "to": "c",
+                  "label": "伴随求导"
+                },
+                {
+                  "from": "b",
+                  "to": "d",
+                  "label": "提取替代条件"
+                },
+                {
+                  "from": "c",
+                  "to": "e",
+                  "label": "精确条件路线"
+                },
+                {
+                  "from": "d",
+                  "to": "e",
+                  "label": "近似条件路线"
+                },
+                {
+                  "from": "e",
+                  "to": "f",
+                  "label": "迭代采样"
+                },
+                {
+                  "from": "f",
+                  "to": "g",
+                  "label": "评估生成拓扑"
+                }
+              ]
+            },
+            {
+              "kind": "proposal",
+              "title": "拟议路线：置信门控的伪灵敏度校正",
+              "description": "对应第一条研究建议，所有性能改善均待实验验证，不代表原论文实测结果。",
+              "nodes": [
+                {
+                  "id": "a",
+                  "stage": 0,
+                  "label": "公开数据与新增工况",
+                  "detail": "核实公开字段，建议增采300例并按几何隔离测试"
+                },
+                {
+                  "id": "b",
+                  "stage": 1,
+                  "label": "速度平方与回流特征",
+                  "detail": "从初始正向求解提取条件，统一灵敏度负号约定"
+                },
+                {
+                  "id": "c",
+                  "stage": 2,
+                  "label": "条件可信度估计",
+                  "detail": "学习局部误差及工况级置信度，预注册门控阈值"
+                },
+                {
+                  "id": "d",
+                  "stage": 3,
+                  "label": "高置信校正条件",
+                  "detail": "使用学习校正场，避免每例额外伴随求解"
+                },
+                {
+                  "id": "e",
+                  "stage": 3,
+                  "label": "低置信伴随回退",
+                  "detail": "调用伴随或传统优化；不可用时进行有限差分抽查"
+                },
+                {
+                  "id": "f",
+                  "stage": 4,
+                  "label": "固定生成器对照",
+                  "detail": "统一架构、采样步数及训练预算，执行门控消融"
+                },
+                {
+                  "id": "g",
+                  "stage": 5,
+                  "label": "全样本风险与成本",
+                  "detail": "统计绝对误差尾部、违例率、仿真成功率及总耗时"
+                }
+              ],
+              "edges": [
+                {
+                  "from": "a",
+                  "to": "b",
+                  "label": "采集初始物理场"
+                },
+                {
+                  "from": "b",
+                  "to": "c",
+                  "label": "估计近似风险"
+                },
+                {
+                  "from": "c",
+                  "to": "d",
+                  "label": "高置信"
+                },
+                {
+                  "from": "c",
+                  "to": "e",
+                  "label": "低置信"
+                },
+                {
+                  "from": "d",
+                  "to": "f",
+                  "label": "输入校正场"
+                },
+                {
+                  "from": "e",
+                  "to": "f",
+                  "label": "输入伴随场"
+                },
+                {
+                  "from": "f",
+                  "to": "g",
+                  "label": "统一物理验证"
+                },
+                {
+                  "from": "g",
+                  "to": "c",
+                  "label": "校准门控"
+                }
+              ]
+            }
+          ],
+          "related": {
+            "status": "ok",
+            "checked_at": "2026-10-06T14:28:41.976956+00:00",
+            "papers": [
+              {
+                "title": "Time Series Causal Discovery via Context-Conditioned and Causality-Augmented Pretraining",
+                "url": "https://doi.org/10.48550/arxiv.2605.26759",
+                "year": 2026,
+                "basis": "abstract",
+                "preprint": true
+              },
+              {
+                "title": "Structure-agnostic Causal Representation Learning",
+                "url": "https://doi.org/10.48550/arxiv.2610.00968",
+                "year": 2026,
+                "basis": "abstract",
+                "preprint": true
+              },
+              {
+                "title": "Acoustic fault diagnosis in heterogeneous environments via causal disentanglement",
+                "url": "https://doi.org/10.1088/1361-6501/ae7aaa",
+                "year": 2026,
+                "basis": "abstract",
+                "preprint": false
+              }
+            ]
+          }
+        },
+        "article_updated_at": "2026-10-06T14:31:59.847669+00:00",
+        "article_profile": "0dc2056d3cac894b7e716218c7ffe8022679250058fdbf8cd9647fb31ad3bd5e",
+        "analysis_references": {
+          "problem": [
+            "P1",
+            "P2",
+            "P3"
+          ],
+          "method": [
+            "P5",
+            "P6",
+            "P18",
+            "P19",
+            "P20"
+          ],
+          "innovation": [
+            "P2",
+            "P3",
+            "P4",
+            "P5",
+            "P11"
+          ],
+          "findings": [
+            "P6",
+            "P8"
+          ],
+          "limitations": [
+            "P9",
+            "P12",
+            "P13",
+            "P14",
+            "P15",
+            "P16",
+            "P20",
+            "P21"
+          ],
+          "connection": [
+            "P7",
+            "P8",
+            "P16",
+            "P17"
+          ],
+          "next_steps": [
+            "P14",
+            "P15",
+            "P16",
+            "P17",
+            "P18",
+            "P19",
+            "P20",
+            "P21"
+          ]
+        },
+        "analysis_material_version": "7bd459d14171d3891c9752345157a6d4333aaa521941e393ef6924efcd678f1d",
+        "analysis_issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "定义1后的向量场标量不变量及命题1第2项，文字提取将‖v‖²展平为“∥v∥ 2”。原页可清楚辨认2为平方上标，已核正为速度模平方；命题为S₀∝−‖v‖²，并限定于冻结湍流与高雷诺数渐近条件。此纠正影响CFD伪灵敏度的具体形式，原页没有缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "表3伪灵敏度条件的文字提取“∥v∥2”未保留平方上标；原页清楚显示‖v‖²，已核正为速度模平方。两列误差分别为UDiT 7.0%、本文2.7%；无原文件缺项，此纠正影响条件信号的物理定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "表6的NITO行被文字提取合并为“NITO225 9.33 2.37”。原页清楚分列为参数22M、额外SIMP步骤FS=5、平均柔顺度误差9.33%、中位误差2.37%。已纠正列合并错误；无原文件缺项，影响参数规模与额外优化成本的比较。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "式(20)、(22)、(25)及A.6.5–A.6.7中的速度范数平方，文字提取多处展平为“∥v∥ 2”；原页明确为‖v‖²，已核正。式(24)分母也明确为(1+qρ)²。无原文件缺项，平方上标影响耗散目标与伪灵敏度的具体数学形式。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P16",
+            "detail": "表8有效批量与学习率、表9批量与学习率在文字提取中粘连，例如“2565×10 −4”。原页列界清楚：批量或有效批量为256，学习率另列为5×10⁻⁴；DiT学习率为3×10⁻⁴。已纠正分列及负指数排版，无原文件缺项，影响训练配置的复现。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P17",
+            "detail": "表10文字提取将UDiT与本文的伪灵敏度、压力相邻列粘连。原页已清楚核正：UDiT伪灵敏度为0.08/0.20/0.36，压力为0.24/1.01/1.67；本文伪灵敏度为0.04/0.15/0.38，压力为0.07/0.23/0.46，顺序均为ID/OOD-M/OOD-H。无原页缺项，影响条件模态的BCE比较。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P20",
+            "detail": "C.6中速度模平方的文字提取展平为“∥v∥ 2”；原页明确为‖v‖²，理论关系为S∝−‖v‖²。已保留平方与负号，无原页缺项，影响伪灵敏度定义及相关性报告的解释。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P21",
+            "detail": "图11文字提取丢失Pearson r纵轴的负号，列为1.0、0.9等。原页清楚显示−1.0、−0.9、−0.8、−0.7、−0.6、−0.5；已核正为速度模平方与灵敏度的负相关。无原页缺项，影响相关方向及S∝−‖v‖²理论与图证的一致性判断；图中未提供可直接读取的总体平均相关值。"
+          }
+        ],
+        "reading_status": {
+          "paper_id": "304acf33a546",
+          "state": "published",
+          "updated_at": "2026-10-06T14:31:59.849663+00:00",
+          "basis": "full_text",
+          "article_state": "failed",
+          "article_stage": "facts",
+          "reason": "",
+          "total": 28,
+          "covered": 28,
+          "pdf_available": true,
+          "issues": [
+            {
+              "kind": "extraction_error",
+              "page": "P4",
+              "detail": "定义1后的向量场标量不变量及命题1第2项，文字提取将‖v‖²展平为“∥v∥ 2”。原页可清楚辨认2为平方上标，已核正为速度模平方；命题为S₀∝−‖v‖²，并限定于冻结湍流与高雷诺数渐近条件。此纠正影响CFD伪灵敏度的具体形式，原页没有缺项。"
+            },
+            {
+              "kind": "extraction_error",
+              "page": "P7",
+              "detail": "表3伪灵敏度条件的文字提取“∥v∥2”未保留平方上标；原页清楚显示‖v‖²，已核正为速度模平方。两列误差分别为UDiT 7.0%、本文2.7%；无原文件缺项，此纠正影响条件信号的物理定义。"
+            },
+            {
+              "kind": "extraction_error",
+              "page": "P8",
+              "detail": "表6的NITO行被文字提取合并为“NITO225 9.33 2.37”。原页清楚分列为参数22M、额外SIMP步骤FS=5、平均柔顺度误差9.33%、中位误差2.37%。已纠正列合并错误；无原文件缺项，影响参数规模与额外优化成本的比较。"
+            },
+            {
+              "kind": "extraction_error",
+              "page": "P15",
+              "detail": "式(20)、(22)、(25)及A.6.5–A.6.7中的速度范数平方，文字提取多处展平为“∥v∥ 2”；原页明确为‖v‖²，已核正。式(24)分母也明确为(1+qρ)²。无原文件缺项，平方上标影响耗散目标与伪灵敏度的具体数学形式。"
+            },
+            {
+              "kind": "extraction_error",
+              "page": "P16",
+              "detail": "表8有效批量与学习率、表9批量与学习率在文字提取中粘连，例如“2565×10 −4”。原页列界清楚：批量或有效批量为256，学习率另列为5×10⁻⁴；DiT学习率为3×10⁻⁴。已纠正分列及负指数排版，无原文件缺项，影响训练配置的复现。"
+            },
+            {
+              "kind": "extraction_error",
+              "page": "P17",
+              "detail": "表10文字提取将UDiT与本文的伪灵敏度、压力相邻列粘连。原页已清楚核正：UDiT伪灵敏度为0.08/0.20/0.36，压力为0.24/1.01/1.67；本文伪灵敏度为0.04/0.15/0.38，压力为0.07/0.23/0.46，顺序均为ID/OOD-M/OOD-H。无原页缺项，影响条件模态的BCE比较。"
+            },
+            {
+              "kind": "extraction_error",
+              "page": "P20",
+              "detail": "C.6中速度模平方的文字提取展平为“∥v∥ 2”；原页明确为‖v‖²，理论关系为S∝−‖v‖²。已保留平方与负号，无原页缺项，影响伪灵敏度定义及相关性报告的解释。"
+            },
+            {
+              "kind": "extraction_error",
+              "page": "P21",
+              "detail": "图11文字提取丢失Pearson r纵轴的负号，列为1.0、0.9等。原页清楚显示−1.0、−0.9、−0.8、−0.7、−0.6、−0.5；已核正为速度模平方与灵敏度的负相关。无原页缺项，影响相关方向及S∝−‖v‖²理论与图证的一致性判断；图中未提供可直接读取的总体平均相关值。"
+            }
+          ]
+        },
+        "identity_aliases": [
+          [
+            "openreview",
+            "1e3gI1ibcn"
+          ],
+          [
+            "title_author_names",
+            "onthegeneralizationintopologyoptimizationviasensitivityconditionedbernoulliflowmatching|gholami:b|guerbuez:c|madeira:d|rashed:m|thuerey:n|yang:y"
+          ],
+          [
+            "title_authors",
+            "onthegeneralizationintopologyoptimizationviasensitivityconditionedbernoulliflowmatching|babakgholami|caglarguerbuez|duartefvalorosomadeira|mohammadrashed|nilsthuerey|yunjiayang"
+          ]
+        ],
+        "research_directions": [
+          "结构生成式设计与可靠性优化"
+        ]
+      },
+      "id": "304acf33a546",
+      "source_ids": [
+        "AI 顶会论文"
+      ],
+      "venue_group": "AI 顶会主会论文",
+      "journal": "ICML",
+      "topic_ids": [
+        "generative_design"
+      ],
+      "focus_tags": [],
+      "title_zh": "灵敏度条件化伯努利流匹配驱动的拓扑优化泛化研究",
+      "recommendation": "推荐重点阅读条件信号消融与结构柔顺度实验，学习如何将伴随灵敏度转化为生成设计条件；同时核查理论假设、样本过滤和端到端计时，避免把经验优势理解为普遍可靠性保证。[P7–P9][P12–P16]",
+      "deep_read": {
+        "problem": "作者研究拓扑优化代理模型在未见载荷和边界条件下的泛化差异，核心问题是哪些输入保留了决定最优材料布局的信息，而非单纯比较网络容量。经典迭代优化需反复求解正向与伴随PDE，湍流场景尤其昂贵，因此直接预测必须兼顾计算节省与工况变化。[P1–P3]",
+        "method": "方法以初始灵敏度或伪灵敏度为条件，沿伯努利线性概率路径扰动二元拓扑，用二元交叉熵训练去噪器。分层Transformer通过交叉注意力注入物理条件、AdaLN注入时间；推理采用50步采样，末步确定性阈值化，并可在采样中渐进剪枝控制体积分数。[P5–P6][P18–P20]",
+        "innovation": "作者将条件场选择置于伴随理论与信息论框架：在Markov假设下用DPI排序预测不确定性，再以单调映射定义伪灵敏度，联系结构应变能与流体速度模平方。贡献还包括多出口CFD数据和二元生成流程；伯努利流模型本身来自既有工作，不宜归为本文原创。[P2–P5][P11]",
+        "findings": "结构OOD测试中，本文平均柔顺度误差为5.73%，TopoDiff为8.57%；灵敏度与SED条件的中位误差分别0.54%和0.53%。三出口CFD测试中本文准确率74.5%，但ID并非最佳。消融还显示灵敏度条件确定性模型优于仅用物理参数的确定性模型。[P6][P8]",
+        "limitations": "作者仅验证二维问题，条件输入仍需物理求解，冻结湍流存在近似误差。[P9]解读：Markov假设与高AUC不等于普遍充分性；伴随符号、相关系数符号及计时比较待澄清，样本过滤影响可靠性解释。[P12–P16][P20–P21]核对记录未确认原文件缺项。",
+        "connection": "解读：对结构设计，最直接的联系是用目标约化梯度指导条件输入，比较其在未见载荷下的表现；对可靠性研究，可关注跨工况失败而非仅平均误差。智能运维可借鉴物理对齐表征思想，但论文没有故障诊断、寿命预测或失效概率证据，不能声称已验证这些应用。[P7–P8][P16–P17]",
+        "next_steps": "建议先复现固定架构下的条件场消融，分别比较灵敏度、SED、位移与原始参数，再报告未过滤误差、保留率和失败案例。随后核查CFD伴随符号与相关性定义，并测试禁入区和体积约束的实际违约率；最后再扩展三维及可靠性目标，避免直接照搬充分性结论。[P14–P21]"
+      },
+      "analysis_status": "ready",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://raw.githubusercontent.com/mlresearch/v306/main/assets/rashed26a/rashed26a.pdf"
+      ],
+      "analyzed_at": "2026-10-06T14:17:44.329388+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 1,
+        "lead": "拓扑优化代理模型为何在训练工况内表现出色，换一组载荷或出口却可能失效？本文把解释重点从网络规模转向条件信号：它是否保留了驱动经典优化的灵敏度信息。作者结合信息论分析、伪灵敏度与Bernoulli流匹配，在二维结构和流体任务中验证这一思路。阅读价值不仅在于误差改善，更在于辨清初始物理场、生成机制与物理可行性各自能解决什么问题。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "泛化瓶颈可能藏在条件场，而非网络容量",
+            "paragraphs": [
+              "经典拓扑优化通过反复求解正向与伴随PDE更新材料分布，代理模型则希望直接预测优化后的拓扑。困难在于，载荷和边界配置变化会同时改变物理响应与目标几何；仅输入原始参数，未必能让网络识别新的材料布局规律。",
+              "本文提出以条件信号保留的灵敏度信息解释泛化差异，并区分条件、架构和生成方式的贡献。其主要生成验证限定于二维线弹性结构与二维稳态RANS流动，不能直接外推到三维、瞬态或路径依赖问题。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从初始灵敏度到二值拓扑的生成链条",
+            "paragraphs": [
+              "作者将优化过程抽象为Θ→X→S₀→ρ⋆，分别对应问题参数、初始物理场、初始灵敏度和收敛拓扑。数据处理不等式在该Markov假设下给出条件信息排序，但不是无条件的OOD性能保证；附录的KKT论证针对终端灵敏度，也不能直接证明S₀严格充分。",
+              "伪灵敏度允许用单调变换后的物理场近似S₀，从而避免额外伴随求解。结构柔顺度问题中，均匀初始设计的应变能密度与负灵敏度成正比；流体速度模平方的近似则依赖冻结湍流和局部Stokes型平衡，不能仅凭高全局雷诺数成立。",
+              "生成器采用αₜ=(1−t)·0.5+t·x₁的Bernoulli概率路径，以BCE训练条件去噪器，层级Transformer通过交叉注意力读取条件场。推理使用50步采样，终步贪心投影减少孤立像素；采样内渐进剪枝控制体积分数，但这些组件尚缺独立的大样本可行性验证。"
+            ]
+          },
+          {
+            "id": "validation",
+            "title": "单出口训练，多出口测试：验证究竟覆盖了什么",
+            "paragraphs": [
+              "CFD数据由STAR-CCM+稳态RANS和realizable k–ε模型生成，统一到128×128网格。单出口训练10,000例、ID测试1,000例，双出口和三出口各测试500例；入口数量与物性也变化，验证集、增强数量及独立性核查未报告，不能把实例数等同于独立求解次数。",
+              "CFD比较DiT、UDiT和PDE-T，并交叉改变灵敏度、速度平方与压力条件；各模型最终训练预算不同，不是严格等预算对照。结构沿用TopoDiffusion和NITO基准，包含未见载荷及新边界配置，但训练测试规模未报告；所给证据均为数值验证，没有实物试件实验。",
+              "两类物理误差均为**有符号相对误差**，均值可能掩盖正负抵消。CFD排除相对初始几何偏离超过50%的预测，结构排除柔顺度误差超过1000%的预测；剔除比例和筛选前结果未报告，因此表中表现不能代表全部生成样本。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "条件信息的证据较强，可行性与效率仍须限定口径",
+            "paragraphs": [
+              "本文模型在三出口OOD中的平均压降误差为6.12%、中位数2.70%，但ID不如神经基线，双出口准确率也低于DiT。结构OOD平均柔顺度误差为5.73%，低于TopoDiff的8.57%和NITO的9.33%；不同条件表的0.54%与基准表的0.53%中位数应分别保留。",
+              "条件消融支持灵敏度相关场更稳健，但交叉熵只是条件熵上界，不能直接测量真实互信息。速度平方相关图显示强负相关，不能照正文简写成正相关；本站判断，流体附录的伴随符号及比例系数解释仍需澄清，高相关也不等于最终设计可行。",
+              "纯网络推理为0.65 ms/样本，获取伪灵敏度并推理约3.2 s，精确灵敏度路线约8.5 s，说明物理求解仍主导成本。硬件已有报告，但相对NITO的计时边界未统一；禁入区、预算收紧和终步投影各展示4例，尚不足以证明普遍连通或严格约束满足。"
+            ]
+          }
+        ],
+        "experiments": [
+          {
+            "name": "CFD多出口OOD性能比较与计算成本",
+            "data": "STAR-CCM+生成二维稳态RANS通道数据，采用realizable k–ε模型，场插值至128×128。",
+            "samples": "训练10,000例，ID测试1,000例，双出口及三出口各500例；独立求解总次数、增强数量及计时重复次数未报告。",
+            "groups": "训练单出口、入口1–11个；双出口测试入口1–10个，三出口入口1–9个；密度和黏度独立均匀采样。",
+            "split": "只有单出口参与训练；三个工况组分别测试。验证集、去重规则及几何配置隔离细节未报告。",
+            "baselines": "灵敏度条件DiT、UDiT、PDE-T及STAR-CCM+单次优化迭代；计时另列完整优化和NITO加5步SIMP。",
+            "metrics": "有符号压降相对误差的均值±标准差、中位数，以及误差在目标值10%以内的比例；另报告每样本耗时。",
+            "results": "本文ID、双出口、三出口平均误差分别3.68%、6.38%、6.12%；三出口中位数2.70%、准确率74.5%。伪灵敏度端到端约3.2 s，精确灵敏度约8.5 s，完整优化113.94 s。",
+            "limitations": "ID并非最佳，双出口准确率72.3%低于DiT的79.4%；几何偏离超过50%的样本被排除，数量未报告。训练预算不同，NITO计时边界未统一。"
+          },
+          {
+            "name": "CFD条件信号与架构交叉消融",
+            "data": "CFD-TO数据上的条件比较、架构交叉比较与累加消融；不同表的测试配置不能直接互换。",
+            "samples": "总体测试规模为ID 1,000例、双出口及三出口各500例；各子实验实际使用数量、重复训练次数未报告。",
+            "groups": "压力、速度模平方伪灵敏度、灵敏度三个条件组，覆盖DiT、UDiT、PDE-T及本文模型。",
+            "split": "采用单出口训练和ID、双出口、三出口测试；条件仿真表中OOD的具体构成未报告。",
+            "baselines": "条件与架构交叉对照；另依次加入伪灵敏度条件、架构增强和BFM，后者属于累加而非完整因子消融。",
+            "metrics": "中位BCE、压降有符号相对误差及定性通道布局；BCE聚合细节与边界违例率未报告。",
+            "results": "本文三出口中位BCE：灵敏度0.22、速度0.38、压力0.46。另一交叉表中，UDiT伪灵敏度中位压降误差7.0%，本文压力条件为100.0%。",
+            "limitations": "不同表的压力结果不能合并；ID存在灵敏度与速度并列或速度略优的情况。累加消融不能完全分离模块交互，未提供统计显著性。"
+          },
+          {
+            "name": "结构柔顺度条件消融与OOD基准比较",
+            "data": "沿用TopoDiffusion和NITO的二维线弹性基准，包含悬臂、桥状结构及未见载荷和边界配置。",
+            "samples": "独立结构、训练验证测试数量、仿真总次数与增强数量未报告；代表性图展示数量不等于测试集规模。",
+            "groups": "灵敏度、SED、位移、物理参数条件；生成与确定性模型对照；另比较各方法的结构OOD性能。",
+            "split": "包含未见载荷模式与新边界配置的OOD测试，具体划分数量、参数范围和隔离规则未报告。",
+            "baselines": "条件与确定性模型消融；基准为TopoDiff、TopoDiff w/ G和NITO，NITO输出后增加5步SIMP。",
+            "metrics": "交叉熵标度×10⁻¹，温度T=15；有符号柔顺度相对误差的均值和中位数；参数量及额外SIMP步数。",
+            "results": "灵敏度、SED条件中位误差为0.54%、0.53%；灵敏度确定性模型2.27%。OOD基准平均/中位误差：本文5.73%/0.53%，TopoDiff 8.57%/1.14%，NITO 9.33%/2.37%。",
+            "limitations": "误差超过1000%的样本被排除，比例未报告；重复训练与置信区间缺失。参数量及后处理步数不能单独证明速度优势。"
+          },
+          {
+            "name": "跨PDE初始灵敏度排序判别力验证",
+            "data": "热传导、NS三出口、特征频率和柔顺度四类PDE；热传导与特征频率为新生成数据。",
+            "samples": "四类PDE是任务类别数量，不是独立样本数；各类别样本、仿真和增强数量未报告。",
+            "groups": "每类分别比较初始灵敏度S₀、收敛灵敏度S⋆和仅按体积分数阈值化的结果。",
+            "split": "各类数据的训练验证测试划分及是否独立于生成模型训练数据未报告。",
+            "baselines": "收敛灵敏度作为排序能力对照，体积分数阈值作为不学习空间拓扑的直接提取基线。",
+            "metrics": "ROC AUC：衡量最终实体单元与空隙单元的排序判别力；Δ为AUC(S⋆)−AUC(S₀)，均无量纲。",
+            "results": "热传导、NS三出口、特征频率、柔顺度的S₀/S⋆ AUC依次为0.972/0.986、0.993/1.000、0.957/0.868、0.915/0.918。",
+            "limitations": "没有样本量、误差条及重复统计；特征频率的终端AUC反而下降。排序能力不能直接证明拓扑重建质量或物理可行性。"
+          }
+        ],
+        "routes": [
+          {
+            "title": "面向过渡流动的伪灵敏度可信度与选择性伴随校正",
+            "direction_id": "generative_design",
+            "gap": "原研究对冻结湍流灵敏度的相关性较强，却缺少过渡雷诺数、回流区域的失败统计。建议首先回答何时速度平方不再足够，而不是继续扩大生成器容量。",
+            "mechanism": "建议由速度、压力和回流特征估计伪灵敏度的局部误差及置信度，低置信工况才调用伴随求解。训练校正场时统一负号约定，并区分冻结湍流导数与完整设计导数。",
+            "innovation": "候选创新是把条件可信度、选择性伴随计算与Bernoulli生成组合成可拒绝预测的流程。各单项机制并非新颖性结论，需验证组合是否改善成本与失败风险的权衡。",
+            "design": "可先使用作者声明公开的CFD数据，核实许可与字段；建议新增300例，按低、过渡、高Re各100例并平衡出口配置。按几何隔离测试，新增完整导数需另行采集且取决于求解器能力。",
+            "comparison": "固定生成架构与采样预算，比较原速度平方、始终精确灵敏度、学习校正和置信门控。消融去掉回流特征、校正及拒绝机制，并统一计入条件求解和失败重算耗时。",
+            "criterion": "建议预注册以全样本绝对误差尾部、边界违例率和可仿真率为主指标，辅以有符号误差。只有失败风险下降且总耗时低于始终伴随路线，才支持机制有效。",
+            "risk": "完整湍流导数可能不稳定或无法取得，置信度也可能在新几何下失准。替代方案是有限差分抽查局部导数，并对高风险样本回退传统优化，不把拒绝样本隐藏于均值。"
+          },
+          {
+            "title": "检验初始灵敏度在路径依赖结构设计中的充分性边界",
+            "direction_id": "generative_design",
+            "gap": "原文从终端KKT关系解释初始条件，却未充分验证多目标和历史依赖约束。建议研究相似S₀是否对应不同可行终态，明确单场条件何时出现不可约歧义。",
+            "mechanism": "建议给生成器补充早期梯度变化、体积乘子和约束余量，通过短优化轨迹提供历史信息。保持二值生成主干不变，用受控信息增量检验性能变化来自历史还是容量。",
+            "innovation": "候选创新是建立初始场充分性的诊断与最小历史条件选择。相关预印本《Structure-agnostic Causal Representation Learning》的摘要提示结构误设风险，但不能据此认定其方法已适用于拓扑优化。",
+            "design": "建议先复用可获得的线弹性基准，再仿真采集240组载荷—支承配置，每组分别求解柔顺度和带路径约束目标。按配置而非像素划分测试，并保存相同初始化下的早期梯度。",
+            "comparison": "比较仅S₀、S₀加约束参数、加入早期轨迹和完整传统优化；配平网络容量与计算预算。消融打乱轨迹顺序、移除乘子及仅增加参数量，以排除额外输入规模的影响。",
+            "criterion": "建议以未见配置的绝对目标误差、约束违例率和失败尾部为判据，报告多随机种子区间。只有历史条件在相似S₀子集仍稳定获益，才支持初始场存在信息缺口。",
+            "risk": "所谓相似初始场可能只是归一化或网格插值造成，轨迹输入也增加求解成本。替代路径是先用受控小规模问题核查歧义，再评估短轨迹收益是否抵消物理计算开销。"
+          }
+        ],
+        "diagrams": [
+          {
+            "kind": "study",
+            "title": "原研究：灵敏度相关条件驱动二值拓扑生成",
+            "description": "展示已实现的方法与验证链条；条件信息排序依赖Markov假设，生成结果仍需物理评估。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "载荷与边界配置",
+                "detail": "二维结构或流体问题，固定均匀初始设计"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "初始正向PDE求解",
+                "detail": "获得位移、应变能、速度及压力等物理场"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "初始伴随灵敏度",
+                "detail": "流体采用冻结湍流伴随，结构采用柔顺度梯度"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "伪灵敏度条件",
+                "detail": "结构SED；流体速度模平方，后者具有近似适用条件"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "条件Bernoulli生成",
+                "detail": "Transformer去噪，BCE训练，推理采用50步采样"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "采样内控制与终步投影",
+                "detail": "渐进剪枝控制体积分数，贪心终步减少孤立像素"
+              },
+              {
+                "id": "g",
+                "stage": 5,
+                "label": "OOD物理与拓扑评估",
+                "detail": "多出口及结构工况偏移；报告有符号误差与BCE"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "求解初始响应"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "伴随求导"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "提取替代条件"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "精确条件路线"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "近似条件路线"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "迭代采样"
+              },
+              {
+                "from": "f",
+                "to": "g",
+                "label": "评估生成拓扑"
+              }
+            ]
+          },
+          {
+            "kind": "proposal",
+            "title": "拟议路线：置信门控的伪灵敏度校正",
+            "description": "对应第一条研究建议，所有性能改善均待实验验证，不代表原论文实测结果。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "公开数据与新增工况",
+                "detail": "核实公开字段，建议增采300例并按几何隔离测试"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "速度平方与回流特征",
+                "detail": "从初始正向求解提取条件，统一灵敏度负号约定"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "条件可信度估计",
+                "detail": "学习局部误差及工况级置信度，预注册门控阈值"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "高置信校正条件",
+                "detail": "使用学习校正场，避免每例额外伴随求解"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "低置信伴随回退",
+                "detail": "调用伴随或传统优化；不可用时进行有限差分抽查"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "固定生成器对照",
+                "detail": "统一架构、采样步数及训练预算，执行门控消融"
+              },
+              {
+                "id": "g",
+                "stage": 5,
+                "label": "全样本风险与成本",
+                "detail": "统计绝对误差尾部、违例率、仿真成功率及总耗时"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "采集初始物理场"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "估计近似风险"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "高置信"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "低置信"
+              },
+              {
+                "from": "d",
+                "to": "f",
+                "label": "输入校正场"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "输入伴随场"
+              },
+              {
+                "from": "f",
+                "to": "g",
+                "label": "统一物理验证"
+              },
+              {
+                "from": "g",
+                "to": "c",
+                "label": "校准门控"
+              }
+            ]
+          }
+        ],
+        "related": {
+          "status": "ok",
+          "checked_at": "2026-10-06T14:28:41.976956+00:00",
+          "papers": [
+            {
+              "title": "Time Series Causal Discovery via Context-Conditioned and Causality-Augmented Pretraining",
+              "url": "https://doi.org/10.48550/arxiv.2605.26759",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            },
+            {
+              "title": "Structure-agnostic Causal Representation Learning",
+              "url": "https://doi.org/10.48550/arxiv.2610.00968",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            },
+            {
+              "title": "Acoustic fault diagnosis in heterogeneous environments via causal disentanglement",
+              "url": "https://doi.org/10.1088/1361-6501/ae7aaa",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": false
+            }
+          ]
+        }
+      },
+      "article_updated_at": "2026-10-06T14:31:59.847669+00:00",
+      "article_profile": "0dc2056d3cac894b7e716218c7ffe8022679250058fdbf8cd9647fb31ad3bd5e",
+      "recommendation_decision": {
+        "kind": "promotion",
+        "previous": {
+          "id": "37467390827",
+          "date": "2026-10-06",
+          "number": 1,
+          "generated_at": "2026-10-06T13:07:31.301005+00:00",
+          "trigger": "scheduled",
+          "core_count": 5,
+          "extended_count": 5,
+          "tier": "extended"
+        },
+        "reason": "与结构设计和跨工况泛化方向直接相关，包含明确的条件化生成方法、结构柔顺度比较及CFD消融，足以支持重点阅读推荐。[P6–P8]资料依据为覆盖全文的逐页笔记及当前可核对摘录，并非本轮重新阅读全文；推荐不代表认可全部理论，也不代表已有智能运维或可靠性验证。",
+        "heat": null
+      },
+      "recommended_direction": "generative_design",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P5",
+          "P6",
+          "P18",
+          "P19",
+          "P20"
+        ],
+        "innovation": [
+          "P2",
+          "P3",
+          "P4",
+          "P5",
+          "P11"
+        ],
+        "findings": [
+          "P6",
+          "P8"
+        ],
+        "limitations": [
+          "P9",
+          "P12",
+          "P13",
+          "P14",
+          "P15",
+          "P16",
+          "P20",
+          "P21"
+        ],
+        "connection": [
+          "P7",
+          "P8",
+          "P16",
+          "P17"
+        ],
+        "next_steps": [
+          "P14",
+          "P15",
+          "P16",
+          "P17",
+          "P18",
+          "P19",
+          "P20",
+          "P21"
+        ]
+      },
+      "analysis_material_version": "7bd459d14171d3891c9752345157a6d4333aaa521941e393ef6924efcd678f1d",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "定义1后的向量场标量不变量及命题1第2项，文字提取将‖v‖²展平为“∥v∥ 2”。原页可清楚辨认2为平方上标，已核正为速度模平方；命题为S₀∝−‖v‖²，并限定于冻结湍流与高雷诺数渐近条件。此纠正影响CFD伪灵敏度的具体形式，原页没有缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "表3伪灵敏度条件的文字提取“∥v∥2”未保留平方上标；原页清楚显示‖v‖²，已核正为速度模平方。两列误差分别为UDiT 7.0%、本文2.7%；无原文件缺项，此纠正影响条件信号的物理定义。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "表6的NITO行被文字提取合并为“NITO225 9.33 2.37”。原页清楚分列为参数22M、额外SIMP步骤FS=5、平均柔顺度误差9.33%、中位误差2.37%。已纠正列合并错误；无原文件缺项，影响参数规模与额外优化成本的比较。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "式(20)、(22)、(25)及A.6.5–A.6.7中的速度范数平方，文字提取多处展平为“∥v∥ 2”；原页明确为‖v‖²，已核正。式(24)分母也明确为(1+qρ)²。无原文件缺项，平方上标影响耗散目标与伪灵敏度的具体数学形式。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P16",
+          "detail": "表8有效批量与学习率、表9批量与学习率在文字提取中粘连，例如“2565×10 −4”。原页列界清楚：批量或有效批量为256，学习率另列为5×10⁻⁴；DiT学习率为3×10⁻⁴。已纠正分列及负指数排版，无原文件缺项，影响训练配置的复现。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P17",
+          "detail": "表10文字提取将UDiT与本文的伪灵敏度、压力相邻列粘连。原页已清楚核正：UDiT伪灵敏度为0.08/0.20/0.36，压力为0.24/1.01/1.67；本文伪灵敏度为0.04/0.15/0.38，压力为0.07/0.23/0.46，顺序均为ID/OOD-M/OOD-H。无原页缺项，影响条件模态的BCE比较。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P20",
+          "detail": "C.6中速度模平方的文字提取展平为“∥v∥ 2”；原页明确为‖v‖²，理论关系为S∝−‖v‖²。已保留平方与负号，无原页缺项，影响伪灵敏度定义及相关性报告的解释。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P21",
+          "detail": "图11文字提取丢失Pearson r纵轴的负号，列为1.0、0.9等。原页清楚显示−1.0、−0.9、−0.8、−0.7、−0.6、−0.5；已核正为速度模平方与灵敏度的负相关。无原页缺项，影响相关方向及S∝−‖v‖²理论与图证的一致性判断；图中未提供可直接读取的总体平均相关值。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "304acf33a546",
+        "state": "published",
+        "updated_at": "2026-10-06T14:31:59.849663+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 28,
+        "covered": 28,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "定义1后的向量场标量不变量及命题1第2项，文字提取将‖v‖²展平为“∥v∥ 2”。原页可清楚辨认2为平方上标，已核正为速度模平方；命题为S₀∝−‖v‖²，并限定于冻结湍流与高雷诺数渐近条件。此纠正影响CFD伪灵敏度的具体形式，原页没有缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "表3伪灵敏度条件的文字提取“∥v∥2”未保留平方上标；原页清楚显示‖v‖²，已核正为速度模平方。两列误差分别为UDiT 7.0%、本文2.7%；无原文件缺项，此纠正影响条件信号的物理定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "表6的NITO行被文字提取合并为“NITO225 9.33 2.37”。原页清楚分列为参数22M、额外SIMP步骤FS=5、平均柔顺度误差9.33%、中位误差2.37%。已纠正列合并错误；无原文件缺项，影响参数规模与额外优化成本的比较。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "式(20)、(22)、(25)及A.6.5–A.6.7中的速度范数平方，文字提取多处展平为“∥v∥ 2”；原页明确为‖v‖²，已核正。式(24)分母也明确为(1+qρ)²。无原文件缺项，平方上标影响耗散目标与伪灵敏度的具体数学形式。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P16",
+            "detail": "表8有效批量与学习率、表9批量与学习率在文字提取中粘连，例如“2565×10 −4”。原页列界清楚：批量或有效批量为256，学习率另列为5×10⁻⁴；DiT学习率为3×10⁻⁴。已纠正分列及负指数排版，无原文件缺项，影响训练配置的复现。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P17",
+            "detail": "表10文字提取将UDiT与本文的伪灵敏度、压力相邻列粘连。原页已清楚核正：UDiT伪灵敏度为0.08/0.20/0.36，压力为0.24/1.01/1.67；本文伪灵敏度为0.04/0.15/0.38，压力为0.07/0.23/0.46，顺序均为ID/OOD-M/OOD-H。无原页缺项，影响条件模态的BCE比较。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P20",
+            "detail": "C.6中速度模平方的文字提取展平为“∥v∥ 2”；原页明确为‖v‖²，理论关系为S∝−‖v‖²。已保留平方与负号，无原页缺项，影响伪灵敏度定义及相关性报告的解释。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P21",
+            "detail": "图11文字提取丢失Pearson r纵轴的负号，列为1.0、0.9等。原页清楚显示−1.0、−0.9、−0.8、−0.7、−0.6、−0.5；已核正为速度模平方与灵敏度的负相关。无原页缺项，影响相关方向及S∝−‖v‖²理论与图证的一致性判断；图中未提供可直接读取的总体平均相关值。"
+          }
+        ]
+      }
+    },
+    {
+      "source": "Semantic Scholar",
+      "source_id": "ea2f2bbecb60512a635ce872a829f11f275df208",
+      "title": "Compound Fault Diagnosis for Industrial Machinery: Data-Driven Methods, Challenges, and LLM-Enhanced Perspectives",
+      "authors": [
+        "Zi-Han Weng"
+      ],
+      "venue": "Applied and Computational Engineering",
+      "abstract": "Compound faults occur when several local faults exist at the same time in industrial machinery and affect condition-monitoring signals together. Their signatures become mixed through modulation, structural transmission, operating-condition variation, and sensor response, which makes feature separation and state recognition more difficult. This paper reviews data-driven compound fault diagnosis from a scenario-oriented perspective. It first summarizes the task formulation and three main difficulties: coupled fault signatures, combinatorial growth of fault states, and distribution shifts across operating conditions and machines. The review then groups representative methods into three areas: signal representation, multi-label and fault-semantic modeling, and generalization under changing domains and unseen fault combinations. The paper also examines the emerging role of large language models, focusing on retrieval-augmented knowledge integration, evidence-grounded reasoning, tool-using diagnostic agents, and deployment reliability. It then points to several directions for future work, including compositional generalization, cross-machine transfer, multimodal sensing, industrial foundation models, and autonomous maintenance. Overall, the review argues that practical compound fault diagnosis depends on combining signal-level intelligence with reusable fault semantics and verifiable knowledge-based reasoning.",
+      "published_at": "2026-10-20",
+      "doi": "10.54254/2755-2721/2026.gf37867",
+      "landing_url": "https://www.semanticscholar.org/paper/ea2f2bbecb60512a635ce872a829f11f275df208",
+      "oa_url": "https://ace.ewapub.com/article/view/37867.pdf",
+      "citation_count": 0,
+      "source_score": 0.64,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "Compound faults occur when several local faults exist at the same time in industrial machinery and affect condition-monitoring signals together. Their signatures become mixed through modulation, structural transmission, operating-condition variation, and sensor response, which makes feature separation and state recognition more difficult. This paper reviews data-driven compound fault diagnosis from a scenario-oriented perspective. It first summarizes the task formulation and three main difficulties: coupled fault signatures, combinatorial growth of fault states, and distribution shifts across…",
+      "raw_metadata": {
+        "provider": "Semantic Scholar",
+        "paperId": "ea2f2bbecb60512a635ce872a829f11f275df208",
+        "sources": [
+          "Semantic Scholar"
+        ],
+        "source_links": [
+          "https://ace.ewapub.com/article/view/37867.pdf",
+          "https://www.semanticscholar.org/paper/ea2f2bbecb60512a635ce872a829f11f275df208"
+        ],
+        "identity_aliases": [
+          [
+            "doi",
+            "10.54254/2755-2721/2026.gf37867"
+          ],
+          [
+            "title_author_names",
+            "compoundfaultdiagnosisforindustrialmachinerydatadrivenmethodschallengesandllmenhancedperspectives|weng:z"
+          ],
+          [
+            "title_authors",
+            "compoundfaultdiagnosisforindustrialmachinerydatadrivenmethodschallengesandllmenhancedperspectives|zihanweng"
+          ]
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "b810820af1e9",
+      "source_ids": [
+        "Semantic Scholar"
+      ],
+      "venue_group": "其他／未分类",
+      "journal": "Applied and Computational Engineering",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [
+        "大模型"
+      ],
+      "analysis_status": "pending",
+      "method": "基于原文摘要的规则摘要",
+      "recommendation": "",
+      "deep_read": {},
+      "recommended_direction": "ai_maintenance"
+    },
+    {
+      "source": "Semantic Scholar",
+      "source_id": "663bc055cfdf9e614fbabb2ec146ceced896a0ff",
+      "title": "Digitalization in Industrial Facilities and the Classification of Maintenance Types: A Review",
+      "authors": [
+        "Faruk Açmalı"
+      ],
+      "venue": "International Journal of New Findings in Engineering, Science and Technology",
+      "abstract": "The digitalization of industrial facilities, driven by Industry 4.0 technologies, is fundamentally changing how production assets are monitored, modeled, and managed, and its strongest effect is felt in maintenance management, where traditional corrective and time-based practices are giving way to data-driven, condition-based, and predictive maintenance strategies. This review addresses two linked questions: how industrial maintenance types can be organized within a consistent framework, and how digital enablers such as cyber-physical systems, the Industrial Internet of Things (IIoT), the digital twin, machine learning, and remaining-useful-life (RUL) estimation reshape these types. The study is designed as a narrative (non-systematic) review of seventy-one peer-reviewed journal articles published between 1995 and 2026, complemented by the primary sources of the reliability centered maintenance literature. Maintenance strategies are classified and compared along a reactiveproactive axis as corrective, planned/periodic, condition-based, predictive, reliability-centered (RCM), risk-based (RBM), and opportunistic maintenance. We show that digitalization repositions these types within a continuous condition-monitoring–diagnosis–prognosis–decision loop. The review also surveys recent developments (large language models and generative artificial intelligence, federated and edge learning, explainable AI, digital-twin interoperability standards, and the human-centric maintenance perspective of Industry 4.0) and discusses their implications for maintenance management. As an original contribution, we propose a conceptual digital-maintenance framework that couples the digital twin, RUL-based maintenance-interval computation, and an expected profit-loss indicator (ePLI) with a reminder/alarm decision layer; the ePLI is formalized through an expected-loss expression, a threshold-based reminder/alarm rule, and an illustrative application scenario. The findings indicate that digitalization turns maintenance types from mutually exclusive choices into elements of an integrated asset-management continuum, and that Industry 4.0 and trustworthy-AI research adds a human-centric dimension to this continuum. For practitioners, the r",
+      "published_at": "2026-09-29",
+      "doi": "10.61150/ijonfest.2001152",
+      "landing_url": "https://www.semanticscholar.org/paper/663bc055cfdf9e614fbabb2ec146ceced896a0ff",
+      "oa_url": "https://dergipark.org.tr/tr/download/article-file/6253822",
+      "citation_count": 0,
+      "source_score": 0.64,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "The digitalization of industrial facilities, driven by Industry 4.0 technologies, is fundamentally changing how production assets are monitored, modeled, and managed, and its strongest effect is felt in maintenance management, where traditional corrective and time-based practices are giving way to data-driven, condition-based, and predictive maintenance strategies. This review addresses two linked questions: how industrial maintenance types can be organized within a consistent framework, and how digital enablers such as cyber-physical systems, the Industrial Internet of Things (IIoT), the digi…",
+      "raw_metadata": {
+        "provider": "Semantic Scholar",
+        "paperId": "663bc055cfdf9e614fbabb2ec146ceced896a0ff",
+        "sources": [
+          "Semantic Scholar"
+        ],
+        "source_links": [
+          "https://dergipark.org.tr/tr/download/article-file/6253822",
+          "https://www.semanticscholar.org/paper/663bc055cfdf9e614fbabb2ec146ceced896a0ff"
+        ],
+        "identity_aliases": [
+          [
+            "doi",
+            "10.61150/ijonfest.2001152"
+          ],
+          [
+            "title_author_names",
+            "digitalizationinindustrialfacilitiesandtheclassificationofmaintenancetypesareview|amal:f"
+          ],
+          [
+            "title_authors",
+            "digitalizationinindustrialfacilitiesandtheclassificationofmaintenancetypesareview|farukamal"
+          ]
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "7448066edf1f",
+      "source_ids": [
+        "Semantic Scholar"
+      ],
+      "venue_group": "其他／未分类",
+      "journal": "International Journal of New Findings in Engineering, Science and Technology",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [
+        "大模型"
+      ],
+      "analysis_status": "pending",
+      "method": "基于原文摘要的规则摘要",
+      "recommendation": "",
+      "deep_read": {},
+      "recommended_direction": "ai_maintenance"
+    },
+    {
+      "source": "Semantic Scholar",
+      "source_id": "1b2c462984bfaff99c02c4fa9dbaca53c092ca5c",
+      "title": "Analysis of Intelligent Operation and Maintenance Technology Strategy of Communication Networks Based on Large Language Models",
+      "authors": [
+        "Yeermaike Mulati"
+      ],
+      "venue": "Applied and Computational Engineering",
+      "abstract": "With the continuous improvement of communication network scale and business complexity, the traditional operation and maintenance methods relying on manual experience and rules face certain limitations in multi-source information processing and complex fault analysis. The ability of large language model in natural language understanding, knowledge association and cross-task processing provides a new research path for intelligent operation and maintenance of communication networks. This paper takes the application of large language model in intelligent operation and maintenance of communication network as the research topic, adopts the method of literature review and comparative analysis, combs the basic system of intelligent operation and maintenance of communication network, and summarizes relevant research and typical applications from four aspects: intelligent question answering, fault diagnosis, network optimization and network security. It is found that the large language model can enhance the interaction ability between the operation and maintenance personnel and the network system, and improve the knowledge association and auxiliary decision-making ability in complex network tasks. However, there are still some limitations in real-time performance, computing cost, domain knowledge adaptation, output reliability and data security. According to the research, the big language model is more suitable as the capabilities of traditional intelligent operation and maintenance system at the present stage. By cooperating with the professional model, knowledge base and automatic operation and maintenance technology, it is expected to further promote the development of intelligent operation and maintenance of communication network to the direction of intelligence and automation.",
+      "published_at": "2026-09-29",
+      "doi": "10.54254/2755-2721/2026.37355",
+      "landing_url": "https://www.semanticscholar.org/paper/1b2c462984bfaff99c02c4fa9dbaca53c092ca5c",
+      "oa_url": "https://ace.ewapub.com/article/view/37355.pdf",
+      "citation_count": 0,
+      "source_score": 0.64,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "With the continuous improvement of communication network scale and business complexity, the traditional operation and maintenance methods relying on manual experience and rules face certain limitations in multi-source information processing and complex fault analysis. The ability of large language model in natural language understanding, knowledge association and cross-task processing provides a new research path for intelligent operation and maintenance of communication networks. This paper takes the application of large language model in intelligent operation and maintenance of communication…",
+      "raw_metadata": {
+        "provider": "Semantic Scholar",
+        "paperId": "1b2c462984bfaff99c02c4fa9dbaca53c092ca5c",
+        "sources": [
+          "Semantic Scholar"
+        ],
+        "source_links": [
+          "https://ace.ewapub.com/article/view/37355.pdf",
+          "https://www.semanticscholar.org/paper/1b2c462984bfaff99c02c4fa9dbaca53c092ca5c"
+        ],
+        "identity_aliases": [
+          [
+            "doi",
+            "10.54254/2755-2721/2026.37355"
+          ],
+          [
+            "title_author_names",
+            "analysisofintelligentoperationandmaintenancetechnologystrategyofcommunicationnetworksbasedonlargelanguagemodels|mulati:y"
+          ],
+          [
+            "title_authors",
+            "analysisofintelligentoperationandmaintenancetechnologystrategyofcommunicationnetworksbasedonlargelanguagemodels|yeermaikemulati"
+          ]
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "22c7cd147987",
+      "source_ids": [
+        "Semantic Scholar"
+      ],
+      "venue_group": "其他／未分类",
+      "journal": "Applied and Computational Engineering",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [
+        "大模型"
+      ],
+      "analysis_status": "pending",
+      "method": "基于原文摘要的规则摘要",
+      "recommendation": "",
+      "deep_read": {},
+      "recommended_direction": "ai_maintenance"
+    },
+    {
+      "source": "Semantic Scholar",
+      "source_id": "f391efb60f93238773449d59966778ac5c9c2c99",
+      "title": "Dynamic knowledge graph enhanced large language model with cascade relation extraction optimized for aviation equipment fault diagnosis",
+      "authors": [
+        "Auwal Haruna",
+        "Lun-Yong Li",
+        "Khandaker Noman",
+        "Tao Liu",
+        "Yong-Bo Li",
+        "Fatin Abrar Shams"
+      ],
+      "venue": "Engineering applications of artificial intelligence",
+      "abstract": "",
+      "published_at": "2026-10-01",
+      "doi": "10.1016/j.engappai.2026.115762",
+      "landing_url": "https://www.semanticscholar.org/paper/f391efb60f93238773449d59966778ac5c9c2c99",
+      "oa_url": "https://doi.org/10.1016/j.engappai.2026.115762",
+      "citation_count": 2,
+      "source_score": 0.64,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "本文聚焦《Dynamic knowledge graph enhanced large language model with cascade relation extraction optimized for aviation equipment fault diagnosis》，暂未提供可用摘要，请查看原文。",
+      "raw_metadata": {
+        "provider": "Semantic Scholar",
+        "paperId": "f391efb60f93238773449d59966778ac5c9c2c99",
+        "sources": [
+          "Semantic Scholar"
+        ],
+        "source_links": [
+          "https://doi.org/10.1016/j.engappai.2026.115762",
+          "https://www.semanticscholar.org/paper/f391efb60f93238773449d59966778ac5c9c2c99"
+        ],
+        "identity_aliases": [
+          [
+            "doi",
+            "10.1016/j.engappai.2026.115762"
+          ],
+          [
+            "title_author_names",
+            "dynamicknowledgegraphenhancedlargelanguagemodelwithcascaderelationextractionoptimizedforaviationequipmentfaultdiagnosis|haruna:a|li:l|li:y|liu:t|noman:k|shams:f"
+          ],
+          [
+            "title_authors",
+            "dynamicknowledgegraphenhancedlargelanguagemodelwithcascaderelationextractionoptimizedforaviationequipmentfaultdiagnosis|auwalharuna|fatinabrarshams|khandakernoman|lunyongli|taoliu|yongboli"
+          ]
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "5c83c63d41f1",
+      "source_ids": [
+        "Semantic Scholar"
+      ],
+      "venue_group": "其他／未分类",
+      "journal": "Engineering applications of artificial intelligence",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [
+        "大模型"
+      ],
+      "analysis_status": "pending",
+      "method": "原文未提供摘要，基于标题生成",
+      "recommendation": "",
+      "deep_read": {},
+      "recommended_direction": "ai_maintenance"
+    }
+  ],
+  "source_status": {
+    "CNS 子刊专项": {
+      "source": "CNS 子刊专项",
+      "status": "ok",
+      "count": 2908,
+      "message": "114/114 journal queries across 19 journals; window 365 days; 0 pending; "
+    },
+    "AI 顶会论文": {
+      "source": "AI 顶会论文",
+      "status": "partial",
+      "count": 10,
+      "message": "官方主会论文；缓存 24 小时；按研究方向和现有时间窗口筛选。",
+      "conferences": [
+        {
+          "id": "neurips",
+          "name": "NeurIPS",
+          "status": "no_data",
+          "count": 518,
+          "matched": 0,
+          "cached": 0,
+          "last_success": "2026-10-23T14:41:30.888357+00:00",
+          "message": "",
+          "pending": 8802
+        },
+        {
+          "id": "icml",
+          "name": "ICML",
+          "status": "ok",
+          "count": 519,
+          "matched": 8,
+          "cached": 0,
+          "last_success": "2026-10-23T14:41:47.513900+00:00",
+          "message": "",
+          "pending": 9363
+        },
+        {
+          "id": "iclr",
+          "name": "ICLR",
+          "status": "ok",
+          "count": 9493,
+          "matched": 2,
+          "cached": 0,
+          "last_success": "2026-10-23T14:41:55.186933+00:00",
+          "message": "2026 使用官方 Oral/Poster 录用目录；2025 使用官方 Oral/Poster 录用目录",
+          "pending": 0
+        },
+        {
+          "id": "aaai",
+          "name": "AAAI",
+          "status": "no_data",
+          "count": 453,
+          "matched": 0,
+          "cached": 0,
+          "last_success": "2026-10-23T14:42:17.581720+00:00",
+          "message": "",
+          "pending": 1922
+        },
+        {
+          "id": "ijcai",
+          "name": "IJCAI",
+          "status": "no_data",
+          "count": 520,
+          "matched": 0,
+          "cached": 0,
+          "last_success": "2026-10-23T14:42:34.427763+00:00",
+          "message": "",
+          "pending": 1172
+        },
+        {
+          "id": "kdd",
+          "name": "KDD",
+          "status": "partial",
+          "count": 502,
+          "matched": 0,
+          "cached": 0,
+          "last_success": "2026-10-22T13:08:39.939245+00:00",
+          "message": "论文详情：Conference title mismatch",
+          "pending": 835
+        },
+        {
+          "id": "cvpr",
+          "name": "CVPR",
+          "status": "no_data",
+          "count": 518,
+          "matched": 0,
+          "cached": 0,
+          "last_success": "2026-10-23T14:43:43.319342+00:00",
+          "message": "",
+          "pending": 6395
+        },
+        {
+          "id": "iccv",
+          "name": "ICCV",
+          "status": "no_data",
+          "count": 519,
+          "matched": 0,
+          "cached": 1,
+          "last_success": "2026-10-23T14:44:13.114280+00:00",
+          "message": "",
+          "pending": 4338
+        },
+        {
+          "id": "eccv",
+          "name": "ECCV",
+          "status": "no_data",
+          "count": 520,
+          "matched": 0,
+          "cached": 2,
+          "last_success": "2026-10-23T14:44:37.721062+00:00",
+          "message": "",
+          "pending": 3512
+        },
+        {
+          "id": "acl",
+          "name": "ACL",
+          "status": "no_data",
+          "count": 3995,
+          "matched": 0,
+          "cached": 0,
+          "last_success": "2026-10-23T14:44:40.894920+00:00",
+          "message": "",
+          "pending": 0
+        },
+        {
+          "id": "emnlp",
+          "name": "EMNLP",
+          "status": "partial",
+          "count": 1809,
+          "matched": 0,
+          "cached": 0,
+          "last_success": "",
+          "message": "2026 官方元数据暂不可用（HTTP 404）",
+          "pending": 0
+        }
+      ]
+    },
+    "Elsevier": {
+      "source": "Elsevier",
+      "status": "ok",
+      "count": 29,
+      "message": "Scopus STANDARD metadata; COMPLETE unavailable under current authorization"
+    },
+    "Google Scholar": {
+      "source": "Google Scholar",
+      "status": "quota_exhausted",
+      "count": 0,
+      "message": "HTTP 429"
+    },
+    "ResearchGate": {
+      "source": "ResearchGate",
+      "status": "quota_exhausted",
+      "count": 0,
+      "message": "ResearchGate 本地导出不可用；公开索引本轮失败（quota_exhausted）：HTTP 429"
+    },
+    "微信公众号": {
+      "source": "微信公众号",
+      "status": "partial",
+      "count": 11,
+      "message": "公众号独立采集：最近检查 10-23 22:36（北京时间）。公众号订阅与同步：公开索引已接入：读取 11 条文章元数据，本期 11 条。 微信后台文章列表受限；已通过公开搜索获取线索，链接为检索入口，非已核验全文。 最近同步：10-05 20:35（北京时间）。 导出超过 3 天，请检查同步任务；将尝试公开索引。 公开查询完成 3/3 项（复用缓存 0 项）。 最近检查：10-22 20:35（北京时间）。 公众号公开索引：公开索引已接入：本期读取 1 条公众号文章线索，按 35 个订阅筛选。 微信后台文章列表受限；线索提供公开检索入口，非已核验全文。 公开查询完成 3/3 项（复用缓存 3 项）。"
+    },
+    "arXiv": {
+      "source": "arXiv",
+      "status": "ok",
+      "count": 36,
+      "message": "public API"
+    },
+    "OpenAlex": {
+      "source": "OpenAlex",
+      "status": "ok",
+      "count": 130,
+      "message": "public API"
+    },
+    "Crossref": {
+      "source": "Crossref",
+      "status": "ok",
+      "count": 134,
+      "message": "常规检索：ok；自定义期刊 1/1 本完成 ISSN 定向检索。"
+    },
+    "Semantic Scholar": {
+      "source": "Semantic Scholar",
+      "status": "ok",
+      "count": 154,
+      "message": "public API"
+    },
+    "PubMed": {
+      "source": "PubMed",
+      "status": "ok",
+      "count": 6,
+      "message": "public API"
+    },
+    "Web of Science": {
+      "source": "Web of Science",
+      "status": "error",
+      "count": 0,
+      "message": "Clarivate 检索失败，请检查网络或 API 响应。"
+    }
+  },
+  "cns_statistics": [
+    {
+      "journal": "Nature",
+      "issn": "1476-4687",
+      "relevant": 0,
+      "new": 0,
+      "historical_excluded": 0,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 8,
+      "available": 162,
+      "status": "ok"
+    },
+    {
+      "journal": "Science",
+      "issn": "1095-9203",
+      "relevant": 1,
+      "new": 0,
+      "historical_excluded": 1,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 5,
+      "available": 92,
+      "status": "ok"
+    },
+    {
+      "journal": "Cell",
+      "issn": "0092-8674",
+      "relevant": 0,
+      "new": 0,
+      "historical_excluded": 0,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 0,
+      "available": 42,
+      "status": "ok"
+    },
+    {
+      "journal": "Nature Communications",
+      "issn": "2041-1723",
+      "relevant": 13,
+      "new": 0,
+      "historical_excluded": 13,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 18,
+      "available": 1161,
+      "status": "ok"
+    },
+    {
+      "journal": "Nature Machine Intelligence",
+      "issn": "2522-5839",
+      "relevant": 4,
+      "new": 0,
+      "historical_excluded": 4,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 8,
+      "available": 190,
+      "status": "ok"
+    },
+    {
+      "journal": "Nature Computational Science",
+      "issn": "2662-8457",
+      "relevant": 0,
+      "new": 0,
+      "historical_excluded": 0,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 0,
+      "available": 56,
+      "status": "ok"
+    },
+    {
+      "journal": "Nature Biomedical Engineering",
+      "issn": "2157-846X",
+      "relevant": 0,
+      "new": 0,
+      "historical_excluded": 0,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 0,
+      "available": 35,
+      "status": "ok"
+    },
+    {
+      "journal": "Nature Electronics",
+      "issn": "2520-1131",
+      "relevant": 1,
+      "new": 0,
+      "historical_excluded": 1,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 0,
+      "available": 11,
+      "status": "ok"
+    },
+    {
+      "journal": "Nature Materials",
+      "issn": "1476-4660",
+      "relevant": 0,
+      "new": 0,
+      "historical_excluded": 0,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 0,
+      "available": 11,
+      "status": "ok"
+    },
+    {
+      "journal": "npj Computational Materials",
+      "issn": "2057-3960",
+      "relevant": 8,
+      "new": 0,
+      "historical_excluded": 8,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 4,
+      "available": 224,
+      "status": "ok"
+    },
+    {
+      "journal": "npj Artificial Intelligence",
+      "issn": "3005-1460",
+      "relevant": 2,
+      "new": 0,
+      "historical_excluded": 2,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 0,
+      "available": 28,
+      "status": "ok"
+    },
+    {
+      "journal": "Microsystems & Nanoengineering",
+      "issn": "2055-7434",
+      "relevant": 2,
+      "new": 0,
+      "historical_excluded": 2,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 1,
+      "available": 33,
+      "status": "ok"
+    },
+    {
+      "journal": "Communications Engineering",
+      "issn": "2731-3395",
+      "relevant": 9,
+      "new": 0,
+      "historical_excluded": 9,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 2,
+      "available": 45,
+      "status": "ok"
+    },
+    {
+      "journal": "Science Advances",
+      "issn": "2375-2548",
+      "relevant": 6,
+      "new": 0,
+      "historical_excluded": 6,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 8,
+      "available": 293,
+      "status": "ok"
+    },
+    {
+      "journal": "Science Robotics",
+      "issn": "2470-9476",
+      "relevant": 0,
+      "new": 0,
+      "historical_excluded": 0,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 1,
+      "available": 18,
+      "status": "ok"
+    },
+    {
+      "journal": "Cell Reports",
+      "issn": "2211-1247",
+      "relevant": 0,
+      "new": 0,
+      "historical_excluded": 0,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 0,
+      "available": 86,
+      "status": "ok"
+    },
+    {
+      "journal": "Cell Systems",
+      "issn": "2405-4712",
+      "relevant": 0,
+      "new": 0,
+      "historical_excluded": 0,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 0,
+      "available": 24,
+      "status": "ok"
+    },
+    {
+      "journal": "Cell Reports Physical Science",
+      "issn": "2666-3864",
+      "relevant": 5,
+      "new": 0,
+      "historical_excluded": 5,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 0,
+      "available": 69,
+      "status": "ok"
+    },
+    {
+      "journal": "iScience",
+      "issn": "2589-0042",
+      "relevant": 1,
+      "new": 0,
+      "historical_excluded": 1,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 0,
+      "available": 328,
+      "status": "ok"
+    }
+  ],
+  "wechat_articles": [
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-d585505dcccf32c5611f",
+      "title": "代码生成越来越快,软件交付真正的瓶颈转向了哪里?",
+      "authors": [],
+      "venue": "机器之心",
+      "abstract": "机器之心发布2026 年 9 月 22 日,阿里巴巴集团 CEO 吴泳铭在杭州云栖大会发表演讲,阐述对「机器智能」时代的思考:机器正在成...",
+      "published_at": "2026-09-24T07:18:18+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E6%9C%BA%E5%99%A8%E4%B9%8B%E5%BF%83%20%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E8%B6%8A%E6%9D%A5%E8%B6%8A%E5%BF%AB%2C%E8%BD%AF%E4%BB%B6%E4%BA%A4%E4%BB%98%E7%9C%9F%E6%AD%A3%E7%9A%84%E7%93%B6%E9%A2%88%E8%BD%AC%E5%90%91%E4%BA%86%E5%93%AA%E9%87%8C%3F",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "ai"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-c94a2f00a58f816da12f",
+      "title": "xAerospace 编委/青年编委全球招募(10月18日截止)",
+      "authors": [],
+      "venue": "航空学报CJA",
+      "abstract": "期2026年10月18日申 请 结 果 反 馈 日 期预计2026年10月底前END两刊简介航空学报CJA_小编微 信 号:HKXBCJA_xiaobian扫码添...",
+      "published_at": "2026-09-28T09:59:22+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA%20xAerospace%20%E7%BC%96%E5%A7%94%2F%E9%9D%92%E5%B9%B4%E7%BC%96%E5%A7%94%E5%85%A8%E7%90%83%E6%8B%9B%E5%8B%9F%2810%E6%9C%8818%E6%97%A5%E6%88%AA%E6%AD%A2%29",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "leads"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-1f849c160f0f02a934cf",
+      "title": "【科技动态】2026年9月最新材料前沿动态",
+      "authors": [],
+      "venue": "航空材料学报",
+      "abstract": "(2026). DOI: 10.1038/s43246-026-01212-yPART.05耶鲁大学开发金属局部变形映射技术支撑航空发动机和燃气轮机高温材料设计向上...",
+      "published_at": "2026-09-29T02:51:29+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E8%88%AA%E7%A9%BA%E6%9D%90%E6%96%99%E5%AD%A6%E6%8A%A5%20%E3%80%90%E7%A7%91%E6%8A%80%E5%8A%A8%E6%80%81%E3%80%912026%E5%B9%B49%E6%9C%88%E6%9C%80%E6%96%B0%E6%9D%90%E6%96%99%E5%89%8D%E6%B2%BF%E5%8A%A8%E6%80%81",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "leads"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-4fef1998594aa065f613",
+      "title": "NeurIPS开奖、AAAI出分!年底CCF会议转投清单来了",
+      "authors": [],
+      "venue": "PaperWeekly",
+      "abstract": "10—12 月还有哪些 CCF 会议能赶上?我们整理了一份转投清单.... NLP、语言理解与生成、语言模型、多模态语言、RAG(偏语言任...",
+      "published_at": "2026-09-25T15:07:53+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=PaperWeekly%20NeurIPS%E5%BC%80%E5%A5%96%E3%80%81AAAI%E5%87%BA%E5%88%86%21%E5%B9%B4%E5%BA%95CCF%E4%BC%9A%E8%AE%AE%E8%BD%AC%E6%8A%95%E6%B8%85%E5%8D%95%E6%9D%A5%E4%BA%86",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "leads"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-142dcb53c2e61c7b7f2f",
+      "title": "量智融合&具身智能分论坛议程公开|2026人工智能开放计算大会暨众智FlagOS技术大会",
+      "authors": [],
+      "venue": "智源FlagOpen",
+      "abstract": "2026 人工智能开放计算大会暨众智 FlagOS 技术大会完整议程还... 社区,目前已经有 100多家成员单位.FlagOS 是一款专为异构 AI ...",
+      "published_at": "2026-09-29T12:58:32+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E6%99%BA%E6%BA%90FlagOpen%20%E9%87%8F%E6%99%BA%E8%9E%8D%E5%90%88%26%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD%E5%88%86%E8%AE%BA%E5%9D%9B%E8%AE%AE%E7%A8%8B%E5%85%AC%E5%BC%80%7C2026%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%BC%80%E6%94%BE%E8%AE%A1%E7%AE%97%E5%A4%A7%E4%BC%9A%E6%9A%A8%E4%BC%97%E6%99%BAFlagOS%E6%8A%80%E6%9C%AF%E5%A4%A7%E4%BC%9A",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "leads"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-9f8cc8897fb784acc586",
+      "title": "早鸟票倒计时2天|2026人工智能开放计算大会暨众智FlagOS技术大会",
+      "authors": [],
+      "venue": "智源FlagOpen",
+      "abstract": "日,2026 人工智能开放计算大会暨众智 FlagOS 技术大会将以“... 社区联合北京智源人工智能研究院、中关村人工智能开源联盟(筹...",
+      "published_at": "2026-10-09T10:30:08+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E6%99%BA%E6%BA%90FlagOpen%20%E6%97%A9%E9%B8%9F%E7%A5%A8%E5%80%92%E8%AE%A1%E6%97%B62%E5%A4%A9%7C2026%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%BC%80%E6%94%BE%E8%AE%A1%E7%AE%97%E5%A4%A7%E4%BC%9A%E6%9A%A8%E4%BC%97%E6%99%BAFlagOS%E6%8A%80%E6%9C%AF%E5%A4%A7%E4%BC%9A",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "leads"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-dc09c25db7f2ed99f0ac",
+      "title": "大语言模型-能力横评 26-09 月榜",
+      "authors": [],
+      "venue": "大模型观测员",
+      "abstract": "#1 参赛选手本次更新模型(按发布时间顺序),共 14 个,持平上个月,其中北美模型占 10 个,本月是北美主场:*美元定价按1 USD ...",
+      "published_at": "2026-09-30T05:27:22+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%A7%82%E6%B5%8B%E5%91%98%20%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B-%E8%83%BD%E5%8A%9B%E6%A8%AA%E8%AF%84%2026-09%20%E6%9C%88%E6%A6%9C",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "leads"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-981c5bcb53fee583e416",
+      "title": "航空航天领域入围2026全球前2%顶尖科学家榜单(中国大陆地区)名单",
+      "authors": [],
+      "venue": "航空学报CJA",
+      "abstract": "于当地时间2026年10月7日共同发布2026年全球前2%顶尖科学家... 两刊简介航空学报CJA_小编微 信 号:HKXBCJA_xiaobian扫码添...",
+      "published_at": "2026-10-10T05:49:04+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA%20%E8%88%AA%E7%A9%BA%E8%88%AA%E5%A4%A9%E9%A2%86%E5%9F%9F%E5%85%A5%E5%9B%B42026%E5%85%A8%E7%90%83%E5%89%8D2%25%E9%A1%B6%E5%B0%96%E7%A7%91%E5%AD%A6%E5%AE%B6%E6%A6%9C%E5%8D%95%28%E4%B8%AD%E5%9B%BD%E5%A4%A7%E9%99%86%E5%9C%B0%E5%8C%BA%29%E5%90%8D%E5%8D%95",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "leads"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-79090656c9064cdbf8a4",
+      "title": "【信息速递】第十一期全国材料疲劳专题学术研讨会图片新闻(第二天)",
+      "authors": [],
+      "venue": "材料疲劳CFS",
+      "abstract": "第十一期全国材料疲劳专题学术研讨会在南京召开2026年10月18日,第十一期全国材料疲劳专题学术研讨会继续在南京召开,5位专家...",
+      "published_at": "2026-10-18T04:09:28+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E6%9D%90%E6%96%99%E7%96%B2%E5%8A%B3CFS%20%E3%80%90%E4%BF%A1%E6%81%AF%E9%80%9F%E9%80%92%E3%80%91%E7%AC%AC%E5%8D%81%E4%B8%80%E6%9C%9F%E5%85%A8%E5%9B%BD%E6%9D%90%E6%96%99%E7%96%B2%E5%8A%B3%E4%B8%93%E9%A2%98%E5%AD%A6%E6%9C%AF%E7%A0%94%E8%AE%A8%E4%BC%9A%E5%9B%BE%E7%89%87%E6%96%B0%E9%97%BB%28%E7%AC%AC%E4%BA%8C%E5%A4%A9%29",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "leads"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-3a0def6c23a18baadffc",
+      "title": "【信息速递】第十一期全国材料疲劳专题学术研讨会图片新闻",
+      "authors": [],
+      "venue": "材料疲劳CFS",
+      "abstract": "第十一期全国材料疲劳专题学术研讨会在南京召开第十一期全国材料疲劳专题学术研讨会于2026年10月17日在南京召开,据初步统计...",
+      "published_at": "2026-10-17T10:37:07+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E6%9D%90%E6%96%99%E7%96%B2%E5%8A%B3CFS%20%E3%80%90%E4%BF%A1%E6%81%AF%E9%80%9F%E9%80%92%E3%80%91%E7%AC%AC%E5%8D%81%E4%B8%80%E6%9C%9F%E5%85%A8%E5%9B%BD%E6%9D%90%E6%96%99%E7%96%B2%E5%8A%B3%E4%B8%93%E9%A2%98%E5%AD%A6%E6%9C%AF%E7%A0%94%E8%AE%A8%E4%BC%9A%E5%9B%BE%E7%89%87%E6%96%B0%E9%97%BB",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "leads"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-a66bdaa8811ec6a509c1",
+      "title": "倒计时 2 天|解锁大会完整玩法!2026人工智能开放计算大会暨众智FlagOS技术大会即将启幕",
+      "authors": [],
+      "venue": "智源FlagOpen",
+      "abstract": "2026 人工智能开放计算大会暨众智 FlagOS 技术大会正式开幕仅... 社区联合北京智源人工智能研究院、北京量子信息科学研究院等机...",
+      "published_at": "2026-10-15T05:41:27+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E6%99%BA%E6%BA%90FlagOpen%20%E5%80%92%E8%AE%A1%E6%97%B6%202%20%E5%A4%A9%7C%E8%A7%A3%E9%94%81%E5%A4%A7%E4%BC%9A%E5%AE%8C%E6%95%B4%E7%8E%A9%E6%B3%95%212026%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%BC%80%E6%94%BE%E8%AE%A1%E7%AE%97%E5%A4%A7%E4%BC%9A%E6%9A%A8%E4%BC%97%E6%99%BAFlagOS%E6%8A%80%E6%9C%AF%E5%A4%A7%E4%BC%9A%E5%8D%B3%E5%B0%86%E5%90%AF%E5%B9%95",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "leads"
+      }
+    }
+  ],
+  "research_profile": {
+    "version": 1,
+    "core_count": 6,
+    "extended_count": 0,
+    "directions": [
+      {
+        "id": "ai_maintenance",
+        "name": "AI 智能运维",
+        "enabled": true,
+        "core": true,
+        "extended": true,
+        "weight": 1,
+        "keywords": [
+          "predictive maintenance",
+          "fault diagnosis",
+          "maintenance",
+          "fault detection",
+          "prognostics",
+          "condition monitoring",
+          "health monitoring",
+          "remaining useful life",
+          "digital twin",
+          "智能运维",
+          "故障诊断",
+          "预测维护"
+        ],
+        "require_any": [
+          "machine learning",
+          "large language model",
+          "deep learning",
+          "neural network",
+          "artificial intelligence",
+          "AI",
+          "LLM",
+          "agentic",
+          "multi-agent",
+          "generative",
+          "surrogate",
+          "kriging",
+          "bayesian",
+          "physics-informed",
+          "大模型",
+          "智能体",
+          "机器学习"
+        ],
+        "exclude": [
+          "cancer",
+          "alzheimer"
+        ]
+      },
+      {
+        "id": "generative_design",
+        "name": "结构生成式设计与可靠性优化",
+        "enabled": true,
+        "core": true,
+        "extended": true,
+        "weight": 1,
+        "keywords": [
+          "generative design",
+          "topology optimization",
+          "inverse design",
+          "structural design",
+          "structural optimization",
+          "constitutive",
+          "scientific machine learning",
+          "finite element",
+          "mechanical metamaterials",
+          "structural reliability optimization",
+          "生成式设计",
+          "拓扑优化",
+          "本构"
+        ],
+        "require_any": [
+          "machine learning",
+          "large language model",
+          "deep learning",
+          "neural network",
+          "artificial intelligence",
+          "AI",
+          "LLM",
+          "agentic",
+          "multi-agent",
+          "generative",
+          "surrogate",
+          "kriging",
+          "bayesian",
+          "physics-informed",
+          "大模型",
+          "智能体",
+          "机器学习"
+        ],
+        "exclude": []
+      },
+      {
+        "id": "fatigue_reliability",
+        "name": "结构疲劳与可靠性",
+        "enabled": true,
+        "core": true,
+        "extended": true,
+        "weight": 1,
+        "keywords": [
+          "structural fatigue",
+          "fatigue life",
+          "fatigue crack",
+          "fracture mechanics",
+          "damage tolerance",
+          "probabilistic fatigue",
+          "structural reliability",
+          "fatigue strength",
+          "fatigue",
+          "结构疲劳",
+          "疲劳寿命",
+          "疲劳可靠性"
+        ],
+        "require_any": [
+          "machine learning",
+          "reliability",
+          "probabilistic",
+          "large language model",
+          "deep learning",
+          "neural network",
+          "AI",
+          "LLM",
+          "agentic",
+          "multi-agent",
+          "surrogate",
+          "kriging",
+          "bayesian",
+          "physics-informed",
+          "大模型",
+          "机器学习",
+          "可靠性"
+        ],
+        "exclude": [
+          "patient",
+          "cancer",
+          "alzheimer"
+        ]
+      }
+    ]
+  },
+  "research_profile_revision": "66e9accaf69b88a3f7664c8ff5a2b3d798edc4e2ea6a7bc8b0bfcae2f25d7a42",
+  "selection_policy": {
+    "priority": "CNS 正刊与子刊同档优先，其次其他相关期刊与已核验主会论文",
+    "direction_allocation": "允许方向不均；归属最高权重的匹配方向；同篇论文不重复推荐",
+    "within_venue_priority": "发表日期 → 大模型与智能体 → 方向权重",
+    "core_requires_chinese_analysis": false,
+    "extended_requires_chinese_analysis": false,
+    "cns_lookback_days": 365,
+    "history": "new_or_evidence_backed",
+    "historical_slots": 1
+  },
+  "heat_status": {
+    "checked_at": "2026-10-23T14:36:53.273478+00:00",
+    "fresh": 73,
+    "failed": 78,
+    "unavailable": 30
+  },
+  "analysis_status": {
+    "ready_core": 1,
+    "target_core": 6,
+    "ready_extended": 0,
+    "target_extended": 0,
+    "llm_configured": false,
+    "llm_attempts": 0,
+    "pending": 5
+  },
+  "edition": {
+    "id": "39970944205",
+    "date": "2026-10-23",
+    "number": 1,
+    "generated_at": "2026-10-23T14:45:49.953924+00:00",
+    "trigger": "scheduled",
+    "core_count": 6,
+    "extended_count": 0
+  }
+}
