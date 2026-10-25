@@ -1,0 +1,1938 @@
+{
+  "generated_at": "2026-10-25T17:09:51.855308+00:00",
+  "update_run_id": "40214157879",
+  "since": "2026-09-25T17:00:21.232013+00:00",
+  "until": "2026-10-25T17:00:21.232013+00:00",
+  "core": [
+    {
+      "source": "AI 顶会论文",
+      "source_id": "https://aclanthology.org/2026.emnlp-main.898/",
+      "title": "HyperRAG-IHM: Incremental Hyperedge Maintenance for Hypergraph RAG under Corpus Expansion",
+      "authors": [
+        "Haoyu Chen",
+        "Jihua Zhu",
+        "Tingkai Jia",
+        "Shengwei Zhao",
+        "Lin Chen",
+        "Xiaoxuan Mu"
+      ],
+      "venue": "EMNLP 2026",
+      "abstract": "Hypergraph-based methods extend structured retrieval-augmented generation (RAG) by organizing external knowledge as multi-entity relational structures, helping large language models (LLMs) generate better-grounded answers. However, existing structured RAG systems typically assume static corpus construction, requiring the retrieval structure to be rebuilt over the expanded corpus when new documents arrive. To address this limitation, we introduce HyperRAG-IHM, a hypergraph-based RAG framework that performs incremental hyperedge maintenance to incorporate newly arriving knowledge without reconstructing the historical retrieval structure. HyperRAG-IHM links relational evidence extracted from new documents to existing hypergraph knowledge, avoiding reconstruction of the entire retrieval structure. It uses LSH to localize candidate historical hyperedges, then applies multi-dimensional comparison and a three-action decision policy to integrate new relational evidence. Experiments show that HyperRAG-IHM achieves answer quality comparable to or better than full reconstruction under 5D scoring and 8D pairwise evaluation, and remains robust across ablation, structural behavior, cross-dataset, and cross-answer-model analyses.",
+      "published_at": "2026-10",
+      "doi": "",
+      "landing_url": "https://aclanthology.org/2026.emnlp-main.898/",
+      "oa_url": "https://aclanthology.org/2026.emnlp-main.898.pdf",
+      "citation_count": null,
+      "source_score": 0.68,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "Hypergraph-based methods extend structured retrieval-augmented generation (RAG) by organizing external knowledge as multi-entity relational structures, helping large language models (LLMs) generate better-grounded answers. However, existing structured RAG systems typically assume static corpus construction, requiring the retrieval structure to be rebuilt over the expanded corpus when new documents arrive. To address this limitation, we introduce HyperRAG-IHM, a hypergraph-based RAG framework that performs incremental hyperedge maintenance to incorporate newly arriving knowledge without reconst…",
+      "raw_metadata": {
+        "conference": {
+          "id": "emnlp",
+          "name": "EMNLP",
+          "year": 2026,
+          "track": "main",
+          "verified": true,
+          "proof_url": "https://aclanthology.org/2026.emnlp-main.898/",
+          "paper_url": "https://aclanthology.org/2026.emnlp-main.898/",
+          "doi": "",
+          "pdf_url": "https://aclanthology.org/2026.emnlp-main.898.pdf",
+          "date_kind": "publication",
+          "date_precision": "month"
+        },
+        "abstract_kind": "publisher_abstract",
+        "date_precision": "month",
+        "date_kind": "publication",
+        "bibliography": {
+          "type": "proceedings-article"
+        },
+        "sources": [
+          "AI 顶会论文"
+        ],
+        "source_links": [
+          "https://aclanthology.org/2026.emnlp-main.898.pdf",
+          "https://aclanthology.org/2026.emnlp-main.898/"
+        ],
+        "identity_aliases": [
+          [
+            "title_author_names",
+            "hyperragihmincrementalhyperedgemaintenanceforhypergraphragundercorpusexpansion|chen:h|chen:l|jia:t|mu:x|zhao:s|zhu:j"
+          ],
+          [
+            "title_authors",
+            "hyperragihmincrementalhyperedgemaintenanceforhypergraphragundercorpusexpansion|haoyuchen|jihuazhu|linchen|shengweizhao|tingkaijia|xiaoxuanmu"
+          ]
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "c4b5993c8dc6",
+      "source_ids": [
+        "AI 顶会论文"
+      ],
+      "venue_group": "AI 顶会主会论文",
+      "journal": "EMNLP",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [
+        "大模型"
+      ],
+      "analysis_status": "pending",
+      "method": "基于原文摘要的规则摘要",
+      "recommendation": "",
+      "deep_read": {},
+      "recommended_direction": "ai_maintenance"
+    },
+    {
+      "source": "AI 顶会论文",
+      "source_id": "https://aclanthology.org/2026.emnlp-main.1595/",
+      "title": "How AI Models Manage Epistemic Authority: A Taxonomy and Comparative Analysis of Responses to User Disagreement",
+      "authors": [
+        "Riyadh Alnasser",
+        "Yusuf Mücahit Çetinkaya",
+        "Sumin Zhao",
+        "Tugrulcan Elmas"
+      ],
+      "venue": "EMNLP 2026",
+      "abstract": "Large language models are increasingly used as sources of advice and information, including in high-stakes settings, yet little is known about how they respond to user disagreement. We study how a model manages its epistemic authority, referring here to its claim to knowledge, competence, or the right to advise, once a user challenges its answer. Building on Conversation Analysis, we introduce a taxonomy of six challenge types and a four-layer framework for analysing each response: whether the original claim is maintained or changed, where authority is located, how the disagreement is socially managed, and what kind of evidential support is offered. We construct a new dataset of 2,310 controlled challenge scenarios and 32,340 corresponding responses from 14 models, and analyse them using our framework with an LLM-as-judge pipeline, providing a vocabulary which future evaluation and benchmark design can build on. We find that models show conflicting behaviour: they validate users in 85% of responses but maintain their original claim in 65%. They explicitly apologise in 33% of responses, yet 59% of those apologies accompany maintenance of the original claim. They transfer authority most often in advice tasks, doing so in 28% of responses and reaching 57% in health advice and 49% in legal advice, compared with 6% in fact and 3% in explanation tasks. Abandonment of the original claim ranges from 0.8% for GPT-5.2 to 40% for DeepSeek 7B, while complete replacement of the original claim is rare overall at 1.5%.",
+      "published_at": "2026-10",
+      "doi": "",
+      "landing_url": "https://aclanthology.org/2026.emnlp-main.1595/",
+      "oa_url": "https://aclanthology.org/2026.emnlp-main.1595.pdf",
+      "citation_count": null,
+      "source_score": 0.68,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "Large language models are increasingly used as sources of advice and information, including in high-stakes settings, yet little is known about how they respond to user disagreement. We study how a model manages its epistemic authority, referring here to its claim to knowledge, competence, or the right to advise, once a user challenges its answer. Building on Conversation Analysis, we introduce a taxonomy of six challenge types and a four-layer framework for analysing each response: whether the original claim is maintained or changed, where authority is located, how the disagreement is socially…",
+      "raw_metadata": {
+        "conference": {
+          "id": "emnlp",
+          "name": "EMNLP",
+          "year": 2026,
+          "track": "main",
+          "verified": true,
+          "proof_url": "https://aclanthology.org/2026.emnlp-main.1595/",
+          "paper_url": "https://aclanthology.org/2026.emnlp-main.1595/",
+          "doi": "",
+          "pdf_url": "https://aclanthology.org/2026.emnlp-main.1595.pdf",
+          "date_kind": "publication",
+          "date_precision": "month"
+        },
+        "abstract_kind": "publisher_abstract",
+        "date_precision": "month",
+        "date_kind": "publication",
+        "bibliography": {
+          "type": "proceedings-article"
+        },
+        "sources": [
+          "AI 顶会论文"
+        ],
+        "source_links": [
+          "https://aclanthology.org/2026.emnlp-main.1595.pdf",
+          "https://aclanthology.org/2026.emnlp-main.1595/"
+        ],
+        "identity_aliases": [
+          [
+            "title_author_names",
+            "howaimodelsmanageepistemicauthorityataxonomyandcomparativeanalysisofresponsestouserdisagreement|alnasser:r|elmas:t|etinkaya:y|zhao:s"
+          ],
+          [
+            "title_authors",
+            "howaimodelsmanageepistemicauthorityataxonomyandcomparativeanalysisofresponsestouserdisagreement|riyadhalnasser|suminzhao|tugrulcanelmas|yusufmcahitetinkaya"
+          ]
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "5bf0c76a6b59",
+      "source_ids": [
+        "AI 顶会论文"
+      ],
+      "venue_group": "AI 顶会主会论文",
+      "journal": "EMNLP",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [
+        "大模型"
+      ],
+      "analysis_status": "pending",
+      "method": "基于原文摘要的规则摘要",
+      "recommendation": "",
+      "deep_read": {},
+      "recommended_direction": "ai_maintenance"
+    },
+    {
+      "source": "AI 顶会论文",
+      "source_id": "https://aclanthology.org/2026.emnlp-main.1158/",
+      "title": "EvoGenUI-Bench: Evaluating LLMs as Multi-Turn Generative UI Assistants",
+      "authors": [
+        "Yue Peng",
+        "Lanke Xia",
+        "Zihan Wang",
+        "Jiahao Ye",
+        "Ke Ning",
+        "Hongyi Wen"
+      ],
+      "venue": "EMNLP 2026",
+      "abstract": "Large language models can generate interactive web interfaces, but reliable generative UI requires maintaining an executable artifact as user requests evolve. We introduce EvoGenUI-Bench, a benchmark for multi-turn interface maintenance comprising 150 five-turn tasks and 750 turns across three scenarios: information presentation, executable interaction, and tool-grounded external state. We execute generated artifacts in a browser and evaluate them using screenshots, source and DOM evidence, actor traces, and runtime logs. Beyond turn-level and episode-level success, we measure cross-turn retention with Adjacent Pass Retention. Across eight models, even the strongest achieves 74.9% Turn Pass while completing only 37.3% of five-turn episodes; APR further falls to 52.4% on tool-grounded tasks. Diagnostic analysis shows that presentation failures center on information architecture, interaction failures on derived-state propagation and affordance binding, and tool-grounded failures additionally involve external-state grounding and requirement decomposition. These results reframe generative UI evaluation from judging isolated outputs to testing whether interface behavior, derived state, external state, and assistant claims remain synchronized as the artifact evolves.",
+      "published_at": "2026-10",
+      "doi": "",
+      "landing_url": "https://aclanthology.org/2026.emnlp-main.1158/",
+      "oa_url": "https://aclanthology.org/2026.emnlp-main.1158.pdf",
+      "citation_count": null,
+      "source_score": 0.68,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "Large language models can generate interactive web interfaces, but reliable generative UI requires maintaining an executable artifact as user requests evolve. We introduce EvoGenUI-Bench, a benchmark for multi-turn interface maintenance comprising 150 five-turn tasks and 750 turns across three scenarios: information presentation, executable interaction, and tool-grounded external state. We execute generated artifacts in a browser and evaluate them using screenshots, source and DOM evidence, actor traces, and runtime logs. Beyond turn-level and episode-level success, we measure cross-turn reten…",
+      "raw_metadata": {
+        "conference": {
+          "id": "emnlp",
+          "name": "EMNLP",
+          "year": 2026,
+          "track": "main",
+          "verified": true,
+          "proof_url": "https://aclanthology.org/2026.emnlp-main.1158/",
+          "paper_url": "https://aclanthology.org/2026.emnlp-main.1158/",
+          "doi": "",
+          "pdf_url": "https://aclanthology.org/2026.emnlp-main.1158.pdf",
+          "date_kind": "publication",
+          "date_precision": "month"
+        },
+        "abstract_kind": "publisher_abstract",
+        "date_precision": "month",
+        "date_kind": "publication",
+        "bibliography": {
+          "type": "proceedings-article"
+        },
+        "sources": [
+          "AI 顶会论文"
+        ],
+        "source_links": [
+          "https://aclanthology.org/2026.emnlp-main.1158.pdf",
+          "https://aclanthology.org/2026.emnlp-main.1158/"
+        ],
+        "identity_aliases": [
+          [
+            "title_author_names",
+            "evogenuibenchevaluatingllmsasmultiturngenerativeuiassistants|ning:k|peng:y|wang:z|wen:h|xia:l|ye:j"
+          ],
+          [
+            "title_authors",
+            "evogenuibenchevaluatingllmsasmultiturngenerativeuiassistants|hongyiwen|jiahaoye|kening|lankexia|yuepeng|zihanwang"
+          ]
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "aa20cdb982cb",
+      "source_ids": [
+        "AI 顶会论文"
+      ],
+      "venue_group": "AI 顶会主会论文",
+      "journal": "EMNLP",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [
+        "大模型"
+      ],
+      "analysis_status": "pending",
+      "method": "基于原文摘要的规则摘要",
+      "recommendation": "",
+      "deep_read": {},
+      "recommended_direction": "ai_maintenance"
+    },
+    {
+      "source": "AI 顶会论文",
+      "source_id": "https://aclanthology.org/2026.emnlp-main.769/",
+      "title": "Diagnostic Analysis for Large Language Model Reasoning",
+      "authors": [
+        "Xinyu Liu",
+        "Dongqi Fu",
+        "Jun Wu"
+      ],
+      "venue": "EMNLP 2026",
+      "abstract": "Reasoning structures (e.g., chains and graphs) are increasingly used for probabilistic inference, factuality verification, and uncertainty estimation, but their structural reliability is rarely evaluated directly. We test whether this reliability holds through a proposed two-stage diagnostic evaluation in open-ended multi-hop QA. Stage 1 tests different capabilities required to construct reasoning graphs, showing that graph reliability varies with topology, prompt design, and model family. Stage 2 uses uncertainty estimation as a downstream test case. Generated-edge experiments show that graph-based computation is sensitive to upstream graph errors, with performance dropping relative to the gold-graph setting. Gold-graph experiments further show that graph structure provides little benefit when used only as prompt context, but improves the separation of correct from incorrect answers by confidence score and enables node-level diagnostics.",
+      "published_at": "2026-10",
+      "doi": "",
+      "landing_url": "https://aclanthology.org/2026.emnlp-main.769/",
+      "oa_url": "https://aclanthology.org/2026.emnlp-main.769.pdf",
+      "citation_count": null,
+      "source_score": 0.68,
+      "topic_tags": [
+        "fatigue_reliability"
+      ],
+      "summary": "Reasoning structures (e.g., chains and graphs) are increasingly used for probabilistic inference, factuality verification, and uncertainty estimation, but their structural reliability is rarely evaluated directly. We test whether this reliability holds through a proposed two-stage diagnostic evaluation in open-ended multi-hop QA. Stage 1 tests different capabilities required to construct reasoning graphs, showing that graph reliability varies with topology, prompt design, and model family. Stage 2 uses uncertainty estimation as a downstream test case. Generated-edge experiments show that graph…",
+      "raw_metadata": {
+        "conference": {
+          "id": "emnlp",
+          "name": "EMNLP",
+          "year": 2026,
+          "track": "main",
+          "verified": true,
+          "proof_url": "https://aclanthology.org/2026.emnlp-main.769/",
+          "paper_url": "https://aclanthology.org/2026.emnlp-main.769/",
+          "doi": "",
+          "pdf_url": "https://aclanthology.org/2026.emnlp-main.769.pdf",
+          "date_kind": "publication",
+          "date_precision": "month"
+        },
+        "abstract_kind": "publisher_abstract",
+        "date_precision": "month",
+        "date_kind": "publication",
+        "bibliography": {
+          "type": "proceedings-article"
+        },
+        "sources": [
+          "AI 顶会论文"
+        ],
+        "source_links": [
+          "https://aclanthology.org/2026.emnlp-main.769.pdf",
+          "https://aclanthology.org/2026.emnlp-main.769/"
+        ],
+        "identity_aliases": [
+          [
+            "title_author_names",
+            "diagnosticanalysisforlargelanguagemodelreasoning|fu:d|liu:x|wu:j"
+          ],
+          [
+            "title_authors",
+            "diagnosticanalysisforlargelanguagemodelreasoning|dongqifu|junwu|xinyuliu"
+          ]
+        ],
+        "research_directions": [
+          "结构疲劳与可靠性"
+        ]
+      },
+      "id": "abdf3af8d331",
+      "source_ids": [
+        "AI 顶会论文"
+      ],
+      "venue_group": "AI 顶会主会论文",
+      "journal": "EMNLP",
+      "topic_ids": [
+        "fatigue_reliability"
+      ],
+      "focus_tags": [
+        "大模型"
+      ],
+      "analysis_status": "pending",
+      "method": "基于原文摘要的规则摘要",
+      "recommendation": "",
+      "deep_read": {},
+      "recommended_direction": "fatigue_reliability"
+    },
+    {
+      "source": "AI 顶会论文",
+      "source_id": "https://aclanthology.org/2026.emnlp-main.491/",
+      "title": "Dynamic Dual-Granularity Skill Bank for Agentic RL",
+      "authors": [
+        "Songjun Tu",
+        "Chengdong Xu",
+        "Qichao Zhang",
+        "Yaocheng Zhang",
+        "Xiangyuan Lan",
+        "Linjing Li",
+        "Dong Li",
+        "Dongbin Zhao"
+      ],
+      "venue": "EMNLP 2026",
+      "abstract": "Agentic RL can benefit substantially from reusable experience, but existing skill-based methods mostly focus on trajectory-level guidance and provide limited support for the principled evaluation and maintenance of an evolving skill memory. We propose D2Skill, a dynamic dual-granularity skill bank for agentic RL that organizes reusable experience into task skills for high-level guidance and step skills for fine-grained decision support and error correction. D2Skill jointly trains the policy and skill bank through paired baseline and skill-injected rollouts under the same policy, using their performance gap to derive hindsight utility signals for both skill updating and policy optimization. Constructed from training-time trajectories, the skill bank is continuously expanded through reflection and maintained with utility-aware retrieval and pruning. Across ALFWorld, WebShop, and Search-Augmented QA, D2Skill consistently outperforms skill-free and skill-based baselines, remains effective with self-feedback, and transfers to unseen ALFWorld environments without test-time adaptation. Project Page: https://github.com/TU2021/D2Skill-AgenticRL",
+      "published_at": "2026-10",
+      "doi": "",
+      "landing_url": "https://aclanthology.org/2026.emnlp-main.491/",
+      "oa_url": "https://aclanthology.org/2026.emnlp-main.491.pdf",
+      "citation_count": null,
+      "source_score": 0.68,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "Agentic RL can benefit substantially from reusable experience, but existing skill-based methods mostly focus on trajectory-level guidance and provide limited support for the principled evaluation and maintenance of an evolving skill memory. We propose D2Skill, a dynamic dual-granularity skill bank for agentic RL that organizes reusable experience into task skills for high-level guidance and step skills for fine-grained decision support and error correction. D2Skill jointly trains the policy and skill bank through paired baseline and skill-injected rollouts under the same policy, using their pe…",
+      "raw_metadata": {
+        "conference": {
+          "id": "emnlp",
+          "name": "EMNLP",
+          "year": 2026,
+          "track": "main",
+          "verified": true,
+          "proof_url": "https://aclanthology.org/2026.emnlp-main.491/",
+          "paper_url": "https://aclanthology.org/2026.emnlp-main.491/",
+          "doi": "",
+          "pdf_url": "https://aclanthology.org/2026.emnlp-main.491.pdf",
+          "date_kind": "publication",
+          "date_precision": "month"
+        },
+        "abstract_kind": "publisher_abstract",
+        "date_precision": "month",
+        "date_kind": "publication",
+        "bibliography": {
+          "type": "proceedings-article"
+        },
+        "sources": [
+          "AI 顶会论文"
+        ],
+        "source_links": [
+          "https://aclanthology.org/2026.emnlp-main.491.pdf",
+          "https://aclanthology.org/2026.emnlp-main.491/"
+        ],
+        "identity_aliases": [
+          [
+            "title_author_names",
+            "dynamicdualgranularityskillbankforagenticrl|lan:x|li:d|li:l|tu:s|xu:c|zhang:q|zhang:y|zhao:d"
+          ],
+          [
+            "title_authors",
+            "dynamicdualgranularityskillbankforagenticrl|chengdongxu|dongbinzhao|dongli|linjingli|qichaozhang|songjuntu|xiangyuanlan|yaochengzhang"
+          ]
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "782e6a0458d9",
+      "source_ids": [
+        "AI 顶会论文"
+      ],
+      "venue_group": "AI 顶会主会论文",
+      "journal": "EMNLP",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [
+        "智能体"
+      ],
+      "analysis_status": "pending",
+      "method": "基于原文摘要的规则摘要",
+      "recommendation": "",
+      "deep_read": {},
+      "recommended_direction": "ai_maintenance"
+    },
+    {
+      "source": "AI 顶会论文",
+      "source_id": "https://aclanthology.org/2026.emnlp-main.1796/",
+      "title": "Drift No More: Spectral Locking for Long-Horizon Open-Weight Multi-Agent AI",
+      "authors": [
+        "Vishal Pramanik",
+        "Maisha Maliha",
+        "Susmit Jha",
+        "Sumit Kumar Jha"
+      ],
+      "venue": "EMNLP 2026",
+      "abstract": "Long-horizon multi-agent systems suffer from three tightly coupled failures: task drift, role drift, and state staleness. We test the hypothesis that these share a common representational cause: agent hidden states move away from the directions encoding the active task, assigned role, and current shared state. A pilot study over 14,832 annotated turns supports this: drifted turns collapse near-uniformly across all three anchor subspaces (pairwise r = 0.72–0.78). Existing methods address these failures separately, operating at the surface-text level or treating control directions independently. We introduce ATLAS (Algebraic Task–role Locking with Adaptive Spectral Memory), a training-free intervention acting on hidden states before a token is generated. ATLAS builds a positive-semidefinite anchor kernel over task, role, and state subspaces and steers hidden states toward their shared high-coherence eigendirections; a low-rank Gram decomposition keeps this tractable. Across long-horizon memory, state maintenance, tool use, least-privilege coordination, and embodied stress tests, ATLAS outperforms prompting, retrieval, memory, and activation-steering baselines. Against A-MEM it improves memory macro-average accuracy by up to 5.7 points and reduces write/read failures by up to 31.7%/24.8%; against MemoryArena-Agent it gains up to 4.8 points. It gains 10.7–12.1 points under perturbation, reaches 93.5% role consistency, and transfers to a 72B backbone (macro-average 61.0 vs. 56.2). Ablating the joint task–role–state span costs 7.2 points against 0.8 for a matched-rank random span, indicating these directions are functionally implicated, not incidental; supplying them by prompt or retrieval recovers 4.3 points less. ATLAS is therefore a representation-level controller for open-weight multi-agent systems, complementary to output-level protocols for black-box agents.",
+      "published_at": "2026-10",
+      "doi": "",
+      "landing_url": "https://aclanthology.org/2026.emnlp-main.1796/",
+      "oa_url": "https://aclanthology.org/2026.emnlp-main.1796.pdf",
+      "citation_count": null,
+      "source_score": 0.68,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "Long-horizon multi-agent systems suffer from three tightly coupled failures: task drift, role drift, and state staleness. We test the hypothesis that these share a common representational cause: agent hidden states move away from the directions encoding the active task, assigned role, and current shared state. A pilot study over 14,832 annotated turns supports this: drifted turns collapse near-uniformly across all three anchor subspaces (pairwise r = 0.72–0.78). Existing methods address these failures separately, operating at the surface-text level or treating control directions independently.…",
+      "raw_metadata": {
+        "conference": {
+          "id": "emnlp",
+          "name": "EMNLP",
+          "year": 2026,
+          "track": "main",
+          "verified": true,
+          "proof_url": "https://aclanthology.org/2026.emnlp-main.1796/",
+          "paper_url": "https://aclanthology.org/2026.emnlp-main.1796/",
+          "doi": "",
+          "pdf_url": "https://aclanthology.org/2026.emnlp-main.1796.pdf",
+          "date_kind": "publication",
+          "date_precision": "month"
+        },
+        "abstract_kind": "publisher_abstract",
+        "date_precision": "month",
+        "date_kind": "publication",
+        "bibliography": {
+          "type": "proceedings-article"
+        },
+        "sources": [
+          "AI 顶会论文"
+        ],
+        "source_links": [
+          "https://aclanthology.org/2026.emnlp-main.1796.pdf",
+          "https://aclanthology.org/2026.emnlp-main.1796/"
+        ],
+        "identity_aliases": [
+          [
+            "title_author_names",
+            "driftnomorespectrallockingforlonghorizonopenweightmultiagentai|jha:s|jha:s|maliha:m|pramanik:v"
+          ],
+          [
+            "title_authors",
+            "driftnomorespectrallockingforlonghorizonopenweightmultiagentai|maishamaliha|sumitkumarjha|susmitjha|vishalpramanik"
+          ]
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "75e1db16e962",
+      "source_ids": [
+        "AI 顶会论文"
+      ],
+      "venue_group": "AI 顶会主会论文",
+      "journal": "EMNLP",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [
+        "智能体"
+      ],
+      "analysis_status": "pending",
+      "method": "基于原文摘要的规则摘要",
+      "recommendation": "",
+      "deep_read": {},
+      "recommended_direction": "ai_maintenance"
+    }
+  ],
+  "extended": [],
+  "papers": [
+    {
+      "source": "AI 顶会论文",
+      "source_id": "https://aclanthology.org/2026.emnlp-main.898/",
+      "title": "HyperRAG-IHM: Incremental Hyperedge Maintenance for Hypergraph RAG under Corpus Expansion",
+      "authors": [
+        "Haoyu Chen",
+        "Jihua Zhu",
+        "Tingkai Jia",
+        "Shengwei Zhao",
+        "Lin Chen",
+        "Xiaoxuan Mu"
+      ],
+      "venue": "EMNLP 2026",
+      "abstract": "Hypergraph-based methods extend structured retrieval-augmented generation (RAG) by organizing external knowledge as multi-entity relational structures, helping large language models (LLMs) generate better-grounded answers. However, existing structured RAG systems typically assume static corpus construction, requiring the retrieval structure to be rebuilt over the expanded corpus when new documents arrive. To address this limitation, we introduce HyperRAG-IHM, a hypergraph-based RAG framework that performs incremental hyperedge maintenance to incorporate newly arriving knowledge without reconstructing the historical retrieval structure. HyperRAG-IHM links relational evidence extracted from new documents to existing hypergraph knowledge, avoiding reconstruction of the entire retrieval structure. It uses LSH to localize candidate historical hyperedges, then applies multi-dimensional comparison and a three-action decision policy to integrate new relational evidence. Experiments show that HyperRAG-IHM achieves answer quality comparable to or better than full reconstruction under 5D scoring and 8D pairwise evaluation, and remains robust across ablation, structural behavior, cross-dataset, and cross-answer-model analyses.",
+      "published_at": "2026-10",
+      "doi": "",
+      "landing_url": "https://aclanthology.org/2026.emnlp-main.898/",
+      "oa_url": "https://aclanthology.org/2026.emnlp-main.898.pdf",
+      "citation_count": null,
+      "source_score": 0.68,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "Hypergraph-based methods extend structured retrieval-augmented generation (RAG) by organizing external knowledge as multi-entity relational structures, helping large language models (LLMs) generate better-grounded answers. However, existing structured RAG systems typically assume static corpus construction, requiring the retrieval structure to be rebuilt over the expanded corpus when new documents arrive. To address this limitation, we introduce HyperRAG-IHM, a hypergraph-based RAG framework that performs incremental hyperedge maintenance to incorporate newly arriving knowledge without reconst…",
+      "raw_metadata": {
+        "conference": {
+          "id": "emnlp",
+          "name": "EMNLP",
+          "year": 2026,
+          "track": "main",
+          "verified": true,
+          "proof_url": "https://aclanthology.org/2026.emnlp-main.898/",
+          "paper_url": "https://aclanthology.org/2026.emnlp-main.898/",
+          "doi": "",
+          "pdf_url": "https://aclanthology.org/2026.emnlp-main.898.pdf",
+          "date_kind": "publication",
+          "date_precision": "month"
+        },
+        "abstract_kind": "publisher_abstract",
+        "date_precision": "month",
+        "date_kind": "publication",
+        "bibliography": {
+          "type": "proceedings-article"
+        },
+        "sources": [
+          "AI 顶会论文"
+        ],
+        "source_links": [
+          "https://aclanthology.org/2026.emnlp-main.898.pdf",
+          "https://aclanthology.org/2026.emnlp-main.898/"
+        ],
+        "identity_aliases": [
+          [
+            "title_author_names",
+            "hyperragihmincrementalhyperedgemaintenanceforhypergraphragundercorpusexpansion|chen:h|chen:l|jia:t|mu:x|zhao:s|zhu:j"
+          ],
+          [
+            "title_authors",
+            "hyperragihmincrementalhyperedgemaintenanceforhypergraphragundercorpusexpansion|haoyuchen|jihuazhu|linchen|shengweizhao|tingkaijia|xiaoxuanmu"
+          ]
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "c4b5993c8dc6",
+      "source_ids": [
+        "AI 顶会论文"
+      ],
+      "venue_group": "AI 顶会主会论文",
+      "journal": "EMNLP",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [
+        "大模型"
+      ],
+      "analysis_status": "pending",
+      "method": "基于原文摘要的规则摘要",
+      "recommendation": "",
+      "deep_read": {},
+      "recommended_direction": "ai_maintenance"
+    },
+    {
+      "source": "AI 顶会论文",
+      "source_id": "https://aclanthology.org/2026.emnlp-main.1595/",
+      "title": "How AI Models Manage Epistemic Authority: A Taxonomy and Comparative Analysis of Responses to User Disagreement",
+      "authors": [
+        "Riyadh Alnasser",
+        "Yusuf Mücahit Çetinkaya",
+        "Sumin Zhao",
+        "Tugrulcan Elmas"
+      ],
+      "venue": "EMNLP 2026",
+      "abstract": "Large language models are increasingly used as sources of advice and information, including in high-stakes settings, yet little is known about how they respond to user disagreement. We study how a model manages its epistemic authority, referring here to its claim to knowledge, competence, or the right to advise, once a user challenges its answer. Building on Conversation Analysis, we introduce a taxonomy of six challenge types and a four-layer framework for analysing each response: whether the original claim is maintained or changed, where authority is located, how the disagreement is socially managed, and what kind of evidential support is offered. We construct a new dataset of 2,310 controlled challenge scenarios and 32,340 corresponding responses from 14 models, and analyse them using our framework with an LLM-as-judge pipeline, providing a vocabulary which future evaluation and benchmark design can build on. We find that models show conflicting behaviour: they validate users in 85% of responses but maintain their original claim in 65%. They explicitly apologise in 33% of responses, yet 59% of those apologies accompany maintenance of the original claim. They transfer authority most often in advice tasks, doing so in 28% of responses and reaching 57% in health advice and 49% in legal advice, compared with 6% in fact and 3% in explanation tasks. Abandonment of the original claim ranges from 0.8% for GPT-5.2 to 40% for DeepSeek 7B, while complete replacement of the original claim is rare overall at 1.5%.",
+      "published_at": "2026-10",
+      "doi": "",
+      "landing_url": "https://aclanthology.org/2026.emnlp-main.1595/",
+      "oa_url": "https://aclanthology.org/2026.emnlp-main.1595.pdf",
+      "citation_count": null,
+      "source_score": 0.68,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "Large language models are increasingly used as sources of advice and information, including in high-stakes settings, yet little is known about how they respond to user disagreement. We study how a model manages its epistemic authority, referring here to its claim to knowledge, competence, or the right to advise, once a user challenges its answer. Building on Conversation Analysis, we introduce a taxonomy of six challenge types and a four-layer framework for analysing each response: whether the original claim is maintained or changed, where authority is located, how the disagreement is socially…",
+      "raw_metadata": {
+        "conference": {
+          "id": "emnlp",
+          "name": "EMNLP",
+          "year": 2026,
+          "track": "main",
+          "verified": true,
+          "proof_url": "https://aclanthology.org/2026.emnlp-main.1595/",
+          "paper_url": "https://aclanthology.org/2026.emnlp-main.1595/",
+          "doi": "",
+          "pdf_url": "https://aclanthology.org/2026.emnlp-main.1595.pdf",
+          "date_kind": "publication",
+          "date_precision": "month"
+        },
+        "abstract_kind": "publisher_abstract",
+        "date_precision": "month",
+        "date_kind": "publication",
+        "bibliography": {
+          "type": "proceedings-article"
+        },
+        "sources": [
+          "AI 顶会论文"
+        ],
+        "source_links": [
+          "https://aclanthology.org/2026.emnlp-main.1595.pdf",
+          "https://aclanthology.org/2026.emnlp-main.1595/"
+        ],
+        "identity_aliases": [
+          [
+            "title_author_names",
+            "howaimodelsmanageepistemicauthorityataxonomyandcomparativeanalysisofresponsestouserdisagreement|alnasser:r|elmas:t|etinkaya:y|zhao:s"
+          ],
+          [
+            "title_authors",
+            "howaimodelsmanageepistemicauthorityataxonomyandcomparativeanalysisofresponsestouserdisagreement|riyadhalnasser|suminzhao|tugrulcanelmas|yusufmcahitetinkaya"
+          ]
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "5bf0c76a6b59",
+      "source_ids": [
+        "AI 顶会论文"
+      ],
+      "venue_group": "AI 顶会主会论文",
+      "journal": "EMNLP",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [
+        "大模型"
+      ],
+      "analysis_status": "pending",
+      "method": "基于原文摘要的规则摘要",
+      "recommendation": "",
+      "deep_read": {},
+      "recommended_direction": "ai_maintenance"
+    },
+    {
+      "source": "AI 顶会论文",
+      "source_id": "https://aclanthology.org/2026.emnlp-main.1158/",
+      "title": "EvoGenUI-Bench: Evaluating LLMs as Multi-Turn Generative UI Assistants",
+      "authors": [
+        "Yue Peng",
+        "Lanke Xia",
+        "Zihan Wang",
+        "Jiahao Ye",
+        "Ke Ning",
+        "Hongyi Wen"
+      ],
+      "venue": "EMNLP 2026",
+      "abstract": "Large language models can generate interactive web interfaces, but reliable generative UI requires maintaining an executable artifact as user requests evolve. We introduce EvoGenUI-Bench, a benchmark for multi-turn interface maintenance comprising 150 five-turn tasks and 750 turns across three scenarios: information presentation, executable interaction, and tool-grounded external state. We execute generated artifacts in a browser and evaluate them using screenshots, source and DOM evidence, actor traces, and runtime logs. Beyond turn-level and episode-level success, we measure cross-turn retention with Adjacent Pass Retention. Across eight models, even the strongest achieves 74.9% Turn Pass while completing only 37.3% of five-turn episodes; APR further falls to 52.4% on tool-grounded tasks. Diagnostic analysis shows that presentation failures center on information architecture, interaction failures on derived-state propagation and affordance binding, and tool-grounded failures additionally involve external-state grounding and requirement decomposition. These results reframe generative UI evaluation from judging isolated outputs to testing whether interface behavior, derived state, external state, and assistant claims remain synchronized as the artifact evolves.",
+      "published_at": "2026-10",
+      "doi": "",
+      "landing_url": "https://aclanthology.org/2026.emnlp-main.1158/",
+      "oa_url": "https://aclanthology.org/2026.emnlp-main.1158.pdf",
+      "citation_count": null,
+      "source_score": 0.68,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "Large language models can generate interactive web interfaces, but reliable generative UI requires maintaining an executable artifact as user requests evolve. We introduce EvoGenUI-Bench, a benchmark for multi-turn interface maintenance comprising 150 five-turn tasks and 750 turns across three scenarios: information presentation, executable interaction, and tool-grounded external state. We execute generated artifacts in a browser and evaluate them using screenshots, source and DOM evidence, actor traces, and runtime logs. Beyond turn-level and episode-level success, we measure cross-turn reten…",
+      "raw_metadata": {
+        "conference": {
+          "id": "emnlp",
+          "name": "EMNLP",
+          "year": 2026,
+          "track": "main",
+          "verified": true,
+          "proof_url": "https://aclanthology.org/2026.emnlp-main.1158/",
+          "paper_url": "https://aclanthology.org/2026.emnlp-main.1158/",
+          "doi": "",
+          "pdf_url": "https://aclanthology.org/2026.emnlp-main.1158.pdf",
+          "date_kind": "publication",
+          "date_precision": "month"
+        },
+        "abstract_kind": "publisher_abstract",
+        "date_precision": "month",
+        "date_kind": "publication",
+        "bibliography": {
+          "type": "proceedings-article"
+        },
+        "sources": [
+          "AI 顶会论文"
+        ],
+        "source_links": [
+          "https://aclanthology.org/2026.emnlp-main.1158.pdf",
+          "https://aclanthology.org/2026.emnlp-main.1158/"
+        ],
+        "identity_aliases": [
+          [
+            "title_author_names",
+            "evogenuibenchevaluatingllmsasmultiturngenerativeuiassistants|ning:k|peng:y|wang:z|wen:h|xia:l|ye:j"
+          ],
+          [
+            "title_authors",
+            "evogenuibenchevaluatingllmsasmultiturngenerativeuiassistants|hongyiwen|jiahaoye|kening|lankexia|yuepeng|zihanwang"
+          ]
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "aa20cdb982cb",
+      "source_ids": [
+        "AI 顶会论文"
+      ],
+      "venue_group": "AI 顶会主会论文",
+      "journal": "EMNLP",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [
+        "大模型"
+      ],
+      "analysis_status": "pending",
+      "method": "基于原文摘要的规则摘要",
+      "recommendation": "",
+      "deep_read": {},
+      "recommended_direction": "ai_maintenance"
+    },
+    {
+      "source": "AI 顶会论文",
+      "source_id": "https://aclanthology.org/2026.emnlp-main.769/",
+      "title": "Diagnostic Analysis for Large Language Model Reasoning",
+      "authors": [
+        "Xinyu Liu",
+        "Dongqi Fu",
+        "Jun Wu"
+      ],
+      "venue": "EMNLP 2026",
+      "abstract": "Reasoning structures (e.g., chains and graphs) are increasingly used for probabilistic inference, factuality verification, and uncertainty estimation, but their structural reliability is rarely evaluated directly. We test whether this reliability holds through a proposed two-stage diagnostic evaluation in open-ended multi-hop QA. Stage 1 tests different capabilities required to construct reasoning graphs, showing that graph reliability varies with topology, prompt design, and model family. Stage 2 uses uncertainty estimation as a downstream test case. Generated-edge experiments show that graph-based computation is sensitive to upstream graph errors, with performance dropping relative to the gold-graph setting. Gold-graph experiments further show that graph structure provides little benefit when used only as prompt context, but improves the separation of correct from incorrect answers by confidence score and enables node-level diagnostics.",
+      "published_at": "2026-10",
+      "doi": "",
+      "landing_url": "https://aclanthology.org/2026.emnlp-main.769/",
+      "oa_url": "https://aclanthology.org/2026.emnlp-main.769.pdf",
+      "citation_count": null,
+      "source_score": 0.68,
+      "topic_tags": [
+        "fatigue_reliability"
+      ],
+      "summary": "Reasoning structures (e.g., chains and graphs) are increasingly used for probabilistic inference, factuality verification, and uncertainty estimation, but their structural reliability is rarely evaluated directly. We test whether this reliability holds through a proposed two-stage diagnostic evaluation in open-ended multi-hop QA. Stage 1 tests different capabilities required to construct reasoning graphs, showing that graph reliability varies with topology, prompt design, and model family. Stage 2 uses uncertainty estimation as a downstream test case. Generated-edge experiments show that graph…",
+      "raw_metadata": {
+        "conference": {
+          "id": "emnlp",
+          "name": "EMNLP",
+          "year": 2026,
+          "track": "main",
+          "verified": true,
+          "proof_url": "https://aclanthology.org/2026.emnlp-main.769/",
+          "paper_url": "https://aclanthology.org/2026.emnlp-main.769/",
+          "doi": "",
+          "pdf_url": "https://aclanthology.org/2026.emnlp-main.769.pdf",
+          "date_kind": "publication",
+          "date_precision": "month"
+        },
+        "abstract_kind": "publisher_abstract",
+        "date_precision": "month",
+        "date_kind": "publication",
+        "bibliography": {
+          "type": "proceedings-article"
+        },
+        "sources": [
+          "AI 顶会论文"
+        ],
+        "source_links": [
+          "https://aclanthology.org/2026.emnlp-main.769.pdf",
+          "https://aclanthology.org/2026.emnlp-main.769/"
+        ],
+        "identity_aliases": [
+          [
+            "title_author_names",
+            "diagnosticanalysisforlargelanguagemodelreasoning|fu:d|liu:x|wu:j"
+          ],
+          [
+            "title_authors",
+            "diagnosticanalysisforlargelanguagemodelreasoning|dongqifu|junwu|xinyuliu"
+          ]
+        ],
+        "research_directions": [
+          "结构疲劳与可靠性"
+        ]
+      },
+      "id": "abdf3af8d331",
+      "source_ids": [
+        "AI 顶会论文"
+      ],
+      "venue_group": "AI 顶会主会论文",
+      "journal": "EMNLP",
+      "topic_ids": [
+        "fatigue_reliability"
+      ],
+      "focus_tags": [
+        "大模型"
+      ],
+      "analysis_status": "pending",
+      "method": "基于原文摘要的规则摘要",
+      "recommendation": "",
+      "deep_read": {},
+      "recommended_direction": "fatigue_reliability"
+    },
+    {
+      "source": "AI 顶会论文",
+      "source_id": "https://aclanthology.org/2026.emnlp-main.491/",
+      "title": "Dynamic Dual-Granularity Skill Bank for Agentic RL",
+      "authors": [
+        "Songjun Tu",
+        "Chengdong Xu",
+        "Qichao Zhang",
+        "Yaocheng Zhang",
+        "Xiangyuan Lan",
+        "Linjing Li",
+        "Dong Li",
+        "Dongbin Zhao"
+      ],
+      "venue": "EMNLP 2026",
+      "abstract": "Agentic RL can benefit substantially from reusable experience, but existing skill-based methods mostly focus on trajectory-level guidance and provide limited support for the principled evaluation and maintenance of an evolving skill memory. We propose D2Skill, a dynamic dual-granularity skill bank for agentic RL that organizes reusable experience into task skills for high-level guidance and step skills for fine-grained decision support and error correction. D2Skill jointly trains the policy and skill bank through paired baseline and skill-injected rollouts under the same policy, using their performance gap to derive hindsight utility signals for both skill updating and policy optimization. Constructed from training-time trajectories, the skill bank is continuously expanded through reflection and maintained with utility-aware retrieval and pruning. Across ALFWorld, WebShop, and Search-Augmented QA, D2Skill consistently outperforms skill-free and skill-based baselines, remains effective with self-feedback, and transfers to unseen ALFWorld environments without test-time adaptation. Project Page: https://github.com/TU2021/D2Skill-AgenticRL",
+      "published_at": "2026-10",
+      "doi": "",
+      "landing_url": "https://aclanthology.org/2026.emnlp-main.491/",
+      "oa_url": "https://aclanthology.org/2026.emnlp-main.491.pdf",
+      "citation_count": null,
+      "source_score": 0.68,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "Agentic RL can benefit substantially from reusable experience, but existing skill-based methods mostly focus on trajectory-level guidance and provide limited support for the principled evaluation and maintenance of an evolving skill memory. We propose D2Skill, a dynamic dual-granularity skill bank for agentic RL that organizes reusable experience into task skills for high-level guidance and step skills for fine-grained decision support and error correction. D2Skill jointly trains the policy and skill bank through paired baseline and skill-injected rollouts under the same policy, using their pe…",
+      "raw_metadata": {
+        "conference": {
+          "id": "emnlp",
+          "name": "EMNLP",
+          "year": 2026,
+          "track": "main",
+          "verified": true,
+          "proof_url": "https://aclanthology.org/2026.emnlp-main.491/",
+          "paper_url": "https://aclanthology.org/2026.emnlp-main.491/",
+          "doi": "",
+          "pdf_url": "https://aclanthology.org/2026.emnlp-main.491.pdf",
+          "date_kind": "publication",
+          "date_precision": "month"
+        },
+        "abstract_kind": "publisher_abstract",
+        "date_precision": "month",
+        "date_kind": "publication",
+        "bibliography": {
+          "type": "proceedings-article"
+        },
+        "sources": [
+          "AI 顶会论文"
+        ],
+        "source_links": [
+          "https://aclanthology.org/2026.emnlp-main.491.pdf",
+          "https://aclanthology.org/2026.emnlp-main.491/"
+        ],
+        "identity_aliases": [
+          [
+            "title_author_names",
+            "dynamicdualgranularityskillbankforagenticrl|lan:x|li:d|li:l|tu:s|xu:c|zhang:q|zhang:y|zhao:d"
+          ],
+          [
+            "title_authors",
+            "dynamicdualgranularityskillbankforagenticrl|chengdongxu|dongbinzhao|dongli|linjingli|qichaozhang|songjuntu|xiangyuanlan|yaochengzhang"
+          ]
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "782e6a0458d9",
+      "source_ids": [
+        "AI 顶会论文"
+      ],
+      "venue_group": "AI 顶会主会论文",
+      "journal": "EMNLP",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [
+        "智能体"
+      ],
+      "analysis_status": "pending",
+      "method": "基于原文摘要的规则摘要",
+      "recommendation": "",
+      "deep_read": {},
+      "recommended_direction": "ai_maintenance"
+    },
+    {
+      "source": "AI 顶会论文",
+      "source_id": "https://aclanthology.org/2026.emnlp-main.1796/",
+      "title": "Drift No More: Spectral Locking for Long-Horizon Open-Weight Multi-Agent AI",
+      "authors": [
+        "Vishal Pramanik",
+        "Maisha Maliha",
+        "Susmit Jha",
+        "Sumit Kumar Jha"
+      ],
+      "venue": "EMNLP 2026",
+      "abstract": "Long-horizon multi-agent systems suffer from three tightly coupled failures: task drift, role drift, and state staleness. We test the hypothesis that these share a common representational cause: agent hidden states move away from the directions encoding the active task, assigned role, and current shared state. A pilot study over 14,832 annotated turns supports this: drifted turns collapse near-uniformly across all three anchor subspaces (pairwise r = 0.72–0.78). Existing methods address these failures separately, operating at the surface-text level or treating control directions independently. We introduce ATLAS (Algebraic Task–role Locking with Adaptive Spectral Memory), a training-free intervention acting on hidden states before a token is generated. ATLAS builds a positive-semidefinite anchor kernel over task, role, and state subspaces and steers hidden states toward their shared high-coherence eigendirections; a low-rank Gram decomposition keeps this tractable. Across long-horizon memory, state maintenance, tool use, least-privilege coordination, and embodied stress tests, ATLAS outperforms prompting, retrieval, memory, and activation-steering baselines. Against A-MEM it improves memory macro-average accuracy by up to 5.7 points and reduces write/read failures by up to 31.7%/24.8%; against MemoryArena-Agent it gains up to 4.8 points. It gains 10.7–12.1 points under perturbation, reaches 93.5% role consistency, and transfers to a 72B backbone (macro-average 61.0 vs. 56.2). Ablating the joint task–role–state span costs 7.2 points against 0.8 for a matched-rank random span, indicating these directions are functionally implicated, not incidental; supplying them by prompt or retrieval recovers 4.3 points less. ATLAS is therefore a representation-level controller for open-weight multi-agent systems, complementary to output-level protocols for black-box agents.",
+      "published_at": "2026-10",
+      "doi": "",
+      "landing_url": "https://aclanthology.org/2026.emnlp-main.1796/",
+      "oa_url": "https://aclanthology.org/2026.emnlp-main.1796.pdf",
+      "citation_count": null,
+      "source_score": 0.68,
+      "topic_tags": [
+        "ai_maintenance"
+      ],
+      "summary": "Long-horizon multi-agent systems suffer from three tightly coupled failures: task drift, role drift, and state staleness. We test the hypothesis that these share a common representational cause: agent hidden states move away from the directions encoding the active task, assigned role, and current shared state. A pilot study over 14,832 annotated turns supports this: drifted turns collapse near-uniformly across all three anchor subspaces (pairwise r = 0.72–0.78). Existing methods address these failures separately, operating at the surface-text level or treating control directions independently.…",
+      "raw_metadata": {
+        "conference": {
+          "id": "emnlp",
+          "name": "EMNLP",
+          "year": 2026,
+          "track": "main",
+          "verified": true,
+          "proof_url": "https://aclanthology.org/2026.emnlp-main.1796/",
+          "paper_url": "https://aclanthology.org/2026.emnlp-main.1796/",
+          "doi": "",
+          "pdf_url": "https://aclanthology.org/2026.emnlp-main.1796.pdf",
+          "date_kind": "publication",
+          "date_precision": "month"
+        },
+        "abstract_kind": "publisher_abstract",
+        "date_precision": "month",
+        "date_kind": "publication",
+        "bibliography": {
+          "type": "proceedings-article"
+        },
+        "sources": [
+          "AI 顶会论文"
+        ],
+        "source_links": [
+          "https://aclanthology.org/2026.emnlp-main.1796.pdf",
+          "https://aclanthology.org/2026.emnlp-main.1796/"
+        ],
+        "identity_aliases": [
+          [
+            "title_author_names",
+            "driftnomorespectrallockingforlonghorizonopenweightmultiagentai|jha:s|jha:s|maliha:m|pramanik:v"
+          ],
+          [
+            "title_authors",
+            "driftnomorespectrallockingforlonghorizonopenweightmultiagentai|maishamaliha|sumitkumarjha|susmitjha|vishalpramanik"
+          ]
+        ],
+        "research_directions": [
+          "AI 智能运维"
+        ]
+      },
+      "id": "75e1db16e962",
+      "source_ids": [
+        "AI 顶会论文"
+      ],
+      "venue_group": "AI 顶会主会论文",
+      "journal": "EMNLP",
+      "topic_ids": [
+        "ai_maintenance"
+      ],
+      "focus_tags": [
+        "智能体"
+      ],
+      "analysis_status": "pending",
+      "method": "基于原文摘要的规则摘要",
+      "recommendation": "",
+      "deep_read": {},
+      "recommended_direction": "ai_maintenance"
+    }
+  ],
+  "source_status": {
+    "CNS 子刊专项": {
+      "source": "CNS 子刊专项",
+      "status": "ok",
+      "count": 2910,
+      "message": "114/114 journal queries across 19 journals; window 365 days; 0 pending; "
+    },
+    "AI 顶会论文": {
+      "source": "AI 顶会论文",
+      "status": "partial",
+      "count": 23,
+      "message": "官方主会论文；缓存 24 小时；按研究方向和现有时间窗口筛选。",
+      "conferences": [
+        {
+          "id": "neurips",
+          "name": "NeurIPS",
+          "status": "no_data",
+          "count": 558,
+          "matched": 0,
+          "cached": 0,
+          "last_success": "2026-10-25T17:05:11.266848+00:00",
+          "message": "",
+          "pending": 8762
+        },
+        {
+          "id": "icml",
+          "name": "ICML",
+          "status": "ok",
+          "count": 559,
+          "matched": 8,
+          "cached": 0,
+          "last_success": "2026-10-25T17:05:29.137236+00:00",
+          "message": "",
+          "pending": 9323
+        },
+        {
+          "id": "iclr",
+          "name": "ICLR",
+          "status": "ok",
+          "count": 9493,
+          "matched": 2,
+          "cached": 0,
+          "last_success": "2026-10-25T17:05:35.622302+00:00",
+          "message": "2026 使用官方 Oral/Poster 录用目录；2025 使用官方 Oral/Poster 录用目录",
+          "pending": 0
+        },
+        {
+          "id": "aaai",
+          "name": "AAAI",
+          "status": "no_data",
+          "count": 492,
+          "matched": 0,
+          "cached": 0,
+          "last_success": "2026-10-25T17:05:52.141345+00:00",
+          "message": "",
+          "pending": 1883
+        },
+        {
+          "id": "ijcai",
+          "name": "IJCAI",
+          "status": "no_data",
+          "count": 560,
+          "matched": 0,
+          "cached": 0,
+          "last_success": "2026-10-25T17:06:12.560220+00:00",
+          "message": "",
+          "pending": 1132
+        },
+        {
+          "id": "kdd",
+          "name": "KDD",
+          "status": "partial",
+          "count": 539,
+          "matched": 0,
+          "cached": 0,
+          "last_success": "2026-10-24T16:37:37.060882+00:00",
+          "message": "论文详情：Conference title mismatch",
+          "pending": 798
+        },
+        {
+          "id": "cvpr",
+          "name": "CVPR",
+          "status": "no_data",
+          "count": 558,
+          "matched": 0,
+          "cached": 0,
+          "last_success": "2026-10-25T17:07:29.353677+00:00",
+          "message": "",
+          "pending": 6355
+        },
+        {
+          "id": "iccv",
+          "name": "ICCV",
+          "status": "no_data",
+          "count": 559,
+          "matched": 0,
+          "cached": 1,
+          "last_success": "2026-10-25T17:08:01.468509+00:00",
+          "message": "",
+          "pending": 4298
+        },
+        {
+          "id": "eccv",
+          "name": "ECCV",
+          "status": "no_data",
+          "count": 560,
+          "matched": 0,
+          "cached": 2,
+          "last_success": "2026-10-25T17:08:28.056242+00:00",
+          "message": "",
+          "pending": 3472
+        },
+        {
+          "id": "acl",
+          "name": "ACL",
+          "status": "no_data",
+          "count": 3995,
+          "matched": 0,
+          "cached": 0,
+          "last_success": "2026-10-25T17:08:31.715704+00:00",
+          "message": "",
+          "pending": 0
+        },
+        {
+          "id": "emnlp",
+          "name": "EMNLP",
+          "status": "ok",
+          "count": 4513,
+          "matched": 13,
+          "cached": 0,
+          "last_success": "2026-10-25T17:08:35.976986+00:00",
+          "message": "",
+          "pending": 0
+        }
+      ]
+    },
+    "Elsevier": {
+      "source": "Elsevier",
+      "status": "error",
+      "count": 0,
+      "message": "Scopus STANDARD metadata; COMPLETE unavailable under current authorization; HTTP 400"
+    },
+    "Google Scholar": {
+      "source": "Google Scholar",
+      "status": "quota_exhausted",
+      "count": 0,
+      "message": "HTTP 429"
+    },
+    "ResearchGate": {
+      "source": "ResearchGate",
+      "status": "quota_exhausted",
+      "count": 0,
+      "message": "ResearchGate 本地导出不可用；公开索引本轮失败（quota_exhausted）：HTTP 429"
+    },
+    "微信公众号": {
+      "source": "微信公众号",
+      "status": "partial",
+      "count": 13,
+      "message": "公众号独立采集：最近检查 10-26 00:58（北京时间）。公众号订阅与同步：公开索引已接入：读取 11 条文章元数据，本期 11 条。 微信后台文章列表受限；已通过公开搜索获取线索，链接为检索入口，非已核验全文。 最近同步：10-05 20:35（北京时间）。 导出超过 3 天，请检查同步任务；将尝试公开索引。 公开查询完成 3/3 项（复用缓存 0 项）。 最近检查：10-22 20:35（北京时间）。 公众号公开索引：公开索引已接入：本期读取 0 条公众号文章线索，按 35 个订阅筛选。 微信后台文章列表受限；线索提供公开检索入口，非已核验全文。 公开查询完成 3/3 项（复用缓存 0 项）。"
+    },
+    "arXiv": {
+      "source": "arXiv",
+      "status": "ok",
+      "count": 33,
+      "message": "public API"
+    },
+    "OpenAlex": {
+      "source": "OpenAlex",
+      "status": "ok",
+      "count": 131,
+      "message": "public API"
+    },
+    "Crossref": {
+      "source": "Crossref",
+      "status": "ok",
+      "count": 128,
+      "message": "常规检索：ok；自定义期刊 1/1 本完成 ISSN 定向检索。"
+    },
+    "Semantic Scholar": {
+      "source": "Semantic Scholar",
+      "status": "quota_exhausted",
+      "count": 0,
+      "message": "HTTP 429"
+    },
+    "PubMed": {
+      "source": "PubMed",
+      "status": "ok",
+      "count": 6,
+      "message": "public API"
+    },
+    "Web of Science": {
+      "source": "Web of Science",
+      "status": "ok",
+      "count": 57,
+      "message": "Clarivate Starter API 已授权：检索 3 个方向，本期获取 57 条元数据。"
+    }
+  },
+  "cns_statistics": [
+    {
+      "journal": "Nature",
+      "issn": "1476-4687",
+      "relevant": 0,
+      "new": 0,
+      "historical_excluded": 0,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 7,
+      "available": 162,
+      "status": "ok"
+    },
+    {
+      "journal": "Science",
+      "issn": "1095-9203",
+      "relevant": 1,
+      "new": 0,
+      "historical_excluded": 1,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 2,
+      "available": 92,
+      "status": "ok"
+    },
+    {
+      "journal": "Cell",
+      "issn": "0092-8674",
+      "relevant": 0,
+      "new": 0,
+      "historical_excluded": 0,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 0,
+      "available": 43,
+      "status": "ok"
+    },
+    {
+      "journal": "Nature Communications",
+      "issn": "2041-1723",
+      "relevant": 13,
+      "new": 0,
+      "historical_excluded": 13,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 19,
+      "available": 1162,
+      "status": "ok"
+    },
+    {
+      "journal": "Nature Machine Intelligence",
+      "issn": "2522-5839",
+      "relevant": 4,
+      "new": 0,
+      "historical_excluded": 4,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 7,
+      "available": 189,
+      "status": "ok"
+    },
+    {
+      "journal": "Nature Computational Science",
+      "issn": "2662-8457",
+      "relevant": 0,
+      "new": 0,
+      "historical_excluded": 0,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 0,
+      "available": 55,
+      "status": "ok"
+    },
+    {
+      "journal": "Nature Biomedical Engineering",
+      "issn": "2157-846X",
+      "relevant": 0,
+      "new": 0,
+      "historical_excluded": 0,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 0,
+      "available": 35,
+      "status": "ok"
+    },
+    {
+      "journal": "Nature Electronics",
+      "issn": "2520-1131",
+      "relevant": 1,
+      "new": 0,
+      "historical_excluded": 1,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 0,
+      "available": 11,
+      "status": "ok"
+    },
+    {
+      "journal": "Nature Materials",
+      "issn": "1476-4660",
+      "relevant": 0,
+      "new": 0,
+      "historical_excluded": 0,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 0,
+      "available": 11,
+      "status": "ok"
+    },
+    {
+      "journal": "npj Computational Materials",
+      "issn": "2057-3960",
+      "relevant": 8,
+      "new": 0,
+      "historical_excluded": 8,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 3,
+      "available": 224,
+      "status": "ok"
+    },
+    {
+      "journal": "npj Artificial Intelligence",
+      "issn": "3005-1460",
+      "relevant": 2,
+      "new": 0,
+      "historical_excluded": 2,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 0,
+      "available": 28,
+      "status": "ok"
+    },
+    {
+      "journal": "Microsystems & Nanoengineering",
+      "issn": "2055-7434",
+      "relevant": 2,
+      "new": 0,
+      "historical_excluded": 2,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 1,
+      "available": 32,
+      "status": "ok"
+    },
+    {
+      "journal": "Communications Engineering",
+      "issn": "2731-3395",
+      "relevant": 9,
+      "new": 0,
+      "historical_excluded": 9,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 3,
+      "available": 46,
+      "status": "ok"
+    },
+    {
+      "journal": "Science Advances",
+      "issn": "2375-2548",
+      "relevant": 6,
+      "new": 0,
+      "historical_excluded": 6,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 7,
+      "available": 295,
+      "status": "ok"
+    },
+    {
+      "journal": "Science Robotics",
+      "issn": "2470-9476",
+      "relevant": 0,
+      "new": 0,
+      "historical_excluded": 0,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 1,
+      "available": 18,
+      "status": "ok"
+    },
+    {
+      "journal": "Cell Reports",
+      "issn": "2211-1247",
+      "relevant": 0,
+      "new": 0,
+      "historical_excluded": 0,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 0,
+      "available": 86,
+      "status": "ok"
+    },
+    {
+      "journal": "Cell Systems",
+      "issn": "2405-4712",
+      "relevant": 0,
+      "new": 0,
+      "historical_excluded": 0,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 0,
+      "available": 24,
+      "status": "ok"
+    },
+    {
+      "journal": "Cell Reports Physical Science",
+      "issn": "2666-3864",
+      "relevant": 5,
+      "new": 0,
+      "historical_excluded": 5,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 0,
+      "available": 69,
+      "status": "ok"
+    },
+    {
+      "journal": "iScience",
+      "issn": "2589-0042",
+      "relevant": 1,
+      "new": 0,
+      "historical_excluded": 1,
+      "selected": 0,
+      "query_count": 6,
+      "completed_queries": 6,
+      "pending_queries": 0,
+      "failed_queries": 0,
+      "errors": [],
+      "fetched": 0,
+      "available": 328,
+      "status": "ok"
+    }
+  ],
+  "wechat_articles": [
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-c94a2f00a58f816da12f",
+      "title": "xAerospace 编委/青年编委全球招募(10月18日截止)",
+      "authors": [],
+      "venue": "航空学报CJA",
+      "abstract": "期2026年10月18日申 请 结 果 反 馈 日 期预计2026年10月底前END两刊简介航空学报CJA_小编微 信 号:HKXBCJA_xiaobian扫码添...",
+      "published_at": "2026-09-28T09:59:22+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA%20xAerospace%20%E7%BC%96%E5%A7%94%2F%E9%9D%92%E5%B9%B4%E7%BC%96%E5%A7%94%E5%85%A8%E7%90%83%E6%8B%9B%E5%8B%9F%2810%E6%9C%8818%E6%97%A5%E6%88%AA%E6%AD%A2%29",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "leads"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-1f849c160f0f02a934cf",
+      "title": "【科技动态】2026年9月最新材料前沿动态",
+      "authors": [],
+      "venue": "航空材料学报",
+      "abstract": "(2026). DOI: 10.1038/s43246-026-01212-yPART.05耶鲁大学开发金属局部变形映射技术支撑航空发动机和燃气轮机高温材料设计向上...",
+      "published_at": "2026-09-29T02:51:29+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E8%88%AA%E7%A9%BA%E6%9D%90%E6%96%99%E5%AD%A6%E6%8A%A5%20%E3%80%90%E7%A7%91%E6%8A%80%E5%8A%A8%E6%80%81%E3%80%912026%E5%B9%B49%E6%9C%88%E6%9C%80%E6%96%B0%E6%9D%90%E6%96%99%E5%89%8D%E6%B2%BF%E5%8A%A8%E6%80%81",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "leads"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-142dcb53c2e61c7b7f2f",
+      "title": "量智融合&具身智能分论坛议程公开|2026人工智能开放计算大会暨众智FlagOS技术大会",
+      "authors": [],
+      "venue": "智源FlagOpen",
+      "abstract": "2026 人工智能开放计算大会暨众智 FlagOS 技术大会完整议程还... 社区,目前已经有 100多家成员单位.FlagOS 是一款专为异构 AI ...",
+      "published_at": "2026-09-29T12:58:32+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E6%99%BA%E6%BA%90FlagOpen%20%E9%87%8F%E6%99%BA%E8%9E%8D%E5%90%88%26%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD%E5%88%86%E8%AE%BA%E5%9D%9B%E8%AE%AE%E7%A8%8B%E5%85%AC%E5%BC%80%7C2026%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%BC%80%E6%94%BE%E8%AE%A1%E7%AE%97%E5%A4%A7%E4%BC%9A%E6%9A%A8%E4%BC%97%E6%99%BAFlagOS%E6%8A%80%E6%9C%AF%E5%A4%A7%E4%BC%9A",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "leads"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-9f8cc8897fb784acc586",
+      "title": "早鸟票倒计时2天|2026人工智能开放计算大会暨众智FlagOS技术大会",
+      "authors": [],
+      "venue": "智源FlagOpen",
+      "abstract": "日,2026 人工智能开放计算大会暨众智 FlagOS 技术大会将以“... 社区联合北京智源人工智能研究院、中关村人工智能开源联盟(筹...",
+      "published_at": "2026-10-09T10:30:08+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E6%99%BA%E6%BA%90FlagOpen%20%E6%97%A9%E9%B8%9F%E7%A5%A8%E5%80%92%E8%AE%A1%E6%97%B62%E5%A4%A9%7C2026%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%BC%80%E6%94%BE%E8%AE%A1%E7%AE%97%E5%A4%A7%E4%BC%9A%E6%9A%A8%E4%BC%97%E6%99%BAFlagOS%E6%8A%80%E6%9C%AF%E5%A4%A7%E4%BC%9A",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "leads"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-dc09c25db7f2ed99f0ac",
+      "title": "大语言模型-能力横评 26-09 月榜",
+      "authors": [],
+      "venue": "大模型观测员",
+      "abstract": "#1 参赛选手本次更新模型(按发布时间顺序),共 14 个,持平上个月,其中北美模型占 10 个,本月是北美主场:*美元定价按1 USD ...",
+      "published_at": "2026-09-30T05:27:22+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%A7%82%E6%B5%8B%E5%91%98%20%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B-%E8%83%BD%E5%8A%9B%E6%A8%AA%E8%AF%84%2026-09%20%E6%9C%88%E6%A6%9C",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "leads"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-981c5bcb53fee583e416",
+      "title": "航空航天领域入围2026全球前2%顶尖科学家榜单(中国大陆地区)名单",
+      "authors": [],
+      "venue": "航空学报CJA",
+      "abstract": "于当地时间2026年10月7日共同发布2026年全球前2%顶尖科学家... 两刊简介航空学报CJA_小编微 信 号:HKXBCJA_xiaobian扫码添...",
+      "published_at": "2026-10-10T05:49:04+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E8%88%AA%E7%A9%BA%E5%AD%A6%E6%8A%A5CJA%20%E8%88%AA%E7%A9%BA%E8%88%AA%E5%A4%A9%E9%A2%86%E5%9F%9F%E5%85%A5%E5%9B%B42026%E5%85%A8%E7%90%83%E5%89%8D2%25%E9%A1%B6%E5%B0%96%E7%A7%91%E5%AD%A6%E5%AE%B6%E6%A6%9C%E5%8D%95%28%E4%B8%AD%E5%9B%BD%E5%A4%A7%E9%99%86%E5%9C%B0%E5%8C%BA%29%E5%90%8D%E5%8D%95",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "leads"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-79090656c9064cdbf8a4",
+      "title": "【信息速递】第十一期全国材料疲劳专题学术研讨会图片新闻(第二天)",
+      "authors": [],
+      "venue": "材料疲劳CFS",
+      "abstract": "第十一期全国材料疲劳专题学术研讨会在南京召开2026年10月18日,第十一期全国材料疲劳专题学术研讨会继续在南京召开,5位专家...",
+      "published_at": "2026-10-18T04:09:28+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E6%9D%90%E6%96%99%E7%96%B2%E5%8A%B3CFS%20%E3%80%90%E4%BF%A1%E6%81%AF%E9%80%9F%E9%80%92%E3%80%91%E7%AC%AC%E5%8D%81%E4%B8%80%E6%9C%9F%E5%85%A8%E5%9B%BD%E6%9D%90%E6%96%99%E7%96%B2%E5%8A%B3%E4%B8%93%E9%A2%98%E5%AD%A6%E6%9C%AF%E7%A0%94%E8%AE%A8%E4%BC%9A%E5%9B%BE%E7%89%87%E6%96%B0%E9%97%BB%28%E7%AC%AC%E4%BA%8C%E5%A4%A9%29",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "leads"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-3a0def6c23a18baadffc",
+      "title": "【信息速递】第十一期全国材料疲劳专题学术研讨会图片新闻",
+      "authors": [],
+      "venue": "材料疲劳CFS",
+      "abstract": "第十一期全国材料疲劳专题学术研讨会在南京召开第十一期全国材料疲劳专题学术研讨会于2026年10月17日在南京召开,据初步统计...",
+      "published_at": "2026-10-17T10:37:07+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E6%9D%90%E6%96%99%E7%96%B2%E5%8A%B3CFS%20%E3%80%90%E4%BF%A1%E6%81%AF%E9%80%9F%E9%80%92%E3%80%91%E7%AC%AC%E5%8D%81%E4%B8%80%E6%9C%9F%E5%85%A8%E5%9B%BD%E6%9D%90%E6%96%99%E7%96%B2%E5%8A%B3%E4%B8%93%E9%A2%98%E5%AD%A6%E6%9C%AF%E7%A0%94%E8%AE%A8%E4%BC%9A%E5%9B%BE%E7%89%87%E6%96%B0%E9%97%BB",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "leads"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-a66bdaa8811ec6a509c1",
+      "title": "倒计时 2 天|解锁大会完整玩法!2026人工智能开放计算大会暨众智FlagOS技术大会即将启幕",
+      "authors": [],
+      "venue": "智源FlagOpen",
+      "abstract": "2026 人工智能开放计算大会暨众智 FlagOS 技术大会正式开幕仅... 社区联合北京智源人工智能研究院、北京量子信息科学研究院等机...",
+      "published_at": "2026-10-15T05:41:27+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E6%99%BA%E6%BA%90FlagOpen%20%E5%80%92%E8%AE%A1%E6%97%B6%202%20%E5%A4%A9%7C%E8%A7%A3%E9%94%81%E5%A4%A7%E4%BC%9A%E5%AE%8C%E6%95%B4%E7%8E%A9%E6%B3%95%212026%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%BC%80%E6%94%BE%E8%AE%A1%E7%AE%97%E5%A4%A7%E4%BC%9A%E6%9A%A8%E4%BC%97%E6%99%BAFlagOS%E6%8A%80%E6%9C%AF%E5%A4%A7%E4%BC%9A%E5%8D%B3%E5%B0%86%E5%90%AF%E5%B9%95",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "leads"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-ae413f21bce55f17e457",
+      "title": "2026年中国机械工程学会年会暨学会成立90周年交流活动通知",
+      "authors": [],
+      "venue": "机械工程学报",
+      "abstract": "010-68799044中国机械工程学会2026年10月10日责任编辑:赵子... 我们《机械工程学报》编辑部将努力为您打造一个有态度、有深度...",
+      "published_at": "2026-10-19T09:03:43+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E6%9C%BA%E6%A2%B0%E5%B7%A5%E7%A8%8B%E5%AD%A6%E6%8A%A5%202026%E5%B9%B4%E4%B8%AD%E5%9B%BD%E6%9C%BA%E6%A2%B0%E5%B7%A5%E7%A8%8B%E5%AD%A6%E4%BC%9A%E5%B9%B4%E4%BC%9A%E6%9A%A8%E5%AD%A6%E4%BC%9A%E6%88%90%E7%AB%8B90%E5%91%A8%E5%B9%B4%E4%BA%A4%E6%B5%81%E6%B4%BB%E5%8A%A8%E9%80%9A%E7%9F%A5",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "leads"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-c3eb0ef1ad0ff7226555",
+      "title": "2026年中国机械工程学会高端学术著作出版计划资助项目公告",
+      "authors": [],
+      "venue": "机械工程学报",
+      "abstract": "中国机械工程学会高端学术著作出版计划管理办公室2026年10月8... 我们《机械工程学报》编辑部将努力为您打造一个有态度、有深度...",
+      "published_at": "2026-10-15T12:04:19+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E6%9C%BA%E6%A2%B0%E5%B7%A5%E7%A8%8B%E5%AD%A6%E6%8A%A5%202026%E5%B9%B4%E4%B8%AD%E5%9B%BD%E6%9C%BA%E6%A2%B0%E5%B7%A5%E7%A8%8B%E5%AD%A6%E4%BC%9A%E9%AB%98%E7%AB%AF%E5%AD%A6%E6%9C%AF%E8%91%97%E4%BD%9C%E5%87%BA%E7%89%88%E8%AE%A1%E5%88%92%E8%B5%84%E5%8A%A9%E9%A1%B9%E7%9B%AE%E5%85%AC%E5%91%8A",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "leads"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-a4d921725d272c275d01",
+      "title": "第八届机器人与智能制造技术国际会议 (ISRIMT 2026)(第二轮通知)",
+      "authors": [],
+      "venue": "机械工程学报",
+      "abstract": "2026年10月23-25日地点:中国·常州福记逸高酒店(江苏省常州... 彤JME学院简介JME学院是由《机械工程学报》编辑部2018年创...",
+      "published_at": "2026-10-12T09:03:42+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E6%9C%BA%E6%A2%B0%E5%B7%A5%E7%A8%8B%E5%AD%A6%E6%8A%A5%20%E7%AC%AC%E5%85%AB%E5%B1%8A%E6%9C%BA%E5%99%A8%E4%BA%BA%E4%B8%8E%E6%99%BA%E8%83%BD%E5%88%B6%E9%80%A0%E6%8A%80%E6%9C%AF%E5%9B%BD%E9%99%85%E4%BC%9A%E8%AE%AE%20%28ISRIMT%202026%29%28%E7%AC%AC%E4%BA%8C%E8%BD%AE%E9%80%9A%E7%9F%A5%29",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "leads"
+      }
+    },
+    {
+      "source": "微信公众号",
+      "source_id": "wechat-4f47f89da28a2142c5cb",
+      "title": "分论坛发布 | 人本生产@2026第四届人本智造学术会议",
+      "authors": [],
+      "venue": "机械工程学报",
+      "abstract": "2026年10月23日-10月25日会议地点:湖北宜昌 宜昌桃花岭饭店... 《机械工程学报》编辑部、《航空制造技术》编辑部、《工程设计...",
+      "published_at": "2026-10-23T09:38:05+00:00",
+      "doi": "",
+      "landing_url": "https://weixin.sogou.com/weixin?type=2&query=%E6%9C%BA%E6%A2%B0%E5%B7%A5%E7%A8%8B%E5%AD%A6%E6%8A%A5%20%E5%88%86%E8%AE%BA%E5%9D%9B%E5%8F%91%E5%B8%83%20%7C%20%E4%BA%BA%E6%9C%AC%E7%94%9F%E4%BA%A7%402026%E7%AC%AC%E5%9B%9B%E5%B1%8A%E4%BA%BA%E6%9C%AC%E6%99%BA%E9%80%A0%E5%AD%A6%E6%9C%AF%E4%BC%9A%E8%AE%AE",
+      "oa_url": "",
+      "citation_count": null,
+      "source_score": 0.0,
+      "topic_tags": [],
+      "summary": "",
+      "raw_metadata": {
+        "access_mode": "public_index",
+        "social_column": "leads"
+      }
+    }
+  ],
+  "research_profile": {
+    "version": 1,
+    "core_count": 6,
+    "extended_count": 0,
+    "directions": [
+      {
+        "id": "ai_maintenance",
+        "name": "AI 智能运维",
+        "enabled": true,
+        "core": true,
+        "extended": true,
+        "weight": 1,
+        "keywords": [
+          "predictive maintenance",
+          "fault diagnosis",
+          "maintenance",
+          "fault detection",
+          "prognostics",
+          "condition monitoring",
+          "health monitoring",
+          "remaining useful life",
+          "digital twin",
+          "智能运维",
+          "故障诊断",
+          "预测维护"
+        ],
+        "require_any": [
+          "machine learning",
+          "large language model",
+          "deep learning",
+          "neural network",
+          "artificial intelligence",
+          "AI",
+          "LLM",
+          "agentic",
+          "multi-agent",
+          "generative",
+          "surrogate",
+          "kriging",
+          "bayesian",
+          "physics-informed",
+          "大模型",
+          "智能体",
+          "机器学习"
+        ],
+        "exclude": [
+          "cancer",
+          "alzheimer"
+        ]
+      },
+      {
+        "id": "generative_design",
+        "name": "结构生成式设计与可靠性优化",
+        "enabled": true,
+        "core": true,
+        "extended": true,
+        "weight": 1,
+        "keywords": [
+          "generative design",
+          "topology optimization",
+          "inverse design",
+          "structural design",
+          "structural optimization",
+          "constitutive",
+          "scientific machine learning",
+          "finite element",
+          "mechanical metamaterials",
+          "structural reliability optimization",
+          "生成式设计",
+          "拓扑优化",
+          "本构"
+        ],
+        "require_any": [
+          "machine learning",
+          "large language model",
+          "deep learning",
+          "neural network",
+          "artificial intelligence",
+          "AI",
+          "LLM",
+          "agentic",
+          "multi-agent",
+          "generative",
+          "surrogate",
+          "kriging",
+          "bayesian",
+          "physics-informed",
+          "大模型",
+          "智能体",
+          "机器学习"
+        ],
+        "exclude": []
+      },
+      {
+        "id": "fatigue_reliability",
+        "name": "结构疲劳与可靠性",
+        "enabled": true,
+        "core": true,
+        "extended": true,
+        "weight": 1,
+        "keywords": [
+          "structural fatigue",
+          "fatigue life",
+          "fatigue crack",
+          "fracture mechanics",
+          "damage tolerance",
+          "probabilistic fatigue",
+          "structural reliability",
+          "fatigue strength",
+          "fatigue",
+          "结构疲劳",
+          "疲劳寿命",
+          "疲劳可靠性"
+        ],
+        "require_any": [
+          "machine learning",
+          "reliability",
+          "probabilistic",
+          "large language model",
+          "deep learning",
+          "neural network",
+          "AI",
+          "LLM",
+          "agentic",
+          "multi-agent",
+          "surrogate",
+          "kriging",
+          "bayesian",
+          "physics-informed",
+          "大模型",
+          "机器学习",
+          "可靠性"
+        ],
+        "exclude": [
+          "patient",
+          "cancer",
+          "alzheimer"
+        ]
+      }
+    ]
+  },
+  "research_profile_revision": "66e9accaf69b88a3f7664c8ff5a2b3d798edc4e2ea6a7bc8b0bfcae2f25d7a42",
+  "selection_policy": {
+    "priority": "CNS 正刊与子刊同档优先，其次其他相关期刊与已核验主会论文",
+    "direction_allocation": "允许方向不均；归属最高权重的匹配方向；同篇论文不重复推荐",
+    "within_venue_priority": "发表日期 → 大模型与智能体 → 方向权重",
+    "core_requires_chinese_analysis": false,
+    "extended_requires_chinese_analysis": false,
+    "cns_lookback_days": 365,
+    "history": "new_or_evidence_backed",
+    "historical_slots": 1
+  },
+  "heat_status": {
+    "checked_at": "2026-10-25T17:00:21.232013+00:00",
+    "fresh": 140,
+    "failed": 16,
+    "unavailable": 36
+  },
+  "analysis_status": {
+    "ready_core": 0,
+    "target_core": 6,
+    "ready_extended": 0,
+    "target_extended": 0,
+    "llm_configured": false,
+    "llm_attempts": 0,
+    "pending": 6
+  },
+  "edition": {
+    "id": "40214157879",
+    "date": "2026-10-26",
+    "number": 1,
+    "generated_at": "2026-10-25T17:09:51.855308+00:00",
+    "trigger": "scheduled",
+    "core_count": 6,
+    "extended_count": 0
+  }
+}
