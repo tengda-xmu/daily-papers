@@ -1,0 +1,146 @@
+{
+  "paper_id": "abdf3af8d331",
+  "fingerprint": "88be75fe2314531ce28d76ffe77bcbe7633ca5e459ee385527ec2df2293d3179",
+  "analysis": {
+    "title_zh": "大语言模型推理图的诊断分析",
+    "summary": "推理图结构清晰，并不意味着依赖正确或置信度可靠。本文以两阶段实验拆分连边、节点答案与证据支撑、完整分解能力，再比较图作为提示和计算结构的作用。结果显示，图计算可改善部分条件下的置信度排序，却可能损害校准，并直接继承生成边错误；收益还随模型与数据集改变。[P3][P7][P8][P25][P26]本文值得作为推理系统诊断方法阅读，但不能视为疲劳可靠性或工程故障定位的直接证据。",
+    "recommendation": "建议作为可靠性研究的方法拓展阅读：其受控消融、误差传播与排序—校准分离评估具有借鉴价值，但与疲劳可靠性方向直接关联较弱。[P3][P8][P24]",
+    "deep_read": {
+      "problem": "作者追问生成推理图是否足以支撑后续计算，而不只检验最终答案。诊断对象是输出图，并非模型隐藏思维；节点须有正确局部答案和证据，边须表达直接依赖。漏边、快捷边或证据错误可能分别破坏计算与事实支撑，因此结构合法不能替代语义可靠。[P1][P3][P8]",
+      "method": "第一阶段逐步移除金标准支架：A仅预测边，B增加答案与证据生成，C生成完整图。第二阶段先固定正确图比较四类使用策略，再替换生成边。Sampled BN按父节点答案状态采样条件分布并传播，属于经验计算，不是真实后验估计。[P3][P6][P7]",
+      "innovation": "本文的方法贡献在于把图作为可独立检验的中间计算对象，将依赖连接、局部支撑和分解能力拆开，并用下游压力测试连接结构错误与置信度质量。解读：价值主要是诊断协议与对照设计，而非证明图推理普遍优于无图推理，也不涉及发现模型内部真实推理过程。[P2][P3][P8]",
+      "findings": "Llama上Sampled BN较CoT-SC的AUROC提高0.029，配对检验p=0.017，但总体F1差异不显著。生成边使BN的F1由0.657降至0.599；Qwen及2Wiki未复现同样排序收益。作者结论是图计算优势取决于节点质量、结构与任务分布。[P8][P24][P25][P26]",
+      "limitations": "金标准图不唯一、语义匹配敏感且方法计算预算不等，限制部署排名解释。[P9][P19]原文件未记录公式缺项，但P5的Qwen快捷边错误率2.8%与P7表5的3.2%冲突，影响精确定量比较；P6单次口头生成与P22–23的vPGM十补全描述也不一致，复现须澄清。\n原文核对：[P5] 原页4.4节将Qwen3-32B在Setting A的shortcut_replacement错误率写为2.8%，而P7原页表5同模型、同设置、同标签为3.2%。两处均清晰可读，属于原文数值不一致而非提取错误；无法凭本批判定正确值。影响该模型具体错误率及与Llama-3.1-70B的定量比较，不改变其低于19.2%的方向判断。无公式或图项缺失。",
+      "connection": "解读：与疲劳可靠性的联系仅在方法层面，可类比检查依赖网络、局部证据与误差传播；本文没有疲劳试验、寿命预测或结构设计验证。对智能运维，节点不确定性可启发排查排序，但论文根因定义依赖可核验的中间答案，不能等同于工程故障因果识别。[P8][P26]",
+      "next_steps": "建议先构建具有专家依赖标注和证据来源的运维小样本任务，分别扰动连边、局部答案与证据，比较错误传播。采用相同补全预算，同时报告定位排序、校准、拒答覆盖率及成本；再测试图与无图信号融合，并跨设备与故障类型验证，避免直接外推论文收益。[P9][P22][P23]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.769/"
+    ],
+    "analyzed_at": "2026-10-26T01:59:09.485821+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "给定方向为疲劳可靠性，而论文实际研究多跳问答中的推理图与不确定性，没有材料疲劳或结构寿命验证，因此不属直接匹配。两阶段诊断、生成边压力测试及跨模型反例提供明确的方法阅读价值；当前笔记覆盖全文，并有原文摘录支持研究对象判断。[P3][P8][P25][P26]",
+    "evidence": "In either case, our evaluation asks whether\nthe resulting graph satisfies its stated semantics:\nnodes should represent meaningful reasoning steps\nwith correct local answers and evidence, and edges\nshould represent immediate task dependencies."
+  },
+  "material": {
+    "version": "2b1934b504db4452d08ebaf74ef643b1e754a66dc0bfdf6d3ecc071ffa99be79",
+    "total": 26,
+    "covered": 26,
+    "references": {
+      "problem": [
+        "P1",
+        "P3",
+        "P8"
+      ],
+      "method": [
+        "P3",
+        "P6",
+        "P7"
+      ],
+      "innovation": [
+        "P2",
+        "P3",
+        "P8"
+      ],
+      "findings": [
+        "P8",
+        "P24",
+        "P25",
+        "P26"
+      ],
+      "limitations": [
+        "P5",
+        "P6",
+        "P7",
+        "P9",
+        "P19",
+        "P22",
+        "P23"
+      ],
+      "connection": [
+        "P8",
+        "P26"
+      ],
+      "next_steps": [
+        "P9",
+        "P22",
+        "P23"
+      ]
+    },
+    "excerpt": "In either case, our evaluation asks whether\nthe resulting graph satisfies its stated semantics:\nnodes should represent meaningful reasoning steps\nwith correct local answers and evidence, and edges\nshould represent immediate task dependencies.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P21",
+      "P22",
+      "P23",
+      "P24",
+      "P25",
+      "P26"
+    ],
+    "issues": [
+      {
+        "kind": "source_defect",
+        "page": "P5",
+        "detail": "原页4.4节将Qwen3-32B在Setting A的shortcut_replacement错误率写为2.8%，而P7原页表5同模型、同设置、同标签为3.2%。两处均清晰可读，属于原文数值不一致而非提取错误；无法凭本批判定正确值。影响该模型具体错误率及与Llama-3.1-70B的定量比较，不改变其低于19.2%的方向判断。无公式或图项缺失。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P11",
+        "detail": "附录A.1提示模板无公式或图号。原页字段清晰为supporting_paragraph_ids、node_confidences和topological_order；提取文本将部分字段插入字母间空格或断开，例如node_con fidences。已按原页识读纠正，不是源文件字段缺失，不影响方法结论，但直接照搬提取文本可能造成接口字段错误。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P12",
+        "detail": "附录A.1约束及输出模式无公式或图号。原页可读字段为supporting_paragraph_ids和topological_order，提取文本多处呈字母间异常空格。已纠正字段识读；B/C完整模式在页底跨页续接，不认定为原文件缺项。影响模板复现的字段准确性，不影响本页实验设置的理解。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P13",
+        "detail": "附录A模板代码块，无公式或图号。原页可读字段为supporting_paragraph_ids、node_confidences、answer_confidence、attribution_confidence、topological_order；提取文本将部分字段拆为带字母间空格的形式。已按原页纠正；无字段缺项，影响模板复现而非实验结论。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P15",
+        "detail": "vPGM-Style输出模板及Sampled BN提示，无公式或图号。原页字段为P_Z_D_given_Z_E_X、P_Z_R_given_Z_E_Z_D_X、P_Y_given_Z_E_Z_D_Z_R_X，动态字段为root_sub_question、current_sub_question；提取文本存在异常插空。已核对纠正，无条件概率项缺失，不改变方法含义。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P17",
+        "detail": "附录B无编号Edge HPS公式及紧随解释中的有向可达关系符号，在提取文本中被识别为分号。原页清楚显示连接匹配节点的箭头关系，正文明确其为directed reachability。已纠正为存在有向路径，而非直接边或分号运算；公式无缺项，影响Edge HPS判定标准的理解。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P24",
+        "detail": "式(1)在提取文本中丢失清晰的分式层次，容易将求和误接到分子。原页确认分子为c(a_i,a_pa(i))+α，分母为Σ_{a′∈S_i}c(a′,a_pa(i))+α|S_i|。已按原页纠正；原公式无缺项，影响加性CPT平滑的实现与校准敏感性分析复现。"
+      }
+    ]
+  }
+}
