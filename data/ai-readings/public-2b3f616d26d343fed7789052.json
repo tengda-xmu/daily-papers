@@ -1,14 +1,14 @@
 {
   "id": "public-2b3f616d26d343fed7789052",
-  "content_version": "dd7a5b3bf628c0c3c7b37cb9a733534c016e915bb4247b40aa77abe325eb07dd",
+  "content_version": "7fc65fb00569b939b0cc7054d125bdc41282974df4a65766117541260e71e497",
   "analysis": {
-    "title_zh": "模型能否在 AWS Trainium 上运行？查询 torch-neuronx 模型支持 Space",
-    "summary": "公告介绍了 torch-neuronx 模型支持 Space，用于查询 Hugging Face Hub 热门模型能否不经修改在 AWS Trainium 上运行，并提供自行运行的脚本。其默认 Selected 视图按下载量和趋势分数，从热门模型中挑选展示对象；每行列出运行结果及模型分片使用的 Trainium 核心数。该工具适合迁移前的兼容性筛选与运行验证，但不能据此认定所有 Transformers 模型均已获得支持。",
-    "application": "建议：科研迁移时，可将该 Space 用作候选模型的兼容性初筛入口，再利用所提供脚本自行验证。官方说明该工具展示模型能否未经修改运行及所用核心数；所给材料未列出具体模型的验证结果，也未证明科研任务的精度、性能或成本收益。",
+    "title_zh": "模型能否运行于 AWS Trainium？用 torch-neuronx model support Space 查询",
+    "summary": "公告介绍 torch-neuronx model support Space，用于查询 Hub 热门模型能否不经修改运行于 AWS Trainium，并提供自行运行的脚本。此前介绍的 TorchNeuron 是 Trainium 的原生 PyTorch 后端；本次重点是提供实际模型支持情况的查询入口，而非宣布所有模型均兼容。默认 Selected 视图展示按下载量和趋势分数筛选的模型，列出运行结果及分片使用的 Trainium 核心数，适合迁移前筛选候选模型。[S1]",
+    "application": "建议：科研迁移时，可先据此筛选拟部署到 Trainium 的模型，再用所提供脚本开展自身任务验证；这是迁移建议，不是官方已验证的科研效果。官方说明该 Space 展示模型能否原样运行及对应脚本，但给定节选未提供具体模型的测试结果，也未证明精度、性能或成本收益。[S1]",
     "requirements": "使用条件见官方文档",
     "steps": [
       {
-        "text": "在 Space 默认打开的 Selected 视图中查找候选模型，查看该行的运行结果及模型分片使用的 Trainium 核心数。",
+        "text": "打开 Space，在默认 Selected 视图查看筛选出的热门模型。",
         "evidence": "The Space opens on the Selected view: our own selection of models picked among the top models on the Hub by downloads and by trending score."
       }
     ],
@@ -20,5 +20,5 @@
     ],
     "basis_url": "https://huggingface.co/blog/torch-neuronx-model-support"
   },
-  "analyzed_at": "2026-10-26T15:15:55.689700+00:00"
+  "analyzed_at": "2026-10-26T17:11:17.275001+00:00"
 }
