@@ -29,7 +29,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "Uncertainty estimation for language models often treats reliability as a property of the answer distribution: high confidence, stable samples, or low semantic entropy are taken as signs that an answer can be trusted. Table reasoning exposes a fundamentally different failure mode. A model may consistently return the same answer while linking the wrong entity, selecting the wrong column, applying the wrong operation, or relying on incomplete or insufficient evidence. We introduce MIRAGE—Model Inference Reliability Assessment via Grounded Evidence, a structure-grounded reliability framework for s…",
+      "summary": "表格问答可能出现“答案一致但依据错误”：模型反复选择错误实体、列或运算，通用置信度却未必报警。MIRAGE利用采样与扰动轨迹提取结果、定位及计算信号，学习正确性分数并决定回答或弃答，同时输出诊断证书。受控基准显示其明显降低选择性风险，但自然表格与跨模型迁移收益较小，且校准不提供条件错误率保证。[P1—P9]本文适合作为可信表格推理的方法参考，不是疲劳可靠性的直接研究。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -81,20 +81,27 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为可信推理与证据审查的跨领域方法补充阅读，重点关注结构信号消融和迁移退化；若推荐目标是疲劳可靠性，则不宜列为核心方向论文。[P8—P9]",
+      "deep_read": {
+        "problem": "论文关注答案分布稳定却缺乏结构支持的问题：实体、列绑定、运算或跨表依赖出错，仍可能产生高度一致的答案。作者将答案生成后尚未消除的风险概括为残余结构不确定性，研究何时应拒绝返回答案，而非直接提高生成准确率。[P1—P2]",
+        "method": "方法先采样或扰动推理轨迹，提取执行熵、证据交并比、模式波动及实体和操作分歧，再用两层MLP估计正确概率。以s(x)=1−p̂构造分数，在校准集上选取分位数阈值，超过阈值即弃答，并输出分项诊断证书。[P3—P5][P11]",
+        "innovation": "贡献重点不是新神经架构，而是将可靠性评估从答案一致性扩展到可观测的结构义务，并把定位、计算及支持状况纳入生成后的决策接口。证书用于展示未解决的问题，“not formal proofs of correctness”；四类诊断基准用于检验这种区别。[P4—P5]",
+        "findings": "表1中MIRAGE的AUROC为0.94±0.02，Risk@50%为0.16±0.02，SelfCheckGPT对应风险为0.43±0.03。消融显示移除模式信号损失最大。WTQ迁移虽降低固定覆盖率风险，但AUROC低于对照，说明安全子集识别与全局排序优势不能混同。[P7—P9]",
+        "limitations": "基准与目标结构特征有意对齐，未见故障类别和自然表格上的收益明显减弱；完整方法还依赖可获得的结构化轨迹。分位数校准不约束接受答案的条件错误率。核对记录未报告原文件缺项；P3、P12仅有已纠正的提取错误，不能据此声称公式缺失。[P5][P9]",
+        "connection": "解读：对智能运维，可借鉴分别审查设备实体、数据字段、计算操作和证据链的可靠性接口。但这里的可靠性指语言模型答案可信度，并非疲劳寿命、失效概率或结构安全度；资料没有相关工程实验，因此与疲劳可靠性及结构设计只有间接方法联系。[P2][P13]",
+        "next_steps": "建议：先在运维表格中构造设备重名、单位或字段混淆、聚合错误及跨表缺证场景，按设备与模板来源隔离划分。比较固定覆盖率风险、误接受代价和采样成本，再测试未见故障迁移；若需要安全保证，应另设直接风险控制目标，不能沿用分位数阈值作保证。[P5—P6][P9]"
+      },
       "recommended_direction": "fatigue_reliability",
       "reading_status": {
         "paper_id": "69175ba497d5",
-        "state": "retry",
-        "updated_at": "2026-10-26T14:54:17.517849+00:00",
+        "state": "published",
+        "updated_at": "2026-10-26T15:03:33.526490+00:00",
         "basis": "full_text",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "facts",
         "reason": "",
-        "next_retry_at": "2026-10-26T14:59:17.517849+00:00",
         "total": 14,
         "covered": 14,
         "pdf_available": true,
@@ -110,7 +117,64 @@
             "detail": "图3的文字提取遗漏AUROC标注中的下降箭头，容易把0.17、0.21、0.34、0.41误读为绝对AUROC。已核对原图：这些标注依次对应跨表缺证、模式歧义、聚合冲突、实体查找的AUROC下降量；图注说明虚线表示迁移退化。原图可读，无公式或图项缺失。纠正影响对类别留出性能及退化幅度的理解。"
           }
         ]
-      }
+      },
+      "title_zh": "MIRAGE：基于证据落地的表格推理可靠性评估",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1427/"
+      ],
+      "analyzed_at": "2026-10-26T15:03:33.504555+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P5",
+          "P11"
+        ],
+        "innovation": [
+          "P4",
+          "P5"
+        ],
+        "findings": [
+          "P7",
+          "P8",
+          "P9"
+        ],
+        "limitations": [
+          "P3",
+          "P5",
+          "P9",
+          "P12"
+        ],
+        "connection": [
+          "P2",
+          "P13"
+        ],
+        "next_steps": [
+          "P5",
+          "P6",
+          "P9"
+        ]
+      },
+      "analysis_material_version": "a9a7d4a6bb82eb6c7c59baee849f92df859a22ec2cede20b0c7049012de6f065",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "图1的文字提取存在阅读顺序混乱、数学字符重复及替代字符。已对照原图纠正：流程阶段依次为1轨迹采样、2可靠性信号提取、3可靠性估计器、4分位数弃答校准、5测试时弃答决策；特征向量为x∈ℝ^d，非一致性分数为s(x)=1−p̂，弃答条件为s(x)>q̂α。原图对应内容可读，无须推造缺失公式；纠正涉及流程顺序与弃答规则的理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P12",
+          "detail": "图3的文字提取遗漏AUROC标注中的下降箭头，容易把0.17、0.21、0.34、0.41误读为绝对AUROC。已核对原图：这些标注依次对应跨表缺证、模式歧义、聚合冲突、实体查找的AUROC下降量；图注说明虚线表示迁移退化。原图可读，无公式或图项缺失。纠正影响对类别留出性能及退化幅度的理解。"
+        }
+      ]
     },
     {
       "source": "AI 顶会论文",
@@ -1363,17 +1427,52 @@
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "1994412852e5",
-        "state": "retry",
-        "updated_at": "2026-10-26T14:55:05.031849+00:00",
+        "state": "failed",
+        "updated_at": "2026-10-26T15:39:33.158139+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
         "reason": "",
-        "next_retry_at": "2026-10-26T15:00:05.031849+00:00",
         "total": 22,
-        "covered": 0,
+        "covered": 18,
         "pdf_available": true,
-        "issues": []
+        "issues": [
+          {
+            "kind": "source_defect",
+            "page": "P4",
+            "detail": "图2中的公式与正文存在简化及缺项：信号矩阵框写作A_y=Cov(Z,Y)，未体现式(12)的协方差乘积、目标方差归一化及求和；求解器框写作A_yw=λA_ew，未体现式(14)—(15)中的ϵI正则项，即B=A_e+ϵI。正文公式完整可读，缺项仅在框架图；不能据图中简式复现正文矩阵构造，也不能据图保证分母矩阵正定。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P9",
+            "detail": "本页阅读结果未通过校验，待补读。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P10",
+            "detail": "本页阅读结果未通过校验，待补读。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P11",
+            "detail": "本页阅读结果未通过校验，待补读。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P12",
+            "detail": "本页阅读结果未通过校验，待补读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P20",
+            "detail": "图8各组纵轴在文字提取中仅剩“v”和“s”，遗漏希腊字母φ。原页纵轴及图注可核实完整统计量为φ_v和φ_s；无原文件缺项。该错误影响统计量身份识别，不改变曲线、校准阈值或故障引入样本160的说明。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P21",
+            "detail": "图9第一项统计量的纵轴在文字提取中仅剩“v”，遗漏希腊字母φ；原页纵轴及图注可核实为φ_v，另外两项为T_s²和Q_s。已纠正统计量名称；不影响曲线、校准阈值及故障在样本160引入的说明，无原文件缺项。"
+          }
+        ]
       }
     },
     {
@@ -1397,7 +1496,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "This study investigates a dynamic parallel-machine scheduling problem with human–robot collaboration (DPMS-HRC), where dynamically arriving jobs are assigned to eligible workstations and processed by workers, robots, or human–robot collaboration based on real-time system states. Worker-involving modes improve operational flexibility but may increase actual processing times and cause uneven fatigue distribution due to fatigue accumulation. To coordinate production responsiveness and fatigue management, a weighted objective combining average flow time and the worker fatigue balance index is mini…",
+      "summary": "本文研究动态到达任务在人、机器人及人机协作模式下的并行机调度，将平均流动时间与工人疲劳均衡指标纳入加权目标，并建立混合整数非线性规划模型。作者提出结合动作掩码和势函数奖励塑形的多智能体近端策略优化算法。摘要报告，其在线推理达到毫秒级，平均流动时间及疲劳均衡表现优于所比较基线。解读：其价值在于将人员状态与生产响应联合决策，但现有资料不足以判断疲劳模型的真实性及现场适用性。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7222123000",
@@ -1443,25 +1542,144 @@
       "focus_tags": [
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议重点关注其可行性动作筛选、长时域奖励设计与疲劳感知调度的结合，适合作为智能运维中人员资源配置的参考，但不宜直接视为结构疲劳可靠性研究。[摘要；解读]",
+      "deep_read": {
+        "problem": "论文关注动态任务到达时，如何根据实时状态选择合适工位及人工、机器人或协作加工模式。人员参与虽然增加灵活性，却可能因“fatigue accumulation”延长实际加工时间并导致疲劳分布不均，因而需要协调生产响应与人员疲劳管理。[摘要]",
+        "method": "作者建立混合整数非线性规划模型，描述动态到达、加工模式选择、人员与机器人分配及疲劳相关加工时间；随后设计AMPS-MAPPO算法。摘要以“weighted objective”说明优化目标，将平均流动时间和工人疲劳均衡指标加权组合，但未提供具体权重。[摘要]",
+        "innovation": "摘要明确的方法特色是将动作掩码与时间缩放的势函数塑形结合：前者仅允许采样结构可行的任务—模式—资源组合，后者为长期学习提供“dense feedback”。解读：这是约束处理与学习反馈的协同设计，但仅凭摘要不能确认各组成部分的独立原创性。[摘要]",
+        "findings": "摘要报告算法达到“millisecond-level online inference”；相较最佳派工规则基准，平均流动时间降低40.98%，相较深度强化学习基线降低8.17–20.92%。其总体工人疲劳均衡指标在所比较深度强化学习算法中最低，但摘要未给出该指标的具体数值。[摘要]",
+        "limitations": "当前仅有摘要，未提供疲劳演化方程、指标定义、实例规模明细、训练成本、重复试验及统计不确定性，因此无法核查收益的稳健性。摘要中的“different scales”也不足以界定适用规模；这些是当前证据的边界，并非已经证实的论文方法缺陷。[摘要]",
+        "connection": "解读：论文与疲劳管理方向直接相关，也可为智能运维中的人员负荷分配和人机协同决策提供思路。但其对象是“worker fatigue”，不能等同于材料疲劳、结构损伤或失效概率；当前摘要没有直接证明算法能够提升设备或结构可靠性。[摘要]",
+        "next_steps": "建议：获取全文后优先核对疲劳模型的标定依据、目标权重敏感性，以及动作掩码和奖励塑形的消融结果。若迁移至智能运维，可进一步研究检修任务动态到达与人员恢复过程，但应另行验证安全约束和现场效果，不能将这些设想视为作者已完成的成果。[摘要；建议]"
+      },
       "recommended_direction": "fatigue_reliability",
       "reading_status": {
         "paper_id": "15d22de52722",
-        "state": "retry",
-        "updated_at": "2026-10-26T14:55:41.360388+00:00",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-26T15:36:54.121703+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "next_retry_at": "2026-10-26T15:00:41.360388+00:00",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "考虑人机协作与工人疲劳的动态并行机调度多智能体强化学习",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.3390/machines14101196"
+      ],
+      "analyzed_at": "2026-10-26T15:35:34.399672+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "动态到达的作业如何及时分配，又不让工人的疲劳负担过度集中？这项研究将人机协作调度与工人疲劳管理放进同一优化目标，用多智能体强化学习协调生产响应与疲劳均衡。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "调度不仅要及时，还要考虑谁更疲劳",
+            "paragraphs": [
+              "研究面向具有人机协作的动态并行机调度：作业持续到达，系统依据实时状态，将其分配到符合条件的工作站，并选择工人、机器人或人机协作进行加工。这里的“疲劳”指工人疲劳，而非结构材料的疲劳损伤。",
+              "有工人参与的加工模式能够提高运行灵活性，但疲劳积累可能延长实际加工时间，并造成工人之间的疲劳分布不均。作者因此将平均流动时间与工人疲劳均衡指数加权组合并最小化，使生产响应与疲劳管理共同进入调度目标。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "先建模约束，再让策略学习可行决策",
+            "paragraphs": [
+              "作者建立混合整数非线性规划模型，描述动态作业到达、可选加工模式、工人与机器人分配，以及依赖疲劳状态的加工时间。模型将资源选择与疲劳影响联系起来，而不是把加工时间视为不受疲劳影响的固定条件。",
+              "在此基础上，研究设计了动作掩码与势函数塑形相结合的多智能体近端策略优化算法AMPS-MAPPO。动作掩码将策略采样限制在结构上可行的“作业—模式—资源”组合内；时间缩放的势函数塑形则为长时域学习提供稠密反馈。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要报告流动时间下降与疲劳指标优势",
+            "paragraphs": [
+              "在不同规模的动态算例上，摘要报告AMPS-MAPPO实现了毫秒级在线推理。其平均流动时间相对表现最佳的派工规则基准降低40.98%，相对深度强化学习基线降低8.17–20.92%。两组降幅对应不同的比较对象，不能混为同一基准下的收益。",
+              "在参与比较的深度强化学习算法中，AMPS-MAPPO还取得最低的总体工人疲劳均衡指数。这一结果支持其在所报告比较中的指标优势，但不能直接解释为所有工人的疲劳都下降，也不等同于已经验证了健康改善。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "算例设置与验证边界仍需查阅全文",
+            "paragraphs": [
+              "摘要没有给出动态算例的具体数量与规模、作业到达设置、疲劳模型参数、目标权重及基线配置，因此无法仅凭当前资料判断比较条件和结果波动。毫秒级推理的硬件与计时条件、是否经过真实生产现场验证，也不能由摘要确定；这些信息未在摘要报告，并不意味着论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注疲劳如何真正进入决策",
+            "paragraphs": [
+              "阅读启发：后续阅读可重点追问，疲劳均衡指数如何定义，加权目标怎样体现响应速度与疲劳管理的取舍，以及动作掩码和势函数塑形各自贡献了什么。对于关注疲劳与可靠性的读者，还应保持对象边界：本文讨论的是工人疲劳与生产调度，不能直接外推为结构疲劳寿命或设备可靠性的结论。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的人机协作调度研究过程",
+            "description": "仅概括摘要明确陈述的问题、建模、算法与评价关系，不代表论文原图或完整实验配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "动态作业与人机资源",
+                "detail": "依据实时状态，为作业选择符合条件的工作站及加工模式。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "调度与疲劳联合建模",
+                "detail": "以混合整数非线性规划描述资源分配和疲劳相关加工时间，最小化加权目标。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "AMPS-MAPPO求解",
+                "detail": "动作掩码约束可行组合，时间缩放的势函数塑形提供稠密反馈。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "不同规模动态算例评价",
+                "detail": "比较在线推理速度、平均流动时间和工人疲劳均衡指数。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "描述调度问题"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "设计求解算法"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "开展算例比较"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-26T15:36:54.121702+00:00",
+      "article_profile": "197985bfd9b6b1726a424dc39c39a40bd1f359e4d880f8dc52bcfb0976ad6ec1",
+      "analysis_references": {},
+      "analysis_material_version": "a8df065622d87b32794b3d54944d1eea83f7bb23a2a785307dfa630cee1f5b4c",
+      "analysis_issues": []
     },
     {
       "source": "Web of Science",
@@ -1488,7 +1706,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "本文聚焦《HyperAgent: Leveraging Hypergraphs for Topology Optimization in Multi-Agent Communication》，暂未提供可用摘要，请查看原文。",
+      "summary": "本文研究大语言模型多智能体系统的通信组织问题，针对成对关系难以表达群体协作、固定通信结构难以适配任务复杂度两项不足，提出HyperAgent。其以超边连接同一子任务中的多个智能体，通过超图卷积聚合信息，并结合变分自编码器与稀疏正则化动态调整拓扑。摘要报告GSM8K准确率为95.07%，token消耗降低25.33%，但未交代该降幅的比较基准。本文仅作摘要级解读，不能据此认定其适用于工程结构生成设计。[摘要]",
       "raw_metadata": {
         "uid": "WOS:001880341000338",
         "title": "HyperAgent: Leveraging Hypergraphs for Topology Optimization in Multi-Agent Communication",
@@ -1616,25 +1834,144 @@
       "focus_tags": [
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为多智能体协作机制的交叉参考阅读，重点关注任务复杂度驱动的稀疏通信设计；不宜仅凭“拓扑优化”一词将其列为工程结构生成设计的核心文献。[摘要]",
+      "deep_read": {
+        "problem": "论文关注通信结构与协作需求不匹配的问题。摘要以“pairwise edge representations”指出，成对连边难以直接表达多个智能体共同参与的关系；同时，通信拓扑缺乏任务适应性，会使简单任务通信过多、复杂任务协调不足。研究对象是智能体通信网络，而非实体结构的材料分布。[摘要]",
+        "method": "HyperAgent用超边连接同一子任务中的多个智能体，并以超图卷积层完成组内一步信息聚合，原文称“one-step information aggregation”。随后结合变分自编码器与稀疏正则化，依据任务复杂度动态调整超图拓扑。摘要未说明复杂度如何度量、拓扑如何采样及模型如何训练。[摘要]",
+        "innovation": "摘要呈现的主要方法特点，是以直接超边表达群体协作，并将任务适应性的拓扑调整纳入框架，而不只是优化成对通信连接。原文强调“direct hyperedge representations”。解读：其贡献定位在关系表达与自适应通信的结合；仅凭摘要无法确认各组件的首创性或相对已有超图方法的新增内容。[摘要]",
+        "findings": "摘要给出的具体结果集中于GSM8K：准确率为“95.07%”，token消耗降低“25.33%”。作者据此强调性能与效率优势，但未提供降幅对应的基线、其他方法准确率、重复实验或误差范围。因此可确认作者报告了这两项指标，不能进一步判断提升的统计稳健性及跨任务普适性。[摘要]",
+        "limitations": "当前材料的主要限制是证据粒度不足，而非已证实的方法缺陷。摘要虽称“Experiments highlight the superiority”，却未展示对照配置、消融结果和开销构成，无法核对超边、卷积与稀疏正则化各自的贡献。训练成本、失败案例及实际部署表现也未交代，不能据此认定这些方面已经得到验证。[摘要]",
+        "connection": "解读：对智能运维而言，同一子任务中的多角色协作可类比诊断、分析与决策智能体的协同，但摘要没有运维验证。对结构设计与可靠性研究，其潜在联系在协作流程组织，而非结构拓扑或可靠度计算。“communication topologies”明确限定了优化对象，不能将名称相似视作研究方向直接契合的证据。[摘要]",
+        "next_steps": "建议：先获取全文核查token降幅的基准、任务复杂度定义及各模块消融，再决定是否开展迁移研究。若用于工程多智能体系统，可比较固定拓扑、成对图与超图在相同任务预算下的质量和通信成本，并单独考察错误传播与关键角色失效。以上属于后续研究建议，不是摘要已报告的实验或结论。[摘要]"
+      },
       "recommended_direction": "generative_design",
       "reading_status": {
         "paper_id": "c85601ebc634",
-        "state": "retry",
-        "updated_at": "2026-10-26T14:56:21.085698+00:00",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-26T15:47:02.323935+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "restricted",
-        "next_retry_at": "2026-10-26T15:01:21.085698+00:00",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "HyperAgent：利用超图优化多智能体通信拓扑",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.65109/qtvf9552"
+      ],
+      "analyzed_at": "2026-10-26T15:38:05.878855+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "多智能体协作并非通信越多越好：简单任务可能承担多余开销，复杂任务又可能协调不足。HyperAgent尝试用超图表达群体协作，并随任务复杂度调整通信拓扑，值得关注的是它如何兼顾回答表现与通信效率。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "两两连边为何难以表达群体协作",
+            "paragraphs": [
+              "摘要指出，大语言模型驱动的多智能体系统虽已展现集体智能，但通信结构仍面临两类问题：基于图中两两连边的表示，难以充分捕捉多个智能体之间的群体关系；通信拓扑对任务的适应性有限，容易在简单任务上通信过多，在复杂场景中协调不足。",
+              "因此，这项工作的关注点不仅是智能体能否交换信息，还包括如何表达协作群体、如何让通信结构适应任务需求。摘要将这两类问题与自适应协作框架的可扩展性及实际部署联系起来。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "用超边组织协作，用稀疏约束调整拓扑",
+            "paragraphs": [
+              "HyperAgent采用超图框架，以超边直接连接同一子任务中的多个智能体，表示群体协作关系；随后利用超图卷积层，实现协作群体内的单步信息聚合。这里的“单步”指摘要描述的聚合机制，不能据此理解为整个任务只需一轮通信。",
+              "框架还引入带稀疏正则化的变分自编码器，根据任务复杂度动态调整超图拓扑。群体关系表达与拓扑自适应，是摘要明确给出的两项方法要点；具体网络配置、训练方式和复杂度判定方法则未在摘要中展开。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "GSM8K上同时报告准确率与token节省",
+            "paragraphs": [
+              "摘要报告，HyperAgent在GSM8K上的准确率达到**95.07%**，同时将token消耗降低**25.33%**。这组结果同时涉及任务表现与通信资源开销，是摘要支持其性能和效率优势的具体例证。",
+              "不过，摘要没有交代token降幅对应的比较基准，也没有列出其他任务的具体结果。因此，可以说作者报告了超图通信优化的潜力，但不能把这一例证扩展为对所有任务、模型或部署条件均有效的结论。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不足以界定比较与验证范围",
+            "paragraphs": [
+              "仅凭本次摘要，无法判断评测样本规模、智能体配置、基础模型、对照方法、重复运行情况及结果波动，也无法确认各方法组件分别贡献了多少收益。这些属于摘要未报告的信息，不代表论文没有开展相应比较或验证。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：先辨清通信拓扑，再讨论应用迁移",
+            "paragraphs": [
+              "阅读启发：值得进一步阅读的是，任务复杂度如何影响拓扑调整，以及节省token时是否仍能保留必要的群体协调。面向智能运维，可关注这类通信组织方式是否适合多角色协作，但当前摘要没有提供运维场景的验证依据。此外，本文的“拓扑优化”针对智能体通信关系，不能直接等同于工程结构的材料布局优化。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的HyperAgent方法示意",
+            "description": "仅概括摘要明确描述的群体表示、信息聚合与拓扑调整关系，不是论文原图，不表示完整执行顺序。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "同一子任务中的多个智能体",
+                "detail": "摘要以同一子任务内的智能体作为超边连接对象。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "超边表示群体协作",
+                "detail": "通过超边直接连接多个智能体，表达群体关系。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "超图卷积聚合信息",
+                "detail": "在协作群体内实现单步信息聚合。"
+              },
+              {
+                "id": "d",
+                "stage": 0,
+                "label": "变分自编码器与稀疏正则化",
+                "detail": "根据任务复杂度动态调整超图拓扑。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "以超边连接"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "群体内信息聚合"
+              },
+              {
+                "from": "d",
+                "to": "b",
+                "label": "动态调整拓扑"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-26T15:47:02.312568+00:00",
+      "article_profile": "fcfcd7784b460e6c590ab8fbe742315adac7e48216d9ff9f62b1e6ace662f097",
+      "analysis_references": {},
+      "analysis_material_version": "e27f0851cf40c3dde7154388cb6e7a88b740b3736680d9f99a2fb7008cea34cb",
+      "analysis_issues": []
     },
     {
       "source": "OpenAlex",
@@ -1661,7 +1998,7 @@
         "ai_maintenance",
         "generative_design"
       ],
-      "summary": "Wireless power transfer (WPT) systems must maintain efficient and safe energy delivery under variations in geometry, coupling, load, alignment, and operating conditions. Machine-learning methods are increasingly applied to accelerate structural design, estimate operating parameters and states, and support adaptive control and scheduling. This review develops a task-oriented framework organized around three interconnected domains: structural design and optimization, parameter and state estimation, and control and optimization. Supervised learning, reinforcement learning, and hybrid or physics-i…",
+      "summary": "【摘要级导读】无线电能传输需要在几何、耦合、负载和对准条件变化时维持高效、安全的能量传递。本文以“task-oriented framework”组织结构设计与优化、参数与状态估计、控制与优化三类任务，比较监督学习、强化学习及混合或物理信息方法的适用条件与工程约束。阅读价值在于建立任务与方法的对应关系，并识别数据偏差、分布外泛化和在线安全等部署障碍。当前仅有摘要，不能据此判断具体算法性能或综述覆盖完整性。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7223238690",
@@ -1712,11 +2049,155 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为智能运维与结构优化方向的方法导航文献重点阅读，关注任务分类、方法适用条件及部署约束；摘要未明确涉及生成式设计算法，不宜将其推荐为生成式设计成果论文。[摘要]",
+      "deep_read": {
+        "problem": "无线电能传输的核心问题是在几何、耦合、负载、对准及运行条件变化时保持能量传递效率与安全，原文强调“efficient and safe”。综述据此讨论设计、估计与控制任务，而非仅考察静态工况下的预测精度；摘要未给出具体系统边界或安全指标。[摘要]",
+        "method": "本文采用任务导向的综述框架，将相关研究划分为结构设计与优化、参数与状态估计、控制与优化，并比较监督学习、强化学习及混合或物理信息方法。比较维度涵盖数据需求、物理模型依赖、信息来源、计算需求、准确性、在线响应、应用范围和优化目标。[摘要]",
+        "innovation": "摘要可确认的贡献是围绕三类相互关联的工程任务组织机器学习研究，而不是提出新的网络或控制算法。解读：这种组织方式有助于从任务需求反推方法选择，避免只按算法名称分类；但摘要未提供与既有综述的对照，无法确认框架的新颖程度。[摘要]",
+        "findings": "摘要指出，监督学习适合在代表性标注数据支持下开展快速代理建模、回归和分类；强化学习面向序贯控制与调度，但涉及奖励设计、安全探索及仿真到现实迁移。混合方法融合物理知识以改善数据效率与物理一致性，未提供量化对比或实验验证细节。[摘要]",
+        "limitations": "作者列出的工程障碍包括数据有限且有偏、分布外泛化薄弱、物理一致性不足、在线适应不安全、嵌入式资源受限及缺少标准化基准。这些是领域部署问题，不能直接视为本文方法缺陷；当前摘要也不足以核查文献筛选流程、覆盖范围及证据质量。[摘要]",
+        "connection": "解读：参数与状态估计、自适应控制可与智能运维中的状态感知和运行调节衔接，结构优化则与设计研究直接相关；安全适应和泛化问题也关联可靠性评价。不过，摘要未报告故障诊断、寿命预测或生成式结构设计成果，不能把这些联系表述为作者已完成的研究。[摘要]",
+        "next_steps": "作者提出优先研究不确定性感知、物理信息学习、安全仿真到现实迁移、轻量化边缘部署、分布式协调、可复现评价和数字孪生辅助开发。建议后续阅读全文时核查这些方向是否对应明确案例、数据与评价协议，再据此选择可迁移的课题，不预设其有效性。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "机器学习赋能无线电能传输：结构优化、状态与参数估计及自适应控制的任务导向综述",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://arxiv.org/abs/2610.30101"
+      ],
+      "analyzed_at": "2026-10-26T15:49:49.672509+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "无线电能传输如何在几何、耦合、负载与对准状态变化时，仍保持高效、安全？这篇综述从任务而非算法名称出发，梳理机器学习在结构设计、状态估计和自适应控制中的作用，帮助读者理解方法选择背后的条件与工程边界。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "无线供能的难点，是变化中的效率与安全",
+            "paragraphs": [
+              "无线电能传输（WPT）系统需要面对几何、耦合、负载、对准及运行条件的变化。机器学习被用于加速结构设计、估计运行参数和状态，以及支持自适应控制与调度；这些应用共同指向变化条件下的能量传输问题。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "按任务组织，再比较学习方法的适用条件",
+            "paragraphs": [
+              "这是一篇综述，而非摘要中报告单项装置实验的研究。作者建立任务导向框架，将讨论组织为相互关联的结构设计与优化、参数与状态估计、控制与优化领域。",
+              "在这一框架下，作者比较监督学习、强化学习以及混合或物理信息方法。比较维度不仅包括准确性，还涉及数据需求、对物理模型的依赖、信息来源、计算需求、在线响应、应用范围和优化目标。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "学习方法各有前提，部署瓶颈不止准确率",
+            "paragraphs": [
+              "摘要将监督学习的快速代理建模、回归与分类能力，明确建立在具备代表性标注数据的前提上。强化学习面向序贯控制与调度，但伴随奖励设计、安全探索和仿真到现实迁移的挑战。混合方法则将物理知识融入数据驱动模型，以改善数据效率与物理一致性。",
+              "作者归纳的工程部署障碍包括：数据有限且存在偏差、分布外泛化较弱、物理一致性不足、在线自适应不安全、嵌入式资源受限，以及缺少标准化基准。摘要没有给出某类方法全面优于其他方法的定量结论。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不能交代综述覆盖与验证强度",
+            "paragraphs": [
+              "仅凭摘要，无法判断文献检索与筛选方式、纳入研究的数量、数据样本规模，以及不同方法是否在可比条件下接受评估。对具体装置、工况和硬件验证范围，也不能作出结论。这些是当前资料无法核实的信息，不代表论文没有讨论或开展相关比较。",
+              "摘要将不确定性感知与物理信息学习、安全仿真到现实迁移、轻量化边缘部署、分布式协调、可复现评估和数字孪生辅助开发列为未来重点；这些方向不能被表述为本文已经验证的工程效果。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：追问数据代表性与在线使用边界",
+            "paragraphs": [
+              "阅读启发：面向结构优化，可进一步关注代理模型的数据是否覆盖目标设计条件，以及物理知识如何参与建模；面向智能运维，可关注状态估计在工况变化时的可靠性，以及在线适应的安全约束。这些问题源于摘要列出的适用前提与部署障碍，不意味着本文已验证故障诊断或预测维护能力。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的任务框架与比较维度",
+            "description": "展示综述的任务组织与方法比较关系，不代表实验流程、控制闭环或论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "任务导向的WPT综述",
+                "detail": "围绕变化条件下高效、安全的无线电能传输组织讨论。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "结构设计与优化",
+                "detail": "梳理机器学习用于加速结构设计的相关任务。"
+              },
+              {
+                "id": "c",
+                "stage": 1,
+                "label": "参数与状态估计",
+                "detail": "梳理运行参数及状态估计相关任务。"
+              },
+              {
+                "id": "d",
+                "stage": 1,
+                "label": "控制与优化",
+                "detail": "梳理自适应控制与调度相关任务。"
+              },
+              {
+                "id": "e",
+                "stage": 1,
+                "label": "学习方法的多维比较",
+                "detail": "比较监督、强化及混合或物理信息方法的数据、模型依赖、计算、准确性与在线响应等。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "任务领域"
+              },
+              {
+                "from": "a",
+                "to": "c",
+                "label": "任务领域"
+              },
+              {
+                "from": "a",
+                "to": "d",
+                "label": "任务领域"
+              },
+              {
+                "from": "a",
+                "to": "e",
+                "label": "方法比较"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-26T15:51:14.955159+00:00",
+      "article_profile": "01cdc47f475dae22144e8769931f5d8d43e19f97f8b73999c36222a94eb25154",
+      "analysis_references": {},
+      "analysis_material_version": "5c986e7e524dd9c1c21b8dedc32c21de9f206e8d15cba99964d77c6881984182",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "9f0079808024",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-26T15:51:14.957653+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "extended": [],
@@ -1746,7 +2227,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "Uncertainty estimation for language models often treats reliability as a property of the answer distribution: high confidence, stable samples, or low semantic entropy are taken as signs that an answer can be trusted. Table reasoning exposes a fundamentally different failure mode. A model may consistently return the same answer while linking the wrong entity, selecting the wrong column, applying the wrong operation, or relying on incomplete or insufficient evidence. We introduce MIRAGE—Model Inference Reliability Assessment via Grounded Evidence, a structure-grounded reliability framework for s…",
+      "summary": "表格问答可能出现“答案一致但依据错误”：模型反复选择错误实体、列或运算，通用置信度却未必报警。MIRAGE利用采样与扰动轨迹提取结果、定位及计算信号，学习正确性分数并决定回答或弃答，同时输出诊断证书。受控基准显示其明显降低选择性风险，但自然表格与跨模型迁移收益较小，且校准不提供条件错误率保证。[P1—P9]本文适合作为可信表格推理的方法参考，不是疲劳可靠性的直接研究。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -1798,20 +2279,27 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为可信推理与证据审查的跨领域方法补充阅读，重点关注结构信号消融和迁移退化；若推荐目标是疲劳可靠性，则不宜列为核心方向论文。[P8—P9]",
+      "deep_read": {
+        "problem": "论文关注答案分布稳定却缺乏结构支持的问题：实体、列绑定、运算或跨表依赖出错，仍可能产生高度一致的答案。作者将答案生成后尚未消除的风险概括为残余结构不确定性，研究何时应拒绝返回答案，而非直接提高生成准确率。[P1—P2]",
+        "method": "方法先采样或扰动推理轨迹，提取执行熵、证据交并比、模式波动及实体和操作分歧，再用两层MLP估计正确概率。以s(x)=1−p̂构造分数，在校准集上选取分位数阈值，超过阈值即弃答，并输出分项诊断证书。[P3—P5][P11]",
+        "innovation": "贡献重点不是新神经架构，而是将可靠性评估从答案一致性扩展到可观测的结构义务，并把定位、计算及支持状况纳入生成后的决策接口。证书用于展示未解决的问题，“not formal proofs of correctness”；四类诊断基准用于检验这种区别。[P4—P5]",
+        "findings": "表1中MIRAGE的AUROC为0.94±0.02，Risk@50%为0.16±0.02，SelfCheckGPT对应风险为0.43±0.03。消融显示移除模式信号损失最大。WTQ迁移虽降低固定覆盖率风险，但AUROC低于对照，说明安全子集识别与全局排序优势不能混同。[P7—P9]",
+        "limitations": "基准与目标结构特征有意对齐，未见故障类别和自然表格上的收益明显减弱；完整方法还依赖可获得的结构化轨迹。分位数校准不约束接受答案的条件错误率。核对记录未报告原文件缺项；P3、P12仅有已纠正的提取错误，不能据此声称公式缺失。[P5][P9]",
+        "connection": "解读：对智能运维，可借鉴分别审查设备实体、数据字段、计算操作和证据链的可靠性接口。但这里的可靠性指语言模型答案可信度，并非疲劳寿命、失效概率或结构安全度；资料没有相关工程实验，因此与疲劳可靠性及结构设计只有间接方法联系。[P2][P13]",
+        "next_steps": "建议：先在运维表格中构造设备重名、单位或字段混淆、聚合错误及跨表缺证场景，按设备与模板来源隔离划分。比较固定覆盖率风险、误接受代价和采样成本，再测试未见故障迁移；若需要安全保证，应另设直接风险控制目标，不能沿用分位数阈值作保证。[P5—P6][P9]"
+      },
       "recommended_direction": "fatigue_reliability",
       "reading_status": {
         "paper_id": "69175ba497d5",
-        "state": "retry",
-        "updated_at": "2026-10-26T14:54:17.517849+00:00",
+        "state": "published",
+        "updated_at": "2026-10-26T15:03:33.526490+00:00",
         "basis": "full_text",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "facts",
         "reason": "",
-        "next_retry_at": "2026-10-26T14:59:17.517849+00:00",
         "total": 14,
         "covered": 14,
         "pdf_available": true,
@@ -1827,7 +2315,64 @@
             "detail": "图3的文字提取遗漏AUROC标注中的下降箭头，容易把0.17、0.21、0.34、0.41误读为绝对AUROC。已核对原图：这些标注依次对应跨表缺证、模式歧义、聚合冲突、实体查找的AUROC下降量；图注说明虚线表示迁移退化。原图可读，无公式或图项缺失。纠正影响对类别留出性能及退化幅度的理解。"
           }
         ]
-      }
+      },
+      "title_zh": "MIRAGE：基于证据落地的表格推理可靠性评估",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1427/"
+      ],
+      "analyzed_at": "2026-10-26T15:03:33.504555+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P5",
+          "P11"
+        ],
+        "innovation": [
+          "P4",
+          "P5"
+        ],
+        "findings": [
+          "P7",
+          "P8",
+          "P9"
+        ],
+        "limitations": [
+          "P3",
+          "P5",
+          "P9",
+          "P12"
+        ],
+        "connection": [
+          "P2",
+          "P13"
+        ],
+        "next_steps": [
+          "P5",
+          "P6",
+          "P9"
+        ]
+      },
+      "analysis_material_version": "a9a7d4a6bb82eb6c7c59baee849f92df859a22ec2cede20b0c7049012de6f065",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "图1的文字提取存在阅读顺序混乱、数学字符重复及替代字符。已对照原图纠正：流程阶段依次为1轨迹采样、2可靠性信号提取、3可靠性估计器、4分位数弃答校准、5测试时弃答决策；特征向量为x∈ℝ^d，非一致性分数为s(x)=1−p̂，弃答条件为s(x)>q̂α。原图对应内容可读，无须推造缺失公式；纠正涉及流程顺序与弃答规则的理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P12",
+          "detail": "图3的文字提取遗漏AUROC标注中的下降箭头，容易把0.17、0.21、0.34、0.41误读为绝对AUROC。已核对原图：这些标注依次对应跨表缺证、模式歧义、聚合冲突、实体查找的AUROC下降量；图注说明虚线表示迁移退化。原图可读，无公式或图项缺失。纠正影响对类别留出性能及退化幅度的理解。"
+        }
+      ]
     },
     {
       "source": "AI 顶会论文",
@@ -3080,17 +3625,52 @@
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "1994412852e5",
-        "state": "retry",
-        "updated_at": "2026-10-26T14:55:05.031849+00:00",
+        "state": "failed",
+        "updated_at": "2026-10-26T15:39:33.158139+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
         "reason": "",
-        "next_retry_at": "2026-10-26T15:00:05.031849+00:00",
         "total": 22,
-        "covered": 0,
+        "covered": 18,
         "pdf_available": true,
-        "issues": []
+        "issues": [
+          {
+            "kind": "source_defect",
+            "page": "P4",
+            "detail": "图2中的公式与正文存在简化及缺项：信号矩阵框写作A_y=Cov(Z,Y)，未体现式(12)的协方差乘积、目标方差归一化及求和；求解器框写作A_yw=λA_ew，未体现式(14)—(15)中的ϵI正则项，即B=A_e+ϵI。正文公式完整可读，缺项仅在框架图；不能据图中简式复现正文矩阵构造，也不能据图保证分母矩阵正定。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P9",
+            "detail": "本页阅读结果未通过校验，待补读。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P10",
+            "detail": "本页阅读结果未通过校验，待补读。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P11",
+            "detail": "本页阅读结果未通过校验，待补读。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P12",
+            "detail": "本页阅读结果未通过校验，待补读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P20",
+            "detail": "图8各组纵轴在文字提取中仅剩“v”和“s”，遗漏希腊字母φ。原页纵轴及图注可核实完整统计量为φ_v和φ_s；无原文件缺项。该错误影响统计量身份识别，不改变曲线、校准阈值或故障引入样本160的说明。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P21",
+            "detail": "图9第一项统计量的纵轴在文字提取中仅剩“v”，遗漏希腊字母φ；原页纵轴及图注可核实为φ_v，另外两项为T_s²和Q_s。已纠正统计量名称；不影响曲线、校准阈值及故障在样本160引入的说明，无原文件缺项。"
+          }
+        ]
       }
     },
     {
@@ -3114,7 +3694,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "This study investigates a dynamic parallel-machine scheduling problem with human–robot collaboration (DPMS-HRC), where dynamically arriving jobs are assigned to eligible workstations and processed by workers, robots, or human–robot collaboration based on real-time system states. Worker-involving modes improve operational flexibility but may increase actual processing times and cause uneven fatigue distribution due to fatigue accumulation. To coordinate production responsiveness and fatigue management, a weighted objective combining average flow time and the worker fatigue balance index is mini…",
+      "summary": "本文研究动态到达任务在人、机器人及人机协作模式下的并行机调度，将平均流动时间与工人疲劳均衡指标纳入加权目标，并建立混合整数非线性规划模型。作者提出结合动作掩码和势函数奖励塑形的多智能体近端策略优化算法。摘要报告，其在线推理达到毫秒级，平均流动时间及疲劳均衡表现优于所比较基线。解读：其价值在于将人员状态与生产响应联合决策，但现有资料不足以判断疲劳模型的真实性及现场适用性。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7222123000",
@@ -3160,25 +3740,144 @@
       "focus_tags": [
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议重点关注其可行性动作筛选、长时域奖励设计与疲劳感知调度的结合，适合作为智能运维中人员资源配置的参考，但不宜直接视为结构疲劳可靠性研究。[摘要；解读]",
+      "deep_read": {
+        "problem": "论文关注动态任务到达时，如何根据实时状态选择合适工位及人工、机器人或协作加工模式。人员参与虽然增加灵活性，却可能因“fatigue accumulation”延长实际加工时间并导致疲劳分布不均，因而需要协调生产响应与人员疲劳管理。[摘要]",
+        "method": "作者建立混合整数非线性规划模型，描述动态到达、加工模式选择、人员与机器人分配及疲劳相关加工时间；随后设计AMPS-MAPPO算法。摘要以“weighted objective”说明优化目标，将平均流动时间和工人疲劳均衡指标加权组合，但未提供具体权重。[摘要]",
+        "innovation": "摘要明确的方法特色是将动作掩码与时间缩放的势函数塑形结合：前者仅允许采样结构可行的任务—模式—资源组合，后者为长期学习提供“dense feedback”。解读：这是约束处理与学习反馈的协同设计，但仅凭摘要不能确认各组成部分的独立原创性。[摘要]",
+        "findings": "摘要报告算法达到“millisecond-level online inference”；相较最佳派工规则基准，平均流动时间降低40.98%，相较深度强化学习基线降低8.17–20.92%。其总体工人疲劳均衡指标在所比较深度强化学习算法中最低，但摘要未给出该指标的具体数值。[摘要]",
+        "limitations": "当前仅有摘要，未提供疲劳演化方程、指标定义、实例规模明细、训练成本、重复试验及统计不确定性，因此无法核查收益的稳健性。摘要中的“different scales”也不足以界定适用规模；这些是当前证据的边界，并非已经证实的论文方法缺陷。[摘要]",
+        "connection": "解读：论文与疲劳管理方向直接相关，也可为智能运维中的人员负荷分配和人机协同决策提供思路。但其对象是“worker fatigue”，不能等同于材料疲劳、结构损伤或失效概率；当前摘要没有直接证明算法能够提升设备或结构可靠性。[摘要]",
+        "next_steps": "建议：获取全文后优先核对疲劳模型的标定依据、目标权重敏感性，以及动作掩码和奖励塑形的消融结果。若迁移至智能运维，可进一步研究检修任务动态到达与人员恢复过程，但应另行验证安全约束和现场效果，不能将这些设想视为作者已完成的成果。[摘要；建议]"
+      },
       "recommended_direction": "fatigue_reliability",
       "reading_status": {
         "paper_id": "15d22de52722",
-        "state": "retry",
-        "updated_at": "2026-10-26T14:55:41.360388+00:00",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-26T15:36:54.121703+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "next_retry_at": "2026-10-26T15:00:41.360388+00:00",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "考虑人机协作与工人疲劳的动态并行机调度多智能体强化学习",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.3390/machines14101196"
+      ],
+      "analyzed_at": "2026-10-26T15:35:34.399672+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "动态到达的作业如何及时分配，又不让工人的疲劳负担过度集中？这项研究将人机协作调度与工人疲劳管理放进同一优化目标，用多智能体强化学习协调生产响应与疲劳均衡。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "调度不仅要及时，还要考虑谁更疲劳",
+            "paragraphs": [
+              "研究面向具有人机协作的动态并行机调度：作业持续到达，系统依据实时状态，将其分配到符合条件的工作站，并选择工人、机器人或人机协作进行加工。这里的“疲劳”指工人疲劳，而非结构材料的疲劳损伤。",
+              "有工人参与的加工模式能够提高运行灵活性，但疲劳积累可能延长实际加工时间，并造成工人之间的疲劳分布不均。作者因此将平均流动时间与工人疲劳均衡指数加权组合并最小化，使生产响应与疲劳管理共同进入调度目标。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "先建模约束，再让策略学习可行决策",
+            "paragraphs": [
+              "作者建立混合整数非线性规划模型，描述动态作业到达、可选加工模式、工人与机器人分配，以及依赖疲劳状态的加工时间。模型将资源选择与疲劳影响联系起来，而不是把加工时间视为不受疲劳影响的固定条件。",
+              "在此基础上，研究设计了动作掩码与势函数塑形相结合的多智能体近端策略优化算法AMPS-MAPPO。动作掩码将策略采样限制在结构上可行的“作业—模式—资源”组合内；时间缩放的势函数塑形则为长时域学习提供稠密反馈。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要报告流动时间下降与疲劳指标优势",
+            "paragraphs": [
+              "在不同规模的动态算例上，摘要报告AMPS-MAPPO实现了毫秒级在线推理。其平均流动时间相对表现最佳的派工规则基准降低40.98%，相对深度强化学习基线降低8.17–20.92%。两组降幅对应不同的比较对象，不能混为同一基准下的收益。",
+              "在参与比较的深度强化学习算法中，AMPS-MAPPO还取得最低的总体工人疲劳均衡指数。这一结果支持其在所报告比较中的指标优势，但不能直接解释为所有工人的疲劳都下降，也不等同于已经验证了健康改善。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "算例设置与验证边界仍需查阅全文",
+            "paragraphs": [
+              "摘要没有给出动态算例的具体数量与规模、作业到达设置、疲劳模型参数、目标权重及基线配置，因此无法仅凭当前资料判断比较条件和结果波动。毫秒级推理的硬件与计时条件、是否经过真实生产现场验证，也不能由摘要确定；这些信息未在摘要报告，并不意味着论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注疲劳如何真正进入决策",
+            "paragraphs": [
+              "阅读启发：后续阅读可重点追问，疲劳均衡指数如何定义，加权目标怎样体现响应速度与疲劳管理的取舍，以及动作掩码和势函数塑形各自贡献了什么。对于关注疲劳与可靠性的读者，还应保持对象边界：本文讨论的是工人疲劳与生产调度，不能直接外推为结构疲劳寿命或设备可靠性的结论。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的人机协作调度研究过程",
+            "description": "仅概括摘要明确陈述的问题、建模、算法与评价关系，不代表论文原图或完整实验配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "动态作业与人机资源",
+                "detail": "依据实时状态，为作业选择符合条件的工作站及加工模式。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "调度与疲劳联合建模",
+                "detail": "以混合整数非线性规划描述资源分配和疲劳相关加工时间，最小化加权目标。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "AMPS-MAPPO求解",
+                "detail": "动作掩码约束可行组合，时间缩放的势函数塑形提供稠密反馈。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "不同规模动态算例评价",
+                "detail": "比较在线推理速度、平均流动时间和工人疲劳均衡指数。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "描述调度问题"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "设计求解算法"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "开展算例比较"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-26T15:36:54.121702+00:00",
+      "article_profile": "197985bfd9b6b1726a424dc39c39a40bd1f359e4d880f8dc52bcfb0976ad6ec1",
+      "analysis_references": {},
+      "analysis_material_version": "a8df065622d87b32794b3d54944d1eea83f7bb23a2a785307dfa630cee1f5b4c",
+      "analysis_issues": []
     },
     {
       "source": "Web of Science",
@@ -3205,7 +3904,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "本文聚焦《HyperAgent: Leveraging Hypergraphs for Topology Optimization in Multi-Agent Communication》，暂未提供可用摘要，请查看原文。",
+      "summary": "本文研究大语言模型多智能体系统的通信组织问题，针对成对关系难以表达群体协作、固定通信结构难以适配任务复杂度两项不足，提出HyperAgent。其以超边连接同一子任务中的多个智能体，通过超图卷积聚合信息，并结合变分自编码器与稀疏正则化动态调整拓扑。摘要报告GSM8K准确率为95.07%，token消耗降低25.33%，但未交代该降幅的比较基准。本文仅作摘要级解读，不能据此认定其适用于工程结构生成设计。[摘要]",
       "raw_metadata": {
         "uid": "WOS:001880341000338",
         "title": "HyperAgent: Leveraging Hypergraphs for Topology Optimization in Multi-Agent Communication",
@@ -3333,25 +4032,144 @@
       "focus_tags": [
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为多智能体协作机制的交叉参考阅读，重点关注任务复杂度驱动的稀疏通信设计；不宜仅凭“拓扑优化”一词将其列为工程结构生成设计的核心文献。[摘要]",
+      "deep_read": {
+        "problem": "论文关注通信结构与协作需求不匹配的问题。摘要以“pairwise edge representations”指出，成对连边难以直接表达多个智能体共同参与的关系；同时，通信拓扑缺乏任务适应性，会使简单任务通信过多、复杂任务协调不足。研究对象是智能体通信网络，而非实体结构的材料分布。[摘要]",
+        "method": "HyperAgent用超边连接同一子任务中的多个智能体，并以超图卷积层完成组内一步信息聚合，原文称“one-step information aggregation”。随后结合变分自编码器与稀疏正则化，依据任务复杂度动态调整超图拓扑。摘要未说明复杂度如何度量、拓扑如何采样及模型如何训练。[摘要]",
+        "innovation": "摘要呈现的主要方法特点，是以直接超边表达群体协作，并将任务适应性的拓扑调整纳入框架，而不只是优化成对通信连接。原文强调“direct hyperedge representations”。解读：其贡献定位在关系表达与自适应通信的结合；仅凭摘要无法确认各组件的首创性或相对已有超图方法的新增内容。[摘要]",
+        "findings": "摘要给出的具体结果集中于GSM8K：准确率为“95.07%”，token消耗降低“25.33%”。作者据此强调性能与效率优势，但未提供降幅对应的基线、其他方法准确率、重复实验或误差范围。因此可确认作者报告了这两项指标，不能进一步判断提升的统计稳健性及跨任务普适性。[摘要]",
+        "limitations": "当前材料的主要限制是证据粒度不足，而非已证实的方法缺陷。摘要虽称“Experiments highlight the superiority”，却未展示对照配置、消融结果和开销构成，无法核对超边、卷积与稀疏正则化各自的贡献。训练成本、失败案例及实际部署表现也未交代，不能据此认定这些方面已经得到验证。[摘要]",
+        "connection": "解读：对智能运维而言，同一子任务中的多角色协作可类比诊断、分析与决策智能体的协同，但摘要没有运维验证。对结构设计与可靠性研究，其潜在联系在协作流程组织，而非结构拓扑或可靠度计算。“communication topologies”明确限定了优化对象，不能将名称相似视作研究方向直接契合的证据。[摘要]",
+        "next_steps": "建议：先获取全文核查token降幅的基准、任务复杂度定义及各模块消融，再决定是否开展迁移研究。若用于工程多智能体系统，可比较固定拓扑、成对图与超图在相同任务预算下的质量和通信成本，并单独考察错误传播与关键角色失效。以上属于后续研究建议，不是摘要已报告的实验或结论。[摘要]"
+      },
       "recommended_direction": "generative_design",
       "reading_status": {
         "paper_id": "c85601ebc634",
-        "state": "retry",
-        "updated_at": "2026-10-26T14:56:21.085698+00:00",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-26T15:47:02.323935+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "restricted",
-        "next_retry_at": "2026-10-26T15:01:21.085698+00:00",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "HyperAgent：利用超图优化多智能体通信拓扑",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.65109/qtvf9552"
+      ],
+      "analyzed_at": "2026-10-26T15:38:05.878855+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "多智能体协作并非通信越多越好：简单任务可能承担多余开销，复杂任务又可能协调不足。HyperAgent尝试用超图表达群体协作，并随任务复杂度调整通信拓扑，值得关注的是它如何兼顾回答表现与通信效率。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "两两连边为何难以表达群体协作",
+            "paragraphs": [
+              "摘要指出，大语言模型驱动的多智能体系统虽已展现集体智能，但通信结构仍面临两类问题：基于图中两两连边的表示，难以充分捕捉多个智能体之间的群体关系；通信拓扑对任务的适应性有限，容易在简单任务上通信过多，在复杂场景中协调不足。",
+              "因此，这项工作的关注点不仅是智能体能否交换信息，还包括如何表达协作群体、如何让通信结构适应任务需求。摘要将这两类问题与自适应协作框架的可扩展性及实际部署联系起来。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "用超边组织协作，用稀疏约束调整拓扑",
+            "paragraphs": [
+              "HyperAgent采用超图框架，以超边直接连接同一子任务中的多个智能体，表示群体协作关系；随后利用超图卷积层，实现协作群体内的单步信息聚合。这里的“单步”指摘要描述的聚合机制，不能据此理解为整个任务只需一轮通信。",
+              "框架还引入带稀疏正则化的变分自编码器，根据任务复杂度动态调整超图拓扑。群体关系表达与拓扑自适应，是摘要明确给出的两项方法要点；具体网络配置、训练方式和复杂度判定方法则未在摘要中展开。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "GSM8K上同时报告准确率与token节省",
+            "paragraphs": [
+              "摘要报告，HyperAgent在GSM8K上的准确率达到**95.07%**，同时将token消耗降低**25.33%**。这组结果同时涉及任务表现与通信资源开销，是摘要支持其性能和效率优势的具体例证。",
+              "不过，摘要没有交代token降幅对应的比较基准，也没有列出其他任务的具体结果。因此，可以说作者报告了超图通信优化的潜力，但不能把这一例证扩展为对所有任务、模型或部署条件均有效的结论。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不足以界定比较与验证范围",
+            "paragraphs": [
+              "仅凭本次摘要，无法判断评测样本规模、智能体配置、基础模型、对照方法、重复运行情况及结果波动，也无法确认各方法组件分别贡献了多少收益。这些属于摘要未报告的信息，不代表论文没有开展相应比较或验证。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：先辨清通信拓扑，再讨论应用迁移",
+            "paragraphs": [
+              "阅读启发：值得进一步阅读的是，任务复杂度如何影响拓扑调整，以及节省token时是否仍能保留必要的群体协调。面向智能运维，可关注这类通信组织方式是否适合多角色协作，但当前摘要没有提供运维场景的验证依据。此外，本文的“拓扑优化”针对智能体通信关系，不能直接等同于工程结构的材料布局优化。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的HyperAgent方法示意",
+            "description": "仅概括摘要明确描述的群体表示、信息聚合与拓扑调整关系，不是论文原图，不表示完整执行顺序。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "同一子任务中的多个智能体",
+                "detail": "摘要以同一子任务内的智能体作为超边连接对象。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "超边表示群体协作",
+                "detail": "通过超边直接连接多个智能体，表达群体关系。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "超图卷积聚合信息",
+                "detail": "在协作群体内实现单步信息聚合。"
+              },
+              {
+                "id": "d",
+                "stage": 0,
+                "label": "变分自编码器与稀疏正则化",
+                "detail": "根据任务复杂度动态调整超图拓扑。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "以超边连接"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "群体内信息聚合"
+              },
+              {
+                "from": "d",
+                "to": "b",
+                "label": "动态调整拓扑"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-26T15:47:02.312568+00:00",
+      "article_profile": "fcfcd7784b460e6c590ab8fbe742315adac7e48216d9ff9f62b1e6ace662f097",
+      "analysis_references": {},
+      "analysis_material_version": "e27f0851cf40c3dde7154388cb6e7a88b740b3736680d9f99a2fb7008cea34cb",
+      "analysis_issues": []
     },
     {
       "source": "OpenAlex",
@@ -3378,7 +4196,7 @@
         "ai_maintenance",
         "generative_design"
       ],
-      "summary": "Wireless power transfer (WPT) systems must maintain efficient and safe energy delivery under variations in geometry, coupling, load, alignment, and operating conditions. Machine-learning methods are increasingly applied to accelerate structural design, estimate operating parameters and states, and support adaptive control and scheduling. This review develops a task-oriented framework organized around three interconnected domains: structural design and optimization, parameter and state estimation, and control and optimization. Supervised learning, reinforcement learning, and hybrid or physics-i…",
+      "summary": "【摘要级导读】无线电能传输需要在几何、耦合、负载和对准条件变化时维持高效、安全的能量传递。本文以“task-oriented framework”组织结构设计与优化、参数与状态估计、控制与优化三类任务，比较监督学习、强化学习及混合或物理信息方法的适用条件与工程约束。阅读价值在于建立任务与方法的对应关系，并识别数据偏差、分布外泛化和在线安全等部署障碍。当前仅有摘要，不能据此判断具体算法性能或综述覆盖完整性。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7223238690",
@@ -3429,11 +4247,155 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为智能运维与结构优化方向的方法导航文献重点阅读，关注任务分类、方法适用条件及部署约束；摘要未明确涉及生成式设计算法，不宜将其推荐为生成式设计成果论文。[摘要]",
+      "deep_read": {
+        "problem": "无线电能传输的核心问题是在几何、耦合、负载、对准及运行条件变化时保持能量传递效率与安全，原文强调“efficient and safe”。综述据此讨论设计、估计与控制任务，而非仅考察静态工况下的预测精度；摘要未给出具体系统边界或安全指标。[摘要]",
+        "method": "本文采用任务导向的综述框架，将相关研究划分为结构设计与优化、参数与状态估计、控制与优化，并比较监督学习、强化学习及混合或物理信息方法。比较维度涵盖数据需求、物理模型依赖、信息来源、计算需求、准确性、在线响应、应用范围和优化目标。[摘要]",
+        "innovation": "摘要可确认的贡献是围绕三类相互关联的工程任务组织机器学习研究，而不是提出新的网络或控制算法。解读：这种组织方式有助于从任务需求反推方法选择，避免只按算法名称分类；但摘要未提供与既有综述的对照，无法确认框架的新颖程度。[摘要]",
+        "findings": "摘要指出，监督学习适合在代表性标注数据支持下开展快速代理建模、回归和分类；强化学习面向序贯控制与调度，但涉及奖励设计、安全探索及仿真到现实迁移。混合方法融合物理知识以改善数据效率与物理一致性，未提供量化对比或实验验证细节。[摘要]",
+        "limitations": "作者列出的工程障碍包括数据有限且有偏、分布外泛化薄弱、物理一致性不足、在线适应不安全、嵌入式资源受限及缺少标准化基准。这些是领域部署问题，不能直接视为本文方法缺陷；当前摘要也不足以核查文献筛选流程、覆盖范围及证据质量。[摘要]",
+        "connection": "解读：参数与状态估计、自适应控制可与智能运维中的状态感知和运行调节衔接，结构优化则与设计研究直接相关；安全适应和泛化问题也关联可靠性评价。不过，摘要未报告故障诊断、寿命预测或生成式结构设计成果，不能把这些联系表述为作者已完成的研究。[摘要]",
+        "next_steps": "作者提出优先研究不确定性感知、物理信息学习、安全仿真到现实迁移、轻量化边缘部署、分布式协调、可复现评价和数字孪生辅助开发。建议后续阅读全文时核查这些方向是否对应明确案例、数据与评价协议，再据此选择可迁移的课题，不预设其有效性。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "机器学习赋能无线电能传输：结构优化、状态与参数估计及自适应控制的任务导向综述",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://arxiv.org/abs/2610.30101"
+      ],
+      "analyzed_at": "2026-10-26T15:49:49.672509+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "无线电能传输如何在几何、耦合、负载与对准状态变化时，仍保持高效、安全？这篇综述从任务而非算法名称出发，梳理机器学习在结构设计、状态估计和自适应控制中的作用，帮助读者理解方法选择背后的条件与工程边界。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "无线供能的难点，是变化中的效率与安全",
+            "paragraphs": [
+              "无线电能传输（WPT）系统需要面对几何、耦合、负载、对准及运行条件的变化。机器学习被用于加速结构设计、估计运行参数和状态，以及支持自适应控制与调度；这些应用共同指向变化条件下的能量传输问题。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "按任务组织，再比较学习方法的适用条件",
+            "paragraphs": [
+              "这是一篇综述，而非摘要中报告单项装置实验的研究。作者建立任务导向框架，将讨论组织为相互关联的结构设计与优化、参数与状态估计、控制与优化领域。",
+              "在这一框架下，作者比较监督学习、强化学习以及混合或物理信息方法。比较维度不仅包括准确性，还涉及数据需求、对物理模型的依赖、信息来源、计算需求、在线响应、应用范围和优化目标。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "学习方法各有前提，部署瓶颈不止准确率",
+            "paragraphs": [
+              "摘要将监督学习的快速代理建模、回归与分类能力，明确建立在具备代表性标注数据的前提上。强化学习面向序贯控制与调度，但伴随奖励设计、安全探索和仿真到现实迁移的挑战。混合方法则将物理知识融入数据驱动模型，以改善数据效率与物理一致性。",
+              "作者归纳的工程部署障碍包括：数据有限且存在偏差、分布外泛化较弱、物理一致性不足、在线自适应不安全、嵌入式资源受限，以及缺少标准化基准。摘要没有给出某类方法全面优于其他方法的定量结论。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不能交代综述覆盖与验证强度",
+            "paragraphs": [
+              "仅凭摘要，无法判断文献检索与筛选方式、纳入研究的数量、数据样本规模，以及不同方法是否在可比条件下接受评估。对具体装置、工况和硬件验证范围，也不能作出结论。这些是当前资料无法核实的信息，不代表论文没有讨论或开展相关比较。",
+              "摘要将不确定性感知与物理信息学习、安全仿真到现实迁移、轻量化边缘部署、分布式协调、可复现评估和数字孪生辅助开发列为未来重点；这些方向不能被表述为本文已经验证的工程效果。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：追问数据代表性与在线使用边界",
+            "paragraphs": [
+              "阅读启发：面向结构优化，可进一步关注代理模型的数据是否覆盖目标设计条件，以及物理知识如何参与建模；面向智能运维，可关注状态估计在工况变化时的可靠性，以及在线适应的安全约束。这些问题源于摘要列出的适用前提与部署障碍，不意味着本文已验证故障诊断或预测维护能力。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的任务框架与比较维度",
+            "description": "展示综述的任务组织与方法比较关系，不代表实验流程、控制闭环或论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "任务导向的WPT综述",
+                "detail": "围绕变化条件下高效、安全的无线电能传输组织讨论。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "结构设计与优化",
+                "detail": "梳理机器学习用于加速结构设计的相关任务。"
+              },
+              {
+                "id": "c",
+                "stage": 1,
+                "label": "参数与状态估计",
+                "detail": "梳理运行参数及状态估计相关任务。"
+              },
+              {
+                "id": "d",
+                "stage": 1,
+                "label": "控制与优化",
+                "detail": "梳理自适应控制与调度相关任务。"
+              },
+              {
+                "id": "e",
+                "stage": 1,
+                "label": "学习方法的多维比较",
+                "detail": "比较监督、强化及混合或物理信息方法的数据、模型依赖、计算、准确性与在线响应等。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "任务领域"
+              },
+              {
+                "from": "a",
+                "to": "c",
+                "label": "任务领域"
+              },
+              {
+                "from": "a",
+                "to": "d",
+                "label": "任务领域"
+              },
+              {
+                "from": "a",
+                "to": "e",
+                "label": "方法比较"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-26T15:51:14.955159+00:00",
+      "article_profile": "01cdc47f475dae22144e8769931f5d8d43e19f97f8b73999c36222a94eb25154",
+      "analysis_references": {},
+      "analysis_material_version": "5c986e7e524dd9c1c21b8dedc32c21de9f206e8d15cba99964d77c6881984182",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "9f0079808024",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-26T15:51:14.957653+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "source_status": {
@@ -4360,13 +5322,13 @@
     "unavailable": 42
   },
   "analysis_status": {
-    "ready_core": 1,
+    "ready_core": 5,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 5
+    "pending": 1
   },
   "edition": {
     "id": "40326907087",
