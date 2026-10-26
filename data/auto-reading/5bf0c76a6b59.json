@@ -1,0 +1,94 @@
+{
+  "paper_id": "5bf0c76a6b59",
+  "fingerprint": "4ae3a1e7ecf0ceba718cdeaf96d069d9a060fb9650f5993e93ec19cef61f71ad",
+  "analysis": {
+    "title_zh": "人工智能模型如何管理认知权威：用户异议响应的分类与比较分析",
+    "summary": "模型受到质疑后，道歉是否意味着纠错？本文以会话分析为基础，构建六类挑战和四层响应框架，比较14个模型在2,310个受控情境中的32,340条回复。结果显示，认可用户与坚持原主张经常并存，道歉不能可靠代表立场修订，模型差异也不简单服从能力层级。研究提供的是行为描述工具，而非正确性或安全性评分。[P4][P7][P9] 解读：适合作为运维助手交互评估的方法参考，但不是直接研究设备维护的论文。",
+    "recommendation": "建议作为智能运维助手可信交互评估的补充文献阅读，重点关注分层标注及其人工验证；若目标是故障诊断、寿命预测或维护优化，不宜列为核心方向论文。[P5][P6][P10]",
+    "deep_read": {
+      "problem": "论文关注用户挑战模型答案后，模型如何维护、修订或让渡认知权威。传统翻转或坚持指标无法区分礼貌让步与知识判断变化，例如道歉后仍重复原答案。作者因此追问响应各维度是否同步，以及挑战类型、任务和模型身份如何影响这些行为。[P2][P3]",
+      "method": "研究使用四轮合成对话，固定初始答案后施加适用挑战，组合七领域、三任务、六类挑战及三级强度，获得32,340条回复。主张结果、权威定位、社交策略和证据支持分别标注，并以320条人工标签及100条双人子集检验自动裁判。[P4][P5][P6]",
+      "innovation": "主要贡献是将会话分析中的认知权威概念转化为可操作的挑战分类与分层编码，而非提出新模型。框架把主张修订、专家转介、关系修复和证据表达分开，揭示单一分数掩盖的行为组合；作者明确将其定位为后续评价的描述性基础。[P5][P9]",
+      "findings": "总体85.1%的回复认可用户，65.0%维持原主张；道歉回复中仍有58.7%维持主张。权威转移在建议任务为28.3%，明显高于事实与解释任务。挑战效果随模型和任务变化，行为画像不按能力层级排列，因此不能用规模简单预测受质疑后的表现。[P7][P8][P9]",
+      "limitations": "研究仅覆盖英语模板和单次挑战，每条响应只采集一次；细分主张修订的标注一致性偏低，稳定性复测也仅涉及三个小模型。正确性审计限于事实初始回答，不能证明最终建议质量。所供笔记未报告原文件缺项，亦无依据声称存在缺失公式。[P10][P12][P16]",
+      "connection": "解读：对智能运维、结构设计和可靠性研究，迁移价值主要在辅助决策的人机交互层：助手认可工程师或推荐专家，不代表技术判断已被证据修正。本文未评估故障诊断、结构安全或维护收益，故只能提供评估维度，不能作为工程有效性的直接证据。[P5][P9][P10]",
+      "next_steps": "建议：选取具有可核验故障根因和维护约束的工程案例，引入专家正确纠正、无依据反驳及安全问责，分别记录判断变化与社交表达。同时增加中文、多轮和重复采样，人工核验最终方案及引用来源，再检验这些行为指标与实际决策损失的关系。[P10][P12][P16]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.1595/"
+    ],
+    "analyzed_at": "2026-10-26T02:58:01.382135+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "给定方向为智能运维，但论文直接研究的是通用语言模型面对用户异议的交互行为，并未提供设备维护实验，因此不属直接切合。其受控对话设计、分层框架及人工验证具有明确方法价值，现有全文笔记和可核对摘录足以支持这一有限推荐。[P4][P5][P10][P13]",
+    "evidence": "Each interaction has four\nturns: the user asks a question, the model answers,\nthe user challenges it, and the model replies; we\nanalyse the reply."
+  },
+  "material": {
+    "version": "cfd2ca6dd25191bbf14d3a74fa6a50938f800e950603c5a9a181356be019ddaa",
+    "total": 16,
+    "covered": 16,
+    "references": {
+      "problem": [
+        "P2",
+        "P3"
+      ],
+      "method": [
+        "P4",
+        "P5",
+        "P6"
+      ],
+      "innovation": [
+        "P5",
+        "P9"
+      ],
+      "findings": [
+        "P7",
+        "P8",
+        "P9"
+      ],
+      "limitations": [
+        "P10",
+        "P12",
+        "P16"
+      ],
+      "connection": [
+        "P5",
+        "P9",
+        "P10"
+      ],
+      "next_steps": [
+        "P10",
+        "P12",
+        "P16"
+      ]
+    },
+    "excerpt": "Each interaction has four\nturns: the user asks a question, the model answers,\nthe user challenges it, and the model replies; we\nanalyse the reply.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16"
+    ],
+    "issues": []
+  }
+}
