@@ -1,0 +1,40 @@
+{
+  "paper_id": "d54dc74f6718",
+  "fingerprint": "0fe95a7e848e4723ab283a86932f27176e0ddde804a1d5046305ae0896b9d464",
+  "analysis": {
+    "title_zh": "校准不等于安全：涡扇发动机寿命末期与工况偏移下的共形预测区间",
+    "summary": "面向航空发动机剩余寿命预测，本文检验共形区间的平均覆盖保证能否支撑安全维修。作者在NASA C-MAPSS上比较五种区间方法，重点检查临近失效及分布偏移情境。全局共形预测虽达到平均覆盖目标，临近失效的区间却过宽；按预测寿命分组校准可改善部分树模型，但不能普遍奏效。跨故障模式应用时，覆盖率明显下降，漏覆盖主要表现为高估寿命。摘要提示：整体校准达标不能替代关键风险场景验证。[摘要]",
+    "recommendation": "建议智能运维与可靠性研究者重点阅读其分阶段覆盖评估和偏移测试设计，尤其关注平均覆盖达标却不能保障维修安全的证据；目前仅有摘要，方法细节仍需全文核查。[摘要]",
+    "deep_read": {
+      "problem": "研究问题是：剩余寿命区间的整体覆盖达标，是否意味着临近失效发动机也能获得可靠且有用的决策信息？摘要指出“an average guarantee is not sufficient”，并将机队与校准数据不同的情境纳入检验，关注保障失效与寿命高估的安全后果。[摘要]",
+      "method": "作者在NASA C-MAPSS的FD001–FD004上评估五种区间方法，涉及707台测试发动机，并采用重复的发动机级校准划分。基础预测器包括岭回归、随机森林、梯度提升和多层感知机；评估同时考察整体与真实剩余寿命不超过30周期群体的覆盖率、宽度及高估率。[摘要]",
+      "innovation": "解读：摘要体现的贡献在于把平均覆盖、临近失效区间效用与偏移后的错误方向放在同一评估框架，而非仅报告总体校准表现。作者还比较按预测寿命分组校准对不同预测器的作用。现有资料不足以确认这些方法或评估思路是否具有首创性。[摘要]",
+      "findings": "全局方法平均覆盖率为89–92%，但临近失效区间约宽44周期。分组校准使梯度提升区间从43.7缩至20.7周期；该策略对岭回归却仅有77%覆盖率。FD001迁移至FD003时，临近失效覆盖率降至37–50%，偏移下95%的漏覆盖属于寿命高估。[摘要]",
+      "limitations": "摘要明确强调共形保证依赖“exchangeability”，即交换性，不能将边际保证直接当作条件安全保证。当前资料未说明超参数、重复划分次数及区间构造细节，也未提供真实机队维修验证；这限制了本次核查深度，但不能据此断言全文缺失这些内容。[摘要]",
+      "connection": "解读：本文与智能运维及可靠性研究直接相关，因为寿命区间会影响维修时点，而高估剩余寿命可能延迟干预。其结果支持按寿命阶段和运行分布分别审查预测表现。与结构设计的联系较间接，可启发退化模型不确定性验证，但摘要未研究结构优化。[摘要]",
+      "next_steps": "建议：取得全文后，先核查校准划分、预测寿命分组边界及偏移测试设置，再尝试复现临近失效覆盖率和寿命高估率。面向自身运维任务，可进一步结合维修提前量与错误代价设置评价指标；这些属于迁移研究设想，并非摘要已验证的作者结论。[摘要]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://doi.org/10.55529/jaimlnn.62.106.119"
+    ],
+    "analyzed_at": "2026-10-26T04:40:17.552152+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": true,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "研究直接面向发动机剩余寿命与维修安全，切合智能运维方向；摘要给出了明确的区间比较方法、临近失效评估和跨故障模式测试，以及覆盖崩溃和寿命高估的定量结果，足以支持优先阅读判断，但不足以完成全文方法质量审查。[摘要]",
+    "evidence": "near-failure coverage collapsed to 37–50%, and 95% of all miscoverage under shift was overestimation of remaining life, the unsafe direction."
+  },
+  "material": {
+    "version": "7dd1f2565cefebf38c6e8926c9ae71a667aa7b511136e4e4dd8ac5a4135fa7ac",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "near-failure coverage collapsed to 37–50%, and 95% of all miscoverage under shift was overestimation of remaining life, the unsafe direction."
+  }
+}
