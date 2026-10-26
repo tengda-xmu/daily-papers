@@ -1,0 +1,119 @@
+{
+  "paper_id": "67fc09a4602b",
+  "fingerprint": "8e9e30c53dd680432730481c1f5f30905b1e5341040ef0c181f9121f45357605",
+  "analysis": {
+    "title_zh": "通过名言再语境化生成品牌广告口号",
+    "summary": "本文针对生成式广告口号重复、缺少辨识度的问题，将熟悉名言的修辞结构与品牌表达结合，通过短文本后训练和四阶段结构化提示完成混编。[P1–P4]实验显示，多样性和第一眼偏好有所改善，但persona匹配未提升，分解提示的独立收益也较有限。[P6–P8][P12–P13]适合借鉴受约束生成与多维评价方法，不宜将广告疲劳误认为工程疲劳，也不能据此推断实际广告转化或部署可靠性。",
+    "recommendation": "建议作为受约束文本生成与评价设计的跨领域参考阅读；若主要研究智能运维、结构设计或疲劳可靠性，则不宜列为方向内重点论文。[P3–P4][P9]",
+    "deep_read": {
+      "problem": "作者关注广告反复曝光造成的效果衰减，以及现有生成口号风格重复、品牌辨识度不足的问题。[P1]核心研究问题是如何兼顾新颖性与熟悉感，让口号保留可识别的文化参照，同时融入品牌及目标情绪；这里的广告疲劳属于传播效果问题，而非材料损伤。[P2]",
+      "method": "方法先以LoRA对QwQ-32B进行短文本后训练，再用单次结构化提示执行名言匹配、结构分解、词汇替换和混编生成。[P3–P4]提示要求提出三个候选句，区分固定与可编辑部分，总计最多修改两个词，加入品牌名也计入限制，最后进行质量检查。[P12]",
+      "innovation": "作者的主要贡献是把名言作为修辞结构与文化熟悉感资源，而非仅沿用既有口号表达，并将混编拆成可解释子任务。[P2–P3]解读：创新更偏向资源选择与生成流程组织，而非新模型架构；与合理两步提示相比，分解收益仅具支持性，不能宣称决定性优势。[P12]",
+      "findings": "本文方法Distinct-2为0.840，Pairwise-BLEU为0.013，Self-BLEU为0.099，多样性均优于所列基线。[P6]人工任务首选率为30.6%；参与者检验使用43次严格胜出，而非平局分摊后的46票。Persona-fit仅为23.45%，作者不主张该能力改善。[P8][P13]",
+      "limitations": "作者承认文化熟悉度、模板僵硬和平台抽样会影响结果，且未开展受控熟悉度分析。[P9]延迟识别仅纳入32名有效匹配者，对DS-Q差异不显著。[P8]记录未确认原文件缺项；P12流畅性提示明确省略，限制完整复现，但不是公式损坏，提取错误亦已纠正。",
+      "connection": "解读：与智能运维、结构设计和疲劳可靠性没有直接研究对象或实验证据上的契合；广告疲劳不能等同工程疲劳。[P1]可迁移之处是固定结构与可编辑内容分离，以及用失败分类检查生成边界；这只能作为流程启示，尚不能证明工程系统可靠性改善。[P3][P15]",
+      "next_steps": "建议围绕作者发现的参照难识别、品牌收益缺失和替换语法别扭，比较熟悉度感知选句、自适应模板放宽及独立收益检查。[P14–P15]另应控制基础模型与后训练条件，开展文化分组和长期曝光评价，区分短时吸引力、品牌识别与真实广告效果；这些均属后续研究设想。"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.2535.pdf"
+    ],
+    "analyzed_at": "2026-10-26T05:21:42.119534+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "论文研究品牌广告口号生成，与智能运维、结构设计及工程疲劳可靠性不直接匹配，不能因fatigue标签而判为方向契合。但其结构化混编方法、人工评价和负面结果具有明确的跨领域阅读价值；全文阅读笔记及可核对原文足以支持这一限定判断。",
+    "evidence": "Role Definition: You are an award-winning slogan\ncopywriter. Your task is to remix a classic quote, slang,\nlyric, meme, or popular expression into a brand slogan."
+  },
+  "material": {
+    "version": "44adc2843c6d65efea9a26c0473f6f86ac2e500a35fe5f2ecf3dbf267de4a1d9",
+    "total": 15,
+    "covered": 15,
+    "references": {
+      "problem": [
+        "P1",
+        "P2"
+      ],
+      "method": [
+        "P3",
+        "P4",
+        "P12"
+      ],
+      "innovation": [
+        "P2",
+        "P3",
+        "P12"
+      ],
+      "findings": [
+        "P6",
+        "P8",
+        "P13"
+      ],
+      "limitations": [
+        "P8",
+        "P9",
+        "P12"
+      ],
+      "connection": [
+        "P1",
+        "P3",
+        "P15"
+      ],
+      "next_steps": [
+        "P14",
+        "P15"
+      ]
+    },
+    "excerpt": "Role Definition: You are an award-winning slogan\ncopywriter. Your task is to remix a classic quote, slang,\nlyric, meme, or popular expression into a brand slogan.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P3",
+        "detail": "文字资料仅保留图1图注，未呈现框架图内部信息；已从原页核对补充：短文本后训练、persona输入，以及Quote Matching→Structure Breakdown→Vocabulary Replacement→Remix Generation流程。影响方法流程的完整理解，不属于原文件缺图。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P4",
+        "detail": "文字提取将“personas:Pride”“eachbrand–personacombination”“set ofN=10”等词间空格合并；原页可清楚辨认为五类persona、每个brand–persona组合生成N=10条。学习率指数经原页核对为1×10⁻⁴，不影响实验设置结论。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P5",
+        "detail": "Pairwise-BLEU公式在文字提取中将组合数分母拆散；已从原页核对为1/C(N,2)乘以全部i<j口号对的对称化BLEU之和。Self-BLEU公式核对为(1/N)ΣBLEU(s_i,S\\{s_i})。原页公式完整，纠正后可明确两指标的平均范围。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P7",
+        "detail": "图2的文字提取仅保留坐标、领域名和图例，遗漏柱状图信息；已从原页核对六个子图、四模型配色及八领域柱形趋势。本文方法在八领域均表现为Distinct-2最高、Pairwise-BLEU与Self-BLEU最低；未将无数值标签的柱高推造为精确数值。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P8",
+        "detail": "图3的文字提取未保留雷达曲线及参照虚线；已从原页核对三个比较面板、八领域轴及比值1参照线。曲线并非所有领域都高于1，因此不能据提取文本概括为所有领域一致胜出；原图完整。"
+      }
+    ]
+  }
+}

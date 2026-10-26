@@ -31938,7 +31938,7 @@
         "state": "published",
         "updated_at": "2026-10-26T04:57:51.850132+00:00",
         "basis": "full_text",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "facts",
         "reason": "",
         "total": 29,
@@ -33196,7 +33196,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "Interactive travel planning has become a popular use case for language models. Agents are deployed to manage evolving preferences and unexpected disruptions over multiple turns. Such settings require models to make complex, profile-conditioned planning decisions. However, existing benchmarks often evaluate feasibility, personalization, or interaction in relatively isolated settings. We therefore introduce Trip+ to measure the ability of agents to plan travel holistically. In Trip+, given traveler profiles and dynamic interactions, agents must generate and revise minute-level itineraries. End-t…",
+      "summary": "Trip+研究旅行规划智能体如何在需求变化与环境扰动中，同时保持行程可执行、画像适配和历史意图一致。基准包含153个多轮实例、570轮交互，结合固定沙箱、状态化规则及体验模拟评价18个模型。结果提示，较高可行性不代表舒适体验，节奏控制与跨轮修订仍是短板；多数指标的领先差异未获显著性支持。[P2][P6][P37]解读：值得作为动态规划代理的评价方法阅读，但旅游疲劳并非结构疲劳或工程可靠性证据。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -33334,10 +33334,126 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {}
+      "recommendation": "建议作为智能运维代理评价的交叉方法参考，重点阅读状态保留、门控评价和配对统计；不宜作为结构疲劳可靠性方向的核心推荐。[P18–P22][P37]",
+      "deep_read": {
+        "problem": "论文关注动态旅行任务中的联合评价缺口：既有基准往往分别处理可行性、个性化或交互，难以检查新需求满足后旧承诺是否仍被保留。作者将画像、环境扰动与分钟级行程结合，要求代理选择规划、澄清或无解响应，而非始终生成方案。[P1–P4]",
+        "method": "基准以状态优先流程构建153个实例、570轮交互，覆盖40城市、11类画像及四类交互。评价先检查响应模式，再核查可行性、硬约束和软偏好，分别计算新增要求完成与旧意图保留；四位模型评委依据活动轨迹模拟体验，最终行程评分跨任务汇总。[P17–P22]",
+        "innovation": "解读：主要贡献是基准与评价协议的联合设计，而非新的规划算法。隐藏状态同时记录模式、硬约束、画像偏好和环境，明确更新及保留目标；软偏好先按规则家族内部平均，再跨有效家族平均，降低规则数量差异对总分的支配。[P3][P17][P19]",
+        "findings": "18模型中，Gemini-3.1-Pro-Preview可行性为0.8812，GPT-5.4体验模拟最高仅0.5184，支持技术可行与体验适配存在差距。配对检验仅可行性及硬约束最佳与次佳差值区间排除零；其余领先应作描述性理解，不能泛称全面显著优越。[P6][P37]",
+        "limitations": "作者承认合成英语对话、固定画像和规则覆盖有限，模拟不能替代真实体验。[P9]原文件问题须保留：[P8]称日程分低于0.5，与图5的0.52不符，影响该断言；[P16]表8缺端点归属说明，影响边界评分复现。无缺失公式，不能推定代码有误。\n原文核对：[P8] §4.2原页称体验模拟中environment、schedule和physical维度均低于0.5，但[P7]图5对应得分分别为0.43、0.52、0.49，schedule并未低于0.5。已核实为正文与图5数值不一致，并非文字提取错误或缺失公式。受影响的是“日程维度平均分低于0.5”的具体断言；不能据此否定其他维度低分或问题率结果，也不能自行改写原始数值。；[P16] 表8部分相邻评分区间缺少端点归属说明：例如市内最大转移时间1.0档为≤240 min，0.5档写240–300 min；最早开始时间Relax的1.0档为≥08:00，0.5档为07:00–08:00。原表已读清，但区间写法在240 min、08:00等边界存在表述重叠，未注明判定优先级。影响仅凭本表精确复现边界样本评分；不能据此推定实际评价代码也有冲突。无缺失公式。",
+        "connection": "解读：与智能运维的联系在于扰动后重规划、动态约束维护及证据驱动审计，可对应检修计划更新后保留安全与资源承诺。但文中疲劳是旅行者体验负担，不是材料损伤、寿命预测或失效概率；对结构设计及工程可靠性的联系仅属方法迁移。[P7–P9][P22]",
+        "next_steps": "建议将更新检查与历史承诺检查迁移到检修排程，分别衡量故障响应、既有安全约束和人员负担；通过真实任务及专家独立评分校准阈值。比较代理时保留整段任务配对重采样，并增加稀有无解案例，避免条件性方案高分掩盖模式选择失败。[P13][P36–P38]"
+      },
+      "title_zh": "Trip+：个性化交互式旅行规划智能体评测基准",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1384.pdf"
+      ],
+      "analyzed_at": "2026-10-26T05:09:06.637349+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P3",
+          "P4"
+        ],
+        "method": [
+          "P17",
+          "P18",
+          "P19",
+          "P20",
+          "P21",
+          "P22"
+        ],
+        "innovation": [
+          "P3",
+          "P17",
+          "P19"
+        ],
+        "findings": [
+          "P6",
+          "P37"
+        ],
+        "limitations": [
+          "P7",
+          "P8",
+          "P9",
+          "P16"
+        ],
+        "connection": [
+          "P7",
+          "P8",
+          "P9",
+          "P22"
+        ],
+        "next_steps": [
+          "P13",
+          "P36",
+          "P37",
+          "P38"
+        ]
+      },
+      "analysis_material_version": "9d2414352368ea32f81cd4720e0bb18396ee67cde1d5bacb9a9287ce9deece1e",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "图1的文字提取遗漏了基准散点、分类区域及Trip+位置等图内信息。已由原图核对：横轴为Personalization Richness，纵轴为Interaction Richness，Trip+位于Experience与Diverse对应区域附近。遗漏影响作者对基准定位的呈现，不构成原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "表1提取将部分单元格符号串接为“✓ ✗”，导致行列含义混乱。原页图例区分绿色明确支持、橙色部分/间接支持、红色不支持。核对例如TRAVEL-SIM：Fine-grained与Feasibility为部分/间接支持，Stateful Eval.不支持，User Sim.明确支持；Trip+八项均明确支持。应以原表单元格为准，不能据混排文字判断比较结果。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P8",
+          "detail": "§4.2原页称体验模拟中environment、schedule和physical维度均低于0.5，但[P7]图5对应得分分别为0.43、0.52、0.49，schedule并未低于0.5。已核实为正文与图5数值不一致，并非文字提取错误或缺失公式。受影响的是“日程维度平均分低于0.5”的具体断言；不能据此否定其他维度低分或问题率结果，也不能自行改写原始数值。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P16",
+          "detail": "表8部分相邻评分区间缺少端点归属说明：例如市内最大转移时间1.0档为≤240 min，0.5档写240–300 min；最早开始时间Relax的1.0档为≥08:00，0.5档为07:00–08:00。原表已读清，但区间写法在240 min、08:00等边界存在表述重叠，未注明判定优先级。影响仅凭本表精确复现边界样本评分；不能据此推定实际评价代码也有冲突。无缺失公式。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "27027236b244",
+        "state": "published",
+        "updated_at": "2026-10-26T05:09:06.674361+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 38,
+        "covered": 38,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "图1的文字提取遗漏了基准散点、分类区域及Trip+位置等图内信息。已由原图核对：横轴为Personalization Richness，纵轴为Interaction Richness，Trip+位于Experience与Diverse对应区域附近。遗漏影响作者对基准定位的呈现，不构成原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "表1提取将部分单元格符号串接为“✓ ✗”，导致行列含义混乱。原页图例区分绿色明确支持、橙色部分/间接支持、红色不支持。核对例如TRAVEL-SIM：Fine-grained与Feasibility为部分/间接支持，Stateful Eval.不支持，User Sim.明确支持；Trip+八项均明确支持。应以原表单元格为准，不能据混排文字判断比较结果。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "§4.2原页称体验模拟中environment、schedule和physical维度均低于0.5，但[P7]图5对应得分分别为0.43、0.52、0.49，schedule并未低于0.5。已核实为正文与图5数值不一致，并非文字提取错误或缺失公式。受影响的是“日程维度平均分低于0.5”的具体断言；不能据此否定其他维度低分或问题率结果，也不能自行改写原始数值。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P16",
+            "detail": "表8部分相邻评分区间缺少端点归属说明：例如市内最大转移时间1.0档为≤240 min，0.5档写240–300 min；最早开始时间Relax的1.0档为≥08:00，0.5档为07:00–08:00。原表已读清，但区间写法在240 min、08:00等边界存在表述重叠，未注明判定优先级。影响仅凭本表精确复现边界样本评分；不能据此推定实际评价代码也有冲突。无缺失公式。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -33360,7 +33476,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "Slogans are concise and memorable catchphrases that play crucial roles in advertising by conveying brand identity and shaping public perception. However, advertising fatigue reduces the effectiveness of repeated slogans, creating a growing demand for novel, creative, and insightful slogan generation. While recent work leverages large language models (LLMs) for this task, existing approaches often generate stylistically repetitive outputs that fall short in distinctiveness and insight.We argue that effective slogans should balance novelty with familiarity and propose a new paradigm that reconte…",
+      "summary": "本文针对生成式广告口号重复、缺少辨识度的问题，将熟悉名言的修辞结构与品牌表达结合，通过短文本后训练和四阶段结构化提示完成混编。[P1–P4]实验显示，多样性和第一眼偏好有所改善，但persona匹配未提升，分解提示的独立收益也较有限。[P6–P8][P12–P13]适合借鉴受约束生成与多维评价方法，不宜将广告疲劳误认为工程疲劳，也不能据此推断实际广告转化或部署可靠性。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -33493,10 +33609,128 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {}
+      "recommendation": "建议作为受约束文本生成与评价设计的跨领域参考阅读；若主要研究智能运维、结构设计或疲劳可靠性，则不宜列为方向内重点论文。[P3–P4][P9]",
+      "deep_read": {
+        "problem": "作者关注广告反复曝光造成的效果衰减，以及现有生成口号风格重复、品牌辨识度不足的问题。[P1]核心研究问题是如何兼顾新颖性与熟悉感，让口号保留可识别的文化参照，同时融入品牌及目标情绪；这里的广告疲劳属于传播效果问题，而非材料损伤。[P2]",
+        "method": "方法先以LoRA对QwQ-32B进行短文本后训练，再用单次结构化提示执行名言匹配、结构分解、词汇替换和混编生成。[P3–P4]提示要求提出三个候选句，区分固定与可编辑部分，总计最多修改两个词，加入品牌名也计入限制，最后进行质量检查。[P12]",
+        "innovation": "作者的主要贡献是把名言作为修辞结构与文化熟悉感资源，而非仅沿用既有口号表达，并将混编拆成可解释子任务。[P2–P3]解读：创新更偏向资源选择与生成流程组织，而非新模型架构；与合理两步提示相比，分解收益仅具支持性，不能宣称决定性优势。[P12]",
+        "findings": "本文方法Distinct-2为0.840，Pairwise-BLEU为0.013，Self-BLEU为0.099，多样性均优于所列基线。[P6]人工任务首选率为30.6%；参与者检验使用43次严格胜出，而非平局分摊后的46票。Persona-fit仅为23.45%，作者不主张该能力改善。[P8][P13]",
+        "limitations": "作者承认文化熟悉度、模板僵硬和平台抽样会影响结果，且未开展受控熟悉度分析。[P9]延迟识别仅纳入32名有效匹配者，对DS-Q差异不显著。[P8]记录未确认原文件缺项；P12流畅性提示明确省略，限制完整复现，但不是公式损坏，提取错误亦已纠正。",
+        "connection": "解读：与智能运维、结构设计和疲劳可靠性没有直接研究对象或实验证据上的契合；广告疲劳不能等同工程疲劳。[P1]可迁移之处是固定结构与可编辑内容分离，以及用失败分类检查生成边界；这只能作为流程启示，尚不能证明工程系统可靠性改善。[P3][P15]",
+        "next_steps": "建议围绕作者发现的参照难识别、品牌收益缺失和替换语法别扭，比较熟悉度感知选句、自适应模板放宽及独立收益检查。[P14–P15]另应控制基础模型与后训练条件，开展文化分组和长期曝光评价，区分短时吸引力、品牌识别与真实广告效果；这些均属后续研究设想。"
+      },
+      "title_zh": "通过名言再语境化生成品牌广告口号",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.2535.pdf"
+      ],
+      "analyzed_at": "2026-10-26T05:21:42.119534+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P12"
+        ],
+        "innovation": [
+          "P2",
+          "P3",
+          "P12"
+        ],
+        "findings": [
+          "P6",
+          "P8",
+          "P13"
+        ],
+        "limitations": [
+          "P8",
+          "P9",
+          "P12"
+        ],
+        "connection": [
+          "P1",
+          "P3",
+          "P15"
+        ],
+        "next_steps": [
+          "P14",
+          "P15"
+        ]
+      },
+      "analysis_material_version": "44adc2843c6d65efea9a26c0473f6f86ac2e500a35fe5f2ecf3dbf267de4a1d9",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "文字资料仅保留图1图注，未呈现框架图内部信息；已从原页核对补充：短文本后训练、persona输入，以及Quote Matching→Structure Breakdown→Vocabulary Replacement→Remix Generation流程。影响方法流程的完整理解，不属于原文件缺图。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "文字提取将“personas:Pride”“eachbrand–personacombination”“set ofN=10”等词间空格合并；原页可清楚辨认为五类persona、每个brand–persona组合生成N=10条。学习率指数经原页核对为1×10⁻⁴，不影响实验设置结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "Pairwise-BLEU公式在文字提取中将组合数分母拆散；已从原页核对为1/C(N,2)乘以全部i<j口号对的对称化BLEU之和。Self-BLEU公式核对为(1/N)ΣBLEU(s_i,S\\{s_i})。原页公式完整，纠正后可明确两指标的平均范围。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "图2的文字提取仅保留坐标、领域名和图例，遗漏柱状图信息；已从原页核对六个子图、四模型配色及八领域柱形趋势。本文方法在八领域均表现为Distinct-2最高、Pairwise-BLEU与Self-BLEU最低；未将无数值标签的柱高推造为精确数值。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "图3的文字提取未保留雷达曲线及参照虚线；已从原页核对三个比较面板、八领域轴及比值1参照线。曲线并非所有领域都高于1，因此不能据提取文本概括为所有领域一致胜出；原图完整。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "67fc09a4602b",
+        "state": "published",
+        "updated_at": "2026-10-26T05:21:42.141430+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 15,
+        "covered": 15,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "文字资料仅保留图1图注，未呈现框架图内部信息；已从原页核对补充：短文本后训练、persona输入，以及Quote Matching→Structure Breakdown→Vocabulary Replacement→Remix Generation流程。影响方法流程的完整理解，不属于原文件缺图。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "文字提取将“personas:Pride”“eachbrand–personacombination”“set ofN=10”等词间空格合并；原页可清楚辨认为五类persona、每个brand–persona组合生成N=10条。学习率指数经原页核对为1×10⁻⁴，不影响实验设置结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "Pairwise-BLEU公式在文字提取中将组合数分母拆散；已从原页核对为1/C(N,2)乘以全部i<j口号对的对称化BLEU之和。Self-BLEU公式核对为(1/N)ΣBLEU(s_i,S\\{s_i})。原页公式完整，纠正后可明确两指标的平均范围。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "图2的文字提取仅保留坐标、领域名和图例，遗漏柱状图信息；已从原页核对六个子图、四模型配色及八领域柱形趋势。本文方法在八领域均表现为Distinct-2最高、Pairwise-BLEU与Self-BLEU最低；未将无数值标签的柱高推造为精确数值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "图3的文字提取未保留雷达曲线及参照虚线；已从原页核对三个比较面板、八领域轴及比值1参照线。曲线并非所有领域都高于1，因此不能据提取文本概括为所有领域一致胜出；原图完整。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -33522,7 +33756,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Real-time voice agents face a tension: end-to-end models often lack deep reasoning, while cascaded ASR–LLM–TTS pipelines achieve stronger reasoning but defer LLM inference until after ASR finalizes the transcript, creating an avoidable post–turn-end silent gap. We target this gap under complex spoken requests that admit a relatively determinate answer, and treat it as system-induced rather than communicatively motivated. Existing cascaded streaming strategies attempt to reduce it via mechanical segmentation (e.g., fixed chunks, VAD-based splitting) or speculative generation, but they frequentl…",
+      "summary": "复杂语音请求常使级联系统在用户说完后才开始推理，形成明显等待。本文通过语义触发器判断何时值得计算，并让后台Thinker维护状态、前台Speaker准备答案，将部分推理移入收听阶段。[P3—P5] 四个基准显示其在实时预算下改善质量与效率，8B模型首完整句延迟为332—415毫秒，但并未全面超过完整上下文推理。[P7] 解读：适合作为运维语音助手的架构参考，不是已验证的故障诊断或可靠性方法。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -33658,10 +33892,142 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {}
+      "recommendation": "建议作为智能运维交互层的拓展阅读，重点研究语义触发、参数修正和异步状态管理；若目标是故障诊断、结构优化或可靠性建模，则不宜列为核心方向论文。[P5][P9]",
+      "deep_read": {
+        "problem": "本文针对有相对确定答案的复杂口语请求：串行级联等待转录结束才推理，固定分块又可能切断语义，提前猜测则因用户修正而反复回滚。目标是压缩系统造成的轮后静默，不是消除所有会话停顿，也不主张回答越快越好。[P1—P3][P9]",
+        "method": "DistilBERT判断累积转录是否达到语义触发条件，并以阈值和去重过滤无效调用。Thinker维护变量与计划，Speaker并发求解并读取上次已提交状态；新触发抢占旧生成，过时状态丢弃，轮次结束后才提交TTS，避免听见内部回滚。[P4—P5][P13]",
+        "innovation": "解读：方法贡献主要在于把触发时机与增量推理组织分开，而非首次提出边听边算。作者将学习式语义边界、双角色状态复用和抢占调度组合，并构造含犹豫与自我修正的Pause-and-Repair基准，使输入修订成为显式压力测试。[P6][P12][P19]",
+        "findings": "四基准上，8B模型准确率为6.88%、78.52%、71.9%、62.57%，TTFS为415、332、338、336毫秒，中断率均低于10%。去触发器后平均调用次数由2.10升至7.23；32B仍保持亚秒TTFS。收益体现为交互预算下的权衡，并非所有指标均最优。[P7—P8][P16]",
+        "limitations": "作者承认领域、语言和声学覆盖有限，合成语音不等于真实自发语音，旁听研究不替代实际交互。[P9][P14] 原文件缺项包括：P2图2(d)缺少与输入一致的收入、房租数值，算术不自洽；P21图8糖果题缺颜色条件，答案不唯一。两者限制示例解释，不据此否定实验表。\n原文核对：[P2] 图2(d)绿色回答框原图写有“earn 300$ a week and spend 100$ on rent”及“save 250$”，金额相互不符；上方用户输入则为时薪修正至20美元、每天8小时、5天、房租300美元并存下余款一半，对应(20×8×5−300)/2=250美元。原图回答框缺少与输入一致的收入、房租数值，影响该示例的算术自洽性，不足以据此否定未提供的实验结果。；[P21] 图8上半部分糖果示例的输入和改写输出均仅提供总数232、红色54，却询问粉色数量；原图未提供其余糖果均为粉色或其他颜色分布的条件。因此无法唯一确定粉色数量，影响该示例作为完整数学问题的可解性，但不影响提示模板及其余页面内容的识读；不补造缺失条件。",
+        "connection": "解读：对智能运维的联系是交互机制，而非诊断算法。现场人员可能边说边修正设备编号、读数或时间范围，变量表与修正感知调度可避免沿用旧条件。但论文没有工业噪声、结构设计或可靠性任务验证，不能把通用问答表现等同工程决策安全性。[P5][P17—P18]",
+        "next_steps": "建议建立含设备术语、单位修正和背景噪声的运维语音测试集，对比语义触发与VAD，并检查状态是否保留原始证据。除准确率外，应测实际首声延迟、总GPU耗时和错误参数传播率；高风险操作加入确认机制。这些是迁移研究建议，不是作者已完成的实验。[P9][P12][P14]"
+      },
+      "title_zh": "LTS-VoiceAgent：基于语义触发与增量推理的听—思—说流式语音交互框架",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1712.pdf"
+      ],
+      "analyzed_at": "2026-10-26T05:40:36.250337+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P3",
+          "P9"
+        ],
+        "method": [
+          "P4",
+          "P5",
+          "P13"
+        ],
+        "innovation": [
+          "P6",
+          "P12",
+          "P19"
+        ],
+        "findings": [
+          "P7",
+          "P8",
+          "P16"
+        ],
+        "limitations": [
+          "P2",
+          "P9",
+          "P14",
+          "P21"
+        ],
+        "connection": [
+          "P5",
+          "P17",
+          "P18"
+        ],
+        "next_steps": [
+          "P9",
+          "P12",
+          "P14"
+        ]
+      },
+      "analysis_material_version": "ea6cae0edb3bcc9c5a1e2572fadf98756b32d92d32ed6c0f1858ee5f63b030b5",
+      "analysis_issues": [
+        {
+          "kind": "source_defect",
+          "page": "P2",
+          "detail": "图2(d)绿色回答框原图写有“earn 300$ a week and spend 100$ on rent”及“save 250$”，金额相互不符；上方用户输入则为时薪修正至20美元、每天8小时、5天、房租300美元并存下余款一半，对应(20×8×5−300)/2=250美元。原图回答框缺少与输入一致的收入、房租数值，影响该示例的算术自洽性，不足以据此否定未提供的实验结果。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "3.2.1文字提取中的“raw texts Draw”经原页核对应为“raw texts D_raw”，其中raw为下标，表示种子原始文本数据；不是英文Draw。已纠正，不影响语义对齐数据合成流程的理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "表1文字提取发生跨列粘连，原图可清楚分列。按VERA、Spoken-MQA、BigBench、Our Bench顺序，每组为准确率(%)／延迟(ms)／TTFS(ms)：Ours应为6.88／230／415；78.52／207／332；71.9／209／338；62.57／236／336。PredGen(No-think)首组为4.34／247／298。LTS-VAD(No-think)后3组为75.14／213／266；55.2／206／258；56.41／244／294。Qwen2.5-Omni中间两组为59.89／139.44／634.68；43.1／195.13／332.92。无原页缺项，已纠正，避免误判实时质量—延迟比较。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "表5提取文本存在跨列粘连，原图列界及数值清楚。按Serial／PredGen／LTS-VA顺序：感知延迟2.1±0.4／4.3±0.3／4.5±0.2；交互自然度4.4±0.3／4.2±0.4／4.3±0.3；语义一致性4.5±0.2／3.8±0.3／4.4±0.3。均为5分量表的均值±标准差，不是延迟秒数或置信区间。无原页缺项，已纠正，以免误读主观评估结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P19",
+          "detail": "表11提取文本中“GSM8KMathematics1319”“MMLU Subtotal983”等发生跨列粘连。原图明确：GSM8K／Mathematics／1319／67.6／25.2／Med；MMLU小计983／121.7／57.1／Hard；总计2302／90.7／38.9／-。数值列依次为样本量、平均tokens、平均音频秒数。无原页缺项，已按列纠正，避免误读数据集规模及音频时长。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P21",
+          "detail": "图8上半部分糖果示例的输入和改写输出均仅提供总数232、红色54，却询问粉色数量；原图未提供其余糖果均为粉色或其他颜色分布的条件。因此无法唯一确定粉色数量，影响该示例作为完整数学问题的可解性，但不影响提示模板及其余页面内容的识读；不补造缺失条件。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "ebce1b60bc9a",
+        "state": "published",
+        "updated_at": "2026-10-26T05:40:36.276820+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 21,
+        "covered": 21,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "source_defect",
+            "page": "P2",
+            "detail": "图2(d)绿色回答框原图写有“earn 300$ a week and spend 100$ on rent”及“save 250$”，金额相互不符；上方用户输入则为时薪修正至20美元、每天8小时、5天、房租300美元并存下余款一半，对应(20×8×5−300)/2=250美元。原图回答框缺少与输入一致的收入、房租数值，影响该示例的算术自洽性，不足以据此否定未提供的实验结果。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "3.2.1文字提取中的“raw texts Draw”经原页核对应为“raw texts D_raw”，其中raw为下标，表示种子原始文本数据；不是英文Draw。已纠正，不影响语义对齐数据合成流程的理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "表1文字提取发生跨列粘连，原图可清楚分列。按VERA、Spoken-MQA、BigBench、Our Bench顺序，每组为准确率(%)／延迟(ms)／TTFS(ms)：Ours应为6.88／230／415；78.52／207／332；71.9／209／338；62.57／236／336。PredGen(No-think)首组为4.34／247／298。LTS-VAD(No-think)后3组为75.14／213／266；55.2／206／258；56.41／244／294。Qwen2.5-Omni中间两组为59.89／139.44／634.68；43.1／195.13／332.92。无原页缺项，已纠正，避免误判实时质量—延迟比较。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "表5提取文本存在跨列粘连，原图列界及数值清楚。按Serial／PredGen／LTS-VA顺序：感知延迟2.1±0.4／4.3±0.3／4.5±0.2；交互自然度4.4±0.3／4.2±0.4／4.3±0.3；语义一致性4.5±0.2／3.8±0.3／4.4±0.3。均为5分量表的均值±标准差，不是延迟秒数或置信区间。无原页缺项，已纠正，以免误读主观评估结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P19",
+            "detail": "表11提取文本中“GSM8KMathematics1319”“MMLU Subtotal983”等发生跨列粘连。原图明确：GSM8K／Mathematics／1319／67.6／25.2／Med；MMLU小计983／121.7／57.1／Hard；总计2302／90.7／38.9／-。数值列依次为样本量、平均tokens、平均音频秒数。无原页缺项，已按列纠正，避免误读数据集规模及音频时长。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P21",
+            "detail": "图8上半部分糖果示例的输入和改写输出均仅提供总数232、红色54，却询问粉色数量；原图未提供其余糖果均为粉色或其他颜色分布的条件。因此无法唯一确定粉色数量，影响该示例作为完整数学问题的可解性，但不影响提示模板及其余页面内容的识读；不补造缺失条件。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -33685,7 +34051,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Long-context LLMs and Retrieval-Augmented Generation (RAG) systems expand accessible context, but still defer state tracking and evidence consolidation to query time. This passive paradigm is brittle in streaming settings where facts are updated and answers depend on latent states rather than explicit spans. We introduce Unified Memory Agent (UMA), an end-to-end reinforcement-learning framework that trains a single policy to maintain external memory and answer questions. UMA updates a structured memory bank via CRUD operations and combines it with raw-context retrieval for QA. To jointly optim…",
+      "summary": "面对持续更新的信息，长上下文模型和RAG往往到提问时才重新整合证据。本文提出统一记忆智能体UMA，在问题揭示前维护结构化记忆，再供多个问答会话复用，并以任务分层GRPO联合训练记忆维护和答案生成。16k预算下，其在13项TTL/AR基准的平均裁判分数领先；账本任务适配进一步改善状态追踪，但超长跨度数值正确性仍弱。[P3–P9、P25]解读：适合作为智能运维状态管理的方法参考，而非直接部署依据。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -33819,10 +34185,161 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {}
+      "recommendation": "推荐重点阅读分层信用分配、记忆维护消融和三阶段错误分析，它们可为运维智能体的状态更新与故障归因提供研究思路；但论文没有真实运维任务验证。[P5、P9、P22]",
+      "deep_read": {
+        "problem": "论文研究信息流持续更新时，如何在未知未来问题的条件下保留可复用状态。答案可能来自跨时间累积，而不直接存在于某段原文；逐问检索易重复计算，普通摘要也可能丢失更新细节。核心问题因此是让共享记忆同时服务多个未来目标，而非围绕已知问题压缩上下文。[P1–P3、P6]",
+        "method": "UMA用统一策略处理记忆与问答：逐块维护核心摘要和键值库，通过增删改及读取操作更新状态，问答时结合记忆读取与原文检索。训练采样多条记忆轨迹，以各轨迹下多问答案的平均结果奖励监督记忆，并对记忆会话和逐问题问答组分别归一化优势。[P3–P5]",
+        "innovation": "创新重点是问题隐藏条件下的共享记忆监督、统一记忆—问答策略与任务分层优势估计的组合，而非单独提出外部记忆或多问题监督。表8显示Mem-α也使用共享记忆多问题监督。Ledger-QA则以可控账本更新隔离累积状态维护能力，补充传统事实检索评估。[P5–P6、P19]",
+        "findings": "16k下Generalist在13项基准平均裁判得分75.86；全局分组与分阶段训练分别低5.9、11.2分，支持训练设计的作用。Specialist账本平均Judge为53.02，但500会话时EM仅7.69，表明平均收益并不等于超长状态计算可靠，也非所有指标均领先。[P7、P9、P25]",
+        "limitations": "作者限于单智能体和固定工具接口，真实任务及细粒度操作归因仍待验证。账本各跨度仅3—5个测试样本；EM使用词集合，预处理删除标点会改变数值形式。解读：这些因素限制可靠性外推。逐页记录未确认原文件缺项，已纠正提取错误不能当作公式缺失。[P10、P18、P21–P22]",
+        "connection": "解读：运维日志、配置变更和维修事件同样需要把分散更新整合为设备当前状态，UMA的主动记忆可作为相关智能体架构参考。其写入、检索和证据使用三阶段失效分类，也便于组织可靠性诊断。不过，论文没有设备故障、结构设计或寿命预测实验，联系仅属方法迁移。[P3、P22]",
+        "next_steps": "建议构建设备事件流与可核验状态账本，加入重复告警、迟到事件、配置回滚和冲突记录，比较主动记忆、RAG及规则状态机。分别测量写入正确率、状态一致性、诊断证据准确率和多查询摊销成本，并采用保留小数与符号的数值校验；这是后续研究方案，非作者已验证成果。[P10、P21–P22]"
+      },
+      "title_zh": "学习记忆：面向长上下文推理的记忆智能体端到端训练",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1299.pdf"
+      ],
+      "analyzed_at": "2026-10-26T05:56:51.578570+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P3",
+          "P6"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P5",
+          "P6",
+          "P19"
+        ],
+        "findings": [
+          "P7",
+          "P9",
+          "P25"
+        ],
+        "limitations": [
+          "P10",
+          "P18",
+          "P21",
+          "P22"
+        ],
+        "connection": [
+          "P3",
+          "P22"
+        ],
+        "next_steps": [
+          "P10",
+          "P21",
+          "P22"
+        ]
+      },
+      "analysis_material_version": "9b3a93d4f6747bf083ec3e473459d3f21378ab5ffbf130fe0d41298849876c31",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "图3奖励计算区域的文字提取遗漏了原图可读的公式和数值。已核对：工具奖励示例为两次成功、一次失败，r_tool=2/3；结果奖励对应格式错误0、格式正确但答案错误0.5、格式及答案均正确1.5；总奖励R=λr_tool+r_outcome。原图还显示记忆的结果奖励取分支问答结果奖励的平均值。遗漏影响对奖励尺度及跨阶段监督机制的理解，并非原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "表1文字提取将相邻单元格粘连，原页可清楚区分。例如RAG的LoCoMo、LongMemEval、MSC、PerLTQA、SQuAD依次为54.03、59.60、54.60、83.75、25.35；UMA-Generalist（16k）的Clinic/NLU为91.00/82.00，ConvoMem/HotpotQA为87.05/76.56。已依表格列线和表头纠正，避免误读各任务成绩及排名；原文件没有缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "图4的文字提取未保留曲线，且将图例Mem-α截为“Mem-”；原图可辨认各方法图例、曲线及代表性横轴跨度2、5、10、20、40、100、500。表2中“Yes53.02”实际为LQA Train列Yes与Judge列53.02两个单元格。已纠正，避免混淆训练条件、模型身份和长跨度变化；未从曲线推造精确数值。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P18",
+          "detail": "表7的ConvoMem行在文字提取中粘连为“64.0522,602300.0”。原页已核实，分别对应Avg. Qs=64.0、Avg. Len (Tok)=522,602、Avg. Chunks=300.0，Samples=7。已按表头纠正；误读会影响对问题数量、长上下文规模及处理块数的理解，原文件并无缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P19",
+          "detail": "表8文字提取将勾选与横线粘连。原页已核对五列：A-MEM、Memory-R1、Mem-T仅前两列勾选；MemAgent、ReMemR1仅联合记忆—问答策略列勾选；Mem-α前三列勾选；AgeMem前两列及联合策略列勾选；UMA五列均勾选。已恢复各方法对应关系，避免误判共享记忆多问题监督或联合训练是否为UMA独有。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P23",
+          "detail": "表12、13的文字提取粘连了多个相邻单元格。已核对原页：表12 UMA-Generalist（16k）的Pub/T-C为67.20/95.00，LME/MSC/PerL为30.60/29.20/12.25；表13对应LoCo/LME为39.39/41.73。表12去Raw-Context版本的PerL/SQuAD为8.25/59.52。纠正列归属，避免误读任务成绩、最优方法及指标差异；原页无缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P24",
+          "detail": "表14、15存在相邻数字粘连。已按原页纠正：表14 Mem-T的LME/MSC/PerL/SQuAD为33.42/57.49/34.06/54.18；表15 RAG的LoCo/LME/MSC/PerL/SQuAD为57.35/61.20/55.80/85.25/25.56，UMA-Generalist（16k）的Convo/Hotpot为88.17/77.34。影响分任务排名和跨裁判比较，原文件内容完整。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P25",
+          "detail": "表16若干相邻单元格在文字提取中粘连，已按原页表头纠正：Judge部分去Raw版本H=10/20/30/40依次59.22/60.78/52.43/46.67；Specialist（16k）H=40/50/100为46.67/45.71/34.62。EM部分去Raw版本H=100/500为34.62/8.65；Generalist对应19.23/9.62；Specialist（16k）H=40/50/100/500为46.67/43.81/32.69/7.69。影响逐跨度比较及Judge与EM差异判断，原文件没有缺项。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "e2dd66bfbd56",
+        "state": "published",
+        "updated_at": "2026-10-26T05:56:51.603330+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 25,
+        "covered": 25,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "图3奖励计算区域的文字提取遗漏了原图可读的公式和数值。已核对：工具奖励示例为两次成功、一次失败，r_tool=2/3；结果奖励对应格式错误0、格式正确但答案错误0.5、格式及答案均正确1.5；总奖励R=λr_tool+r_outcome。原图还显示记忆的结果奖励取分支问答结果奖励的平均值。遗漏影响对奖励尺度及跨阶段监督机制的理解，并非原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "表1文字提取将相邻单元格粘连，原页可清楚区分。例如RAG的LoCoMo、LongMemEval、MSC、PerLTQA、SQuAD依次为54.03、59.60、54.60、83.75、25.35；UMA-Generalist（16k）的Clinic/NLU为91.00/82.00，ConvoMem/HotpotQA为87.05/76.56。已依表格列线和表头纠正，避免误读各任务成绩及排名；原文件没有缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "图4的文字提取未保留曲线，且将图例Mem-α截为“Mem-”；原图可辨认各方法图例、曲线及代表性横轴跨度2、5、10、20、40、100、500。表2中“Yes53.02”实际为LQA Train列Yes与Judge列53.02两个单元格。已纠正，避免混淆训练条件、模型身份和长跨度变化；未从曲线推造精确数值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P18",
+            "detail": "表7的ConvoMem行在文字提取中粘连为“64.0522,602300.0”。原页已核实，分别对应Avg. Qs=64.0、Avg. Len (Tok)=522,602、Avg. Chunks=300.0，Samples=7。已按表头纠正；误读会影响对问题数量、长上下文规模及处理块数的理解，原文件并无缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P19",
+            "detail": "表8文字提取将勾选与横线粘连。原页已核对五列：A-MEM、Memory-R1、Mem-T仅前两列勾选；MemAgent、ReMemR1仅联合记忆—问答策略列勾选；Mem-α前三列勾选；AgeMem前两列及联合策略列勾选；UMA五列均勾选。已恢复各方法对应关系，避免误判共享记忆多问题监督或联合训练是否为UMA独有。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P23",
+            "detail": "表12、13的文字提取粘连了多个相邻单元格。已核对原页：表12 UMA-Generalist（16k）的Pub/T-C为67.20/95.00，LME/MSC/PerL为30.60/29.20/12.25；表13对应LoCo/LME为39.39/41.73。表12去Raw-Context版本的PerL/SQuAD为8.25/59.52。纠正列归属，避免误读任务成绩、最优方法及指标差异；原页无缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P24",
+            "detail": "表14、15存在相邻数字粘连。已按原页纠正：表14 Mem-T的LME/MSC/PerL/SQuAD为33.42/57.49/34.06/54.18；表15 RAG的LoCo/LME/MSC/PerL/SQuAD为57.35/61.20/55.80/85.25/25.56，UMA-Generalist（16k）的Convo/Hotpot为88.17/77.34。影响分任务排名和跨裁判比较，原文件内容完整。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P25",
+            "detail": "表16若干相邻单元格在文字提取中粘连，已按原页表头纠正：Judge部分去Raw版本H=10/20/30/40依次59.22/60.78/52.43/46.67；Specialist（16k）H=40/50/100为46.67/45.71/34.62。EM部分去Raw版本H=100/500为34.62/8.65；Generalist对应19.23/9.62；Specialist（16k）H=40/50/100/500为46.67/43.81/32.69/7.69。影响逐跨度比较及Judge与EM差异判断，原文件没有缺项。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
