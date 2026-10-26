@@ -102,8 +102,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       },
@@ -324,8 +324,8 @@
         "state": "published",
         "updated_at": "2026-10-26T02:58:01.399402+00:00",
         "basis": "full_text",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "facts",
         "reason": "",
         "total": 16,
         "covered": 16,
@@ -866,7 +866,7 @@
         "state": "published",
         "updated_at": "2026-10-26T02:33:03.366672+00:00",
         "basis": "full_text",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "facts",
         "reason": "",
         "total": 22,
@@ -982,7 +982,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Long-horizon multi-agent systems suffer from three tightly coupled failures: task drift, role drift, and state staleness. We test the hypothesis that these share a common representational cause: agent hidden states move away from the directions encoding the active task, assigned role, and current shared state. A pilot study over 14,832 annotated turns supports this: drifted turns collapse near-uniformly across all three anchor subspaces (pairwise r = 0.72–0.78). Existing methods address these failures separately, operating at the surface-text level or treating control directions independently.…",
+      "summary": "长期协作中，智能体可能同时偏离任务、越过角色权限并使用陈旧状态。本文提出ATLAS，以保留重叠的任务—角色—状态子空间构造半正定核，在生成时修正隐藏状态，并动态刷新状态记忆。全文阅读笔记显示，其在记忆、工具链和权限协调测试中取得收益，且提供消融、随机子空间和人工审计证据。但方法依赖内部激活访问，部分对照覆盖不匹配，也没有真实智能运维验证，适合作为可靠代理控制的方法参考。[P2][P7][P19][P30]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -1036,22 +1036,29 @@
       "focus_tags": [
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "推荐重点阅读联合核构造、隐藏访问消融及状态维护诊断，它们为智能运维代理的长期协作可靠性提供可迁移方法，但不能视为已经验证的运维解决方案。[P4][P17][P24]",
+      "deep_read": {
+        "problem": "论文研究流畅输出掩盖的长期协调失效：任务目标偏离、角色权限漂移及共享状态陈旧。先导研究发现三类失效相关，并伴随锚对齐下降。作者提出共同表征原因假说，而不是将问题简化为记忆检索不足；解读：核心是信息存在时为何仍被错误使用。[P3][P26]",
+        "method": "ATLAS从冻结模型的锚文本隐藏状态提取低秩子空间，按任务、角色和状态构造保留重叠的半正定核，通过小型Gram矩阵求谱，逐token放大核对齐分量。状态记忆经衰减、残差新颖度检测和增广更新，并限制秩与修正幅度，全程不更新模型权重。[P2][P4][P5]",
+        "innovation": "方法特色不在于分别添加三种控制方向，而在于利用跨锚重叠，让共同支持的方向获得更强修正。固定核下还证明连续与离散更新的一致性单调。解读：其贡献是联合几何控制与动态状态维护的结合，数学单调性不能直接解释为任务正确率保证。[P27][P28]",
+        "findings": "T2记忆宏平均为54.1，对比MemoryArena-Agent的49.3；写入和读取失败率下降，但利用失败率升至17.9%。完整核比正交化高3.8个百分点；移除联合锚跨度损失7.2，同秩随机移除仅损失0.8，支持该几何具有功能相关性，而非任意扰动有效。[P7][P24][P30]",
+        "limitations": "方法需隐藏状态访问，依赖锚质量且不保证安全；ActAdd、SEA仅干预三个角色，与ATLAS覆盖不匹配。核删项不归一化也混合了结构与强度效应。记录未确认原文件公式缺项；P32算法未显式交代状态初始化及任务切换重建步骤，影响复现完整性，不能自行补造。[P10][P19][P28][P32]",
+        "connection": "解读：智能运维代理同样需要保持处置目标、操作权限和最新设备状态一致，本文可为长期诊断与工具执行链提供控制思路。单写入者、验证器及逐轮日志也有助于定位故障传播。但论文没有真实运维、结构设计或工程可靠性实验，联系属于方法迁移而非应用结论。[P13][P14][P21]",
+        "next_steps": "建议：先在可控运维仿真中比较提示控制、检索记忆与谱控制，统一干预角色和计算预算；注入状态延迟、权限变化及矛盾锚，分别记录写入、读取、利用和越权失效。再做等强度核删减及参数交互实验，并补全初始化约定，以检验收益来源与部署边界。[P17][P19][P30][P32]"
+      },
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "75e1db16e962",
-        "state": "retry",
-        "updated_at": "2026-10-26T01:34:23.460441+00:00",
+        "state": "published",
+        "updated_at": "2026-10-26T03:16:39.118681+00:00",
         "basis": "full_text",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "facts",
         "reason": "",
-        "next_retry_at": "2026-10-26T01:39:23.460441+00:00",
         "total": 32,
-        "covered": 24,
+        "covered": 32,
         "pdf_available": true,
         "issues": [
           {
@@ -1063,9 +1070,87 @@
             "kind": "extraction_error",
             "page": "P7",
             "detail": "表2的ATLAS行在文字提取中跨列粘连，原页已读清。按OA、NMS、W、R、U顺序，T1为57.6、54.3、13.2、11.8、17.4；T2为60.1、56.9、11.4、10.6、17.9；T3为54.5、51.2、15.1、13.3、16.1，单位均为%。原页无缺项。纠正可避免将利用失败率误并入相邻准确率，并保留ATLAS写读改善但利用失败率上升的实际结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P25",
+            "detail": "表12的ATLAS行在提取文字中将方法名、token数及末两列粘连。原页已核清：Tok.=96.8K、Calls=12.4、Lat.=17.5秒、C-N=0.56。原表没有缺项；纠正避免将延迟17.5与成本归一化性能0.56误读为单个数值，影响成本和效率比较。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P31",
+            "detail": "表21文字提取中的ATLAS行将47.9与49.2粘连。原页已核清：统一中点层为47.9，逐骨干选层为49.2，增益+1.3个百分点；ActAdd对应40.4、41.0、+0.6，SEA对应41.3、42.0、+0.7。原表无缺项，纠正影响选层控制及异质设置优势的解读。"
           }
         ]
-      }
+      },
+      "title_zh": "不再漂移：面向长时程开放权重多智能体人工智能的谱锁定",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1796/"
+      ],
+      "analyzed_at": "2026-10-26T03:16:39.072772+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P3",
+          "P26"
+        ],
+        "method": [
+          "P2",
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P27",
+          "P28"
+        ],
+        "findings": [
+          "P7",
+          "P24",
+          "P30"
+        ],
+        "limitations": [
+          "P10",
+          "P19",
+          "P28",
+          "P32"
+        ],
+        "connection": [
+          "P13",
+          "P14",
+          "P21"
+        ],
+        "next_steps": [
+          "P17",
+          "P19",
+          "P30",
+          "P32"
+        ]
+      },
+      "analysis_material_version": "1bfba8344bb097a742606016c31a3130c278db1064f82f564560051bf2154db3",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "公式(1)在文字提取中分式结构挤连；已核对原页，正确含义为k_c=min{k: (∑_{j=1}^k s_j²)/(∑_j s_j²)≥τ}。分子是前k个平方奇异值之和，分母是全部平方奇异值之和。原页公式完整，非源文件缺项；纠正影响锚子空间保留秩的定义。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "表2的ATLAS行在文字提取中跨列粘连，原页已读清。按OA、NMS、W、R、U顺序，T1为57.6、54.3、13.2、11.8、17.4；T2为60.1、56.9、11.4、10.6、17.9；T3为54.5、51.2、15.1、13.3、16.1，单位均为%。原页无缺项。纠正可避免将利用失败率误并入相邻准确率，并保留ATLAS写读改善但利用失败率上升的实际结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P25",
+          "detail": "表12的ATLAS行在提取文字中将方法名、token数及末两列粘连。原页已核清：Tok.=96.8K、Calls=12.4、Lat.=17.5秒、C-N=0.56。原表没有缺项；纠正避免将延迟17.5与成本归一化性能0.56误读为单个数值，影响成本和效率比较。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P31",
+          "detail": "表21文字提取中的ATLAS行将47.9与49.2粘连。原页已核清：统一中点层为47.9，逐骨干选层为49.2，增益+1.3个百分点；ActAdd对应40.4、41.0、+0.6，SEA对应41.3、42.0、+0.7。原表无缺项，纠正影响选层控制及异质设置优势的解读。"
+        }
+      ]
     }
   ],
   "extended": [],
@@ -1168,8 +1253,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       },
@@ -1390,8 +1475,8 @@
         "state": "published",
         "updated_at": "2026-10-26T02:58:01.399402+00:00",
         "basis": "full_text",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "facts",
         "reason": "",
         "total": 16,
         "covered": 16,
@@ -1932,7 +2017,7 @@
         "state": "published",
         "updated_at": "2026-10-26T02:33:03.366672+00:00",
         "basis": "full_text",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "facts",
         "reason": "",
         "total": 22,
@@ -2048,7 +2133,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Long-horizon multi-agent systems suffer from three tightly coupled failures: task drift, role drift, and state staleness. We test the hypothesis that these share a common representational cause: agent hidden states move away from the directions encoding the active task, assigned role, and current shared state. A pilot study over 14,832 annotated turns supports this: drifted turns collapse near-uniformly across all three anchor subspaces (pairwise r = 0.72–0.78). Existing methods address these failures separately, operating at the surface-text level or treating control directions independently.…",
+      "summary": "长期协作中，智能体可能同时偏离任务、越过角色权限并使用陈旧状态。本文提出ATLAS，以保留重叠的任务—角色—状态子空间构造半正定核，在生成时修正隐藏状态，并动态刷新状态记忆。全文阅读笔记显示，其在记忆、工具链和权限协调测试中取得收益，且提供消融、随机子空间和人工审计证据。但方法依赖内部激活访问，部分对照覆盖不匹配，也没有真实智能运维验证，适合作为可靠代理控制的方法参考。[P2][P7][P19][P30]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -2102,22 +2187,29 @@
       "focus_tags": [
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "推荐重点阅读联合核构造、隐藏访问消融及状态维护诊断，它们为智能运维代理的长期协作可靠性提供可迁移方法，但不能视为已经验证的运维解决方案。[P4][P17][P24]",
+      "deep_read": {
+        "problem": "论文研究流畅输出掩盖的长期协调失效：任务目标偏离、角色权限漂移及共享状态陈旧。先导研究发现三类失效相关，并伴随锚对齐下降。作者提出共同表征原因假说，而不是将问题简化为记忆检索不足；解读：核心是信息存在时为何仍被错误使用。[P3][P26]",
+        "method": "ATLAS从冻结模型的锚文本隐藏状态提取低秩子空间，按任务、角色和状态构造保留重叠的半正定核，通过小型Gram矩阵求谱，逐token放大核对齐分量。状态记忆经衰减、残差新颖度检测和增广更新，并限制秩与修正幅度，全程不更新模型权重。[P2][P4][P5]",
+        "innovation": "方法特色不在于分别添加三种控制方向，而在于利用跨锚重叠，让共同支持的方向获得更强修正。固定核下还证明连续与离散更新的一致性单调。解读：其贡献是联合几何控制与动态状态维护的结合，数学单调性不能直接解释为任务正确率保证。[P27][P28]",
+        "findings": "T2记忆宏平均为54.1，对比MemoryArena-Agent的49.3；写入和读取失败率下降，但利用失败率升至17.9%。完整核比正交化高3.8个百分点；移除联合锚跨度损失7.2，同秩随机移除仅损失0.8，支持该几何具有功能相关性，而非任意扰动有效。[P7][P24][P30]",
+        "limitations": "方法需隐藏状态访问，依赖锚质量且不保证安全；ActAdd、SEA仅干预三个角色，与ATLAS覆盖不匹配。核删项不归一化也混合了结构与强度效应。记录未确认原文件公式缺项；P32算法未显式交代状态初始化及任务切换重建步骤，影响复现完整性，不能自行补造。[P10][P19][P28][P32]",
+        "connection": "解读：智能运维代理同样需要保持处置目标、操作权限和最新设备状态一致，本文可为长期诊断与工具执行链提供控制思路。单写入者、验证器及逐轮日志也有助于定位故障传播。但论文没有真实运维、结构设计或工程可靠性实验，联系属于方法迁移而非应用结论。[P13][P14][P21]",
+        "next_steps": "建议：先在可控运维仿真中比较提示控制、检索记忆与谱控制，统一干预角色和计算预算；注入状态延迟、权限变化及矛盾锚，分别记录写入、读取、利用和越权失效。再做等强度核删减及参数交互实验，并补全初始化约定，以检验收益来源与部署边界。[P17][P19][P30][P32]"
+      },
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "75e1db16e962",
-        "state": "retry",
-        "updated_at": "2026-10-26T01:34:23.460441+00:00",
+        "state": "published",
+        "updated_at": "2026-10-26T03:16:39.118681+00:00",
         "basis": "full_text",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "facts",
         "reason": "",
-        "next_retry_at": "2026-10-26T01:39:23.460441+00:00",
         "total": 32,
-        "covered": 24,
+        "covered": 32,
         "pdf_available": true,
         "issues": [
           {
@@ -2129,9 +2221,87 @@
             "kind": "extraction_error",
             "page": "P7",
             "detail": "表2的ATLAS行在文字提取中跨列粘连，原页已读清。按OA、NMS、W、R、U顺序，T1为57.6、54.3、13.2、11.8、17.4；T2为60.1、56.9、11.4、10.6、17.9；T3为54.5、51.2、15.1、13.3、16.1，单位均为%。原页无缺项。纠正可避免将利用失败率误并入相邻准确率，并保留ATLAS写读改善但利用失败率上升的实际结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P25",
+            "detail": "表12的ATLAS行在提取文字中将方法名、token数及末两列粘连。原页已核清：Tok.=96.8K、Calls=12.4、Lat.=17.5秒、C-N=0.56。原表没有缺项；纠正避免将延迟17.5与成本归一化性能0.56误读为单个数值，影响成本和效率比较。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P31",
+            "detail": "表21文字提取中的ATLAS行将47.9与49.2粘连。原页已核清：统一中点层为47.9，逐骨干选层为49.2，增益+1.3个百分点；ActAdd对应40.4、41.0、+0.6，SEA对应41.3、42.0、+0.7。原表无缺项，纠正影响选层控制及异质设置优势的解读。"
           }
         ]
-      }
+      },
+      "title_zh": "不再漂移：面向长时程开放权重多智能体人工智能的谱锁定",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1796/"
+      ],
+      "analyzed_at": "2026-10-26T03:16:39.072772+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P3",
+          "P26"
+        ],
+        "method": [
+          "P2",
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P27",
+          "P28"
+        ],
+        "findings": [
+          "P7",
+          "P24",
+          "P30"
+        ],
+        "limitations": [
+          "P10",
+          "P19",
+          "P28",
+          "P32"
+        ],
+        "connection": [
+          "P13",
+          "P14",
+          "P21"
+        ],
+        "next_steps": [
+          "P17",
+          "P19",
+          "P30",
+          "P32"
+        ]
+      },
+      "analysis_material_version": "1bfba8344bb097a742606016c31a3130c278db1064f82f564560051bf2154db3",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "公式(1)在文字提取中分式结构挤连；已核对原页，正确含义为k_c=min{k: (∑_{j=1}^k s_j²)/(∑_j s_j²)≥τ}。分子是前k个平方奇异值之和，分母是全部平方奇异值之和。原页公式完整，非源文件缺项；纠正影响锚子空间保留秩的定义。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "表2的ATLAS行在文字提取中跨列粘连，原页已读清。按OA、NMS、W、R、U顺序，T1为57.6、54.3、13.2、11.8、17.4；T2为60.1、56.9、11.4、10.6、17.9；T3为54.5、51.2、15.1、13.3、16.1，单位均为%。原页无缺项。纠正可避免将利用失败率误并入相邻准确率，并保留ATLAS写读改善但利用失败率上升的实际结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P25",
+          "detail": "表12的ATLAS行在提取文字中将方法名、token数及末两列粘连。原页已核清：Tok.=96.8K、Calls=12.4、Lat.=17.5秒、C-N=0.56。原表没有缺项；纠正避免将延迟17.5与成本归一化性能0.56误读为单个数值，影响成本和效率比较。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P31",
+          "detail": "表21文字提取中的ATLAS行将47.9与49.2粘连。原页已核清：统一中点层为47.9，逐骨干选层为49.2，增益+1.3个百分点；ActAdd对应40.4、41.0、+0.6，SEA对应41.3、42.0、+0.7。原表无缺项，纠正影响选层控制及异质设置优势的解读。"
+        }
+      ]
     },
     {
       "source": "OpenAlex",
@@ -7912,7 +8082,7 @@
       "reading_status": {
         "paper_id": "709bdb82c0b5",
         "state": "failed",
-        "updated_at": "2026-10-23T14:38:36.873491+00:00",
+        "updated_at": "2026-10-26T03:46:54.009132+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -8438,11 +8608,11 @@
       "reading_status": {
         "paper_id": "45dbfe9703f1",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-23T14:37:17.187987+00:00",
+        "updated_at": "2026-10-26T03:42:22.360453+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -8671,7 +8841,7 @@
       "reading_status": {
         "paper_id": "a1515ce3849b",
         "state": "failed",
-        "updated_at": "2026-10-23T14:38:54.891010+00:00",
+        "updated_at": "2026-10-26T03:47:17.548219+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -11028,11 +11198,11 @@
       "reading_status": {
         "paper_id": "e287fb472485",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-23T14:32:49.487527+00:00",
+        "updated_at": "2026-10-26T03:35:10.972469+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -17080,7 +17250,7 @@
       "reading_status": {
         "paper_id": "9170f18af989",
         "state": "failed",
-        "updated_at": "2026-10-23T14:36:01.285400+00:00",
+        "updated_at": "2026-10-26T03:37:10.971817+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -22903,11 +23073,11 @@
       "reading_status": {
         "paper_id": "844574fe5c84",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-23T14:31:10.290365+00:00",
+        "updated_at": "2026-10-26T03:33:19.513337+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -24538,11 +24708,11 @@
       "reading_status": {
         "paper_id": "c6eb0c75d85e",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-23T14:39:36.793598+00:00",
+        "updated_at": "2026-10-26T03:50:29.263409+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -26623,11 +26793,11 @@
       "reading_status": {
         "paper_id": "a921eaaa3fb4",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-23T14:30:44.360421+00:00",
+        "updated_at": "2026-10-26T03:26:59.744009+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -35190,11 +35360,11 @@
       "reading_status": {
         "paper_id": "1172e7a5c357",
         "state": "missing_evidence",
-        "updated_at": "2026-10-23T14:36:36.856517+00:00",
+        "updated_at": "2026-10-26T03:41:45.069067+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -35520,11 +35690,11 @@
       "reading_status": {
         "paper_id": "c935fc51c706",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-23T14:36:50.772927+00:00",
+        "updated_at": "2026-10-26T03:41:59.116243+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": true,
@@ -36638,11 +36808,11 @@
       "reading_status": {
         "paper_id": "448942aa1a69",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-24T02:35:37.294012+00:00",
+        "updated_at": "2026-10-26T03:57:12.530155+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -37151,11 +37321,11 @@
       "reading_status": {
         "paper_id": "533cdd3a344d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-23T14:40:01.777819+00:00",
+        "updated_at": "2026-10-26T03:50:51.543481+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": true,
@@ -37508,11 +37678,11 @@
       "reading_status": {
         "paper_id": "9f42a1c20a27",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-23T14:35:05.240596+00:00",
+        "updated_at": "2026-10-26T03:36:55.565057+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -38192,11 +38362,11 @@
       "reading_status": {
         "paper_id": "abd65bfce7b5",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-24T02:33:09.964613+00:00",
+        "updated_at": "2026-10-26T03:56:36.286252+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -38761,11 +38931,11 @@
       "reading_status": {
         "paper_id": "0b71b4d17bb7",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-23T14:34:40.615662+00:00",
+        "updated_at": "2026-10-26T03:36:36.787528+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -38985,11 +39155,11 @@
       "reading_status": {
         "paper_id": "b8d36ac1dcaf",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-24T02:30:54.083840+00:00",
+        "updated_at": "2026-10-26T03:53:17.923023+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -46877,11 +47047,11 @@
       "reading_status": {
         "paper_id": "dfc9b7fc8847",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-23T14:32:11.190755+00:00",
+        "updated_at": "2026-10-26T03:34:35.543108+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -48304,11 +48474,11 @@
       "reading_status": {
         "paper_id": "a1130ac09906",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-23T14:33:34.911954+00:00",
+        "updated_at": "2026-10-26T03:35:44.681281+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -48954,11 +49124,11 @@
       "reading_status": {
         "paper_id": "925093e117c0",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-24T02:30:39.790581+00:00",
+        "updated_at": "2026-10-26T03:52:55.629757+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -49187,11 +49357,11 @@
       "reading_status": {
         "paper_id": "932eec332894",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-23T14:38:14.485431+00:00",
+        "updated_at": "2026-10-26T03:45:59.028655+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -49980,11 +50150,11 @@
       "reading_status": {
         "paper_id": "04a29ffa0d97",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-23T14:39:14.295948+00:00",
+        "updated_at": "2026-10-26T03:50:10.079432+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -53069,11 +53239,11 @@
       "reading_status": {
         "paper_id": "846009a34c58",
         "state": "missing_evidence",
-        "updated_at": "2026-10-23T14:37:45.807256+00:00",
+        "updated_at": "2026-10-26T03:42:44.851910+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -53257,11 +53427,11 @@
       "reading_status": {
         "paper_id": "f61abfb865f5",
         "state": "missing_evidence",
-        "updated_at": "2026-10-23T14:38:02.452425+00:00",
+        "updated_at": "2026-10-26T03:45:45.115422+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -53447,11 +53617,11 @@
       "reading_status": {
         "paper_id": "eb62449238c8",
         "state": "missing_evidence",
-        "updated_at": "2026-10-23T14:32:35.479081+00:00",
+        "updated_at": "2026-10-26T03:34:52.902965+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -53634,11 +53804,11 @@
       "reading_status": {
         "paper_id": "f93c5ebdceed",
         "state": "missing_evidence",
-        "updated_at": "2026-10-23T14:33:59.673278+00:00",
+        "updated_at": "2026-10-26T03:36:01.438821+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -54727,11 +54897,11 @@
       "reading_status": {
         "paper_id": "f0e890e1abac",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-23T14:31:49.007621+00:00",
+        "updated_at": "2026-10-26T03:34:09.021057+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -54882,11 +55052,11 @@
       "reading_status": {
         "paper_id": "565888b08f8a",
         "state": "missing_evidence",
-        "updated_at": "2026-10-24T02:31:22.685868+00:00",
+        "updated_at": "2026-10-26T03:53:57.916984+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -55388,11 +55558,11 @@
       "reading_status": {
         "paper_id": "b972c8c0d15c",
         "state": "missing_evidence",
-        "updated_at": "2026-10-23T14:34:25.464287+00:00",
+        "updated_at": "2026-10-26T03:36:23.149811+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -55854,11 +56024,11 @@
       "reading_status": {
         "paper_id": "de48174471ad",
         "state": "missing_evidence",
-        "updated_at": "2026-10-24T02:31:52.281584+00:00",
+        "updated_at": "2026-10-26T03:54:35.863151+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -56686,11 +56856,11 @@
       "reading_status": {
         "paper_id": "e1a150bc890d",
         "state": "missing_evidence",
-        "updated_at": "2026-10-24T02:32:07.191564+00:00",
+        "updated_at": "2026-10-26T03:54:54.464885+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -58787,7 +58957,7 @@
       "reading_status": {
         "paper_id": "0888222377a8",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-23T14:31:34.834839+00:00",
+        "updated_at": "2026-10-26T03:33:53.139913+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
@@ -64068,11 +64238,11 @@
       "reading_status": {
         "paper_id": "8cbe65d69ab9",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-24T02:29:38.715271+00:00",
+        "updated_at": "2026-10-26T03:51:15.525887+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -65838,7 +66008,7 @@
       "reading_status": {
         "paper_id": "6fd3604394f8",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-24T02:30:25.665628+00:00",
+        "updated_at": "2026-10-26T03:52:40.892855+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
@@ -66306,11 +66476,11 @@
       "reading_status": {
         "paper_id": "2cbdfd75804d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-24T02:29:54.919359+00:00",
+        "updated_at": "2026-10-26T03:52:01.448906+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -66672,11 +66842,11 @@
       "reading_status": {
         "paper_id": "a3bed94312e4",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-24T02:30:10.955528+00:00",
+        "updated_at": "2026-10-26T03:52:19.202752+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -72611,11 +72781,11 @@
       "reading_status": {
         "paper_id": "c05baf48e37d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-24T02:31:08.502442+00:00",
+        "updated_at": "2026-10-26T03:53:35.335372+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -73365,11 +73535,11 @@
       "reading_status": {
         "paper_id": "35b3b0d29b69",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-24T02:31:37.757463+00:00",
+        "updated_at": "2026-10-26T03:54:12.753451+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -74367,11 +74537,11 @@
       "reading_status": {
         "paper_id": "e4cf9f888b6d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-24T02:33:24.096795+00:00",
+        "updated_at": "2026-10-26T03:56:54.158106+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -74557,11 +74727,11 @@
       "reading_status": {
         "paper_id": "f5d9c5d173ef",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-23T14:33:10.325807+00:00",
+        "updated_at": "2026-10-26T03:35:29.369816+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -75029,11 +75199,11 @@
       "reading_status": {
         "paper_id": "d2ad3a94e5bd",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-24T02:36:08.063997+00:00",
+        "updated_at": "2026-10-26T04:00:40.154548+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -76469,7 +76639,7 @@
       "reading_status": {
         "paper_id": "c0cf7585af24",
         "state": "failed",
-        "updated_at": "2026-10-24T02:32:54.397570+00:00",
+        "updated_at": "2026-10-26T03:56:22.517957+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -85576,11 +85746,11 @@
       "reading_status": {
         "paper_id": "7ebe32b91775",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-24T02:35:51.547015+00:00",
+        "updated_at": "2026-10-26T03:57:33.308164+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -85786,13 +85956,14 @@
       "deep_read": {},
       "reading_status": {
         "paper_id": "ca3b95f43cb0",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-10-24T02:32:38.373702+00:00",
-        "basis": "abstract",
+        "state": "retry",
+        "updated_at": "2026-10-26T03:55:49.948762+00:00",
+        "basis": "full_text",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "network",
-        "total": 0,
+        "reason": "",
+        "next_retry_at": "2026-10-26T04:00:49.948762+00:00",
+        "total": 120,
         "covered": 0,
         "pdf_available": false,
         "issues": []
@@ -87440,11 +87611,11 @@
       "reading_status": {
         "paper_id": "86cf61a99b1a",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-24T02:32:23.528534+00:00",
+        "updated_at": "2026-10-26T03:55:08.906292+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -87841,11 +88012,11 @@
       "reading_status": {
         "paper_id": "65e1dc5c1243",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-24T02:36:22.888201+00:00",
+        "updated_at": "2026-10-26T04:00:57.974157+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -96517,13 +96688,13 @@
     "unavailable": 36
   },
   "analysis_status": {
-    "ready_core": 5,
+    "ready_core": 6,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 1
+    "pending": 0
   },
   "edition": {
     "id": "40214157879",

@@ -102,8 +102,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       },
@@ -324,8 +324,8 @@
         "state": "published",
         "updated_at": "2026-10-26T02:58:01.399402+00:00",
         "basis": "full_text",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "facts",
         "reason": "",
         "total": 16,
         "covered": 16,
@@ -866,7 +866,7 @@
         "state": "published",
         "updated_at": "2026-10-26T02:33:03.366672+00:00",
         "basis": "full_text",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "facts",
         "reason": "",
         "total": 22,
@@ -982,7 +982,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Long-horizon multi-agent systems suffer from three tightly coupled failures: task drift, role drift, and state staleness. We test the hypothesis that these share a common representational cause: agent hidden states move away from the directions encoding the active task, assigned role, and current shared state. A pilot study over 14,832 annotated turns supports this: drifted turns collapse near-uniformly across all three anchor subspaces (pairwise r = 0.72–0.78). Existing methods address these failures separately, operating at the surface-text level or treating control directions independently.…",
+      "summary": "长期协作中，智能体可能同时偏离任务、越过角色权限并使用陈旧状态。本文提出ATLAS，以保留重叠的任务—角色—状态子空间构造半正定核，在生成时修正隐藏状态，并动态刷新状态记忆。全文阅读笔记显示，其在记忆、工具链和权限协调测试中取得收益，且提供消融、随机子空间和人工审计证据。但方法依赖内部激活访问，部分对照覆盖不匹配，也没有真实智能运维验证，适合作为可靠代理控制的方法参考。[P2][P7][P19][P30]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -1036,22 +1036,29 @@
       "focus_tags": [
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "推荐重点阅读联合核构造、隐藏访问消融及状态维护诊断，它们为智能运维代理的长期协作可靠性提供可迁移方法，但不能视为已经验证的运维解决方案。[P4][P17][P24]",
+      "deep_read": {
+        "problem": "论文研究流畅输出掩盖的长期协调失效：任务目标偏离、角色权限漂移及共享状态陈旧。先导研究发现三类失效相关，并伴随锚对齐下降。作者提出共同表征原因假说，而不是将问题简化为记忆检索不足；解读：核心是信息存在时为何仍被错误使用。[P3][P26]",
+        "method": "ATLAS从冻结模型的锚文本隐藏状态提取低秩子空间，按任务、角色和状态构造保留重叠的半正定核，通过小型Gram矩阵求谱，逐token放大核对齐分量。状态记忆经衰减、残差新颖度检测和增广更新，并限制秩与修正幅度，全程不更新模型权重。[P2][P4][P5]",
+        "innovation": "方法特色不在于分别添加三种控制方向，而在于利用跨锚重叠，让共同支持的方向获得更强修正。固定核下还证明连续与离散更新的一致性单调。解读：其贡献是联合几何控制与动态状态维护的结合，数学单调性不能直接解释为任务正确率保证。[P27][P28]",
+        "findings": "T2记忆宏平均为54.1，对比MemoryArena-Agent的49.3；写入和读取失败率下降，但利用失败率升至17.9%。完整核比正交化高3.8个百分点；移除联合锚跨度损失7.2，同秩随机移除仅损失0.8，支持该几何具有功能相关性，而非任意扰动有效。[P7][P24][P30]",
+        "limitations": "方法需隐藏状态访问，依赖锚质量且不保证安全；ActAdd、SEA仅干预三个角色，与ATLAS覆盖不匹配。核删项不归一化也混合了结构与强度效应。记录未确认原文件公式缺项；P32算法未显式交代状态初始化及任务切换重建步骤，影响复现完整性，不能自行补造。[P10][P19][P28][P32]",
+        "connection": "解读：智能运维代理同样需要保持处置目标、操作权限和最新设备状态一致，本文可为长期诊断与工具执行链提供控制思路。单写入者、验证器及逐轮日志也有助于定位故障传播。但论文没有真实运维、结构设计或工程可靠性实验，联系属于方法迁移而非应用结论。[P13][P14][P21]",
+        "next_steps": "建议：先在可控运维仿真中比较提示控制、检索记忆与谱控制，统一干预角色和计算预算；注入状态延迟、权限变化及矛盾锚，分别记录写入、读取、利用和越权失效。再做等强度核删减及参数交互实验，并补全初始化约定，以检验收益来源与部署边界。[P17][P19][P30][P32]"
+      },
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "75e1db16e962",
-        "state": "retry",
-        "updated_at": "2026-10-26T01:34:23.460441+00:00",
+        "state": "published",
+        "updated_at": "2026-10-26T03:16:39.118681+00:00",
         "basis": "full_text",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "facts",
         "reason": "",
-        "next_retry_at": "2026-10-26T01:39:23.460441+00:00",
         "total": 32,
-        "covered": 24,
+        "covered": 32,
         "pdf_available": true,
         "issues": [
           {
@@ -1063,9 +1070,87 @@
             "kind": "extraction_error",
             "page": "P7",
             "detail": "表2的ATLAS行在文字提取中跨列粘连，原页已读清。按OA、NMS、W、R、U顺序，T1为57.6、54.3、13.2、11.8、17.4；T2为60.1、56.9、11.4、10.6、17.9；T3为54.5、51.2、15.1、13.3、16.1，单位均为%。原页无缺项。纠正可避免将利用失败率误并入相邻准确率，并保留ATLAS写读改善但利用失败率上升的实际结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P25",
+            "detail": "表12的ATLAS行在提取文字中将方法名、token数及末两列粘连。原页已核清：Tok.=96.8K、Calls=12.4、Lat.=17.5秒、C-N=0.56。原表没有缺项；纠正避免将延迟17.5与成本归一化性能0.56误读为单个数值，影响成本和效率比较。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P31",
+            "detail": "表21文字提取中的ATLAS行将47.9与49.2粘连。原页已核清：统一中点层为47.9，逐骨干选层为49.2，增益+1.3个百分点；ActAdd对应40.4、41.0、+0.6，SEA对应41.3、42.0、+0.7。原表无缺项，纠正影响选层控制及异质设置优势的解读。"
           }
         ]
-      }
+      },
+      "title_zh": "不再漂移：面向长时程开放权重多智能体人工智能的谱锁定",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1796/"
+      ],
+      "analyzed_at": "2026-10-26T03:16:39.072772+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P3",
+          "P26"
+        ],
+        "method": [
+          "P2",
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P27",
+          "P28"
+        ],
+        "findings": [
+          "P7",
+          "P24",
+          "P30"
+        ],
+        "limitations": [
+          "P10",
+          "P19",
+          "P28",
+          "P32"
+        ],
+        "connection": [
+          "P13",
+          "P14",
+          "P21"
+        ],
+        "next_steps": [
+          "P17",
+          "P19",
+          "P30",
+          "P32"
+        ]
+      },
+      "analysis_material_version": "1bfba8344bb097a742606016c31a3130c278db1064f82f564560051bf2154db3",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "公式(1)在文字提取中分式结构挤连；已核对原页，正确含义为k_c=min{k: (∑_{j=1}^k s_j²)/(∑_j s_j²)≥τ}。分子是前k个平方奇异值之和，分母是全部平方奇异值之和。原页公式完整，非源文件缺项；纠正影响锚子空间保留秩的定义。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "表2的ATLAS行在文字提取中跨列粘连，原页已读清。按OA、NMS、W、R、U顺序，T1为57.6、54.3、13.2、11.8、17.4；T2为60.1、56.9、11.4、10.6、17.9；T3为54.5、51.2、15.1、13.3、16.1，单位均为%。原页无缺项。纠正可避免将利用失败率误并入相邻准确率，并保留ATLAS写读改善但利用失败率上升的实际结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P25",
+          "detail": "表12的ATLAS行在提取文字中将方法名、token数及末两列粘连。原页已核清：Tok.=96.8K、Calls=12.4、Lat.=17.5秒、C-N=0.56。原表没有缺项；纠正避免将延迟17.5与成本归一化性能0.56误读为单个数值，影响成本和效率比较。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P31",
+          "detail": "表21文字提取中的ATLAS行将47.9与49.2粘连。原页已核清：统一中点层为47.9，逐骨干选层为49.2，增益+1.3个百分点；ActAdd对应40.4、41.0、+0.6，SEA对应41.3、42.0、+0.7。原表无缺项，纠正影响选层控制及异质设置优势的解读。"
+        }
+      ]
     }
   ],
   "extended": [],
@@ -1168,8 +1253,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       },
@@ -1390,8 +1475,8 @@
         "state": "published",
         "updated_at": "2026-10-26T02:58:01.399402+00:00",
         "basis": "full_text",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "facts",
         "reason": "",
         "total": 16,
         "covered": 16,
@@ -1932,7 +2017,7 @@
         "state": "published",
         "updated_at": "2026-10-26T02:33:03.366672+00:00",
         "basis": "full_text",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "facts",
         "reason": "",
         "total": 22,
@@ -2048,7 +2133,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Long-horizon multi-agent systems suffer from three tightly coupled failures: task drift, role drift, and state staleness. We test the hypothesis that these share a common representational cause: agent hidden states move away from the directions encoding the active task, assigned role, and current shared state. A pilot study over 14,832 annotated turns supports this: drifted turns collapse near-uniformly across all three anchor subspaces (pairwise r = 0.72–0.78). Existing methods address these failures separately, operating at the surface-text level or treating control directions independently.…",
+      "summary": "长期协作中，智能体可能同时偏离任务、越过角色权限并使用陈旧状态。本文提出ATLAS，以保留重叠的任务—角色—状态子空间构造半正定核，在生成时修正隐藏状态，并动态刷新状态记忆。全文阅读笔记显示，其在记忆、工具链和权限协调测试中取得收益，且提供消融、随机子空间和人工审计证据。但方法依赖内部激活访问，部分对照覆盖不匹配，也没有真实智能运维验证，适合作为可靠代理控制的方法参考。[P2][P7][P19][P30]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -2102,22 +2187,29 @@
       "focus_tags": [
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "推荐重点阅读联合核构造、隐藏访问消融及状态维护诊断，它们为智能运维代理的长期协作可靠性提供可迁移方法，但不能视为已经验证的运维解决方案。[P4][P17][P24]",
+      "deep_read": {
+        "problem": "论文研究流畅输出掩盖的长期协调失效：任务目标偏离、角色权限漂移及共享状态陈旧。先导研究发现三类失效相关，并伴随锚对齐下降。作者提出共同表征原因假说，而不是将问题简化为记忆检索不足；解读：核心是信息存在时为何仍被错误使用。[P3][P26]",
+        "method": "ATLAS从冻结模型的锚文本隐藏状态提取低秩子空间，按任务、角色和状态构造保留重叠的半正定核，通过小型Gram矩阵求谱，逐token放大核对齐分量。状态记忆经衰减、残差新颖度检测和增广更新，并限制秩与修正幅度，全程不更新模型权重。[P2][P4][P5]",
+        "innovation": "方法特色不在于分别添加三种控制方向，而在于利用跨锚重叠，让共同支持的方向获得更强修正。固定核下还证明连续与离散更新的一致性单调。解读：其贡献是联合几何控制与动态状态维护的结合，数学单调性不能直接解释为任务正确率保证。[P27][P28]",
+        "findings": "T2记忆宏平均为54.1，对比MemoryArena-Agent的49.3；写入和读取失败率下降，但利用失败率升至17.9%。完整核比正交化高3.8个百分点；移除联合锚跨度损失7.2，同秩随机移除仅损失0.8，支持该几何具有功能相关性，而非任意扰动有效。[P7][P24][P30]",
+        "limitations": "方法需隐藏状态访问，依赖锚质量且不保证安全；ActAdd、SEA仅干预三个角色，与ATLAS覆盖不匹配。核删项不归一化也混合了结构与强度效应。记录未确认原文件公式缺项；P32算法未显式交代状态初始化及任务切换重建步骤，影响复现完整性，不能自行补造。[P10][P19][P28][P32]",
+        "connection": "解读：智能运维代理同样需要保持处置目标、操作权限和最新设备状态一致，本文可为长期诊断与工具执行链提供控制思路。单写入者、验证器及逐轮日志也有助于定位故障传播。但论文没有真实运维、结构设计或工程可靠性实验，联系属于方法迁移而非应用结论。[P13][P14][P21]",
+        "next_steps": "建议：先在可控运维仿真中比较提示控制、检索记忆与谱控制，统一干预角色和计算预算；注入状态延迟、权限变化及矛盾锚，分别记录写入、读取、利用和越权失效。再做等强度核删减及参数交互实验，并补全初始化约定，以检验收益来源与部署边界。[P17][P19][P30][P32]"
+      },
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "75e1db16e962",
-        "state": "retry",
-        "updated_at": "2026-10-26T01:34:23.460441+00:00",
+        "state": "published",
+        "updated_at": "2026-10-26T03:16:39.118681+00:00",
         "basis": "full_text",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "facts",
         "reason": "",
-        "next_retry_at": "2026-10-26T01:39:23.460441+00:00",
         "total": 32,
-        "covered": 24,
+        "covered": 32,
         "pdf_available": true,
         "issues": [
           {
@@ -2129,9 +2221,87 @@
             "kind": "extraction_error",
             "page": "P7",
             "detail": "表2的ATLAS行在文字提取中跨列粘连，原页已读清。按OA、NMS、W、R、U顺序，T1为57.6、54.3、13.2、11.8、17.4；T2为60.1、56.9、11.4、10.6、17.9；T3为54.5、51.2、15.1、13.3、16.1，单位均为%。原页无缺项。纠正可避免将利用失败率误并入相邻准确率，并保留ATLAS写读改善但利用失败率上升的实际结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P25",
+            "detail": "表12的ATLAS行在提取文字中将方法名、token数及末两列粘连。原页已核清：Tok.=96.8K、Calls=12.4、Lat.=17.5秒、C-N=0.56。原表没有缺项；纠正避免将延迟17.5与成本归一化性能0.56误读为单个数值，影响成本和效率比较。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P31",
+            "detail": "表21文字提取中的ATLAS行将47.9与49.2粘连。原页已核清：统一中点层为47.9，逐骨干选层为49.2，增益+1.3个百分点；ActAdd对应40.4、41.0、+0.6，SEA对应41.3、42.0、+0.7。原表无缺项，纠正影响选层控制及异质设置优势的解读。"
           }
         ]
-      }
+      },
+      "title_zh": "不再漂移：面向长时程开放权重多智能体人工智能的谱锁定",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1796/"
+      ],
+      "analyzed_at": "2026-10-26T03:16:39.072772+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P3",
+          "P26"
+        ],
+        "method": [
+          "P2",
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P27",
+          "P28"
+        ],
+        "findings": [
+          "P7",
+          "P24",
+          "P30"
+        ],
+        "limitations": [
+          "P10",
+          "P19",
+          "P28",
+          "P32"
+        ],
+        "connection": [
+          "P13",
+          "P14",
+          "P21"
+        ],
+        "next_steps": [
+          "P17",
+          "P19",
+          "P30",
+          "P32"
+        ]
+      },
+      "analysis_material_version": "1bfba8344bb097a742606016c31a3130c278db1064f82f564560051bf2154db3",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "公式(1)在文字提取中分式结构挤连；已核对原页，正确含义为k_c=min{k: (∑_{j=1}^k s_j²)/(∑_j s_j²)≥τ}。分子是前k个平方奇异值之和，分母是全部平方奇异值之和。原页公式完整，非源文件缺项；纠正影响锚子空间保留秩的定义。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "表2的ATLAS行在文字提取中跨列粘连，原页已读清。按OA、NMS、W、R、U顺序，T1为57.6、54.3、13.2、11.8、17.4；T2为60.1、56.9、11.4、10.6、17.9；T3为54.5、51.2、15.1、13.3、16.1，单位均为%。原页无缺项。纠正可避免将利用失败率误并入相邻准确率，并保留ATLAS写读改善但利用失败率上升的实际结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P25",
+          "detail": "表12的ATLAS行在提取文字中将方法名、token数及末两列粘连。原页已核清：Tok.=96.8K、Calls=12.4、Lat.=17.5秒、C-N=0.56。原表没有缺项；纠正避免将延迟17.5与成本归一化性能0.56误读为单个数值，影响成本和效率比较。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P31",
+          "detail": "表21文字提取中的ATLAS行将47.9与49.2粘连。原页已核清：统一中点层为47.9，逐骨干选层为49.2，增益+1.3个百分点；ActAdd对应40.4、41.0、+0.6，SEA对应41.3、42.0、+0.7。原表无缺项，纠正影响选层控制及异质设置优势的解读。"
+        }
+      ]
     }
   ],
   "source_status": {
@@ -3058,13 +3228,13 @@
     "unavailable": 36
   },
   "analysis_status": {
-    "ready_core": 5,
+    "ready_core": 6,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 1
+    "pending": 0
   },
   "edition": {
     "id": "40214157879",
