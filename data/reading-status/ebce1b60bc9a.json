@@ -1,0 +1,44 @@
+{
+  "paper_id": "ebce1b60bc9a",
+  "state": "published",
+  "updated_at": "2026-10-26T05:40:36.276820+00:00",
+  "basis": "full_text",
+  "article_state": "pending",
+  "article_stage": "",
+  "reason": "",
+  "total": 21,
+  "covered": 21,
+  "pdf_available": true,
+  "issues": [
+    {
+      "kind": "source_defect",
+      "page": "P2",
+      "detail": "图2(d)绿色回答框原图写有“earn 300$ a week and spend 100$ on rent”及“save 250$”，金额相互不符；上方用户输入则为时薪修正至20美元、每天8小时、5天、房租300美元并存下余款一半，对应(20×8×5−300)/2=250美元。原图回答框缺少与输入一致的收入、房租数值，影响该示例的算术自洽性，不足以据此否定未提供的实验结果。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P4",
+      "detail": "3.2.1文字提取中的“raw texts Draw”经原页核对应为“raw texts D_raw”，其中raw为下标，表示种子原始文本数据；不是英文Draw。已纠正，不影响语义对齐数据合成流程的理解。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P7",
+      "detail": "表1文字提取发生跨列粘连，原图可清楚分列。按VERA、Spoken-MQA、BigBench、Our Bench顺序，每组为准确率(%)／延迟(ms)／TTFS(ms)：Ours应为6.88／230／415；78.52／207／332；71.9／209／338；62.57／236／336。PredGen(No-think)首组为4.34／247／298。LTS-VAD(No-think)后3组为75.14／213／266；55.2／206／258；56.41／244／294。Qwen2.5-Omni中间两组为59.89／139.44／634.68；43.1／195.13／332.92。无原页缺项，已纠正，避免误判实时质量—延迟比较。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P15",
+      "detail": "表5提取文本存在跨列粘连，原图列界及数值清楚。按Serial／PredGen／LTS-VA顺序：感知延迟2.1±0.4／4.3±0.3／4.5±0.2；交互自然度4.4±0.3／4.2±0.4／4.3±0.3；语义一致性4.5±0.2／3.8±0.3／4.4±0.3。均为5分量表的均值±标准差，不是延迟秒数或置信区间。无原页缺项，已纠正，以免误读主观评估结论。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P19",
+      "detail": "表11提取文本中“GSM8KMathematics1319”“MMLU Subtotal983”等发生跨列粘连。原图明确：GSM8K／Mathematics／1319／67.6／25.2／Med；MMLU小计983／121.7／57.1／Hard；总计2302／90.7／38.9／-。数值列依次为样本量、平均tokens、平均音频秒数。无原页缺项，已按列纠正，避免误读数据集规模及音频时长。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P21",
+      "detail": "图8上半部分糖果示例的输入和改写输出均仅提供总数232、红色54，却询问粉色数量；原图未提供其余糖果均为粉色或其他颜色分布的条件。因此无法唯一确定粉色数量，影响该示例作为完整数学问题的可解性，但不影响提示模板及其余页面内容的识读；不补造缺失条件。"
+    }
+  ]
+}
