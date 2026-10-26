@@ -85,7 +85,22 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "c4b5993c8dc6",
+        "state": "retry",
+        "updated_at": "2026-10-26T01:14:52.016902+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "error_code": "codex_connection",
+        "next_retry_at": "2026-10-26T01:29:52.016902+00:00",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -166,7 +181,22 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "5bf0c76a6b59",
+        "state": "retry",
+        "updated_at": "2026-10-26T01:15:55.772672+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "error_code": "codex_connection",
+        "next_retry_at": "2026-10-26T01:30:55.772672+00:00",
+        "total": 16,
+        "covered": 0,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -191,7 +221,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Large language models can generate interactive web interfaces, but reliable generative UI requires maintaining an executable artifact as user requests evolve. We introduce EvoGenUI-Bench, a benchmark for multi-turn interface maintenance comprising 150 five-turn tasks and 750 turns across three scenarios: information presentation, executable interaction, and tool-grounded external state. We execute generated artifacts in a browser and evaluate them using screenshots, source and DOM evidence, actor traces, and runtime logs. Beyond turn-level and episode-level success, we measure cross-turn reten…",
+      "summary": "生成界面不等于持续维护可用界面。本文构建150个五轮任务，覆盖信息呈现、本地交互及工具支撑的外部状态，通过浏览器执行、截图、交互轨迹和日志联合评估。八模型实验显示，最强模型单轮通过率达74.9%，完整五轮成功率却仅37.3%；工具场景尤其困难。论文的价值在于将评测从静态外观转向跨轮行为与状态一致性，但结果限于固定框架和模拟运行环境。[P3–P6][P10]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -245,11 +275,95 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐作为智能运维助手可靠性评测的方法参考，重点阅读跨轮指标、证据消融及失败归因；它并非真实运维或结构设计应用的效果验证。[P5–P10]",
+      "deep_read": {
+        "problem": "本文研究用户连续修改需求时，模型能否维护同一个可执行界面，同时保留仍有效的旧功能。难点不只是生成控件，而是保证交互行为、派生状态、外部状态与助手解释同步。作者认为单次页面生成评测无法覆盖这种持续维护可靠性。[P1–P3]",
+        "method": "作者人工编写150个五轮任务，按三类场景均分，并隔离公开输入与私有验证契约。每轮构建源码、运行浏览器、收集多类证据，再评估呈现、执行和对齐，三项均至少4分才通过；另统计完整任务成功、连续通过前缀及相邻通过保持率。[P3–P5]",
+        "innovation": "贡献在于将持续演化的界面同时视为助手输出与任务交互层，而非只评页面外观或工具调用。评测把视觉、行为、源码和运行时证据结合起来，并以轮次、完整任务和相邻转移三个层级衡量可靠性，再用六类机制解释失败，不是提出新的生成模型。[P2–P5][P8]",
+        "findings": "最强模型单轮通过率74.9%，完整五轮成功率37.3%；跨模型汇总分别为42.7%和11.8%。工具场景相邻通过保持率为52.4%，不能归于最强模型。独立消融集中，移除交互轨迹使评估准确率从87.5%降至55.0%，说明行为证据不可替代。[P6–P7]",
+        "limitations": "作者限定人工五轮任务、固定React/Vite环境及确定性模拟工具，未覆盖无障碍、设备差异与真实服务故障。APR不是因果归因指标，场景难度还受要求密度影响。解读：仅一个模型接受三次生成稳定性检查，不能外推全部模型；核对记录未发现原文件缺项。[P6–P7][P10][P16]",
+        "connection": "解读：与智能运维的联系主要在评测方法，而非已完成的领域验证。运维助手也可能出现状态面板更新、后台未提交，或修改流程后旧能力失效的问题；本文的权威回读和多证据核验可作为分析框架。对结构设计的直接适用性，当前资料没有实证支持。[P9–P10][P13–P14]",
+        "next_steps": "建议在运维场景构建累积变更任务，逐轮回放仍有效的历史验证契约，分别记录旧功能回归与新增需求失败。再加入权限失败、延迟和限流，比较界面显示与后台权威状态，并对多个模型重复运行。该方案是研究建议，不属于本文已完成的实验。[P10][P14][P16–P17]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "EvoGenUI-Bench：大语言模型多轮生成式界面维护能力评测",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1158/"
+      ],
+      "analyzed_at": "2026-10-26T01:43:09.441710+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P3",
+          "P4",
+          "P5",
+          "P8"
+        ],
+        "findings": [
+          "P6",
+          "P7"
+        ],
+        "limitations": [
+          "P6",
+          "P7",
+          "P10",
+          "P16"
+        ],
+        "connection": [
+          "P9",
+          "P10",
+          "P13",
+          "P14"
+        ],
+        "next_steps": [
+          "P10",
+          "P14",
+          "P16",
+          "P17"
+        ]
+      },
+      "analysis_material_version": "7bc1bf1303693b88208812cffd20939e797f6ffa2b406234041d783be2937f62",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "图1的文字提取遗漏了三幅界面缩略图及底部四个说明框。原页可核实四框为Accumulating requirements、Preserving Earlier Functionality、Cross-turn Consistency、Full context Alignment。已据原图补充其表达的跨轮维护要求；属于提取遗漏，不是原文件缺项，不影响摘要数值。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "aa20cdb982cb",
+        "state": "published",
+        "updated_at": "2026-10-26T01:43:09.460085+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 17,
+        "covered": 17,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "图1的文字提取遗漏了三幅界面缩略图及底部四个说明框。原页可核实四框为Accumulating requirements、Preserving Earlier Functionality、Cross-turn Consistency、Full context Alignment。已据原图补充其表达的跨轮维护要求；属于提取遗漏，不是原文件缺项，不影响摘要数值。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -329,7 +443,22 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "abdf3af8d331",
+        "state": "retry",
+        "updated_at": "2026-10-26T01:10:57.917825+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "error_code": "codex_connection",
+        "next_retry_at": "2026-10-26T01:25:57.917825+00:00",
+        "total": 26,
+        "covered": 0,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -414,7 +543,22 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "782e6a0458d9",
+        "state": "retry",
+        "updated_at": "2026-10-26T01:12:07.724382+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "error_code": "codex_connection",
+        "next_retry_at": "2026-10-26T01:27:07.724382+00:00",
+        "total": 22,
+        "covered": 0,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -495,7 +639,32 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "75e1db16e962",
+        "state": "retry",
+        "updated_at": "2026-10-26T01:34:23.460441+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "next_retry_at": "2026-10-26T01:39:23.460441+00:00",
+        "total": 32,
+        "covered": 24,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "公式(1)在文字提取中分式结构挤连；已核对原页，正确含义为k_c=min{k: (∑_{j=1}^k s_j²)/(∑_j s_j²)≥τ}。分子是前k个平方奇异值之和，分母是全部平方奇异值之和。原页公式完整，非源文件缺项；纠正影响锚子空间保留秩的定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "表2的ATLAS行在文字提取中跨列粘连，原页已读清。按OA、NMS、W、R、U顺序，T1为57.6、54.3、13.2、11.8、17.4；T2为60.1、56.9、11.4、10.6、17.9；T3为54.5、51.2、15.1、13.3、16.1，单位均为%。原页无缺项。纠正可避免将利用失败率误并入相邻准确率，并保留ATLAS写读改善但利用失败率上升的实际结论。"
+          }
+        ]
+      }
     }
   ],
   "extended": [],
@@ -581,7 +750,22 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "c4b5993c8dc6",
+        "state": "retry",
+        "updated_at": "2026-10-26T01:14:52.016902+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "error_code": "codex_connection",
+        "next_retry_at": "2026-10-26T01:29:52.016902+00:00",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -662,7 +846,22 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "5bf0c76a6b59",
+        "state": "retry",
+        "updated_at": "2026-10-26T01:15:55.772672+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "error_code": "codex_connection",
+        "next_retry_at": "2026-10-26T01:30:55.772672+00:00",
+        "total": 16,
+        "covered": 0,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -687,7 +886,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Large language models can generate interactive web interfaces, but reliable generative UI requires maintaining an executable artifact as user requests evolve. We introduce EvoGenUI-Bench, a benchmark for multi-turn interface maintenance comprising 150 five-turn tasks and 750 turns across three scenarios: information presentation, executable interaction, and tool-grounded external state. We execute generated artifacts in a browser and evaluate them using screenshots, source and DOM evidence, actor traces, and runtime logs. Beyond turn-level and episode-level success, we measure cross-turn reten…",
+      "summary": "生成界面不等于持续维护可用界面。本文构建150个五轮任务，覆盖信息呈现、本地交互及工具支撑的外部状态，通过浏览器执行、截图、交互轨迹和日志联合评估。八模型实验显示，最强模型单轮通过率达74.9%，完整五轮成功率却仅37.3%；工具场景尤其困难。论文的价值在于将评测从静态外观转向跨轮行为与状态一致性，但结果限于固定框架和模拟运行环境。[P3–P6][P10]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -741,11 +940,95 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐作为智能运维助手可靠性评测的方法参考，重点阅读跨轮指标、证据消融及失败归因；它并非真实运维或结构设计应用的效果验证。[P5–P10]",
+      "deep_read": {
+        "problem": "本文研究用户连续修改需求时，模型能否维护同一个可执行界面，同时保留仍有效的旧功能。难点不只是生成控件，而是保证交互行为、派生状态、外部状态与助手解释同步。作者认为单次页面生成评测无法覆盖这种持续维护可靠性。[P1–P3]",
+        "method": "作者人工编写150个五轮任务，按三类场景均分，并隔离公开输入与私有验证契约。每轮构建源码、运行浏览器、收集多类证据，再评估呈现、执行和对齐，三项均至少4分才通过；另统计完整任务成功、连续通过前缀及相邻通过保持率。[P3–P5]",
+        "innovation": "贡献在于将持续演化的界面同时视为助手输出与任务交互层，而非只评页面外观或工具调用。评测把视觉、行为、源码和运行时证据结合起来，并以轮次、完整任务和相邻转移三个层级衡量可靠性，再用六类机制解释失败，不是提出新的生成模型。[P2–P5][P8]",
+        "findings": "最强模型单轮通过率74.9%，完整五轮成功率37.3%；跨模型汇总分别为42.7%和11.8%。工具场景相邻通过保持率为52.4%，不能归于最强模型。独立消融集中，移除交互轨迹使评估准确率从87.5%降至55.0%，说明行为证据不可替代。[P6–P7]",
+        "limitations": "作者限定人工五轮任务、固定React/Vite环境及确定性模拟工具，未覆盖无障碍、设备差异与真实服务故障。APR不是因果归因指标，场景难度还受要求密度影响。解读：仅一个模型接受三次生成稳定性检查，不能外推全部模型；核对记录未发现原文件缺项。[P6–P7][P10][P16]",
+        "connection": "解读：与智能运维的联系主要在评测方法，而非已完成的领域验证。运维助手也可能出现状态面板更新、后台未提交，或修改流程后旧能力失效的问题；本文的权威回读和多证据核验可作为分析框架。对结构设计的直接适用性，当前资料没有实证支持。[P9–P10][P13–P14]",
+        "next_steps": "建议在运维场景构建累积变更任务，逐轮回放仍有效的历史验证契约，分别记录旧功能回归与新增需求失败。再加入权限失败、延迟和限流，比较界面显示与后台权威状态，并对多个模型重复运行。该方案是研究建议，不属于本文已完成的实验。[P10][P14][P16–P17]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "EvoGenUI-Bench：大语言模型多轮生成式界面维护能力评测",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1158/"
+      ],
+      "analyzed_at": "2026-10-26T01:43:09.441710+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P3",
+          "P4",
+          "P5",
+          "P8"
+        ],
+        "findings": [
+          "P6",
+          "P7"
+        ],
+        "limitations": [
+          "P6",
+          "P7",
+          "P10",
+          "P16"
+        ],
+        "connection": [
+          "P9",
+          "P10",
+          "P13",
+          "P14"
+        ],
+        "next_steps": [
+          "P10",
+          "P14",
+          "P16",
+          "P17"
+        ]
+      },
+      "analysis_material_version": "7bc1bf1303693b88208812cffd20939e797f6ffa2b406234041d783be2937f62",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "图1的文字提取遗漏了三幅界面缩略图及底部四个说明框。原页可核实四框为Accumulating requirements、Preserving Earlier Functionality、Cross-turn Consistency、Full context Alignment。已据原图补充其表达的跨轮维护要求；属于提取遗漏，不是原文件缺项，不影响摘要数值。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "aa20cdb982cb",
+        "state": "published",
+        "updated_at": "2026-10-26T01:43:09.460085+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 17,
+        "covered": 17,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "图1的文字提取遗漏了三幅界面缩略图及底部四个说明框。原页可核实四框为Accumulating requirements、Preserving Earlier Functionality、Cross-turn Consistency、Full context Alignment。已据原图补充其表达的跨轮维护要求；属于提取遗漏，不是原文件缺项，不影响摘要数值。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -825,7 +1108,22 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "abdf3af8d331",
+        "state": "retry",
+        "updated_at": "2026-10-26T01:10:57.917825+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "error_code": "codex_connection",
+        "next_retry_at": "2026-10-26T01:25:57.917825+00:00",
+        "total": 26,
+        "covered": 0,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -910,7 +1208,22 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "782e6a0458d9",
+        "state": "retry",
+        "updated_at": "2026-10-26T01:12:07.724382+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "error_code": "codex_connection",
+        "next_retry_at": "2026-10-26T01:27:07.724382+00:00",
+        "total": 22,
+        "covered": 0,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -991,7 +1304,32 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "75e1db16e962",
+        "state": "retry",
+        "updated_at": "2026-10-26T01:34:23.460441+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "next_retry_at": "2026-10-26T01:39:23.460441+00:00",
+        "total": 32,
+        "covered": 24,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "公式(1)在文字提取中分式结构挤连；已核对原页，正确含义为k_c=min{k: (∑_{j=1}^k s_j²)/(∑_j s_j²)≥τ}。分子是前k个平方奇异值之和，分母是全部平方奇异值之和。原页公式完整，非源文件缺项；纠正影响锚子空间保留秩的定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "表2的ATLAS行在文字提取中跨列粘连，原页已读清。按OA、NMS、W、R、U顺序，T1为57.6、54.3、13.2、11.8、17.4；T2为60.1、56.9、11.4、10.6、17.9；T3为54.5、51.2、15.1、13.3、16.1，单位均为%。原页无缺项。纠正可避免将利用失败率误并入相邻准确率，并保留ATLAS写读改善但利用失败率上升的实际结论。"
+          }
+        ]
+      }
     }
   ],
   "source_status": {
@@ -1918,13 +2256,13 @@
     "unavailable": 36
   },
   "analysis_status": {
-    "ready_core": 0,
+    "ready_core": 1,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 6
+    "pending": 5
   },
   "edition": {
     "id": "40214157879",

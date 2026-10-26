@@ -1,0 +1,107 @@
+{
+  "paper_id": "aa20cdb982cb",
+  "fingerprint": "05334f16a9b5ac9ddeb916c6a47a297a23020b44255b34f6bfd72bb5dbf36198",
+  "analysis": {
+    "title_zh": "EvoGenUI-Bench：大语言模型多轮生成式界面维护能力评测",
+    "summary": "生成界面不等于持续维护可用界面。本文构建150个五轮任务，覆盖信息呈现、本地交互及工具支撑的外部状态，通过浏览器执行、截图、交互轨迹和日志联合评估。八模型实验显示，最强模型单轮通过率达74.9%，完整五轮成功率却仅37.3%；工具场景尤其困难。论文的价值在于将评测从静态外观转向跨轮行为与状态一致性，但结果限于固定框架和模拟运行环境。[P3–P6][P10]",
+    "recommendation": "推荐作为智能运维助手可靠性评测的方法参考，重点阅读跨轮指标、证据消融及失败归因；它并非真实运维或结构设计应用的效果验证。[P5–P10]",
+    "deep_read": {
+      "problem": "本文研究用户连续修改需求时，模型能否维护同一个可执行界面，同时保留仍有效的旧功能。难点不只是生成控件，而是保证交互行为、派生状态、外部状态与助手解释同步。作者认为单次页面生成评测无法覆盖这种持续维护可靠性。[P1–P3]",
+      "method": "作者人工编写150个五轮任务，按三类场景均分，并隔离公开输入与私有验证契约。每轮构建源码、运行浏览器、收集多类证据，再评估呈现、执行和对齐，三项均至少4分才通过；另统计完整任务成功、连续通过前缀及相邻通过保持率。[P3–P5]",
+      "innovation": "贡献在于将持续演化的界面同时视为助手输出与任务交互层，而非只评页面外观或工具调用。评测把视觉、行为、源码和运行时证据结合起来，并以轮次、完整任务和相邻转移三个层级衡量可靠性，再用六类机制解释失败，不是提出新的生成模型。[P2–P5][P8]",
+      "findings": "最强模型单轮通过率74.9%，完整五轮成功率37.3%；跨模型汇总分别为42.7%和11.8%。工具场景相邻通过保持率为52.4%，不能归于最强模型。独立消融集中，移除交互轨迹使评估准确率从87.5%降至55.0%，说明行为证据不可替代。[P6–P7]",
+      "limitations": "作者限定人工五轮任务、固定React/Vite环境及确定性模拟工具，未覆盖无障碍、设备差异与真实服务故障。APR不是因果归因指标，场景难度还受要求密度影响。解读：仅一个模型接受三次生成稳定性检查，不能外推全部模型；核对记录未发现原文件缺项。[P6–P7][P10][P16]",
+      "connection": "解读：与智能运维的联系主要在评测方法，而非已完成的领域验证。运维助手也可能出现状态面板更新、后台未提交，或修改流程后旧能力失效的问题；本文的权威回读和多证据核验可作为分析框架。对结构设计的直接适用性，当前资料没有实证支持。[P9–P10][P13–P14]",
+      "next_steps": "建议在运维场景构建累积变更任务，逐轮回放仍有效的历史验证契约，分别记录旧功能回归与新增需求失败。再加入权限失败、延迟和限流，比较界面显示与后台权威状态，并对多个模型重复运行。该方案是研究建议，不属于本文已完成的实验。[P10][P14][P16–P17]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.1158/"
+    ],
+    "analyzed_at": "2026-10-26T01:43:09.441710+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": true,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "按智能运维与可靠性评测方向判断，本文的跨轮维护、执行验证和状态一致性检查具有方法契合度，值得重点阅读；但不是工业运维实证。全文笔记提供指标、人工验证、消融和局限，当前可核对原文[P1]也明确支持其多证据执行评估方法。",
+    "evidence": "We\nexecute generated artifacts in a browser and\nevaluate them using screenshots, source and\nDOM evidence, actor traces, and runtime logs."
+  },
+  "material": {
+    "version": "7bc1bf1303693b88208812cffd20939e797f6ffa2b406234041d783be2937f62",
+    "total": 17,
+    "covered": 17,
+    "references": {
+      "problem": [
+        "P1",
+        "P2",
+        "P3"
+      ],
+      "method": [
+        "P3",
+        "P4",
+        "P5"
+      ],
+      "innovation": [
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P8"
+      ],
+      "findings": [
+        "P6",
+        "P7"
+      ],
+      "limitations": [
+        "P6",
+        "P7",
+        "P10",
+        "P16"
+      ],
+      "connection": [
+        "P9",
+        "P10",
+        "P13",
+        "P14"
+      ],
+      "next_steps": [
+        "P10",
+        "P14",
+        "P16",
+        "P17"
+      ]
+    },
+    "excerpt": "We\nexecute generated artifacts in a browser and\nevaluate them using screenshots, source and\nDOM evidence, actor traces, and runtime logs.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P1",
+        "detail": "图1的文字提取遗漏了三幅界面缩略图及底部四个说明框。原页可核实四框为Accumulating requirements、Preserving Earlier Functionality、Cross-turn Consistency、Full context Alignment。已据原图补充其表达的跨轮维护要求；属于提取遗漏，不是原文件缺项，不影响摘要数值。"
+      }
+    ]
+  }
+}

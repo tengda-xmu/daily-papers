@@ -1,17 +1,18 @@
 {
   "id": "public-0e5fad3ca5f8a881acf7d04b",
-  "content_version": "57bcdc8bd21f015c40a77a36bd4c1b164da18901be62b79a4dac7363f3604942",
+  "content_version": "17091d126fca5d7d4a92ffaea44f3331f95b9120a5066da3c9ec6c997d83dfab",
   "analysis": {
     "title_zh": "使用 IBM Granite 时间序列模型进行集成预测",
-    "summary": "所给公告片段介绍以四个开放的 IBM Granite 模型和一个可扩展预测接口，减少时间序列预测中的模型选择负担。原文说明，预训练时间序列模型无需在用户数据集上训练即可预测，但仍需选择模型；适合平滑工业信号的模型，面对噪声较大的零售需求或较长的季节性预测跨度时可能表现不佳。材料未完整展示集成方法、模型清单或效果评测，不能据此确认具体性能提升。",
-    "application": "建议：科研迁移可考虑在智能运维传感器预测与需求预测中，对比单模型和集成方法，并按噪声水平及预测跨度分组评估；这是研究建议，不是官方已验证效果。所给片段仅介绍模型与接口思路，未提供集成效果的量化证据。",
+    "summary": "原文介绍四个开放的 IBM Granite 模型与一个可扩展的预测接口，旨在减少时间序列预测中的模型选择困扰。预训练模型无需在用户数据集上训练即可预测，但仍需根据任务选型：适合平滑工业信号的模型，面对噪声较大的零售需求或较长季节性预测范围时可能表现不佳。所给内容仅为文章开头，未展示集成机制、模型版本、操作流程或性能验证结果。",
+    "application": "建议：科研迁移方面，可将工业设备监测序列作为候选应用，比较不同模型对平滑信号、噪声及预测范围的适应性；这是迁移设想，不是官方已验证效果。官方原文仅说明预训练时间序列模型可不经用户数据集训练直接预测，当前片段不足以证明集成预测能提升智能运维或可靠性研究效果。",
     "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
       "Four open Granite models, one extensible forecasting interface, and less guesswork about which model to use.",
-      "Pre-trained time-series models can forecast without training on your dataset, but you still have to choose one."
+      "Pre-trained time-series models can forecast without training on your dataset, but you still have to choose one.",
+      "A model that handles smooth industrial signals well may struggle with noisy retail demand or a long seasonal horizon"
     ],
     "basis_url": "https://huggingface.co/blog/ibm-research/granite-timeseries-ensemble-r1"
   },
-  "analyzed_at": "2026-10-23T00:26:45.387641+00:00"
+  "analyzed_at": "2026-10-26T01:47:17.469166+00:00"
 }
