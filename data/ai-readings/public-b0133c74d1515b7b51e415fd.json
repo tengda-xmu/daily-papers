@@ -1,0 +1,24 @@
+{
+  "id": "public-b0133c74d1515b7b51e415fd",
+  "content_version": "97bb8b76f6ad432209bf9863b30b9295f10071d8b07c92e9a426cc9c7f43917b",
+  "analysis": {
+    "title_zh": "上下文工程始于检索：Deep Agents 的上下文管理方法",
+    "summary": "所给官方博文节选介绍了 Deep Agents 面向有限上下文窗口的检索机制，并非新版本发布公告。原文指出，检索会面临搜索低效、一次引入过多上下文，以及内容无关或过时三类问题。其内置文件系统工具先搜索再读取，支持文件名匹配、匹配行查找和分页读取；过大的工具结果保存到文件，仅向智能体返回路径与预览。针对 RAG 等自定义搜索工具，原文建议采用“检索、卸载、委派”流程，适用于需要处理大量检索结果的智能体任务。",
+    "application": "建议：科研迁移可考虑将该流程用于文献检索、运维日志分析或可靠性资料整理，先保存检索结果，再由子智能体读取并筛选相关内容；这些属于迁移设想，并非原文已验证的科研效果。官方节选说明了内置机制与推荐流程，但未提供量化评测，不能据此宣称准确率、速度或成本改善。",
+    "requirements": "使用条件见官方文档",
+    "steps": [
+      {
+        "text": "针对 RAG 等自定义搜索工具，将检索结果保存到文件，返回文件路径，再让子智能体读取。",
+        "evidence": "For custom search tools (like RAG), use \"retrieve, offload, delegate\": save results to files, return the paths, and let subagents read them."
+      }
+    ],
+    "evidence": [
+      "Agents work with a limited context window, and information retrieval breaks in three ways: inefficient searching, too much context at once, and irrelevant or stale context.",
+      "The built-in filesystem tools search before they read: glob matches file names, grep finds matching lines, and read_file reads a page at a time.",
+      "Oversized tool results are offloaded: the full result is saved to files, but the agent gets just the path and a preview.",
+      "For custom search tools (like RAG), use \"retrieve, offload, delegate\": save results to files, return the paths, and let subagents read them."
+    ],
+    "basis_url": "https://www.langchain.com/blog/context-engineering-starts-with-retrieval"
+  },
+  "analyzed_at": "2026-10-26T01:46:17.694655+00:00"
+}
