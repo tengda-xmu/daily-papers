@@ -1,15 +1,34 @@
 {
   "paper_id": "782e6a0458d9",
-  "state": "retry",
-  "updated_at": "2026-10-26T01:12:07.724382+00:00",
+  "state": "published",
+  "updated_at": "2026-10-26T02:33:03.366672+00:00",
   "basis": "full_text",
   "article_state": "pending",
   "article_stage": "",
   "reason": "",
-  "error_code": "codex_connection",
-  "next_retry_at": "2026-10-26T01:27:07.724382+00:00",
   "total": 22,
-  "covered": 0,
+  "covered": 22,
   "pdf_available": true,
-  "issues": []
+  "issues": [
+    {
+      "kind": "extraction_error",
+      "page": "P3",
+      "detail": "图3的坐标轴、刻度及图例在文字提取中出现大量/uni编码乱码；原页已读清。图3a横轴为Training Steps，纵轴为Success Rate，图例为D2Skill: Skill Group、D2Skill: Baseline Group、GRPO；图3b纵轴为Average Skill Utility，比较有无management的SkillBank和Retrieval曲线，标注Skill Pruning及Success:72.7、Success:57.8。乱码影响训练收益和技能管理证据的识别，但不属于原文件缺项。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P8",
+      "detail": "图5的文字提取遗漏或打乱了横轴技能库设置与柱值对应关系。原图已核实：每组依次为GRPO、w/o skill、G3F skill、Self skill；ALFWorld/Qwen3-4B依次为53.9、61.7、68.0、72.7，WebShop/Qwen2.5-7B依次为72.6、73.4、77.3、84.4。无公式或原图缺项；该纠正影响评估时移除、替换技能库及策略知识内化证据的解读。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P9",
+      "detail": "图6坐标轴、刻度和图例的文字提取出现/uni编码乱码，原图已读清：横轴为Training Times (Hours)，刻度0至35、间隔5；纵轴为Success Rate，标示0.2、0.4、0.6、0.8；曲线图例为GRPO、D2Skill、SkillRL，并标注X1.7。无原图缺项。纠正影响按墙钟时间比较验证性能及理解约1.7倍效率结论，不能据此推定完整训练总耗时比。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P21",
+      "detail": "原页第四个示例“An Example of Step Skills (WebShop)”的retrieval_obs仅列购物任务，未列当前观察；缺项已从原图核实，不能补造。该技能的原则依赖当前观察是否显示目标选项，因此无法仅据此示例核验步骤检索键的观察部分及其情境匹配；不影响其余内容识读，也不足以断言实际实现缺少观察。"
+    }
+  ]
 }
