@@ -1,15 +1,49 @@
 {
   "paper_id": "abdf3af8d331",
-  "state": "retry",
-  "updated_at": "2026-10-26T01:10:57.917825+00:00",
+  "state": "published",
+  "updated_at": "2026-10-26T01:59:09.513553+00:00",
   "basis": "full_text",
-  "article_state": "pending",
-  "article_stage": "",
+  "article_state": "failed",
+  "article_stage": "facts",
   "reason": "",
-  "error_code": "codex_connection",
-  "next_retry_at": "2026-10-26T01:25:57.917825+00:00",
   "total": 26,
-  "covered": 0,
+  "covered": 26,
   "pdf_available": true,
-  "issues": []
+  "issues": [
+    {
+      "kind": "source_defect",
+      "page": "P5",
+      "detail": "原页4.4节将Qwen3-32B在Setting A的shortcut_replacement错误率写为2.8%，而P7原页表5同模型、同设置、同标签为3.2%。两处均清晰可读，属于原文数值不一致而非提取错误；无法凭本批判定正确值。影响该模型具体错误率及与Llama-3.1-70B的定量比较，不改变其低于19.2%的方向判断。无公式或图项缺失。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P11",
+      "detail": "附录A.1提示模板无公式或图号。原页字段清晰为supporting_paragraph_ids、node_confidences和topological_order；提取文本将部分字段插入字母间空格或断开，例如node_con fidences。已按原页识读纠正，不是源文件字段缺失，不影响方法结论，但直接照搬提取文本可能造成接口字段错误。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P12",
+      "detail": "附录A.1约束及输出模式无公式或图号。原页可读字段为supporting_paragraph_ids和topological_order，提取文本多处呈字母间异常空格。已纠正字段识读；B/C完整模式在页底跨页续接，不认定为原文件缺项。影响模板复现的字段准确性，不影响本页实验设置的理解。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P13",
+      "detail": "附录A模板代码块，无公式或图号。原页可读字段为supporting_paragraph_ids、node_confidences、answer_confidence、attribution_confidence、topological_order；提取文本将部分字段拆为带字母间空格的形式。已按原页纠正；无字段缺项，影响模板复现而非实验结论。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P15",
+      "detail": "vPGM-Style输出模板及Sampled BN提示，无公式或图号。原页字段为P_Z_D_given_Z_E_X、P_Z_R_given_Z_E_Z_D_X、P_Y_given_Z_E_Z_D_Z_R_X，动态字段为root_sub_question、current_sub_question；提取文本存在异常插空。已核对纠正，无条件概率项缺失，不改变方法含义。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P17",
+      "detail": "附录B无编号Edge HPS公式及紧随解释中的有向可达关系符号，在提取文本中被识别为分号。原页清楚显示连接匹配节点的箭头关系，正文明确其为directed reachability。已纠正为存在有向路径，而非直接边或分号运算；公式无缺项，影响Edge HPS判定标准的理解。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P24",
+      "detail": "式(1)在提取文本中丢失清晰的分式层次，容易将求和误接到分子。原页确认分子为c(a_i,a_pa(i))+α，分母为Σ_{a′∈S_i}c(a′,a_pa(i))+α|S_i|。已按原页纠正；原公式无缺项，影响加性CPT平滑的实现与校准敏感性分析复现。"
+    }
+  ]
 }

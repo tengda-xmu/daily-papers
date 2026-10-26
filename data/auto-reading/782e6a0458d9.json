@@ -1,0 +1,120 @@
+{
+  "paper_id": "782e6a0458d9",
+  "fingerprint": "fa5405e4a6b373546d639354485ab8baefa83e2023aba92e5d8f9c8a9ac75f86",
+  "analysis": {
+    "title_zh": "面向智能体强化学习的动态双粒度技能库",
+    "summary": "D2Skill研究智能体如何复用经验，同时避免高层计划无法纠正局部错误、技能库持续膨胀的问题。方法将经验划分为任务技能与步骤技能，通过同一策略下的配对轨迹估计效用，联合驱动奖励塑形、检索和剪枝。[P2–P5]交互任务、搜索问答、消融及冻结技能库迁移实验支持其方法价值，但效用不是技能贡献的因果估计，外部监督与完整成本仍有限制。[P6–P15]解读：适合智能运维经验管理的方法借鉴，并非工业可靠性的直接验证。",
+    "recommendation": "建议作为智能运维智能体的经验复用与规则库治理方法重点阅读，尤其关注配对效用估计和噪声技能管理；不宜将基准成功率直接解释为工业部署可靠性。[P4][P14]",
+    "deep_read": {
+      "problem": "论文针对两类相互关联的失败：任务级经验能提供整体计划，却不足以指导观察变化后的局部恢复；技能持续积累又会增加冗余和低质量指导。作者以空容器被重复搜索为例，说明合理计划仍可能伴随错误动作，因此需要细粒度纠错和持续记忆维护。[P2–P3]",
+      "method": "每任务八条轨迹均分为技能组和基线组，以成功率差更新任务技能效用，以轨迹成功相对基线的差更新步骤技能并塑形奖励。失败触发反思生成技能；检索先筛语义相似候选，再结合效用与探索奖励排序，超容量时剪枝并保护新技能。[P4–P5][P17]",
+      "innovation": "作者将贡献定位于机制耦合，而非首次提出反思或文本记忆：任务与步骤两种抽象配合，同一策略的配对轨迹提供后见评价，并让评价参与检索、维护和策略训练。解读：关键是使经验库由被动存储转为可持续评价的训练组件，而非增加提示内容。[P9][P22]",
+      "findings": "表3中完整模型验证成功率为72.7%，去除步骤技能降至60.2%，去除技能管理降至57.8%；冻结策略与技能库的未见环境成功率为63.3%，高于SkillRL的55.5%。搜索问答平均准确率亦有提升，但并非各数据集均最佳，不能概括为全面领先。[P7–P8]",
+      "limitations": "技能效用不是单技能因果贡献；Self仍依赖外部样例，API成本仅统计早期十步。[P10][P15]原文件缺项：P21的WebShop步骤技能示例未列当前观察，无法核验情境匹配，不能补造；同页另有冰箱与柜子描述错配。基准结果尚不足以证明工业可靠性。\n原文核对：[P21] 原页第四个示例“An Example of Step Skills (WebShop)”的retrieval_obs仅列购物任务，未列当前观察；缺项已从原图核实，不能补造。该技能的原则依赖当前观察是否显示目标选项，因此无法仅据此示例核验步骤检索键的观察部分及其情境匹配；不影响其余内容识读，也不足以断言实际实现缺少观察。",
+      "connection": "解读：智能运维中的完整处置流程可对应任务技能，特定告警状态下的恢复规则可对应步骤技能；效用更新与淘汰机制可用于治理过时经验。但论文任务是文本交互与搜索，未验证设备退化、故障诊断或结构设计性能，关联属于方法迁移而非应用实证。[P2][P10][P22]",
+      "next_steps": "建议先在可回放的运维仿真任务中比较双粒度、单粒度及无记忆方案，再注入过时或误导规则，记录恢复成功率、误操作和检索噪声。沿用冻结技能库的未见场景评估，并将API等待纳入完整成本；若研究单技能贡献，应另设随机干预实验。[P8][P14–P15]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.491/"
+    ],
+    "analyzed_at": "2026-10-26T02:33:03.358557+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": true,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "与智能运维的契合主要在经验管理和智能体决策方法层面，而非工业场景验证。全文阅读笔记提供明确算法、组件消融、噪声压力测试和冻结库迁移结果，足以支持重点阅读；但不足以支持结构设计收益或工程可靠性保证。[P8][P14][P22]",
+    "evidence": "D2Skill Dynamic skill bank Task and step Paired utility, retrieval, and pruning"
+  },
+  "material": {
+    "version": "a340a63607fe49018ac954489a33f7190bf0c18af8641cae6b1fa0b48985f7d2",
+    "total": 22,
+    "covered": 22,
+    "references": {
+      "problem": [
+        "P2",
+        "P3"
+      ],
+      "method": [
+        "P4",
+        "P5",
+        "P17"
+      ],
+      "innovation": [
+        "P9",
+        "P22"
+      ],
+      "findings": [
+        "P7",
+        "P8"
+      ],
+      "limitations": [
+        "P10",
+        "P15",
+        "P21"
+      ],
+      "connection": [
+        "P2",
+        "P10",
+        "P22"
+      ],
+      "next_steps": [
+        "P8",
+        "P14",
+        "P15"
+      ]
+    },
+    "excerpt": "D2Skill Dynamic skill bank Task and step Paired utility, retrieval, and pruning",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P21",
+      "P22"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P3",
+        "detail": "图3的坐标轴、刻度及图例在文字提取中出现大量/uni编码乱码；原页已读清。图3a横轴为Training Steps，纵轴为Success Rate，图例为D2Skill: Skill Group、D2Skill: Baseline Group、GRPO；图3b纵轴为Average Skill Utility，比较有无management的SkillBank和Retrieval曲线，标注Skill Pruning及Success:72.7、Success:57.8。乱码影响训练收益和技能管理证据的识别，但不属于原文件缺项。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P8",
+        "detail": "图5的文字提取遗漏或打乱了横轴技能库设置与柱值对应关系。原图已核实：每组依次为GRPO、w/o skill、G3F skill、Self skill；ALFWorld/Qwen3-4B依次为53.9、61.7、68.0、72.7，WebShop/Qwen2.5-7B依次为72.6、73.4、77.3、84.4。无公式或原图缺项；该纠正影响评估时移除、替换技能库及策略知识内化证据的解读。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P9",
+        "detail": "图6坐标轴、刻度和图例的文字提取出现/uni编码乱码，原图已读清：横轴为Training Times (Hours)，刻度0至35、间隔5；纵轴为Success Rate，标示0.2、0.4、0.6、0.8；曲线图例为GRPO、D2Skill、SkillRL，并标注X1.7。无原图缺项。纠正影响按墙钟时间比较验证性能及理解约1.7倍效率结论，不能据此推定完整训练总耗时比。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P21",
+        "detail": "原页第四个示例“An Example of Step Skills (WebShop)”的retrieval_obs仅列购物任务，未列当前观察；缺项已从原图核实，不能补造。该技能的原则依赖当前观察是否显示目标选项，因此无法仅据此示例核验步骤检索键的观察部分及其情境匹配；不影响其余内容识读，也不足以断言实际实现缺少观察。"
+      }
+    ]
+  }
+}

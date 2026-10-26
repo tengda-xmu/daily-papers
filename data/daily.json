@@ -27,7 +27,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Hypergraph-based methods extend structured retrieval-augmented generation (RAG) by organizing external knowledge as multi-entity relational structures, helping large language models (LLMs) generate better-grounded answers. However, existing structured RAG systems typically assume static corpus construction, requiring the retrieval structure to be rebuilt over the expanded corpus when new documents arrive. To address this limitation, we introduce HyperRAG-IHM, a hypergraph-based RAG framework that performs incremental hyperedge maintenance to incorporate newly arriving knowledge without reconst…",
+      "summary": "当知识库持续加入新文档时，结构化检索增强生成如何避免反复重建历史检索结构？本文提出HyperRAG-IHM，将新文档中的关系证据关联至已有超图，通过LSH定位候选历史超边，再结合多维比较与三动作决策完成增量维护。[摘要]作者报告，其回答质量可比或优于完全重建，并开展多类稳健性分析。当前仅有摘要，尚无法核查效率收益、决策细节和实验规模，适合作为动态知识维护方向的候选精读论文。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -81,26 +81,155 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议关注其“定位历史超边—比较关系证据—执行维护决策”的方法链条，尤其适合研究持续更新知识库的读者；但不能据摘要认定其已解决工业智能运维问题。[摘要][解读]",
+      "deep_read": {
+        "problem": "研究问题是语料持续扩展时，如何维护超图RAG的检索结构。摘要指出，现有结构化RAG通常假设静态语料，新文档到来后需要重建扩展语料上的结构。[摘要]解读：本文关注知识更新机制，而非直接研究设备维修或故障诊断。",
+        "method": "框架先把新文档提取的关系证据关联至已有超图，再用“LSH”定位候选历史超边，随后执行“multi-dimensional comparison”和“three-action decision policy”。[摘要]摘要未说明比较维度、动作定义及其判定规则，不能据此复现算法。",
+        "innovation": "摘要明确提出的贡献是“incremental hyperedge maintenance”，即通过增量维护接纳新知识，而不重建历史检索结构。[摘要]解读：其方法特点在于把更新对象落实到超边及关系证据；现有资料不足以确认各组件的首创性及其与既有方法的完整差异。",
+        "findings": "作者报告，在“5D scoring”和“8D pairwise evaluation”下，回答质量可比或优于完全重建，并报告消融、结构行为、跨数据集及跨回答模型分析中的稳健性。[摘要]未给出具体分数、差异幅度或统计检验，不能推定提升程度。",
+        "limitations": "当前资料不足以确认作者讨论了哪些方法局限。摘要未提供数据集规模、计算开销、更新频率及错误分析，也未解释评价维度。[摘要]解读：这些是当前证据的边界，而非已证实的算法缺陷；尤其不能将避免重建直接等同于已量化的效率优势。",
+        "connection": "解读：该方法与智能运维的潜在联系是维护持续增长的运维知识库，例如接纳新增记录中的多实体关系；这不是摘要验证过的应用。[摘要]对可靠性研究，可关注知识更新是否影响回答一致性；目前没有直接面向结构设计或设备可靠性建模的证据。",
+        "next_steps": "建议：后续获取全文，优先核查三种维护动作、比较维度及LSH参数，再检查完全重建基线的公平性和更新成本。若迁移至运维场景，建议单独评价新旧知识冲突、证据可追溯性与错误累积；这些属于研究设想，并非作者已报告的结论。"
+      },
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "c4b5993c8dc6",
-        "state": "retry",
-        "updated_at": "2026-10-26T01:14:52.016902+00:00",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-26T02:54:56.819834+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-10-26T01:29:52.016902+00:00",
-        "total": 0,
-        "covered": 0,
+        "total": 1,
+        "covered": 1,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "HyperRAG-IHM：面向语料扩展的超图检索增强生成增量超边维护",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.898/"
+      ],
+      "analyzed_at": "2026-10-26T02:49:56.933821+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "知识库持续扩充时，结构化RAG是否必须重建整套检索结构？HyperRAG-IHM尝试通过增量维护超边接入新知识，其阅读价值在于考察：不重建历史结构，能否仍保持与全量重建相当的回答质量。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "语料不断增加，检索结构如何更新",
+            "paragraphs": [
+              "超图方法将外部知识组织为多实体关系结构，为大语言模型生成有据可依的回答提供支持。但摘要指出，现有结构化RAG系统通常以静态语料构建为前提，新文档到来后，需要针对扩充后的语料重建检索结构。本文关注的正是知识持续进入时的结构更新问题，而非仅讨论初次建库。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从候选定位到增量超边维护",
+            "paragraphs": [
+              "HyperRAG-IHM从新文档中提取关系证据，将其与已有超图知识关联，在不重建历史检索结构的情况下纳入新知识。摘要明确给出的处理链条是：使用LSH定位候选历史超边，再通过多维比较和三动作决策策略整合新的关系证据。",
+              "这里的方法重点是维护已有关系结构，而不是对扩充后的全部语料重新构建。摘要没有展开多维比较的具体维度，也没有说明三种动作各自的定义，因此不能仅凭摘要补出完整的更新规则。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "回答质量与全量重建相当或更好",
+            "paragraphs": [
+              "摘要报告，在5D评分和8D成对评估下，HyperRAG-IHM的回答质量与全量重建相当或更好。这一结果支持的结论是：在作者报告的评估条件下，增量维护能够在避免整体重建的同时保持回答质量；不能据此推断其在所有数据与任务上都优于重建。",
+              "作者还报告，该框架在消融、结构行为、跨数据集及跨回答模型分析中保持稳健。摘要未给出各项分析的具体结果，因此目前只能概括这一总体发现，不能进一步排列不同设置的表现或解释差异来源。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不能界定验证边界",
+            "paragraphs": [
+              "本解读仅依据完整摘要。数据集规模、样本构成、语料扩充方式、比较系统及回答模型的具体范围均未在摘要中交代；评分维度、评估流程和差异的统计证据也无法判断。这些信息未在摘要中报告，不代表论文没有开展相关工作。",
+              "此外，避免全量重建不等于已经证明具体的时间或资源收益。摘要没有提供更新耗时、存储开销或加速幅度，因此不宜将结构维护方式的变化直接写成已量化的效率提升。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注知识更新，而非只看建库",
+            "paragraphs": [
+              "阅读启发：对于持续积累文档的智能运维知识库，可以关注“新关系如何接入历史知识”这一问题，但不能将本文结果直接视为运维场景的验证。进一步阅读时，值得核对三动作策略如何处理新旧证据，以及跨数据集、跨回答模型的稳健性究竟覆盖哪些条件。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的增量维护流程",
+            "description": "仅概括摘要明确描述的方法关系，不代表论文原图，也不补充比较维度或决策动作的具体定义。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "提取新文档关系证据",
+                "detail": "从新到达的文档中提取关系证据。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "LSH定位候选历史超边",
+                "detail": "在已有超图知识中定位候选历史超边。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "多维比较",
+                "detail": "进行多维比较；摘要未展开具体维度。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "三动作决策策略",
+                "detail": "应用三动作决策策略；摘要未说明各动作定义。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "整合新关系证据",
+                "detail": "将新关系证据接入已有超图知识，不重建历史检索结构。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "定位关联候选"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "对候选进行比较"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "结合决策策略"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "整合关系证据"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-26T02:54:56.817834+00:00",
+      "article_profile": "da9ee838a2d681fd9f82478435fca271a7f32bb3c899c739bbc4810d1d482364",
+      "analysis_references": {},
+      "analysis_material_version": "651383bce0c77dfbd042dfd27cdddfd9fb85157c6f2dd3ee16476a4dc8cab1cb",
+      "analysis_issues": []
     },
     {
       "source": "AI 顶会论文",
@@ -123,7 +252,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Large language models are increasingly used as sources of advice and information, including in high-stakes settings, yet little is known about how they respond to user disagreement. We study how a model manages its epistemic authority, referring here to its claim to knowledge, competence, or the right to advise, once a user challenges its answer. Building on Conversation Analysis, we introduce a taxonomy of six challenge types and a four-layer framework for analysing each response: whether the original claim is maintained or changed, where authority is located, how the disagreement is socially…",
+      "summary": "模型受到质疑后，道歉是否意味着纠错？本文以会话分析为基础，构建六类挑战和四层响应框架，比较14个模型在2,310个受控情境中的32,340条回复。结果显示，认可用户与坚持原主张经常并存，道歉不能可靠代表立场修订，模型差异也不简单服从能力层级。研究提供的是行为描述工具，而非正确性或安全性评分。[P4][P7][P9] 解读：适合作为运维助手交互评估的方法参考，但不是直接研究设备维护的论文。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -177,26 +306,77 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为智能运维助手可信交互评估的补充文献阅读，重点关注分层标注及其人工验证；若目标是故障诊断、寿命预测或维护优化，不宜列为核心方向论文。[P5][P6][P10]",
+      "deep_read": {
+        "problem": "论文关注用户挑战模型答案后，模型如何维护、修订或让渡认知权威。传统翻转或坚持指标无法区分礼貌让步与知识判断变化，例如道歉后仍重复原答案。作者因此追问响应各维度是否同步，以及挑战类型、任务和模型身份如何影响这些行为。[P2][P3]",
+        "method": "研究使用四轮合成对话，固定初始答案后施加适用挑战，组合七领域、三任务、六类挑战及三级强度，获得32,340条回复。主张结果、权威定位、社交策略和证据支持分别标注，并以320条人工标签及100条双人子集检验自动裁判。[P4][P5][P6]",
+        "innovation": "主要贡献是将会话分析中的认知权威概念转化为可操作的挑战分类与分层编码，而非提出新模型。框架把主张修订、专家转介、关系修复和证据表达分开，揭示单一分数掩盖的行为组合；作者明确将其定位为后续评价的描述性基础。[P5][P9]",
+        "findings": "总体85.1%的回复认可用户，65.0%维持原主张；道歉回复中仍有58.7%维持主张。权威转移在建议任务为28.3%，明显高于事实与解释任务。挑战效果随模型和任务变化，行为画像不按能力层级排列，因此不能用规模简单预测受质疑后的表现。[P7][P8][P9]",
+        "limitations": "研究仅覆盖英语模板和单次挑战，每条响应只采集一次；细分主张修订的标注一致性偏低，稳定性复测也仅涉及三个小模型。正确性审计限于事实初始回答，不能证明最终建议质量。所供笔记未报告原文件缺项，亦无依据声称存在缺失公式。[P10][P12][P16]",
+        "connection": "解读：对智能运维、结构设计和可靠性研究，迁移价值主要在辅助决策的人机交互层：助手认可工程师或推荐专家，不代表技术判断已被证据修正。本文未评估故障诊断、结构安全或维护收益，故只能提供评估维度，不能作为工程有效性的直接证据。[P5][P9][P10]",
+        "next_steps": "建议：选取具有可核验故障根因和维护约束的工程案例，引入专家正确纠正、无依据反驳及安全问责，分别记录判断变化与社交表达。同时增加中文、多轮和重复采样，人工核验最终方案及引用来源，再检验这些行为指标与实际决策损失的关系。[P10][P12][P16]"
+      },
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "5bf0c76a6b59",
-        "state": "retry",
-        "updated_at": "2026-10-26T01:15:55.772672+00:00",
+        "state": "published",
+        "updated_at": "2026-10-26T02:58:01.399402+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
         "reason": "",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-10-26T01:30:55.772672+00:00",
         "total": 16,
-        "covered": 0,
+        "covered": 16,
         "pdf_available": true,
         "issues": []
-      }
+      },
+      "title_zh": "人工智能模型如何管理认知权威：用户异议响应的分类与比较分析",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1595/"
+      ],
+      "analyzed_at": "2026-10-26T02:58:01.382135+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "innovation": [
+          "P5",
+          "P9"
+        ],
+        "findings": [
+          "P7",
+          "P8",
+          "P9"
+        ],
+        "limitations": [
+          "P10",
+          "P12",
+          "P16"
+        ],
+        "connection": [
+          "P5",
+          "P9",
+          "P10"
+        ],
+        "next_steps": [
+          "P10",
+          "P12",
+          "P16"
+        ]
+      },
+      "analysis_material_version": "cfd2ca6dd25191bbf14d3a74fa6a50938f800e950603c5a9a181356be019ddaa",
+      "analysis_issues": []
     },
     {
       "source": "AI 顶会论文",
@@ -350,7 +530,7 @@
         "state": "published",
         "updated_at": "2026-10-26T01:43:09.460085+00:00",
         "basis": "full_text",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "facts",
         "reason": "",
         "total": 17,
@@ -385,7 +565,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "Reasoning structures (e.g., chains and graphs) are increasingly used for probabilistic inference, factuality verification, and uncertainty estimation, but their structural reliability is rarely evaluated directly. We test whether this reliability holds through a proposed two-stage diagnostic evaluation in open-ended multi-hop QA. Stage 1 tests different capabilities required to construct reasoning graphs, showing that graph reliability varies with topology, prompt design, and model family. Stage 2 uses uncertainty estimation as a downstream test case. Generated-edge experiments show that graph…",
+      "summary": "推理图结构清晰，并不意味着依赖正确或置信度可靠。本文以两阶段实验拆分连边、节点答案与证据支撑、完整分解能力，再比较图作为提示和计算结构的作用。结果显示，图计算可改善部分条件下的置信度排序，却可能损害校准，并直接继承生成边错误；收益还随模型与数据集改变。[P3][P7][P8][P25][P26]本文值得作为推理系统诊断方法阅读，但不能视为疲劳可靠性或工程故障定位的直接证据。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -439,26 +619,155 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为可靠性研究的方法拓展阅读：其受控消融、误差传播与排序—校准分离评估具有借鉴价值，但与疲劳可靠性方向直接关联较弱。[P3][P8][P24]",
+      "deep_read": {
+        "problem": "作者追问生成推理图是否足以支撑后续计算，而不只检验最终答案。诊断对象是输出图，并非模型隐藏思维；节点须有正确局部答案和证据，边须表达直接依赖。漏边、快捷边或证据错误可能分别破坏计算与事实支撑，因此结构合法不能替代语义可靠。[P1][P3][P8]",
+        "method": "第一阶段逐步移除金标准支架：A仅预测边，B增加答案与证据生成，C生成完整图。第二阶段先固定正确图比较四类使用策略，再替换生成边。Sampled BN按父节点答案状态采样条件分布并传播，属于经验计算，不是真实后验估计。[P3][P6][P7]",
+        "innovation": "本文的方法贡献在于把图作为可独立检验的中间计算对象，将依赖连接、局部支撑和分解能力拆开，并用下游压力测试连接结构错误与置信度质量。解读：价值主要是诊断协议与对照设计，而非证明图推理普遍优于无图推理，也不涉及发现模型内部真实推理过程。[P2][P3][P8]",
+        "findings": "Llama上Sampled BN较CoT-SC的AUROC提高0.029，配对检验p=0.017，但总体F1差异不显著。生成边使BN的F1由0.657降至0.599；Qwen及2Wiki未复现同样排序收益。作者结论是图计算优势取决于节点质量、结构与任务分布。[P8][P24][P25][P26]",
+        "limitations": "金标准图不唯一、语义匹配敏感且方法计算预算不等，限制部署排名解释。[P9][P19]原文件未记录公式缺项，但P5的Qwen快捷边错误率2.8%与P7表5的3.2%冲突，影响精确定量比较；P6单次口头生成与P22–23的vPGM十补全描述也不一致，复现须澄清。\n原文核对：[P5] 原页4.4节将Qwen3-32B在Setting A的shortcut_replacement错误率写为2.8%，而P7原页表5同模型、同设置、同标签为3.2%。两处均清晰可读，属于原文数值不一致而非提取错误；无法凭本批判定正确值。影响该模型具体错误率及与Llama-3.1-70B的定量比较，不改变其低于19.2%的方向判断。无公式或图项缺失。",
+        "connection": "解读：与疲劳可靠性的联系仅在方法层面，可类比检查依赖网络、局部证据与误差传播；本文没有疲劳试验、寿命预测或结构设计验证。对智能运维，节点不确定性可启发排查排序，但论文根因定义依赖可核验的中间答案，不能等同于工程故障因果识别。[P8][P26]",
+        "next_steps": "建议先构建具有专家依赖标注和证据来源的运维小样本任务，分别扰动连边、局部答案与证据，比较错误传播。采用相同补全预算，同时报告定位排序、校准、拒答覆盖率及成本；再测试图与无图信号融合，并跨设备与故障类型验证，避免直接外推论文收益。[P9][P22][P23]"
+      },
       "recommended_direction": "fatigue_reliability",
       "reading_status": {
         "paper_id": "abdf3af8d331",
-        "state": "retry",
-        "updated_at": "2026-10-26T01:10:57.917825+00:00",
+        "state": "published",
+        "updated_at": "2026-10-26T01:59:09.513553+00:00",
         "basis": "full_text",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "facts",
         "reason": "",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-10-26T01:25:57.917825+00:00",
         "total": 26,
-        "covered": 0,
+        "covered": 26,
         "pdf_available": true,
-        "issues": []
-      }
+        "issues": [
+          {
+            "kind": "source_defect",
+            "page": "P5",
+            "detail": "原页4.4节将Qwen3-32B在Setting A的shortcut_replacement错误率写为2.8%，而P7原页表5同模型、同设置、同标签为3.2%。两处均清晰可读，属于原文数值不一致而非提取错误；无法凭本批判定正确值。影响该模型具体错误率及与Llama-3.1-70B的定量比较，不改变其低于19.2%的方向判断。无公式或图项缺失。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "附录A.1提示模板无公式或图号。原页字段清晰为supporting_paragraph_ids、node_confidences和topological_order；提取文本将部分字段插入字母间空格或断开，例如node_con fidences。已按原页识读纠正，不是源文件字段缺失，不影响方法结论，但直接照搬提取文本可能造成接口字段错误。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "附录A.1约束及输出模式无公式或图号。原页可读字段为supporting_paragraph_ids和topological_order，提取文本多处呈字母间异常空格。已纠正字段识读；B/C完整模式在页底跨页续接，不认定为原文件缺项。影响模板复现的字段准确性，不影响本页实验设置的理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "附录A模板代码块，无公式或图号。原页可读字段为supporting_paragraph_ids、node_confidences、answer_confidence、attribution_confidence、topological_order；提取文本将部分字段拆为带字母间空格的形式。已按原页纠正；无字段缺项，影响模板复现而非实验结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "vPGM-Style输出模板及Sampled BN提示，无公式或图号。原页字段为P_Z_D_given_Z_E_X、P_Z_R_given_Z_E_Z_D_X、P_Y_given_Z_E_Z_D_Z_R_X，动态字段为root_sub_question、current_sub_question；提取文本存在异常插空。已核对纠正，无条件概率项缺失，不改变方法含义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P17",
+            "detail": "附录B无编号Edge HPS公式及紧随解释中的有向可达关系符号，在提取文本中被识别为分号。原页清楚显示连接匹配节点的箭头关系，正文明确其为directed reachability。已纠正为存在有向路径，而非直接边或分号运算；公式无缺项，影响Edge HPS判定标准的理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P24",
+            "detail": "式(1)在提取文本中丢失清晰的分式层次，容易将求和误接到分子。原页确认分子为c(a_i,a_pa(i))+α，分母为Σ_{a′∈S_i}c(a′,a_pa(i))+α|S_i|。已按原页纠正；原公式无缺项，影响加性CPT平滑的实现与校准敏感性分析复现。"
+          }
+        ]
+      },
+      "title_zh": "大语言模型推理图的诊断分析",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.769/"
+      ],
+      "analyzed_at": "2026-10-26T01:59:09.485821+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P3",
+          "P8"
+        ],
+        "method": [
+          "P3",
+          "P6",
+          "P7"
+        ],
+        "innovation": [
+          "P2",
+          "P3",
+          "P8"
+        ],
+        "findings": [
+          "P8",
+          "P24",
+          "P25",
+          "P26"
+        ],
+        "limitations": [
+          "P5",
+          "P6",
+          "P7",
+          "P9",
+          "P19",
+          "P22",
+          "P23"
+        ],
+        "connection": [
+          "P8",
+          "P26"
+        ],
+        "next_steps": [
+          "P9",
+          "P22",
+          "P23"
+        ]
+      },
+      "analysis_material_version": "2b1934b504db4452d08ebaf74ef643b1e754a66dc0bfdf6d3ecc071ffa99be79",
+      "analysis_issues": [
+        {
+          "kind": "source_defect",
+          "page": "P5",
+          "detail": "原页4.4节将Qwen3-32B在Setting A的shortcut_replacement错误率写为2.8%，而P7原页表5同模型、同设置、同标签为3.2%。两处均清晰可读，属于原文数值不一致而非提取错误；无法凭本批判定正确值。影响该模型具体错误率及与Llama-3.1-70B的定量比较，不改变其低于19.2%的方向判断。无公式或图项缺失。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P11",
+          "detail": "附录A.1提示模板无公式或图号。原页字段清晰为supporting_paragraph_ids、node_confidences和topological_order；提取文本将部分字段插入字母间空格或断开，例如node_con fidences。已按原页识读纠正，不是源文件字段缺失，不影响方法结论，但直接照搬提取文本可能造成接口字段错误。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P12",
+          "detail": "附录A.1约束及输出模式无公式或图号。原页可读字段为supporting_paragraph_ids和topological_order，提取文本多处呈字母间异常空格。已纠正字段识读；B/C完整模式在页底跨页续接，不认定为原文件缺项。影响模板复现的字段准确性，不影响本页实验设置的理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P13",
+          "detail": "附录A模板代码块，无公式或图号。原页可读字段为supporting_paragraph_ids、node_confidences、answer_confidence、attribution_confidence、topological_order；提取文本将部分字段拆为带字母间空格的形式。已按原页纠正；无字段缺项，影响模板复现而非实验结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "vPGM-Style输出模板及Sampled BN提示，无公式或图号。原页字段为P_Z_D_given_Z_E_X、P_Z_R_given_Z_E_Z_D_X、P_Y_given_Z_E_Z_D_Z_R_X，动态字段为root_sub_question、current_sub_question；提取文本存在异常插空。已核对纠正，无条件概率项缺失，不改变方法含义。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P17",
+          "detail": "附录B无编号Edge HPS公式及紧随解释中的有向可达关系符号，在提取文本中被识别为分号。原页清楚显示连接匹配节点的箭头关系，正文明确其为directed reachability。已纠正为存在有向路径，而非直接边或分号运算；公式无缺项，影响Edge HPS判定标准的理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P24",
+          "detail": "式(1)在提取文本中丢失清晰的分式层次，容易将求和误接到分子。原页确认分子为c(a_i,a_pa(i))+α，分母为Σ_{a′∈S_i}c(a′,a_pa(i))+α|S_i|。已按原页纠正；原公式无缺项，影响加性CPT平滑的实现与校准敏感性分析复现。"
+        }
+      ]
     },
     {
       "source": "AI 顶会论文",
@@ -485,7 +794,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Agentic RL can benefit substantially from reusable experience, but existing skill-based methods mostly focus on trajectory-level guidance and provide limited support for the principled evaluation and maintenance of an evolving skill memory. We propose D2Skill, a dynamic dual-granularity skill bank for agentic RL that organizes reusable experience into task skills for high-level guidance and step skills for fine-grained decision support and error correction. D2Skill jointly trains the policy and skill bank through paired baseline and skill-injected rollouts under the same policy, using their pe…",
+      "summary": "D2Skill研究智能体如何复用经验，同时避免高层计划无法纠正局部错误、技能库持续膨胀的问题。方法将经验划分为任务技能与步骤技能，通过同一策略下的配对轨迹估计效用，联合驱动奖励塑形、检索和剪枝。[P2–P5]交互任务、搜索问答、消融及冻结技能库迁移实验支持其方法价值，但效用不是技能贡献的因果估计，外部监督与完整成本仍有限制。[P6–P15]解读：适合智能运维经验管理的方法借鉴，并非工业可靠性的直接验证。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -539,26 +848,118 @@
       "focus_tags": [
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为智能运维智能体的经验复用与规则库治理方法重点阅读，尤其关注配对效用估计和噪声技能管理；不宜将基准成功率直接解释为工业部署可靠性。[P4][P14]",
+      "deep_read": {
+        "problem": "论文针对两类相互关联的失败：任务级经验能提供整体计划，却不足以指导观察变化后的局部恢复；技能持续积累又会增加冗余和低质量指导。作者以空容器被重复搜索为例，说明合理计划仍可能伴随错误动作，因此需要细粒度纠错和持续记忆维护。[P2–P3]",
+        "method": "每任务八条轨迹均分为技能组和基线组，以成功率差更新任务技能效用，以轨迹成功相对基线的差更新步骤技能并塑形奖励。失败触发反思生成技能；检索先筛语义相似候选，再结合效用与探索奖励排序，超容量时剪枝并保护新技能。[P4–P5][P17]",
+        "innovation": "作者将贡献定位于机制耦合，而非首次提出反思或文本记忆：任务与步骤两种抽象配合，同一策略的配对轨迹提供后见评价，并让评价参与检索、维护和策略训练。解读：关键是使经验库由被动存储转为可持续评价的训练组件，而非增加提示内容。[P9][P22]",
+        "findings": "表3中完整模型验证成功率为72.7%，去除步骤技能降至60.2%，去除技能管理降至57.8%；冻结策略与技能库的未见环境成功率为63.3%，高于SkillRL的55.5%。搜索问答平均准确率亦有提升，但并非各数据集均最佳，不能概括为全面领先。[P7–P8]",
+        "limitations": "技能效用不是单技能因果贡献；Self仍依赖外部样例，API成本仅统计早期十步。[P10][P15]原文件缺项：P21的WebShop步骤技能示例未列当前观察，无法核验情境匹配，不能补造；同页另有冰箱与柜子描述错配。基准结果尚不足以证明工业可靠性。\n原文核对：[P21] 原页第四个示例“An Example of Step Skills (WebShop)”的retrieval_obs仅列购物任务，未列当前观察；缺项已从原图核实，不能补造。该技能的原则依赖当前观察是否显示目标选项，因此无法仅据此示例核验步骤检索键的观察部分及其情境匹配；不影响其余内容识读，也不足以断言实际实现缺少观察。",
+        "connection": "解读：智能运维中的完整处置流程可对应任务技能，特定告警状态下的恢复规则可对应步骤技能；效用更新与淘汰机制可用于治理过时经验。但论文任务是文本交互与搜索，未验证设备退化、故障诊断或结构设计性能，关联属于方法迁移而非应用实证。[P2][P10][P22]",
+        "next_steps": "建议先在可回放的运维仿真任务中比较双粒度、单粒度及无记忆方案，再注入过时或误导规则，记录恢复成功率、误操作和检索噪声。沿用冻结技能库的未见场景评估，并将API等待纳入完整成本；若研究单技能贡献，应另设随机干预实验。[P8][P14–P15]"
+      },
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "782e6a0458d9",
-        "state": "retry",
-        "updated_at": "2026-10-26T01:12:07.724382+00:00",
+        "state": "published",
+        "updated_at": "2026-10-26T02:33:03.366672+00:00",
         "basis": "full_text",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "retry",
+        "article_stage": "facts",
         "reason": "",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-10-26T01:27:07.724382+00:00",
         "total": 22,
-        "covered": 0,
+        "covered": 22,
         "pdf_available": true,
-        "issues": []
-      }
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "图3的坐标轴、刻度及图例在文字提取中出现大量/uni编码乱码；原页已读清。图3a横轴为Training Steps，纵轴为Success Rate，图例为D2Skill: Skill Group、D2Skill: Baseline Group、GRPO；图3b纵轴为Average Skill Utility，比较有无management的SkillBank和Retrieval曲线，标注Skill Pruning及Success:72.7、Success:57.8。乱码影响训练收益和技能管理证据的识别，但不属于原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "图5的文字提取遗漏或打乱了横轴技能库设置与柱值对应关系。原图已核实：每组依次为GRPO、w/o skill、G3F skill、Self skill；ALFWorld/Qwen3-4B依次为53.9、61.7、68.0、72.7，WebShop/Qwen2.5-7B依次为72.6、73.4、77.3、84.4。无公式或原图缺项；该纠正影响评估时移除、替换技能库及策略知识内化证据的解读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "图6坐标轴、刻度和图例的文字提取出现/uni编码乱码，原图已读清：横轴为Training Times (Hours)，刻度0至35、间隔5；纵轴为Success Rate，标示0.2、0.4、0.6、0.8；曲线图例为GRPO、D2Skill、SkillRL，并标注X1.7。无原图缺项。纠正影响按墙钟时间比较验证性能及理解约1.7倍效率结论，不能据此推定完整训练总耗时比。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P21",
+            "detail": "原页第四个示例“An Example of Step Skills (WebShop)”的retrieval_obs仅列购物任务，未列当前观察；缺项已从原图核实，不能补造。该技能的原则依赖当前观察是否显示目标选项，因此无法仅据此示例核验步骤检索键的观察部分及其情境匹配；不影响其余内容识读，也不足以断言实际实现缺少观察。"
+          }
+        ]
+      },
+      "title_zh": "面向智能体强化学习的动态双粒度技能库",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.491/"
+      ],
+      "analyzed_at": "2026-10-26T02:33:03.358557+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P4",
+          "P5",
+          "P17"
+        ],
+        "innovation": [
+          "P9",
+          "P22"
+        ],
+        "findings": [
+          "P7",
+          "P8"
+        ],
+        "limitations": [
+          "P10",
+          "P15",
+          "P21"
+        ],
+        "connection": [
+          "P2",
+          "P10",
+          "P22"
+        ],
+        "next_steps": [
+          "P8",
+          "P14",
+          "P15"
+        ]
+      },
+      "analysis_material_version": "a340a63607fe49018ac954489a33f7190bf0c18af8641cae6b1fa0b48985f7d2",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "图3的坐标轴、刻度及图例在文字提取中出现大量/uni编码乱码；原页已读清。图3a横轴为Training Steps，纵轴为Success Rate，图例为D2Skill: Skill Group、D2Skill: Baseline Group、GRPO；图3b纵轴为Average Skill Utility，比较有无management的SkillBank和Retrieval曲线，标注Skill Pruning及Success:72.7、Success:57.8。乱码影响训练收益和技能管理证据的识别，但不属于原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "图5的文字提取遗漏或打乱了横轴技能库设置与柱值对应关系。原图已核实：每组依次为GRPO、w/o skill、G3F skill、Self skill；ALFWorld/Qwen3-4B依次为53.9、61.7、68.0、72.7，WebShop/Qwen2.5-7B依次为72.6、73.4、77.3、84.4。无公式或原图缺项；该纠正影响评估时移除、替换技能库及策略知识内化证据的解读。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "图6坐标轴、刻度和图例的文字提取出现/uni编码乱码，原图已读清：横轴为Training Times (Hours)，刻度0至35、间隔5；纵轴为Success Rate，标示0.2、0.4、0.6、0.8；曲线图例为GRPO、D2Skill、SkillRL，并标注X1.7。无原图缺项。纠正影响按墙钟时间比较验证性能及理解约1.7倍效率结论，不能据此推定完整训练总耗时比。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P21",
+          "detail": "原页第四个示例“An Example of Step Skills (WebShop)”的retrieval_obs仅列购物任务，未列当前观察；缺项已从原图核实，不能补造。该技能的原则依赖当前观察是否显示目标选项，因此无法仅据此示例核验步骤检索键的观察部分及其情境匹配；不影响其余内容识读，也不足以断言实际实现缺少观察。"
+        }
+      ]
     },
     {
       "source": "AI 顶会论文",
@@ -692,7 +1093,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Hypergraph-based methods extend structured retrieval-augmented generation (RAG) by organizing external knowledge as multi-entity relational structures, helping large language models (LLMs) generate better-grounded answers. However, existing structured RAG systems typically assume static corpus construction, requiring the retrieval structure to be rebuilt over the expanded corpus when new documents arrive. To address this limitation, we introduce HyperRAG-IHM, a hypergraph-based RAG framework that performs incremental hyperedge maintenance to incorporate newly arriving knowledge without reconst…",
+      "summary": "当知识库持续加入新文档时，结构化检索增强生成如何避免反复重建历史检索结构？本文提出HyperRAG-IHM，将新文档中的关系证据关联至已有超图，通过LSH定位候选历史超边，再结合多维比较与三动作决策完成增量维护。[摘要]作者报告，其回答质量可比或优于完全重建，并开展多类稳健性分析。当前仅有摘要，尚无法核查效率收益、决策细节和实验规模，适合作为动态知识维护方向的候选精读论文。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -746,26 +1147,155 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议关注其“定位历史超边—比较关系证据—执行维护决策”的方法链条，尤其适合研究持续更新知识库的读者；但不能据摘要认定其已解决工业智能运维问题。[摘要][解读]",
+      "deep_read": {
+        "problem": "研究问题是语料持续扩展时，如何维护超图RAG的检索结构。摘要指出，现有结构化RAG通常假设静态语料，新文档到来后需要重建扩展语料上的结构。[摘要]解读：本文关注知识更新机制，而非直接研究设备维修或故障诊断。",
+        "method": "框架先把新文档提取的关系证据关联至已有超图，再用“LSH”定位候选历史超边，随后执行“multi-dimensional comparison”和“three-action decision policy”。[摘要]摘要未说明比较维度、动作定义及其判定规则，不能据此复现算法。",
+        "innovation": "摘要明确提出的贡献是“incremental hyperedge maintenance”，即通过增量维护接纳新知识，而不重建历史检索结构。[摘要]解读：其方法特点在于把更新对象落实到超边及关系证据；现有资料不足以确认各组件的首创性及其与既有方法的完整差异。",
+        "findings": "作者报告，在“5D scoring”和“8D pairwise evaluation”下，回答质量可比或优于完全重建，并报告消融、结构行为、跨数据集及跨回答模型分析中的稳健性。[摘要]未给出具体分数、差异幅度或统计检验，不能推定提升程度。",
+        "limitations": "当前资料不足以确认作者讨论了哪些方法局限。摘要未提供数据集规模、计算开销、更新频率及错误分析，也未解释评价维度。[摘要]解读：这些是当前证据的边界，而非已证实的算法缺陷；尤其不能将避免重建直接等同于已量化的效率优势。",
+        "connection": "解读：该方法与智能运维的潜在联系是维护持续增长的运维知识库，例如接纳新增记录中的多实体关系；这不是摘要验证过的应用。[摘要]对可靠性研究，可关注知识更新是否影响回答一致性；目前没有直接面向结构设计或设备可靠性建模的证据。",
+        "next_steps": "建议：后续获取全文，优先核查三种维护动作、比较维度及LSH参数，再检查完全重建基线的公平性和更新成本。若迁移至运维场景，建议单独评价新旧知识冲突、证据可追溯性与错误累积；这些属于研究设想，并非作者已报告的结论。"
+      },
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "c4b5993c8dc6",
-        "state": "retry",
-        "updated_at": "2026-10-26T01:14:52.016902+00:00",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-26T02:54:56.819834+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-10-26T01:29:52.016902+00:00",
-        "total": 0,
-        "covered": 0,
+        "total": 1,
+        "covered": 1,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "HyperRAG-IHM：面向语料扩展的超图检索增强生成增量超边维护",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.898/"
+      ],
+      "analyzed_at": "2026-10-26T02:49:56.933821+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "知识库持续扩充时，结构化RAG是否必须重建整套检索结构？HyperRAG-IHM尝试通过增量维护超边接入新知识，其阅读价值在于考察：不重建历史结构，能否仍保持与全量重建相当的回答质量。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "语料不断增加，检索结构如何更新",
+            "paragraphs": [
+              "超图方法将外部知识组织为多实体关系结构，为大语言模型生成有据可依的回答提供支持。但摘要指出，现有结构化RAG系统通常以静态语料构建为前提，新文档到来后，需要针对扩充后的语料重建检索结构。本文关注的正是知识持续进入时的结构更新问题，而非仅讨论初次建库。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从候选定位到增量超边维护",
+            "paragraphs": [
+              "HyperRAG-IHM从新文档中提取关系证据，将其与已有超图知识关联，在不重建历史检索结构的情况下纳入新知识。摘要明确给出的处理链条是：使用LSH定位候选历史超边，再通过多维比较和三动作决策策略整合新的关系证据。",
+              "这里的方法重点是维护已有关系结构，而不是对扩充后的全部语料重新构建。摘要没有展开多维比较的具体维度，也没有说明三种动作各自的定义，因此不能仅凭摘要补出完整的更新规则。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "回答质量与全量重建相当或更好",
+            "paragraphs": [
+              "摘要报告，在5D评分和8D成对评估下，HyperRAG-IHM的回答质量与全量重建相当或更好。这一结果支持的结论是：在作者报告的评估条件下，增量维护能够在避免整体重建的同时保持回答质量；不能据此推断其在所有数据与任务上都优于重建。",
+              "作者还报告，该框架在消融、结构行为、跨数据集及跨回答模型分析中保持稳健。摘要未给出各项分析的具体结果，因此目前只能概括这一总体发现，不能进一步排列不同设置的表现或解释差异来源。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不能界定验证边界",
+            "paragraphs": [
+              "本解读仅依据完整摘要。数据集规模、样本构成、语料扩充方式、比较系统及回答模型的具体范围均未在摘要中交代；评分维度、评估流程和差异的统计证据也无法判断。这些信息未在摘要中报告，不代表论文没有开展相关工作。",
+              "此外，避免全量重建不等于已经证明具体的时间或资源收益。摘要没有提供更新耗时、存储开销或加速幅度，因此不宜将结构维护方式的变化直接写成已量化的效率提升。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注知识更新，而非只看建库",
+            "paragraphs": [
+              "阅读启发：对于持续积累文档的智能运维知识库，可以关注“新关系如何接入历史知识”这一问题，但不能将本文结果直接视为运维场景的验证。进一步阅读时，值得核对三动作策略如何处理新旧证据，以及跨数据集、跨回答模型的稳健性究竟覆盖哪些条件。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的增量维护流程",
+            "description": "仅概括摘要明确描述的方法关系，不代表论文原图，也不补充比较维度或决策动作的具体定义。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "提取新文档关系证据",
+                "detail": "从新到达的文档中提取关系证据。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "LSH定位候选历史超边",
+                "detail": "在已有超图知识中定位候选历史超边。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "多维比较",
+                "detail": "进行多维比较；摘要未展开具体维度。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "三动作决策策略",
+                "detail": "应用三动作决策策略；摘要未说明各动作定义。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "整合新关系证据",
+                "detail": "将新关系证据接入已有超图知识，不重建历史检索结构。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "定位关联候选"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "对候选进行比较"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "结合决策策略"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "整合关系证据"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-26T02:54:56.817834+00:00",
+      "article_profile": "da9ee838a2d681fd9f82478435fca271a7f32bb3c899c739bbc4810d1d482364",
+      "analysis_references": {},
+      "analysis_material_version": "651383bce0c77dfbd042dfd27cdddfd9fb85157c6f2dd3ee16476a4dc8cab1cb",
+      "analysis_issues": []
     },
     {
       "source": "AI 顶会论文",
@@ -788,7 +1318,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Large language models are increasingly used as sources of advice and information, including in high-stakes settings, yet little is known about how they respond to user disagreement. We study how a model manages its epistemic authority, referring here to its claim to knowledge, competence, or the right to advise, once a user challenges its answer. Building on Conversation Analysis, we introduce a taxonomy of six challenge types and a four-layer framework for analysing each response: whether the original claim is maintained or changed, where authority is located, how the disagreement is socially…",
+      "summary": "模型受到质疑后，道歉是否意味着纠错？本文以会话分析为基础，构建六类挑战和四层响应框架，比较14个模型在2,310个受控情境中的32,340条回复。结果显示，认可用户与坚持原主张经常并存，道歉不能可靠代表立场修订，模型差异也不简单服从能力层级。研究提供的是行为描述工具，而非正确性或安全性评分。[P4][P7][P9] 解读：适合作为运维助手交互评估的方法参考，但不是直接研究设备维护的论文。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -842,26 +1372,77 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为智能运维助手可信交互评估的补充文献阅读，重点关注分层标注及其人工验证；若目标是故障诊断、寿命预测或维护优化，不宜列为核心方向论文。[P5][P6][P10]",
+      "deep_read": {
+        "problem": "论文关注用户挑战模型答案后，模型如何维护、修订或让渡认知权威。传统翻转或坚持指标无法区分礼貌让步与知识判断变化，例如道歉后仍重复原答案。作者因此追问响应各维度是否同步，以及挑战类型、任务和模型身份如何影响这些行为。[P2][P3]",
+        "method": "研究使用四轮合成对话，固定初始答案后施加适用挑战，组合七领域、三任务、六类挑战及三级强度，获得32,340条回复。主张结果、权威定位、社交策略和证据支持分别标注，并以320条人工标签及100条双人子集检验自动裁判。[P4][P5][P6]",
+        "innovation": "主要贡献是将会话分析中的认知权威概念转化为可操作的挑战分类与分层编码，而非提出新模型。框架把主张修订、专家转介、关系修复和证据表达分开，揭示单一分数掩盖的行为组合；作者明确将其定位为后续评价的描述性基础。[P5][P9]",
+        "findings": "总体85.1%的回复认可用户，65.0%维持原主张；道歉回复中仍有58.7%维持主张。权威转移在建议任务为28.3%，明显高于事实与解释任务。挑战效果随模型和任务变化，行为画像不按能力层级排列，因此不能用规模简单预测受质疑后的表现。[P7][P8][P9]",
+        "limitations": "研究仅覆盖英语模板和单次挑战，每条响应只采集一次；细分主张修订的标注一致性偏低，稳定性复测也仅涉及三个小模型。正确性审计限于事实初始回答，不能证明最终建议质量。所供笔记未报告原文件缺项，亦无依据声称存在缺失公式。[P10][P12][P16]",
+        "connection": "解读：对智能运维、结构设计和可靠性研究，迁移价值主要在辅助决策的人机交互层：助手认可工程师或推荐专家，不代表技术判断已被证据修正。本文未评估故障诊断、结构安全或维护收益，故只能提供评估维度，不能作为工程有效性的直接证据。[P5][P9][P10]",
+        "next_steps": "建议：选取具有可核验故障根因和维护约束的工程案例，引入专家正确纠正、无依据反驳及安全问责，分别记录判断变化与社交表达。同时增加中文、多轮和重复采样，人工核验最终方案及引用来源，再检验这些行为指标与实际决策损失的关系。[P10][P12][P16]"
+      },
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "5bf0c76a6b59",
-        "state": "retry",
-        "updated_at": "2026-10-26T01:15:55.772672+00:00",
+        "state": "published",
+        "updated_at": "2026-10-26T02:58:01.399402+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
         "reason": "",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-10-26T01:30:55.772672+00:00",
         "total": 16,
-        "covered": 0,
+        "covered": 16,
         "pdf_available": true,
         "issues": []
-      }
+      },
+      "title_zh": "人工智能模型如何管理认知权威：用户异议响应的分类与比较分析",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1595/"
+      ],
+      "analyzed_at": "2026-10-26T02:58:01.382135+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "innovation": [
+          "P5",
+          "P9"
+        ],
+        "findings": [
+          "P7",
+          "P8",
+          "P9"
+        ],
+        "limitations": [
+          "P10",
+          "P12",
+          "P16"
+        ],
+        "connection": [
+          "P5",
+          "P9",
+          "P10"
+        ],
+        "next_steps": [
+          "P10",
+          "P12",
+          "P16"
+        ]
+      },
+      "analysis_material_version": "cfd2ca6dd25191bbf14d3a74fa6a50938f800e950603c5a9a181356be019ddaa",
+      "analysis_issues": []
     },
     {
       "source": "AI 顶会论文",
@@ -1015,7 +1596,7 @@
         "state": "published",
         "updated_at": "2026-10-26T01:43:09.460085+00:00",
         "basis": "full_text",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "facts",
         "reason": "",
         "total": 17,
@@ -1050,7 +1631,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "Reasoning structures (e.g., chains and graphs) are increasingly used for probabilistic inference, factuality verification, and uncertainty estimation, but their structural reliability is rarely evaluated directly. We test whether this reliability holds through a proposed two-stage diagnostic evaluation in open-ended multi-hop QA. Stage 1 tests different capabilities required to construct reasoning graphs, showing that graph reliability varies with topology, prompt design, and model family. Stage 2 uses uncertainty estimation as a downstream test case. Generated-edge experiments show that graph…",
+      "summary": "推理图结构清晰，并不意味着依赖正确或置信度可靠。本文以两阶段实验拆分连边、节点答案与证据支撑、完整分解能力，再比较图作为提示和计算结构的作用。结果显示，图计算可改善部分条件下的置信度排序，却可能损害校准，并直接继承生成边错误；收益还随模型与数据集改变。[P3][P7][P8][P25][P26]本文值得作为推理系统诊断方法阅读，但不能视为疲劳可靠性或工程故障定位的直接证据。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -1104,26 +1685,155 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为可靠性研究的方法拓展阅读：其受控消融、误差传播与排序—校准分离评估具有借鉴价值，但与疲劳可靠性方向直接关联较弱。[P3][P8][P24]",
+      "deep_read": {
+        "problem": "作者追问生成推理图是否足以支撑后续计算，而不只检验最终答案。诊断对象是输出图，并非模型隐藏思维；节点须有正确局部答案和证据，边须表达直接依赖。漏边、快捷边或证据错误可能分别破坏计算与事实支撑，因此结构合法不能替代语义可靠。[P1][P3][P8]",
+        "method": "第一阶段逐步移除金标准支架：A仅预测边，B增加答案与证据生成，C生成完整图。第二阶段先固定正确图比较四类使用策略，再替换生成边。Sampled BN按父节点答案状态采样条件分布并传播，属于经验计算，不是真实后验估计。[P3][P6][P7]",
+        "innovation": "本文的方法贡献在于把图作为可独立检验的中间计算对象，将依赖连接、局部支撑和分解能力拆开，并用下游压力测试连接结构错误与置信度质量。解读：价值主要是诊断协议与对照设计，而非证明图推理普遍优于无图推理，也不涉及发现模型内部真实推理过程。[P2][P3][P8]",
+        "findings": "Llama上Sampled BN较CoT-SC的AUROC提高0.029，配对检验p=0.017，但总体F1差异不显著。生成边使BN的F1由0.657降至0.599；Qwen及2Wiki未复现同样排序收益。作者结论是图计算优势取决于节点质量、结构与任务分布。[P8][P24][P25][P26]",
+        "limitations": "金标准图不唯一、语义匹配敏感且方法计算预算不等，限制部署排名解释。[P9][P19]原文件未记录公式缺项，但P5的Qwen快捷边错误率2.8%与P7表5的3.2%冲突，影响精确定量比较；P6单次口头生成与P22–23的vPGM十补全描述也不一致，复现须澄清。\n原文核对：[P5] 原页4.4节将Qwen3-32B在Setting A的shortcut_replacement错误率写为2.8%，而P7原页表5同模型、同设置、同标签为3.2%。两处均清晰可读，属于原文数值不一致而非提取错误；无法凭本批判定正确值。影响该模型具体错误率及与Llama-3.1-70B的定量比较，不改变其低于19.2%的方向判断。无公式或图项缺失。",
+        "connection": "解读：与疲劳可靠性的联系仅在方法层面，可类比检查依赖网络、局部证据与误差传播；本文没有疲劳试验、寿命预测或结构设计验证。对智能运维，节点不确定性可启发排查排序，但论文根因定义依赖可核验的中间答案，不能等同于工程故障因果识别。[P8][P26]",
+        "next_steps": "建议先构建具有专家依赖标注和证据来源的运维小样本任务，分别扰动连边、局部答案与证据，比较错误传播。采用相同补全预算，同时报告定位排序、校准、拒答覆盖率及成本；再测试图与无图信号融合，并跨设备与故障类型验证，避免直接外推论文收益。[P9][P22][P23]"
+      },
       "recommended_direction": "fatigue_reliability",
       "reading_status": {
         "paper_id": "abdf3af8d331",
-        "state": "retry",
-        "updated_at": "2026-10-26T01:10:57.917825+00:00",
+        "state": "published",
+        "updated_at": "2026-10-26T01:59:09.513553+00:00",
         "basis": "full_text",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "facts",
         "reason": "",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-10-26T01:25:57.917825+00:00",
         "total": 26,
-        "covered": 0,
+        "covered": 26,
         "pdf_available": true,
-        "issues": []
-      }
+        "issues": [
+          {
+            "kind": "source_defect",
+            "page": "P5",
+            "detail": "原页4.4节将Qwen3-32B在Setting A的shortcut_replacement错误率写为2.8%，而P7原页表5同模型、同设置、同标签为3.2%。两处均清晰可读，属于原文数值不一致而非提取错误；无法凭本批判定正确值。影响该模型具体错误率及与Llama-3.1-70B的定量比较，不改变其低于19.2%的方向判断。无公式或图项缺失。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "附录A.1提示模板无公式或图号。原页字段清晰为supporting_paragraph_ids、node_confidences和topological_order；提取文本将部分字段插入字母间空格或断开，例如node_con fidences。已按原页识读纠正，不是源文件字段缺失，不影响方法结论，但直接照搬提取文本可能造成接口字段错误。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "附录A.1约束及输出模式无公式或图号。原页可读字段为supporting_paragraph_ids和topological_order，提取文本多处呈字母间异常空格。已纠正字段识读；B/C完整模式在页底跨页续接，不认定为原文件缺项。影响模板复现的字段准确性，不影响本页实验设置的理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "附录A模板代码块，无公式或图号。原页可读字段为supporting_paragraph_ids、node_confidences、answer_confidence、attribution_confidence、topological_order；提取文本将部分字段拆为带字母间空格的形式。已按原页纠正；无字段缺项，影响模板复现而非实验结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "vPGM-Style输出模板及Sampled BN提示，无公式或图号。原页字段为P_Z_D_given_Z_E_X、P_Z_R_given_Z_E_Z_D_X、P_Y_given_Z_E_Z_D_Z_R_X，动态字段为root_sub_question、current_sub_question；提取文本存在异常插空。已核对纠正，无条件概率项缺失，不改变方法含义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P17",
+            "detail": "附录B无编号Edge HPS公式及紧随解释中的有向可达关系符号，在提取文本中被识别为分号。原页清楚显示连接匹配节点的箭头关系，正文明确其为directed reachability。已纠正为存在有向路径，而非直接边或分号运算；公式无缺项，影响Edge HPS判定标准的理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P24",
+            "detail": "式(1)在提取文本中丢失清晰的分式层次，容易将求和误接到分子。原页确认分子为c(a_i,a_pa(i))+α，分母为Σ_{a′∈S_i}c(a′,a_pa(i))+α|S_i|。已按原页纠正；原公式无缺项，影响加性CPT平滑的实现与校准敏感性分析复现。"
+          }
+        ]
+      },
+      "title_zh": "大语言模型推理图的诊断分析",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.769/"
+      ],
+      "analyzed_at": "2026-10-26T01:59:09.485821+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P3",
+          "P8"
+        ],
+        "method": [
+          "P3",
+          "P6",
+          "P7"
+        ],
+        "innovation": [
+          "P2",
+          "P3",
+          "P8"
+        ],
+        "findings": [
+          "P8",
+          "P24",
+          "P25",
+          "P26"
+        ],
+        "limitations": [
+          "P5",
+          "P6",
+          "P7",
+          "P9",
+          "P19",
+          "P22",
+          "P23"
+        ],
+        "connection": [
+          "P8",
+          "P26"
+        ],
+        "next_steps": [
+          "P9",
+          "P22",
+          "P23"
+        ]
+      },
+      "analysis_material_version": "2b1934b504db4452d08ebaf74ef643b1e754a66dc0bfdf6d3ecc071ffa99be79",
+      "analysis_issues": [
+        {
+          "kind": "source_defect",
+          "page": "P5",
+          "detail": "原页4.4节将Qwen3-32B在Setting A的shortcut_replacement错误率写为2.8%，而P7原页表5同模型、同设置、同标签为3.2%。两处均清晰可读，属于原文数值不一致而非提取错误；无法凭本批判定正确值。影响该模型具体错误率及与Llama-3.1-70B的定量比较，不改变其低于19.2%的方向判断。无公式或图项缺失。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P11",
+          "detail": "附录A.1提示模板无公式或图号。原页字段清晰为supporting_paragraph_ids、node_confidences和topological_order；提取文本将部分字段插入字母间空格或断开，例如node_con fidences。已按原页识读纠正，不是源文件字段缺失，不影响方法结论，但直接照搬提取文本可能造成接口字段错误。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P12",
+          "detail": "附录A.1约束及输出模式无公式或图号。原页可读字段为supporting_paragraph_ids和topological_order，提取文本多处呈字母间异常空格。已纠正字段识读；B/C完整模式在页底跨页续接，不认定为原文件缺项。影响模板复现的字段准确性，不影响本页实验设置的理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P13",
+          "detail": "附录A模板代码块，无公式或图号。原页可读字段为supporting_paragraph_ids、node_confidences、answer_confidence、attribution_confidence、topological_order；提取文本将部分字段拆为带字母间空格的形式。已按原页纠正；无字段缺项，影响模板复现而非实验结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "vPGM-Style输出模板及Sampled BN提示，无公式或图号。原页字段为P_Z_D_given_Z_E_X、P_Z_R_given_Z_E_Z_D_X、P_Y_given_Z_E_Z_D_Z_R_X，动态字段为root_sub_question、current_sub_question；提取文本存在异常插空。已核对纠正，无条件概率项缺失，不改变方法含义。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P17",
+          "detail": "附录B无编号Edge HPS公式及紧随解释中的有向可达关系符号，在提取文本中被识别为分号。原页清楚显示连接匹配节点的箭头关系，正文明确其为directed reachability。已纠正为存在有向路径，而非直接边或分号运算；公式无缺项，影响Edge HPS判定标准的理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P24",
+          "detail": "式(1)在提取文本中丢失清晰的分式层次，容易将求和误接到分子。原页确认分子为c(a_i,a_pa(i))+α，分母为Σ_{a′∈S_i}c(a′,a_pa(i))+α|S_i|。已按原页纠正；原公式无缺项，影响加性CPT平滑的实现与校准敏感性分析复现。"
+        }
+      ]
     },
     {
       "source": "AI 顶会论文",
@@ -1150,7 +1860,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Agentic RL can benefit substantially from reusable experience, but existing skill-based methods mostly focus on trajectory-level guidance and provide limited support for the principled evaluation and maintenance of an evolving skill memory. We propose D2Skill, a dynamic dual-granularity skill bank for agentic RL that organizes reusable experience into task skills for high-level guidance and step skills for fine-grained decision support and error correction. D2Skill jointly trains the policy and skill bank through paired baseline and skill-injected rollouts under the same policy, using their pe…",
+      "summary": "D2Skill研究智能体如何复用经验，同时避免高层计划无法纠正局部错误、技能库持续膨胀的问题。方法将经验划分为任务技能与步骤技能，通过同一策略下的配对轨迹估计效用，联合驱动奖励塑形、检索和剪枝。[P2–P5]交互任务、搜索问答、消融及冻结技能库迁移实验支持其方法价值，但效用不是技能贡献的因果估计，外部监督与完整成本仍有限制。[P6–P15]解读：适合智能运维经验管理的方法借鉴，并非工业可靠性的直接验证。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -1204,26 +1914,118 @@
       "focus_tags": [
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为智能运维智能体的经验复用与规则库治理方法重点阅读，尤其关注配对效用估计和噪声技能管理；不宜将基准成功率直接解释为工业部署可靠性。[P4][P14]",
+      "deep_read": {
+        "problem": "论文针对两类相互关联的失败：任务级经验能提供整体计划，却不足以指导观察变化后的局部恢复；技能持续积累又会增加冗余和低质量指导。作者以空容器被重复搜索为例，说明合理计划仍可能伴随错误动作，因此需要细粒度纠错和持续记忆维护。[P2–P3]",
+        "method": "每任务八条轨迹均分为技能组和基线组，以成功率差更新任务技能效用，以轨迹成功相对基线的差更新步骤技能并塑形奖励。失败触发反思生成技能；检索先筛语义相似候选，再结合效用与探索奖励排序，超容量时剪枝并保护新技能。[P4–P5][P17]",
+        "innovation": "作者将贡献定位于机制耦合，而非首次提出反思或文本记忆：任务与步骤两种抽象配合，同一策略的配对轨迹提供后见评价，并让评价参与检索、维护和策略训练。解读：关键是使经验库由被动存储转为可持续评价的训练组件，而非增加提示内容。[P9][P22]",
+        "findings": "表3中完整模型验证成功率为72.7%，去除步骤技能降至60.2%，去除技能管理降至57.8%；冻结策略与技能库的未见环境成功率为63.3%，高于SkillRL的55.5%。搜索问答平均准确率亦有提升，但并非各数据集均最佳，不能概括为全面领先。[P7–P8]",
+        "limitations": "技能效用不是单技能因果贡献；Self仍依赖外部样例，API成本仅统计早期十步。[P10][P15]原文件缺项：P21的WebShop步骤技能示例未列当前观察，无法核验情境匹配，不能补造；同页另有冰箱与柜子描述错配。基准结果尚不足以证明工业可靠性。\n原文核对：[P21] 原页第四个示例“An Example of Step Skills (WebShop)”的retrieval_obs仅列购物任务，未列当前观察；缺项已从原图核实，不能补造。该技能的原则依赖当前观察是否显示目标选项，因此无法仅据此示例核验步骤检索键的观察部分及其情境匹配；不影响其余内容识读，也不足以断言实际实现缺少观察。",
+        "connection": "解读：智能运维中的完整处置流程可对应任务技能，特定告警状态下的恢复规则可对应步骤技能；效用更新与淘汰机制可用于治理过时经验。但论文任务是文本交互与搜索，未验证设备退化、故障诊断或结构设计性能，关联属于方法迁移而非应用实证。[P2][P10][P22]",
+        "next_steps": "建议先在可回放的运维仿真任务中比较双粒度、单粒度及无记忆方案，再注入过时或误导规则，记录恢复成功率、误操作和检索噪声。沿用冻结技能库的未见场景评估，并将API等待纳入完整成本；若研究单技能贡献，应另设随机干预实验。[P8][P14–P15]"
+      },
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "782e6a0458d9",
-        "state": "retry",
-        "updated_at": "2026-10-26T01:12:07.724382+00:00",
+        "state": "published",
+        "updated_at": "2026-10-26T02:33:03.366672+00:00",
         "basis": "full_text",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "retry",
+        "article_stage": "facts",
         "reason": "",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-10-26T01:27:07.724382+00:00",
         "total": 22,
-        "covered": 0,
+        "covered": 22,
         "pdf_available": true,
-        "issues": []
-      }
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "图3的坐标轴、刻度及图例在文字提取中出现大量/uni编码乱码；原页已读清。图3a横轴为Training Steps，纵轴为Success Rate，图例为D2Skill: Skill Group、D2Skill: Baseline Group、GRPO；图3b纵轴为Average Skill Utility，比较有无management的SkillBank和Retrieval曲线，标注Skill Pruning及Success:72.7、Success:57.8。乱码影响训练收益和技能管理证据的识别，但不属于原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "图5的文字提取遗漏或打乱了横轴技能库设置与柱值对应关系。原图已核实：每组依次为GRPO、w/o skill、G3F skill、Self skill；ALFWorld/Qwen3-4B依次为53.9、61.7、68.0、72.7，WebShop/Qwen2.5-7B依次为72.6、73.4、77.3、84.4。无公式或原图缺项；该纠正影响评估时移除、替换技能库及策略知识内化证据的解读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "图6坐标轴、刻度和图例的文字提取出现/uni编码乱码，原图已读清：横轴为Training Times (Hours)，刻度0至35、间隔5；纵轴为Success Rate，标示0.2、0.4、0.6、0.8；曲线图例为GRPO、D2Skill、SkillRL，并标注X1.7。无原图缺项。纠正影响按墙钟时间比较验证性能及理解约1.7倍效率结论，不能据此推定完整训练总耗时比。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P21",
+            "detail": "原页第四个示例“An Example of Step Skills (WebShop)”的retrieval_obs仅列购物任务，未列当前观察；缺项已从原图核实，不能补造。该技能的原则依赖当前观察是否显示目标选项，因此无法仅据此示例核验步骤检索键的观察部分及其情境匹配；不影响其余内容识读，也不足以断言实际实现缺少观察。"
+          }
+        ]
+      },
+      "title_zh": "面向智能体强化学习的动态双粒度技能库",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.491/"
+      ],
+      "analyzed_at": "2026-10-26T02:33:03.358557+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P4",
+          "P5",
+          "P17"
+        ],
+        "innovation": [
+          "P9",
+          "P22"
+        ],
+        "findings": [
+          "P7",
+          "P8"
+        ],
+        "limitations": [
+          "P10",
+          "P15",
+          "P21"
+        ],
+        "connection": [
+          "P2",
+          "P10",
+          "P22"
+        ],
+        "next_steps": [
+          "P8",
+          "P14",
+          "P15"
+        ]
+      },
+      "analysis_material_version": "a340a63607fe49018ac954489a33f7190bf0c18af8641cae6b1fa0b48985f7d2",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "图3的坐标轴、刻度及图例在文字提取中出现大量/uni编码乱码；原页已读清。图3a横轴为Training Steps，纵轴为Success Rate，图例为D2Skill: Skill Group、D2Skill: Baseline Group、GRPO；图3b纵轴为Average Skill Utility，比较有无management的SkillBank和Retrieval曲线，标注Skill Pruning及Success:72.7、Success:57.8。乱码影响训练收益和技能管理证据的识别，但不属于原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "图5的文字提取遗漏或打乱了横轴技能库设置与柱值对应关系。原图已核实：每组依次为GRPO、w/o skill、G3F skill、Self skill；ALFWorld/Qwen3-4B依次为53.9、61.7、68.0、72.7，WebShop/Qwen2.5-7B依次为72.6、73.4、77.3、84.4。无公式或原图缺项；该纠正影响评估时移除、替换技能库及策略知识内化证据的解读。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "图6坐标轴、刻度和图例的文字提取出现/uni编码乱码，原图已读清：横轴为Training Times (Hours)，刻度0至35、间隔5；纵轴为Success Rate，标示0.2、0.4、0.6、0.8；曲线图例为GRPO、D2Skill、SkillRL，并标注X1.7。无原图缺项。纠正影响按墙钟时间比较验证性能及理解约1.7倍效率结论，不能据此推定完整训练总耗时比。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P21",
+          "detail": "原页第四个示例“An Example of Step Skills (WebShop)”的retrieval_obs仅列购物任务，未列当前观察；缺项已从原图核实，不能补造。该技能的原则依赖当前观察是否显示目标选项，因此无法仅据此示例核验步骤检索键的观察部分及其情境匹配；不影响其余内容识读，也不足以断言实际实现缺少观察。"
+        }
+      ]
     },
     {
       "source": "AI 顶会论文",
@@ -95715,13 +96517,13 @@
     "unavailable": 36
   },
   "analysis_status": {
-    "ready_core": 1,
+    "ready_core": 5,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 5
+    "pending": 1
   },
   "edition": {
     "id": "40214157879",
