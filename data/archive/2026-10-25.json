@@ -33,7 +33,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Scientific LLM agents have shown promise in literature reasoning, tool use, and experiment planning, but it remains unclear whether they can autonomously improve large, tightly coupled scientific machine-learning systems through executable code changes and computationally expensive validation. We study this question in protein folding, where progress requires coordinated architectural modifications, multi-objective evaluation, and domain-aware interpretation. We present AgentFold, a multi-agent framework that formulates folding-model development as a closed-loop search over executable code var…",
+      "summary": "AgentFold研究科学智能体能否通过修改、调试和验证代码，自主改进蛋白折叠模型。系统结合MCTS式搜索、实验记忆和多智能体协作，在紧凑ESMFold衍生模型上探索约80个变体。匹配36次评估时，最佳lDDT达到0.285，高于独立Codex提案的0.265。收益主要集中于局部结构，消融支持IPA偏置与更新门控的互补作用。解读：本文更适合作为闭环科研与模型设计方法案例，而非全局折叠能力突破的证据。[P1–P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -88,11 +88,110 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐重点阅读搜索控制、失败记忆、匹配预算比较及组件消融；对生成式模型设计有方法参考价值，但不能直接作为工程结构设计或智能运维有效性的证据。[P3–P9]",
+      "deep_read": {
+        "problem": "论文关注的不是单次代码生成，而是智能体能否在紧耦合科学模型中完成可执行修改、故障恢复和昂贵实验比较。蛋白折叠同时涉及序列表示、几何精化及多种结构指标，因此研究目标兼顾模型性能与可积累的干预证据，而非仅产生文字假设。[P1–P3]",
+        "method": "系统以代码快照构建MCTS式搜索树，经采样、去重、统一规划编码、调试、训练及分析完成内循环，数据库保存成败记录。外循环每10次迭代更新评分；NWRS汇总五类指标的均值和中位数，Critic分数仅用于实验优先级，不用于证明最终改进。[P3–P4][P14–P15]",
+        "innovation": "解读：方法特色在于把通用搜索与智能体组件落实到可执行折叠代码的连续改进，并将失败干预转为后续设计上下文。作者同时提出几何前偏置、乘性精化及避免几何反馈的经验模式；这些来自轨迹归纳，不应包装为新的通用搜索理论或已证明的生物物理规律。[P2–P3][P6][P16]",
+        "findings": "匹配36次评估时，AgentFold最佳lDDT为0.285，Codex和随机控制器分别为0.265、0.260。最优变体参数增加约1.1%；去除IPA偏置或更新门控使平均lDDT分别下降0.017、0.012。但其平均loop RMSD增加0.041，说明局部准确度收益不等于所有指标改善。[P5][P7–P8][P16]",
+        "limitations": "作者将主要证据限定于紧凑单块模型、1,000链训练集及CAMEO2022开发评价，向更强模型、多链及其他领域迁移未验证。解读：整体控制器比较未分离各组件贡献，轨迹关联也非因果证明。核对记录未确认原文件缺项；P8异版混入及P13根号问题均为已纠正的提取错误。[P5][P9][P13]",
+        "connection": "解读：与generative_design的联系主要是生成、实现和筛选模型架构变体，而非直接生成工程构件。失败记忆、预算分配和多目标评价可为智能运维及可靠性研究提供框架借鉴；局部准确度、物理合理性和长程接触的权衡，也提示结构设计不能仅优化单一综合分数。[P3–P4][P16–P17]",
+        "next_steps": "建议：先冻结搜索与训练预算，单独消融记忆、树控制器和Critic，再以独立评价集检验搜索所得收益。若迁移到工程结构设计，应建立可执行设计接口、力学验证与失效约束，并分别报告性能提升和安全退化，避免将蛋白折叠中的经验模式直接当作工程规律。[P5][P9][P14–P17]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "AgentFold：面向蛋白折叠模型设计的闭环智能体搜索",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.166.pdf"
+      ],
+      "analyzed_at": "2026-10-26T04:57:51.824226+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P14",
+          "P15"
+        ],
+        "innovation": [
+          "P2",
+          "P3",
+          "P6",
+          "P16"
+        ],
+        "findings": [
+          "P5",
+          "P7",
+          "P8",
+          "P16"
+        ],
+        "limitations": [
+          "P5",
+          "P8",
+          "P9",
+          "P13",
+          "P16"
+        ],
+        "connection": [
+          "P3",
+          "P4",
+          "P16",
+          "P17"
+        ],
+        "next_steps": [
+          "P5",
+          "P9",
+          "P14",
+          "P15",
+          "P16",
+          "P17"
+        ]
+      },
+      "analysis_material_version": "15cffe277ebe0bf715c837ab641badabddd005cf7bcc1582d0e6db97927b61ee",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "原页核实：文字提取混入带636–698行号的重复/异版段落及错误图号、附录引用和案例配对；原页没有该段“5 Conclusion”。应以原页图4（稳健性）、图5（消融）、图6（案例）及Appendix B.4为准。图6中7vd7_B实际为loop lDDT 0.225→0.269、loop backbone-lDDT 0.665→0.654、loop RMSD 8.298→6.929；提取段落所称lDDT下降及RMSD降至3.436并非该案例。纠正后结论是四例loop lDDT均提高、RMSD均降低，backbone-lDDT三例提高。不存在由此确认的原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P13",
+          "detail": "式(6)的文字提取含“/radicaltp/radicalvertex”等根号控制字符。原页已核实为完整平方根：RMSD=√[(1/N)Σ_i‖r_i^model−r_i^target‖₂²]，没有原文件公式缺项。式(8)亦核实立方根覆盖L_target−15，−1.8位于根号外。纠正用于避免误读RMSD及TM-score归一化常数，不改变作者报告的实验结果。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "106bc5838015",
+        "state": "published",
+        "updated_at": "2026-10-26T04:57:51.850132+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 29,
+        "covered": 29,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "原页核实：文字提取混入带636–698行号的重复/异版段落及错误图号、附录引用和案例配对；原页没有该段“5 Conclusion”。应以原页图4（稳健性）、图5（消融）、图6（案例）及Appendix B.4为准。图6中7vd7_B实际为loop lDDT 0.225→0.269、loop backbone-lDDT 0.665→0.654、loop RMSD 8.298→6.929；提取段落所称lDDT下降及RMSD降至3.436并非该案例。纠正后结论是四例loop lDDT均提高、RMSD均降低，backbone-lDDT三例提高。不存在由此确认的原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "式(6)的文字提取含“/radicaltp/radicalvertex”等根号控制字符。原页已核实为完整平方根：RMSD=√[(1/N)Σ_i‖r_i^model−r_i^target‖₂²]，没有原文件公式缺项。式(8)亦核实立方根覆盖L_target−15，−1.8位于根号外。纠正用于避免误读RMSD及TM-score归一化常数，不改变作者报告的实验结果。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -543,7 +642,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Scientific LLM agents have shown promise in literature reasoning, tool use, and experiment planning, but it remains unclear whether they can autonomously improve large, tightly coupled scientific machine-learning systems through executable code changes and computationally expensive validation. We study this question in protein folding, where progress requires coordinated architectural modifications, multi-objective evaluation, and domain-aware interpretation. We present AgentFold, a multi-agent framework that formulates folding-model development as a closed-loop search over executable code var…",
+      "summary": "AgentFold研究科学智能体能否通过修改、调试和验证代码，自主改进蛋白折叠模型。系统结合MCTS式搜索、实验记忆和多智能体协作，在紧凑ESMFold衍生模型上探索约80个变体。匹配36次评估时，最佳lDDT达到0.285，高于独立Codex提案的0.265。收益主要集中于局部结构，消融支持IPA偏置与更新门控的互补作用。解读：本文更适合作为闭环科研与模型设计方法案例，而非全局折叠能力突破的证据。[P1–P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -598,11 +697,110 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐重点阅读搜索控制、失败记忆、匹配预算比较及组件消融；对生成式模型设计有方法参考价值，但不能直接作为工程结构设计或智能运维有效性的证据。[P3–P9]",
+      "deep_read": {
+        "problem": "论文关注的不是单次代码生成，而是智能体能否在紧耦合科学模型中完成可执行修改、故障恢复和昂贵实验比较。蛋白折叠同时涉及序列表示、几何精化及多种结构指标，因此研究目标兼顾模型性能与可积累的干预证据，而非仅产生文字假设。[P1–P3]",
+        "method": "系统以代码快照构建MCTS式搜索树，经采样、去重、统一规划编码、调试、训练及分析完成内循环，数据库保存成败记录。外循环每10次迭代更新评分；NWRS汇总五类指标的均值和中位数，Critic分数仅用于实验优先级，不用于证明最终改进。[P3–P4][P14–P15]",
+        "innovation": "解读：方法特色在于把通用搜索与智能体组件落实到可执行折叠代码的连续改进，并将失败干预转为后续设计上下文。作者同时提出几何前偏置、乘性精化及避免几何反馈的经验模式；这些来自轨迹归纳，不应包装为新的通用搜索理论或已证明的生物物理规律。[P2–P3][P6][P16]",
+        "findings": "匹配36次评估时，AgentFold最佳lDDT为0.285，Codex和随机控制器分别为0.265、0.260。最优变体参数增加约1.1%；去除IPA偏置或更新门控使平均lDDT分别下降0.017、0.012。但其平均loop RMSD增加0.041，说明局部准确度收益不等于所有指标改善。[P5][P7–P8][P16]",
+        "limitations": "作者将主要证据限定于紧凑单块模型、1,000链训练集及CAMEO2022开发评价，向更强模型、多链及其他领域迁移未验证。解读：整体控制器比较未分离各组件贡献，轨迹关联也非因果证明。核对记录未确认原文件缺项；P8异版混入及P13根号问题均为已纠正的提取错误。[P5][P9][P13]",
+        "connection": "解读：与generative_design的联系主要是生成、实现和筛选模型架构变体，而非直接生成工程构件。失败记忆、预算分配和多目标评价可为智能运维及可靠性研究提供框架借鉴；局部准确度、物理合理性和长程接触的权衡，也提示结构设计不能仅优化单一综合分数。[P3–P4][P16–P17]",
+        "next_steps": "建议：先冻结搜索与训练预算，单独消融记忆、树控制器和Critic，再以独立评价集检验搜索所得收益。若迁移到工程结构设计，应建立可执行设计接口、力学验证与失效约束，并分别报告性能提升和安全退化，避免将蛋白折叠中的经验模式直接当作工程规律。[P5][P9][P14–P17]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "AgentFold：面向蛋白折叠模型设计的闭环智能体搜索",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.166.pdf"
+      ],
+      "analyzed_at": "2026-10-26T04:57:51.824226+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P14",
+          "P15"
+        ],
+        "innovation": [
+          "P2",
+          "P3",
+          "P6",
+          "P16"
+        ],
+        "findings": [
+          "P5",
+          "P7",
+          "P8",
+          "P16"
+        ],
+        "limitations": [
+          "P5",
+          "P8",
+          "P9",
+          "P13",
+          "P16"
+        ],
+        "connection": [
+          "P3",
+          "P4",
+          "P16",
+          "P17"
+        ],
+        "next_steps": [
+          "P5",
+          "P9",
+          "P14",
+          "P15",
+          "P16",
+          "P17"
+        ]
+      },
+      "analysis_material_version": "15cffe277ebe0bf715c837ab641badabddd005cf7bcc1582d0e6db97927b61ee",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "原页核实：文字提取混入带636–698行号的重复/异版段落及错误图号、附录引用和案例配对；原页没有该段“5 Conclusion”。应以原页图4（稳健性）、图5（消融）、图6（案例）及Appendix B.4为准。图6中7vd7_B实际为loop lDDT 0.225→0.269、loop backbone-lDDT 0.665→0.654、loop RMSD 8.298→6.929；提取段落所称lDDT下降及RMSD降至3.436并非该案例。纠正后结论是四例loop lDDT均提高、RMSD均降低，backbone-lDDT三例提高。不存在由此确认的原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P13",
+          "detail": "式(6)的文字提取含“/radicaltp/radicalvertex”等根号控制字符。原页已核实为完整平方根：RMSD=√[(1/N)Σ_i‖r_i^model−r_i^target‖₂²]，没有原文件公式缺项。式(8)亦核实立方根覆盖L_target−15，−1.8位于根号外。纠正用于避免误读RMSD及TM-score归一化常数，不改变作者报告的实验结果。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "106bc5838015",
+        "state": "published",
+        "updated_at": "2026-10-26T04:57:51.850132+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 29,
+        "covered": 29,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "原页核实：文字提取混入带636–698行号的重复/异版段落及错误图号、附录引用和案例配对；原页没有该段“5 Conclusion”。应以原页图4（稳健性）、图5（消融）、图6（案例）及Appendix B.4为准。图6中7vd7_B实际为loop lDDT 0.225→0.269、loop backbone-lDDT 0.665→0.654、loop RMSD 8.298→6.929；提取段落所称lDDT下降及RMSD降至3.436并非该案例。纠正后结论是四例loop lDDT均提高、RMSD均降低，backbone-lDDT三例提高。不存在由此确认的原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "式(6)的文字提取含“/radicaltp/radicalvertex”等根号控制字符。原页已核实为完整平方根：RMSD=√[(1/N)Σ_i‖r_i^model−r_i^target‖₂²]，没有原文件公式缺项。式(8)亦核实立方根覆盖L_target−15，−1.8位于根号外。纠正用于避免误读RMSD及TM-score归一化常数，不改变作者报告的实验结果。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -1966,13 +2164,13 @@
     "unavailable": 30
   },
   "analysis_status": {
-    "ready_core": 0,
+    "ready_core": 1,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 6
+    "pending": 5
   },
   "edition": {
     "id": "40111581596",
