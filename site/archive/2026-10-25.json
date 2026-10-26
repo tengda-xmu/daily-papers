@@ -219,7 +219,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "Interactive travel planning has become a popular use case for language models. Agents are deployed to manage evolving preferences and unexpected disruptions over multiple turns. Such settings require models to make complex, profile-conditioned planning decisions. However, existing benchmarks often evaluate feasibility, personalization, or interaction in relatively isolated settings. We therefore introduce Trip+ to measure the ability of agents to plan travel holistically. In Trip+, given traveler profiles and dynamic interactions, agents must generate and revise minute-level itineraries. End-t…",
+      "summary": "Trip+研究旅行规划智能体如何在需求变化与环境扰动中，同时保持行程可执行、画像适配和历史意图一致。基准包含153个多轮实例、570轮交互，结合固定沙箱、状态化规则及体验模拟评价18个模型。结果提示，较高可行性不代表舒适体验，节奏控制与跨轮修订仍是短板；多数指标的领先差异未获显著性支持。[P2][P6][P37]解读：值得作为动态规划代理的评价方法阅读，但旅游疲劳并非结构疲劳或工程可靠性证据。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -273,11 +273,127 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议作为智能运维代理评价的交叉方法参考，重点阅读状态保留、门控评价和配对统计；不宜作为结构疲劳可靠性方向的核心推荐。[P18–P22][P37]",
+      "deep_read": {
+        "problem": "论文关注动态旅行任务中的联合评价缺口：既有基准往往分别处理可行性、个性化或交互，难以检查新需求满足后旧承诺是否仍被保留。作者将画像、环境扰动与分钟级行程结合，要求代理选择规划、澄清或无解响应，而非始终生成方案。[P1–P4]",
+        "method": "基准以状态优先流程构建153个实例、570轮交互，覆盖40城市、11类画像及四类交互。评价先检查响应模式，再核查可行性、硬约束和软偏好，分别计算新增要求完成与旧意图保留；四位模型评委依据活动轨迹模拟体验，最终行程评分跨任务汇总。[P17–P22]",
+        "innovation": "解读：主要贡献是基准与评价协议的联合设计，而非新的规划算法。隐藏状态同时记录模式、硬约束、画像偏好和环境，明确更新及保留目标；软偏好先按规则家族内部平均，再跨有效家族平均，降低规则数量差异对总分的支配。[P3][P17][P19]",
+        "findings": "18模型中，Gemini-3.1-Pro-Preview可行性为0.8812，GPT-5.4体验模拟最高仅0.5184，支持技术可行与体验适配存在差距。配对检验仅可行性及硬约束最佳与次佳差值区间排除零；其余领先应作描述性理解，不能泛称全面显著优越。[P6][P37]",
+        "limitations": "作者承认合成英语对话、固定画像和规则覆盖有限，模拟不能替代真实体验。[P9]原文件问题须保留：[P8]称日程分低于0.5，与图5的0.52不符，影响该断言；[P16]表8缺端点归属说明，影响边界评分复现。无缺失公式，不能推定代码有误。\n原文核对：[P8] §4.2原页称体验模拟中environment、schedule和physical维度均低于0.5，但[P7]图5对应得分分别为0.43、0.52、0.49，schedule并未低于0.5。已核实为正文与图5数值不一致，并非文字提取错误或缺失公式。受影响的是“日程维度平均分低于0.5”的具体断言；不能据此否定其他维度低分或问题率结果，也不能自行改写原始数值。；[P16] 表8部分相邻评分区间缺少端点归属说明：例如市内最大转移时间1.0档为≤240 min，0.5档写240–300 min；最早开始时间Relax的1.0档为≥08:00，0.5档为07:00–08:00。原表已读清，但区间写法在240 min、08:00等边界存在表述重叠，未注明判定优先级。影响仅凭本表精确复现边界样本评分；不能据此推定实际评价代码也有冲突。无缺失公式。",
+        "connection": "解读：与智能运维的联系在于扰动后重规划、动态约束维护及证据驱动审计，可对应检修计划更新后保留安全与资源承诺。但文中疲劳是旅行者体验负担，不是材料损伤、寿命预测或失效概率；对结构设计及工程可靠性的联系仅属方法迁移。[P7–P9][P22]",
+        "next_steps": "建议将更新检查与历史承诺检查迁移到检修排程，分别衡量故障响应、既有安全约束和人员负担；通过真实任务及专家独立评分校准阈值。比较代理时保留整段任务配对重采样，并增加稀有无解案例，避免条件性方案高分掩盖模式选择失败。[P13][P36–P38]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "Trip+：个性化交互式旅行规划智能体评测基准",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1384.pdf"
+      ],
+      "analyzed_at": "2026-10-26T05:09:06.637349+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P3",
+          "P4"
+        ],
+        "method": [
+          "P17",
+          "P18",
+          "P19",
+          "P20",
+          "P21",
+          "P22"
+        ],
+        "innovation": [
+          "P3",
+          "P17",
+          "P19"
+        ],
+        "findings": [
+          "P6",
+          "P37"
+        ],
+        "limitations": [
+          "P7",
+          "P8",
+          "P9",
+          "P16"
+        ],
+        "connection": [
+          "P7",
+          "P8",
+          "P9",
+          "P22"
+        ],
+        "next_steps": [
+          "P13",
+          "P36",
+          "P37",
+          "P38"
+        ]
+      },
+      "analysis_material_version": "9d2414352368ea32f81cd4720e0bb18396ee67cde1d5bacb9a9287ce9deece1e",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "图1的文字提取遗漏了基准散点、分类区域及Trip+位置等图内信息。已由原图核对：横轴为Personalization Richness，纵轴为Interaction Richness，Trip+位于Experience与Diverse对应区域附近。遗漏影响作者对基准定位的呈现，不构成原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "表1提取将部分单元格符号串接为“✓ ✗”，导致行列含义混乱。原页图例区分绿色明确支持、橙色部分/间接支持、红色不支持。核对例如TRAVEL-SIM：Fine-grained与Feasibility为部分/间接支持，Stateful Eval.不支持，User Sim.明确支持；Trip+八项均明确支持。应以原表单元格为准，不能据混排文字判断比较结果。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P8",
+          "detail": "§4.2原页称体验模拟中environment、schedule和physical维度均低于0.5，但[P7]图5对应得分分别为0.43、0.52、0.49，schedule并未低于0.5。已核实为正文与图5数值不一致，并非文字提取错误或缺失公式。受影响的是“日程维度平均分低于0.5”的具体断言；不能据此否定其他维度低分或问题率结果，也不能自行改写原始数值。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P16",
+          "detail": "表8部分相邻评分区间缺少端点归属说明：例如市内最大转移时间1.0档为≤240 min，0.5档写240–300 min；最早开始时间Relax的1.0档为≥08:00，0.5档为07:00–08:00。原表已读清，但区间写法在240 min、08:00等边界存在表述重叠，未注明判定优先级。影响仅凭本表精确复现边界样本评分；不能据此推定实际评价代码也有冲突。无缺失公式。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "27027236b244",
+        "state": "published",
+        "updated_at": "2026-10-26T05:09:06.674361+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 38,
+        "covered": 38,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "图1的文字提取遗漏了基准散点、分类区域及Trip+位置等图内信息。已由原图核对：横轴为Personalization Richness，纵轴为Interaction Richness，Trip+位于Experience与Diverse对应区域附近。遗漏影响作者对基准定位的呈现，不构成原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "表1提取将部分单元格符号串接为“✓ ✗”，导致行列含义混乱。原页图例区分绿色明确支持、橙色部分/间接支持、红色不支持。核对例如TRAVEL-SIM：Fine-grained与Feasibility为部分/间接支持，Stateful Eval.不支持，User Sim.明确支持；Trip+八项均明确支持。应以原表单元格为准，不能据混排文字判断比较结果。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "§4.2原页称体验模拟中environment、schedule和physical维度均低于0.5，但[P7]图5对应得分分别为0.43、0.52、0.49，schedule并未低于0.5。已核实为正文与图5数值不一致，并非文字提取错误或缺失公式。受影响的是“日程维度平均分低于0.5”的具体断言；不能据此否定其他维度低分或问题率结果，也不能自行改写原始数值。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P16",
+            "detail": "表8部分相邻评分区间缺少端点归属说明：例如市内最大转移时间1.0档为≤240 min，0.5档写240–300 min；最早开始时间Relax的1.0档为≥08:00，0.5档为07:00–08:00。原表已读清，但区间写法在240 min、08:00等边界存在表述重叠，未注明判定优先级。影响仅凭本表精确复现边界样本评分；不能据此推定实际评价代码也有冲突。无缺失公式。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -828,7 +944,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "Interactive travel planning has become a popular use case for language models. Agents are deployed to manage evolving preferences and unexpected disruptions over multiple turns. Such settings require models to make complex, profile-conditioned planning decisions. However, existing benchmarks often evaluate feasibility, personalization, or interaction in relatively isolated settings. We therefore introduce Trip+ to measure the ability of agents to plan travel holistically. In Trip+, given traveler profiles and dynamic interactions, agents must generate and revise minute-level itineraries. End-t…",
+      "summary": "Trip+研究旅行规划智能体如何在需求变化与环境扰动中，同时保持行程可执行、画像适配和历史意图一致。基准包含153个多轮实例、570轮交互，结合固定沙箱、状态化规则及体验模拟评价18个模型。结果提示，较高可行性不代表舒适体验，节奏控制与跨轮修订仍是短板；多数指标的领先差异未获显著性支持。[P2][P6][P37]解读：值得作为动态规划代理的评价方法阅读，但旅游疲劳并非结构疲劳或工程可靠性证据。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -882,11 +998,127 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议作为智能运维代理评价的交叉方法参考，重点阅读状态保留、门控评价和配对统计；不宜作为结构疲劳可靠性方向的核心推荐。[P18–P22][P37]",
+      "deep_read": {
+        "problem": "论文关注动态旅行任务中的联合评价缺口：既有基准往往分别处理可行性、个性化或交互，难以检查新需求满足后旧承诺是否仍被保留。作者将画像、环境扰动与分钟级行程结合，要求代理选择规划、澄清或无解响应，而非始终生成方案。[P1–P4]",
+        "method": "基准以状态优先流程构建153个实例、570轮交互，覆盖40城市、11类画像及四类交互。评价先检查响应模式，再核查可行性、硬约束和软偏好，分别计算新增要求完成与旧意图保留；四位模型评委依据活动轨迹模拟体验，最终行程评分跨任务汇总。[P17–P22]",
+        "innovation": "解读：主要贡献是基准与评价协议的联合设计，而非新的规划算法。隐藏状态同时记录模式、硬约束、画像偏好和环境，明确更新及保留目标；软偏好先按规则家族内部平均，再跨有效家族平均，降低规则数量差异对总分的支配。[P3][P17][P19]",
+        "findings": "18模型中，Gemini-3.1-Pro-Preview可行性为0.8812，GPT-5.4体验模拟最高仅0.5184，支持技术可行与体验适配存在差距。配对检验仅可行性及硬约束最佳与次佳差值区间排除零；其余领先应作描述性理解，不能泛称全面显著优越。[P6][P37]",
+        "limitations": "作者承认合成英语对话、固定画像和规则覆盖有限，模拟不能替代真实体验。[P9]原文件问题须保留：[P8]称日程分低于0.5，与图5的0.52不符，影响该断言；[P16]表8缺端点归属说明，影响边界评分复现。无缺失公式，不能推定代码有误。\n原文核对：[P8] §4.2原页称体验模拟中environment、schedule和physical维度均低于0.5，但[P7]图5对应得分分别为0.43、0.52、0.49，schedule并未低于0.5。已核实为正文与图5数值不一致，并非文字提取错误或缺失公式。受影响的是“日程维度平均分低于0.5”的具体断言；不能据此否定其他维度低分或问题率结果，也不能自行改写原始数值。；[P16] 表8部分相邻评分区间缺少端点归属说明：例如市内最大转移时间1.0档为≤240 min，0.5档写240–300 min；最早开始时间Relax的1.0档为≥08:00，0.5档为07:00–08:00。原表已读清，但区间写法在240 min、08:00等边界存在表述重叠，未注明判定优先级。影响仅凭本表精确复现边界样本评分；不能据此推定实际评价代码也有冲突。无缺失公式。",
+        "connection": "解读：与智能运维的联系在于扰动后重规划、动态约束维护及证据驱动审计，可对应检修计划更新后保留安全与资源承诺。但文中疲劳是旅行者体验负担，不是材料损伤、寿命预测或失效概率；对结构设计及工程可靠性的联系仅属方法迁移。[P7–P9][P22]",
+        "next_steps": "建议将更新检查与历史承诺检查迁移到检修排程，分别衡量故障响应、既有安全约束和人员负担；通过真实任务及专家独立评分校准阈值。比较代理时保留整段任务配对重采样，并增加稀有无解案例，避免条件性方案高分掩盖模式选择失败。[P13][P36–P38]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "Trip+：个性化交互式旅行规划智能体评测基准",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1384.pdf"
+      ],
+      "analyzed_at": "2026-10-26T05:09:06.637349+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P3",
+          "P4"
+        ],
+        "method": [
+          "P17",
+          "P18",
+          "P19",
+          "P20",
+          "P21",
+          "P22"
+        ],
+        "innovation": [
+          "P3",
+          "P17",
+          "P19"
+        ],
+        "findings": [
+          "P6",
+          "P37"
+        ],
+        "limitations": [
+          "P7",
+          "P8",
+          "P9",
+          "P16"
+        ],
+        "connection": [
+          "P7",
+          "P8",
+          "P9",
+          "P22"
+        ],
+        "next_steps": [
+          "P13",
+          "P36",
+          "P37",
+          "P38"
+        ]
+      },
+      "analysis_material_version": "9d2414352368ea32f81cd4720e0bb18396ee67cde1d5bacb9a9287ce9deece1e",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "图1的文字提取遗漏了基准散点、分类区域及Trip+位置等图内信息。已由原图核对：横轴为Personalization Richness，纵轴为Interaction Richness，Trip+位于Experience与Diverse对应区域附近。遗漏影响作者对基准定位的呈现，不构成原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "表1提取将部分单元格符号串接为“✓ ✗”，导致行列含义混乱。原页图例区分绿色明确支持、橙色部分/间接支持、红色不支持。核对例如TRAVEL-SIM：Fine-grained与Feasibility为部分/间接支持，Stateful Eval.不支持，User Sim.明确支持；Trip+八项均明确支持。应以原表单元格为准，不能据混排文字判断比较结果。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P8",
+          "detail": "§4.2原页称体验模拟中environment、schedule和physical维度均低于0.5，但[P7]图5对应得分分别为0.43、0.52、0.49，schedule并未低于0.5。已核实为正文与图5数值不一致，并非文字提取错误或缺失公式。受影响的是“日程维度平均分低于0.5”的具体断言；不能据此否定其他维度低分或问题率结果，也不能自行改写原始数值。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P16",
+          "detail": "表8部分相邻评分区间缺少端点归属说明：例如市内最大转移时间1.0档为≤240 min，0.5档写240–300 min；最早开始时间Relax的1.0档为≥08:00，0.5档为07:00–08:00。原表已读清，但区间写法在240 min、08:00等边界存在表述重叠，未注明判定优先级。影响仅凭本表精确复现边界样本评分；不能据此推定实际评价代码也有冲突。无缺失公式。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "27027236b244",
+        "state": "published",
+        "updated_at": "2026-10-26T05:09:06.674361+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 38,
+        "covered": 38,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "图1的文字提取遗漏了基准散点、分类区域及Trip+位置等图内信息。已由原图核对：横轴为Personalization Richness，纵轴为Interaction Richness，Trip+位于Experience与Diverse对应区域附近。遗漏影响作者对基准定位的呈现，不构成原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "表1提取将部分单元格符号串接为“✓ ✗”，导致行列含义混乱。原页图例区分绿色明确支持、橙色部分/间接支持、红色不支持。核对例如TRAVEL-SIM：Fine-grained与Feasibility为部分/间接支持，Stateful Eval.不支持，User Sim.明确支持；Trip+八项均明确支持。应以原表单元格为准，不能据混排文字判断比较结果。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "§4.2原页称体验模拟中environment、schedule和physical维度均低于0.5，但[P7]图5对应得分分别为0.43、0.52、0.49，schedule并未低于0.5。已核实为正文与图5数值不一致，并非文字提取错误或缺失公式。受影响的是“日程维度平均分低于0.5”的具体断言；不能据此否定其他维度低分或问题率结果，也不能自行改写原始数值。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P16",
+            "detail": "表8部分相邻评分区间缺少端点归属说明：例如市内最大转移时间1.0档为≤240 min，0.5档写240–300 min；最早开始时间Relax的1.0档为≥08:00，0.5档为07:00–08:00。原表已读清，但区间写法在240 min、08:00等边界存在表述重叠，未注明判定优先级。影响仅凭本表精确复现边界样本评分；不能据此推定实际评价代码也有冲突。无缺失公式。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -2164,13 +2396,13 @@
     "unavailable": 30
   },
   "analysis_status": {
-    "ready_core": 1,
+    "ready_core": 2,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 5
+    "pending": 4
   },
   "edition": {
     "id": "40111581596",
