@@ -1,0 +1,40 @@
+{
+  "paper_id": "0da00754456e",
+  "fingerprint": "7515e23580e1245ef6e57b19021e4b96cb419ddc86360db5a18b6c34c7298b5e",
+  "analysis": {
+    "title_zh": "融合子结构信息的一体化叶盘—轴转子不确定性低周疲劳可靠性代理评估框架",
+    "summary": "本文针对复杂工况和参数不确定性下一体化叶盘—轴转子的低周疲劳可靠性评估，提出结合主导循环识别、改进猫群优化辅助神经网络与蒙特卡洛模拟的代理框架。摘要报告寿命预测MAPE为0.77%，所设设计寿命要求下可靠度约98.6%，计算约加速69倍，并识别疲劳强度参数和转速为主要不确定性贡献因素。当前仅能据摘要评估其方法价值，不能确认全文验证质量及推广范围。[摘要]",
+    "recommendation": "建议疲劳可靠性研究者重点关注其有限元代理建模与概率评估流程；摘要提供明确方法和量化结果，但未展示生成式设计成果，不能仅凭主题标签认定相关贡献。[摘要]",
+    "deep_read": {
+      "problem": "研究对象是一体化叶盘—轴转子在复杂工况和参数不确定性下的低周疲劳问题。摘要指出直接有限元概率评估“computationally demanding”。解读：研究重点是在重复力学计算成本与寿命风险量化需求之间建立可行路径，而非仅寻找单一确定性寿命。[摘要]",
+      "method": "作者先通过弹塑性有限元分析确定疲劳危险区域和主导循环，再用拉丁超立方抽样生成1000个有限元样本。框架结合ICSO-ANN与蒙特卡洛模拟，开展四次独立评估，每次使用200个样本开发模型、50个留出样本独立测试。[摘要]",
+      "innovation": "解读：值得关注的是主导循环识别、优化辅助神经网络与概率可靠性分析的组合。摘要称其为“surrogate-assisted fatigue-reliability framework”，但没有展开猫群算法改进或子结构信息的具体作用，因此只能识别方法组合，不能确认相对既有工作的创新幅度。[摘要]",
+      "findings": "摘要报告寿命预测MAPE为0.77%；在均值11,000次循环的正态分布设计寿命要求下，可靠度约98.6%。相同“103-sample”基准下计算约加速69倍。敏感性分析还将疲劳强度参数与转速识别为寿命不确定性的主要贡献因素。[摘要]",
+      "limitations": "当前资料未给出输入变量分布细节、设计寿命标准差、误差分布和计算计时口径，无法核查可靠度及加速结果的稳健性。“103-sample”缺少排版上下文，不能擅自改写为指数形式。这些是摘要证据的边界，不应当作论文全文已经确认的缺陷。[摘要]",
+      "connection": "解读：该工作直接关联疲劳可靠性与结构设计中的不确定性分析，敏感性结果可作为确定重点考察参数的参考，但不等同于完成设计优化。对于智能运维，摘要没有提供监测数据接入、在线寿命更新或维护决策证据；对于生成式设计，也尚无直接方法支持。[摘要]",
+      "next_steps": "建议：获取全文后优先核对子结构信息如何进入模型、改进猫群算法的对照设置，以及四次评估的样本关系。若迁移至自身研究，可另行检验低寿命尾部预测误差和可靠度收敛情况，并在统一精度要求下比较计算成本；这些属于后续建议，并非已报告成果。"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://doi.org/10.3390/ma19204404"
+    ],
+    "analyzed_at": "2026-10-28T01:07:59.696204+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": true,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "摘要明确研究低周疲劳可靠性，并提供代理模型、独立测试安排和量化结果，足以支持其在疲劳可靠性方向值得重点阅读的初步判断；但不足以确认生成式设计贡献、算法原创程度或工程泛化能力。[摘要]",
+    "evidence": "The ICSO-ANN achieves a MAPE of 0.77%, demonstrating high accuracy in fatigue life prediction. Probabilistic analysis against a normally distributed design life requirement with a mean of 11,000 cycles yields a reliability of approximately 98.6%."
+  },
+  "material": {
+    "version": "421c8c7403add508a63f84d00f1dbc97cff68a84cf894d58245a581503cf5c2c",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "The ICSO-ANN achieves a MAPE of 0.77%, demonstrating high accuracy in fatigue life prediction. Probabilistic analysis against a normally distributed design life requirement with a mean of 11,000 cycles yields a reliability of approximately 98.6%."
+  }
+}
