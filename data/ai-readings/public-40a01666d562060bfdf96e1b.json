@@ -1,18 +1,19 @@
 {
   "id": "public-40a01666d562060bfdf96e1b",
-  "content_version": "bcd43db8be6a487b84ac6457a268efd042de0f29ef497f743226b28671298aef",
+  "content_version": "f2d988ebaa4bcbfadbf493e2274a8cc4340578b7991d30502e44aa81593570c8",
   "analysis": {
-    "title_zh": "VocabX 结果预告：词表专用化如何降低 SLM 推理成本",
-    "summary": "团队文章介绍 VocabX 的部分预告结果：面向领域或任务微调的 Qwen、Gemma 等开源模型，仍继承通用词表，可能将任务中常见的输出文本切分为较多 token。团队在生产环境的作文评分应用中，围绕每个 token 的成本而非频率进行词表专用化，报告实测推理成本降低 77%。该结果来自特定应用，不能直接视为其他任务的收益；原文明确论文尚待发布。",
-    "application": "建议：【科研迁移建议】可在作文评分、结构化报告生成等输出模式较固定的任务中，评估词表切分与推理成本的关系，并检验专用化对输出质量的影响。【团队报告效果】所给原文仅报告生产环境作文评分应用的实测推理成本降低 77%，未提供其他任务的验证结果，不宜外推为普遍收益。",
+    "title_zh": "VocabX 研究预告：通过词表专门化降低小语言模型推理成本",
+    "summary": "【原文】面向领域或任务微调的 Qwen、Gemma 等开源模型，仍继承覆盖通用场景的词表。作者在生产环境中的作文评分系统发现，模型最常生成的文本会被拆成多个词元，因此尝试围绕每个词元的成本而非频率进行词表专门化，并报告实测推理成本降低77%。该文章仅预告即将发表的 VocabX 论文结果，不能视为工具已发布，也不能据此认定其他任务具有同等降幅。",
+    "application": "建议：【科研迁移设想】可在科研文本分类、结构设计报告生成或运维日志解释等专用任务中，评估词表切分与推理成本的关系，同时检查任务质量是否变化。【原文报告效果】作者仅报告其生产作文评分场景的实测成本降低77%；所给资料未提供其他任务的验证结果。",
     "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
       "Models specialized for a domain or a task by fine-tuning general open-source models, such as Qwen and Gemma, inherit a vocabulary built for many domains and general applications.",
       "In an essay grader we run in production, that vocabulary split the text the model writes most into many tokens.",
-      "This article previews some results from the VocabX paper, which we will publish soon: how we specialized the vocabulary around the cost of each token rather than its frequency, and cut measured inference cost by 77%"
+      "This article previews some results from the VocabX paper, which we will publish soon:",
+      "how we specialized the vocabulary around the cost of each token rather than its frequency, and cut measured inference cost by 77%"
     ],
     "basis_url": "https://huggingface.co/blog/Dharma-AI/vocabx-vocabulary-specialization"
   },
-  "analyzed_at": "2026-10-28T00:24:22.237062+00:00"
+  "analyzed_at": "2026-10-28T08:22:59.207558+00:00"
 }
