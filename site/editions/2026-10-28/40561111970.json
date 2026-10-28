@@ -68,7 +68,20 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "840fad5030ef",
+        "state": "missing_evidence",
+        "updated_at": "2026-10-28T00:25:33.132129+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -674,7 +687,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "Energy-efficient train control usually optimises speed for traction energy and running time alone, while the structural fatigue of the vehicle frame is treated as a fixed design property. This paper argues that speed also drives fatigue damage and should enter the same optimisation. The argument is built on full-scale strain-gauge tests of the frame of an ADM-1 special self-propelled railcar operated in Uzbekistan. Sixteen measuring channels were recorded at 10, 30, 55 and 60 km/h; finite element results agreed with the measurements within 5–10%. Maximum stress grows almost linearly with speed…",
+      "summary": "本文关注列车节能控制通常忽略的车架疲劳代价，主张将速度引起的结构损伤与牵引能耗、运行时间共同优化。作者以乌兹别克斯坦ADM-1自推进轨道车的实车应变测试为基础，报告应力随速度近线性增长，并提出包含Miner型疲劳损伤的综合成本模型及面向UzEL电力机车的机器学习驾驶建议框架。[摘要] 当前仅有摘要，实测结果、示例优化与拟议框架应分别理解，不能视为已完成电力机车应用验证。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7221807530",
@@ -720,11 +733,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议重点阅读其将实测结构响应接入节能速度决策的思路，尤其适合疲劳可靠性与智能运维交叉研究；但不宜将拟议人工智能框架当作成熟应用成果。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是：节能驾驶的速度选择是否应同时考虑车辆结构寿命，而非仅优化牵引能耗与运行时间。摘要指出，传统处理中车架疲劳常被视为“a fixed design property”。[摘要] 解读：本文试图把结构承载后果纳入运行决策，使运行效率与疲劳损伤在同一优化问题中权衡。",
+        "method": "作者对ADM-1轨道车车架开展实尺度应变片测试，在10、30、55和60 km/h下记录16个测量通道，并以有限元结果对照测量。随后构建牵引能耗、Miner型疲劳损伤及运行时间的综合成本，开展示例计算。[摘要] 摘要未给出成本权重、损伤参数及优化求解细节。",
+        "innovation": "可辨识的方法特点是连接车架应变测量、速度相关结构响应与疲劳约束速度优化，并进一步提出面向UzEL电力机车的驾驶建议框架。[摘要] 解读：价值在于结构可靠性与运行控制的耦合，而非摘要已证明某种人工智能算法创新；其相对既有研究的新颖程度仍缺少文献对照。",
+        "findings": "摘要报告有限元结果与测量相差5–10%，最大应力随速度近线性增长，中位R²为0.92。柴油机下方梁区的应力梯度为2.73 MPa每km/h，约54 km/h时达到152.75 MPa许用应力。[摘要] 示例计算还显示，最优巡航速度明显低于强度限值，但未报告具体最优速度。",
+        "limitations": "当前仅有摘要，无法核查测量时长、重复试验、线路激励与载荷条件，也无法判断疲劳损伤计算如何处理应力历程。摘要将优化结果称为“an illustrative calculation”，机器学习框架则是“proposed”。[摘要] 因而尚不足以确认节能收益、寿命改善或跨车型部署效果。",
+        "connection": "与疲劳可靠性研究的直接联系是把Miner型损伤纳入运行成本；与智能运维的联系是利用结构状态信息支持驾驶速度建议。[摘要] 解读：这提供了从监测走向运行干预的研究路径。对结构设计的联系主要是载荷边界与运行约束协同，摘要未涉及生成式设计或结构形态优化。",
+        "next_steps": "建议后续核查应变至疲劳损伤的转换过程、综合成本各项权重及约束定义，并区分许用应力边界与长期疲劳寿命要求。针对拟议电力机车框架，建议补充目标车型数据和独立工况验证，比较能耗、时间与损伤的变化。这些是基于摘要证据缺口提出的研究建议，并非作者已完成的工作。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "疲劳约束下的机车节能速度建议：从车架应变测量到人工智能框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.5281/zenodo.23367076"
+      ],
+      "analyzed_at": "2026-10-28T00:26:49.637275+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "0aeef60d7d4d34b7132f0a417790cfff126bf2dbca7a5f4b6bfa50a62060b7bc",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "0802a585eb30",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-28T00:26:49.644839+00:00",
+        "basis": "abstract",
+        "article_state": "retry",
+        "article_stage": "writing",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -746,7 +791,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Purpose The current study proposes building a strong predictive maintenance (PdM) model for industrial systems through the use of ensemble machine learning models to forecast equipment failures before they happen. The research emphasizes enhancing the reliability during operation, minimizing downtime and offering a scalable solution to fill the gap between theoretical studies and real-world industrial applications in the Industry 5.0 era. Design/methodology/approach Two benchmark datasets: AI4I 2020 and its extended variant AI4I Predictive Maintenance Dataset with Irregularities (PMDI) are emp…",
+      "summary": "本文研究工业设备故障预测，采用三个梯度提升模型作为基学习器，以逻辑回归构建堆叠集成，并在两个AI4I基准数据集上评估。[摘要]报告准确率分别为99.16%和99.60%，ROC-AUC接近0.99，且优于独立基模型。研究与智能运维直接相关，但证据限于公开基准和人工工业环境，不能据此确认真实产线收益。本文仅作摘要级解读，重点关注集成方法、类别不平衡处理及结果的适用边界。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -784,11 +829,154 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为智能运维中表格数据故障分类与堆叠集成的候选文献重点阅读；[摘要]明确给出模型组合和基准结果，但尚不足以支持直接部署或认定维护成本下降。",
+      "deep_read": {
+        "problem": "研究针对工业设备故障预警，希望通过预测性维护提高运行可靠性、减少停机，并缩小理论研究与工业应用之间的差距。[摘要]以“forecast equipment failures before they happen”说明目标，但没有提供预测提前量，不能确认其是否实现时间意义上的提前预警。",
+        "method": "框架采用XGBoost、LightGBM和CatBoost作为基学习器，以逻辑回归进行堆叠集成。[摘要]明确称其为“meta-learner”。预处理包括标签编码、特征缩放和SMOTE，评估涉及准确率、精确率、召回率、F1及ROC-AUC；摘要未交代数据划分细节。",
+        "innovation": "作者将贡献定位于三种梯度提升模型面向预测性维护的堆叠组合。[摘要]称其“combines three gradient boosting models”。解读：可核对的贡献是具体模型组合及基准验证，而非新算法原理；仅凭摘要无法判断其相对既有集成研究的新颖程度。",
+        "findings": "作者报告堆叠集成持续优于单独基模型。[摘要]给出“99.16%”和“99.60%”，分别对应两个数据集的准确率，ROC-AUC接近0.99。不过摘要没有列出基模型成绩、提升幅度及不确定性，尚不能判断优势大小、统计稳定性或少数类故障的实际检出水平。",
+        "limitations": "研究明确受限于公开基准数据集与人工工业环境，[摘要]原文为“artificial industrial settings”。实时部署、可解释性和成本敏感评估均被列为后续扩展。摘要也未说明划分与过采样顺序，因此无法核查泄漏风险；这不等于已经发现泄漏。",
+        "connection": "解读：该研究与智能运维中的设备故障识别直接相关，可作为比较单模型与集成模型的参考。[摘要]强调“enhancing the reliability during operation”，但没有给出结构设计优化、寿命分布或系统可靠度分析，不能将分类准确率直接解释为工程可靠性增益。",
+        "next_steps": "建议：获取全文后先核查数据划分、堆叠训练流程及过采样是否仅用于训练集，再检查故障类别召回率与误报情况。[摘要]将“Real-time deployment”列为未来扩展；后续可用真实产线数据检验跨工况泛化，并评估漏报代价与维护收益，这些尚非本文已证实成果。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "面向工业物联网机器故障预测的AI4I数据集堆叠集成预测性维护框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1108/jqme-08-2025-0093"
+      ],
+      "analyzed_at": "2026-10-28T00:28:28.827329+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "多种梯度提升模型组合后，能否比单一模型更好地预测设备故障？这项研究在公开预测性维护基准上检验堆叠集成的表现，也提示我们区分高分类指标与真实工业运维收益。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "故障预测：从模型表现走向维护价值",
+            "paragraphs": [
+              "预测性维护希望在设备故障发生前识别风险，以提高运行可靠性、减少停机。本文围绕这一目标构建集成学习模型，尝试缩小理论研究与工业应用之间的距离。不过，减少停机和支持可扩展应用是研究的目标，不能直接视为已经验证的现场成效。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "梯度提升模型打底，逻辑回归完成堆叠",
+            "paragraphs": [
+              "研究使用 AI4I 2020 及其扩展变体 AI4I Predictive Maintenance Dataset with Irregularities（PMDI）。摘要列出的预处理包括标签编码、特征缩放，以及用于处理类别不平衡的合成少数类过采样技术（SMOTE），并关注数据质量问题。",
+              "模型以 XGBoost、LightGBM 和 CatBoost 为基学习器，以逻辑回归为元学习器组成堆叠集成。评价指标包括准确率、精确率、召回率、F1 分数和 ROC-AUC，用于从不同角度衡量故障预测表现。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "基准结果：堆叠集成优于单独基模型",
+            "paragraphs": [
+              "摘要报告，堆叠集成持续优于单独使用的基模型，在 AI4I 2020 上达到 99.16% 的准确率，在 AI4I PMDI 上达到 99.60%，ROC-AUC 接近 0.99。这些结果支持该组合在所用基准条件下的预测表现，但摘要未给出各基模型的具体分数，因此无法据此量化集成带来的提升幅度。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "高准确率的适用边界仍需核对",
+            "paragraphs": [
+              "作者明确指出，研究局限于公开基准数据集和人工构造的工业场景。仅凭摘要，无法判断样本规模、故障类别分布、训练测试划分、过采样实施位置，以及比较模型的调参与重复验证范围；这些是当前资料未交代的信息，不代表论文没有开展相应工作。",
+              "实时部署、深度模型融合、成本敏感评价，以及 SHAP、LIME 等解释工具，被列为未来扩展。因此，当前摘要不能证明模型已经降低现场停机时间，也不足以判断漏报与误报的实际维护代价。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：把预测分数与运维决策分开看",
+            "paragraphs": [
+              "阅读启发：后续阅读可优先核对类别不平衡如何影响召回率和精确率，以及堆叠模型相对各基模型的优势是否稳定。对智能运维读者而言，还值得关注预测结果如何对应维护决策、错误成本与解释需求；这些问题与摘要提出的扩展方向一致，但尚不能由现有结果回答。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的故障预测框架",
+            "description": "概括摘要明确描述的数据处理、堆叠集成与评价关系，并非论文原图，不表示摘要未披露的训练或验证配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "预测性维护基准数据",
+                "detail": "AI4I 2020 及其扩展变体 AI4I PMDI"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "数据预处理",
+                "detail": "标签编码、特征缩放与 SMOTE；摘要未说明内部实施顺序"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "梯度提升基学习器",
+                "detail": "XGBoost、LightGBM、CatBoost"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "逻辑回归元学习器",
+                "detail": "与基学习器共同组成堆叠集成模型"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "故障预测性能评价",
+                "detail": "准确率、精确率、召回率、F1 分数与 ROC-AUC"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "数据处理"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "用于模型学习"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "堆叠集成"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "评价模型表现"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-28T00:29:41.858501+00:00",
+      "article_profile": "48292ee32e9e62687d3a658de8690886438542899504ddc32e23a40f0d73ee81",
+      "analysis_references": {},
+      "analysis_material_version": "eafd0f96f7c30fe852ac96f32c0044251c7b7723cd5f6fd8fa0fd77f81a4e375",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "a5f1949ef4a2",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-28T00:29:41.859600+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -810,7 +998,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Artificial intelligence (AI) has significantly improved photovoltaic (PV) fault diagnosis; however, existing methods often struggle under critical fault conditions, require large training datasets, or exhibit limited robustness in multi-fault classification. This paper proposes an intelligent ensemble learning framework that integrates fuzzy logic (FL) and particle swarm optimization (PSO) for accurate fault detection and classification in PV arrays. Initially, representative features are extracted from the PV current–voltage (I–V) characteristics using Manhattan and Chebyshev distance metrics…",
+      "summary": "本文针对光伏阵列故障诊断在复杂工况下分类不稳等问题，提出融合模糊逻辑与粒子群优化的加权集成框架。方法从电流—电压特性提取距离特征，综合分类器准确率、F1分数与标准差进行评价，再优化分类器组合及权重，并用置换特征选择降低输入维度。摘要报告，实验数据覆盖多种故障和环境条件，平均分类准确率为98.78%。其价值在于联合处理分类性能、稳定性与模型组合，但当前仅有摘要，尚不能核验具体实验设计及泛化边界。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7223649916",
@@ -854,11 +1042,43 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为光伏智能运维中多分类器融合与复杂工况故障识别的方法线索重点阅读；摘要给出了明确流程和实验结果，但不足以直接支撑工程部署判断。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是光伏阵列在复杂故障与运行条件下的可靠分类。摘要指出，现有方法可能在关键故障条件下表现不足、依赖较大训练集，或多故障分类鲁棒性有限。这里的“multi-fault classification”不能直接等同于并发故障识别，摘要未明确其标签结构及故障组合方式。[摘要]",
+        "method": "方法先以曼哈顿距离和切比雪夫距离从电流—电压特性提取代表性特征，再用模糊逻辑依据平均准确率、F1分数与标准差评价分类器。粒子群优化负责选择分类器子集及集成权重，置换特征选择用于降低输入维度；摘要未说明这些环节的具体执行顺序与参数。[摘要]",
+        "innovation": "解读：摘要呈现的方法特色，是把模糊评价、分类器子集选择和集成权重优化纳入同一框架，而非仅采用单一分类器。作者称其为“intelligent ensemble learning framework”。但摘要没有充分交代与既有混合集成方法的差异，不能据此认定各组成技术或组合方式具有首创性。[摘要]",
+        "findings": "摘要报告，优化后的加权集成平均分类准确率为98.78%，并优于常规融合策略。实验数据包含正常运行、线间故障、开路及退化故障，覆盖不同辐照度、温度、失配和故障阻抗条件。该结果支持其在所述实验范围内有效，但摘要未列出各故障类别的独立表现。[摘要]",
+        "limitations": "当前证据的主要限制是摘要未给出样本规模、训练测试划分、基线名称、指标波动范围及计算耗时，也未交代模糊规则和优化参数。这些属于资料缺口，不应写成论文已证实的缺陷。尤其不能仅凭准确率和降维描述，确认其小样本优势、统计显著性或实时运行能力。[摘要]",
+        "connection": "解读：该研究与智能运维直接相关，可为光伏状态识别和故障告警提供分类方法。评价中纳入标准差，也为关注预测稳定性提供了方法线索。但分类准确率并不等于设备可靠性，摘要未涉及寿命预测、失效概率或维修决策，对结构设计研究的联系主要是间接的方法迁移。[摘要]",
+        "next_steps": "建议：后续取得全文后，优先核对数据划分是否隔离不同运行条件，以及特征选择、分类器评价和权重优化是否仅使用训练数据；再检查消融实验、逐类F1分数与推理耗时。若开展迁移研究，可检验跨阵列或跨时间测试，但这些是后续研究建议，并非作者已完成的验证。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "融合概率与逻辑机器学习的光伏故障诊断方法",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.4229/eupvsec2026/4bo.7.5"
+      ],
+      "analyzed_at": "2026-10-28T00:30:51.055243+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "7d1e5201317d77a915615bc2a8e1da4b45816879dc8a1cb5279e5b1fc15a3380",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "07e93e308e08",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-28T00:30:51.062505+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "extended": [],
@@ -927,7 +1147,20 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "840fad5030ef",
+        "state": "missing_evidence",
+        "updated_at": "2026-10-28T00:25:33.132129+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -1533,7 +1766,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "Energy-efficient train control usually optimises speed for traction energy and running time alone, while the structural fatigue of the vehicle frame is treated as a fixed design property. This paper argues that speed also drives fatigue damage and should enter the same optimisation. The argument is built on full-scale strain-gauge tests of the frame of an ADM-1 special self-propelled railcar operated in Uzbekistan. Sixteen measuring channels were recorded at 10, 30, 55 and 60 km/h; finite element results agreed with the measurements within 5–10%. Maximum stress grows almost linearly with speed…",
+      "summary": "本文关注列车节能控制通常忽略的车架疲劳代价，主张将速度引起的结构损伤与牵引能耗、运行时间共同优化。作者以乌兹别克斯坦ADM-1自推进轨道车的实车应变测试为基础，报告应力随速度近线性增长，并提出包含Miner型疲劳损伤的综合成本模型及面向UzEL电力机车的机器学习驾驶建议框架。[摘要] 当前仅有摘要，实测结果、示例优化与拟议框架应分别理解，不能视为已完成电力机车应用验证。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7221807530",
@@ -1579,11 +1812,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议重点阅读其将实测结构响应接入节能速度决策的思路，尤其适合疲劳可靠性与智能运维交叉研究；但不宜将拟议人工智能框架当作成熟应用成果。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是：节能驾驶的速度选择是否应同时考虑车辆结构寿命，而非仅优化牵引能耗与运行时间。摘要指出，传统处理中车架疲劳常被视为“a fixed design property”。[摘要] 解读：本文试图把结构承载后果纳入运行决策，使运行效率与疲劳损伤在同一优化问题中权衡。",
+        "method": "作者对ADM-1轨道车车架开展实尺度应变片测试，在10、30、55和60 km/h下记录16个测量通道，并以有限元结果对照测量。随后构建牵引能耗、Miner型疲劳损伤及运行时间的综合成本，开展示例计算。[摘要] 摘要未给出成本权重、损伤参数及优化求解细节。",
+        "innovation": "可辨识的方法特点是连接车架应变测量、速度相关结构响应与疲劳约束速度优化，并进一步提出面向UzEL电力机车的驾驶建议框架。[摘要] 解读：价值在于结构可靠性与运行控制的耦合，而非摘要已证明某种人工智能算法创新；其相对既有研究的新颖程度仍缺少文献对照。",
+        "findings": "摘要报告有限元结果与测量相差5–10%，最大应力随速度近线性增长，中位R²为0.92。柴油机下方梁区的应力梯度为2.73 MPa每km/h，约54 km/h时达到152.75 MPa许用应力。[摘要] 示例计算还显示，最优巡航速度明显低于强度限值，但未报告具体最优速度。",
+        "limitations": "当前仅有摘要，无法核查测量时长、重复试验、线路激励与载荷条件，也无法判断疲劳损伤计算如何处理应力历程。摘要将优化结果称为“an illustrative calculation”，机器学习框架则是“proposed”。[摘要] 因而尚不足以确认节能收益、寿命改善或跨车型部署效果。",
+        "connection": "与疲劳可靠性研究的直接联系是把Miner型损伤纳入运行成本；与智能运维的联系是利用结构状态信息支持驾驶速度建议。[摘要] 解读：这提供了从监测走向运行干预的研究路径。对结构设计的联系主要是载荷边界与运行约束协同，摘要未涉及生成式设计或结构形态优化。",
+        "next_steps": "建议后续核查应变至疲劳损伤的转换过程、综合成本各项权重及约束定义，并区分许用应力边界与长期疲劳寿命要求。针对拟议电力机车框架，建议补充目标车型数据和独立工况验证，比较能耗、时间与损伤的变化。这些是基于摘要证据缺口提出的研究建议，并非作者已完成的工作。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "疲劳约束下的机车节能速度建议：从车架应变测量到人工智能框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.5281/zenodo.23367076"
+      ],
+      "analyzed_at": "2026-10-28T00:26:49.637275+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "0aeef60d7d4d34b7132f0a417790cfff126bf2dbca7a5f4b6bfa50a62060b7bc",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "0802a585eb30",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-28T00:26:49.644839+00:00",
+        "basis": "abstract",
+        "article_state": "retry",
+        "article_stage": "writing",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -1605,7 +1870,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Purpose The current study proposes building a strong predictive maintenance (PdM) model for industrial systems through the use of ensemble machine learning models to forecast equipment failures before they happen. The research emphasizes enhancing the reliability during operation, minimizing downtime and offering a scalable solution to fill the gap between theoretical studies and real-world industrial applications in the Industry 5.0 era. Design/methodology/approach Two benchmark datasets: AI4I 2020 and its extended variant AI4I Predictive Maintenance Dataset with Irregularities (PMDI) are emp…",
+      "summary": "本文研究工业设备故障预测，采用三个梯度提升模型作为基学习器，以逻辑回归构建堆叠集成，并在两个AI4I基准数据集上评估。[摘要]报告准确率分别为99.16%和99.60%，ROC-AUC接近0.99，且优于独立基模型。研究与智能运维直接相关，但证据限于公开基准和人工工业环境，不能据此确认真实产线收益。本文仅作摘要级解读，重点关注集成方法、类别不平衡处理及结果的适用边界。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -1643,11 +1908,154 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为智能运维中表格数据故障分类与堆叠集成的候选文献重点阅读；[摘要]明确给出模型组合和基准结果，但尚不足以支持直接部署或认定维护成本下降。",
+      "deep_read": {
+        "problem": "研究针对工业设备故障预警，希望通过预测性维护提高运行可靠性、减少停机，并缩小理论研究与工业应用之间的差距。[摘要]以“forecast equipment failures before they happen”说明目标，但没有提供预测提前量，不能确认其是否实现时间意义上的提前预警。",
+        "method": "框架采用XGBoost、LightGBM和CatBoost作为基学习器，以逻辑回归进行堆叠集成。[摘要]明确称其为“meta-learner”。预处理包括标签编码、特征缩放和SMOTE，评估涉及准确率、精确率、召回率、F1及ROC-AUC；摘要未交代数据划分细节。",
+        "innovation": "作者将贡献定位于三种梯度提升模型面向预测性维护的堆叠组合。[摘要]称其“combines three gradient boosting models”。解读：可核对的贡献是具体模型组合及基准验证，而非新算法原理；仅凭摘要无法判断其相对既有集成研究的新颖程度。",
+        "findings": "作者报告堆叠集成持续优于单独基模型。[摘要]给出“99.16%”和“99.60%”，分别对应两个数据集的准确率，ROC-AUC接近0.99。不过摘要没有列出基模型成绩、提升幅度及不确定性，尚不能判断优势大小、统计稳定性或少数类故障的实际检出水平。",
+        "limitations": "研究明确受限于公开基准数据集与人工工业环境，[摘要]原文为“artificial industrial settings”。实时部署、可解释性和成本敏感评估均被列为后续扩展。摘要也未说明划分与过采样顺序，因此无法核查泄漏风险；这不等于已经发现泄漏。",
+        "connection": "解读：该研究与智能运维中的设备故障识别直接相关，可作为比较单模型与集成模型的参考。[摘要]强调“enhancing the reliability during operation”，但没有给出结构设计优化、寿命分布或系统可靠度分析，不能将分类准确率直接解释为工程可靠性增益。",
+        "next_steps": "建议：获取全文后先核查数据划分、堆叠训练流程及过采样是否仅用于训练集，再检查故障类别召回率与误报情况。[摘要]将“Real-time deployment”列为未来扩展；后续可用真实产线数据检验跨工况泛化，并评估漏报代价与维护收益，这些尚非本文已证实成果。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "面向工业物联网机器故障预测的AI4I数据集堆叠集成预测性维护框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1108/jqme-08-2025-0093"
+      ],
+      "analyzed_at": "2026-10-28T00:28:28.827329+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "多种梯度提升模型组合后，能否比单一模型更好地预测设备故障？这项研究在公开预测性维护基准上检验堆叠集成的表现，也提示我们区分高分类指标与真实工业运维收益。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "故障预测：从模型表现走向维护价值",
+            "paragraphs": [
+              "预测性维护希望在设备故障发生前识别风险，以提高运行可靠性、减少停机。本文围绕这一目标构建集成学习模型，尝试缩小理论研究与工业应用之间的距离。不过，减少停机和支持可扩展应用是研究的目标，不能直接视为已经验证的现场成效。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "梯度提升模型打底，逻辑回归完成堆叠",
+            "paragraphs": [
+              "研究使用 AI4I 2020 及其扩展变体 AI4I Predictive Maintenance Dataset with Irregularities（PMDI）。摘要列出的预处理包括标签编码、特征缩放，以及用于处理类别不平衡的合成少数类过采样技术（SMOTE），并关注数据质量问题。",
+              "模型以 XGBoost、LightGBM 和 CatBoost 为基学习器，以逻辑回归为元学习器组成堆叠集成。评价指标包括准确率、精确率、召回率、F1 分数和 ROC-AUC，用于从不同角度衡量故障预测表现。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "基准结果：堆叠集成优于单独基模型",
+            "paragraphs": [
+              "摘要报告，堆叠集成持续优于单独使用的基模型，在 AI4I 2020 上达到 99.16% 的准确率，在 AI4I PMDI 上达到 99.60%，ROC-AUC 接近 0.99。这些结果支持该组合在所用基准条件下的预测表现，但摘要未给出各基模型的具体分数，因此无法据此量化集成带来的提升幅度。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "高准确率的适用边界仍需核对",
+            "paragraphs": [
+              "作者明确指出，研究局限于公开基准数据集和人工构造的工业场景。仅凭摘要，无法判断样本规模、故障类别分布、训练测试划分、过采样实施位置，以及比较模型的调参与重复验证范围；这些是当前资料未交代的信息，不代表论文没有开展相应工作。",
+              "实时部署、深度模型融合、成本敏感评价，以及 SHAP、LIME 等解释工具，被列为未来扩展。因此，当前摘要不能证明模型已经降低现场停机时间，也不足以判断漏报与误报的实际维护代价。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：把预测分数与运维决策分开看",
+            "paragraphs": [
+              "阅读启发：后续阅读可优先核对类别不平衡如何影响召回率和精确率，以及堆叠模型相对各基模型的优势是否稳定。对智能运维读者而言，还值得关注预测结果如何对应维护决策、错误成本与解释需求；这些问题与摘要提出的扩展方向一致，但尚不能由现有结果回答。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的故障预测框架",
+            "description": "概括摘要明确描述的数据处理、堆叠集成与评价关系，并非论文原图，不表示摘要未披露的训练或验证配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "预测性维护基准数据",
+                "detail": "AI4I 2020 及其扩展变体 AI4I PMDI"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "数据预处理",
+                "detail": "标签编码、特征缩放与 SMOTE；摘要未说明内部实施顺序"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "梯度提升基学习器",
+                "detail": "XGBoost、LightGBM、CatBoost"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "逻辑回归元学习器",
+                "detail": "与基学习器共同组成堆叠集成模型"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "故障预测性能评价",
+                "detail": "准确率、精确率、召回率、F1 分数与 ROC-AUC"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "数据处理"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "用于模型学习"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "堆叠集成"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "评价模型表现"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-28T00:29:41.858501+00:00",
+      "article_profile": "48292ee32e9e62687d3a658de8690886438542899504ddc32e23a40f0d73ee81",
+      "analysis_references": {},
+      "analysis_material_version": "eafd0f96f7c30fe852ac96f32c0044251c7b7723cd5f6fd8fa0fd77f81a4e375",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "a5f1949ef4a2",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-28T00:29:41.859600+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -1669,7 +2077,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Artificial intelligence (AI) has significantly improved photovoltaic (PV) fault diagnosis; however, existing methods often struggle under critical fault conditions, require large training datasets, or exhibit limited robustness in multi-fault classification. This paper proposes an intelligent ensemble learning framework that integrates fuzzy logic (FL) and particle swarm optimization (PSO) for accurate fault detection and classification in PV arrays. Initially, representative features are extracted from the PV current–voltage (I–V) characteristics using Manhattan and Chebyshev distance metrics…",
+      "summary": "本文针对光伏阵列故障诊断在复杂工况下分类不稳等问题，提出融合模糊逻辑与粒子群优化的加权集成框架。方法从电流—电压特性提取距离特征，综合分类器准确率、F1分数与标准差进行评价，再优化分类器组合及权重，并用置换特征选择降低输入维度。摘要报告，实验数据覆盖多种故障和环境条件，平均分类准确率为98.78%。其价值在于联合处理分类性能、稳定性与模型组合，但当前仅有摘要，尚不能核验具体实验设计及泛化边界。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7223649916",
@@ -1713,11 +2121,43 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为光伏智能运维中多分类器融合与复杂工况故障识别的方法线索重点阅读；摘要给出了明确流程和实验结果，但不足以直接支撑工程部署判断。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是光伏阵列在复杂故障与运行条件下的可靠分类。摘要指出，现有方法可能在关键故障条件下表现不足、依赖较大训练集，或多故障分类鲁棒性有限。这里的“multi-fault classification”不能直接等同于并发故障识别，摘要未明确其标签结构及故障组合方式。[摘要]",
+        "method": "方法先以曼哈顿距离和切比雪夫距离从电流—电压特性提取代表性特征，再用模糊逻辑依据平均准确率、F1分数与标准差评价分类器。粒子群优化负责选择分类器子集及集成权重，置换特征选择用于降低输入维度；摘要未说明这些环节的具体执行顺序与参数。[摘要]",
+        "innovation": "解读：摘要呈现的方法特色，是把模糊评价、分类器子集选择和集成权重优化纳入同一框架，而非仅采用单一分类器。作者称其为“intelligent ensemble learning framework”。但摘要没有充分交代与既有混合集成方法的差异，不能据此认定各组成技术或组合方式具有首创性。[摘要]",
+        "findings": "摘要报告，优化后的加权集成平均分类准确率为98.78%，并优于常规融合策略。实验数据包含正常运行、线间故障、开路及退化故障，覆盖不同辐照度、温度、失配和故障阻抗条件。该结果支持其在所述实验范围内有效，但摘要未列出各故障类别的独立表现。[摘要]",
+        "limitations": "当前证据的主要限制是摘要未给出样本规模、训练测试划分、基线名称、指标波动范围及计算耗时，也未交代模糊规则和优化参数。这些属于资料缺口，不应写成论文已证实的缺陷。尤其不能仅凭准确率和降维描述，确认其小样本优势、统计显著性或实时运行能力。[摘要]",
+        "connection": "解读：该研究与智能运维直接相关，可为光伏状态识别和故障告警提供分类方法。评价中纳入标准差，也为关注预测稳定性提供了方法线索。但分类准确率并不等于设备可靠性，摘要未涉及寿命预测、失效概率或维修决策，对结构设计研究的联系主要是间接的方法迁移。[摘要]",
+        "next_steps": "建议：后续取得全文后，优先核对数据划分是否隔离不同运行条件，以及特征选择、分类器评价和权重优化是否仅使用训练数据；再检查消融实验、逐类F1分数与推理耗时。若开展迁移研究，可检验跨阵列或跨时间测试，但这些是后续研究建议，并非作者已完成的验证。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "融合概率与逻辑机器学习的光伏故障诊断方法",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.4229/eupvsec2026/4bo.7.5"
+      ],
+      "analyzed_at": "2026-10-28T00:30:51.055243+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "7d1e5201317d77a915615bc2a8e1da4b45816879dc8a1cb5279e5b1fc15a3380",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "07e93e308e08",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-28T00:30:51.062505+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "source_status": {
@@ -2644,13 +3084,13 @@
     "unavailable": 44
   },
   "analysis_status": {
-    "ready_core": 1,
+    "ready_core": 4,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 5
+    "pending": 2
   },
   "edition": {
     "id": "40561111970",
