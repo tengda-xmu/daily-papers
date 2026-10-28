@@ -1,17 +1,12 @@
 {
   "id": "public-2b3f616d26d343fed7789052",
-  "content_version": "d37f3e02a4e03cf64d189c4a78b20e7973fda7c6112924b5e83c0ea7896828c5",
+  "content_version": "eed38169b5bff0a9bbb6834df87bff2e44c4646a478dd8daba2b2286de094c63",
   "analysis": {
-    "title_zh": "模型能否运行于 AWS Trainium？通过 torch-neuronx model support Space 查询",
-    "summary": "【本站解读】公告介绍了 torch-neuronx model support Space，用于查询 Hub 热门模型能否不经修改在 AWS Trainium 上运行，并提供自行运行的脚本。默认 Selected 视图展示按下载量与趋势分数挑选的模型；各行包含运行结果及模型分片使用的 Trainium 核心数。它适合模型兼容性初筛和运行验证准备，但不能据此认定所有 Transformers 模型均已获得支持，所给节选也未提供具体性能结论。",
-    "application": "建议：科研迁移时，可先用该 Space 初筛候选模型的 Trainium 兼容性，再结合其脚本开展自身任务验证；这是迁移建议，不是官方已验证的科研效果。原文明示平台提供模型能否原样运行的结果，但当前节选未列出具体模型结果，不能推断精度、加速比或成本收益。",
-    "requirements": "使用条件见官方文档",
-    "steps": [
-      {
-        "text": "打开该 Space，查看默认 Selected 视图中的模型列表。",
-        "evidence": "The Space opens on the Selected view: our own selection of models picked among the top models on the Hub by downloads and by trending score."
-      }
-    ],
+    "title_zh": "模型能否运行在 AWS Trainium？用 torch-neuronx model support Space 查询",
+    "summary": "公告介绍 torch-neuronx model support Space，用于查询 Hub 上热门模型能否不经修改运行于 AWS Trainium，并提供自行运行的脚本。其背景是 TorchNeuron 作为原生 PyTorch 后端，让 Transformers 在 Trainium 上运行自身建模代码，但这不等于所有模型均已验证兼容。Space 默认展示 Selected 视图，模型依据下载量和趋势分数挑选，适用于迁移前的兼容性筛查与候选模型选择。[S1]",
+    "application": "建议：科研迁移时，可先用该 Space 筛查候选模型，再通过其提供的脚本核验自身任务；这是迁移建议，并非官方已验证的科研效果。官方资料明确说明可查询模型是否无需修改即可运行，但所给片段未列出具体通过验证的模型，也未提供性能提升或成本节省结论。[S1]",
+    "requirements": "运行目标为 AWS Trainium，所述原生 PyTorch 后端对应 torch-neuronx 包；使用条件见官方文档。",
+    "steps": [],
     "evidence": [
       "we introduced TorchNeuron, the native PyTorch backend for AWS Trainium (the torch-neuronx package).",
       "The torch-neuronx model support Space answers that question for the most popular models on the Hub.",
@@ -20,5 +15,5 @@
     ],
     "basis_url": "https://huggingface.co/blog/torch-neuronx-model-support"
   },
-  "analyzed_at": "2026-10-27T07:32:17.730313+00:00"
+  "analyzed_at": "2026-10-28T00:58:44.690631+00:00"
 }

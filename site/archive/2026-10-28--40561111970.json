@@ -584,7 +584,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "Integrated blisk-shaft rotors are susceptible to low-cycle fatigue (LCF) under complex operating conditions and parameter uncertainties, rendering direct finite-element-based probabilistic assessment computationally demanding. This study develops a surrogate-assisted fatigue-reliability framework integrating dominant-cycle identification, an improved cat swarm optimization-assisted artificial neural network (ICSO-ANN), and Monte Carlo simulation. Elastoplastic finite-element analysis is first performed to identify the fatigue-critical region and dominant fatigue cycle. Subsequently, 1000 finit…",
+      "summary": "本文针对复杂工况和参数不确定性下一体化叶盘—轴转子的低周疲劳可靠性评估，提出结合主导循环识别、改进猫群优化辅助神经网络与蒙特卡洛模拟的代理框架。摘要报告寿命预测MAPE为0.77%，所设设计寿命要求下可靠度约98.6%，计算约加速69倍，并识别疲劳强度参数和转速为主要不确定性贡献因素。当前仅能据摘要评估其方法价值，不能确认全文验证质量及推广范围。[摘要]",
       "raw_metadata": {
         "provider": "PubMed",
         "pmid": "42941145",
@@ -662,11 +662,143 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议疲劳可靠性研究者重点关注其有限元代理建模与概率评估流程；摘要提供明确方法和量化结果，但未展示生成式设计成果，不能仅凭主题标签认定相关贡献。[摘要]",
+      "deep_read": {
+        "problem": "研究对象是一体化叶盘—轴转子在复杂工况和参数不确定性下的低周疲劳问题。摘要指出直接有限元概率评估“computationally demanding”。解读：研究重点是在重复力学计算成本与寿命风险量化需求之间建立可行路径，而非仅寻找单一确定性寿命。[摘要]",
+        "method": "作者先通过弹塑性有限元分析确定疲劳危险区域和主导循环，再用拉丁超立方抽样生成1000个有限元样本。框架结合ICSO-ANN与蒙特卡洛模拟，开展四次独立评估，每次使用200个样本开发模型、50个留出样本独立测试。[摘要]",
+        "innovation": "解读：值得关注的是主导循环识别、优化辅助神经网络与概率可靠性分析的组合。摘要称其为“surrogate-assisted fatigue-reliability framework”，但没有展开猫群算法改进或子结构信息的具体作用，因此只能识别方法组合，不能确认相对既有工作的创新幅度。[摘要]",
+        "findings": "摘要报告寿命预测MAPE为0.77%；在均值11,000次循环的正态分布设计寿命要求下，可靠度约98.6%。相同“103-sample”基准下计算约加速69倍。敏感性分析还将疲劳强度参数与转速识别为寿命不确定性的主要贡献因素。[摘要]",
+        "limitations": "当前资料未给出输入变量分布细节、设计寿命标准差、误差分布和计算计时口径，无法核查可靠度及加速结果的稳健性。“103-sample”缺少排版上下文，不能擅自改写为指数形式。这些是摘要证据的边界，不应当作论文全文已经确认的缺陷。[摘要]",
+        "connection": "解读：该工作直接关联疲劳可靠性与结构设计中的不确定性分析，敏感性结果可作为确定重点考察参数的参考，但不等同于完成设计优化。对于智能运维，摘要没有提供监测数据接入、在线寿命更新或维护决策证据；对于生成式设计，也尚无直接方法支持。[摘要]",
+        "next_steps": "建议：获取全文后优先核对子结构信息如何进入模型、改进猫群算法的对照设置，以及四次评估的样本关系。若迁移至自身研究，可另行检验低寿命尾部预测误差和可靠度收敛情况，并在统一精度要求下比较计算成本；这些属于后续建议，并非已报告成果。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "融合子结构信息的一体化叶盘—轴转子不确定性低周疲劳可靠性代理评估框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.3390/ma19204404"
+      ],
+      "analyzed_at": "2026-10-28T01:07:59.696204+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "整体叶盘—轴转子在复杂工况与参数不确定性下易发生低周疲劳，但直接依靠有限元开展概率评估计算代价较高。这项研究将疲劳关键区域识别、神经网络代理模型与蒙特卡洛模拟结合，关注如何兼顾寿命预测精度与可靠性评估效率。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "低周疲劳评估为何需要代理模型",
+            "paragraphs": [
+              "对于整体叶盘—轴转子，研究问题不仅是预测疲劳寿命，还包括分析参数不确定性如何影响寿命及其满足设计要求的概率。摘要指出，直接基于有限元开展这类概率评估计算负担较重，因此作者引入代理模型，承担后续不确定性传播中的寿命预测任务。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从主导循环识别到概率寿命评估",
+            "paragraphs": [
+              "研究首先开展弹塑性有限元分析，识别疲劳关键区域与主导疲劳循环；随后通过拉丁超立方抽样生成1000个有限元样本。作者开展四次独立评估，每次使用200个样本开发模型，另留出50个样本用于独立测试。这些样本属于有限元计算样本，不应理解为实体转子的试验数量。",
+              "代理模型采用改进猫群优化辅助的人工神经网络，简称ICSO-ANN，并与蒙特卡洛模拟结合开展疲劳可靠性分析。摘要明确了这些方法环节，但未展开猫群优化的改进机制、网络结构，以及主导循环如何具体参与寿命计算。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "预测误差、可靠性与计算加速分别说明什么",
+            "paragraphs": [
+              "摘要报告，ICSO-ANN的平均绝对百分比误差（MAPE）为0.77%。在设计寿命要求服从正态分布、均值为11,000个循环的设定下，概率分析得到约98.6%的可靠性。前者描述寿命预测误差，后者对应特定设计寿命要求下的概率结果，两者不能相互替代。",
+              "在相同的103个样本基准下，代理辅助分析相对直接基于有限元的蒙特卡洛分析实现约69倍计算加速。敏感性分析还指出，疲劳强度参数与转速是疲劳寿命不确定性的主要贡献因素，为理解该评估中哪些输入更值得关注提供了线索。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不足以界定工程适用范围",
+            "paragraphs": [
+              "仅凭摘要，无法判断输入参数的取值范围、分布与相关性，也无法确定留出测试覆盖了哪些工况，以及是否包含实体疲劳试验或跨结构验证。摘要虽给出样本划分，但未说明各次评估的误差波动、与其他代理模型的比较，以及加速比是否计入样本生成和训练成本；这些属于当前资料未交代的信息，并不意味着论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：把代理精度与可靠性可信度分开看",
+            "paragraphs": [
+              "阅读启发：进一步阅读时，可重点关注主导循环的选取依据、代理误差如何影响可靠性估计，以及疲劳强度参数和转速的敏感性结论适用于哪些输入范围。对于智能运维方向，这项研究提供的是计算评估思路；当前摘要不足以证明其已经具备在线监测或剩余寿命预测能力。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的疲劳可靠性评估流程",
+            "description": "概括摘要明确陈述的有限元分析、样本生成、代理建模与概率评估关系，并非论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "弹塑性有限元分析",
+                "detail": "识别疲劳关键区域与主导疲劳循环。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "拉丁超立方抽样",
+                "detail": "生成有限元样本，用于模型开发与留出测试。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "ICSO-ANN代理模型",
+                "detail": "以改进猫群优化辅助人工神经网络进行疲劳寿命预测。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "蒙特卡洛可靠性分析",
+                "detail": "结合代理模型与设计寿命要求，开展概率疲劳可靠性评估。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "随后生成样本"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "模型开发与测试"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "提供代理寿命预测"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-28T01:11:12.754173+00:00",
+      "article_profile": "ffd5703272851abbb69b069632799751e20d1c5f78888f514daf2bcdd0f77474",
+      "analysis_references": {},
+      "analysis_material_version": "421c8c7403add508a63f84d00f1dbc97cff68a84cf894d58245a581503cf5c2c",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "0da00754456e",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-28T01:11:12.756185+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -762,8 +894,8 @@
         "state": "awaiting_fulltext",
         "updated_at": "2026-10-28T00:26:49.644839+00:00",
         "basis": "abstract",
-        "article_state": "retry",
-        "article_stage": "writing",
+        "article_state": "failed",
+        "article_stage": "review",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -972,8 +1104,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -1063,19 +1195,143 @@
       ],
       "analyzed_at": "2026-10-28T00:30:51.055243+00:00",
       "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "光伏阵列故障诊断不仅要分得准，还要在复杂工况下保持稳定。这项研究将模糊逻辑与粒子群优化结合，用于筛选分类器并分配集成权重，为理解多故障识别中的模型协作提供了一个具体案例。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "光伏诊断的难点不只是平均准确率",
+            "paragraphs": [
+              "摘要指出，现有人工智能诊断方法仍可能在关键故障工况下表现不佳，或依赖大量训练数据，在多故障分类中的稳健性也有限。因此，研究关注的不只是提高总体分类表现，还包括不同运行条件下的可靠识别。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从电流—电压特征到分类器加权组合",
+            "paragraphs": [
+              "研究首先从光伏阵列的电流—电压（I–V）特性中，利用曼哈顿距离和切比雪夫距离提取代表性特征。框架还采用置换特征选择，以降低输入维度、提高计算效率；摘要未展开具体特征定义与筛选细节。",
+              "在模型组合环节，模糊逻辑系统依据平均准确率、F1分数和标准差评价多个机器学习分类器；粒子群优化则确定分类器子集及相应的集成权重。两者分别承担分类器评价与组合优化任务，形成优化后的加权集成。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "实验数据上的平均分类准确率达到98.78%",
+            "paragraphs": [
+              "验证数据涵盖正常运行，以及线间故障、开路故障和退化故障，并涉及不同辐照度、温度、失配及故障阻抗条件。这表明摘要所述验证考虑了多种运行与故障条件，但尚不能据此判断各条件的覆盖密度。",
+              "摘要报告，优化后的加权集成平均分类准确率为**98.78%**，优于常规融合策略，并在关键故障工况下保持可靠表现。作者据此认为该框架具有稳健且计算高效的诊断能力；摘要未给出各故障类别的独立指标或计算耗时。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "总体成绩之外，验证边界仍需查阅",
+            "paragraphs": [
+              "仅凭摘要，无法判断实验样本量、类别分布、训练与测试划分，以及是否进行了跨设备或跨场景验证。比较对象的具体名称、性能差距、重复试验与不确定性也未展开，因此不宜将总体准确率直接理解为所有工况下均有同等表现。",
+              "摘要将大训练集需求列为背景问题，但没有报告本方法的数据需求随样本量变化的结果，不能据此认定其已解决少样本诊断问题。这些都是当前资料无法判断的事项，不代表论文没有开展相关分析。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注评价指标怎样进入集成决策",
+            "paragraphs": [
+              "阅读启发：值得进一步查阅的是，平均准确率、F1分数与标准差如何共同影响模糊逻辑评价，以及这种评价如何与分类器子集和权重优化衔接。对智能运维读者而言，理解组合决策机制，比只关注最终准确率更有助于把握方法的适用边界。",
+              "建议进一步关注关键故障工况的定义、不同类别的误判情况，以及特征筛选前后的效率证据。这些问题直接对应摘要提出的稳健性与计算效率目标，但现有资料尚不足以给出答案。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的光伏故障诊断框架",
+            "description": "概括摘要明确的方法关系；分支不表示完整执行顺序，也不表达未报告的实验配置。这不是论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "光伏I–V特性",
+                "detail": "以光伏阵列的电流—电压特性作为特征提取来源。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "距离度量提取特征",
+                "detail": "采用曼哈顿距离和切比雪夫距离提取代表性特征。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "模糊逻辑评价分类器",
+                "detail": "评价依据为平均准确率、F1分数和标准差。"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "粒子群优化",
+                "detail": "确定分类器子集及其集成权重。"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "优化加权集成",
+                "detail": "用于光伏阵列故障检测与分类。"
+              },
+              {
+                "id": "f",
+                "stage": 2,
+                "label": "置换特征选择",
+                "detail": "用于降低输入维度、提高计算效率；摘要未明确其执行位置。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "提取代表性特征"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "用于分类器学习"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "提供分类器评价"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "确定子集与权重"
+              },
+              {
+                "from": "b",
+                "to": "f",
+                "label": "对输入特征降维"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-28T00:55:57.525869+00:00",
+      "article_profile": "5ae48a0ed4fc5fd8ce46f2369c280bef15510b9a0a10b10cb91f5e6b91eaa9f3",
       "analysis_references": {},
       "analysis_material_version": "7d1e5201317d77a915615bc2a8e1da4b45816879dc8a1cb5279e5b1fc15a3380",
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "07e93e308e08",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-28T00:30:51.062505+00:00",
+        "updated_at": "2026-10-28T00:55:57.525869+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -1663,7 +1919,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "Integrated blisk-shaft rotors are susceptible to low-cycle fatigue (LCF) under complex operating conditions and parameter uncertainties, rendering direct finite-element-based probabilistic assessment computationally demanding. This study develops a surrogate-assisted fatigue-reliability framework integrating dominant-cycle identification, an improved cat swarm optimization-assisted artificial neural network (ICSO-ANN), and Monte Carlo simulation. Elastoplastic finite-element analysis is first performed to identify the fatigue-critical region and dominant fatigue cycle. Subsequently, 1000 finit…",
+      "summary": "本文针对复杂工况和参数不确定性下一体化叶盘—轴转子的低周疲劳可靠性评估，提出结合主导循环识别、改进猫群优化辅助神经网络与蒙特卡洛模拟的代理框架。摘要报告寿命预测MAPE为0.77%，所设设计寿命要求下可靠度约98.6%，计算约加速69倍，并识别疲劳强度参数和转速为主要不确定性贡献因素。当前仅能据摘要评估其方法价值，不能确认全文验证质量及推广范围。[摘要]",
       "raw_metadata": {
         "provider": "PubMed",
         "pmid": "42941145",
@@ -1741,11 +1997,143 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议疲劳可靠性研究者重点关注其有限元代理建模与概率评估流程；摘要提供明确方法和量化结果，但未展示生成式设计成果，不能仅凭主题标签认定相关贡献。[摘要]",
+      "deep_read": {
+        "problem": "研究对象是一体化叶盘—轴转子在复杂工况和参数不确定性下的低周疲劳问题。摘要指出直接有限元概率评估“computationally demanding”。解读：研究重点是在重复力学计算成本与寿命风险量化需求之间建立可行路径，而非仅寻找单一确定性寿命。[摘要]",
+        "method": "作者先通过弹塑性有限元分析确定疲劳危险区域和主导循环，再用拉丁超立方抽样生成1000个有限元样本。框架结合ICSO-ANN与蒙特卡洛模拟，开展四次独立评估，每次使用200个样本开发模型、50个留出样本独立测试。[摘要]",
+        "innovation": "解读：值得关注的是主导循环识别、优化辅助神经网络与概率可靠性分析的组合。摘要称其为“surrogate-assisted fatigue-reliability framework”，但没有展开猫群算法改进或子结构信息的具体作用，因此只能识别方法组合，不能确认相对既有工作的创新幅度。[摘要]",
+        "findings": "摘要报告寿命预测MAPE为0.77%；在均值11,000次循环的正态分布设计寿命要求下，可靠度约98.6%。相同“103-sample”基准下计算约加速69倍。敏感性分析还将疲劳强度参数与转速识别为寿命不确定性的主要贡献因素。[摘要]",
+        "limitations": "当前资料未给出输入变量分布细节、设计寿命标准差、误差分布和计算计时口径，无法核查可靠度及加速结果的稳健性。“103-sample”缺少排版上下文，不能擅自改写为指数形式。这些是摘要证据的边界，不应当作论文全文已经确认的缺陷。[摘要]",
+        "connection": "解读：该工作直接关联疲劳可靠性与结构设计中的不确定性分析，敏感性结果可作为确定重点考察参数的参考，但不等同于完成设计优化。对于智能运维，摘要没有提供监测数据接入、在线寿命更新或维护决策证据；对于生成式设计，也尚无直接方法支持。[摘要]",
+        "next_steps": "建议：获取全文后优先核对子结构信息如何进入模型、改进猫群算法的对照设置，以及四次评估的样本关系。若迁移至自身研究，可另行检验低寿命尾部预测误差和可靠度收敛情况，并在统一精度要求下比较计算成本；这些属于后续建议，并非已报告成果。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "融合子结构信息的一体化叶盘—轴转子不确定性低周疲劳可靠性代理评估框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.3390/ma19204404"
+      ],
+      "analyzed_at": "2026-10-28T01:07:59.696204+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "整体叶盘—轴转子在复杂工况与参数不确定性下易发生低周疲劳，但直接依靠有限元开展概率评估计算代价较高。这项研究将疲劳关键区域识别、神经网络代理模型与蒙特卡洛模拟结合，关注如何兼顾寿命预测精度与可靠性评估效率。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "低周疲劳评估为何需要代理模型",
+            "paragraphs": [
+              "对于整体叶盘—轴转子，研究问题不仅是预测疲劳寿命，还包括分析参数不确定性如何影响寿命及其满足设计要求的概率。摘要指出，直接基于有限元开展这类概率评估计算负担较重，因此作者引入代理模型，承担后续不确定性传播中的寿命预测任务。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从主导循环识别到概率寿命评估",
+            "paragraphs": [
+              "研究首先开展弹塑性有限元分析，识别疲劳关键区域与主导疲劳循环；随后通过拉丁超立方抽样生成1000个有限元样本。作者开展四次独立评估，每次使用200个样本开发模型，另留出50个样本用于独立测试。这些样本属于有限元计算样本，不应理解为实体转子的试验数量。",
+              "代理模型采用改进猫群优化辅助的人工神经网络，简称ICSO-ANN，并与蒙特卡洛模拟结合开展疲劳可靠性分析。摘要明确了这些方法环节，但未展开猫群优化的改进机制、网络结构，以及主导循环如何具体参与寿命计算。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "预测误差、可靠性与计算加速分别说明什么",
+            "paragraphs": [
+              "摘要报告，ICSO-ANN的平均绝对百分比误差（MAPE）为0.77%。在设计寿命要求服从正态分布、均值为11,000个循环的设定下，概率分析得到约98.6%的可靠性。前者描述寿命预测误差，后者对应特定设计寿命要求下的概率结果，两者不能相互替代。",
+              "在相同的103个样本基准下，代理辅助分析相对直接基于有限元的蒙特卡洛分析实现约69倍计算加速。敏感性分析还指出，疲劳强度参数与转速是疲劳寿命不确定性的主要贡献因素，为理解该评估中哪些输入更值得关注提供了线索。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不足以界定工程适用范围",
+            "paragraphs": [
+              "仅凭摘要，无法判断输入参数的取值范围、分布与相关性，也无法确定留出测试覆盖了哪些工况，以及是否包含实体疲劳试验或跨结构验证。摘要虽给出样本划分，但未说明各次评估的误差波动、与其他代理模型的比较，以及加速比是否计入样本生成和训练成本；这些属于当前资料未交代的信息，并不意味着论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：把代理精度与可靠性可信度分开看",
+            "paragraphs": [
+              "阅读启发：进一步阅读时，可重点关注主导循环的选取依据、代理误差如何影响可靠性估计，以及疲劳强度参数和转速的敏感性结论适用于哪些输入范围。对于智能运维方向，这项研究提供的是计算评估思路；当前摘要不足以证明其已经具备在线监测或剩余寿命预测能力。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的疲劳可靠性评估流程",
+            "description": "概括摘要明确陈述的有限元分析、样本生成、代理建模与概率评估关系，并非论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "弹塑性有限元分析",
+                "detail": "识别疲劳关键区域与主导疲劳循环。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "拉丁超立方抽样",
+                "detail": "生成有限元样本，用于模型开发与留出测试。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "ICSO-ANN代理模型",
+                "detail": "以改进猫群优化辅助人工神经网络进行疲劳寿命预测。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "蒙特卡洛可靠性分析",
+                "detail": "结合代理模型与设计寿命要求，开展概率疲劳可靠性评估。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "随后生成样本"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "模型开发与测试"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "提供代理寿命预测"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-28T01:11:12.754173+00:00",
+      "article_profile": "ffd5703272851abbb69b069632799751e20d1c5f78888f514daf2bcdd0f77474",
+      "analysis_references": {},
+      "analysis_material_version": "421c8c7403add508a63f84d00f1dbc97cff68a84cf894d58245a581503cf5c2c",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "0da00754456e",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-28T01:11:12.756185+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -1841,8 +2229,8 @@
         "state": "awaiting_fulltext",
         "updated_at": "2026-10-28T00:26:49.644839+00:00",
         "basis": "abstract",
-        "article_state": "retry",
-        "article_stage": "writing",
+        "article_state": "failed",
+        "article_stage": "review",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -2051,8 +2439,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -2142,19 +2530,143 @@
       ],
       "analyzed_at": "2026-10-28T00:30:51.055243+00:00",
       "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "光伏阵列故障诊断不仅要分得准，还要在复杂工况下保持稳定。这项研究将模糊逻辑与粒子群优化结合，用于筛选分类器并分配集成权重，为理解多故障识别中的模型协作提供了一个具体案例。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "光伏诊断的难点不只是平均准确率",
+            "paragraphs": [
+              "摘要指出，现有人工智能诊断方法仍可能在关键故障工况下表现不佳，或依赖大量训练数据，在多故障分类中的稳健性也有限。因此，研究关注的不只是提高总体分类表现，还包括不同运行条件下的可靠识别。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从电流—电压特征到分类器加权组合",
+            "paragraphs": [
+              "研究首先从光伏阵列的电流—电压（I–V）特性中，利用曼哈顿距离和切比雪夫距离提取代表性特征。框架还采用置换特征选择，以降低输入维度、提高计算效率；摘要未展开具体特征定义与筛选细节。",
+              "在模型组合环节，模糊逻辑系统依据平均准确率、F1分数和标准差评价多个机器学习分类器；粒子群优化则确定分类器子集及相应的集成权重。两者分别承担分类器评价与组合优化任务，形成优化后的加权集成。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "实验数据上的平均分类准确率达到98.78%",
+            "paragraphs": [
+              "验证数据涵盖正常运行，以及线间故障、开路故障和退化故障，并涉及不同辐照度、温度、失配及故障阻抗条件。这表明摘要所述验证考虑了多种运行与故障条件，但尚不能据此判断各条件的覆盖密度。",
+              "摘要报告，优化后的加权集成平均分类准确率为**98.78%**，优于常规融合策略，并在关键故障工况下保持可靠表现。作者据此认为该框架具有稳健且计算高效的诊断能力；摘要未给出各故障类别的独立指标或计算耗时。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "总体成绩之外，验证边界仍需查阅",
+            "paragraphs": [
+              "仅凭摘要，无法判断实验样本量、类别分布、训练与测试划分，以及是否进行了跨设备或跨场景验证。比较对象的具体名称、性能差距、重复试验与不确定性也未展开，因此不宜将总体准确率直接理解为所有工况下均有同等表现。",
+              "摘要将大训练集需求列为背景问题，但没有报告本方法的数据需求随样本量变化的结果，不能据此认定其已解决少样本诊断问题。这些都是当前资料无法判断的事项，不代表论文没有开展相关分析。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注评价指标怎样进入集成决策",
+            "paragraphs": [
+              "阅读启发：值得进一步查阅的是，平均准确率、F1分数与标准差如何共同影响模糊逻辑评价，以及这种评价如何与分类器子集和权重优化衔接。对智能运维读者而言，理解组合决策机制，比只关注最终准确率更有助于把握方法的适用边界。",
+              "建议进一步关注关键故障工况的定义、不同类别的误判情况，以及特征筛选前后的效率证据。这些问题直接对应摘要提出的稳健性与计算效率目标，但现有资料尚不足以给出答案。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的光伏故障诊断框架",
+            "description": "概括摘要明确的方法关系；分支不表示完整执行顺序，也不表达未报告的实验配置。这不是论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "光伏I–V特性",
+                "detail": "以光伏阵列的电流—电压特性作为特征提取来源。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "距离度量提取特征",
+                "detail": "采用曼哈顿距离和切比雪夫距离提取代表性特征。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "模糊逻辑评价分类器",
+                "detail": "评价依据为平均准确率、F1分数和标准差。"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "粒子群优化",
+                "detail": "确定分类器子集及其集成权重。"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "优化加权集成",
+                "detail": "用于光伏阵列故障检测与分类。"
+              },
+              {
+                "id": "f",
+                "stage": 2,
+                "label": "置换特征选择",
+                "detail": "用于降低输入维度、提高计算效率；摘要未明确其执行位置。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "提取代表性特征"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "用于分类器学习"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "提供分类器评价"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "确定子集与权重"
+              },
+              {
+                "from": "b",
+                "to": "f",
+                "label": "对输入特征降维"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-28T00:55:57.525869+00:00",
+      "article_profile": "5ae48a0ed4fc5fd8ce46f2369c280bef15510b9a0a10b10cb91f5e6b91eaa9f3",
       "analysis_references": {},
       "analysis_material_version": "7d1e5201317d77a915615bc2a8e1da4b45816879dc8a1cb5279e5b1fc15a3380",
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "07e93e308e08",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-28T00:30:51.062505+00:00",
+        "updated_at": "2026-10-28T00:55:57.525869+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -3084,13 +3596,13 @@
     "unavailable": 44
   },
   "analysis_status": {
-    "ready_core": 4,
+    "ready_core": 5,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 2
+    "pending": 1
   },
   "edition": {
     "id": "40561111970",

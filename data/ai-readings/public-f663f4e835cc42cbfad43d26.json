@@ -1,0 +1,19 @@
+{
+  "id": "public-f663f4e835cc42cbfad43d26",
+  "content_version": "5cf038359312f4ab9269a1d08decba0e847cc0dac73f79034a48383b5289581b",
+  "analysis": {
+    "title_zh": "Design Agent 构建实践：设计上下文、独立沙箱与长任务协作",
+    "summary": "本文介绍 Design Agent 的构建经验，并非新版发布公告。作者强调，将设计原则、风格约束及反馈背后的理由提供给模型，帮助其产出符合团队风格的作品；为每个 Slack 线程配置独立沙箱，在多轮交互间保留项目，并结合视频引擎、图像工具和共享画布检查渲染结果。文章还主张随模型进步移除补偿性规则，并为耗时数小时的异步子智能体任务提供多人协作界面，适用于持续迭代的视觉设计与内容制作。",
+    "application": "建议：【科研迁移建议】可借鉴其上下文组织方式，为科研图表、结构设计可视化或智能运维看板整理视觉规范与反馈理由，并探索沙箱中的多轮迭代和结果自检；这些属于迁移设想，并非官方已验证效果。【原文经验】作者介绍了设计原则注入、线程独立沙箱和长任务协作界面，但所给节选未提供量化效果或科研场景验证。",
+    "requirements": "使用条件见官方文档",
+    "steps": [],
+    "evidence": [
+      "Models already write good code, but they need your designers’ principles, guardrails against AI slop, and the reasoning behind feedback to make work that looks like yours.",
+      "Every Slack thread gets its own sandbox where the agent keeps the project between turns, works across a video engine, image tools, and a shared canvas, and inspects its own renders.",
+      "Rules that make up for a model’s weaknesses expire, so keep the design principles and remove the workarounds as models get better.",
+      "Long-running agents need multiplayer UX."
+    ],
+    "basis_url": "https://www.langchain.com/blog/design-agent"
+  },
+  "analyzed_at": "2026-10-28T00:22:37.630986+00:00"
+}
