@@ -478,7 +478,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "Fatigue cracks in microtextured titanium alloys are hard to find by ultrasound. Backscatter from alpha colonies, modulated by microtextured regions, mimics a small flaw, and crack faces held in contact by residual stress reflect far less energy than their area suggests. This paper is a simulation study. It builds a forward model of pulse-echo inspection whose constants are those of mill-annealed Ti-6Al-4V, verified against closed-form solutions on 15 quantities, and uses it to characterise what a learned detector can and cannot deliver under that model. The model solves a bilinear contact law…",
+      "summary": "本文研究微织构钛合金中晶粒背散射与裂纹闭合共同造成的超声漏检，以物理正向模型连接谐波测量、机器学习评分和试件级保形决策。模拟测试中，报告模型检出73/84条低接触裂纹，180个无缺陷试件未观察到误报；但二次谐波峰值已有最高AUC，消融表明主要信息来自谐波通道。其价值在于量化测量条件与决策收益，而非证明复杂网络更优；论文没有钛合金实测验证。[P2][P12–P15][P22]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -516,11 +516,139 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "推荐作为疲劳可靠性与智能检测的方法论文重点阅读，尤其关注试件级校准、闭合窗口和物理通道消融；不宜作为钛合金工程检测能力已获验证的依据。[P9][P15][P16][P22]",
+      "deep_read": {
+        "problem": "研究问题不是单纯提高分类准确率，而是在宏区调制的重尾晶粒背景中，以受控误报发现闭合疲劳裂纹。宏区背散射可模拟小缺陷，接触裂面又削弱反射，使局部高信噪比不必然转化为整件可检出性；因此必须同时考察缺陷尺寸、闭合状态和误报成本。[P2][P16]",
+        "method": "作者构建含晶粒噪声、宏区调制及双线性接触界面的正向模型，以模拟记录训练三通道膨胀残差编码器。数据按试件独立划分，取每件最大分数作保形校准，再拟合分层POD曲线；闭式检查验证数值实现，高斯匹配滤波仅作参考基准。[P4–P11]",
+        "innovation": "贡献主要是把接触律决定的信息窗口与检测决策相连接，而非提出物理信息神经网络或新保形定理。作者分析邻域噪声参考受相关长度和缺陷足迹的限制，并将校准单位设为试件，揭示校准样本量对可实现误报水平的约束。[P2][P7][P9][P12]",
+        "findings": "报告模型低接触裂纹检出73/84，误报0/180，误报率单侧95%上限0.017，a90半长为0.138 mm。相对谐波峰值，独占检出为9对1，但AUC差异不显著；仅谐波包络网络达到80/84，同时误报2/180，说明不能只按检出数排序。[P12][P13][P15]",
+        "limitations": "钛合金结果均来自同一模型生成的训练和测试记录，缺少实测验证；圆盘裂纹、均匀闭合及无仪器非线性等假设限制外推。铝板案例仅检验决策层，角度依赖条件未获证明。核对记录没有确认原文件缺项；另有正文与表格数值不一致须保留。[P14][P17–P22]",
+        "connection": "解读：对智能运维与疲劳可靠性，本文提示应将检出概率、误报代价与测量可观测性共同纳入检测方案，而不是只优化网络指标。其试件级配对评估和分层POD可供检测可靠性研究借鉴；对结构设计的联系主要是检测约束，尚未给出寿命或设计优化结果。[P10][P13][P21]",
+        "next_steps": "建议：优先按作者指出的方向采集宏区和裂纹闭合已表征的Ti-6Al-4V试件数据，验证发射应力与接收带宽要求。同时增加线性参考、幅值扫描和收发互换，区分仪器与材料谐波；再用独立试件检验校准迁移，而非先扩大网络。[P21][P23]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "疲劳裂纹的机器学习超声检测：基于物理模型的仿真研究",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.frontiersin.org/journals/materials/articles/10.3389/fmats.2026.1961699/pdf"
+      ],
+      "analyzed_at": "2026-10-29T01:04:18.167624+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P16"
+        ],
+        "method": [
+          "P4",
+          "P5",
+          "P6",
+          "P7",
+          "P8",
+          "P9",
+          "P10",
+          "P11"
+        ],
+        "innovation": [
+          "P2",
+          "P7",
+          "P9",
+          "P12"
+        ],
+        "findings": [
+          "P12",
+          "P13",
+          "P15"
+        ],
+        "limitations": [
+          "P14",
+          "P17",
+          "P18",
+          "P19",
+          "P20",
+          "P21",
+          "P22"
+        ],
+        "connection": [
+          "P10",
+          "P13",
+          "P21"
+        ],
+        "next_steps": [
+          "P21",
+          "P23"
+        ]
+      },
+      "analysis_material_version": "d7c500ac6079112cce997330ab841a82352291d151e769b3787e7ece4a780d1c",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "贡献第1项续句的文字提取将指数排成“one part in 105”；原页清楚显示“one part in 10^5”，应读作十万分之一。该纠正影响弹簧反射系数闭式验证精度的表述，不涉及公式(1)或检测性能结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "表1及命题1附近的接触刚度在提取文字中写作“2 × 1016”；原页清晰为2×10¹⁶ Pa m⁻¹。该指数影响公式(2)的刚度量级及ft=236 MHz的解释，不是原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "第3.1节未编号的局部噪声尺度估计式，原页分母根号覆盖2 ln 2，应为σ̂=med{Ej}/√(2 ln 2)，而非√2再乘ln 2。此处影响Rayleigh包络中位数归一化尺度。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "第2.4节到达时间验证的提取文字“four parts in 10 4”，原页为“four parts in 10⁴”，即约4×10⁻⁴的相对偏差，与表2的4.00e-04对应；并非缺失公式。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P11",
+          "detail": "公式(7)的提取文字将末项写为“f0”；原页清楚为f⁰，即频率的零次方，而不是中心频率符号f₀。正确读法为a_min∝D^(3/4)f⁰，影响作者关于该模型下最小可检裂纹尺寸基本不随频率变化的结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "4ebb28834e94",
+        "state": "published",
+        "updated_at": "2026-10-29T01:04:18.209129+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 24,
+        "covered": 24,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "贡献第1项续句的文字提取将指数排成“one part in 105”；原页清楚显示“one part in 10^5”，应读作十万分之一。该纠正影响弹簧反射系数闭式验证精度的表述，不涉及公式(1)或检测性能结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "表1及命题1附近的接触刚度在提取文字中写作“2 × 1016”；原页清晰为2×10¹⁶ Pa m⁻¹。该指数影响公式(2)的刚度量级及ft=236 MHz的解释，不是原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "第3.1节未编号的局部噪声尺度估计式，原页分母根号覆盖2 ln 2，应为σ̂=med{Ej}/√(2 ln 2)，而非√2再乘ln 2。此处影响Rayleigh包络中位数归一化尺度。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "第2.4节到达时间验证的提取文字“four parts in 10 4”，原页为“four parts in 10⁴”，即约4×10⁻⁴的相对偏差，与表2的4.00e-04对应；并非缺失公式。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "公式(7)的提取文字将末项写为“f0”；原页清楚为f⁰，即频率的零次方，而不是中心频率符号f₀。正确读法为a_min∝D^(3/4)f⁰，影响作者关于该模型下最小可检裂纹尺寸基本不随频率变化的结论。"
+          }
+        ]
+      }
     },
     {
       "source": "OpenAlex",
@@ -541,7 +669,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Audit records, analysis and re-test scripts, run summaries, figure data and Online Resources 1-6 for the paper 'How the Classical Baseline Shapes Machine-Learning Speed Claims in Topology Optimization' (arXiv:2610.16051). Code is released under the MIT licence; records, evidence files, figure data and the Online Resources under CC BY 4.0 (see LICENSE and LICENSE-DATA.md). Third-party code, data and weights are not included.",
+      "summary": "本条目是同名论文的代码与数据资源说明，而非研究论文摘要，列出了审计记录、分析与复测脚本、运行汇总、图表数据及在线资源。[摘要] 解读：题名指向经典算法基线选择对机器学习加速评价的影响，与生成式结构设计的方法比较相关。但当前资料没有交代优化问题、基线配置、计时口径或比较结果，无法核实加速声明及论文贡献。本次仅作摘要级解读，未阅读全文。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7223869169",
@@ -585,11 +713,91 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议作为拓扑优化性能比较的待核查资源保留；其复测脚本与审计记录具有潜在参考价值，但现有说明不足以支持重点推荐。[摘要]",
+      "deep_read": {
+        "problem": "题名将关注点放在经典基线如何影响拓扑优化中的机器学习加速声明上。解读：这涉及方法比较是否公平，而非仅关注机器学习模型本身。不过，当前资源说明没有给出正式研究问题、应用场景或评价假设，不能确认作者具体检验了哪些影响因素。[摘要]",
+        "method": "资料明确列有“analysis and re-test scripts”及运行汇总，说明资源包包含分析和复测相关材料。[摘要] 但未描述复测流程、求解器、硬件、训练成本处理或停止准则，因此只能确认材料类别，不能据此还原论文的实验方法。",
+        "innovation": "当前资料没有陈述创新点，也没有提供与既有研究的比较。[摘要] 解读：将审计记录、复测脚本和图表数据一并发布，可能有助于检查性能声明，但资源开放本身不能证明方法创新，亦不能认定作者提出了新的拓扑优化算法。",
+        "findings": "资料能够确认的是代码采用 MIT 许可，记录、证据文件、图表数据及在线资源采用 CC BY 4.0 许可，且不包含第三方代码、数据和权重。[摘要] 这些属于资源发布信息，不是实验发现；目前没有可核对的速度比较、性能差异或统计结论。",
+        "limitations": "本次判断的主要限制是输入仅有资源说明，没有完整的研究摘要、正文或实验表格，无法评估比较条件和结论适用范围。这是当前证据的限制，不是已证实的论文缺陷；第三方材料未随包提供，也不足以直接判定研究不可复现。[摘要]",
+        "connection": "解读：题名所涉及的拓扑优化与给定的生成式设计方向存在直接主题联系；基线选择问题也可能关联结构设计方案的计算成本评价。[摘要] 但资料未涉及故障诊断、运维决策或可靠性约束，不能将这些领域的联系表述为作者已验证的应用。",
+        "next_steps": "建议后续取得论文正文及对应资源，优先核对经典基线实现、计算预算、解的质量约束和计时边界，再判断加速比较是否成立。若迁移至自己的结构设计研究，建议采用相同精度与约束条件开展对照；这些是阅读与研究建议，并非作者结论。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "经典基线如何影响拓扑优化中的机器学习加速声明：代码与数据",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.5281/zenodo.23683491"
+      ],
+      "analyzed_at": "2026-10-29T01:15:58.429271+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "拓扑优化中的机器学习加速主张，应如何理解其经典方法基线？本次资料是一份配套代码与数据发布说明，阅读价值在于了解可供核查的材料范围，而非获取已经证实的加速结论。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "经典基线与加速主张：先辨清资料性质",
+            "paragraphs": [
+              "这份资源对应一篇讨论经典基线如何影响拓扑优化机器学习速度主张的论文。需要先区分：本次提供的完整摘要是配套资源说明，不是研究论文的技术摘要。因此，不能仅凭标题推断作者发现了何种偏差，也不能据此判断机器学习方法是否更快。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "公开了审计与重测材料，但未展开技术方法",
+            "paragraphs": [
+              "摘要列出的材料包括审计记录、分析与重新测试脚本、运行摘要、图表数据以及在线补充资源。这些名称说明资源覆盖记录、分析和重测等环节，但没有交代它们如何衔接，也未描述拓扑优化算法、机器学习模型、计时方式或具体比较流程，因而不宜据此重建研究方法。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "明确报告的是资源范围与授权边界",
+            "paragraphs": [
+              "摘要实际确认的是资源发布内容及其使用边界：代码采用 MIT 许可；记录、证据文件、图表数据和在线补充资源采用 CC BY 4.0 许可。第三方代码、数据和权重不包含在发布内容中。这里没有报告性能数值或比较结果，不能把材料公开本身当成加速结论得到验证。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "样本、比较公平性与验证范围仍无法判断",
+            "paragraphs": [
+              "仅据本次摘要，无法判断研究涉及多少算例、哪些任务与模型，以及经典基线如何选择和配置；也无法确认硬件条件、计算成本的统计口径和重测覆盖范围。这些是当前材料未报告的信息，不代表论文没有开展相关工作。第三方内容未随包提供，也意味着不能仅凭资源清单确认复现所需依赖是否齐全。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：把速度结论与比较依据一起读",
+            "paragraphs": [
+              "阅读启发：对结构生成式设计与拓扑优化中的加速主张，可优先关注经典基线的定义，以及运行记录、分析脚本和重测材料能否对应到具体比较结论。进一步阅读原论文时，值得核对双方是否在可比条件下计时、成本边界是否一致；这些是待核查的问题，而不是本次摘要已经给出的答案。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-29T01:17:11.201639+00:00",
+      "article_profile": "e222df0d5b8f586457c7c30ccc2d2e4c4a99dbe396a2dd49dad92e842b6d08bb",
+      "analysis_references": {},
+      "analysis_material_version": "45128c36af7f892cf0af6ed9755efcaf53653ac718af76e46d6b76686211f546",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "6940cb068e6b",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-29T01:17:11.202636+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -610,7 +818,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Accurate battery fault detection and diagnosis (FDD) is essential for ensuring the safety, health monitoring, and operational performance of electric vehicles (EVs). Yet, existing research still suffers from issues such as limited classification accuracy due to non-linear feature interactions and insufficient interpretability. To address these limitations, this study proposes the Functional Tree Forest (FTF), a hybrid Bagging-Boosting ensemble machine learning approach that combines multiple functional trees with LogitBoost-based modeling, while preserving model explainability. Unlike conventi…",
+      "summary": "电动汽车电池故障诊断需要兼顾分类准确性与模型可解释性。本文提出功能树森林，将多个功能树与基于LogitBoost的建模结合，并在内部节点和叶节点引入多变量线性回归函数，以捕捉复杂特征交互。摘要报告，该方法在五个公开数据集上取得优于13种基线方法的数值准确率；与既有文献的比较则涉及不同实验协议，优势幅度随数据集变化。当前仅有摘要，尚不能核验具体性能与解释性证据。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7224005754",
@@ -657,11 +865,43 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议将其作为智能运维中电池故障分类与混合集成建模的候选重点文献；其方法结构明确，但应在取得全文后核查实验公平性、性能增益和解释性验证。[摘要]",
+      "deep_read": {
+        "problem": "研究针对电动汽车电池故障检测与诊断，强调其对安全、健康监测和运行性能的重要性。作者将现有研究的问题概括为非线性特征交互造成的分类准确性不足，以及可解释性不充分。摘要未说明具体故障类型、诊断提前量或在线应用条件，不能进一步界定任务难度。[摘要]",
+        "method": "功能树森林采用Bagging与Boosting混合集成，将多个功能树与基于LogitBoost的建模结合。区别于仅依赖轴对齐单变量划分的常规决策树，该架构在内部节点和末端叶节点动态引入多变量线性回归函数。摘要没有提供集成流程、参数设置及训练细节。[摘要]",
+        "innovation": "作者突出的方法特点，是将节点层面的多变量函数建模与森林集成结合，同时声称保留模型可解释性。解读：其研究价值在于探索特征交互表达与解释需求的兼顾，而非仅增加分类器数量。不过，摘要不足以确认该组合相对既有功能树方法的原创边界。[摘要]",
+        "findings": "摘要称，方法在五个公开电动汽车电池故障数据集上，相对13种基线机器学习方法取得最高数值准确率。与使用相同数据集的既有研究相比，作者仅概括为具有竞争力，且差异幅度随数据集变化。摘要未给出准确率数值、误差范围或统计显著性。[摘要]",
+        "limitations": "当前证据仅为摘要，无法核对数据划分、类别分布、调参预算及数据泄漏防范措施。作者明确提到文献比较采用不同实验协议，因此不能据此认定统一条件下全面领先。解释性虽被宣称保留，但摘要未展示解释实例或评价方式；这些属于资料缺口，而非已证实的模型缺陷。[摘要]",
+        "connection": "解读：电池故障诊断直接契合智能运维中的状态识别与健康监测，可为可靠性研究提供故障分类方法参考。但摘要没有涉及失效概率、剩余寿命预测或结构参数优化，不能把分类准确率优势等同于可靠性提升，也不能据此认定其已验证结构设计方面的应用价值。[摘要]",
+        "next_steps": "建议取得全文后，优先核查五个数据集的故障定义、训练测试划分、基线调参公平性以及解释性证据。若考虑迁移到实际运维，再设计跨工况验证，并评价故障漏报、误报与推理开销。这些是后续研究建议，不是摘要已经报告的实验或作者结论。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "功能树森林：用于电动汽车电池故障诊断的袋装与提升混合集成学习方法",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.3390/batteries12110443"
+      ],
+      "analyzed_at": "2026-10-29T01:18:31.176067+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "7ab2010577738d6f7d34b9e5052e976753a9994db6f3895b38079cec221c2140",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "b1dc3607e418",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-29T01:18:31.185110+00:00",
+        "basis": "abstract",
+        "article_state": "retry",
+        "article_stage": "writing",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -686,7 +926,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Photovoltaic (PV) systems continue to expand worldwide, and reliable fault diagnosis has become increasingly important for ensuring safe and stable operation. Although machine-learning-based fault diagnosis has been widely investigated, most previous studies have focused on high-irradiance environments. In contrast, the effectiveness of fault diagnosis under low-irradiance conditions remains insufficiently explored. This study investigates the applicability of machine learning algorithms for diagnosing partial-shading faults in PV systems operating under low-irradiance conditions. An outdoor e…",
+      "summary": "本研究针对低辐照条件下光伏系统局部遮阴故障难以识别的问题，利用室外实验系统模拟故障，采集电流—电压特性，经异常值检测与预处理后比较多种监督学习算法。摘要指出，低辐照使正常与故障状态的差异减弱，各算法性能总体下降，但可靠检测仍然可行，集成学习表现更优且更稳健。本文适合作为智能运维中环境条件影响诊断能力的阅读案例，但摘要未提供具体算法、样本规模及指标数值，不能据此判断性能优势的幅度。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7223676222",
@@ -730,11 +970,154 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议关注其低辐照场景下的诊断难点和集成学习比较思路，与光伏智能运维直接相关；但重点阅读价值目前来自研究问题和定性结果，仍需全文核实实验设计与优势证据。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是低辐照条件下，机器学习能否识别光伏系统的局部遮阴故障。摘要称这一场景仍“insufficiently explored”，而既有研究多关注高辐照环境。其关注的是环境条件变化对故障可辨识性的影响，并非所有光伏故障的统一诊断问题。[摘要]",
+        "method": "作者使用室外实验光伏系统模拟故障，采集不同运行条件下的电流—电压特性，先进行异常值检测和数据预处理，再训练、评估多种监督学习算法。评价指标包括准确率、精确率、召回率和F1分数；摘要未披露具体模型及数据划分方式。[摘要]",
+        "innovation": "解读：可辨认的研究特色是将算法比较聚焦于低辐照下的局部遮阴诊断，并讨论集成学习的适用性。摘要没有提出新算法或新模型结构，因此不能将其表述为算法原创突破；研究场景的针对性也不等于已证明该工作具有首创性。[摘要]",
+        "findings": "摘要指出，低辐照使正常与故障状态的差异不再明显，各算法性能相较常规辐照条件均呈下降趋势，但可靠检测仍可实现。集成学习被描述为“superior and more robust”。这些是定性结论，不能由此推算准确率或改善幅度。[摘要]",
+        "limitations": "当前资料仅为摘要，未给出辐照阈值、样本规模、算法名单、指标数值和不确定性分析，因而无法核验性能差异的大小及稳定性。这些属于资料披露不足，不能直接认定为论文实验缺陷；跨设备、跨地点适用性也缺少可核对证据。[摘要]",
+        "connection": "解读：该研究与智能运维直接相关，提示诊断模型的有效性需要结合运行环境判断，而不能仅看整体分类表现。对可靠性研究，其意义在于关注不利环境下故障能否被发现；与结构设计的联系则较间接，摘要没有提供结构优化或寿命分析证据。[摘要]",
+        "next_steps": "建议：后续获取全文时，优先核对低辐照定义、故障模拟方式、训练测试划分及集成模型优势是否一致。可迁移研究建议是按辐照水平分别统计漏报和误报，检验跨时段泛化能力；这些是后续验证方向，并非作者已完成的实验。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "低辐照条件下光伏系统故障诊断的机器学习算法比较研究",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.4229/eupvsec2026/4dv.4.44"
+      ],
+      "analyzed_at": "2026-10-29T01:28:36.800659+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "低辐照条件下，光伏系统的正常状态与故障状态更难区分，机器学习还能可靠识别局部遮阴故障吗？这项研究通过户外实验与算法比较，探讨低辐照场景的诊断可行性，以及集成学习的应用潜力。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从高辐照走向低辐照诊断",
+            "paragraphs": [
+              "随着光伏系统持续普及，可靠的故障诊断对安全、稳定运行愈发重要。摘要指出，既有机器学习诊断研究多聚焦高辐照环境，而低辐照条件下的有效性仍缺少充分探索。本文将问题具体落在局部遮阴故障上，关注低辐照是否会削弱算法区分正常与故障状态的能力。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "以户外伏安特性比较监督学习算法",
+            "paragraphs": [
+              "研究使用户外实验光伏系统模拟故障，并在不同运行条件下采集电流—电压（I-V）特性。模型开发前进行了异常值检测与数据预处理，随后训练、评估多种监督机器学习算法。评价指标包括准确率、精确率、召回率和F1分数；摘要未列出具体算法名称与处理流程细节。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "诊断性能下降，但集成学习表现更稳健",
+            "paragraphs": [
+              "摘要报告，低辐照条件下，正常与故障运行状态之间的差异变得不够明显，故障诊断因此更具挑战。与常规辐照条件相比，所有受评算法的性能均呈下降趋势，但可靠的故障检测仍然可行。这里的核心结果不是低辐照不影响诊断，而是性能受损后仍保有识别能力。",
+              "在本研究比较的方法中，集成学习相较常规分类算法表现更优，也更稳健。作者据此指出，集成学习在太阳辐照有限地区的实际故障检测中具有潜力。摘要没有提供具体指标数值，因此目前不能量化其领先幅度，也不能把应用潜力理解为已经完成现场部署验证。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不足以界定适用范围",
+            "paragraphs": [
+              "仅凭本次摘要，无法判断样本规模、各运行状态的数据分布、低辐照的具体界定，以及训练与测试数据如何划分。算法名单、比较配置和指标数值同样未被报告，因此不足以判断性能差异的大小及比较是否充分。",
+              "摘要也未交代跨时间、跨系统或跨地点的验证范围，不能据此推断对其他故障类型的适用性。这些属于当前资料无法确认的信息，并不意味着论文没有开展相关工作；本文解读也仅限于所提供的完整摘要。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注低辐照下的比较边界",
+            "paragraphs": [
+              "阅读启发：对光伏智能运维而言，值得关注的不只是哪个算法排名靠前，还包括低辐照如何改变正常与故障状态的可区分性。进一步阅读时，可重点核对辐照条件的定义、集成学习优势对应的评价指标，以及“可靠检测”所依赖的验证范围，从而判断结果与实际运维场景的关联。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的低辐照故障诊断流程",
+            "description": "仅概括摘要明确陈述的实验、数据处理与算法评价关系，不代表论文原图，也不补充未报告的实验配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "户外光伏系统模拟故障",
+                "detail": "研究低辐照条件下局部遮阴故障的机器学习诊断。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "采集电流—电压特性",
+                "detail": "在不同运行条件下收集I-V特性。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "异常值检测与数据预处理",
+                "detail": "在模型开发前进行数据质量处理。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "训练监督学习算法",
+                "detail": "比较多种监督机器学习方法，包含集成学习方法。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "评价故障分类性能",
+                "detail": "使用准确率、精确率、召回率和F1分数评价算法。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "采集运行特性"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "模型开发前处理"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "用于算法训练"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "分类指标评价"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-29T01:35:25.167725+00:00",
+      "article_profile": "d46cf4d0ad31f740398443973103e728861c26b38fc2074ce91c304d144e7227",
+      "analysis_references": {},
+      "analysis_material_version": "28d1840ba55dad389a44bc1735ff5f9cd6aa3c8c200104d0fbc0cc74e07e8961",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "cdd9897f5b3a",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-29T01:35:25.168930+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "PubMed",
@@ -759,7 +1142,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "The epidermal growth factor receptor (EGFR) is an established therapeutic target in breast, colorectal, and non-small cell lung cancers, and pyrazoline-containing scaffolds have been repeatedly reported as EGFR inhibitors. This study combined generative machine learning with physics-based modelling to design and computationally characterize novel pyrazoline analogues targeting the EGFR kinase ATP-binding site. A curated set of 50 experimentally validated pyrazoline-based EGFR inhibitors, compiled from ChEMBL and the primary literature, was used to seed the Mol2Mol model in REINVENT4, generatin…",
+      "summary": "本研究将生成式机器学习与物理建模结合，围绕EGFR激酶ATP结合位点设计吡唑啉类似物。作者以50个经实验验证的抑制剂为种子，经相似性、成药相关性质、合成可及性及对接筛选，选出五个候选物，并以分子动力学、MM-GBSA和密度泛函理论进一步表征。[摘要]这些结果仅支持计算层面的候选优先排序，不能证明实际抑制活性；生化及细胞实验仍待开展。本解读仅依据摘要。",
       "raw_metadata": {
         "provider": "PubMed",
         "pmid": "42945755",
@@ -835,11 +1218,165 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议作为生成式设计与多层计算筛选结合的案例阅读，重点关注筛选链条和验证边界，而非将预测亲和力视为实验药效。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是如何围绕已知吡唑啉骨架，生成并筛选靶向EGFR激酶ATP结合位点的新类似物。摘要称EGFR是多种癌症的“established therapeutic target”。[摘要]解读：工作面向候选分子发现，尚非治疗效果验证。",
+        "method": "作者以50个经实验验证的抑制剂驱动REINVENT4中的Mol2Mol模型，再按相似性、理化及药代毒性预测、合成可及性和分子对接逐级筛选。[摘要]对接采用“PDB 5U8L”，随后结合分子动力学、MM-GBSA及密度泛函理论表征候选物。",
+        "innovation": "摘要明确的方法组合是“generative machine learning with physics-based modelling”，即将类似物生成与多层计算表征串联。[摘要]解读：值得关注的是流程整合；现有资料不足以确认模型、算法或筛选策略具有首创性，也无法判断相对既有流程的增益。",
+        "findings": "五个候选物的对接评分为-9.5至-10.6 kcal/mol，优于重对接原配体的评分；其复合物在“100 ns”模拟中保持稳定。[摘要]PyEG5的MM-GBSA估计值接近参照配体。解读：这些是计算指标上的支持，并不等同于实测抑制活性。",
+        "limitations": "作者明确指出“These findings are entirely computational”，候选物仍需生化激酶测定与细胞实验确认。[摘要]摘要未提供生成库规模、预测模型误差及重复模拟安排，因此无法据此判断筛选覆盖度与结果稳健性；这些属于资料缺口，而非已证实的方法缺陷。",
+        "connection": "解读：该文与给定的生成式设计方向直接相关，但对象是药物分子，并非工程结构或运维系统。[摘要]其“生成—约束筛选—物理验证”的组织方式可启发结构设计研究；向智能运维或可靠性研究迁移仅是方法类比，摘要没有验证这些用途。",
+        "next_steps": "建议：若继续阅读全文，优先核对生成库规模、性质预测模型适用范围、筛选淘汰比例及模拟重复性。作者将候选物定位为“prioritized synthetic targets”。[摘要]后续应通过合成、生化激酶测定与细胞实验检验预测，而不以对接排名代替活性结论。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "基于吡唑啉的EGFR激酶抑制剂候选物生成式设计与计算表征",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/42945755/"
+      ],
+      "analyzed_at": "2026-10-29T01:37:07.750056+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "生成模型提出的分子，如何成为值得优先合成的候选物？这项研究围绕靶向 EGFR 的吡唑啉类似物，将生成式机器学习与物理建模串联起来。阅读价值在于理解计算筛选如何支持候选排序，而非将预测结果等同于药效验证。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从已知吡唑啉骨架寻找 EGFR 候选物",
+            "paragraphs": [
+              "EGFR 是乳腺癌、结直肠癌和非小细胞肺癌中已确立的治疗靶点，含吡唑啉的骨架也已多次被报道具有 EGFR 抑制活性。本研究针对 EGFR 激酶的 ATP 结合位点，尝试从已有活性分子出发，生成并计算表征相关类似物。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "先生成类似物，再逐层筛选与表征",
+            "paragraphs": [
+              "研究从 ChEMBL 和原始文献整理了 50 个经实验验证的吡唑啉类 EGFR 抑制剂，作为 REINVENT4 中 Mol2Mol 模型的种子，生成结构相关的分子库。随后依次依据 Tanimoto 相似度（≥0.6）、预测理化及药代动力学和毒性性质、合成可及性（SA score <6），以及分子对接进行筛选。",
+              "对接采用 EGFR 激酶结构 PDB 5U8L，并通过原配体重对接检验流程，重对接 RMSD 为 1.342 Å。研究还使用分子动力学、MM-GBSA 端点计算和密度泛函理论，分别考察复合物稳定性、估算结合自由能及分析电子结构。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "计算结果支持候选优先级，而非已证实活性",
+            "paragraphs": [
+              "筛出的 PyEG1–PyEG5 对接评分为 -9.5 至 -10.6 kcal/mol，比重对接原配体的 -9.2 kcal/mol 更有利。摘要报告，这些复合物在 100 ns 分子动力学模拟中保持稳定，骨架 RMSD ≤ 0.27 nm，平均配体 RMSD ≤ 0.18 nm，回转半径接近参考复合物。",
+              "MM-GBSA 估算中，PyEG5 的结合自由能为 -37.5 ± 2.5 kcal/mol，接近参考配体的 -37.6 ± 6.0 kcal/mol。电子结构计算预测 PyEG2 和 PyEG5 反应性最高，PyEG3 动力学稳定性最高。基于预测结合模式的分析还提示，与 Met793 的氢键及与 Phe856 的 π-π 堆积是预测亲和力的重要影响因素。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "模拟稳定不等于抑制活性得到验证",
+            "paragraphs": [
+              "上述发现完全来自计算，候选物应被视为优先合成对象，其活性仍需生化激酶测定和细胞测试确认。仅凭摘要，无法判断生成库的具体规模、种子集的代表性、模拟重复设置，以及更广泛的对照和验证范围；这些信息未在摘要交代，不代表全文没有开展。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注生成之后的证据如何衔接",
+            "paragraphs": [
+              "阅读启发：这项工作的重点不只是生成分子，还在于用不同计算方法逐步缩小候选范围。进一步阅读时，可关注筛选条件如何影响最终候选，以及对接评分、动力学稳定性和自由能估算是否给出一致排序；即使预测相互呼应，也应与实验活性证据明确区分。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的候选分子筛选过程",
+            "description": "仅概括摘要明确陈述的生成、筛选与计算表征关系，不代表论文原图，也不表示候选活性已获实验验证。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "已验证的种子抑制剂",
+                "detail": "从 ChEMBL 和原始文献整理吡唑啉类 EGFR 抑制剂。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "Mol2Mol 生成类似物",
+                "detail": "使用 REINVENT4 中的模型生成结构相关分子库。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "相似度与性质筛选",
+                "detail": "依次考察相似度、预测理化及药代和毒性性质、合成可及性。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "EGFR 分子对接",
+                "detail": "采用经原配体重对接检验的流程筛选候选物。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "候选物计算表征",
+                "detail": "通过分子动力学、MM-GBSA 和密度泛函理论分析候选物。"
+              },
+              {
+                "id": "f",
+                "stage": 5,
+                "label": "优先合成对象",
+                "detail": "候选活性仍需生化激酶测定和细胞测试确认。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "作为生成种子"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "逐层筛选"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "进一步对接筛选"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "表征入选候选物"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "支持合成优先级"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-29T01:38:27.583774+00:00",
+      "article_profile": "be962fc586dea4d3fdaee81c27f4be5b9a37beace1e5e93759c9cf84791d8966",
+      "analysis_references": {},
+      "analysis_material_version": "05a6502477c95dbdd77b4b49c4dcd024011db9c8c1f688e8351dcdd4abc881e9",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "e0bcc3f204ad",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-29T01:38:27.584797+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "extended": [],
@@ -1318,7 +1855,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "Fatigue cracks in microtextured titanium alloys are hard to find by ultrasound. Backscatter from alpha colonies, modulated by microtextured regions, mimics a small flaw, and crack faces held in contact by residual stress reflect far less energy than their area suggests. This paper is a simulation study. It builds a forward model of pulse-echo inspection whose constants are those of mill-annealed Ti-6Al-4V, verified against closed-form solutions on 15 quantities, and uses it to characterise what a learned detector can and cannot deliver under that model. The model solves a bilinear contact law…",
+      "summary": "本文研究微织构钛合金中晶粒背散射与裂纹闭合共同造成的超声漏检，以物理正向模型连接谐波测量、机器学习评分和试件级保形决策。模拟测试中，报告模型检出73/84条低接触裂纹，180个无缺陷试件未观察到误报；但二次谐波峰值已有最高AUC，消融表明主要信息来自谐波通道。其价值在于量化测量条件与决策收益，而非证明复杂网络更优；论文没有钛合金实测验证。[P2][P12–P15][P22]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -1356,11 +1893,139 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "推荐作为疲劳可靠性与智能检测的方法论文重点阅读，尤其关注试件级校准、闭合窗口和物理通道消融；不宜作为钛合金工程检测能力已获验证的依据。[P9][P15][P16][P22]",
+      "deep_read": {
+        "problem": "研究问题不是单纯提高分类准确率，而是在宏区调制的重尾晶粒背景中，以受控误报发现闭合疲劳裂纹。宏区背散射可模拟小缺陷，接触裂面又削弱反射，使局部高信噪比不必然转化为整件可检出性；因此必须同时考察缺陷尺寸、闭合状态和误报成本。[P2][P16]",
+        "method": "作者构建含晶粒噪声、宏区调制及双线性接触界面的正向模型，以模拟记录训练三通道膨胀残差编码器。数据按试件独立划分，取每件最大分数作保形校准，再拟合分层POD曲线；闭式检查验证数值实现，高斯匹配滤波仅作参考基准。[P4–P11]",
+        "innovation": "贡献主要是把接触律决定的信息窗口与检测决策相连接，而非提出物理信息神经网络或新保形定理。作者分析邻域噪声参考受相关长度和缺陷足迹的限制，并将校准单位设为试件，揭示校准样本量对可实现误报水平的约束。[P2][P7][P9][P12]",
+        "findings": "报告模型低接触裂纹检出73/84，误报0/180，误报率单侧95%上限0.017，a90半长为0.138 mm。相对谐波峰值，独占检出为9对1，但AUC差异不显著；仅谐波包络网络达到80/84，同时误报2/180，说明不能只按检出数排序。[P12][P13][P15]",
+        "limitations": "钛合金结果均来自同一模型生成的训练和测试记录，缺少实测验证；圆盘裂纹、均匀闭合及无仪器非线性等假设限制外推。铝板案例仅检验决策层，角度依赖条件未获证明。核对记录没有确认原文件缺项；另有正文与表格数值不一致须保留。[P14][P17–P22]",
+        "connection": "解读：对智能运维与疲劳可靠性，本文提示应将检出概率、误报代价与测量可观测性共同纳入检测方案，而不是只优化网络指标。其试件级配对评估和分层POD可供检测可靠性研究借鉴；对结构设计的联系主要是检测约束，尚未给出寿命或设计优化结果。[P10][P13][P21]",
+        "next_steps": "建议：优先按作者指出的方向采集宏区和裂纹闭合已表征的Ti-6Al-4V试件数据，验证发射应力与接收带宽要求。同时增加线性参考、幅值扫描和收发互换，区分仪器与材料谐波；再用独立试件检验校准迁移，而非先扩大网络。[P21][P23]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "疲劳裂纹的机器学习超声检测：基于物理模型的仿真研究",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.frontiersin.org/journals/materials/articles/10.3389/fmats.2026.1961699/pdf"
+      ],
+      "analyzed_at": "2026-10-29T01:04:18.167624+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P16"
+        ],
+        "method": [
+          "P4",
+          "P5",
+          "P6",
+          "P7",
+          "P8",
+          "P9",
+          "P10",
+          "P11"
+        ],
+        "innovation": [
+          "P2",
+          "P7",
+          "P9",
+          "P12"
+        ],
+        "findings": [
+          "P12",
+          "P13",
+          "P15"
+        ],
+        "limitations": [
+          "P14",
+          "P17",
+          "P18",
+          "P19",
+          "P20",
+          "P21",
+          "P22"
+        ],
+        "connection": [
+          "P10",
+          "P13",
+          "P21"
+        ],
+        "next_steps": [
+          "P21",
+          "P23"
+        ]
+      },
+      "analysis_material_version": "d7c500ac6079112cce997330ab841a82352291d151e769b3787e7ece4a780d1c",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "贡献第1项续句的文字提取将指数排成“one part in 105”；原页清楚显示“one part in 10^5”，应读作十万分之一。该纠正影响弹簧反射系数闭式验证精度的表述，不涉及公式(1)或检测性能结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "表1及命题1附近的接触刚度在提取文字中写作“2 × 1016”；原页清晰为2×10¹⁶ Pa m⁻¹。该指数影响公式(2)的刚度量级及ft=236 MHz的解释，不是原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "第3.1节未编号的局部噪声尺度估计式，原页分母根号覆盖2 ln 2，应为σ̂=med{Ej}/√(2 ln 2)，而非√2再乘ln 2。此处影响Rayleigh包络中位数归一化尺度。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "第2.4节到达时间验证的提取文字“four parts in 10 4”，原页为“four parts in 10⁴”，即约4×10⁻⁴的相对偏差，与表2的4.00e-04对应；并非缺失公式。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P11",
+          "detail": "公式(7)的提取文字将末项写为“f0”；原页清楚为f⁰，即频率的零次方，而不是中心频率符号f₀。正确读法为a_min∝D^(3/4)f⁰，影响作者关于该模型下最小可检裂纹尺寸基本不随频率变化的结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "4ebb28834e94",
+        "state": "published",
+        "updated_at": "2026-10-29T01:04:18.209129+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 24,
+        "covered": 24,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "贡献第1项续句的文字提取将指数排成“one part in 105”；原页清楚显示“one part in 10^5”，应读作十万分之一。该纠正影响弹簧反射系数闭式验证精度的表述，不涉及公式(1)或检测性能结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "表1及命题1附近的接触刚度在提取文字中写作“2 × 1016”；原页清晰为2×10¹⁶ Pa m⁻¹。该指数影响公式(2)的刚度量级及ft=236 MHz的解释，不是原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "第3.1节未编号的局部噪声尺度估计式，原页分母根号覆盖2 ln 2，应为σ̂=med{Ej}/√(2 ln 2)，而非√2再乘ln 2。此处影响Rayleigh包络中位数归一化尺度。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "第2.4节到达时间验证的提取文字“four parts in 10 4”，原页为“four parts in 10⁴”，即约4×10⁻⁴的相对偏差，与表2的4.00e-04对应；并非缺失公式。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "公式(7)的提取文字将末项写为“f0”；原页清楚为f⁰，即频率的零次方，而不是中心频率符号f₀。正确读法为a_min∝D^(3/4)f⁰，影响作者关于该模型下最小可检裂纹尺寸基本不随频率变化的结论。"
+          }
+        ]
+      }
     },
     {
       "source": "OpenAlex",
@@ -1381,7 +2046,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Audit records, analysis and re-test scripts, run summaries, figure data and Online Resources 1-6 for the paper 'How the Classical Baseline Shapes Machine-Learning Speed Claims in Topology Optimization' (arXiv:2610.16051). Code is released under the MIT licence; records, evidence files, figure data and the Online Resources under CC BY 4.0 (see LICENSE and LICENSE-DATA.md). Third-party code, data and weights are not included.",
+      "summary": "本条目是同名论文的代码与数据资源说明，而非研究论文摘要，列出了审计记录、分析与复测脚本、运行汇总、图表数据及在线资源。[摘要] 解读：题名指向经典算法基线选择对机器学习加速评价的影响，与生成式结构设计的方法比较相关。但当前资料没有交代优化问题、基线配置、计时口径或比较结果，无法核实加速声明及论文贡献。本次仅作摘要级解读，未阅读全文。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7223869169",
@@ -1425,11 +2090,91 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议作为拓扑优化性能比较的待核查资源保留；其复测脚本与审计记录具有潜在参考价值，但现有说明不足以支持重点推荐。[摘要]",
+      "deep_read": {
+        "problem": "题名将关注点放在经典基线如何影响拓扑优化中的机器学习加速声明上。解读：这涉及方法比较是否公平，而非仅关注机器学习模型本身。不过，当前资源说明没有给出正式研究问题、应用场景或评价假设，不能确认作者具体检验了哪些影响因素。[摘要]",
+        "method": "资料明确列有“analysis and re-test scripts”及运行汇总，说明资源包包含分析和复测相关材料。[摘要] 但未描述复测流程、求解器、硬件、训练成本处理或停止准则，因此只能确认材料类别，不能据此还原论文的实验方法。",
+        "innovation": "当前资料没有陈述创新点，也没有提供与既有研究的比较。[摘要] 解读：将审计记录、复测脚本和图表数据一并发布，可能有助于检查性能声明，但资源开放本身不能证明方法创新，亦不能认定作者提出了新的拓扑优化算法。",
+        "findings": "资料能够确认的是代码采用 MIT 许可，记录、证据文件、图表数据及在线资源采用 CC BY 4.0 许可，且不包含第三方代码、数据和权重。[摘要] 这些属于资源发布信息，不是实验发现；目前没有可核对的速度比较、性能差异或统计结论。",
+        "limitations": "本次判断的主要限制是输入仅有资源说明，没有完整的研究摘要、正文或实验表格，无法评估比较条件和结论适用范围。这是当前证据的限制，不是已证实的论文缺陷；第三方材料未随包提供，也不足以直接判定研究不可复现。[摘要]",
+        "connection": "解读：题名所涉及的拓扑优化与给定的生成式设计方向存在直接主题联系；基线选择问题也可能关联结构设计方案的计算成本评价。[摘要] 但资料未涉及故障诊断、运维决策或可靠性约束，不能将这些领域的联系表述为作者已验证的应用。",
+        "next_steps": "建议后续取得论文正文及对应资源，优先核对经典基线实现、计算预算、解的质量约束和计时边界，再判断加速比较是否成立。若迁移至自己的结构设计研究，建议采用相同精度与约束条件开展对照；这些是阅读与研究建议，并非作者结论。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "经典基线如何影响拓扑优化中的机器学习加速声明：代码与数据",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.5281/zenodo.23683491"
+      ],
+      "analyzed_at": "2026-10-29T01:15:58.429271+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "拓扑优化中的机器学习加速主张，应如何理解其经典方法基线？本次资料是一份配套代码与数据发布说明，阅读价值在于了解可供核查的材料范围，而非获取已经证实的加速结论。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "经典基线与加速主张：先辨清资料性质",
+            "paragraphs": [
+              "这份资源对应一篇讨论经典基线如何影响拓扑优化机器学习速度主张的论文。需要先区分：本次提供的完整摘要是配套资源说明，不是研究论文的技术摘要。因此，不能仅凭标题推断作者发现了何种偏差，也不能据此判断机器学习方法是否更快。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "公开了审计与重测材料，但未展开技术方法",
+            "paragraphs": [
+              "摘要列出的材料包括审计记录、分析与重新测试脚本、运行摘要、图表数据以及在线补充资源。这些名称说明资源覆盖记录、分析和重测等环节，但没有交代它们如何衔接，也未描述拓扑优化算法、机器学习模型、计时方式或具体比较流程，因而不宜据此重建研究方法。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "明确报告的是资源范围与授权边界",
+            "paragraphs": [
+              "摘要实际确认的是资源发布内容及其使用边界：代码采用 MIT 许可；记录、证据文件、图表数据和在线补充资源采用 CC BY 4.0 许可。第三方代码、数据和权重不包含在发布内容中。这里没有报告性能数值或比较结果，不能把材料公开本身当成加速结论得到验证。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "样本、比较公平性与验证范围仍无法判断",
+            "paragraphs": [
+              "仅据本次摘要，无法判断研究涉及多少算例、哪些任务与模型，以及经典基线如何选择和配置；也无法确认硬件条件、计算成本的统计口径和重测覆盖范围。这些是当前材料未报告的信息，不代表论文没有开展相关工作。第三方内容未随包提供，也意味着不能仅凭资源清单确认复现所需依赖是否齐全。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：把速度结论与比较依据一起读",
+            "paragraphs": [
+              "阅读启发：对结构生成式设计与拓扑优化中的加速主张，可优先关注经典基线的定义，以及运行记录、分析脚本和重测材料能否对应到具体比较结论。进一步阅读原论文时，值得核对双方是否在可比条件下计时、成本边界是否一致；这些是待核查的问题，而不是本次摘要已经给出的答案。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-29T01:17:11.201639+00:00",
+      "article_profile": "e222df0d5b8f586457c7c30ccc2d2e4c4a99dbe396a2dd49dad92e842b6d08bb",
+      "analysis_references": {},
+      "analysis_material_version": "45128c36af7f892cf0af6ed9755efcaf53653ac718af76e46d6b76686211f546",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "6940cb068e6b",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-29T01:17:11.202636+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -1450,7 +2195,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Accurate battery fault detection and diagnosis (FDD) is essential for ensuring the safety, health monitoring, and operational performance of electric vehicles (EVs). Yet, existing research still suffers from issues such as limited classification accuracy due to non-linear feature interactions and insufficient interpretability. To address these limitations, this study proposes the Functional Tree Forest (FTF), a hybrid Bagging-Boosting ensemble machine learning approach that combines multiple functional trees with LogitBoost-based modeling, while preserving model explainability. Unlike conventi…",
+      "summary": "电动汽车电池故障诊断需要兼顾分类准确性与模型可解释性。本文提出功能树森林，将多个功能树与基于LogitBoost的建模结合，并在内部节点和叶节点引入多变量线性回归函数，以捕捉复杂特征交互。摘要报告，该方法在五个公开数据集上取得优于13种基线方法的数值准确率；与既有文献的比较则涉及不同实验协议，优势幅度随数据集变化。当前仅有摘要，尚不能核验具体性能与解释性证据。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7224005754",
@@ -1497,11 +2242,43 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议将其作为智能运维中电池故障分类与混合集成建模的候选重点文献；其方法结构明确，但应在取得全文后核查实验公平性、性能增益和解释性验证。[摘要]",
+      "deep_read": {
+        "problem": "研究针对电动汽车电池故障检测与诊断，强调其对安全、健康监测和运行性能的重要性。作者将现有研究的问题概括为非线性特征交互造成的分类准确性不足，以及可解释性不充分。摘要未说明具体故障类型、诊断提前量或在线应用条件，不能进一步界定任务难度。[摘要]",
+        "method": "功能树森林采用Bagging与Boosting混合集成，将多个功能树与基于LogitBoost的建模结合。区别于仅依赖轴对齐单变量划分的常规决策树，该架构在内部节点和末端叶节点动态引入多变量线性回归函数。摘要没有提供集成流程、参数设置及训练细节。[摘要]",
+        "innovation": "作者突出的方法特点，是将节点层面的多变量函数建模与森林集成结合，同时声称保留模型可解释性。解读：其研究价值在于探索特征交互表达与解释需求的兼顾，而非仅增加分类器数量。不过，摘要不足以确认该组合相对既有功能树方法的原创边界。[摘要]",
+        "findings": "摘要称，方法在五个公开电动汽车电池故障数据集上，相对13种基线机器学习方法取得最高数值准确率。与使用相同数据集的既有研究相比，作者仅概括为具有竞争力，且差异幅度随数据集变化。摘要未给出准确率数值、误差范围或统计显著性。[摘要]",
+        "limitations": "当前证据仅为摘要，无法核对数据划分、类别分布、调参预算及数据泄漏防范措施。作者明确提到文献比较采用不同实验协议，因此不能据此认定统一条件下全面领先。解释性虽被宣称保留，但摘要未展示解释实例或评价方式；这些属于资料缺口，而非已证实的模型缺陷。[摘要]",
+        "connection": "解读：电池故障诊断直接契合智能运维中的状态识别与健康监测，可为可靠性研究提供故障分类方法参考。但摘要没有涉及失效概率、剩余寿命预测或结构参数优化，不能把分类准确率优势等同于可靠性提升，也不能据此认定其已验证结构设计方面的应用价值。[摘要]",
+        "next_steps": "建议取得全文后，优先核查五个数据集的故障定义、训练测试划分、基线调参公平性以及解释性证据。若考虑迁移到实际运维，再设计跨工况验证，并评价故障漏报、误报与推理开销。这些是后续研究建议，不是摘要已经报告的实验或作者结论。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "功能树森林：用于电动汽车电池故障诊断的袋装与提升混合集成学习方法",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.3390/batteries12110443"
+      ],
+      "analyzed_at": "2026-10-29T01:18:31.176067+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "7ab2010577738d6f7d34b9e5052e976753a9994db6f3895b38079cec221c2140",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "b1dc3607e418",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-29T01:18:31.185110+00:00",
+        "basis": "abstract",
+        "article_state": "retry",
+        "article_stage": "writing",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -1526,7 +2303,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Photovoltaic (PV) systems continue to expand worldwide, and reliable fault diagnosis has become increasingly important for ensuring safe and stable operation. Although machine-learning-based fault diagnosis has been widely investigated, most previous studies have focused on high-irradiance environments. In contrast, the effectiveness of fault diagnosis under low-irradiance conditions remains insufficiently explored. This study investigates the applicability of machine learning algorithms for diagnosing partial-shading faults in PV systems operating under low-irradiance conditions. An outdoor e…",
+      "summary": "本研究针对低辐照条件下光伏系统局部遮阴故障难以识别的问题，利用室外实验系统模拟故障，采集电流—电压特性，经异常值检测与预处理后比较多种监督学习算法。摘要指出，低辐照使正常与故障状态的差异减弱，各算法性能总体下降，但可靠检测仍然可行，集成学习表现更优且更稳健。本文适合作为智能运维中环境条件影响诊断能力的阅读案例，但摘要未提供具体算法、样本规模及指标数值，不能据此判断性能优势的幅度。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7223676222",
@@ -1570,11 +2347,154 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议关注其低辐照场景下的诊断难点和集成学习比较思路，与光伏智能运维直接相关；但重点阅读价值目前来自研究问题和定性结果，仍需全文核实实验设计与优势证据。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是低辐照条件下，机器学习能否识别光伏系统的局部遮阴故障。摘要称这一场景仍“insufficiently explored”，而既有研究多关注高辐照环境。其关注的是环境条件变化对故障可辨识性的影响，并非所有光伏故障的统一诊断问题。[摘要]",
+        "method": "作者使用室外实验光伏系统模拟故障，采集不同运行条件下的电流—电压特性，先进行异常值检测和数据预处理，再训练、评估多种监督学习算法。评价指标包括准确率、精确率、召回率和F1分数；摘要未披露具体模型及数据划分方式。[摘要]",
+        "innovation": "解读：可辨认的研究特色是将算法比较聚焦于低辐照下的局部遮阴诊断，并讨论集成学习的适用性。摘要没有提出新算法或新模型结构，因此不能将其表述为算法原创突破；研究场景的针对性也不等于已证明该工作具有首创性。[摘要]",
+        "findings": "摘要指出，低辐照使正常与故障状态的差异不再明显，各算法性能相较常规辐照条件均呈下降趋势，但可靠检测仍可实现。集成学习被描述为“superior and more robust”。这些是定性结论，不能由此推算准确率或改善幅度。[摘要]",
+        "limitations": "当前资料仅为摘要，未给出辐照阈值、样本规模、算法名单、指标数值和不确定性分析，因而无法核验性能差异的大小及稳定性。这些属于资料披露不足，不能直接认定为论文实验缺陷；跨设备、跨地点适用性也缺少可核对证据。[摘要]",
+        "connection": "解读：该研究与智能运维直接相关，提示诊断模型的有效性需要结合运行环境判断，而不能仅看整体分类表现。对可靠性研究，其意义在于关注不利环境下故障能否被发现；与结构设计的联系则较间接，摘要没有提供结构优化或寿命分析证据。[摘要]",
+        "next_steps": "建议：后续获取全文时，优先核对低辐照定义、故障模拟方式、训练测试划分及集成模型优势是否一致。可迁移研究建议是按辐照水平分别统计漏报和误报，检验跨时段泛化能力；这些是后续验证方向，并非作者已完成的实验。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "低辐照条件下光伏系统故障诊断的机器学习算法比较研究",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.4229/eupvsec2026/4dv.4.44"
+      ],
+      "analyzed_at": "2026-10-29T01:28:36.800659+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "低辐照条件下，光伏系统的正常状态与故障状态更难区分，机器学习还能可靠识别局部遮阴故障吗？这项研究通过户外实验与算法比较，探讨低辐照场景的诊断可行性，以及集成学习的应用潜力。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从高辐照走向低辐照诊断",
+            "paragraphs": [
+              "随着光伏系统持续普及，可靠的故障诊断对安全、稳定运行愈发重要。摘要指出，既有机器学习诊断研究多聚焦高辐照环境，而低辐照条件下的有效性仍缺少充分探索。本文将问题具体落在局部遮阴故障上，关注低辐照是否会削弱算法区分正常与故障状态的能力。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "以户外伏安特性比较监督学习算法",
+            "paragraphs": [
+              "研究使用户外实验光伏系统模拟故障，并在不同运行条件下采集电流—电压（I-V）特性。模型开发前进行了异常值检测与数据预处理，随后训练、评估多种监督机器学习算法。评价指标包括准确率、精确率、召回率和F1分数；摘要未列出具体算法名称与处理流程细节。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "诊断性能下降，但集成学习表现更稳健",
+            "paragraphs": [
+              "摘要报告，低辐照条件下，正常与故障运行状态之间的差异变得不够明显，故障诊断因此更具挑战。与常规辐照条件相比，所有受评算法的性能均呈下降趋势，但可靠的故障检测仍然可行。这里的核心结果不是低辐照不影响诊断，而是性能受损后仍保有识别能力。",
+              "在本研究比较的方法中，集成学习相较常规分类算法表现更优，也更稳健。作者据此指出，集成学习在太阳辐照有限地区的实际故障检测中具有潜力。摘要没有提供具体指标数值，因此目前不能量化其领先幅度，也不能把应用潜力理解为已经完成现场部署验证。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不足以界定适用范围",
+            "paragraphs": [
+              "仅凭本次摘要，无法判断样本规模、各运行状态的数据分布、低辐照的具体界定，以及训练与测试数据如何划分。算法名单、比较配置和指标数值同样未被报告，因此不足以判断性能差异的大小及比较是否充分。",
+              "摘要也未交代跨时间、跨系统或跨地点的验证范围，不能据此推断对其他故障类型的适用性。这些属于当前资料无法确认的信息，并不意味着论文没有开展相关工作；本文解读也仅限于所提供的完整摘要。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注低辐照下的比较边界",
+            "paragraphs": [
+              "阅读启发：对光伏智能运维而言，值得关注的不只是哪个算法排名靠前，还包括低辐照如何改变正常与故障状态的可区分性。进一步阅读时，可重点核对辐照条件的定义、集成学习优势对应的评价指标，以及“可靠检测”所依赖的验证范围，从而判断结果与实际运维场景的关联。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的低辐照故障诊断流程",
+            "description": "仅概括摘要明确陈述的实验、数据处理与算法评价关系，不代表论文原图，也不补充未报告的实验配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "户外光伏系统模拟故障",
+                "detail": "研究低辐照条件下局部遮阴故障的机器学习诊断。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "采集电流—电压特性",
+                "detail": "在不同运行条件下收集I-V特性。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "异常值检测与数据预处理",
+                "detail": "在模型开发前进行数据质量处理。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "训练监督学习算法",
+                "detail": "比较多种监督机器学习方法，包含集成学习方法。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "评价故障分类性能",
+                "detail": "使用准确率、精确率、召回率和F1分数评价算法。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "采集运行特性"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "模型开发前处理"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "用于算法训练"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "分类指标评价"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-29T01:35:25.167725+00:00",
+      "article_profile": "d46cf4d0ad31f740398443973103e728861c26b38fc2074ce91c304d144e7227",
+      "analysis_references": {},
+      "analysis_material_version": "28d1840ba55dad389a44bc1735ff5f9cd6aa3c8c200104d0fbc0cc74e07e8961",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "cdd9897f5b3a",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-29T01:35:25.168930+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "PubMed",
@@ -1599,7 +2519,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "The epidermal growth factor receptor (EGFR) is an established therapeutic target in breast, colorectal, and non-small cell lung cancers, and pyrazoline-containing scaffolds have been repeatedly reported as EGFR inhibitors. This study combined generative machine learning with physics-based modelling to design and computationally characterize novel pyrazoline analogues targeting the EGFR kinase ATP-binding site. A curated set of 50 experimentally validated pyrazoline-based EGFR inhibitors, compiled from ChEMBL and the primary literature, was used to seed the Mol2Mol model in REINVENT4, generatin…",
+      "summary": "本研究将生成式机器学习与物理建模结合，围绕EGFR激酶ATP结合位点设计吡唑啉类似物。作者以50个经实验验证的抑制剂为种子，经相似性、成药相关性质、合成可及性及对接筛选，选出五个候选物，并以分子动力学、MM-GBSA和密度泛函理论进一步表征。[摘要]这些结果仅支持计算层面的候选优先排序，不能证明实际抑制活性；生化及细胞实验仍待开展。本解读仅依据摘要。",
       "raw_metadata": {
         "provider": "PubMed",
         "pmid": "42945755",
@@ -1675,11 +2595,165 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议作为生成式设计与多层计算筛选结合的案例阅读，重点关注筛选链条和验证边界，而非将预测亲和力视为实验药效。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是如何围绕已知吡唑啉骨架，生成并筛选靶向EGFR激酶ATP结合位点的新类似物。摘要称EGFR是多种癌症的“established therapeutic target”。[摘要]解读：工作面向候选分子发现，尚非治疗效果验证。",
+        "method": "作者以50个经实验验证的抑制剂驱动REINVENT4中的Mol2Mol模型，再按相似性、理化及药代毒性预测、合成可及性和分子对接逐级筛选。[摘要]对接采用“PDB 5U8L”，随后结合分子动力学、MM-GBSA及密度泛函理论表征候选物。",
+        "innovation": "摘要明确的方法组合是“generative machine learning with physics-based modelling”，即将类似物生成与多层计算表征串联。[摘要]解读：值得关注的是流程整合；现有资料不足以确认模型、算法或筛选策略具有首创性，也无法判断相对既有流程的增益。",
+        "findings": "五个候选物的对接评分为-9.5至-10.6 kcal/mol，优于重对接原配体的评分；其复合物在“100 ns”模拟中保持稳定。[摘要]PyEG5的MM-GBSA估计值接近参照配体。解读：这些是计算指标上的支持，并不等同于实测抑制活性。",
+        "limitations": "作者明确指出“These findings are entirely computational”，候选物仍需生化激酶测定与细胞实验确认。[摘要]摘要未提供生成库规模、预测模型误差及重复模拟安排，因此无法据此判断筛选覆盖度与结果稳健性；这些属于资料缺口，而非已证实的方法缺陷。",
+        "connection": "解读：该文与给定的生成式设计方向直接相关，但对象是药物分子，并非工程结构或运维系统。[摘要]其“生成—约束筛选—物理验证”的组织方式可启发结构设计研究；向智能运维或可靠性研究迁移仅是方法类比，摘要没有验证这些用途。",
+        "next_steps": "建议：若继续阅读全文，优先核对生成库规模、性质预测模型适用范围、筛选淘汰比例及模拟重复性。作者将候选物定位为“prioritized synthetic targets”。[摘要]后续应通过合成、生化激酶测定与细胞实验检验预测，而不以对接排名代替活性结论。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "基于吡唑啉的EGFR激酶抑制剂候选物生成式设计与计算表征",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/42945755/"
+      ],
+      "analyzed_at": "2026-10-29T01:37:07.750056+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "生成模型提出的分子，如何成为值得优先合成的候选物？这项研究围绕靶向 EGFR 的吡唑啉类似物，将生成式机器学习与物理建模串联起来。阅读价值在于理解计算筛选如何支持候选排序，而非将预测结果等同于药效验证。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从已知吡唑啉骨架寻找 EGFR 候选物",
+            "paragraphs": [
+              "EGFR 是乳腺癌、结直肠癌和非小细胞肺癌中已确立的治疗靶点，含吡唑啉的骨架也已多次被报道具有 EGFR 抑制活性。本研究针对 EGFR 激酶的 ATP 结合位点，尝试从已有活性分子出发，生成并计算表征相关类似物。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "先生成类似物，再逐层筛选与表征",
+            "paragraphs": [
+              "研究从 ChEMBL 和原始文献整理了 50 个经实验验证的吡唑啉类 EGFR 抑制剂，作为 REINVENT4 中 Mol2Mol 模型的种子，生成结构相关的分子库。随后依次依据 Tanimoto 相似度（≥0.6）、预测理化及药代动力学和毒性性质、合成可及性（SA score <6），以及分子对接进行筛选。",
+              "对接采用 EGFR 激酶结构 PDB 5U8L，并通过原配体重对接检验流程，重对接 RMSD 为 1.342 Å。研究还使用分子动力学、MM-GBSA 端点计算和密度泛函理论，分别考察复合物稳定性、估算结合自由能及分析电子结构。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "计算结果支持候选优先级，而非已证实活性",
+            "paragraphs": [
+              "筛出的 PyEG1–PyEG5 对接评分为 -9.5 至 -10.6 kcal/mol，比重对接原配体的 -9.2 kcal/mol 更有利。摘要报告，这些复合物在 100 ns 分子动力学模拟中保持稳定，骨架 RMSD ≤ 0.27 nm，平均配体 RMSD ≤ 0.18 nm，回转半径接近参考复合物。",
+              "MM-GBSA 估算中，PyEG5 的结合自由能为 -37.5 ± 2.5 kcal/mol，接近参考配体的 -37.6 ± 6.0 kcal/mol。电子结构计算预测 PyEG2 和 PyEG5 反应性最高，PyEG3 动力学稳定性最高。基于预测结合模式的分析还提示，与 Met793 的氢键及与 Phe856 的 π-π 堆积是预测亲和力的重要影响因素。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "模拟稳定不等于抑制活性得到验证",
+            "paragraphs": [
+              "上述发现完全来自计算，候选物应被视为优先合成对象，其活性仍需生化激酶测定和细胞测试确认。仅凭摘要，无法判断生成库的具体规模、种子集的代表性、模拟重复设置，以及更广泛的对照和验证范围；这些信息未在摘要交代，不代表全文没有开展。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注生成之后的证据如何衔接",
+            "paragraphs": [
+              "阅读启发：这项工作的重点不只是生成分子，还在于用不同计算方法逐步缩小候选范围。进一步阅读时，可关注筛选条件如何影响最终候选，以及对接评分、动力学稳定性和自由能估算是否给出一致排序；即使预测相互呼应，也应与实验活性证据明确区分。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的候选分子筛选过程",
+            "description": "仅概括摘要明确陈述的生成、筛选与计算表征关系，不代表论文原图，也不表示候选活性已获实验验证。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "已验证的种子抑制剂",
+                "detail": "从 ChEMBL 和原始文献整理吡唑啉类 EGFR 抑制剂。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "Mol2Mol 生成类似物",
+                "detail": "使用 REINVENT4 中的模型生成结构相关分子库。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "相似度与性质筛选",
+                "detail": "依次考察相似度、预测理化及药代和毒性性质、合成可及性。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "EGFR 分子对接",
+                "detail": "采用经原配体重对接检验的流程筛选候选物。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "候选物计算表征",
+                "detail": "通过分子动力学、MM-GBSA 和密度泛函理论分析候选物。"
+              },
+              {
+                "id": "f",
+                "stage": 5,
+                "label": "优先合成对象",
+                "detail": "候选活性仍需生化激酶测定和细胞测试确认。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "作为生成种子"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "逐层筛选"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "进一步对接筛选"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "表征入选候选物"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "支持合成优先级"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-29T01:38:27.583774+00:00",
+      "article_profile": "be962fc586dea4d3fdaee81c27f4be5b9a37beace1e5e93759c9cf84791d8966",
+      "analysis_references": {},
+      "analysis_material_version": "05a6502477c95dbdd77b4b49c4dcd024011db9c8c1f688e8351dcdd4abc881e9",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "e0bcc3f204ad",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-29T01:38:27.584797+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "source_status": {
@@ -2586,13 +3660,13 @@
     "unavailable": 44
   },
   "analysis_status": {
-    "ready_core": 1,
+    "ready_core": 6,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 5
+    "pending": 0
   },
   "edition": {
     "id": "40692514230",
