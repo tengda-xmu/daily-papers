@@ -1,19 +1,19 @@
 {
   "id": "public-2b3f616d26d343fed7789052",
-  "content_version": "78b69b73233fbc9172de9fe2fd6638f22f322fd92db9a1849676f0142a81324d",
+  "content_version": "954c7254056e78707119b991b698d8a312d8714dbac2adddd2bf63bf14e916bc",
   "analysis": {
-    "title_zh": "模型能否运行于 AWS Trainium？通过 torch-neuronx model support Space 查询",
-    "summary": "公告介绍 torch-neuronx model support Space，用于查询 Hub 热门模型能否不经修改运行于 AWS Trainium，并提供自行运行的脚本。其背景是原生 PyTorch 后端 TorchNeuron，使 Transformers 能在 Trainium 上运行自身建模代码。Space 默认展示 Selected 视图，模型依据下载量与趋势评分筛选，逐行列出运行结果及分片使用的 Trainium 核心数，适合模型兼容性初筛与迁移前核查；不能据此认定所有模型均已获得支持。",
-    "application": "建议：科研迁移时，可先查询候选模型的运行结果及分片核心数，再参考所提供脚本开展复现与资源评估。官方已明确的功能是兼容性结果查询和运行脚本提供；所给原文未提供具体模型测试结果、性能提升或成本优势，迁移收益仍需自行验证。",
-    "requirements": "原文涉及的运行平台为 AWS Trainium，后端为 TorchNeuron（torch-neuronx 包）；未明确版本、账号、API、费用或具体部署要求，使用条件见官方文档。",
+    "title_zh": "模型能否运行于 AWS Trainium？用 torch-neuronx model support Space 查询",
+    "summary": "公告介绍 torch-neuronx model support Space，用于查询 Hub 热门模型能否不经修改运行于 AWS Trainium，并提供自行运行的脚本。此前介绍的 TorchNeuron 是 Trainium 的原生 PyTorch 后端，使 Transformers 可沿用自身建模代码。Space 默认展示按下载量和趋势分数挑选的模型，列出运行结果及分片使用的 Trainium 核心数，适合模型兼容性筛选与迁移前核查；不代表所有模型均已验证。[S1]",
+    "application": "建议：科研迁移时，可先查询候选模型的兼容性，再利用所提供脚本开展自身任务验证；这是迁移建议，并非官方已验证的科研效果。官方明确提供的是热门模型运行情况查询与运行脚本，所给资料未提供具体模型的测试结果或性能提升数据。[S1]",
+    "requirements": "原文明示涉及 AWS Trainium，以及作为原生 PyTorch 后端的 TorchNeuron（torch-neuronx 包）；未明确版本、账号、API、费用或具体部署条件。使用条件见官方文档。",
     "steps": [
       {
-        "text": "进入 Space 的默认 Selected 视图，查看按 Hub 下载量与趋势评分筛选的模型。",
+        "text": "查看 Space 默认打开的 Selected 视图，浏览按 Hub 下载量和趋势分数挑选的模型。",
         "evidence": "The Space opens on the Selected view: our own selection of models picked among the top models on the Hub by downloads and by trending score."
       }
     ],
     "evidence": [
-      "we introduced TorchNeuron, the native PyTorch backend for AWS Trainium (the torch-neuronx package).",
+      "In a previous post , we introduced TorchNeuron, the native PyTorch backend for AWS Trainium (the torch-neuronx package).",
       "With it, Transformers runs its own modeling code on Trainium, as it does on any other device, so any Transformers model on the Hub may run.",
       "The torch-neuronx model support Space answers that question for the most popular models on the Hub.",
       "It tells you whether a model runs unmodified on Trainium, and gives you the script to run it yourself.",
@@ -21,5 +21,5 @@
     ],
     "basis_url": "https://huggingface.co/blog/torch-neuronx-model-support"
   },
-  "analyzed_at": "2026-10-28T09:32:04.355156+00:00"
+  "analyzed_at": "2026-10-29T12:29:33.315304+00:00"
 }
