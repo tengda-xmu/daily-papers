@@ -770,16 +770,128 @@
       "reading_status": {
         "paper_id": "fbc5d34a4892",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-29T14:59:56.576766+00:00",
+        "updated_at": "2026-10-30T02:08:16.632113+00:00",
         "basis": "abstract",
-        "article_state": "retry",
-        "article_stage": "writing",
+        "article_state": "complete",
+        "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "设备意外停机会打乱生产与维护安排。本文尝试将运行测量转化为数字孪生维护中的虚拟状态层，结合可解释机器学习识别故障风险。阅读价值在于观察：模型预测如何连接维护优先级，而不把决策完全交给算法。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从意外停机问题走向风险优先级",
+            "paragraphs": [
+              "智能制造中的预测性维护不仅关乎故障识别，也关系到生产率、维护计划和资产利用。摘要将研究目标定位为利用运行测量支持维护决策，重点是建立数据驱动的虚拟状态层，而不是宣称已经完成整套数字孪生系统的现场部署。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "用无泄漏状态变量比较预测模型",
+            "paragraphs": [
+              "研究使用AI4I 2020 Predictive Maintenance数据集，选取6个不含目标泄漏的机器状态预测变量。作者以精确率—召回率曲线下面积（PR-AUC）为主要评价指标，比较Logistic Regression、Random Forest、Extra Trees和HistGradientBoosting。",
+              "摘要说明，模型在开发数据集上优化，并在独立验证数据集上测试，最终选择HistGradientBoosting。研究还使用置换重要性解释预测变量的贡献，并通过维护风险分层呈现结果，使预测能够服务于风险排序。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "锁定测试表现与Critical风险层",
+            "paragraphs": [
+              "所选HistGradientBoosting模型在锁定测试中的PR-AUC为0.8242，ROC-AUC为0.9750，平衡准确率为0.9031，故障召回率为0.8235。这些是摘要实际报告的预测指标，不能直接等同于停机时间减少或维护成本下降。",
+              "置换重要性识别出的最重要预测变量是扭矩、空气温度和刀具磨损。维护风险层将锁定测试中51个故障里的48个归入Critical等级。该分层结果与故障召回率属于不同表述，不能在缺少阈值说明时视为同一指标。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "预测结果之外，哪些边界尚不明确",
+            "paragraphs": [
+              "仅凭摘要，无法判断开发、验证与锁定测试各自的样本规模、划分方式及相互关系，也无法核对其他候选模型的具体表现。摘要未展开变量筛选和目标泄漏排查过程，因此不能进一步评价这些处理的充分性。",
+              "Critical等级覆盖了多少非故障观测、风险阈值如何设定，以及跨设备或真实生产环境的验证范围，摘要均未说明。它也未报告维护成本、停机时长或现场决策效果；这不意味着论文没有开展相关工作，而是当前资料不足以判断。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：风险分层如何支持人工判断",
+            "paragraphs": [
+              "阅读启发：继续阅读时，可重点关注虚拟状态层如何连接维护流程，以及Critical等级的划分依据。故障集中进入高风险层是否同时伴随较多误报，是理解其维护价值的重要问题；置换重要性则应作为模型解释线索，而非故障因果机制的证明。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的预测与风险呈现过程",
+            "description": "仅概括摘要明确陈述的数据、模型比较、解释与风险分层关系，不代表论文原图或已验证的现场维护闭环。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "机器运行测量",
+                "detail": "使用AI4I数据集中的无目标泄漏机器状态预测变量。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "模型优化与比较",
+                "detail": "在开发数据上优化，以PR-AUC为主要指标比较候选模型。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "选择并评估模型",
+                "detail": "选择HistGradientBoosting，摘要报告其锁定测试指标。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "置换重要性解释",
+                "detail": "识别扭矩、空气温度和刀具磨损等重要预测变量。"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "维护风险分层",
+                "detail": "通过Critical等级呈现故障风险，支持维护风险优先级判断。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "提供状态变量"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "比较后选择"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "解释预测变量贡献"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "呈现维护风险"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-30T02:08:16.632112+00:00",
+      "article_profile": "36224e742cb51029812fe675bbfe99f95bce81f6e23e527f32c07c36ddba7620"
     },
     {
       "source": "OpenAlex",
@@ -799,7 +911,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "ADCs play an important role in converting information from the analog world to the digital one; with modern applications requiring higher resolutions, speed, and power efficiency, it has become very difficult to design them. Traditionally, the design of an ADC follows an iterative design process that includes stages like specification, behavioral modeling, transistor sizing, schematic simulation, layout, and post-layout verification, which is laborious and requires much designer expertise due to the consideration of process-voltage-temperature variations and yield. In this work, we perform a r…",
+      "summary": "本文围绕模数转换器在高分辨率、高速度与功率效率要求下的设计难题，综述机器学习辅助设计的研究进展。作者检索2015至2026年的相关文献，按设计阶段而非算法类别组织研究，覆盖行为建模、晶体管尺寸设计、校准、布局优化及工艺—电压—温度与良率变化预测。摘要指出数据不足、泛化能力弱及跨阶段协同优化探索不足等挑战，并讨论物理信息学习、数字孪生等方向。当前仅有摘要，不能核实具体性能提升。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7224078275",
@@ -843,11 +955,143 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为机器学习辅助电子设计的研究地图阅读，重点关注按设计阶段组织方法的框架；若用于智能运维选题，应注意其研究对象是设计自动化，并非运行维护。[摘要]【解读】",
+      "deep_read": {
+        "problem": "【论文摘要】研究问题是如何借助机器学习缓解模数转换器设计的复杂性。传统流程涉及规格制定、行为建模、晶体管尺寸设计、仿真、布局及后布局验证，还须考虑工艺—电压—温度变化与良率。原文以“laborious”概括其劳动密集特征，强调设计经验依赖。[摘要]",
+        "method": "【论文摘要】作者在IEEE Xplore、ACM Digital Library及arXiv中系统检索2015至2026年的研究，并按设计阶段整理机器学习应用，而非仅按算法分类。摘要列出回归、树模型、神经网络、强化学习等方法，但未提供检索式、筛选标准及纳入文献数量。[摘要]",
+        "innovation": "【解读】摘要中可识别的组织特色是以设计任务串联不同学习方法，原文明确写道“Rather than organizing the literature on different ML algorithms”。这有助于从工程需求寻找适用技术，但不能仅凭摘要认定该框架具有首创性，也不能视为提出了新算法。[摘要]",
+        "findings": "【论文摘要】综述比较各技术的速度、精度收益及主要不足，并指出“lack of data”“poor generalization performance”和低可解释性等开放挑战。跨多个设计阶段的协同优化也被列为探索不足的问题。摘要没有列出定量对比，因此无法判断哪类方法性能最佳。[摘要]",
+        "limitations": "【解读】当前证据边界主要来自资料范围：只有摘要，无法核对综述的检索完整性、研究质量评价与比较口径。文中列举的数据不足和泛化较差属于领域挑战，不能直接当作本综述的方法缺陷；其对不同模数转换器架构的覆盖程度同样缺少证据。[摘要]",
+        "connection": "【解读】与可靠性研究最直接的联系是“prediction of PVT/yield variations”，即工艺—电压—温度及良率变化预测。与结构设计的联系主要在布局优化和设计空间探索。对智能运维则只有方法迁移层面的关联，摘要未涉及在线故障诊断、维护决策或剩余寿命预测。[摘要]",
+        "next_steps": "【建议】若能取得全文，可先核查检索与筛选流程，再追踪变化预测、布局优化和跨阶段协同优化的代表研究。面向可靠性选题，可进一步考察物理信息学习能否改善跨工况泛化，并设置独立验证；这是基于摘要主题提出的研究建议，并非作者已验证的成果。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "面向模数转换器设计自动化的机器学习技术综述",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.5281/zenodo.23721241"
+      ],
+      "analyzed_at": "2026-10-30T02:29:45.182761+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "模数转换器（ADC）如何在追求更高分辨率、速度和能效的同时，降低设计负担？这篇综述按设计环节梳理机器学习的应用，阅读价值在于理解算法能介入哪些任务，以及数据、泛化与跨阶段协同为何仍是难点。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "ADC设计难在反复迭代与多重约束",
+            "paragraphs": [
+              "ADC负责将模拟世界的信息转换为数字信息。摘要指出，传统设计需要经历规格制定、行为建模、晶体管尺寸设计、原理图仿真、版图和版图后验证等环节。设计者还须考虑工艺、电压、温度（PVT）变化及良率，因此流程耗费人力，并高度依赖专业经验。机器学习所面对的，正是这类多环节、反复迭代的设计任务。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "不按算法列清单，而按设计任务组织文献",
+            "paragraphs": [
+              "作者报告，在IEEE Xplore、ACM Digital Library和arXiv中，对2015至2026年的相关研究开展系统检索。本文属于综述工作，摘要描述的方法是文献检索、分类与比较，而不是提出并验证某个新的ADC设计模型。",
+              "其组织方式是将回归、树模型、支持向量机、人工神经网络、卷积神经网络、图神经网络、强化学习、进化算法和贝叶斯优化等方法，放到具体设计环节中讨论。覆盖任务包括行为建模、晶体管尺寸设计、比较器与电容阵列校准、ADC校准、版图优化、PVT与良率变化预测，以及设计空间探索。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要强调共性瓶颈，未给出算法性能排名",
+            "paragraphs": [
+              "摘要说明，综述比较了各类技术在速度、精度等方面的收益及主要不足，但没有披露具体比较结果、提升幅度或统一评测指标。因此，当前资料支持理解其比较维度，不能据此判断哪种算法表现最佳，也不能将局部任务的收益等同于完整设计流程的收益。",
+              "摘要明确提出的开放挑战包括数据不足、泛化性能较差、可解释性偏低，以及跨多个设计阶段的协同优化仍较少得到探索。这些问题提示，评价机器学习辅助ADC设计，不能只关注单个环节的预测或优化表现，还需关注方法的适用边界。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "检索覆盖与验证强度仍需查阅正文",
+            "paragraphs": [
+              "仅凭摘要，无法判断纳入文献数量、筛选与质量评价标准，也无法核实各研究的数据样本规模、ADC类型、工艺条件和比较基线。速度与精度收益是否来自仿真、版图后验证或实测，以及能否跨设计和工艺推广，同样尚不明确。这些是摘要未交代的信息，不代表论文或被综述研究没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：区分未来方向与已验证能力",
+            "paragraphs": [
+              "阅读启发：摘要将生成式AI、图神经网络版图优化、物理信息学习、数字孪生及人机协同设计列为未来方向，并提醒生成式方法可能涉及可制造性和知识产权风险。进一步阅读时，建议关注这些方向分别对应哪些设计任务、已有何种验证，以及跨阶段信息如何衔接；不能据此认定其已实现可靠设计自动化，也不宜将数字孪生的展望直接解读为智能运维成效。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的综述组织过程",
+            "description": "示意摘要明确描述的检索、分类、比较和讨论关系，不是论文原图，也不表示新增实验流程。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "系统检索相关文献",
+                "detail": "在IEEE Xplore、ACM Digital Library和arXiv检索相关研究。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "按ADC设计环节分类",
+                "detail": "将机器学习方法放入建模、尺寸设计、校准、版图与变化预测等任务。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "比较收益与主要不足",
+                "detail": "比较维度包括速度、精度收益及各技术的主要缺点。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "讨论挑战与未来方向",
+                "detail": "讨论数据、泛化、解释性、跨阶段协同，以及未来方向与潜在风险。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "组织检索所得文献"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "开展分类比较"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "进一步讨论"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-30T02:31:15.740990+00:00",
+      "article_profile": "9ceaee08191685a9707d3f941cc0cca56b772ce6da5ac8175c1f10e3cb297d0a",
+      "analysis_references": {},
+      "analysis_material_version": "49ddce02fea92148328b9c996a6f5d0a154ba241d6c0cdeb38ac8c74b4dd12f3",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "b9d7d2f2b6ed",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-30T02:31:15.741989+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -868,7 +1112,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Unplanned equipment failure remains one of the most expensive problems in modern manufacturing, and the maintenance strategy adopted by a plant has a direct bearing on its productivity, safety, and operating cost. Traditional reactive and time-based preventive approaches either allow machines to run to failure or replace healthy components too early, and neither uses the rich stream of data that industrial assets now generate. The convergence of the Industrial Internet of Things (IIoT) and machine learning has made a third option practical: predictive maintenance, in which the condition of a m…",
+      "summary": "本文围绕工业设备预测性维护，综述从物联网感知到云端处理的分层架构，以及故障分类、剩余使用寿命估计中的特征提取与学习方法。摘要称比较了支持向量机、集成方法、深度网络、图像诊断和生存分析等代表性研究，并指出分类与寿命估计割裂、边缘部署及可解释性等问题。[摘要] 解读：适合作为智能运维研究的框架性入口，但摘要中的跨研究指标不能直接用于算法排名，本文亦不能据此认定提出并验证了新系统。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7224131549",
@@ -923,11 +1167,135 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐作为智能运维方向的综述性入门与选题参考，重点关注故障分类和寿命预测的衔接、生存分析及部署问题；当前仅有摘要，不宜将其视为新算法有效性的实验证据。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是如何利用设备持续产生的数据改善维护决策。摘要指出，传统策略可能使机器“run to failure”，或过早更换健康部件，难以充分利用工业数据。[摘要] 解读：本文关注从被动维修和定期维护转向状态驱动的预测性维护，目标涉及生产率、安全与运行成本。",
+        "method": "本文采用综述路径，而非摘要已说明的原创实验方案。作者考察“layered sensing-to-cloud architectures”，并梳理特征提取、故障分类及剩余使用寿命估计方法，比较多类代表性研究。[摘要] 摘要未交代检索数据库、纳入标准和质量评价流程，无法判断综述覆盖的系统性。",
+        "innovation": "摘要提出将实时物联网感知与“combined classification-and-prognostics pipeline”结合的研究方向。[摘要] 解读：其潜在贡献是把监测架构、诊断与预后放在共同框架中讨论，而非已证实的算法创新；资料未提供所提方向的实现细节或验证结果。",
+        "findings": "摘要汇总的研究准确率约为88%至96%，另称生存模型在真实工业数据上的一致性指数超过0.97。[摘要] 这些属于被综述研究的报告结果，并非本文统一实验所得。解读：任务、数据与指标不同，因此这些数字不能证明某类方法普遍优于其他方法。",
+        "limitations": "作者指出现有研究存在“balanced benchmark datasets”依赖，以及分类和寿命估计处理割裂等问题，并列出边缘部署、安全与可解释性挑战。[摘要] 这些是作者归纳的领域缺口，不应直接当作本文缺陷；仅凭摘要无法核实其归纳依据及适用范围。",
+        "connection": "与智能运维的联系直接体现在连续状态监测、故障识别和寿命估计。[摘要] 解读：对可靠性研究，生存分析可作为进一步关注的寿命建模方向；对结构设计，摘要未讨论载荷、结构参数或设计优化，因而不能据此声称已有直接的设计方法贡献。",
+        "next_steps": "建议阅读全文时优先核对综述纳入标准、数据来源、指标定义，以及集成研究方向是否有实际验证。研究迁移方面，建议探索诊断结果如何进入寿命预测，并检验不平衡数据与边缘部署条件下的表现；这些是基于摘要缺口提出的研究建议，并非作者已完成的成果。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "基于物联网与机器学习的机器健康监测及预测性维护综述：架构、算法与开放挑战",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.64388/irev10i4-1724415"
+      ],
+      "analyzed_at": "2026-10-30T01:55:52.974028+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "设备维护如何从“坏了再修”或“到期就换”，转向依据运行状态判断风险？这篇综述梳理工业物联网与机器学习如何支撑预测性维护，阅读价值不仅在于比较算法，更在于理解故障识别、寿命估计与实际部署之间尚未打通的环节。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "维护时机：避免故障，也避免过早更换",
+            "paragraphs": [
+              "非计划设备故障影响制造业的生产效率、安全与运行成本。摘要指出，传统被动维修可能让设备运行至失效，按时间安排的预防性维护则可能过早更换健康部件，两者都未充分利用工业设备持续产生的数据。",
+              "工业物联网与机器学习结合，使持续监测设备状态、根据传感器数据估计未来健康状况成为可行选择。本文是一篇综述，关注这一预测性维护体系，而非报告一套新模型的独立实验。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从感知到云端，梳理诊断与寿命估计方法",
+            "paragraphs": [
+              "作者考察从感知端到云端的分层架构，梳理用于故障分类和剩余使用寿命估计的特征提取与学习方法，并比较具有代表性的既有研究。",
+              "综述覆盖支持向量机、集成方法、深度网络、基于图像的诊断以及生存分析。摘要明确了讨论范围，但没有交代文献检索策略、筛选标准或纳入研究数量，因此不能仅据摘要判断其综述覆盖程度。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "已有结果可观，但不同指标不能直接排榜",
+            "paragraphs": [
+              "摘要汇总的既有研究中，单分类器故障检测的准确率约为88%，基于视觉的齿轮箱诊断准确率为96%；生存模型在真实工业数据上的一致性指数超过0.97。这些数字来自被综述研究，不是本文统一实验得到的成绩。",
+              "准确率与一致性指数不是同一种指标，且对应任务不同，不能据此直接排列方法优劣。摘要也未提供足以确认这些研究具有相同评测条件的信息。",
+              "作者归纳的共性缺口包括：过度依赖单一算法和平衡基准数据集，故障分类与寿命估计相互割裂，生存分析在工业4.0场景中的采用有限，以及边缘部署、安全与可解释性仍有待解决。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要能说明趋势，不能确定验证边界",
+            "paragraphs": [
+              "摘要未完整交代各项结果的样本规模、故障分布、训练测试划分及跨设备验证范围；其中96%准确率明确对应基于视觉的齿轮箱诊断，生存模型结果明确涉及真实工业数据。其余细节仍需查阅原文，不能将摘要未报告理解为论文没有开展相关工作。",
+              "作者最后提出将实时物联网感知与分类、预后预测相结合的研究方向，但摘要没有报告该整合方案的实施与验证结果，不能把这一展望写成已经实现的维护收益。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注诊断与预后如何衔接",
+            "paragraphs": [
+              "阅读启发：进一步阅读时，可重点追问故障分类与寿命估计如何衔接、平衡基准上的结果是否适用于实际故障分布，以及生存分析为何在工业场景中采用有限。对智能运维而言，这些问题比孤立比较准确率更值得结合部署、安全和可解释性要求审视。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的预测性维护关系示意",
+            "description": "仅概括摘要中的传感器数据、持续状态监测与未来健康估计关系，不代表论文原图或已验证的整合系统。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "工业设备传感器数据",
+                "detail": "工业物联网与机器学习结合，为预测性维护提供数据基础。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "持续监测设备状态",
+                "detail": "预测性维护持续关注机器当前的运行与健康状况。"
+              },
+              {
+                "id": "c",
+                "stage": 1,
+                "label": "估计未来健康状况",
+                "detail": "依据传感器数据估计设备未来健康状况。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "支持状态监测"
+              },
+              {
+                "from": "a",
+                "to": "c",
+                "label": "用于健康估计"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-30T02:10:27.505135+00:00",
+      "article_profile": "2538322c58271fdb45e163b2d84d869f5e3b653410a194b870201e88060b9b27",
+      "analysis_references": {},
+      "analysis_material_version": "3c2038fd0d6b765ae42cf17c55d6f29b53b19609101f953441970ee7934d2455",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "75683a8ba272",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-30T02:10:27.506153+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -950,7 +1318,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Determination of equivalent elastic coefficients in composite laminates is a fundamental problem in structural mechanics and materials engineering. This task becomes particularly challenging for unsymmetric laminates, where coupling effects between membrane, bending, and shear responses render analytical characterisation difficult and computationally expensive. In this work, a machine learning-based inverse methodology is proposed for determining the equivalent shear modulus of unsymmetric composite laminates. A high-fidelity finite element implementation of the ASTM V-notched shear test is us…",
+      "summary": "非对称复合材料层合板的膜内、弯曲与剪切耦合，使等效弹性参数表征更加困难。本文利用ASTM V形缺口剪切试验的高保真有限元模型生成数据，训练LightGBM预测等效剪切模量，再将其用于寻找满足目标模量的铺层序列。摘要声称该方法可降低传统反复有限元试算的成本，但未提供误差、加速比或实物验证结果。本文适合关注复合材料逆向设计的读者，当前仅能作摘要级评价。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -988,11 +1356,156 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐作为复合材料目标性能驱动逆向设计的方法线索阅读，重点关注有限元数据、LightGBM代理与铺层搜索的衔接；其定量优势仍需全文核查。[摘要]",
+      "deep_read": {
+        "problem": "研究面向非对称复合材料层合板的等效弹性参数确定。摘要指出其难点在于“coupling effects between membrane, bending, and shear responses”。本文实际聚焦等效剪切模量，不能将标题中的弹性系数泛化为全部弹性参数均已识别。[摘要]",
+        "method": "方法先以ASTM V形缺口剪切试验的高保真有限元实现生成不同非对称铺层的数据，再训练LightGBM，建立设计变量到等效剪切模量的非线性映射，最后寻找满足目标模量的铺层序列。摘要称其为“inverse design framework”，但未交代搜索算法。[摘要]",
+        "innovation": "解读：值得关注的是将剪切试验有限元数据、LightGBM代理与目标模量约束下的铺层反求串联，形成面向非对称层合板的设计流程。依据为摘要所述“machine learning-based inverse methodology”；现有资料不足以确认其首创性或相对已有方法的创新幅度。[摘要]",
+        "findings": "摘要报告该方法相较传统反复有限元试算“significantly reduces computational cost”，并有助于理解铺层结构与有效剪切行为的关系。但未给出预测误差、计算耗时或具体铺层规律，因此只能确认作者报告了这些成果，不能评定优势大小或适用精度。[摘要]",
+        "limitations": "当前证据仅限摘要，未提供样本数量、材料体系、铺层范围、数据划分、超参数及逆向结果复核信息，也未说明是否开展物理试验验证。这些属于资料披露不足，不能据此断言论文未做相关工作；尤其无法核查其“high-fidelity”实现的准确性。[摘要]",
+        "connection": "解读：与给定生成式设计方向的联系主要在目标性能驱动的铺层逆向设计，而非生成模型本身；摘要使用的是“nonlinear surrogate”。其对结构设计有直接参考意义，但未涉及在线监测、故障诊断或失效概率，不能直接认定为智能运维或可靠性研究成果。[摘要]",
+        "next_steps": "建议：获取全文后，优先核查数据覆盖、训练测试划分及反求铺层的独立有限元复核，再判断代理模型能否支持设计决策。若迁移至可靠性研究，可考虑材料参数波动与制造偏差下的目标满足率；这是后续研究设想，并非摘要已经验证的结论。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "非对称层合板弹性系数确定的机器学习逆向方法",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.69644/ivk-2026-sia-0005"
+      ],
+      "analyzed_at": "2026-10-30T01:58:56.109025+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "非对称复合材料层合板的等效剪切模量难以高效确定。这项研究用有限元数据训练机器学习代理模型，再由目标模量反推铺层序列，为理解铺层结构与剪切性能之间的关系提供了一条计算路径。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "非对称铺层为何增加表征难度",
+            "paragraphs": [
+              "确定复合材料层合板的等效弹性系数，是结构力学与材料工程中的基础问题。对于非对称层合板，膜内、弯曲与剪切响应之间存在耦合，使解析表征更加困难，也增加了计算负担。",
+              "本文聚焦其中的等效剪切模量，而非一次性识别全部弹性系数。研究关注的不只是给定铺层具有什么性能，还包括能否从指定的剪切模量出发，寻找相应的铺层序列。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从剪切试验仿真到目标铺层反求",
+            "paragraphs": [
+              "作者采用 ASTM V 形缺口剪切试验的高保真有限元实现，生成覆盖广泛非对称铺层序列的数据集。这里的数据来源是试验形式的数值仿真，不能据此理解为已经完成同等范围的实体试验。",
+              "随后，研究训练轻量级梯度提升机（LightGBM），作为连接层合板设计变量与等效剪切模量的非线性代理模型。训练后的模型再被用于逆向设计框架，以寻找达到预设剪切模量目标的铺层序列。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要报告了降本与结构—性能关系认识",
+            "paragraphs": [
+              "摘要报告，相较于传统试错式有限元分析，该方法显著降低了计算成本，并为理解层合板构型与有效剪切行为之间的关系提供了新认识。这些是作者在摘要中给出的定性结论，当前资料不足以量化其幅度。",
+              "研究将设计变量到模量的正向代理映射用于目标性能驱动的铺层识别。不过，摘要没有列出具体目标值、对应铺层方案或达到目标的误差，因此不能进一步判断反求结果的精度与稳定性。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "数据规模、比较口径与验证范围仍待核对",
+            "paragraphs": [
+              "本解读仅依据所提供的完整摘要。摘要未报告数据集规模、材料体系、铺层参数范围及训练与测试划分，也未给出预测误差和计算成本的具体比较口径，因而无法判断模型对未见铺层的泛化能力或实际节省的计算量。",
+              "摘要也未交代实体试验验证、逆向结果复核及不同目标模量下的适用范围。这些属于当前资料无法判断的信息，不意味着论文没有开展相关工作；尤其不能把仿真代理模型的用途直接延伸为已验证的工程可靠性。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：区分预测准确与反求可信",
+            "paragraphs": [
+              "阅读启发：值得继续关注的是，代理模型对模量的预测能力，如何支撑逆向铺层结果的可信度。进一步阅读时，可核对候选铺层是否经过独立复核，以及目标模量是否位于训练数据覆盖范围内，从而理解这条逆向设计路径的适用边界。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的剪切模量逆向设计流程",
+            "description": "仅概括摘要明确陈述的数据生成、代理建模与逆向设计关系，不代表论文原图，也不补充未报告的算法配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "非对称铺层序列",
+                "detail": "覆盖广泛非对称铺层序列的层合板设计。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "高保真有限元生成数据",
+                "detail": "采用 ASTM V 形缺口剪切试验的有限元实现。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "训练 LightGBM 代理模型",
+                "detail": "建立层合板设计变量到等效剪切模量的非线性映射。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "预设剪切模量目标",
+                "detail": "为逆向设计提供所需达到的目标模量。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "逆向识别铺层序列",
+                "detail": "利用训练后的代理模型寻找达到目标模量的铺层序列。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "覆盖不同铺层"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "提供训练数据"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "用于逆向设计"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "指定性能目标"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-30T02:00:19.288529+00:00",
+      "article_profile": "779e4b5fd79a6d451f33e46b64b5f0875e754b0f3cd280c6a436356517359daa",
+      "analysis_references": {},
+      "analysis_material_version": "b2038e22718023308655d0a08e6cbcbf92496eeb0168f0543b76806a2602a2ed",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "53de9584f17e",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-30T02:00:19.288529+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "extended": [],
@@ -1763,16 +2276,128 @@
       "reading_status": {
         "paper_id": "fbc5d34a4892",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-29T14:59:56.576766+00:00",
+        "updated_at": "2026-10-30T02:08:16.632113+00:00",
         "basis": "abstract",
-        "article_state": "retry",
-        "article_stage": "writing",
+        "article_state": "complete",
+        "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "设备意外停机会打乱生产与维护安排。本文尝试将运行测量转化为数字孪生维护中的虚拟状态层，结合可解释机器学习识别故障风险。阅读价值在于观察：模型预测如何连接维护优先级，而不把决策完全交给算法。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从意外停机问题走向风险优先级",
+            "paragraphs": [
+              "智能制造中的预测性维护不仅关乎故障识别，也关系到生产率、维护计划和资产利用。摘要将研究目标定位为利用运行测量支持维护决策，重点是建立数据驱动的虚拟状态层，而不是宣称已经完成整套数字孪生系统的现场部署。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "用无泄漏状态变量比较预测模型",
+            "paragraphs": [
+              "研究使用AI4I 2020 Predictive Maintenance数据集，选取6个不含目标泄漏的机器状态预测变量。作者以精确率—召回率曲线下面积（PR-AUC）为主要评价指标，比较Logistic Regression、Random Forest、Extra Trees和HistGradientBoosting。",
+              "摘要说明，模型在开发数据集上优化，并在独立验证数据集上测试，最终选择HistGradientBoosting。研究还使用置换重要性解释预测变量的贡献，并通过维护风险分层呈现结果，使预测能够服务于风险排序。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "锁定测试表现与Critical风险层",
+            "paragraphs": [
+              "所选HistGradientBoosting模型在锁定测试中的PR-AUC为0.8242，ROC-AUC为0.9750，平衡准确率为0.9031，故障召回率为0.8235。这些是摘要实际报告的预测指标，不能直接等同于停机时间减少或维护成本下降。",
+              "置换重要性识别出的最重要预测变量是扭矩、空气温度和刀具磨损。维护风险层将锁定测试中51个故障里的48个归入Critical等级。该分层结果与故障召回率属于不同表述，不能在缺少阈值说明时视为同一指标。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "预测结果之外，哪些边界尚不明确",
+            "paragraphs": [
+              "仅凭摘要，无法判断开发、验证与锁定测试各自的样本规模、划分方式及相互关系，也无法核对其他候选模型的具体表现。摘要未展开变量筛选和目标泄漏排查过程，因此不能进一步评价这些处理的充分性。",
+              "Critical等级覆盖了多少非故障观测、风险阈值如何设定，以及跨设备或真实生产环境的验证范围，摘要均未说明。它也未报告维护成本、停机时长或现场决策效果；这不意味着论文没有开展相关工作，而是当前资料不足以判断。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：风险分层如何支持人工判断",
+            "paragraphs": [
+              "阅读启发：继续阅读时，可重点关注虚拟状态层如何连接维护流程，以及Critical等级的划分依据。故障集中进入高风险层是否同时伴随较多误报，是理解其维护价值的重要问题；置换重要性则应作为模型解释线索，而非故障因果机制的证明。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的预测与风险呈现过程",
+            "description": "仅概括摘要明确陈述的数据、模型比较、解释与风险分层关系，不代表论文原图或已验证的现场维护闭环。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "机器运行测量",
+                "detail": "使用AI4I数据集中的无目标泄漏机器状态预测变量。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "模型优化与比较",
+                "detail": "在开发数据上优化，以PR-AUC为主要指标比较候选模型。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "选择并评估模型",
+                "detail": "选择HistGradientBoosting，摘要报告其锁定测试指标。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "置换重要性解释",
+                "detail": "识别扭矩、空气温度和刀具磨损等重要预测变量。"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "维护风险分层",
+                "detail": "通过Critical等级呈现故障风险，支持维护风险优先级判断。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "提供状态变量"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "比较后选择"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "解释预测变量贡献"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "呈现维护风险"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-30T02:08:16.632112+00:00",
+      "article_profile": "36224e742cb51029812fe675bbfe99f95bce81f6e23e527f32c07c36ddba7620"
     },
     {
       "source": "OpenAlex",
@@ -1792,7 +2417,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "ADCs play an important role in converting information from the analog world to the digital one; with modern applications requiring higher resolutions, speed, and power efficiency, it has become very difficult to design them. Traditionally, the design of an ADC follows an iterative design process that includes stages like specification, behavioral modeling, transistor sizing, schematic simulation, layout, and post-layout verification, which is laborious and requires much designer expertise due to the consideration of process-voltage-temperature variations and yield. In this work, we perform a r…",
+      "summary": "本文围绕模数转换器在高分辨率、高速度与功率效率要求下的设计难题，综述机器学习辅助设计的研究进展。作者检索2015至2026年的相关文献，按设计阶段而非算法类别组织研究，覆盖行为建模、晶体管尺寸设计、校准、布局优化及工艺—电压—温度与良率变化预测。摘要指出数据不足、泛化能力弱及跨阶段协同优化探索不足等挑战，并讨论物理信息学习、数字孪生等方向。当前仅有摘要，不能核实具体性能提升。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7224078275",
@@ -1836,11 +2461,143 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为机器学习辅助电子设计的研究地图阅读，重点关注按设计阶段组织方法的框架；若用于智能运维选题，应注意其研究对象是设计自动化，并非运行维护。[摘要]【解读】",
+      "deep_read": {
+        "problem": "【论文摘要】研究问题是如何借助机器学习缓解模数转换器设计的复杂性。传统流程涉及规格制定、行为建模、晶体管尺寸设计、仿真、布局及后布局验证，还须考虑工艺—电压—温度变化与良率。原文以“laborious”概括其劳动密集特征，强调设计经验依赖。[摘要]",
+        "method": "【论文摘要】作者在IEEE Xplore、ACM Digital Library及arXiv中系统检索2015至2026年的研究，并按设计阶段整理机器学习应用，而非仅按算法分类。摘要列出回归、树模型、神经网络、强化学习等方法，但未提供检索式、筛选标准及纳入文献数量。[摘要]",
+        "innovation": "【解读】摘要中可识别的组织特色是以设计任务串联不同学习方法，原文明确写道“Rather than organizing the literature on different ML algorithms”。这有助于从工程需求寻找适用技术，但不能仅凭摘要认定该框架具有首创性，也不能视为提出了新算法。[摘要]",
+        "findings": "【论文摘要】综述比较各技术的速度、精度收益及主要不足，并指出“lack of data”“poor generalization performance”和低可解释性等开放挑战。跨多个设计阶段的协同优化也被列为探索不足的问题。摘要没有列出定量对比，因此无法判断哪类方法性能最佳。[摘要]",
+        "limitations": "【解读】当前证据边界主要来自资料范围：只有摘要，无法核对综述的检索完整性、研究质量评价与比较口径。文中列举的数据不足和泛化较差属于领域挑战，不能直接当作本综述的方法缺陷；其对不同模数转换器架构的覆盖程度同样缺少证据。[摘要]",
+        "connection": "【解读】与可靠性研究最直接的联系是“prediction of PVT/yield variations”，即工艺—电压—温度及良率变化预测。与结构设计的联系主要在布局优化和设计空间探索。对智能运维则只有方法迁移层面的关联，摘要未涉及在线故障诊断、维护决策或剩余寿命预测。[摘要]",
+        "next_steps": "【建议】若能取得全文，可先核查检索与筛选流程，再追踪变化预测、布局优化和跨阶段协同优化的代表研究。面向可靠性选题，可进一步考察物理信息学习能否改善跨工况泛化，并设置独立验证；这是基于摘要主题提出的研究建议，并非作者已验证的成果。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "面向模数转换器设计自动化的机器学习技术综述",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.5281/zenodo.23721241"
+      ],
+      "analyzed_at": "2026-10-30T02:29:45.182761+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "模数转换器（ADC）如何在追求更高分辨率、速度和能效的同时，降低设计负担？这篇综述按设计环节梳理机器学习的应用，阅读价值在于理解算法能介入哪些任务，以及数据、泛化与跨阶段协同为何仍是难点。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "ADC设计难在反复迭代与多重约束",
+            "paragraphs": [
+              "ADC负责将模拟世界的信息转换为数字信息。摘要指出，传统设计需要经历规格制定、行为建模、晶体管尺寸设计、原理图仿真、版图和版图后验证等环节。设计者还须考虑工艺、电压、温度（PVT）变化及良率，因此流程耗费人力，并高度依赖专业经验。机器学习所面对的，正是这类多环节、反复迭代的设计任务。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "不按算法列清单，而按设计任务组织文献",
+            "paragraphs": [
+              "作者报告，在IEEE Xplore、ACM Digital Library和arXiv中，对2015至2026年的相关研究开展系统检索。本文属于综述工作，摘要描述的方法是文献检索、分类与比较，而不是提出并验证某个新的ADC设计模型。",
+              "其组织方式是将回归、树模型、支持向量机、人工神经网络、卷积神经网络、图神经网络、强化学习、进化算法和贝叶斯优化等方法，放到具体设计环节中讨论。覆盖任务包括行为建模、晶体管尺寸设计、比较器与电容阵列校准、ADC校准、版图优化、PVT与良率变化预测，以及设计空间探索。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要强调共性瓶颈，未给出算法性能排名",
+            "paragraphs": [
+              "摘要说明，综述比较了各类技术在速度、精度等方面的收益及主要不足，但没有披露具体比较结果、提升幅度或统一评测指标。因此，当前资料支持理解其比较维度，不能据此判断哪种算法表现最佳，也不能将局部任务的收益等同于完整设计流程的收益。",
+              "摘要明确提出的开放挑战包括数据不足、泛化性能较差、可解释性偏低，以及跨多个设计阶段的协同优化仍较少得到探索。这些问题提示，评价机器学习辅助ADC设计，不能只关注单个环节的预测或优化表现，还需关注方法的适用边界。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "检索覆盖与验证强度仍需查阅正文",
+            "paragraphs": [
+              "仅凭摘要，无法判断纳入文献数量、筛选与质量评价标准，也无法核实各研究的数据样本规模、ADC类型、工艺条件和比较基线。速度与精度收益是否来自仿真、版图后验证或实测，以及能否跨设计和工艺推广，同样尚不明确。这些是摘要未交代的信息，不代表论文或被综述研究没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：区分未来方向与已验证能力",
+            "paragraphs": [
+              "阅读启发：摘要将生成式AI、图神经网络版图优化、物理信息学习、数字孪生及人机协同设计列为未来方向，并提醒生成式方法可能涉及可制造性和知识产权风险。进一步阅读时，建议关注这些方向分别对应哪些设计任务、已有何种验证，以及跨阶段信息如何衔接；不能据此认定其已实现可靠设计自动化，也不宜将数字孪生的展望直接解读为智能运维成效。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的综述组织过程",
+            "description": "示意摘要明确描述的检索、分类、比较和讨论关系，不是论文原图，也不表示新增实验流程。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "系统检索相关文献",
+                "detail": "在IEEE Xplore、ACM Digital Library和arXiv检索相关研究。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "按ADC设计环节分类",
+                "detail": "将机器学习方法放入建模、尺寸设计、校准、版图与变化预测等任务。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "比较收益与主要不足",
+                "detail": "比较维度包括速度、精度收益及各技术的主要缺点。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "讨论挑战与未来方向",
+                "detail": "讨论数据、泛化、解释性、跨阶段协同，以及未来方向与潜在风险。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "组织检索所得文献"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "开展分类比较"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "进一步讨论"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-30T02:31:15.740990+00:00",
+      "article_profile": "9ceaee08191685a9707d3f941cc0cca56b772ce6da5ac8175c1f10e3cb297d0a",
+      "analysis_references": {},
+      "analysis_material_version": "49ddce02fea92148328b9c996a6f5d0a154ba241d6c0cdeb38ac8c74b4dd12f3",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "b9d7d2f2b6ed",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-30T02:31:15.741989+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -1861,7 +2618,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Unplanned equipment failure remains one of the most expensive problems in modern manufacturing, and the maintenance strategy adopted by a plant has a direct bearing on its productivity, safety, and operating cost. Traditional reactive and time-based preventive approaches either allow machines to run to failure or replace healthy components too early, and neither uses the rich stream of data that industrial assets now generate. The convergence of the Industrial Internet of Things (IIoT) and machine learning has made a third option practical: predictive maintenance, in which the condition of a m…",
+      "summary": "本文围绕工业设备预测性维护，综述从物联网感知到云端处理的分层架构，以及故障分类、剩余使用寿命估计中的特征提取与学习方法。摘要称比较了支持向量机、集成方法、深度网络、图像诊断和生存分析等代表性研究，并指出分类与寿命估计割裂、边缘部署及可解释性等问题。[摘要] 解读：适合作为智能运维研究的框架性入口，但摘要中的跨研究指标不能直接用于算法排名，本文亦不能据此认定提出并验证了新系统。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7224131549",
@@ -1916,11 +2673,135 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐作为智能运维方向的综述性入门与选题参考，重点关注故障分类和寿命预测的衔接、生存分析及部署问题；当前仅有摘要，不宜将其视为新算法有效性的实验证据。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是如何利用设备持续产生的数据改善维护决策。摘要指出，传统策略可能使机器“run to failure”，或过早更换健康部件，难以充分利用工业数据。[摘要] 解读：本文关注从被动维修和定期维护转向状态驱动的预测性维护，目标涉及生产率、安全与运行成本。",
+        "method": "本文采用综述路径，而非摘要已说明的原创实验方案。作者考察“layered sensing-to-cloud architectures”，并梳理特征提取、故障分类及剩余使用寿命估计方法，比较多类代表性研究。[摘要] 摘要未交代检索数据库、纳入标准和质量评价流程，无法判断综述覆盖的系统性。",
+        "innovation": "摘要提出将实时物联网感知与“combined classification-and-prognostics pipeline”结合的研究方向。[摘要] 解读：其潜在贡献是把监测架构、诊断与预后放在共同框架中讨论，而非已证实的算法创新；资料未提供所提方向的实现细节或验证结果。",
+        "findings": "摘要汇总的研究准确率约为88%至96%，另称生存模型在真实工业数据上的一致性指数超过0.97。[摘要] 这些属于被综述研究的报告结果，并非本文统一实验所得。解读：任务、数据与指标不同，因此这些数字不能证明某类方法普遍优于其他方法。",
+        "limitations": "作者指出现有研究存在“balanced benchmark datasets”依赖，以及分类和寿命估计处理割裂等问题，并列出边缘部署、安全与可解释性挑战。[摘要] 这些是作者归纳的领域缺口，不应直接当作本文缺陷；仅凭摘要无法核实其归纳依据及适用范围。",
+        "connection": "与智能运维的联系直接体现在连续状态监测、故障识别和寿命估计。[摘要] 解读：对可靠性研究，生存分析可作为进一步关注的寿命建模方向；对结构设计，摘要未讨论载荷、结构参数或设计优化，因而不能据此声称已有直接的设计方法贡献。",
+        "next_steps": "建议阅读全文时优先核对综述纳入标准、数据来源、指标定义，以及集成研究方向是否有实际验证。研究迁移方面，建议探索诊断结果如何进入寿命预测，并检验不平衡数据与边缘部署条件下的表现；这些是基于摘要缺口提出的研究建议，并非作者已完成的成果。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "基于物联网与机器学习的机器健康监测及预测性维护综述：架构、算法与开放挑战",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.64388/irev10i4-1724415"
+      ],
+      "analyzed_at": "2026-10-30T01:55:52.974028+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "设备维护如何从“坏了再修”或“到期就换”，转向依据运行状态判断风险？这篇综述梳理工业物联网与机器学习如何支撑预测性维护，阅读价值不仅在于比较算法，更在于理解故障识别、寿命估计与实际部署之间尚未打通的环节。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "维护时机：避免故障，也避免过早更换",
+            "paragraphs": [
+              "非计划设备故障影响制造业的生产效率、安全与运行成本。摘要指出，传统被动维修可能让设备运行至失效，按时间安排的预防性维护则可能过早更换健康部件，两者都未充分利用工业设备持续产生的数据。",
+              "工业物联网与机器学习结合，使持续监测设备状态、根据传感器数据估计未来健康状况成为可行选择。本文是一篇综述，关注这一预测性维护体系，而非报告一套新模型的独立实验。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从感知到云端，梳理诊断与寿命估计方法",
+            "paragraphs": [
+              "作者考察从感知端到云端的分层架构，梳理用于故障分类和剩余使用寿命估计的特征提取与学习方法，并比较具有代表性的既有研究。",
+              "综述覆盖支持向量机、集成方法、深度网络、基于图像的诊断以及生存分析。摘要明确了讨论范围，但没有交代文献检索策略、筛选标准或纳入研究数量，因此不能仅据摘要判断其综述覆盖程度。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "已有结果可观，但不同指标不能直接排榜",
+            "paragraphs": [
+              "摘要汇总的既有研究中，单分类器故障检测的准确率约为88%，基于视觉的齿轮箱诊断准确率为96%；生存模型在真实工业数据上的一致性指数超过0.97。这些数字来自被综述研究，不是本文统一实验得到的成绩。",
+              "准确率与一致性指数不是同一种指标，且对应任务不同，不能据此直接排列方法优劣。摘要也未提供足以确认这些研究具有相同评测条件的信息。",
+              "作者归纳的共性缺口包括：过度依赖单一算法和平衡基准数据集，故障分类与寿命估计相互割裂，生存分析在工业4.0场景中的采用有限，以及边缘部署、安全与可解释性仍有待解决。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要能说明趋势，不能确定验证边界",
+            "paragraphs": [
+              "摘要未完整交代各项结果的样本规模、故障分布、训练测试划分及跨设备验证范围；其中96%准确率明确对应基于视觉的齿轮箱诊断，生存模型结果明确涉及真实工业数据。其余细节仍需查阅原文，不能将摘要未报告理解为论文没有开展相关工作。",
+              "作者最后提出将实时物联网感知与分类、预后预测相结合的研究方向，但摘要没有报告该整合方案的实施与验证结果，不能把这一展望写成已经实现的维护收益。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注诊断与预后如何衔接",
+            "paragraphs": [
+              "阅读启发：进一步阅读时，可重点追问故障分类与寿命估计如何衔接、平衡基准上的结果是否适用于实际故障分布，以及生存分析为何在工业场景中采用有限。对智能运维而言，这些问题比孤立比较准确率更值得结合部署、安全和可解释性要求审视。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的预测性维护关系示意",
+            "description": "仅概括摘要中的传感器数据、持续状态监测与未来健康估计关系，不代表论文原图或已验证的整合系统。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "工业设备传感器数据",
+                "detail": "工业物联网与机器学习结合，为预测性维护提供数据基础。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "持续监测设备状态",
+                "detail": "预测性维护持续关注机器当前的运行与健康状况。"
+              },
+              {
+                "id": "c",
+                "stage": 1,
+                "label": "估计未来健康状况",
+                "detail": "依据传感器数据估计设备未来健康状况。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "支持状态监测"
+              },
+              {
+                "from": "a",
+                "to": "c",
+                "label": "用于健康估计"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-30T02:10:27.505135+00:00",
+      "article_profile": "2538322c58271fdb45e163b2d84d869f5e3b653410a194b870201e88060b9b27",
+      "analysis_references": {},
+      "analysis_material_version": "3c2038fd0d6b765ae42cf17c55d6f29b53b19609101f953441970ee7934d2455",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "75683a8ba272",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-30T02:10:27.506153+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -1943,7 +2824,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Determination of equivalent elastic coefficients in composite laminates is a fundamental problem in structural mechanics and materials engineering. This task becomes particularly challenging for unsymmetric laminates, where coupling effects between membrane, bending, and shear responses render analytical characterisation difficult and computationally expensive. In this work, a machine learning-based inverse methodology is proposed for determining the equivalent shear modulus of unsymmetric composite laminates. A high-fidelity finite element implementation of the ASTM V-notched shear test is us…",
+      "summary": "非对称复合材料层合板的膜内、弯曲与剪切耦合，使等效弹性参数表征更加困难。本文利用ASTM V形缺口剪切试验的高保真有限元模型生成数据，训练LightGBM预测等效剪切模量，再将其用于寻找满足目标模量的铺层序列。摘要声称该方法可降低传统反复有限元试算的成本，但未提供误差、加速比或实物验证结果。本文适合关注复合材料逆向设计的读者，当前仅能作摘要级评价。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -1981,11 +2862,156 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "推荐作为复合材料目标性能驱动逆向设计的方法线索阅读，重点关注有限元数据、LightGBM代理与铺层搜索的衔接；其定量优势仍需全文核查。[摘要]",
+      "deep_read": {
+        "problem": "研究面向非对称复合材料层合板的等效弹性参数确定。摘要指出其难点在于“coupling effects between membrane, bending, and shear responses”。本文实际聚焦等效剪切模量，不能将标题中的弹性系数泛化为全部弹性参数均已识别。[摘要]",
+        "method": "方法先以ASTM V形缺口剪切试验的高保真有限元实现生成不同非对称铺层的数据，再训练LightGBM，建立设计变量到等效剪切模量的非线性映射，最后寻找满足目标模量的铺层序列。摘要称其为“inverse design framework”，但未交代搜索算法。[摘要]",
+        "innovation": "解读：值得关注的是将剪切试验有限元数据、LightGBM代理与目标模量约束下的铺层反求串联，形成面向非对称层合板的设计流程。依据为摘要所述“machine learning-based inverse methodology”；现有资料不足以确认其首创性或相对已有方法的创新幅度。[摘要]",
+        "findings": "摘要报告该方法相较传统反复有限元试算“significantly reduces computational cost”，并有助于理解铺层结构与有效剪切行为的关系。但未给出预测误差、计算耗时或具体铺层规律，因此只能确认作者报告了这些成果，不能评定优势大小或适用精度。[摘要]",
+        "limitations": "当前证据仅限摘要，未提供样本数量、材料体系、铺层范围、数据划分、超参数及逆向结果复核信息，也未说明是否开展物理试验验证。这些属于资料披露不足，不能据此断言论文未做相关工作；尤其无法核查其“high-fidelity”实现的准确性。[摘要]",
+        "connection": "解读：与给定生成式设计方向的联系主要在目标性能驱动的铺层逆向设计，而非生成模型本身；摘要使用的是“nonlinear surrogate”。其对结构设计有直接参考意义，但未涉及在线监测、故障诊断或失效概率，不能直接认定为智能运维或可靠性研究成果。[摘要]",
+        "next_steps": "建议：获取全文后，优先核查数据覆盖、训练测试划分及反求铺层的独立有限元复核，再判断代理模型能否支持设计决策。若迁移至可靠性研究，可考虑材料参数波动与制造偏差下的目标满足率；这是后续研究设想，并非摘要已经验证的结论。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "非对称层合板弹性系数确定的机器学习逆向方法",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.69644/ivk-2026-sia-0005"
+      ],
+      "analyzed_at": "2026-10-30T01:58:56.109025+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "非对称复合材料层合板的等效剪切模量难以高效确定。这项研究用有限元数据训练机器学习代理模型，再由目标模量反推铺层序列，为理解铺层结构与剪切性能之间的关系提供了一条计算路径。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "非对称铺层为何增加表征难度",
+            "paragraphs": [
+              "确定复合材料层合板的等效弹性系数，是结构力学与材料工程中的基础问题。对于非对称层合板，膜内、弯曲与剪切响应之间存在耦合，使解析表征更加困难，也增加了计算负担。",
+              "本文聚焦其中的等效剪切模量，而非一次性识别全部弹性系数。研究关注的不只是给定铺层具有什么性能，还包括能否从指定的剪切模量出发，寻找相应的铺层序列。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从剪切试验仿真到目标铺层反求",
+            "paragraphs": [
+              "作者采用 ASTM V 形缺口剪切试验的高保真有限元实现，生成覆盖广泛非对称铺层序列的数据集。这里的数据来源是试验形式的数值仿真，不能据此理解为已经完成同等范围的实体试验。",
+              "随后，研究训练轻量级梯度提升机（LightGBM），作为连接层合板设计变量与等效剪切模量的非线性代理模型。训练后的模型再被用于逆向设计框架，以寻找达到预设剪切模量目标的铺层序列。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要报告了降本与结构—性能关系认识",
+            "paragraphs": [
+              "摘要报告，相较于传统试错式有限元分析，该方法显著降低了计算成本，并为理解层合板构型与有效剪切行为之间的关系提供了新认识。这些是作者在摘要中给出的定性结论，当前资料不足以量化其幅度。",
+              "研究将设计变量到模量的正向代理映射用于目标性能驱动的铺层识别。不过，摘要没有列出具体目标值、对应铺层方案或达到目标的误差，因此不能进一步判断反求结果的精度与稳定性。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "数据规模、比较口径与验证范围仍待核对",
+            "paragraphs": [
+              "本解读仅依据所提供的完整摘要。摘要未报告数据集规模、材料体系、铺层参数范围及训练与测试划分，也未给出预测误差和计算成本的具体比较口径，因而无法判断模型对未见铺层的泛化能力或实际节省的计算量。",
+              "摘要也未交代实体试验验证、逆向结果复核及不同目标模量下的适用范围。这些属于当前资料无法判断的信息，不意味着论文没有开展相关工作；尤其不能把仿真代理模型的用途直接延伸为已验证的工程可靠性。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：区分预测准确与反求可信",
+            "paragraphs": [
+              "阅读启发：值得继续关注的是，代理模型对模量的预测能力，如何支撑逆向铺层结果的可信度。进一步阅读时，可核对候选铺层是否经过独立复核，以及目标模量是否位于训练数据覆盖范围内，从而理解这条逆向设计路径的适用边界。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的剪切模量逆向设计流程",
+            "description": "仅概括摘要明确陈述的数据生成、代理建模与逆向设计关系，不代表论文原图，也不补充未报告的算法配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "非对称铺层序列",
+                "detail": "覆盖广泛非对称铺层序列的层合板设计。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "高保真有限元生成数据",
+                "detail": "采用 ASTM V 形缺口剪切试验的有限元实现。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "训练 LightGBM 代理模型",
+                "detail": "建立层合板设计变量到等效剪切模量的非线性映射。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "预设剪切模量目标",
+                "detail": "为逆向设计提供所需达到的目标模量。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "逆向识别铺层序列",
+                "detail": "利用训练后的代理模型寻找达到目标模量的铺层序列。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "覆盖不同铺层"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "提供训练数据"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "用于逆向设计"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "指定性能目标"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-30T02:00:19.288529+00:00",
+      "article_profile": "779e4b5fd79a6d451f33e46b64b5f0875e754b0f3cd280c6a436356517359daa",
+      "analysis_references": {},
+      "analysis_material_version": "b2038e22718023308655d0a08e6cbcbf92496eeb0168f0543b76806a2602a2ed",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "53de9584f17e",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-30T02:00:19.288529+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -38811,11 +39837,11 @@
       "reading_status": {
         "paper_id": "840fad5030ef",
         "state": "missing_evidence",
-        "updated_at": "2026-10-29T00:47:03.566082+00:00",
+        "updated_at": "2026-10-30T01:34:42.511738+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -52267,7 +53293,7 @@
       "reading_status": {
         "paper_id": "1994412852e5",
         "state": "failed",
-        "updated_at": "2026-10-29T01:39:11.909493+00:00",
+        "updated_at": "2026-10-30T01:40:38.345763+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -78372,11 +79398,11 @@
       "reading_status": {
         "paper_id": "15d22de52722",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-29T00:48:50.197727+00:00",
+        "updated_at": "2026-10-30T01:36:09.594646+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -79381,11 +80407,11 @@
       "reading_status": {
         "paper_id": "c85601ebc634",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-29T01:47:20.353204+00:00",
+        "updated_at": "2026-10-30T01:48:27.901339+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -81543,11 +82569,11 @@
       "reading_status": {
         "paper_id": "9f0079808024",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-29T01:47:41.980222+00:00",
+        "updated_at": "2026-10-30T01:48:52.651871+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -81578,7 +82604,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "本文针对复杂工况和参数不确定性下一体化叶盘—轴转子的低周疲劳可靠性评估，提出结合主导循环识别、改进猫群优化辅助神经网络与蒙特卡洛模拟的代理框架。摘要报告寿命预测MAPE为0.77%，所设设计寿命要求下可靠度约98.6%，计算约加速69倍，并识别疲劳强度参数和转速为主要不确定性贡献因素。当前仅能据摘要评估其方法价值，不能确认全文验证质量及推广范围。[摘要]",
+      "summary": "一体化叶盘—轴转子的低周疲劳可靠性评估面临参数不确定性与有限元计算成本高的问题。研究结合主导循环识别、改进猫群优化辅助人工神经网络和蒙特卡洛模拟，以有限元样本训练代理模型。[摘要]报告寿命预测MAPE为0.77%，可靠度约98.6%，并在相同103样本基础上实现约69倍加速。疲劳强度参数和转速是主要不确定性贡献因素。本文适合疲劳可靠性与代理建模方向阅读，但当前仅有摘要，不能据此确认模型细节及跨工况泛化能力。",
       "raw_metadata": {
         "provider": "PubMed",
         "pmid": "42941145",
@@ -81894,65 +82920,65 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "title_zh": "融合子结构信息的一体化叶盘—轴转子不确定性低周疲劳可靠性代理评估框架",
-      "recommendation": "建议疲劳可靠性研究者重点关注其有限元代理建模与概率评估流程；摘要提供明确方法和量化结果，但未展示生成式设计成果，不能仅凭主题标签认定相关贡献。[摘要]",
+      "title_zh": "子结构信息驱动的一体化叶盘—轴转子不确定性低周疲劳可靠性代理评估框架",
+      "recommendation": "建议重点关注其有限元—代理模型—概率评估流程，以及独立测试和同样本计算成本比较；与疲劳可靠性方向直接相关，但摘要未展示生成式设计方法。[摘要；解读]",
       "deep_read": {
-        "problem": "研究对象是一体化叶盘—轴转子在复杂工况和参数不确定性下的低周疲劳问题。摘要指出直接有限元概率评估“computationally demanding”。解读：研究重点是在重复力学计算成本与寿命风险量化需求之间建立可行路径，而非仅寻找单一确定性寿命。[摘要]",
-        "method": "作者先通过弹塑性有限元分析确定疲劳危险区域和主导循环，再用拉丁超立方抽样生成1000个有限元样本。框架结合ICSO-ANN与蒙特卡洛模拟，开展四次独立评估，每次使用200个样本开发模型、50个留出样本独立测试。[摘要]",
-        "innovation": "解读：值得关注的是主导循环识别、优化辅助神经网络与概率可靠性分析的组合。摘要称其为“surrogate-assisted fatigue-reliability framework”，但没有展开猫群算法改进或子结构信息的具体作用，因此只能识别方法组合，不能确认相对既有工作的创新幅度。[摘要]",
-        "findings": "摘要报告寿命预测MAPE为0.77%；在均值11,000次循环的正态分布设计寿命要求下，可靠度约98.6%。相同“103-sample”基准下计算约加速69倍。敏感性分析还将疲劳强度参数与转速识别为寿命不确定性的主要贡献因素。[摘要]",
-        "limitations": "当前资料未给出输入变量分布细节、设计寿命标准差、误差分布和计算计时口径，无法核查可靠度及加速结果的稳健性。“103-sample”缺少排版上下文，不能擅自改写为指数形式。这些是摘要证据的边界，不应当作论文全文已经确认的缺陷。[摘要]",
-        "connection": "解读：该工作直接关联疲劳可靠性与结构设计中的不确定性分析，敏感性结果可作为确定重点考察参数的参考，但不等同于完成设计优化。对于智能运维，摘要没有提供监测数据接入、在线寿命更新或维护决策证据；对于生成式设计，也尚无直接方法支持。[摘要]",
-        "next_steps": "建议：获取全文后优先核对子结构信息如何进入模型、改进猫群算法的对照设置，以及四次评估的样本关系。若迁移至自身研究，可另行检验低寿命尾部预测误差和可靠度收敛情况，并在统一精度要求下比较计算成本；这些属于后续建议，并非已报告成果。"
+        "problem": "研究针对复杂工况和参数不确定性下的一体化叶盘—轴转子低周疲劳问题。摘要指出，直接采用有限元开展概率评估“computationally demanding”。[摘要]解读：核心矛盾是可靠性分析需要反复计算，而弹塑性有限元单次求解成本较高。",
+        "method": "方法串联主导循环识别、改进猫群优化辅助人工神经网络与蒙特卡洛模拟。先通过弹塑性有限元识别危险区域和主导循环，再以拉丁超立方抽样生成1000个有限元样本；开展四次独立评估，每次用200个样本建模、50个留出样本测试。[摘要]",
+        "innovation": "摘要将贡献表述为整合循环识别、优化辅助神经网络及概率模拟的可靠性框架。[摘要]解读：值得关注的是物理分析与代理预测的衔接，而非仅看网络精度。标题虽提及子结构信息，但摘要未解释其编码或利用方式，不能据此认定具体子结构创新。",
+        "findings": "摘要报告MAPE为0.77%；针对均值11000循环的正态分布设计寿命要求，可靠度约98.6%；在相同103样本基础上较直接有限元蒙特卡洛分析约加速69倍。[摘要]解读：这些结果分别涉及预测误差、概率输出和效率，不能相互替代证明。",
+        "limitations": "当前只有摘要，未提供输入变量分布、设计寿命标准差、网络配置或尾部误差等信息；也未说明四次评估间样本如何分配。[摘要]解读：现有资料不足以判断可靠度估计的统计稳定性和复现条件，这属于证据边界，并非作者已证实的方法缺陷。",
+        "connection": "敏感性分析将“fatigue strength parameters and rotational speed”识别为寿命不确定性的主要贡献因素。[摘要]解读：这与可靠性研究直接相关，也可为结构设计中的参数控制提供参考；向智能运维迁移仍需状态监测和退化更新证据，摘要未展示相关应用。",
+        "next_steps": "建议后续获取全文，核对主导循环判据、子结构信息表达、优化设置与基线比较，并检查可靠度置信区间及加速比的计时边界。针对结构设计应用，建议进一步研究代理误差如何影响设计约束判定；这些是后续研究建议，不是摘要报告的成果。[摘要；建议]"
       },
       "analysis_status": "ready",
       "analysis_basis": "abstract",
       "analysis_kind": "model",
       "analysis_sources": [
-        "https://doi.org/10.3390/ma19204404"
+        "https://pubmed.ncbi.nlm.nih.gov/42941145/"
       ],
-      "analyzed_at": "2026-10-28T01:07:59.696204+00:00",
+      "analyzed_at": "2026-10-30T02:01:35.140260+00:00",
       "llm_model": "gpt-6.1-sol",
       "article": {
         "version": 3,
         "basis": "abstract",
-        "lead": "整体叶盘—轴转子在复杂工况与参数不确定性下易发生低周疲劳，但直接依靠有限元开展概率评估计算代价较高。这项研究将疲劳关键区域识别、神经网络代理模型与蒙特卡洛模拟结合，关注如何兼顾寿命预测精度与可靠性评估效率。",
+        "lead": "整体叶盘轴转子在复杂工况与参数不确定性下容易发生低周疲劳，直接依靠有限元开展概率评估又计算昂贵。这项研究将有限元分析、神经网络代理模型与蒙特卡洛模拟串联，探索如何更高效地评估疲劳寿命及其可靠性。",
         "sections": [
           {
             "id": "context",
-            "title": "低周疲劳评估为何需要代理模型",
+            "title": "从疲劳寿命预测走向概率可靠性评估",
             "paragraphs": [
-              "对于整体叶盘—轴转子，研究问题不仅是预测疲劳寿命，还包括分析参数不确定性如何影响寿命及其满足设计要求的概率。摘要指出，直接基于有限元开展这类概率评估计算负担较重，因此作者引入代理模型，承担后续不确定性传播中的寿命预测任务。"
+              "这项研究关注的不只是转子能够承受多少次循环，还包括参数不确定性下，疲劳寿命满足设计要求的概率。摘要指出，复杂运行条件与参数不确定性使直接基于有限元的概率评估计算负担较重，因此需要兼顾预测精度与计算效率的替代途径。"
             ]
           },
           {
             "id": "method",
-            "title": "从主导循环识别到概率寿命评估",
+            "title": "先识别关键循环，再建立寿命代理模型",
             "paragraphs": [
-              "研究首先开展弹塑性有限元分析，识别疲劳关键区域与主导疲劳循环；随后通过拉丁超立方抽样生成1000个有限元样本。作者开展四次独立评估，每次使用200个样本开发模型，另留出50个样本用于独立测试。这些样本属于有限元计算样本，不应理解为实体转子的试验数量。",
-              "代理模型采用改进猫群优化辅助的人工神经网络，简称ICSO-ANN，并与蒙特卡洛模拟结合开展疲劳可靠性分析。摘要明确了这些方法环节，但未展开猫群优化的改进机制、网络结构，以及主导循环如何具体参与寿命计算。"
+              "研究首先开展弹塑性有限元分析，识别疲劳关键区域与主导疲劳循环；随后采用拉丁超立方抽样生成1000个有限元样本。这些样本属于数值分析数据，不应理解为实体转子的试验样本。",
+              "框架引入改进猫群优化辅助人工神经网络（ICSO-ANN），并结合蒙特卡洛模拟开展概率评估。摘要报告了四次独立评估，每次使用200个样本进行模型开发，另以50个留出样本进行独立测试；不能据此推断各次评估之间样本是否重叠。"
             ]
           },
           {
             "id": "findings",
             "title": "预测误差、可靠性与计算加速分别说明什么",
             "paragraphs": [
-              "摘要报告，ICSO-ANN的平均绝对百分比误差（MAPE）为0.77%。在设计寿命要求服从正态分布、均值为11,000个循环的设定下，概率分析得到约98.6%的可靠性。前者描述寿命预测误差，后者对应特定设计寿命要求下的概率结果，两者不能相互替代。",
-              "在相同的103个样本基准下，代理辅助分析相对直接基于有限元的蒙特卡洛分析实现约69倍计算加速。敏感性分析还指出，疲劳强度参数与转速是疲劳寿命不确定性的主要贡献因素，为理解该评估中哪些输入更值得关注提供了线索。"
+              "摘要报告，ICSO-ANN的平均绝对百分比误差（MAPE）为0.77%。当设计寿命要求服从均值为11,000次循环的正态分布时，概率分析得到的可靠性约为98.6%。这一可靠性对应摘要所述设计要求，不能直接当作其他工况下的通用结论。",
+              "在相同的103个样本基础上，代理辅助分析相较直接基于有限元的蒙特卡洛分析实现约69倍计算加速。敏感性分析还识别出，疲劳强度参数与转速是疲劳寿命不确定性的主要贡献因素。预测误差、计算加速和不确定性来源，是这里需要分别理解的结果。"
             ]
           },
           {
             "id": "limitations",
-            "title": "摘要尚不足以界定工程适用范围",
+            "title": "摘要尚不足以界定验证与适用范围",
             "paragraphs": [
-              "仅凭摘要，无法判断输入参数的取值范围、分布与相关性，也无法确定留出测试覆盖了哪些工况，以及是否包含实体疲劳试验或跨结构验证。摘要虽给出样本划分，但未说明各次评估的误差波动、与其他代理模型的比较，以及加速比是否计入样本生成和训练成本；这些属于当前资料未交代的信息，并不意味着论文没有开展相关工作。"
+              "仅凭本次摘要，无法判断输入参数的完整分布与取值范围、各次评估的样本划分细节，以及误差在不同寿命区间的表现。摘要也未交代其他代理模型的比较结果、加速统计涵盖哪些计算环节，或是否进行了实体试验验证。这些是当前资料的判断边界，不代表论文没有开展相关工作。"
             ]
           },
           {
             "id": "inspiration",
-            "title": "阅读启发：把代理精度与可靠性可信度分开看",
+            "title": "阅读启发：关注代理误差如何影响可靠性",
             "paragraphs": [
-              "阅读启发：进一步阅读时，可重点关注主导循环的选取依据、代理误差如何影响可靠性估计，以及疲劳强度参数和转速的敏感性结论适用于哪些输入范围。对于智能运维方向，这项研究提供的是计算评估思路；当前摘要不足以证明其已经具备在线监测或剩余寿命预测能力。"
+              "阅读启发：后续阅读可重点追问，寿命预测误差如何传递到可靠性估计，以及疲劳强度参数、转速的不确定性如何设定。面向结构可靠性或智能运维应用，还应关注该框架的适用工况与验证边界，而不宜把当前结果直接解读为已验证的在线监测或维护决策能力。"
             ]
           }
         ],
@@ -81962,8 +82988,8 @@
           {
             "kind": "study",
             "basis": "abstract",
-            "title": "依据摘要整理的疲劳可靠性评估流程",
-            "description": "概括摘要明确陈述的有限元分析、样本生成、代理建模与概率评估关系，并非论文原图。",
+            "title": "从有限元识别到疲劳可靠性评估",
+            "description": "依据摘要整理的研究过程示意，非论文原图；仅概括明确报告的分析环节及其关系。",
             "nodes": [
               {
                 "id": "a",
@@ -81975,19 +83001,25 @@
                 "id": "b",
                 "stage": 1,
                 "label": "拉丁超立方抽样",
-                "detail": "生成有限元样本，用于模型开发与留出测试。"
+                "detail": "生成用于后续代理建模的有限元样本。"
               },
               {
                 "id": "c",
                 "stage": 2,
                 "label": "ICSO-ANN代理模型",
-                "detail": "以改进猫群优化辅助人工神经网络进行疲劳寿命预测。"
+                "detail": "开展模型开发与留出样本独立测试，评估疲劳寿命预测误差。"
               },
               {
                 "id": "d",
                 "stage": 3,
-                "label": "蒙特卡洛可靠性分析",
-                "detail": "结合代理模型与设计寿命要求，开展概率疲劳可靠性评估。"
+                "label": "蒙特卡洛概率分析",
+                "detail": "利用代理模型开展不确定性传播与概率评估。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "疲劳可靠性评估",
+                "detail": "针对正态分布的设计寿命要求计算可靠性。"
               }
             ],
             "edges": [
@@ -81999,31 +83031,36 @@
               {
                 "from": "b",
                 "to": "c",
-                "label": "模型开发与测试"
+                "label": "用于建模与测试"
               },
               {
                 "from": "c",
                 "to": "d",
-                "label": "提供代理寿命预测"
+                "label": "代理辅助分析"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "评估满足要求的概率"
               }
             ]
           }
         ],
         "figure_groups": []
       },
-      "article_updated_at": "2026-10-28T01:11:12.754173+00:00",
-      "article_profile": "ffd5703272851abbb69b069632799751e20d1c5f78888f514daf2bcdd0f77474",
+      "article_updated_at": "2026-10-30T02:12:27.516951+00:00",
+      "article_profile": "65e51407fb1215b71d843fccf59c999e9f10769b094d106347bad7ccd9a8c7d7",
       "analysis_references": {},
-      "analysis_material_version": "421c8c7403add508a63f84d00f1dbc97cff68a84cf894d58245a581503cf5c2c",
+      "analysis_material_version": "31536ab1ecc8d11cebbc6dd4cbdb21557c7b6ee3e0311200206d22ca0ab70e9c",
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "0da00754456e",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-29T01:46:57.154839+00:00",
+        "updated_at": "2026-10-30T02:12:27.517869+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -82220,11 +83257,11 @@
       "reading_status": {
         "paper_id": "0802a585eb30",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-29T00:47:18.101024+00:00",
+        "updated_at": "2026-10-30T01:34:57.301365+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -89281,11 +90318,11 @@
       "reading_status": {
         "paper_id": "6940cb068e6b",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-29T01:17:11.202636+00:00",
+        "updated_at": "2026-10-30T01:36:32.528643+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -89691,11 +90728,11 @@
       "reading_status": {
         "paper_id": "a5f1949ef4a2",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-29T00:47:55.946916+00:00",
+        "updated_at": "2026-10-30T01:35:20.941948+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -90138,11 +91175,11 @@
       "reading_status": {
         "paper_id": "07e93e308e08",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-29T00:48:23.506027+00:00",
+        "updated_at": "2026-10-30T01:35:44.722742+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -90547,11 +91584,11 @@
       "reading_status": {
         "paper_id": "b1dc3607e418",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-29T01:46:09.841394+00:00",
+        "updated_at": "2026-10-30T01:40:54.628133+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -90974,11 +92011,11 @@
       "reading_status": {
         "paper_id": "cdd9897f5b3a",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-29T01:35:25.168930+00:00",
+        "updated_at": "2026-10-30T01:36:57.741187+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "not_found",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -91488,11 +92525,11 @@
       "reading_status": {
         "paper_id": "e0bcc3f204ad",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-10-29T01:38:27.584797+00:00",
+        "updated_at": "2026-10-30T01:37:22.632802+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "restricted",
+        "reason": "network",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -106619,13 +107656,13 @@
     "unavailable": 44
   },
   "analysis_status": {
-    "ready_core": 3,
+    "ready_core": 6,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 3
+    "pending": 0
   },
   "edition": {
     "id": "40877987451",
