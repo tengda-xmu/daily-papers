@@ -1,0 +1,20 @@
+{
+  "id": "public-572d42d7bf6d0efe0ab60ae5",
+  "content_version": "e23e291606e3fc9d8cda8e76bcd5523a9f15d58b69b90115ddbf9e541a298445",
+  "analysis": {
+    "title_zh": "Managed Deep Agents v0.10：浏览器操作与异步子智能体",
+    "summary": "官方公告介绍 Managed Deep Agents v0.10 的三项变化：浏览器操作支持在无 API 的网站上预订行程、提交理赔；遇到登录时将浏览器交给用户，避免密码进入模型消息与追踪记录。异步子智能体可后台处理长任务，主智能体继续对话，用户可查询进展或调整方向。回复会返回请求发起的 Slack 线程，包括定时运行和延迟完成的子任务结果；线程中的停止按钮可取消运行。",
+    "application": "建议：科研迁移可探索将耗时的信息整理任务交给后台子智能体，并在 Slack 线程集中接收结果；这是迁移设想，并非官方已验证的科研效果。官方公告描述了无 API 网站操作、登录交接和后台任务交互能力，但所给片段未提供效果评测或可靠性数据。",
+    "requirements": "使用条件见官方文档",
+    "steps": [],
+    "evidence": [
+      "Browser use: Your agent can book travel or file a claim on sites that have no API.",
+      "When a site asks you to sign in, the agent hands you the browser window, so your password stays out of the model's messages and traces.",
+      "Async subagents: A long job can go to a subagent that runs in the background while your agent keeps talking with you.",
+      "You can ask the agent to check on the job or change its course, and the result comes back to the conversation when the subagent finishes.",
+      "Thread origins and stopping runs: Replies go back to the Slack thread a request started in, including replies from a scheduled run or from a subagent that finished later. A Stop button in the thread cancels its runs."
+    ],
+    "basis_url": "https://www.langchain.com/blog/managed-deep-agents-browser-use-and-asynchronous-subagents"
+  },
+  "analyzed_at": "2026-10-31T00:26:09.137576+00:00"
+}
