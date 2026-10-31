@@ -70,7 +70,20 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "192a909c7b81",
+        "state": "missing_evidence",
+        "updated_at": "2026-10-31T13:41:29.113981+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -528,7 +541,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Wind turbine fault diagnosis (WTFD) requires combining heterogeneous measurements with engineering knowledge under changing operating conditions. Large language models (LLMs) are being investigated for numerical diagnosis, inspection interpretation, and diagnostic decision support, but these roles have different evidence requirements. This structured narrative review examines enabling technologies and component-level applications for hub and blades, gearboxes, bearings, and generators. Explicit review questions guide a consolidated evidence map linking components, tasks, data modalities, model…",
+      "summary": "风力机故障诊断需要在工况变化下融合异构测量与工程知识。本文以结构化叙述综述梳理大语言模型在数值诊断、巡检解释和诊断决策支持中的角色，覆盖轮毂与叶片、齿轮箱、轴承及发电机。摘要强调，不同任务结果不能视为可互换的诊断能力，并关注时间泄漏、解释未经验证及离线评估到实际部署的差距。其阅读价值在于帮助辨别证据层级与应用成熟度，而非提供已获验证的统一诊断方案。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "6b113ea239d109a210b647e0ca81bcc1e9682f29",
@@ -569,11 +582,122 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐关注其按部件、任务、数据模态及验证成熟度组织证据的方法，可辅助智能运维研究识别能力混用和验证不足；但当前仅有摘要，不能据此确认综述覆盖质量。[摘要]",
+      "deep_read": {
+        "problem": "风力机诊断面临异构测量、工程知识与变化工况的联合处理问题。摘要指出，大语言模型承担的数值诊断、巡检解释和决策支持具有不同证据要求。解读：关键问题不只是模型能否输出答案，还包括输出对应何种能力、需要何种验证。[摘要]",
+        "method": "本文采用结构化叙述综述，以明确的综述问题引导证据图谱，将部件、任务、数据模态、模型角色及验证成熟度关联起来，并区分直接研究证据、相关领域演示与拟议实施路径。摘要未提供检索范围、筛选流程或纳入数量，无法核查覆盖程度。[摘要]",
+        "innovation": "摘要呈现的特色是把模型角色与证据成熟度共同纳入比较，而非仅按风力机部件罗列应用。其明确强调各类结果不能视为“interchangeable diagnostic capabilities”。解读：这有助于约束能力外推，但不足以确认该框架的首创性。[摘要]",
+        "findings": "摘要报告，特征选择、适配后的数值预测、知识检索和报告生成结果不能作为可互换的诊断能力，并讨论检索配置失败、潜在时间泄漏及未经验证的解释。当前没有具体案例、指标或对照结果，因而不能判断这些问题的发生频率及影响大小。[摘要]",
+        "limitations": "摘要明确提到回顾性现场数据评估与运行部署之间存在差距，但没有说明各部件证据的规模、质量分布或综述自身的偏倚控制。解读：当前能够确认作者重视验证边界，不能进一步确认其证据整理是否完整，或结论能否覆盖不同风场。[摘要]",
+        "connection": "与智能运维的联系直接体现在诊断工具就绪程度评估，以及测量信息与工程知识的结合。解读：其证据分层思路也可供可靠性研究区分辅助解释与经验证的故障判断；摘要未涉及结构优化或可靠度计算，不能将其扩展为这些方向的已有成果。[摘要]",
+        "next_steps": "作者提出匹配的消融实验、验证及前瞻性现场研究方向。建议：后续精读应核查各模型角色的评价终点、数据时间划分和部署证据，并优先追踪含明确对照的研究；若迁移到自身课题，应分别检验诊断准确性与解释可信度，避免以报告质量代替诊断有效性。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "大语言模型用于风力机故障诊断：使能技术、部件级应用与未来展望综述",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.3390/en19205020"
+      ],
+      "analyzed_at": "2026-10-31T13:42:26.629387+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "大语言模型能否用于风机故障诊断，关键不只是能否生成答案，而是答案背后具有什么证据。这篇综述梳理不同部件、任务与模型角色，帮助读者区分“能够辅助某个环节”与“已具备可部署的诊断能力”。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "风机诊断需要的不只是语言答案",
+            "paragraphs": [
+              "风机故障诊断需要在变化的运行工况下，将异构测量数据与工程知识结合起来。大语言模型正被探索用于数值诊断、巡检解读和诊断决策支持，但这些任务并不共享同一套证据要求。理解它们各自承担什么角色，是判断工具价值的前提。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "用证据图谱连接部件、任务与验证成熟度",
+            "paragraphs": [
+              "本文是一篇结构化叙述性综述，覆盖轮毂与叶片、齿轮箱、轴承和发电机的相关使能技术及部件级应用。作者以明确的综述问题引导综合证据图谱，将部件、任务、数据模态、模型角色和验证成熟度联系起来。",
+              "在单项研究的梳理中，综述区分直接研究证据、相关领域演示以及拟议实施路径。这种组织方式保留了证据来源与成熟程度的差别，避免把尚处于构想阶段的应用与已经报告的研究结果混为一谈。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "不同任务的成绩不能兑换成同一种诊断能力",
+            "paragraphs": [
+              "摘要报告的核心比较结论是：特征选择、适配后的数值预测、知识检索和报告生成，其结果不能被视为可相互替代的诊断能力。**完成一个辅助任务，不等于证明整个故障诊断流程可靠。**阅读相关成果时，需要先确认模型究竟完成了哪类任务。",
+              "综述还讨论了未成功的检索配置、可能存在的时间泄漏、未经验证的解释，以及现场数据回顾性评估与实际运行部署之间的差距。这些是文中讨论的风险与证据缺口，并不意味着所有被综述的方法都存在同样问题。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要不足以判定具体方法的部署水平",
+            "paragraphs": [
+              "仅凭摘要，无法判断纳入研究的数量、样本规模、数据来源与工况覆盖，也无法核对具体模型、比较基线、评价指标及验证划分。摘要未给出各类方法的量化结果，因此不能据此排序模型性能，或断言某种方案已经适用于现场部署。",
+              "摘要提到将相关不确定性与匹配的消融比较、验证及前瞻性现场研究相联系，但没有提供这些工作的具体实施与结果。这属于综述提出的研究方向，不能解读为作者已经完成了相应验证。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：先辨认模型角色，再追问证据",
+            "paragraphs": [
+              "阅读启发：面向智能运维应用，可沿着本文的证据图谱继续追问：模型处理的是数值数据、巡检内容还是知识检索？结论来自风机领域的直接证据，还是相关领域演示？解释是否经过验证，回顾性结果又如何支撑运行部署？这些问题比笼统询问“大模型是否有效”更有助于理解研究边界。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的证据图谱构建示意",
+            "description": "仅展示摘要明确陈述的综述问题与证据图谱之间的关系，不代表论文原图或具体实验流程。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "明确综述问题",
+                "detail": "以明确的综述问题引导证据整理。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "构建综合证据图谱",
+                "detail": "连接部件、任务、数据模态、模型角色与验证成熟度。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "引导图谱构建"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-31T13:43:43.617549+00:00",
+      "article_profile": "797a22472ea4cb9572a4ef0dfa0154c476a23b42e282476f1aaf2b1d62389185",
+      "analysis_references": {},
+      "analysis_material_version": "cddf263832519c78c6f7867c56358f7b4d33552384b0e01bb34b2df4ce3a350d",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "1badd0f59dea",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-31T13:43:43.619755+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -597,7 +721,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Open RAN deployments produce telemetry from the RAN, 5G core, Kubernetes, servers, fronthaul switches, and radio units, but each source uses a different identity model. The RAN identifies activity by cell-ID and PCI, Kubernetes by namespace and pod, switches by port and VLAN. Existing tools collect these sources separately and provide no common mapping between their identifiers, so correlating a DU event with a host CPU spike or a switch-port error requires manual topology reconstruction for every query. Within a single source, metrics do not always carry enough identifiers to determine which…",
+      "summary": "【摘要】本文关注开放无线接入网部署中跨层遥测难以关联的问题。无线接入网、5G核心网、Kubernetes、服务器及网络设备采用不同标识体系，现有工具分别采集数据，缺少共同映射，导致事件关联需要反复手工重建拓扑。摘要还指出，单一来源的指标也可能缺少组件或部署归属信息。当前资料仅说明问题背景，未交代平台实现、实验设计与效果，因此适合用于理解运维观测障碍，尚不足以确认技术贡献。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "694e79068a2edead4b2bd8c1d0670288d36822c1",
@@ -638,11 +762,93 @@
       "focus_tags": [
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "【解读】建议作为智能运维中跨层遥测关联问题的背景材料阅读；若要重点借鉴平台方法，应先补充架构、标识映射机制及验证结果。",
+      "deep_read": {
+        "problem": "【摘要】研究问题是异构遥测之间缺少可共同使用的身份映射。原文指出各来源采用“a different identity model”，例如无线侧使用小区标识，容器侧使用命名空间与Pod。由此，跨层事件关联需要先解决对象对应关系，而非仅汇集指标。",
+        "method": "【摘要】当前资料没有说明Panoramic如何采集、存储或关联遥测，也未提供平台架构与算法。原文仅指出现有工具“collect these sources separately”。【解读】不能据此认定该平台已经实现统一标识、自动拓扑发现或实时查询。",
+        "innovation": "【解读】资料呈现出一个潜在贡献切入点：同时处理跨来源身份不一致与单来源归属信息不足。但这只是根据问题陈述识别的研究空间，并非已证实的作者创新；摘要未给出与既有系统的技术差异，无法判断方法新颖性。",
+        "findings": "【摘要】可核对的主要陈述是，关联DU事件与主机CPU峰值或交换机端口错误，需要“manual topology reconstruction for every query”。这说明现有流程存在人工关联负担，但资料没有报告耗时、准确率或平台改进幅度，不能视为效果验证。",
+        "limitations": "【摘要】当前资料止于问题描述，未提供实现细节、评估场景、对照系统和实验结果，因而无法评价平台的性能、适用范围或部署成本。【解读】这些属于当前证据的缺口，不能直接写成作者系统已被证实存在的技术局限。",
+        "connection": "【解读】该问题与智能运维直接相关：若告警、资源指标和网络事件不能对应到同一部署对象，故障定位就缺少关联基础。原文提及的CPU峰值与端口错误具有可靠性分析意义，但并未证明平台支持故障预测，也没有提供结构设计方面的证据。",
+        "next_steps": "【建议】后续阅读应优先核对身份映射的生成方式、组件归属信息的补全机制，以及拓扑变化时的更新策略。研究迁移可考虑比较人工与自动关联的耗时和错误情况；这些是建议的验证方向，不是摘要已经采用的方法或取得的成果。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "Panoramic：面向开放无线接入网部署的跨层测量平台",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1145/3842655.3844894"
+      ],
+      "analyzed_at": "2026-10-31T13:45:10.063378+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "Open RAN 的跨层排障难点，不只是遥测数据分散，更是不同系统用不同标识描述组件。理解这些标识为何难以关联，是阅读 Panoramic、判断其运维价值的起点。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "同一套部署，各层却使用不同标识",
+            "paragraphs": [
+              "Open RAN 部署的遥测来自无线接入网、5G 核心网、Kubernetes、服务器、前传交换机和无线单元。它们并不共享统一的身份模型：无线接入网使用 cell-ID 和 PCI，Kubernetes 使用命名空间和 pod，交换机则使用端口和 VLAN。",
+              "因此，把多个来源的数据采集起来，并不意味着已经能够跨层关联。摘要指出，现有工具分别采集这些来源，却没有提供标识之间的公共映射，排障人员仍需自行还原组件关系。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "问题指向标识映射，具体实现仍待确认",
+            "paragraphs": [
+              "当前可核对的摘要内容主要解释了标识关联的缺口，未展开平台如何建立映射、如何处理采集数据。因此，这里不将问题描述扩写为已经得到证实的实现流程，也不据此绘制方法示意图。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "跨层关联与单源归属都存在信息缺口",
+            "paragraphs": [
+              "摘要明确描述了两类障碍：跨来源时，关联一个 DU 事件、主机 CPU 峰值或交换机端口错误，需要针对每次查询手动重建拓扑；即使只看单一来源，指标携带的标识也不总能确定其所属组件或部署。",
+              "这些内容说明了研究所针对的工程问题，但不能当作平台性能的实验结果。当前材料没有给出可据以判断诊断速度、关联准确性或资源开销改善程度的定量证据。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "尚不能判断适用部署与验证范围",
+            "paragraphs": [
+              "仅凭当前摘要证据，无法判断涉及多少部署或设备、覆盖哪些故障场景、采用何种比较对象，以及是否验证了不同配置下的适用性。这些属于当前材料无法回答的问题，不代表论文没有开展相关实验。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：先确认数据能否关联，再讨论智能诊断",
+            "paragraphs": [
+              "阅读启发：面向智能运维，值得先追问指标能否明确归属到组件，以及跨层标识能否建立可靠联系。进一步阅读时，可重点查看论文如何定义和维护这些关系，以及用什么证据说明关联有效；不能仅因数据已被集中采集，就默认它们足以支持故障诊断。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-31T13:46:36.765926+00:00",
+      "article_profile": "a7c08524607af60982df4c8e99e2a1d2fe0bfae44bdcecb3419a698038e00363",
+      "analysis_references": {},
+      "analysis_material_version": "90e130628c82580179bc616323650214e617c8b5880b8007e4bacf501ea17345",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "88b3a9840a61",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-31T13:46:36.774587+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -849,7 +1055,20 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "192a909c7b81",
+        "state": "missing_evidence",
+        "updated_at": "2026-10-31T13:41:29.113981+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -1307,7 +1526,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Wind turbine fault diagnosis (WTFD) requires combining heterogeneous measurements with engineering knowledge under changing operating conditions. Large language models (LLMs) are being investigated for numerical diagnosis, inspection interpretation, and diagnostic decision support, but these roles have different evidence requirements. This structured narrative review examines enabling technologies and component-level applications for hub and blades, gearboxes, bearings, and generators. Explicit review questions guide a consolidated evidence map linking components, tasks, data modalities, model…",
+      "summary": "风力机故障诊断需要在工况变化下融合异构测量与工程知识。本文以结构化叙述综述梳理大语言模型在数值诊断、巡检解释和诊断决策支持中的角色，覆盖轮毂与叶片、齿轮箱、轴承及发电机。摘要强调，不同任务结果不能视为可互换的诊断能力，并关注时间泄漏、解释未经验证及离线评估到实际部署的差距。其阅读价值在于帮助辨别证据层级与应用成熟度，而非提供已获验证的统一诊断方案。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "6b113ea239d109a210b647e0ca81bcc1e9682f29",
@@ -1348,11 +1567,122 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐关注其按部件、任务、数据模态及验证成熟度组织证据的方法，可辅助智能运维研究识别能力混用和验证不足；但当前仅有摘要，不能据此确认综述覆盖质量。[摘要]",
+      "deep_read": {
+        "problem": "风力机诊断面临异构测量、工程知识与变化工况的联合处理问题。摘要指出，大语言模型承担的数值诊断、巡检解释和决策支持具有不同证据要求。解读：关键问题不只是模型能否输出答案，还包括输出对应何种能力、需要何种验证。[摘要]",
+        "method": "本文采用结构化叙述综述，以明确的综述问题引导证据图谱，将部件、任务、数据模态、模型角色及验证成熟度关联起来，并区分直接研究证据、相关领域演示与拟议实施路径。摘要未提供检索范围、筛选流程或纳入数量，无法核查覆盖程度。[摘要]",
+        "innovation": "摘要呈现的特色是把模型角色与证据成熟度共同纳入比较，而非仅按风力机部件罗列应用。其明确强调各类结果不能视为“interchangeable diagnostic capabilities”。解读：这有助于约束能力外推，但不足以确认该框架的首创性。[摘要]",
+        "findings": "摘要报告，特征选择、适配后的数值预测、知识检索和报告生成结果不能作为可互换的诊断能力，并讨论检索配置失败、潜在时间泄漏及未经验证的解释。当前没有具体案例、指标或对照结果，因而不能判断这些问题的发生频率及影响大小。[摘要]",
+        "limitations": "摘要明确提到回顾性现场数据评估与运行部署之间存在差距，但没有说明各部件证据的规模、质量分布或综述自身的偏倚控制。解读：当前能够确认作者重视验证边界，不能进一步确认其证据整理是否完整，或结论能否覆盖不同风场。[摘要]",
+        "connection": "与智能运维的联系直接体现在诊断工具就绪程度评估，以及测量信息与工程知识的结合。解读：其证据分层思路也可供可靠性研究区分辅助解释与经验证的故障判断；摘要未涉及结构优化或可靠度计算，不能将其扩展为这些方向的已有成果。[摘要]",
+        "next_steps": "作者提出匹配的消融实验、验证及前瞻性现场研究方向。建议：后续精读应核查各模型角色的评价终点、数据时间划分和部署证据，并优先追踪含明确对照的研究；若迁移到自身课题，应分别检验诊断准确性与解释可信度，避免以报告质量代替诊断有效性。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "大语言模型用于风力机故障诊断：使能技术、部件级应用与未来展望综述",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.3390/en19205020"
+      ],
+      "analyzed_at": "2026-10-31T13:42:26.629387+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "大语言模型能否用于风机故障诊断，关键不只是能否生成答案，而是答案背后具有什么证据。这篇综述梳理不同部件、任务与模型角色，帮助读者区分“能够辅助某个环节”与“已具备可部署的诊断能力”。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "风机诊断需要的不只是语言答案",
+            "paragraphs": [
+              "风机故障诊断需要在变化的运行工况下，将异构测量数据与工程知识结合起来。大语言模型正被探索用于数值诊断、巡检解读和诊断决策支持，但这些任务并不共享同一套证据要求。理解它们各自承担什么角色，是判断工具价值的前提。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "用证据图谱连接部件、任务与验证成熟度",
+            "paragraphs": [
+              "本文是一篇结构化叙述性综述，覆盖轮毂与叶片、齿轮箱、轴承和发电机的相关使能技术及部件级应用。作者以明确的综述问题引导综合证据图谱，将部件、任务、数据模态、模型角色和验证成熟度联系起来。",
+              "在单项研究的梳理中，综述区分直接研究证据、相关领域演示以及拟议实施路径。这种组织方式保留了证据来源与成熟程度的差别，避免把尚处于构想阶段的应用与已经报告的研究结果混为一谈。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "不同任务的成绩不能兑换成同一种诊断能力",
+            "paragraphs": [
+              "摘要报告的核心比较结论是：特征选择、适配后的数值预测、知识检索和报告生成，其结果不能被视为可相互替代的诊断能力。**完成一个辅助任务，不等于证明整个故障诊断流程可靠。**阅读相关成果时，需要先确认模型究竟完成了哪类任务。",
+              "综述还讨论了未成功的检索配置、可能存在的时间泄漏、未经验证的解释，以及现场数据回顾性评估与实际运行部署之间的差距。这些是文中讨论的风险与证据缺口，并不意味着所有被综述的方法都存在同样问题。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要不足以判定具体方法的部署水平",
+            "paragraphs": [
+              "仅凭摘要，无法判断纳入研究的数量、样本规模、数据来源与工况覆盖，也无法核对具体模型、比较基线、评价指标及验证划分。摘要未给出各类方法的量化结果，因此不能据此排序模型性能，或断言某种方案已经适用于现场部署。",
+              "摘要提到将相关不确定性与匹配的消融比较、验证及前瞻性现场研究相联系，但没有提供这些工作的具体实施与结果。这属于综述提出的研究方向，不能解读为作者已经完成了相应验证。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：先辨认模型角色，再追问证据",
+            "paragraphs": [
+              "阅读启发：面向智能运维应用，可沿着本文的证据图谱继续追问：模型处理的是数值数据、巡检内容还是知识检索？结论来自风机领域的直接证据，还是相关领域演示？解释是否经过验证，回顾性结果又如何支撑运行部署？这些问题比笼统询问“大模型是否有效”更有助于理解研究边界。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的证据图谱构建示意",
+            "description": "仅展示摘要明确陈述的综述问题与证据图谱之间的关系，不代表论文原图或具体实验流程。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "明确综述问题",
+                "detail": "以明确的综述问题引导证据整理。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "构建综合证据图谱",
+                "detail": "连接部件、任务、数据模态、模型角色与验证成熟度。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "引导图谱构建"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-31T13:43:43.617549+00:00",
+      "article_profile": "797a22472ea4cb9572a4ef0dfa0154c476a23b42e282476f1aaf2b1d62389185",
+      "analysis_references": {},
+      "analysis_material_version": "cddf263832519c78c6f7867c56358f7b4d33552384b0e01bb34b2df4ce3a350d",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "1badd0f59dea",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-31T13:43:43.619755+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -1376,7 +1706,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Open RAN deployments produce telemetry from the RAN, 5G core, Kubernetes, servers, fronthaul switches, and radio units, but each source uses a different identity model. The RAN identifies activity by cell-ID and PCI, Kubernetes by namespace and pod, switches by port and VLAN. Existing tools collect these sources separately and provide no common mapping between their identifiers, so correlating a DU event with a host CPU spike or a switch-port error requires manual topology reconstruction for every query. Within a single source, metrics do not always carry enough identifiers to determine which…",
+      "summary": "【摘要】本文关注开放无线接入网部署中跨层遥测难以关联的问题。无线接入网、5G核心网、Kubernetes、服务器及网络设备采用不同标识体系，现有工具分别采集数据，缺少共同映射，导致事件关联需要反复手工重建拓扑。摘要还指出，单一来源的指标也可能缺少组件或部署归属信息。当前资料仅说明问题背景，未交代平台实现、实验设计与效果，因此适合用于理解运维观测障碍，尚不足以确认技术贡献。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "694e79068a2edead4b2bd8c1d0670288d36822c1",
@@ -1417,11 +1747,93 @@
       "focus_tags": [
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "【解读】建议作为智能运维中跨层遥测关联问题的背景材料阅读；若要重点借鉴平台方法，应先补充架构、标识映射机制及验证结果。",
+      "deep_read": {
+        "problem": "【摘要】研究问题是异构遥测之间缺少可共同使用的身份映射。原文指出各来源采用“a different identity model”，例如无线侧使用小区标识，容器侧使用命名空间与Pod。由此，跨层事件关联需要先解决对象对应关系，而非仅汇集指标。",
+        "method": "【摘要】当前资料没有说明Panoramic如何采集、存储或关联遥测，也未提供平台架构与算法。原文仅指出现有工具“collect these sources separately”。【解读】不能据此认定该平台已经实现统一标识、自动拓扑发现或实时查询。",
+        "innovation": "【解读】资料呈现出一个潜在贡献切入点：同时处理跨来源身份不一致与单来源归属信息不足。但这只是根据问题陈述识别的研究空间，并非已证实的作者创新；摘要未给出与既有系统的技术差异，无法判断方法新颖性。",
+        "findings": "【摘要】可核对的主要陈述是，关联DU事件与主机CPU峰值或交换机端口错误，需要“manual topology reconstruction for every query”。这说明现有流程存在人工关联负担，但资料没有报告耗时、准确率或平台改进幅度，不能视为效果验证。",
+        "limitations": "【摘要】当前资料止于问题描述，未提供实现细节、评估场景、对照系统和实验结果，因而无法评价平台的性能、适用范围或部署成本。【解读】这些属于当前证据的缺口，不能直接写成作者系统已被证实存在的技术局限。",
+        "connection": "【解读】该问题与智能运维直接相关：若告警、资源指标和网络事件不能对应到同一部署对象，故障定位就缺少关联基础。原文提及的CPU峰值与端口错误具有可靠性分析意义，但并未证明平台支持故障预测，也没有提供结构设计方面的证据。",
+        "next_steps": "【建议】后续阅读应优先核对身份映射的生成方式、组件归属信息的补全机制，以及拓扑变化时的更新策略。研究迁移可考虑比较人工与自动关联的耗时和错误情况；这些是建议的验证方向，不是摘要已经采用的方法或取得的成果。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "Panoramic：面向开放无线接入网部署的跨层测量平台",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1145/3842655.3844894"
+      ],
+      "analyzed_at": "2026-10-31T13:45:10.063378+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "Open RAN 的跨层排障难点，不只是遥测数据分散，更是不同系统用不同标识描述组件。理解这些标识为何难以关联，是阅读 Panoramic、判断其运维价值的起点。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "同一套部署，各层却使用不同标识",
+            "paragraphs": [
+              "Open RAN 部署的遥测来自无线接入网、5G 核心网、Kubernetes、服务器、前传交换机和无线单元。它们并不共享统一的身份模型：无线接入网使用 cell-ID 和 PCI，Kubernetes 使用命名空间和 pod，交换机则使用端口和 VLAN。",
+              "因此，把多个来源的数据采集起来，并不意味着已经能够跨层关联。摘要指出，现有工具分别采集这些来源，却没有提供标识之间的公共映射，排障人员仍需自行还原组件关系。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "问题指向标识映射，具体实现仍待确认",
+            "paragraphs": [
+              "当前可核对的摘要内容主要解释了标识关联的缺口，未展开平台如何建立映射、如何处理采集数据。因此，这里不将问题描述扩写为已经得到证实的实现流程，也不据此绘制方法示意图。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "跨层关联与单源归属都存在信息缺口",
+            "paragraphs": [
+              "摘要明确描述了两类障碍：跨来源时，关联一个 DU 事件、主机 CPU 峰值或交换机端口错误，需要针对每次查询手动重建拓扑；即使只看单一来源，指标携带的标识也不总能确定其所属组件或部署。",
+              "这些内容说明了研究所针对的工程问题，但不能当作平台性能的实验结果。当前材料没有给出可据以判断诊断速度、关联准确性或资源开销改善程度的定量证据。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "尚不能判断适用部署与验证范围",
+            "paragraphs": [
+              "仅凭当前摘要证据，无法判断涉及多少部署或设备、覆盖哪些故障场景、采用何种比较对象，以及是否验证了不同配置下的适用性。这些属于当前材料无法回答的问题，不代表论文没有开展相关实验。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：先确认数据能否关联，再讨论智能诊断",
+            "paragraphs": [
+              "阅读启发：面向智能运维，值得先追问指标能否明确归属到组件，以及跨层标识能否建立可靠联系。进一步阅读时，可重点查看论文如何定义和维护这些关系，以及用什么证据说明关联有效；不能仅因数据已被集中采集，就默认它们足以支持故障诊断。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-10-31T13:46:36.765926+00:00",
+      "article_profile": "a7c08524607af60982df4c8e99e2a1d2fe0bfae44bdcecb3419a698038e00363",
+      "analysis_references": {},
+      "analysis_material_version": "90e130628c82580179bc616323650214e617c8b5880b8007e4bacf501ea17345",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "88b3a9840a61",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-31T13:46:36.774587+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -112412,13 +112824,13 @@
     "unavailable": 44
   },
   "analysis_status": {
-    "ready_core": 1,
+    "ready_core": 3,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 5
+    "pending": 3
   },
   "edition": {
     "id": "41204155642",
