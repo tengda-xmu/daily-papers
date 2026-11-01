@@ -1,0 +1,40 @@
+{
+  "paper_id": "109bf46dbf46",
+  "fingerprint": "d9f6da37b11e29f433dd7a20a8f63a0fcce9d6e9de105b9cb6585826398925a0",
+  "analysis": {
+    "title_zh": "主动学习与缺陷感知有限元驱动的激光粉末床熔融Hastelloy-X疲劳寿命代理建模",
+    "summary": "本文面向激光粉末床熔融Hastelloy-X的疲劳寿命预测，将缺陷感知有限元、统一缺陷敏感应变—寿命模型与高斯过程主动学习结合。摘要报告，寿命模型以19个数据点校准，在440点数据集上取得较高预测精度；主动学习以20个训练点达到相当精度。[摘要] 解读：其价值在于联合处理缺陷影响与数据效率，但数据来源、验证划分和外推边界仍需全文核实。",
+    "recommendation": "建议优先作为疲劳可靠性方向的方法论文阅读，重点考察缺陷物理特征如何进入代理模型及主动学习如何降低数据需求；与生成式设计仅有潜在方法联系，摘要未展示设计生成或优化。[摘要]",
+    "deep_read": {
+      "problem": "研究针对LPBF制造Hastelloy-X疲劳行为对表面粗糙度、次表面孔隙及成形方向的敏感性。摘要指出，既有方法通常将这些因素“treat these factors independently”，且依赖大量实验数据。核心问题是如何联合描述缺陷影响，并在多工况下减少寿命预测的数据需求。[摘要]",
+      "method": "框架将缺陷感知有限元与高斯过程主动学习结合，覆盖应变幅、温度、成形方向和缺陷条件；同时建立统一缺陷敏感应变—寿命模型。代理模型采用含有限元导出量及温度交互的“physics-informed features”，并以不确定性驱动选点。[摘要]",
+      "innovation": "摘要提出“unified defect-sensitive strain–life (UDSL) model”，并以数值结果校准广义表达式，描述粗糙度与孔隙的次加性交互。解读：值得关注的是缺陷交互建模与物理特征主动学习的组合；仅凭摘要不能确认各组成部分的首创性或相对既有研究的完整增量。[摘要]",
+      "findings": "摘要报告UDSL以19点校准，在440点数据集上达到R²=0.984、RMSE=0.131，误差尺度为log10(Nf)，寿命预测落在两倍误差因子内的比例为97.7%。主动学习使用20个训练点达到相当精度，较随机采样的数据效率约提高“2.5×”。[摘要]",
+      "limitations": "资料仅为摘要，未说明440点数据的来源构成、训练与测试划分、缺陷参数范围及重复验证设置。“robust extrapolation capability”是摘要结论，尚无法核对外推幅度与失败情形。解读：这些属于当前证据缺口，不能直接认定为作者方法已证实的缺陷。[摘要]",
+      "connection": "摘要定位于高温应用中LPBF构件的疲劳寿命预测与“qualification of LPBF components”。解读：这与疲劳可靠性研究直接相关，也可为结构设计提供缺陷敏感的寿命评价模型；但摘要未涉及生成式设计、在线监测或维护决策，不能据此声称完成智能运维应用。[摘要]",
+      "next_steps": "建议获取全文后先核查19个校准点、20个训练点与440点数据集之间的关系，再检查不确定性校准和跨成形方向验证。针对“more than 95%”的实验负担降幅，应核实比较基准。建议后续用独立缺陷批次检验泛化能力，而非直接将摘要精度迁移到新构件。[摘要]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://doi.org/10.1007/s40964-026-01936-w"
+    ],
+    "analyzed_at": "2026-11-01T05:49:31.673312+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": true,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "摘要明确给出缺陷感知有限元、高斯过程主动学习及疲劳寿命预测结果，足以支持其切合疲劳可靠性方向且值得重点阅读的初步判断；但未展示生成式设计，证据充分仅指摘要级推荐，不代表模型可靠性已获独立核验。[摘要]",
+    "evidence": "an uncertainty-driven active learning strategy that achieves equivalent accuracy with only 20 training points, representing an approximately 2.5× improvement in data efficiency compared with random sampling."
+  },
+  "material": {
+    "version": "c320534b6429934ba0a5824ec186de85f9642d1f0c25b25317d4b24b96744a3c",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "an uncertainty-driven active learning strategy that achieves equivalent accuracy with only 20 training points, representing an approximately 2.5× improvement in data efficiency compared with random sampling."
+  }
+}
