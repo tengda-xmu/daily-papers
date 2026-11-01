@@ -70,7 +70,20 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "30719925104a",
+        "state": "missing_evidence",
+        "updated_at": "2026-11-01T13:28:06.320410+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -134,7 +147,20 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "edfba5029949",
+        "state": "missing_evidence",
+        "updated_at": "2026-11-01T13:28:30.776976+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -201,7 +227,20 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "5c61f4d246bb",
+        "state": "missing_evidence",
+        "updated_at": "2026-11-01T13:28:51.969116+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Web of Science",
@@ -223,7 +262,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "本文聚焦《Evaluating Quantum Machine Learning Models for Patient Flow, Energy Demand Estimation, and Predictive Maintenance》，暂未提供可用摘要，请查看原文。",
+      "summary": "【摘要】本文比较混合与纯量子机器学习在患者流量、工业能耗和维护建议三个任务中的表现。混合流程结合经典预处理、特征选择与变分量子电路，纯量子流程通过参数化量子电路学习。患者流量任务中，混合模型与KNN同为87%准确率，纯量子模型为53%；能源估计仅小幅优于随机森林；维护建议中纯量子分类器略优于朴素贝叶斯，混合模型表现明显下降。结果未显示一致优势，并提示电路设计、训练稳定性和计算资源的重要性。以上仅为摘要级解读。",
       "raw_metadata": {
         "uid": "WOS:001886211700087",
         "title": "Evaluating Quantum Machine Learning Models for Patient Flow, Energy Demand Estimation, and Predictive Maintenance",
@@ -325,11 +364,160 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "【解读】建议作为智能运维中量子模型适用性与基线比较的探索性文献阅读，重点关注维护任务中两类流程表现相反的现象，而非将其视为量子优势或工程部署效果的充分证明。",
+      "deep_read": {
+        "problem": "【摘要】研究考察混合与纯量子机器学习能否在患者流量、工业能耗估计及设备维护建议中，相对经典基线获得可测收益。原文使用“measurable benefits”界定比较目标。【解读】核心问题是不同任务中的实际增益，而非仅展示量子模型可以运行。",
+        "method": "【摘要】混合流程将经典预处理和特征选择与变分量子电路结合；纯量子流程直接通过参数化量子电路学习，主要使用PennyLane开发。实验采用公开基准数据，分类报告准确率，回归报告MSE和R2。摘要未给出数据规模、划分方式及具体电路配置。",
+        "innovation": "【解读】可辨识的研究特色是在三个运行管理场景中并列评估混合与纯量子流程，并与经典模型比较。摘要明确提到“hybrid and pure QML models”，但未宣称新型电路、优化算法或理论突破，因此不能把跨场景评估直接认定为方法原创性。",
+        "findings": "【摘要】能源估计的测试MSE为0.73，随机森林为0.74；测试R2分别为0.25和0.23。维护建议中，纯量子分类器略优于朴素贝叶斯，混合模型则明显下降，括注38.55%。摘要未明确该括注指标名称，不能把它解释为降幅或补充未报告的比较数值。",
+        "limitations": "【摘要】作者指出“circuit design, training stability, and limited computational resources”带来实际约束。【解读】当前资料还缺少重复实验、误差范围、基线调参及计算成本信息，无法判断微小差异是否稳定，也不能核验比较公平性；这些属于摘要证据边界。",
+        "connection": "【解读】本文与智能运维和可靠性研究的直接联系是设备维护行动推荐，能源估计则关联工业运行管理。但维护分类结果不等同于设备可靠性提升，摘要没有故障率、寿命或停机损失证据；对结构设计也未提供直接研究结果，不能扩大其应用结论。",
+        "next_steps": "【建议】后续优先核查维护任务的标签定义、类别分布和数据划分，再确认38.55%的指标含义及纯量子模型的完整成绩。可设计统一数据与计算预算的重复对照实验，检验电路配置和训练稳定性；若用于实际运维，还应增加维护成本与漏判风险评价。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "面向患者流量、能源需求估计与预测性维护的量子机器学习模型评估",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1109/icmlt69916.2026.11689314"
+      ],
+      "analyzed_at": "2026-11-01T13:29:55.620999+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "量子机器学习能否在实际运营任务中胜过经典模型？这项研究比较患者流预测、工业能耗估计与维护行动推荐，结果提示：优势取决于任务与模型配置，不能把采用量子方法直接等同于性能提升。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从患者流到设备维护，检验量子学习的实际收益",
+            "paragraphs": [
+              "量子机器学习（QML）结合量子计算原理与数据驱动学习。本研究关注的不是其概念潜力，而是混合式与纯量子模型在不同运营任务中，相对经典基线能否带来可测量的收益。患者流分析、工业能耗估计和设备维护行动推荐，构成了此次比较的应用范围。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "两条学习流程，分别对照经典模型",
+            "paragraphs": [
+              "研究主要使用 PennyLane，构建两条流程：混合式流程将经典预处理、特征选择与变分量子电路结合；纯量子流程则直接通过参数化量子电路学习。实验使用公开基准数据集，分类任务报告准确率，回归任务报告均方误差（MSE）与 R²。摘要未展开具体电路和训练配置。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "患者流持平、能耗微升，维护推荐出现分化",
+            "paragraphs": [
+              "患者流预测中，混合模型与经典 KNN 基线持平，准确率为87%；同一资源受限设置下，纯量子模型的准确率为53%。这说明在该任务与配置中，混合流程保持了基线水平，但未表现出超越基线的准确率优势。",
+              "能耗估计中，量子电路学习模型略优于随机森林：测试 MSE 分别为0.73与0.74，测试 R² 分别为0.25与0.23。摘要将其描述为小幅改善，不宜据此推断广泛的量子优势。",
+              "维护行动推荐中，纯量子分类器略优于朴素贝叶斯，但摘要未给出双方的具体准确率；混合模型则明显退化，准确率为38.55%。结合其他任务可见，混合式与纯量子路线并不存在一致的优劣顺序。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "资源约束明确，比较与验证细节仍待查阅",
+            "paragraphs": [
+              "摘要指出，电路设计、训练稳定性与有限计算资源构成实际约束。但仅凭摘要，无法判断各数据集的样本规模、训练测试划分、重复试验及统计不确定性，也无法核对各基线的调参与资源预算是否可比。这些是当前资料未报告的信息，不代表论文没有开展相关工作。",
+              "当前摘要也不足以判断结果能否推广到其他设备、工业场景或真实部署环境。尤其应区分维护行动推荐的分类表现与实际可靠性收益：摘要没有提供足够证据，将前者解释为已经验证的故障减少或运维改善。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注维护任务中的路线差异",
+            "paragraphs": [
+              "阅读启发：对智能运维读者，更值得追问的是，为何混合流程在患者流任务中持平，却在维护推荐中明显退化。进一步阅读时，可关注特征处理、电路设计与训练稳定性的具体说明，以及经典基线的比较条件；这些信息有助于理解结果边界，而不是预设量子方法必然更优。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的两条量子学习流程",
+            "description": "概括公开基准数据、混合式与纯量子流程及性能评价的关系，不表示论文原图或完整实验配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "公开基准数据",
+                "detail": "覆盖患者流、工业能耗与维护行动推荐任务。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "经典预处理与特征选择",
+                "detail": "混合式流程中的经典处理环节。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "变分量子电路",
+                "detail": "与经典处理环节结合，构成混合式流程。"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "参数化量子电路",
+                "detail": "纯量子流程通过参数化量子电路直接学习。"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "性能评价与基线比较",
+                "detail": "分类报告准确率，回归报告均方误差与决定系数。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "混合式流程"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "结合量子电路"
+              },
+              {
+                "from": "a",
+                "to": "d",
+                "label": "纯量子流程"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "评价表现"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "评价表现"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-01T13:31:20.405697+00:00",
+      "article_profile": "914a6289308f2eee4522368880a526d438c589ed0ed91bfb35346a99d1f2ceb3",
+      "analysis_references": {},
+      "analysis_material_version": "e5cd1bcac3284956ba47b5a99cee6397431bab01f6c14f297c4476462475a0e6",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "d9ffbd0de9d3",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-01T13:31:20.407708+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "arXiv",
@@ -816,7 +1004,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "As data-center networks (DCNs) continue to scale in capacity and complexity, rapid and accurate fiber faults identification is becoming increasingly important for maintaining service continuity, minimizing downtime, and enabling automated maintenance. Optical time-domain reflectometry (OTDR) is widely used for fiber monitoring and fault localization. However, conventional OTDR relies on single-wavelength and polarization-insensitive measurements, and therefore struggles to distinguish different fault types with similar trace patterns, limiting precise fault diagnosis. This limitation is partic…",
+      "summary": "数据中心光纤链路中，不同故障可能产生相似的光时域反射轨迹，导致传统监测方法难以准确区分。本文提出波长与偏振多样性光时域反射框架，利用故障对两类探测维度的不同响应构建多维特征，再通过机器学习完成识别。摘要报告，在六类实验模拟故障中，总体识别准确率由传统方法的72.30%提高至99.23%。其价值在于改善诊断所需的观测信息，而非仅更换分类算法；实际部署能力仍需全文证据核实。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "16d58334a43f86f12b379e54567c40cac23b0ed7",
@@ -854,11 +1042,43 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议智能运维方向重点阅读，尤其关注其如何利用物理响应差异改善易混淆故障的可辨识性；摘要已有六类故障实验及准确率对比，但尚不足以判断现场泛化能力。[摘要]",
+      "deep_read": {
+        "problem": "研究针对数据中心光纤故障诊断中的类别混淆，而不只是故障定位。摘要指出传统方法依赖“single-wavelength and polarization-insensitive measurements”，相似轨迹因而难以区分不同故障，尤其影响软故障识别。核心问题是现有观测维度能否提供足够的类别判别信息。[摘要]",
+        "method": "作者提出波长与偏振多样性光时域反射框架，通过探测故障随波长和偏振变化的响应形成多维特征，再交由机器学习分类器自动识别。摘要以“multi-dimensional fault signatures”概括其表征结果，但未交代具体波长、偏振采样方式或分类器类型，不能据此复现系统。[摘要]",
+        "innovation": "解读：可辨识的创新重点是把波长与偏振响应引入故障表征，补充传统光时域反射测量缺少的信息，而非摘要已证明某种分类算法创新。原文强调这些特征“unavailable to conventional OTDRs”。其相对既有多维探测研究的新颖程度，仍需全文相关工作与技术细节核实。[摘要]",
+        "findings": "摘要报告实验模拟并评估六类代表性故障。传统方法总体识别准确率为72.30%，宏弯、微弯及不良熔接等相似轨迹故障中的部分类别准确率低于60%；所提方法总体达到99.23%。原文称其“clearly separates these fault classes”，但未给出各类改进后的具体准确率。[摘要]",
+        "limitations": "当前仅有摘要，不能确认样本数量、训练测试划分、重复实验或统计不确定性。原文使用“experimentally emulated”描述故障，因此现有材料支持模拟故障条件下的结果，尚不足以确认真实运行网络中的表现。这是当前证据范围的限制，不能直接认定作者未开展相关验证。[摘要]",
+        "connection": "解读：该研究与智能运维直接相关，形成物理测量、多维特征和自动分类相结合的诊断流程。摘要明确关联“enabling automated maintenance”。对可靠性研究，其启发是减少故障误判可能有助于维护决策，但资料未提供停机时间或可靠性指标改善；与结构设计的联系则较间接。[摘要]",
+        "next_steps": "建议：获取全文后，优先核对波长与偏振各自贡献、分类器设置以及数据划分，判断准确率提升来自何种信息增益。进一步可考虑跨链路条件测试，并评估采集成本与诊断时延。这些属于面向工程迁移的研究建议，不是摘要已经报告的实验，也不应视为作者结论。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "面向数据中心网络精准光纤故障识别的波长与偏振多样性光时域反射技术",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1109/jlt.2026.3733156"
+      ],
+      "analyzed_at": "2026-11-01T13:32:50.894228+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "5d0f95738091ed17a7e801ffe3f5acbdb989a1c4dccc9e0098b0a07bd8b51689",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "1ddd5dc1d616",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-01T13:32:50.905493+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "extended": [],
@@ -929,7 +1149,20 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "30719925104a",
+        "state": "missing_evidence",
+        "updated_at": "2026-11-01T13:28:06.320410+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -993,7 +1226,20 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "edfba5029949",
+        "state": "missing_evidence",
+        "updated_at": "2026-11-01T13:28:30.776976+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -1060,7 +1306,20 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommended_direction": "fatigue_reliability",
+      "reading_status": {
+        "paper_id": "5c61f4d246bb",
+        "state": "missing_evidence",
+        "updated_at": "2026-11-01T13:28:51.969116+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Web of Science",
@@ -1082,7 +1341,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "本文聚焦《Evaluating Quantum Machine Learning Models for Patient Flow, Energy Demand Estimation, and Predictive Maintenance》，暂未提供可用摘要，请查看原文。",
+      "summary": "【摘要】本文比较混合与纯量子机器学习在患者流量、工业能耗和维护建议三个任务中的表现。混合流程结合经典预处理、特征选择与变分量子电路，纯量子流程通过参数化量子电路学习。患者流量任务中，混合模型与KNN同为87%准确率，纯量子模型为53%；能源估计仅小幅优于随机森林；维护建议中纯量子分类器略优于朴素贝叶斯，混合模型表现明显下降。结果未显示一致优势，并提示电路设计、训练稳定性和计算资源的重要性。以上仅为摘要级解读。",
       "raw_metadata": {
         "uid": "WOS:001886211700087",
         "title": "Evaluating Quantum Machine Learning Models for Patient Flow, Energy Demand Estimation, and Predictive Maintenance",
@@ -1184,11 +1443,160 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "【解读】建议作为智能运维中量子模型适用性与基线比较的探索性文献阅读，重点关注维护任务中两类流程表现相反的现象，而非将其视为量子优势或工程部署效果的充分证明。",
+      "deep_read": {
+        "problem": "【摘要】研究考察混合与纯量子机器学习能否在患者流量、工业能耗估计及设备维护建议中，相对经典基线获得可测收益。原文使用“measurable benefits”界定比较目标。【解读】核心问题是不同任务中的实际增益，而非仅展示量子模型可以运行。",
+        "method": "【摘要】混合流程将经典预处理和特征选择与变分量子电路结合；纯量子流程直接通过参数化量子电路学习，主要使用PennyLane开发。实验采用公开基准数据，分类报告准确率，回归报告MSE和R2。摘要未给出数据规模、划分方式及具体电路配置。",
+        "innovation": "【解读】可辨识的研究特色是在三个运行管理场景中并列评估混合与纯量子流程，并与经典模型比较。摘要明确提到“hybrid and pure QML models”，但未宣称新型电路、优化算法或理论突破，因此不能把跨场景评估直接认定为方法原创性。",
+        "findings": "【摘要】能源估计的测试MSE为0.73，随机森林为0.74；测试R2分别为0.25和0.23。维护建议中，纯量子分类器略优于朴素贝叶斯，混合模型则明显下降，括注38.55%。摘要未明确该括注指标名称，不能把它解释为降幅或补充未报告的比较数值。",
+        "limitations": "【摘要】作者指出“circuit design, training stability, and limited computational resources”带来实际约束。【解读】当前资料还缺少重复实验、误差范围、基线调参及计算成本信息，无法判断微小差异是否稳定，也不能核验比较公平性；这些属于摘要证据边界。",
+        "connection": "【解读】本文与智能运维和可靠性研究的直接联系是设备维护行动推荐，能源估计则关联工业运行管理。但维护分类结果不等同于设备可靠性提升，摘要没有故障率、寿命或停机损失证据；对结构设计也未提供直接研究结果，不能扩大其应用结论。",
+        "next_steps": "【建议】后续优先核查维护任务的标签定义、类别分布和数据划分，再确认38.55%的指标含义及纯量子模型的完整成绩。可设计统一数据与计算预算的重复对照实验，检验电路配置和训练稳定性；若用于实际运维，还应增加维护成本与漏判风险评价。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "面向患者流量、能源需求估计与预测性维护的量子机器学习模型评估",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1109/icmlt69916.2026.11689314"
+      ],
+      "analyzed_at": "2026-11-01T13:29:55.620999+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "量子机器学习能否在实际运营任务中胜过经典模型？这项研究比较患者流预测、工业能耗估计与维护行动推荐，结果提示：优势取决于任务与模型配置，不能把采用量子方法直接等同于性能提升。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从患者流到设备维护，检验量子学习的实际收益",
+            "paragraphs": [
+              "量子机器学习（QML）结合量子计算原理与数据驱动学习。本研究关注的不是其概念潜力，而是混合式与纯量子模型在不同运营任务中，相对经典基线能否带来可测量的收益。患者流分析、工业能耗估计和设备维护行动推荐，构成了此次比较的应用范围。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "两条学习流程，分别对照经典模型",
+            "paragraphs": [
+              "研究主要使用 PennyLane，构建两条流程：混合式流程将经典预处理、特征选择与变分量子电路结合；纯量子流程则直接通过参数化量子电路学习。实验使用公开基准数据集，分类任务报告准确率，回归任务报告均方误差（MSE）与 R²。摘要未展开具体电路和训练配置。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "患者流持平、能耗微升，维护推荐出现分化",
+            "paragraphs": [
+              "患者流预测中，混合模型与经典 KNN 基线持平，准确率为87%；同一资源受限设置下，纯量子模型的准确率为53%。这说明在该任务与配置中，混合流程保持了基线水平，但未表现出超越基线的准确率优势。",
+              "能耗估计中，量子电路学习模型略优于随机森林：测试 MSE 分别为0.73与0.74，测试 R² 分别为0.25与0.23。摘要将其描述为小幅改善，不宜据此推断广泛的量子优势。",
+              "维护行动推荐中，纯量子分类器略优于朴素贝叶斯，但摘要未给出双方的具体准确率；混合模型则明显退化，准确率为38.55%。结合其他任务可见，混合式与纯量子路线并不存在一致的优劣顺序。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "资源约束明确，比较与验证细节仍待查阅",
+            "paragraphs": [
+              "摘要指出，电路设计、训练稳定性与有限计算资源构成实际约束。但仅凭摘要，无法判断各数据集的样本规模、训练测试划分、重复试验及统计不确定性，也无法核对各基线的调参与资源预算是否可比。这些是当前资料未报告的信息，不代表论文没有开展相关工作。",
+              "当前摘要也不足以判断结果能否推广到其他设备、工业场景或真实部署环境。尤其应区分维护行动推荐的分类表现与实际可靠性收益：摘要没有提供足够证据，将前者解释为已经验证的故障减少或运维改善。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注维护任务中的路线差异",
+            "paragraphs": [
+              "阅读启发：对智能运维读者，更值得追问的是，为何混合流程在患者流任务中持平，却在维护推荐中明显退化。进一步阅读时，可关注特征处理、电路设计与训练稳定性的具体说明，以及经典基线的比较条件；这些信息有助于理解结果边界，而不是预设量子方法必然更优。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的两条量子学习流程",
+            "description": "概括公开基准数据、混合式与纯量子流程及性能评价的关系，不表示论文原图或完整实验配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "公开基准数据",
+                "detail": "覆盖患者流、工业能耗与维护行动推荐任务。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "经典预处理与特征选择",
+                "detail": "混合式流程中的经典处理环节。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "变分量子电路",
+                "detail": "与经典处理环节结合，构成混合式流程。"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "参数化量子电路",
+                "detail": "纯量子流程通过参数化量子电路直接学习。"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "性能评价与基线比较",
+                "detail": "分类报告准确率，回归报告均方误差与决定系数。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "混合式流程"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "结合量子电路"
+              },
+              {
+                "from": "a",
+                "to": "d",
+                "label": "纯量子流程"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "评价表现"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "评价表现"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-01T13:31:20.405697+00:00",
+      "article_profile": "914a6289308f2eee4522368880a526d438c589ed0ed91bfb35346a99d1f2ceb3",
+      "analysis_references": {},
+      "analysis_material_version": "e5cd1bcac3284956ba47b5a99cee6397431bab01f6c14f297c4476462475a0e6",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "d9ffbd0de9d3",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-01T13:31:20.407708+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "arXiv",
@@ -1675,7 +2083,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "As data-center networks (DCNs) continue to scale in capacity and complexity, rapid and accurate fiber faults identification is becoming increasingly important for maintaining service continuity, minimizing downtime, and enabling automated maintenance. Optical time-domain reflectometry (OTDR) is widely used for fiber monitoring and fault localization. However, conventional OTDR relies on single-wavelength and polarization-insensitive measurements, and therefore struggles to distinguish different fault types with similar trace patterns, limiting precise fault diagnosis. This limitation is partic…",
+      "summary": "数据中心光纤链路中，不同故障可能产生相似的光时域反射轨迹，导致传统监测方法难以准确区分。本文提出波长与偏振多样性光时域反射框架，利用故障对两类探测维度的不同响应构建多维特征，再通过机器学习完成识别。摘要报告，在六类实验模拟故障中，总体识别准确率由传统方法的72.30%提高至99.23%。其价值在于改善诊断所需的观测信息，而非仅更换分类算法；实际部署能力仍需全文证据核实。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "16d58334a43f86f12b379e54567c40cac23b0ed7",
@@ -1713,11 +2121,43 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议智能运维方向重点阅读，尤其关注其如何利用物理响应差异改善易混淆故障的可辨识性；摘要已有六类故障实验及准确率对比，但尚不足以判断现场泛化能力。[摘要]",
+      "deep_read": {
+        "problem": "研究针对数据中心光纤故障诊断中的类别混淆，而不只是故障定位。摘要指出传统方法依赖“single-wavelength and polarization-insensitive measurements”，相似轨迹因而难以区分不同故障，尤其影响软故障识别。核心问题是现有观测维度能否提供足够的类别判别信息。[摘要]",
+        "method": "作者提出波长与偏振多样性光时域反射框架，通过探测故障随波长和偏振变化的响应形成多维特征，再交由机器学习分类器自动识别。摘要以“multi-dimensional fault signatures”概括其表征结果，但未交代具体波长、偏振采样方式或分类器类型，不能据此复现系统。[摘要]",
+        "innovation": "解读：可辨识的创新重点是把波长与偏振响应引入故障表征，补充传统光时域反射测量缺少的信息，而非摘要已证明某种分类算法创新。原文强调这些特征“unavailable to conventional OTDRs”。其相对既有多维探测研究的新颖程度，仍需全文相关工作与技术细节核实。[摘要]",
+        "findings": "摘要报告实验模拟并评估六类代表性故障。传统方法总体识别准确率为72.30%，宏弯、微弯及不良熔接等相似轨迹故障中的部分类别准确率低于60%；所提方法总体达到99.23%。原文称其“clearly separates these fault classes”，但未给出各类改进后的具体准确率。[摘要]",
+        "limitations": "当前仅有摘要，不能确认样本数量、训练测试划分、重复实验或统计不确定性。原文使用“experimentally emulated”描述故障，因此现有材料支持模拟故障条件下的结果，尚不足以确认真实运行网络中的表现。这是当前证据范围的限制，不能直接认定作者未开展相关验证。[摘要]",
+        "connection": "解读：该研究与智能运维直接相关，形成物理测量、多维特征和自动分类相结合的诊断流程。摘要明确关联“enabling automated maintenance”。对可靠性研究，其启发是减少故障误判可能有助于维护决策，但资料未提供停机时间或可靠性指标改善；与结构设计的联系则较间接。[摘要]",
+        "next_steps": "建议：获取全文后，优先核对波长与偏振各自贡献、分类器设置以及数据划分，判断准确率提升来自何种信息增益。进一步可考虑跨链路条件测试，并评估采集成本与诊断时延。这些属于面向工程迁移的研究建议，不是摘要已经报告的实验，也不应视为作者结论。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "面向数据中心网络精准光纤故障识别的波长与偏振多样性光时域反射技术",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1109/jlt.2026.3733156"
+      ],
+      "analyzed_at": "2026-11-01T13:32:50.894228+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "5d0f95738091ed17a7e801ffe3f5acbdb989a1c4dccc9e0098b0a07bd8b51689",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "1ddd5dc1d616",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-01T13:32:50.905493+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -116123,13 +116563,13 @@
     "unavailable": 44
   },
   "analysis_status": {
-    "ready_core": 1,
+    "ready_core": 3,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 5
+    "pending": 3
   },
   "edition": {
     "id": "41309168706",
