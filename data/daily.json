@@ -693,8 +693,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -844,8 +844,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "restricted",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -871,7 +871,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "The article examines modern methods for predicting the remaining life of metallic ship structures with due consideration of fatigue, crack growth, corrosion wastage, and actual operating conditions. The analytical basis comprises eleven peer-reviewed publications issued in 2021–2026 and three regulatory and technical documents published by IMO and DNV. Fracture mechanics, fatigue-life prediction, finite element analysis, corrosion prediction, structural health monitoring, and artificial-intelligence-based methods are compared. It is established that the reliability of a remaining-life assessme…",
+      "summary": "【摘要】本文围绕船舶金属结构剩余寿命预测，比较断裂力学、疲劳寿命预测、有限元分析、腐蚀预测、结构健康监测及人工智能方法。分析依据为2021—2026年的十一篇同行评审文献及IMO、DNV的三份规范技术文件。摘要强调，应联合考虑实测结构状态、后续退化、未来载荷和极限状态判据，并提出融合物理、概率模型与监测数据的发展方向。本次仅据摘要解读，不能核实具体算法及验证效果。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "49b32c6a9cba31c7397391ffd601b8d9314efd3e",
@@ -914,11 +914,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "【解读】建议作为船舶结构疲劳可靠性与智能运维交叉研究的方法综览阅读，重点关注状态监测、退化建模和寿命判据如何衔接；若需复现算法或比较预测精度，当前摘要不足以支持。",
+      "deep_read": {
+        "problem": "【摘要】研究问题是在疲劳、裂纹扩展、腐蚀损耗和实际运行条件共同影响下，如何预测船舶金属结构的剩余寿命。原文明确列出“fatigue, crack growth, corrosion wastage”。【解读】关注点是服役条件下的综合寿命评估，而非仅计算单一损伤机制。",
+        "method": "【摘要】文章以十一篇同行评审文献和三份规范技术文件为分析基础，对比断裂力学、疲劳寿命预测、有限元分析、腐蚀预测、结构健康监测与人工智能方法。【解读】摘要呈现的是文献比较路径，未交代检索策略、筛选标准及统一比较指标，不能据此复现分析过程。",
+        "innovation": "【摘要】文章提出的发展方向是将物理与概率模型同监测数据、计算预测工具结合，原文称“the integration of physics-based and probabilistic models”。【解读】这体现综合建模取向，但摘要未报告新算法、新模型或原创验证，不能将该方向直接认定为方法创新。",
+        "findings": "【摘要】核心判断是剩余寿命评估的可靠性取决于实测结构状态、后续退化模型、未来载荷及适用极限状态判据的联合考虑。原文强调“joint consideration”。【解读】该结论提示不能仅凭当前损伤程度推断寿命，但摘要没有提供量化比较或误差结果。",
+        "limitations": "【解读】当前资料仅为摘要，未提供所比较方法的适用条件、数据来源、参数设定、验证案例和预测不确定性结果，因此无法判断各方法的优劣及工程成熟度。这些属于当前证据范围的限制，不代表全文必然缺失，也不能据此认定作者忽略了相关问题。",
+        "connection": "【解读】结构健康监测与人工智能方法的比较直接关联智能运维，疲劳、裂纹和腐蚀则关联结构可靠性评估。【摘要】文章明确涉及“structural health monitoring”。对结构设计的联系主要是寿命约束可能反馈设计决策，但摘要没有涉及生成式设计或设计优化。",
+        "next_steps": "【建议】后续阅读应优先核查各方法如何接收监测数据、描述退化与未来载荷，并采用何种极限状态判据。若开展迁移研究，可考虑比较物理模型与数据融合模型在相同数据和判据下的表现；这属于研究建议，并非摘要已完成的实验或作者已验证的成果。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "船舶金属结构剩余寿命预测的现代方法",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.34660/inf.2026.48.93.009"
+      ],
+      "analyzed_at": "2026-10-31T13:58:44.915546+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "544de0e94d0fbcf564f3aa1e428e45b501368ca13d2026351c14cb47f9921b21",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "029aeceb4cb3",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-31T13:58:44.925345+00:00",
+        "basis": "abstract",
+        "article_state": "retry",
+        "article_stage": "writing",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -1678,8 +1710,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -1829,8 +1861,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "restricted",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -1856,7 +1888,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "The article examines modern methods for predicting the remaining life of metallic ship structures with due consideration of fatigue, crack growth, corrosion wastage, and actual operating conditions. The analytical basis comprises eleven peer-reviewed publications issued in 2021–2026 and three regulatory and technical documents published by IMO and DNV. Fracture mechanics, fatigue-life prediction, finite element analysis, corrosion prediction, structural health monitoring, and artificial-intelligence-based methods are compared. It is established that the reliability of a remaining-life assessme…",
+      "summary": "【摘要】本文围绕船舶金属结构剩余寿命预测，比较断裂力学、疲劳寿命预测、有限元分析、腐蚀预测、结构健康监测及人工智能方法。分析依据为2021—2026年的十一篇同行评审文献及IMO、DNV的三份规范技术文件。摘要强调，应联合考虑实测结构状态、后续退化、未来载荷和极限状态判据，并提出融合物理、概率模型与监测数据的发展方向。本次仅据摘要解读，不能核实具体算法及验证效果。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "49b32c6a9cba31c7397391ffd601b8d9314efd3e",
@@ -1899,11 +1931,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "【解读】建议作为船舶结构疲劳可靠性与智能运维交叉研究的方法综览阅读，重点关注状态监测、退化建模和寿命判据如何衔接；若需复现算法或比较预测精度，当前摘要不足以支持。",
+      "deep_read": {
+        "problem": "【摘要】研究问题是在疲劳、裂纹扩展、腐蚀损耗和实际运行条件共同影响下，如何预测船舶金属结构的剩余寿命。原文明确列出“fatigue, crack growth, corrosion wastage”。【解读】关注点是服役条件下的综合寿命评估，而非仅计算单一损伤机制。",
+        "method": "【摘要】文章以十一篇同行评审文献和三份规范技术文件为分析基础，对比断裂力学、疲劳寿命预测、有限元分析、腐蚀预测、结构健康监测与人工智能方法。【解读】摘要呈现的是文献比较路径，未交代检索策略、筛选标准及统一比较指标，不能据此复现分析过程。",
+        "innovation": "【摘要】文章提出的发展方向是将物理与概率模型同监测数据、计算预测工具结合，原文称“the integration of physics-based and probabilistic models”。【解读】这体现综合建模取向，但摘要未报告新算法、新模型或原创验证，不能将该方向直接认定为方法创新。",
+        "findings": "【摘要】核心判断是剩余寿命评估的可靠性取决于实测结构状态、后续退化模型、未来载荷及适用极限状态判据的联合考虑。原文强调“joint consideration”。【解读】该结论提示不能仅凭当前损伤程度推断寿命，但摘要没有提供量化比较或误差结果。",
+        "limitations": "【解读】当前资料仅为摘要，未提供所比较方法的适用条件、数据来源、参数设定、验证案例和预测不确定性结果，因此无法判断各方法的优劣及工程成熟度。这些属于当前证据范围的限制，不代表全文必然缺失，也不能据此认定作者忽略了相关问题。",
+        "connection": "【解读】结构健康监测与人工智能方法的比较直接关联智能运维，疲劳、裂纹和腐蚀则关联结构可靠性评估。【摘要】文章明确涉及“structural health monitoring”。对结构设计的联系主要是寿命约束可能反馈设计决策，但摘要没有涉及生成式设计或设计优化。",
+        "next_steps": "【建议】后续阅读应优先核查各方法如何接收监测数据、描述退化与未来载荷，并采用何种极限状态判据。若开展迁移研究，可考虑比较物理模型与数据融合模型在相同数据和判据下的表现；这属于研究建议，并非摘要已完成的实验或作者已验证的成果。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "船舶金属结构剩余寿命预测的现代方法",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.34660/inf.2026.48.93.009"
+      ],
+      "analyzed_at": "2026-10-31T13:58:44.915546+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "544de0e94d0fbcf564f3aa1e428e45b501368ca13d2026351c14cb47f9921b21",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "029aeceb4cb3",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-10-31T13:58:44.925345+00:00",
+        "basis": "abstract",
+        "article_state": "retry",
+        "article_stage": "writing",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -112824,13 +112888,13 @@
     "unavailable": 44
   },
   "analysis_status": {
-    "ready_core": 3,
+    "ready_core": 4,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 3
+    "pending": 2
   },
   "edition": {
     "id": "41204155642",
