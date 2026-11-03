@@ -291,8 +291,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -624,7 +624,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "This chapter presents a systematic examination of how Artificial Intelligence and Machine Learning techniques are transforming the design, operation, diagnosis, and control of solar thermal energy systems, including flat-plate collectors, evacuated tube collectors, and concentrating solar power plants. Principal ML methodologies surveyed include Artificial Neural Networks, Support Vector Regression, Gradient Boosting, Long Short-Term Memory networks, Transformer architectures, Physics-Informed Neural Networks, and Deep Reinforcement Learning. Applications are reviewed across four domains data-…",
+      "summary": "本章综述人工智能与机器学习在太阳能热利用系统设计、运行、诊断和控制中的应用，涵盖平板集热器、真空管集热器及聚光太阳能电站。内容围绕性能代理建模、辐照与热输出预测、故障检测和预测性维护、智能控制四类任务展开。摘要报告相关控制策略可使年度有效供热量提高8%至15%，但未交代具体实验条件。本文适合作为智能运维方向的领域入口，不能据此确认各类算法的实际优劣。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -662,11 +662,43 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐作为太阳能热系统智能运维的综述入口，重点关注故障检测、预测性维护与控制的任务关联；若用于方法选型或性能论证，仍须核查全文及其引用研究。[摘要；解读]",
+      "deep_read": {
+        "problem": "本章关注机器学习如何服务太阳能热利用系统的设计、运行、诊断与控制，研究对象覆盖三类集热或发电设施。摘要以“design, operation, diagnosis, and control”界定范围，说明讨论不限于单一预测任务；但未给出各类系统的具体运行约束和问题优先级。[摘要]",
+        "method": "本章采用综述方式梳理人工神经网络、支持向量回归、梯度提升、长短期记忆网络、Transformer、物理信息神经网络及深度强化学习，并按四类应用组织内容。摘要使用“methodologies surveyed”，未披露文献检索、筛选及质量评价程序，不能认定其符合系统综述规范。[摘要]",
+        "innovation": "解读：当前可辨识的贡献在于将不同太阳能热系统中的性能预测、故障维护与控制研究纳入共同框架，而非提出已经验证的新算法。摘要没有提供原创模型、损失函数或新数据集的信息，因此不足以判断方法创新性，也不能把列举前沿模型视为创新证据。[摘要]",
+        "findings": "摘要称智能控制策略可使年度有效供热量提高“8 to 15 percent”，这是当前唯一明确的量化效果信息。但未说明比较基线、系统类型、气候条件、统计区间及结果来自哪些研究，因此只能作为综述报告的效果范围，不能归为本章独立实验结果或普适增益。[摘要]",
+        "limitations": "作者指出“data scarcity, model interpretability, and cross-site generalization”是研究挑战，即数据稀缺、模型可解释性与跨站点泛化。当前仅有摘要，无法判断这些挑战是否经过定量比较，也无法核实综述覆盖程度；这些证据缺口不应被直接写成全文的方法缺陷。[摘要]",
+        "connection": "解读：故障检测与预测性维护直接对应智能运维方向，热性能代理模型则可能为结构设计中的快速性能评估提供参考。对可靠性研究而言，故障识别具有任务关联，但摘要未涉及失效概率、寿命分布或可靠度计算，不能据此宣称已经建立可靠性分析框架。[摘要]",
+        "next_steps": "建议：后续获取全文时，优先核查故障标签来源、维护预测目标、跨站点测试设置及控制收益的比较基线，再评估迁移到自身研究的可行性。作者提出联邦学习、物理信息架构与可解释人工智能作为未来方向；可围绕数据共享限制选择切入点，但不应预设这些方案已经有效。[摘要；建议]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "面向太阳能热利用优化与智能控制的机器学习",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.4018/979-8-2600-0026-7.ch008"
+      ],
+      "analyzed_at": "2026-11-03T13:25:40.283889+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "239bcc2cbe099a31a8661756534e8c79c3687bb63dc2ef736a0e142a8ae3ce09",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "7c51821504c7",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-03T13:25:40.288004+00:00",
+        "basis": "abstract",
+        "article_state": "failed",
+        "article_stage": "writing",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -688,7 +720,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Aims: To critically review how machine learning is applied to predictive maintenance of industrial assets, to compare the main method families and benchmark practices, and to identify the barriers that limit industrial adoption and the priorities for future research. Study Design: Narrative (non-systematic) review. Methodology: Peer-reviewed journal articles, conference papers and established review studies published between 2006 and 2026 were identified from major scientific databases and publisher platforms using combinations of the terms predictive maintenance, condition monitoring, fault d…",
+      "summary": "本文以非系统性叙述综述梳理工业资产预测性维护中的机器学习，覆盖2006—2026年相关研究，并按维护任务、方法族、数据集、评价指标与部署问题组织证据。摘要概述从浅层分类器到深度网络及混合模型的演进，同时指出证据集中于实验室或仿真数据，现场泛化与维护决策衔接仍不足。作者强调，工业价值应侧重稳健、可解释、考虑不确定性且面向决策的模型，而非基准成绩的微小提升。[摘要]本解读仅依据摘要，不能核验具体研究质量与效果。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -726,11 +758,144 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐作为智能运维研究选题与评价框架的导读：摘要明确关联故障诊断、剩余寿命预测及维护决策，并将现场验证与成本收益证据列为重点；但不能替代具体方法论文的实证核查。[摘要]",
+      "deep_read": {
+        "problem": "论文关注机器学习如何服务工业资产预测性维护，以及哪些障碍限制实际采用。其目标不仅是比较算法，还包括基准实践与研究优先事项。原文提出识别“barriers that limit industrial adoption”。[摘要]解读：问题核心是预测性能如何转化为可用的维护支持，而非单纯提高分类准确率。",
+        "method": "作者采用“Narrative (non-systematic) review”，检索2006—2026年的期刊、会议及既有综述，优先选择经典、高被引、基准数据集与近期研究，并按任务、方法、数据、指标和部署问题综合。[摘要]摘要未提供完整检索式、筛选流程或质量评价细节，无法据此复核文献覆盖程度。",
+        "innovation": "摘要未声明提出新算法或新数据集，其贡献定位是跨方法与部署问题的综合梳理，涉及迁移学习、联邦学习、物理信息混合模型及大型基础模型。原文称证据按“deployment issue”等维度综合。[摘要]解读：值得关注的是技术路线与应用障碍的关联整理，尚不足以确认综述本身具有独创性。",
+        "findings": "摘要称深度模型在轴承故障诊断与涡扇剩余使用寿命估计的公共基准上表现较强，物理与深度学习混合模型可延长预测时域并减少训练数据需求，原文为“requiring less training data”。[摘要]但未列比较对象、指标或数值，不能判断增益大小，也不能直接外推至现场。",
+        "limitations": "作者指出现有证据主要来自少量实验室或仿真数据，原文为“laboratory or simulated datasets”，且域偏移、故障数据稀缺、不确定性、可解释性及维护决策联系仍处理不足。[摘要]这些属于被综述领域的问题；本综述自身的选择偏差与结论稳健性，当前摘要不足以判定。",
+        "connection": "与智能运维的联系直接体现在状态监测、故障诊断和寿命预测；可靠性研究可关注不确定性及维护决策接口。作者强调模型应“validated on field data”。[摘要]解读：这些议题适合连接现场可靠性评价，但摘要未讨论结构设计优化，不能据此认定对结构设计已有直接贡献。",
+        "next_steps": "作者提出标准化评价、开放工业数据、知识与数据混合模型及“cost-benefit evidence”等优先方向。[摘要]建议：后续精读先核查各结论对应的研究与现场证据，再围绕跨工况测试、寿命预测不确定性和维护成本构建研究方案；这些是可迁移设想，并非本文已验证的成果。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "工业系统预测性维护中的机器学习：方法、基准、挑战与未来方向综述",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.9734/jerr/2026/v28i112041"
+      ],
+      "analyzed_at": "2026-11-03T15:35:08.921020+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "预测维护模型在公开基准上表现出色，是否就能为工业设备创造实际价值？这篇综述梳理机器学习的方法演进与应用障碍，提醒读者把关注点从预测精度转向现场可靠性和维护决策。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从基准成绩走向工业维护价值",
+            "paragraphs": [
+              "工业资产的预测维护涉及状态监测、故障诊断和剩余使用寿命估计。本文关注的不只是哪些算法表现更好，还包括方法如何被评价，以及哪些障碍限制了工业采用。其核心问题是：模型的预测能力，怎样才能转化为可信、可用的维护依据？"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "以叙述性综述串联方法与部署问题",
+            "paragraphs": [
+              "本文采用叙述性、非系统性综述。作者从主要科学数据库和出版平台检索2006至2026年的同行评审期刊论文、会议论文及已有综述，组合使用预测维护、状态监测、故障诊断、预后、剩余使用寿命和机器学习等检索词。",
+              "文献选择优先考虑奠基性与高被引研究、基准数据集论文及近期进展，再按维护任务、方法类别、数据集、评价指标和部署问题综合证据。这是对既有研究的梳理，而非摘要报告的一项新模型实验。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "模型持续演进，现场证据仍是关键短板",
+            "paragraphs": [
+              "综述概括的方法演进始于依赖人工特征的浅层分类器，随后发展为直接从原始传感器信号学习的卷积、循环及注意力网络，近期进一步扩展到迁移学习、联邦学习、物理信息混合模型和大型基础模型。",
+              "摘要报告，深度模型在轴承故障诊断和涡扇发动机剩余使用寿命估计的公开基准上取得较高准确性；物理与深度学习混合模型则延长了预测时间跨度，并减少了训练数据需求。但摘要没有给出对应的量化幅度或逐项比较条件。",
+              "与此同时，多数证据仍来自少数实验室或仿真数据集。领域偏移、故障数据稀缺、不确定性量化、可解释性，以及预测与维护决策之间的衔接，仍未得到充分解决。作者因此强调，工业价值不能仅由基准成绩的小幅提升来衡量。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不能界定比较与验证范围",
+            "paragraphs": [
+              "仅凭本次摘要，无法判断纳入文献数量、各数据集的样本规模、具体模型的比较设置，以及现场验证覆盖了哪些设备和工况；也无法核对混合模型优势所对应的基线、指标和适用范围。这些信息是摘要未报告，并不意味着论文没有讨论或相关研究没有开展。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：追问预测如何支持决策",
+            "paragraphs": [
+              "阅读启发：继续阅读时，可重点追问公开基准优势是否经现场数据验证，模型如何表达不确定性，以及预测输出怎样连接维护决策。摘要提出的标准化评价、开放工业数据、知识与数据混合模型及成本收益证据，可作为阅读线索，而不应被当作已经验证的落地成效。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的综述过程示意",
+            "description": "仅概括摘要明确陈述的文献检索、优先选择与证据综合关系，不代表论文原图或新实验流程。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "检索相关文献",
+                "detail": "从主要科学数据库和出版平台检索期刊论文、会议论文及已有综述。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "确定优先文献",
+                "detail": "优先考虑奠基性与高被引研究、基准数据集论文及近期进展。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "按任务与评价维度综合",
+                "detail": "按维护任务、方法类别、数据集、评价指标及部署问题综合证据。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "归纳进展与采用障碍",
+                "detail": "梳理方法演进、基准表现、工业采用障碍和未来研究优先事项。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "文献优先选择"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "综合既有证据"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "形成综述判断"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-03T15:36:29.428740+00:00",
+      "article_profile": "4e3bb6c362749ea1eaa1717a0729116db6bcee1a2c7e0799c17325cd08161eee",
+      "analysis_references": {},
+      "analysis_material_version": "16df508f515cc91fed9da0210c78bf7c790579ba5bbd635c1cc4387fd9ef7c1d",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "fb1019378eae",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-03T15:36:29.440116+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -751,7 +916,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Structural design of battery thermal management systems requires prediction of maximum temperature, maximum temperature difference, and pressure drop, whose scales and response forms differ. Direct multioutput regression overlooks response differences and the data support of optimized designs. This study develops a response-aligned machine-learning surrogate coupled with coverage-constrained multi-objective optimization and fuzzy comprehensive evaluation. Screening ten regressors identifies Extra Trees as the thermal baseline and a multilayer perceptron for pressure drop. Nested fivef…",
+      "summary": "【摘要】本文针对电池热管理系统结构设计中最高温度、最大温差与压降响应差异，构建响应对齐的机器学习代理，并结合覆盖约束多目标优化与模糊综合评价。方法为不同输出选择模型及响应变换，在独立留出设计上检验误差与预测区间覆盖率，再筛选非支配结构方案。结果支持该框架在确定性分布式热网络定义域内用于结构筛选。【解读】其重点是兼顾预测精度与优化方案的数据支持程度，而非已经完成实物验证。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -789,11 +954,155 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议重点阅读其响应差异化建模与覆盖约束优化的衔接方式，适合作为电池热管理结构多目标设计的方法参考；但当前仅有摘要，不能据此确认物理可靠性或工程部署效果。[摘要]",
+      "deep_read": {
+        "problem": "【论文摘要】结构设计需要同时预测最高温度、最大温差与压降，但三者尺度和响应形式不同。摘要指出直接多输出回归会忽视这些差异，以及优化设计的数据支持程度。【解读】研究问题不仅是降低预测误差，还包括避免优化过程偏向缺乏数据支撑的结构区域。[摘要]",
+        "method": "【论文摘要】研究筛选十种回归器，以极端随机树处理热响应，以多层感知机处理压降，并分别采用直接预测、对数响应和速度归一化重构。模型选择使用五个随机种子重复的嵌套五折交叉验证，随后衔接覆盖约束多目标优化及模糊综合评价。[摘要]",
+        "innovation": "【解读】可关注的组合特点是按响应形式配置代理模型，并将覆盖约束引入结构优化与候选排序，而非用单一多输出回归统一处理全部目标。摘要称其为“response-aligned”。但缺少全文相关工作比较，无法确认这些组成部分各自的原创性或相对既有研究的创新幅度。[摘要]",
+        "findings": "【论文摘要】独立留出集上，对数响应与速度归一化分支的均方根误差分别降低10.48%和24.76%；摘要仅明确压降改善获95%配对自助法区间支持。覆盖约束优化得到334个非支配解。上述结果属于确定性热网络映射验证，不能等同于实物性能提升。[摘要]",
+        "limitations": "【论文摘要】适用边界明确限定为“Within the DTN-defined domain”，候选方案仍需物理验证。【解读】当前没有全文，无法核对几何参数范围、工况设置、覆盖约束细节及计算成本，也无法判断模型对域外结构或真实测量噪声的适应性；这些是证据缺口，不是已证实的失败。[摘要]",
+        "connection": "【解读】与结构设计的联系最直接：代理模型加速多目标搜索，覆盖信息辅助判断候选方案的数据支持程度。对可靠性研究，预测区间和重采样特征排序提供可借鉴的分析思路，但不等于失效概率评估。摘要未涉及在线监测、故障诊断或维护决策，不能直接归为智能运维成果。[摘要]",
+        "next_steps": "【建议】获得全文后，优先核查覆盖指标定义、补充采样规则及留出集独立性，再比较去除响应变换或覆盖约束后的效果。后续研究可对候选结构开展物理验证，并考察工况扰动下的排序稳定性。这些是基于摘要边界提出的研究建议，不是作者已报告的实验结果。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "面向电动汽车电池热管理系统结构优化的热液机器学习代理建模",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1088/2631-8695/aebcc7"
+      ],
+      "analyzed_at": "2026-11-03T15:46:18.832548+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "电动汽车电池热管理结构优化，不仅要预测温度与压降，还要判断优化方案是否得到已有数据支持。这项研究将响应差异、代理模型与覆盖约束结合起来，阅读价值在于理解：预测更准与候选设计更可信，如何共同进入优化流程。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "温度与压降，不宜用同一种方式预测",
+            "paragraphs": [
+              "电池热管理结构设计需要同时关注最高温度、最大温差和压降，但这些输出的尺度与响应形式不同。摘要指出，直接采用多输出回归，会忽略响应差异以及优化设计的数据支撑。因此，研究既关注预测误差，也关注优化候选是否处于数据能够支持的范围。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "按响应选择模型，再连接约束优化与评价",
+            "paragraphs": [
+              "研究筛选十种回归器，并通过跨五个随机种子重复的嵌套五折交叉验证，选择三条预测分支：最高温度采用直接 Extra Trees 回归；最大温差采用对数响应 Extra Trees；压降采用速度归一化重构与多层感知机。",
+              "与标签无关的采样规则向含80个样本的建模集补充40个设计，另用互不重叠的40个设计检验确定性分布式热网络（DTN）映射。代理模型随后连接带覆盖约束的多目标优化与模糊综合评价，用于生成并筛选候选结构。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "误差有所下降，覆盖信息也影响设计排序",
+            "paragraphs": [
+              "在留出集上，对数响应与速度归一化分支的均方根误差分别降低10.48%和24.76%；95%配对自助法区间支持压降预测的改进。名义覆盖率为90%的交叉验证加法预测区间，对三个输出的实际覆盖率依次为87.5%、90.0%和100%。",
+              "重采样中，接触长度比始终是排名最高的热学特征，局部参数扫描也复现了DTN趋势。经过10,000次评估，带覆盖约束的非支配排序遗传算法II得到334个非支配解，占合并前沿的99.1%。",
+              "考虑覆盖信息的模糊评价选出得分为0.648的候选。移除覆盖因素后，首位设计改变，但前十名中仍保留九个候选。这说明覆盖信息会影响最终优先级，却不能据此认定所选结构已经获得物理性能验证。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "验证边界仍是DTN定义的设计域",
+            "paragraphs": [
+              "摘要将适用范围限定在DTN定义的域内，所报告的留出检验针对该确定性映射，不能直接等同于真实电池系统验证。摘要未交代具体几何与工况范围、误差降幅对应的详细比较基线，以及合并前沿包含哪些比较方法；实物验证范围也无法由摘要判断，需进一步阅读原文。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：区分预测准确与设计可信",
+            "paragraphs": [
+              "阅读启发：结构优化中的代理模型，不应只看误差指标，也值得追问候选方案的数据支撑。进一步阅读时，可重点核对覆盖约束如何定义、如何进入优化与评价，以及预测区间覆盖率和设计域覆盖约束分别表达什么。当前资料支持将该框架理解为结构筛选工具，而非已完成物理验证的设计结论。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的代理建模与设计筛选流程",
+            "description": "仅概括摘要明确陈述的方法关系，不是论文原图；物理验证是候选设计的后续用途，不代表已完成。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "设计采样与DTN映射",
+                "detail": "通过与标签无关的规则补充设计，并设置不重叠的留出集。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "响应适配代理模型",
+                "detail": "分别为最高温度、最大温差和压降选择预测分支。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "覆盖约束多目标优化",
+                "detail": "将代理模型与带覆盖约束的非支配排序遗传算法II结合。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "考虑覆盖的模糊综合评价",
+                "detail": "对优化候选进行综合评价，确定优先设计。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "供物理验证的优先候选",
+                "detail": "在DTN定义域内用于结构筛选，并为物理验证安排候选优先级。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "建模与检验"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "耦合优化"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "评价非支配候选"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "确定优先级"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-03T15:47:40.945684+00:00",
+      "article_profile": "53629b2eeada36ed6d47357cab5600345c26252e4fef82f738c3b04c9de31488",
+      "analysis_references": {},
+      "analysis_material_version": "902426454f5eabfd19315c5a091f0b1fb84dc47c0bcadda03e052380ef1b890a",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "df260c189cc8",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-03T15:47:40.946678+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "extended": [],
@@ -1085,8 +1394,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -1418,7 +1727,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "This chapter presents a systematic examination of how Artificial Intelligence and Machine Learning techniques are transforming the design, operation, diagnosis, and control of solar thermal energy systems, including flat-plate collectors, evacuated tube collectors, and concentrating solar power plants. Principal ML methodologies surveyed include Artificial Neural Networks, Support Vector Regression, Gradient Boosting, Long Short-Term Memory networks, Transformer architectures, Physics-Informed Neural Networks, and Deep Reinforcement Learning. Applications are reviewed across four domains data-…",
+      "summary": "本章综述人工智能与机器学习在太阳能热利用系统设计、运行、诊断和控制中的应用，涵盖平板集热器、真空管集热器及聚光太阳能电站。内容围绕性能代理建模、辐照与热输出预测、故障检测和预测性维护、智能控制四类任务展开。摘要报告相关控制策略可使年度有效供热量提高8%至15%，但未交代具体实验条件。本文适合作为智能运维方向的领域入口，不能据此确认各类算法的实际优劣。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -1456,11 +1765,43 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐作为太阳能热系统智能运维的综述入口，重点关注故障检测、预测性维护与控制的任务关联；若用于方法选型或性能论证，仍须核查全文及其引用研究。[摘要；解读]",
+      "deep_read": {
+        "problem": "本章关注机器学习如何服务太阳能热利用系统的设计、运行、诊断与控制，研究对象覆盖三类集热或发电设施。摘要以“design, operation, diagnosis, and control”界定范围，说明讨论不限于单一预测任务；但未给出各类系统的具体运行约束和问题优先级。[摘要]",
+        "method": "本章采用综述方式梳理人工神经网络、支持向量回归、梯度提升、长短期记忆网络、Transformer、物理信息神经网络及深度强化学习，并按四类应用组织内容。摘要使用“methodologies surveyed”，未披露文献检索、筛选及质量评价程序，不能认定其符合系统综述规范。[摘要]",
+        "innovation": "解读：当前可辨识的贡献在于将不同太阳能热系统中的性能预测、故障维护与控制研究纳入共同框架，而非提出已经验证的新算法。摘要没有提供原创模型、损失函数或新数据集的信息，因此不足以判断方法创新性，也不能把列举前沿模型视为创新证据。[摘要]",
+        "findings": "摘要称智能控制策略可使年度有效供热量提高“8 to 15 percent”，这是当前唯一明确的量化效果信息。但未说明比较基线、系统类型、气候条件、统计区间及结果来自哪些研究，因此只能作为综述报告的效果范围，不能归为本章独立实验结果或普适增益。[摘要]",
+        "limitations": "作者指出“data scarcity, model interpretability, and cross-site generalization”是研究挑战，即数据稀缺、模型可解释性与跨站点泛化。当前仅有摘要，无法判断这些挑战是否经过定量比较，也无法核实综述覆盖程度；这些证据缺口不应被直接写成全文的方法缺陷。[摘要]",
+        "connection": "解读：故障检测与预测性维护直接对应智能运维方向，热性能代理模型则可能为结构设计中的快速性能评估提供参考。对可靠性研究而言，故障识别具有任务关联，但摘要未涉及失效概率、寿命分布或可靠度计算，不能据此宣称已经建立可靠性分析框架。[摘要]",
+        "next_steps": "建议：后续获取全文时，优先核查故障标签来源、维护预测目标、跨站点测试设置及控制收益的比较基线，再评估迁移到自身研究的可行性。作者提出联邦学习、物理信息架构与可解释人工智能作为未来方向；可围绕数据共享限制选择切入点，但不应预设这些方案已经有效。[摘要；建议]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "面向太阳能热利用优化与智能控制的机器学习",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.4018/979-8-2600-0026-7.ch008"
+      ],
+      "analyzed_at": "2026-11-03T13:25:40.283889+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "239bcc2cbe099a31a8661756534e8c79c3687bb63dc2ef736a0e142a8ae3ce09",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "7c51821504c7",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-03T13:25:40.288004+00:00",
+        "basis": "abstract",
+        "article_state": "failed",
+        "article_stage": "writing",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -1482,7 +1823,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Aims: To critically review how machine learning is applied to predictive maintenance of industrial assets, to compare the main method families and benchmark practices, and to identify the barriers that limit industrial adoption and the priorities for future research. Study Design: Narrative (non-systematic) review. Methodology: Peer-reviewed journal articles, conference papers and established review studies published between 2006 and 2026 were identified from major scientific databases and publisher platforms using combinations of the terms predictive maintenance, condition monitoring, fault d…",
+      "summary": "本文以非系统性叙述综述梳理工业资产预测性维护中的机器学习，覆盖2006—2026年相关研究，并按维护任务、方法族、数据集、评价指标与部署问题组织证据。摘要概述从浅层分类器到深度网络及混合模型的演进，同时指出证据集中于实验室或仿真数据，现场泛化与维护决策衔接仍不足。作者强调，工业价值应侧重稳健、可解释、考虑不确定性且面向决策的模型，而非基准成绩的微小提升。[摘要]本解读仅依据摘要，不能核验具体研究质量与效果。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -1520,11 +1861,144 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐作为智能运维研究选题与评价框架的导读：摘要明确关联故障诊断、剩余寿命预测及维护决策，并将现场验证与成本收益证据列为重点；但不能替代具体方法论文的实证核查。[摘要]",
+      "deep_read": {
+        "problem": "论文关注机器学习如何服务工业资产预测性维护，以及哪些障碍限制实际采用。其目标不仅是比较算法，还包括基准实践与研究优先事项。原文提出识别“barriers that limit industrial adoption”。[摘要]解读：问题核心是预测性能如何转化为可用的维护支持，而非单纯提高分类准确率。",
+        "method": "作者采用“Narrative (non-systematic) review”，检索2006—2026年的期刊、会议及既有综述，优先选择经典、高被引、基准数据集与近期研究，并按任务、方法、数据、指标和部署问题综合。[摘要]摘要未提供完整检索式、筛选流程或质量评价细节，无法据此复核文献覆盖程度。",
+        "innovation": "摘要未声明提出新算法或新数据集，其贡献定位是跨方法与部署问题的综合梳理，涉及迁移学习、联邦学习、物理信息混合模型及大型基础模型。原文称证据按“deployment issue”等维度综合。[摘要]解读：值得关注的是技术路线与应用障碍的关联整理，尚不足以确认综述本身具有独创性。",
+        "findings": "摘要称深度模型在轴承故障诊断与涡扇剩余使用寿命估计的公共基准上表现较强，物理与深度学习混合模型可延长预测时域并减少训练数据需求，原文为“requiring less training data”。[摘要]但未列比较对象、指标或数值，不能判断增益大小，也不能直接外推至现场。",
+        "limitations": "作者指出现有证据主要来自少量实验室或仿真数据，原文为“laboratory or simulated datasets”，且域偏移、故障数据稀缺、不确定性、可解释性及维护决策联系仍处理不足。[摘要]这些属于被综述领域的问题；本综述自身的选择偏差与结论稳健性，当前摘要不足以判定。",
+        "connection": "与智能运维的联系直接体现在状态监测、故障诊断和寿命预测；可靠性研究可关注不确定性及维护决策接口。作者强调模型应“validated on field data”。[摘要]解读：这些议题适合连接现场可靠性评价，但摘要未讨论结构设计优化，不能据此认定对结构设计已有直接贡献。",
+        "next_steps": "作者提出标准化评价、开放工业数据、知识与数据混合模型及“cost-benefit evidence”等优先方向。[摘要]建议：后续精读先核查各结论对应的研究与现场证据，再围绕跨工况测试、寿命预测不确定性和维护成本构建研究方案；这些是可迁移设想，并非本文已验证的成果。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "工业系统预测性维护中的机器学习：方法、基准、挑战与未来方向综述",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.9734/jerr/2026/v28i112041"
+      ],
+      "analyzed_at": "2026-11-03T15:35:08.921020+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "预测维护模型在公开基准上表现出色，是否就能为工业设备创造实际价值？这篇综述梳理机器学习的方法演进与应用障碍，提醒读者把关注点从预测精度转向现场可靠性和维护决策。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从基准成绩走向工业维护价值",
+            "paragraphs": [
+              "工业资产的预测维护涉及状态监测、故障诊断和剩余使用寿命估计。本文关注的不只是哪些算法表现更好，还包括方法如何被评价，以及哪些障碍限制了工业采用。其核心问题是：模型的预测能力，怎样才能转化为可信、可用的维护依据？"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "以叙述性综述串联方法与部署问题",
+            "paragraphs": [
+              "本文采用叙述性、非系统性综述。作者从主要科学数据库和出版平台检索2006至2026年的同行评审期刊论文、会议论文及已有综述，组合使用预测维护、状态监测、故障诊断、预后、剩余使用寿命和机器学习等检索词。",
+              "文献选择优先考虑奠基性与高被引研究、基准数据集论文及近期进展，再按维护任务、方法类别、数据集、评价指标和部署问题综合证据。这是对既有研究的梳理，而非摘要报告的一项新模型实验。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "模型持续演进，现场证据仍是关键短板",
+            "paragraphs": [
+              "综述概括的方法演进始于依赖人工特征的浅层分类器，随后发展为直接从原始传感器信号学习的卷积、循环及注意力网络，近期进一步扩展到迁移学习、联邦学习、物理信息混合模型和大型基础模型。",
+              "摘要报告，深度模型在轴承故障诊断和涡扇发动机剩余使用寿命估计的公开基准上取得较高准确性；物理与深度学习混合模型则延长了预测时间跨度，并减少了训练数据需求。但摘要没有给出对应的量化幅度或逐项比较条件。",
+              "与此同时，多数证据仍来自少数实验室或仿真数据集。领域偏移、故障数据稀缺、不确定性量化、可解释性，以及预测与维护决策之间的衔接，仍未得到充分解决。作者因此强调，工业价值不能仅由基准成绩的小幅提升来衡量。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不能界定比较与验证范围",
+            "paragraphs": [
+              "仅凭本次摘要，无法判断纳入文献数量、各数据集的样本规模、具体模型的比较设置，以及现场验证覆盖了哪些设备和工况；也无法核对混合模型优势所对应的基线、指标和适用范围。这些信息是摘要未报告，并不意味着论文没有讨论或相关研究没有开展。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：追问预测如何支持决策",
+            "paragraphs": [
+              "阅读启发：继续阅读时，可重点追问公开基准优势是否经现场数据验证，模型如何表达不确定性，以及预测输出怎样连接维护决策。摘要提出的标准化评价、开放工业数据、知识与数据混合模型及成本收益证据，可作为阅读线索，而不应被当作已经验证的落地成效。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的综述过程示意",
+            "description": "仅概括摘要明确陈述的文献检索、优先选择与证据综合关系，不代表论文原图或新实验流程。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "检索相关文献",
+                "detail": "从主要科学数据库和出版平台检索期刊论文、会议论文及已有综述。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "确定优先文献",
+                "detail": "优先考虑奠基性与高被引研究、基准数据集论文及近期进展。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "按任务与评价维度综合",
+                "detail": "按维护任务、方法类别、数据集、评价指标及部署问题综合证据。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "归纳进展与采用障碍",
+                "detail": "梳理方法演进、基准表现、工业采用障碍和未来研究优先事项。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "文献优先选择"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "综合既有证据"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "形成综述判断"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-03T15:36:29.428740+00:00",
+      "article_profile": "4e3bb6c362749ea1eaa1717a0729116db6bcee1a2c7e0799c17325cd08161eee",
+      "analysis_references": {},
+      "analysis_material_version": "16df508f515cc91fed9da0210c78bf7c790579ba5bbd635c1cc4387fd9ef7c1d",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "fb1019378eae",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-03T15:36:29.440116+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -1545,7 +2019,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Abstract Structural design of battery thermal management systems requires prediction of maximum temperature, maximum temperature difference, and pressure drop, whose scales and response forms differ. Direct multioutput regression overlooks response differences and the data support of optimized designs. This study develops a response-aligned machine-learning surrogate coupled with coverage-constrained multi-objective optimization and fuzzy comprehensive evaluation. Screening ten regressors identifies Extra Trees as the thermal baseline and a multilayer perceptron for pressure drop. Nested fivef…",
+      "summary": "【摘要】本文针对电池热管理系统结构设计中最高温度、最大温差与压降响应差异，构建响应对齐的机器学习代理，并结合覆盖约束多目标优化与模糊综合评价。方法为不同输出选择模型及响应变换，在独立留出设计上检验误差与预测区间覆盖率，再筛选非支配结构方案。结果支持该框架在确定性分布式热网络定义域内用于结构筛选。【解读】其重点是兼顾预测精度与优化方案的数据支持程度，而非已经完成实物验证。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -1583,11 +2057,155 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议重点阅读其响应差异化建模与覆盖约束优化的衔接方式，适合作为电池热管理结构多目标设计的方法参考；但当前仅有摘要，不能据此确认物理可靠性或工程部署效果。[摘要]",
+      "deep_read": {
+        "problem": "【论文摘要】结构设计需要同时预测最高温度、最大温差与压降，但三者尺度和响应形式不同。摘要指出直接多输出回归会忽视这些差异，以及优化设计的数据支持程度。【解读】研究问题不仅是降低预测误差，还包括避免优化过程偏向缺乏数据支撑的结构区域。[摘要]",
+        "method": "【论文摘要】研究筛选十种回归器，以极端随机树处理热响应，以多层感知机处理压降，并分别采用直接预测、对数响应和速度归一化重构。模型选择使用五个随机种子重复的嵌套五折交叉验证，随后衔接覆盖约束多目标优化及模糊综合评价。[摘要]",
+        "innovation": "【解读】可关注的组合特点是按响应形式配置代理模型，并将覆盖约束引入结构优化与候选排序，而非用单一多输出回归统一处理全部目标。摘要称其为“response-aligned”。但缺少全文相关工作比较，无法确认这些组成部分各自的原创性或相对既有研究的创新幅度。[摘要]",
+        "findings": "【论文摘要】独立留出集上，对数响应与速度归一化分支的均方根误差分别降低10.48%和24.76%；摘要仅明确压降改善获95%配对自助法区间支持。覆盖约束优化得到334个非支配解。上述结果属于确定性热网络映射验证，不能等同于实物性能提升。[摘要]",
+        "limitations": "【论文摘要】适用边界明确限定为“Within the DTN-defined domain”，候选方案仍需物理验证。【解读】当前没有全文，无法核对几何参数范围、工况设置、覆盖约束细节及计算成本，也无法判断模型对域外结构或真实测量噪声的适应性；这些是证据缺口，不是已证实的失败。[摘要]",
+        "connection": "【解读】与结构设计的联系最直接：代理模型加速多目标搜索，覆盖信息辅助判断候选方案的数据支持程度。对可靠性研究，预测区间和重采样特征排序提供可借鉴的分析思路，但不等于失效概率评估。摘要未涉及在线监测、故障诊断或维护决策，不能直接归为智能运维成果。[摘要]",
+        "next_steps": "【建议】获得全文后，优先核查覆盖指标定义、补充采样规则及留出集独立性，再比较去除响应变换或覆盖约束后的效果。后续研究可对候选结构开展物理验证，并考察工况扰动下的排序稳定性。这些是基于摘要边界提出的研究建议，不是作者已报告的实验结果。[摘要]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "面向电动汽车电池热管理系统结构优化的热液机器学习代理建模",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1088/2631-8695/aebcc7"
+      ],
+      "analyzed_at": "2026-11-03T15:46:18.832548+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "电动汽车电池热管理结构优化，不仅要预测温度与压降，还要判断优化方案是否得到已有数据支持。这项研究将响应差异、代理模型与覆盖约束结合起来，阅读价值在于理解：预测更准与候选设计更可信，如何共同进入优化流程。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "温度与压降，不宜用同一种方式预测",
+            "paragraphs": [
+              "电池热管理结构设计需要同时关注最高温度、最大温差和压降，但这些输出的尺度与响应形式不同。摘要指出，直接采用多输出回归，会忽略响应差异以及优化设计的数据支撑。因此，研究既关注预测误差，也关注优化候选是否处于数据能够支持的范围。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "按响应选择模型，再连接约束优化与评价",
+            "paragraphs": [
+              "研究筛选十种回归器，并通过跨五个随机种子重复的嵌套五折交叉验证，选择三条预测分支：最高温度采用直接 Extra Trees 回归；最大温差采用对数响应 Extra Trees；压降采用速度归一化重构与多层感知机。",
+              "与标签无关的采样规则向含80个样本的建模集补充40个设计，另用互不重叠的40个设计检验确定性分布式热网络（DTN）映射。代理模型随后连接带覆盖约束的多目标优化与模糊综合评价，用于生成并筛选候选结构。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "误差有所下降，覆盖信息也影响设计排序",
+            "paragraphs": [
+              "在留出集上，对数响应与速度归一化分支的均方根误差分别降低10.48%和24.76%；95%配对自助法区间支持压降预测的改进。名义覆盖率为90%的交叉验证加法预测区间，对三个输出的实际覆盖率依次为87.5%、90.0%和100%。",
+              "重采样中，接触长度比始终是排名最高的热学特征，局部参数扫描也复现了DTN趋势。经过10,000次评估，带覆盖约束的非支配排序遗传算法II得到334个非支配解，占合并前沿的99.1%。",
+              "考虑覆盖信息的模糊评价选出得分为0.648的候选。移除覆盖因素后，首位设计改变，但前十名中仍保留九个候选。这说明覆盖信息会影响最终优先级，却不能据此认定所选结构已经获得物理性能验证。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "验证边界仍是DTN定义的设计域",
+            "paragraphs": [
+              "摘要将适用范围限定在DTN定义的域内，所报告的留出检验针对该确定性映射，不能直接等同于真实电池系统验证。摘要未交代具体几何与工况范围、误差降幅对应的详细比较基线，以及合并前沿包含哪些比较方法；实物验证范围也无法由摘要判断，需进一步阅读原文。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：区分预测准确与设计可信",
+            "paragraphs": [
+              "阅读启发：结构优化中的代理模型，不应只看误差指标，也值得追问候选方案的数据支撑。进一步阅读时，可重点核对覆盖约束如何定义、如何进入优化与评价，以及预测区间覆盖率和设计域覆盖约束分别表达什么。当前资料支持将该框架理解为结构筛选工具，而非已完成物理验证的设计结论。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的代理建模与设计筛选流程",
+            "description": "仅概括摘要明确陈述的方法关系，不是论文原图；物理验证是候选设计的后续用途，不代表已完成。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "设计采样与DTN映射",
+                "detail": "通过与标签无关的规则补充设计，并设置不重叠的留出集。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "响应适配代理模型",
+                "detail": "分别为最高温度、最大温差和压降选择预测分支。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "覆盖约束多目标优化",
+                "detail": "将代理模型与带覆盖约束的非支配排序遗传算法II结合。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "考虑覆盖的模糊综合评价",
+                "detail": "对优化候选进行综合评价，确定优先设计。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "供物理验证的优先候选",
+                "detail": "在DTN定义域内用于结构筛选，并为物理验证安排候选优先级。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "建模与检验"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "耦合优化"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "评价非支配候选"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "确定优先级"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-03T15:47:40.945684+00:00",
+      "article_profile": "53629b2eeada36ed6d47357cab5600345c26252e4fef82f738c3b04c9de31488",
+      "analysis_references": {},
+      "analysis_material_version": "902426454f5eabfd19315c5a091f0b1fb84dc47c0bcadda03e052380ef1b890a",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "df260c189cc8",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-03T15:47:40.946678+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -116353,13 +116971,13 @@
     "unavailable": 44
   },
   "analysis_status": {
-    "ready_core": 2,
+    "ready_core": 5,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 4
+    "pending": 1
   },
   "edition": {
     "id": "41640452607",
