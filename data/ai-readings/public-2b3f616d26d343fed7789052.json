@@ -1,24 +1,20 @@
 {
   "id": "public-2b3f616d26d343fed7789052",
-  "content_version": "feaf2f9865f075d4fc6f8408be871d61325426c0feca131b0344046223d95848",
+  "content_version": "cf32ad73b2e67812b7d75c7908861b43464af2697fa1c0e91862732f9dc77c87",
   "analysis": {
-    "title_zh": "模型能否运行于 AWS Trainium？用 torch-neuronx model support Space 查询",
-    "summary": "公告介绍 torch-neuronx model support Space，用于查询 Hub 热门模型能否不经修改运行于 AWS Trainium，并提供自行运行的脚本。默认 Selected 视图展示按下载量和趋势评分挑选的模型，结果还包含模型分片使用的 Trainium 核心数。它适合模型兼容性初筛和运行验证准备；原文未承诺所有 Transformers 模型均可运行，提供的片段也没有具体性能结果。[S1]",
-    "application": "建议：科研迁移时，可先用该 Space 筛查候选模型的 Trainium 兼容性，再结合自身任务验证；这是迁移建议，并非官方已验证的科研收益。官方明确说明该工具提供兼容性结果与运行脚本，但所给片段未列出具体通过验证的模型或加速效果。[S1]",
-    "requirements": "使用条件见官方文档",
-    "steps": [
-      {
-        "text": "打开 torch-neuronx model support Space，在默认 Selected 视图查看精选模型。[S1]",
-        "evidence": "The Space opens on the Selected view: our own selection of models picked among the top models on the Hub by downloads and by trending score."
-      }
-    ],
+    "title_zh": "模型能否在 AWS Trainium 上运行？用 torch-neuronx model support Space 查询",
+    "summary": "公告介绍 torch-neuronx model support Space，用于查询 Hub 热门模型能否不经修改在 AWS Trainium 上运行，并提供自行运行的脚本。其背景是 TorchNeuron 让 Transformers 在 Trainium 上使用自身建模代码，但这不代表所有模型均已验证可运行。Space 默认展示按下载量和趋势分数挑选的模型，每行提供运行结果及模型分片使用的 Trainium 核心数，适合模型兼容性初筛与运行验证准备。",
+    "application": "建议：科研迁移时，可将该 Space 用于智能运维、结构设计或可靠性研究中候选模型的 Trainium 兼容性初筛，再结合所提供脚本验证目标模型。官方明确介绍的是兼容性查询、运行脚本及核心数展示；所给资料未提供这些科研任务的效果验证，也不能据此认定所有 Transformers 模型均已兼容。",
+    "requirements": "原文明确：TorchNeuron 是 AWS Trainium 的原生 PyTorch 后端，对应 torch-neuronx 包。未明确版本、账号、API、费用或具体部署条件；使用条件见官方文档。",
+    "steps": [],
     "evidence": [
-      "TorchNeuron, the native PyTorch backend for AWS Trainium (the torch-neuronx package).",
+      "we introduced TorchNeuron, the native PyTorch backend for AWS Trainium (the torch-neuronx package).",
       "The torch-neuronx model support Space answers that question for the most popular models on the Hub.",
       "It tells you whether a model runs unmodified on Trainium, and gives you the script to run it yourself.",
-      "The Space opens on the Selected view: our own selection of models picked among the top models on the Hub by downloads and by trending score."
+      "The Space opens on the Selected view: our own selection of models picked among the top models on the Hub by downloads and by trending score.",
+      "Each row gives the result, the number of Trainium cores the model is sharded over"
     ],
     "basis_url": "https://huggingface.co/blog/torch-neuronx-model-support"
   },
-  "analyzed_at": "2026-10-31T12:58:46.501143+00:00"
+  "analyzed_at": "2026-11-03T06:39:51.870361+00:00"
 }
