@@ -201,7 +201,7 @@
       "reading_status": {
         "paper_id": "d54dc74f6718",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-02T07:48:55.395142+00:00",
+        "updated_at": "2026-11-03T08:05:15.211557+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -1549,7 +1549,7 @@
       "reading_status": {
         "paper_id": "b810820af1e9",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-02T07:49:17.771194+00:00",
+        "updated_at": "2026-11-03T08:05:36.338849+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -1938,7 +1938,7 @@
       "reading_status": {
         "paper_id": "22c7cd147987",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-02T07:49:34.961574+00:00",
+        "updated_at": "2026-11-03T08:13:04.941234+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -1972,7 +1972,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "本文聚焦《Dynamic knowledge graph enhanced large language model with cascade relation extraction optimized for aviation equipment fault diagnosis》，暂未提供可用摘要，请查看原文。",
+      "summary": "论文面向航空维修文本术语复杂、故障知识动态变化及大模型幻觉问题，将上下文增强BERT-CasRel、领域本体、动态知识图谱与检索增强生成结合，支持故障链追踪和诊断问答。作者报告航空三元组抽取F1为0.968、诊断准确率为97.5%[S92]。解读：值得关注其知识构建与推理协同路线，但当前依据为覆盖全文的阅读笔记及有限原文摘录，图表未核验，不能将性能报告直接等同于工程可靠性保证。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "f391efb60f93238773449d59966778ac5c9c2c99",
@@ -2013,24 +2013,100 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为智能运维知识抽取与图谱增强诊断的方法参考重点阅读，尤其关注组件消融和幻觉评价；涉及规章合规、跨域泛化及部署成本的结论须审慎核查[S107–S128]。",
+      "deep_read": {
+        "problem": "研究针对维修日志、技术手册等非结构化资料的知识利用困难：航空术语与语义歧义影响抽取，静态知识难以及时覆盖新故障，单独使用大模型又可能生成虚假部件和关系。作者希望同时改善细粒度故障链建模、根因追踪与诊断可解释性，而非仅提高实体识别指标[S2–S3，S25–S26]。",
+        "method": "框架先构建航空领域本体，再以BERT上下文编码、实体起止标注及关系条件标注抽取三元组，存入Neo4j。查询阶段结合路径与邻居扩展构造子图，经LLM精化后生成提示，由Spark 4.0 Ultra进行检索增强诊断。领域规则与图谱关系共同约束输出[S38–S39，S61–S75，S97]。",
+        "innovation": "作者强调三项组合创新：面向航空噪声文本的上下文增强抽取、LLM与KG双向协同，以及动态子图更新与符号—神经混合推理。解读：贡献重心是领域知识约束与诊断流程集成，而非提出新的基础语言模型；其相对既有融合方案的独创程度仍需核对完整基线配置[S8–S12，S92]。",
+        "findings": "作者报告航空数据抽取F1为0.968，CASREL与CASREL_Att分别为0.907、0.960；诊断准确率为97.5%。消融比较中，去除KG时FER为15.6%，完整框架为2.1%，提示事实约束具有价值。以上属于作者报告，当前未核验表格、逐折结果和统计不确定性[S92，S105–S108]。",
+        "limitations": "作者承认跨域适应尚未充分验证、频繁子图精化有开销，重叠实体及稀有关系仍难处理。资料层面未确认任何原文件缺项；[S60–S61]聚合式与维度显示存疑，影响复现核对，不能判为公式缺失。解读：FER计数口径及跨域降幅表述也需澄清[S119，S134，S142–S144]。",
+        "connection": "解读：该研究直接契合智能运维，可将维修文本、部件关系与检查流程组织为可追溯知识，辅助故障检索和根因分析。对结构设计与可靠性研究，其作用主要是整理损伤和维护证据，而不是替代力学计算、失效概率建模或寿命预测；文中尚未验证这些直接收益[S44–S48，S79，S145]。",
+        "next_steps": "作者计划开展时序推理、多模态融合、持续学习及边缘部署，这些尚非已实现成果。建议先按设备与时间隔离测试数据，独立核验图谱事实和规章适用性，再分别评估多根因故障、子图错误增删及安全关键漏诊，并测量并发条件下的尾延迟，避免仅凭平均准确率判断可部署性[S39，S138–S145]。"
+      },
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "5c83c63d41f1",
-        "state": "missing_evidence",
-        "updated_at": "2026-11-02T07:49:57.396676+00:00",
-        "basis": "missing",
+        "state": "published",
+        "updated_at": "2026-11-03T08:25:08.512189+00:00",
+        "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "restricted",
-        "total": 0,
-        "covered": 0,
+        "reason": "",
+        "total": 153,
+        "covered": 153,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "面向航空装备故障诊断的级联关系抽取优化与动态知识图谱增强大语言模型",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://api.elsevier.com/content/article/PII:S0952197626020464?httpAccept=text/xml"
+      ],
+      "analyzed_at": "2026-11-03T08:25:08.485227+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "S2",
+          "S3",
+          "S25",
+          "S26"
+        ],
+        "method": [
+          "S38",
+          "S39",
+          "S61",
+          "S62",
+          "S69",
+          "S70",
+          "S71",
+          "S75",
+          "S97"
+        ],
+        "innovation": [
+          "S8",
+          "S9",
+          "S10",
+          "S11",
+          "S12",
+          "S92"
+        ],
+        "findings": [
+          "S92",
+          "S105",
+          "S107",
+          "S108"
+        ],
+        "limitations": [
+          "S60",
+          "S61",
+          "S119",
+          "S130",
+          "S134",
+          "S142",
+          "S144"
+        ],
+        "connection": [
+          "S44",
+          "S45",
+          "S46",
+          "S47",
+          "S48",
+          "S79",
+          "S145"
+        ],
+        "next_steps": [
+          "S39",
+          "S138",
+          "S139",
+          "S142",
+          "S145"
+        ]
+      },
+      "analysis_material_version": "bd06c04fe693f8f9c66f23e6fc8dd4d6485587f248e72bca9f2567a6a8bf5589",
+      "analysis_issues": []
     }
   ],
   "extended": [],
@@ -2232,7 +2308,7 @@
       "reading_status": {
         "paper_id": "d54dc74f6718",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-02T07:48:55.395142+00:00",
+        "updated_at": "2026-11-03T08:05:15.211557+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -3580,7 +3656,7 @@
       "reading_status": {
         "paper_id": "b810820af1e9",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-02T07:49:17.771194+00:00",
+        "updated_at": "2026-11-03T08:05:36.338849+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -3969,7 +4045,7 @@
       "reading_status": {
         "paper_id": "22c7cd147987",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-02T07:49:34.961574+00:00",
+        "updated_at": "2026-11-03T08:13:04.941234+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -4003,7 +4079,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "本文聚焦《Dynamic knowledge graph enhanced large language model with cascade relation extraction optimized for aviation equipment fault diagnosis》，暂未提供可用摘要，请查看原文。",
+      "summary": "论文面向航空维修文本术语复杂、故障知识动态变化及大模型幻觉问题，将上下文增强BERT-CasRel、领域本体、动态知识图谱与检索增强生成结合，支持故障链追踪和诊断问答。作者报告航空三元组抽取F1为0.968、诊断准确率为97.5%[S92]。解读：值得关注其知识构建与推理协同路线，但当前依据为覆盖全文的阅读笔记及有限原文摘录，图表未核验，不能将性能报告直接等同于工程可靠性保证。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "f391efb60f93238773449d59966778ac5c9c2c99",
@@ -4044,24 +4120,100 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为智能运维知识抽取与图谱增强诊断的方法参考重点阅读，尤其关注组件消融和幻觉评价；涉及规章合规、跨域泛化及部署成本的结论须审慎核查[S107–S128]。",
+      "deep_read": {
+        "problem": "研究针对维修日志、技术手册等非结构化资料的知识利用困难：航空术语与语义歧义影响抽取，静态知识难以及时覆盖新故障，单独使用大模型又可能生成虚假部件和关系。作者希望同时改善细粒度故障链建模、根因追踪与诊断可解释性，而非仅提高实体识别指标[S2–S3，S25–S26]。",
+        "method": "框架先构建航空领域本体，再以BERT上下文编码、实体起止标注及关系条件标注抽取三元组，存入Neo4j。查询阶段结合路径与邻居扩展构造子图，经LLM精化后生成提示，由Spark 4.0 Ultra进行检索增强诊断。领域规则与图谱关系共同约束输出[S38–S39，S61–S75，S97]。",
+        "innovation": "作者强调三项组合创新：面向航空噪声文本的上下文增强抽取、LLM与KG双向协同，以及动态子图更新与符号—神经混合推理。解读：贡献重心是领域知识约束与诊断流程集成，而非提出新的基础语言模型；其相对既有融合方案的独创程度仍需核对完整基线配置[S8–S12，S92]。",
+        "findings": "作者报告航空数据抽取F1为0.968，CASREL与CASREL_Att分别为0.907、0.960；诊断准确率为97.5%。消融比较中，去除KG时FER为15.6%，完整框架为2.1%，提示事实约束具有价值。以上属于作者报告，当前未核验表格、逐折结果和统计不确定性[S92，S105–S108]。",
+        "limitations": "作者承认跨域适应尚未充分验证、频繁子图精化有开销，重叠实体及稀有关系仍难处理。资料层面未确认任何原文件缺项；[S60–S61]聚合式与维度显示存疑，影响复现核对，不能判为公式缺失。解读：FER计数口径及跨域降幅表述也需澄清[S119，S134，S142–S144]。",
+        "connection": "解读：该研究直接契合智能运维，可将维修文本、部件关系与检查流程组织为可追溯知识，辅助故障检索和根因分析。对结构设计与可靠性研究，其作用主要是整理损伤和维护证据，而不是替代力学计算、失效概率建模或寿命预测；文中尚未验证这些直接收益[S44–S48，S79，S145]。",
+        "next_steps": "作者计划开展时序推理、多模态融合、持续学习及边缘部署，这些尚非已实现成果。建议先按设备与时间隔离测试数据，独立核验图谱事实和规章适用性，再分别评估多根因故障、子图错误增删及安全关键漏诊，并测量并发条件下的尾延迟，避免仅凭平均准确率判断可部署性[S39，S138–S145]。"
+      },
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "5c83c63d41f1",
-        "state": "missing_evidence",
-        "updated_at": "2026-11-02T07:49:57.396676+00:00",
-        "basis": "missing",
+        "state": "published",
+        "updated_at": "2026-11-03T08:25:08.512189+00:00",
+        "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "restricted",
-        "total": 0,
-        "covered": 0,
+        "reason": "",
+        "total": 153,
+        "covered": 153,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "面向航空装备故障诊断的级联关系抽取优化与动态知识图谱增强大语言模型",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://api.elsevier.com/content/article/PII:S0952197626020464?httpAccept=text/xml"
+      ],
+      "analyzed_at": "2026-11-03T08:25:08.485227+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "S2",
+          "S3",
+          "S25",
+          "S26"
+        ],
+        "method": [
+          "S38",
+          "S39",
+          "S61",
+          "S62",
+          "S69",
+          "S70",
+          "S71",
+          "S75",
+          "S97"
+        ],
+        "innovation": [
+          "S8",
+          "S9",
+          "S10",
+          "S11",
+          "S12",
+          "S92"
+        ],
+        "findings": [
+          "S92",
+          "S105",
+          "S107",
+          "S108"
+        ],
+        "limitations": [
+          "S60",
+          "S61",
+          "S119",
+          "S130",
+          "S134",
+          "S142",
+          "S144"
+        ],
+        "connection": [
+          "S44",
+          "S45",
+          "S46",
+          "S47",
+          "S48",
+          "S79",
+          "S145"
+        ],
+        "next_steps": [
+          "S39",
+          "S138",
+          "S139",
+          "S142",
+          "S145"
+        ]
+      },
+      "analysis_material_version": "bd06c04fe693f8f9c66f23e6fc8dd4d6485587f248e72bca9f2567a6a8bf5589",
+      "analysis_issues": []
     }
   ],
   "source_status": {
@@ -4948,13 +5100,13 @@
     "unavailable": 30
   },
   "analysis_status": {
-    "ready_core": 5,
+    "ready_core": 6,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 1
+    "pending": 0
   },
   "edition": {
     "id": "39970944205",
