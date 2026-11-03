@@ -25,7 +25,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Truss bridges are key transportation infrastructures, recognized for their ability to support heavy loads across long spans. Despite being designed with built-in redundancy, they are exposed to several forms of deterioration that compromise structural integrity, often initiating local failures and progressive collapse. Progressive collapse remains a critical failure mode in such bridges, requiring advanced monitoring and damage identification methods. This study presents an optimized Machine Learning (ML) framework for early-stage localization of initial component failure. The framework involv…",
+      "summary": "桁架桥局部构件失效可能诱发渐进倒塌，本文以初始失效的早期定位为目标，构建融合有限元模型、试验验证与监督学习的框架。研究采用固有频率和节点挠度，在未见荷载条件下识别失效构件，并加入测量噪声、评估认知不确定性。摘要报告三种模型准确率约为70%，且性能主要取决于物理特征的质量与表征，而非模型架构。其价值偏向智能监测和可靠性决策，并非生成式设计；当前仅作摘要级解读。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7223211600",
@@ -71,26 +71,154 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为智能运维与不确定性评估方向的相关文献阅读，重点关注跨荷载失效定位及物理特征表征；若筛选目标严格限定为生成式设计，则不宜优先推荐。[摘要；解读]",
+      "deep_read": {
+        "problem": "研究针对桁架桥局部失效可能引发渐进倒塌的问题，将任务限定为初始构件失效的早期定位。摘要明确采用“multi-class classification”，覆盖全部构件失效类别，并要求在未见荷载条件下识别，重点不是预测倒塌全过程。[摘要]",
+        "method": "框架以缩尺桁架桥有限元模型为基础，并在受控损伤场景下进行试验验证。输入为固有频率与节点挠度，数据加入“5% Gaussian noise”；四种监督学习模型经调参与评估，同时考察常规性能指标和认知不确定性。[摘要]",
+        "innovation": "解读：其值得关注的组合是将跨荷载构件定位、物理响应特征与认知不确定性共同纳入评估，而不只是比较分类准确率。摘要使用“epistemic uncertainty”，但未交代具体估计方法，因此不足以认定其提出了新的不确定性算法。[摘要]",
+        "findings": "摘要报告Deep MLP、1D-CNN和SVM准确率均约为70%，并具有较强置信度；扩展分析显示三者在不同噪声水平、类别配置与特征集下表现稳定。误分类趋势与结构对称性相关，作者认为物理特征质量及表征比模型架构更影响预测性能。[摘要]",
+        "limitations": "当前仅有摘要，无法核对样本规模、类别分布、数据划分、第四种模型及置信度校准方式，也无法判断约70%的准确率能否满足实际报警要求。这些属于证据缺口，并非作者已确认的局限；缩尺受控试验对实桥的适用范围仍需全文核查。[摘要；解读]",
+        "connection": "解读：本文与智能运维的联系最直接，构件定位可为监测诊断提供信息，不确定性可辅助识别需要复核的预测。其对可靠性研究具有潜在参考价值，但摘要未给出失效概率计算；与结构设计的联系主要是间接启示，未展示生成式设计方法。[摘要]",
+        "next_steps": "建议：阅读全文时优先核查未见荷载的划分方式、噪声施加位置、认知不确定性的估计与验证，以及对称构件混淆的具体分布。后续可研究传感器布置能否缓解定位歧义，但这属于可迁移研究设想，不是摘要已经证明的结论。[摘要；建议]"
+      },
       "recommended_direction": "generative_design",
       "reading_status": {
         "paper_id": "4f52eeae0487",
-        "state": "retry",
-        "updated_at": "2026-11-03T01:44:33.034107+00:00",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-03T02:52:27.549675+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "restricted",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-11-03T02:44:33.034107+00:00",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "面向桁架桥关键失效定位的不确定性感知机器学习框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.engstruct.2026.123964"
+      ],
+      "analyzed_at": "2026-11-03T02:50:57.498896+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "桁架桥具有结构冗余，却仍可能因局部构件失效引发渐进倒塌。这项研究关注如何在未见过的荷载条件下定位初始失效构件，并将预测置信度纳入评价；阅读重点是物理特征、识别能力与不确定性之间的关系。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从局部失效定位切入渐进倒塌风险",
+            "paragraphs": [
+              "桁架桥能够跨越较长距离、承担较大荷载，但劣化仍可能损害结构完整性，进而触发局部失效与渐进倒塌。研究针对的是初始构件失效的早期定位，而非直接预测整个倒塌过程。其核心问题是：识别模型能否捕捉损伤相关响应，而不只是记住特定荷载下的表现？"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "以频率和挠度识别失效，同时评价认知不确定性",
+            "paragraphs": [
+              "研究采用缩尺桁架桥有限元模型，并在受控损伤情景下进行实验验证。失效定位被表述为多类别分类任务，覆盖模型中的全部构件失效，考察未见荷载条件下的识别表现。输入特征包括固有频率与节点挠度，数据集使用5%高斯噪声进行增强，以模拟实际测量不确定性。",
+              "作者对四种监督学习模型进行调参与评价，同时考察常规性能指标和认知不确定性。这样的评价不仅关注分类是否正确，也关注预测置信度；但摘要没有说明认知不确定性的具体计算方法。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "约七成准确率之外，特征表达比架构更受关注",
+            "paragraphs": [
+              "初步结果显示，Deep MLP、1D-CNN和SVM的准确率均约为70%，并表现出较强置信度。摘要将其解释为模型捕捉到了损伤敏感行为，而非荷载特有模式。扩展分析中，这些模型在改变噪声水平、类别配置和特征集时表现稳定；这一结论仍限于研究考察的条件。",
+              "误分类趋势反映了桥梁的结构对称性，预测置信度也与识别出的敏感性模式相吻合。研究据此强调，预测性能主要受到具有物理信息的特征质量及其表达方式影响，而非机器学习架构本身。这是本研究的结果，不宜直接推广为所有桥梁诊断任务的普遍规律。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "缩尺验证与工程应用之间，摘要还留下哪些空白",
+            "paragraphs": [
+              "仅凭摘要，无法判断原始样本数量、训练与测试划分、独立损伤情景数量，以及噪声增强前后的数据规模。第四种模型的名称和表现、模型间差异的统计依据、变化条件的具体范围也未交代。已有验证涉及缩尺桥和受控损伤，但向实桥、长期监测及其他桥型迁移的证据范围仍需阅读正文确认；这些信息未在摘要报告，不代表论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：把传感特征与置信度放在一起看",
+            "paragraphs": [
+              "阅读启发：面向桥梁智能运维，可优先追问哪些频率与挠度特征具有定位辨识力，以及结构对称性如何影响错误判断。进一步阅读时，值得核对传感信息与特征选择的关系、置信度能否帮助辨认易混淆构件。摘要提出了对传感器集成和不确定性感知决策的启示，但不能据此认定实际监测可靠性或计算效率已经得到工程验证。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的失效定位框架",
+            "description": "概括摘要明确陈述的模型、特征、噪声增强与评价关系，不代表论文原图或完整实验流程。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "缩尺桁架桥有限元模型",
+                "detail": "在受控损伤情景下进行实验验证。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "固有频率与节点挠度",
+                "detail": "作为构件失效定位的输入特征。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "高斯噪声数据增强",
+                "detail": "使用5%高斯噪声模拟实际测量不确定性。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "监督学习多类别分类",
+                "detail": "调参与评价四种模型，任务覆盖全部构件失效。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "性能与认知不确定性评价",
+                "detail": "考察未见荷载条件下的定位表现，并分析噪声、类别配置与特征集变化。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "框架采用的响应特征"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "特征数据增强"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "用于失效定位"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "联合评价"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-03T02:52:27.544766+00:00",
+      "article_profile": "067d0bd74c7ef4fb7cb76c19651d23bb1168d025a21a3b760d6691608449ab7e",
+      "analysis_references": {},
+      "analysis_material_version": "ab08a04200f6db3ff9867192f03ee1e693270ca1c37a663a5d00e6f177d90229",
+      "analysis_issues": []
     },
     {
       "source": "arXiv",
@@ -1219,7 +1347,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Abstract Machine learning is a leading research approach to the diagnostic stage of fault location, isolation and service restoration (FLISR), but most schemes assume dense or synchronized metering and few link diagnostic accuracy to reliability. We present an objective-driven framework in which a few low-cost, unsynchronized feeder meters support a learning pipeline for fault classification, section localization, isolation, and self-healing restoration on the IEEE 33-bus system in OpenDSS/MATLAB. The two diagnostic tasks differ markedly in their sensing requirements: classification saturates…",
+      "summary": "本文关注主动配电网如何以少量低成本、非同步电表支撑故障诊断与自愈恢复。作者在IEEE 33节点系统中，将电表配置、学习诊断、恢复供电和寿命期成本联系起来，指出分类与定位的感知需求不同，干净数据上的最高准确率也不等于最短停电时间。摘要报告七表方案的一跳范围定位准确率为97.3%。其价值在于将诊断评价推进到可靠性和经济性层面；目前仅有摘要，无法核验具体建模与实验细节。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -1257,26 +1385,43 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "推荐智能运维与可靠性研究者重点关注其从诊断性能走向恢复效果和寿命期成本的评价路径，而非仅比较分类准确率。摘要明确指出“few link diagnostic accuracy to reliability”，但推荐依据限于摘要报告，尚不能判断结果的外部适用性。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是：在计量稀疏且不同步的条件下，如何完成故障分类、区段定位、隔离与恢复，并把诊断表现连接到供电可靠性。摘要指出既有方案多假设“dense or synchronized metering”。解读：本文针对的是感知投入与运维目标之间的配置矛盾，而非单独提高分类分数。[摘要]",
+        "method": "作者在OpenDSS/MATLAB中的IEEE 33节点系统上构建学习流程，以低成本非同步电表提供输入。配置方法为按任务分别运行的“greedy wrapper”，并使用事件留出协议评价；进一步将电表费用与未供电电量计入寿命期成本。摘要未交代特征、学习器与故障样本生成细节。[摘要]",
+        "innovation": "解读：可辨识的方法贡献是把计量配置与最终运维目标相连，而不是默认不同诊断任务共享最优感知方案；同时提出数据驱动的可隔离性度量，并以“closed-form relation”连接准确率与SAIDI。仅凭摘要不能确认这些构件相较既有文献的首次性或具体数学创新。[摘要]",
+        "findings": "摘要报告分类在三至四块电表时趋于饱和，定位则持续改善至十六块；寿命期成本最小化选出七块电表，一跳范围定位准确率为97.3%，SAIDI降低82.2%，回收期九个月。需注意“within one hop”并非精确区段命中，且上述数值均是摘要报告，尚未独立核验。[摘要]",
+        "limitations": "当前资料仅为摘要，未提供故障类型覆盖、负荷与分布式电源变化范围、计量误差设置或统计不确定性，因此不足以判断鲁棒性。摘要只明确给出“IEEE 33-bus system”，其他网络与现场验证情况未知；这些是证据边界，不能直接认定作者未开展相关实验。[摘要]",
+        "connection": "解读：与智能运维的直接联系是将诊断接入隔离和恢复流程；与可靠性研究的联系是用系统平均停电持续时间指标SAIDI评价后果。摘要称最准确的学习器未必“minimizes interruption duration”。对结构设计的关联较间接，可启发按系统后果配置传感器，而非证明结构领域适用性。[摘要]",
+        "next_steps": "建议：获得全文后，优先核查“event-held-out protocol”的事件划分与选表流程是否严格分离，再追踪诊断错误如何传递至恢复决策和SAIDI。后续可研究成本参数变化下电表配置是否稳定，并检验跨网络迁移表现；这些属于研究建议，不是作者已完成或已承诺的工作。[摘要]"
+      },
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "c52629341b66",
-        "state": "retry",
-        "updated_at": "2026-11-03T01:45:11.891782+00:00",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-03T02:54:05.603329+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "retry",
+        "article_stage": "writing",
         "reason": "not_found",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-11-03T02:45:11.891782+00:00",
-        "total": 0,
-        "covered": 0,
+        "total": 1,
+        "covered": 1,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "面向主动配电网机器学习故障诊断与自愈恢复的目标驱动高效稀疏计量",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.21203/rs.3.rs-11245800/v1"
+      ],
+      "analyzed_at": "2026-11-03T02:54:05.598066+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "e7251a7f446402c1c2a80a80750cb0bf9988e2f7bb4947c01b4442bcd2dfc197",
+      "analysis_issues": []
     },
     {
       "source": "Crossref",
@@ -1298,7 +1443,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Abstract Fault interpretation in salt-influenced offshore settings is challenging due to complex deformation styles, fault segmentation, imaging limitations, and variable seismic quality. While foundation machine-learning (ML) fault-detection networks enable rapid identification of major fault systems, their generalized training can limit structural consistency and geological reliability when applied to complex regional settings. This study demonstrates the value of customized, data-driven ML training networks for enhancing fault interpretation through an offshore salt-related anticline case s…",
+      "summary": "本文针对盐构造影响下海上地震资料的断层解释难题，比较通用基础网络与本地定制网络的表现。作者以解释人员标注的断层线段训练网络，结合多种地震属性及迭代质控，改善断层连续性、小断层识别和地质一致性，并报告与井资料更加吻合。[摘要] 当前仅有摘要，未提供量化指标或独立验证细节。解读：这里的“fault”指地质断层，而非设备故障，与智能运维的联系主要是方法迁移。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -1336,26 +1481,43 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为领域定制训练与专家知识融入机器学习的案例选读，而非智能运维核心论文；其断层解释流程具有迁移启发，但摘要不足以验证提升幅度。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是盐构造影响下，通用机器学习断层检测结果难以保持局部地质一致性。摘要指出基础网络存在“limitations ... in fault continuity”，并涉及次级断层与不同地层层位的一致性不足。[摘要] 研究对象是地下地质构造，不是工程结构损伤或设备故障。",
+        "method": "作者先将多个基础断层网络应用于高质量三维地震数据，建立基线；再利用解释人员在选定主测线和联络测线剖面上生成的断层线段训练定制网络。训练解释由多种地震属性引导，并通过“Iterative training and quality-control cycles”逐步调整。[摘要]",
+        "innovation": "摘要将贡献定位于以本地地震表现和地质认识支撑定制训练，而非仅依赖通用网络。作者强调“grounded in local seismic expression and geological understanding”。[摘要] 解读：可关注专家解释与区域适配的结合，但没有网络结构或对比细节，不能认定其提出全新算法。",
+        "findings": "摘要报告定制网络提高断层连续性、改善小断层刻画，并使时间切片和垂直剖面的断层几何更加符合地质认识；同时指出结果与井资料的吻合度改善，原文为“improved agreement with well data”。[摘要] 这些是定性结果，资料未给出提升幅度或统计检验。",
+        "limitations": "当前材料仅为摘要，未交代训练标注规模、网络架构、数据划分、量化指标及井资料验证方式。[摘要] 解读：因此无法判断改进是否能跨区域推广，也不能排除解释人员标注与评价之间的关联；这些属于待核查问题，不是作者已证实的研究缺陷。",
+        "connection": "解读：与智能运维的关联在于通用模型面对本地复杂数据时，可能需要专家标注、领域特征和迭代质控；摘要中的“customized ML training”提供了方法启发。[摘要] 但本文没有设备状态监测、工程结构设计或可靠性计算证据，不能据此声称相关任务性能改善。",
+        "next_steps": "建议：后续取得全文时，优先核查标注与测试是否独立、基础网络对比是否公平、井资料如何参与验证，以及深部低反射区的评价结果。若迁移至智能运维，可另行设计本地标注与跨工况测试；这是研究建议，并非本文已完成的实验或结论。"
+      },
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "e4b1578ae75f",
-        "state": "retry",
-        "updated_at": "2026-11-03T01:46:02.574712+00:00",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-03T03:03:36.453268+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
         "reason": "not_found",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-11-03T02:46:02.574712+00:00",
-        "total": 0,
-        "covered": 0,
+        "total": 1,
+        "covered": 1,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "定制化数据驱动机器学习网络增强复杂地质构造断层解释：阿布扎比海上案例",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.2118/235431-ms"
+      ],
+      "analyzed_at": "2026-11-03T03:03:36.438865+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "dda5ba487b0626ad2df85689a9e87ee3be7dd4c3840ce1737698374a6808cfad",
+      "analysis_issues": []
     },
     {
       "source": "OpenAlex",
@@ -1593,7 +1755,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Truss bridges are key transportation infrastructures, recognized for their ability to support heavy loads across long spans. Despite being designed with built-in redundancy, they are exposed to several forms of deterioration that compromise structural integrity, often initiating local failures and progressive collapse. Progressive collapse remains a critical failure mode in such bridges, requiring advanced monitoring and damage identification methods. This study presents an optimized Machine Learning (ML) framework for early-stage localization of initial component failure. The framework involv…",
+      "summary": "桁架桥局部构件失效可能诱发渐进倒塌，本文以初始失效的早期定位为目标，构建融合有限元模型、试验验证与监督学习的框架。研究采用固有频率和节点挠度，在未见荷载条件下识别失效构件，并加入测量噪声、评估认知不确定性。摘要报告三种模型准确率约为70%，且性能主要取决于物理特征的质量与表征，而非模型架构。其价值偏向智能监测和可靠性决策，并非生成式设计；当前仅作摘要级解读。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7223211600",
@@ -1639,26 +1801,154 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为智能运维与不确定性评估方向的相关文献阅读，重点关注跨荷载失效定位及物理特征表征；若筛选目标严格限定为生成式设计，则不宜优先推荐。[摘要；解读]",
+      "deep_read": {
+        "problem": "研究针对桁架桥局部失效可能引发渐进倒塌的问题，将任务限定为初始构件失效的早期定位。摘要明确采用“multi-class classification”，覆盖全部构件失效类别，并要求在未见荷载条件下识别，重点不是预测倒塌全过程。[摘要]",
+        "method": "框架以缩尺桁架桥有限元模型为基础，并在受控损伤场景下进行试验验证。输入为固有频率与节点挠度，数据加入“5% Gaussian noise”；四种监督学习模型经调参与评估，同时考察常规性能指标和认知不确定性。[摘要]",
+        "innovation": "解读：其值得关注的组合是将跨荷载构件定位、物理响应特征与认知不确定性共同纳入评估，而不只是比较分类准确率。摘要使用“epistemic uncertainty”，但未交代具体估计方法，因此不足以认定其提出了新的不确定性算法。[摘要]",
+        "findings": "摘要报告Deep MLP、1D-CNN和SVM准确率均约为70%，并具有较强置信度；扩展分析显示三者在不同噪声水平、类别配置与特征集下表现稳定。误分类趋势与结构对称性相关，作者认为物理特征质量及表征比模型架构更影响预测性能。[摘要]",
+        "limitations": "当前仅有摘要，无法核对样本规模、类别分布、数据划分、第四种模型及置信度校准方式，也无法判断约70%的准确率能否满足实际报警要求。这些属于证据缺口，并非作者已确认的局限；缩尺受控试验对实桥的适用范围仍需全文核查。[摘要；解读]",
+        "connection": "解读：本文与智能运维的联系最直接，构件定位可为监测诊断提供信息，不确定性可辅助识别需要复核的预测。其对可靠性研究具有潜在参考价值，但摘要未给出失效概率计算；与结构设计的联系主要是间接启示，未展示生成式设计方法。[摘要]",
+        "next_steps": "建议：阅读全文时优先核查未见荷载的划分方式、噪声施加位置、认知不确定性的估计与验证，以及对称构件混淆的具体分布。后续可研究传感器布置能否缓解定位歧义，但这属于可迁移研究设想，不是摘要已经证明的结论。[摘要；建议]"
+      },
       "recommended_direction": "generative_design",
       "reading_status": {
         "paper_id": "4f52eeae0487",
-        "state": "retry",
-        "updated_at": "2026-11-03T01:44:33.034107+00:00",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-03T02:52:27.549675+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "restricted",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-11-03T02:44:33.034107+00:00",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "面向桁架桥关键失效定位的不确定性感知机器学习框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.engstruct.2026.123964"
+      ],
+      "analyzed_at": "2026-11-03T02:50:57.498896+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "桁架桥具有结构冗余，却仍可能因局部构件失效引发渐进倒塌。这项研究关注如何在未见过的荷载条件下定位初始失效构件，并将预测置信度纳入评价；阅读重点是物理特征、识别能力与不确定性之间的关系。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从局部失效定位切入渐进倒塌风险",
+            "paragraphs": [
+              "桁架桥能够跨越较长距离、承担较大荷载，但劣化仍可能损害结构完整性，进而触发局部失效与渐进倒塌。研究针对的是初始构件失效的早期定位，而非直接预测整个倒塌过程。其核心问题是：识别模型能否捕捉损伤相关响应，而不只是记住特定荷载下的表现？"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "以频率和挠度识别失效，同时评价认知不确定性",
+            "paragraphs": [
+              "研究采用缩尺桁架桥有限元模型，并在受控损伤情景下进行实验验证。失效定位被表述为多类别分类任务，覆盖模型中的全部构件失效，考察未见荷载条件下的识别表现。输入特征包括固有频率与节点挠度，数据集使用5%高斯噪声进行增强，以模拟实际测量不确定性。",
+              "作者对四种监督学习模型进行调参与评价，同时考察常规性能指标和认知不确定性。这样的评价不仅关注分类是否正确，也关注预测置信度；但摘要没有说明认知不确定性的具体计算方法。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "约七成准确率之外，特征表达比架构更受关注",
+            "paragraphs": [
+              "初步结果显示，Deep MLP、1D-CNN和SVM的准确率均约为70%，并表现出较强置信度。摘要将其解释为模型捕捉到了损伤敏感行为，而非荷载特有模式。扩展分析中，这些模型在改变噪声水平、类别配置和特征集时表现稳定；这一结论仍限于研究考察的条件。",
+              "误分类趋势反映了桥梁的结构对称性，预测置信度也与识别出的敏感性模式相吻合。研究据此强调，预测性能主要受到具有物理信息的特征质量及其表达方式影响，而非机器学习架构本身。这是本研究的结果，不宜直接推广为所有桥梁诊断任务的普遍规律。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "缩尺验证与工程应用之间，摘要还留下哪些空白",
+            "paragraphs": [
+              "仅凭摘要，无法判断原始样本数量、训练与测试划分、独立损伤情景数量，以及噪声增强前后的数据规模。第四种模型的名称和表现、模型间差异的统计依据、变化条件的具体范围也未交代。已有验证涉及缩尺桥和受控损伤，但向实桥、长期监测及其他桥型迁移的证据范围仍需阅读正文确认；这些信息未在摘要报告，不代表论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：把传感特征与置信度放在一起看",
+            "paragraphs": [
+              "阅读启发：面向桥梁智能运维，可优先追问哪些频率与挠度特征具有定位辨识力，以及结构对称性如何影响错误判断。进一步阅读时，值得核对传感信息与特征选择的关系、置信度能否帮助辨认易混淆构件。摘要提出了对传感器集成和不确定性感知决策的启示，但不能据此认定实际监测可靠性或计算效率已经得到工程验证。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的失效定位框架",
+            "description": "概括摘要明确陈述的模型、特征、噪声增强与评价关系，不代表论文原图或完整实验流程。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "缩尺桁架桥有限元模型",
+                "detail": "在受控损伤情景下进行实验验证。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "固有频率与节点挠度",
+                "detail": "作为构件失效定位的输入特征。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "高斯噪声数据增强",
+                "detail": "使用5%高斯噪声模拟实际测量不确定性。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "监督学习多类别分类",
+                "detail": "调参与评价四种模型，任务覆盖全部构件失效。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "性能与认知不确定性评价",
+                "detail": "考察未见荷载条件下的定位表现，并分析噪声、类别配置与特征集变化。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "框架采用的响应特征"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "特征数据增强"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "用于失效定位"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "联合评价"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-03T02:52:27.544766+00:00",
+      "article_profile": "067d0bd74c7ef4fb7cb76c19651d23bb1168d025a21a3b760d6691608449ab7e",
+      "analysis_references": {},
+      "analysis_material_version": "ab08a04200f6db3ff9867192f03ee1e693270ca1c37a663a5d00e6f177d90229",
+      "analysis_issues": []
     },
     {
       "source": "arXiv",
@@ -2787,7 +3077,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Abstract Machine learning is a leading research approach to the diagnostic stage of fault location, isolation and service restoration (FLISR), but most schemes assume dense or synchronized metering and few link diagnostic accuracy to reliability. We present an objective-driven framework in which a few low-cost, unsynchronized feeder meters support a learning pipeline for fault classification, section localization, isolation, and self-healing restoration on the IEEE 33-bus system in OpenDSS/MATLAB. The two diagnostic tasks differ markedly in their sensing requirements: classification saturates…",
+      "summary": "本文关注主动配电网如何以少量低成本、非同步电表支撑故障诊断与自愈恢复。作者在IEEE 33节点系统中，将电表配置、学习诊断、恢复供电和寿命期成本联系起来，指出分类与定位的感知需求不同，干净数据上的最高准确率也不等于最短停电时间。摘要报告七表方案的一跳范围定位准确率为97.3%。其价值在于将诊断评价推进到可靠性和经济性层面；目前仅有摘要，无法核验具体建模与实验细节。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -2825,26 +3115,43 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "推荐智能运维与可靠性研究者重点关注其从诊断性能走向恢复效果和寿命期成本的评价路径，而非仅比较分类准确率。摘要明确指出“few link diagnostic accuracy to reliability”，但推荐依据限于摘要报告，尚不能判断结果的外部适用性。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是：在计量稀疏且不同步的条件下，如何完成故障分类、区段定位、隔离与恢复，并把诊断表现连接到供电可靠性。摘要指出既有方案多假设“dense or synchronized metering”。解读：本文针对的是感知投入与运维目标之间的配置矛盾，而非单独提高分类分数。[摘要]",
+        "method": "作者在OpenDSS/MATLAB中的IEEE 33节点系统上构建学习流程，以低成本非同步电表提供输入。配置方法为按任务分别运行的“greedy wrapper”，并使用事件留出协议评价；进一步将电表费用与未供电电量计入寿命期成本。摘要未交代特征、学习器与故障样本生成细节。[摘要]",
+        "innovation": "解读：可辨识的方法贡献是把计量配置与最终运维目标相连，而不是默认不同诊断任务共享最优感知方案；同时提出数据驱动的可隔离性度量，并以“closed-form relation”连接准确率与SAIDI。仅凭摘要不能确认这些构件相较既有文献的首次性或具体数学创新。[摘要]",
+        "findings": "摘要报告分类在三至四块电表时趋于饱和，定位则持续改善至十六块；寿命期成本最小化选出七块电表，一跳范围定位准确率为97.3%，SAIDI降低82.2%，回收期九个月。需注意“within one hop”并非精确区段命中，且上述数值均是摘要报告，尚未独立核验。[摘要]",
+        "limitations": "当前资料仅为摘要，未提供故障类型覆盖、负荷与分布式电源变化范围、计量误差设置或统计不确定性，因此不足以判断鲁棒性。摘要只明确给出“IEEE 33-bus system”，其他网络与现场验证情况未知；这些是证据边界，不能直接认定作者未开展相关实验。[摘要]",
+        "connection": "解读：与智能运维的直接联系是将诊断接入隔离和恢复流程；与可靠性研究的联系是用系统平均停电持续时间指标SAIDI评价后果。摘要称最准确的学习器未必“minimizes interruption duration”。对结构设计的关联较间接，可启发按系统后果配置传感器，而非证明结构领域适用性。[摘要]",
+        "next_steps": "建议：获得全文后，优先核查“event-held-out protocol”的事件划分与选表流程是否严格分离，再追踪诊断错误如何传递至恢复决策和SAIDI。后续可研究成本参数变化下电表配置是否稳定，并检验跨网络迁移表现；这些属于研究建议，不是作者已完成或已承诺的工作。[摘要]"
+      },
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "c52629341b66",
-        "state": "retry",
-        "updated_at": "2026-11-03T01:45:11.891782+00:00",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-03T02:54:05.603329+00:00",
         "basis": "abstract",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "retry",
+        "article_stage": "writing",
         "reason": "not_found",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-11-03T02:45:11.891782+00:00",
-        "total": 0,
-        "covered": 0,
+        "total": 1,
+        "covered": 1,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "面向主动配电网机器学习故障诊断与自愈恢复的目标驱动高效稀疏计量",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.21203/rs.3.rs-11245800/v1"
+      ],
+      "analyzed_at": "2026-11-03T02:54:05.598066+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "e7251a7f446402c1c2a80a80750cb0bf9988e2f7bb4947c01b4442bcd2dfc197",
+      "analysis_issues": []
     },
     {
       "source": "Crossref",
@@ -2866,7 +3173,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Abstract Fault interpretation in salt-influenced offshore settings is challenging due to complex deformation styles, fault segmentation, imaging limitations, and variable seismic quality. While foundation machine-learning (ML) fault-detection networks enable rapid identification of major fault systems, their generalized training can limit structural consistency and geological reliability when applied to complex regional settings. This study demonstrates the value of customized, data-driven ML training networks for enhancing fault interpretation through an offshore salt-related anticline case s…",
+      "summary": "本文针对盐构造影响下海上地震资料的断层解释难题，比较通用基础网络与本地定制网络的表现。作者以解释人员标注的断层线段训练网络，结合多种地震属性及迭代质控，改善断层连续性、小断层识别和地质一致性，并报告与井资料更加吻合。[摘要] 当前仅有摘要，未提供量化指标或独立验证细节。解读：这里的“fault”指地质断层，而非设备故障，与智能运维的联系主要是方法迁移。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -2904,26 +3211,43 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为领域定制训练与专家知识融入机器学习的案例选读，而非智能运维核心论文；其断层解释流程具有迁移启发，但摘要不足以验证提升幅度。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是盐构造影响下，通用机器学习断层检测结果难以保持局部地质一致性。摘要指出基础网络存在“limitations ... in fault continuity”，并涉及次级断层与不同地层层位的一致性不足。[摘要] 研究对象是地下地质构造，不是工程结构损伤或设备故障。",
+        "method": "作者先将多个基础断层网络应用于高质量三维地震数据，建立基线；再利用解释人员在选定主测线和联络测线剖面上生成的断层线段训练定制网络。训练解释由多种地震属性引导，并通过“Iterative training and quality-control cycles”逐步调整。[摘要]",
+        "innovation": "摘要将贡献定位于以本地地震表现和地质认识支撑定制训练，而非仅依赖通用网络。作者强调“grounded in local seismic expression and geological understanding”。[摘要] 解读：可关注专家解释与区域适配的结合，但没有网络结构或对比细节，不能认定其提出全新算法。",
+        "findings": "摘要报告定制网络提高断层连续性、改善小断层刻画，并使时间切片和垂直剖面的断层几何更加符合地质认识；同时指出结果与井资料的吻合度改善，原文为“improved agreement with well data”。[摘要] 这些是定性结果，资料未给出提升幅度或统计检验。",
+        "limitations": "当前材料仅为摘要，未交代训练标注规模、网络架构、数据划分、量化指标及井资料验证方式。[摘要] 解读：因此无法判断改进是否能跨区域推广，也不能排除解释人员标注与评价之间的关联；这些属于待核查问题，不是作者已证实的研究缺陷。",
+        "connection": "解读：与智能运维的关联在于通用模型面对本地复杂数据时，可能需要专家标注、领域特征和迭代质控；摘要中的“customized ML training”提供了方法启发。[摘要] 但本文没有设备状态监测、工程结构设计或可靠性计算证据，不能据此声称相关任务性能改善。",
+        "next_steps": "建议：后续取得全文时，优先核查标注与测试是否独立、基础网络对比是否公平、井资料如何参与验证，以及深部低反射区的评价结果。若迁移至智能运维，可另行设计本地标注与跨工况测试；这是研究建议，并非本文已完成的实验或结论。"
+      },
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "e4b1578ae75f",
-        "state": "retry",
-        "updated_at": "2026-11-03T01:46:02.574712+00:00",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-03T03:03:36.453268+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
         "reason": "not_found",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-11-03T02:46:02.574712+00:00",
-        "total": 0,
-        "covered": 0,
+        "total": 1,
+        "covered": 1,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "定制化数据驱动机器学习网络增强复杂地质构造断层解释：阿布扎比海上案例",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.2118/235431-ms"
+      ],
+      "analyzed_at": "2026-11-03T03:03:36.438865+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "dda5ba487b0626ad2df85689a9e87ee3be7dd4c3840ce1737698374a6808cfad",
+      "analysis_issues": []
     },
     {
       "source": "OpenAlex",
@@ -4062,13 +4386,13 @@
     "unavailable": 44
   },
   "analysis_status": {
-    "ready_core": 2,
+    "ready_core": 5,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 4
+    "pending": 1
   },
   "edition": {
     "id": "41449238826",
