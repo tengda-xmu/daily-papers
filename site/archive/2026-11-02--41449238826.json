@@ -79,13 +79,13 @@
       "reading_status": {
         "paper_id": "4f52eeae0487",
         "state": "retry",
-        "updated_at": "2026-11-03T01:12:52.999709+00:00",
+        "updated_at": "2026-11-03T01:44:33.034107+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
         "reason": "restricted",
         "error_code": "codex_connection",
-        "next_retry_at": "2026-11-03T01:42:52.999709+00:00",
+        "next_retry_at": "2026-11-03T02:44:33.034107+00:00",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -1265,13 +1265,13 @@
       "reading_status": {
         "paper_id": "c52629341b66",
         "state": "retry",
-        "updated_at": "2026-11-03T01:13:41.297539+00:00",
+        "updated_at": "2026-11-03T01:45:11.891782+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
         "reason": "not_found",
         "error_code": "codex_connection",
-        "next_retry_at": "2026-11-03T01:43:41.297539+00:00",
+        "next_retry_at": "2026-11-03T02:45:11.891782+00:00",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -1344,13 +1344,13 @@
       "reading_status": {
         "paper_id": "e4b1578ae75f",
         "state": "retry",
-        "updated_at": "2026-11-03T01:14:20.833899+00:00",
+        "updated_at": "2026-11-03T01:46:02.574712+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
         "reason": "not_found",
         "error_code": "codex_connection",
-        "next_retry_at": "2026-11-03T01:44:20.833899+00:00",
+        "next_retry_at": "2026-11-03T02:46:02.574712+00:00",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -1375,7 +1375,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Unexpected machine failures can interrupt production, increase repair expenses, and create safety risks. Predictive machine maintenance usessensor data, Artificial Intelligence (AI), and Machine Learning (ML) to estimate when equipment may develop a fault. Instead of servicing every machine atfixed intervals or waiting for a breakdown, the system continuously monitors parameters such as vibration, temperature, pressure, current, and operating hours.Data is cleaned and analysed, and a trained ML model identifies abnormal behaviour or predicts the remaining useful life of a component. The system…",
+      "summary": "本文围绕设备突发故障引发的生产中断、维修支出和安全风险，介绍利用传感器数据与机器学习开展预测性维护的基本流程。系统持续采集振动、温度等参数，经清洗分析后识别异常或预测部件剩余寿命，并通过预警辅助维护安排。[摘要] 当前材料主要提供概念与框架介绍，未展示具体算法、数据集或量化验证，且摘要末句截断，因此适合作为入门线索，尚不足以判断实际效果。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7225065191",
@@ -1419,26 +1419,155 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为智能运维入门材料条件性阅读，重点关注监测、预测与维护安排的衔接；当前摘要缺少具体模型及验证结果，不建议据此列为方法创新类重点论文。[摘要；解读]",
+      "deep_read": {
+        "problem": "研究针对突发设备故障带来的生产中断、维修费用增加和安全风险，尝试以状态监测支持故障前维护，区别于固定周期保养或故障后维修。摘要以“Unexpected machine failures”提出问题，但未说明特定设备、行业场景及故障类型，问题边界仍较宽泛。[摘要]",
+        "method": "方法流程是持续监测振动、温度、压力、电流和运行时长，清洗分析数据，再由训练后的机器学习模型识别异常或预测部件剩余寿命，随后生成预警。原文使用“predicts the remaining useful life”，但没有给出模型结构、训练配置或预警阈值。[摘要]",
+        "innovation": "摘要称论文提供“a practical implementation framework”，同时讨论主要技术、模型设计与应用。解读：这些内容说明其具有流程整合取向，却不能单独证明方法创新；现有资料没有说明新算法、新机制或相对既有研究的区别，因此不宜把常规预测维护流程列为原创贡献。[摘要]",
+        "findings": "摘要提出预测性维护能够改善设备可用性与维护规划，表述为“can improve equipment availability”。这属于潜在收益陈述，而不是已展示的实验结果。当前资料未提供测试样本、对比基线、误差指标或实际维护记录，无法确认收益幅度及其适用条件。[摘要]",
+        "limitations": "作者明确涉及数据质量、模型评价、网络安全与人工核验，并提到效果依赖代表性数据；但末句在“suitable”处截断，后续条件不可补写。资料层面的限制是仅有摘要，不能判断上述问题是否得到解决，也不能把未展示实验直接认定为论文全文没有实验。[摘要]",
+        "connection": "解读：该流程直接对应智能运维中的状态感知、异常识别、寿命预测和维护决策衔接，也与可靠性研究中的失效前干预有关。摘要中的“maintenance is planned before failure occurs”支持这一联系；但资料没有涉及结构参数优化，不能据此声称其提出了结构设计方法。[摘要]",
+        "next_steps": "建议：若后续获得全文，优先核对实施框架是否包含明确的数据来源、故障标签、训练测试划分、模型评价和人工复核流程，再判断可复现性。若迁移至自身研究，可考虑联合评价预警准确性与维护决策收益；这些是后续研究建议，并非摘要已经报告的成果。[摘要；建议]"
+      },
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "ee80a4f3d959",
-        "state": "retry",
-        "updated_at": "2026-11-03T01:25:14.733854+00:00",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-03T01:57:58.090381+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-11-03T01:55:14.733854+00:00",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "基于人工智能与机器学习的设备预测性维护",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.5281/zenodo.23857460"
+      ],
+      "analyzed_at": "2026-11-03T01:56:41.734102+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "机器突发故障会打断生产、增加维修支出并带来安全风险。这篇摘要介绍如何将传感器数据与人工智能、机器学习结合，把维护决策从固定周期或故障后维修，转向依据设备状态提前安排。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "维护时机：不只看日历，也要看设备状态",
+            "paragraphs": [
+              "固定间隔保养与等待故障发生，是摘要用来对照预测性维护的两种方式。预测性维护关注的问题是：能否通过持续观察设备运行状态，估计故障可能何时出现，从而为维护安排提供提前量？这里的价值目标是改善设备可用性与维护计划，而不是单纯给出一个预测结果。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从连续监测到预警，串起维护决策",
+            "paragraphs": [
+              "摘要给出的流程始于传感器监测，涉及振动、温度、压力、电流和运行时长等参数。数据经过清洗与分析后，由训练好的机器学习模型识别异常行为，或预测部件的剩余使用寿命。系统随后可以生成预警，帮助在故障发生前安排维护。",
+              "需要区分的是，异常识别与剩余寿命预测是摘要列出的两类模型任务，并未说明二者必须同时执行。摘要也没有交代具体算法、训练配置或预警阈值，因此这里能够概括的是工作流程，而非可直接复现的模型方案。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要提供的是框架介绍，而非量化效果证明",
+            "paragraphs": [
+              "摘要说明，文章涵盖预测性维护的概念、工作过程、主要技术、模型设计、应用、收益、局限及实用实施框架，并讨论数据质量、模型评估、网络安全与人工核验。就当前资料而言，这些是文章明确介绍的内容，不能等同于已经完成并验证的工业部署。",
+              "关于效果，摘要提出预测性维护可以改善设备可用性和维护计划，同时强调结果依赖具有代表性的数据。这属于带条件的价值表述；摘要未提供可用于判断改善幅度的实验结果，也未报告预测精度、停机时间或维修费用的量化变化。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "样本、比较与验证范围仍无法判断",
+            "paragraphs": [
+              "仅凭本次摘要，无法判断使用了哪些设备和数据集、样本规模如何、故障类型覆盖多广，也无法确认是否设置基线比较，以及验证是否涉及不同设备或工况。这些信息未在摘要中报告，不意味着论文没有开展相关工作。",
+              "此外，所提供摘要的末句在“suitable”处中断，结果依赖条件的后续表述缺失，不能自行补全。因此，本解读仅覆盖当前可见摘要，不据此宣称已阅读全文或确认系统的实际部署效果。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：重点追问预警如何支撑维护",
+            "paragraphs": [
+              "阅读启发：后续阅读可围绕摘要已经提出的环节展开——代表性数据如何界定，异常识别与剩余寿命预测分别如何评估，预警又如何经过人工核验转化为维护安排？同时值得关注网络安全如何纳入实施框架。这些是理解方案适用边界的阅读问题，而不是当前资料已经回答的结论。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的预测性维护流程",
+            "description": "仅概括摘要明确陈述的数据处理、模型任务和预警关系，不代表论文原图或已验证的部署方案。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "连续监测设备参数",
+                "detail": "采集振动、温度、压力、电流及运行时长等数据。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "清洗与分析数据",
+                "detail": "对监测数据进行清洗和分析。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "机器学习模型判断",
+                "detail": "由训练好的模型识别异常行为，或预测部件剩余使用寿命。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "生成维护预警",
+                "detail": "系统可根据模型判断生成预警。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "提前安排维护",
+                "detail": "利用预警在故障发生前规划维护。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "监测数据进入处理"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "处理后用于模型判断"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "可触发预警"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "支持维护安排"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-03T01:57:58.088378+00:00",
+      "article_profile": "8005fd72bc4b2801fc7a38983ccac5b43167f7d2996940dbad554891f74bb46c",
+      "analysis_references": {},
+      "analysis_material_version": "3006611f103af441a239b605d5c5d44922b8c650e78ac977daf79c9d74d37a7a",
+      "analysis_issues": []
     }
   ],
   "extended": [],
@@ -1518,13 +1647,13 @@
       "reading_status": {
         "paper_id": "4f52eeae0487",
         "state": "retry",
-        "updated_at": "2026-11-03T01:12:52.999709+00:00",
+        "updated_at": "2026-11-03T01:44:33.034107+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
         "reason": "restricted",
         "error_code": "codex_connection",
-        "next_retry_at": "2026-11-03T01:42:52.999709+00:00",
+        "next_retry_at": "2026-11-03T02:44:33.034107+00:00",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -2704,13 +2833,13 @@
       "reading_status": {
         "paper_id": "c52629341b66",
         "state": "retry",
-        "updated_at": "2026-11-03T01:13:41.297539+00:00",
+        "updated_at": "2026-11-03T01:45:11.891782+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
         "reason": "not_found",
         "error_code": "codex_connection",
-        "next_retry_at": "2026-11-03T01:43:41.297539+00:00",
+        "next_retry_at": "2026-11-03T02:45:11.891782+00:00",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -2783,13 +2912,13 @@
       "reading_status": {
         "paper_id": "e4b1578ae75f",
         "state": "retry",
-        "updated_at": "2026-11-03T01:14:20.833899+00:00",
+        "updated_at": "2026-11-03T01:46:02.574712+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
         "reason": "not_found",
         "error_code": "codex_connection",
-        "next_retry_at": "2026-11-03T01:44:20.833899+00:00",
+        "next_retry_at": "2026-11-03T02:46:02.574712+00:00",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -2814,7 +2943,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Unexpected machine failures can interrupt production, increase repair expenses, and create safety risks. Predictive machine maintenance usessensor data, Artificial Intelligence (AI), and Machine Learning (ML) to estimate when equipment may develop a fault. Instead of servicing every machine atfixed intervals or waiting for a breakdown, the system continuously monitors parameters such as vibration, temperature, pressure, current, and operating hours.Data is cleaned and analysed, and a trained ML model identifies abnormal behaviour or predicts the remaining useful life of a component. The system…",
+      "summary": "本文围绕设备突发故障引发的生产中断、维修支出和安全风险，介绍利用传感器数据与机器学习开展预测性维护的基本流程。系统持续采集振动、温度等参数，经清洗分析后识别异常或预测部件剩余寿命，并通过预警辅助维护安排。[摘要] 当前材料主要提供概念与框架介绍，未展示具体算法、数据集或量化验证，且摘要末句截断，因此适合作为入门线索，尚不足以判断实际效果。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7225065191",
@@ -2858,26 +2987,155 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为智能运维入门材料条件性阅读，重点关注监测、预测与维护安排的衔接；当前摘要缺少具体模型及验证结果，不建议据此列为方法创新类重点论文。[摘要；解读]",
+      "deep_read": {
+        "problem": "研究针对突发设备故障带来的生产中断、维修费用增加和安全风险，尝试以状态监测支持故障前维护，区别于固定周期保养或故障后维修。摘要以“Unexpected machine failures”提出问题，但未说明特定设备、行业场景及故障类型，问题边界仍较宽泛。[摘要]",
+        "method": "方法流程是持续监测振动、温度、压力、电流和运行时长，清洗分析数据，再由训练后的机器学习模型识别异常或预测部件剩余寿命，随后生成预警。原文使用“predicts the remaining useful life”，但没有给出模型结构、训练配置或预警阈值。[摘要]",
+        "innovation": "摘要称论文提供“a practical implementation framework”，同时讨论主要技术、模型设计与应用。解读：这些内容说明其具有流程整合取向，却不能单独证明方法创新；现有资料没有说明新算法、新机制或相对既有研究的区别，因此不宜把常规预测维护流程列为原创贡献。[摘要]",
+        "findings": "摘要提出预测性维护能够改善设备可用性与维护规划，表述为“can improve equipment availability”。这属于潜在收益陈述，而不是已展示的实验结果。当前资料未提供测试样本、对比基线、误差指标或实际维护记录，无法确认收益幅度及其适用条件。[摘要]",
+        "limitations": "作者明确涉及数据质量、模型评价、网络安全与人工核验，并提到效果依赖代表性数据；但末句在“suitable”处截断，后续条件不可补写。资料层面的限制是仅有摘要，不能判断上述问题是否得到解决，也不能把未展示实验直接认定为论文全文没有实验。[摘要]",
+        "connection": "解读：该流程直接对应智能运维中的状态感知、异常识别、寿命预测和维护决策衔接，也与可靠性研究中的失效前干预有关。摘要中的“maintenance is planned before failure occurs”支持这一联系；但资料没有涉及结构参数优化，不能据此声称其提出了结构设计方法。[摘要]",
+        "next_steps": "建议：若后续获得全文，优先核对实施框架是否包含明确的数据来源、故障标签、训练测试划分、模型评价和人工复核流程，再判断可复现性。若迁移至自身研究，可考虑联合评价预警准确性与维护决策收益；这些是后续研究建议，并非摘要已经报告的成果。[摘要；建议]"
+      },
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "ee80a4f3d959",
-        "state": "retry",
-        "updated_at": "2026-11-03T01:25:14.733854+00:00",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-03T01:57:58.090381+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-11-03T01:55:14.733854+00:00",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "基于人工智能与机器学习的设备预测性维护",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.5281/zenodo.23857460"
+      ],
+      "analyzed_at": "2026-11-03T01:56:41.734102+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "机器突发故障会打断生产、增加维修支出并带来安全风险。这篇摘要介绍如何将传感器数据与人工智能、机器学习结合，把维护决策从固定周期或故障后维修，转向依据设备状态提前安排。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "维护时机：不只看日历，也要看设备状态",
+            "paragraphs": [
+              "固定间隔保养与等待故障发生，是摘要用来对照预测性维护的两种方式。预测性维护关注的问题是：能否通过持续观察设备运行状态，估计故障可能何时出现，从而为维护安排提供提前量？这里的价值目标是改善设备可用性与维护计划，而不是单纯给出一个预测结果。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从连续监测到预警，串起维护决策",
+            "paragraphs": [
+              "摘要给出的流程始于传感器监测，涉及振动、温度、压力、电流和运行时长等参数。数据经过清洗与分析后，由训练好的机器学习模型识别异常行为，或预测部件的剩余使用寿命。系统随后可以生成预警，帮助在故障发生前安排维护。",
+              "需要区分的是，异常识别与剩余寿命预测是摘要列出的两类模型任务，并未说明二者必须同时执行。摘要也没有交代具体算法、训练配置或预警阈值，因此这里能够概括的是工作流程，而非可直接复现的模型方案。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要提供的是框架介绍，而非量化效果证明",
+            "paragraphs": [
+              "摘要说明，文章涵盖预测性维护的概念、工作过程、主要技术、模型设计、应用、收益、局限及实用实施框架，并讨论数据质量、模型评估、网络安全与人工核验。就当前资料而言，这些是文章明确介绍的内容，不能等同于已经完成并验证的工业部署。",
+              "关于效果，摘要提出预测性维护可以改善设备可用性和维护计划，同时强调结果依赖具有代表性的数据。这属于带条件的价值表述；摘要未提供可用于判断改善幅度的实验结果，也未报告预测精度、停机时间或维修费用的量化变化。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "样本、比较与验证范围仍无法判断",
+            "paragraphs": [
+              "仅凭本次摘要，无法判断使用了哪些设备和数据集、样本规模如何、故障类型覆盖多广，也无法确认是否设置基线比较，以及验证是否涉及不同设备或工况。这些信息未在摘要中报告，不意味着论文没有开展相关工作。",
+              "此外，所提供摘要的末句在“suitable”处中断，结果依赖条件的后续表述缺失，不能自行补全。因此，本解读仅覆盖当前可见摘要，不据此宣称已阅读全文或确认系统的实际部署效果。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：重点追问预警如何支撑维护",
+            "paragraphs": [
+              "阅读启发：后续阅读可围绕摘要已经提出的环节展开——代表性数据如何界定，异常识别与剩余寿命预测分别如何评估，预警又如何经过人工核验转化为维护安排？同时值得关注网络安全如何纳入实施框架。这些是理解方案适用边界的阅读问题，而不是当前资料已经回答的结论。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的预测性维护流程",
+            "description": "仅概括摘要明确陈述的数据处理、模型任务和预警关系，不代表论文原图或已验证的部署方案。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "连续监测设备参数",
+                "detail": "采集振动、温度、压力、电流及运行时长等数据。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "清洗与分析数据",
+                "detail": "对监测数据进行清洗和分析。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "机器学习模型判断",
+                "detail": "由训练好的模型识别异常行为，或预测部件剩余使用寿命。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "生成维护预警",
+                "detail": "系统可根据模型判断生成预警。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "提前安排维护",
+                "detail": "利用预警在故障发生前规划维护。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "监测数据进入处理"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "处理后用于模型判断"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "可触发预警"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "支持维护安排"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-03T01:57:58.088378+00:00",
+      "article_profile": "8005fd72bc4b2801fc7a38983ccac5b43167f7d2996940dbad554891f74bb46c",
+      "analysis_references": {},
+      "analysis_material_version": "3006611f103af441a239b605d5c5d44922b8c650e78ac977daf79c9d74d37a7a",
+      "analysis_issues": []
     }
   ],
   "source_status": {
@@ -3804,13 +4062,13 @@
     "unavailable": 44
   },
   "analysis_status": {
-    "ready_core": 1,
+    "ready_core": 2,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 5
+    "pending": 4
   },
   "edition": {
     "id": "41449238826",
