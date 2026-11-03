@@ -25,7 +25,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Truss bridges are key transportation infrastructures, recognized for their ability to support heavy loads across long spans. Despite being designed with built-in redundancy, they are exposed to several forms of deterioration that compromise structural integrity, often initiating local failures and progressive collapse. Progressive collapse remains a critical failure mode in such bridges, requiring advanced monitoring and damage identification methods. This study presents an optimized Machine Learning (ML) framework for early-stage localization of initial component failure. The framework involv…",
+      "summary": "桁架桥局部构件失效可能诱发渐进倒塌，本文以初始失效的早期定位为目标，构建融合有限元模型、试验验证与监督学习的框架。研究采用固有频率和节点挠度，在未见荷载条件下识别失效构件，并加入测量噪声、评估认知不确定性。摘要报告三种模型准确率约为70%，且性能主要取决于物理特征的质量与表征，而非模型架构。其价值偏向智能监测和可靠性决策，并非生成式设计；当前仅作摘要级解读。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7223211600",
@@ -71,26 +71,154 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为智能运维与不确定性评估方向的相关文献阅读，重点关注跨荷载失效定位及物理特征表征；若筛选目标严格限定为生成式设计，则不宜优先推荐。[摘要；解读]",
+      "deep_read": {
+        "problem": "研究针对桁架桥局部失效可能引发渐进倒塌的问题，将任务限定为初始构件失效的早期定位。摘要明确采用“multi-class classification”，覆盖全部构件失效类别，并要求在未见荷载条件下识别，重点不是预测倒塌全过程。[摘要]",
+        "method": "框架以缩尺桁架桥有限元模型为基础，并在受控损伤场景下进行试验验证。输入为固有频率与节点挠度，数据加入“5% Gaussian noise”；四种监督学习模型经调参与评估，同时考察常规性能指标和认知不确定性。[摘要]",
+        "innovation": "解读：其值得关注的组合是将跨荷载构件定位、物理响应特征与认知不确定性共同纳入评估，而不只是比较分类准确率。摘要使用“epistemic uncertainty”，但未交代具体估计方法，因此不足以认定其提出了新的不确定性算法。[摘要]",
+        "findings": "摘要报告Deep MLP、1D-CNN和SVM准确率均约为70%，并具有较强置信度；扩展分析显示三者在不同噪声水平、类别配置与特征集下表现稳定。误分类趋势与结构对称性相关，作者认为物理特征质量及表征比模型架构更影响预测性能。[摘要]",
+        "limitations": "当前仅有摘要，无法核对样本规模、类别分布、数据划分、第四种模型及置信度校准方式，也无法判断约70%的准确率能否满足实际报警要求。这些属于证据缺口，并非作者已确认的局限；缩尺受控试验对实桥的适用范围仍需全文核查。[摘要；解读]",
+        "connection": "解读：本文与智能运维的联系最直接，构件定位可为监测诊断提供信息，不确定性可辅助识别需要复核的预测。其对可靠性研究具有潜在参考价值，但摘要未给出失效概率计算；与结构设计的联系主要是间接启示，未展示生成式设计方法。[摘要]",
+        "next_steps": "建议：阅读全文时优先核查未见荷载的划分方式、噪声施加位置、认知不确定性的估计与验证，以及对称构件混淆的具体分布。后续可研究传感器布置能否缓解定位歧义，但这属于可迁移研究设想，不是摘要已经证明的结论。[摘要；建议]"
+      },
       "recommended_direction": "generative_design",
       "reading_status": {
         "paper_id": "4f52eeae0487",
-        "state": "retry",
-        "updated_at": "2026-11-03T01:44:33.034107+00:00",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-03T02:52:27.549675+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "restricted",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-11-03T02:44:33.034107+00:00",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "面向桁架桥关键失效定位的不确定性感知机器学习框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.engstruct.2026.123964"
+      ],
+      "analyzed_at": "2026-11-03T02:50:57.498896+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "桁架桥具有结构冗余，却仍可能因局部构件失效引发渐进倒塌。这项研究关注如何在未见过的荷载条件下定位初始失效构件，并将预测置信度纳入评价；阅读重点是物理特征、识别能力与不确定性之间的关系。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从局部失效定位切入渐进倒塌风险",
+            "paragraphs": [
+              "桁架桥能够跨越较长距离、承担较大荷载，但劣化仍可能损害结构完整性，进而触发局部失效与渐进倒塌。研究针对的是初始构件失效的早期定位，而非直接预测整个倒塌过程。其核心问题是：识别模型能否捕捉损伤相关响应，而不只是记住特定荷载下的表现？"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "以频率和挠度识别失效，同时评价认知不确定性",
+            "paragraphs": [
+              "研究采用缩尺桁架桥有限元模型，并在受控损伤情景下进行实验验证。失效定位被表述为多类别分类任务，覆盖模型中的全部构件失效，考察未见荷载条件下的识别表现。输入特征包括固有频率与节点挠度，数据集使用5%高斯噪声进行增强，以模拟实际测量不确定性。",
+              "作者对四种监督学习模型进行调参与评价，同时考察常规性能指标和认知不确定性。这样的评价不仅关注分类是否正确，也关注预测置信度；但摘要没有说明认知不确定性的具体计算方法。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "约七成准确率之外，特征表达比架构更受关注",
+            "paragraphs": [
+              "初步结果显示，Deep MLP、1D-CNN和SVM的准确率均约为70%，并表现出较强置信度。摘要将其解释为模型捕捉到了损伤敏感行为，而非荷载特有模式。扩展分析中，这些模型在改变噪声水平、类别配置和特征集时表现稳定；这一结论仍限于研究考察的条件。",
+              "误分类趋势反映了桥梁的结构对称性，预测置信度也与识别出的敏感性模式相吻合。研究据此强调，预测性能主要受到具有物理信息的特征质量及其表达方式影响，而非机器学习架构本身。这是本研究的结果，不宜直接推广为所有桥梁诊断任务的普遍规律。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "缩尺验证与工程应用之间，摘要还留下哪些空白",
+            "paragraphs": [
+              "仅凭摘要，无法判断原始样本数量、训练与测试划分、独立损伤情景数量，以及噪声增强前后的数据规模。第四种模型的名称和表现、模型间差异的统计依据、变化条件的具体范围也未交代。已有验证涉及缩尺桥和受控损伤，但向实桥、长期监测及其他桥型迁移的证据范围仍需阅读正文确认；这些信息未在摘要报告，不代表论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：把传感特征与置信度放在一起看",
+            "paragraphs": [
+              "阅读启发：面向桥梁智能运维，可优先追问哪些频率与挠度特征具有定位辨识力，以及结构对称性如何影响错误判断。进一步阅读时，值得核对传感信息与特征选择的关系、置信度能否帮助辨认易混淆构件。摘要提出了对传感器集成和不确定性感知决策的启示，但不能据此认定实际监测可靠性或计算效率已经得到工程验证。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的失效定位框架",
+            "description": "概括摘要明确陈述的模型、特征、噪声增强与评价关系，不代表论文原图或完整实验流程。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "缩尺桁架桥有限元模型",
+                "detail": "在受控损伤情景下进行实验验证。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "固有频率与节点挠度",
+                "detail": "作为构件失效定位的输入特征。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "高斯噪声数据增强",
+                "detail": "使用5%高斯噪声模拟实际测量不确定性。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "监督学习多类别分类",
+                "detail": "调参与评价四种模型，任务覆盖全部构件失效。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "性能与认知不确定性评价",
+                "detail": "考察未见荷载条件下的定位表现，并分析噪声、类别配置与特征集变化。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "框架采用的响应特征"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "特征数据增强"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "用于失效定位"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "联合评价"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-03T02:52:27.544766+00:00",
+      "article_profile": "067d0bd74c7ef4fb7cb76c19651d23bb1168d025a21a3b760d6691608449ab7e",
+      "analysis_references": {},
+      "analysis_material_version": "ab08a04200f6db3ff9867192f03ee1e693270ca1c37a663a5d00e6f177d90229",
+      "analysis_issues": []
     },
     {
       "source": "arXiv",
@@ -1219,7 +1347,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Abstract Machine learning is a leading research approach to the diagnostic stage of fault location, isolation and service restoration (FLISR), but most schemes assume dense or synchronized metering and few link diagnostic accuracy to reliability. We present an objective-driven framework in which a few low-cost, unsynchronized feeder meters support a learning pipeline for fault classification, section localization, isolation, and self-healing restoration on the IEEE 33-bus system in OpenDSS/MATLAB. The two diagnostic tasks differ markedly in their sensing requirements: classification saturates…",
+      "summary": "本文关注主动配电网如何以少量低成本、非同步电表支撑故障诊断与自愈恢复。作者在IEEE 33节点系统中，将电表配置、学习诊断、恢复供电和寿命期成本联系起来，指出分类与定位的感知需求不同，干净数据上的最高准确率也不等于最短停电时间。摘要报告七表方案的一跳范围定位准确率为97.3%。其价值在于将诊断评价推进到可靠性和经济性层面；目前仅有摘要，无法核验具体建模与实验细节。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -1257,26 +1385,147 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "推荐智能运维与可靠性研究者重点关注其从诊断性能走向恢复效果和寿命期成本的评价路径，而非仅比较分类准确率。摘要明确指出“few link diagnostic accuracy to reliability”，但推荐依据限于摘要报告，尚不能判断结果的外部适用性。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是：在计量稀疏且不同步的条件下，如何完成故障分类、区段定位、隔离与恢复，并把诊断表现连接到供电可靠性。摘要指出既有方案多假设“dense or synchronized metering”。解读：本文针对的是感知投入与运维目标之间的配置矛盾，而非单独提高分类分数。[摘要]",
+        "method": "作者在OpenDSS/MATLAB中的IEEE 33节点系统上构建学习流程，以低成本非同步电表提供输入。配置方法为按任务分别运行的“greedy wrapper”，并使用事件留出协议评价；进一步将电表费用与未供电电量计入寿命期成本。摘要未交代特征、学习器与故障样本生成细节。[摘要]",
+        "innovation": "解读：可辨识的方法贡献是把计量配置与最终运维目标相连，而不是默认不同诊断任务共享最优感知方案；同时提出数据驱动的可隔离性度量，并以“closed-form relation”连接准确率与SAIDI。仅凭摘要不能确认这些构件相较既有文献的首次性或具体数学创新。[摘要]",
+        "findings": "摘要报告分类在三至四块电表时趋于饱和，定位则持续改善至十六块；寿命期成本最小化选出七块电表，一跳范围定位准确率为97.3%，SAIDI降低82.2%，回收期九个月。需注意“within one hop”并非精确区段命中，且上述数值均是摘要报告，尚未独立核验。[摘要]",
+        "limitations": "当前资料仅为摘要，未提供故障类型覆盖、负荷与分布式电源变化范围、计量误差设置或统计不确定性，因此不足以判断鲁棒性。摘要只明确给出“IEEE 33-bus system”，其他网络与现场验证情况未知；这些是证据边界，不能直接认定作者未开展相关实验。[摘要]",
+        "connection": "解读：与智能运维的直接联系是将诊断接入隔离和恢复流程；与可靠性研究的联系是用系统平均停电持续时间指标SAIDI评价后果。摘要称最准确的学习器未必“minimizes interruption duration”。对结构设计的关联较间接，可启发按系统后果配置传感器，而非证明结构领域适用性。[摘要]",
+        "next_steps": "建议：获得全文后，优先核查“event-held-out protocol”的事件划分与选表流程是否严格分离，再追踪诊断错误如何传递至恢复决策和SAIDI。后续可研究成本参数变化下电表配置是否稳定，并检验跨网络迁移表现；这些属于研究建议，不是作者已完成或已承诺的工作。[摘要]"
+      },
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "c52629341b66",
-        "state": "retry",
-        "updated_at": "2026-11-03T01:45:11.891782+00:00",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-03T03:13:25.645939+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-11-03T02:45:11.891782+00:00",
-        "total": 0,
-        "covered": 0,
+        "total": 1,
+        "covered": 1,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "面向主动配电网机器学习故障诊断与自愈恢复的目标驱动高效稀疏计量",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.21203/rs.3.rs-11245800/v1"
+      ],
+      "analyzed_at": "2026-11-03T02:54:05.598066+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "配电网故障诊断需要多少测量装置，才能既识别故障，又真正缩短停电？这项研究把稀疏测量、机器学习诊断与自愈恢复联系起来，阅读价值在于：**诊断准确率最高的方案，不一定带来最短的停电时间。**",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从识别故障走向减少停电",
+            "paragraphs": [
+              "故障定位、隔离与供电恢复（FLISR）不仅需要判断发生了什么故障，还需要确定故障区段并支持恢复供电。摘要指出，现有机器学习方案多假设测量装置密集部署或同步采集，而较少把诊断准确率与供电可靠性直接关联。",
+              "本文关注的不是单纯提高分类分数，而是在少量、低成本、非同步的馈线测量装置条件下，兼顾诊断、恢复和成本。这使测点配置成为一个围绕运行目标展开的问题。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "按诊断任务选点，再用寿命期成本权衡",
+            "paragraphs": [
+              "研究在 OpenDSS/MATLAB 中以 IEEE 33 节点系统为对象，构建覆盖故障分类、区段定位、隔离及自愈恢复的学习流程。针对不同诊断任务，分别运行贪心包裹式测点选择，并采用事件留出评估协议。",
+              "测点配置与覆盖式、过滤式及随机布置进行比较；经济性选择则通过最小化寿命期成本完成，将测量装置成本和未供电能量计入权衡。摘要还报告了数据驱动的可隔离性度量，以及由准确率映射至系统平均停电持续时间指标（SAIDI）的闭式关系。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "分类与定位需要的测量密度并不相同",
+            "paragraphs": [
+              "故障分类在三至四个测量装置时趋于饱和，区段定位则在增加至十六个装置的过程中仍持续改善。分别面向任务运行的贪心包裹式方法，在所测试的三个预算下均优于摘要列出的其他布置方法。",
+              "模型选择同样存在目标差异：干净数据上准确率最高的学习器，并不是使停电持续时间最短的学习器。摘要中的可隔离性度量用于解释定位错误为何落在相邻区段，提示定位错误的空间分布也值得关注。",
+              "寿命期成本最小化选出七个测量装置。该配置下，故障定位在一跳范围内的准确率为 97.3%；按 IEEE Std 1366，FLISR 使 SAIDI 降低 82.2%，投资回收期为九个月。这里的准确率包含一跳容差，不能等同于精确区段命中率。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要不足以界定结果的适用范围",
+            "paragraphs": [
+              "摘要未交代故障事件数量、故障类型分布、具体学习器、输入特征及事件留出的划分细节，也未列出各比较方案的完整结果，因此无法据此判断样本覆盖度与性能差异的稳定性。",
+              "当前资料也不足以核对 SAIDI 降幅的比较基准、成本参数、投资回收计算条件，以及其他网络或现场条件下的验证范围。上述数值应放在摘要所述系统与评估设置中理解，而不能直接作为实际部署的收益保证。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：选模型前先明确运维目标",
+            "paragraphs": [
+              "阅读启发：面向智能运维，值得先问目标是识别故障类别、缩小定位范围，还是减少用户停电时间。本文摘要显示，这些目标对应的测量需求与模型选择并不完全一致。",
+              "建议进一步阅读时，重点核对准确率如何进入 SAIDI 的闭式关系，以及相邻区段误判如何影响隔离与恢复决策。这有助于理解诊断指标与供电可靠性之间的联系，而不只是比较准确率高低。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的稀疏测量与恢复流程",
+            "description": "仅概括摘要明确陈述的测量输入与处理环节，不代表论文原图，不补充具体算法或控制配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "稀疏馈线测量",
+                "detail": "由少量低成本、非同步测量装置提供输入。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "故障分类与区段定位",
+                "detail": "学习流程包含不同诊断任务，并分别进行贪心包裹式测点选择。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "故障隔离",
+                "detail": "研究流程包含故障隔离环节。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "自愈恢复",
+                "detail": "研究流程延伸至供电恢复，并将诊断准确率与 SAIDI 联系。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "支持学习诊断"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "衔接隔离环节"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "衔接恢复环节"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-03T03:13:25.643924+00:00",
+      "article_profile": "1bbabf954b6c5fd18f1d6af2b419e2ee8b4bfe97b0516f475fcfff5473044d63",
+      "analysis_references": {},
+      "analysis_material_version": "e7251a7f446402c1c2a80a80750cb0bf9988e2f7bb4947c01b4442bcd2dfc197",
+      "analysis_issues": []
     },
     {
       "source": "Crossref",
@@ -1298,7 +1547,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Abstract Fault interpretation in salt-influenced offshore settings is challenging due to complex deformation styles, fault segmentation, imaging limitations, and variable seismic quality. While foundation machine-learning (ML) fault-detection networks enable rapid identification of major fault systems, their generalized training can limit structural consistency and geological reliability when applied to complex regional settings. This study demonstrates the value of customized, data-driven ML training networks for enhancing fault interpretation through an offshore salt-related anticline case s…",
+      "summary": "本文针对盐构造影响下海上地震资料的断层解释难题，比较通用基础网络与本地定制网络的表现。作者以解释人员标注的断层线段训练网络，结合多种地震属性及迭代质控，改善断层连续性、小断层识别和地质一致性，并报告与井资料更加吻合。[摘要] 当前仅有摘要，未提供量化指标或独立验证细节。解读：这里的“fault”指地质断层，而非设备故障，与智能运维的联系主要是方法迁移。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -1336,26 +1585,167 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为领域定制训练与专家知识融入机器学习的案例选读，而非智能运维核心论文；其断层解释流程具有迁移启发，但摘要不足以验证提升幅度。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是盐构造影响下，通用机器学习断层检测结果难以保持局部地质一致性。摘要指出基础网络存在“limitations ... in fault continuity”，并涉及次级断层与不同地层层位的一致性不足。[摘要] 研究对象是地下地质构造，不是工程结构损伤或设备故障。",
+        "method": "作者先将多个基础断层网络应用于高质量三维地震数据，建立基线；再利用解释人员在选定主测线和联络测线剖面上生成的断层线段训练定制网络。训练解释由多种地震属性引导，并通过“Iterative training and quality-control cycles”逐步调整。[摘要]",
+        "innovation": "摘要将贡献定位于以本地地震表现和地质认识支撑定制训练，而非仅依赖通用网络。作者强调“grounded in local seismic expression and geological understanding”。[摘要] 解读：可关注专家解释与区域适配的结合，但没有网络结构或对比细节，不能认定其提出全新算法。",
+        "findings": "摘要报告定制网络提高断层连续性、改善小断层刻画，并使时间切片和垂直剖面的断层几何更加符合地质认识；同时指出结果与井资料的吻合度改善，原文为“improved agreement with well data”。[摘要] 这些是定性结果，资料未给出提升幅度或统计检验。",
+        "limitations": "当前材料仅为摘要，未交代训练标注规模、网络架构、数据划分、量化指标及井资料验证方式。[摘要] 解读：因此无法判断改进是否能跨区域推广，也不能排除解释人员标注与评价之间的关联；这些属于待核查问题，不是作者已证实的研究缺陷。",
+        "connection": "解读：与智能运维的关联在于通用模型面对本地复杂数据时，可能需要专家标注、领域特征和迭代质控；摘要中的“customized ML training”提供了方法启发。[摘要] 但本文没有设备状态监测、工程结构设计或可靠性计算证据，不能据此声称相关任务性能改善。",
+        "next_steps": "建议：后续取得全文时，优先核查标注与测试是否独立、基础网络对比是否公平、井资料如何参与验证，以及深部低反射区的评价结果。若迁移至智能运维，可另行设计本地标注与跨工况测试；这是研究建议，并非本文已完成的实验或结论。"
+      },
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "e4b1578ae75f",
-        "state": "retry",
-        "updated_at": "2026-11-03T01:46:02.574712+00:00",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-03T03:05:20.994553+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-11-03T02:46:02.574712+00:00",
-        "total": 0,
-        "covered": 0,
+        "total": 1,
+        "covered": 1,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "定制化数据驱动机器学习网络增强复杂地质构造断层解释：阿布扎比海上案例",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.2118/235431-ms"
+      ],
+      "analyzed_at": "2026-11-03T03:03:36.438865+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "盐构造影响下的海上断层解释，难点不仅是识别断层，还在于追踪其连续性并判断连接关系。这项阿布扎比海上案例探讨：用当地地震资料和解释人员的地质认识定制机器学习网络，能否比通用训练网络获得更可信的断层框架。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "主要断层能找到，复杂构造仍难解释",
+            "paragraphs": [
+              "盐相关变形、断层分段、成像局限和地震资料质量变化，共同增加了海上断层解释的难度。基础机器学习断层检测网络虽然能够快速识别主要断层系统，但通用训练并不必然保证局部复杂构造中的解释一致性。",
+              "本研究聚焦阿布扎比海上一处盐相关背斜。基础网络识别出了主要断层走向，但在断层连续性、次级断层检出和跨地层一致性方面仍有不足，尤其是在反射较弱、受盐相关变形影响的深部层段。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "用本地断层解释训练定制网络",
+            "paragraphs": [
+              "研究先将多个基础断层检测网络应用于高质量三维地震数据，建立基准构造框架；随后从选定的主测线和联络测线地震剖面中，提取解释人员绘制的断层解释线，用于训练定制网络。",
+              "训练所用解释由地震属性辅助，包括基于张量属性的多属性色彩融合、构造导向相似性、倾角信息和频率分解。研究通过迭代训练与质量控制，逐步优化断层可检测性、方位保真度及构造连贯性，再将定制网络应用于整个地震数据体。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "连续性、小断层与井资料吻合度得到改善",
+            "paragraphs": [
+              "摘要报告，相比基础网络，定制网络增强了断层连续性，改善了小断层的刻画，并在时间切片和垂直剖面上呈现出更符合地质认识的断层几何形态。这些发现涉及的不只是检出能力，也包括解释结果的空间连贯性。",
+              "优化后的断层框架还与井资料更加吻合，为断层位置及连接关系提供了更高的解释信心。摘要将地下表征、开发规划和风险降低列为应用价值，但未提供这些下游用途的独立成效数据，不宜将其写成已经量化验证的收益。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "定性改善之外，验证范围仍待了解",
+            "paragraphs": [
+              "摘要未交代训练解释线的数量与分布、数据划分方式、网络结构，以及参与比较的基础网络细节，也未给出改善幅度的定量指标。因此，仅凭摘要无法判断比较条件是否充分一致，或提升在不同层段中是否稳定。",
+              "井资料吻合度是重要线索，但摘要未说明井的数量、独立性及评价方法；也无法据此判断定制网络在其他地区或不同质量地震资料上的适用性。这些属于当前摘要的信息边界，不代表论文没有开展相应分析。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：追问地质知识如何进入模型",
+            "paragraphs": [
+              "阅读启发：这项案例值得关注的，是本地解释、地震属性与迭代质控如何共同约束模型。进一步阅读时，可重点查看训练解释如何选取、质控如何判定，以及井资料是否提供独立检验。这里的“断层检测”属于地质解释任务，不应直接等同于设备运维中的故障诊断。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的定制断层解释流程",
+            "description": "概括基准解释、定制训练及全体积应用的关系；这是摘要示意图，不是论文原图，不表示摘要未报告的网络配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "地震数据与基础网络",
+                "detail": "将多个基础断层检测网络应用于高质量三维地震数据。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "建立基准构造框架",
+                "detail": "识别主要断层走向，同时发现连续性、次级断层检出和跨地层一致性的不足。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "准备本地断层解释",
+                "detail": "从选定主测线和联络测线剖面提取人工断层解释线，解释过程由地震属性辅助。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "定制训练与迭代质控",
+                "detail": "以断层解释线训练定制网络，迭代优化可检测性、方位保真度及构造连贯性。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "应用于整个地震数据体",
+                "detail": "在时间切片和垂直剖面中评价断层解释结果。"
+              },
+              {
+                "id": "f",
+                "stage": 5,
+                "label": "报告解释改善",
+                "detail": "摘要报告连续性、小断层刻画、几何合理性及与井资料吻合度的改善。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "形成基准"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "针对解释不足"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "提供训练解释"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "应用定制网络"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "与基础网络比较"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-03T03:05:20.994553+00:00",
+      "article_profile": "bfddb8c1cb4ba0f30cd41eae53998953c32de63ea4f35a090af1483938923843",
+      "analysis_references": {},
+      "analysis_material_version": "dda5ba487b0626ad2df85689a9e87ee3be7dd4c3840ce1737698374a6808cfad",
+      "analysis_issues": []
     },
     {
       "source": "OpenAlex",
@@ -1593,7 +1983,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Truss bridges are key transportation infrastructures, recognized for their ability to support heavy loads across long spans. Despite being designed with built-in redundancy, they are exposed to several forms of deterioration that compromise structural integrity, often initiating local failures and progressive collapse. Progressive collapse remains a critical failure mode in such bridges, requiring advanced monitoring and damage identification methods. This study presents an optimized Machine Learning (ML) framework for early-stage localization of initial component failure. The framework involv…",
+      "summary": "桁架桥局部构件失效可能诱发渐进倒塌，本文以初始失效的早期定位为目标，构建融合有限元模型、试验验证与监督学习的框架。研究采用固有频率和节点挠度，在未见荷载条件下识别失效构件，并加入测量噪声、评估认知不确定性。摘要报告三种模型准确率约为70%，且性能主要取决于物理特征的质量与表征，而非模型架构。其价值偏向智能监测和可靠性决策，并非生成式设计；当前仅作摘要级解读。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7223211600",
@@ -1639,26 +2029,154 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为智能运维与不确定性评估方向的相关文献阅读，重点关注跨荷载失效定位及物理特征表征；若筛选目标严格限定为生成式设计，则不宜优先推荐。[摘要；解读]",
+      "deep_read": {
+        "problem": "研究针对桁架桥局部失效可能引发渐进倒塌的问题，将任务限定为初始构件失效的早期定位。摘要明确采用“multi-class classification”，覆盖全部构件失效类别，并要求在未见荷载条件下识别，重点不是预测倒塌全过程。[摘要]",
+        "method": "框架以缩尺桁架桥有限元模型为基础，并在受控损伤场景下进行试验验证。输入为固有频率与节点挠度，数据加入“5% Gaussian noise”；四种监督学习模型经调参与评估，同时考察常规性能指标和认知不确定性。[摘要]",
+        "innovation": "解读：其值得关注的组合是将跨荷载构件定位、物理响应特征与认知不确定性共同纳入评估，而不只是比较分类准确率。摘要使用“epistemic uncertainty”，但未交代具体估计方法，因此不足以认定其提出了新的不确定性算法。[摘要]",
+        "findings": "摘要报告Deep MLP、1D-CNN和SVM准确率均约为70%，并具有较强置信度；扩展分析显示三者在不同噪声水平、类别配置与特征集下表现稳定。误分类趋势与结构对称性相关，作者认为物理特征质量及表征比模型架构更影响预测性能。[摘要]",
+        "limitations": "当前仅有摘要，无法核对样本规模、类别分布、数据划分、第四种模型及置信度校准方式，也无法判断约70%的准确率能否满足实际报警要求。这些属于证据缺口，并非作者已确认的局限；缩尺受控试验对实桥的适用范围仍需全文核查。[摘要；解读]",
+        "connection": "解读：本文与智能运维的联系最直接，构件定位可为监测诊断提供信息，不确定性可辅助识别需要复核的预测。其对可靠性研究具有潜在参考价值，但摘要未给出失效概率计算；与结构设计的联系主要是间接启示，未展示生成式设计方法。[摘要]",
+        "next_steps": "建议：阅读全文时优先核查未见荷载的划分方式、噪声施加位置、认知不确定性的估计与验证，以及对称构件混淆的具体分布。后续可研究传感器布置能否缓解定位歧义，但这属于可迁移研究设想，不是摘要已经证明的结论。[摘要；建议]"
+      },
       "recommended_direction": "generative_design",
       "reading_status": {
         "paper_id": "4f52eeae0487",
-        "state": "retry",
-        "updated_at": "2026-11-03T01:44:33.034107+00:00",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-03T02:52:27.549675+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "restricted",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-11-03T02:44:33.034107+00:00",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "面向桁架桥关键失效定位的不确定性感知机器学习框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.engstruct.2026.123964"
+      ],
+      "analyzed_at": "2026-11-03T02:50:57.498896+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "桁架桥具有结构冗余，却仍可能因局部构件失效引发渐进倒塌。这项研究关注如何在未见过的荷载条件下定位初始失效构件，并将预测置信度纳入评价；阅读重点是物理特征、识别能力与不确定性之间的关系。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从局部失效定位切入渐进倒塌风险",
+            "paragraphs": [
+              "桁架桥能够跨越较长距离、承担较大荷载，但劣化仍可能损害结构完整性，进而触发局部失效与渐进倒塌。研究针对的是初始构件失效的早期定位，而非直接预测整个倒塌过程。其核心问题是：识别模型能否捕捉损伤相关响应，而不只是记住特定荷载下的表现？"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "以频率和挠度识别失效，同时评价认知不确定性",
+            "paragraphs": [
+              "研究采用缩尺桁架桥有限元模型，并在受控损伤情景下进行实验验证。失效定位被表述为多类别分类任务，覆盖模型中的全部构件失效，考察未见荷载条件下的识别表现。输入特征包括固有频率与节点挠度，数据集使用5%高斯噪声进行增强，以模拟实际测量不确定性。",
+              "作者对四种监督学习模型进行调参与评价，同时考察常规性能指标和认知不确定性。这样的评价不仅关注分类是否正确，也关注预测置信度；但摘要没有说明认知不确定性的具体计算方法。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "约七成准确率之外，特征表达比架构更受关注",
+            "paragraphs": [
+              "初步结果显示，Deep MLP、1D-CNN和SVM的准确率均约为70%，并表现出较强置信度。摘要将其解释为模型捕捉到了损伤敏感行为，而非荷载特有模式。扩展分析中，这些模型在改变噪声水平、类别配置和特征集时表现稳定；这一结论仍限于研究考察的条件。",
+              "误分类趋势反映了桥梁的结构对称性，预测置信度也与识别出的敏感性模式相吻合。研究据此强调，预测性能主要受到具有物理信息的特征质量及其表达方式影响，而非机器学习架构本身。这是本研究的结果，不宜直接推广为所有桥梁诊断任务的普遍规律。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "缩尺验证与工程应用之间，摘要还留下哪些空白",
+            "paragraphs": [
+              "仅凭摘要，无法判断原始样本数量、训练与测试划分、独立损伤情景数量，以及噪声增强前后的数据规模。第四种模型的名称和表现、模型间差异的统计依据、变化条件的具体范围也未交代。已有验证涉及缩尺桥和受控损伤，但向实桥、长期监测及其他桥型迁移的证据范围仍需阅读正文确认；这些信息未在摘要报告，不代表论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：把传感特征与置信度放在一起看",
+            "paragraphs": [
+              "阅读启发：面向桥梁智能运维，可优先追问哪些频率与挠度特征具有定位辨识力，以及结构对称性如何影响错误判断。进一步阅读时，值得核对传感信息与特征选择的关系、置信度能否帮助辨认易混淆构件。摘要提出了对传感器集成和不确定性感知决策的启示，但不能据此认定实际监测可靠性或计算效率已经得到工程验证。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的失效定位框架",
+            "description": "概括摘要明确陈述的模型、特征、噪声增强与评价关系，不代表论文原图或完整实验流程。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "缩尺桁架桥有限元模型",
+                "detail": "在受控损伤情景下进行实验验证。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "固有频率与节点挠度",
+                "detail": "作为构件失效定位的输入特征。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "高斯噪声数据增强",
+                "detail": "使用5%高斯噪声模拟实际测量不确定性。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "监督学习多类别分类",
+                "detail": "调参与评价四种模型，任务覆盖全部构件失效。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "性能与认知不确定性评价",
+                "detail": "考察未见荷载条件下的定位表现，并分析噪声、类别配置与特征集变化。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "框架采用的响应特征"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "特征数据增强"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "用于失效定位"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "联合评价"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-03T02:52:27.544766+00:00",
+      "article_profile": "067d0bd74c7ef4fb7cb76c19651d23bb1168d025a21a3b760d6691608449ab7e",
+      "analysis_references": {},
+      "analysis_material_version": "ab08a04200f6db3ff9867192f03ee1e693270ca1c37a663a5d00e6f177d90229",
+      "analysis_issues": []
     },
     {
       "source": "arXiv",
@@ -2787,7 +3305,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Abstract Machine learning is a leading research approach to the diagnostic stage of fault location, isolation and service restoration (FLISR), but most schemes assume dense or synchronized metering and few link diagnostic accuracy to reliability. We present an objective-driven framework in which a few low-cost, unsynchronized feeder meters support a learning pipeline for fault classification, section localization, isolation, and self-healing restoration on the IEEE 33-bus system in OpenDSS/MATLAB. The two diagnostic tasks differ markedly in their sensing requirements: classification saturates…",
+      "summary": "本文关注主动配电网如何以少量低成本、非同步电表支撑故障诊断与自愈恢复。作者在IEEE 33节点系统中，将电表配置、学习诊断、恢复供电和寿命期成本联系起来，指出分类与定位的感知需求不同，干净数据上的最高准确率也不等于最短停电时间。摘要报告七表方案的一跳范围定位准确率为97.3%。其价值在于将诊断评价推进到可靠性和经济性层面；目前仅有摘要，无法核验具体建模与实验细节。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -2825,26 +3343,147 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "推荐智能运维与可靠性研究者重点关注其从诊断性能走向恢复效果和寿命期成本的评价路径，而非仅比较分类准确率。摘要明确指出“few link diagnostic accuracy to reliability”，但推荐依据限于摘要报告，尚不能判断结果的外部适用性。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是：在计量稀疏且不同步的条件下，如何完成故障分类、区段定位、隔离与恢复，并把诊断表现连接到供电可靠性。摘要指出既有方案多假设“dense or synchronized metering”。解读：本文针对的是感知投入与运维目标之间的配置矛盾，而非单独提高分类分数。[摘要]",
+        "method": "作者在OpenDSS/MATLAB中的IEEE 33节点系统上构建学习流程，以低成本非同步电表提供输入。配置方法为按任务分别运行的“greedy wrapper”，并使用事件留出协议评价；进一步将电表费用与未供电电量计入寿命期成本。摘要未交代特征、学习器与故障样本生成细节。[摘要]",
+        "innovation": "解读：可辨识的方法贡献是把计量配置与最终运维目标相连，而不是默认不同诊断任务共享最优感知方案；同时提出数据驱动的可隔离性度量，并以“closed-form relation”连接准确率与SAIDI。仅凭摘要不能确认这些构件相较既有文献的首次性或具体数学创新。[摘要]",
+        "findings": "摘要报告分类在三至四块电表时趋于饱和，定位则持续改善至十六块；寿命期成本最小化选出七块电表，一跳范围定位准确率为97.3%，SAIDI降低82.2%，回收期九个月。需注意“within one hop”并非精确区段命中，且上述数值均是摘要报告，尚未独立核验。[摘要]",
+        "limitations": "当前资料仅为摘要，未提供故障类型覆盖、负荷与分布式电源变化范围、计量误差设置或统计不确定性，因此不足以判断鲁棒性。摘要只明确给出“IEEE 33-bus system”，其他网络与现场验证情况未知；这些是证据边界，不能直接认定作者未开展相关实验。[摘要]",
+        "connection": "解读：与智能运维的直接联系是将诊断接入隔离和恢复流程；与可靠性研究的联系是用系统平均停电持续时间指标SAIDI评价后果。摘要称最准确的学习器未必“minimizes interruption duration”。对结构设计的关联较间接，可启发按系统后果配置传感器，而非证明结构领域适用性。[摘要]",
+        "next_steps": "建议：获得全文后，优先核查“event-held-out protocol”的事件划分与选表流程是否严格分离，再追踪诊断错误如何传递至恢复决策和SAIDI。后续可研究成本参数变化下电表配置是否稳定，并检验跨网络迁移表现；这些属于研究建议，不是作者已完成或已承诺的工作。[摘要]"
+      },
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "c52629341b66",
-        "state": "retry",
-        "updated_at": "2026-11-03T01:45:11.891782+00:00",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-03T03:13:25.645939+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-11-03T02:45:11.891782+00:00",
-        "total": 0,
-        "covered": 0,
+        "total": 1,
+        "covered": 1,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "面向主动配电网机器学习故障诊断与自愈恢复的目标驱动高效稀疏计量",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.21203/rs.3.rs-11245800/v1"
+      ],
+      "analyzed_at": "2026-11-03T02:54:05.598066+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "配电网故障诊断需要多少测量装置，才能既识别故障，又真正缩短停电？这项研究把稀疏测量、机器学习诊断与自愈恢复联系起来，阅读价值在于：**诊断准确率最高的方案，不一定带来最短的停电时间。**",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从识别故障走向减少停电",
+            "paragraphs": [
+              "故障定位、隔离与供电恢复（FLISR）不仅需要判断发生了什么故障，还需要确定故障区段并支持恢复供电。摘要指出，现有机器学习方案多假设测量装置密集部署或同步采集，而较少把诊断准确率与供电可靠性直接关联。",
+              "本文关注的不是单纯提高分类分数，而是在少量、低成本、非同步的馈线测量装置条件下，兼顾诊断、恢复和成本。这使测点配置成为一个围绕运行目标展开的问题。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "按诊断任务选点，再用寿命期成本权衡",
+            "paragraphs": [
+              "研究在 OpenDSS/MATLAB 中以 IEEE 33 节点系统为对象，构建覆盖故障分类、区段定位、隔离及自愈恢复的学习流程。针对不同诊断任务，分别运行贪心包裹式测点选择，并采用事件留出评估协议。",
+              "测点配置与覆盖式、过滤式及随机布置进行比较；经济性选择则通过最小化寿命期成本完成，将测量装置成本和未供电能量计入权衡。摘要还报告了数据驱动的可隔离性度量，以及由准确率映射至系统平均停电持续时间指标（SAIDI）的闭式关系。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "分类与定位需要的测量密度并不相同",
+            "paragraphs": [
+              "故障分类在三至四个测量装置时趋于饱和，区段定位则在增加至十六个装置的过程中仍持续改善。分别面向任务运行的贪心包裹式方法，在所测试的三个预算下均优于摘要列出的其他布置方法。",
+              "模型选择同样存在目标差异：干净数据上准确率最高的学习器，并不是使停电持续时间最短的学习器。摘要中的可隔离性度量用于解释定位错误为何落在相邻区段，提示定位错误的空间分布也值得关注。",
+              "寿命期成本最小化选出七个测量装置。该配置下，故障定位在一跳范围内的准确率为 97.3%；按 IEEE Std 1366，FLISR 使 SAIDI 降低 82.2%，投资回收期为九个月。这里的准确率包含一跳容差，不能等同于精确区段命中率。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要不足以界定结果的适用范围",
+            "paragraphs": [
+              "摘要未交代故障事件数量、故障类型分布、具体学习器、输入特征及事件留出的划分细节，也未列出各比较方案的完整结果，因此无法据此判断样本覆盖度与性能差异的稳定性。",
+              "当前资料也不足以核对 SAIDI 降幅的比较基准、成本参数、投资回收计算条件，以及其他网络或现场条件下的验证范围。上述数值应放在摘要所述系统与评估设置中理解，而不能直接作为实际部署的收益保证。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：选模型前先明确运维目标",
+            "paragraphs": [
+              "阅读启发：面向智能运维，值得先问目标是识别故障类别、缩小定位范围，还是减少用户停电时间。本文摘要显示，这些目标对应的测量需求与模型选择并不完全一致。",
+              "建议进一步阅读时，重点核对准确率如何进入 SAIDI 的闭式关系，以及相邻区段误判如何影响隔离与恢复决策。这有助于理解诊断指标与供电可靠性之间的联系，而不只是比较准确率高低。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的稀疏测量与恢复流程",
+            "description": "仅概括摘要明确陈述的测量输入与处理环节，不代表论文原图，不补充具体算法或控制配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "稀疏馈线测量",
+                "detail": "由少量低成本、非同步测量装置提供输入。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "故障分类与区段定位",
+                "detail": "学习流程包含不同诊断任务，并分别进行贪心包裹式测点选择。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "故障隔离",
+                "detail": "研究流程包含故障隔离环节。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "自愈恢复",
+                "detail": "研究流程延伸至供电恢复，并将诊断准确率与 SAIDI 联系。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "支持学习诊断"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "衔接隔离环节"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "衔接恢复环节"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-03T03:13:25.643924+00:00",
+      "article_profile": "1bbabf954b6c5fd18f1d6af2b419e2ee8b4bfe97b0516f475fcfff5473044d63",
+      "analysis_references": {},
+      "analysis_material_version": "e7251a7f446402c1c2a80a80750cb0bf9988e2f7bb4947c01b4442bcd2dfc197",
+      "analysis_issues": []
     },
     {
       "source": "Crossref",
@@ -2866,7 +3505,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Abstract Fault interpretation in salt-influenced offshore settings is challenging due to complex deformation styles, fault segmentation, imaging limitations, and variable seismic quality. While foundation machine-learning (ML) fault-detection networks enable rapid identification of major fault systems, their generalized training can limit structural consistency and geological reliability when applied to complex regional settings. This study demonstrates the value of customized, data-driven ML training networks for enhancing fault interpretation through an offshore salt-related anticline case s…",
+      "summary": "本文针对盐构造影响下海上地震资料的断层解释难题，比较通用基础网络与本地定制网络的表现。作者以解释人员标注的断层线段训练网络，结合多种地震属性及迭代质控，改善断层连续性、小断层识别和地质一致性，并报告与井资料更加吻合。[摘要] 当前仅有摘要，未提供量化指标或独立验证细节。解读：这里的“fault”指地质断层，而非设备故障，与智能运维的联系主要是方法迁移。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -2904,26 +3543,167 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为领域定制训练与专家知识融入机器学习的案例选读，而非智能运维核心论文；其断层解释流程具有迁移启发，但摘要不足以验证提升幅度。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是盐构造影响下，通用机器学习断层检测结果难以保持局部地质一致性。摘要指出基础网络存在“limitations ... in fault continuity”，并涉及次级断层与不同地层层位的一致性不足。[摘要] 研究对象是地下地质构造，不是工程结构损伤或设备故障。",
+        "method": "作者先将多个基础断层网络应用于高质量三维地震数据，建立基线；再利用解释人员在选定主测线和联络测线剖面上生成的断层线段训练定制网络。训练解释由多种地震属性引导，并通过“Iterative training and quality-control cycles”逐步调整。[摘要]",
+        "innovation": "摘要将贡献定位于以本地地震表现和地质认识支撑定制训练，而非仅依赖通用网络。作者强调“grounded in local seismic expression and geological understanding”。[摘要] 解读：可关注专家解释与区域适配的结合，但没有网络结构或对比细节，不能认定其提出全新算法。",
+        "findings": "摘要报告定制网络提高断层连续性、改善小断层刻画，并使时间切片和垂直剖面的断层几何更加符合地质认识；同时指出结果与井资料的吻合度改善，原文为“improved agreement with well data”。[摘要] 这些是定性结果，资料未给出提升幅度或统计检验。",
+        "limitations": "当前材料仅为摘要，未交代训练标注规模、网络架构、数据划分、量化指标及井资料验证方式。[摘要] 解读：因此无法判断改进是否能跨区域推广，也不能排除解释人员标注与评价之间的关联；这些属于待核查问题，不是作者已证实的研究缺陷。",
+        "connection": "解读：与智能运维的关联在于通用模型面对本地复杂数据时，可能需要专家标注、领域特征和迭代质控；摘要中的“customized ML training”提供了方法启发。[摘要] 但本文没有设备状态监测、工程结构设计或可靠性计算证据，不能据此声称相关任务性能改善。",
+        "next_steps": "建议：后续取得全文时，优先核查标注与测试是否独立、基础网络对比是否公平、井资料如何参与验证，以及深部低反射区的评价结果。若迁移至智能运维，可另行设计本地标注与跨工况测试；这是研究建议，并非本文已完成的实验或结论。"
+      },
       "recommended_direction": "ai_maintenance",
       "reading_status": {
         "paper_id": "e4b1578ae75f",
-        "state": "retry",
-        "updated_at": "2026-11-03T01:46:02.574712+00:00",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-03T03:05:20.994553+00:00",
         "basis": "abstract",
-        "article_state": "pending",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-11-03T02:46:02.574712+00:00",
-        "total": 0,
-        "covered": 0,
+        "total": 1,
+        "covered": 1,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "title_zh": "定制化数据驱动机器学习网络增强复杂地质构造断层解释：阿布扎比海上案例",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.2118/235431-ms"
+      ],
+      "analyzed_at": "2026-11-03T03:03:36.438865+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "盐构造影响下的海上断层解释，难点不仅是识别断层，还在于追踪其连续性并判断连接关系。这项阿布扎比海上案例探讨：用当地地震资料和解释人员的地质认识定制机器学习网络，能否比通用训练网络获得更可信的断层框架。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "主要断层能找到，复杂构造仍难解释",
+            "paragraphs": [
+              "盐相关变形、断层分段、成像局限和地震资料质量变化，共同增加了海上断层解释的难度。基础机器学习断层检测网络虽然能够快速识别主要断层系统，但通用训练并不必然保证局部复杂构造中的解释一致性。",
+              "本研究聚焦阿布扎比海上一处盐相关背斜。基础网络识别出了主要断层走向，但在断层连续性、次级断层检出和跨地层一致性方面仍有不足，尤其是在反射较弱、受盐相关变形影响的深部层段。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "用本地断层解释训练定制网络",
+            "paragraphs": [
+              "研究先将多个基础断层检测网络应用于高质量三维地震数据，建立基准构造框架；随后从选定的主测线和联络测线地震剖面中，提取解释人员绘制的断层解释线，用于训练定制网络。",
+              "训练所用解释由地震属性辅助，包括基于张量属性的多属性色彩融合、构造导向相似性、倾角信息和频率分解。研究通过迭代训练与质量控制，逐步优化断层可检测性、方位保真度及构造连贯性，再将定制网络应用于整个地震数据体。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "连续性、小断层与井资料吻合度得到改善",
+            "paragraphs": [
+              "摘要报告，相比基础网络，定制网络增强了断层连续性，改善了小断层的刻画，并在时间切片和垂直剖面上呈现出更符合地质认识的断层几何形态。这些发现涉及的不只是检出能力，也包括解释结果的空间连贯性。",
+              "优化后的断层框架还与井资料更加吻合，为断层位置及连接关系提供了更高的解释信心。摘要将地下表征、开发规划和风险降低列为应用价值，但未提供这些下游用途的独立成效数据，不宜将其写成已经量化验证的收益。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "定性改善之外，验证范围仍待了解",
+            "paragraphs": [
+              "摘要未交代训练解释线的数量与分布、数据划分方式、网络结构，以及参与比较的基础网络细节，也未给出改善幅度的定量指标。因此，仅凭摘要无法判断比较条件是否充分一致，或提升在不同层段中是否稳定。",
+              "井资料吻合度是重要线索，但摘要未说明井的数量、独立性及评价方法；也无法据此判断定制网络在其他地区或不同质量地震资料上的适用性。这些属于当前摘要的信息边界，不代表论文没有开展相应分析。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：追问地质知识如何进入模型",
+            "paragraphs": [
+              "阅读启发：这项案例值得关注的，是本地解释、地震属性与迭代质控如何共同约束模型。进一步阅读时，可重点查看训练解释如何选取、质控如何判定，以及井资料是否提供独立检验。这里的“断层检测”属于地质解释任务，不应直接等同于设备运维中的故障诊断。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的定制断层解释流程",
+            "description": "概括基准解释、定制训练及全体积应用的关系；这是摘要示意图，不是论文原图，不表示摘要未报告的网络配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "地震数据与基础网络",
+                "detail": "将多个基础断层检测网络应用于高质量三维地震数据。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "建立基准构造框架",
+                "detail": "识别主要断层走向，同时发现连续性、次级断层检出和跨地层一致性的不足。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "准备本地断层解释",
+                "detail": "从选定主测线和联络测线剖面提取人工断层解释线，解释过程由地震属性辅助。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "定制训练与迭代质控",
+                "detail": "以断层解释线训练定制网络，迭代优化可检测性、方位保真度及构造连贯性。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "应用于整个地震数据体",
+                "detail": "在时间切片和垂直剖面中评价断层解释结果。"
+              },
+              {
+                "id": "f",
+                "stage": 5,
+                "label": "报告解释改善",
+                "detail": "摘要报告连续性、小断层刻画、几何合理性及与井资料吻合度的改善。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "形成基准"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "针对解释不足"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "提供训练解释"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "应用定制网络"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "与基础网络比较"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-03T03:05:20.994553+00:00",
+      "article_profile": "bfddb8c1cb4ba0f30cd41eae53998953c32de63ea4f35a090af1483938923843",
+      "analysis_references": {},
+      "analysis_material_version": "dda5ba487b0626ad2df85689a9e87ee3be7dd4c3840ce1737698374a6808cfad",
+      "analysis_issues": []
     },
     {
       "source": "OpenAlex",
@@ -3901,7 +4681,7 @@
         "state": "published",
         "updated_at": "2026-10-20T02:27:33.587870+00:00",
         "basis": "full_text",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "facts",
         "reason": "",
         "total": 17,
@@ -4734,7 +5514,7 @@
         "state": "published",
         "updated_at": "2026-10-20T02:10:26.083830+00:00",
         "basis": "full_text",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "facts",
         "reason": "",
         "total": 10,
@@ -82003,7 +82783,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "【摘要】本文关注开放无线接入网部署中跨层遥测难以关联的问题。无线接入网、5G核心网、Kubernetes、服务器及网络设备采用不同标识体系，现有工具分别采集数据，缺少共同映射，导致事件关联需要反复手工重建拓扑。摘要还指出，单一来源的指标也可能缺少组件或部署归属信息。当前资料仅说明问题背景，未交代平台实现、实验设计与效果，因此适合用于理解运维观测障碍，尚不足以确认技术贡献。",
+      "summary": "Open RAN各层遥测采用不同标识，跨层排障因而需要人工重建拓扑。Panoramic从部署配置构建标识映射，在指标摄取时附加共享标签，同时保留原始KPI语义，并按运行状态启用瞬态标识。平台支持跨层诊断、机器学习数据导出及受权限约束的智能体操作。[摘要] 解读：其价值在于改善智能运维的数据关联基础；当前仅有摘要，尚不能判断诊断效果与实际开销。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "694e79068a2edead4b2bd8c1d0670288d36822c1",
@@ -82194,87 +82974,136 @@
         "智能体"
       ],
       "title_zh": "Panoramic：面向开放无线接入网部署的跨层测量平台",
-      "recommendation": "【解读】建议作为智能运维中跨层遥测关联问题的背景材料阅读；若要重点借鉴平台方法，应先补充架构、标识映射机制及验证结果。",
+      "recommendation": "建议关注其配置驱动的跨层标识关联机制，以及RBAC约束下的智能体操作接口；这些内容直接关联智能运维的数据治理与执行安全，但摘要未提供效果验证。[摘要]",
       "deep_read": {
-        "problem": "【摘要】研究问题是异构遥测之间缺少可共同使用的身份映射。原文指出各来源采用“a different identity model”，例如无线侧使用小区标识，容器侧使用命名空间与Pod。由此，跨层事件关联需要先解决对象对应关系，而非仅汇集指标。",
-        "method": "【摘要】当前资料没有说明Panoramic如何采集、存储或关联遥测，也未提供平台架构与算法。原文仅指出现有工具“collect these sources separately”。【解读】不能据此认定该平台已经实现统一标识、自动拓扑发现或实时查询。",
-        "innovation": "【解读】资料呈现出一个潜在贡献切入点：同时处理跨来源身份不一致与单来源归属信息不足。但这只是根据问题陈述识别的研究空间，并非已证实的作者创新；摘要未给出与既有系统的技术差异，无法判断方法新颖性。",
-        "findings": "【摘要】可核对的主要陈述是，关联DU事件与主机CPU峰值或交换机端口错误，需要“manual topology reconstruction for every query”。这说明现有流程存在人工关联负担，但资料没有报告耗时、准确率或平台改进幅度，不能视为效果验证。",
-        "limitations": "【摘要】当前资料止于问题描述，未提供实现细节、评估场景、对照系统和实验结果，因而无法评价平台的性能、适用范围或部署成本。【解读】这些属于当前证据的缺口，不能直接写成作者系统已被证实存在的技术局限。",
-        "connection": "【解读】该问题与智能运维直接相关：若告警、资源指标和网络事件不能对应到同一部署对象，故障定位就缺少关联基础。原文提及的CPU峰值与端口错误具有可靠性分析意义，但并未证明平台支持故障预测，也没有提供结构设计方面的证据。",
-        "next_steps": "【建议】后续阅读应优先核对身份映射的生成方式、组件归属信息的补全机制，以及拓扑变化时的更新策略。研究迁移可考虑比较人工与自动关联的耗时和错误情况；这些是建议的验证方向，不是摘要已经采用的方法或取得的成果。"
+        "problem": "摘要指出，不同遥测源采用不同身份模型，现有工具又缺少共同映射，导致每次跨层查询都需人工重建拓扑。原文称其“requires manual topology reconstruction for every query”。此外，单一来源的指标也可能缺少归属信息。[摘要]",
+        "method": "平台从部署配置建立映射，并在指标摄取时附加共享标签，使不同层的测量可以关联，同时保留各来源KPI语义。原文明确“attaches it to metrics at the time of ingestion”。稳定部署标识持续启用，瞬态标识仅在RAN运行时启用。[摘要]",
+        "innovation": "摘要呈现的方法特点是把部署配置转为遥测关联依据，并结合稳定标识与瞬态标识的差异化启用策略。原文强调“preserve the original KPI semantics”。解读：其特色在于兼顾指标语义与跨层关联；仅凭摘要不能确认相对既有工作的创新幅度。[摘要]",
+        "findings": "摘要报告平台支持跨层故障诊断、机器学习数据集导出，以及受限智能体操作，原文包括“executes approved actions”。这些属于作者陈述的功能能力，而非已展示的性能结论；资料未给出诊断准确率、故障恢复时间或资源开销的量化结果。[摘要]",
+        "limitations": "当前资料仅为摘要，未提供部署规模、测试场景、对照方法和实验结果，也未说明配置变化时映射如何更新。因此无法核实标签关联的完整性、运行开销及权限约束的实际效果。这些是当前证据缺口，不能直接认定为平台已经存在的缺陷。[摘要]",
+        "connection": "平台明确支持“cross-layer fault diagnosis”，与智能运维方向直接契合。[摘要] 解读：共享标识有望为跨层故障分析及可靠性研究提供可关联的数据基础，但关联并不等于因果识别。摘要没有涉及结构设计，不能据此主张其具有直接的结构设计贡献。",
+        "next_steps": "建议后续取得全文后，优先核查映射构建规则、配置变更处理、标签开销及RBAC的动作审批边界，并检查是否有跨层故障对照实验。面向自身研究，可考虑比较共享标签与分散采集在诊断效率上的差异；这是研究建议，不是作者已验证的成果。"
       },
       "analysis_status": "ready",
       "analysis_basis": "abstract",
       "analysis_kind": "model",
       "analysis_sources": [
-        "https://doi.org/10.1145/3842655.3844894"
+        "https://www.semanticscholar.org/paper/694e79068a2edead4b2bd8c1d0670288d36822c1"
       ],
-      "analyzed_at": "2026-10-31T13:45:10.063378+00:00",
+      "analyzed_at": "2026-11-03T02:40:53.510134+00:00",
       "llm_model": "gpt-6.1-sol",
       "article": {
         "version": 3,
         "basis": "abstract",
-        "lead": "Open RAN 的跨层排障难点，不只是遥测数据分散，更是不同系统用不同标识描述组件。理解这些标识为何难以关联，是阅读 Panoramic、判断其运维价值的起点。",
+        "lead": "Open RAN 的运维难点不只是采集指标，更是确认不同层级的指标究竟属于哪个组件、哪套部署。Panoramic 从部署配置建立标识映射，为跨层故障诊断和受约束的智能体操作提供数据关联基础。",
         "sections": [
           {
             "id": "context",
-            "title": "同一套部署，各层却使用不同标识",
+            "title": "指标已经采集，身份却尚未对齐",
             "paragraphs": [
-              "Open RAN 部署的遥测来自无线接入网、5G 核心网、Kubernetes、服务器、前传交换机和无线单元。它们并不共享统一的身份模型：无线接入网使用 cell-ID 和 PCI，Kubernetes 使用命名空间和 pod，交换机则使用端口和 VLAN。",
-              "因此，把多个来源的数据采集起来，并不意味着已经能够跨层关联。摘要指出，现有工具分别采集这些来源，却没有提供标识之间的公共映射，排障人员仍需自行还原组件关系。"
+              "Open RAN 的遥测来自无线接入网、5G 核心网、Kubernetes、服务器、前传交换机和无线单元，但这些来源采用不同的身份体系：无线接入网使用 cell-ID 和 PCI，Kubernetes 使用命名空间与 pod，交换机则使用端口与 VLAN。",
+              "摘要指出，现有工具分开采集这些数据，却缺少标识之间的共同映射。因此，要把 DU 事件与主机 CPU 峰值或交换机端口错误联系起来，每次查询都需要人工重建拓扑。即使在单一来源内部，指标携带的标识也未必足以确定所属组件或部署。"
             ]
           },
           {
             "id": "method",
-            "title": "问题指向标识映射，具体实现仍待确认",
+            "title": "在指标接入时补上部署映射",
             "paragraphs": [
-              "当前可核对的摘要内容主要解释了标识关联的缺口，未展开平台如何建立映射、如何处理采集数据。因此，这里不将问题描述扩写为已经得到证实的实现流程，也不据此绘制方法示意图。"
+              "Panoramic 从部署配置中建立缺失的映射，并在指标接入时将其附加到数据上。面向不同来源的采集器保留原始 KPI 语义，同时添加共享标签，使不同层级的测量数据能够关联，而不是要求各来源先改用同一种原生标识。",
+              "平台对标识采取区别化启用策略：稳定的部署标识始终启用，RNTI、pod 名称等瞬态运行标识仅在 RAN 运行时启用。摘要将这一安排与日常监控的轻量化联系起来，但未给出具体开销测量。"
             ]
           },
           {
             "id": "findings",
-            "title": "跨层关联与单源归属都存在信息缺口",
+            "title": "摘要报告的是关联能力与受限操作",
             "paragraphs": [
-              "摘要明确描述了两类障碍：跨来源时，关联一个 DU 事件、主机 CPU 峰值或交换机端口错误，需要针对每次查询手动重建拓扑；即使只看单一来源，指标携带的标识也不总能确定其所属组件或部署。",
-              "这些内容说明了研究所针对的工程问题，但不能当作平台性能的实验结果。当前材料没有给出可据以判断诊断速度、关联准确性或资源开销改善程度的定量证据。"
+              "摘要报告，Panoramic 支持跨层故障诊断，以及面向机器学习应用的数据集导出。这些是平台提供的能力，不能直接理解为已经证明诊断准确率提高，或下游模型性能得到改善。",
+              "平台还支持有边界的智能体操作：语言模型智能体诊断故障，并通过受基于角色的访问控制（RBAC）约束的接口执行获准动作。这里的关键限定是**操作受授权边界约束**，而非不受限制的自主运维。"
             ]
           },
           {
             "id": "limitations",
-            "title": "尚不能判断适用部署与验证范围",
+            "title": "效果、规模与验证边界仍待确认",
             "paragraphs": [
-              "仅凭当前摘要证据，无法判断涉及多少部署或设备、覆盖哪些故障场景、采用何种比较对象，以及是否验证了不同配置下的适用性。这些属于当前材料无法回答的问题，不代表论文没有开展相关实验。"
+              "仅凭本次摘要，无法判断平台验证涉及的部署规模、样本构成、故障类型、比较基线及测试条件，也无法确认映射准确性、诊断效果、采集开销和智能体操作安全性的验证范围。摘要未报告这些细节，不等于论文没有开展相应评估。"
             ]
           },
           {
             "id": "inspiration",
-            "title": "阅读启发：先确认数据能否关联，再讨论智能诊断",
+            "title": "阅读启发：先看数据归属，再看智能诊断",
             "paragraphs": [
-              "阅读启发：面向智能运维，值得先追问指标能否明确归属到组件，以及跨层标识能否建立可靠联系。进一步阅读时，可重点查看论文如何定义和维护这些关系，以及用什么证据说明关联有效；不能仅因数据已被集中采集，就默认它们足以支持故障诊断。"
+              "阅读启发：对 AI 智能运维而言，这份摘要提示了一个值得关注的前提——模型使用跨层数据之前，需要先明确数据归属。进一步阅读时，可关注部署变化后映射如何保持一致、瞬态标识如何参与关联，以及 RBAC 如何界定智能体可执行的动作；这些问题不能由当前摘要直接回答。"
             ]
           }
         ],
         "experiments": [],
         "routes": [],
-        "diagrams": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的指标关联过程",
+            "description": "此图为依据摘要整理的示意图，并非论文原图；仅展示部署配置、标识映射与指标关联之间的关系。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "部署配置",
+                "detail": "提供建立跨来源标识映射的依据。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "建立标识映射",
+                "detail": "补充不同遥测来源之间缺失的身份关联。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "接入指标并添加共享标签",
+                "detail": "面向各来源的采集器保留原始 KPI 语义，将映射附加到指标。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "跨层测量可关联",
+                "detail": "共享标签使不同层级的测量数据能够关联。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "从配置构建"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "在指标接入时附加"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "通过共享标签关联"
+              }
+            ]
+          }
+        ],
         "figure_groups": []
       },
-      "article_updated_at": "2026-10-31T13:46:36.765926+00:00",
-      "article_profile": "a7c08524607af60982df4c8e99e2a1d2fe0bfae44bdcecb3419a698038e00363",
+      "article_updated_at": "2026-11-03T02:43:03.246908+00:00",
+      "article_profile": "ee1d048b2efb5b30601524d6b2c769653a3a5491a8c28b66419c120cedbd0d14",
       "analysis_references": {},
-      "analysis_material_version": "90e130628c82580179bc616323650214e617c8b5880b8007e4bacf501ea17345",
+      "analysis_material_version": "4ac933334681c4577c964c6ca1bfb33c2a09820d4a376431103f035e5634c90a",
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "88b3a9840a61",
-        "state": "retry",
-        "updated_at": "2026-11-03T01:38:22.370455+00:00",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-03T02:43:03.246909+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
         "reason": "network",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-11-03T02:38:22.370455+00:00",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -120611,13 +121440,13 @@
     "unavailable": 44
   },
   "analysis_status": {
-    "ready_core": 2,
+    "ready_core": 5,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 4
+    "pending": 1
   },
   "edition": {
     "id": "41449238826",
