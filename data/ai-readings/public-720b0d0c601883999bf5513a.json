@@ -1,19 +1,19 @@
 {
   "id": "public-720b0d0c601883999bf5513a",
-  "content_version": "5ffbe9750c8ea54b78b168636b7bd96d1b218be01632b05e0119e8c66034644a",
+  "content_version": "9077f0014a4192c2b20c28b8aa30018c1c3d23d28ef830816121ab2970f042bf",
   "analysis": {
-    "title_zh": "LangSmith BYOC 已支持 AWS、Azure 和 Google Cloud",
-    "summary": "LangSmith Bring Your Own Cloud（BYOC）现已支持 AWS（正式可用）、Azure（Beta）和 Google Cloud（Beta）。追踪记录、评估、数据集、提示词及智能体部署保留在用户自有云账号中，LangChain 负责数据平面的编排、扩缩容与平台更新。该模式适用于希望控制智能体运行位置和遥测数据存放位置、又不愿自行运维 LangSmith 的任务；控制平面仍由 LangChain 运行。",
-    "application": "建议：科研迁移可考虑用于需要将智能体实验追踪、评估数据和提示词保留在自有云账号中的研究流程，此为迁移建议，并非官方验证的科研效果。官方公告确认的是云平台支持范围、数据归属与托管职责，未提供科研性能或成本改善的验证结果。",
-    "requirements": "部署于用户自有云账号；AWS 为正式可用（GA），Azure 和 Google Cloud 为 Beta。其余使用条件见官方文档。",
+    "title_zh": "LangSmith BYOC 现已支持 AWS、Azure 和 Google Cloud",
+    "summary": "官方公告称，LangSmith Bring Your Own Cloud（BYOC）已支持 AWS（正式可用）、Azure（测试版）和 Google Cloud（测试版）。追踪记录、评估、数据集、提示词及智能体部署保留在用户自己的云账号中，LangChain 负责数据平面的编排、扩缩容与平台更新。该方案通过分离控制平面和数据平面，支持自主选择智能体运行及遥测数据存放位置，适用于希望将智能体开发与评估数据留在自有云账号内的任务。",
+    "application": "建议：科研迁移可考虑用于涉及敏感实验数据的智能体追踪、评估和部署，先核对数据边界与机构合规要求。官方明确的是云平台支持范围、数据归属及托管分工，并未在所给片段中提供科研效果、性能或成本改善的验证结果。",
+    "requirements": "部署于用户自己的云账号；AWS 为 GA，Azure 和 Google Cloud 为 Beta。其他使用条件见官方文档。",
     "steps": [],
     "evidence": [
       "LangSmith Bring Your Own Cloud (BYOC) now runs on AWS (GA), Azure (Beta), and Google Cloud (Beta).",
       "Your traces, evals, datasets, prompts, and agent deployments stay in your own cloud account, on the cloud you choose, and LangChain manages the data plane for you, from orchestration and scaling to platform updates.",
-      "You decide where your agents run and where your telemetry lives, without taking on the work of running LangSmith yourself.",
+      "By splitting the control plane and data plane in two, BYOC provides greater flexibily to decide where agents run and where telemetry lives, without taking on the work of running LangSmith.",
       "LangChain runs the control plane , which holds auth, org and workspace config, billing metadata, hashed API keys, and static UI assets."
     ],
     "basis_url": "https://www.langchain.com/blog/langsmith-byoc-aws-gc-azure"
   },
-  "analyzed_at": "2026-11-04T00:53:02.205073+00:00"
+  "analyzed_at": "2026-11-04T03:54:21.683421+00:00"
 }
