@@ -214,8 +214,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -285,7 +285,20 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "0c71ddc40ad2",
+        "state": "missing_evidence",
+        "updated_at": "2026-11-04T13:36:51.040722+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "arXiv",
@@ -306,7 +319,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "OperAItor, an open-source framework for developing and evaluating large language model agents for supervisory fault management in chemical processes. The framework is demonstrated on a dynamic reactor-distillation process representing isopropanol dehydrogenation, with physically based thermodynamics and modified reaction kinetics to permit liquid-phase operation. The process is represented by a 113-variable differential-algebraic model and operates at a nominal feed rate of 100kmol/h, producing approximately 4t/h of acetone. The simulated plant includes 8 PI control loops, 22 process alarms, 5…",
+      "summary": "化工故障发生后，语言模型智能体能否协助维持生产，并通过动作验证减少不当干预？OperAItor围绕这一问题，集成统计监测、故障诊断、知识图谱检索、规划与监督动作生成，在反应—精馏动态仿真中比较四种模型和五类动作验证配置。摘要报告，部分经验证的智能体配置将停机情景数由18个降至5—8个，并挽回部分经济损失。本文值得从智能运维决策与安全验证结合的角度阅读，但这些结果属于仿真基准，不能据此认定已具备真实工厂部署能力。[摘要]",
       "raw_metadata": {
         "provider": "arXiv",
         "method": "api",
@@ -347,11 +360,166 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐重点关注故障诊断到运行干预之间的动作验证机制，以及包含多故障情景的可复现评测框架；它与智能运维直接相关，但推荐依据仅限当前摘要，不代表对全文质量或工业成熟度的确认。[摘要]",
+      "deep_read": {
+        "problem": "研究面向化工过程的监督层故障管理，关注故障发生后如何生成运行干预以减少停机及经济损失。摘要将单故障与多故障同时发生纳入评测，而非只讨论故障识别。解读：核心问题是把监测和诊断推进到可执行决策，并检验这些决策能否帮助维持运行。[摘要]",
+        "method": "框架串联多变量统计过程监测、故障诊断、知识图谱检索、动作规划与监督动作生成。作者在异丙醇脱氢反应—精馏动态模型上，用四种语言模型测试20个情景，并比较无验证、语言模型评判、数字孪生仿真及两类确定性可接受性检查配置。[摘要]",
+        "innovation": "摘要明确展示的设计特点，是把故障管理智能体与多种动作验证路径置于同一开源评测框架，而非仅演示语言模型生成操作建议。解读：这种组织方式有利于区分模型选择和验证机制的作用；但摘要未提供既有研究对比，尚不能据此确认其方法首创性。[摘要]",
+        "findings": "无智能体干预时，20个情景中18个导致停机，按基准经济假设损失399,000美元。摘要报告，GPT-5 nano、Qwen3 8B和Mistral 7B的经验证配置将停机数降至5—8个，挽回265,000美元损失；未给出各模型与各配置的完整对应结果。[摘要]",
+        "limitations": "当前材料仅为摘要，未提供故障清单、提示词、验证规则、重复试验或结果波动，因而无法判断收益的稳定性及具体来源。摘要明确使用动态仿真，并为液相运行修改反应动力学；其对真实装置、其他工况和实际经济条件的适用性，现有证据不足以确认。[摘要]",
+        "connection": "该研究与智能运维的直接联系，是将异常监测、故障诊断和操作干预纳入同一流程；与可靠性研究的联系，则是考察故障条件下的停机结果及动作验证。解读：它更偏向运行阶段的容错决策评测，不能把这些成果等同于结构设计优化或设备寿命预测。[摘要]",
+        "next_steps": "建议获取全文后，先核查各验证配置在相同故障和模型条件下的对照，再检查错误动作、验证失败与停机之间的关系。若用于自身智能运维研究，建议借鉴其评测组织方式，分别衡量诊断正确性、动作可接受性及运行收益；这些是后续研究建议，并非作者已证实的结论。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "OperAItor：面向化工过程容错运行的智能体框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "http://arxiv.org/abs/2611.05179v1"
+      ],
+      "analyzed_at": "2026-11-04T13:46:06.406917+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "化工过程发生故障时，大语言模型智能体能否帮助装置维持运行，而不只是给出诊断？OperAItor把过程监测、故障诊断、动作生成与验证纳入同一框架，通过动态仿真比较停机与经济损失，为评估智能体的监督层故障管理能力提供基准。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从识别故障走向监督层处置",
+            "paragraphs": [
+              "OperAItor是用于开发和评估化工过程监督层故障管理智能体的开源框架。它关注的不只是识别异常，还包括规划并生成监督层操作动作，以及比较不同动作验证方式下的运行结果。",
+              "研究采用代表异丙醇脱氢的动态反应器—精馏过程，使用基于物理的热力学描述，并修改反应动力学以允许液相操作。仿真装置包含PI控制回路、过程报警、主备用泵组和独立安全仪表功能；这些配置构成了智能体接受评估的过程环境。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "把智能体架构与动作验证分开比较",
+            "paragraphs": [
+              "智能体架构整合多变量统计过程监测、故障诊断、知识图谱检索、动作规划和监督层动作生成。过程由113变量的微分—代数模型表示，标称进料速率为100kmol/h，丙酮产量约为4t/h。",
+              "研究比较五种动作验证配置：不验证、基于大语言模型的评判器、数字孪生仿真，以及不带后果推演和带后果推演的确定性可接受性检查。评估覆盖四种大语言模型和20个场景，包含单一故障与多个同时发生的故障。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "经验证配置减少了仿真停机",
+            "paragraphs": [
+              "没有智能体干预时，18个场景发生装置停机。在设定的基准经济假设下，相对于无故障运行，经济损失为$399,000。这是特定仿真与经济设定下的结果，不宜直接当作真实工厂的损失估计。",
+              "摘要报告，对于GPT-5 nano、Qwen3 8B和Mistral 7B，经验证的智能体配置将停机场景数降至5–8，并挽回$265,000的损失。摘要没有逐项拆分各模型与验证配置的结果，因此不能据此判定哪一种验证方式最优。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不足以界定可靠性边界",
+            "paragraphs": [
+              "当前依据仅为完整摘要。虽然已知场景数量，但故障类型与严重程度的分布、重复运行次数、模型与验证配置的完整比较、经济核算细节，以及真实装置验证范围，均无法由摘要判断。这些是信息边界，不代表论文没有开展相关工作；停机减少也不能直接等同于获得全面安全保证。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注动作如何通过验证",
+            "paragraphs": [
+              "阅读启发：这项工作值得关注的不只是语言模型选型，还有生成动作如何接受验证。进一步阅读时，可重点核对不同验证配置对停机结果的影响、多个同时故障下的表现，以及数字孪生仿真与确定性检查各自的适用边界，从而理解结果成立的条件，而非直接推断工业部署效果。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的OperAItor研究构成",
+            "description": "概括框架、仿真对象、智能体架构与评估之间的关系；这是摘要示意，不是论文原图，也不表示实际控制执行时序。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "OperAItor框架",
+                "detail": "开发和评估化工过程监督层故障管理的大语言模型智能体。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "动态过程仿真",
+                "detail": "以代表异丙醇脱氢的反应器—精馏过程演示框架。"
+              },
+              {
+                "id": "c",
+                "stage": 1,
+                "label": "集成智能体架构",
+                "detail": "整合多变量统计过程监测、故障诊断、知识图谱检索、动作规划及监督层动作生成。"
+              },
+              {
+                "id": "d",
+                "stage": 1,
+                "label": "动作验证配置",
+                "detail": "比较不验证、模型评判器、数字孪生仿真及带或不带后果推演的确定性可接受性检查。"
+              },
+              {
+                "id": "e",
+                "stage": 2,
+                "label": "模型与故障场景评估",
+                "detail": "使用四种大语言模型，在20个单一及多故障场景中评估。"
+              },
+              {
+                "id": "f",
+                "stage": 3,
+                "label": "停机与经济损失结果",
+                "detail": "报告无智能体干预与经验证智能体配置下的停机和经济损失结果。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "演示对象"
+              },
+              {
+                "from": "a",
+                "to": "c",
+                "label": "架构整合"
+              },
+              {
+                "from": "a",
+                "to": "d",
+                "label": "比较配置"
+              },
+              {
+                "from": "a",
+                "to": "e",
+                "label": "开展评估"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "报告结果"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-04T13:56:25.733510+00:00",
+      "article_profile": "9bd5be6d476b5b437d1ea45d42c23c8892f1b52ab3bb68704659d674b25cde2f",
+      "analysis_references": {},
+      "analysis_material_version": "8556f50956c6e5c7845f7a05c3cfa658bc929433431c57cbbc2e252fe6cad6af",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "1915317cfd34",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-04T13:56:25.733511+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -374,7 +542,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Fault diagnosis of rotating machinery frequently encounters the compounded challenges of non-stationary operating conditions and small-sample data constraints. Traditional deep learning models often exhibit suboptimal performance when addressing these issues. Deep Generative Models (DGMs) offer innovative solutions by synthesizing high-fidelity data samples, reconstructing latent system states, and modeling complex multimodal data streams. This paper presents a review of rotating machinery fault diagnosis technologies based on DGMs. The state-of-the-art applications of DGMs and their variants,…",
+      "summary": "旋转机械故障诊断常同时面临非平稳工况与小样本约束。本文综述深度生成模型的相关应用，覆盖深度自回归模型、变分自编码器、生成对抗网络、扩散模型和大语言模型，梳理数据生成、域适应与泛化、多模态融合及诊断检测任务。摘要还涉及与传统方法的对比，以及可解释性、边缘部署效率等问题。解读：适合用于建立智能运维领域的技术分类与选题框架，但当前仅有摘要，不能据此判断具体模型的性能优劣。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "9f8988299a654d8d7a862514710ab0b8dd2d17dd",
@@ -415,11 +583,145 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为智能运维方向的综述候选重点阅读，尤其关注小样本、跨工况与多模态诊断的技术分类；但须通过全文核查文献覆盖、比较依据和实际部署证据。[摘要]",
+      "deep_read": {
+        "problem": "本文关注旋转机械诊断中的双重困难：非平稳运行工况与小样本数据约束。摘要以“non-stationary operating conditions”和“small-sample data constraints”明确问题背景，并指出传统深度学习应对不足，但没有给出具体失效案例、数据集或性能差距。[摘要]",
+        "method": "本文采用综述而非单一模型实验的形式，系统梳理深度自回归模型、变分自编码器、生成对抗网络、扩散模型及大语言模型。应用按数据生成、域适应与泛化、多模态融合和下游诊断检测展开；摘要称其为“systematically summarized”，但未交代检索与筛选流程。[摘要]",
+        "innovation": "解读：本文值得关注之处在于以生成模型为共同视角，将多类模型及多种诊断任务纳入同一综述范围，并涉及与传统信号处理、标准深度学习的比较。摘要称“contrasts DGMs”，但未展示比较框架，因此不能将其认定为已验证的新算法或首创分类体系。[摘要]",
+        "findings": "摘要将生成模型的作用概括为合成高保真样本、重建潜在系统状态和建模复杂多模态数据流，其中明确提到“reconstructing latent system states”。这些是摘要陈述的技术用途，而非本次可核查的实验结论；资料未提供准确率、增益或模型排名。[摘要]",
+        "limitations": "摘要列出的当前问题涉及参数高效微调策略、可解释性与可靠性，以及边缘部署计算效率，原文包括“computational efficiency for edge deployment”。这些属于综述讨论的领域问题，不能直接归为本文实验缺陷；资料也不足以评估综述覆盖是否完整。[摘要]",
+        "connection": "解读：该文与智能运维直接相关，可帮助组织数据稀缺、工况变化和多源监测下的诊断研究。摘要明确覆盖“fault diagnosis and anomaly detection”。与可靠性研究的联系主要在状态识别及诊断可信性层面；尚无证据表明其讨论结构优化设计或寿命可靠性量化。[摘要]",
+        "next_steps": "作者提出少样本或零样本学习、稳健多模态生成、物理信息混合架构，以及强化学习与生成模型结合等方向。建议后续阅读全文时，优先核查“physics-informed hybrid DGM architectures”的具体案例与物理约束形式，再判断其能否迁移到自己的设备诊断问题。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "基于深度生成模型的旋转机械故障诊断技术综述",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.3390/s26216883"
+      ],
+      "analyzed_at": "2026-11-04T13:57:47.754310+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "工况不断变化、故障样本又少，旋转机械的智能诊断如何保持有效？这篇综述围绕深度生成模型梳理技术选择，阅读价值在于理解数据生成、跨域适应与诊断任务之间的联系，而不是寻找一个已经验证的最优模型。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "变工况与小样本叠加，诊断为何困难",
+            "paragraphs": [
+              "旋转机械故障诊断经常同时面临非平稳运行工况与小样本数据约束。摘要指出，传统深度学习模型在处理这些问题时往往表现不够理想。因此，本文关注的不是单纯扩大模型，而是生成式方法能为这些约束提供哪些解决思路。",
+              "深度生成模型的作用也不只限于补充训练数据。摘要将其能力概括为合成高保真数据样本、重构系统潜在状态，以及建模复杂的多模态数据流，为理解这类方法在故障诊断中的不同角色提供了入口。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "按模型家族与应用任务组织综述",
+            "paragraphs": [
+              "这是一篇综述，而非摘要中报告了新诊断算法及其实验结果的研究。作者系统总结了深度自回归模型、变分自编码器、生成对抗网络、扩散模型和大语言模型及其变体在旋转机械故障诊断中的应用。",
+              "应用层面覆盖数据生成、领域适应与泛化、多模态数据融合，以及下游故障诊断和异常检测。综述还将深度生成模型与传统信号处理方法、标准深度学习模型进行对照；摘要未说明文献检索、筛选或质量评价的具体流程。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "技术版图之外，部署约束同样重要",
+            "paragraphs": [
+              "摘要呈现的主要成果是对模型类型、应用任务及现有限制的梳理，而不是某类模型在统一测试中的性能胜出。其讨论范围表明，生成式方法既涉及数据层面的处理，也涉及跨域、多模态及下游诊断任务，不能仅按“生成更多样本”理解。",
+              "作者重点分析的限制包括参数高效微调策略、可解释性（可靠性），以及面向边缘部署的计算效率。摘要另将少样本或零样本学习、稳健多模态数据生成、物理信息混合生成架构及强化学习融合列为未来方向；这些是研究展望，不是已验证的诊断增益。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要不足以判断比较强度与验证范围",
+            "paragraphs": [
+              "仅凭当前摘要，无法判断所纳入研究的样本规模、设备类型、故障类别及工况覆盖，也无法核对模型比较是否采用一致的数据划分、基线与评价指标。摘要没有给出定量结果，因此不能据此排列模型优劣或推断跨设备适用性。",
+              "同样，真实工业场景中的验证范围、生成数据的可信度，以及边缘部署的实际资源开销，都需要进一步阅读相关内容。这些属于当前资料未报告的信息，不能据此认定论文或其纳入研究没有开展相应工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：沿任务需求追问证据",
+            "paragraphs": [
+              "阅读启发：面向智能运维，可先区分自己的主要困难是样本稀缺、跨工况迁移，还是多模态信息融合，再阅读对应模型的应用证据。值得继续追问的是：生成数据是否支撑了真实诊断任务，可解释性与可靠性如何评价，以及计算效率是否满足部署需求；当前摘要尚不能回答这些问题。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的综述组织示意",
+            "description": "概括摘要明确陈述的梳理、对照、限制分析与展望，不代表实验流程，也不是论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "梳理模型与应用",
+                "detail": "总结深度生成模型及其变体在旋转机械故障诊断中的应用。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "对照既有方法",
+                "detail": "与传统信号处理方法及标准深度学习模型进行对照。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "分析现有限制",
+                "detail": "关注参数高效微调、可解释性（可靠性）及边缘部署计算效率。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "提出未来方向",
+                "detail": "讨论少样本或零样本、多模态生成、物理信息架构与强化学习融合。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "开展方法对照"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "讨论现有限制"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "展望未来研究"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-04T14:07:11.495812+00:00",
+      "article_profile": "6eff705bcea238b112c9e83915c0e59fa492a338b4f18171364672187f459403",
+      "analysis_references": {},
+      "analysis_material_version": "046e77411cdda1b6096e87c9b687e3f9812d52a0c21b797982481470d8307072",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "0ed43e6c82bd",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-04T14:07:11.496910+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "arXiv",
@@ -643,7 +945,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "Multi-bolted flange (MBF) connections are essential components of piping systems, pressure vessels, offshore structures, renewable energy infrastructure, and process plants. However, their long-term reliability is often affected by complex mechanical loading, thermal cycling, gasket degradation, corrosion, bolt preload loss, and uneven force distributions. These technical challenges can lead to leakage, fatigue failure, unplanned shutdowns, repeated component replacement, and increased material waste. This review examines the role of the Finite Element Method (FEM) in improving the sustainable…",
+      "summary": "多螺栓法兰在复杂载荷、热循环、腐蚀及预紧力损失下，可能出现泄漏、疲劳失效与材料浪费。本文综述有限元方法如何服务于应力分析、密封接触压力预测、疲劳寿命评估及维护决策，并强调接触、摩擦和网格等建模条件。[摘要]其关注点是将结构可靠性与资源节约联系起来，而非报告新的试验成果。摘要还将机器学习验证和数字孪生维护列为研究缺口，适合作为相关选题的入门线索。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "b7372bb10d9c7862fc01d02a649737cae7ac003e",
@@ -686,11 +988,145 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议重点关注其法兰接触建模、疲劳评估与预测性维护之间的联系；但当前仅有摘要，适合作为综述选读，不能据此认定其提出了经过验证的智能运维算法。[摘要]",
+      "deep_read": {
+        "problem": "本文关注多螺栓法兰长期可靠性及其资源消耗问题。摘要列出机械载荷、热循环、垫片退化、腐蚀和预紧力损失等影响因素，并指出其可能导致“leakage, fatigue failure”及非计划停机。[摘要]研究问题因此同时涉及连接安全、维护频次与材料浪费，而不只是静态承载能力。",
+        "method": "文章采用综述方式，原文表述为“Recent studies have been synthesised”，梳理有限元在应力分布、预紧力、垫片接触压力、疲劳寿命及腐蚀风险评估中的作用。[摘要]摘要未交代文献检索范围、筛选标准或质量评价程序，故不能将其直接认定为系统性综述。",
+        "innovation": "解读：其值得关注之处在于以“optimised design and green maintenance strategies”为共同视角，组织法兰有限元研究，将密封、寿命与资源效率联系起来。[摘要]这属于综述框架层面的特点；现有资料不足以确认其提出了原创求解方法、新材料模型或经验证的新型维护策略。",
+        "findings": "摘要认为有限元能够支持减少过度设计、改善密封、延长寿命，并通过提前识别失效机制支持预测性维护，原文使用“reduce overdesign”。[摘要]这些是综述归纳的作用方向，当前未提供对照数据、改善幅度或验证案例，不能进一步推导具体节材比例与寿命增益。",
+        "limitations": "作者明确指出有限元与自修复材料、实时自适应控制、传感监测、机器学习验证及数字孪生维护的融合仍有缺口，原文称“important research gaps remain”。[摘要]另就当前资料而言，缺少模型误差、适用边界及实证细节；这是摘要证据范围限制，不能直接认定全文也未讨论。",
+        "connection": "解读：与结构设计和疲劳可靠性的联系较直接，摘要明确涉及预紧力评估、密封接触压力与疲劳寿命。与智能运维的联系主要体现为“predictive maintenance”和健康监测。[摘要]机器学习及数字孪生仍被列为融合缺口，因此不能把本文视为已经实现智能闭环维护的研究。",
+        "next_steps": "建议：若进一步获取全文，优先核对预紧力定义、接触关系、垫片压缩性及服役载荷组合的处理依据。摘要明确强调“mesh refinement”等建模条件。[摘要]可迁移研究宜先建立可验证的法兰有限元基线，再探索传感数据校准与维护决策；该路径是研究建议，并非作者已完成的成果。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "多螺栓法兰可持续结构完整性的有限元方法：优化设计与绿色维护策略综述",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.17576/jkukm-2026-38(7)-09"
+      ],
+      "analyzed_at": "2026-11-04T14:08:46.412613+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "5d19fb45c23486d9b17f8165a968f99e6aa4b1c9f273ef54948a6d51b751efc3",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "5fccb145f752",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-04T14:18:12.745050+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      },
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "多螺栓法兰连接的泄漏与疲劳失效，不仅影响设备安全，也会带来停机、更换和材料浪费。这篇综述讨论有限元方法如何连接结构可靠性、设计优化与绿色维护，值得关注的是其对建模条件和工程应用边界的梳理。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "法兰可靠性为何也是资源效率问题",
+            "paragraphs": [
+              "多螺栓法兰连接广泛用于管道、压力容器、海上结构、可再生能源基础设施和流程装置。其长期可靠性受到复杂机械载荷、热循环、垫片退化、腐蚀、螺栓预紧力损失及受力不均等因素影响。",
+              "这些问题可能引发泄漏、疲劳失效和非计划停机，并增加部件更换与材料浪费。因此，本文关注的不只是连接能否承载，也包括如何通过优化设计和维护，兼顾安全、寿命与资源利用。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "综述如何组织有限元的应用与建模条件",
+            "paragraphs": [
+              "本文是一篇综述，摘要明确的方法是综合近期研究，梳理有限元方法在多螺栓法兰系统中的作用，而非报告一套新开展的实验或仿真流程。讨论覆盖应力分布、螺栓预紧力、垫片接触压力、疲劳寿命、泄漏预防、腐蚀风险和结构健康监测。",
+              "在建模条件上，作者特别强调预紧力定义、接触相互作用、垫片可压缩性、摩擦行为、网格细化及服役载荷组合。这些内容构成理解模型适用性的重点，但摘要未展开具体设置与求解过程。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "从失效机制识别走向设计与维护支持",
+            "paragraphs": [
+              "综述认为，有限元已显著增进对多螺栓法兰性能的理解。其讨论的关键价值，是在现场失效发生前识别关键失效机制，为减少过度设计、改善密封、延长服役寿命及支持预测性维护提供帮助。这里呈现的是综述层面的判断，而非摘要给出的定量收益。",
+              "与此同时，作者指出，有限元与自修复材料、实时自适应控制、传感器监测、机器学习验证及数字孪生维护框架的整合仍存在研究缺口。这些方向不能被解读为本文已经完成验证的系统。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "仅凭摘要还不能判断哪些证据强度",
+            "paragraphs": [
+              "摘要未说明纳入文献的数量、检索与筛选标准，也未交代各研究的试验样本、法兰类型、材料和工况覆盖范围。因此，尚不能判断综述结论对不同工程场景的代表性。",
+              "摘要也未给出统一的比较基线、预测误差、试验或现场验证范围，以及寿命、密封和资源效率的量化结果。这不等于论文没有相关分析，而是当前资料不足以判断其比较公平性与工程可迁移性。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：先核对模型，再理解智能维护",
+            "paragraphs": [
+              "阅读启发：进一步阅读时，可优先关注预紧力、接触与垫片行为如何被描述，以及疲劳和泄漏判断依据哪些验证证据。对于智能运维，更值得追问的是传感器信息、机器学习验证与有限元分析如何衔接，而不是把数字孪生等研究缺口直接视为成熟成果。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的综述内容关系示意",
+            "description": "概括近期研究综合、有限元应用梳理与设计维护价值之间的关系，不代表论文原图或新实验流程。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "综合近期法兰研究",
+                "detail": "综述多螺栓法兰连接中有限元方法的相关研究。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "梳理有限元分析用途",
+                "detail": "涵盖应力、预紧力、垫片接触压力、疲劳、泄漏、腐蚀及健康监测。"
+              },
+              {
+                "id": "c",
+                "stage": 1,
+                "label": "强调关键建模条件",
+                "detail": "关注预紧力、接触、垫片可压缩性、摩擦、网格及服役载荷组合。"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "讨论设计与维护价值",
+                "detail": "讨论减少过度设计、改善密封、延长寿命和支持预测性维护的作用。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "综合应用研究"
+              },
+              {
+                "from": "a",
+                "to": "c",
+                "label": "梳理建模要点"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "讨论工程价值"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-04T14:18:12.743065+00:00",
+      "article_profile": "99ad20bbc22e0d1338d64fecec68d9a2006293ce66971f5ae60eeb06e158abdc"
     }
   ],
   "extended": [],
@@ -905,8 +1341,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -976,7 +1412,20 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "0c71ddc40ad2",
+        "state": "missing_evidence",
+        "updated_at": "2026-11-04T13:36:51.040722+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "arXiv",
@@ -997,7 +1446,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "OperAItor, an open-source framework for developing and evaluating large language model agents for supervisory fault management in chemical processes. The framework is demonstrated on a dynamic reactor-distillation process representing isopropanol dehydrogenation, with physically based thermodynamics and modified reaction kinetics to permit liquid-phase operation. The process is represented by a 113-variable differential-algebraic model and operates at a nominal feed rate of 100kmol/h, producing approximately 4t/h of acetone. The simulated plant includes 8 PI control loops, 22 process alarms, 5…",
+      "summary": "化工故障发生后，语言模型智能体能否协助维持生产，并通过动作验证减少不当干预？OperAItor围绕这一问题，集成统计监测、故障诊断、知识图谱检索、规划与监督动作生成，在反应—精馏动态仿真中比较四种模型和五类动作验证配置。摘要报告，部分经验证的智能体配置将停机情景数由18个降至5—8个，并挽回部分经济损失。本文值得从智能运维决策与安全验证结合的角度阅读，但这些结果属于仿真基准，不能据此认定已具备真实工厂部署能力。[摘要]",
       "raw_metadata": {
         "provider": "arXiv",
         "method": "api",
@@ -1038,11 +1487,166 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "推荐重点关注故障诊断到运行干预之间的动作验证机制，以及包含多故障情景的可复现评测框架；它与智能运维直接相关，但推荐依据仅限当前摘要，不代表对全文质量或工业成熟度的确认。[摘要]",
+      "deep_read": {
+        "problem": "研究面向化工过程的监督层故障管理，关注故障发生后如何生成运行干预以减少停机及经济损失。摘要将单故障与多故障同时发生纳入评测，而非只讨论故障识别。解读：核心问题是把监测和诊断推进到可执行决策，并检验这些决策能否帮助维持运行。[摘要]",
+        "method": "框架串联多变量统计过程监测、故障诊断、知识图谱检索、动作规划与监督动作生成。作者在异丙醇脱氢反应—精馏动态模型上，用四种语言模型测试20个情景，并比较无验证、语言模型评判、数字孪生仿真及两类确定性可接受性检查配置。[摘要]",
+        "innovation": "摘要明确展示的设计特点，是把故障管理智能体与多种动作验证路径置于同一开源评测框架，而非仅演示语言模型生成操作建议。解读：这种组织方式有利于区分模型选择和验证机制的作用；但摘要未提供既有研究对比，尚不能据此确认其方法首创性。[摘要]",
+        "findings": "无智能体干预时，20个情景中18个导致停机，按基准经济假设损失399,000美元。摘要报告，GPT-5 nano、Qwen3 8B和Mistral 7B的经验证配置将停机数降至5—8个，挽回265,000美元损失；未给出各模型与各配置的完整对应结果。[摘要]",
+        "limitations": "当前材料仅为摘要，未提供故障清单、提示词、验证规则、重复试验或结果波动，因而无法判断收益的稳定性及具体来源。摘要明确使用动态仿真，并为液相运行修改反应动力学；其对真实装置、其他工况和实际经济条件的适用性，现有证据不足以确认。[摘要]",
+        "connection": "该研究与智能运维的直接联系，是将异常监测、故障诊断和操作干预纳入同一流程；与可靠性研究的联系，则是考察故障条件下的停机结果及动作验证。解读：它更偏向运行阶段的容错决策评测，不能把这些成果等同于结构设计优化或设备寿命预测。[摘要]",
+        "next_steps": "建议获取全文后，先核查各验证配置在相同故障和模型条件下的对照，再检查错误动作、验证失败与停机之间的关系。若用于自身智能运维研究，建议借鉴其评测组织方式，分别衡量诊断正确性、动作可接受性及运行收益；这些是后续研究建议，并非作者已证实的结论。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "OperAItor：面向化工过程容错运行的智能体框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "http://arxiv.org/abs/2611.05179v1"
+      ],
+      "analyzed_at": "2026-11-04T13:46:06.406917+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "化工过程发生故障时，大语言模型智能体能否帮助装置维持运行，而不只是给出诊断？OperAItor把过程监测、故障诊断、动作生成与验证纳入同一框架，通过动态仿真比较停机与经济损失，为评估智能体的监督层故障管理能力提供基准。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从识别故障走向监督层处置",
+            "paragraphs": [
+              "OperAItor是用于开发和评估化工过程监督层故障管理智能体的开源框架。它关注的不只是识别异常，还包括规划并生成监督层操作动作，以及比较不同动作验证方式下的运行结果。",
+              "研究采用代表异丙醇脱氢的动态反应器—精馏过程，使用基于物理的热力学描述，并修改反应动力学以允许液相操作。仿真装置包含PI控制回路、过程报警、主备用泵组和独立安全仪表功能；这些配置构成了智能体接受评估的过程环境。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "把智能体架构与动作验证分开比较",
+            "paragraphs": [
+              "智能体架构整合多变量统计过程监测、故障诊断、知识图谱检索、动作规划和监督层动作生成。过程由113变量的微分—代数模型表示，标称进料速率为100kmol/h，丙酮产量约为4t/h。",
+              "研究比较五种动作验证配置：不验证、基于大语言模型的评判器、数字孪生仿真，以及不带后果推演和带后果推演的确定性可接受性检查。评估覆盖四种大语言模型和20个场景，包含单一故障与多个同时发生的故障。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "经验证配置减少了仿真停机",
+            "paragraphs": [
+              "没有智能体干预时，18个场景发生装置停机。在设定的基准经济假设下，相对于无故障运行，经济损失为$399,000。这是特定仿真与经济设定下的结果，不宜直接当作真实工厂的损失估计。",
+              "摘要报告，对于GPT-5 nano、Qwen3 8B和Mistral 7B，经验证的智能体配置将停机场景数降至5–8，并挽回$265,000的损失。摘要没有逐项拆分各模型与验证配置的结果，因此不能据此判定哪一种验证方式最优。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不足以界定可靠性边界",
+            "paragraphs": [
+              "当前依据仅为完整摘要。虽然已知场景数量，但故障类型与严重程度的分布、重复运行次数、模型与验证配置的完整比较、经济核算细节，以及真实装置验证范围，均无法由摘要判断。这些是信息边界，不代表论文没有开展相关工作；停机减少也不能直接等同于获得全面安全保证。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注动作如何通过验证",
+            "paragraphs": [
+              "阅读启发：这项工作值得关注的不只是语言模型选型，还有生成动作如何接受验证。进一步阅读时，可重点核对不同验证配置对停机结果的影响、多个同时故障下的表现，以及数字孪生仿真与确定性检查各自的适用边界，从而理解结果成立的条件，而非直接推断工业部署效果。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的OperAItor研究构成",
+            "description": "概括框架、仿真对象、智能体架构与评估之间的关系；这是摘要示意，不是论文原图，也不表示实际控制执行时序。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "OperAItor框架",
+                "detail": "开发和评估化工过程监督层故障管理的大语言模型智能体。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "动态过程仿真",
+                "detail": "以代表异丙醇脱氢的反应器—精馏过程演示框架。"
+              },
+              {
+                "id": "c",
+                "stage": 1,
+                "label": "集成智能体架构",
+                "detail": "整合多变量统计过程监测、故障诊断、知识图谱检索、动作规划及监督层动作生成。"
+              },
+              {
+                "id": "d",
+                "stage": 1,
+                "label": "动作验证配置",
+                "detail": "比较不验证、模型评判器、数字孪生仿真及带或不带后果推演的确定性可接受性检查。"
+              },
+              {
+                "id": "e",
+                "stage": 2,
+                "label": "模型与故障场景评估",
+                "detail": "使用四种大语言模型，在20个单一及多故障场景中评估。"
+              },
+              {
+                "id": "f",
+                "stage": 3,
+                "label": "停机与经济损失结果",
+                "detail": "报告无智能体干预与经验证智能体配置下的停机和经济损失结果。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "演示对象"
+              },
+              {
+                "from": "a",
+                "to": "c",
+                "label": "架构整合"
+              },
+              {
+                "from": "a",
+                "to": "d",
+                "label": "比较配置"
+              },
+              {
+                "from": "a",
+                "to": "e",
+                "label": "开展评估"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "报告结果"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-04T13:56:25.733510+00:00",
+      "article_profile": "9bd5be6d476b5b437d1ea45d42c23c8892f1b52ab3bb68704659d674b25cde2f",
+      "analysis_references": {},
+      "analysis_material_version": "8556f50956c6e5c7845f7a05c3cfa658bc929433431c57cbbc2e252fe6cad6af",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "1915317cfd34",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-04T13:56:25.733511+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -1065,7 +1669,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Fault diagnosis of rotating machinery frequently encounters the compounded challenges of non-stationary operating conditions and small-sample data constraints. Traditional deep learning models often exhibit suboptimal performance when addressing these issues. Deep Generative Models (DGMs) offer innovative solutions by synthesizing high-fidelity data samples, reconstructing latent system states, and modeling complex multimodal data streams. This paper presents a review of rotating machinery fault diagnosis technologies based on DGMs. The state-of-the-art applications of DGMs and their variants,…",
+      "summary": "旋转机械故障诊断常同时面临非平稳工况与小样本约束。本文综述深度生成模型的相关应用，覆盖深度自回归模型、变分自编码器、生成对抗网络、扩散模型和大语言模型，梳理数据生成、域适应与泛化、多模态融合及诊断检测任务。摘要还涉及与传统方法的对比，以及可解释性、边缘部署效率等问题。解读：适合用于建立智能运维领域的技术分类与选题框架，但当前仅有摘要，不能据此判断具体模型的性能优劣。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "9f8988299a654d8d7a862514710ab0b8dd2d17dd",
@@ -1106,11 +1710,145 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为智能运维方向的综述候选重点阅读，尤其关注小样本、跨工况与多模态诊断的技术分类；但须通过全文核查文献覆盖、比较依据和实际部署证据。[摘要]",
+      "deep_read": {
+        "problem": "本文关注旋转机械诊断中的双重困难：非平稳运行工况与小样本数据约束。摘要以“non-stationary operating conditions”和“small-sample data constraints”明确问题背景，并指出传统深度学习应对不足，但没有给出具体失效案例、数据集或性能差距。[摘要]",
+        "method": "本文采用综述而非单一模型实验的形式，系统梳理深度自回归模型、变分自编码器、生成对抗网络、扩散模型及大语言模型。应用按数据生成、域适应与泛化、多模态融合和下游诊断检测展开；摘要称其为“systematically summarized”，但未交代检索与筛选流程。[摘要]",
+        "innovation": "解读：本文值得关注之处在于以生成模型为共同视角，将多类模型及多种诊断任务纳入同一综述范围，并涉及与传统信号处理、标准深度学习的比较。摘要称“contrasts DGMs”，但未展示比较框架，因此不能将其认定为已验证的新算法或首创分类体系。[摘要]",
+        "findings": "摘要将生成模型的作用概括为合成高保真样本、重建潜在系统状态和建模复杂多模态数据流，其中明确提到“reconstructing latent system states”。这些是摘要陈述的技术用途，而非本次可核查的实验结论；资料未提供准确率、增益或模型排名。[摘要]",
+        "limitations": "摘要列出的当前问题涉及参数高效微调策略、可解释性与可靠性，以及边缘部署计算效率，原文包括“computational efficiency for edge deployment”。这些属于综述讨论的领域问题，不能直接归为本文实验缺陷；资料也不足以评估综述覆盖是否完整。[摘要]",
+        "connection": "解读：该文与智能运维直接相关，可帮助组织数据稀缺、工况变化和多源监测下的诊断研究。摘要明确覆盖“fault diagnosis and anomaly detection”。与可靠性研究的联系主要在状态识别及诊断可信性层面；尚无证据表明其讨论结构优化设计或寿命可靠性量化。[摘要]",
+        "next_steps": "作者提出少样本或零样本学习、稳健多模态生成、物理信息混合架构，以及强化学习与生成模型结合等方向。建议后续阅读全文时，优先核查“physics-informed hybrid DGM architectures”的具体案例与物理约束形式，再判断其能否迁移到自己的设备诊断问题。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "基于深度生成模型的旋转机械故障诊断技术综述",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.3390/s26216883"
+      ],
+      "analyzed_at": "2026-11-04T13:57:47.754310+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "工况不断变化、故障样本又少，旋转机械的智能诊断如何保持有效？这篇综述围绕深度生成模型梳理技术选择，阅读价值在于理解数据生成、跨域适应与诊断任务之间的联系，而不是寻找一个已经验证的最优模型。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "变工况与小样本叠加，诊断为何困难",
+            "paragraphs": [
+              "旋转机械故障诊断经常同时面临非平稳运行工况与小样本数据约束。摘要指出，传统深度学习模型在处理这些问题时往往表现不够理想。因此，本文关注的不是单纯扩大模型，而是生成式方法能为这些约束提供哪些解决思路。",
+              "深度生成模型的作用也不只限于补充训练数据。摘要将其能力概括为合成高保真数据样本、重构系统潜在状态，以及建模复杂的多模态数据流，为理解这类方法在故障诊断中的不同角色提供了入口。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "按模型家族与应用任务组织综述",
+            "paragraphs": [
+              "这是一篇综述，而非摘要中报告了新诊断算法及其实验结果的研究。作者系统总结了深度自回归模型、变分自编码器、生成对抗网络、扩散模型和大语言模型及其变体在旋转机械故障诊断中的应用。",
+              "应用层面覆盖数据生成、领域适应与泛化、多模态数据融合，以及下游故障诊断和异常检测。综述还将深度生成模型与传统信号处理方法、标准深度学习模型进行对照；摘要未说明文献检索、筛选或质量评价的具体流程。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "技术版图之外，部署约束同样重要",
+            "paragraphs": [
+              "摘要呈现的主要成果是对模型类型、应用任务及现有限制的梳理，而不是某类模型在统一测试中的性能胜出。其讨论范围表明，生成式方法既涉及数据层面的处理，也涉及跨域、多模态及下游诊断任务，不能仅按“生成更多样本”理解。",
+              "作者重点分析的限制包括参数高效微调策略、可解释性（可靠性），以及面向边缘部署的计算效率。摘要另将少样本或零样本学习、稳健多模态数据生成、物理信息混合生成架构及强化学习融合列为未来方向；这些是研究展望，不是已验证的诊断增益。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要不足以判断比较强度与验证范围",
+            "paragraphs": [
+              "仅凭当前摘要，无法判断所纳入研究的样本规模、设备类型、故障类别及工况覆盖，也无法核对模型比较是否采用一致的数据划分、基线与评价指标。摘要没有给出定量结果，因此不能据此排列模型优劣或推断跨设备适用性。",
+              "同样，真实工业场景中的验证范围、生成数据的可信度，以及边缘部署的实际资源开销，都需要进一步阅读相关内容。这些属于当前资料未报告的信息，不能据此认定论文或其纳入研究没有开展相应工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：沿任务需求追问证据",
+            "paragraphs": [
+              "阅读启发：面向智能运维，可先区分自己的主要困难是样本稀缺、跨工况迁移，还是多模态信息融合，再阅读对应模型的应用证据。值得继续追问的是：生成数据是否支撑了真实诊断任务，可解释性与可靠性如何评价，以及计算效率是否满足部署需求；当前摘要尚不能回答这些问题。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的综述组织示意",
+            "description": "概括摘要明确陈述的梳理、对照、限制分析与展望，不代表实验流程，也不是论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "梳理模型与应用",
+                "detail": "总结深度生成模型及其变体在旋转机械故障诊断中的应用。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "对照既有方法",
+                "detail": "与传统信号处理方法及标准深度学习模型进行对照。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "分析现有限制",
+                "detail": "关注参数高效微调、可解释性（可靠性）及边缘部署计算效率。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "提出未来方向",
+                "detail": "讨论少样本或零样本、多模态生成、物理信息架构与强化学习融合。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "开展方法对照"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "讨论现有限制"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "展望未来研究"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-04T14:07:11.495812+00:00",
+      "article_profile": "6eff705bcea238b112c9e83915c0e59fa492a338b4f18171364672187f459403",
+      "analysis_references": {},
+      "analysis_material_version": "046e77411cdda1b6096e87c9b687e3f9812d52a0c21b797982481470d8307072",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "0ed43e6c82bd",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-04T14:07:11.496910+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "arXiv",
@@ -1334,7 +2072,7 @@
         "generative_design",
         "fatigue_reliability"
       ],
-      "summary": "Multi-bolted flange (MBF) connections are essential components of piping systems, pressure vessels, offshore structures, renewable energy infrastructure, and process plants. However, their long-term reliability is often affected by complex mechanical loading, thermal cycling, gasket degradation, corrosion, bolt preload loss, and uneven force distributions. These technical challenges can lead to leakage, fatigue failure, unplanned shutdowns, repeated component replacement, and increased material waste. This review examines the role of the Finite Element Method (FEM) in improving the sustainable…",
+      "summary": "多螺栓法兰在复杂载荷、热循环、腐蚀及预紧力损失下，可能出现泄漏、疲劳失效与材料浪费。本文综述有限元方法如何服务于应力分析、密封接触压力预测、疲劳寿命评估及维护决策，并强调接触、摩擦和网格等建模条件。[摘要]其关注点是将结构可靠性与资源节约联系起来，而非报告新的试验成果。摘要还将机器学习验证和数字孪生维护列为研究缺口，适合作为相关选题的入门线索。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "b7372bb10d9c7862fc01d02a649737cae7ac003e",
@@ -1377,11 +2115,145 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议重点关注其法兰接触建模、疲劳评估与预测性维护之间的联系；但当前仅有摘要，适合作为综述选读，不能据此认定其提出了经过验证的智能运维算法。[摘要]",
+      "deep_read": {
+        "problem": "本文关注多螺栓法兰长期可靠性及其资源消耗问题。摘要列出机械载荷、热循环、垫片退化、腐蚀和预紧力损失等影响因素，并指出其可能导致“leakage, fatigue failure”及非计划停机。[摘要]研究问题因此同时涉及连接安全、维护频次与材料浪费，而不只是静态承载能力。",
+        "method": "文章采用综述方式，原文表述为“Recent studies have been synthesised”，梳理有限元在应力分布、预紧力、垫片接触压力、疲劳寿命及腐蚀风险评估中的作用。[摘要]摘要未交代文献检索范围、筛选标准或质量评价程序，故不能将其直接认定为系统性综述。",
+        "innovation": "解读：其值得关注之处在于以“optimised design and green maintenance strategies”为共同视角，组织法兰有限元研究，将密封、寿命与资源效率联系起来。[摘要]这属于综述框架层面的特点；现有资料不足以确认其提出了原创求解方法、新材料模型或经验证的新型维护策略。",
+        "findings": "摘要认为有限元能够支持减少过度设计、改善密封、延长寿命，并通过提前识别失效机制支持预测性维护，原文使用“reduce overdesign”。[摘要]这些是综述归纳的作用方向，当前未提供对照数据、改善幅度或验证案例，不能进一步推导具体节材比例与寿命增益。",
+        "limitations": "作者明确指出有限元与自修复材料、实时自适应控制、传感监测、机器学习验证及数字孪生维护的融合仍有缺口，原文称“important research gaps remain”。[摘要]另就当前资料而言，缺少模型误差、适用边界及实证细节；这是摘要证据范围限制，不能直接认定全文也未讨论。",
+        "connection": "解读：与结构设计和疲劳可靠性的联系较直接，摘要明确涉及预紧力评估、密封接触压力与疲劳寿命。与智能运维的联系主要体现为“predictive maintenance”和健康监测。[摘要]机器学习及数字孪生仍被列为融合缺口，因此不能把本文视为已经实现智能闭环维护的研究。",
+        "next_steps": "建议：若进一步获取全文，优先核对预紧力定义、接触关系、垫片压缩性及服役载荷组合的处理依据。摘要明确强调“mesh refinement”等建模条件。[摘要]可迁移研究宜先建立可验证的法兰有限元基线，再探索传感数据校准与维护决策；该路径是研究建议，并非作者已完成的成果。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "多螺栓法兰可持续结构完整性的有限元方法：优化设计与绿色维护策略综述",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.17576/jkukm-2026-38(7)-09"
+      ],
+      "analyzed_at": "2026-11-04T14:08:46.412613+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "5d19fb45c23486d9b17f8165a968f99e6aa4b1c9f273ef54948a6d51b751efc3",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "5fccb145f752",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-04T14:18:12.745050+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      },
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "多螺栓法兰连接的泄漏与疲劳失效，不仅影响设备安全，也会带来停机、更换和材料浪费。这篇综述讨论有限元方法如何连接结构可靠性、设计优化与绿色维护，值得关注的是其对建模条件和工程应用边界的梳理。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "法兰可靠性为何也是资源效率问题",
+            "paragraphs": [
+              "多螺栓法兰连接广泛用于管道、压力容器、海上结构、可再生能源基础设施和流程装置。其长期可靠性受到复杂机械载荷、热循环、垫片退化、腐蚀、螺栓预紧力损失及受力不均等因素影响。",
+              "这些问题可能引发泄漏、疲劳失效和非计划停机，并增加部件更换与材料浪费。因此，本文关注的不只是连接能否承载，也包括如何通过优化设计和维护，兼顾安全、寿命与资源利用。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "综述如何组织有限元的应用与建模条件",
+            "paragraphs": [
+              "本文是一篇综述，摘要明确的方法是综合近期研究，梳理有限元方法在多螺栓法兰系统中的作用，而非报告一套新开展的实验或仿真流程。讨论覆盖应力分布、螺栓预紧力、垫片接触压力、疲劳寿命、泄漏预防、腐蚀风险和结构健康监测。",
+              "在建模条件上，作者特别强调预紧力定义、接触相互作用、垫片可压缩性、摩擦行为、网格细化及服役载荷组合。这些内容构成理解模型适用性的重点，但摘要未展开具体设置与求解过程。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "从失效机制识别走向设计与维护支持",
+            "paragraphs": [
+              "综述认为，有限元已显著增进对多螺栓法兰性能的理解。其讨论的关键价值，是在现场失效发生前识别关键失效机制，为减少过度设计、改善密封、延长服役寿命及支持预测性维护提供帮助。这里呈现的是综述层面的判断，而非摘要给出的定量收益。",
+              "与此同时，作者指出，有限元与自修复材料、实时自适应控制、传感器监测、机器学习验证及数字孪生维护框架的整合仍存在研究缺口。这些方向不能被解读为本文已经完成验证的系统。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "仅凭摘要还不能判断哪些证据强度",
+            "paragraphs": [
+              "摘要未说明纳入文献的数量、检索与筛选标准，也未交代各研究的试验样本、法兰类型、材料和工况覆盖范围。因此，尚不能判断综述结论对不同工程场景的代表性。",
+              "摘要也未给出统一的比较基线、预测误差、试验或现场验证范围，以及寿命、密封和资源效率的量化结果。这不等于论文没有相关分析，而是当前资料不足以判断其比较公平性与工程可迁移性。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：先核对模型，再理解智能维护",
+            "paragraphs": [
+              "阅读启发：进一步阅读时，可优先关注预紧力、接触与垫片行为如何被描述，以及疲劳和泄漏判断依据哪些验证证据。对于智能运维，更值得追问的是传感器信息、机器学习验证与有限元分析如何衔接，而不是把数字孪生等研究缺口直接视为成熟成果。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的综述内容关系示意",
+            "description": "概括近期研究综合、有限元应用梳理与设计维护价值之间的关系，不代表论文原图或新实验流程。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "综合近期法兰研究",
+                "detail": "综述多螺栓法兰连接中有限元方法的相关研究。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "梳理有限元分析用途",
+                "detail": "涵盖应力、预紧力、垫片接触压力、疲劳、泄漏、腐蚀及健康监测。"
+              },
+              {
+                "id": "c",
+                "stage": 1,
+                "label": "强调关键建模条件",
+                "detail": "关注预紧力、接触、垫片可压缩性、摩擦、网格及服役载荷组合。"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "讨论设计与维护价值",
+                "detail": "讨论减少过度设计、改善密封、延长寿命和支持预测性维护的作用。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "综合应用研究"
+              },
+              {
+                "from": "a",
+                "to": "c",
+                "label": "梳理建模要点"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "讨论工程价值"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-04T14:18:12.743065+00:00",
+      "article_profile": "99ad20bbc22e0d1338d64fecec68d9a2006293ce66971f5ae60eeb06e158abdc"
     }
   ],
   "source_status": {
@@ -2348,13 +3220,13 @@
     "unavailable": 44
   },
   "analysis_status": {
-    "ready_core": 2,
+    "ready_core": 5,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 4
+    "pending": 1
   },
   "edition": {
     "id": "41834128068",
