@@ -29,7 +29,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "ABSTRACT Accurate prediction of the fatigue life of ultrahigh performance concrete (UHPC), due to its complex multiparameter dependent nonlinear behavior, presents a major challenge for ensuring structural safety and durability. To address this issue, this study integrates machine learning algorithms with interpretability analysis to develop a high‐precision prediction model. The Yeo–Johnson transformation was employed to correct the pronounced positive skewness of the UHPC fatigue life data. Through a systematic evaluation of seven machine learning algorithms, the hyperparameter‐optimized Gau…",
+      "summary": "本文针对超高性能混凝土疲劳寿命的多参数非线性预测问题，采用Yeo–Johnson变换处理数据正偏，并比较七种机器学习算法。摘要报告，调优后的高斯过程回归表现最佳，且在源数据验证中优于既有模型。SHAP分析进一步识别出粗骨料体积、立方体抗压强度和应力水平三个主导因素。本文适合从疲劳可靠性与可解释预测角度阅读，但当前仅有摘要，无法核实数据划分和工程适用边界。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7225173350",
@@ -71,11 +71,154 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议重点关注数据变换、模型比较与解释分析如何衔接，这与疲劳可靠性预测直接相关；但应在取得全文后核查验证独立性，不能仅凭摘要中的高拟合指标认定工程可用。[摘要；解读]",
+      "deep_read": {
+        "problem": "研究问题是如何预测超高性能混凝土的疲劳寿命。摘要将困难归于“complex multiparameter dependent nonlinear behavior”，并将预测需求联系到结构安全与耐久性。解读：其核心是多因素共同作用下的寿命估计，而非直接建立结构失效概率模型。[摘要]",
+        "method": "方法包括以Yeo–Johnson变换校正寿命数据的明显正偏，系统比较七种机器学习算法，并对高斯过程回归进行超参数优化，最后使用SHAP解释预测。摘要明确写出“seven machine learning algorithms”，但未说明其余算法名称、调参范围及数据划分方式。[摘要]",
+        "innovation": "摘要呈现的特色是将偏态数据处理、高斯过程回归预测与SHAP解释结合，而非只报告预测精度。原文以“integrates machine learning algorithms with interpretability analysis”概括路线。解读：这是一种方法组合特色；是否构成相对既有研究的创新，尚缺全文对照证据。[摘要]",
+        "findings": "摘要报告最优模型R²为0.9931、MAPE为1.410%；源数据验证R²为0.939，既有模型为0.665。SHAP识别出粗骨料体积、立方体抗压强度及应力水平三个主导因素，合计对应“over 85% of the prediction variability”。这些均为摘要报告，尚不能独立复核。[摘要]",
+        "limitations": "当前资料未交代样本量、数据来源构成、训练测试划分、重复验证或误差分布，也未提供预测区间。解读：这些是摘要级评估的证据缺口，并非已经证实的论文缺陷；尤其不能仅据“robustness”一词判断模型在不同配合比或载荷条件下均可靠。[摘要]",
+        "connection": "解读：该研究与疲劳可靠性的直接联系在于提供寿命预测方法；SHAP识别的因素也可为结构材料参数筛选提供参考。但摘要未涉及智能运维监测、时变损伤更新或可靠指标计算，因此不能将其成果直接表述为在线运维系统或完整可靠性设计方法。[摘要]",
+        "next_steps": "建议：取得全文后优先核查变换参数是否仅由训练数据确定、源数据验证是否独立，以及不同应力水平下的误差。若面向可靠性研究，可进一步评估预测不确定性及其校准效果，再讨论寿命分布与失效概率；这些是后续研究建议，不是作者已完成的成果。[摘要；建议]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "结合SHAP解释与Yeo–Johnson变换的超高性能混凝土疲劳寿命高斯过程回归预测",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1111/ffe.70485"
+      ],
+      "analyzed_at": "2026-11-04T13:25:03.222951+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "超高性能混凝土（UHPC）的疲劳寿命受多参数非线性关系影响，如何既预测准确、又解释预测依据，是结构安全与耐久性评估中的难题。这项研究将数据变换、机器学习比较和SHAP解释结合起来，值得关注的是其预测表现及验证边界。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "UHPC疲劳寿命：多参数非线性带来的预测难题",
+            "paragraphs": [
+              "疲劳寿命预测不仅要面对多个影响参数，还要处理参数与寿命之间复杂的非线性关系。摘要将这一问题与结构安全、耐久性联系起来，研究目标是构建兼顾预测精度与可解释性的评估模型，而非仅给出一个寿命预测值。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "先处理数据偏态，再比较预测算法",
+            "paragraphs": [
+              "针对UHPC疲劳寿命数据显著的正偏态，研究采用Yeo–Johnson变换进行修正，随后系统评价七种机器学习算法，并对高斯过程回归（GPR）进行超参数优化。摘要还报告了基于源数据的验证，并通过Shapley加性解释（SHAP）分析主要影响因素。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "GPR表现最佳，主要影响集中于三类参数",
+            "paragraphs": [
+              "摘要报告，超参数优化后的GPR综合表现最佳，R² = 0.9931，MAPE = 1.410%。在基于源数据的验证中，GPR的R²为0.939，高于既有模型的0.665。这两组结果对应不同的评价表述，不能合并理解为同一次验证，也不宜只引用其中较高的数值概括模型性能。",
+              "SHAP分析指出，粗骨料体积、立方体抗压强度和应力水平是主导影响因素，合计解释超过85%的预测变异。这揭示了模型预测主要依赖哪些信息，但解释预测贡献并不等于确认材料疲劳损伤的因果机制，摘要也未给出各因素作用方向。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "高精度指标之外，验证范围仍需进一步核对",
+            "paragraphs": [
+              "本解读仅依据完整摘要，无法判断样本数量、数据来源构成、训练与测试划分，以及源数据验证与模型开发数据是否独立。摘要也未交代其他算法的具体表现、既有模型的适用条件及比较设置，因此尚不能判断性能优势在不同数据条件下能否保持。",
+              "摘要未报告跨材料配比、加载条件或工程场景的验证范围，也未给出预测不确定性的评价信息。这些属于当前资料无法判断的内容，不代表论文没有开展相关工作；其工程评估用途也不宜直接等同于已经验证的实际部署效果。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：把预测精度与适用边界一起看",
+            "paragraphs": [
+              "阅读启发：面向结构疲劳与可靠性评估，后续阅读可重点核对偏态变换如何衔接模型训练与寿命输出、源数据验证如何组织，以及SHAP贡献在何种数据范围内成立。对智能运维而言，这项工作提供了寿命建模的参考，但摘要不足以支持其已具备在线监测或维护决策能力。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的UHPC疲劳寿命建模示意",
+            "description": "概括摘要明确描述的数据处理、算法评价与解释环节，不表示论文完整实验配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "UHPC疲劳寿命数据",
+                "detail": "摘要指出数据存在显著正偏态。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "Yeo–Johnson变换",
+                "detail": "修正疲劳寿命数据的正偏态。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "机器学习算法评价",
+                "detail": "系统比较算法表现，并进行GPR超参数优化。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "GPR预测模型",
+                "detail": "摘要报告其综合表现最佳，并开展源数据验证。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "SHAP解释分析",
+                "detail": "识别模型预测中的主导影响因素。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "偏态修正"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "用于预测建模"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "比较与优化"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "解释预测贡献"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-04T13:35:58.637986+00:00",
+      "article_profile": "86bbbf9db5ae271b949418426be26768c430693c9aa176e6fb1f64c3ad212bf2",
+      "analysis_references": {},
+      "analysis_material_version": "68a87218bce88e0d9dcdc90a2fa899585a08c2fd6986547223663dc08bf538fb",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "c3c1ff243e25",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-04T13:35:58.639994+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -577,7 +720,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "ABSTRACT Accurate prediction of the fatigue life of ultrahigh performance concrete (UHPC), due to its complex multiparameter dependent nonlinear behavior, presents a major challenge for ensuring structural safety and durability. To address this issue, this study integrates machine learning algorithms with interpretability analysis to develop a high‐precision prediction model. The Yeo–Johnson transformation was employed to correct the pronounced positive skewness of the UHPC fatigue life data. Through a systematic evaluation of seven machine learning algorithms, the hyperparameter‐optimized Gau…",
+      "summary": "本文针对超高性能混凝土疲劳寿命的多参数非线性预测问题，采用Yeo–Johnson变换处理数据正偏，并比较七种机器学习算法。摘要报告，调优后的高斯过程回归表现最佳，且在源数据验证中优于既有模型。SHAP分析进一步识别出粗骨料体积、立方体抗压强度和应力水平三个主导因素。本文适合从疲劳可靠性与可解释预测角度阅读，但当前仅有摘要，无法核实数据划分和工程适用边界。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7225173350",
@@ -619,11 +762,154 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议重点关注数据变换、模型比较与解释分析如何衔接，这与疲劳可靠性预测直接相关；但应在取得全文后核查验证独立性，不能仅凭摘要中的高拟合指标认定工程可用。[摘要；解读]",
+      "deep_read": {
+        "problem": "研究问题是如何预测超高性能混凝土的疲劳寿命。摘要将困难归于“complex multiparameter dependent nonlinear behavior”，并将预测需求联系到结构安全与耐久性。解读：其核心是多因素共同作用下的寿命估计，而非直接建立结构失效概率模型。[摘要]",
+        "method": "方法包括以Yeo–Johnson变换校正寿命数据的明显正偏，系统比较七种机器学习算法，并对高斯过程回归进行超参数优化，最后使用SHAP解释预测。摘要明确写出“seven machine learning algorithms”，但未说明其余算法名称、调参范围及数据划分方式。[摘要]",
+        "innovation": "摘要呈现的特色是将偏态数据处理、高斯过程回归预测与SHAP解释结合，而非只报告预测精度。原文以“integrates machine learning algorithms with interpretability analysis”概括路线。解读：这是一种方法组合特色；是否构成相对既有研究的创新，尚缺全文对照证据。[摘要]",
+        "findings": "摘要报告最优模型R²为0.9931、MAPE为1.410%；源数据验证R²为0.939，既有模型为0.665。SHAP识别出粗骨料体积、立方体抗压强度及应力水平三个主导因素，合计对应“over 85% of the prediction variability”。这些均为摘要报告，尚不能独立复核。[摘要]",
+        "limitations": "当前资料未交代样本量、数据来源构成、训练测试划分、重复验证或误差分布，也未提供预测区间。解读：这些是摘要级评估的证据缺口，并非已经证实的论文缺陷；尤其不能仅据“robustness”一词判断模型在不同配合比或载荷条件下均可靠。[摘要]",
+        "connection": "解读：该研究与疲劳可靠性的直接联系在于提供寿命预测方法；SHAP识别的因素也可为结构材料参数筛选提供参考。但摘要未涉及智能运维监测、时变损伤更新或可靠指标计算，因此不能将其成果直接表述为在线运维系统或完整可靠性设计方法。[摘要]",
+        "next_steps": "建议：取得全文后优先核查变换参数是否仅由训练数据确定、源数据验证是否独立，以及不同应力水平下的误差。若面向可靠性研究，可进一步评估预测不确定性及其校准效果，再讨论寿命分布与失效概率；这些是后续研究建议，不是作者已完成的成果。[摘要；建议]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "结合SHAP解释与Yeo–Johnson变换的超高性能混凝土疲劳寿命高斯过程回归预测",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1111/ffe.70485"
+      ],
+      "analyzed_at": "2026-11-04T13:25:03.222951+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "超高性能混凝土（UHPC）的疲劳寿命受多参数非线性关系影响，如何既预测准确、又解释预测依据，是结构安全与耐久性评估中的难题。这项研究将数据变换、机器学习比较和SHAP解释结合起来，值得关注的是其预测表现及验证边界。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "UHPC疲劳寿命：多参数非线性带来的预测难题",
+            "paragraphs": [
+              "疲劳寿命预测不仅要面对多个影响参数，还要处理参数与寿命之间复杂的非线性关系。摘要将这一问题与结构安全、耐久性联系起来，研究目标是构建兼顾预测精度与可解释性的评估模型，而非仅给出一个寿命预测值。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "先处理数据偏态，再比较预测算法",
+            "paragraphs": [
+              "针对UHPC疲劳寿命数据显著的正偏态，研究采用Yeo–Johnson变换进行修正，随后系统评价七种机器学习算法，并对高斯过程回归（GPR）进行超参数优化。摘要还报告了基于源数据的验证，并通过Shapley加性解释（SHAP）分析主要影响因素。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "GPR表现最佳，主要影响集中于三类参数",
+            "paragraphs": [
+              "摘要报告，超参数优化后的GPR综合表现最佳，R² = 0.9931，MAPE = 1.410%。在基于源数据的验证中，GPR的R²为0.939，高于既有模型的0.665。这两组结果对应不同的评价表述，不能合并理解为同一次验证，也不宜只引用其中较高的数值概括模型性能。",
+              "SHAP分析指出，粗骨料体积、立方体抗压强度和应力水平是主导影响因素，合计解释超过85%的预测变异。这揭示了模型预测主要依赖哪些信息，但解释预测贡献并不等于确认材料疲劳损伤的因果机制，摘要也未给出各因素作用方向。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "高精度指标之外，验证范围仍需进一步核对",
+            "paragraphs": [
+              "本解读仅依据完整摘要，无法判断样本数量、数据来源构成、训练与测试划分，以及源数据验证与模型开发数据是否独立。摘要也未交代其他算法的具体表现、既有模型的适用条件及比较设置，因此尚不能判断性能优势在不同数据条件下能否保持。",
+              "摘要未报告跨材料配比、加载条件或工程场景的验证范围，也未给出预测不确定性的评价信息。这些属于当前资料无法判断的内容，不代表论文没有开展相关工作；其工程评估用途也不宜直接等同于已经验证的实际部署效果。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：把预测精度与适用边界一起看",
+            "paragraphs": [
+              "阅读启发：面向结构疲劳与可靠性评估，后续阅读可重点核对偏态变换如何衔接模型训练与寿命输出、源数据验证如何组织，以及SHAP贡献在何种数据范围内成立。对智能运维而言，这项工作提供了寿命建模的参考，但摘要不足以支持其已具备在线监测或维护决策能力。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的UHPC疲劳寿命建模示意",
+            "description": "概括摘要明确描述的数据处理、算法评价与解释环节，不表示论文完整实验配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "UHPC疲劳寿命数据",
+                "detail": "摘要指出数据存在显著正偏态。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "Yeo–Johnson变换",
+                "detail": "修正疲劳寿命数据的正偏态。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "机器学习算法评价",
+                "detail": "系统比较算法表现，并进行GPR超参数优化。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "GPR预测模型",
+                "detail": "摘要报告其综合表现最佳，并开展源数据验证。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "SHAP解释分析",
+                "detail": "识别模型预测中的主导影响因素。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "偏态修正"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "用于预测建模"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "比较与优化"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "解释预测贡献"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-04T13:35:58.637986+00:00",
+      "article_profile": "86bbbf9db5ae271b949418426be26768c430693c9aa176e6fb1f64c3ad212bf2",
+      "analysis_references": {},
+      "analysis_material_version": "68a87218bce88e0d9dcdc90a2fa899585a08c2fd6986547223663dc08bf538fb",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "c3c1ff243e25",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-04T13:35:58.639994+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -2062,13 +2348,13 @@
     "unavailable": 44
   },
   "analysis_status": {
-    "ready_core": 1,
+    "ready_core": 2,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 5
+    "pending": 4
   },
   "edition": {
     "id": "41834128068",
