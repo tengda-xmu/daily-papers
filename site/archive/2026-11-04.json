@@ -29,7 +29,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "ABSTRACT Accurate prediction of the fatigue life of ultrahigh performance concrete (UHPC), due to its complex multiparameter dependent nonlinear behavior, presents a major challenge for ensuring structural safety and durability. To address this issue, this study integrates machine learning algorithms with interpretability analysis to develop a high‐precision prediction model. The Yeo–Johnson transformation was employed to correct the pronounced positive skewness of the UHPC fatigue life data. Through a systematic evaluation of seven machine learning algorithms, the hyperparameter‐optimized Gau…",
+      "summary": "本文针对超高性能混凝土疲劳寿命的多参数非线性预测问题，采用Yeo–Johnson变换处理数据正偏，并比较七种机器学习算法。摘要报告，调优后的高斯过程回归表现最佳，且在源数据验证中优于既有模型。SHAP分析进一步识别出粗骨料体积、立方体抗压强度和应力水平三个主导因素。本文适合从疲劳可靠性与可解释预测角度阅读，但当前仅有摘要，无法核实数据划分和工程适用边界。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7225173350",
@@ -71,11 +71,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议重点关注数据变换、模型比较与解释分析如何衔接，这与疲劳可靠性预测直接相关；但应在取得全文后核查验证独立性，不能仅凭摘要中的高拟合指标认定工程可用。[摘要；解读]",
+      "deep_read": {
+        "problem": "研究问题是如何预测超高性能混凝土的疲劳寿命。摘要将困难归于“complex multiparameter dependent nonlinear behavior”，并将预测需求联系到结构安全与耐久性。解读：其核心是多因素共同作用下的寿命估计，而非直接建立结构失效概率模型。[摘要]",
+        "method": "方法包括以Yeo–Johnson变换校正寿命数据的明显正偏，系统比较七种机器学习算法，并对高斯过程回归进行超参数优化，最后使用SHAP解释预测。摘要明确写出“seven machine learning algorithms”，但未说明其余算法名称、调参范围及数据划分方式。[摘要]",
+        "innovation": "摘要呈现的特色是将偏态数据处理、高斯过程回归预测与SHAP解释结合，而非只报告预测精度。原文以“integrates machine learning algorithms with interpretability analysis”概括路线。解读：这是一种方法组合特色；是否构成相对既有研究的创新，尚缺全文对照证据。[摘要]",
+        "findings": "摘要报告最优模型R²为0.9931、MAPE为1.410%；源数据验证R²为0.939，既有模型为0.665。SHAP识别出粗骨料体积、立方体抗压强度及应力水平三个主导因素，合计对应“over 85% of the prediction variability”。这些均为摘要报告，尚不能独立复核。[摘要]",
+        "limitations": "当前资料未交代样本量、数据来源构成、训练测试划分、重复验证或误差分布，也未提供预测区间。解读：这些是摘要级评估的证据缺口，并非已经证实的论文缺陷；尤其不能仅据“robustness”一词判断模型在不同配合比或载荷条件下均可靠。[摘要]",
+        "connection": "解读：该研究与疲劳可靠性的直接联系在于提供寿命预测方法；SHAP识别的因素也可为结构材料参数筛选提供参考。但摘要未涉及智能运维监测、时变损伤更新或可靠指标计算，因此不能将其成果直接表述为在线运维系统或完整可靠性设计方法。[摘要]",
+        "next_steps": "建议：取得全文后优先核查变换参数是否仅由训练数据确定、源数据验证是否独立，以及不同应力水平下的误差。若面向可靠性研究，可进一步评估预测不确定性及其校准效果，再讨论寿命分布与失效概率；这些是后续研究建议，不是作者已完成的成果。[摘要；建议]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "结合SHAP解释与Yeo–Johnson变换的超高性能混凝土疲劳寿命高斯过程回归预测",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1111/ffe.70485"
+      ],
+      "analyzed_at": "2026-11-04T13:25:03.222951+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "68a87218bce88e0d9dcdc90a2fa899585a08c2fd6986547223663dc08bf538fb",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "c3c1ff243e25",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-04T13:25:03.227207+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -577,7 +609,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "ABSTRACT Accurate prediction of the fatigue life of ultrahigh performance concrete (UHPC), due to its complex multiparameter dependent nonlinear behavior, presents a major challenge for ensuring structural safety and durability. To address this issue, this study integrates machine learning algorithms with interpretability analysis to develop a high‐precision prediction model. The Yeo–Johnson transformation was employed to correct the pronounced positive skewness of the UHPC fatigue life data. Through a systematic evaluation of seven machine learning algorithms, the hyperparameter‐optimized Gau…",
+      "summary": "本文针对超高性能混凝土疲劳寿命的多参数非线性预测问题，采用Yeo–Johnson变换处理数据正偏，并比较七种机器学习算法。摘要报告，调优后的高斯过程回归表现最佳，且在源数据验证中优于既有模型。SHAP分析进一步识别出粗骨料体积、立方体抗压强度和应力水平三个主导因素。本文适合从疲劳可靠性与可解释预测角度阅读，但当前仅有摘要，无法核实数据划分和工程适用边界。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7225173350",
@@ -619,11 +651,43 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议重点关注数据变换、模型比较与解释分析如何衔接，这与疲劳可靠性预测直接相关；但应在取得全文后核查验证独立性，不能仅凭摘要中的高拟合指标认定工程可用。[摘要；解读]",
+      "deep_read": {
+        "problem": "研究问题是如何预测超高性能混凝土的疲劳寿命。摘要将困难归于“complex multiparameter dependent nonlinear behavior”，并将预测需求联系到结构安全与耐久性。解读：其核心是多因素共同作用下的寿命估计，而非直接建立结构失效概率模型。[摘要]",
+        "method": "方法包括以Yeo–Johnson变换校正寿命数据的明显正偏，系统比较七种机器学习算法，并对高斯过程回归进行超参数优化，最后使用SHAP解释预测。摘要明确写出“seven machine learning algorithms”，但未说明其余算法名称、调参范围及数据划分方式。[摘要]",
+        "innovation": "摘要呈现的特色是将偏态数据处理、高斯过程回归预测与SHAP解释结合，而非只报告预测精度。原文以“integrates machine learning algorithms with interpretability analysis”概括路线。解读：这是一种方法组合特色；是否构成相对既有研究的创新，尚缺全文对照证据。[摘要]",
+        "findings": "摘要报告最优模型R²为0.9931、MAPE为1.410%；源数据验证R²为0.939，既有模型为0.665。SHAP识别出粗骨料体积、立方体抗压强度及应力水平三个主导因素，合计对应“over 85% of the prediction variability”。这些均为摘要报告，尚不能独立复核。[摘要]",
+        "limitations": "当前资料未交代样本量、数据来源构成、训练测试划分、重复验证或误差分布，也未提供预测区间。解读：这些是摘要级评估的证据缺口，并非已经证实的论文缺陷；尤其不能仅据“robustness”一词判断模型在不同配合比或载荷条件下均可靠。[摘要]",
+        "connection": "解读：该研究与疲劳可靠性的直接联系在于提供寿命预测方法；SHAP识别的因素也可为结构材料参数筛选提供参考。但摘要未涉及智能运维监测、时变损伤更新或可靠指标计算，因此不能将其成果直接表述为在线运维系统或完整可靠性设计方法。[摘要]",
+        "next_steps": "建议：取得全文后优先核查变换参数是否仅由训练数据确定、源数据验证是否独立，以及不同应力水平下的误差。若面向可靠性研究，可进一步评估预测不确定性及其校准效果，再讨论寿命分布与失效概率；这些是后续研究建议，不是作者已完成的成果。[摘要；建议]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "结合SHAP解释与Yeo–Johnson变换的超高性能混凝土疲劳寿命高斯过程回归预测",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1111/ffe.70485"
+      ],
+      "analyzed_at": "2026-11-04T13:25:03.222951+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "68a87218bce88e0d9dcdc90a2fa899585a08c2fd6986547223663dc08bf538fb",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "c3c1ff243e25",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-04T13:25:03.227207+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -2062,13 +2126,13 @@
     "unavailable": 44
   },
   "analysis_status": {
-    "ready_core": 1,
+    "ready_core": 2,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 5
+    "pending": 4
   },
   "edition": {
     "id": "41834128068",
