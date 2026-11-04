@@ -1,20 +1,20 @@
 {
   "id": "public-a6f54d325d31634f891659b5",
-  "content_version": "674e3c9ad1a3a8f1971800d9d1c79d2895f69d5e9620aac137d806b9b08d6547",
+  "content_version": "91b8f9bd71f775ceae73cb2630b7369a7743ed43e7716000781e2d0881b1a4bf",
   "analysis": {
-    "title_zh": "Transformers 模型集成契约",
-    "summary": "【公告原文】Transformers 为 T5 启用 PyTorch 的缩放点积注意力（SDPA）后，意外导致 UMT5 解码器能够关注未来词元，训练时可窥见待预测答案。该问题未引发崩溃，并在主分支停留近两个月。事后回放相关提交时，一个在 CPU 上运行的小型 UMT5 模型每次都能检出问题。公告由此介绍该模型及围绕它构建的测试，适用于关注注意力实现变更、因果性约束和模型集成回归测试的读者；所给节选尚未展示具体契约或操作方法。",
-    "application": "建议：【科研迁移建议】可借鉴小模型回归测试思路，为智能运维时序预测模型设计未来信息泄漏检查，但这属于迁移设想。【官方已报告效果】原文仅报告小型 UMT5 在 CPU 上回放相关提交时均检出该问题，不能据此推定其对其他模型或任务同样有效。",
+    "title_zh": "Transformers Model Integration Contracts：模型集成中的静默缺陷检测",
+    "summary": "公告介绍 Transformers 模型集成测试的背景：2026年7月30日为 T5 启用 PyTorch 的缩放点积注意力（SDPA）后，UMT5 解码器意外能够关注未来词元，训练时可能提前看到答案。程序未崩溃，缺陷在主分支持续近两个月。官方回放相关提交时，小型 UMT5 模型在 CPU 上每次均检出了问题，体现了此类测试对静默回归排查的用途。所给原文截断，未展示完整测试机制或接入方法。",
+    "application": "建议：科研迁移可考虑在模型或注意力实现变更后，增加针对未来信息泄漏的小模型回归测试；这是迁移设想，并非官方已验证的通用效果。官方已报告的效果仅为：回放相关提交时，小型 UMT5 模型在 CPU 上每次均标记出该问题。",
     "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
       "On July 30, 2026, Transformers enabled PyTorch's scaled dot-product attention (SDPA) for T5.",
       "As a side effect, UMT5's decoder could attend to future tokens.",
+      "During training, it could peek at the answer it was supposed to predict.",
       "Nothing crashed, and the bug stayed in main for almost two months.",
-      "When we later replayed those commits, a small UMT5 model running on CPU flagged it on every one of them.",
-      "This post is about that model and the tests built around it."
+      "When we later replayed those commits, a small UMT5 model running on CPU flagged it on every one of them."
     ],
     "basis_url": "https://huggingface.co/blog/transformers-mic"
   },
-  "analyzed_at": "2026-11-03T15:27:09.216974+00:00"
+  "analyzed_at": "2026-11-04T00:49:54.359865+00:00"
 }
