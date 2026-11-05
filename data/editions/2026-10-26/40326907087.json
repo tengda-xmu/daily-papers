@@ -1428,7 +1428,7 @@
       "reading_status": {
         "paper_id": "1994412852e5",
         "state": "failed",
-        "updated_at": "2026-11-04T04:27:21.859309+00:00",
+        "updated_at": "2026-11-05T04:53:55.135936+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -1558,7 +1558,7 @@
       "reading_status": {
         "paper_id": "15d22de52722",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-04T04:25:26.418120+00:00",
+        "updated_at": "2026-11-05T04:44:09.740419+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -1706,7 +1706,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "本文研究大语言模型多智能体系统的通信组织问题，针对成对关系难以表达群体协作、固定通信结构难以适配任务复杂度两项不足，提出HyperAgent。其以超边连接同一子任务中的多个智能体，通过超图卷积聚合信息，并结合变分自编码器与稀疏正则化动态调整拓扑。摘要报告GSM8K准确率为95.07%，token消耗降低25.33%，但未交代该降幅的比较基准。本文仅作摘要级解读，不能据此认定其适用于工程结构生成设计。[摘要]",
+      "summary": "HyperAgent研究大语言模型多智能体的通信组织，而非工程结构的生成设计。作者用超边表示共同执行子任务的协作组，结合超图卷积、变分自编码器与稀疏正则生成任务相关拓扑。[P4–P5] 六项基准的平均成绩为91.77，移除超图后降至89.33。[P6–P7] 解读：其价值主要在群体协作建模，但解码仍构造两两亲和矩阵，且图文存在多处矛盾，效率与可复现性结论需审慎核验。",
       "raw_metadata": {
         "uid": "WOS:001880341000338",
         "title": "HyperAgent: Leveraging Hypergraphs for Topology Optimization in Multi-Agent Communication",
@@ -1836,37 +1836,78 @@
       ],
       "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "建议作为多智能体协作机制的交叉参考阅读，重点关注任务复杂度驱动的稀疏通信设计；不宜仅凭“拓扑优化”一词将其列为工程结构生成设计的核心文献。[摘要]",
+      "recommendation": "建议作为多智能体协作机制的交叉参考阅读，重点研究超边分组与组件消融；不宜作为结构生成设计或可靠性验证的直接证据。",
       "deep_read": {
-        "problem": "论文关注通信结构与协作需求不匹配的问题。摘要以“pairwise edge representations”指出，成对连边难以直接表达多个智能体共同参与的关系；同时，通信拓扑缺乏任务适应性，会使简单任务通信过多、复杂任务协调不足。研究对象是智能体通信网络，而非实体结构的材料分布。[摘要]",
-        "method": "HyperAgent用超边连接同一子任务中的多个智能体，并以超图卷积层完成组内一步信息聚合，原文称“one-step information aggregation”。随后结合变分自编码器与稀疏正则化，依据任务复杂度动态调整超图拓扑。摘要未说明复杂度如何度量、拓扑如何采样及模型如何训练。[摘要]",
-        "innovation": "摘要呈现的主要方法特点，是以直接超边表达群体协作，并将任务适应性的拓扑调整纳入框架，而不只是优化成对通信连接。原文强调“direct hyperedge representations”。解读：其贡献定位在关系表达与自适应通信的结合；仅凭摘要无法确认各组件的首创性或相对已有超图方法的新增内容。[摘要]",
-        "findings": "摘要给出的具体结果集中于GSM8K：准确率为“95.07%”，token消耗降低“25.33%”。作者据此强调性能与效率优势，但未提供降幅对应的基线、其他方法准确率、重复实验或误差范围。因此可确认作者报告了这两项指标，不能进一步判断提升的统计稳健性及跨任务普适性。[摘要]",
-        "limitations": "当前材料的主要限制是证据粒度不足，而非已证实的方法缺陷。摘要虽称“Experiments highlight the superiority”，却未展示对照配置、消融结果和开销构成，无法核对超边、卷积与稀疏正则化各自的贡献。训练成本、失败案例及实际部署表现也未交代，不能据此认定这些方面已经得到验证。[摘要]",
-        "connection": "解读：对智能运维而言，同一子任务中的多角色协作可类比诊断、分析与决策智能体的协同，但摘要没有运维验证。对结构设计与可靠性研究，其潜在联系在协作流程组织，而非结构拓扑或可靠度计算。“communication topologies”明确限定了优化对象，不能将名称相似视作研究方向直接契合的证据。[摘要]",
-        "next_steps": "建议：先获取全文核查token降幅的基准、任务复杂度定义及各模块消融，再决定是否开展迁移研究。若用于工程多智能体系统，可比较固定拓扑、成对图与超图在相同任务预算下的质量和通信成本，并单独考察错误传播与关键角色失效。以上属于后续研究建议，不是摘要已报告的实验或结论。[摘要]"
+        "problem": "作者关注两类通信问题：成对边难以直接表示共同处理子任务的协作群体，固定或适应不足的拓扑又可能造成通信冗余或协调不足。[P1–P2] 研究对象是智能体间的信息交换结构，不是承载结构的几何、材料或力学性能优化，二者的“拓扑”概念应明确区分。",
+        "method": "先编码智能体角色、模型和工具描述，并加入任务节点；双路超图卷积预测潜变量分布。[P4] 解码器生成成对亲和矩阵，经核范数正则和锚结构约束细化，再按最高亲和度邻居构造超边；多轮交互后由汇总智能体作答，以策略梯度训练拓扑生成器。[P5、P7]",
+        "innovation": "方法的特色是将协作单元显式表示为超边，并把任务语义、先验锚结构和随机拓扑生成整合起来，而非只调整独立通信边。[P3–P5] 解读：这是协作表示与生成流程的组合创新，但解码仍经过N×N成对矩阵，不能据超边数量直接认定整个优化过程具有线性复杂度。",
+        "findings": "表1报告GSM8K为96.57%、MultiArith为99.30%、HumanEval为92.40% pass@1，六项平均91.77。[P6] 表2中去除超图、VAE和任务节点后，平均分别下降2.44、1.33和1.26个百分点。[P7] 这些结果支持组件贡献，但准确率与pass@1的平均不应解释为统一任务准确率。",
+        "limitations": "原文缺项及矛盾须保留：[P1]DOI缺后缀，影响定位；[P6]表1部分增量算错，影响提升幅度；[P7]图4(c)图注错配、图3训练单位不一，影响机制与收敛解释；[P8]图5数值及趋势与正文冲突，影响轮数分析。解读：不能补造缺项，也不能据此确认通信效率结论。\n原文核对：[P1] 原页ACM Reference Format及页脚的DOI均仅显示“https://doi.org/10.65109/”，未见后缀。属于书目信息缺项，不影响摘要和引言结论的阅读，不补造完整DOI。；[P6] 表1原页PHP行MultiArith为98.10，附增量2.84，而Vanilla为93.15，两者相减应为4.95；HumanEval为82.96，附增量11.36，而Vanilla为71.68，相减应为11.28。原表增量存在不一致，影响提升幅度解读，但不改变已印出的主指标值。；[P7] 图4(c)原图标题为“Effect of Interaction Rounds (K)”，横轴为交互轮数，展示MMLU及HumanEval准确率；图注(c)却描述图的多跳传播与超边的一步同步。原图与图注不匹配，不能将该子图作为传播机制比较的直接证据。；[P7] 图3(b)原图横轴为“Training Epochs”，图注却称准确率在“50 iterations”后趋稳。训练计量单位不一致，无法确定作者指50个epoch还是50次迭代；准确率上升并趋稳的定性趋势仍可阅读。；[P8] 图5在K=3处将HumanEval标为92.4%，而5.7节原文写其从84.2%提升至91.6%；91.6实际标在K=4处。图文数值不一致，影响最佳轮数对应成绩的引用；应分别保留图示值与正文值。；[P8] 图5显示三个基准均在K=3达到峰值，K=4、5均下降；5.7节却称之后仍有“marginal improvements”。原图与正文趋势描述不一致，影响追加轮数收益的结论，但不妨碍现有图文识读。",
+        "connection": "解读：与智能运维的联系在于把监测、诊断、处置和复核角色组成任务相关协作组，并限制不必要的信息交换。[P3–P5] 对结构设计及可靠性研究，它提供的是组织计算或审查流程的启发，而不是结构优化算法；现有数学、问答和代码基准不足以证明工程适用性。[P6–P8]",
+        "next_steps": "建议先复现表2及通信成本统计，澄清效用与惩罚的优化方向、低秩和稀疏的关系、拓扑排序的方向与去环规则。[P5–P7] 再在运维诊断任务中对比固定群组、成对图和超图，统一模型、预算与轮数，同时记录漏诊、错误传播和token开销；这些是研究设想，不是作者已验证成果。"
       },
       "recommended_direction": "generative_design",
       "reading_status": {
         "paper_id": "c85601ebc634",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-11-04T04:35:48.123314+00:00",
-        "basis": "abstract",
-        "article_state": "complete",
-        "article_stage": "",
-        "reason": "restricted",
-        "total": 0,
-        "covered": 0,
-        "pdf_available": false,
-        "issues": []
+        "state": "published",
+        "updated_at": "2026-11-05T04:57:25.752301+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 10,
+        "covered": 10,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "source_defect",
+            "page": "P1",
+            "detail": "原页ACM Reference Format及页脚的DOI均仅显示“https://doi.org/10.65109/”，未见后缀。属于书目信息缺项，不影响摘要和引言结论的阅读，不补造完整DOI。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "原页节点度和超边度定义中的符号是求和Σ，公式(10)是从i=1到N的乘积Π；文字提取分别出现“˝”及“Ö”等乱码。已按原页辨认，不属于原公式缺项，不影响度归一化及独立高斯采样定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "表1图注及支持状态列中的符号被提取为“%”“!”等。原页以叉号、混合勾叉、勾号分别表示不支持、部分支持、完全支持，不能解释为百分数或感叹号。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P6",
+            "detail": "表1原页PHP行MultiArith为98.10，附增量2.84，而Vanilla为93.15，两者相减应为4.95；HumanEval为82.96，附增量11.36，而Vanilla为71.68，相减应为11.28。原表增量存在不一致，影响提升幅度解读，但不改变已印出的主指标值。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P7",
+            "detail": "图4(c)原图标题为“Effect of Interaction Rounds (K)”，横轴为交互轮数，展示MMLU及HumanEval准确率；图注(c)却描述图的多跳传播与超边的一步同步。原图与图注不匹配，不能将该子图作为传播机制比较的直接证据。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P7",
+            "detail": "图3(b)原图横轴为“Training Epochs”，图注却称准确率在“50 iterations”后趋稳。训练计量单位不一致，无法确定作者指50个epoch还是50次迭代；准确率上升并趋稳的定性趋势仍可阅读。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "图5在K=3处将HumanEval标为92.4%，而5.7节原文写其从84.2%提升至91.6%；91.6实际标在K=4处。图文数值不一致，影响最佳轮数对应成绩的引用；应分别保留图示值与正文值。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "图5显示三个基准均在K=3达到峰值，K=4、5均下降；5.7节却称之后仍有“marginal improvements”。原图与正文趋势描述不一致，影响追加轮数收益的结论，但不妨碍现有图文识读。"
+          }
+        ]
       },
       "title_zh": "HyperAgent：利用超图优化多智能体通信拓扑",
-      "analysis_basis": "abstract",
+      "analysis_basis": "full_text",
       "analysis_kind": "model",
       "analysis_sources": [
-        "https://doi.org/10.65109/qtvf9552"
+        "https://arxiv.org/pdf/2510.10611"
       ],
-      "analyzed_at": "2026-10-26T15:38:05.878855+00:00",
+      "analyzed_at": "2026-11-05T04:57:25.721999+00:00",
       "llm_model": "gpt-6.1-sol",
       "article": {
         "version": 3,
@@ -1969,9 +2010,88 @@
       },
       "article_updated_at": "2026-10-26T15:47:02.312568+00:00",
       "article_profile": "fcfcd7784b460e6c590ab8fbe742315adac7e48216d9ff9f62b1e6ace662f097",
-      "analysis_references": {},
-      "analysis_material_version": "e27f0851cf40c3dde7154388cb6e7a88b740b3736680d9f99a2fb7008cea34cb",
-      "analysis_issues": []
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P4",
+          "P5",
+          "P7"
+        ],
+        "innovation": [
+          "P3",
+          "P4",
+          "P5"
+        ],
+        "findings": [
+          "P6",
+          "P7"
+        ],
+        "limitations": [
+          "P1",
+          "P6",
+          "P7",
+          "P8"
+        ],
+        "connection": [
+          "P3",
+          "P4",
+          "P5",
+          "P6",
+          "P7",
+          "P8"
+        ],
+        "next_steps": [
+          "P5",
+          "P6",
+          "P7"
+        ]
+      },
+      "analysis_material_version": "a963508bf7616804b67c3d5710fd5a13f35160a05cbd6d03c8464fbcc0485f28",
+      "analysis_issues": [
+        {
+          "kind": "source_defect",
+          "page": "P1",
+          "detail": "原页ACM Reference Format及页脚的DOI均仅显示“https://doi.org/10.65109/”，未见后缀。属于书目信息缺项，不影响摘要和引言结论的阅读，不补造完整DOI。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "原页节点度和超边度定义中的符号是求和Σ，公式(10)是从i=1到N的乘积Π；文字提取分别出现“˝”及“Ö”等乱码。已按原页辨认，不属于原公式缺项，不影响度归一化及独立高斯采样定义。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "表1图注及支持状态列中的符号被提取为“%”“!”等。原页以叉号、混合勾叉、勾号分别表示不支持、部分支持、完全支持，不能解释为百分数或感叹号。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P6",
+          "detail": "表1原页PHP行MultiArith为98.10，附增量2.84，而Vanilla为93.15，两者相减应为4.95；HumanEval为82.96，附增量11.36，而Vanilla为71.68，相减应为11.28。原表增量存在不一致，影响提升幅度解读，但不改变已印出的主指标值。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P7",
+          "detail": "图4(c)原图标题为“Effect of Interaction Rounds (K)”，横轴为交互轮数，展示MMLU及HumanEval准确率；图注(c)却描述图的多跳传播与超边的一步同步。原图与图注不匹配，不能将该子图作为传播机制比较的直接证据。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P7",
+          "detail": "图3(b)原图横轴为“Training Epochs”，图注却称准确率在“50 iterations”后趋稳。训练计量单位不一致，无法确定作者指50个epoch还是50次迭代；准确率上升并趋稳的定性趋势仍可阅读。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P8",
+          "detail": "图5在K=3处将HumanEval标为92.4%，而5.7节原文写其从84.2%提升至91.6%；91.6实际标在K=4处。图文数值不一致，影响最佳轮数对应成绩的引用；应分别保留图示值与正文值。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P8",
+          "detail": "图5显示三个基准均在K=3达到峰值，K=4、5均下降；5.7节却称之后仍有“marginal improvements”。原图与正文趋势描述不一致，影响追加轮数收益的结论，但不妨碍现有图文识读。"
+        }
+      ]
     },
     {
       "source": "OpenAlex",
@@ -3626,7 +3746,7 @@
       "reading_status": {
         "paper_id": "1994412852e5",
         "state": "failed",
-        "updated_at": "2026-11-04T04:27:21.859309+00:00",
+        "updated_at": "2026-11-05T04:53:55.135936+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -3756,7 +3876,7 @@
       "reading_status": {
         "paper_id": "15d22de52722",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-04T04:25:26.418120+00:00",
+        "updated_at": "2026-11-05T04:44:09.740419+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -3904,7 +4024,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "本文研究大语言模型多智能体系统的通信组织问题，针对成对关系难以表达群体协作、固定通信结构难以适配任务复杂度两项不足，提出HyperAgent。其以超边连接同一子任务中的多个智能体，通过超图卷积聚合信息，并结合变分自编码器与稀疏正则化动态调整拓扑。摘要报告GSM8K准确率为95.07%，token消耗降低25.33%，但未交代该降幅的比较基准。本文仅作摘要级解读，不能据此认定其适用于工程结构生成设计。[摘要]",
+      "summary": "HyperAgent研究大语言模型多智能体的通信组织，而非工程结构的生成设计。作者用超边表示共同执行子任务的协作组，结合超图卷积、变分自编码器与稀疏正则生成任务相关拓扑。[P4–P5] 六项基准的平均成绩为91.77，移除超图后降至89.33。[P6–P7] 解读：其价值主要在群体协作建模，但解码仍构造两两亲和矩阵，且图文存在多处矛盾，效率与可复现性结论需审慎核验。",
       "raw_metadata": {
         "uid": "WOS:001880341000338",
         "title": "HyperAgent: Leveraging Hypergraphs for Topology Optimization in Multi-Agent Communication",
@@ -4034,37 +4154,78 @@
       ],
       "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "建议作为多智能体协作机制的交叉参考阅读，重点关注任务复杂度驱动的稀疏通信设计；不宜仅凭“拓扑优化”一词将其列为工程结构生成设计的核心文献。[摘要]",
+      "recommendation": "建议作为多智能体协作机制的交叉参考阅读，重点研究超边分组与组件消融；不宜作为结构生成设计或可靠性验证的直接证据。",
       "deep_read": {
-        "problem": "论文关注通信结构与协作需求不匹配的问题。摘要以“pairwise edge representations”指出，成对连边难以直接表达多个智能体共同参与的关系；同时，通信拓扑缺乏任务适应性，会使简单任务通信过多、复杂任务协调不足。研究对象是智能体通信网络，而非实体结构的材料分布。[摘要]",
-        "method": "HyperAgent用超边连接同一子任务中的多个智能体，并以超图卷积层完成组内一步信息聚合，原文称“one-step information aggregation”。随后结合变分自编码器与稀疏正则化，依据任务复杂度动态调整超图拓扑。摘要未说明复杂度如何度量、拓扑如何采样及模型如何训练。[摘要]",
-        "innovation": "摘要呈现的主要方法特点，是以直接超边表达群体协作，并将任务适应性的拓扑调整纳入框架，而不只是优化成对通信连接。原文强调“direct hyperedge representations”。解读：其贡献定位在关系表达与自适应通信的结合；仅凭摘要无法确认各组件的首创性或相对已有超图方法的新增内容。[摘要]",
-        "findings": "摘要给出的具体结果集中于GSM8K：准确率为“95.07%”，token消耗降低“25.33%”。作者据此强调性能与效率优势，但未提供降幅对应的基线、其他方法准确率、重复实验或误差范围。因此可确认作者报告了这两项指标，不能进一步判断提升的统计稳健性及跨任务普适性。[摘要]",
-        "limitations": "当前材料的主要限制是证据粒度不足，而非已证实的方法缺陷。摘要虽称“Experiments highlight the superiority”，却未展示对照配置、消融结果和开销构成，无法核对超边、卷积与稀疏正则化各自的贡献。训练成本、失败案例及实际部署表现也未交代，不能据此认定这些方面已经得到验证。[摘要]",
-        "connection": "解读：对智能运维而言，同一子任务中的多角色协作可类比诊断、分析与决策智能体的协同，但摘要没有运维验证。对结构设计与可靠性研究，其潜在联系在协作流程组织，而非结构拓扑或可靠度计算。“communication topologies”明确限定了优化对象，不能将名称相似视作研究方向直接契合的证据。[摘要]",
-        "next_steps": "建议：先获取全文核查token降幅的基准、任务复杂度定义及各模块消融，再决定是否开展迁移研究。若用于工程多智能体系统，可比较固定拓扑、成对图与超图在相同任务预算下的质量和通信成本，并单独考察错误传播与关键角色失效。以上属于后续研究建议，不是摘要已报告的实验或结论。[摘要]"
+        "problem": "作者关注两类通信问题：成对边难以直接表示共同处理子任务的协作群体，固定或适应不足的拓扑又可能造成通信冗余或协调不足。[P1–P2] 研究对象是智能体间的信息交换结构，不是承载结构的几何、材料或力学性能优化，二者的“拓扑”概念应明确区分。",
+        "method": "先编码智能体角色、模型和工具描述，并加入任务节点；双路超图卷积预测潜变量分布。[P4] 解码器生成成对亲和矩阵，经核范数正则和锚结构约束细化，再按最高亲和度邻居构造超边；多轮交互后由汇总智能体作答，以策略梯度训练拓扑生成器。[P5、P7]",
+        "innovation": "方法的特色是将协作单元显式表示为超边，并把任务语义、先验锚结构和随机拓扑生成整合起来，而非只调整独立通信边。[P3–P5] 解读：这是协作表示与生成流程的组合创新，但解码仍经过N×N成对矩阵，不能据超边数量直接认定整个优化过程具有线性复杂度。",
+        "findings": "表1报告GSM8K为96.57%、MultiArith为99.30%、HumanEval为92.40% pass@1，六项平均91.77。[P6] 表2中去除超图、VAE和任务节点后，平均分别下降2.44、1.33和1.26个百分点。[P7] 这些结果支持组件贡献，但准确率与pass@1的平均不应解释为统一任务准确率。",
+        "limitations": "原文缺项及矛盾须保留：[P1]DOI缺后缀，影响定位；[P6]表1部分增量算错，影响提升幅度；[P7]图4(c)图注错配、图3训练单位不一，影响机制与收敛解释；[P8]图5数值及趋势与正文冲突，影响轮数分析。解读：不能补造缺项，也不能据此确认通信效率结论。\n原文核对：[P1] 原页ACM Reference Format及页脚的DOI均仅显示“https://doi.org/10.65109/”，未见后缀。属于书目信息缺项，不影响摘要和引言结论的阅读，不补造完整DOI。；[P6] 表1原页PHP行MultiArith为98.10，附增量2.84，而Vanilla为93.15，两者相减应为4.95；HumanEval为82.96，附增量11.36，而Vanilla为71.68，相减应为11.28。原表增量存在不一致，影响提升幅度解读，但不改变已印出的主指标值。；[P7] 图4(c)原图标题为“Effect of Interaction Rounds (K)”，横轴为交互轮数，展示MMLU及HumanEval准确率；图注(c)却描述图的多跳传播与超边的一步同步。原图与图注不匹配，不能将该子图作为传播机制比较的直接证据。；[P7] 图3(b)原图横轴为“Training Epochs”，图注却称准确率在“50 iterations”后趋稳。训练计量单位不一致，无法确定作者指50个epoch还是50次迭代；准确率上升并趋稳的定性趋势仍可阅读。；[P8] 图5在K=3处将HumanEval标为92.4%，而5.7节原文写其从84.2%提升至91.6%；91.6实际标在K=4处。图文数值不一致，影响最佳轮数对应成绩的引用；应分别保留图示值与正文值。；[P8] 图5显示三个基准均在K=3达到峰值，K=4、5均下降；5.7节却称之后仍有“marginal improvements”。原图与正文趋势描述不一致，影响追加轮数收益的结论，但不妨碍现有图文识读。",
+        "connection": "解读：与智能运维的联系在于把监测、诊断、处置和复核角色组成任务相关协作组，并限制不必要的信息交换。[P3–P5] 对结构设计及可靠性研究，它提供的是组织计算或审查流程的启发，而不是结构优化算法；现有数学、问答和代码基准不足以证明工程适用性。[P6–P8]",
+        "next_steps": "建议先复现表2及通信成本统计，澄清效用与惩罚的优化方向、低秩和稀疏的关系、拓扑排序的方向与去环规则。[P5–P7] 再在运维诊断任务中对比固定群组、成对图和超图，统一模型、预算与轮数，同时记录漏诊、错误传播和token开销；这些是研究设想，不是作者已验证成果。"
       },
       "recommended_direction": "generative_design",
       "reading_status": {
         "paper_id": "c85601ebc634",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-11-04T04:35:48.123314+00:00",
-        "basis": "abstract",
-        "article_state": "complete",
-        "article_stage": "",
-        "reason": "restricted",
-        "total": 0,
-        "covered": 0,
-        "pdf_available": false,
-        "issues": []
+        "state": "published",
+        "updated_at": "2026-11-05T04:57:25.752301+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 10,
+        "covered": 10,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "source_defect",
+            "page": "P1",
+            "detail": "原页ACM Reference Format及页脚的DOI均仅显示“https://doi.org/10.65109/”，未见后缀。属于书目信息缺项，不影响摘要和引言结论的阅读，不补造完整DOI。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "原页节点度和超边度定义中的符号是求和Σ，公式(10)是从i=1到N的乘积Π；文字提取分别出现“˝”及“Ö”等乱码。已按原页辨认，不属于原公式缺项，不影响度归一化及独立高斯采样定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "表1图注及支持状态列中的符号被提取为“%”“!”等。原页以叉号、混合勾叉、勾号分别表示不支持、部分支持、完全支持，不能解释为百分数或感叹号。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P6",
+            "detail": "表1原页PHP行MultiArith为98.10，附增量2.84，而Vanilla为93.15，两者相减应为4.95；HumanEval为82.96，附增量11.36，而Vanilla为71.68，相减应为11.28。原表增量存在不一致，影响提升幅度解读，但不改变已印出的主指标值。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P7",
+            "detail": "图4(c)原图标题为“Effect of Interaction Rounds (K)”，横轴为交互轮数，展示MMLU及HumanEval准确率；图注(c)却描述图的多跳传播与超边的一步同步。原图与图注不匹配，不能将该子图作为传播机制比较的直接证据。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P7",
+            "detail": "图3(b)原图横轴为“Training Epochs”，图注却称准确率在“50 iterations”后趋稳。训练计量单位不一致，无法确定作者指50个epoch还是50次迭代；准确率上升并趋稳的定性趋势仍可阅读。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "图5在K=3处将HumanEval标为92.4%，而5.7节原文写其从84.2%提升至91.6%；91.6实际标在K=4处。图文数值不一致，影响最佳轮数对应成绩的引用；应分别保留图示值与正文值。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "图5显示三个基准均在K=3达到峰值，K=4、5均下降；5.7节却称之后仍有“marginal improvements”。原图与正文趋势描述不一致，影响追加轮数收益的结论，但不妨碍现有图文识读。"
+          }
+        ]
       },
       "title_zh": "HyperAgent：利用超图优化多智能体通信拓扑",
-      "analysis_basis": "abstract",
+      "analysis_basis": "full_text",
       "analysis_kind": "model",
       "analysis_sources": [
-        "https://doi.org/10.65109/qtvf9552"
+        "https://arxiv.org/pdf/2510.10611"
       ],
-      "analyzed_at": "2026-10-26T15:38:05.878855+00:00",
+      "analyzed_at": "2026-11-05T04:57:25.721999+00:00",
       "llm_model": "gpt-6.1-sol",
       "article": {
         "version": 3,
@@ -4167,9 +4328,88 @@
       },
       "article_updated_at": "2026-10-26T15:47:02.312568+00:00",
       "article_profile": "fcfcd7784b460e6c590ab8fbe742315adac7e48216d9ff9f62b1e6ace662f097",
-      "analysis_references": {},
-      "analysis_material_version": "e27f0851cf40c3dde7154388cb6e7a88b740b3736680d9f99a2fb7008cea34cb",
-      "analysis_issues": []
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P4",
+          "P5",
+          "P7"
+        ],
+        "innovation": [
+          "P3",
+          "P4",
+          "P5"
+        ],
+        "findings": [
+          "P6",
+          "P7"
+        ],
+        "limitations": [
+          "P1",
+          "P6",
+          "P7",
+          "P8"
+        ],
+        "connection": [
+          "P3",
+          "P4",
+          "P5",
+          "P6",
+          "P7",
+          "P8"
+        ],
+        "next_steps": [
+          "P5",
+          "P6",
+          "P7"
+        ]
+      },
+      "analysis_material_version": "a963508bf7616804b67c3d5710fd5a13f35160a05cbd6d03c8464fbcc0485f28",
+      "analysis_issues": [
+        {
+          "kind": "source_defect",
+          "page": "P1",
+          "detail": "原页ACM Reference Format及页脚的DOI均仅显示“https://doi.org/10.65109/”，未见后缀。属于书目信息缺项，不影响摘要和引言结论的阅读，不补造完整DOI。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "原页节点度和超边度定义中的符号是求和Σ，公式(10)是从i=1到N的乘积Π；文字提取分别出现“˝”及“Ö”等乱码。已按原页辨认，不属于原公式缺项，不影响度归一化及独立高斯采样定义。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "表1图注及支持状态列中的符号被提取为“%”“!”等。原页以叉号、混合勾叉、勾号分别表示不支持、部分支持、完全支持，不能解释为百分数或感叹号。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P6",
+          "detail": "表1原页PHP行MultiArith为98.10，附增量2.84，而Vanilla为93.15，两者相减应为4.95；HumanEval为82.96，附增量11.36，而Vanilla为71.68，相减应为11.28。原表增量存在不一致，影响提升幅度解读，但不改变已印出的主指标值。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P7",
+          "detail": "图4(c)原图标题为“Effect of Interaction Rounds (K)”，横轴为交互轮数，展示MMLU及HumanEval准确率；图注(c)却描述图的多跳传播与超边的一步同步。原图与图注不匹配，不能将该子图作为传播机制比较的直接证据。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P7",
+          "detail": "图3(b)原图横轴为“Training Epochs”，图注却称准确率在“50 iterations”后趋稳。训练计量单位不一致，无法确定作者指50个epoch还是50次迭代；准确率上升并趋稳的定性趋势仍可阅读。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P8",
+          "detail": "图5在K=3处将HumanEval标为92.4%，而5.7节原文写其从84.2%提升至91.6%；91.6实际标在K=4处。图文数值不一致，影响最佳轮数对应成绩的引用；应分别保留图示值与正文值。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P8",
+          "detail": "图5显示三个基准均在K=3达到峰值，K=4、5均下降；5.7节却称之后仍有“marginal improvements”。原图与正文趋势描述不一致，影响追加轮数收益的结论，但不妨碍现有图文识读。"
+        }
+      ]
     },
     {
       "source": "OpenAlex",
