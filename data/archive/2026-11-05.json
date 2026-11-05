@@ -28,7 +28,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "ABSTRACT A physics‐informed multisource domain transfer learning (PITL) prediction model was proposed to predict fatigue life of IN718 superalloy under complex conditions, which faced sparse data and complex mechanism challenges. The model effectively integrates physical prior knowledge and transfer learning algorithms widely used in current fatigue research and engineering fields, such as equivalent effect variable model, Manson–Coffin model, and other physical information, as well as low‐cycle fatigue hysteresis‐loop characteristic information, based on its architecture. It effectively solve…",
+      "summary": "本文针对IN718高温合金在复杂条件下疲劳数据稀疏、机理复杂的问题，提出物理信息融合多源域迁移学习模型PITL。模型结合物理先验与低周疲劳滞回环特征，利用已知加载条件的数据预测不同应变比下的疲劳寿命。摘要报告其精度与稳健性优于基础迁移学习模型，并考察模型组合、迁移模式和源域数据量的影响，但未提供定量误差与验证细节。本导读仅依据摘要。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -67,11 +67,145 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议重点关注其物理先验与多源疲劳数据融合思路，以及跨应变比寿命预测的验证设计；但当前仅有摘要，尚不足以判断性能提升幅度和工程适用边界。[摘要]",
+      "deep_read": {
+        "problem": "研究面向复杂条件下IN718高温合金的疲劳寿命预测，摘要以“sparse data and complex mechanism challenges”概括困难。具体任务是利用已知疲劳加载条件的数据，预测不同应变比条件下的寿命，而不是仅在单一加载条件内拟合。[摘要]",
+        "method": "PITL在模型架构中融合物理先验与迁移学习，摘要列举等效效应变量模型、Manson–Coffin模型及低周疲劳滞回环特征信息。研究还在四种应变比加载条件下考察不同模型组合、多源迁移模式和源域数据量；摘要未说明网络结构与训练损失。[摘要]",
+        "innovation": "解读：值得关注的设计是将物理模型信息、滞回环特征与多源域迁移共同用于疲劳寿命预测，尝试兼顾物理知识利用和跨加载条件的数据利用。摘要未提供与既有物理信息迁移方法的逐项比较，因此只能识别其方法特色，不能据此确认首创性。[摘要]",
+        "findings": "摘要报告，融入物理信息的PITL相较基础迁移学习模型具有更高预测精度与稳健性，并指出性能取决于模型组合、迁移模式及源域数据量。可核对表述为“higher prediction accuracy and robustness”；摘要未给出误差数值或提升幅度。[摘要]",
+        "limitations": "当前证据仅限摘要：样本规模、材料状态、应变比具体取值、数据划分和误差指标均未披露，无法核查泛化评估是否充分。摘要也未说明稳健性的测量方式。以上属于资料不足，不应直接认定为论文方法缺陷，更不能推断其在其他工况下失效。[摘要]",
+        "connection": "解读：该研究与疲劳可靠性方向直接相关，跨应变比寿命预测可为结构寿命评估提供方法参考，也可能启发智能运维中的少样本预测。但摘要只报告疲劳寿命预测，没有涉及在线监测、维护决策、失效概率或结构优化，相关联系属于潜在迁移用途。[摘要]",
+        "next_steps": "建议：后续获取全文后，优先核查物理信息的注入位置、源域与目标域划分，以及各模型组合的对照结果；进一步确认滞回环特征在实际预测阶段是否可获得。若用于可靠性研究，还需另行评估预测不确定性及其向失效概率传播的方式，而非默认本文已完成。[摘要]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "物理信息融合多源域迁移学习的IN718合金疲劳寿命预测",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1111/ffe.70517"
+      ],
+      "analyzed_at": "2026-11-05T13:26:34.860770+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "b24727a3b5973967f6096b3b9dc73ecc9fef096ea804bf8c2bce1ce76c79623d",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "2e3f6b6a821c",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-05T13:28:01.266124+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      },
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "IN718高温合金的疲劳寿命预测，面临数据稀疏与机理复杂的双重困难。这项研究将物理先验与多源域迁移学习结合，探索如何利用已知加载条件下的数据，预测不同应变比条件下的疲劳寿命。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "应变比变化后，已有疲劳数据如何继续发挥作用",
+            "paragraphs": [
+              "本文关注的不是单一加载条件下的寿命拟合，而是不同应变比加载条件之间的信息利用。摘要指出，复杂条件下的IN718疲劳寿命预测受到稀疏数据和复杂机理的制约，因此需要同时考虑物理知识与多来源疲劳试验数据。",
+              "研究的切入点是：从已知疲劳加载条件出发，通过迁移学习支持其他应变比条件下的寿命预测。这使关注点从“能否拟合已有数据”，转向“已有条件中的哪些信息能够用于目标条件”。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "把物理先验与滞回环特征纳入PITL",
+            "paragraphs": [
+              "作者提出物理信息多源域迁移学习模型，简称PITL。摘要明确列出的信息包括等效效应变量模型、Manson–Coffin模型等物理先验，以及低周疲劳滞回环特征；这些信息与迁移学习算法在模型架构中结合，用于学习和利用多源疲劳数据。",
+              "研究还在四种应变比加载条件下，系统考察模型组合、多源迁移模式和多源数据规模对目标域寿命预测精度的影响。摘要未进一步说明这些信息进入模型的具体位置，也未给出各迁移模式的实现细节。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "物理信息带来优势，但迁移配置仍影响表现",
+            "paragraphs": [
+              "摘要报告，融入物理信息的PITL模型，相比基础迁移学习模型具有更高的预测精度和鲁棒性，并能依据已知加载条件预测不同应变比条件下的疲劳寿命。这是摘要给出的定性比较，未附具体误差指标或提升幅度。",
+              "另一个重要发现是，预测性能取决于模型组合、迁移模式以及源域数据量。因此，摘要呈现的并非一种不受数据配置影响的通用优势，而是物理信息与多源迁移配置共同作用下的预测表现。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不足以界定优势的大小与适用边界",
+            "paragraphs": [
+              "仅凭当前摘要，无法判断独立试样数量、各域数据分配、训练与测试划分，以及四种应变比的具体取值。基础迁移学习模型的配置、鲁棒性的评价方式和结果不确定性也未在摘要中报告；这些信息缺失不等于论文没有开展相关工作。",
+              "摘要所述验证围绕不同应变比条件展开，尚不足以判断结论能否推广到其他材料、其他加载情形或实际服役环境，也不能据此认定模型已经具备工程维护决策能力。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注物理信息为何有助于跨条件预测",
+            "paragraphs": [
+              "阅读启发：进一步阅读时，值得关注物理先验与滞回环特征分别承担什么作用，以及不同源域组合为何影响目标域表现。对于疲劳可靠性或智能运维读者，还应区分试验条件间的寿命预测与服役场景中的可靠性判断，避免将前者直接视为后者的验证。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的PITL信息融合与预测示意",
+            "description": "仅概括摘要明确描述的信息来源、融合关系与预测目标，不表示论文的具体网络结构或训练流程。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "物理先验",
+                "detail": "包括等效效应变量模型、Manson–Coffin模型等物理信息。"
+              },
+              {
+                "id": "b",
+                "stage": 0,
+                "label": "多源疲劳数据与特征",
+                "detail": "利用已知疲劳加载条件的数据，并纳入低周疲劳滞回环特征信息。"
+              },
+              {
+                "id": "c",
+                "stage": 1,
+                "label": "PITL模型",
+                "detail": "将物理信息与多源域迁移学习结合，学习和利用多来源信息。"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "目标域疲劳寿命预测",
+                "detail": "依据已知加载条件，预测不同应变比加载条件下的疲劳寿命。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "c",
+                "label": "融入物理信息"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "学习与利用"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "跨条件预测"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-05T13:28:01.264122+00:00",
+      "article_profile": "a3d39e00db516075c674a4922fc992db5271fccbdf00220ab32e4e8d43856545"
     },
     {
       "source": "Semantic Scholar",
@@ -832,7 +966,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "ABSTRACT A physics‐informed multisource domain transfer learning (PITL) prediction model was proposed to predict fatigue life of IN718 superalloy under complex conditions, which faced sparse data and complex mechanism challenges. The model effectively integrates physical prior knowledge and transfer learning algorithms widely used in current fatigue research and engineering fields, such as equivalent effect variable model, Manson–Coffin model, and other physical information, as well as low‐cycle fatigue hysteresis‐loop characteristic information, based on its architecture. It effectively solve…",
+      "summary": "本文针对IN718高温合金在复杂条件下疲劳数据稀疏、机理复杂的问题，提出物理信息融合多源域迁移学习模型PITL。模型结合物理先验与低周疲劳滞回环特征，利用已知加载条件的数据预测不同应变比下的疲劳寿命。摘要报告其精度与稳健性优于基础迁移学习模型，并考察模型组合、迁移模式和源域数据量的影响，但未提供定量误差与验证细节。本导读仅依据摘要。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -871,11 +1005,145 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议重点关注其物理先验与多源疲劳数据融合思路，以及跨应变比寿命预测的验证设计；但当前仅有摘要，尚不足以判断性能提升幅度和工程适用边界。[摘要]",
+      "deep_read": {
+        "problem": "研究面向复杂条件下IN718高温合金的疲劳寿命预测，摘要以“sparse data and complex mechanism challenges”概括困难。具体任务是利用已知疲劳加载条件的数据，预测不同应变比条件下的寿命，而不是仅在单一加载条件内拟合。[摘要]",
+        "method": "PITL在模型架构中融合物理先验与迁移学习，摘要列举等效效应变量模型、Manson–Coffin模型及低周疲劳滞回环特征信息。研究还在四种应变比加载条件下考察不同模型组合、多源迁移模式和源域数据量；摘要未说明网络结构与训练损失。[摘要]",
+        "innovation": "解读：值得关注的设计是将物理模型信息、滞回环特征与多源域迁移共同用于疲劳寿命预测，尝试兼顾物理知识利用和跨加载条件的数据利用。摘要未提供与既有物理信息迁移方法的逐项比较，因此只能识别其方法特色，不能据此确认首创性。[摘要]",
+        "findings": "摘要报告，融入物理信息的PITL相较基础迁移学习模型具有更高预测精度与稳健性，并指出性能取决于模型组合、迁移模式及源域数据量。可核对表述为“higher prediction accuracy and robustness”；摘要未给出误差数值或提升幅度。[摘要]",
+        "limitations": "当前证据仅限摘要：样本规模、材料状态、应变比具体取值、数据划分和误差指标均未披露，无法核查泛化评估是否充分。摘要也未说明稳健性的测量方式。以上属于资料不足，不应直接认定为论文方法缺陷，更不能推断其在其他工况下失效。[摘要]",
+        "connection": "解读：该研究与疲劳可靠性方向直接相关，跨应变比寿命预测可为结构寿命评估提供方法参考，也可能启发智能运维中的少样本预测。但摘要只报告疲劳寿命预测，没有涉及在线监测、维护决策、失效概率或结构优化，相关联系属于潜在迁移用途。[摘要]",
+        "next_steps": "建议：后续获取全文后，优先核查物理信息的注入位置、源域与目标域划分，以及各模型组合的对照结果；进一步确认滞回环特征在实际预测阶段是否可获得。若用于可靠性研究，还需另行评估预测不确定性及其向失效概率传播的方式，而非默认本文已完成。[摘要]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "物理信息融合多源域迁移学习的IN718合金疲劳寿命预测",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1111/ffe.70517"
+      ],
+      "analyzed_at": "2026-11-05T13:26:34.860770+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "b24727a3b5973967f6096b3b9dc73ecc9fef096ea804bf8c2bce1ce76c79623d",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "2e3f6b6a821c",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-05T13:28:01.266124+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      },
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "IN718高温合金的疲劳寿命预测，面临数据稀疏与机理复杂的双重困难。这项研究将物理先验与多源域迁移学习结合，探索如何利用已知加载条件下的数据，预测不同应变比条件下的疲劳寿命。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "应变比变化后，已有疲劳数据如何继续发挥作用",
+            "paragraphs": [
+              "本文关注的不是单一加载条件下的寿命拟合，而是不同应变比加载条件之间的信息利用。摘要指出，复杂条件下的IN718疲劳寿命预测受到稀疏数据和复杂机理的制约，因此需要同时考虑物理知识与多来源疲劳试验数据。",
+              "研究的切入点是：从已知疲劳加载条件出发，通过迁移学习支持其他应变比条件下的寿命预测。这使关注点从“能否拟合已有数据”，转向“已有条件中的哪些信息能够用于目标条件”。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "把物理先验与滞回环特征纳入PITL",
+            "paragraphs": [
+              "作者提出物理信息多源域迁移学习模型，简称PITL。摘要明确列出的信息包括等效效应变量模型、Manson–Coffin模型等物理先验，以及低周疲劳滞回环特征；这些信息与迁移学习算法在模型架构中结合，用于学习和利用多源疲劳数据。",
+              "研究还在四种应变比加载条件下，系统考察模型组合、多源迁移模式和多源数据规模对目标域寿命预测精度的影响。摘要未进一步说明这些信息进入模型的具体位置，也未给出各迁移模式的实现细节。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "物理信息带来优势，但迁移配置仍影响表现",
+            "paragraphs": [
+              "摘要报告，融入物理信息的PITL模型，相比基础迁移学习模型具有更高的预测精度和鲁棒性，并能依据已知加载条件预测不同应变比条件下的疲劳寿命。这是摘要给出的定性比较，未附具体误差指标或提升幅度。",
+              "另一个重要发现是，预测性能取决于模型组合、迁移模式以及源域数据量。因此，摘要呈现的并非一种不受数据配置影响的通用优势，而是物理信息与多源迁移配置共同作用下的预测表现。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不足以界定优势的大小与适用边界",
+            "paragraphs": [
+              "仅凭当前摘要，无法判断独立试样数量、各域数据分配、训练与测试划分，以及四种应变比的具体取值。基础迁移学习模型的配置、鲁棒性的评价方式和结果不确定性也未在摘要中报告；这些信息缺失不等于论文没有开展相关工作。",
+              "摘要所述验证围绕不同应变比条件展开，尚不足以判断结论能否推广到其他材料、其他加载情形或实际服役环境，也不能据此认定模型已经具备工程维护决策能力。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注物理信息为何有助于跨条件预测",
+            "paragraphs": [
+              "阅读启发：进一步阅读时，值得关注物理先验与滞回环特征分别承担什么作用，以及不同源域组合为何影响目标域表现。对于疲劳可靠性或智能运维读者，还应区分试验条件间的寿命预测与服役场景中的可靠性判断，避免将前者直接视为后者的验证。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的PITL信息融合与预测示意",
+            "description": "仅概括摘要明确描述的信息来源、融合关系与预测目标，不表示论文的具体网络结构或训练流程。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "物理先验",
+                "detail": "包括等效效应变量模型、Manson–Coffin模型等物理信息。"
+              },
+              {
+                "id": "b",
+                "stage": 0,
+                "label": "多源疲劳数据与特征",
+                "detail": "利用已知疲劳加载条件的数据，并纳入低周疲劳滞回环特征信息。"
+              },
+              {
+                "id": "c",
+                "stage": 1,
+                "label": "PITL模型",
+                "detail": "将物理信息与多源域迁移学习结合，学习和利用多来源信息。"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "目标域疲劳寿命预测",
+                "detail": "依据已知加载条件，预测不同应变比加载条件下的疲劳寿命。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "c",
+                "label": "融入物理信息"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "学习与利用"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "跨条件预测"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-05T13:28:01.264122+00:00",
+      "article_profile": "a3d39e00db516075c674a4922fc992db5271fccbdf00220ab32e4e8d43856545"
     },
     {
       "source": "Semantic Scholar",
@@ -2574,13 +2842,13 @@
     "unavailable": 45
   },
   "analysis_status": {
-    "ready_core": 1,
+    "ready_core": 2,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 5
+    "pending": 4
   },
   "edition": {
     "id": "42031893650",
