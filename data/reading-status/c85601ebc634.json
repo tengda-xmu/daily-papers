@@ -1,13 +1,54 @@
 {
   "paper_id": "c85601ebc634",
-  "state": "awaiting_fulltext",
-  "updated_at": "2026-11-04T04:35:48.123314+00:00",
-  "basis": "abstract",
+  "state": "published",
+  "updated_at": "2026-11-05T04:57:25.752301+00:00",
+  "basis": "full_text",
   "article_state": "complete",
   "article_stage": "",
-  "reason": "restricted",
-  "total": 0,
-  "covered": 0,
-  "pdf_available": false,
-  "issues": []
+  "reason": "",
+  "total": 10,
+  "covered": 10,
+  "pdf_available": true,
+  "issues": [
+    {
+      "kind": "source_defect",
+      "page": "P1",
+      "detail": "原页ACM Reference Format及页脚的DOI均仅显示“https://doi.org/10.65109/”，未见后缀。属于书目信息缺项，不影响摘要和引言结论的阅读，不补造完整DOI。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P4",
+      "detail": "原页节点度和超边度定义中的符号是求和Σ，公式(10)是从i=1到N的乘积Π；文字提取分别出现“˝”及“Ö”等乱码。已按原页辨认，不属于原公式缺项，不影响度归一化及独立高斯采样定义。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P6",
+      "detail": "表1图注及支持状态列中的符号被提取为“%”“!”等。原页以叉号、混合勾叉、勾号分别表示不支持、部分支持、完全支持，不能解释为百分数或感叹号。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P6",
+      "detail": "表1原页PHP行MultiArith为98.10，附增量2.84，而Vanilla为93.15，两者相减应为4.95；HumanEval为82.96，附增量11.36，而Vanilla为71.68，相减应为11.28。原表增量存在不一致，影响提升幅度解读，但不改变已印出的主指标值。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P7",
+      "detail": "图4(c)原图标题为“Effect of Interaction Rounds (K)”，横轴为交互轮数，展示MMLU及HumanEval准确率；图注(c)却描述图的多跳传播与超边的一步同步。原图与图注不匹配，不能将该子图作为传播机制比较的直接证据。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P7",
+      "detail": "图3(b)原图横轴为“Training Epochs”，图注却称准确率在“50 iterations”后趋稳。训练计量单位不一致，无法确定作者指50个epoch还是50次迭代；准确率上升并趋稳的定性趋势仍可阅读。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P8",
+      "detail": "图5在K=3处将HumanEval标为92.4%，而5.7节原文写其从84.2%提升至91.6%；91.6实际标在K=4处。图文数值不一致，影响最佳轮数对应成绩的引用；应分别保留图示值与正文值。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P8",
+      "detail": "图5显示三个基准均在K=3达到峰值，K=4、5均下降；5.7节却称之后仍有“marginal improvements”。原图与正文趋势描述不一致，影响追加轮数收益的结论，但不妨碍现有图文识读。"
+    }
+  ]
 }
