@@ -227,7 +227,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Accurate failure analysis in intelligent supercharging stations is critical for operational safety and efficiency. However, traditional methods suffer from poor cross-condition adaptability, limited few-shot learning capability, and insufficient cross-model generalization. This paper proposes a Multi-Agent Failure Analysis Execution System (FAES), which synergistically integrates a Multimodal Workbench, an Intelligence Hub, and a modular agent cluster. The Multimodal Workbench fuses heterogeneous sensor data (voltage, current, temperature, acoustic) through a progressive three-level fusion str…",
+      "summary": "本文面向智能充电站故障诊断，将多模态融合、能力感知调度和大模型诊断整合为FAES。作者报告单数据集准确率97.2%、少样本迁移准确率83.2%，并通过动态调度降低任务完成时间。然而，部分基线及协调消融明确使用模拟估计，少样本结果和时延口径也存在冲突。本文适合作为智能运维系统架构与实验审查案例阅读，不宜直接作为多智能体优越性或工业安全部署的充分证据。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "ce89e125ac1c3e2e673a12ed7451da023db76e80",
@@ -269,11 +269,229 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "有条件推荐：重点阅读三级融合、可学习能力路由及事件级数据划分，同时对照模拟结果脚注和数据矛盾审查结论，避免直接引用增益归因。",
+      "deep_read": {
+        "problem": "研究针对充电站多源异构数据、故障样本稀缺及设备型号变化带来的诊断困难，兼顾准确性、响应时间和计算资源约束。作者将问题扩展至部分可观测环境下的协作感知、任务编排与推理可信性，但根因解释和全局最优性仍属于需要证明的目标。[P2][P5—P7]",
+        "method": "FAES通过DTW时间对齐、CLIP与Whisper语义映射、跨注意力及Dempster–Shafer证据融合处理多模态输入；以能力嵌入和需求向量点积进行容量屏蔽路由，再由LoRA微调的Qwen3-Omni生成诊断，专家纠正回流知识库。[P8—P18]",
+        "innovation": "作者主张的创新是将感知融合、约束调度与诊断反馈统一为闭环，而非单独提出基础算法。能力嵌入联合学习，共享上下文支持证据交换和任务重分配。解读：系统集成具有参考价值，但softmax与完整整数规划的等价性未获充分证明，不能据此认定全局最优。[P13—P16]",
+        "findings": "作者报告单数据集准确率97.2%±0.2%，全数据迁移平均93.2%±0.5%；50并发下任务完成时间从4.2降至2.4 s。表9少样本增益为15.8个百分点，同页重跑正文却为13.4个百分点；部分基线使用模拟估计，故这些结果不能共同构成稳健的机制归因。[P24—P28]",
+        "limitations": "原文件缺项包括：P6处置策略释义缺变量符号，影响定义完整性；P12图4分母缺索引和指数参数，妨碍据图复现；P17缺Zenodo DOI，影响版本追溯；P26表10、P30表19部分比较缺已完成实测，仅有模拟估计，削弱基线与协作归因。另有时延口径及跨域验证表述冲突。[P28][P33]\n原文核对：[P6] 已核对原页：无编号输出定义Y={c,p,t}下，第三条释义直接以“denotes the recommended handling strategy”开始，项目符号后缺少被解释的变量符号。处置策略的文字说明仍完整，缺项影响符号定义的完整性，不妨碍其余页面识读；不补写原页缺失内容。；[P12] 已核对图4的“Softmax Assignment”框：概率式分母仅显示“Σ exp”，未显示求和索引及指数函数的参数，属于图内公式表达缺项，而非图像模糊。现有内容可识读，但不能仅凭该图复现完整归一化分配概率；不据常见softmax形式补写缺失部分。；[P17] 已从原页核实，“Framework and code repository”段的Zenodo DOI仍写为“[TODO: Zenodo DOI to be added upon acceptance]”，缺少实际存档DOI。此项不是公式或图号缺失，不妨碍页面识读，但无法据该标识定位作者所称的版本化代码快照，影响可复现性材料的追溯。；[P26] 已核对原页表10及†脚注：架构控制比较三行和近期方法比较五行被明确标为“Simulated estimates”，对应真实测量“are being finalized”。缺少这些比较的已完成实测结果，而不是数值无法辨认；不得把现有模拟值替换成推测实测值。此缺项影响P25及此前关于排除骨干模型优势、多智能体独立增益和优于近期方法的实证结论。；[P30] 已核对表19及†脚注：智能体数量协调的2、3、4、5、6智能体条目，以及两两消息传递、无通信条目，被明确标为“Simulated estimates”，对应真实测量“are being finalized”。缺少这些扩展协调比较的已完成实测证据，而非页面不清；不得将模拟值当作真实测量。受影响的是P29—P30关于四智能体充分性、增加智能体造成冗余以及通信机制贡献的结论。",
+        "connection": "解读：对智能运维，本文提供多模态诊断与负载感知资源编排的组合思路；对可靠性研究，事件级划分、超时计错和异常输出审查具有方法参考价值。但分类准确率不等于根因识别能力，特定定义下的0.4%幻觉率也不是系统危险失效率；结构设计迁移尚无直接验证。[P22][P29—P31]",
+        "next_steps": "建议先取得真实基线、协调消融及事件级划分记录，统一复核少样本对照和时延测量边界；再审查日志中的维修结果是否引入诊断后信息。随后测试容量耗尽、未知故障及关联证据冲突，结合拒识、规则检查和人工审核开展现场验证，而非直接移植作者性能结论。[P11][P14][P21][P33—P34]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "多智能体技术驱动的工业产品失效分析应用框架研究",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41598-026-77288-w_reference.pdf"
+      ],
+      "analyzed_at": "2026-11-05T13:41:51.100640+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P5",
+          "P6",
+          "P7"
+        ],
+        "method": [
+          "P8",
+          "P9",
+          "P10",
+          "P11",
+          "P14",
+          "P16",
+          "P17",
+          "P18"
+        ],
+        "innovation": [
+          "P13",
+          "P14",
+          "P15",
+          "P16"
+        ],
+        "findings": [
+          "P24",
+          "P25",
+          "P26",
+          "P28"
+        ],
+        "limitations": [
+          "P6",
+          "P12",
+          "P17",
+          "P26",
+          "P28",
+          "P30",
+          "P33"
+        ],
+        "connection": [
+          "P22",
+          "P29",
+          "P31"
+        ],
+        "next_steps": [
+          "P11",
+          "P14",
+          "P21",
+          "P25",
+          "P26",
+          "P28",
+          "P30",
+          "P33",
+          "P34"
+        ]
+      },
+      "analysis_material_version": "3fec78fc0585227e77d9bed89f94ed3855c5d703637b8da273c73b8a0e189e26",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "原页可清楚区分模型名称与上标参考文献号：提取文本“GPT-49”应读为GPT-4后接参考文献9；“TCA V25”应读为TCAV后接参考文献25。均为正文术语与引文标记的提取错误，不涉及公式或图号，不改变作者对知识管理和可信性验证不足的论述。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P6",
+          "detail": "已核对原页：无编号输出定义Y={c,p,t}下，第三条释义直接以“denotes the recommended handling strategy”开始，项目符号后缺少被解释的变量符号。处置策略的文字说明仍完整，缺项影响符号定义的完整性，不妨碍其余页面识读；不补写原页缺失内容。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "无编号多目标函数及符号表的文字提取出现重复字形和运算符乱码。原页可读清准确性项为α·E[Acc(Y,Ŷ)]，时间与资源项分别以−β、−γ加权；表中参数为θ、调度策略为π。输入集合下标为t、i、a、s，并非提取文本中的重复字符。纠正后可确认作者采用准确性收益减去时延和资源成本的目标。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "原页已核对：C1中的处理映射为Process(X_j,θ,π)=Y_j，提取文本误将π等字符识别为重复θ及乱码；C3为Σ_i load_i≤Capacity_total。式(1)是四模态编码结果的分号连接；式(2)为Attention(Q,K,V)=softmax(QK^T/√d_k)V，非提取文本中重复的Q。公式本身未缺失，错误影响任务约束和融合机制的准确转述。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P11",
+          "detail": "已核对原页式(3)：距离项为d(x_i,y_j)，求和范围为(i,j)∈π，提取文本中的重复字形及下标错误已纠正。式(4)分子为Σ_{B∩C=A}m₁(B)m₂(C)，分母为1−Σ_{B∩C=∅}m₁(B)m₂(C)。原页公式完整，非源文件缺项；纠正关系到DTW路径优化与证据冲突归一化的准确理解。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P12",
+          "detail": "已核对图4的“Softmax Assignment”框：概率式分母仅显示“Σ exp”，未显示求和索引及指数函数的参数，属于图内公式表达缺项，而非图像模糊。现有内容可识读，但不能仅凭该图复现完整归一化分配概率；不据常见softmax形式补写缺失部分。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P13",
+          "detail": "已核对式(5)及其下方无编号约束，原页公式完整。决策变量为x_ijl，子任务索引为j,l；唯一分配约束为Σ_{i=1}^n x_ijl=1，∀j,l；容量约束为Σ_{j,l}x_ijl·load_jl≤C_i^max，∀i。提取文本的重复字形和索引乱码已纠正，影响任务唯一分配与容量限制的准确转述。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P14",
+          "detail": "已核对两条无编号分配公式：点积为c_i^T d_jl/τ；屏蔽概率的分子为exp(c_i^T d_jl/τ)·1[capacity_i>0]，分母对i′求和，采用相应i′项。提取文本中的重复τ、capacity乱码及下标错误已纠正。原页分母完整，无公式缺项，可识读其归一化与满容量屏蔽机制。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P17",
+          "detail": "已从原页核实，“Framework and code repository”段的Zenodo DOI仍写为“[TODO: Zenodo DOI to be added upon acceptance]”，缺少实际存档DOI。此项不是公式或图号缺失，不妨碍页面识读，但无法据该标识定位作者所称的版本化代码快照，影响可复现性材料的追溯。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P17",
+          "detail": "原页式(6)完整，提取文本存在重复字符及概率表达乱码。已纠正为L_SFT=−Σ_{k=1}^N log P(y_k|x_k,θ_base+Δθ_LoRA)。本页无编号汇总目标的优化变量为θ、π，目标为α·Acc(Y,Ŷ)−β·Time(T_exec)−γ·Cost(R_usage)。纠正关系到监督微调损失及系统优化目标的准确理解。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P26",
+          "detail": "已核对原页表10及†脚注：架构控制比较三行和近期方法比较五行被明确标为“Simulated estimates”，对应真实测量“are being finalized”。缺少这些比较的已完成实测结果，而不是数值无法辨认；不得把现有模拟值替换成推测实测值。此缺项影响P25及此前关于排除骨干模型优势、多智能体独立增益和优于近期方法的实证结论。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P30",
+          "detail": "已核对表19及†脚注：智能体数量协调的2、3、4、5、6智能体条目，以及两两消息传递、无通信条目，被明确标为“Simulated estimates”，对应真实测量“are being finalized”。缺少这些扩展协调比较的已完成实测证据，而非页面不清；不得将模拟值当作真实测量。受影响的是P29—P30关于四智能体充分性、增加智能体造成冗余以及通信机制贡献的结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P35",
+          "detail": "已核对参考文献25：原页题名为“Visual-TCAV: Explainability of image classification through concept-based saliency maps”，提取文本将TCAV拆为“TCA V”。无公式或图号缺项，不改变作者论述，但应纠正可解释性方法名称以免误检文献。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "dc0fcb85db88",
+        "state": "published",
+        "updated_at": "2026-11-05T13:41:51.144804+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 37,
+        "covered": 37,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "原页可清楚区分模型名称与上标参考文献号：提取文本“GPT-49”应读为GPT-4后接参考文献9；“TCA V25”应读为TCAV后接参考文献25。均为正文术语与引文标记的提取错误，不涉及公式或图号，不改变作者对知识管理和可信性验证不足的论述。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P6",
+            "detail": "已核对原页：无编号输出定义Y={c,p,t}下，第三条释义直接以“denotes the recommended handling strategy”开始，项目符号后缺少被解释的变量符号。处置策略的文字说明仍完整，缺项影响符号定义的完整性，不妨碍其余页面识读；不补写原页缺失内容。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "无编号多目标函数及符号表的文字提取出现重复字形和运算符乱码。原页可读清准确性项为α·E[Acc(Y,Ŷ)]，时间与资源项分别以−β、−γ加权；表中参数为θ、调度策略为π。输入集合下标为t、i、a、s，并非提取文本中的重复字符。纠正后可确认作者采用准确性收益减去时延和资源成本的目标。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "原页已核对：C1中的处理映射为Process(X_j,θ,π)=Y_j，提取文本误将π等字符识别为重复θ及乱码；C3为Σ_i load_i≤Capacity_total。式(1)是四模态编码结果的分号连接；式(2)为Attention(Q,K,V)=softmax(QK^T/√d_k)V，非提取文本中重复的Q。公式本身未缺失，错误影响任务约束和融合机制的准确转述。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "已核对原页式(3)：距离项为d(x_i,y_j)，求和范围为(i,j)∈π，提取文本中的重复字形及下标错误已纠正。式(4)分子为Σ_{B∩C=A}m₁(B)m₂(C)，分母为1−Σ_{B∩C=∅}m₁(B)m₂(C)。原页公式完整，非源文件缺项；纠正关系到DTW路径优化与证据冲突归一化的准确理解。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "已核对图4的“Softmax Assignment”框：概率式分母仅显示“Σ exp”，未显示求和索引及指数函数的参数，属于图内公式表达缺项，而非图像模糊。现有内容可识读，但不能仅凭该图复现完整归一化分配概率；不据常见softmax形式补写缺失部分。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "已核对式(5)及其下方无编号约束，原页公式完整。决策变量为x_ijl，子任务索引为j,l；唯一分配约束为Σ_{i=1}^n x_ijl=1，∀j,l；容量约束为Σ_{j,l}x_ijl·load_jl≤C_i^max，∀i。提取文本的重复字形和索引乱码已纠正，影响任务唯一分配与容量限制的准确转述。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "已核对两条无编号分配公式：点积为c_i^T d_jl/τ；屏蔽概率的分子为exp(c_i^T d_jl/τ)·1[capacity_i>0]，分母对i′求和，采用相应i′项。提取文本中的重复τ、capacity乱码及下标错误已纠正。原页分母完整，无公式缺项，可识读其归一化与满容量屏蔽机制。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P17",
+            "detail": "已从原页核实，“Framework and code repository”段的Zenodo DOI仍写为“[TODO: Zenodo DOI to be added upon acceptance]”，缺少实际存档DOI。此项不是公式或图号缺失，不妨碍页面识读，但无法据该标识定位作者所称的版本化代码快照，影响可复现性材料的追溯。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P17",
+            "detail": "原页式(6)完整，提取文本存在重复字符及概率表达乱码。已纠正为L_SFT=−Σ_{k=1}^N log P(y_k|x_k,θ_base+Δθ_LoRA)。本页无编号汇总目标的优化变量为θ、π，目标为α·Acc(Y,Ŷ)−β·Time(T_exec)−γ·Cost(R_usage)。纠正关系到监督微调损失及系统优化目标的准确理解。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P26",
+            "detail": "已核对原页表10及†脚注：架构控制比较三行和近期方法比较五行被明确标为“Simulated estimates”，对应真实测量“are being finalized”。缺少这些比较的已完成实测结果，而不是数值无法辨认；不得把现有模拟值替换成推测实测值。此缺项影响P25及此前关于排除骨干模型优势、多智能体独立增益和优于近期方法的实证结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P30",
+            "detail": "已核对表19及†脚注：智能体数量协调的2、3、4、5、6智能体条目，以及两两消息传递、无通信条目，被明确标为“Simulated estimates”，对应真实测量“are being finalized”。缺少这些扩展协调比较的已完成实测证据，而非页面不清；不得将模拟值当作真实测量。受影响的是P29—P30关于四智能体充分性、增加智能体造成冗余以及通信机制贡献的结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P35",
+            "detail": "已核对参考文献25：原页题名为“Visual-TCAV: Explainability of image classification through concept-based saliency maps”，提取文本将TCAV拆为“TCA V”。无公式或图号缺项，不改变作者论述，但应纠正可解释性方法名称以免误检文献。"
+          }
+        ]
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -1165,7 +1383,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Accurate failure analysis in intelligent supercharging stations is critical for operational safety and efficiency. However, traditional methods suffer from poor cross-condition adaptability, limited few-shot learning capability, and insufficient cross-model generalization. This paper proposes a Multi-Agent Failure Analysis Execution System (FAES), which synergistically integrates a Multimodal Workbench, an Intelligence Hub, and a modular agent cluster. The Multimodal Workbench fuses heterogeneous sensor data (voltage, current, temperature, acoustic) through a progressive three-level fusion str…",
+      "summary": "本文面向智能充电站故障诊断，将多模态融合、能力感知调度和大模型诊断整合为FAES。作者报告单数据集准确率97.2%、少样本迁移准确率83.2%，并通过动态调度降低任务完成时间。然而，部分基线及协调消融明确使用模拟估计，少样本结果和时延口径也存在冲突。本文适合作为智能运维系统架构与实验审查案例阅读，不宜直接作为多智能体优越性或工业安全部署的充分证据。",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "ce89e125ac1c3e2e673a12ed7451da023db76e80",
@@ -1207,11 +1425,229 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "有条件推荐：重点阅读三级融合、可学习能力路由及事件级数据划分，同时对照模拟结果脚注和数据矛盾审查结论，避免直接引用增益归因。",
+      "deep_read": {
+        "problem": "研究针对充电站多源异构数据、故障样本稀缺及设备型号变化带来的诊断困难，兼顾准确性、响应时间和计算资源约束。作者将问题扩展至部分可观测环境下的协作感知、任务编排与推理可信性，但根因解释和全局最优性仍属于需要证明的目标。[P2][P5—P7]",
+        "method": "FAES通过DTW时间对齐、CLIP与Whisper语义映射、跨注意力及Dempster–Shafer证据融合处理多模态输入；以能力嵌入和需求向量点积进行容量屏蔽路由，再由LoRA微调的Qwen3-Omni生成诊断，专家纠正回流知识库。[P8—P18]",
+        "innovation": "作者主张的创新是将感知融合、约束调度与诊断反馈统一为闭环，而非单独提出基础算法。能力嵌入联合学习，共享上下文支持证据交换和任务重分配。解读：系统集成具有参考价值，但softmax与完整整数规划的等价性未获充分证明，不能据此认定全局最优。[P13—P16]",
+        "findings": "作者报告单数据集准确率97.2%±0.2%，全数据迁移平均93.2%±0.5%；50并发下任务完成时间从4.2降至2.4 s。表9少样本增益为15.8个百分点，同页重跑正文却为13.4个百分点；部分基线使用模拟估计，故这些结果不能共同构成稳健的机制归因。[P24—P28]",
+        "limitations": "原文件缺项包括：P6处置策略释义缺变量符号，影响定义完整性；P12图4分母缺索引和指数参数，妨碍据图复现；P17缺Zenodo DOI，影响版本追溯；P26表10、P30表19部分比较缺已完成实测，仅有模拟估计，削弱基线与协作归因。另有时延口径及跨域验证表述冲突。[P28][P33]\n原文核对：[P6] 已核对原页：无编号输出定义Y={c,p,t}下，第三条释义直接以“denotes the recommended handling strategy”开始，项目符号后缺少被解释的变量符号。处置策略的文字说明仍完整，缺项影响符号定义的完整性，不妨碍其余页面识读；不补写原页缺失内容。；[P12] 已核对图4的“Softmax Assignment”框：概率式分母仅显示“Σ exp”，未显示求和索引及指数函数的参数，属于图内公式表达缺项，而非图像模糊。现有内容可识读，但不能仅凭该图复现完整归一化分配概率；不据常见softmax形式补写缺失部分。；[P17] 已从原页核实，“Framework and code repository”段的Zenodo DOI仍写为“[TODO: Zenodo DOI to be added upon acceptance]”，缺少实际存档DOI。此项不是公式或图号缺失，不妨碍页面识读，但无法据该标识定位作者所称的版本化代码快照，影响可复现性材料的追溯。；[P26] 已核对原页表10及†脚注：架构控制比较三行和近期方法比较五行被明确标为“Simulated estimates”，对应真实测量“are being finalized”。缺少这些比较的已完成实测结果，而不是数值无法辨认；不得把现有模拟值替换成推测实测值。此缺项影响P25及此前关于排除骨干模型优势、多智能体独立增益和优于近期方法的实证结论。；[P30] 已核对表19及†脚注：智能体数量协调的2、3、4、5、6智能体条目，以及两两消息传递、无通信条目，被明确标为“Simulated estimates”，对应真实测量“are being finalized”。缺少这些扩展协调比较的已完成实测证据，而非页面不清；不得将模拟值当作真实测量。受影响的是P29—P30关于四智能体充分性、增加智能体造成冗余以及通信机制贡献的结论。",
+        "connection": "解读：对智能运维，本文提供多模态诊断与负载感知资源编排的组合思路；对可靠性研究，事件级划分、超时计错和异常输出审查具有方法参考价值。但分类准确率不等于根因识别能力，特定定义下的0.4%幻觉率也不是系统危险失效率；结构设计迁移尚无直接验证。[P22][P29—P31]",
+        "next_steps": "建议先取得真实基线、协调消融及事件级划分记录，统一复核少样本对照和时延测量边界；再审查日志中的维修结果是否引入诊断后信息。随后测试容量耗尽、未知故障及关联证据冲突，结合拒识、规则检查和人工审核开展现场验证，而非直接移植作者性能结论。[P11][P14][P21][P33—P34]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "多智能体技术驱动的工业产品失效分析应用框架研究",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41598-026-77288-w_reference.pdf"
+      ],
+      "analyzed_at": "2026-11-05T13:41:51.100640+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P5",
+          "P6",
+          "P7"
+        ],
+        "method": [
+          "P8",
+          "P9",
+          "P10",
+          "P11",
+          "P14",
+          "P16",
+          "P17",
+          "P18"
+        ],
+        "innovation": [
+          "P13",
+          "P14",
+          "P15",
+          "P16"
+        ],
+        "findings": [
+          "P24",
+          "P25",
+          "P26",
+          "P28"
+        ],
+        "limitations": [
+          "P6",
+          "P12",
+          "P17",
+          "P26",
+          "P28",
+          "P30",
+          "P33"
+        ],
+        "connection": [
+          "P22",
+          "P29",
+          "P31"
+        ],
+        "next_steps": [
+          "P11",
+          "P14",
+          "P21",
+          "P25",
+          "P26",
+          "P28",
+          "P30",
+          "P33",
+          "P34"
+        ]
+      },
+      "analysis_material_version": "3fec78fc0585227e77d9bed89f94ed3855c5d703637b8da273c73b8a0e189e26",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "原页可清楚区分模型名称与上标参考文献号：提取文本“GPT-49”应读为GPT-4后接参考文献9；“TCA V25”应读为TCAV后接参考文献25。均为正文术语与引文标记的提取错误，不涉及公式或图号，不改变作者对知识管理和可信性验证不足的论述。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P6",
+          "detail": "已核对原页：无编号输出定义Y={c,p,t}下，第三条释义直接以“denotes the recommended handling strategy”开始，项目符号后缺少被解释的变量符号。处置策略的文字说明仍完整，缺项影响符号定义的完整性，不妨碍其余页面识读；不补写原页缺失内容。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "无编号多目标函数及符号表的文字提取出现重复字形和运算符乱码。原页可读清准确性项为α·E[Acc(Y,Ŷ)]，时间与资源项分别以−β、−γ加权；表中参数为θ、调度策略为π。输入集合下标为t、i、a、s，并非提取文本中的重复字符。纠正后可确认作者采用准确性收益减去时延和资源成本的目标。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "原页已核对：C1中的处理映射为Process(X_j,θ,π)=Y_j，提取文本误将π等字符识别为重复θ及乱码；C3为Σ_i load_i≤Capacity_total。式(1)是四模态编码结果的分号连接；式(2)为Attention(Q,K,V)=softmax(QK^T/√d_k)V，非提取文本中重复的Q。公式本身未缺失，错误影响任务约束和融合机制的准确转述。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P11",
+          "detail": "已核对原页式(3)：距离项为d(x_i,y_j)，求和范围为(i,j)∈π，提取文本中的重复字形及下标错误已纠正。式(4)分子为Σ_{B∩C=A}m₁(B)m₂(C)，分母为1−Σ_{B∩C=∅}m₁(B)m₂(C)。原页公式完整，非源文件缺项；纠正关系到DTW路径优化与证据冲突归一化的准确理解。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P12",
+          "detail": "已核对图4的“Softmax Assignment”框：概率式分母仅显示“Σ exp”，未显示求和索引及指数函数的参数，属于图内公式表达缺项，而非图像模糊。现有内容可识读，但不能仅凭该图复现完整归一化分配概率；不据常见softmax形式补写缺失部分。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P13",
+          "detail": "已核对式(5)及其下方无编号约束，原页公式完整。决策变量为x_ijl，子任务索引为j,l；唯一分配约束为Σ_{i=1}^n x_ijl=1，∀j,l；容量约束为Σ_{j,l}x_ijl·load_jl≤C_i^max，∀i。提取文本的重复字形和索引乱码已纠正，影响任务唯一分配与容量限制的准确转述。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P14",
+          "detail": "已核对两条无编号分配公式：点积为c_i^T d_jl/τ；屏蔽概率的分子为exp(c_i^T d_jl/τ)·1[capacity_i>0]，分母对i′求和，采用相应i′项。提取文本中的重复τ、capacity乱码及下标错误已纠正。原页分母完整，无公式缺项，可识读其归一化与满容量屏蔽机制。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P17",
+          "detail": "已从原页核实，“Framework and code repository”段的Zenodo DOI仍写为“[TODO: Zenodo DOI to be added upon acceptance]”，缺少实际存档DOI。此项不是公式或图号缺失，不妨碍页面识读，但无法据该标识定位作者所称的版本化代码快照，影响可复现性材料的追溯。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P17",
+          "detail": "原页式(6)完整，提取文本存在重复字符及概率表达乱码。已纠正为L_SFT=−Σ_{k=1}^N log P(y_k|x_k,θ_base+Δθ_LoRA)。本页无编号汇总目标的优化变量为θ、π，目标为α·Acc(Y,Ŷ)−β·Time(T_exec)−γ·Cost(R_usage)。纠正关系到监督微调损失及系统优化目标的准确理解。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P26",
+          "detail": "已核对原页表10及†脚注：架构控制比较三行和近期方法比较五行被明确标为“Simulated estimates”，对应真实测量“are being finalized”。缺少这些比较的已完成实测结果，而不是数值无法辨认；不得把现有模拟值替换成推测实测值。此缺项影响P25及此前关于排除骨干模型优势、多智能体独立增益和优于近期方法的实证结论。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P30",
+          "detail": "已核对表19及†脚注：智能体数量协调的2、3、4、5、6智能体条目，以及两两消息传递、无通信条目，被明确标为“Simulated estimates”，对应真实测量“are being finalized”。缺少这些扩展协调比较的已完成实测证据，而非页面不清；不得将模拟值当作真实测量。受影响的是P29—P30关于四智能体充分性、增加智能体造成冗余以及通信机制贡献的结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P35",
+          "detail": "已核对参考文献25：原页题名为“Visual-TCAV: Explainability of image classification through concept-based saliency maps”，提取文本将TCAV拆为“TCA V”。无公式或图号缺项，不改变作者论述，但应纠正可解释性方法名称以免误检文献。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "dc0fcb85db88",
+        "state": "published",
+        "updated_at": "2026-11-05T13:41:51.144804+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 37,
+        "covered": 37,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "原页可清楚区分模型名称与上标参考文献号：提取文本“GPT-49”应读为GPT-4后接参考文献9；“TCA V25”应读为TCAV后接参考文献25。均为正文术语与引文标记的提取错误，不涉及公式或图号，不改变作者对知识管理和可信性验证不足的论述。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P6",
+            "detail": "已核对原页：无编号输出定义Y={c,p,t}下，第三条释义直接以“denotes the recommended handling strategy”开始，项目符号后缺少被解释的变量符号。处置策略的文字说明仍完整，缺项影响符号定义的完整性，不妨碍其余页面识读；不补写原页缺失内容。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "无编号多目标函数及符号表的文字提取出现重复字形和运算符乱码。原页可读清准确性项为α·E[Acc(Y,Ŷ)]，时间与资源项分别以−β、−γ加权；表中参数为θ、调度策略为π。输入集合下标为t、i、a、s，并非提取文本中的重复字符。纠正后可确认作者采用准确性收益减去时延和资源成本的目标。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "原页已核对：C1中的处理映射为Process(X_j,θ,π)=Y_j，提取文本误将π等字符识别为重复θ及乱码；C3为Σ_i load_i≤Capacity_total。式(1)是四模态编码结果的分号连接；式(2)为Attention(Q,K,V)=softmax(QK^T/√d_k)V，非提取文本中重复的Q。公式本身未缺失，错误影响任务约束和融合机制的准确转述。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "已核对原页式(3)：距离项为d(x_i,y_j)，求和范围为(i,j)∈π，提取文本中的重复字形及下标错误已纠正。式(4)分子为Σ_{B∩C=A}m₁(B)m₂(C)，分母为1−Σ_{B∩C=∅}m₁(B)m₂(C)。原页公式完整，非源文件缺项；纠正关系到DTW路径优化与证据冲突归一化的准确理解。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "已核对图4的“Softmax Assignment”框：概率式分母仅显示“Σ exp”，未显示求和索引及指数函数的参数，属于图内公式表达缺项，而非图像模糊。现有内容可识读，但不能仅凭该图复现完整归一化分配概率；不据常见softmax形式补写缺失部分。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "已核对式(5)及其下方无编号约束，原页公式完整。决策变量为x_ijl，子任务索引为j,l；唯一分配约束为Σ_{i=1}^n x_ijl=1，∀j,l；容量约束为Σ_{j,l}x_ijl·load_jl≤C_i^max，∀i。提取文本的重复字形和索引乱码已纠正，影响任务唯一分配与容量限制的准确转述。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "已核对两条无编号分配公式：点积为c_i^T d_jl/τ；屏蔽概率的分子为exp(c_i^T d_jl/τ)·1[capacity_i>0]，分母对i′求和，采用相应i′项。提取文本中的重复τ、capacity乱码及下标错误已纠正。原页分母完整，无公式缺项，可识读其归一化与满容量屏蔽机制。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P17",
+            "detail": "已从原页核实，“Framework and code repository”段的Zenodo DOI仍写为“[TODO: Zenodo DOI to be added upon acceptance]”，缺少实际存档DOI。此项不是公式或图号缺失，不妨碍页面识读，但无法据该标识定位作者所称的版本化代码快照，影响可复现性材料的追溯。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P17",
+            "detail": "原页式(6)完整，提取文本存在重复字符及概率表达乱码。已纠正为L_SFT=−Σ_{k=1}^N log P(y_k|x_k,θ_base+Δθ_LoRA)。本页无编号汇总目标的优化变量为θ、π，目标为α·Acc(Y,Ŷ)−β·Time(T_exec)−γ·Cost(R_usage)。纠正关系到监督微调损失及系统优化目标的准确理解。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P26",
+            "detail": "已核对原页表10及†脚注：架构控制比较三行和近期方法比较五行被明确标为“Simulated estimates”，对应真实测量“are being finalized”。缺少这些比较的已完成实测结果，而不是数值无法辨认；不得把现有模拟值替换成推测实测值。此缺项影响P25及此前关于排除骨干模型优势、多智能体独立增益和优于近期方法的实证结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P30",
+            "detail": "已核对表19及†脚注：智能体数量协调的2、3、4、5、6智能体条目，以及两两消息传递、无通信条目，被明确标为“Simulated estimates”，对应真实测量“are being finalized”。缺少这些扩展协调比较的已完成实测证据，而非页面不清；不得将模拟值当作真实测量。受影响的是P29—P30关于四智能体充分性、增加智能体造成冗余以及通信机制贡献的结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P35",
+            "detail": "已核对参考文献25：原页题名为“Visual-TCAV: Explainability of image classification through concept-based saliency maps”，提取文本将TCAV拆为“TCA V”。无公式或图号缺项，不改变作者论述，但应纠正可解释性方法名称以免误检文献。"
+          }
+        ]
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -123104,13 +123540,13 @@
     "unavailable": 45
   },
   "analysis_status": {
-    "ready_core": 2,
+    "ready_core": 3,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 4
+    "pending": 3
   },
   "edition": {
     "id": "42031893650",
