@@ -1,20 +1,19 @@
 {
   "id": "public-a6f54d325d31634f891659b5",
-  "content_version": "436b647e704970aa00f2ad69e1dd3834173bd16f9d49d703187c2e33828b01cb",
+  "content_version": "2507c93159c2c829e8cb4bd06e52324c0f6212ab4a8602f4be39587415e68543",
   "analysis": {
-    "title_zh": "Transformers Model Integration Contracts：模型集成回归测试导读",
-    "summary": "公告介绍 Transformers 模型集成测试的背景：2026年7月30日为 T5 启用 PyTorch SDPA 后，UMT5 解码器意外能够关注未来词元，在训练时窥见待预测答案；程序未崩溃，缺陷在主分支停留近两个月。作者随后回放相关提交，发现 CPU 上的小型 UMT5 模型能逐一检出该问题。这为注意力机制变更后的语义回归测试提供了案例，但所给节选未展示集成契约的具体机制或使用方法。",
-    "application": "建议：科研迁移可考虑为时序预测、故障诊断等任务设置小模型回归测试，重点检查未来信息泄漏；这是迁移设想，并非官方已验证效果。原文报告的验证仅限于：CPU 上的小型 UMT5 模型在回放相关提交时，每次均检出了上述缺陷，不能据此推断对其他模型或任务同样有效。",
+    "title_zh": "Transformers 模型集成契约（Model Integration Contracts）",
+    "summary": "公告介绍围绕小型 UMT5 模型构建的测试：Transformers 为 T5 启用 PyTorch SDPA 后，意外导致 UMT5 解码器能够关注未来词元，在训练中提前看到预测答案，且未触发崩溃。[S1][S2] 作者回放相关提交时，CPU 上的小模型每次均检出了问题。[S3] 这类测试适用于注意力实现变更后的模型行为回归检查；但所给片段已截断，尚不足以说明集成契约的完整机制及接入方法。",
+    "application": "建议：【科研迁移建议／本站解读】可在科研模型和智能运维时序预测模型中，探索加入未来信息泄漏与因果约束的回归测试；这不是公告已验证的跨领域效果。【官方已验证效果】原文仅报告小型 UMT5 在 CPU 上回放相关提交时，每次均检出该问题。[S3]",
     "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
       "On July 30, 2026, Transformers enabled PyTorch's scaled dot-product attention (SDPA) for T5.",
       "As a side effect, UMT5's decoder could attend to future tokens.",
-      "During training, it could peek at the answer it was supposed to predict.",
-      "Nothing crashed, and the bug stayed in main for almost two months.",
-      "When we later replayed those commits, a small UMT5 model running on CPU flagged it on every one of them."
+      "When we later replayed those commits, a small UMT5 model running on CPU flagged it on every one of them.",
+      "This post is about that model and the tests built around it."
     ],
     "basis_url": "https://huggingface.co/blog/transformers-mic"
   },
-  "analyzed_at": "2026-11-05T12:58:49.702369+00:00"
+  "analyzed_at": "2026-11-07T02:28:04.264730+00:00"
 }
