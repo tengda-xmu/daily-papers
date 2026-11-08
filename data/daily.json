@@ -1071,8 +1071,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -1100,7 +1100,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Multivariate sensor data is increasingly being used to guide intelligent electromechanical systems into predictive maintenance strategies that deliver timely, reliable and actionable maintenance decisions. This study overcomes the drawback of fragmented approaches, where the anomaly detection, failure prediction and maintenance optimization are treated separately. Four key components of a temporal feature engineering, autoencoder-based anomaly detection, supervised predictive models and multi-horizon early-warning analysis, and Pareto-based maintenance optimization were used to develop an inte…",
+      "summary": "本文针对异常检测、故障预测与维护优化相互割裂的问题，提出连接时序特征、自编码器异常表示、监督预测、多时间跨度预警及帕累托维护优化的集成框架。作者在地铁空气生产单元的MetroPT-3数据集上测试，摘要报告Autoencoder + XGBoost表现最佳，并给出预警时域与维护策略结果。[摘要] 解读：适合关注智能运维中预测结果如何转化为维护决策的研究者，但当前仅有摘要，不能核验实验设计与结论稳健性。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -1138,11 +1138,182 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为智能运维方法候选重点阅读，其价值在于尝试贯通异常表示、故障预警与维护优化；但应先核验全文的数据划分、对照实验和成本定义，再判断实际贡献。[摘要]",
+      "deep_read": {
+        "problem": "论文关注多变量传感数据如何支持及时、可靠且可执行的维护决策，指出既有流程将异常检测、故障预测和维护优化分别处理，原文称为“fragmented approaches”。[摘要] 解读：研究问题不仅是提高识别性能，还包括如何将不同分析环节连接为维护决策流程。",
+        "method": "框架结合时序特征工程、自编码器异常检测、监督预测、多时间跨度预警与帕累托维护优化，并使用地铁空气生产单元的电气、气动、热及运行测量数据测试。[摘要] 原文强调“engineered latent anomaly representations”，但未说明表示维度、模型训练细节与优化目标。",
+        "innovation": "作者强调把潜在异常表示引入监督学习，并连接预警与工程决策，摘要表述为“incorporate engineered latent anomaly representations into the supervised learning context”。[摘要] 解读：可关注其流程集成思路，但缺少相关工作比较和消融证据，尚不能确认各组件或组合的原创性。",
+        "findings": "摘要报告最佳模型为“Autoencoder + XGBoost”，F1为0.905、ROC-AUC为0.974；最佳预警时域为30分钟，风险阈值0.52下的平衡维护策略取得归一化成本指数0.58。[摘要] 这些结果分别涉及预测、预警和维护成本，但摘要未提供比较对象与统计不确定性。",
+        "limitations": "当前仅能进行摘要级判断，不能声称已阅读全文。摘要未交代训练测试划分、故障标签来源、样本分布、基线配置及成本指数定义。[摘要] 解读：这些信息缺口使数据泄漏、类别不平衡影响及维护收益的可推广性暂时无法核验，不等同于已经发现论文存在相应缺陷。",
+        "connection": "与智能运维的联系直接体现在多变量监测、故障预警与维护策略优化的衔接，原文目标包括“actionable maintenance decisions”。[摘要] 解读：对可靠性研究，可关注预测风险如何参与维护选择；对结构设计，目前只有工程优化层面的间接联系，未见结构参数或结构性能证据。",
+        "next_steps": "建议获取全文后，优先核查时序数据是否严格隔离、预警标签如何构造，以及异常表示是否带来独立增益；随后检查帕累托目标、风险阈值与成本计算的定义及敏感性。上述均为研究建议，不是作者结论；摘要尚不足以确定这些验证是否已经完成。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "面向智能机电系统预测性维护与工程决策的人工智能及机器学习集成框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1922/comdem.v3i6s.18954"
+      ],
+      "analyzed_at": "2026-11-08T14:40:19.205092+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "异常检测、故障预测与维护优化若彼此分离，传感器数据就难以直接支撑维护决策。这项研究以地铁列车空气生产单元为对象，将这些环节纳入统一框架，值得关注的是异常表征如何连接预测与决策。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从识别异常走向维护决策",
+            "paragraphs": [
+              "多变量传感器数据正在成为机电系统预测性维护的重要依据。本文针对的问题是：异常检测、故障预测与维护优化常被分开处理。研究希望通过集成人工智能与机器学习方法，将这些环节联系起来，面向及时、可靠且可执行的维护决策。",
+              "摘要所述测试对象是MetroPT-3工业时间序列数据集，包含地铁列车空气生产单元的电气、气动、热学及运行测量。这使研究具有明确的设备场景，但不能据此直接推及其他机电系统。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "把潜在异常表征接入监督学习",
+            "paragraphs": [
+              "框架涵盖时间特征工程、基于自编码器的异常检测、监督预测模型与多时间跨度预警分析，以及基于Pareto的维护优化。摘要强调，将经过构建的潜在异常表征引入监督学习，是连接异常识别与后续预测的重要做法。",
+              "因此，这项工作的关注点并不止于识别异常，还包括预警时间跨度与维护策略的选择。不过，摘要没有展开各模块的具体实现，也未说明特征构造、模型训练和优化目标的详细设置。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "模型表现、预警跨度与维护成本",
+            "paragraphs": [
+              "摘要报告，表现最佳的模型为Autoencoder + XGBoost，其精确率为0.918、召回率为0.893、F1分数为0.905、ROC-AUC为0.974、PR-AUC为0.928、MCC为0.889。这些是摘要报告的评价结果，尚不能据此确定相对其他模型的提升幅度。",
+              "预警分析中，30分钟时间跨度产生了最佳预警响应；维护优化中，平衡维护策略在风险阈值为0.52时取得最佳归一化成本指数0.58。这里的“最佳”应限定在研究所比较的设置内，不能解释为普遍最优参数或实际成本降幅。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "验证边界仍需查阅完整论文",
+            "paragraphs": [
+              "仅凭摘要，无法判断样本规模、故障事件数量、训练与测试的划分方式，也无法确认比较模型、预警时间跨度及维护策略的完整范围。摘要未交代成本指数的定义、结果不确定性，以及是否开展跨设备或现场验证；这些信息未报告，不等于论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注预测怎样服务决策",
+            "paragraphs": [
+              "阅读启发：对AI智能运维研究，可进一步关注潜在异常表征如何进入监督模型、预警响应如何评价，以及风险阈值如何对应维护成本。这些问题直接关联摘要中的集成思路，也有助于区分预测指标上的表现与维护决策中的实际价值。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的集成框架示意",
+            "description": "展示摘要明确列出的数据对象、框架组成及异常表征与监督学习的关系；不表示具体执行顺序或未报告的实验配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "MetroPT-3时间序列",
+                "detail": "地铁空气生产单元的电气、气动、热学及运行测量。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "集成AI与机器学习框架",
+                "detail": "联系异常检测、故障预测与维护优化。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "时间特征工程",
+                "detail": "摘要列出的框架组成，具体特征构造未展开。"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "自编码器异常检测",
+                "detail": "以潜在异常表征连接监督学习。"
+              },
+              {
+                "id": "e",
+                "stage": 2,
+                "label": "监督预测模型",
+                "detail": "将构建的潜在异常表征纳入监督学习。"
+              },
+              {
+                "id": "f",
+                "stage": 2,
+                "label": "多时间跨度预警分析",
+                "detail": "分析不同预警时间跨度下的响应。"
+              },
+              {
+                "id": "g",
+                "stage": 2,
+                "label": "基于Pareto的维护优化",
+                "detail": "涉及维护策略、风险阈值与归一化成本指数。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "用于测试"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "包含"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "包含"
+              },
+              {
+                "from": "b",
+                "to": "e",
+                "label": "包含"
+              },
+              {
+                "from": "b",
+                "to": "f",
+                "label": "包含"
+              },
+              {
+                "from": "b",
+                "to": "g",
+                "label": "包含"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "引入潜在异常表征"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-08T14:51:03.469162+00:00",
+      "article_profile": "4452bacd17364bd60bf11850e898eafc61de07e0f0d5c901afbac5b0d725313d",
+      "analysis_references": {},
+      "analysis_material_version": "5098630cc13cd2afb21411fe2572d562a32a8a59aedf04c43b7e665f10b5db9e",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "bc88401e69c3",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-08T14:51:03.471168+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -1167,7 +1338,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "AI-Driven Model Development is a major paradigm shift in modern systems engineering, software-intensive engineering, manufacturing, digital-twin development, and Model-Based Systems Engineering (MBSE) where AI is increasingly playing a key role in model creation and evolution by accelerating, automating, analyzing and improving the engineering model. Typical model development is often based on the practice of building models manually based on domain knowledge, requirements, design assumptions, system relationships, and operational information by experienced engineers. Manual modeling can be ti…",
+      "summary": "本文摘要讨论人工智能如何辅助基于模型的系统工程（MBSE）中的模型创建与演化。传统建模依赖工程师的领域知识、需求和设计假设，系统复杂化后容易出现耗时、维护困难与不一致问题。作者列举机器学习、自然语言处理、生成式人工智能和知识图谱等技术，强调其对建模生命周期的辅助作用。[摘要] 当前资料未呈现具体算法、验证案例或量化成果，适合作为主题概览，不宜视为已验证的智能运维方案。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7225270859",
@@ -1211,11 +1382,95 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为人工智能辅助系统建模的背景材料选读；摘要尚未提供明确技术方案及验证结果，暂不推荐作为智能运维方向的重点方法文献。[摘要]",
+      "deep_read": {
+        "problem": "传统工程模型依靠有经验的工程师，根据领域知识、需求、设计假设、系统关系和运行信息手工建立。摘要指出，随着系统更加复杂、多学科且互联，人工建模会面临耗时、维护困难和不一致风险。[摘要] 研究问题聚焦模型开发流程，而非设备故障诊断。",
+        "method": "摘要列举机器学习、自然语言处理、生成式人工智能、知识图谱、计算机视觉、优化算法和智能体，作为支持工程师开展建模工作的技术工具。[摘要] 但没有说明这些工具如何组合，也未交代数据输入、训练过程或模型更新机制，不能据此还原具体方法。",
+        "innovation": "作者将人工智能驱动的模型开发称为“a major paradigm shift”，强调其对模型创建与演化的作用。[摘要] 解读：这是对技术趋势和应用范式的定位，并不等于已经提出原创算法；仅凭摘要无法确认相对既有研究的具体创新。",
+        "findings": "摘要表达的主要观点是，人工智能能够通过加速、自动化、分析和改进工程模型，辅助工程师完成建模生命周期中的工作。[摘要] 这属于作者对应用作用的概括；当前未提供实验、对照或量化指标，不能将其表述为效率或一致性已经得到验证。",
+        "limitations": "当前仅有摘要，未展示实施案例、评价指标、基线比较及工程部署条件，也没有提供作者自述的研究局限。[摘要] 解读：这些是现有资料的证据边界，不代表全文必然缺少相关内容，因此无法判断方法的可复现性及实际适用范围。",
+        "connection": "摘要明确涉及制造、数字孪生和工程模型，并提到建模使用运行信息。[摘要] 解读：这与智能运维中的模型维护、结构设计中的系统关系表达存在间接联系，但摘要没有展开故障预测、结构优化或可靠性评估，不能认定已有相应应用成果。",
+        "next_steps": "建议后续获取正文，优先核查是否存在明确的建模任务、人工智能介入环节和工程案例，再决定是否重点阅读。建议迁移研究时选择需求到模型转换或运行信息驱动更新等具体任务，设置人工流程对照；这些是研究建议，并非作者已完成的工作。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "基于模型的系统工程流程中的人工智能与机器学习",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.4018/979-8-2600-1086-0.ch003"
+      ],
+      "analyzed_at": "2026-11-08T15:01:50.675094+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "复杂工程系统的模型不仅难建，也难持续维护。这篇摘要关注人工智能如何辅助基于模型的系统工程（MBSE），阅读价值在于理解其对人工建模的补充定位，而非获得已经验证的性能结论。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "系统越复杂，人工建模越难维护",
+            "paragraphs": [
+              "传统模型开发通常依赖有经验的工程师，将领域知识、需求、设计假设、系统关系和运行信息组织为工程模型。随着系统呈现多学科、软件密集、互联和自适应等特征，人工建模可能耗时较长、维护困难，也更容易出现不一致。",
+              "摘要将这一问题放在现代系统工程、制造、数字孪生开发与MBSE等背景下讨论。这里的关注点不仅是模型的初次创建，也包括模型后续的演化。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "多类AI工具辅助模型全生命周期",
+            "paragraphs": [
+              "摘要列出的工具包括机器学习、自然语言处理、生成式AI、知识图谱、计算机视觉、优化算法和智能体。其共同定位是支持工程师开展模型全生命周期工作，**补充人工建模，而不是明确宣称替代工程师**。",
+              "不过，摘要没有交代这些工具如何组合，也没有描述具体算法、输入输出接口或连续实施步骤。因此，目前能够概括的是技术覆盖范围与辅助目标，而非一套可以直接复现的方法流程。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要提出方向判断，未报告实测成效",
+            "paragraphs": [
+              "作者将AI驱动的模型开发描述为一种重要的范式转变，强调AI在模型创建与演化中的作用，并将加速、自动化、分析和改进工程模型列为其作用方向。",
+              "需要区分的是，这些属于摘要中的总体判断和技术定位。摘要没有报告具体实验发现或量化结果，不能据此认定建模时间已经缩短、模型一致性已经提高，或某类AI工具优于其他方法。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "样本、对照与验证边界仍待查明",
+            "paragraphs": [
+              "仅凭本次摘要，无法判断研究采用了哪些样本或工程案例、是否设置人工建模或其他方法作为对照，以及验证覆盖了哪些系统和生命周期环节。这是当前资料的边界，并不等于论文没有开展相关工作。",
+              "摘要也不足以判断各类AI工具的适用条件、可靠性及维护成本。其对制造和数字孪生等领域的提及，不能直接视为这些场景均已获得验证。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：先看AI究竟辅助哪类模型工作",
+            "paragraphs": [
+              "阅读启发：后续阅读可优先关注，作者如何把不同AI工具对应到模型创建、分析与演化的具体任务，以及如何判断辅助是否有效。对于关注智能运维的读者，数字孪生是摘要明确涉及的连接点，但当前资料尚不足以延伸出故障诊断、预测维护或寿命预测方面的成效结论。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-08T15:12:50.042097+00:00",
+      "article_profile": "e2cfe233b5cce3a1791a6e257e98191cc5457b8840a15960a06ec8d13691c164",
+      "analysis_references": {},
+      "analysis_material_version": "4c82cc6433a78da3fd5492913647f08e849ec3f812dc86881ff4e55058e2490b",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "720b6cef44ee",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-08T15:12:50.043350+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "extended": [],
@@ -2287,8 +2542,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -2316,7 +2571,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Multivariate sensor data is increasingly being used to guide intelligent electromechanical systems into predictive maintenance strategies that deliver timely, reliable and actionable maintenance decisions. This study overcomes the drawback of fragmented approaches, where the anomaly detection, failure prediction and maintenance optimization are treated separately. Four key components of a temporal feature engineering, autoencoder-based anomaly detection, supervised predictive models and multi-horizon early-warning analysis, and Pareto-based maintenance optimization were used to develop an inte…",
+      "summary": "本文针对异常检测、故障预测与维护优化相互割裂的问题，提出连接时序特征、自编码器异常表示、监督预测、多时间跨度预警及帕累托维护优化的集成框架。作者在地铁空气生产单元的MetroPT-3数据集上测试，摘要报告Autoencoder + XGBoost表现最佳，并给出预警时域与维护策略结果。[摘要] 解读：适合关注智能运维中预测结果如何转化为维护决策的研究者，但当前仅有摘要，不能核验实验设计与结论稳健性。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -2354,11 +2609,182 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为智能运维方法候选重点阅读，其价值在于尝试贯通异常表示、故障预警与维护优化；但应先核验全文的数据划分、对照实验和成本定义，再判断实际贡献。[摘要]",
+      "deep_read": {
+        "problem": "论文关注多变量传感数据如何支持及时、可靠且可执行的维护决策，指出既有流程将异常检测、故障预测和维护优化分别处理，原文称为“fragmented approaches”。[摘要] 解读：研究问题不仅是提高识别性能，还包括如何将不同分析环节连接为维护决策流程。",
+        "method": "框架结合时序特征工程、自编码器异常检测、监督预测、多时间跨度预警与帕累托维护优化，并使用地铁空气生产单元的电气、气动、热及运行测量数据测试。[摘要] 原文强调“engineered latent anomaly representations”，但未说明表示维度、模型训练细节与优化目标。",
+        "innovation": "作者强调把潜在异常表示引入监督学习，并连接预警与工程决策，摘要表述为“incorporate engineered latent anomaly representations into the supervised learning context”。[摘要] 解读：可关注其流程集成思路，但缺少相关工作比较和消融证据，尚不能确认各组件或组合的原创性。",
+        "findings": "摘要报告最佳模型为“Autoencoder + XGBoost”，F1为0.905、ROC-AUC为0.974；最佳预警时域为30分钟，风险阈值0.52下的平衡维护策略取得归一化成本指数0.58。[摘要] 这些结果分别涉及预测、预警和维护成本，但摘要未提供比较对象与统计不确定性。",
+        "limitations": "当前仅能进行摘要级判断，不能声称已阅读全文。摘要未交代训练测试划分、故障标签来源、样本分布、基线配置及成本指数定义。[摘要] 解读：这些信息缺口使数据泄漏、类别不平衡影响及维护收益的可推广性暂时无法核验，不等同于已经发现论文存在相应缺陷。",
+        "connection": "与智能运维的联系直接体现在多变量监测、故障预警与维护策略优化的衔接，原文目标包括“actionable maintenance decisions”。[摘要] 解读：对可靠性研究，可关注预测风险如何参与维护选择；对结构设计，目前只有工程优化层面的间接联系，未见结构参数或结构性能证据。",
+        "next_steps": "建议获取全文后，优先核查时序数据是否严格隔离、预警标签如何构造，以及异常表示是否带来独立增益；随后检查帕累托目标、风险阈值与成本计算的定义及敏感性。上述均为研究建议，不是作者结论；摘要尚不足以确定这些验证是否已经完成。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "面向智能机电系统预测性维护与工程决策的人工智能及机器学习集成框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1922/comdem.v3i6s.18954"
+      ],
+      "analyzed_at": "2026-11-08T14:40:19.205092+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "异常检测、故障预测与维护优化若彼此分离，传感器数据就难以直接支撑维护决策。这项研究以地铁列车空气生产单元为对象，将这些环节纳入统一框架，值得关注的是异常表征如何连接预测与决策。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从识别异常走向维护决策",
+            "paragraphs": [
+              "多变量传感器数据正在成为机电系统预测性维护的重要依据。本文针对的问题是：异常检测、故障预测与维护优化常被分开处理。研究希望通过集成人工智能与机器学习方法，将这些环节联系起来，面向及时、可靠且可执行的维护决策。",
+              "摘要所述测试对象是MetroPT-3工业时间序列数据集，包含地铁列车空气生产单元的电气、气动、热学及运行测量。这使研究具有明确的设备场景，但不能据此直接推及其他机电系统。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "把潜在异常表征接入监督学习",
+            "paragraphs": [
+              "框架涵盖时间特征工程、基于自编码器的异常检测、监督预测模型与多时间跨度预警分析，以及基于Pareto的维护优化。摘要强调，将经过构建的潜在异常表征引入监督学习，是连接异常识别与后续预测的重要做法。",
+              "因此，这项工作的关注点并不止于识别异常，还包括预警时间跨度与维护策略的选择。不过，摘要没有展开各模块的具体实现，也未说明特征构造、模型训练和优化目标的详细设置。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "模型表现、预警跨度与维护成本",
+            "paragraphs": [
+              "摘要报告，表现最佳的模型为Autoencoder + XGBoost，其精确率为0.918、召回率为0.893、F1分数为0.905、ROC-AUC为0.974、PR-AUC为0.928、MCC为0.889。这些是摘要报告的评价结果，尚不能据此确定相对其他模型的提升幅度。",
+              "预警分析中，30分钟时间跨度产生了最佳预警响应；维护优化中，平衡维护策略在风险阈值为0.52时取得最佳归一化成本指数0.58。这里的“最佳”应限定在研究所比较的设置内，不能解释为普遍最优参数或实际成本降幅。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "验证边界仍需查阅完整论文",
+            "paragraphs": [
+              "仅凭摘要，无法判断样本规模、故障事件数量、训练与测试的划分方式，也无法确认比较模型、预警时间跨度及维护策略的完整范围。摘要未交代成本指数的定义、结果不确定性，以及是否开展跨设备或现场验证；这些信息未报告，不等于论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注预测怎样服务决策",
+            "paragraphs": [
+              "阅读启发：对AI智能运维研究，可进一步关注潜在异常表征如何进入监督模型、预警响应如何评价，以及风险阈值如何对应维护成本。这些问题直接关联摘要中的集成思路，也有助于区分预测指标上的表现与维护决策中的实际价值。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的集成框架示意",
+            "description": "展示摘要明确列出的数据对象、框架组成及异常表征与监督学习的关系；不表示具体执行顺序或未报告的实验配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "MetroPT-3时间序列",
+                "detail": "地铁空气生产单元的电气、气动、热学及运行测量。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "集成AI与机器学习框架",
+                "detail": "联系异常检测、故障预测与维护优化。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "时间特征工程",
+                "detail": "摘要列出的框架组成，具体特征构造未展开。"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "自编码器异常检测",
+                "detail": "以潜在异常表征连接监督学习。"
+              },
+              {
+                "id": "e",
+                "stage": 2,
+                "label": "监督预测模型",
+                "detail": "将构建的潜在异常表征纳入监督学习。"
+              },
+              {
+                "id": "f",
+                "stage": 2,
+                "label": "多时间跨度预警分析",
+                "detail": "分析不同预警时间跨度下的响应。"
+              },
+              {
+                "id": "g",
+                "stage": 2,
+                "label": "基于Pareto的维护优化",
+                "detail": "涉及维护策略、风险阈值与归一化成本指数。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "用于测试"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "包含"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "包含"
+              },
+              {
+                "from": "b",
+                "to": "e",
+                "label": "包含"
+              },
+              {
+                "from": "b",
+                "to": "f",
+                "label": "包含"
+              },
+              {
+                "from": "b",
+                "to": "g",
+                "label": "包含"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "引入潜在异常表征"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-08T14:51:03.469162+00:00",
+      "article_profile": "4452bacd17364bd60bf11850e898eafc61de07e0f0d5c901afbac5b0d725313d",
+      "analysis_references": {},
+      "analysis_material_version": "5098630cc13cd2afb21411fe2572d562a32a8a59aedf04c43b7e665f10b5db9e",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "bc88401e69c3",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-08T14:51:03.471168+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -2383,7 +2809,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "AI-Driven Model Development is a major paradigm shift in modern systems engineering, software-intensive engineering, manufacturing, digital-twin development, and Model-Based Systems Engineering (MBSE) where AI is increasingly playing a key role in model creation and evolution by accelerating, automating, analyzing and improving the engineering model. Typical model development is often based on the practice of building models manually based on domain knowledge, requirements, design assumptions, system relationships, and operational information by experienced engineers. Manual modeling can be ti…",
+      "summary": "本文摘要讨论人工智能如何辅助基于模型的系统工程（MBSE）中的模型创建与演化。传统建模依赖工程师的领域知识、需求和设计假设，系统复杂化后容易出现耗时、维护困难与不一致问题。作者列举机器学习、自然语言处理、生成式人工智能和知识图谱等技术，强调其对建模生命周期的辅助作用。[摘要] 当前资料未呈现具体算法、验证案例或量化成果，适合作为主题概览，不宜视为已验证的智能运维方案。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7225270859",
@@ -2427,11 +2853,95 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为人工智能辅助系统建模的背景材料选读；摘要尚未提供明确技术方案及验证结果，暂不推荐作为智能运维方向的重点方法文献。[摘要]",
+      "deep_read": {
+        "problem": "传统工程模型依靠有经验的工程师，根据领域知识、需求、设计假设、系统关系和运行信息手工建立。摘要指出，随着系统更加复杂、多学科且互联，人工建模会面临耗时、维护困难和不一致风险。[摘要] 研究问题聚焦模型开发流程，而非设备故障诊断。",
+        "method": "摘要列举机器学习、自然语言处理、生成式人工智能、知识图谱、计算机视觉、优化算法和智能体，作为支持工程师开展建模工作的技术工具。[摘要] 但没有说明这些工具如何组合，也未交代数据输入、训练过程或模型更新机制，不能据此还原具体方法。",
+        "innovation": "作者将人工智能驱动的模型开发称为“a major paradigm shift”，强调其对模型创建与演化的作用。[摘要] 解读：这是对技术趋势和应用范式的定位，并不等于已经提出原创算法；仅凭摘要无法确认相对既有研究的具体创新。",
+        "findings": "摘要表达的主要观点是，人工智能能够通过加速、自动化、分析和改进工程模型，辅助工程师完成建模生命周期中的工作。[摘要] 这属于作者对应用作用的概括；当前未提供实验、对照或量化指标，不能将其表述为效率或一致性已经得到验证。",
+        "limitations": "当前仅有摘要，未展示实施案例、评价指标、基线比较及工程部署条件，也没有提供作者自述的研究局限。[摘要] 解读：这些是现有资料的证据边界，不代表全文必然缺少相关内容，因此无法判断方法的可复现性及实际适用范围。",
+        "connection": "摘要明确涉及制造、数字孪生和工程模型，并提到建模使用运行信息。[摘要] 解读：这与智能运维中的模型维护、结构设计中的系统关系表达存在间接联系，但摘要没有展开故障预测、结构优化或可靠性评估，不能认定已有相应应用成果。",
+        "next_steps": "建议后续获取正文，优先核查是否存在明确的建模任务、人工智能介入环节和工程案例，再决定是否重点阅读。建议迁移研究时选择需求到模型转换或运行信息驱动更新等具体任务，设置人工流程对照；这些是研究建议，并非作者已完成的工作。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "基于模型的系统工程流程中的人工智能与机器学习",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.4018/979-8-2600-1086-0.ch003"
+      ],
+      "analyzed_at": "2026-11-08T15:01:50.675094+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "复杂工程系统的模型不仅难建，也难持续维护。这篇摘要关注人工智能如何辅助基于模型的系统工程（MBSE），阅读价值在于理解其对人工建模的补充定位，而非获得已经验证的性能结论。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "系统越复杂，人工建模越难维护",
+            "paragraphs": [
+              "传统模型开发通常依赖有经验的工程师，将领域知识、需求、设计假设、系统关系和运行信息组织为工程模型。随着系统呈现多学科、软件密集、互联和自适应等特征，人工建模可能耗时较长、维护困难，也更容易出现不一致。",
+              "摘要将这一问题放在现代系统工程、制造、数字孪生开发与MBSE等背景下讨论。这里的关注点不仅是模型的初次创建，也包括模型后续的演化。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "多类AI工具辅助模型全生命周期",
+            "paragraphs": [
+              "摘要列出的工具包括机器学习、自然语言处理、生成式AI、知识图谱、计算机视觉、优化算法和智能体。其共同定位是支持工程师开展模型全生命周期工作，**补充人工建模，而不是明确宣称替代工程师**。",
+              "不过，摘要没有交代这些工具如何组合，也没有描述具体算法、输入输出接口或连续实施步骤。因此，目前能够概括的是技术覆盖范围与辅助目标，而非一套可以直接复现的方法流程。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要提出方向判断，未报告实测成效",
+            "paragraphs": [
+              "作者将AI驱动的模型开发描述为一种重要的范式转变，强调AI在模型创建与演化中的作用，并将加速、自动化、分析和改进工程模型列为其作用方向。",
+              "需要区分的是，这些属于摘要中的总体判断和技术定位。摘要没有报告具体实验发现或量化结果，不能据此认定建模时间已经缩短、模型一致性已经提高，或某类AI工具优于其他方法。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "样本、对照与验证边界仍待查明",
+            "paragraphs": [
+              "仅凭本次摘要，无法判断研究采用了哪些样本或工程案例、是否设置人工建模或其他方法作为对照，以及验证覆盖了哪些系统和生命周期环节。这是当前资料的边界，并不等于论文没有开展相关工作。",
+              "摘要也不足以判断各类AI工具的适用条件、可靠性及维护成本。其对制造和数字孪生等领域的提及，不能直接视为这些场景均已获得验证。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：先看AI究竟辅助哪类模型工作",
+            "paragraphs": [
+              "阅读启发：后续阅读可优先关注，作者如何把不同AI工具对应到模型创建、分析与演化的具体任务，以及如何判断辅助是否有效。对于关注智能运维的读者，数字孪生是摘要明确涉及的连接点，但当前资料尚不足以延伸出故障诊断、预测维护或寿命预测方面的成效结论。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-08T15:12:50.042097+00:00",
+      "article_profile": "e2cfe233b5cce3a1791a6e257e98191cc5457b8840a15960a06ec8d13691c164",
+      "analysis_references": {},
+      "analysis_material_version": "4c82cc6433a78da3fd5492913647f08e849ec3f812dc86881ff4e55058e2490b",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "720b6cef44ee",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-08T15:12:50.043350+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -41931,7 +42441,7 @@
       "reading_status": {
         "paper_id": "448942aa1a69",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-06T10:38:55.610983+00:00",
+        "updated_at": "2026-11-08T16:36:27.461884+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
@@ -45018,7 +45528,7 @@
       "reading_status": {
         "paper_id": "abd65bfce7b5",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-06T10:38:12.446603+00:00",
+        "updated_at": "2026-11-08T16:35:39.285703+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
@@ -45997,7 +46507,7 @@
       "reading_status": {
         "paper_id": "b8d36ac1dcaf",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-06T10:24:02.147624+00:00",
+        "updated_at": "2026-11-08T15:54:19.684060+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
@@ -57205,7 +57715,7 @@
       "reading_status": {
         "paper_id": "925093e117c0",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-06T10:11:33.686630+00:00",
+        "updated_at": "2026-11-08T15:44:16.560113+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
@@ -64210,7 +64720,7 @@
       "reading_status": {
         "paper_id": "565888b08f8a",
         "state": "missing_evidence",
-        "updated_at": "2026-11-06T10:35:58.065575+00:00",
+        "updated_at": "2026-11-08T16:03:49.518994+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -65576,7 +66086,7 @@
       "reading_status": {
         "paper_id": "de48174471ad",
         "state": "missing_evidence",
-        "updated_at": "2026-11-06T10:36:46.875276+00:00",
+        "updated_at": "2026-11-08T16:04:38.921840+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -66696,7 +67206,7 @@
       "reading_status": {
         "paper_id": "e1a150bc890d",
         "state": "missing_evidence",
-        "updated_at": "2026-11-06T10:37:10.788257+00:00",
+        "updated_at": "2026-11-08T16:05:03.529886+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -82360,7 +82870,7 @@
       "reading_status": {
         "paper_id": "a3bed94312e4",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-06T09:46:13.724136+00:00",
+        "updated_at": "2026-11-08T15:23:44.245229+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -83811,7 +84321,7 @@
       "reading_status": {
         "paper_id": "40c0ae2fa4ed",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-06T09:59:10.541603+00:00",
+        "updated_at": "2026-11-08T15:34:04.609642+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -86396,7 +86906,7 @@
       "reading_status": {
         "paper_id": "9aeec1365697",
         "state": "missing_evidence",
-        "updated_at": "2026-11-06T10:42:28.798589+00:00",
+        "updated_at": "2026-11-08T16:56:52.886028+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -92158,7 +92668,7 @@
       "reading_status": {
         "paper_id": "c05baf48e37d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-06T10:35:03.535278+00:00",
+        "updated_at": "2026-11-08T15:54:41.641841+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
@@ -92912,7 +93422,7 @@
       "reading_status": {
         "paper_id": "35b3b0d29b69",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-06T10:36:17.596196+00:00",
+        "updated_at": "2026-11-08T16:04:10.399899+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
@@ -96560,7 +97070,7 @@
       "reading_status": {
         "paper_id": "e4cf9f888b6d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-06T10:38:35.112202+00:00",
+        "updated_at": "2026-11-08T16:36:06.332560+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -98683,7 +99193,7 @@
       "reading_status": {
         "paper_id": "c0cf7585af24",
         "state": "failed",
-        "updated_at": "2026-11-06T10:37:51.998582+00:00",
+        "updated_at": "2026-11-08T16:26:14.481153+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -101231,7 +101741,7 @@
       "reading_status": {
         "paper_id": "438f7c66205e",
         "state": "missing_evidence",
-        "updated_at": "2026-11-06T10:42:03.755553+00:00",
+        "updated_at": "2026-11-08T16:56:29.938804+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -102611,7 +103121,7 @@
       "reading_status": {
         "paper_id": "18ee2d492b5c",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-06T10:41:20.293215+00:00",
+        "updated_at": "2026-11-08T16:56:03.290521+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
@@ -123512,7 +124022,7 @@
       "reading_status": {
         "paper_id": "7ebe32b91775",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-06T10:39:24.282472+00:00",
+        "updated_at": "2026-11-08T16:46:29.009174+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
@@ -124229,7 +124739,7 @@
       "reading_status": {
         "paper_id": "86cf61a99b1a",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-06T10:37:30.030989+00:00",
+        "updated_at": "2026-11-08T16:15:38.787389+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
@@ -124415,7 +124925,7 @@
       "reading_status": {
         "paper_id": "65e1dc5c1243",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-06T10:41:01.794724+00:00",
+        "updated_at": "2026-11-08T16:55:38.644445+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
@@ -131550,13 +132060,13 @@
     "unavailable": 44
   },
   "analysis_status": {
-    "ready_core": 4,
+    "ready_core": 6,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 2
+    "pending": 0
   },
   "edition": {
     "id": "42482855882",
