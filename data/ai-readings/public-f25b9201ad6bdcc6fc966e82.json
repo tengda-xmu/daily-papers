@@ -1,17 +1,18 @@
 {
   "id": "public-f25b9201ad6bdcc6fc966e82",
-  "content_version": "0fb4b210c5978aed3004fa79b66755c5d55128d5c87312ea369bf282a47b94f1",
+  "content_version": "4b44abe5b9904ded363363eb17dd8914c0cc0dec104ed99c1ade2dc709471d93",
   "analysis": {
-    "title_zh": "NVIDIA Cosmos 3 新增开放权重模型，用于交互式世界仿真",
-    "summary": "公告称，NVIDIA Cosmos 世界模型开发平台为 Cosmos 3 系列新增四个开放权重检查点，面向交互式世界仿真及多传感器、多视角驾驶场景生成。其中，Cosmos3-Nano-Transfer-Auto 可生成不同天气、光照和时段的多视角驾驶数据，适用于驾驶场景数据生成。所给摘录在另一模型的介绍处截断，无法确认其完整能力、其余模型信息或性能表现。",
-    "application": "建议：科研迁移可考虑利用多天气、多光照驾驶数据，研究感知模型在环境变化下的鲁棒性与可靠性；这是研究设想，并非官方已验证效果。官方摘录仅说明场景生成能力，未提供其提升下游任务性能的实验结果。",
+    "title_zh": "NVIDIA Cosmos 3 新增开放权重模型，面向交互式世界仿真",
+    "summary": "公告称，NVIDIA Cosmos 世界模型开发平台为 Cosmos 3 系列新增四个开放权重检查点，面向交互式世界仿真及多传感器、多视角驾驶场景生成。所给片段完整说明了两个模型：Cosmos3-Nano-Transfer-Auto 用于生成不同天气、光照和时段的多视角驾驶数据；Cosmos3-Nano-Sim-Auto 用于流式输出同步相机与激光雷达观测。其余模型信息被截断，无法确认完整功能。",
+    "application": "建议：科研迁移可考虑将上述模型用于自动驾驶感知系统的环境变化测试、多传感器同步数据研究及可靠性评估；这些属于迁移设想，并非官方已验证效果。所给公告仅陈述模型用途，未提供实验指标，不能据此认定其能提升感知精度或仿真真实性。",
     "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
       "NVIDIA Cosmos world model development platform adds four new open-weight checkpoints to its Cosmos 3 model family for generating interactive world simulation and multi-sensor multi-view driving scenes:",
-      "Cosmos3-Nano-Transfer-Auto : Generate multi-view driving data with varied weather, lighting, and time of day."
+      "Cosmos3-Nano-Transfer-Auto : Generate multi-view driving data with varied weather, lighting, and time of day.",
+      "Cosmos3-Nano-Sim-Auto : Stream synchronized camera and LiDAR observations for driving simulation."
     ],
     "basis_url": "https://huggingface.co/blog/nvidia/cosmos-interactive-world-simulation"
   },
-  "analyzed_at": "2026-11-06T03:33:45.845814+00:00"
+  "analyzed_at": "2026-11-08T05:33:56.593179+00:00"
 }
