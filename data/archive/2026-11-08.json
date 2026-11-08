@@ -25,7 +25,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "本文聚焦《HyperLLM: Hypergraph-Enhanced Large Language Model for Remaining Useful Life Prediction》，暂未提供可用摘要，请查看原文。",
+      "summary": "航空发动机退化过程复杂，多传感器信号强耦合，使剩余使用寿命预测面临信息提取困难。本文提出HyperLLM，以自适应超图及超图卷积提取空间退化特征，以退化感知时间嵌入捕捉时间特征，再通过轻量适配器融合，并利用任务嵌入提示适配冻结的大语言模型。摘要报告其在C-MAPSS与N-CMAPSS上具有较强预测精度和泛化能力，但未给出具体指标与对照结果。本解读仅依据摘要，适合用于判断方法相关性，不足以确认性能优势幅度。[摘要]",
       "raw_metadata": {
         "uid": "WOS:001919642000001",
         "title": "HyperLLM: Hypergraph-Enhanced Large Language Model for Remaining Useful Life Prediction",
@@ -136,11 +136,181 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议重点关注其如何连接多传感器高阶关系建模与冻结大语言模型适配，这与智能运维中的寿命预测直接相关；但推荐依据是明确的方法设计，而非已经核实的性能领先性。[摘要]",
+      "deep_read": {
+        "problem": "研究针对航空发动机剩余使用寿命预测，核心困难是退化过程复杂，以及多变量传感器信号存在“strong coupling relationships”。作者认为这些耦合妨碍退化信息的有效提取与利用。解读：问题重点是耦合退化表征，而非单纯引入更大的预测模型。[摘要]",
+        "method": "方法先构建自适应超图，以超图卷积提取拓扑空间退化特征；同时用退化感知时间嵌入提取时间特征，再由轻量适配器融合。随后构建任务嵌入提示，在“LLM parameters frozen”条件下完成适配。摘要未说明超边构造、嵌入公式或适配器结构。[摘要]",
+        "innovation": "摘要明确提出“hypergraph-enhanced LLM method”，并将超图空间表征、退化感知时间表征及冻结大模型适配纳入同一方法。解读：值得关注的是耦合退化信息如何转化为大模型可利用的输入；仅凭摘要不能确认各模块的首创性或相对既有工作的创新幅度。[摘要]",
+        "findings": "摘要称在C-MAPSS与N-CMAPSS上的实验表明，方法具有“strong prediction accuracy and generalization capability”。这是作者报告的定性结果，未提供误差、评分、方差或基线比较，因而尚不能核实改善幅度，也无法判断泛化具体对应哪些实验设置。[摘要]",
+        "limitations": "当前证据的局限在于仅有摘要，缺少数据划分、评价指标、对照模型、消融和计算开销信息，无法核对模块贡献与复现条件。这些属于资料缺口，不是已证实的方法缺陷。摘要也未说明大模型规模及真实发动机验证情况，不能据此断言作者未开展相关研究。[摘要]",
+        "connection": "论文直接面向航空发动机寿命预测，与智能运维及可靠性研究中的退化评估高度相关。解读：超图表征提供了组织多传感器关联的一种思路，但寿命预测精度不等于可靠性概率或维护决策收益；当前摘要也没有提供结构设计优化方面的直接证据。[摘要]",
+        "next_steps": "建议获取全文后，优先核对超图构建规则、冻结参数范围与提示接口，并检查移除超图、时间嵌入或适配器后的消融结果。进一步研究可考虑噪声、传感器缺失及工况变化下的稳定性，并评估维护决策价值；这些是建议，不是摘要已经验证的结论。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "HyperLLM：超图增强大语言模型的航空发动机剩余使用寿命预测",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1109/tii.2026.3741598"
+      ],
+      "analyzed_at": "2026-11-08T01:19:31.041166+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "航空发动机的退化过程复杂，多变量传感信号又存在强耦合，如何从中提取有效信息、准确预测剩余使用寿命，是关系飞行安全的重要问题。HyperLLM尝试结合超图与大语言模型，为理解这类预测任务提供了一条值得关注的方法思路。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "寿命预测的难点：复杂退化与传感信号耦合",
+            "paragraphs": [
+              "发动机剩余使用寿命（RUL）预测不仅需要描述退化过程，还需要有效利用多变量传感信号。摘要指出，退化过程本身难以准确建模，而传感信号间的强耦合又阻碍了退化信息的提取与利用。因此，研究关注的不只是预测模型，还包括如何组织和表达多源退化信息。",
+              "作者将大语言模型的理解与推理能力视为建模复杂退化过程的新切入点，提出超图增强的大语言模型方法。这里的核心问题是：怎样把传感信息中的关联结构与时间退化特征，转化为能够支持大语言模型适配寿命预测任务的表示。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "超图提取空间关联，时间嵌入补充退化演变",
+            "paragraphs": [
+              "方法首先构建自适应超图，融合多源退化信息，再通过超图卷积提取拓扑空间退化特征。与此同时，退化感知时间嵌入模块负责捕捉时间退化特征。随后，轻量级适配器实现多维特征融合，将空间关联与时间信息纳入同一方法框架。",
+              "在此基础上，作者构建任务嵌入提示，引导模型在**冻结大语言模型参数**的条件下进行高效适配。摘要将保留大语言模型先验知识、提升预测性能作为这一设计的作用描述，但未展开提示的具体形式、适配器结构或训练配置。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "两个仿真数据集上的定性结果",
+            "paragraphs": [
+              "摘要报告，研究在NASA商业模块化航空推进系统仿真数据集（C-MAPSS）及新商业模块化航空推进系统仿真数据集（N-CMAPSS）上开展实验，结果表明该方法具有较强的预测准确性与泛化能力。这是摘要实际给出的结果层面结论，未提供具体误差指标、提升幅度或分项比较结果。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "准确性与泛化结论仍需结合评测细节理解",
+            "paragraphs": [
+              "仅依据本次摘要，尚无法判断样本规模、数据划分、比较方法及其配置，也无法核对各模块的独立贡献。泛化能力具体对应何种验证设置，以及仿真数据上的结果能否延伸至真实发动机运行场景，同样需要进一步查阅论文。这些属于当前资料未交代的信息，不意味着论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注信息表示与模型适配的衔接",
+            "paragraphs": [
+              "阅读启发：这项工作的可读之处，是将传感关联建模、时间退化表征与冻结参数的大模型适配联系起来。进一步阅读时，建议重点关注自适应超图如何表达传感关系、融合特征如何形成任务提示，以及准确性和泛化结论分别由哪些比较与验证支撑，而不宜仅凭摘要将其理解为已经验证的实际运维收益。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的HyperLLM方法示意",
+            "description": "概括摘要明确描述的空间与时间特征提取、融合及模型适配关系；此图为摘要整理示意，不是论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "多源退化信息",
+                "detail": "研究面向航空发动机多变量传感信号中的退化信息。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "自适应超图",
+                "detail": "构建自适应超图，融合多源退化信息。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "超图卷积",
+                "detail": "提取拓扑空间退化特征。"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "退化感知时间嵌入",
+                "detail": "捕捉时间退化特征。"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "轻量级适配器",
+                "detail": "实现多维特征融合。"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "任务嵌入提示",
+                "detail": "在特征融合基础上构建提示，引导任务适配。"
+              },
+              {
+                "id": "g",
+                "stage": 5,
+                "label": "冻结参数的大语言模型",
+                "detail": "在大语言模型参数冻结的条件下适配剩余使用寿命预测任务。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "构建与融合"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "提取空间特征"
+              },
+              {
+                "from": "a",
+                "to": "d",
+                "label": "捕捉时间退化"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "空间特征融合"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "时间特征融合"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "构建任务提示"
+              },
+              {
+                "from": "f",
+                "to": "g",
+                "label": "引导高效适配"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-08T01:29:45.676639+00:00",
+      "article_profile": "f0b3c27fee335ac1969be1ec8af1e60d1159dabae5f7c8c2ef2258f911637dfe",
+      "analysis_references": {},
+      "analysis_material_version": "745f67d8db48f7c4c5c5ebdad551782b8bd2aac081dd62a54f984afbbd3770ca",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "9cee5c8d8731",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-08T01:29:45.680402+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -341,7 +511,7 @@
       "reading_status": {
         "paper_id": "d2ad3a94e5bd",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-06T10:40:37.373961+00:00",
+        "updated_at": "2026-11-08T01:08:17.816562+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
@@ -376,7 +546,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Enzyme engineering has long relied on rational design and directed evolution, yet both remain bounded by natural enzyme space - a constraint felt acutely across the largely uncharacterised microbial world. The 2021 advent of accurate structure prediction marked an inflection point, catalysing AI methods that now extend far beyond folding. These tools are organism-agnostic; the microbial domain is their proving ground because it supplies both the uncharacterised sequence space and the expression hosts. Here we examine three stages: mining microbial sequence space; generative design, whether con…",
+      "summary": "【摘要】本文围绕人工智能如何推动酶工程突破天然酶空间展开，梳理微生物序列挖掘、生成式设计与机器学习引导的定向进化三个环节。作者强调，设计出具有功能的蛋白质，并不等于获得实用生物催化剂，因此提出涵盖催化、选择性、可生产性与工艺适配性的分层评价框架。本文适合用于建立领域认识和设计评价指标，但摘要未提供具体案例、定量结果或框架验证证据，本解读不代表全文阅读。",
       "raw_metadata": {
         "provider": "PubMed",
         "pmid": "42994288",
@@ -457,11 +627,156 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "【解读】建议作为生成式蛋白质设计的框架性读物重点阅读，尤其关注作者如何区分蛋白质功能与生物催化实用价值；不宜仅凭摘要判断相关技术的性能优势。",
+      "deep_read": {
+        "problem": "【摘要】传统酶工程依靠理性设计与定向进化，但仍受“natural enzyme space”约束，微生物世界中大量尚未表征的序列使这一问题更加突出。文章关注人工智能如何扩展可探索空间，以及如何判断设计产物是否真正具有生物催化用途，而非仅表现出某种蛋白质功能。",
+        "method": "【摘要】文章按三个环节组织讨论：挖掘微生物序列空间、以结构或序列为条件开展生成式设计，以及机器学习引导的定向进化。作者还提出分层评价框架，将技术路线梳理与实用性判断结合起来；摘要未交代文献筛选方式、模型配置或具体实验流程。",
+        "innovation": "【解读】摘要中值得关注的概念贡献，是把关注点从功能蛋白质转向实用生物催化剂，并以四个层次组织评价。其价值可能在于改善不同研究主张难以比较的问题，而不是证明某个新模型优于既有方法；仅凭摘要无法确认该框架的首创性与覆盖完整性。",
+        "findings": "【摘要】作者指出，准确结构预测的发展推动人工智能方法超越折叠预测，并强调这些工具并不限定适用生物。微生物领域同时提供未充分表征的序列空间和表达宿主，因而成为重要试验场。摘要未给出具体酶、性能提升或实验对照，不能据此概括定量成效。",
+        "limitations": "【摘要】作者明确指出，已发表研究的主张难以比较，但摘要未说明差异来自何种实验条件或评价口径。【解读】当前资料也不足以检验分层框架的可操作性、不同层次间的权衡及其跨体系适用范围；这些属于证据边界，不应直接写成论文已证实的缺陷。",
+        "connection": "【解读】与给定的生成式设计标签直接相关的是以结构或序列为条件生成酶，以及将设计结果置于实际用途下评价。对结构设计与可靠性研究，可借鉴其分层评价思路；但这里的结构主要指蛋白质结构，摘要没有涉及工程结构或智能运维，不能认定存在直接应用联系。",
+        "next_steps": "【建议】后续取得全文后，优先核对各技术阶段是否配有实验案例，以及四层评价是否给出可执行指标。若开展迁移研究，可先选定单一酶体系，分别记录功能表现与生产、工艺要求，检查评价结论是否一致；这属于研究建议，并非作者已实施的验证。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "从预测到创造：人工智能驱动设计如何重塑微生物生物催化",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.cbpa.2026.102816"
+      ],
+      "analyzed_at": "2026-11-08T01:38:44.061940+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "AI能够生成蛋白质，并不等于已经得到实用的生物催化剂。这篇综述围绕微生物酶工程，梳理从序列挖掘到生成式设计与定向进化的研究脉络，并提出判断设计成果是否真正有用的分层评价框架。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "天然酶空间为何仍是设计边界",
+            "paragraphs": [
+              "酶工程长期依靠理性设计与定向进化，但摘要指出，两者仍受天然酶空间约束。微生物世界中大量尚未被表征的序列，使这一边界尤其突出：潜在资源丰富，却不意味着其功能已经得到认识。",
+              "准确的结构预测推动AI方法走向折叠预测之外。作者强调，这些工具并不局限于特定生物；微生物之所以成为重要试验场，是因为它们既提供尚待探索的序列空间，也提供蛋白质表达宿主。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从序列挖掘走向生成与进化",
+            "paragraphs": [
+              "本文采用综述式梳理，考察微生物序列空间挖掘、以结构或序列为条件的生成式设计，以及机器学习指导的定向进化。摘要给出的是研究版图，而不是一套新模型的训练流程或具体实验方案。",
+              "贯穿这些环节的问题，是蛋白质研究如何从“读取”已有空间走向“书写”新的设计，以及不同方法已经为微生物生物催化带来了什么。这里的生成式设计明确涉及结构条件与序列条件，不能仅理解为结构预测的延伸。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "评价重点从功能成立转向催化实用性",
+            "paragraphs": [
+              "摘要呈现的核心产出是评价框架，而非某种酶性能提升的实验结果。面对已发表主张难以相互比较的问题，作者提出按催化能力、选择性、可生产性和工艺适配性分层判断设计成果。",
+              "这一框架区分了“具有功能的蛋白质”与“有用的生物催化剂”。其关注点不止于功能是否成立，还包括是否适合生产与具体工艺；但摘要没有给出各层的量化门槛，也未报告框架应用后的比较结果。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不足以判断验证覆盖范围",
+            "paragraphs": [
+              "仅凭摘要，无法判断综述纳入了哪些酶、微生物宿主和反应体系，也无法核对相关研究的样本规模、对照设置及验证条件。因此，不能据此认定生成式设计优于传统方法，或已经具备普遍的工艺适用性。",
+              "摘要也未交代文献筛选方式，以及分层框架如何处理不同研究的指标差异。这些属于当前资料不能回答的问题，并不意味着论文全文没有讨论或相关研究没有开展验证。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：生成之后，证据走到了哪一层",
+            "paragraphs": [
+              "阅读启发：对于关注生成式设计的读者，可以带着“设计输出与应用证据是否对应”的问题继续阅读。值得追问的不是生成了多少候选，而是其主张落在催化、选择性、可生产性还是工艺适配层面，以及不同成果是否具有可比较的证据。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的综述组织示意",
+            "description": "概括摘要明确列出的研究环节与评价框架；分支表示综述关注方向，不代表已验证的实验流水线。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "AI驱动的微生物酶工程",
+                "detail": "围绕从读取蛋白质空间到书写新设计的转变展开综述。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "微生物序列空间挖掘",
+                "detail": "考察尚未充分表征的微生物序列空间。"
+              },
+              {
+                "id": "c",
+                "stage": 1,
+                "label": "生成式设计",
+                "detail": "考察以结构或序列为条件的生成式设计。"
+              },
+              {
+                "id": "d",
+                "stage": 1,
+                "label": "机器学习指导的定向进化",
+                "detail": "考察机器学习参与定向进化的研究方向。"
+              },
+              {
+                "id": "e",
+                "stage": 2,
+                "label": "生物催化剂分层评价",
+                "detail": "作者提出从催化能力、选择性、可生产性和工艺适配性判断实用价值。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "梳理研究环节"
+              },
+              {
+                "from": "a",
+                "to": "c",
+                "label": "梳理研究环节"
+              },
+              {
+                "from": "a",
+                "to": "d",
+                "label": "梳理研究环节"
+              },
+              {
+                "from": "a",
+                "to": "e",
+                "label": "提出评价框架"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-08T01:40:08.857466+00:00",
+      "article_profile": "e69b71163fb93184f32a7c5252389695eb153e2a712477af519c0053984e1983",
+      "analysis_references": {},
+      "analysis_material_version": "1185e8c78a7e5ce8524c053b4a8a5dc16ea1f3c9ede43dca95cccb6b3f51e235",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "386f2b156921",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-08T01:40:08.860114+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "PubMed",
@@ -488,7 +803,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "The steady functioning of power electronic-based systems is linked to fault localization and identification for converters, which is gaining a lot of attention. Artificial intelligence (AI), a representation of sophisticated algorithms is offering new solutions. This article examines how artificial intelligence (AI) can be used to diagnose open-circuit defects in power electronic converters, which are essential parts of contemporary power systems. From an algorithmic point of view, the fault diagnosis techniques are methodically classified and summarized encompassing a variety of approaches su…",
+      "summary": "电力电子变换器的开路故障如何被及时识别和定位，是本文关注的问题。[摘要]该综述按算法梳理传统机器学习、神经网络、混合模型与多模态融合，并从实时性、计算效率和抗噪性评估诊断方法。解读：其阅读价值主要在于帮助建立智能故障诊断的方法分类与评价框架，而非提供一种已验证的新算法。当前仅有摘要，且结尾不完整，不能据此判断具体模型的优劣、实验可信度或工程部署效果。",
       "raw_metadata": {
         "provider": "PubMed",
         "pmid": "42992788",
@@ -586,11 +901,133 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为智能运维方向的方法地图阅读，重点关注算法分类及实时性、计算效率、抗噪性三个评价维度；但不宜仅凭摘要选择最优诊断模型。[摘要]",
+      "deep_read": {
+        "problem": "本文讨论电力电子变换器开路故障的识别与定位。[摘要]原文以“fault localization and identification”关联系统稳定运行。解读：研究问题不仅是检测异常，还涉及故障位置辨识；但摘要没有说明具体变换器拓扑、故障组合或诊断粒度。",
+        "method": "文章采用综述式梳理，从算法角度分类诊断技术，涉及支持向量机、极限学习机、卷积与循环神经网络，以及混合模型和多模态融合。[摘要]原文称“methodically classified and summarized”，但未披露文献检索范围、纳入标准及比较流程。",
+        "innovation": "可确认的工作特点是把多类人工智能诊断方法放入统一分类讨论，并引入工程性能评价视角。[摘要]解读：其潜在贡献属于知识组织和方法比较，而不是新模型发明。摘要没有交代相较既有综述新增哪些内容，因此不足以确认其原创性或综述覆盖优势。",
+        "findings": "摘要明确列出“real-time capabilities, computational efficiency, and noise robustness”三个评估维度。[摘要]这说明文章关注诊断方法的实际运行表现，但没有给出模型排名、性能数值或比较结论，故不能将评价维度的提出视为某类算法更优的证据。",
+        "limitations": "当前资料仅为摘要，且末尾停在“To support the creation of sophisticated diagnostic.”，内容不完整。[摘要]无法核对案例、数据来源、评价指标定义及结论适用条件。这些属于当前资料的证据限制，不能直接认定为论文全文存在的方法缺陷。",
+        "connection": "解读：开路故障识别与定位直接对应智能运维中的状态诊断环节，摘要提及的“dependability and affordability”也与可靠性及运维经济性相关。[摘要]但资料没有涉及结构参数优化、寿命预测或维修决策，因此与结构设计的联系目前只能视为间接关联。",
+        "next_steps": "建议后续取得全文，核查分类依据、比较表及各项性能结论对应的原始研究。若迁移到自身课题，可围绕实时性、计算效率和抗噪性设计同条件比较，并补充跨工况验证。这是基于摘要评价维度提出的研究建议，不是作者已完成的实验或已证明的结论。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "人工智能技术用于电力电子变换器开路故障分析的综述",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.3791/72442"
+      ],
+      "analyzed_at": "2026-11-08T01:50:43.577762+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "电力电子变换器发生开路故障后，如何识别并定位故障，关系到系统的稳定运行。这篇综述从算法分类和工程评价维度梳理人工智能诊断方法，阅读价值在于建立方法选择的框架，而不是提供一个已经证明最优的模型。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "开路故障诊断为何关系系统稳定",
+            "paragraphs": [
+              "电力电子变换器是现代电力系统的重要组成部分。摘要将系统稳定运行与变换器故障的定位、识别联系起来，并把开路故障诊断作为讨论对象。文章关注的是人工智能如何服务这一具体问题，而非泛泛讨论智能运维的全部应用。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "按算法归类，再看工程适用性",
+            "paragraphs": [
+              "这是一篇综述，摘要明确的方法是从算法角度对故障诊断技术进行系统分类与总结。覆盖范围包括多模态融合、混合模型、神经网络，以及传统机器学习；其中列举了卷积神经网络、循环神经网络、支持向量机和极限学习机。",
+              "在分类之外，文章还从实时能力、计算效率和噪声鲁棒性评价这些方法。理解其组织方式的关键，是把“采用何种算法”与“能否满足应用要求”分开阅读，而不是仅凭模型名称判断技术价值。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要给出了评价框架，未给出性能排名",
+            "paragraphs": [
+              "摘要报告的主要内容，是对多类人工智能诊断方法的归纳，以及围绕实时性、计算效率和噪声鲁棒性的评价。它没有给出各类方法的具体评价结果，因此不能据此认定某类神经网络优于传统机器学习，也不能认定融合方法必然更稳健。",
+              "文章还讨论了人工智能故障诊断的未来可能性与建议方向，目标指向变换器系统可靠性和经济性的改善。**这些是发展目标，不能改写成已经验证的改善效果。**"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "样本、比较条件与验证范围仍待核对",
+            "paragraphs": [
+              "仅凭本次摘要，无法判断综述纳入研究的数量、检索与筛选过程，也无法确认相关研究的数据来源、样本规模、变换器类型及故障工况。不同方法是否在一致条件下比较、是否经过硬件或现场验证，同样不能确定；这些信息未在摘要报告，不等于论文没有涉及。",
+              "本次提供的摘要末句不完整，不能据此补写其结论。上述解读仅限摘要可确认的内容，不代表已经阅读全文，也不足以形成具体算法的工程选型结论。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：沿评价条件理解算法选择",
+            "paragraphs": [
+              "阅读启发：后续阅读可重点核对，实时能力对应怎样的诊断时限，计算效率基于何种运行平台，噪声鲁棒性又在什么条件下评价。对于智能运维读者，这些问题有助于辨别不同研究结论的适用边界，也能避免将面向可靠性与经济性的愿景误读为落地证据。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的综述组织示意",
+            "description": "概括摘要明确陈述的分类、评价与展望环节，仅表示综述组织关系，不是论文原图或实验流程。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "分类与总结诊断方法",
+                "detail": "覆盖多模态融合、混合模型、神经网络及传统机器学习。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "从工程维度评价",
+                "detail": "关注实时能力、计算效率和噪声鲁棒性。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "讨论未来可能性",
+                "detail": "提出发展方向，目标指向变换器系统的可靠性与经济性。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "对所述方法进行评价"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "进一步讨论展望"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-08T02:00:47.987559+00:00",
+      "article_profile": "2efea61c3772fb54345b7c935d0a863af5258482a0c4d29d355f484335fe5c88",
+      "analysis_references": {},
+      "analysis_material_version": "a56181ae3c4951c56efbe268f692186231622e721861c540889f125975b346f3",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "664f683d7e01",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-08T02:00:47.990208+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -740,7 +1177,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "本文聚焦《HyperLLM: Hypergraph-Enhanced Large Language Model for Remaining Useful Life Prediction》，暂未提供可用摘要，请查看原文。",
+      "summary": "航空发动机退化过程复杂，多传感器信号强耦合，使剩余使用寿命预测面临信息提取困难。本文提出HyperLLM，以自适应超图及超图卷积提取空间退化特征，以退化感知时间嵌入捕捉时间特征，再通过轻量适配器融合，并利用任务嵌入提示适配冻结的大语言模型。摘要报告其在C-MAPSS与N-CMAPSS上具有较强预测精度和泛化能力，但未给出具体指标与对照结果。本解读仅依据摘要，适合用于判断方法相关性，不足以确认性能优势幅度。[摘要]",
       "raw_metadata": {
         "uid": "WOS:001919642000001",
         "title": "HyperLLM: Hypergraph-Enhanced Large Language Model for Remaining Useful Life Prediction",
@@ -851,11 +1288,181 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议重点关注其如何连接多传感器高阶关系建模与冻结大语言模型适配，这与智能运维中的寿命预测直接相关；但推荐依据是明确的方法设计，而非已经核实的性能领先性。[摘要]",
+      "deep_read": {
+        "problem": "研究针对航空发动机剩余使用寿命预测，核心困难是退化过程复杂，以及多变量传感器信号存在“strong coupling relationships”。作者认为这些耦合妨碍退化信息的有效提取与利用。解读：问题重点是耦合退化表征，而非单纯引入更大的预测模型。[摘要]",
+        "method": "方法先构建自适应超图，以超图卷积提取拓扑空间退化特征；同时用退化感知时间嵌入提取时间特征，再由轻量适配器融合。随后构建任务嵌入提示，在“LLM parameters frozen”条件下完成适配。摘要未说明超边构造、嵌入公式或适配器结构。[摘要]",
+        "innovation": "摘要明确提出“hypergraph-enhanced LLM method”，并将超图空间表征、退化感知时间表征及冻结大模型适配纳入同一方法。解读：值得关注的是耦合退化信息如何转化为大模型可利用的输入；仅凭摘要不能确认各模块的首创性或相对既有工作的创新幅度。[摘要]",
+        "findings": "摘要称在C-MAPSS与N-CMAPSS上的实验表明，方法具有“strong prediction accuracy and generalization capability”。这是作者报告的定性结果，未提供误差、评分、方差或基线比较，因而尚不能核实改善幅度，也无法判断泛化具体对应哪些实验设置。[摘要]",
+        "limitations": "当前证据的局限在于仅有摘要，缺少数据划分、评价指标、对照模型、消融和计算开销信息，无法核对模块贡献与复现条件。这些属于资料缺口，不是已证实的方法缺陷。摘要也未说明大模型规模及真实发动机验证情况，不能据此断言作者未开展相关研究。[摘要]",
+        "connection": "论文直接面向航空发动机寿命预测，与智能运维及可靠性研究中的退化评估高度相关。解读：超图表征提供了组织多传感器关联的一种思路，但寿命预测精度不等于可靠性概率或维护决策收益；当前摘要也没有提供结构设计优化方面的直接证据。[摘要]",
+        "next_steps": "建议获取全文后，优先核对超图构建规则、冻结参数范围与提示接口，并检查移除超图、时间嵌入或适配器后的消融结果。进一步研究可考虑噪声、传感器缺失及工况变化下的稳定性，并评估维护决策价值；这些是建议，不是摘要已经验证的结论。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "HyperLLM：超图增强大语言模型的航空发动机剩余使用寿命预测",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1109/tii.2026.3741598"
+      ],
+      "analyzed_at": "2026-11-08T01:19:31.041166+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "航空发动机的退化过程复杂，多变量传感信号又存在强耦合，如何从中提取有效信息、准确预测剩余使用寿命，是关系飞行安全的重要问题。HyperLLM尝试结合超图与大语言模型，为理解这类预测任务提供了一条值得关注的方法思路。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "寿命预测的难点：复杂退化与传感信号耦合",
+            "paragraphs": [
+              "发动机剩余使用寿命（RUL）预测不仅需要描述退化过程，还需要有效利用多变量传感信号。摘要指出，退化过程本身难以准确建模，而传感信号间的强耦合又阻碍了退化信息的提取与利用。因此，研究关注的不只是预测模型，还包括如何组织和表达多源退化信息。",
+              "作者将大语言模型的理解与推理能力视为建模复杂退化过程的新切入点，提出超图增强的大语言模型方法。这里的核心问题是：怎样把传感信息中的关联结构与时间退化特征，转化为能够支持大语言模型适配寿命预测任务的表示。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "超图提取空间关联，时间嵌入补充退化演变",
+            "paragraphs": [
+              "方法首先构建自适应超图，融合多源退化信息，再通过超图卷积提取拓扑空间退化特征。与此同时，退化感知时间嵌入模块负责捕捉时间退化特征。随后，轻量级适配器实现多维特征融合，将空间关联与时间信息纳入同一方法框架。",
+              "在此基础上，作者构建任务嵌入提示，引导模型在**冻结大语言模型参数**的条件下进行高效适配。摘要将保留大语言模型先验知识、提升预测性能作为这一设计的作用描述，但未展开提示的具体形式、适配器结构或训练配置。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "两个仿真数据集上的定性结果",
+            "paragraphs": [
+              "摘要报告，研究在NASA商业模块化航空推进系统仿真数据集（C-MAPSS）及新商业模块化航空推进系统仿真数据集（N-CMAPSS）上开展实验，结果表明该方法具有较强的预测准确性与泛化能力。这是摘要实际给出的结果层面结论，未提供具体误差指标、提升幅度或分项比较结果。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "准确性与泛化结论仍需结合评测细节理解",
+            "paragraphs": [
+              "仅依据本次摘要，尚无法判断样本规模、数据划分、比较方法及其配置，也无法核对各模块的独立贡献。泛化能力具体对应何种验证设置，以及仿真数据上的结果能否延伸至真实发动机运行场景，同样需要进一步查阅论文。这些属于当前资料未交代的信息，不意味着论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注信息表示与模型适配的衔接",
+            "paragraphs": [
+              "阅读启发：这项工作的可读之处，是将传感关联建模、时间退化表征与冻结参数的大模型适配联系起来。进一步阅读时，建议重点关注自适应超图如何表达传感关系、融合特征如何形成任务提示，以及准确性和泛化结论分别由哪些比较与验证支撑，而不宜仅凭摘要将其理解为已经验证的实际运维收益。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的HyperLLM方法示意",
+            "description": "概括摘要明确描述的空间与时间特征提取、融合及模型适配关系；此图为摘要整理示意，不是论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "多源退化信息",
+                "detail": "研究面向航空发动机多变量传感信号中的退化信息。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "自适应超图",
+                "detail": "构建自适应超图，融合多源退化信息。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "超图卷积",
+                "detail": "提取拓扑空间退化特征。"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "退化感知时间嵌入",
+                "detail": "捕捉时间退化特征。"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "轻量级适配器",
+                "detail": "实现多维特征融合。"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "任务嵌入提示",
+                "detail": "在特征融合基础上构建提示，引导任务适配。"
+              },
+              {
+                "id": "g",
+                "stage": 5,
+                "label": "冻结参数的大语言模型",
+                "detail": "在大语言模型参数冻结的条件下适配剩余使用寿命预测任务。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "构建与融合"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "提取空间特征"
+              },
+              {
+                "from": "a",
+                "to": "d",
+                "label": "捕捉时间退化"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "空间特征融合"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "时间特征融合"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "构建任务提示"
+              },
+              {
+                "from": "f",
+                "to": "g",
+                "label": "引导高效适配"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-08T01:29:45.676639+00:00",
+      "article_profile": "f0b3c27fee335ac1969be1ec8af1e60d1159dabae5f7c8c2ef2258f911637dfe",
+      "analysis_references": {},
+      "analysis_material_version": "745f67d8db48f7c4c5c5ebdad551782b8bd2aac081dd62a54f984afbbd3770ca",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "9cee5c8d8731",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-08T01:29:45.680402+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Semantic Scholar",
@@ -1056,7 +1663,7 @@
       "reading_status": {
         "paper_id": "d2ad3a94e5bd",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-06T10:40:37.373961+00:00",
+        "updated_at": "2026-11-08T01:08:17.816562+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "review",
@@ -1091,7 +1698,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "Enzyme engineering has long relied on rational design and directed evolution, yet both remain bounded by natural enzyme space - a constraint felt acutely across the largely uncharacterised microbial world. The 2021 advent of accurate structure prediction marked an inflection point, catalysing AI methods that now extend far beyond folding. These tools are organism-agnostic; the microbial domain is their proving ground because it supplies both the uncharacterised sequence space and the expression hosts. Here we examine three stages: mining microbial sequence space; generative design, whether con…",
+      "summary": "【摘要】本文围绕人工智能如何推动酶工程突破天然酶空间展开，梳理微生物序列挖掘、生成式设计与机器学习引导的定向进化三个环节。作者强调，设计出具有功能的蛋白质，并不等于获得实用生物催化剂，因此提出涵盖催化、选择性、可生产性与工艺适配性的分层评价框架。本文适合用于建立领域认识和设计评价指标，但摘要未提供具体案例、定量结果或框架验证证据，本解读不代表全文阅读。",
       "raw_metadata": {
         "provider": "PubMed",
         "pmid": "42994288",
@@ -1172,11 +1779,156 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "【解读】建议作为生成式蛋白质设计的框架性读物重点阅读，尤其关注作者如何区分蛋白质功能与生物催化实用价值；不宜仅凭摘要判断相关技术的性能优势。",
+      "deep_read": {
+        "problem": "【摘要】传统酶工程依靠理性设计与定向进化，但仍受“natural enzyme space”约束，微生物世界中大量尚未表征的序列使这一问题更加突出。文章关注人工智能如何扩展可探索空间，以及如何判断设计产物是否真正具有生物催化用途，而非仅表现出某种蛋白质功能。",
+        "method": "【摘要】文章按三个环节组织讨论：挖掘微生物序列空间、以结构或序列为条件开展生成式设计，以及机器学习引导的定向进化。作者还提出分层评价框架，将技术路线梳理与实用性判断结合起来；摘要未交代文献筛选方式、模型配置或具体实验流程。",
+        "innovation": "【解读】摘要中值得关注的概念贡献，是把关注点从功能蛋白质转向实用生物催化剂，并以四个层次组织评价。其价值可能在于改善不同研究主张难以比较的问题，而不是证明某个新模型优于既有方法；仅凭摘要无法确认该框架的首创性与覆盖完整性。",
+        "findings": "【摘要】作者指出，准确结构预测的发展推动人工智能方法超越折叠预测，并强调这些工具并不限定适用生物。微生物领域同时提供未充分表征的序列空间和表达宿主，因而成为重要试验场。摘要未给出具体酶、性能提升或实验对照，不能据此概括定量成效。",
+        "limitations": "【摘要】作者明确指出，已发表研究的主张难以比较，但摘要未说明差异来自何种实验条件或评价口径。【解读】当前资料也不足以检验分层框架的可操作性、不同层次间的权衡及其跨体系适用范围；这些属于证据边界，不应直接写成论文已证实的缺陷。",
+        "connection": "【解读】与给定的生成式设计标签直接相关的是以结构或序列为条件生成酶，以及将设计结果置于实际用途下评价。对结构设计与可靠性研究，可借鉴其分层评价思路；但这里的结构主要指蛋白质结构，摘要没有涉及工程结构或智能运维，不能认定存在直接应用联系。",
+        "next_steps": "【建议】后续取得全文后，优先核对各技术阶段是否配有实验案例，以及四层评价是否给出可执行指标。若开展迁移研究，可先选定单一酶体系，分别记录功能表现与生产、工艺要求，检查评价结论是否一致；这属于研究建议，并非作者已实施的验证。"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "从预测到创造：人工智能驱动设计如何重塑微生物生物催化",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.cbpa.2026.102816"
+      ],
+      "analyzed_at": "2026-11-08T01:38:44.061940+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "AI能够生成蛋白质，并不等于已经得到实用的生物催化剂。这篇综述围绕微生物酶工程，梳理从序列挖掘到生成式设计与定向进化的研究脉络，并提出判断设计成果是否真正有用的分层评价框架。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "天然酶空间为何仍是设计边界",
+            "paragraphs": [
+              "酶工程长期依靠理性设计与定向进化，但摘要指出，两者仍受天然酶空间约束。微生物世界中大量尚未被表征的序列，使这一边界尤其突出：潜在资源丰富，却不意味着其功能已经得到认识。",
+              "准确的结构预测推动AI方法走向折叠预测之外。作者强调，这些工具并不局限于特定生物；微生物之所以成为重要试验场，是因为它们既提供尚待探索的序列空间，也提供蛋白质表达宿主。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从序列挖掘走向生成与进化",
+            "paragraphs": [
+              "本文采用综述式梳理，考察微生物序列空间挖掘、以结构或序列为条件的生成式设计，以及机器学习指导的定向进化。摘要给出的是研究版图，而不是一套新模型的训练流程或具体实验方案。",
+              "贯穿这些环节的问题，是蛋白质研究如何从“读取”已有空间走向“书写”新的设计，以及不同方法已经为微生物生物催化带来了什么。这里的生成式设计明确涉及结构条件与序列条件，不能仅理解为结构预测的延伸。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "评价重点从功能成立转向催化实用性",
+            "paragraphs": [
+              "摘要呈现的核心产出是评价框架，而非某种酶性能提升的实验结果。面对已发表主张难以相互比较的问题，作者提出按催化能力、选择性、可生产性和工艺适配性分层判断设计成果。",
+              "这一框架区分了“具有功能的蛋白质”与“有用的生物催化剂”。其关注点不止于功能是否成立，还包括是否适合生产与具体工艺；但摘要没有给出各层的量化门槛，也未报告框架应用后的比较结果。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不足以判断验证覆盖范围",
+            "paragraphs": [
+              "仅凭摘要，无法判断综述纳入了哪些酶、微生物宿主和反应体系，也无法核对相关研究的样本规模、对照设置及验证条件。因此，不能据此认定生成式设计优于传统方法，或已经具备普遍的工艺适用性。",
+              "摘要也未交代文献筛选方式，以及分层框架如何处理不同研究的指标差异。这些属于当前资料不能回答的问题，并不意味着论文全文没有讨论或相关研究没有开展验证。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：生成之后，证据走到了哪一层",
+            "paragraphs": [
+              "阅读启发：对于关注生成式设计的读者，可以带着“设计输出与应用证据是否对应”的问题继续阅读。值得追问的不是生成了多少候选，而是其主张落在催化、选择性、可生产性还是工艺适配层面，以及不同成果是否具有可比较的证据。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的综述组织示意",
+            "description": "概括摘要明确列出的研究环节与评价框架；分支表示综述关注方向，不代表已验证的实验流水线。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "AI驱动的微生物酶工程",
+                "detail": "围绕从读取蛋白质空间到书写新设计的转变展开综述。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "微生物序列空间挖掘",
+                "detail": "考察尚未充分表征的微生物序列空间。"
+              },
+              {
+                "id": "c",
+                "stage": 1,
+                "label": "生成式设计",
+                "detail": "考察以结构或序列为条件的生成式设计。"
+              },
+              {
+                "id": "d",
+                "stage": 1,
+                "label": "机器学习指导的定向进化",
+                "detail": "考察机器学习参与定向进化的研究方向。"
+              },
+              {
+                "id": "e",
+                "stage": 2,
+                "label": "生物催化剂分层评价",
+                "detail": "作者提出从催化能力、选择性、可生产性和工艺适配性判断实用价值。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "梳理研究环节"
+              },
+              {
+                "from": "a",
+                "to": "c",
+                "label": "梳理研究环节"
+              },
+              {
+                "from": "a",
+                "to": "d",
+                "label": "梳理研究环节"
+              },
+              {
+                "from": "a",
+                "to": "e",
+                "label": "提出评价框架"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-08T01:40:08.857466+00:00",
+      "article_profile": "e69b71163fb93184f32a7c5252389695eb153e2a712477af519c0053984e1983",
+      "analysis_references": {},
+      "analysis_material_version": "1185e8c78a7e5ce8524c053b4a8a5dc16ea1f3c9ede43dca95cccb6b3f51e235",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "386f2b156921",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-08T01:40:08.860114+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "PubMed",
@@ -1203,7 +1955,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "The steady functioning of power electronic-based systems is linked to fault localization and identification for converters, which is gaining a lot of attention. Artificial intelligence (AI), a representation of sophisticated algorithms is offering new solutions. This article examines how artificial intelligence (AI) can be used to diagnose open-circuit defects in power electronic converters, which are essential parts of contemporary power systems. From an algorithmic point of view, the fault diagnosis techniques are methodically classified and summarized encompassing a variety of approaches su…",
+      "summary": "电力电子变换器的开路故障如何被及时识别和定位，是本文关注的问题。[摘要]该综述按算法梳理传统机器学习、神经网络、混合模型与多模态融合，并从实时性、计算效率和抗噪性评估诊断方法。解读：其阅读价值主要在于帮助建立智能故障诊断的方法分类与评价框架，而非提供一种已验证的新算法。当前仅有摘要，且结尾不完整，不能据此判断具体模型的优劣、实验可信度或工程部署效果。",
       "raw_metadata": {
         "provider": "PubMed",
         "pmid": "42992788",
@@ -1301,11 +2053,133 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为智能运维方向的方法地图阅读，重点关注算法分类及实时性、计算效率、抗噪性三个评价维度；但不宜仅凭摘要选择最优诊断模型。[摘要]",
+      "deep_read": {
+        "problem": "本文讨论电力电子变换器开路故障的识别与定位。[摘要]原文以“fault localization and identification”关联系统稳定运行。解读：研究问题不仅是检测异常，还涉及故障位置辨识；但摘要没有说明具体变换器拓扑、故障组合或诊断粒度。",
+        "method": "文章采用综述式梳理，从算法角度分类诊断技术，涉及支持向量机、极限学习机、卷积与循环神经网络，以及混合模型和多模态融合。[摘要]原文称“methodically classified and summarized”，但未披露文献检索范围、纳入标准及比较流程。",
+        "innovation": "可确认的工作特点是把多类人工智能诊断方法放入统一分类讨论，并引入工程性能评价视角。[摘要]解读：其潜在贡献属于知识组织和方法比较，而不是新模型发明。摘要没有交代相较既有综述新增哪些内容，因此不足以确认其原创性或综述覆盖优势。",
+        "findings": "摘要明确列出“real-time capabilities, computational efficiency, and noise robustness”三个评估维度。[摘要]这说明文章关注诊断方法的实际运行表现，但没有给出模型排名、性能数值或比较结论，故不能将评价维度的提出视为某类算法更优的证据。",
+        "limitations": "当前资料仅为摘要，且末尾停在“To support the creation of sophisticated diagnostic.”，内容不完整。[摘要]无法核对案例、数据来源、评价指标定义及结论适用条件。这些属于当前资料的证据限制，不能直接认定为论文全文存在的方法缺陷。",
+        "connection": "解读：开路故障识别与定位直接对应智能运维中的状态诊断环节，摘要提及的“dependability and affordability”也与可靠性及运维经济性相关。[摘要]但资料没有涉及结构参数优化、寿命预测或维修决策，因此与结构设计的联系目前只能视为间接关联。",
+        "next_steps": "建议后续取得全文，核查分类依据、比较表及各项性能结论对应的原始研究。若迁移到自身课题，可围绕实时性、计算效率和抗噪性设计同条件比较，并补充跨工况验证。这是基于摘要评价维度提出的研究建议，不是作者已完成的实验或已证明的结论。"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "人工智能技术用于电力电子变换器开路故障分析的综述",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.3791/72442"
+      ],
+      "analyzed_at": "2026-11-08T01:50:43.577762+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "电力电子变换器发生开路故障后，如何识别并定位故障，关系到系统的稳定运行。这篇综述从算法分类和工程评价维度梳理人工智能诊断方法，阅读价值在于建立方法选择的框架，而不是提供一个已经证明最优的模型。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "开路故障诊断为何关系系统稳定",
+            "paragraphs": [
+              "电力电子变换器是现代电力系统的重要组成部分。摘要将系统稳定运行与变换器故障的定位、识别联系起来，并把开路故障诊断作为讨论对象。文章关注的是人工智能如何服务这一具体问题，而非泛泛讨论智能运维的全部应用。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "按算法归类，再看工程适用性",
+            "paragraphs": [
+              "这是一篇综述，摘要明确的方法是从算法角度对故障诊断技术进行系统分类与总结。覆盖范围包括多模态融合、混合模型、神经网络，以及传统机器学习；其中列举了卷积神经网络、循环神经网络、支持向量机和极限学习机。",
+              "在分类之外，文章还从实时能力、计算效率和噪声鲁棒性评价这些方法。理解其组织方式的关键，是把“采用何种算法”与“能否满足应用要求”分开阅读，而不是仅凭模型名称判断技术价值。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要给出了评价框架，未给出性能排名",
+            "paragraphs": [
+              "摘要报告的主要内容，是对多类人工智能诊断方法的归纳，以及围绕实时性、计算效率和噪声鲁棒性的评价。它没有给出各类方法的具体评价结果，因此不能据此认定某类神经网络优于传统机器学习，也不能认定融合方法必然更稳健。",
+              "文章还讨论了人工智能故障诊断的未来可能性与建议方向，目标指向变换器系统可靠性和经济性的改善。**这些是发展目标，不能改写成已经验证的改善效果。**"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "样本、比较条件与验证范围仍待核对",
+            "paragraphs": [
+              "仅凭本次摘要，无法判断综述纳入研究的数量、检索与筛选过程，也无法确认相关研究的数据来源、样本规模、变换器类型及故障工况。不同方法是否在一致条件下比较、是否经过硬件或现场验证，同样不能确定；这些信息未在摘要报告，不等于论文没有涉及。",
+              "本次提供的摘要末句不完整，不能据此补写其结论。上述解读仅限摘要可确认的内容，不代表已经阅读全文，也不足以形成具体算法的工程选型结论。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：沿评价条件理解算法选择",
+            "paragraphs": [
+              "阅读启发：后续阅读可重点核对，实时能力对应怎样的诊断时限，计算效率基于何种运行平台，噪声鲁棒性又在什么条件下评价。对于智能运维读者，这些问题有助于辨别不同研究结论的适用边界，也能避免将面向可靠性与经济性的愿景误读为落地证据。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的综述组织示意",
+            "description": "概括摘要明确陈述的分类、评价与展望环节，仅表示综述组织关系，不是论文原图或实验流程。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "分类与总结诊断方法",
+                "detail": "覆盖多模态融合、混合模型、神经网络及传统机器学习。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "从工程维度评价",
+                "detail": "关注实时能力、计算效率和噪声鲁棒性。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "讨论未来可能性",
+                "detail": "提出发展方向，目标指向变换器系统的可靠性与经济性。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "对所述方法进行评价"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "进一步讨论展望"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-08T02:00:47.987559+00:00",
+      "article_profile": "2efea61c3772fb54345b7c935d0a863af5258482a0c4d29d355f484335fe5c88",
+      "analysis_references": {},
+      "analysis_material_version": "a56181ae3c4951c56efbe268f692186231622e721861c540889f125975b346f3",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "664f683d7e01",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-08T02:00:47.990208+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -2396,13 +3270,13 @@
     "unavailable": 45
   },
   "analysis_status": {
-    "ready_core": 1,
+    "ready_core": 4,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 5
+    "pending": 2
   },
   "edition": {
     "id": "42398778914",
