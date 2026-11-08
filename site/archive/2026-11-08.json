@@ -26,7 +26,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "ABSTRACT To solve the difficult problem of fatigue life prediction of hydraulic concrete under complex stresses, this work conducts fatigue tests at stress levels of 0.75, 0.80, and 0.85, combined with multi‐model comparisons. The experimental study reveals that cyclic loading induced nonlinear hysteresis and a three‐stage failure process: microcrack initiation, stable propagation, and macrofracture. The probability model based on Weibull distribution quantified the stress sensitivity of fatigue life through P – S – N curves. The GM(1,1) model was enhanced with dynamic time weighting and norma…",
+      "summary": "本文面向复杂应力下水工混凝土的疲劳寿命预测，在0.75、0.80和0.85三个应力水平开展疲劳试验，并比较Weibull概率模型、改进GM(1,1)模型与DT‐ANN级联模型。摘要报告循环加载引起非线性滞回，并呈现微裂纹萌生、稳定扩展和宏观断裂三个阶段。研究将概率评估、小样本分析和智能预测组织为多层次方法体系原型，但未提供具体误差及验证细节，当前只能进行摘要级评价。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7224876353",
@@ -72,11 +72,155 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议重点关注三类模型如何分别服务寿命概率表征、小样本建模与智能预测，适合作为水工结构疲劳可靠性研究的方法线索；其预测优势仍需全文中的误差指标和验证方案支撑。[摘要]",
+      "deep_read": {
+        "problem": "研究针对复杂应力下水工混凝土疲劳寿命难以预测的问题。摘要以“under complex stresses”界定背景，并设置三个应力水平开展试验。解读：问题关联循环荷载下的耐久性与安全评估，但摘要没有说明复杂应力的具体形式，不能将其直接理解为多轴疲劳试验。[摘要]",
+        "method": "方法包括疲劳试验与三类模型比较：Weibull分布用于构建P–S–N曲线；GM(1,1)引入动态时间加权和归一化；DT‐ANN级联模型采用确定性扰动训练。摘要称其构成多层次方法体系原型，但未交代模型之间是否存在数据传递或联合计算。[摘要]",
+        "innovation": "摘要可辨识的方法特色是改进灰色模型并组合不同预测思路，其中明确写到“dynamic time weighting and normalization”。解读：其价值可能在于兼顾概率、小样本与智能预测需求；但摘要不足以证明这些技术首次提出，也不能确认组合体系优于各单独模型。[摘要]",
+        "findings": "试验观察到非线性滞回，以及微裂纹萌生、稳定扩展和宏观断裂三个阶段。模型方面，摘要称改进GM(1,1)在小样本下达到“Level 1 accuracy”，DT‐ANN具有较强预测表现；但未给出等级判据、具体误差或排序，无法量化两者的性能差距。[摘要]",
+        "limitations": "当前限制主要来自摘要的信息范围，而非已证实的论文缺陷：资料未列出样本量、试件条件、数据划分、误差指标及外部验证结果。因此无法判断模型的泛化能力、扰动训练的稳定性或应力区间外适用性，也不能据此断言作者没有开展这些验证。[摘要]",
+        "connection": "与疲劳可靠性方向的联系较直接：摘要通过Weibull概率模型和P–S–N曲线表征寿命的应力敏感性，并指向耐久性设计与安全评估。解读：这为结构设计中的寿命概率分析提供方法线索；与智能运维的联系则属潜在迁移，摘要未报告在线监测或维护决策应用。[摘要]",
+        "next_steps": "建议后续优先核对全文中的样本规模、精度等级定义、训练与测试划分，以及三类模型的统一比较条件。若用于自身研究，建议检验跨应力水平预测与概率输出校准，再讨论设计取值或运维决策；这些属于研究建议，并非摘要已经验证的成果。[摘要]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "水工混凝土疲劳寿命预测的多模型研究",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1111/ffe.70514"
+      ],
+      "analyzed_at": "2026-11-08T13:32:02.714889+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "水工混凝土在复杂应力下的疲劳寿命如何预测？这项研究将疲劳试验与多模型比较结合，从概率评估、小样本分析和智能预测三个角度组织寿命预测方法。其阅读价值不仅在于模型表现，也在于不同方法分别回答什么问题。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "复杂应力下，疲劳寿命需要多角度评估",
+            "paragraphs": [
+              "研究聚焦水工混凝土的疲劳寿命预测难题，并将其与结构耐久性设计、安全评估及长期安全运行联系起来。摘要提出的思路不是仅用一个模型给出寿命结果，而是结合试验，对不同类型的预测方法进行比较。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "疲劳试验结合三类预测模型",
+            "paragraphs": [
+              "研究在0.75、0.80和0.85应力水平下开展疲劳试验，并结合多模型比较。概率分析采用基于Weibull分布的模型，通过P–S–N曲线量化疲劳寿命对应力的敏感性。",
+              "小样本分析采用GM(1,1)模型，并引入动态时间加权与归一化处理；智能预测采用DT‐ANN级联模型，以确定性扰动进行训练。摘要明确了这些方法要素，但未展开具体计算流程、模型结构或训练配置。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "非线性滞回与分阶段破坏，连接寿命预测",
+            "paragraphs": [
+              "试验观察到，循环加载引发非线性滞回，破坏过程表现为微裂纹萌生、稳定扩展和宏观断裂三个阶段。这是摘要报告的材料响应与破坏过程发现，不能据此进一步推断各阶段的持续时间或具体损伤阈值。",
+              "模型方面，增强后的GM(1,1)在小样本条件下达到Level 1精度，DT‐ANN级联模型表现出较强的预测性能。作者将三类模型概括为“概率评估—小样本分析—智能预测”的多层次方法体系雏形；摘要未给出足以判定模型优劣排序的定量比较。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "精度等级与预测表现仍需核对验证边界",
+            "paragraphs": [
+              "仅凭摘要，无法判断试件数量、材料与加载条件的覆盖范围，也无法确认试验如何表征所讨论的复杂应力。小样本的具体规模、Level 1的判定标准、模型误差指标、比较基线以及训练与验证数据的划分均未在摘要中报告；这不等于论文未开展相关工作。",
+              "摘要将耐久性设计和安全评估作为研究价值，但没有提供工程应用验证的具体结果。因此，不能把模型预测表现直接等同于已经实现结构寿命延长、安全水平提升或现场运维效果改善。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注模型分工，而非急于选出赢家",
+            "paragraphs": [
+              "阅读启发：后续阅读可重点核对，概率模型的应力敏感性描述、小样本模型的精度等级与智能模型的预测表现，是否采用可对照的评价依据。若从智能运维角度理解这项工作，还应关注试验条件与实际结构工况之间的适用边界，而不是直接将疲劳寿命预测视为已验证的现场剩余寿命评估能力。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的试验与多模型研究关系",
+            "description": "仅展示摘要明确陈述的疲劳试验与模型比较关系，分支不代表模型之间存在串联计算或结果融合。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "水工混凝土疲劳试验",
+                "detail": "在0.75、0.80和0.85应力水平下开展试验。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "结合多模型比较",
+                "detail": "从概率评估、小样本分析和智能预测角度研究疲劳寿命。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "Weibull概率模型",
+                "detail": "通过P–S–N曲线量化疲劳寿命对应力的敏感性。"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "增强GM(1,1)模型",
+                "detail": "采用动态时间加权与归一化处理，开展小样本分析。"
+              },
+              {
+                "id": "e",
+                "stage": 2,
+                "label": "DT‐ANN级联模型",
+                "detail": "采用确定性扰动进行训练，用于智能预测。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "试验结合模型比较"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "概率评估"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "小样本分析"
+              },
+              {
+                "from": "b",
+                "to": "e",
+                "label": "智能预测"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-08T13:43:27.341440+00:00",
+      "article_profile": "cb39897d5baee6ded7e8b60e1f0363131c1ecb49b5e2db094dbd6b0898717c35",
+      "analysis_references": {},
+      "analysis_material_version": "564f9284ba132c79b902b404ca8783b8ae70bb32e220eb34637330a7dcb08e51",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "aa5b02d7b25f",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-08T13:43:27.342441+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -515,7 +659,7 @@
       "reading_status": {
         "paper_id": "93948bc47be6",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-07T01:35:00.833865+00:00",
+        "updated_at": "2026-11-08T13:30:56.652029+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -546,7 +690,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Industri minyak dan gas membutuhkan strategi pemeliharaan yang mampu mendeteksi risiko kegagalan dan membantu menentukan prioritas tindakan. Penelitian ini mengembangkan Predictive Maintenance Copilot sebagai prototipe Sistem Pendukung Keputusan yang mengintegrasikan prediksi risiko, Physics-Informed Machine Learning, estimasi Remaining Useful Life, dan AI Copilot. Penelitian menggunakan pendekatan mixed method dengan dominasi kuantitatif-komputasional. Pemodelan dilakukan menggunakan AI4I 2020 Predictive Maintenance Dataset dengan membandingkan Logistic Regression, Decision Tree, Random Fores…",
+      "summary": "本文面向油气行业维护决策，开发整合故障风险预测、物理信息机器学习、剩余使用寿命估计与人工智能助手的决策支持原型。研究使用AI4I 2020数据集比较四种分类模型，以衍生特征和物理约束规则引入物理信息，并单独计算剩余使用寿命。摘要报告XGBoost的F2-score为0.7373，另有用户接受度与软件测试结果。当前资料仅为摘要，实际工业机器数据验证仍待开展。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7225276298",
@@ -587,11 +731,43 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为智能运维决策支持原型的案例阅读，重点关注风险预测、寿命估计与助手功能如何组合；不宜仅凭摘要将其视为工业现场有效性已获证实的方法。[摘要]",
+      "deep_read": {
+        "problem": "研究针对油气行业识别机器故障风险、确定维护行动优先级的需求，目标不只是输出分类结果，还要辅助维护决策。摘要将系统定位为“prototipe Sistem Pendukung Keputusan”，即决策支持系统原型；但未说明具体设备类型、现场工况及维护成本目标。[摘要]",
+        "method": "研究采用定量计算为主的混合方法，在AI4I 2020数据集上比较逻辑回归、决策树、随机森林和XGBoost。物理信息通过“fitur turunan dan physics guardrails”引入；剩余使用寿命则依据刀具磨损、占空比和磨损增量独立计算，不能据此认定采用了联合训练。[摘要]",
+        "innovation": "解读：值得关注的是将风险预测、物理信息处理、寿命估计和AI助手集成为维护决策原型，而非摘要已证明某种算法突破。原文使用“mengintegrasikan prediksi risiko”描述整合目标；缺少相关工作比较、约束公式与消融实验，尚不能确认其方法新颖性。[摘要]",
+        "findings": "摘要报告XGBoost取得最高F2-score，为0.7373，准确率为0.9489，故障类别召回率为0.9412。对“10 responden”的评估得到90.8%的接受度，所有软件测试均成功运行。这些结果分别涉及预测表现、用户接受和软件运行，不能等同于现场维护收益。[摘要]",
+        "limitations": "作者明确指出仍需“validasi menggunakan data mesin industri aktual”，即使用实际工业机器数据验证。摘要还未提供数据划分、类别处理、物理规则细节、寿命估计误差和接受度量表；这些属于当前资料的证据缺口，不能直接断言全文也缺少相应内容。[摘要]",
+        "connection": "解读：该研究与智能运维直接相关，因其把风险识别与维护优先级支持相联系；独立寿命估计也可作为可靠性研究的讨论入口。不过，“Remaining Useful Life dihitung secara terpisah”并不证明寿命预测准确，摘要也没有结构设计优化或可靠度计算结果。[摘要]",
+        "next_steps": "建议：若获取全文，优先核对物理约束规则、数据划分和寿命计算公式，辨明助手是否真正参与决策。后续可考虑实际设备上的跨工况验证、物理信息消融及寿命误差评价，并记录误报漏报对应的维护代价；这些是研究建议，并非作者已完成的实验。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "基于物理信息机器学习的预测性维护助手：机器故障风险预测与剩余使用寿命估计",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.54895/intech.v7i2.3732"
+      ],
+      "analyzed_at": "2026-11-08T13:52:57.705286+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "4480c9c4aa258b53baff5575518517cbd92e5ab67a6bb398b659786258508e0c",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "fa4d221fff1e",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-08T13:52:57.714385+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -831,7 +1007,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "ABSTRACT To solve the difficult problem of fatigue life prediction of hydraulic concrete under complex stresses, this work conducts fatigue tests at stress levels of 0.75, 0.80, and 0.85, combined with multi‐model comparisons. The experimental study reveals that cyclic loading induced nonlinear hysteresis and a three‐stage failure process: microcrack initiation, stable propagation, and macrofracture. The probability model based on Weibull distribution quantified the stress sensitivity of fatigue life through P – S – N curves. The GM(1,1) model was enhanced with dynamic time weighting and norma…",
+      "summary": "本文面向复杂应力下水工混凝土的疲劳寿命预测，在0.75、0.80和0.85三个应力水平开展疲劳试验，并比较Weibull概率模型、改进GM(1,1)模型与DT‐ANN级联模型。摘要报告循环加载引起非线性滞回，并呈现微裂纹萌生、稳定扩展和宏观断裂三个阶段。研究将概率评估、小样本分析和智能预测组织为多层次方法体系原型，但未提供具体误差及验证细节，当前只能进行摘要级评价。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7224876353",
@@ -877,11 +1053,155 @@
         "fatigue_reliability"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "fatigue_reliability"
+      "recommendation": "建议重点关注三类模型如何分别服务寿命概率表征、小样本建模与智能预测，适合作为水工结构疲劳可靠性研究的方法线索；其预测优势仍需全文中的误差指标和验证方案支撑。[摘要]",
+      "deep_read": {
+        "problem": "研究针对复杂应力下水工混凝土疲劳寿命难以预测的问题。摘要以“under complex stresses”界定背景，并设置三个应力水平开展试验。解读：问题关联循环荷载下的耐久性与安全评估，但摘要没有说明复杂应力的具体形式，不能将其直接理解为多轴疲劳试验。[摘要]",
+        "method": "方法包括疲劳试验与三类模型比较：Weibull分布用于构建P–S–N曲线；GM(1,1)引入动态时间加权和归一化；DT‐ANN级联模型采用确定性扰动训练。摘要称其构成多层次方法体系原型，但未交代模型之间是否存在数据传递或联合计算。[摘要]",
+        "innovation": "摘要可辨识的方法特色是改进灰色模型并组合不同预测思路，其中明确写到“dynamic time weighting and normalization”。解读：其价值可能在于兼顾概率、小样本与智能预测需求；但摘要不足以证明这些技术首次提出，也不能确认组合体系优于各单独模型。[摘要]",
+        "findings": "试验观察到非线性滞回，以及微裂纹萌生、稳定扩展和宏观断裂三个阶段。模型方面，摘要称改进GM(1,1)在小样本下达到“Level 1 accuracy”，DT‐ANN具有较强预测表现；但未给出等级判据、具体误差或排序，无法量化两者的性能差距。[摘要]",
+        "limitations": "当前限制主要来自摘要的信息范围，而非已证实的论文缺陷：资料未列出样本量、试件条件、数据划分、误差指标及外部验证结果。因此无法判断模型的泛化能力、扰动训练的稳定性或应力区间外适用性，也不能据此断言作者没有开展这些验证。[摘要]",
+        "connection": "与疲劳可靠性方向的联系较直接：摘要通过Weibull概率模型和P–S–N曲线表征寿命的应力敏感性，并指向耐久性设计与安全评估。解读：这为结构设计中的寿命概率分析提供方法线索；与智能运维的联系则属潜在迁移，摘要未报告在线监测或维护决策应用。[摘要]",
+        "next_steps": "建议后续优先核对全文中的样本规模、精度等级定义、训练与测试划分，以及三类模型的统一比较条件。若用于自身研究，建议检验跨应力水平预测与概率输出校准，再讨论设计取值或运维决策；这些属于研究建议，并非摘要已经验证的成果。[摘要]"
+      },
+      "recommended_direction": "fatigue_reliability",
+      "title_zh": "水工混凝土疲劳寿命预测的多模型研究",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1111/ffe.70514"
+      ],
+      "analyzed_at": "2026-11-08T13:32:02.714889+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "水工混凝土在复杂应力下的疲劳寿命如何预测？这项研究将疲劳试验与多模型比较结合，从概率评估、小样本分析和智能预测三个角度组织寿命预测方法。其阅读价值不仅在于模型表现，也在于不同方法分别回答什么问题。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "复杂应力下，疲劳寿命需要多角度评估",
+            "paragraphs": [
+              "研究聚焦水工混凝土的疲劳寿命预测难题，并将其与结构耐久性设计、安全评估及长期安全运行联系起来。摘要提出的思路不是仅用一个模型给出寿命结果，而是结合试验，对不同类型的预测方法进行比较。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "疲劳试验结合三类预测模型",
+            "paragraphs": [
+              "研究在0.75、0.80和0.85应力水平下开展疲劳试验，并结合多模型比较。概率分析采用基于Weibull分布的模型，通过P–S–N曲线量化疲劳寿命对应力的敏感性。",
+              "小样本分析采用GM(1,1)模型，并引入动态时间加权与归一化处理；智能预测采用DT‐ANN级联模型，以确定性扰动进行训练。摘要明确了这些方法要素，但未展开具体计算流程、模型结构或训练配置。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "非线性滞回与分阶段破坏，连接寿命预测",
+            "paragraphs": [
+              "试验观察到，循环加载引发非线性滞回，破坏过程表现为微裂纹萌生、稳定扩展和宏观断裂三个阶段。这是摘要报告的材料响应与破坏过程发现，不能据此进一步推断各阶段的持续时间或具体损伤阈值。",
+              "模型方面，增强后的GM(1,1)在小样本条件下达到Level 1精度，DT‐ANN级联模型表现出较强的预测性能。作者将三类模型概括为“概率评估—小样本分析—智能预测”的多层次方法体系雏形；摘要未给出足以判定模型优劣排序的定量比较。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "精度等级与预测表现仍需核对验证边界",
+            "paragraphs": [
+              "仅凭摘要，无法判断试件数量、材料与加载条件的覆盖范围，也无法确认试验如何表征所讨论的复杂应力。小样本的具体规模、Level 1的判定标准、模型误差指标、比较基线以及训练与验证数据的划分均未在摘要中报告；这不等于论文未开展相关工作。",
+              "摘要将耐久性设计和安全评估作为研究价值，但没有提供工程应用验证的具体结果。因此，不能把模型预测表现直接等同于已经实现结构寿命延长、安全水平提升或现场运维效果改善。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注模型分工，而非急于选出赢家",
+            "paragraphs": [
+              "阅读启发：后续阅读可重点核对，概率模型的应力敏感性描述、小样本模型的精度等级与智能模型的预测表现，是否采用可对照的评价依据。若从智能运维角度理解这项工作，还应关注试验条件与实际结构工况之间的适用边界，而不是直接将疲劳寿命预测视为已验证的现场剩余寿命评估能力。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的试验与多模型研究关系",
+            "description": "仅展示摘要明确陈述的疲劳试验与模型比较关系，分支不代表模型之间存在串联计算或结果融合。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "水工混凝土疲劳试验",
+                "detail": "在0.75、0.80和0.85应力水平下开展试验。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "结合多模型比较",
+                "detail": "从概率评估、小样本分析和智能预测角度研究疲劳寿命。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "Weibull概率模型",
+                "detail": "通过P–S–N曲线量化疲劳寿命对应力的敏感性。"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "增强GM(1,1)模型",
+                "detail": "采用动态时间加权与归一化处理，开展小样本分析。"
+              },
+              {
+                "id": "e",
+                "stage": 2,
+                "label": "DT‐ANN级联模型",
+                "detail": "采用确定性扰动进行训练，用于智能预测。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "试验结合模型比较"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "概率评估"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "小样本分析"
+              },
+              {
+                "from": "b",
+                "to": "e",
+                "label": "智能预测"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-08T13:43:27.341440+00:00",
+      "article_profile": "cb39897d5baee6ded7e8b60e1f0363131c1ecb49b5e2db094dbd6b0898717c35",
+      "analysis_references": {},
+      "analysis_material_version": "564f9284ba132c79b902b404ca8783b8ae70bb32e220eb34637330a7dcb08e51",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "aa5b02d7b25f",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-08T13:43:27.342441+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -1320,7 +1640,7 @@
       "reading_status": {
         "paper_id": "93948bc47be6",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-07T01:35:00.833865+00:00",
+        "updated_at": "2026-11-08T13:30:56.652029+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -1351,7 +1671,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Industri minyak dan gas membutuhkan strategi pemeliharaan yang mampu mendeteksi risiko kegagalan dan membantu menentukan prioritas tindakan. Penelitian ini mengembangkan Predictive Maintenance Copilot sebagai prototipe Sistem Pendukung Keputusan yang mengintegrasikan prediksi risiko, Physics-Informed Machine Learning, estimasi Remaining Useful Life, dan AI Copilot. Penelitian menggunakan pendekatan mixed method dengan dominasi kuantitatif-komputasional. Pemodelan dilakukan menggunakan AI4I 2020 Predictive Maintenance Dataset dengan membandingkan Logistic Regression, Decision Tree, Random Fores…",
+      "summary": "本文面向油气行业维护决策，开发整合故障风险预测、物理信息机器学习、剩余使用寿命估计与人工智能助手的决策支持原型。研究使用AI4I 2020数据集比较四种分类模型，以衍生特征和物理约束规则引入物理信息，并单独计算剩余使用寿命。摘要报告XGBoost的F2-score为0.7373，另有用户接受度与软件测试结果。当前资料仅为摘要，实际工业机器数据验证仍待开展。[摘要]",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7225276298",
@@ -1392,11 +1712,43 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为智能运维决策支持原型的案例阅读，重点关注风险预测、寿命估计与助手功能如何组合；不宜仅凭摘要将其视为工业现场有效性已获证实的方法。[摘要]",
+      "deep_read": {
+        "problem": "研究针对油气行业识别机器故障风险、确定维护行动优先级的需求，目标不只是输出分类结果，还要辅助维护决策。摘要将系统定位为“prototipe Sistem Pendukung Keputusan”，即决策支持系统原型；但未说明具体设备类型、现场工况及维护成本目标。[摘要]",
+        "method": "研究采用定量计算为主的混合方法，在AI4I 2020数据集上比较逻辑回归、决策树、随机森林和XGBoost。物理信息通过“fitur turunan dan physics guardrails”引入；剩余使用寿命则依据刀具磨损、占空比和磨损增量独立计算，不能据此认定采用了联合训练。[摘要]",
+        "innovation": "解读：值得关注的是将风险预测、物理信息处理、寿命估计和AI助手集成为维护决策原型，而非摘要已证明某种算法突破。原文使用“mengintegrasikan prediksi risiko”描述整合目标；缺少相关工作比较、约束公式与消融实验，尚不能确认其方法新颖性。[摘要]",
+        "findings": "摘要报告XGBoost取得最高F2-score，为0.7373，准确率为0.9489，故障类别召回率为0.9412。对“10 responden”的评估得到90.8%的接受度，所有软件测试均成功运行。这些结果分别涉及预测表现、用户接受和软件运行，不能等同于现场维护收益。[摘要]",
+        "limitations": "作者明确指出仍需“validasi menggunakan data mesin industri aktual”，即使用实际工业机器数据验证。摘要还未提供数据划分、类别处理、物理规则细节、寿命估计误差和接受度量表；这些属于当前资料的证据缺口，不能直接断言全文也缺少相应内容。[摘要]",
+        "connection": "解读：该研究与智能运维直接相关，因其把风险识别与维护优先级支持相联系；独立寿命估计也可作为可靠性研究的讨论入口。不过，“Remaining Useful Life dihitung secara terpisah”并不证明寿命预测准确，摘要也没有结构设计优化或可靠度计算结果。[摘要]",
+        "next_steps": "建议：若获取全文，优先核对物理约束规则、数据划分和寿命计算公式，辨明助手是否真正参与决策。后续可考虑实际设备上的跨工况验证、物理信息消融及寿命误差评价，并记录误报漏报对应的维护代价；这些是研究建议，并非作者已完成的实验。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "基于物理信息机器学习的预测性维护助手：机器故障风险预测与剩余使用寿命估计",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.54895/intech.v7i2.3732"
+      ],
+      "analyzed_at": "2026-11-08T13:52:57.705286+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {},
+      "analysis_material_version": "4480c9c4aa258b53baff5575518517cbd92e5ab67a6bb398b659786258508e0c",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "fa4d221fff1e",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-08T13:52:57.714385+00:00",
+        "basis": "abstract",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "OpenAlex",
@@ -2556,13 +2908,13 @@
     "unavailable": 44
   },
   "analysis_status": {
-    "ready_core": 1,
+    "ready_core": 3,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 5
+    "pending": 3
   },
   "edition": {
     "id": "42482855882",
