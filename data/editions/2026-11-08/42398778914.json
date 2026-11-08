@@ -1023,8 +1023,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -1047,7 +1047,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Fault diagnosis of mechanical equipment is essential for ensuring safe and reliable operation and reducing losses caused by unplanned downtime. With the large-scale deployment of sensors and the Industrial Internet of Things, condition-monitoring data have grown rapidly in both volume and dimensionality. Conventional diagnostic approaches that rely on human expertise and signal processing are increasingly inadequate, while machine learning, especially deep learning, has become the dominant research paradigm because of its automatic feature extraction and powerful nonlinear modeling capabilitie…",
+      "summary": "机械设备故障诊断如何从依赖专家经验走向可部署的智能方法，是本文关注的核心。该综述沿“数据—特征—模型—应用”框架，梳理监测信号、公共数据集、传统机器学习与深度学习方法，并讨论少样本学习、迁移学习、多传感器融合和联邦学习等工业应用方向。摘要认为，领域正转向少样本、跨工况、可解释和可部署方案，数据治理与工程实现将成为落地瓶颈。本解读仅依据摘要，不能核实全文比较的深度与完整性。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -1085,11 +1085,145 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为智能运维故障诊断方向的综述入口重点阅读，尤其关注其方法适用条件与工程部署问题；但当前只能确认议题和框架，不能据此认可方法优劣或实际诊断效果。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是：面对传感器与工业物联网带来的高维、大规模状态监测数据，如何组织机械故障诊断的技术路线并识别落地障碍。摘要以“safe and reliable operation”说明应用目标，并指出依赖人工经验和信号处理的传统方式日益不足；未提供失效风险或停机损失的量化证据。[摘要]",
+        "method": "本文采用综述而非新模型实验路线，组织框架为“data-feature-model-application”。内容从诊断流程、监测信号和公共数据集展开，比较传统机器学习与多类深度学习方法的原理、适用条件及优缺点。摘要未交代文献检索策略、纳入标准或比较指标，无法核实综述的系统性。[摘要]",
+        "innovation": "解读：本文可能的价值在于以统一框架贯通数据、模型与工业应用，并把少样本、迁移学习、图神经网络等方向纳入讨论。摘要称其“systematically reviews”，但未声称提出新算法、数据集或理论；因此宜将其视为知识整合贡献，不能把方法覆盖范围直接认定为原创突破。[摘要]",
+        "findings": "摘要给出的主要判断是，故障诊断正从依赖大量标注数据转向少样本、跨工况、可解释和可部署方案，并将“Data governance and engineering implementation”列为实际采用的主要瓶颈。这是综述层面的趋势判断；摘要没有报告准确率、跨域性能或部署时延，不能据此推断具体方法效果。[摘要]",
+        "limitations": "当前资料仅有摘要，缺少全文中的文献清单、方法比较表和具体案例，因而无法核实覆盖范围、证据质量及结论适用边界。摘要虽讨论数据质量、泛化、可解释性和边缘实时部署，但这些是作者归纳的领域挑战，不等同于该综述自身已经证实的缺陷。[摘要]",
+        "connection": "解读：本文与智能运维直接相关，摘要明确讨论“intelligent operation and maintenance”，并覆盖旋转机械、电机、数控机床和泵。对可靠性研究，其联系主要在于利用状态监测支持安全运行；摘要未涉及寿命分布、可靠度计算或结构优化，不能将故障识别直接等同于可靠性评估。[摘要]",
+        "next_steps": "建议：后续阅读全文时，优先核查跨工况与少样本诊断是否设置合理基线、数据划分能否避免泄漏，以及边缘部署是否报告资源与时延约束。针对摘要提出的“physics-data integration”，可进一步考察物理约束如何进入模型；这些是阅读与研究建议，并非作者已完成的实验。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "基于机器学习的机械设备故障诊断研究进展",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.70267/cai.v3n6.100119"
+      ],
+      "analyzed_at": "2026-11-08T02:12:53.247154+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "机械设备故障诊断如何从依赖大量标注数据的模型，走向真实工业环境中可迁移、可解释、可部署的工具？这篇综述以“数据—特征—模型—应用”为主线，梳理机器学习诊断方法，并将阅读重点引向数据治理与工程落地。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "监测数据增多，诊断难题并未自动消失",
+            "paragraphs": [
+              "机械设备故障诊断关系到运行安全、可靠性和非计划停机损失。传感器与工业物联网的大规模部署，使状态监测数据的规模和维度快速增长，依赖人工经验与信号处理的传统诊断方式因而面临更大压力。",
+              "摘要指出，机器学习尤其是深度学习，凭借自动特征提取和非线性建模能力，已成为这一领域的主导研究范式。但本文关注的不只是模型能力，还包括这些方法如何适应实际工业环境。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "沿数据、特征、模型到应用梳理方法谱系",
+            "paragraphs": [
+              "这是一篇综述，而非摘要中报告了新模型实验的研究。作者先介绍诊断基本流程、常用监测信号和代表性公共数据集，再梳理特征工程、支持向量机、集成学习，以及卷积神经网络、循环神经网络、自编码器、注意力机制和Transformer，对比其原理、适用条件、优势与局限。",
+              "面向工业场景，综述进一步讨论少样本学习、迁移学习、多传感器融合与图神经网络、联邦学习，以及基于生成对抗网络的数据增强，并总结其在旋转机械、电机、数控机床和泵等系统中的应用。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "领域转向少样本、跨工况与可部署诊断",
+            "paragraphs": [
+              "摘要给出的核心判断是：该领域正从依赖大量标注数据的判别式诊断，转向少样本、跨工况、可解释且可部署的解决方案。这是综述对研究趋势的归纳，不是某种算法已在所有设备上取得优势的实验证明。",
+              "作者将数据质量、模型泛化、可解释性和实时边缘部署列为当前挑战，并判断**数据治理与工程实施将成为实际落地的主要瓶颈**。物理与数据融合、基础模型和智能运维则属于文中讨论的未来趋势，不能据此认定其应用效果已经得到验证。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不能支撑算法排名或落地效果判断",
+            "paragraphs": [
+              "当前解读仅依据完整摘要。摘要未报告文献检索与筛选细节、纳入文献数量、具体数据集名称、样本规模、比较指标及验证工况，因此无法判断综述覆盖的完整性，也无法核对不同方法的量化性能差异。",
+              "同样，仅凭摘要不能确定跨工况泛化、少样本诊断或边缘部署的具体验证范围，更不能推断现场停机损失已降低。上述信息是摘要未交代的内容，不代表论文正文没有讨论或验证。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：把模型选择放回工业约束中",
+            "paragraphs": [
+              "阅读启发：可将这篇综述作为梳理智能运维方法的入口，进一步阅读时重点追问：各类方法适用于什么数据条件，其跨工况能力依据何种比较，可解释性与实时部署又如何评价？这些问题直接对应摘要指出的挑战，比单纯关注网络结构更有助于理解工程适用边界。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的综述组织框架",
+            "description": "概括摘要明确给出的“数据—特征—模型—应用”综述主线，不表示实验流程或已验证的技术方案，也不是论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "数据",
+                "detail": "介绍常用监测信号与代表性公共数据集。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "特征",
+                "detail": "梳理特征工程及深度学习的自动特征提取能力。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "模型",
+                "detail": "比较传统机器学习与深度学习方法的原理、适用条件和局限。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "应用",
+                "detail": "总结旋转机械、电机、数控机床和泵等系统中的应用。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "综述主线"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "综述主线"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "综述主线"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-08T02:23:13.539117+00:00",
+      "article_profile": "cbc7629bd201110f874af12053acc0770902db85e481fb6da600ed7561e51dce",
+      "analysis_references": {},
+      "analysis_material_version": "3ae0435af21b7a7eb9ea6965d66285ad45d40f93bb40959ac3f5e3959659e1ec",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "1f7c3af45cfb",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-08T02:23:13.541128+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -1109,7 +1243,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "To address the issue of insufficient modeling efficiency of high-dimensional sensor data in the identification of complex equipment operating states, a deep learning diagnostic computing framework for automotive system operation signals is constructed. By designing a multilayer convolutional feature extraction network and a time-series dynamic modeling structure, high-dimensional feature representation and time-series dependency learning of multi-source sensor signals are achieved; further, an attention weight calculation mechanism is introduced to adaptively weight key features, thereby impro…",
+      "summary": "本文针对汽车运行状态识别中高维传感器数据建模效率不足的问题，提出结合多层卷积、时序建模与注意力加权的诊断框架，并利用GPU并行计算提高数据处理效率。摘要报告，在15,000个样本条件下，诊断准确率达到94.7%，训练收敛速度提高约18.3%。但未说明对照方法、数据划分及跨工况验证，尚不足以判断实际部署效果。本次仅作摘要级解读。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -1147,11 +1281,143 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为智能运维中多源传感器故障诊断的候选方法论文阅读，重点核查时序结构、效率对照与实验划分，而非直接据摘要认定其具有领先性能。[摘要]",
+      "deep_read": {
+        "problem": "论文聚焦复杂设备运行状态识别时，高维传感器数据建模效率不足的问题，具体应用对象为汽车系统运行信号。摘要明确提出“insufficient modeling efficiency”，因此关注点不仅是分类准确率，也包括计算效率；具体故障类别及诊断任务边界尚未交代。[摘要]",
+        "method": "方法由多层卷积特征提取网络、时序动态建模结构和注意力权重计算机制组成，分别承担高维表示、时间依赖学习及关键特征加权。训练采用交叉熵损失与梯度优化，并结合GPU并行计算；摘要未给出时序模块类型、网络参数或优化器名称。[摘要]",
+        "innovation": "解读：摘要呈现的贡献主要是将卷积表征、时序依赖学习、注意力加权与并行训练整合到汽车诊断框架中。但这些模块的组合是否具有结构创新，仍需比较已有方法。当前资料没有提供新算子、独特损失函数或理论结果，不能据此认定其为原创算法突破。[摘要]",
+        "findings": "摘要报告，在15,000个样本条件下，诊断准确率为94.7%，训练收敛速度提高约18.3%，并声称注意力加权有助于诊断稳定性和计算效率。然而，收敛速度提升的参照对象及计量方式未说明，稳定性也没有对应数值，现阶段只能确认这些是作者报告的结果。[摘要]",
+        "limitations": "当前摘要未说明数据来源、类别分布、训练测试划分、重复试验及不确定性，也没有列出基线和消融结果。这些是当前资料的证据缺口，不等于全文一定缺失。缺少上述信息，无法判断准确率是否受数据泄漏影响，也无法区分各模块对性能提升的贡献。[摘要]",
+        "connection": "解读：该研究与智能运维中的多源信号状态识别和自动故障诊断直接相关，可为汽车设备监测提供方法参考。但故障分类准确率并不等同于可靠性提升，摘要没有涉及寿命预测、失效概率或结构参数优化，因此与可靠性评估及结构设计仅存在潜在联系。[摘要]",
+        "next_steps": "建议：后续阅读优先核查数据划分是否按车辆或运行批次隔离、收敛速度的定义，以及卷积、时序和注意力模块的消融证据。若迁移到自己的运维研究，可补充跨工况测试、漏报分析及推理时延评估；这些属于研究建议，并非摘要已完成的实验。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "汽车故障诊断系统中的深度学习算法优化",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1117/12.3125972"
+      ],
+      "analyzed_at": "2026-11-08T02:35:36.466871+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "汽车运行信号来源多、维度高，如何兼顾故障诊断的准确性与建模效率？这项研究将卷积特征提取、时序建模和注意力加权结合起来，并报告诊断准确率与训练收敛速度，提供了理解汽车智能诊断框架的一个具体案例。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "多源运行信号，难在高维建模",
+            "paragraphs": [
+              "研究针对复杂设备运行状态识别中，高维传感器数据建模效率不足的问题，应用对象是汽车系统运行信号。摘要将多源信号的高维特征表示与时间依赖学习同时纳入框架：既要提取信号中的特征，也要学习这些信号随时间变化的关联。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "卷积与时序建模之外，再给特征分配权重",
+            "paragraphs": [
+              "作者构建了深度学习诊断计算框架，以多层卷积网络提取特征，并通过时序动态建模结构学习多源传感器信号的时间依赖。在此基础上，引入注意力权重计算机制，对关键特征进行自适应加权。摘要将这一设计与诊断决策稳定性、计算效率的提升联系起来，但没有分别给出这两方面的量化指标。",
+              "训练环节采用交叉熵损失与梯度优化策略，并使用GPU并行计算提高大规模数据处理效率。摘要没有说明具体的时序模型类型、注意力计算形式或梯度优化器，因此目前能够把握的是方法组成，而不是可直接复现的网络配置。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "准确率与收敛速度：摘要给出的结果",
+            "paragraphs": [
+              "摘要报告，在15,000个样本数据条件下，算法诊断准确率达到94.7%，训练收敛速度提高约18.3%。这分别涉及诊断表现与训练效率，但“收敛速度提高”不能直接改述为训练耗时同比例缩短，也不能等同于车辆端推理速度提升。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "样本口径、比较基准与验证边界仍待确认",
+            "paragraphs": [
+              "仅凭摘要，无法判断样本来自哪些车辆、传感器与故障类别，也不清楚数据划分、类别分布及样本独立性。15,000个样本不能直接理解为同等数量的独立车辆或独立故障事件；准确率对应的具体测试范围也仍需查阅正文。",
+              "收敛速度提高所对应的比较方法、收敛判据和硬件条件未在摘要中交代，各模块贡献、重复试验波动及跨工况验证情况也无法判断。因此，当前资料不足以确认提升主要来自哪一环节，更不能据此认定真实运维部署效果；这些属于摘要的信息边界，并不意味着论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：把诊断表现与计算效率分开审视",
+            "paragraphs": [
+              "阅读启发：面向AI智能运维，可优先关注正文如何界定样本、设置比较基准，以及分别评价特征提取、时序建模和注意力加权的作用。还应区分训练收敛、推理效率与诊断稳定性，避免用单一准确率替代对实际应用适用性的判断。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的汽车运行信号诊断示意",
+            "description": "仅概括摘要明确描述的信号建模与特征加权关系，不代表论文原图或完整网络配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "多源传感器运行信号",
+                "detail": "面向汽车系统运行状态诊断的信号输入。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "卷积特征提取与时序建模",
+                "detail": "以多层卷积网络和时序动态结构学习高维特征与时间依赖。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "注意力权重计算",
+                "detail": "对关键特征进行自适应加权。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "诊断决策",
+                "detail": "框架旨在改善诊断决策的稳定性与计算效率。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "特征与时间依赖学习"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "关键特征自适应加权"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "用于诊断决策"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-08T02:47:18.360540+00:00",
+      "article_profile": "9bf88068069a92f090ccb209ef07dd38d7326258c564606b3e151354b86816a4",
+      "analysis_references": {},
+      "analysis_material_version": "cbb41b1a41fe13441e4a62e666fcc6cab2526db6c883222b13657dce2831592c",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "2d625262285a",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-08T02:47:18.363400+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "extended": [],
@@ -2175,8 +2441,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -2199,7 +2465,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "Fault diagnosis of mechanical equipment is essential for ensuring safe and reliable operation and reducing losses caused by unplanned downtime. With the large-scale deployment of sensors and the Industrial Internet of Things, condition-monitoring data have grown rapidly in both volume and dimensionality. Conventional diagnostic approaches that rely on human expertise and signal processing are increasingly inadequate, while machine learning, especially deep learning, has become the dominant research paradigm because of its automatic feature extraction and powerful nonlinear modeling capabilitie…",
+      "summary": "机械设备故障诊断如何从依赖专家经验走向可部署的智能方法，是本文关注的核心。该综述沿“数据—特征—模型—应用”框架，梳理监测信号、公共数据集、传统机器学习与深度学习方法，并讨论少样本学习、迁移学习、多传感器融合和联邦学习等工业应用方向。摘要认为，领域正转向少样本、跨工况、可解释和可部署方案，数据治理与工程实现将成为落地瓶颈。本解读仅依据摘要，不能核实全文比较的深度与完整性。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -2237,11 +2503,145 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为智能运维故障诊断方向的综述入口重点阅读，尤其关注其方法适用条件与工程部署问题；但当前只能确认议题和框架，不能据此认可方法优劣或实际诊断效果。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是：面对传感器与工业物联网带来的高维、大规模状态监测数据，如何组织机械故障诊断的技术路线并识别落地障碍。摘要以“safe and reliable operation”说明应用目标，并指出依赖人工经验和信号处理的传统方式日益不足；未提供失效风险或停机损失的量化证据。[摘要]",
+        "method": "本文采用综述而非新模型实验路线，组织框架为“data-feature-model-application”。内容从诊断流程、监测信号和公共数据集展开，比较传统机器学习与多类深度学习方法的原理、适用条件及优缺点。摘要未交代文献检索策略、纳入标准或比较指标，无法核实综述的系统性。[摘要]",
+        "innovation": "解读：本文可能的价值在于以统一框架贯通数据、模型与工业应用，并把少样本、迁移学习、图神经网络等方向纳入讨论。摘要称其“systematically reviews”，但未声称提出新算法、数据集或理论；因此宜将其视为知识整合贡献，不能把方法覆盖范围直接认定为原创突破。[摘要]",
+        "findings": "摘要给出的主要判断是，故障诊断正从依赖大量标注数据转向少样本、跨工况、可解释和可部署方案，并将“Data governance and engineering implementation”列为实际采用的主要瓶颈。这是综述层面的趋势判断；摘要没有报告准确率、跨域性能或部署时延，不能据此推断具体方法效果。[摘要]",
+        "limitations": "当前资料仅有摘要，缺少全文中的文献清单、方法比较表和具体案例，因而无法核实覆盖范围、证据质量及结论适用边界。摘要虽讨论数据质量、泛化、可解释性和边缘实时部署，但这些是作者归纳的领域挑战，不等同于该综述自身已经证实的缺陷。[摘要]",
+        "connection": "解读：本文与智能运维直接相关，摘要明确讨论“intelligent operation and maintenance”，并覆盖旋转机械、电机、数控机床和泵。对可靠性研究，其联系主要在于利用状态监测支持安全运行；摘要未涉及寿命分布、可靠度计算或结构优化，不能将故障识别直接等同于可靠性评估。[摘要]",
+        "next_steps": "建议：后续阅读全文时，优先核查跨工况与少样本诊断是否设置合理基线、数据划分能否避免泄漏，以及边缘部署是否报告资源与时延约束。针对摘要提出的“physics-data integration”，可进一步考察物理约束如何进入模型；这些是阅读与研究建议，并非作者已完成的实验。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "基于机器学习的机械设备故障诊断研究进展",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.70267/cai.v3n6.100119"
+      ],
+      "analyzed_at": "2026-11-08T02:12:53.247154+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "机械设备故障诊断如何从依赖大量标注数据的模型，走向真实工业环境中可迁移、可解释、可部署的工具？这篇综述以“数据—特征—模型—应用”为主线，梳理机器学习诊断方法，并将阅读重点引向数据治理与工程落地。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "监测数据增多，诊断难题并未自动消失",
+            "paragraphs": [
+              "机械设备故障诊断关系到运行安全、可靠性和非计划停机损失。传感器与工业物联网的大规模部署，使状态监测数据的规模和维度快速增长，依赖人工经验与信号处理的传统诊断方式因而面临更大压力。",
+              "摘要指出，机器学习尤其是深度学习，凭借自动特征提取和非线性建模能力，已成为这一领域的主导研究范式。但本文关注的不只是模型能力，还包括这些方法如何适应实际工业环境。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "沿数据、特征、模型到应用梳理方法谱系",
+            "paragraphs": [
+              "这是一篇综述，而非摘要中报告了新模型实验的研究。作者先介绍诊断基本流程、常用监测信号和代表性公共数据集，再梳理特征工程、支持向量机、集成学习，以及卷积神经网络、循环神经网络、自编码器、注意力机制和Transformer，对比其原理、适用条件、优势与局限。",
+              "面向工业场景，综述进一步讨论少样本学习、迁移学习、多传感器融合与图神经网络、联邦学习，以及基于生成对抗网络的数据增强，并总结其在旋转机械、电机、数控机床和泵等系统中的应用。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "领域转向少样本、跨工况与可部署诊断",
+            "paragraphs": [
+              "摘要给出的核心判断是：该领域正从依赖大量标注数据的判别式诊断，转向少样本、跨工况、可解释且可部署的解决方案。这是综述对研究趋势的归纳，不是某种算法已在所有设备上取得优势的实验证明。",
+              "作者将数据质量、模型泛化、可解释性和实时边缘部署列为当前挑战，并判断**数据治理与工程实施将成为实际落地的主要瓶颈**。物理与数据融合、基础模型和智能运维则属于文中讨论的未来趋势，不能据此认定其应用效果已经得到验证。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不能支撑算法排名或落地效果判断",
+            "paragraphs": [
+              "当前解读仅依据完整摘要。摘要未报告文献检索与筛选细节、纳入文献数量、具体数据集名称、样本规模、比较指标及验证工况，因此无法判断综述覆盖的完整性，也无法核对不同方法的量化性能差异。",
+              "同样，仅凭摘要不能确定跨工况泛化、少样本诊断或边缘部署的具体验证范围，更不能推断现场停机损失已降低。上述信息是摘要未交代的内容，不代表论文正文没有讨论或验证。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：把模型选择放回工业约束中",
+            "paragraphs": [
+              "阅读启发：可将这篇综述作为梳理智能运维方法的入口，进一步阅读时重点追问：各类方法适用于什么数据条件，其跨工况能力依据何种比较，可解释性与实时部署又如何评价？这些问题直接对应摘要指出的挑战，比单纯关注网络结构更有助于理解工程适用边界。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的综述组织框架",
+            "description": "概括摘要明确给出的“数据—特征—模型—应用”综述主线，不表示实验流程或已验证的技术方案，也不是论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "数据",
+                "detail": "介绍常用监测信号与代表性公共数据集。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "特征",
+                "detail": "梳理特征工程及深度学习的自动特征提取能力。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "模型",
+                "detail": "比较传统机器学习与深度学习方法的原理、适用条件和局限。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "应用",
+                "detail": "总结旋转机械、电机、数控机床和泵等系统中的应用。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "综述主线"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "综述主线"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "综述主线"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-08T02:23:13.539117+00:00",
+      "article_profile": "cbc7629bd201110f874af12053acc0770902db85e481fb6da600ed7561e51dce",
+      "analysis_references": {},
+      "analysis_material_version": "3ae0435af21b7a7eb9ea6965d66285ad45d40f93bb40959ac3f5e3959659e1ec",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "1f7c3af45cfb",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-08T02:23:13.541128+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -2261,7 +2661,7 @@
       "topic_tags": [
         "ai_maintenance"
       ],
-      "summary": "To address the issue of insufficient modeling efficiency of high-dimensional sensor data in the identification of complex equipment operating states, a deep learning diagnostic computing framework for automotive system operation signals is constructed. By designing a multilayer convolutional feature extraction network and a time-series dynamic modeling structure, high-dimensional feature representation and time-series dependency learning of multi-source sensor signals are achieved; further, an attention weight calculation mechanism is introduced to adaptively weight key features, thereby impro…",
+      "summary": "本文针对汽车运行状态识别中高维传感器数据建模效率不足的问题，提出结合多层卷积、时序建模与注意力加权的诊断框架，并利用GPU并行计算提高数据处理效率。摘要报告，在15,000个样本条件下，诊断准确率达到94.7%，训练收敛速度提高约18.3%。但未说明对照方法、数据划分及跨工况验证，尚不足以判断实际部署效果。本次仅作摘要级解读。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -2299,11 +2699,143 @@
         "ai_maintenance"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommendation": "建议作为智能运维中多源传感器故障诊断的候选方法论文阅读，重点核查时序结构、效率对照与实验划分，而非直接据摘要认定其具有领先性能。[摘要]",
+      "deep_read": {
+        "problem": "论文聚焦复杂设备运行状态识别时，高维传感器数据建模效率不足的问题，具体应用对象为汽车系统运行信号。摘要明确提出“insufficient modeling efficiency”，因此关注点不仅是分类准确率，也包括计算效率；具体故障类别及诊断任务边界尚未交代。[摘要]",
+        "method": "方法由多层卷积特征提取网络、时序动态建模结构和注意力权重计算机制组成，分别承担高维表示、时间依赖学习及关键特征加权。训练采用交叉熵损失与梯度优化，并结合GPU并行计算；摘要未给出时序模块类型、网络参数或优化器名称。[摘要]",
+        "innovation": "解读：摘要呈现的贡献主要是将卷积表征、时序依赖学习、注意力加权与并行训练整合到汽车诊断框架中。但这些模块的组合是否具有结构创新，仍需比较已有方法。当前资料没有提供新算子、独特损失函数或理论结果，不能据此认定其为原创算法突破。[摘要]",
+        "findings": "摘要报告，在15,000个样本条件下，诊断准确率为94.7%，训练收敛速度提高约18.3%，并声称注意力加权有助于诊断稳定性和计算效率。然而，收敛速度提升的参照对象及计量方式未说明，稳定性也没有对应数值，现阶段只能确认这些是作者报告的结果。[摘要]",
+        "limitations": "当前摘要未说明数据来源、类别分布、训练测试划分、重复试验及不确定性，也没有列出基线和消融结果。这些是当前资料的证据缺口，不等于全文一定缺失。缺少上述信息，无法判断准确率是否受数据泄漏影响，也无法区分各模块对性能提升的贡献。[摘要]",
+        "connection": "解读：该研究与智能运维中的多源信号状态识别和自动故障诊断直接相关，可为汽车设备监测提供方法参考。但故障分类准确率并不等同于可靠性提升，摘要没有涉及寿命预测、失效概率或结构参数优化，因此与可靠性评估及结构设计仅存在潜在联系。[摘要]",
+        "next_steps": "建议：后续阅读优先核查数据划分是否按车辆或运行批次隔离、收敛速度的定义，以及卷积、时序和注意力模块的消融证据。若迁移到自己的运维研究，可补充跨工况测试、漏报分析及推理时延评估；这些属于研究建议，并非摘要已完成的实验。[摘要]"
+      },
+      "recommended_direction": "ai_maintenance",
+      "title_zh": "汽车故障诊断系统中的深度学习算法优化",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1117/12.3125972"
+      ],
+      "analyzed_at": "2026-11-08T02:35:36.466871+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "汽车运行信号来源多、维度高，如何兼顾故障诊断的准确性与建模效率？这项研究将卷积特征提取、时序建模和注意力加权结合起来，并报告诊断准确率与训练收敛速度，提供了理解汽车智能诊断框架的一个具体案例。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "多源运行信号，难在高维建模",
+            "paragraphs": [
+              "研究针对复杂设备运行状态识别中，高维传感器数据建模效率不足的问题，应用对象是汽车系统运行信号。摘要将多源信号的高维特征表示与时间依赖学习同时纳入框架：既要提取信号中的特征，也要学习这些信号随时间变化的关联。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "卷积与时序建模之外，再给特征分配权重",
+            "paragraphs": [
+              "作者构建了深度学习诊断计算框架，以多层卷积网络提取特征，并通过时序动态建模结构学习多源传感器信号的时间依赖。在此基础上，引入注意力权重计算机制，对关键特征进行自适应加权。摘要将这一设计与诊断决策稳定性、计算效率的提升联系起来，但没有分别给出这两方面的量化指标。",
+              "训练环节采用交叉熵损失与梯度优化策略，并使用GPU并行计算提高大规模数据处理效率。摘要没有说明具体的时序模型类型、注意力计算形式或梯度优化器，因此目前能够把握的是方法组成，而不是可直接复现的网络配置。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "准确率与收敛速度：摘要给出的结果",
+            "paragraphs": [
+              "摘要报告，在15,000个样本数据条件下，算法诊断准确率达到94.7%，训练收敛速度提高约18.3%。这分别涉及诊断表现与训练效率，但“收敛速度提高”不能直接改述为训练耗时同比例缩短，也不能等同于车辆端推理速度提升。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "样本口径、比较基准与验证边界仍待确认",
+            "paragraphs": [
+              "仅凭摘要，无法判断样本来自哪些车辆、传感器与故障类别，也不清楚数据划分、类别分布及样本独立性。15,000个样本不能直接理解为同等数量的独立车辆或独立故障事件；准确率对应的具体测试范围也仍需查阅正文。",
+              "收敛速度提高所对应的比较方法、收敛判据和硬件条件未在摘要中交代，各模块贡献、重复试验波动及跨工况验证情况也无法判断。因此，当前资料不足以确认提升主要来自哪一环节，更不能据此认定真实运维部署效果；这些属于摘要的信息边界，并不意味着论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：把诊断表现与计算效率分开审视",
+            "paragraphs": [
+              "阅读启发：面向AI智能运维，可优先关注正文如何界定样本、设置比较基准，以及分别评价特征提取、时序建模和注意力加权的作用。还应区分训练收敛、推理效率与诊断稳定性，避免用单一准确率替代对实际应用适用性的判断。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的汽车运行信号诊断示意",
+            "description": "仅概括摘要明确描述的信号建模与特征加权关系，不代表论文原图或完整网络配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "多源传感器运行信号",
+                "detail": "面向汽车系统运行状态诊断的信号输入。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "卷积特征提取与时序建模",
+                "detail": "以多层卷积网络和时序动态结构学习高维特征与时间依赖。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "注意力权重计算",
+                "detail": "对关键特征进行自适应加权。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "诊断决策",
+                "detail": "框架旨在改善诊断决策的稳定性与计算效率。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "特征与时间依赖学习"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "关键特征自适应加权"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "用于诊断决策"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-08T02:47:18.360540+00:00",
+      "article_profile": "9bf88068069a92f090ccb209ef07dd38d7326258c564606b3e151354b86816a4",
+      "analysis_references": {},
+      "analysis_material_version": "cbb41b1a41fe13441e4a62e666fcc6cab2526db6c883222b13657dce2831592c",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "2d625262285a",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-08T02:47:18.363400+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "source_status": {
@@ -3270,13 +3802,13 @@
     "unavailable": 45
   },
   "analysis_status": {
-    "ready_core": 4,
+    "ready_core": 6,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 2
+    "pending": 0
   },
   "edition": {
     "id": "42398778914",
