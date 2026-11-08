@@ -1,0 +1,40 @@
+{
+  "paper_id": "0bdf5a69af83",
+  "fingerprint": "7761a3ab7855b1b8c210e995d7107affc0903dae525f0301096cbad175a65df5",
+  "analysis": {
+    "title_zh": "求和法辅助的工业设备预测性维护机器学习框架",
+    "summary": "工业设备传感器数据中的噪声、孤立尖峰与工况变化，可能干扰故障预警。本文提出求和法辅助机器学习框架，通过均值、累积与稳健汇总构造预测特征，并结合防泄漏评估和成本敏感决策。合成泵数据示例显示，部分特征能够识别缓慢漂移并忽略孤立尖峰，但窗口长度涉及误报与检测延迟的权衡。全部数值结果均来自合成数据，尚不能证明实际设备上的有效性。本导读仅依据完整摘要。[摘要]",
+    "recommendation": "建议作为智能运维中特征构造、时序评估与维护决策衔接的方法性参考重点阅读；不宜将其作为工业部署效果已获验证的证据。[摘要]",
+    "deep_read": {
+      "problem": "研究针对工业预测性维护中的信号不稳定问题：传感器序列存在噪声、不规则性及运行工况变化，模型可能对瞬时尖峰过度响应，也可能遗漏缓慢漂移。作者希望在预测之前获得稳定、可解释的特征。摘要明确指出风险包括“overreact to transient spikes or miss slow drift”。[摘要]",
+      "method": "方法将文献综合与数学特征定义结合，采用有限切萨罗均值、加权均值、累积及稳健汇总，并纳入防信息泄漏的评估协议和成本敏感决策规则。演示对象为合成泵记录。摘要称其为“methodological design”，但未提供模型结构、数据划分细节或参数配置，无法进一步核查实施过程。[摘要]",
+      "innovation": "作者将贡献定位为可实施的集成方式、连接平滑处理与维护决策的评估协议，以及面向未来实证研究的轴承测试数据参照。解读：值得关注的是信号汇总、预测与行动规则的组织方式，而非已经证实的新算法优势。摘要不足以判断其相对既有平滑方法的原创程度。[摘要]",
+      "findings": "合成记录中，相邻窗口差与截断累积和检测到了单样本阈值遗漏的缓慢漂移，同时忽略孤立尖峰。窗口长度影响误报与检测延迟；算例中，校准失效概率为0.18，高于盈亏平衡概率0.048，因而支持检查。上述结果仅属于模拟演示，不能外推为真实设备的检测性能。[摘要]",
+      "limitations": "摘要直接说明“not empirically validated”，且全部数值结果来自合成数据。作者同时强调，特征价值须按设备类别及决策时间范围分别证明。因此，目前缺乏真实工业场景有效性的证据。摘要也未给出样本规模、不确定性或对照结果，无法据此判断收益大小及统计可靠性。[摘要]",
+      "connection": "解读：该研究与智能运维直接相关，其关注点是如何将传感器变化转化为检查行动，而不只追求预测分数。对可靠性研究，可借鉴失效概率与行动成本之间的衔接思路；对结构设计，当前摘要没有提供载荷、材料或结构优化证据，联系仅限于潜在的状态监测应用。[摘要]",
+      "next_steps": "建议：优先围绕作者提及的IMS轴承测试开展实证核查，在明确预测时间范围后，对比原始信号与求和特征，并检查数据划分是否防止泄漏。进一步分别评估窗口选择对误报、检测延迟和维护成本的影响。这些是依据摘要提出的研究建议，不是论文已经完成的实验。[摘要]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://doi.org/10.52909/jti.v6i2.461"
+    ],
+    "analyzed_at": "2026-11-08T14:17:05.871149+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": true,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "依据摘要，该文直接面向工业预测性维护，具有明确的特征构造、评估与决策方法，适合作为智能运维方法性阅读材料。现有资料足以支持这一推荐定位，但作者明确承认尚无实证验证，不能据此肯定工业应用效果或算法领先性。[摘要]",
+    "evidence": "Results: On the synthetic record, an adjacent window difference and a clipped cumulative sum detected a slow drift that a single sample limit missed while ignoring an isolated spike."
+  },
+  "material": {
+    "version": "8094581f748d585b58a9b5354771c1b587ba88fec7908e8532bde68bfa637c54",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "Results: On the synthetic record, an adjacent window difference and a clipped cumulative sum detected a slow drift that a single sample limit missed while ignoring an isolated spike."
+  }
+}
