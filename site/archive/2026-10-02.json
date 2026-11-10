@@ -1246,7 +1246,7 @@
       "reading_status": {
         "paper_id": "c6e1f2105665",
         "state": "failed",
-        "updated_at": "2026-11-08T21:24:03.838940+00:00",
+        "updated_at": "2026-11-10T11:01:12.819264+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -2801,16 +2801,129 @@
       "reading_status": {
         "paper_id": "533cdd3a344d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-09T01:29:36.290904+00:00",
+        "updated_at": "2026-11-10T12:18:08.318544+00:00",
         "basis": "abstract",
-        "article_state": "failed",
-        "article_stage": "writing",
+        "article_state": "complete",
+        "article_stage": "",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": true,
         "issues": []
-      }
+      },
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "轻量化承载植入物不仅要承受载荷，还要面对载荷与材料性能的不确定性。这项研究围绕径向梯度TPMS钛合金支架，将有限元、主动学习代理模型与疲劳寿命评估连接起来，探索如何更高效地支持可靠性设计与孔隙率选择。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "多孔支架的设计，不能只看确定工况",
+            "paragraphs": [
+              "三周期极小曲面（TPMS）多孔结构具有用于轻量化承载植入物的潜力。本文关注径向梯度gyroid型Ti‐6Al‐4V支架，研究问题是：当载荷和材料性能存在不可避免的不确定性时，如何评估其疲劳可靠性？",
+              "这里的重点不是单纯获得某个工况下的应力结果，而是把不确定性纳入评估过程。摘要提出的框架，旨在为承载型TPMS植入物的可靠性导向设计和孔隙率选择提供计算工具。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从有限元应力到代理模型与疲劳寿命",
+            "paragraphs": [
+              "研究设计了五种仿骨圆柱支架，孔隙率范围为60%至80%，并在位移控制压缩条件下进行分析。为提高对网格变化的稳健性，作者采用von Mises应力场的第95百分位数作为高应力指标，而不是直接以应力最大值作为该指标。",
+              "随后，研究建立基于主动学习的高斯过程回归代理模型（GPR‐AL），采用均方根误差（RMSE）作为误差指标，并通过最大最小距离准则，从高不确定性区域迭代选择新的训练点。",
+              "在此基础上，作者将GPR‐AL模型与蒙特卡洛模拟结合，传播输入不确定性，再采用Basquin模型评估TPMS结构的疲劳寿命。摘要明确给出了这些环节，但未展开具体参数与实现细节。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要报告的是计算工具价值，而非最优孔隙率",
+            "paragraphs": [
+              "作者报告，该方法能够为运行条件不确定性下的TPMS承载植入物提供计算高效的可靠性分析工具，服务于设计与孔隙率选择。**这一结论属于框架层面的效用判断**；摘要没有给出计算加速幅度、寿命预测误差，也没有指出哪种孔隙率最优。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "样本、对照与验证范围仍需进一步阅读",
+            "paragraphs": [
+              "摘要中的五种支架是设计对象，不能据此认定为五个实体试验样本。仅凭摘要，无法判断训练与验证样本规模、载荷及材料参数的概率分布，也无法确认是否采用独立疲劳试验或其他方法进行对照验证。",
+              "摘要同样不足以判断模型对其他结构、材料或载荷形式的适用范围，以及效率与精度之间的具体权衡。这些属于当前资料未交代的信息，不能据此断言论文没有开展相关比较或验证。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注代理模型如何支撑可靠性判断",
+            "paragraphs": [
+              "阅读启发：对于结构设计与疲劳可靠性研究，值得继续关注高应力指标、主动学习选点和不确定性传播之间的衔接。进一步阅读时，可重点核对：第95百分位应力的网格稳健性如何评估，代理模型误差如何检验，以及这些误差对疲劳可靠性判断有何影响。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的TPMS疲劳可靠性分析过程",
+            "description": "仅概括摘要明确陈述的研究环节及其关系，不代表论文原图，也不补充未报告的实验配置或结果。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "径向梯度TPMS支架",
+                "detail": "设计仿骨圆柱形Ti‐6Al‐4V支架，考虑不同孔隙率。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "有限元压缩分析",
+                "detail": "位移控制压缩，以von Mises应力场第95百分位数表征高应力。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "GPR‐AL代理模型",
+                "detail": "以RMSE为误差指标，按最大最小距离准则在高不确定性区域迭代选点。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "蒙特卡洛不确定性传播",
+                "detail": "将代理模型与蒙特卡洛模拟结合，传播载荷和材料性能不确定性。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "Basquin疲劳寿命评估",
+                "detail": "采用Basquin模型评估TPMS疲劳寿命，服务于可靠性导向设计。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "压缩响应分析"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "结合有限元建立代理"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "耦合蒙特卡洛模拟"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "进一步评估疲劳寿命"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-10T09:56:13.326904+00:00",
+      "article_profile": "f9ccea395e4c92511ac6db041e6135bfd47a641baed059088304666a0d27dca4"
     },
     {
       "source": "Nature Portfolio",
@@ -4037,10 +4150,10 @@
       "reading_status": {
         "paper_id": "9f42a1c20a27",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-09T01:29:14.943616+00:00",
+        "updated_at": "2026-11-10T11:06:01.285781+00:00",
         "basis": "abstract",
         "article_state": "failed",
-        "article_stage": "review",
+        "article_stage": "writing",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
@@ -5910,7 +6023,7 @@
       "reading_status": {
         "paper_id": "c6e1f2105665",
         "state": "failed",
-        "updated_at": "2026-11-08T21:24:03.838940+00:00",
+        "updated_at": "2026-11-10T11:01:12.819264+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -7463,16 +7576,129 @@
       "reading_status": {
         "paper_id": "533cdd3a344d",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-09T01:29:36.290904+00:00",
+        "updated_at": "2026-11-10T12:18:08.318544+00:00",
         "basis": "abstract",
-        "article_state": "failed",
-        "article_stage": "writing",
+        "article_state": "complete",
+        "article_stage": "",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": true,
         "issues": []
-      }
+      },
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "轻量化承载植入物不仅要承受载荷，还要面对载荷与材料性能的不确定性。这项研究围绕径向梯度TPMS钛合金支架，将有限元、主动学习代理模型与疲劳寿命评估连接起来，探索如何更高效地支持可靠性设计与孔隙率选择。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "多孔支架的设计，不能只看确定工况",
+            "paragraphs": [
+              "三周期极小曲面（TPMS）多孔结构具有用于轻量化承载植入物的潜力。本文关注径向梯度gyroid型Ti‐6Al‐4V支架，研究问题是：当载荷和材料性能存在不可避免的不确定性时，如何评估其疲劳可靠性？",
+              "这里的重点不是单纯获得某个工况下的应力结果，而是把不确定性纳入评估过程。摘要提出的框架，旨在为承载型TPMS植入物的可靠性导向设计和孔隙率选择提供计算工具。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从有限元应力到代理模型与疲劳寿命",
+            "paragraphs": [
+              "研究设计了五种仿骨圆柱支架，孔隙率范围为60%至80%，并在位移控制压缩条件下进行分析。为提高对网格变化的稳健性，作者采用von Mises应力场的第95百分位数作为高应力指标，而不是直接以应力最大值作为该指标。",
+              "随后，研究建立基于主动学习的高斯过程回归代理模型（GPR‐AL），采用均方根误差（RMSE）作为误差指标，并通过最大最小距离准则，从高不确定性区域迭代选择新的训练点。",
+              "在此基础上，作者将GPR‐AL模型与蒙特卡洛模拟结合，传播输入不确定性，再采用Basquin模型评估TPMS结构的疲劳寿命。摘要明确给出了这些环节，但未展开具体参数与实现细节。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要报告的是计算工具价值，而非最优孔隙率",
+            "paragraphs": [
+              "作者报告，该方法能够为运行条件不确定性下的TPMS承载植入物提供计算高效的可靠性分析工具，服务于设计与孔隙率选择。**这一结论属于框架层面的效用判断**；摘要没有给出计算加速幅度、寿命预测误差，也没有指出哪种孔隙率最优。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "样本、对照与验证范围仍需进一步阅读",
+            "paragraphs": [
+              "摘要中的五种支架是设计对象，不能据此认定为五个实体试验样本。仅凭摘要，无法判断训练与验证样本规模、载荷及材料参数的概率分布，也无法确认是否采用独立疲劳试验或其他方法进行对照验证。",
+              "摘要同样不足以判断模型对其他结构、材料或载荷形式的适用范围，以及效率与精度之间的具体权衡。这些属于当前资料未交代的信息，不能据此断言论文没有开展相关比较或验证。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注代理模型如何支撑可靠性判断",
+            "paragraphs": [
+              "阅读启发：对于结构设计与疲劳可靠性研究，值得继续关注高应力指标、主动学习选点和不确定性传播之间的衔接。进一步阅读时，可重点核对：第95百分位应力的网格稳健性如何评估，代理模型误差如何检验，以及这些误差对疲劳可靠性判断有何影响。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的TPMS疲劳可靠性分析过程",
+            "description": "仅概括摘要明确陈述的研究环节及其关系，不代表论文原图，也不补充未报告的实验配置或结果。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "径向梯度TPMS支架",
+                "detail": "设计仿骨圆柱形Ti‐6Al‐4V支架，考虑不同孔隙率。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "有限元压缩分析",
+                "detail": "位移控制压缩，以von Mises应力场第95百分位数表征高应力。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "GPR‐AL代理模型",
+                "detail": "以RMSE为误差指标，按最大最小距离准则在高不确定性区域迭代选点。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "蒙特卡洛不确定性传播",
+                "detail": "将代理模型与蒙特卡洛模拟结合，传播载荷和材料性能不确定性。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "Basquin疲劳寿命评估",
+                "detail": "采用Basquin模型评估TPMS疲劳寿命，服务于可靠性导向设计。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "压缩响应分析"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "结合有限元建立代理"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "耦合蒙特卡洛模拟"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "进一步评估疲劳寿命"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-10T09:56:13.326904+00:00",
+      "article_profile": "f9ccea395e4c92511ac6db041e6135bfd47a641baed059088304666a0d27dca4"
     },
     {
       "source": "Nature Portfolio",
@@ -8699,10 +8925,10 @@
       "reading_status": {
         "paper_id": "9f42a1c20a27",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-09T01:29:14.943616+00:00",
+        "updated_at": "2026-11-10T11:06:01.285781+00:00",
         "basis": "abstract",
         "article_state": "failed",
-        "article_stage": "review",
+        "article_stage": "writing",
         "reason": "not_found",
         "total": 0,
         "covered": 0,

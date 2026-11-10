@@ -248,13 +248,13 @@
       "reading_status": {
         "paper_id": "04a29ffa0d97",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-10T03:54:55.006308+00:00",
+        "updated_at": "2026-11-10T11:37:17.482853+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       },
@@ -1100,13 +1100,13 @@
       "reading_status": {
         "paper_id": "dfc9b7fc8847",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-10T03:34:48.772641+00:00",
+        "updated_at": "2026-11-10T11:32:01.911205+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       },
@@ -1317,7 +1317,7 @@
       "reading_status": {
         "paper_id": "eb62449238c8",
         "state": "missing_evidence",
-        "updated_at": "2026-11-08T11:25:25.300247+00:00",
+        "updated_at": "2026-11-10T10:36:53.173776+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -1510,13 +1510,13 @@
       "reading_status": {
         "paper_id": "e287fb472485",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-10T03:40:56.769347+00:00",
+        "updated_at": "2026-11-10T11:33:29.224768+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
         "reason": "restricted",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       },
@@ -1725,7 +1725,7 @@
       "reading_status": {
         "paper_id": "f93c5ebdceed",
         "state": "missing_evidence",
-        "updated_at": "2026-11-08T11:26:31.275755+00:00",
+        "updated_at": "2026-11-10T10:38:29.033721+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -2508,7 +2508,7 @@
       "reading_status": {
         "paper_id": "a1130ac09906",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-09T01:30:25.246778+00:00",
+        "updated_at": "2026-11-10T12:19:50.780428+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -2521,41 +2521,43 @@
       "article": {
         "version": 3,
         "basis": "abstract",
-        "lead": "在标注样本有限或含噪时，滚动轴承故障诊断如何仍能提取可靠特征？本文提出多阶段扩散式振动信号表征方法，尝试以逐步恢复信号和融合不同阶段信息应对小样本诊断难题。",
+        "lead": "标注数据有限时，如何从振动信号中提取足以区分轴承故障的特征？这项研究将扩散恢复与多阶段表征结合，阅读价值在于理解不同扩散阶段的信息为何被保留并融合，而不只是关注最终分类表现。",
         "sections": [
           {
             "id": "context",
-            "title": "小样本与噪声带来的诊断难题",
+            "title": "少量标注下，故障特征如何保持可辨识",
             "paragraphs": [
-              "工业振动监测中的滚动轴承故障诊断，常面临标注数据有限的情况。摘要指出，训练样本不足或含噪时，传统深度学习方法的性能可能下降；因此，关键问题不只是识别故障，还包括如何在数据稀缺条件下形成更有区分力的信号表征。"
+              "滚动轴承故障诊断面临一个现实难题：训练样本不足或含有噪声时，传统深度学习方法的性能容易下降。本文针对有限标注数据下的工业振动监测，关注如何改善信号表征，使故障相关信息在数据稀缺条件下仍能被有效提取。"
             ]
           },
           {
             "id": "method",
-            "title": "从扩散恢复到多阶段表征融合",
+            "title": "从扩散恢复到跨阶段表征融合",
             "paragraphs": [
-              "方法以扩散恢复过程逐步增强振动信号中的故障相关成分，进而提取特征。作者还设计多阶段表征策略，利用不同扩散步骤的信息：较早阶段保留信号整体结构，较晚阶段强调局部故障特征；最后融合这些表征，并交由轻量级分类器识别故障。"
+              "研究提出基于多阶段扩散的振动信号表征方法。按照摘要描述，扩散恢复过程逐步增强振动信号中的故障相关成分，以提取更具区分性的特征。这里的扩散过程被用于信号恢复与表征，摘要并未将其描述为生成额外训练样本的数据增强方案。",
+              "多阶段策略进一步利用不同扩散步骤之间的互补信息：早期阶段保留信号的全局结构，后期阶段突出局部故障特征。随后融合这些表征，并交由轻量级分类器完成故障识别。方法的关键是联合利用不同阶段的信息，而非仅依赖单一阶段的输出。"
             ]
           },
           {
             "id": "findings",
-            "title": "摘要报告的小样本诊断表现",
+            "title": "摘要报告：少样本条件下表现更优",
             "paragraphs": [
-              "摘要称，作者在基准轴承数据集上进行了大量实验。与若干先进方法相比，所提方法取得了更好的诊断表现，尤其是在少样本设置下。摘要据此认为，基于扩散的信号表征有助于复杂工业环境中的稳健故障诊断；但没有提供具体数据集名称、指标或数值结果。"
+              "摘要报告，作者在轴承基准数据集上开展实验，与若干先进方法相比，所提方法取得了更优的诊断表现，尤其是在少样本设置下。作者据此认为，扩散式信号表征有助于复杂工业环境中的稳健故障诊断；但摘要没有提供具体指标、提升幅度或逐项比较结果。"
             ]
           },
           {
             "id": "limitations",
-            "title": "摘要尚未展开的验证细节",
+            "title": "基准结果与工业适用范围仍需分开判断",
             "paragraphs": [
-              "仅凭摘要无法判断样本规模、少样本设置的具体定义、噪声条件和数据集构成，也无法确认比较方法、评价指标及各方法是否采用一致的实验设置。摘要没有列出定量结果或验证范围的细节；这不代表论文正文未报告这些内容，需阅读全文核对。"
+              "仅凭本次摘要，无法判断所用数据集名称、标注样本数量、训练与测试划分、噪声设置，以及比较方法和比较条件。摘要也未交代不同阶段各自的贡献、融合方式、分类器结构及计算开销。这些属于当前资料未报告的信息，不能据此断言论文没有开展相关分析。",
+              "摘要中的复杂工业环境表述，也不足以确认现场部署、跨设备或跨工况验证的具体范围。因此，目前可以确认的是作者报告了基准数据集上的比较优势，尚不能据此评估其在特定工业现场的可靠性与适用边界。"
             ]
           },
           {
             "id": "inspiration",
-            "title": "阅读启发：不同阶段的信息各自贡献什么？",
+            "title": "阅读启发：关注互补信息，而非只看扩散模型",
             "paragraphs": [
-              "阅读启发：可进一步关注论文如何定义扩散步骤与多阶段表征，以及整体结构信息和局部故障特征如何融合。结合正文中的实验设置与结果，还可核对少样本条件下的比较方式，并观察含噪情形是否纳入验证；这些问题有助于判断摘要所述优势适用的范围。"
+              "阅读启发：对于智能运维，更值得进一步阅读的问题是，早期全局结构与后期局部特征如何被界定和融合，以及比较结果能否支持这种互补性解释。另一个关注点是轻量级分类器之外的整条处理链开销；仅有分类器轻量，并不足以判断整体部署成本。"
             ]
           }
         ],
@@ -2565,68 +2567,84 @@
           {
             "kind": "study",
             "basis": "abstract",
-            "title": "依据摘要整理的研究过程示意",
-            "description": "仅呈现摘要明确描述的方法环节，不代表论文原图或未报告的实验配置。",
+            "title": "依据摘要整理的多阶段扩散表征流程",
+            "description": "仅概括摘要明确描述的信号恢复、阶段信息融合与故障识别关系，不代表论文原图或具体网络结构。",
             "nodes": [
               {
                 "id": "a",
                 "stage": 0,
                 "label": "振动信号",
-                "detail": "滚动轴承故障诊断的输入信号"
+                "detail": "面向有限标注数据下的滚动轴承故障诊断"
               },
               {
                 "id": "b",
                 "stage": 1,
-                "label": "扩散恢复",
+                "label": "扩散恢复过程",
                 "detail": "逐步增强信号中的故障相关成分"
               },
               {
                 "id": "c",
                 "stage": 2,
-                "label": "多阶段表征",
-                "detail": "早期保留整体结构，后期强调局部故障特征"
+                "label": "早期阶段表征",
+                "detail": "保留信号的全局结构"
               },
               {
                 "id": "d",
-                "stage": 3,
-                "label": "表征融合",
-                "detail": "融合不同扩散步骤的信息"
+                "stage": 2,
+                "label": "后期阶段表征",
+                "detail": "突出局部故障特征"
               },
               {
                 "id": "e",
+                "stage": 3,
+                "label": "多阶段表征融合",
+                "detail": "利用不同扩散步骤中的互补信息"
+              },
+              {
+                "id": "f",
                 "stage": 4,
                 "label": "轻量级分类器",
-                "detail": "依据融合表征识别故障"
+                "detail": "根据融合表征完成故障识别"
               }
             ],
             "edges": [
               {
                 "from": "a",
                 "to": "b",
-                "label": "输入"
+                "label": "信号恢复"
               },
               {
                 "from": "b",
                 "to": "c",
-                "label": "形成阶段信息"
+                "label": "利用早期信息"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "利用后期信息"
               },
               {
                 "from": "c",
-                "to": "d",
-                "label": "互补融合"
+                "to": "e",
+                "label": "全局信息"
               },
               {
                 "from": "d",
                 "to": "e",
-                "label": "用于识别"
+                "label": "局部信息"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "用于故障识别"
               }
             ]
           }
         ],
         "figure_groups": []
       },
-      "article_updated_at": "2026-10-18T00:54:26.669386+00:00",
-      "article_profile": "371aecc35d9e7cebe1cbf6aa9f64e6f21a623536a2ec73d775450a209968d423"
+      "article_updated_at": "2026-11-10T10:03:28.564275+00:00",
+      "article_profile": "1471ad80591400f33d8acfceb828f5be9c066d4d07f87fbf772f6fafeb624209"
     },
     {
       "source": "OpenAlex",
@@ -2753,7 +2771,7 @@
       "reading_status": {
         "paper_id": "b972c8c0d15c",
         "state": "missing_evidence",
-        "updated_at": "2026-11-08T11:27:51.136947+00:00",
+        "updated_at": "2026-11-10T10:39:05.070571+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -2889,9 +2907,9 @@
       "reading_status": {
         "paper_id": "0b71b4d17bb7",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-08T11:38:04.626621+00:00",
+        "updated_at": "2026-11-10T10:39:37.411744+00:00",
         "basis": "abstract",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "writing",
         "reason": "restricted",
         "total": 0,
@@ -3157,13 +3175,13 @@
       "reading_status": {
         "paper_id": "04a29ffa0d97",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-10T03:54:55.006308+00:00",
+        "updated_at": "2026-11-10T11:37:17.482853+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       },
@@ -4009,13 +4027,13 @@
       "reading_status": {
         "paper_id": "dfc9b7fc8847",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-10T03:34:48.772641+00:00",
+        "updated_at": "2026-11-10T11:32:01.911205+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       },
@@ -4226,7 +4244,7 @@
       "reading_status": {
         "paper_id": "eb62449238c8",
         "state": "missing_evidence",
-        "updated_at": "2026-11-08T11:25:25.300247+00:00",
+        "updated_at": "2026-11-10T10:36:53.173776+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -4419,13 +4437,13 @@
       "reading_status": {
         "paper_id": "e287fb472485",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-10T03:40:56.769347+00:00",
+        "updated_at": "2026-11-10T11:33:29.224768+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
         "reason": "restricted",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       },
@@ -4632,7 +4650,7 @@
       "reading_status": {
         "paper_id": "f93c5ebdceed",
         "state": "missing_evidence",
-        "updated_at": "2026-11-08T11:26:31.275755+00:00",
+        "updated_at": "2026-11-10T10:38:29.033721+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -5415,7 +5433,7 @@
       "reading_status": {
         "paper_id": "a1130ac09906",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-09T01:30:25.246778+00:00",
+        "updated_at": "2026-11-10T12:19:50.780428+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -5428,41 +5446,43 @@
       "article": {
         "version": 3,
         "basis": "abstract",
-        "lead": "在标注样本有限或含噪时，滚动轴承故障诊断如何仍能提取可靠特征？本文提出多阶段扩散式振动信号表征方法，尝试以逐步恢复信号和融合不同阶段信息应对小样本诊断难题。",
+        "lead": "标注数据有限时，如何从振动信号中提取足以区分轴承故障的特征？这项研究将扩散恢复与多阶段表征结合，阅读价值在于理解不同扩散阶段的信息为何被保留并融合，而不只是关注最终分类表现。",
         "sections": [
           {
             "id": "context",
-            "title": "小样本与噪声带来的诊断难题",
+            "title": "少量标注下，故障特征如何保持可辨识",
             "paragraphs": [
-              "工业振动监测中的滚动轴承故障诊断，常面临标注数据有限的情况。摘要指出，训练样本不足或含噪时，传统深度学习方法的性能可能下降；因此，关键问题不只是识别故障，还包括如何在数据稀缺条件下形成更有区分力的信号表征。"
+              "滚动轴承故障诊断面临一个现实难题：训练样本不足或含有噪声时，传统深度学习方法的性能容易下降。本文针对有限标注数据下的工业振动监测，关注如何改善信号表征，使故障相关信息在数据稀缺条件下仍能被有效提取。"
             ]
           },
           {
             "id": "method",
-            "title": "从扩散恢复到多阶段表征融合",
+            "title": "从扩散恢复到跨阶段表征融合",
             "paragraphs": [
-              "方法以扩散恢复过程逐步增强振动信号中的故障相关成分，进而提取特征。作者还设计多阶段表征策略，利用不同扩散步骤的信息：较早阶段保留信号整体结构，较晚阶段强调局部故障特征；最后融合这些表征，并交由轻量级分类器识别故障。"
+              "研究提出基于多阶段扩散的振动信号表征方法。按照摘要描述，扩散恢复过程逐步增强振动信号中的故障相关成分，以提取更具区分性的特征。这里的扩散过程被用于信号恢复与表征，摘要并未将其描述为生成额外训练样本的数据增强方案。",
+              "多阶段策略进一步利用不同扩散步骤之间的互补信息：早期阶段保留信号的全局结构，后期阶段突出局部故障特征。随后融合这些表征，并交由轻量级分类器完成故障识别。方法的关键是联合利用不同阶段的信息，而非仅依赖单一阶段的输出。"
             ]
           },
           {
             "id": "findings",
-            "title": "摘要报告的小样本诊断表现",
+            "title": "摘要报告：少样本条件下表现更优",
             "paragraphs": [
-              "摘要称，作者在基准轴承数据集上进行了大量实验。与若干先进方法相比，所提方法取得了更好的诊断表现，尤其是在少样本设置下。摘要据此认为，基于扩散的信号表征有助于复杂工业环境中的稳健故障诊断；但没有提供具体数据集名称、指标或数值结果。"
+              "摘要报告，作者在轴承基准数据集上开展实验，与若干先进方法相比，所提方法取得了更优的诊断表现，尤其是在少样本设置下。作者据此认为，扩散式信号表征有助于复杂工业环境中的稳健故障诊断；但摘要没有提供具体指标、提升幅度或逐项比较结果。"
             ]
           },
           {
             "id": "limitations",
-            "title": "摘要尚未展开的验证细节",
+            "title": "基准结果与工业适用范围仍需分开判断",
             "paragraphs": [
-              "仅凭摘要无法判断样本规模、少样本设置的具体定义、噪声条件和数据集构成，也无法确认比较方法、评价指标及各方法是否采用一致的实验设置。摘要没有列出定量结果或验证范围的细节；这不代表论文正文未报告这些内容，需阅读全文核对。"
+              "仅凭本次摘要，无法判断所用数据集名称、标注样本数量、训练与测试划分、噪声设置，以及比较方法和比较条件。摘要也未交代不同阶段各自的贡献、融合方式、分类器结构及计算开销。这些属于当前资料未报告的信息，不能据此断言论文没有开展相关分析。",
+              "摘要中的复杂工业环境表述，也不足以确认现场部署、跨设备或跨工况验证的具体范围。因此，目前可以确认的是作者报告了基准数据集上的比较优势，尚不能据此评估其在特定工业现场的可靠性与适用边界。"
             ]
           },
           {
             "id": "inspiration",
-            "title": "阅读启发：不同阶段的信息各自贡献什么？",
+            "title": "阅读启发：关注互补信息，而非只看扩散模型",
             "paragraphs": [
-              "阅读启发：可进一步关注论文如何定义扩散步骤与多阶段表征，以及整体结构信息和局部故障特征如何融合。结合正文中的实验设置与结果，还可核对少样本条件下的比较方式，并观察含噪情形是否纳入验证；这些问题有助于判断摘要所述优势适用的范围。"
+              "阅读启发：对于智能运维，更值得进一步阅读的问题是，早期全局结构与后期局部特征如何被界定和融合，以及比较结果能否支持这种互补性解释。另一个关注点是轻量级分类器之外的整条处理链开销；仅有分类器轻量，并不足以判断整体部署成本。"
             ]
           }
         ],
@@ -5472,68 +5492,84 @@
           {
             "kind": "study",
             "basis": "abstract",
-            "title": "依据摘要整理的研究过程示意",
-            "description": "仅呈现摘要明确描述的方法环节，不代表论文原图或未报告的实验配置。",
+            "title": "依据摘要整理的多阶段扩散表征流程",
+            "description": "仅概括摘要明确描述的信号恢复、阶段信息融合与故障识别关系，不代表论文原图或具体网络结构。",
             "nodes": [
               {
                 "id": "a",
                 "stage": 0,
                 "label": "振动信号",
-                "detail": "滚动轴承故障诊断的输入信号"
+                "detail": "面向有限标注数据下的滚动轴承故障诊断"
               },
               {
                 "id": "b",
                 "stage": 1,
-                "label": "扩散恢复",
+                "label": "扩散恢复过程",
                 "detail": "逐步增强信号中的故障相关成分"
               },
               {
                 "id": "c",
                 "stage": 2,
-                "label": "多阶段表征",
-                "detail": "早期保留整体结构，后期强调局部故障特征"
+                "label": "早期阶段表征",
+                "detail": "保留信号的全局结构"
               },
               {
                 "id": "d",
-                "stage": 3,
-                "label": "表征融合",
-                "detail": "融合不同扩散步骤的信息"
+                "stage": 2,
+                "label": "后期阶段表征",
+                "detail": "突出局部故障特征"
               },
               {
                 "id": "e",
+                "stage": 3,
+                "label": "多阶段表征融合",
+                "detail": "利用不同扩散步骤中的互补信息"
+              },
+              {
+                "id": "f",
                 "stage": 4,
                 "label": "轻量级分类器",
-                "detail": "依据融合表征识别故障"
+                "detail": "根据融合表征完成故障识别"
               }
             ],
             "edges": [
               {
                 "from": "a",
                 "to": "b",
-                "label": "输入"
+                "label": "信号恢复"
               },
               {
                 "from": "b",
                 "to": "c",
-                "label": "形成阶段信息"
+                "label": "利用早期信息"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "利用后期信息"
               },
               {
                 "from": "c",
-                "to": "d",
-                "label": "互补融合"
+                "to": "e",
+                "label": "全局信息"
               },
               {
                 "from": "d",
                 "to": "e",
-                "label": "用于识别"
+                "label": "局部信息"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "用于故障识别"
               }
             ]
           }
         ],
         "figure_groups": []
       },
-      "article_updated_at": "2026-10-18T00:54:26.669386+00:00",
-      "article_profile": "371aecc35d9e7cebe1cbf6aa9f64e6f21a623536a2ec73d775450a209968d423"
+      "article_updated_at": "2026-11-10T10:03:28.564275+00:00",
+      "article_profile": "1471ad80591400f33d8acfceb828f5be9c066d4d07f87fbf772f6fafeb624209"
     },
     {
       "source": "OpenAlex",
@@ -5660,7 +5696,7 @@
       "reading_status": {
         "paper_id": "b972c8c0d15c",
         "state": "missing_evidence",
-        "updated_at": "2026-11-08T11:27:51.136947+00:00",
+        "updated_at": "2026-11-10T10:39:05.070571+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -5796,9 +5832,9 @@
       "reading_status": {
         "paper_id": "0b71b4d17bb7",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-08T11:38:04.626621+00:00",
+        "updated_at": "2026-11-10T10:39:37.411744+00:00",
         "basis": "abstract",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "writing",
         "reason": "restricted",
         "total": 0,
