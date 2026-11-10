@@ -1,0 +1,19 @@
+{
+  "id": "public-55d059b88c6c576a2f3d9ab4",
+  "content_version": "e95c8c568ca1b1062071e2f5c1420af44df287b3b77d02d604aa284a53a257ff",
+  "analysis": {
+    "title_zh": "Higher-Order Pruning of Experts（HOPE）：面向 MoE 语言模型的专家剪枝",
+    "summary": "本文介绍面向混合专家（MoE）语言模型的专家剪枝研究，聚焦推理时专家参数常驻内存、但多数专家对单个词元闲置的瓶颈。[S1] 原文以 Qwen3.5-122B 为例：每个 MoE 层有256个专家，每个词元实际仅使用8个专家。[S2][S3] 专家剪枝旨在缓解这一内存瓶颈，适合关注大模型推理部署与参数压缩的研究者；但所给片段在方法介绍处截断，未提供 HOPE 的具体机制、实验效果或发布信息。",
+    "application": "建议：科研迁移可考虑将专家剪枝作为智能运维领域 MoE 模型推理内存优化的研究方向，并自行评估任务精度与资源占用的变化；这属于迁移设想，不是官方已验证效果。所给原文仅说明内存瓶颈及剪枝动机，未展示 HOPE 的效果验证。",
+    "requirements": "使用条件见官方文档",
+    "steps": [],
+    "evidence": [
+      "Mixture-of-Experts (MoE) models have enabled state-of-the-art LLMs to be scaled to hundreds of billions of parameters, but they come with a fundamental and costly caveat: every expert MLP must occupy memory at inference time, even though the vast majority are idle for any given token.",
+      "For example, Qwen3.5-122B has 256 experts in each of its 48 MoE layers, and 95% of its ~250 GB parameter memory footprint is taken up entirely by these expert MLPs alone.",
+      "However, for any given token, only 8 experts in each layer are actually used.",
+      "Expert pruning is one of the most direct fixes to this memory bottleneck."
+    ],
+    "basis_url": "https://huggingface.co/blog/amazon/higher-order-pruning-experts"
+  },
+  "analyzed_at": "2026-11-10T00:52:40.795278+00:00"
+}
