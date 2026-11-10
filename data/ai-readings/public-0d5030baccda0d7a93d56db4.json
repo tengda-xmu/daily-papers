@@ -1,0 +1,33 @@
+{
+  "id": "public-0d5030baccda0d7a93d56db4",
+  "content_version": "2b9c3bbe33a486255c1dd99602cfe7f8b87e868f333ece3f2e93dccf37b4e44a",
+  "analysis": {
+    "title_zh": "LangSmith：什么是评估驱动开发，如何改进 AI 智能体",
+    "summary": "【原文】本文介绍评估驱动开发（EDD），并非产品新版本发布：将智能体开发从手工试问、调整提示词，转向依据固定指标持续评估和迭代。先明确期望行为、禁止行为及必须保持的能力，再比较实验判断修改是否有效，避免修复个别案例却破坏其他表现。原文还建议在持续集成（CI）和生产环境持续运行评估，将失败案例补入数据集。适用于需要持续改进并防范回归的智能体开发任务；所给节选未提供量化效果。",
+    "application": "建议：【科研迁移建议／你的推断】可为文献问答或智能运维智能体建立固定测试集，覆盖回答正确性、禁止行为及既有能力保持情况，并把失败案例纳入后续评估。【官方已验证效果】所给原文仅介绍开发方法，未提供实验结果或量化收益，不能据此宣称科研任务效果已获验证。",
+    "requirements": "使用条件见官方文档",
+    "steps": [
+      {
+        "text": "先写一份简短规范，明确目标行为，并纳入智能体不应执行的行为及必须保持正常的能力。",
+        "evidence": "The first step of EDD is to create a short spec of what good looks like for your desired behavior. Include what the agent shouldn't do and what has to keep working."
+      },
+      {
+        "text": "迭代时通过比较实验评判修改，检查是否影响其他案例。",
+        "evidence": "As you iterate, judge a change you make to the agent by comparing experiments. A change that fixes one case may break another."
+      },
+      {
+        "text": "在 CI 和生产环境持续运行评估，并将发现的失败案例转化为新的数据集样例。",
+        "evidence": "Keep evals running in CI and in production, and turn the failures you find into new dataset examples."
+      }
+    ],
+    "evidence": [
+      "Eval-driven development (EDD) involves building an agent while measuring performance against a consistent set of metrics and hill climbing toward an eval.",
+      "The first step of EDD is to create a short spec of what good looks like for your desired behavior.",
+      "Include what the agent shouldn't do and what has to keep working.",
+      "As you iterate, judge a change you make to the agent by comparing experiments. A change that fixes one case may break another.",
+      "Keep evals running in CI and in production, and turn the failures you find into new dataset examples."
+    ],
+    "basis_url": "https://www.langchain.com/blog/what-is-eval-driven-development"
+  },
+  "analyzed_at": "2026-11-10T00:56:59.767147+00:00"
+}
