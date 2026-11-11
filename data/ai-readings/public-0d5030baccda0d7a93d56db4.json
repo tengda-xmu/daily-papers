@@ -1,22 +1,22 @@
 {
   "id": "public-0d5030baccda0d7a93d56db4",
-  "content_version": "2b9c3bbe33a486255c1dd99602cfe7f8b87e868f333ece3f2e93dccf37b4e44a",
+  "content_version": "3a1c3e688fbada0275f86b8f3e0268c3603b5ffe304a224be77428eec11df6ba",
   "analysis": {
     "title_zh": "LangSmith：什么是评估驱动开发，如何改进 AI 智能体",
-    "summary": "【原文】本文介绍评估驱动开发（EDD），并非产品新版本发布：将智能体开发从手工试问、调整提示词，转向依据固定指标持续评估和迭代。先明确期望行为、禁止行为及必须保持的能力，再比较实验判断修改是否有效，避免修复个别案例却破坏其他表现。原文还建议在持续集成（CI）和生产环境持续运行评估，将失败案例补入数据集。适用于需要持续改进并防范回归的智能体开发任务；所给节选未提供量化效果。",
-    "application": "建议：【科研迁移建议／你的推断】可为文献问答或智能运维智能体建立固定测试集，覆盖回答正确性、禁止行为及既有能力保持情况，并把失败案例纳入后续评估。【官方已验证效果】所给原文仅介绍开发方法，未提供实验结果或量化收益，不能据此宣称科研任务效果已获验证。",
+    "summary": "本文介绍评估驱动开发（EDD），并非产品新版本发布。其核心是将智能体开发从手工试问、调整提示词，转向围绕一致指标持续评估和迭代：先定义期望行为、禁止行为及必须保持正常的功能，再通过实验比较判断改动，避免修复一个案例却破坏另一个。原文还建议在持续集成与生产环境运行评估，将发现的失败补充为数据集样例，适用于需要持续迭代与回归检查的智能体任务。所给节选未提供量化效果或完整案例。",
+    "application": "建议：科研迁移可将这一流程用于文献问答、智能运维或结构设计辅助智能体，建立正确性、约束遵守与回归测试样例；这些属于迁移设想，并非官方已验证效果。原文提出了开发实践建议，但所给节选未展示实验数据，不能据此声称性能已提升。",
     "requirements": "使用条件见官方文档",
     "steps": [
       {
-        "text": "先写一份简短规范，明确目标行为，并纳入智能体不应执行的行为及必须保持正常的能力。",
+        "text": "先写简短规格，定义期望行为、智能体不应执行的行为，以及必须持续正常工作的功能。",
         "evidence": "The first step of EDD is to create a short spec of what good looks like for your desired behavior. Include what the agent shouldn't do and what has to keep working."
       },
       {
-        "text": "迭代时通过比较实验评判修改，检查是否影响其他案例。",
+        "text": "迭代时比较实验，判断改动是否引入其他案例的退化。",
         "evidence": "As you iterate, judge a change you make to the agent by comparing experiments. A change that fixes one case may break another."
       },
       {
-        "text": "在 CI 和生产环境持续运行评估，并将发现的失败案例转化为新的数据集样例。",
+        "text": "在持续集成与生产环境持续运行评估，并把发现的失败转化为新的数据集样例。",
         "evidence": "Keep evals running in CI and in production, and turn the failures you find into new dataset examples."
       }
     ],
@@ -29,5 +29,5 @@
     ],
     "basis_url": "https://www.langchain.com/blog/what-is-eval-driven-development"
   },
-  "analyzed_at": "2026-11-10T00:56:59.767147+00:00"
+  "analyzed_at": "2026-11-10T20:43:39.241911+00:00"
 }
