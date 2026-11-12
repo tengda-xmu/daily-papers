@@ -1,19 +1,20 @@
 {
   "id": "public-55d059b88c6c576a2f3d9ab4",
-  "content_version": "8851e90635d77c4afb785fdfce074d01353781b59e5aed7b692c0e5e05bc3ca0",
+  "content_version": "5cbaee781003927a4a34f79cc48bf53be170c3503fe266e5d7f62820ba0f45ec",
   "analysis": {
-    "title_zh": "HOPE：混合专家（MoE）语言模型的高阶专家剪枝",
-    "summary": "【原文节选】文章关注MoE语言模型推理时的显存瓶颈：即使多数专家对当前词元不参与计算，全部专家MLP仍须驻留内存。文中以Qwen3.5-122B为例，其48个MoE层每层有256个专家，但每个词元每层仅使用8个；专家MLP占约250 GB参数内存的95%。这一问题关联大模型推理部署与资源优化，但所给内容在介绍专家剪枝时截断，尚未展示HOPE的具体方法、发布状态或效果。",
-    "application": "建议：【科研迁移建议】可将专家驻留内存与实际激活数量的差异，作为智能运维中模型部署容量评估、资源配置优化的研究切入点；这属于迁移设想，并非作者已验证结论。【官方已验证效果】所给节选未提供HOPE的剪枝实验、精度保持或内存节省结果，不能据此认定其已具备可部署效果。",
+    "title_zh": "HOPE：混合专家语言模型中的高阶专家剪枝",
+    "summary": "所给文章片段讨论混合专家（MoE）语言模型的推理内存瓶颈：所有专家MLP均需驻留内存，但每个词元仅调用少数专家。文中以Qwen3.5-122B为例，其48个MoE层每层包含256个专家，每个词元每层仅使用8个；专家MLP占约250 GB参数内存的95%。文章将专家剪枝作为缓解这一问题的方向，适合关注大模型推理部署与内存优化的读者；片段未展示HOPE的具体方法、发布状态或实验效果。",
+    "application": "建议：【科研迁移建议】可将专家剪枝作为科研大模型部署与资源受限推理的候选研究方向，后续评估内存占用和任务精度的权衡；这不是本文已验证的结论。【官方已验证效果】所给片段仅提供模型结构和内存占用示例，未提供HOPE剪枝后的效果数据。",
     "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
       "Higher-Order Pruning of Experts in Mixture-of-Experts Language Models",
       "every expert MLP must occupy memory at inference time, even though the vast majority are idle for any given token.",
-      "For example, Qwen3.5-122B has 256 experts in each of its 48 MoE layers, and 95% of its ~250 GB parameter memory footprint is taken up entirely by these expert MLPs alone.",
+      "Qwen3.5-122B has 256 experts in each of its 48 MoE layers",
+      "95% of its ~250 GB parameter memory footprint is taken up entirely by these expert MLPs alone.",
       "However, for any given token, only 8 experts in each layer are actually used."
     ],
     "basis_url": "https://huggingface.co/blog/amazon/higher-order-pruning-experts"
   },
-  "analyzed_at": "2026-11-10T09:05:13.661584+00:00"
+  "analyzed_at": "2026-11-12T00:48:13.372030+00:00"
 }
