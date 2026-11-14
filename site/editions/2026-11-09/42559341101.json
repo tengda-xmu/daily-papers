@@ -23,7 +23,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Abstract Existing FAIR materials repositories can only serve pre-computed entries, so broad coverage is perpetually incomplete and cannot adapt to new questions on demand. We present OptiMat Alloys, a large language model-powered conversational agent for multi-principal element alloy exploration. Its central contribution is LLM-based workflow orchestration coupled to a living database : every calculation is performed on demand and persisted automatically with provenance in a local database, so asking a question produces provenance-rich, FAIR-aligned records without a separate deposition step.…",
+      "summary": "本文针对合金组合空间庞大、模拟门槛高及计算结果难以持续复用的问题，将对话式工作流编排、通用机器学习原子间势与本地数据库连接起来，实现按需计算和来源信息自动保存。[P1–P4]验证涵盖材料性质、智能体执行及缓存复用，但结果仍属初筛级；跨模型一致不代表物理准确，跨用户汇聚也尚未实现。[P6–P9]阅读重点是计算与知识积累的一体化机制，而非将其视为自主发现或平衡相预测系统。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -76,11 +76,205 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐重点阅读其来源追踪、确定性工具约束及语言解释失效分析；这些方法对结构设计筛选和可靠科研工作流有参考价值，但不能直接证明智能运维应用效果。[P6][P19]",
+      "deep_read": {
+        "problem": "既有材料数据库主要服务预计算条目，难以响应新成分和新性质问题；新增结果还需研究者主动整理提交。作者希望同时降低模拟操作门槛、扩大数据供给，并补充可信度信息。问题核心不是单纯增加条目，而是让日常提问持续产生可追踪、可复用的研究记录。[P1–P3]",
+        "method": "系统以AutoGen和ASE连接七项工具，完成SQS生成、两阶段FIRE弛豫、弹性张量及QHA计算，再将性质与来源信息保存至SQLite。科学约束置于工具层，LLM负责请求解析和工具串联；跨势函数、构型与尺寸比较用于观察预测离散和收敛。[P4][P17–P19]",
+        "innovation": "作者强调的贡献是将LLM编排与自动持久化结合，让计算和入库成为同一步骤，并以低编程门槛界面支持持续使用。解读：创新主要在科研基础设施的组织机制，而非新势函数或新物理理论；当前已实现的是实例内累积复用，不是社区级联邦数据库。[P3][P9][P14]",
+        "findings": "作者单实例积累491个结构；28种合金验证中，晶格参数MAE≤0.011 Å、形成能MAE≤0.014 eV/atom。缓存比较无需新计算，但智能体曾在正确数值上给出错误排序及延性解释，说明工具执行可靠与文字结论可靠必须分开评估。[P6][P9][P13]",
+        "limitations": "随机单相模型不含有序与分相，集合离散不能覆盖共同偏差，联邦尚未实现。[P16–P17]原文件问题包括[P2]正文与图1b数量级冲突，限制空间规模引用；[P8]表2上下界矛盾，限制加速比解释；[P23]文献120缺编号，影响溯源。没有缺失公式可供补推。\n原文核对：[P2] 原页正文写1%分辨率下八元体系候选数量达到“10^54”，但图1b横轴8对应的理论候选柱位于约10^20量级，正文与图示数量级不一致。影响八元成分空间规模的定量引用，不改变图示所支持的候选空间远大于实验覆盖这一方向性结论；本批资料不足以确定作者拟采用的正确精确数值。；[P8] 表2表注原页同时写VASP未在60次SCF迭代内收敛，因此时间是“lower bounds”，加速比是“upper bounds”。按同一表注定义，加速比=VASP时间/ORB Direct时间；分母固定时，VASP时间下界对应比值下界，而非上界。影响加速比界限的解释，不影响已列耗时数值的识读。另外256原子时间来自单次迭代×60的外推，其严格界限不能仅凭该外推确定。；[P23] 参考文献120在原页确实出现“NIST-JANAF Thermochemical Tables. No. in”这一不完整书目片段，“No.”后没有明确编号。不能据本页恢复其拟填写内容。影响热化学参考资料的精确书目定位，不影响页面识读；本页没有因此缺失的公式或实验结果。",
+        "connection": "解读：与结构设计的直接联系是成分—弹性及热学性质初筛；与可靠性研究的联系是区分构型波动、模型偏差和解释错误。对智能运维，来源追踪、缓存复用和稳定性标记具有迁移潜力，但论文没有设备监测、故障诊断或寿命预测验证。[P6][P18–P19]",
+        "next_steps": "建议先选定目标合金族，使用已存构型复现并锁定软件与势函数版本，再开展多构型、多计算器及针对性DFT验证。延性比较应统一平均方案，解释规则宜在工具层校验。作者规划的DFT触发与微调闭环尚未实现，不应作为现有功能使用。[P17–P20]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "OptiMat Alloys：对话智能体驱动的FAIR对齐多主元合金动态数据库",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41524-026-02377-3_reference.pdf"
+      ],
+      "analyzed_at": "2026-11-14T18:33:50.014558+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P4",
+          "P17",
+          "P18",
+          "P19"
+        ],
+        "innovation": [
+          "P3",
+          "P9",
+          "P14"
+        ],
+        "findings": [
+          "P6",
+          "P9",
+          "P13"
+        ],
+        "limitations": [
+          "P2",
+          "P8",
+          "P16",
+          "P17",
+          "P23"
+        ],
+        "connection": [
+          "P6",
+          "P18",
+          "P19"
+        ],
+        "next_steps": [
+          "P17",
+          "P18",
+          "P19",
+          "P20"
+        ]
+      },
+      "analysis_material_version": "6b6b6cbd357e16a9991583277353786cb9e753bd147397bbd222bcdbd298f927",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "作者姓名提取为带异常空格的“V l a d y s l a vT u r l o”；原页清楚显示为“Vladyslav Turlo”。已纠正，不影响研究结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "正文提取文本“1054”丢失上标层级；原页为“10^54”。此处仅恢复原文排版，不代表认可该数值；其与图1b的矛盾另列为source_defect。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P2",
+          "detail": "原页正文写1%分辨率下八元体系候选数量达到“10^54”，但图1b横轴8对应的理论候选柱位于约10^20量级，正文与图示数量级不一致。影响八元成分空间规模的定量引用，不改变图示所支持的候选空间远大于实验覆盖这一方向性结论；本批资料不足以确定作者拟采用的正确精确数值。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "正文提取文本将上下文窗口规模写作“106 tokens”；原页清楚显示为“10^6 tokens”。已恢复上标，避免误读为106个token。此处不是编号公式，不影响后文关于推理能力与上下文长度的定性比较。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P8",
+          "detail": "表2表注原页同时写VASP未在60次SCF迭代内收敛，因此时间是“lower bounds”，加速比是“upper bounds”。按同一表注定义，加速比=VASP时间/ORB Direct时间；分母固定时，VASP时间下界对应比值下界，而非上界。影响加速比界限的解释，不影响已列耗时数值的识读。另外256原子时间来自单次迭代×60的外推，其严格界限不能仅凭该外推确定。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P12",
+          "detail": "HCP静水弛豫段的理想轴比在提取文本中出现根号错排及“/C25”乱码；原页清楚显示c/a=√(8/3)≈1.633。已纠正。该式说明计算保持理想轴比，并非对a、c完全独立弛豫；影响HCP晶格参数与薄膜测量的比较条件，不是原文件公式缺失。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P16",
+          "detail": "Fe–Cr磁性讨论段提取文本写作“α–α0 miscibility gap”，原页清楚显示为“α–α′ miscibility gap”，第二相标记为撇号而非数字0。已纠正相名；影响磁性驱动互溶间隙的术语识别，不涉及公式或图表缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P17",
+          "detail": "SQS未编号目标函数中的“/C0”是减号提取乱码，原页为Φ=Σ_s w_s[Π_actual(s)−Π_random(s)]²；迭代数原页为10^6。已恢复求和、平方和上标层级，避免误解优化目标与采样次数；不是原文件公式缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P18",
+          "detail": "原页公式清楚，提取文本中的“/C0”“/C12”“/C16”等为数学符号编码错误。已核对恢复式(2)、(4)、(7)、(10)、(13)的负号，最小二乘式与S=C^−1的逆矩阵上标，式(9)的根号，以及式(11)的平衡体积求值标记。影响弹性拟合、方向性质和热力学公式的准确转录，不存在原页公式缺失。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P19",
+          "detail": "UUID4命名空间在提取文本中写成“2 122”，原页清楚显示为2^122；HCP参考轴比的根号也发生提取错排，原页为c/a=√(8/3)。已恢复数学排版，分别影响标识符空间规模及DFT晶胞约束的准确记录，不是原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P20",
+          "detail": "提供的文字提取遗漏日期行“Published online: 04 November 2026”；原页位于Received/Accepted行之后、References之前，已读清并补记。影响出版日期元数据，不影响计算结果；不是原文件缺失。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P23",
+          "detail": "参考文献120在原页确实出现“NIST-JANAF Thermochemical Tables. No. in”这一不完整书目片段，“No.”后没有明确编号。不能据本页恢复其拟填写内容。影响热化学参考资料的精确书目定位，不影响页面识读；本页没有因此缺失的公式或实验结果。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "8f9c4b4a407d",
+        "state": "published",
+        "updated_at": "2026-11-14T18:33:50.059209+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 23,
+        "covered": 23,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "作者姓名提取为带异常空格的“V l a d y s l a vT u r l o”；原页清楚显示为“Vladyslav Turlo”。已纠正，不影响研究结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "正文提取文本“1054”丢失上标层级；原页为“10^54”。此处仅恢复原文排版，不代表认可该数值；其与图1b的矛盾另列为source_defect。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P2",
+            "detail": "原页正文写1%分辨率下八元体系候选数量达到“10^54”，但图1b横轴8对应的理论候选柱位于约10^20量级，正文与图示数量级不一致。影响八元成分空间规模的定量引用，不改变图示所支持的候选空间远大于实验覆盖这一方向性结论；本批资料不足以确定作者拟采用的正确精确数值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "正文提取文本将上下文窗口规模写作“106 tokens”；原页清楚显示为“10^6 tokens”。已恢复上标，避免误读为106个token。此处不是编号公式，不影响后文关于推理能力与上下文长度的定性比较。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "表2表注原页同时写VASP未在60次SCF迭代内收敛，因此时间是“lower bounds”，加速比是“upper bounds”。按同一表注定义，加速比=VASP时间/ORB Direct时间；分母固定时，VASP时间下界对应比值下界，而非上界。影响加速比界限的解释，不影响已列耗时数值的识读。另外256原子时间来自单次迭代×60的外推，其严格界限不能仅凭该外推确定。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "HCP静水弛豫段的理想轴比在提取文本中出现根号错排及“/C25”乱码；原页清楚显示c/a=√(8/3)≈1.633。已纠正。该式说明计算保持理想轴比，并非对a、c完全独立弛豫；影响HCP晶格参数与薄膜测量的比较条件，不是原文件公式缺失。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P16",
+            "detail": "Fe–Cr磁性讨论段提取文本写作“α–α0 miscibility gap”，原页清楚显示为“α–α′ miscibility gap”，第二相标记为撇号而非数字0。已纠正相名；影响磁性驱动互溶间隙的术语识别，不涉及公式或图表缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P17",
+            "detail": "SQS未编号目标函数中的“/C0”是减号提取乱码，原页为Φ=Σ_s w_s[Π_actual(s)−Π_random(s)]²；迭代数原页为10^6。已恢复求和、平方和上标层级，避免误解优化目标与采样次数；不是原文件公式缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P18",
+            "detail": "原页公式清楚，提取文本中的“/C0”“/C12”“/C16”等为数学符号编码错误。已核对恢复式(2)、(4)、(7)、(10)、(13)的负号，最小二乘式与S=C^−1的逆矩阵上标，式(9)的根号，以及式(11)的平衡体积求值标记。影响弹性拟合、方向性质和热力学公式的准确转录，不存在原页公式缺失。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P19",
+            "detail": "UUID4命名空间在提取文本中写成“2 122”，原页清楚显示为2^122；HCP参考轴比的根号也发生提取错排，原页为c/a=√(8/3)。已恢复数学排版，分别影响标识符空间规模及DFT晶胞约束的准确记录，不是原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P20",
+            "detail": "提供的文字提取遗漏日期行“Published online: 04 November 2026”；原页位于Received/Accepted行之后、References之前，已读清并补记。影响出版日期元数据，不影响计算结果；不是原文件缺失。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P23",
+            "detail": "参考文献120在原页确实出现“NIST-JANAF Thermochemical Tables. No. in”这一不完整书目片段，“No.”后没有明确编号。不能据本页恢复其拟填写内容。影响热化学参考资料的精确书目定位，不影响页面识读；本页没有因此缺失的公式或实验结果。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -507,7 +701,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Abstract Existing FAIR materials repositories can only serve pre-computed entries, so broad coverage is perpetually incomplete and cannot adapt to new questions on demand. We present OptiMat Alloys, a large language model-powered conversational agent for multi-principal element alloy exploration. Its central contribution is LLM-based workflow orchestration coupled to a living database : every calculation is performed on demand and persisted automatically with provenance in a local database, so asking a question produces provenance-rich, FAIR-aligned records without a separate deposition step.…",
+      "summary": "本文针对合金组合空间庞大、模拟门槛高及计算结果难以持续复用的问题，将对话式工作流编排、通用机器学习原子间势与本地数据库连接起来，实现按需计算和来源信息自动保存。[P1–P4]验证涵盖材料性质、智能体执行及缓存复用，但结果仍属初筛级；跨模型一致不代表物理准确，跨用户汇聚也尚未实现。[P6–P9]阅读重点是计算与知识积累的一体化机制，而非将其视为自主发现或平衡相预测系统。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -560,11 +754,205 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐重点阅读其来源追踪、确定性工具约束及语言解释失效分析；这些方法对结构设计筛选和可靠科研工作流有参考价值，但不能直接证明智能运维应用效果。[P6][P19]",
+      "deep_read": {
+        "problem": "既有材料数据库主要服务预计算条目，难以响应新成分和新性质问题；新增结果还需研究者主动整理提交。作者希望同时降低模拟操作门槛、扩大数据供给，并补充可信度信息。问题核心不是单纯增加条目，而是让日常提问持续产生可追踪、可复用的研究记录。[P1–P3]",
+        "method": "系统以AutoGen和ASE连接七项工具，完成SQS生成、两阶段FIRE弛豫、弹性张量及QHA计算，再将性质与来源信息保存至SQLite。科学约束置于工具层，LLM负责请求解析和工具串联；跨势函数、构型与尺寸比较用于观察预测离散和收敛。[P4][P17–P19]",
+        "innovation": "作者强调的贡献是将LLM编排与自动持久化结合，让计算和入库成为同一步骤，并以低编程门槛界面支持持续使用。解读：创新主要在科研基础设施的组织机制，而非新势函数或新物理理论；当前已实现的是实例内累积复用，不是社区级联邦数据库。[P3][P9][P14]",
+        "findings": "作者单实例积累491个结构；28种合金验证中，晶格参数MAE≤0.011 Å、形成能MAE≤0.014 eV/atom。缓存比较无需新计算，但智能体曾在正确数值上给出错误排序及延性解释，说明工具执行可靠与文字结论可靠必须分开评估。[P6][P9][P13]",
+        "limitations": "随机单相模型不含有序与分相，集合离散不能覆盖共同偏差，联邦尚未实现。[P16–P17]原文件问题包括[P2]正文与图1b数量级冲突，限制空间规模引用；[P8]表2上下界矛盾，限制加速比解释；[P23]文献120缺编号，影响溯源。没有缺失公式可供补推。\n原文核对：[P2] 原页正文写1%分辨率下八元体系候选数量达到“10^54”，但图1b横轴8对应的理论候选柱位于约10^20量级，正文与图示数量级不一致。影响八元成分空间规模的定量引用，不改变图示所支持的候选空间远大于实验覆盖这一方向性结论；本批资料不足以确定作者拟采用的正确精确数值。；[P8] 表2表注原页同时写VASP未在60次SCF迭代内收敛，因此时间是“lower bounds”，加速比是“upper bounds”。按同一表注定义，加速比=VASP时间/ORB Direct时间；分母固定时，VASP时间下界对应比值下界，而非上界。影响加速比界限的解释，不影响已列耗时数值的识读。另外256原子时间来自单次迭代×60的外推，其严格界限不能仅凭该外推确定。；[P23] 参考文献120在原页确实出现“NIST-JANAF Thermochemical Tables. No. in”这一不完整书目片段，“No.”后没有明确编号。不能据本页恢复其拟填写内容。影响热化学参考资料的精确书目定位，不影响页面识读；本页没有因此缺失的公式或实验结果。",
+        "connection": "解读：与结构设计的直接联系是成分—弹性及热学性质初筛；与可靠性研究的联系是区分构型波动、模型偏差和解释错误。对智能运维，来源追踪、缓存复用和稳定性标记具有迁移潜力，但论文没有设备监测、故障诊断或寿命预测验证。[P6][P18–P19]",
+        "next_steps": "建议先选定目标合金族，使用已存构型复现并锁定软件与势函数版本，再开展多构型、多计算器及针对性DFT验证。延性比较应统一平均方案，解释规则宜在工具层校验。作者规划的DFT触发与微调闭环尚未实现，不应作为现有功能使用。[P17–P20]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "OptiMat Alloys：对话智能体驱动的FAIR对齐多主元合金动态数据库",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41524-026-02377-3_reference.pdf"
+      ],
+      "analyzed_at": "2026-11-14T18:33:50.014558+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P4",
+          "P17",
+          "P18",
+          "P19"
+        ],
+        "innovation": [
+          "P3",
+          "P9",
+          "P14"
+        ],
+        "findings": [
+          "P6",
+          "P9",
+          "P13"
+        ],
+        "limitations": [
+          "P2",
+          "P8",
+          "P16",
+          "P17",
+          "P23"
+        ],
+        "connection": [
+          "P6",
+          "P18",
+          "P19"
+        ],
+        "next_steps": [
+          "P17",
+          "P18",
+          "P19",
+          "P20"
+        ]
+      },
+      "analysis_material_version": "6b6b6cbd357e16a9991583277353786cb9e753bd147397bbd222bcdbd298f927",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "作者姓名提取为带异常空格的“V l a d y s l a vT u r l o”；原页清楚显示为“Vladyslav Turlo”。已纠正，不影响研究结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "正文提取文本“1054”丢失上标层级；原页为“10^54”。此处仅恢复原文排版，不代表认可该数值；其与图1b的矛盾另列为source_defect。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P2",
+          "detail": "原页正文写1%分辨率下八元体系候选数量达到“10^54”，但图1b横轴8对应的理论候选柱位于约10^20量级，正文与图示数量级不一致。影响八元成分空间规模的定量引用，不改变图示所支持的候选空间远大于实验覆盖这一方向性结论；本批资料不足以确定作者拟采用的正确精确数值。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "正文提取文本将上下文窗口规模写作“106 tokens”；原页清楚显示为“10^6 tokens”。已恢复上标，避免误读为106个token。此处不是编号公式，不影响后文关于推理能力与上下文长度的定性比较。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P8",
+          "detail": "表2表注原页同时写VASP未在60次SCF迭代内收敛，因此时间是“lower bounds”，加速比是“upper bounds”。按同一表注定义，加速比=VASP时间/ORB Direct时间；分母固定时，VASP时间下界对应比值下界，而非上界。影响加速比界限的解释，不影响已列耗时数值的识读。另外256原子时间来自单次迭代×60的外推，其严格界限不能仅凭该外推确定。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P12",
+          "detail": "HCP静水弛豫段的理想轴比在提取文本中出现根号错排及“/C25”乱码；原页清楚显示c/a=√(8/3)≈1.633。已纠正。该式说明计算保持理想轴比，并非对a、c完全独立弛豫；影响HCP晶格参数与薄膜测量的比较条件，不是原文件公式缺失。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P16",
+          "detail": "Fe–Cr磁性讨论段提取文本写作“α–α0 miscibility gap”，原页清楚显示为“α–α′ miscibility gap”，第二相标记为撇号而非数字0。已纠正相名；影响磁性驱动互溶间隙的术语识别，不涉及公式或图表缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P17",
+          "detail": "SQS未编号目标函数中的“/C0”是减号提取乱码，原页为Φ=Σ_s w_s[Π_actual(s)−Π_random(s)]²；迭代数原页为10^6。已恢复求和、平方和上标层级，避免误解优化目标与采样次数；不是原文件公式缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P18",
+          "detail": "原页公式清楚，提取文本中的“/C0”“/C12”“/C16”等为数学符号编码错误。已核对恢复式(2)、(4)、(7)、(10)、(13)的负号，最小二乘式与S=C^−1的逆矩阵上标，式(9)的根号，以及式(11)的平衡体积求值标记。影响弹性拟合、方向性质和热力学公式的准确转录，不存在原页公式缺失。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P19",
+          "detail": "UUID4命名空间在提取文本中写成“2 122”，原页清楚显示为2^122；HCP参考轴比的根号也发生提取错排，原页为c/a=√(8/3)。已恢复数学排版，分别影响标识符空间规模及DFT晶胞约束的准确记录，不是原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P20",
+          "detail": "提供的文字提取遗漏日期行“Published online: 04 November 2026”；原页位于Received/Accepted行之后、References之前，已读清并补记。影响出版日期元数据，不影响计算结果；不是原文件缺失。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P23",
+          "detail": "参考文献120在原页确实出现“NIST-JANAF Thermochemical Tables. No. in”这一不完整书目片段，“No.”后没有明确编号。不能据本页恢复其拟填写内容。影响热化学参考资料的精确书目定位，不影响页面识读；本页没有因此缺失的公式或实验结果。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "8f9c4b4a407d",
+        "state": "published",
+        "updated_at": "2026-11-14T18:33:50.059209+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 23,
+        "covered": 23,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "作者姓名提取为带异常空格的“V l a d y s l a vT u r l o”；原页清楚显示为“Vladyslav Turlo”。已纠正，不影响研究结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "正文提取文本“1054”丢失上标层级；原页为“10^54”。此处仅恢复原文排版，不代表认可该数值；其与图1b的矛盾另列为source_defect。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P2",
+            "detail": "原页正文写1%分辨率下八元体系候选数量达到“10^54”，但图1b横轴8对应的理论候选柱位于约10^20量级，正文与图示数量级不一致。影响八元成分空间规模的定量引用，不改变图示所支持的候选空间远大于实验覆盖这一方向性结论；本批资料不足以确定作者拟采用的正确精确数值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "正文提取文本将上下文窗口规模写作“106 tokens”；原页清楚显示为“10^6 tokens”。已恢复上标，避免误读为106个token。此处不是编号公式，不影响后文关于推理能力与上下文长度的定性比较。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "表2表注原页同时写VASP未在60次SCF迭代内收敛，因此时间是“lower bounds”，加速比是“upper bounds”。按同一表注定义，加速比=VASP时间/ORB Direct时间；分母固定时，VASP时间下界对应比值下界，而非上界。影响加速比界限的解释，不影响已列耗时数值的识读。另外256原子时间来自单次迭代×60的外推，其严格界限不能仅凭该外推确定。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "HCP静水弛豫段的理想轴比在提取文本中出现根号错排及“/C25”乱码；原页清楚显示c/a=√(8/3)≈1.633。已纠正。该式说明计算保持理想轴比，并非对a、c完全独立弛豫；影响HCP晶格参数与薄膜测量的比较条件，不是原文件公式缺失。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P16",
+            "detail": "Fe–Cr磁性讨论段提取文本写作“α–α0 miscibility gap”，原页清楚显示为“α–α′ miscibility gap”，第二相标记为撇号而非数字0。已纠正相名；影响磁性驱动互溶间隙的术语识别，不涉及公式或图表缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P17",
+            "detail": "SQS未编号目标函数中的“/C0”是减号提取乱码，原页为Φ=Σ_s w_s[Π_actual(s)−Π_random(s)]²；迭代数原页为10^6。已恢复求和、平方和上标层级，避免误解优化目标与采样次数；不是原文件公式缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P18",
+            "detail": "原页公式清楚，提取文本中的“/C0”“/C12”“/C16”等为数学符号编码错误。已核对恢复式(2)、(4)、(7)、(10)、(13)的负号，最小二乘式与S=C^−1的逆矩阵上标，式(9)的根号，以及式(11)的平衡体积求值标记。影响弹性拟合、方向性质和热力学公式的准确转录，不存在原页公式缺失。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P19",
+            "detail": "UUID4命名空间在提取文本中写成“2 122”，原页清楚显示为2^122；HCP参考轴比的根号也发生提取错排，原页为c/a=√(8/3)。已恢复数学排版，分别影响标识符空间规模及DFT晶胞约束的准确记录，不是原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P20",
+            "detail": "提供的文字提取遗漏日期行“Published online: 04 November 2026”；原页位于Received/Accepted行之后、References之前，已读清并补记。影响出版日期元数据，不影响计算结果；不是原文件缺失。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P23",
+            "detail": "参考文献120在原页确实出现“NIST-JANAF Thermochemical Tables. No. in”这一不完整书目片段，“No.”后没有明确编号。不能据本页恢复其拟填写内容。影响热化学参考资料的精确书目定位，不影响页面识读；本页没有因此缺失的公式或实验结果。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -1929,13 +2317,13 @@
     "unavailable": 45
   },
   "analysis_status": {
-    "ready_core": 0,
+    "ready_core": 1,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 6
+    "pending": 5
   },
   "edition": {
     "id": "42559341101",
