@@ -1,19 +1,20 @@
 {
   "id": "public-11568aa8dfcf9a3c07504fe2",
-  "content_version": "71c766500e07ec91eabbe1c4f803e367a73f7c2c959c5d520377e28c69d7d644",
+  "content_version": "f2a3e1be3d121ebea16a463291b3f4eb2bbb60179ae583c793e388caa171293e",
   "analysis": {
-    "title_zh": "多向量嵌入模型的池化感知训练：Token Pooling-Aware Training",
-    "summary": "所给公告节选介绍多向量嵌入模型的池化感知训练，适用于文档搜索与压缩检索。多向量模型让每个查询词元分别匹配文档，但大规模语料会产生大量文档向量。词元池化通过合并相似向量缩小表示，同时可能损失有用信息。本文介绍的训练思路是让编码器在向量合并时保留重要信息；原文称其有助于在相同存储预算下改善检索，但节选未提供量化结果或完整训练方法。",
-    "application": "建议：科研迁移可考虑将该思路用于科研文献或运维文档检索，比较压缩程度、存储占用与检索质量；这是迁移设想，并非官方已验证场景。原文声称可改善相同存储预算下的检索，但所给节选不足以确认具体效果幅度与适用边界。",
+    "title_zh": "多向量嵌入模型的词元池化感知训练（Token Pooling-Aware Training）",
+    "summary": "多向量嵌入模型让每个查询词元分别匹配文档，有利于表达细粒度检索需求，但大规模文档库会积累海量向量。本文介绍通过合并相似词元向量缩小表示，并以池化感知训练帮助编码器在合并后保留重要信息，目标是在相同存储预算下改善检索。适用方向是存储受限的大规模文档检索与压缩表示训练。当前仅提供文章开头，未包含实验指标、完整训练方法或可确认的新产品发布信息。",
+    "application": "建议：【本站解读】科研迁移可考虑用于论文库、运维日志或故障案例库的压缩检索研究，对比不同压缩程度下的检索质量与存储占用。原文作者称池化感知训练有助于在相同存储预算下改善检索，但所给摘录没有实验结果，不能据此认定上述科研场景已获官方验证。",
     "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
       "Multi-vector embedding models give each query token its own opportunity to find a match in a document.",
+      "A corpus with millions of documents can contain hundreds of millions of vectors!",
       "Token pooling makes these representations smaller by merging similar token vectors.",
       "The more aggressively I compress them, however, the easier it becomes to lose something useful.",
       "Pooling-aware training teaches the encoder to preserve the information that matters when its vectors are merged, helping you retrieve better from the same storage budget."
     ],
     "basis_url": "https://huggingface.co/blog/token-pooling"
   },
-  "analyzed_at": "2026-11-14T02:47:44.750127+00:00"
+  "analyzed_at": "2026-11-14T13:38:09.808274+00:00"
 }
