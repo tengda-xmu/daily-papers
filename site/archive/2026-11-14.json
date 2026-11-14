@@ -361,7 +361,7 @@
         "state": "published",
         "updated_at": "2026-11-14T14:40:06.079595+00:00",
         "basis": "full_text",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "facts",
         "reason": "",
         "total": 21,
@@ -391,7 +391,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Large language models (LLMs) are increasingly used as proposal generators for evolutionary robot design, yet most loops remain memoryless: simulator results shape the next population but are not preserved as reusable design knowledge. We present Auto-Robotist, a self-evolving LLM agent that distills morphology-search traces into an explicit natural-language skill library. Each skill stores a structural archetype, evidence-grounded positive and negative rules, and the evaluated designs that support them, making design memory inspectable rather than implicit in a population. During search, the a…",
+      "summary": "机器人形态优化通常只保留优胜设计，昂贵仿真中的失败原因与结构经验难以复用。本文提出AUTO-ROBOTIST，以结构原型、正负规则和评估观测构建显式技能库，结合LLM定向修改与遗传变异持续搜索。七项二维仿真任务显示，该方法改善冷启动搜索，并支持从5×5向10×10迁移；带参考迁移六项超过GA、一项持平。其价值在于可审计的设计记忆，而非已验证的实体部署能力。[P4—P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -450,11 +450,131 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐作为结构设计与证据驱动智能体研究的方法论文重点阅读，尤其关注失败规则、跨尺度迁移及组件消融；不宜作为智能运维或硬件可靠性已获验证的依据。[P7—P9][P15—P16]",
+      "deep_read": {
+        "problem": "本文关注的不是能否再生成一个高分机器人，而是昂贵评估能否留下可迁移知识。每次适应度查询都需训练控制器，传统种群难以显式保存接触、支撑和失效经验。作者要求记忆兼具抽象性、证据依托与可编辑性，以应对设计尺度改变后的重新搜索。[P2][P5]",
+        "method": "系统以L1结构原型、L2正负规则、L3评估观测组织技能；检索后引导LLM修改精英父代，同时保留GA探索。候选经合法性检查和PPO评估，再通过ADD、DIAGNOSE、MERGE更新记忆。跨尺度仅导入L1与L2，避免把源尺度观测冒充目标证据。[P4—P5]",
+        "innovation": "创新重点是把搜索经验变为可检查、可修订的显式设计理论，而非更新LLM权重或直接放大优胜形态。规则描述功能部件间的支撑关系，并保留负面模式及来源。解读：其新意主要体现为证据关联记忆与进化搜索的系统结合，不等于提出新的物理定律。[P2][P7—P8]",
+        "findings": "七任务冷启动终点均超过所列GA，平均收敛加速比为1.66；该指标衡量评估次数而非运行时间。带参考迁移六项超过GA、一项持平，Carrier增益为5.84。Pusher取消GA变异下降24.0%，说明技能提案仍需探索路径；这些结果属于描述性比较。[P5—P7][P15]",
+        "limitations": "证据限于二维EVOGYM与固定PPO协议，不能确立三维或实体性能。主要设置仅三种子，消融只覆盖两任务，联合移除L2与L3不能分辨各自贡献；模型版本和硬件披露也不完整。逐页记录未发现原文件缺项，已纠正的提取错误不构成公式缺失。[P9][P15—P16][P19]",
+        "connection": "解读：与结构设计最直接的联系，是把承载路径、接触界面及执行器支撑转为可复用关系。对可靠性研究，负规则和观测追溯可启发失效知识管理；对智能运维，可类比检修经验库。但论文没有运维任务、故障诊断指标或实体可靠性试验，不能据此宣称应用有效。[P8—P9][P20]",
+        "next_steps": "建议先在结构优化任务复现技能库与GA混合搜索，分别消融正规则、负规则和观测示例，并增加匹配预算的多种子比较。进一步加入规则冲突处理、置信度校准和扰动压力测试，区分仿真偶然成功与稳健规律；实体迁移前设置人工审查和独立安全约束。[P9][P16—P17]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "当搜索成为记忆：以自演化技能加速机器人设计发现",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.368.pdf"
+      ],
+      "analyzed_at": "2026-11-14T15:47:32.508041+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P5"
+        ],
+        "method": [
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P7",
+          "P8"
+        ],
+        "findings": [
+          "P5",
+          "P6",
+          "P7",
+          "P15"
+        ],
+        "limitations": [
+          "P9",
+          "P15",
+          "P16",
+          "P19"
+        ],
+        "connection": [
+          "P8",
+          "P9",
+          "P20"
+        ],
+        "next_steps": [
+          "P9",
+          "P16",
+          "P17"
+        ]
+      },
+      "analysis_material_version": "ec4a3e98771a6de277f6e53814b4cfc9d98b3c27cb891f8921be49199ab7b93b",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "设计空间数量的文字提取将指数扁平化为“5100 >10 69”；原页清晰显示5^100 > 10^69。已按原页恢复指数，关系到100个位置、每位置五类模块时的无约束组合数量；不代表满足连通性和执行器要求的可行形态数量。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "公式(2)的文字提取未完整保留分式和求和上下标布局。原页清晰显示w_s=(1+Σ_{i=1}^{n_s}clip(g_{s,i}/δ_max,0,1))/(2+n_s)。已据图纠正；分母作用于整个分子，影响技能效用评分及归一化后的抽样概率。原公式无缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "公式(3)的文字提取压平了分式。原页清晰显示ḡ_ℓ←ḡ_ℓ+(g_i−ḡ_ℓ)/m_ℓ，分母m_ℓ仅作用于增量项，且为更新后的支持计数。已按原页恢复；影响规则运行平均收益的更新解释，原公式无缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "图4的Balancer纵轴文字提取遗漏负号：上排含−0.10、−0.05，下排同样含−0.10、−0.05。原图负号可辨，已纠正；影响对搜索初期负适应度及曲线跨零过程的理解，不影响表2终点值。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P16",
+          "detail": "图8的提取文本将标题、条件名、刻度及数值转为/uni000000…字形编码。原页清晰可读，已恢复：完整方法、No Diagnose、No Merge、Pure LLM、No L2+L3；Walker数值依次9.56、9.16、9.44、9.35、9.54，Pusher依次9.87、7.74、8.49、7.51、7.52。错误影响消融结果识读，非原图缺项。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "aca33ce5d0e9",
+        "state": "published",
+        "updated_at": "2026-11-14T15:47:32.534379+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 20,
+        "covered": 20,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "设计空间数量的文字提取将指数扁平化为“5100 >10 69”；原页清晰显示5^100 > 10^69。已按原页恢复指数，关系到100个位置、每位置五类模块时的无约束组合数量；不代表满足连通性和执行器要求的可行形态数量。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "公式(2)的文字提取未完整保留分式和求和上下标布局。原页清晰显示w_s=(1+Σ_{i=1}^{n_s}clip(g_{s,i}/δ_max,0,1))/(2+n_s)。已据图纠正；分母作用于整个分子，影响技能效用评分及归一化后的抽样概率。原公式无缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "公式(3)的文字提取压平了分式。原页清晰显示ḡ_ℓ←ḡ_ℓ+(g_i−ḡ_ℓ)/m_ℓ，分母m_ℓ仅作用于增量项，且为更新后的支持计数。已按原页恢复；影响规则运行平均收益的更新解释，原公式无缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "图4的Balancer纵轴文字提取遗漏负号：上排含−0.10、−0.05，下排同样含−0.10、−0.05。原图负号可辨，已纠正；影响对搜索初期负适应度及曲线跨零过程的理解，不影响表2终点值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P16",
+            "detail": "图8的提取文本将标题、条件名、刻度及数值转为/uni000000…字形编码。原页清晰可读，已恢复：完整方法、No Diagnose、No Merge、Pure LLM、No L2+L3；Walker数值依次9.56、9.16、9.44、9.35、9.54，Pusher依次9.87、7.74、8.49、7.51、7.52。错误影响消融结果识读，非原图缺项。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -478,7 +598,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "LLMs are increasingly being used by users from diverse demographics with pluralistic values and distinct backgrounds. Maintaining safety while respecting value-laden personas is uniquely challenging because persona-conditioned requests are often not overtly malicious, unlike those in existing safety benchmarks. Alignment methods aimed at adversarial requests therefore may miss the harm that emerges from persona use, leaving models to either refuse legitimate value expression or blindly follow unsafe personas. We construct a dataset of 11k controversial topics paired with value-based personas m…",
+      "summary": "本文关注大语言模型在遵循多元价值人格时，如何避免伤害而不压制正当价值表达。作者构建包含11k个争议话题及价值人格的数据集，通过迭代优化话题与人格的智能体流程诱发有害回答，并以联合国教科文组织全球公民原则作为区分价值表达与有害行为的共同基础，提出推理时可调节人格遵循和安全性的对齐模型。摘要称其在多数样本上优于基线，但未提供详细指标与实验设置。本解读仅依据摘要。[摘要]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -537,11 +657,131 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注其将人格价值表达与有害行为分开处理的研究思路，以及推理时控制安全与人格遵循权衡的方法；但目前只能判断其具有方法阅读价值，不能确认与未说明的目标研究方向契合。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是：面对带有不同价值取向的人格设定，模型如何兼顾安全与正当表达。摘要指出，这类请求“not overtly malicious”，因而面向对抗请求的对齐方法可能遗漏人格使用引出的伤害，使模型陷入拒绝合法表达或盲从不安全人格的两难。[摘要]",
+        "method": "作者构建11k个争议话题及配对价值人格，并映射至施瓦茨价值观调查的价值维度；再用智能体流程迭代优化话题和人格，收集有害回答。对齐阶段引入全球公民原则，并提供推理时调节人格遵循与安全性的可控模型，具体训练机制未披露。[摘要]",
+        "innovation": "解读：值得关注的特点并非单纯强化拒答，而是以全球公民原则作为“minimal common ground”，区分正当价值表达与有害行为，再允许用户调节推理时的权衡。这体现了对价值多元性与安全边界的联合考虑，但摘要不足以确认其相对已有研究的首创性。[摘要]",
+        "findings": "摘要报告，智能体流程从已良好对齐的商业模型中收集有害回答的成功率超过47%；所提出模型在多数样本上比基线更安全，也更遵循人格。该结果支持继续核查其方法，但摘要未说明成功率分母、具体基线或改善幅度，不能据此推断普遍优势。[摘要]",
+        "limitations": "当前资料仅为摘要，未提供模型规模、训练目标、数据划分、评测标准及统计检验，因此无法独立判断结果稳健性。摘要也未说明全球公民原则如何转化为标注规则，以及争议案例如何裁决。这些是证据缺口，不能直接视为作者已确认的方法缺陷。[摘要]",
+        "connection": "解读：与智能运维、结构设计及可靠性研究的潜在联系，在于处理用户偏好与安全约束之间的冲突，可启发面向运维助手的指令遵循评测。不过，摘要没有工业系统、结构设计或工程可靠性实验，因此这种联系仅属方法迁移设想，不能认定已有应用成效。[摘要]",
+        "next_steps": "建议：取得全文后，优先核查有害回答成功率的定义、人格遵循与安全性的独立评测，以及推理控制参数的作用。若面向智能运维迁移，可设计合法操作偏好与危险操作请求的对照案例，检验模型能否保持合理偏好而拒绝风险行为；这不是作者已完成的实验。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "当人格设定带来危害：以全球公民价值观引导大语言模型对齐",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.2420/"
+      ],
+      "analyzed_at": "2026-11-14T16:37:12.756476+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "当大语言模型被要求遵循特定价值观的人设时，怎样既尊重合理表达，又避免迎合有害行为？这项研究关注并不显露恶意的人设请求，探索以共同价值原则约束模型，并让用户在推理时调节安全性与人设遵循程度。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "没有明显恶意的人设，也可能带来风险",
+            "paragraphs": [
+              "不同背景的用户带着多元价值观使用大语言模型，人设因此不只是语言风格，也可能包含价值立场。摘要指出，人设条件下的请求往往不像现有安全基准中的请求那样明显恶意，面向对抗请求的对齐方法可能漏掉这类风险，使模型陷入两难：要么拒绝合理的价值表达，要么盲目遵循不安全的人设。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从价值维度构建人设，再引入共同原则",
+            "paragraphs": [
+              "研究构建了包含11k争议话题的数据集，将话题与基于价值观的人设配对，并把人设映射到施瓦茨价值观调查的价值维度。随后，研究通过智能体流程反复细化话题与人设，从已进行良好对齐的商业大语言模型中诱发并收集有害回答。",
+              "在对齐方法上，研究采用联合国教科文组织的全球公民原则，作为区分合理价值表达与有害行为的最低共同基础，并提出可控对齐模型。摘要明确的控制位置是推理阶段：用户可以调节人设遵循与安全性之间的平衡，但摘要未展开具体实现机制。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "风险诱发与可控对齐分别报告了什么",
+            "paragraphs": [
+              "摘要报告，智能体流程诱发并收集有害回答的成功率超过47%。这一结果对应特定流程下的风险发现，不能直接理解为模型在日常使用中的有害回答比例。对于最终模型，摘要称其在大多数样本上比基线更安全，也更遵循人设；这一表述并不意味着所有样本均有改善。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "样本构成、基线与验证范围仍待展开",
+            "paragraphs": [
+              "仅凭摘要，无法判断话题与人设的具体分布、数据划分、商业模型名单，以及成功率的统计口径；也无法确定安全性和人设遵循的评价方式、比较基线、提升幅度与不确定性。摘要同样不足以判断结论能否推广到不同语言、文化背景或应用场景。这些是当前资料的判断边界，不代表论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：安全不应等同于抹平价值差异",
+            "paragraphs": [
+              "阅读启发：本文值得追问的不是模型是否应当接受所有人设，而是合理价值表达与有害行为如何被区分。进一步阅读时，可重点关注全球公民原则怎样转化为判断标准、推理时的控制如何作用于输出，以及安全性与人设遵循同时改善的具体条件；不宜仅凭摘要将这一平衡理解为已经普遍解决。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的人设风险收集流程",
+            "description": "仅概括摘要明确描述的数据构建与风险收集关系，不是论文原图，也不表示完整的对齐模型训练流程。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "争议话题与价值人设配对",
+                "detail": "构建数据集，人设映射到施瓦茨价值观调查的价值维度。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "智能体迭代细化",
+                "detail": "反复细化话题与人设，用于发现商业大语言模型的有害回答。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "诱发并收集有害回答",
+                "detail": "面向已进行良好对齐的商业大语言模型收集风险输出。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "细化话题与人设"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "诱发并收集"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-14T16:49:03.937700+00:00",
+      "article_profile": "d2be18b5a191a33b42ba34bd333db8435bfbe2c72f081f5b6b9f9b29881c89cc",
+      "analysis_references": {},
+      "analysis_material_version": "dece09d4033d570ab79f987cc7d3ae669247e030e17fa1ab55744f9e6610b3ee",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "f5a81350d43a",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-14T16:49:03.941545+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -566,7 +806,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "This study employs LLM-based multi-agent simulation to investigate how fairness-related behavior evolves in repeated resource allocation. Thirty agents with five idealized value orientations participate in a survival-production cycle under equal, needs-based, contribution-based, and negotiation-based allocation mechanisms. Results show that negotiation achieves the highest productive return and subjective satisfaction with the strongest consensus in our main setting, and its subjective advantage holds across eight LLMs, suggesting that deliberative allocation can help navigate the fairness–eff…",
+      "summary": "本文通过大语言模型多智能体仿真，研究重复资源分配中的公平行为演变。三十个智能体具有五种理想化价值取向，在四种分配机制下参与生存—生产循环。摘要称，协商机制在主设定中取得最高生产回报、主观满意度和最强共识，其主观优势在八种模型中保持。同时，满意度与客观资源结果存在系统性错位，公平立场逐渐混合化。作者强调，这些结果是计算假说，而非人类公平行为的直接证据。[摘要]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -625,11 +865,145 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议作为多智能体协商与价值演变的方法参考阅读，重点关注主客观评价错位及人类分布对照；但摘要未提供智能运维、结构设计或可靠性任务验证，不宜直接视为这些方向的核心成果。[摘要]",
+      "deep_read": {
+        "problem": "研究关注重复资源分配中，价值取向如何影响公平行为及其演变，而非仅比较一次分配是否公平。摘要以“how fairness-related behavior evolves”界定问题。解读：关键在于同时观察分配机制、主观评价与长期立场变化之间的关系。[摘要]",
+        "method": "研究设置三十个智能体、五种理想化价值取向，在生存—生产循环中比较平等、按需、按贡献及协商分配。摘要另报告八种模型的主观优势检验，以及十六种受控情景的人类选择分布对照；后者仅针对GPT-4o，不应混同两类验证范围。[摘要]",
+        "innovation": "解读：值得关注的是把价值取向、重复交互与反思生成的公平立场结合起来，而非只报告最终资源收益。摘要用“reflection-derived fairness positions”描述立场来源；但未提供相关工作比较，无法据此确认其首创性或相对既有方法的创新幅度。[摘要]",
+        "findings": "摘要报告协商在主设定中获得最高生产回报、主观满意度及最强共识，并指出其“subjective advantage holds across eight LLMs”。此外，满意度与客观资源结果存在系统性错位，公平立场趋向混合；跨模型结果不能扩大为全部客观指标均占优。[摘要]",
+        "limitations": "作者明确称结果属于“computational hypotheses”，不是人类公平行为的直接证据。与已发表人类选择分布比较时，模型仅呈中等排序对应，选择也更集中。当前摘要未给出指标定义、效应量和统计细节，因此尚不足以评估结论强度及适用边界。[摘要]",
+        "connection": "解读：对智能运维与可靠性研究，可迁移的问题是资源分配中参与者满意度与客观收益是否一致；对结构设计，潜在关联是多目标协商，而非结构性能预测。摘要没有这些领域的应用实验，以上仅为研究问题层面的联系，不能视为已验证效果。[摘要]",
+        "next_steps": "建议：取得全文后，优先核查价值取向如何设定、反思立场如何编码、满意度如何测量，以及不同模型比较是否采用一致条件。若迁移至运维资源配置，应另行加入成本、服务水平与可靠性指标，对照协商和固定规则，不能预设协商必然更优。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "公平如何演化：多智能体资源分配中的价值取向与演变",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1334/"
+      ],
+      "analyzed_at": "2026-11-14T17:01:19.470388+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "资源分配中的公平感，会不会随着反复互动而改变？这项研究用大语言模型多智能体模拟，考察分配规则、价值取向与公平判断之间的关系，也提醒我们：智能体更满意，并不等于它获得了更多资源，更不等于模型已经复现人类的公平行为。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "公平不仅关乎分到多少",
+            "paragraphs": [
+              "平均分配、按需分配、按贡献分配与协商分配，体现了不同的公平标准。研究关注的并非只有哪种规则带来更多产出，还包括不同价值取向的智能体如何评价分配，以及这些评价是否会在持续互动中改变。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "在生存—生产循环中比较分配规则",
+            "paragraphs": [
+              "研究采用基于大语言模型的多智能体模拟，让具有不同理想化价值取向的智能体参与生存—生产循环，并比较平均、按需、按贡献和协商分配机制。分析涉及生产回报、主观满意度、客观资源结果，以及从智能体反思中提取的公平立场。",
+              "为提供以人类行为为参照的结构性比较，研究还将 GPT-4o 的选择与已发表的人类选择分布进行对照，比较范围是受控的资源分配情境，而不是现实社会中的长期互动。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "协商表现较好，满意度却不等于资源收益",
+            "paragraphs": [
+              "摘要报告，在主要设置中，协商分配取得最高的生产回报和主观满意度，同时形成最强共识；其主观层面的优势也在多个大语言模型中保持。这个结果提示，协商可能有助于处理公平与效率的权衡，但不能据此认定所有指标都已获得跨模型验证。",
+              "智能体的主观满意度与客观资源结果存在系统性错位，且受到价值取向和互动条件影响。随着互动持续，基于反思提取的公平立场逐渐偏离初始取向，转向结合平等、功绩与需求推理的混合表达。",
+              "在人类参照比较中，GPT-4o 与人类选择呈现中等程度的排序对应，但模型选择明显更加集中。因此，排序上的相似不能直接解释为选择分布一致，更不能替代对人类公平行为的直接证据。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "模拟中的立场变化，不等于人类价值演化",
+            "paragraphs": [
+              "摘要未交代独立重复次数、结果波动、效应大小，以及完整的模型配置和比较细节，因此仅凭当前资料无法判断统计稳健性与适用边界。人类选择数据的样本构成和具体情境内容，也需进一步阅读论文才能确认。",
+              "作者明确将这些发现定位为计算性假说。反思文本中的公平立场变化，不能直接证明智能体形成了稳定价值观；与已发表人类分布的比较，也不等于已经验证模型能够预测真实人群的公平行为。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：把满意、收益与立场分开看",
+            "paragraphs": [
+              "阅读启发：理解多智能体协作时，值得分别追问资源如何分配、参与者是否满意，以及它们如何解释公平。进一步阅读可重点查看这些指标的定义、反思立场的提取方式，以及协商优势在不同互动条件下的边界，而不宜只凭共识或满意度判断机制优劣。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的资源分配模拟示意",
+            "description": "概括摘要明确报告的模拟关系与分析对象，不代表论文原图，也不补充未报告的实验配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "不同价值取向的智能体",
+                "detail": "以理想化价值取向作为初始设置。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "反复参与生存—生产循环",
+                "detail": "比较平均、按需、按贡献和协商分配机制。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "比较产出、满意度与资源结果",
+                "detail": "考察机制表现及主观满意度与客观资源结果的关系。"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "分析反思中的公平立场",
+                "detail": "考察反复互动后公平推理相对于初始取向的变化。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "参与分配互动"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "比较分配表现"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "分析立场变化"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-14T17:25:17.782438+00:00",
+      "article_profile": "4f387396207c34dece1c4e37c4c9a71641f97c3e2b5e6f3d60d4eb71ea37c408",
+      "analysis_references": {},
+      "analysis_material_version": "2ff59432e0380f7cc4786d868fc083d5844ee482f76d5095ae1ae7537dfae0ad",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "d3adcbc57183",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-14T17:25:17.784486+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -652,7 +1026,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Long-horizon LLM agents require reinforcement learning methods that can assign credit to intermediate decisions under sparse and delayed rewards. Recent group-based methods such as GiGPO improve over trajectory-level GRPO by constructing step-level advantages at repeated anchor states. However, we show that such dense credit can be statistically unreliable: under limited rollouts, rare but lucky actions may receive overly large advantages, producing divergent anchor bias and late-stage training oscillation. We propose Evidence-Calibrated Policy Optimization (ECPO), a critic-free policy optimiz…",
+      "summary": "长时程智能体不仅面临奖励稀疏，还可能把稀有动作的偶然成功误当作可靠信用。本文提出ECPO，通过动作级收缩估计和锚点方差门控，在保留轨迹级优势的同时校准步骤信用。[P5—P6]实验显示，1.5B模型在ALFWorld和WebShop上较GiGPO分别提高5.2、7.3个成功率百分点，但部分子任务退步。[P7—P8]本文适合关注智能体训练稳定性的读者；迁移到真实运维仍需验证状态重复与动作规范化条件。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -711,11 +1085,84 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐重点阅读信用校准公式、消融实验及理论限定，尤其适合研究小样本决策和智能体训练稳定性；不宜将基准收益直接视为真实运维可靠性证明。[P5—P10]",
+      "deep_read": {
+        "problem": "【论文原文】GRPO依赖轨迹回报，GiGPO借重复锚点提供步骤信用，但采样不均衡会让仅成功一次的稀有动作压过证据更多的动作。作者将其称为分歧锚点偏差，研究重点由信用是否足够密集转向信用是否统计可靠，而非单纯增加中间奖励。[P2—P4]",
+        "method": "【论文原文】ECA将规范动作的平均未来回报按样本数与κ加权，向锚点均值收缩；VarGate以动作间方差占总方差的比例结合样本量门控。最终优势保留GRPO项，并加入加权校准信用。实现另用StrictValid检查及可靠性下限，同一动作的词元共享优势。[P5—P6][P13]",
+        "innovation": "【论文原文】本文的贡献定位是更新前的信用证据校准，而不是再增加一套价值评估器。动作聚合与收缩处理低计数估计，方差分解处理锚点可信度。【解读】两者分别针对估计对象和信用使用强度；这是对既有分组优化的结构性改造，并不意味着收缩估计本身是新理论。[P3—P6]",
+        "findings": "【论文原文】表1中，1.5B模型的ALFWorld成功率由87.5升至92.7，WebShop由64.6升至71.9。消融总体成功率为ECA单用89.8、门控单用89.6、联合92.7，支持组件互补，但不证明协同具有统计显著性。表5归因于校准的新增计算为每步0.30秒。[P7—P9]",
+        "limitations": "【论文原文】方法依赖重复且可规范化的状态，真实工具环境的泛化尚待验证。[P10]【解读】Pick2退步；QA平均口径未解释；理论收缩界限定同一局部归一化尺度，成功率代理也非噪声实测。[P8—P9][P17]现有笔记未确认原文件缺项，不能将早期分批未展示公式误报为缺失。",
+        "connection": "【解读】对智能运维，可将重复故障状态和处置动作视作候选锚点与规范动作，避免把偶然恢复误认为处置有效。对结构设计及可靠性研究，可借鉴按证据量收缩决策信用的思路，但论文没有相关工程实验，且任务成功率不等于系统失效概率或安全保证。[P4—P6][P10]",
+        "next_steps": "【建议】先在可控运维仿真中测量有效锚点覆盖率，再比较原始信用、仅收缩、仅门控及联合方法，分任务报告收益与退步。单独扫描κ、深度阈值和可靠性下限，检查其对稀有关键动作的影响；同时澄清QA平均口径，并验证代理噪声与实际错误归因的关系。[P8—P10][P13][P17]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "密集信用仍不足：面向长时程大语言模型智能体训练的证据校准策略优化",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.172.pdf"
+      ],
+      "analyzed_at": "2026-11-14T17:39:59.256027+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3",
+          "P4"
+        ],
+        "method": [
+          "P5",
+          "P6",
+          "P13"
+        ],
+        "innovation": [
+          "P3",
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "findings": [
+          "P7",
+          "P8",
+          "P9"
+        ],
+        "limitations": [
+          "P8",
+          "P9",
+          "P10",
+          "P17"
+        ],
+        "connection": [
+          "P4",
+          "P5",
+          "P6",
+          "P10"
+        ],
+        "next_steps": [
+          "P8",
+          "P9",
+          "P10",
+          "P13",
+          "P17"
+        ]
+      },
+      "analysis_material_version": "dea2903161e71e201c069630fe31fb1ffe3a70b9f3de77bc1ad9d9733444c19c",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "971ce22b8f13",
+        "state": "published",
+        "updated_at": "2026-11-14T17:39:59.281105+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 18,
+        "covered": 18,
+        "pdf_available": true,
+        "issues": []
+      }
     }
   ],
   "extended": [],
@@ -1077,7 +1524,7 @@
         "state": "published",
         "updated_at": "2026-11-14T14:40:06.079595+00:00",
         "basis": "full_text",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "facts",
         "reason": "",
         "total": 21,
@@ -1107,7 +1554,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Large language models (LLMs) are increasingly used as proposal generators for evolutionary robot design, yet most loops remain memoryless: simulator results shape the next population but are not preserved as reusable design knowledge. We present Auto-Robotist, a self-evolving LLM agent that distills morphology-search traces into an explicit natural-language skill library. Each skill stores a structural archetype, evidence-grounded positive and negative rules, and the evaluated designs that support them, making design memory inspectable rather than implicit in a population. During search, the a…",
+      "summary": "机器人形态优化通常只保留优胜设计，昂贵仿真中的失败原因与结构经验难以复用。本文提出AUTO-ROBOTIST，以结构原型、正负规则和评估观测构建显式技能库，结合LLM定向修改与遗传变异持续搜索。七项二维仿真任务显示，该方法改善冷启动搜索，并支持从5×5向10×10迁移；带参考迁移六项超过GA、一项持平。其价值在于可审计的设计记忆，而非已验证的实体部署能力。[P4—P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -1166,11 +1613,131 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐作为结构设计与证据驱动智能体研究的方法论文重点阅读，尤其关注失败规则、跨尺度迁移及组件消融；不宜作为智能运维或硬件可靠性已获验证的依据。[P7—P9][P15—P16]",
+      "deep_read": {
+        "problem": "本文关注的不是能否再生成一个高分机器人，而是昂贵评估能否留下可迁移知识。每次适应度查询都需训练控制器，传统种群难以显式保存接触、支撑和失效经验。作者要求记忆兼具抽象性、证据依托与可编辑性，以应对设计尺度改变后的重新搜索。[P2][P5]",
+        "method": "系统以L1结构原型、L2正负规则、L3评估观测组织技能；检索后引导LLM修改精英父代，同时保留GA探索。候选经合法性检查和PPO评估，再通过ADD、DIAGNOSE、MERGE更新记忆。跨尺度仅导入L1与L2，避免把源尺度观测冒充目标证据。[P4—P5]",
+        "innovation": "创新重点是把搜索经验变为可检查、可修订的显式设计理论，而非更新LLM权重或直接放大优胜形态。规则描述功能部件间的支撑关系，并保留负面模式及来源。解读：其新意主要体现为证据关联记忆与进化搜索的系统结合，不等于提出新的物理定律。[P2][P7—P8]",
+        "findings": "七任务冷启动终点均超过所列GA，平均收敛加速比为1.66；该指标衡量评估次数而非运行时间。带参考迁移六项超过GA、一项持平，Carrier增益为5.84。Pusher取消GA变异下降24.0%，说明技能提案仍需探索路径；这些结果属于描述性比较。[P5—P7][P15]",
+        "limitations": "证据限于二维EVOGYM与固定PPO协议，不能确立三维或实体性能。主要设置仅三种子，消融只覆盖两任务，联合移除L2与L3不能分辨各自贡献；模型版本和硬件披露也不完整。逐页记录未发现原文件缺项，已纠正的提取错误不构成公式缺失。[P9][P15—P16][P19]",
+        "connection": "解读：与结构设计最直接的联系，是把承载路径、接触界面及执行器支撑转为可复用关系。对可靠性研究，负规则和观测追溯可启发失效知识管理；对智能运维，可类比检修经验库。但论文没有运维任务、故障诊断指标或实体可靠性试验，不能据此宣称应用有效。[P8—P9][P20]",
+        "next_steps": "建议先在结构优化任务复现技能库与GA混合搜索，分别消融正规则、负规则和观测示例，并增加匹配预算的多种子比较。进一步加入规则冲突处理、置信度校准和扰动压力测试，区分仿真偶然成功与稳健规律；实体迁移前设置人工审查和独立安全约束。[P9][P16—P17]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "当搜索成为记忆：以自演化技能加速机器人设计发现",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.368.pdf"
+      ],
+      "analyzed_at": "2026-11-14T15:47:32.508041+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P5"
+        ],
+        "method": [
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P7",
+          "P8"
+        ],
+        "findings": [
+          "P5",
+          "P6",
+          "P7",
+          "P15"
+        ],
+        "limitations": [
+          "P9",
+          "P15",
+          "P16",
+          "P19"
+        ],
+        "connection": [
+          "P8",
+          "P9",
+          "P20"
+        ],
+        "next_steps": [
+          "P9",
+          "P16",
+          "P17"
+        ]
+      },
+      "analysis_material_version": "ec4a3e98771a6de277f6e53814b4cfc9d98b3c27cb891f8921be49199ab7b93b",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "设计空间数量的文字提取将指数扁平化为“5100 >10 69”；原页清晰显示5^100 > 10^69。已按原页恢复指数，关系到100个位置、每位置五类模块时的无约束组合数量；不代表满足连通性和执行器要求的可行形态数量。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "公式(2)的文字提取未完整保留分式和求和上下标布局。原页清晰显示w_s=(1+Σ_{i=1}^{n_s}clip(g_{s,i}/δ_max,0,1))/(2+n_s)。已据图纠正；分母作用于整个分子，影响技能效用评分及归一化后的抽样概率。原公式无缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "公式(3)的文字提取压平了分式。原页清晰显示ḡ_ℓ←ḡ_ℓ+(g_i−ḡ_ℓ)/m_ℓ，分母m_ℓ仅作用于增量项，且为更新后的支持计数。已按原页恢复；影响规则运行平均收益的更新解释，原公式无缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "图4的Balancer纵轴文字提取遗漏负号：上排含−0.10、−0.05，下排同样含−0.10、−0.05。原图负号可辨，已纠正；影响对搜索初期负适应度及曲线跨零过程的理解，不影响表2终点值。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P16",
+          "detail": "图8的提取文本将标题、条件名、刻度及数值转为/uni000000…字形编码。原页清晰可读，已恢复：完整方法、No Diagnose、No Merge、Pure LLM、No L2+L3；Walker数值依次9.56、9.16、9.44、9.35、9.54，Pusher依次9.87、7.74、8.49、7.51、7.52。错误影响消融结果识读，非原图缺项。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "aca33ce5d0e9",
+        "state": "published",
+        "updated_at": "2026-11-14T15:47:32.534379+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 20,
+        "covered": 20,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "设计空间数量的文字提取将指数扁平化为“5100 >10 69”；原页清晰显示5^100 > 10^69。已按原页恢复指数，关系到100个位置、每位置五类模块时的无约束组合数量；不代表满足连通性和执行器要求的可行形态数量。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "公式(2)的文字提取未完整保留分式和求和上下标布局。原页清晰显示w_s=(1+Σ_{i=1}^{n_s}clip(g_{s,i}/δ_max,0,1))/(2+n_s)。已据图纠正；分母作用于整个分子，影响技能效用评分及归一化后的抽样概率。原公式无缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "公式(3)的文字提取压平了分式。原页清晰显示ḡ_ℓ←ḡ_ℓ+(g_i−ḡ_ℓ)/m_ℓ，分母m_ℓ仅作用于增量项，且为更新后的支持计数。已按原页恢复；影响规则运行平均收益的更新解释，原公式无缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "图4的Balancer纵轴文字提取遗漏负号：上排含−0.10、−0.05，下排同样含−0.10、−0.05。原图负号可辨，已纠正；影响对搜索初期负适应度及曲线跨零过程的理解，不影响表2终点值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P16",
+            "detail": "图8的提取文本将标题、条件名、刻度及数值转为/uni000000…字形编码。原页清晰可读，已恢复：完整方法、No Diagnose、No Merge、Pure LLM、No L2+L3；Walker数值依次9.56、9.16、9.44、9.35、9.54，Pusher依次9.87、7.74、8.49、7.51、7.52。错误影响消融结果识读，非原图缺项。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -1194,7 +1761,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "LLMs are increasingly being used by users from diverse demographics with pluralistic values and distinct backgrounds. Maintaining safety while respecting value-laden personas is uniquely challenging because persona-conditioned requests are often not overtly malicious, unlike those in existing safety benchmarks. Alignment methods aimed at adversarial requests therefore may miss the harm that emerges from persona use, leaving models to either refuse legitimate value expression or blindly follow unsafe personas. We construct a dataset of 11k controversial topics paired with value-based personas m…",
+      "summary": "本文关注大语言模型在遵循多元价值人格时，如何避免伤害而不压制正当价值表达。作者构建包含11k个争议话题及价值人格的数据集，通过迭代优化话题与人格的智能体流程诱发有害回答，并以联合国教科文组织全球公民原则作为区分价值表达与有害行为的共同基础，提出推理时可调节人格遵循和安全性的对齐模型。摘要称其在多数样本上优于基线，但未提供详细指标与实验设置。本解读仅依据摘要。[摘要]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -1253,11 +1820,131 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注其将人格价值表达与有害行为分开处理的研究思路，以及推理时控制安全与人格遵循权衡的方法；但目前只能判断其具有方法阅读价值，不能确认与未说明的目标研究方向契合。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是：面对带有不同价值取向的人格设定，模型如何兼顾安全与正当表达。摘要指出，这类请求“not overtly malicious”，因而面向对抗请求的对齐方法可能遗漏人格使用引出的伤害，使模型陷入拒绝合法表达或盲从不安全人格的两难。[摘要]",
+        "method": "作者构建11k个争议话题及配对价值人格，并映射至施瓦茨价值观调查的价值维度；再用智能体流程迭代优化话题和人格，收集有害回答。对齐阶段引入全球公民原则，并提供推理时调节人格遵循与安全性的可控模型，具体训练机制未披露。[摘要]",
+        "innovation": "解读：值得关注的特点并非单纯强化拒答，而是以全球公民原则作为“minimal common ground”，区分正当价值表达与有害行为，再允许用户调节推理时的权衡。这体现了对价值多元性与安全边界的联合考虑，但摘要不足以确认其相对已有研究的首创性。[摘要]",
+        "findings": "摘要报告，智能体流程从已良好对齐的商业模型中收集有害回答的成功率超过47%；所提出模型在多数样本上比基线更安全，也更遵循人格。该结果支持继续核查其方法，但摘要未说明成功率分母、具体基线或改善幅度，不能据此推断普遍优势。[摘要]",
+        "limitations": "当前资料仅为摘要，未提供模型规模、训练目标、数据划分、评测标准及统计检验，因此无法独立判断结果稳健性。摘要也未说明全球公民原则如何转化为标注规则，以及争议案例如何裁决。这些是证据缺口，不能直接视为作者已确认的方法缺陷。[摘要]",
+        "connection": "解读：与智能运维、结构设计及可靠性研究的潜在联系，在于处理用户偏好与安全约束之间的冲突，可启发面向运维助手的指令遵循评测。不过，摘要没有工业系统、结构设计或工程可靠性实验，因此这种联系仅属方法迁移设想，不能认定已有应用成效。[摘要]",
+        "next_steps": "建议：取得全文后，优先核查有害回答成功率的定义、人格遵循与安全性的独立评测，以及推理控制参数的作用。若面向智能运维迁移，可设计合法操作偏好与危险操作请求的对照案例，检验模型能否保持合理偏好而拒绝风险行为；这不是作者已完成的实验。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "当人格设定带来危害：以全球公民价值观引导大语言模型对齐",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.2420/"
+      ],
+      "analyzed_at": "2026-11-14T16:37:12.756476+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "当大语言模型被要求遵循特定价值观的人设时，怎样既尊重合理表达，又避免迎合有害行为？这项研究关注并不显露恶意的人设请求，探索以共同价值原则约束模型，并让用户在推理时调节安全性与人设遵循程度。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "没有明显恶意的人设，也可能带来风险",
+            "paragraphs": [
+              "不同背景的用户带着多元价值观使用大语言模型，人设因此不只是语言风格，也可能包含价值立场。摘要指出，人设条件下的请求往往不像现有安全基准中的请求那样明显恶意，面向对抗请求的对齐方法可能漏掉这类风险，使模型陷入两难：要么拒绝合理的价值表达，要么盲目遵循不安全的人设。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从价值维度构建人设，再引入共同原则",
+            "paragraphs": [
+              "研究构建了包含11k争议话题的数据集，将话题与基于价值观的人设配对，并把人设映射到施瓦茨价值观调查的价值维度。随后，研究通过智能体流程反复细化话题与人设，从已进行良好对齐的商业大语言模型中诱发并收集有害回答。",
+              "在对齐方法上，研究采用联合国教科文组织的全球公民原则，作为区分合理价值表达与有害行为的最低共同基础，并提出可控对齐模型。摘要明确的控制位置是推理阶段：用户可以调节人设遵循与安全性之间的平衡，但摘要未展开具体实现机制。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "风险诱发与可控对齐分别报告了什么",
+            "paragraphs": [
+              "摘要报告，智能体流程诱发并收集有害回答的成功率超过47%。这一结果对应特定流程下的风险发现，不能直接理解为模型在日常使用中的有害回答比例。对于最终模型，摘要称其在大多数样本上比基线更安全，也更遵循人设；这一表述并不意味着所有样本均有改善。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "样本构成、基线与验证范围仍待展开",
+            "paragraphs": [
+              "仅凭摘要，无法判断话题与人设的具体分布、数据划分、商业模型名单，以及成功率的统计口径；也无法确定安全性和人设遵循的评价方式、比较基线、提升幅度与不确定性。摘要同样不足以判断结论能否推广到不同语言、文化背景或应用场景。这些是当前资料的判断边界，不代表论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：安全不应等同于抹平价值差异",
+            "paragraphs": [
+              "阅读启发：本文值得追问的不是模型是否应当接受所有人设，而是合理价值表达与有害行为如何被区分。进一步阅读时，可重点关注全球公民原则怎样转化为判断标准、推理时的控制如何作用于输出，以及安全性与人设遵循同时改善的具体条件；不宜仅凭摘要将这一平衡理解为已经普遍解决。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的人设风险收集流程",
+            "description": "仅概括摘要明确描述的数据构建与风险收集关系，不是论文原图，也不表示完整的对齐模型训练流程。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "争议话题与价值人设配对",
+                "detail": "构建数据集，人设映射到施瓦茨价值观调查的价值维度。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "智能体迭代细化",
+                "detail": "反复细化话题与人设，用于发现商业大语言模型的有害回答。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "诱发并收集有害回答",
+                "detail": "面向已进行良好对齐的商业大语言模型收集风险输出。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "细化话题与人设"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "诱发并收集"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-14T16:49:03.937700+00:00",
+      "article_profile": "d2be18b5a191a33b42ba34bd333db8435bfbe2c72f081f5b6b9f9b29881c89cc",
+      "analysis_references": {},
+      "analysis_material_version": "dece09d4033d570ab79f987cc7d3ae669247e030e17fa1ab55744f9e6610b3ee",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "f5a81350d43a",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-14T16:49:03.941545+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -1282,7 +1969,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "This study employs LLM-based multi-agent simulation to investigate how fairness-related behavior evolves in repeated resource allocation. Thirty agents with five idealized value orientations participate in a survival-production cycle under equal, needs-based, contribution-based, and negotiation-based allocation mechanisms. Results show that negotiation achieves the highest productive return and subjective satisfaction with the strongest consensus in our main setting, and its subjective advantage holds across eight LLMs, suggesting that deliberative allocation can help navigate the fairness–eff…",
+      "summary": "本文通过大语言模型多智能体仿真，研究重复资源分配中的公平行为演变。三十个智能体具有五种理想化价值取向，在四种分配机制下参与生存—生产循环。摘要称，协商机制在主设定中取得最高生产回报、主观满意度和最强共识，其主观优势在八种模型中保持。同时，满意度与客观资源结果存在系统性错位，公平立场逐渐混合化。作者强调，这些结果是计算假说，而非人类公平行为的直接证据。[摘要]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -1341,11 +2028,145 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议作为多智能体协商与价值演变的方法参考阅读，重点关注主客观评价错位及人类分布对照；但摘要未提供智能运维、结构设计或可靠性任务验证，不宜直接视为这些方向的核心成果。[摘要]",
+      "deep_read": {
+        "problem": "研究关注重复资源分配中，价值取向如何影响公平行为及其演变，而非仅比较一次分配是否公平。摘要以“how fairness-related behavior evolves”界定问题。解读：关键在于同时观察分配机制、主观评价与长期立场变化之间的关系。[摘要]",
+        "method": "研究设置三十个智能体、五种理想化价值取向，在生存—生产循环中比较平等、按需、按贡献及协商分配。摘要另报告八种模型的主观优势检验，以及十六种受控情景的人类选择分布对照；后者仅针对GPT-4o，不应混同两类验证范围。[摘要]",
+        "innovation": "解读：值得关注的是把价值取向、重复交互与反思生成的公平立场结合起来，而非只报告最终资源收益。摘要用“reflection-derived fairness positions”描述立场来源；但未提供相关工作比较，无法据此确认其首创性或相对既有方法的创新幅度。[摘要]",
+        "findings": "摘要报告协商在主设定中获得最高生产回报、主观满意度及最强共识，并指出其“subjective advantage holds across eight LLMs”。此外，满意度与客观资源结果存在系统性错位，公平立场趋向混合；跨模型结果不能扩大为全部客观指标均占优。[摘要]",
+        "limitations": "作者明确称结果属于“computational hypotheses”，不是人类公平行为的直接证据。与已发表人类选择分布比较时，模型仅呈中等排序对应，选择也更集中。当前摘要未给出指标定义、效应量和统计细节，因此尚不足以评估结论强度及适用边界。[摘要]",
+        "connection": "解读：对智能运维与可靠性研究，可迁移的问题是资源分配中参与者满意度与客观收益是否一致；对结构设计，潜在关联是多目标协商，而非结构性能预测。摘要没有这些领域的应用实验，以上仅为研究问题层面的联系，不能视为已验证效果。[摘要]",
+        "next_steps": "建议：取得全文后，优先核查价值取向如何设定、反思立场如何编码、满意度如何测量，以及不同模型比较是否采用一致条件。若迁移至运维资源配置，应另行加入成本、服务水平与可靠性指标，对照协商和固定规则，不能预设协商必然更优。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "公平如何演化：多智能体资源分配中的价值取向与演变",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1334/"
+      ],
+      "analyzed_at": "2026-11-14T17:01:19.470388+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "资源分配中的公平感，会不会随着反复互动而改变？这项研究用大语言模型多智能体模拟，考察分配规则、价值取向与公平判断之间的关系，也提醒我们：智能体更满意，并不等于它获得了更多资源，更不等于模型已经复现人类的公平行为。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "公平不仅关乎分到多少",
+            "paragraphs": [
+              "平均分配、按需分配、按贡献分配与协商分配，体现了不同的公平标准。研究关注的并非只有哪种规则带来更多产出，还包括不同价值取向的智能体如何评价分配，以及这些评价是否会在持续互动中改变。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "在生存—生产循环中比较分配规则",
+            "paragraphs": [
+              "研究采用基于大语言模型的多智能体模拟，让具有不同理想化价值取向的智能体参与生存—生产循环，并比较平均、按需、按贡献和协商分配机制。分析涉及生产回报、主观满意度、客观资源结果，以及从智能体反思中提取的公平立场。",
+              "为提供以人类行为为参照的结构性比较，研究还将 GPT-4o 的选择与已发表的人类选择分布进行对照，比较范围是受控的资源分配情境，而不是现实社会中的长期互动。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "协商表现较好，满意度却不等于资源收益",
+            "paragraphs": [
+              "摘要报告，在主要设置中，协商分配取得最高的生产回报和主观满意度，同时形成最强共识；其主观层面的优势也在多个大语言模型中保持。这个结果提示，协商可能有助于处理公平与效率的权衡，但不能据此认定所有指标都已获得跨模型验证。",
+              "智能体的主观满意度与客观资源结果存在系统性错位，且受到价值取向和互动条件影响。随着互动持续，基于反思提取的公平立场逐渐偏离初始取向，转向结合平等、功绩与需求推理的混合表达。",
+              "在人类参照比较中，GPT-4o 与人类选择呈现中等程度的排序对应，但模型选择明显更加集中。因此，排序上的相似不能直接解释为选择分布一致，更不能替代对人类公平行为的直接证据。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "模拟中的立场变化，不等于人类价值演化",
+            "paragraphs": [
+              "摘要未交代独立重复次数、结果波动、效应大小，以及完整的模型配置和比较细节，因此仅凭当前资料无法判断统计稳健性与适用边界。人类选择数据的样本构成和具体情境内容，也需进一步阅读论文才能确认。",
+              "作者明确将这些发现定位为计算性假说。反思文本中的公平立场变化，不能直接证明智能体形成了稳定价值观；与已发表人类分布的比较，也不等于已经验证模型能够预测真实人群的公平行为。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：把满意、收益与立场分开看",
+            "paragraphs": [
+              "阅读启发：理解多智能体协作时，值得分别追问资源如何分配、参与者是否满意，以及它们如何解释公平。进一步阅读可重点查看这些指标的定义、反思立场的提取方式，以及协商优势在不同互动条件下的边界，而不宜只凭共识或满意度判断机制优劣。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的资源分配模拟示意",
+            "description": "概括摘要明确报告的模拟关系与分析对象，不代表论文原图，也不补充未报告的实验配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "不同价值取向的智能体",
+                "detail": "以理想化价值取向作为初始设置。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "反复参与生存—生产循环",
+                "detail": "比较平均、按需、按贡献和协商分配机制。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "比较产出、满意度与资源结果",
+                "detail": "考察机制表现及主观满意度与客观资源结果的关系。"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "分析反思中的公平立场",
+                "detail": "考察反复互动后公平推理相对于初始取向的变化。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "参与分配互动"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "比较分配表现"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "分析立场变化"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-14T17:25:17.782438+00:00",
+      "article_profile": "4f387396207c34dece1c4e37c4c9a71641f97c3e2b5e6f3d60d4eb71ea37c408",
+      "analysis_references": {},
+      "analysis_material_version": "2ff59432e0380f7cc4786d868fc083d5844ee482f76d5095ae1ae7537dfae0ad",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "d3adcbc57183",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-14T17:25:17.784486+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -1368,7 +2189,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Long-horizon LLM agents require reinforcement learning methods that can assign credit to intermediate decisions under sparse and delayed rewards. Recent group-based methods such as GiGPO improve over trajectory-level GRPO by constructing step-level advantages at repeated anchor states. However, we show that such dense credit can be statistically unreliable: under limited rollouts, rare but lucky actions may receive overly large advantages, producing divergent anchor bias and late-stage training oscillation. We propose Evidence-Calibrated Policy Optimization (ECPO), a critic-free policy optimiz…",
+      "summary": "长时程智能体不仅面临奖励稀疏，还可能把稀有动作的偶然成功误当作可靠信用。本文提出ECPO，通过动作级收缩估计和锚点方差门控，在保留轨迹级优势的同时校准步骤信用。[P5—P6]实验显示，1.5B模型在ALFWorld和WebShop上较GiGPO分别提高5.2、7.3个成功率百分点，但部分子任务退步。[P7—P8]本文适合关注智能体训练稳定性的读者；迁移到真实运维仍需验证状态重复与动作规范化条件。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -1427,11 +2248,84 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐重点阅读信用校准公式、消融实验及理论限定，尤其适合研究小样本决策和智能体训练稳定性；不宜将基准收益直接视为真实运维可靠性证明。[P5—P10]",
+      "deep_read": {
+        "problem": "【论文原文】GRPO依赖轨迹回报，GiGPO借重复锚点提供步骤信用，但采样不均衡会让仅成功一次的稀有动作压过证据更多的动作。作者将其称为分歧锚点偏差，研究重点由信用是否足够密集转向信用是否统计可靠，而非单纯增加中间奖励。[P2—P4]",
+        "method": "【论文原文】ECA将规范动作的平均未来回报按样本数与κ加权，向锚点均值收缩；VarGate以动作间方差占总方差的比例结合样本量门控。最终优势保留GRPO项，并加入加权校准信用。实现另用StrictValid检查及可靠性下限，同一动作的词元共享优势。[P5—P6][P13]",
+        "innovation": "【论文原文】本文的贡献定位是更新前的信用证据校准，而不是再增加一套价值评估器。动作聚合与收缩处理低计数估计，方差分解处理锚点可信度。【解读】两者分别针对估计对象和信用使用强度；这是对既有分组优化的结构性改造，并不意味着收缩估计本身是新理论。[P3—P6]",
+        "findings": "【论文原文】表1中，1.5B模型的ALFWorld成功率由87.5升至92.7，WebShop由64.6升至71.9。消融总体成功率为ECA单用89.8、门控单用89.6、联合92.7，支持组件互补，但不证明协同具有统计显著性。表5归因于校准的新增计算为每步0.30秒。[P7—P9]",
+        "limitations": "【论文原文】方法依赖重复且可规范化的状态，真实工具环境的泛化尚待验证。[P10]【解读】Pick2退步；QA平均口径未解释；理论收缩界限定同一局部归一化尺度，成功率代理也非噪声实测。[P8—P9][P17]现有笔记未确认原文件缺项，不能将早期分批未展示公式误报为缺失。",
+        "connection": "【解读】对智能运维，可将重复故障状态和处置动作视作候选锚点与规范动作，避免把偶然恢复误认为处置有效。对结构设计及可靠性研究，可借鉴按证据量收缩决策信用的思路，但论文没有相关工程实验，且任务成功率不等于系统失效概率或安全保证。[P4—P6][P10]",
+        "next_steps": "【建议】先在可控运维仿真中测量有效锚点覆盖率，再比较原始信用、仅收缩、仅门控及联合方法，分任务报告收益与退步。单独扫描κ、深度阈值和可靠性下限，检查其对稀有关键动作的影响；同时澄清QA平均口径，并验证代理噪声与实际错误归因的关系。[P8—P10][P13][P17]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "密集信用仍不足：面向长时程大语言模型智能体训练的证据校准策略优化",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.172.pdf"
+      ],
+      "analyzed_at": "2026-11-14T17:39:59.256027+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3",
+          "P4"
+        ],
+        "method": [
+          "P5",
+          "P6",
+          "P13"
+        ],
+        "innovation": [
+          "P3",
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "findings": [
+          "P7",
+          "P8",
+          "P9"
+        ],
+        "limitations": [
+          "P8",
+          "P9",
+          "P10",
+          "P17"
+        ],
+        "connection": [
+          "P4",
+          "P5",
+          "P6",
+          "P10"
+        ],
+        "next_steps": [
+          "P8",
+          "P9",
+          "P10",
+          "P13",
+          "P17"
+        ]
+      },
+      "analysis_material_version": "dea2903161e71e201c069630fe31fb1ffe3a70b9f3de77bc1ad9d9733444c19c",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "971ce22b8f13",
+        "state": "published",
+        "updated_at": "2026-11-14T17:39:59.281105+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 18,
+        "covered": 18,
+        "pdf_available": true,
+        "issues": []
+      }
     }
   ],
   "source_status": {
@@ -2433,13 +3327,13 @@
     "unavailable": 46
   },
   "analysis_status": {
-    "ready_core": 2,
+    "ready_core": 6,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 4
+    "pending": 0
   },
   "edition": {
     "id": "43597549877",

@@ -1,0 +1,126 @@
+{
+  "paper_id": "aca33ce5d0e9",
+  "fingerprint": "4adeaaa9f208438386367a9d1f2b80cd37a4733e58f9669a0a1346948c9771f3",
+  "analysis": {
+    "title_zh": "当搜索成为记忆：以自演化技能加速机器人设计发现",
+    "summary": "机器人形态优化通常只保留优胜设计，昂贵仿真中的失败原因与结构经验难以复用。本文提出AUTO-ROBOTIST，以结构原型、正负规则和评估观测构建显式技能库，结合LLM定向修改与遗传变异持续搜索。七项二维仿真任务显示，该方法改善冷启动搜索，并支持从5×5向10×10迁移；带参考迁移六项超过GA、一项持平。其价值在于可审计的设计记忆，而非已验证的实体部署能力。[P4—P9]",
+    "recommendation": "推荐作为结构设计与证据驱动智能体研究的方法论文重点阅读，尤其关注失败规则、跨尺度迁移及组件消融；不宜作为智能运维或硬件可靠性已获验证的依据。[P7—P9][P15—P16]",
+    "deep_read": {
+      "problem": "本文关注的不是能否再生成一个高分机器人，而是昂贵评估能否留下可迁移知识。每次适应度查询都需训练控制器，传统种群难以显式保存接触、支撑和失效经验。作者要求记忆兼具抽象性、证据依托与可编辑性，以应对设计尺度改变后的重新搜索。[P2][P5]",
+      "method": "系统以L1结构原型、L2正负规则、L3评估观测组织技能；检索后引导LLM修改精英父代，同时保留GA探索。候选经合法性检查和PPO评估，再通过ADD、DIAGNOSE、MERGE更新记忆。跨尺度仅导入L1与L2，避免把源尺度观测冒充目标证据。[P4—P5]",
+      "innovation": "创新重点是把搜索经验变为可检查、可修订的显式设计理论，而非更新LLM权重或直接放大优胜形态。规则描述功能部件间的支撑关系，并保留负面模式及来源。解读：其新意主要体现为证据关联记忆与进化搜索的系统结合，不等于提出新的物理定律。[P2][P7—P8]",
+      "findings": "七任务冷启动终点均超过所列GA，平均收敛加速比为1.66；该指标衡量评估次数而非运行时间。带参考迁移六项超过GA、一项持平，Carrier增益为5.84。Pusher取消GA变异下降24.0%，说明技能提案仍需探索路径；这些结果属于描述性比较。[P5—P7][P15]",
+      "limitations": "证据限于二维EVOGYM与固定PPO协议，不能确立三维或实体性能。主要设置仅三种子，消融只覆盖两任务，联合移除L2与L3不能分辨各自贡献；模型版本和硬件披露也不完整。逐页记录未发现原文件缺项，已纠正的提取错误不构成公式缺失。[P9][P15—P16][P19]",
+      "connection": "解读：与结构设计最直接的联系，是把承载路径、接触界面及执行器支撑转为可复用关系。对可靠性研究，负规则和观测追溯可启发失效知识管理；对智能运维，可类比检修经验库。但论文没有运维任务、故障诊断指标或实体可靠性试验，不能据此宣称应用有效。[P8—P9][P20]",
+      "next_steps": "建议先在结构优化任务复现技能库与GA混合搜索，分别消融正规则、负规则和观测示例，并增加匹配预算的多种子比较。进一步加入规则冲突处理、置信度校准和扰动压力测试，区分仿真偶然成功与稳健规律；实体迁移前设置人工审查和独立安全约束。[P9][P16—P17]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.368.pdf"
+    ],
+    "analyzed_at": "2026-11-14T15:47:32.508041+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": true,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "按资料中明确讨论的结构设计、可靠性与智能运维方向判断，本文直接涉及机器人结构设计，且有证据关联技能库、迁移对照和组件消融，值得重点阅读。可靠性与运维联系仅属方法启发；当前证据足以支持推荐，但不足以支持实体安全性或统计显著性结论。[P7—P9][P15—P16][P20]",
+    "evidence": "The proposed library stores not only\nskill names but also rules, supporting observations,\nand failure evidence, so users can inspect why a\ndesign prior was retrieved rather than treating the\nLLM proposal as an opaque recommendation."
+  },
+  "material": {
+    "version": "ec4a3e98771a6de277f6e53814b4cfc9d98b3c27cb891f8921be49199ab7b93b",
+    "total": 20,
+    "covered": 20,
+    "references": {
+      "problem": [
+        "P2",
+        "P5"
+      ],
+      "method": [
+        "P4",
+        "P5"
+      ],
+      "innovation": [
+        "P2",
+        "P7",
+        "P8"
+      ],
+      "findings": [
+        "P5",
+        "P6",
+        "P7",
+        "P15"
+      ],
+      "limitations": [
+        "P9",
+        "P15",
+        "P16",
+        "P19"
+      ],
+      "connection": [
+        "P8",
+        "P9",
+        "P20"
+      ],
+      "next_steps": [
+        "P9",
+        "P16",
+        "P17"
+      ]
+    },
+    "excerpt": "The proposed library stores not only\nskill names but also rules, supporting observations,\nand failure evidence, so users can inspect why a\ndesign prior was retrieved rather than treating the\nLLM proposal as an opaque recommendation.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18",
+      "P19",
+      "P20"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P2",
+        "detail": "设计空间数量的文字提取将指数扁平化为“5100 >10 69”；原页清晰显示5^100 > 10^69。已按原页恢复指数，关系到100个位置、每位置五类模块时的无约束组合数量；不代表满足连通性和执行器要求的可行形态数量。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P4",
+        "detail": "公式(2)的文字提取未完整保留分式和求和上下标布局。原页清晰显示w_s=(1+Σ_{i=1}^{n_s}clip(g_{s,i}/δ_max,0,1))/(2+n_s)。已据图纠正；分母作用于整个分子，影响技能效用评分及归一化后的抽样概率。原公式无缺项。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P5",
+        "detail": "公式(3)的文字提取压平了分式。原页清晰显示ḡ_ℓ←ḡ_ℓ+(g_i−ḡ_ℓ)/m_ℓ，分母m_ℓ仅作用于增量项，且为更新后的支持计数。已按原页恢复；影响规则运行平均收益的更新解释，原公式无缺项。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P7",
+        "detail": "图4的Balancer纵轴文字提取遗漏负号：上排含−0.10、−0.05，下排同样含−0.10、−0.05。原图负号可辨，已纠正；影响对搜索初期负适应度及曲线跨零过程的理解，不影响表2终点值。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P16",
+        "detail": "图8的提取文本将标题、条件名、刻度及数值转为/uni000000…字形编码。原页清晰可读，已恢复：完整方法、No Diagnose、No Merge、Pure LLM、No L2+L3；Walker数值依次9.56、9.16、9.44、9.35、9.54，Pusher依次9.87、7.74、8.49、7.51、7.52。错误影响消融结果识读，非原图缺项。"
+      }
+    ]
+  }
+}
