@@ -2646,7 +2646,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Abstract Existing FAIR materials repositories can only serve pre-computed entries, so broad coverage is perpetually incomplete and cannot adapt to new questions on demand. We present OptiMat Alloys, a large language model-powered conversational agent for multi-principal element alloy exploration. Its central contribution is LLM-based workflow orchestration coupled to a living database : every calculation is performed on demand and persisted automatically with provenance in a local database, so asking a question produces provenance-rich, FAIR-aligned records without a separate deposition step.…",
+      "summary": "本文针对合金组合空间庞大、模拟门槛高及计算结果难以持续复用的问题，将对话式工作流编排、通用机器学习原子间势与本地数据库连接起来，实现按需计算和来源信息自动保存。[P1–P4]验证涵盖材料性质、智能体执行及缓存复用，但结果仍属初筛级；跨模型一致不代表物理准确，跨用户汇聚也尚未实现。[P6–P9]阅读重点是计算与知识积累的一体化机制，而非将其视为自主发现或平衡相预测系统。",
       "raw_metadata": {
         "source": "Crossref",
         "source_id": "10.1038/s41524-026-02377-3",
@@ -2766,10 +2766,204 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {}
+      "recommendation": "推荐重点阅读其来源追踪、确定性工具约束及语言解释失效分析；这些方法对结构设计筛选和可靠科研工作流有参考价值，但不能直接证明智能运维应用效果。[P6][P19]",
+      "deep_read": {
+        "problem": "既有材料数据库主要服务预计算条目，难以响应新成分和新性质问题；新增结果还需研究者主动整理提交。作者希望同时降低模拟操作门槛、扩大数据供给，并补充可信度信息。问题核心不是单纯增加条目，而是让日常提问持续产生可追踪、可复用的研究记录。[P1–P3]",
+        "method": "系统以AutoGen和ASE连接七项工具，完成SQS生成、两阶段FIRE弛豫、弹性张量及QHA计算，再将性质与来源信息保存至SQLite。科学约束置于工具层，LLM负责请求解析和工具串联；跨势函数、构型与尺寸比较用于观察预测离散和收敛。[P4][P17–P19]",
+        "innovation": "作者强调的贡献是将LLM编排与自动持久化结合，让计算和入库成为同一步骤，并以低编程门槛界面支持持续使用。解读：创新主要在科研基础设施的组织机制，而非新势函数或新物理理论；当前已实现的是实例内累积复用，不是社区级联邦数据库。[P3][P9][P14]",
+        "findings": "作者单实例积累491个结构；28种合金验证中，晶格参数MAE≤0.011 Å、形成能MAE≤0.014 eV/atom。缓存比较无需新计算，但智能体曾在正确数值上给出错误排序及延性解释，说明工具执行可靠与文字结论可靠必须分开评估。[P6][P9][P13]",
+        "limitations": "随机单相模型不含有序与分相，集合离散不能覆盖共同偏差，联邦尚未实现。[P16–P17]原文件问题包括[P2]正文与图1b数量级冲突，限制空间规模引用；[P8]表2上下界矛盾，限制加速比解释；[P23]文献120缺编号，影响溯源。没有缺失公式可供补推。\n原文核对：[P2] 原页正文写1%分辨率下八元体系候选数量达到“10^54”，但图1b横轴8对应的理论候选柱位于约10^20量级，正文与图示数量级不一致。影响八元成分空间规模的定量引用，不改变图示所支持的候选空间远大于实验覆盖这一方向性结论；本批资料不足以确定作者拟采用的正确精确数值。；[P8] 表2表注原页同时写VASP未在60次SCF迭代内收敛，因此时间是“lower bounds”，加速比是“upper bounds”。按同一表注定义，加速比=VASP时间/ORB Direct时间；分母固定时，VASP时间下界对应比值下界，而非上界。影响加速比界限的解释，不影响已列耗时数值的识读。另外256原子时间来自单次迭代×60的外推，其严格界限不能仅凭该外推确定。；[P23] 参考文献120在原页确实出现“NIST-JANAF Thermochemical Tables. No. in”这一不完整书目片段，“No.”后没有明确编号。不能据本页恢复其拟填写内容。影响热化学参考资料的精确书目定位，不影响页面识读；本页没有因此缺失的公式或实验结果。",
+        "connection": "解读：与结构设计的直接联系是成分—弹性及热学性质初筛；与可靠性研究的联系是区分构型波动、模型偏差和解释错误。对智能运维，来源追踪、缓存复用和稳定性标记具有迁移潜力，但论文没有设备监测、故障诊断或寿命预测验证。[P6][P18–P19]",
+        "next_steps": "建议先选定目标合金族，使用已存构型复现并锁定软件与势函数版本，再开展多构型、多计算器及针对性DFT验证。延性比较应统一平均方案，解释规则宜在工具层校验。作者规划的DFT触发与微调闭环尚未实现，不应作为现有功能使用。[P17–P20]"
+      },
+      "title_zh": "OptiMat Alloys：对话智能体驱动的FAIR对齐多主元合金动态数据库",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41524-026-02377-3_reference.pdf"
+      ],
+      "analyzed_at": "2026-11-14T18:33:50.014558+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P4",
+          "P17",
+          "P18",
+          "P19"
+        ],
+        "innovation": [
+          "P3",
+          "P9",
+          "P14"
+        ],
+        "findings": [
+          "P6",
+          "P9",
+          "P13"
+        ],
+        "limitations": [
+          "P2",
+          "P8",
+          "P16",
+          "P17",
+          "P23"
+        ],
+        "connection": [
+          "P6",
+          "P18",
+          "P19"
+        ],
+        "next_steps": [
+          "P17",
+          "P18",
+          "P19",
+          "P20"
+        ]
+      },
+      "analysis_material_version": "6b6b6cbd357e16a9991583277353786cb9e753bd147397bbd222bcdbd298f927",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "作者姓名提取为带异常空格的“V l a d y s l a vT u r l o”；原页清楚显示为“Vladyslav Turlo”。已纠正，不影响研究结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "正文提取文本“1054”丢失上标层级；原页为“10^54”。此处仅恢复原文排版，不代表认可该数值；其与图1b的矛盾另列为source_defect。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P2",
+          "detail": "原页正文写1%分辨率下八元体系候选数量达到“10^54”，但图1b横轴8对应的理论候选柱位于约10^20量级，正文与图示数量级不一致。影响八元成分空间规模的定量引用，不改变图示所支持的候选空间远大于实验覆盖这一方向性结论；本批资料不足以确定作者拟采用的正确精确数值。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "正文提取文本将上下文窗口规模写作“106 tokens”；原页清楚显示为“10^6 tokens”。已恢复上标，避免误读为106个token。此处不是编号公式，不影响后文关于推理能力与上下文长度的定性比较。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P8",
+          "detail": "表2表注原页同时写VASP未在60次SCF迭代内收敛，因此时间是“lower bounds”，加速比是“upper bounds”。按同一表注定义，加速比=VASP时间/ORB Direct时间；分母固定时，VASP时间下界对应比值下界，而非上界。影响加速比界限的解释，不影响已列耗时数值的识读。另外256原子时间来自单次迭代×60的外推，其严格界限不能仅凭该外推确定。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P12",
+          "detail": "HCP静水弛豫段的理想轴比在提取文本中出现根号错排及“/C25”乱码；原页清楚显示c/a=√(8/3)≈1.633。已纠正。该式说明计算保持理想轴比，并非对a、c完全独立弛豫；影响HCP晶格参数与薄膜测量的比较条件，不是原文件公式缺失。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P16",
+          "detail": "Fe–Cr磁性讨论段提取文本写作“α–α0 miscibility gap”，原页清楚显示为“α–α′ miscibility gap”，第二相标记为撇号而非数字0。已纠正相名；影响磁性驱动互溶间隙的术语识别，不涉及公式或图表缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P17",
+          "detail": "SQS未编号目标函数中的“/C0”是减号提取乱码，原页为Φ=Σ_s w_s[Π_actual(s)−Π_random(s)]²；迭代数原页为10^6。已恢复求和、平方和上标层级，避免误解优化目标与采样次数；不是原文件公式缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P18",
+          "detail": "原页公式清楚，提取文本中的“/C0”“/C12”“/C16”等为数学符号编码错误。已核对恢复式(2)、(4)、(7)、(10)、(13)的负号，最小二乘式与S=C^−1的逆矩阵上标，式(9)的根号，以及式(11)的平衡体积求值标记。影响弹性拟合、方向性质和热力学公式的准确转录，不存在原页公式缺失。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P19",
+          "detail": "UUID4命名空间在提取文本中写成“2 122”，原页清楚显示为2^122；HCP参考轴比的根号也发生提取错排，原页为c/a=√(8/3)。已恢复数学排版，分别影响标识符空间规模及DFT晶胞约束的准确记录，不是原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P20",
+          "detail": "提供的文字提取遗漏日期行“Published online: 04 November 2026”；原页位于Received/Accepted行之后、References之前，已读清并补记。影响出版日期元数据，不影响计算结果；不是原文件缺失。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P23",
+          "detail": "参考文献120在原页确实出现“NIST-JANAF Thermochemical Tables. No. in”这一不完整书目片段，“No.”后没有明确编号。不能据本页恢复其拟填写内容。影响热化学参考资料的精确书目定位，不影响页面识读；本页没有因此缺失的公式或实验结果。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "8f9c4b4a407d",
+        "state": "published",
+        "updated_at": "2026-11-14T18:33:50.059209+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 23,
+        "covered": 23,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "作者姓名提取为带异常空格的“V l a d y s l a vT u r l o”；原页清楚显示为“Vladyslav Turlo”。已纠正，不影响研究结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "正文提取文本“1054”丢失上标层级；原页为“10^54”。此处仅恢复原文排版，不代表认可该数值；其与图1b的矛盾另列为source_defect。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P2",
+            "detail": "原页正文写1%分辨率下八元体系候选数量达到“10^54”，但图1b横轴8对应的理论候选柱位于约10^20量级，正文与图示数量级不一致。影响八元成分空间规模的定量引用，不改变图示所支持的候选空间远大于实验覆盖这一方向性结论；本批资料不足以确定作者拟采用的正确精确数值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "正文提取文本将上下文窗口规模写作“106 tokens”；原页清楚显示为“10^6 tokens”。已恢复上标，避免误读为106个token。此处不是编号公式，不影响后文关于推理能力与上下文长度的定性比较。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "表2表注原页同时写VASP未在60次SCF迭代内收敛，因此时间是“lower bounds”，加速比是“upper bounds”。按同一表注定义，加速比=VASP时间/ORB Direct时间；分母固定时，VASP时间下界对应比值下界，而非上界。影响加速比界限的解释，不影响已列耗时数值的识读。另外256原子时间来自单次迭代×60的外推，其严格界限不能仅凭该外推确定。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "HCP静水弛豫段的理想轴比在提取文本中出现根号错排及“/C25”乱码；原页清楚显示c/a=√(8/3)≈1.633。已纠正。该式说明计算保持理想轴比，并非对a、c完全独立弛豫；影响HCP晶格参数与薄膜测量的比较条件，不是原文件公式缺失。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P16",
+            "detail": "Fe–Cr磁性讨论段提取文本写作“α–α0 miscibility gap”，原页清楚显示为“α–α′ miscibility gap”，第二相标记为撇号而非数字0。已纠正相名；影响磁性驱动互溶间隙的术语识别，不涉及公式或图表缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P17",
+            "detail": "SQS未编号目标函数中的“/C0”是减号提取乱码，原页为Φ=Σ_s w_s[Π_actual(s)−Π_random(s)]²；迭代数原页为10^6。已恢复求和、平方和上标层级，避免误解优化目标与采样次数；不是原文件公式缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P18",
+            "detail": "原页公式清楚，提取文本中的“/C0”“/C12”“/C16”等为数学符号编码错误。已核对恢复式(2)、(4)、(7)、(10)、(13)的负号，最小二乘式与S=C^−1的逆矩阵上标，式(9)的根号，以及式(11)的平衡体积求值标记。影响弹性拟合、方向性质和热力学公式的准确转录，不存在原页公式缺失。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P19",
+            "detail": "UUID4命名空间在提取文本中写成“2 122”，原页清楚显示为2^122；HCP参考轴比的根号也发生提取错排，原页为c/a=√(8/3)。已恢复数学排版，分别影响标识符空间规模及DFT晶胞约束的准确记录，不是原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P20",
+            "detail": "提供的文字提取遗漏日期行“Published online: 04 November 2026”；原页位于Received/Accepted行之后、References之前，已读清并补记。影响出版日期元数据，不影响计算结果；不是原文件缺失。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P23",
+            "detail": "参考文献120在原页确实出现“NIST-JANAF Thermochemical Tables. No. in”这一不完整书目片段，“No.”后没有明确编号。不能据本页恢复其拟填写内容。影响热化学参考资料的精确书目定位，不影响页面识读；本页没有因此缺失的公式或实验结果。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -2790,7 +2984,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Abstract Spatial transcriptomics measures gene activity while preserving the locations of cells within tissue. A key analysis step is to divide the tissue into spatial domains, but the performance of computational methods varies considerably across datasets, and no single method consistently performs best. Here we show that a large language model can compare spatial domain maps and identify the better-performing methods. We developed L-STAR, which visually compares and ranks candidate methods, then builds a consensus map from the highest-ranked results. Across datasets representing different t…",
+      "summary": "空间转录组分析中，不同空间域检测方法的优势随数据集变化。L-STAR让视觉大语言模型比较候选分区图，按胜率筛选前五种方法，再以证据累积聚类生成共识结果。六个数据集上，其平均归一化ARI为0.96，但并非逐个数据集最优[P2、P4]。论文还检验展示顺序与配色敏感性，并提供经济模式和生物学命名模块。解读：值得关注的是自适应选择与共识聚合的结合，而非已证明跨领域通用。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -2901,10 +3095,177 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {}
+      "recommendation": "建议作为模型选择与共识聚合的方法参考重点阅读，尤其关注其偏差检验和成本权衡；不宜直接当作智能运维或结构可靠性的应用证据。",
+      "deep_read": {
+        "problem": "空间域检测需要恢复组织中分子与功能相近的区域，但组织复杂度、分辨率及噪声变化使单一方法难以持续领先。作者指出“no single method consistently performs best”[P1]。研究针对逐数据集人工选法的负担，探索能否利用视觉判断筛选可靠候选，而不是重新开发一个基础分区模型。",
+        "method": "L-STAR输入候选域分配及坐标，生成配色优化图像，由GPT-5默认重复五次进行两两比较，按各方法参与比较的胜率选前五[P7—P8]。随后构建等权共同分配矩阵，以D=1−C进行平均连接层次聚类，默认簇数取候选簇数中位数；事后命名不改变分区。",
+        "innovation": "解读：方法特色是把视觉模型评价嵌入自适应集成流程，而非提出新的证据累积聚类算法。它区别于仅选一个最佳方法，也区别于固定成员共识[P2、P9]。同时比较模式进一步通过重复排名得分筛选成员；标记基因驱动的事后注释则将分区选择与生物学命名分开[P8]。",
+        "findings": "六个数据集上，最高ARI方法均进入模型前五，L-STAR平均归一化ARI为0.96，BayesSpace为0.86[P2]。但其逐数据集排名包含第四名，不能解释为全面最优[P4]。默认模式每数据集平均3.70 USD、2.12 h，经济模式为0.29 USD、0.10 h，后者整体表现较弱[P3]。",
+        "limitations": "作者承认候选方法相关性可能强化共同错误，且无法完全区分新视觉推理与既有解剖知识[P5]。基准采用参考注释类别数设置簇数，未知簇数部署未获验证[P9，解读]。六个数据集及计算重复限制外推[P10]。核对记录未发现原文件缺项，公式乱码已纠正，不能算作源文件缺陷。",
+        "connection": "解读：对智能运维与可靠性研究，可借鉴根据样本特征选择候选模型、再聚合分区的思路，例如比较状态划分图；但本文仅研究组织空间域，未提供故障诊断、结构设计或寿命预测结果[P6、P9]。视觉上的连贯性也不能直接等同工程正确性，迁移必须另设物理与任务指标验证。",
+        "next_steps": "建议先在独立、未知真实簇数的数据上复现，并分别比较固定共识、仅模型选择及完整流程，以区分收益来源[P9]。针对作者指出的相关性问题，可检验多样性约束或冗余感知权重[P5]；迁移工程场景时再加入物理约束及盲测，记录顺序、配色、调用成本与失败案例。"
+      },
+      "title_zh": "L-STAR：视觉大语言模型引导的共识空间域检测",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41467-026-78923-w_reference.pdf"
+      ],
+      "analyzed_at": "2026-11-14T19:24:46.742622+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P7",
+          "P8"
+        ],
+        "innovation": [
+          "P2",
+          "P8",
+          "P9"
+        ],
+        "findings": [
+          "P2",
+          "P3",
+          "P4"
+        ],
+        "limitations": [
+          "P5",
+          "P8",
+          "P9",
+          "P10"
+        ],
+        "connection": [
+          "P6",
+          "P9"
+        ],
+        "next_steps": [
+          "P5",
+          "P9"
+        ]
+      },
+      "analysis_material_version": "4041565794ad33d52becfb69da45322ebe163add80ed195be86e092952aa7c74",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "所给文字提取遗漏原页左侧“Published online: 03 November 2026”。已由截图核实并补充；影响出版信息完整性，不影响方法或实验结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "图1内部的三幅图像、提问及回答未进入所给文字提取。原页可读：提问要求比较两种方法，输出限定为“First”或“Second”，展示回答为“First”。补全后支持正文所述视觉比较示例；不将图内指令作为操作指令。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "图2内部流程标签未进入所给文字提取。原页可读出两两比较、Count Wins、Compute Winning Rates、Rank by Winning Rates、Select Top k Methods、Consensus Matrix 与 Clustering Algorithm。图中使用一般化的前k方法表述，正文明确默认前五，二者不矛盾；未发现缺失公式。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "正文调用量公式在文字提取中损坏为分行的“R M 2 /C18/C19”。原页清楚显示组合数：默认调用量为R×C(M,2)，同时比较模式为R。不是原文件缺项；该纠正影响调用复杂度与成本比较的理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "图4内部指标未进入文字提取。原页依ARI/AMI/NMI顺序：L-STAR为0.6072/0.7180/0.7187，GraphST为0.6327/0.7144/0.7151，Spatial_MGCN为0.5561/0.6106/0.6117。补全后可见GraphST的ARI略高，而L-STAR的AMI、NMI略高，不能概括为L-STAR各指标均领先。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "图5内部指标未进入文字提取。原页依ARI/AMI/NMI顺序：L-STAR为0.4581/0.6131/0.6146，GraphST为0.2945/0.4645/0.4666，Spatial_MGCN为0.4536/0.6043/0.6059。补全支持L-STAR接近并略高于该示例最佳单一方法、优于GraphST的结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "Step 1的组合数在文字提取中损坏。原页明确每轮C(m,2)次比较、总计R×C(m,2)次LLM调用，默认R=5；temperature=1.0亦可读清。图6c内嵌注释表被遗漏，尤其人工L2对应L2/3、人工L3对应L4，补全后表明注释具有一致性但并非逐域完全正确。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "公式(1)的求和下标、标签上下标及指示函数括号在文字提取中乱码。原页完整显示C_ij=(1/k)Σ_{ℓ∈𝓜_k}I(L_i^(ℓ)=L_j^(ℓ))，i,j=1,…,n。其含义是所选方法的等权共同分配比例，并非标签数值平均；原文件未缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "经济模式调用量的组合数被提取为分行数字和“/C18/C19”。原页清楚显示调用量从R×C(m,2)降至R；纠正后明确默认模式随方法数二次增长，而经济模式每次重复仅调用一次，不影响其后共识步骤。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P10",
+          "detail": "Code availability中的Zenodo DOI被文字提取为“10.5281/zenodo.2266291037”，将上标参考文献编号37并入了链接。原页清楚显示DOI为10.5281/zenodo.22662910，后接上标37；P11参考文献37亦列出该DOI。影响代码归档标识，不影响实验结论；本批无公式或图号涉及此项。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "81af8463138f",
+        "state": "published",
+        "updated_at": "2026-11-14T19:24:46.761260+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 11,
+        "covered": 11,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "所给文字提取遗漏原页左侧“Published online: 03 November 2026”。已由截图核实并补充；影响出版信息完整性，不影响方法或实验结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "图1内部的三幅图像、提问及回答未进入所给文字提取。原页可读：提问要求比较两种方法，输出限定为“First”或“Second”，展示回答为“First”。补全后支持正文所述视觉比较示例；不将图内指令作为操作指令。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "图2内部流程标签未进入所给文字提取。原页可读出两两比较、Count Wins、Compute Winning Rates、Rank by Winning Rates、Select Top k Methods、Consensus Matrix 与 Clustering Algorithm。图中使用一般化的前k方法表述，正文明确默认前五，二者不矛盾；未发现缺失公式。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "正文调用量公式在文字提取中损坏为分行的“R M 2 /C18/C19”。原页清楚显示组合数：默认调用量为R×C(M,2)，同时比较模式为R。不是原文件缺项；该纠正影响调用复杂度与成本比较的理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "图4内部指标未进入文字提取。原页依ARI/AMI/NMI顺序：L-STAR为0.6072/0.7180/0.7187，GraphST为0.6327/0.7144/0.7151，Spatial_MGCN为0.5561/0.6106/0.6117。补全后可见GraphST的ARI略高，而L-STAR的AMI、NMI略高，不能概括为L-STAR各指标均领先。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "图5内部指标未进入文字提取。原页依ARI/AMI/NMI顺序：L-STAR为0.4581/0.6131/0.6146，GraphST为0.2945/0.4645/0.4666，Spatial_MGCN为0.4536/0.6043/0.6059。补全支持L-STAR接近并略高于该示例最佳单一方法、优于GraphST的结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "Step 1的组合数在文字提取中损坏。原页明确每轮C(m,2)次比较、总计R×C(m,2)次LLM调用，默认R=5；temperature=1.0亦可读清。图6c内嵌注释表被遗漏，尤其人工L2对应L2/3、人工L3对应L4，补全后表明注释具有一致性但并非逐域完全正确。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "公式(1)的求和下标、标签上下标及指示函数括号在文字提取中乱码。原页完整显示C_ij=(1/k)Σ_{ℓ∈𝓜_k}I(L_i^(ℓ)=L_j^(ℓ))，i,j=1,…,n。其含义是所选方法的等权共同分配比例，并非标签数值平均；原文件未缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "经济模式调用量的组合数被提取为分行数字和“/C18/C19”。原页清楚显示调用量从R×C(m,2)降至R；纠正后明确默认模式随方法数二次增长，而经济模式每次重复仅调用一次，不影响其后共识步骤。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "Code availability中的Zenodo DOI被文字提取为“10.5281/zenodo.2266291037”，将上标参考文献编号37并入了链接。原页清楚显示DOI为10.5281/zenodo.22662910，后接上标37；P11参考文献37亦列出该DOI。影响代码归档标识，不影响实验结论；本批无公式或图号涉及此项。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",

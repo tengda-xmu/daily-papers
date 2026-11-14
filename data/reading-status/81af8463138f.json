@@ -1,0 +1,64 @@
+{
+  "paper_id": "81af8463138f",
+  "state": "published",
+  "updated_at": "2026-11-14T19:24:46.761260+00:00",
+  "basis": "full_text",
+  "article_state": "retry",
+  "article_stage": "facts",
+  "reason": "",
+  "total": 11,
+  "covered": 11,
+  "pdf_available": true,
+  "issues": [
+    {
+      "kind": "extraction_error",
+      "page": "P1",
+      "detail": "所给文字提取遗漏原页左侧“Published online: 03 November 2026”。已由截图核实并补充；影响出版信息完整性，不影响方法或实验结论。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P2",
+      "detail": "图1内部的三幅图像、提问及回答未进入所给文字提取。原页可读：提问要求比较两种方法，输出限定为“First”或“Second”，展示回答为“First”。补全后支持正文所述视觉比较示例；不将图内指令作为操作指令。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P3",
+      "detail": "图2内部流程标签未进入所给文字提取。原页可读出两两比较、Count Wins、Compute Winning Rates、Rank by Winning Rates、Select Top k Methods、Consensus Matrix 与 Clustering Algorithm。图中使用一般化的前k方法表述，正文明确默认前五，二者不矛盾；未发现缺失公式。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P4",
+      "detail": "正文调用量公式在文字提取中损坏为分行的“R M 2 /C18/C19”。原页清楚显示组合数：默认调用量为R×C(M,2)，同时比较模式为R。不是原文件缺项；该纠正影响调用复杂度与成本比较的理解。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P5",
+      "detail": "图4内部指标未进入文字提取。原页依ARI/AMI/NMI顺序：L-STAR为0.6072/0.7180/0.7187，GraphST为0.6327/0.7144/0.7151，Spatial_MGCN为0.5561/0.6106/0.6117。补全后可见GraphST的ARI略高，而L-STAR的AMI、NMI略高，不能概括为L-STAR各指标均领先。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P6",
+      "detail": "图5内部指标未进入文字提取。原页依ARI/AMI/NMI顺序：L-STAR为0.4581/0.6131/0.6146，GraphST为0.2945/0.4645/0.4666，Spatial_MGCN为0.4536/0.6043/0.6059。补全支持L-STAR接近并略高于该示例最佳单一方法、优于GraphST的结论。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P7",
+      "detail": "Step 1的组合数在文字提取中损坏。原页明确每轮C(m,2)次比较、总计R×C(m,2)次LLM调用，默认R=5；temperature=1.0亦可读清。图6c内嵌注释表被遗漏，尤其人工L2对应L2/3、人工L3对应L4，补全后表明注释具有一致性但并非逐域完全正确。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P8",
+      "detail": "公式(1)的求和下标、标签上下标及指示函数括号在文字提取中乱码。原页完整显示C_ij=(1/k)Σ_{ℓ∈𝓜_k}I(L_i^(ℓ)=L_j^(ℓ))，i,j=1,…,n。其含义是所选方法的等权共同分配比例，并非标签数值平均；原文件未缺项。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P8",
+      "detail": "经济模式调用量的组合数被提取为分行数字和“/C18/C19”。原页清楚显示调用量从R×C(m,2)降至R；纠正后明确默认模式随方法数二次增长，而经济模式每次重复仅调用一次，不影响其后共识步骤。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P10",
+      "detail": "Code availability中的Zenodo DOI被文字提取为“10.5281/zenodo.2266291037”，将上标参考文献编号37并入了链接。原页清楚显示DOI为10.5281/zenodo.22662910，后接上标37；P11参考文献37亦列出该DOI。影响代码归档标识，不影响实验结论；本批无公式或图号涉及此项。"
+    }
+  ]
+}

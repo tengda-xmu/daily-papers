@@ -1,0 +1,139 @@
+{
+  "paper_id": "81af8463138f",
+  "fingerprint": "4617b95b90b468d5ba996e4bee1c54e9dab09382f8351f3a36324a1b95675c8c",
+  "analysis": {
+    "title_zh": "L-STAR：视觉大语言模型引导的共识空间域检测",
+    "summary": "空间转录组分析中，不同空间域检测方法的优势随数据集变化。L-STAR让视觉大语言模型比较候选分区图，按胜率筛选前五种方法，再以证据累积聚类生成共识结果。六个数据集上，其平均归一化ARI为0.96，但并非逐个数据集最优[P2、P4]。论文还检验展示顺序与配色敏感性，并提供经济模式和生物学命名模块。解读：值得关注的是自适应选择与共识聚合的结合，而非已证明跨领域通用。",
+    "recommendation": "建议作为模型选择与共识聚合的方法参考重点阅读，尤其关注其偏差检验和成本权衡；不宜直接当作智能运维或结构可靠性的应用证据。",
+    "deep_read": {
+      "problem": "空间域检测需要恢复组织中分子与功能相近的区域，但组织复杂度、分辨率及噪声变化使单一方法难以持续领先。作者指出“no single method consistently performs best”[P1]。研究针对逐数据集人工选法的负担，探索能否利用视觉判断筛选可靠候选，而不是重新开发一个基础分区模型。",
+      "method": "L-STAR输入候选域分配及坐标，生成配色优化图像，由GPT-5默认重复五次进行两两比较，按各方法参与比较的胜率选前五[P7—P8]。随后构建等权共同分配矩阵，以D=1−C进行平均连接层次聚类，默认簇数取候选簇数中位数；事后命名不改变分区。",
+      "innovation": "解读：方法特色是把视觉模型评价嵌入自适应集成流程，而非提出新的证据累积聚类算法。它区别于仅选一个最佳方法，也区别于固定成员共识[P2、P9]。同时比较模式进一步通过重复排名得分筛选成员；标记基因驱动的事后注释则将分区选择与生物学命名分开[P8]。",
+      "findings": "六个数据集上，最高ARI方法均进入模型前五，L-STAR平均归一化ARI为0.96，BayesSpace为0.86[P2]。但其逐数据集排名包含第四名，不能解释为全面最优[P4]。默认模式每数据集平均3.70 USD、2.12 h，经济模式为0.29 USD、0.10 h，后者整体表现较弱[P3]。",
+      "limitations": "作者承认候选方法相关性可能强化共同错误，且无法完全区分新视觉推理与既有解剖知识[P5]。基准采用参考注释类别数设置簇数，未知簇数部署未获验证[P9，解读]。六个数据集及计算重复限制外推[P10]。核对记录未发现原文件缺项，公式乱码已纠正，不能算作源文件缺陷。",
+      "connection": "解读：对智能运维与可靠性研究，可借鉴根据样本特征选择候选模型、再聚合分区的思路，例如比较状态划分图；但本文仅研究组织空间域，未提供故障诊断、结构设计或寿命预测结果[P6、P9]。视觉上的连贯性也不能直接等同工程正确性，迁移必须另设物理与任务指标验证。",
+      "next_steps": "建议先在独立、未知真实簇数的数据上复现，并分别比较固定共识、仅模型选择及完整流程，以区分收益来源[P9]。针对作者指出的相关性问题，可检验多样性约束或冗余感知权重[P5]；迁移工程场景时再加入物理约束及盲测，记录顺序、配色、调用成本与失败案例。"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://www.nature.com/articles/s41467-026-78923-w_reference.pdf"
+    ],
+    "analyzed_at": "2026-11-14T19:24:46.742622+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "给定方向仅有不可解释的标签，不能确认直接契合；若按此前关注的智能运维、结构设计与可靠性衡量，本文属于空间转录组方法研究，仅存在间接迁移价值。现有全文笔记及可核对原文足以确认其自适应筛选与共识聚合方法值得阅读，但不支持跨领域有效性判断。",
+    "evidence": "We developed L-STAR, which visually\ncompares and ranks candidate methods, then builds a consensus map from\nthe highest-ranked results."
+  },
+  "material": {
+    "version": "4041565794ad33d52becfb69da45322ebe163add80ed195be86e092952aa7c74",
+    "total": 11,
+    "covered": 11,
+    "references": {
+      "problem": [
+        "P1",
+        "P2"
+      ],
+      "method": [
+        "P7",
+        "P8"
+      ],
+      "innovation": [
+        "P2",
+        "P8",
+        "P9"
+      ],
+      "findings": [
+        "P2",
+        "P3",
+        "P4"
+      ],
+      "limitations": [
+        "P5",
+        "P8",
+        "P9",
+        "P10"
+      ],
+      "connection": [
+        "P6",
+        "P9"
+      ],
+      "next_steps": [
+        "P5",
+        "P9"
+      ]
+    },
+    "excerpt": "We developed L-STAR, which visually\ncompares and ranks candidate methods, then builds a consensus map from\nthe highest-ranked results.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P1",
+        "detail": "所给文字提取遗漏原页左侧“Published online: 03 November 2026”。已由截图核实并补充；影响出版信息完整性，不影响方法或实验结论。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P2",
+        "detail": "图1内部的三幅图像、提问及回答未进入所给文字提取。原页可读：提问要求比较两种方法，输出限定为“First”或“Second”，展示回答为“First”。补全后支持正文所述视觉比较示例；不将图内指令作为操作指令。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P3",
+        "detail": "图2内部流程标签未进入所给文字提取。原页可读出两两比较、Count Wins、Compute Winning Rates、Rank by Winning Rates、Select Top k Methods、Consensus Matrix 与 Clustering Algorithm。图中使用一般化的前k方法表述，正文明确默认前五，二者不矛盾；未发现缺失公式。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P4",
+        "detail": "正文调用量公式在文字提取中损坏为分行的“R M 2 /C18/C19”。原页清楚显示组合数：默认调用量为R×C(M,2)，同时比较模式为R。不是原文件缺项；该纠正影响调用复杂度与成本比较的理解。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P5",
+        "detail": "图4内部指标未进入文字提取。原页依ARI/AMI/NMI顺序：L-STAR为0.6072/0.7180/0.7187，GraphST为0.6327/0.7144/0.7151，Spatial_MGCN为0.5561/0.6106/0.6117。补全后可见GraphST的ARI略高，而L-STAR的AMI、NMI略高，不能概括为L-STAR各指标均领先。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P6",
+        "detail": "图5内部指标未进入文字提取。原页依ARI/AMI/NMI顺序：L-STAR为0.4581/0.6131/0.6146，GraphST为0.2945/0.4645/0.4666，Spatial_MGCN为0.4536/0.6043/0.6059。补全支持L-STAR接近并略高于该示例最佳单一方法、优于GraphST的结论。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P7",
+        "detail": "Step 1的组合数在文字提取中损坏。原页明确每轮C(m,2)次比较、总计R×C(m,2)次LLM调用，默认R=5；temperature=1.0亦可读清。图6c内嵌注释表被遗漏，尤其人工L2对应L2/3、人工L3对应L4，补全后表明注释具有一致性但并非逐域完全正确。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P8",
+        "detail": "公式(1)的求和下标、标签上下标及指示函数括号在文字提取中乱码。原页完整显示C_ij=(1/k)Σ_{ℓ∈𝓜_k}I(L_i^(ℓ)=L_j^(ℓ))，i,j=1,…,n。其含义是所选方法的等权共同分配比例，并非标签数值平均；原文件未缺项。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P8",
+        "detail": "经济模式调用量的组合数被提取为分行数字和“/C18/C19”。原页清楚显示调用量从R×C(m,2)降至R；纠正后明确默认模式随方法数二次增长，而经济模式每次重复仅调用一次，不影响其后共识步骤。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P10",
+        "detail": "Code availability中的Zenodo DOI被文字提取为“10.5281/zenodo.2266291037”，将上标参考文献编号37并入了链接。原页清楚显示DOI为10.5281/zenodo.22662910，后接上标37；P11参考文献37亦列出该DOI。影响代码归档标识，不影响实验结论；本批无公式或图号涉及此项。"
+      }
+    ]
+  }
+}
