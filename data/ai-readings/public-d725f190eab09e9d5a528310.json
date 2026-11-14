@@ -1,0 +1,23 @@
+{
+  "id": "public-d725f190eab09e9d5a528310",
+  "content_version": "c65a0a52562a22e680012d9edd0977166258a9eb600226e235f9023d01da48d3",
+  "analysis": {
+    "title_zh": "DeepSeek 开放应用能力 API：支持联网搜索、文件输入与 URL 读取",
+    "summary": "公告宣布向开发者开放 DeepSeek App 的应用能力：通过现有 API 的对应参数启用联网搜索、文件输入和 URL 读取，由服务端处理工具调用与上下文组装。deepseek-flash 在 Messages、Responses 和 Chat Completions API 中支持搜索；关闭思考并启用指定工具后，可按问题进行网页或图片搜索并附引用回答，适合资料检索与来源追溯。所给原文在深度思考搜索说明处截断，不能确认其完整机制。",
+    "application": "建议：科研迁移可考虑用于文献线索检索、网页资料汇总与引用追溯，但应核对原始来源；这些属于迁移建议，并非官方已验证的科研效果。官方原文明示搜索可返回带引用的回答，但未提供准确率、效率或科研任务评测结果。",
+    "requirements": "原文明示模型为 deepseek-flash，接口包括 Messages、Responses 和 Chat Completions API；普通联网搜索需关闭 thinking 并启用 deepseek_web_search 工具。账号、费用及部署条件未明确，使用条件见官方文档。",
+    "steps": [
+      {
+        "text": "使用普通联网搜索时，关闭 thinking 并启用 deepseek_web_search 工具。",
+        "evidence": "with thinking disabled and the deepseek_web_search tool enabled, the model runs web or image searches as the question requires and answers with citations."
+      }
+    ],
+    "evidence": [
+      "Today we open these capabilities to developers: enable the corresponding parameters in the existing APIs to get conversation features such as web search, file input and URL reading, with the tool calls and context assembly handled by the service.",
+      "The deepseek-flash model supports the following in the Messages, Responses and Chat Completions APIs:",
+      "with thinking disabled and the deepseek_web_search tool enabled, the model runs web or image searches as the question requires and answers with citations."
+    ],
+    "basis_url": "https://api-docs.deepseek.com/updates/#date-2026-11-13"
+  },
+  "analyzed_at": "2026-11-14T02:19:58.187781+00:00"
+}
