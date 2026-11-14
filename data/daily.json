@@ -27,7 +27,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Offensive dark humor presents a high-context safety challenge: its harmful meaning is often absent from surface wording and emerges only after recovering background knowledge and rhetorical transformation. To explore this problem, we introduce HellHumor-CN, a benchmark of 2,168 Chinese jokes annotated for three subtasks: (1) offense detection, (2) sensitive topic prediction, and (3) target identification. We further propose HumorLens, a knowledge-grounded and rhetoric-aware multi-agent framework that retrieves relevant background information and analyzes three common mechanisms in dark humor:…",
+      "summary": "中文黑色幽默的伤害常隐藏于典故、谐音和悲剧联想，不能仅凭敏感词识别。论文构建含2,168条笑话的HELLHUMOR-CN，将评价拆为冒犯检测、主题预测与目标识别，并提出知识检索结合三类修辞代理的HUMORLENS。结果显示框架改善多个底座的结构化解释表现，但陌生目标、隐含视觉场景和目标过度抽象仍难处理。[P1–P9] 解读：适合作为知识增强安全评估的方法参考，而非直接面向工程可靠性的应用成果。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -86,11 +86,135 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议作为跨领域方法参考阅读：其证据检索、机制分解和陌生目标评估具有启发性，但与智能运维、结构设计及工程可靠性并非直接契合。[P8–P10]",
+      "deep_read": {
+        "problem": "作者研究表面措辞无害、却因文化背景和修辞转换产生冒犯的中文黑色幽默。问题不止判断是否有害，还需恢复敏感主题及具体指向；“拿铁”等双关说明词面检测不足。[P1–P3] 解读：核心是语境依赖的结构化理解，而非普通敏感词分类。",
+        "method": "框架先识别可检索实体，将外部知识按主题抽取，再由嘲弄、反讽、双关代理分别输出机制、触发片段和理由，最终裁判综合判断。摘要提示限制使用检索原句，裁判可舍弃证据不足的分析。[P4–P5、P14–P15] 目标评价另采用语义裁判，允许别名但拒绝抽象主题替代具体目标。",
+        "innovation": "主要贡献是将中文冒犯性黑色幽默组织为三任务基准，并把知识定位与修辞机制分析衔接起来。数据含362个目标，521条冒犯实例涉及多个主题，支持超越单一二分类的评价。[P3–P4] 解读：创新侧重资源、任务组织和框架组合，不能据此宣称首次使用检索或多代理。",
+        "findings": "Gemini框架版本冒犯F1为0.8163，DeepSeek框架版本目标准确率为0.666；主题Macro最佳仍是Sonnet，不能说框架包揽全部指标。[P6] 五底座平均消融中，去知识使F1下降0.0457，去嘲弄下降0.0436，支持两者的重要性，但不等于部署成本优势已获验证。[P7]",
+        "limitations": "作者承认平台采样、主观标签、三类修辞覆盖和外部检索质量均有限。[P10] 原文件P20表11第二例因敏感性主动省略原笑话，仅保留抽象描述，限制对目标及解释的独立核验。解读：裁判总体准确率接近不足以排除共享偏差，低重叠划分也可能混入难度差异。[P8、P18]\n原文核对：[P20] 表11第二例在原页明确声明因敏感性省略原笑话，仅保留抽象描述；表注也说明敏感案例不逐字重现。这是作者主动省略，不是提取失败或页面不清。受影响的是对该例隐含关联、gold受害群体及模型错误解释的独立核验；不影响读取其余表格内容，不推造省略原文。",
+        "connection": "解读：对智能运维和可靠性研究，可借鉴“发现异常—恢复背景—定位对象”的分层思路，以及用陌生实体检验泛化的评价设计。[P8、P16–P18] 但论文研究的是语言冒犯，不涉及设备故障、结构优化或物理失效机理；资料没有证据证明其框架能改善工程指标。",
+        "next_steps": "建议先复核主题与目标的端到端计分，再进行目标不重叠、时间迁移及跨平台测试，并报告逐例裁判一致性、人工复核和检索成本。[P10、P16–P18] 若迁移至运维，应另建故障证据及实体标注集，对比单模型检索与多代理方案；这些是研究建议，不是作者已完成的结果。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "这个笑话为何冒犯？通过知识与修辞解释中文黑色幽默",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.204.pdf"
+      ],
+      "analyzed_at": "2026-11-14T13:45:16.653408+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P4",
+          "P5",
+          "P14",
+          "P15",
+          "P16",
+          "P17"
+        ],
+        "innovation": [
+          "P3",
+          "P4"
+        ],
+        "findings": [
+          "P6",
+          "P7"
+        ],
+        "limitations": [
+          "P8",
+          "P10",
+          "P18",
+          "P20"
+        ],
+        "connection": [
+          "P8",
+          "P16",
+          "P17",
+          "P18"
+        ],
+        "next_steps": [
+          "P10",
+          "P16",
+          "P17",
+          "P18"
+        ]
+      },
+      "analysis_material_version": "30ebeaa172e3a485533f640b043e8f1dca50dfec6f41da7dfdd643301a44530a",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "图1提取文字出现中文例句、Normal/Offensive标签及检测器名称重复，并打乱图内对应关系。原页可清楚核实四个例子：事实叙述标签Normal、预测Normal；溺亡典故笑话标签Offensive、预测Normal；显式辱骂标签Offensive、预测Offensive；“拿铁”双关标签Offensive、预测Normal。已按原图纠正，不能将重复提取内容视为额外样本或检测结果。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "图3文字提取重复了Analyst Agent、Summary Agent、Judge Agent、Pun Agent、Search Engines及部分分区标题和原始例句，并打乱布局顺序。原图已核实：知识整合为分析实体、检索、摘要；修辞分析包含嘲弄、双关、反讽三路，最终由一个裁判汇总。重复文字不是额外代理或重复实验，已按原图纠正；不影响案例所展示的两种提示方式预测差异。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "图4提取文本重复了三例原文、译文、Baseline/Ours预测及修辞分析，并打乱三列布局。原图已核实仅有三个案例，分别对应反讽、双关、嘲弄；每例各有一个Baseline预测Not Offensive和一个Ours预测Offensive。已按原图消除重复并恢复对应关系，不应将重复段落计为更多案例或额外实验结果。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P13",
+          "detail": "图6提取文本重复检测器名称和Normal/Offensive标签，并打乱标签与预测的对应顺序。原图已读清：四行依次为Normal→Normal、Offensive→Normal、Offensive→Offensive、Offensive→Normal。已按原图纠正；无图项缺失，不应把重复提取内容当作额外实例或额外预测。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P20",
+          "detail": "表11第二例在原页明确声明因敏感性省略原笑话，仅保留抽象描述；表注也说明敏感案例不逐字重现。这是作者主动省略，不是提取失败或页面不清。受影响的是对该例隐含关联、gold受害群体及模型错误解释的独立核验；不影响读取其余表格内容，不推造省略原文。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "d34594d4e0f2",
+        "state": "published",
+        "updated_at": "2026-11-14T13:45:16.689291+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 22,
+        "covered": 22,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "图1提取文字出现中文例句、Normal/Offensive标签及检测器名称重复，并打乱图内对应关系。原页可清楚核实四个例子：事实叙述标签Normal、预测Normal；溺亡典故笑话标签Offensive、预测Normal；显式辱骂标签Offensive、预测Offensive；“拿铁”双关标签Offensive、预测Normal。已按原图纠正，不能将重复提取内容视为额外样本或检测结果。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "图3文字提取重复了Analyst Agent、Summary Agent、Judge Agent、Pun Agent、Search Engines及部分分区标题和原始例句，并打乱布局顺序。原图已核实：知识整合为分析实体、检索、摘要；修辞分析包含嘲弄、双关、反讽三路，最终由一个裁判汇总。重复文字不是额外代理或重复实验，已按原图纠正；不影响案例所展示的两种提示方式预测差异。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "图4提取文本重复了三例原文、译文、Baseline/Ours预测及修辞分析，并打乱三列布局。原图已核实仅有三个案例，分别对应反讽、双关、嘲弄；每例各有一个Baseline预测Not Offensive和一个Ours预测Offensive。已按原图消除重复并恢复对应关系，不应将重复段落计为更多案例或额外实验结果。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "图6提取文本重复检测器名称和Normal/Offensive标签，并打乱标签与预测的对应顺序。原图已读清：四行依次为Normal→Normal、Offensive→Normal、Offensive→Offensive、Offensive→Normal。已按原图纠正；无图项缺失，不应把重复提取内容当作额外实例或额外预测。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P20",
+            "detail": "表11第二例在原页明确声明因敏感性省略原笑话，仅保留抽象描述；表注也说明敏感案例不逐字重现。这是作者主动省略，不是提取失败或页面不清。受影响的是对该例隐含关联、gold受害群体及模型错误解释的独立核验；不影响读取其余表格内容，不推造省略原文。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -551,7 +675,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Offensive dark humor presents a high-context safety challenge: its harmful meaning is often absent from surface wording and emerges only after recovering background knowledge and rhetorical transformation. To explore this problem, we introduce HellHumor-CN, a benchmark of 2,168 Chinese jokes annotated for three subtasks: (1) offense detection, (2) sensitive topic prediction, and (3) target identification. We further propose HumorLens, a knowledge-grounded and rhetoric-aware multi-agent framework that retrieves relevant background information and analyzes three common mechanisms in dark humor:…",
+      "summary": "中文黑色幽默的伤害常隐藏于典故、谐音和悲剧联想，不能仅凭敏感词识别。论文构建含2,168条笑话的HELLHUMOR-CN，将评价拆为冒犯检测、主题预测与目标识别，并提出知识检索结合三类修辞代理的HUMORLENS。结果显示框架改善多个底座的结构化解释表现，但陌生目标、隐含视觉场景和目标过度抽象仍难处理。[P1–P9] 解读：适合作为知识增强安全评估的方法参考，而非直接面向工程可靠性的应用成果。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -610,11 +734,135 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议作为跨领域方法参考阅读：其证据检索、机制分解和陌生目标评估具有启发性，但与智能运维、结构设计及工程可靠性并非直接契合。[P8–P10]",
+      "deep_read": {
+        "problem": "作者研究表面措辞无害、却因文化背景和修辞转换产生冒犯的中文黑色幽默。问题不止判断是否有害，还需恢复敏感主题及具体指向；“拿铁”等双关说明词面检测不足。[P1–P3] 解读：核心是语境依赖的结构化理解，而非普通敏感词分类。",
+        "method": "框架先识别可检索实体，将外部知识按主题抽取，再由嘲弄、反讽、双关代理分别输出机制、触发片段和理由，最终裁判综合判断。摘要提示限制使用检索原句，裁判可舍弃证据不足的分析。[P4–P5、P14–P15] 目标评价另采用语义裁判，允许别名但拒绝抽象主题替代具体目标。",
+        "innovation": "主要贡献是将中文冒犯性黑色幽默组织为三任务基准，并把知识定位与修辞机制分析衔接起来。数据含362个目标，521条冒犯实例涉及多个主题，支持超越单一二分类的评价。[P3–P4] 解读：创新侧重资源、任务组织和框架组合，不能据此宣称首次使用检索或多代理。",
+        "findings": "Gemini框架版本冒犯F1为0.8163，DeepSeek框架版本目标准确率为0.666；主题Macro最佳仍是Sonnet，不能说框架包揽全部指标。[P6] 五底座平均消融中，去知识使F1下降0.0457，去嘲弄下降0.0436，支持两者的重要性，但不等于部署成本优势已获验证。[P7]",
+        "limitations": "作者承认平台采样、主观标签、三类修辞覆盖和外部检索质量均有限。[P10] 原文件P20表11第二例因敏感性主动省略原笑话，仅保留抽象描述，限制对目标及解释的独立核验。解读：裁判总体准确率接近不足以排除共享偏差，低重叠划分也可能混入难度差异。[P8、P18]\n原文核对：[P20] 表11第二例在原页明确声明因敏感性省略原笑话，仅保留抽象描述；表注也说明敏感案例不逐字重现。这是作者主动省略，不是提取失败或页面不清。受影响的是对该例隐含关联、gold受害群体及模型错误解释的独立核验；不影响读取其余表格内容，不推造省略原文。",
+        "connection": "解读：对智能运维和可靠性研究，可借鉴“发现异常—恢复背景—定位对象”的分层思路，以及用陌生实体检验泛化的评价设计。[P8、P16–P18] 但论文研究的是语言冒犯，不涉及设备故障、结构优化或物理失效机理；资料没有证据证明其框架能改善工程指标。",
+        "next_steps": "建议先复核主题与目标的端到端计分，再进行目标不重叠、时间迁移及跨平台测试，并报告逐例裁判一致性、人工复核和检索成本。[P10、P16–P18] 若迁移至运维，应另建故障证据及实体标注集，对比单模型检索与多代理方案；这些是研究建议，不是作者已完成的结果。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "这个笑话为何冒犯？通过知识与修辞解释中文黑色幽默",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.204.pdf"
+      ],
+      "analyzed_at": "2026-11-14T13:45:16.653408+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P4",
+          "P5",
+          "P14",
+          "P15",
+          "P16",
+          "P17"
+        ],
+        "innovation": [
+          "P3",
+          "P4"
+        ],
+        "findings": [
+          "P6",
+          "P7"
+        ],
+        "limitations": [
+          "P8",
+          "P10",
+          "P18",
+          "P20"
+        ],
+        "connection": [
+          "P8",
+          "P16",
+          "P17",
+          "P18"
+        ],
+        "next_steps": [
+          "P10",
+          "P16",
+          "P17",
+          "P18"
+        ]
+      },
+      "analysis_material_version": "30ebeaa172e3a485533f640b043e8f1dca50dfec6f41da7dfdd643301a44530a",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "图1提取文字出现中文例句、Normal/Offensive标签及检测器名称重复，并打乱图内对应关系。原页可清楚核实四个例子：事实叙述标签Normal、预测Normal；溺亡典故笑话标签Offensive、预测Normal；显式辱骂标签Offensive、预测Offensive；“拿铁”双关标签Offensive、预测Normal。已按原图纠正，不能将重复提取内容视为额外样本或检测结果。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "图3文字提取重复了Analyst Agent、Summary Agent、Judge Agent、Pun Agent、Search Engines及部分分区标题和原始例句，并打乱布局顺序。原图已核实：知识整合为分析实体、检索、摘要；修辞分析包含嘲弄、双关、反讽三路，最终由一个裁判汇总。重复文字不是额外代理或重复实验，已按原图纠正；不影响案例所展示的两种提示方式预测差异。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "图4提取文本重复了三例原文、译文、Baseline/Ours预测及修辞分析，并打乱三列布局。原图已核实仅有三个案例，分别对应反讽、双关、嘲弄；每例各有一个Baseline预测Not Offensive和一个Ours预测Offensive。已按原图消除重复并恢复对应关系，不应将重复段落计为更多案例或额外实验结果。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P13",
+          "detail": "图6提取文本重复检测器名称和Normal/Offensive标签，并打乱标签与预测的对应顺序。原图已读清：四行依次为Normal→Normal、Offensive→Normal、Offensive→Offensive、Offensive→Normal。已按原图纠正；无图项缺失，不应把重复提取内容当作额外实例或额外预测。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P20",
+          "detail": "表11第二例在原页明确声明因敏感性省略原笑话，仅保留抽象描述；表注也说明敏感案例不逐字重现。这是作者主动省略，不是提取失败或页面不清。受影响的是对该例隐含关联、gold受害群体及模型错误解释的独立核验；不影响读取其余表格内容，不推造省略原文。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "d34594d4e0f2",
+        "state": "published",
+        "updated_at": "2026-11-14T13:45:16.689291+00:00",
+        "basis": "full_text",
+        "article_state": "retry",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 22,
+        "covered": 22,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "图1提取文字出现中文例句、Normal/Offensive标签及检测器名称重复，并打乱图内对应关系。原页可清楚核实四个例子：事实叙述标签Normal、预测Normal；溺亡典故笑话标签Offensive、预测Normal；显式辱骂标签Offensive、预测Offensive；“拿铁”双关标签Offensive、预测Normal。已按原图纠正，不能将重复提取内容视为额外样本或检测结果。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "图3文字提取重复了Analyst Agent、Summary Agent、Judge Agent、Pun Agent、Search Engines及部分分区标题和原始例句，并打乱布局顺序。原图已核实：知识整合为分析实体、检索、摘要；修辞分析包含嘲弄、双关、反讽三路，最终由一个裁判汇总。重复文字不是额外代理或重复实验，已按原图纠正；不影响案例所展示的两种提示方式预测差异。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "图4提取文本重复了三例原文、译文、Baseline/Ours预测及修辞分析，并打乱三列布局。原图已核实仅有三个案例，分别对应反讽、双关、嘲弄；每例各有一个Baseline预测Not Offensive和一个Ours预测Offensive。已按原图消除重复并恢复对应关系，不应将重复段落计为更多案例或额外实验结果。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "图6提取文本重复检测器名称和Normal/Offensive标签，并打乱标签与预测的对应顺序。原图已读清：四行依次为Normal→Normal、Offensive→Normal、Offensive→Offensive、Offensive→Normal。已按原图纠正；无图项缺失，不应把重复提取内容当作额外实例或额外预测。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P20",
+            "detail": "表11第二例在原页明确声明因敏感性省略原笑话，仅保留抽象描述；表注也说明敏感案例不逐字重现。这是作者主动省略，不是提取失败或页面不清。受影响的是对该例隐含关联、gold受害群体及模型错误解释的独立核验；不影响读取其余表格内容，不推造省略原文。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -337464,13 +337712,13 @@
     "unavailable": 46
   },
   "analysis_status": {
-    "ready_core": 0,
+    "ready_core": 1,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 6
+    "pending": 5
   },
   "edition": {
     "id": "43597549877",

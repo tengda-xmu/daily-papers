@@ -1,0 +1,39 @@
+{
+  "paper_id": "d34594d4e0f2",
+  "state": "published",
+  "updated_at": "2026-11-14T13:45:16.689291+00:00",
+  "basis": "full_text",
+  "article_state": "retry",
+  "article_stage": "facts",
+  "reason": "",
+  "total": 22,
+  "covered": 22,
+  "pdf_available": true,
+  "issues": [
+    {
+      "kind": "extraction_error",
+      "page": "P1",
+      "detail": "图1提取文字出现中文例句、Normal/Offensive标签及检测器名称重复，并打乱图内对应关系。原页可清楚核实四个例子：事实叙述标签Normal、预测Normal；溺亡典故笑话标签Offensive、预测Normal；显式辱骂标签Offensive、预测Offensive；“拿铁”双关标签Offensive、预测Normal。已按原图纠正，不能将重复提取内容视为额外样本或检测结果。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P5",
+      "detail": "图3文字提取重复了Analyst Agent、Summary Agent、Judge Agent、Pun Agent、Search Engines及部分分区标题和原始例句，并打乱布局顺序。原图已核实：知识整合为分析实体、检索、摘要；修辞分析包含嘲弄、双关、反讽三路，最终由一个裁判汇总。重复文字不是额外代理或重复实验，已按原图纠正；不影响案例所展示的两种提示方式预测差异。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P8",
+      "detail": "图4提取文本重复了三例原文、译文、Baseline/Ours预测及修辞分析，并打乱三列布局。原图已核实仅有三个案例，分别对应反讽、双关、嘲弄；每例各有一个Baseline预测Not Offensive和一个Ours预测Offensive。已按原图消除重复并恢复对应关系，不应将重复段落计为更多案例或额外实验结果。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P13",
+      "detail": "图6提取文本重复检测器名称和Normal/Offensive标签，并打乱标签与预测的对应顺序。原图已读清：四行依次为Normal→Normal、Offensive→Normal、Offensive→Offensive、Offensive→Normal。已按原图纠正；无图项缺失，不应把重复提取内容当作额外实例或额外预测。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P20",
+      "detail": "表11第二例在原页明确声明因敏感性省略原笑话，仅保留抽象描述；表注也说明敏感案例不逐字重现。这是作者主动省略，不是提取失败或页面不清。受影响的是对该例隐含关联、gold受害群体及模型错误解释的独立核验；不影响读取其余表格内容，不推造省略原文。"
+    }
+  ]
+}
