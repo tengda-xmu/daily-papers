@@ -1,0 +1,64 @@
+{
+  "paper_id": "da56605f1edf",
+  "state": "published",
+  "updated_at": "2026-11-14T20:44:02.460884+00:00",
+  "basis": "full_text",
+  "article_state": "pending",
+  "article_stage": "",
+  "reason": "",
+  "total": 12,
+  "covered": 12,
+  "pdf_available": true,
+  "issues": [
+    {
+      "kind": "extraction_error",
+      "page": "P1",
+      "detail": "所给文字遗漏原页明确显示的“Published online: 29 October 2026”，已据原页补正为2026年10月29日。属于出版元数据提取遗漏，不影响方法和性能结论。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P3",
+      "detail": "所给文字保留图1图注，但未提取图内流程与示例。原页可读：图1a包含动作集、提示词、模型加载、模型响应、解析、提取数据和后处理；图1b示例输出依次为NEWSOLUTION、ADD NH₄Cl (20 mL, 1 M)、SETTEMPERATURE 80 °C、ADD zeolite (1 g)、STIR during 2 h。已补读，非原文件缺项；遗漏会使仅凭文字无法核对动作顺序及参数映射。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P4",
+      "detail": "图3图注的SEM公式在文字提取中乱码，原页可读为SEM = σ/√n，σ为总体标准差，n = 7个LLM。已纠正；该式说明误差线是跨模型均值标准误，不是标准差。文字提取还遗漏图2动作清单及图3流程示例，已据原图核对并补入笔记，不属于原文件缺项。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P6",
+      "detail": "图4图注SD公式在文字提取中出现“/C0 /C22”等乱码；原页可读为SD = √[(1/n)Σᵢ₌₁ⁿ(xᵢ−x̄)²]，n = 5次独立运行。已纠正，分母为n而非n−1。提取文字未保留柱状图内容；已核对图4a沸石优势及图4b中RXN有机合成流程优于本文流程的方向，避免将结果误解为全领域最优。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P7",
+      "detail": "文字提取仅保留图5图注，遗漏动作标签、图例与横轴。原页已核对，横轴为Relative Amount (%)，显示−100至100的刻度，并以0为参考线；四种流程存在动作数量的正负偏差。已补读，不能将该图误作非负的检出率或准确率，也不能从数量偏差直接判断动作内容正确性。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P8",
+      "detail": "文字提取未保留图6的坐标、散点及边缘分布。原页已核对：横轴BLEU Similarity，纵轴Levenshtein Similarity；本文流程为蓝色点群，有机模型为两种绿色点群，SAC模型为橙色参考标记。图注明确SAC模型的图形面积不具代表性，不能据此推断其分布或误差范围；未从图中补造精确数值。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P9",
+      "detail": "式(1)至式(3)已据原页核对。提取文字中的式(3)出现“/C0”“/C1”等乱码，原页清楚显示F-score = 2·Precision·Recall/(Precision+Recall)；式(1)、式(2)分别为TP/(TP+FP)、TP/(TP+FN)。公式完整，无原文件缺项；已纠正，避免误读F-score运算符。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P10",
+      "detail": "提取文字仅保留图7图注，未保留图内步骤及流程标签。已据原图补读三步：分析标准提示下的模型响应；构建或复用解析器，必要时添加后处理；优化提示、模型参数并比较多个LLM。遗漏尤其会掩盖步骤2允许复用解析器且后处理按需添加的条件，不影响页面可读性。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P11",
+      "detail": "代码可用性段落的提取文字将归档DOI后的上标参考文献号44拼入链接，形成10.5281/zenodo.2207942044。原页清楚显示DOI为10.5281/zenodo.22079420，其后为上标44，且与P12参考文献44一致。已纠正；影响代码归档定位，不影响实验数值。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P12",
+      "detail": "原页已核实参考文献40仅为“Kleene, S. C. et al. Representation of events in nerve nets and finite automata.”，随后直接进入文献41；缺少年份、出版来源及页码或其他定位信息。该缺项影响对P9正则表达式相关引文的追溯，不构成实验公式缺失，也不影响其余页面识读；未自行补写书目信息。"
+    }
+  ]
+}
