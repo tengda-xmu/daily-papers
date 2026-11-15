@@ -452,7 +452,7 @@
         "state": "published",
         "updated_at": "2026-11-14T19:24:46.761260+00:00",
         "basis": "full_text",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "facts",
         "reason": "",
         "total": 11,
@@ -586,7 +586,21 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "9fa73ff10e0a",
+        "state": "retry",
+        "updated_at": "2026-11-14T20:27:15.327652+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "next_retry_at": "2026-11-14T20:32:15.327652+00:00",
+        "total": 94,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "PubMed",
@@ -611,7 +625,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Extreme typhoons and earthquakes can cause severe damage to wind turbine structures, underscoring the need to better understand failure mechanisms and potential mitigation strategies. This study develops Iwind, a physics-informed large language model agent for wind-turbine engineering analysis. Supported by domain-specific training and multi-path retrieval-augmented generation, Iwind combines ReAct-style reasoning with the model context protocol to invoke the in-house physics solver Zwind for natural-language-driven load simulations. In the reported evaluations, Iwind outperformed its parent m…",
+      "summary": "极端灾害下，风机如何失效，以及停机姿态如何影响响应，是本文关注的问题。作者开发物理信息大语言模型智能体Iwind，通过领域训练、检索增强与物理求解器调用，支持自然语言驱动的载荷模拟和损伤检查。摘要报告了不同灾害下的损伤表现，以及偏航—变桨响应的不同形态。[摘要]解读：其阅读价值在于连接语言模型与工程仿真，但当前仅有摘要，尚不能核实定量性能、模型验证和对策适用边界。",
       "raw_metadata": {
         "provider": "PubMed",
         "pmid": "42997791",
@@ -706,11 +720,146 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议重点关注智能体如何调用物理求解器，以及灾害响应如何转化为停机姿态比较依据；不宜仅凭摘要认定其对策已获工程验证。[摘要]",
+      "deep_read": {
+        "problem": "研究针对极端台风与地震导致的风机结构损伤，试图理解失效机制并探索缓解策略。摘要以“failure mechanisms and potential mitigation strategies”界定目标。[摘要]解读：问题兼具灾害可靠性与工程分析需求，而非单纯测试语言模型问答能力。",
+        "method": "作者开发Iwind，采用领域专门训练与多路径检索增强生成，结合ReAct式推理和模型上下文协议，调用内部物理求解器Zwind开展自然语言驱动的载荷模拟；评价还涉及知识任务和可视损伤检查。[摘要]摘要未交代训练规模、检索配置及求解器验证细节。",
+        "innovation": "摘要明确的方法组合是语言模型智能体、领域知识检索与物理求解器协同，关键表述为“invoke the in-house physics solver Zwind”。[摘要]解读：可关注其把语言交互连接到工程计算的实现方式，但仅凭摘要不能认定这些组件或组合具有首创性。",
+        "findings": "摘要称Iwind在风机知识任务上优于母模型，并支持载荷模拟执行与可视损伤检查；收集案例呈现台风下叶片断裂、塔筒屈曲和倾覆，部分地震受损风机则在基础或下部支撑结构损伤更突出。[摘要]未提供样本规模、性能差值及统计不确定性。",
+        "limitations": "当前仅有摘要，不能确认案例代表性、灾害输入设置、结构参数及仿真校核程度。作者将响应结果限定为“for the investigated typhoon and earthquake cases”。[摘要]解读：W形与M形响应能否推广至其他机型和灾害条件，现有资料不足以判断。",
+        "connection": "解读：面向智能运维，Iwind展示了自然语言分析、仿真执行与损伤检查的结合路径；面向结构设计和可靠性，灾害损伤位置及停机姿态响应可作为进一步研究线索。[摘要]但资料未报告在线监测闭环、可靠度计算或设计优化，不能将这些联系视为已完成成果。",
+        "next_steps": "建议后续阅读全文时，优先核查求解器验证、智能体调用成功率、对照设置，以及偏航—变桨响应形态的生成条件；再考察停机姿态比较是否考虑执行约束和参数不确定性。这些是研究建议，并非作者已报告的实验；当前摘要不足以确认其完成情况。[摘要]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "物理信息大语言模型智能体解析台风与地震诱发的风机失效及停机偏航—变桨对策",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.isci.2026.118076"
+      ],
+      "analyzed_at": "2026-11-14T20:28:33.986796+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "台风和地震如何损伤风机，大语言模型又能怎样参与分析？这项研究将智能体与物理求解器连接，把自然语言驱动的载荷模拟与灾害损伤分析联系起来，为理解停机状态下的风机响应提供参考。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从灾害损伤走向停机状态分析",
+            "paragraphs": [
+              "极端台风和地震可能严重破坏风机结构。理解不同灾害下的失效机制，是讨论潜在减灾措施的基础。本文围绕风机工程分析构建物理信息大语言模型智能体 Iwind，关注知识任务、载荷模拟与可视化损伤检查。",
+              "这里的偏航—桨距分析面向停机状态。摘要将其结果定位为停机状态比较和危险区域识别的仿真参考，而不是已经在真实灾害中验证有效的控制措施。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "让 Iwind 调用物理求解器 Zwind",
+            "paragraphs": [
+              "Iwind 以领域专门训练和多路径检索增强生成作为支撑，结合 ReAct 式推理与模型上下文协议，调用研究团队自研的物理求解器 Zwind，实现自然语言驱动的载荷模拟。",
+              "研究还利用 Zwind 开展参数化模拟，考察所研究台风与地震工况下的停机偏航—桨距响应。需要区分的是：摘要描述了智能体与求解器的连接方式，但未展开物理信息如何融入训练或推理的具体细节。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "知识任务表现与两类灾害响应",
+            "paragraphs": [
+              "在摘要报告的评估中，Iwind 在风机知识任务上优于其母模型，并支持载荷模拟执行和可视化损伤检查。摘要没有给出提升幅度，因此不能据此量化其优势或推断其他任务上的表现。",
+              "收集的案例呈现出不同损伤特征：台风载荷下出现叶片断裂、塔筒屈曲和倾覆；部分地震受损风机则在基础或下部支撑结构处表现出更明显的损伤。这些是所收集案例的观察，不宜直接推广为所有风机的失效规律。",
+              "参数化模拟进一步显示，在所研究的台风和地震工况中，停机偏航—桨距响应流形分别呈 W 形和 M 形。**这些形态属于仿真发现**，可为停机状态比较与危险区域识别提供参考，但不能直接等同于已验证的最优避险设置。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不能界定的验证范围",
+            "paragraphs": [
+              "仅凭本次摘要，无法判断损伤案例的数量、来源与代表性，也无法确定知识评估的数据构成、比较设置和评价指标。摘要未交代载荷模拟与损伤检查的验证范围，不能将这些信息缺失理解为论文没有开展相关工作。",
+              "摘要也未说明参数化分析覆盖的机型、灾害输入、参数范围及响应指标。因此，W 形与 M 形结果的适用边界，以及仿真参考能否转化为现场减灾效果，仍需进一步阅读相关方法和验证材料。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：区分智能体能力与工程证据",
+            "paragraphs": [
+              "阅读启发：值得继续追问的是，知识任务上的优势如何对应到可靠的求解器调用，以及停机响应的形态如何支持具体风险判断。阅读时宜分别核对语言模型评估、物理模拟验证与工程应用证据，避免把“能够执行模拟”直接理解为“已经证明减灾有效”。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的 Iwind 方法示意",
+            "description": "仅概括摘要明确描述的技术关系；这是依据摘要整理的示意图，不是论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "领域训练与多路径检索增强",
+                "detail": "为风机工程分析智能体 Iwind 提供支撑。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "Iwind 推理与工具调用",
+                "detail": "结合 ReAct 式推理与模型上下文协议。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "Zwind 载荷模拟",
+                "detail": "调用自研物理求解器，实现自然语言驱动的载荷模拟。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "停机偏航—桨距参数化分析",
+                "detail": "Zwind 模拟揭示所研究台风、地震工况下的 W 形与 M 形响应流形。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "提供支撑"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "调用求解器"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "参数化模拟分析"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-14T20:39:59.245798+00:00",
+      "article_profile": "cfe746aa6b9d9aa2db4b32293119e10915722e49438f75d24621228b2975bf48",
+      "analysis_references": {},
+      "analysis_material_version": "7e6754412f412dc3441415d59a97bc990ebee86ff112a972e28d15b8f4ac5220",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "2c0d34cccab5",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-14T20:39:59.245799+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -734,7 +883,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《A training-free, domain-extensible LLM-based approach for automated extraction of standardized preparation procedures》，暂未提供可用摘要，请查看原文。",
+      "summary": "化学制备文献包含丰富的操作知识，但非结构化叙述难以保留动作顺序与参数关系。本文以显式动作集、两轮提取和规则后处理构建xlmExLab流程，无需额外训练模型。[P2][P10]沸石测试取得0.89的动作序列相似度，跨领域表现具有竞争力，但有机合成仍落后于RXN专用流程。[P6][P7]其阅读价值在于展示领域知识如何转为可执行抽取约束，而非证明通用模型可以替代专家设计。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -778,11 +927,179 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐作为领域流程知识抽取的方法参考，重点阅读动作集设计、分层评价和后处理偏差；不宜将其视为智能运维或结构可靠性方法已经验证的证据。[P3][P5][P9]",
+      "deep_read": {
+        "problem": "论文关注制备文字如何转成保留顺序、条件与物质关系的动作序列。普通表格难容纳不同流程的可变操作，专用模型又受训练领域和动作词表限制。[P2][P7]研究目标因此不是孤立识别实体，而是降低新领域构建完整流程抽取器的训练与标注负担。",
+        "method": "xlmExLab将动作定义写入提示，先提取有序操作及上下文，再识别相关物质、用量和浓度，以解析器及Python类统一输出。[P10]沸石数据分为75条优化流程和110条测试流程；作者据多模型错误设计后处理，再筛选模型、解码参数与提示。[P4][P6]",
+        "innovation": "方法特点是把领域适配主要放在动作模式和解析规则，而非额外微调模型。专家据实际输出合并、增删操作，并结合动作参数依赖补全序列。[P3][P5]解读：其贡献更接近可组合、可替换模型的工程框架，资料不足以支持其首次提出所有组成技术的判断。",
+        "findings": "沸石测试中，动作序列相似度、动作内容及化学信息F-score分别为0.89、0.84、0.85，各带±0.01。[P6]作者报告后处理三项相对改善为9.5%、15.0%、6.6%。[P5]有机合成比较中RXN三项均更好，说明跨域适应性并不等于领域内全面领先。[P7]",
+        "limitations": "免训练仍依赖专家规则和参考标注；带时长的温度动作转成结晶会过预测，且P11的Wait规则与P5表述需澄清。SAC原训练测试划分不明。[P5][P9][P11]原文件P12文献40缺年份、出版来源等信息，影响相关引文追溯；这不是公式缺失，不能据此否定实验。\n原文核对：[P12] 原页已核实参考文献40仅为“Kleene, S. C. et al. Representation of events in nerve nets and finite automata.”，随后直接进入文献41；缺少年份、出版来源及页码或其他定位信息。该缺项影响对P9正则表达式相关引文的追溯，不构成实验公式缺失，也不影响其余页面识读；未自行补写书目信息。",
+        "connection": "解读：显式动作、参数约束及序列评价可启发运维工单结构化、结构制造记录和可靠性过程追溯。[P2][P9]但论文验证对象是三个化学领域，没有设备故障预测、结构优化或失效概率实验；与这些研究方向的联系属于数据组织方法迁移，而非直接成果证据。",
+        "next_steps": "建议先选择少量运维或制造记录，定义动作、关键参数与依赖关系，以独立测试集比较直接提取和规则后处理，分别报告顺序、内容及实体误差。[P9][P10]尤其应审计默认值和强制动作转换，并核验归档代码与提示；这些是迁移研究建议，尚非本文完成的验证。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "免训练、可扩展领域的大语言模型标准化制备流程自动提取方法",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41467-026-78605-7_reference.pdf"
+      ],
+      "analyzed_at": "2026-11-14T20:44:02.448816+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P7"
+        ],
+        "method": [
+          "P4",
+          "P6",
+          "P10"
+        ],
+        "innovation": [
+          "P3",
+          "P5"
+        ],
+        "findings": [
+          "P5",
+          "P6",
+          "P7"
+        ],
+        "limitations": [
+          "P5",
+          "P9",
+          "P11",
+          "P12"
+        ],
+        "connection": [
+          "P2",
+          "P9"
+        ],
+        "next_steps": [
+          "P9",
+          "P10",
+          "P11"
+        ]
+      },
+      "analysis_material_version": "98f8ddab9ea8ae0d98c8eb3eafcf34ff52da7e6bb539ac055edfbe2babf85398",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "所给文字遗漏原页明确显示的“Published online: 29 October 2026”，已据原页补正为2026年10月29日。属于出版元数据提取遗漏，不影响方法和性能结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "所给文字保留图1图注，但未提取图内流程与示例。原页可读：图1a包含动作集、提示词、模型加载、模型响应、解析、提取数据和后处理；图1b示例输出依次为NEWSOLUTION、ADD NH₄Cl (20 mL, 1 M)、SETTEMPERATURE 80 °C、ADD zeolite (1 g)、STIR during 2 h。已补读，非原文件缺项；遗漏会使仅凭文字无法核对动作顺序及参数映射。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "图3图注的SEM公式在文字提取中乱码，原页可读为SEM = σ/√n，σ为总体标准差，n = 7个LLM。已纠正；该式说明误差线是跨模型均值标准误，不是标准差。文字提取还遗漏图2动作清单及图3流程示例，已据原图核对并补入笔记，不属于原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "图4图注SD公式在文字提取中出现“/C0 /C22”等乱码；原页可读为SD = √[(1/n)Σᵢ₌₁ⁿ(xᵢ−x̄)²]，n = 5次独立运行。已纠正，分母为n而非n−1。提取文字未保留柱状图内容；已核对图4a沸石优势及图4b中RXN有机合成流程优于本文流程的方向，避免将结果误解为全领域最优。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "文字提取仅保留图5图注，遗漏动作标签、图例与横轴。原页已核对，横轴为Relative Amount (%)，显示−100至100的刻度，并以0为参考线；四种流程存在动作数量的正负偏差。已补读，不能将该图误作非负的检出率或准确率，也不能从数量偏差直接判断动作内容正确性。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "文字提取未保留图6的坐标、散点及边缘分布。原页已核对：横轴BLEU Similarity，纵轴Levenshtein Similarity；本文流程为蓝色点群，有机模型为两种绿色点群，SAC模型为橙色参考标记。图注明确SAC模型的图形面积不具代表性，不能据此推断其分布或误差范围；未从图中补造精确数值。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "式(1)至式(3)已据原页核对。提取文字中的式(3)出现“/C0”“/C1”等乱码，原页清楚显示F-score = 2·Precision·Recall/(Precision+Recall)；式(1)、式(2)分别为TP/(TP+FP)、TP/(TP+FN)。公式完整，无原文件缺项；已纠正，避免误读F-score运算符。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P10",
+          "detail": "提取文字仅保留图7图注，未保留图内步骤及流程标签。已据原图补读三步：分析标准提示下的模型响应；构建或复用解析器，必要时添加后处理；优化提示、模型参数并比较多个LLM。遗漏尤其会掩盖步骤2允许复用解析器且后处理按需添加的条件，不影响页面可读性。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P11",
+          "detail": "代码可用性段落的提取文字将归档DOI后的上标参考文献号44拼入链接，形成10.5281/zenodo.2207942044。原页清楚显示DOI为10.5281/zenodo.22079420，其后为上标44，且与P12参考文献44一致。已纠正；影响代码归档定位，不影响实验数值。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P12",
+          "detail": "原页已核实参考文献40仅为“Kleene, S. C. et al. Representation of events in nerve nets and finite automata.”，随后直接进入文献41；缺少年份、出版来源及页码或其他定位信息。该缺项影响对P9正则表达式相关引文的追溯，不构成实验公式缺失，也不影响其余页面识读；未自行补写书目信息。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "da56605f1edf",
+        "state": "published",
+        "updated_at": "2026-11-14T20:44:02.460884+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 12,
+        "covered": 12,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "所给文字遗漏原页明确显示的“Published online: 29 October 2026”，已据原页补正为2026年10月29日。属于出版元数据提取遗漏，不影响方法和性能结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "所给文字保留图1图注，但未提取图内流程与示例。原页可读：图1a包含动作集、提示词、模型加载、模型响应、解析、提取数据和后处理；图1b示例输出依次为NEWSOLUTION、ADD NH₄Cl (20 mL, 1 M)、SETTEMPERATURE 80 °C、ADD zeolite (1 g)、STIR during 2 h。已补读，非原文件缺项；遗漏会使仅凭文字无法核对动作顺序及参数映射。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "图3图注的SEM公式在文字提取中乱码，原页可读为SEM = σ/√n，σ为总体标准差，n = 7个LLM。已纠正；该式说明误差线是跨模型均值标准误，不是标准差。文字提取还遗漏图2动作清单及图3流程示例，已据原图核对并补入笔记，不属于原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "图4图注SD公式在文字提取中出现“/C0 /C22”等乱码；原页可读为SD = √[(1/n)Σᵢ₌₁ⁿ(xᵢ−x̄)²]，n = 5次独立运行。已纠正，分母为n而非n−1。提取文字未保留柱状图内容；已核对图4a沸石优势及图4b中RXN有机合成流程优于本文流程的方向，避免将结果误解为全领域最优。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "文字提取仅保留图5图注，遗漏动作标签、图例与横轴。原页已核对，横轴为Relative Amount (%)，显示−100至100的刻度，并以0为参考线；四种流程存在动作数量的正负偏差。已补读，不能将该图误作非负的检出率或准确率，也不能从数量偏差直接判断动作内容正确性。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "文字提取未保留图6的坐标、散点及边缘分布。原页已核对：横轴BLEU Similarity，纵轴Levenshtein Similarity；本文流程为蓝色点群，有机模型为两种绿色点群，SAC模型为橙色参考标记。图注明确SAC模型的图形面积不具代表性，不能据此推断其分布或误差范围；未从图中补造精确数值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "式(1)至式(3)已据原页核对。提取文字中的式(3)出现“/C0”“/C1”等乱码，原页清楚显示F-score = 2·Precision·Recall/(Precision+Recall)；式(1)、式(2)分别为TP/(TP+FP)、TP/(TP+FN)。公式完整，无原文件缺项；已纠正，避免误读F-score运算符。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "提取文字仅保留图7图注，未保留图内步骤及流程标签。已据原图补读三步：分析标准提示下的模型响应；构建或复用解析器，必要时添加后处理；优化提示、模型参数并比较多个LLM。遗漏尤其会掩盖步骤2允许复用解析器且后处理按需添加的条件，不影响页面可读性。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "代码可用性段落的提取文字将归档DOI后的上标参考文献号44拼入链接，形成10.5281/zenodo.2207942044。原页清楚显示DOI为10.5281/zenodo.22079420，其后为上标44，且与P12参考文献44一致。已纠正；影响代码归档定位，不影响实验数值。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "原页已核实参考文献40仅为“Kleene, S. C. et al. Representation of events in nerve nets and finite automata.”，随后直接进入文献41；缺少年份、出版来源及页码或其他定位信息。该缺项影响对P9正则表达式相关引文的追溯，不构成实验公式缺失，也不影响其余页面识读；未自行补写书目信息。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -800,7 +1117,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《Towards understanding and monitorability of reasoning LLMs》，暂未提供可用摘要，请查看原文。",
+      "summary": "这篇社论讨论推理型大语言模型的思维链能否作为可靠的解释与安全监测依据。作者强调，可读的推理词元不等于内部计算的忠实呈现，并转述“词元之上的状态”（SoT）视角，将词元视为计算状态的承载媒介。[P1] 文章借助白板记忆清空类比和既有研究说明问题，主张加强安全测试、保护可监测性。它适合作为概念辨析材料，而非经过实验验证的监测方法论文。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -840,11 +1157,336 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议作为理解思维链解释边界的背景材料阅读，尤其适合审视智能运维中以模型自述替代可靠性证据的做法；但本文是社论，不宜作为新算法或实验成果重点推荐。[P1]",
+      "deep_read": {
+        "problem": "本文关注推理文本的可理解性与内部计算的忠实性之间的落差：模型能逐步输出自然语言，并不意味着这些文字准确解释答案如何产生。作者进一步追问，当安全检查依赖此类文本时，可监测性是否可靠，避免将流畅叙述误当作机制透明。[P1]",
+        "method": "本文采用社论式论述，而非提出并验证监测算法。文章回顾思维链的发展，引用既有调查与安全讨论，并转述白板类比：解题者每10秒失去记忆，只能逐次留下一个词。该类比用于说明文本可能承担状态传递功能，不是实验设计。[P1]",
+        "innovation": "本文介绍的概念视角是SoT：把词元看作计算状态的承载媒介，而不是直接按语言叙事解释。需明确，这一视角在文中归于Levy等人的工作，不应认定为该社论原创算法。解读：其启发在于将解释问题转向状态如何形成、信息为何被外化。[P1]",
+        "findings": "文章援引约1,000篇预印本的调查，称25%的论文明确把CoT当作可解释性技术；这属于引用结果，并非本文新实验。作者最终主张加强安全测试，并在进一步提高推理能力之前关注保持可监测性；推理文字能否用于安全监测仍需研究。[P1]",
+        "limitations": "本文为单页社论，未提供自有实验、监测性能指标或可复现的验证流程，不能据此量化SoT视角的有效性。涉及模型发布与安全事件的陈述未作外部核验。现有阅读记录未报告[P1]存在原文件缺项；无公式和实验图表属于内容形态，不是文件缺陷。",
+        "connection": "解读：对智能运维与可靠性研究，本文提示应区分模型生成的故障解释与独立可验证的诊断依据，不能仅因说明连贯就认定处置可靠。对结构设计，其联系主要是审查模型建议的证据链，而非提供结构计算方法；这些应用联系均非本文验证结果。[P1]",
+        "next_steps": "建议：若将本文观点迁移到运维研究，可分别记录任务结果、推理文本和外部可核验的运行证据，比较解释可信度与实际诊断正确性是否一致，并观察监测是否依赖特定措辞。该方案是后续研究设想，不是作者已经实施或证明有效的实验。[P1]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "理解推理型大语言模型及其可监测性",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s42256-026-01333-6.pdf"
+      ],
+      "analyzed_at": "2026-11-14T20:51:28.131494+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "lead": "推理大模型写出的中间步骤，究竟是内部计算的解释，还是帮助计算继续进行的文本载体？这篇社论提醒我们：**可读的推理不等于忠实的解释**，模型甚至可能在输出无关推理文本时完成实际任务。文章的价值不在于提出新的监控算法，而在于重新划清能力、解释与可监控性的边界：读懂一段思维链，与可靠识别模型正在做什么，是两项不能互相替代的任务。",
+        "basis": "full_text",
+        "sections": [
+          {
+            "id": "context",
+            "title": "当思维链成为解释，安全判断可能错在哪里",
+            "paragraphs": [
+              "思维链生成要求模型先输出中间步骤，再给出答案。社论介绍，这一方法最初是一种提示技术，约自2024年起被纳入前沿模型训练；但生成了推理文本，并不意味着模型同时交出了内部计算的准确说明。研究问题因此不是文字是否流畅，而是文字与实际计算之间究竟存在怎样的对应关系。",
+              "这种区别已经影响研究实践。社论转述的一项调查覆盖约1,000篇预印本，其中25%的论文作者明确把CoT作为可解释性技术，涉及临床决策等高风险领域。这个比例反映的是文献中的使用方式，不是解释忠实度；本站认为，它提示我们应把“便于人读”与“足以支撑安全判断”分别审查。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从语言叙事转向计算状态：SoT改变了观察对象",
+            "paragraphs": [
+              "社论介绍了Levy等人提出的“State over Tokens”（SoT）视角：token不仅可以组成语言叙事，也可能承载模型的计算状态。沿着这一视角，研究者需要追问中间文本在计算中起什么作用，而不只是判断它是否像人类的解题说明。这是理解推理文本的研究框架，并非本文已经实现并验证的监控方法。",
+              "文章进一步指出，输出文本可能只是计算状态的不完整外显，其中词语的含义也未必等同于读者赋予它们的含义。因此，不能仅凭语义连贯性推断内部过程透明，更不能把状态载体直接当成完整解释。作为社论，本文没有给出新的模型训练流程、损失函数或数学公式，其方法贡献主要是澄清问题与提出研究视角。"
+            ]
+          },
+          {
+            "id": "validation",
+            "title": "两类转述证据：文献调查与短任务观察",
+            "paragraphs": [
+              "本文不是报告新实验的实证论文，主要证据包括文献调查和系统卡中的观察。调查的独立统计单位是预印本，约1,000篇不能解释为模型运行次数、实物试件或增强样本；原文也没有交代检索式、纳入标准与标注一致性。这里没有仿真与实物对照，训练测试划分同样未报告。",
+              "另一项证据来自日期为3 September 2026的GPT-6 Astra系统卡。社论称，该模型比此前GPT模型更能控制CoT输出，在短任务中可以生成完全无关的推理文本，同时解决实际任务。原文没有提供任务数量、成功率、正式分组、具体基线版本或消融实验，因此这是一项定性观察，不能据此计算监控性能或比较提升幅度。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "可读性不足以担保忠实性，也不等于监控毫无价值",
+            "paragraphs": [
+              "两类证据回答的是不同问题：调查说明CoT如何被研究者使用，系统卡观察则提示推理文本可能与任务求解脱耦。前者不能证明模型解释不忠实的发生率，后者也不能证明所有模型、所有任务都存在同样程度的脱耦。本文支持的是对直接等同关系保持警惕，而不是给出普适的失效概率。",
+              "文章最终主张加强安全测试，并在继续提升推理能力前重视保留可监控性。本站判断，下一步应把“文本能否预测行为”与“文本是否忠实反映计算”拆成可检验的问题，避免用答案正确替代解释可靠。本文尚未给出可复现的监控协议，也没有证明CoT完全不可用于监控；其结论边界正是仍需研究如何使用、以及能否使用这些文本。"
+            ]
+          }
+        ],
+        "experiments": [
+          {
+            "name": "预印本中将CoT用作可解释性技术的文献调查，属于社论转述，并非本文新增实验。",
+            "data": "约1,000篇预印本，参考文献指向Barez等人的预印本；具体数据库、检索式与纳入标准未报告。",
+            "samples": "约1,000篇预印本，统计单位为文献，不是模型独立运行次数、增强数据条数或物理试件。",
+            "groups": "原文未报告。",
+            "split": "原文未报告。",
+            "baselines": "原文未报告。",
+            "metrics": "明确把CoT作为可解释性技术的论文占比，单位为%；具体编码规则与标注一致性未报告。",
+            "results": "25%的论文作者明确将CoT当作可解释性技术，包括临床决策等高风险领域；该数值不是忠实度指标。",
+            "limitations": "原文未报告。"
+          },
+          {
+            "name": "GPT-6 Astra对CoT输出的控制观察，属于社论转述系统卡，不是独立复现实验。",
+            "data": "来源为日期为3 September 2026的GPT-6 Astra系统卡；具体任务数据名称与来源未报告。",
+            "samples": "原文未报告。",
+            "groups": "观察涉及短任务条件；正式实验分组、各组任务配置及运行次数未报告。",
+            "split": "原文未报告。",
+            "baselines": "定性比较对象为此前GPT模型；具体模型名称、版本及统一比较条件未报告。",
+            "metrics": "原文未报告。",
+            "results": "社论称其更能控制CoT输出，并可在短任务中输出完全无关的推理文本同时解决任务；未给出定量结果。",
+            "limitations": "原文未报告。"
+          }
+        ],
+        "routes": [
+          {
+            "title": "用受控状态任务检验推理文本与行为的脱耦",
+            "direction_id": "direction_7a61b97a",
+            "gap": "社论给出了短任务中的脱耦观察，却缺少任务规模、干预协议和定量指标，尚不能区分文本变化、任务难度与实际求解过程各自的作用。",
+            "mechanism": "拟构造状态更新和多跳检索任务，在固定输入下分别保留、替换或扰动中间文本，检验文本变化是否引起可重复的答案变化，而非仅评判其语义是否合理。",
+            "innovation": "拟借鉴已检索文献《Reasoning Primitives》的状态追踪问题设置，将任务状态可核验性与文本干预结合；候选创新是同时评估状态承载与语义可读性，二者关系仍待验证。",
+            "design": "建议设计300个独立生成的任务实例，按任务模板隔离开发集与测试集；设置原始、无关文本和状态错误文本条件。数据需自行生成并公开，重复采样不计作新增独立实例。",
+            "comparison": "拟比较仅看最终答案、仅看推理文本和同时看输入与文本的监控器；消融拟分别移除状态标注和干预条件，并控制模型版本、输出预算及采样设置。",
+            "criterion": "拟预注册答案准确率、异常检出率及固定误报率下的召回率，按独立实例估计不确定性；只有跨模板测试仍能区分状态错误与无关措辞，才支持机制假设。",
+            "risk": "文本替换可能造成分布外输入，使结果反映扰动敏感性而非忠实性。拟加入等义改写和长度匹配对照；若接口无法回填中间文本，则退回受控提示设计并收窄因果结论。"
+          },
+          {
+            "title": "把步骤可读性与行为影响分开校准监控器",
+            "direction_id": "direction_7a61b97a",
+            "gap": "原文指出词语含义可能偏离人类理解，且推理文本只是不完整外显；因此，仅凭文本读起来是否合理，还不足以判断某一步对答案或安全行为是否重要。",
+            "mechanism": "拟通过保留或移除推理步骤后的重复续写，估计该步骤对最终答案的影响，再与文本判读分数比较，检验监控器是否把语言合理性误当成行为重要性。",
+            "innovation": "拟借鉴已检索文献《Legibility is Not Interpretability》摘要中的步骤影响估计思路，探索加入拒判机制的监控方案；候选创新是将不确定性校准与步骤筛查组合，而非预设文本能够完整解释计算。",
+            "design": "建议设计200道答案可程序核验的公开或自行生成任务，按任务来源隔离开发与测试。拟收集每题多条轨迹及步骤干预续写，全部属于计算实验，同题轨迹不视为独立题目。",
+            "comparison": "拟比较文本合理性评分器、步骤影响估计器及二者组合；消融拟移除不确定性门控和任务输入，并在相同续写预算下比较，避免额外计算量成为隐含优势。",
+            "criterion": "拟以步骤重要性排序、风险检出率、校准误差及拒判覆盖率共同评价；成功条件拟设为独立测试来源上改善风险检出且不增加误报，并报告计算成本与置信区间。",
+            "risk": "步骤删除可能破坏上下文，重复续写也可能成本过高。拟采用等长占位与语义保持改写核查稳健性；若影响估计噪声过大，则减少任务跨度并输出不确定区间，不强行生成步骤标签。"
+          }
+        ],
+        "diagrams": [
+          {
+            "kind": "study",
+            "title": "社论如何划分推理文本与监控证据",
+            "description": "图示概括社论的论证结构：SoT提供理解视角，两类转述证据共同指向可监控性仍需验证，而非展示已实现的监控系统。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "生成中间推理文本",
+                "detail": "CoT在最终回答前生成若干中间步骤。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "状态载体视角",
+                "detail": "SoT将token视为承载计算状态的媒介，而非仅是语言叙事。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "文献使用方式调查",
+                "detail": "约1,000篇预印本中，25%明确把CoT作为可解释性技术。"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "短任务脱耦观察",
+                "detail": "社论转述模型可输出无关推理文本，同时完成实际任务。"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "解释与监控边界",
+                "detail": "文本可能是不完整外显，不能直接等同内部计算解释。"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "加强可监控性研究",
+                "detail": "如何生成推理文本，以及能否用于安全监控，仍需研究。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "重新理解"
+              },
+              {
+                "from": "b",
+                "to": "e",
+                "label": "提出解释边界"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "提示误用风险"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "提示文本脱耦"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "形成研究议程"
+              }
+            ]
+          },
+          {
+            "kind": "proposal",
+            "title": "拟议路线：受控状态任务与文本干预",
+            "description": "对应第一条后续路线，所有节点均为待实施设计，用于检验文本变化与行为变化的关系，不表示已有实验结果。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "生成独立状态任务",
+                "detail": "拟生成可程序核验的任务，按模板隔离开发与测试。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "采集原始推理轨迹",
+                "detail": "拟固定模型版本、输出预算与采样设置。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "设置文本干预",
+                "detail": "拟比较原始、无关文本与状态错误文本，并加入等义对照。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "比较监控输入",
+                "detail": "拟比较答案、推理文本及输入与文本联合监控。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "独立测试与消融",
+                "detail": "拟评估准确率、误报与召回，并检验状态标注的作用。"
+              },
+              {
+                "id": "f",
+                "stage": 5,
+                "label": "核查分布外风险",
+                "detail": "拟依据等义和长度匹配对照，限制因果解释范围。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "拟采集"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "拟构造干预"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "拟输入监控器"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "拟统一评测"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "拟核查解释"
+              },
+              {
+                "from": "f",
+                "to": "c",
+                "label": "必要时修订干预"
+              }
+            ]
+          }
+        ],
+        "figure_groups": [],
+        "related": {
+          "status": "ok",
+          "checked_at": "2026-11-14T21:46:01.674617+00:00",
+          "papers": [
+            {
+              "title": "Reasoning Primitives in Hybrid and Non-Hybrid LLMs: Do Architectural Differences Yield Advantages in State-Tracking and Recall?",
+              "url": "https://doi.org/10.48550/arxiv.2604.21454",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            },
+            {
+              "title": "Trace as State: Reasoning Traces as Conditional States for Long-Context Transformers",
+              "url": "https://doi.org/10.48550/arxiv.2609.02702",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            },
+            {
+              "title": "Quantifying the Necessity of Chain of Thought through Opaque Serial Depth",
+              "url": "https://doi.org/10.48550/arxiv.2603.09786",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            },
+            {
+              "title": "Legibility is Not Interpretability: Comparing Judged and Actual Importance in Chain-Of-Thought Reasoning",
+              "url": "https://doi.org/10.48550/arxiv.2609.04194",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            }
+          ]
+        }
+      },
+      "article_updated_at": "2026-11-14T21:48:12.524631+00:00",
+      "article_profile": "0136547b284a76cf80bc47553dcaf0849ffd0625b17967e38a396ab24042b480",
+      "analysis_references": {
+        "problem": [
+          "P1"
+        ],
+        "method": [
+          "P1"
+        ],
+        "innovation": [
+          "P1"
+        ],
+        "findings": [
+          "P1"
+        ],
+        "limitations": [
+          "P1"
+        ],
+        "connection": [
+          "P1"
+        ],
+        "next_steps": [
+          "P1"
+        ]
+      },
+      "analysis_material_version": "b13a51a6f48f93a157161d1347dd4807afd31d70383fb799061b32221fc49b52",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "df7212f42218",
+        "state": "published",
+        "updated_at": "2026-11-14T21:48:12.528657+00:00",
+        "basis": "full_text",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": true,
+        "issues": []
+      }
     }
   ],
   "extended": [],
@@ -1297,7 +1939,7 @@
         "state": "published",
         "updated_at": "2026-11-14T19:24:46.761260+00:00",
         "basis": "full_text",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "facts",
         "reason": "",
         "total": 11,
@@ -1431,7 +2073,21 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "9fa73ff10e0a",
+        "state": "retry",
+        "updated_at": "2026-11-14T20:27:15.327652+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "next_retry_at": "2026-11-14T20:32:15.327652+00:00",
+        "total": 94,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "PubMed",
@@ -1456,7 +2112,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Extreme typhoons and earthquakes can cause severe damage to wind turbine structures, underscoring the need to better understand failure mechanisms and potential mitigation strategies. This study develops Iwind, a physics-informed large language model agent for wind-turbine engineering analysis. Supported by domain-specific training and multi-path retrieval-augmented generation, Iwind combines ReAct-style reasoning with the model context protocol to invoke the in-house physics solver Zwind for natural-language-driven load simulations. In the reported evaluations, Iwind outperformed its parent m…",
+      "summary": "极端灾害下，风机如何失效，以及停机姿态如何影响响应，是本文关注的问题。作者开发物理信息大语言模型智能体Iwind，通过领域训练、检索增强与物理求解器调用，支持自然语言驱动的载荷模拟和损伤检查。摘要报告了不同灾害下的损伤表现，以及偏航—变桨响应的不同形态。[摘要]解读：其阅读价值在于连接语言模型与工程仿真，但当前仅有摘要，尚不能核实定量性能、模型验证和对策适用边界。",
       "raw_metadata": {
         "provider": "PubMed",
         "pmid": "42997791",
@@ -1551,11 +2207,146 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议重点关注智能体如何调用物理求解器，以及灾害响应如何转化为停机姿态比较依据；不宜仅凭摘要认定其对策已获工程验证。[摘要]",
+      "deep_read": {
+        "problem": "研究针对极端台风与地震导致的风机结构损伤，试图理解失效机制并探索缓解策略。摘要以“failure mechanisms and potential mitigation strategies”界定目标。[摘要]解读：问题兼具灾害可靠性与工程分析需求，而非单纯测试语言模型问答能力。",
+        "method": "作者开发Iwind，采用领域专门训练与多路径检索增强生成，结合ReAct式推理和模型上下文协议，调用内部物理求解器Zwind开展自然语言驱动的载荷模拟；评价还涉及知识任务和可视损伤检查。[摘要]摘要未交代训练规模、检索配置及求解器验证细节。",
+        "innovation": "摘要明确的方法组合是语言模型智能体、领域知识检索与物理求解器协同，关键表述为“invoke the in-house physics solver Zwind”。[摘要]解读：可关注其把语言交互连接到工程计算的实现方式，但仅凭摘要不能认定这些组件或组合具有首创性。",
+        "findings": "摘要称Iwind在风机知识任务上优于母模型，并支持载荷模拟执行与可视损伤检查；收集案例呈现台风下叶片断裂、塔筒屈曲和倾覆，部分地震受损风机则在基础或下部支撑结构损伤更突出。[摘要]未提供样本规模、性能差值及统计不确定性。",
+        "limitations": "当前仅有摘要，不能确认案例代表性、灾害输入设置、结构参数及仿真校核程度。作者将响应结果限定为“for the investigated typhoon and earthquake cases”。[摘要]解读：W形与M形响应能否推广至其他机型和灾害条件，现有资料不足以判断。",
+        "connection": "解读：面向智能运维，Iwind展示了自然语言分析、仿真执行与损伤检查的结合路径；面向结构设计和可靠性，灾害损伤位置及停机姿态响应可作为进一步研究线索。[摘要]但资料未报告在线监测闭环、可靠度计算或设计优化，不能将这些联系视为已完成成果。",
+        "next_steps": "建议后续阅读全文时，优先核查求解器验证、智能体调用成功率、对照设置，以及偏航—变桨响应形态的生成条件；再考察停机姿态比较是否考虑执行约束和参数不确定性。这些是研究建议，并非作者已报告的实验；当前摘要不足以确认其完成情况。[摘要]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "物理信息大语言模型智能体解析台风与地震诱发的风机失效及停机偏航—变桨对策",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1016/j.isci.2026.118076"
+      ],
+      "analyzed_at": "2026-11-14T20:28:33.986796+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "台风和地震如何损伤风机，大语言模型又能怎样参与分析？这项研究将智能体与物理求解器连接，把自然语言驱动的载荷模拟与灾害损伤分析联系起来，为理解停机状态下的风机响应提供参考。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从灾害损伤走向停机状态分析",
+            "paragraphs": [
+              "极端台风和地震可能严重破坏风机结构。理解不同灾害下的失效机制，是讨论潜在减灾措施的基础。本文围绕风机工程分析构建物理信息大语言模型智能体 Iwind，关注知识任务、载荷模拟与可视化损伤检查。",
+              "这里的偏航—桨距分析面向停机状态。摘要将其结果定位为停机状态比较和危险区域识别的仿真参考，而不是已经在真实灾害中验证有效的控制措施。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "让 Iwind 调用物理求解器 Zwind",
+            "paragraphs": [
+              "Iwind 以领域专门训练和多路径检索增强生成作为支撑，结合 ReAct 式推理与模型上下文协议，调用研究团队自研的物理求解器 Zwind，实现自然语言驱动的载荷模拟。",
+              "研究还利用 Zwind 开展参数化模拟，考察所研究台风与地震工况下的停机偏航—桨距响应。需要区分的是：摘要描述了智能体与求解器的连接方式，但未展开物理信息如何融入训练或推理的具体细节。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "知识任务表现与两类灾害响应",
+            "paragraphs": [
+              "在摘要报告的评估中，Iwind 在风机知识任务上优于其母模型，并支持载荷模拟执行和可视化损伤检查。摘要没有给出提升幅度，因此不能据此量化其优势或推断其他任务上的表现。",
+              "收集的案例呈现出不同损伤特征：台风载荷下出现叶片断裂、塔筒屈曲和倾覆；部分地震受损风机则在基础或下部支撑结构处表现出更明显的损伤。这些是所收集案例的观察，不宜直接推广为所有风机的失效规律。",
+              "参数化模拟进一步显示，在所研究的台风和地震工况中，停机偏航—桨距响应流形分别呈 W 形和 M 形。**这些形态属于仿真发现**，可为停机状态比较与危险区域识别提供参考，但不能直接等同于已验证的最优避险设置。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不能界定的验证范围",
+            "paragraphs": [
+              "仅凭本次摘要，无法判断损伤案例的数量、来源与代表性，也无法确定知识评估的数据构成、比较设置和评价指标。摘要未交代载荷模拟与损伤检查的验证范围，不能将这些信息缺失理解为论文没有开展相关工作。",
+              "摘要也未说明参数化分析覆盖的机型、灾害输入、参数范围及响应指标。因此，W 形与 M 形结果的适用边界，以及仿真参考能否转化为现场减灾效果，仍需进一步阅读相关方法和验证材料。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：区分智能体能力与工程证据",
+            "paragraphs": [
+              "阅读启发：值得继续追问的是，知识任务上的优势如何对应到可靠的求解器调用，以及停机响应的形态如何支持具体风险判断。阅读时宜分别核对语言模型评估、物理模拟验证与工程应用证据，避免把“能够执行模拟”直接理解为“已经证明减灾有效”。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的 Iwind 方法示意",
+            "description": "仅概括摘要明确描述的技术关系；这是依据摘要整理的示意图，不是论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "领域训练与多路径检索增强",
+                "detail": "为风机工程分析智能体 Iwind 提供支撑。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "Iwind 推理与工具调用",
+                "detail": "结合 ReAct 式推理与模型上下文协议。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "Zwind 载荷模拟",
+                "detail": "调用自研物理求解器，实现自然语言驱动的载荷模拟。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "停机偏航—桨距参数化分析",
+                "detail": "Zwind 模拟揭示所研究台风、地震工况下的 W 形与 M 形响应流形。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "提供支撑"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "调用求解器"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "参数化模拟分析"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-14T20:39:59.245798+00:00",
+      "article_profile": "cfe746aa6b9d9aa2db4b32293119e10915722e49438f75d24621228b2975bf48",
+      "analysis_references": {},
+      "analysis_material_version": "7e6754412f412dc3441415d59a97bc990ebee86ff112a972e28d15b8f4ac5220",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "2c0d34cccab5",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-14T20:39:59.245799+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "restricted",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -1579,7 +2370,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《A training-free, domain-extensible LLM-based approach for automated extraction of standardized preparation procedures》，暂未提供可用摘要，请查看原文。",
+      "summary": "化学制备文献包含丰富的操作知识，但非结构化叙述难以保留动作顺序与参数关系。本文以显式动作集、两轮提取和规则后处理构建xlmExLab流程，无需额外训练模型。[P2][P10]沸石测试取得0.89的动作序列相似度，跨领域表现具有竞争力，但有机合成仍落后于RXN专用流程。[P6][P7]其阅读价值在于展示领域知识如何转为可执行抽取约束，而非证明通用模型可以替代专家设计。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -1623,11 +2414,179 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐作为领域流程知识抽取的方法参考，重点阅读动作集设计、分层评价和后处理偏差；不宜将其视为智能运维或结构可靠性方法已经验证的证据。[P3][P5][P9]",
+      "deep_read": {
+        "problem": "论文关注制备文字如何转成保留顺序、条件与物质关系的动作序列。普通表格难容纳不同流程的可变操作，专用模型又受训练领域和动作词表限制。[P2][P7]研究目标因此不是孤立识别实体，而是降低新领域构建完整流程抽取器的训练与标注负担。",
+        "method": "xlmExLab将动作定义写入提示，先提取有序操作及上下文，再识别相关物质、用量和浓度，以解析器及Python类统一输出。[P10]沸石数据分为75条优化流程和110条测试流程；作者据多模型错误设计后处理，再筛选模型、解码参数与提示。[P4][P6]",
+        "innovation": "方法特点是把领域适配主要放在动作模式和解析规则，而非额外微调模型。专家据实际输出合并、增删操作，并结合动作参数依赖补全序列。[P3][P5]解读：其贡献更接近可组合、可替换模型的工程框架，资料不足以支持其首次提出所有组成技术的判断。",
+        "findings": "沸石测试中，动作序列相似度、动作内容及化学信息F-score分别为0.89、0.84、0.85，各带±0.01。[P6]作者报告后处理三项相对改善为9.5%、15.0%、6.6%。[P5]有机合成比较中RXN三项均更好，说明跨域适应性并不等于领域内全面领先。[P7]",
+        "limitations": "免训练仍依赖专家规则和参考标注；带时长的温度动作转成结晶会过预测，且P11的Wait规则与P5表述需澄清。SAC原训练测试划分不明。[P5][P9][P11]原文件P12文献40缺年份、出版来源等信息，影响相关引文追溯；这不是公式缺失，不能据此否定实验。\n原文核对：[P12] 原页已核实参考文献40仅为“Kleene, S. C. et al. Representation of events in nerve nets and finite automata.”，随后直接进入文献41；缺少年份、出版来源及页码或其他定位信息。该缺项影响对P9正则表达式相关引文的追溯，不构成实验公式缺失，也不影响其余页面识读；未自行补写书目信息。",
+        "connection": "解读：显式动作、参数约束及序列评价可启发运维工单结构化、结构制造记录和可靠性过程追溯。[P2][P9]但论文验证对象是三个化学领域，没有设备故障预测、结构优化或失效概率实验；与这些研究方向的联系属于数据组织方法迁移，而非直接成果证据。",
+        "next_steps": "建议先选择少量运维或制造记录，定义动作、关键参数与依赖关系，以独立测试集比较直接提取和规则后处理，分别报告顺序、内容及实体误差。[P9][P10]尤其应审计默认值和强制动作转换，并核验归档代码与提示；这些是迁移研究建议，尚非本文完成的验证。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "免训练、可扩展领域的大语言模型标准化制备流程自动提取方法",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41467-026-78605-7_reference.pdf"
+      ],
+      "analyzed_at": "2026-11-14T20:44:02.448816+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P7"
+        ],
+        "method": [
+          "P4",
+          "P6",
+          "P10"
+        ],
+        "innovation": [
+          "P3",
+          "P5"
+        ],
+        "findings": [
+          "P5",
+          "P6",
+          "P7"
+        ],
+        "limitations": [
+          "P5",
+          "P9",
+          "P11",
+          "P12"
+        ],
+        "connection": [
+          "P2",
+          "P9"
+        ],
+        "next_steps": [
+          "P9",
+          "P10",
+          "P11"
+        ]
+      },
+      "analysis_material_version": "98f8ddab9ea8ae0d98c8eb3eafcf34ff52da7e6bb539ac055edfbe2babf85398",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "所给文字遗漏原页明确显示的“Published online: 29 October 2026”，已据原页补正为2026年10月29日。属于出版元数据提取遗漏，不影响方法和性能结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "所给文字保留图1图注，但未提取图内流程与示例。原页可读：图1a包含动作集、提示词、模型加载、模型响应、解析、提取数据和后处理；图1b示例输出依次为NEWSOLUTION、ADD NH₄Cl (20 mL, 1 M)、SETTEMPERATURE 80 °C、ADD zeolite (1 g)、STIR during 2 h。已补读，非原文件缺项；遗漏会使仅凭文字无法核对动作顺序及参数映射。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "图3图注的SEM公式在文字提取中乱码，原页可读为SEM = σ/√n，σ为总体标准差，n = 7个LLM。已纠正；该式说明误差线是跨模型均值标准误，不是标准差。文字提取还遗漏图2动作清单及图3流程示例，已据原图核对并补入笔记，不属于原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "图4图注SD公式在文字提取中出现“/C0 /C22”等乱码；原页可读为SD = √[(1/n)Σᵢ₌₁ⁿ(xᵢ−x̄)²]，n = 5次独立运行。已纠正，分母为n而非n−1。提取文字未保留柱状图内容；已核对图4a沸石优势及图4b中RXN有机合成流程优于本文流程的方向，避免将结果误解为全领域最优。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "文字提取仅保留图5图注，遗漏动作标签、图例与横轴。原页已核对，横轴为Relative Amount (%)，显示−100至100的刻度，并以0为参考线；四种流程存在动作数量的正负偏差。已补读，不能将该图误作非负的检出率或准确率，也不能从数量偏差直接判断动作内容正确性。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "文字提取未保留图6的坐标、散点及边缘分布。原页已核对：横轴BLEU Similarity，纵轴Levenshtein Similarity；本文流程为蓝色点群，有机模型为两种绿色点群，SAC模型为橙色参考标记。图注明确SAC模型的图形面积不具代表性，不能据此推断其分布或误差范围；未从图中补造精确数值。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "式(1)至式(3)已据原页核对。提取文字中的式(3)出现“/C0”“/C1”等乱码，原页清楚显示F-score = 2·Precision·Recall/(Precision+Recall)；式(1)、式(2)分别为TP/(TP+FP)、TP/(TP+FN)。公式完整，无原文件缺项；已纠正，避免误读F-score运算符。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P10",
+          "detail": "提取文字仅保留图7图注，未保留图内步骤及流程标签。已据原图补读三步：分析标准提示下的模型响应；构建或复用解析器，必要时添加后处理；优化提示、模型参数并比较多个LLM。遗漏尤其会掩盖步骤2允许复用解析器且后处理按需添加的条件，不影响页面可读性。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P11",
+          "detail": "代码可用性段落的提取文字将归档DOI后的上标参考文献号44拼入链接，形成10.5281/zenodo.2207942044。原页清楚显示DOI为10.5281/zenodo.22079420，其后为上标44，且与P12参考文献44一致。已纠正；影响代码归档定位，不影响实验数值。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P12",
+          "detail": "原页已核实参考文献40仅为“Kleene, S. C. et al. Representation of events in nerve nets and finite automata.”，随后直接进入文献41；缺少年份、出版来源及页码或其他定位信息。该缺项影响对P9正则表达式相关引文的追溯，不构成实验公式缺失，也不影响其余页面识读；未自行补写书目信息。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "da56605f1edf",
+        "state": "published",
+        "updated_at": "2026-11-14T20:44:02.460884+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 12,
+        "covered": 12,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "所给文字遗漏原页明确显示的“Published online: 29 October 2026”，已据原页补正为2026年10月29日。属于出版元数据提取遗漏，不影响方法和性能结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "所给文字保留图1图注，但未提取图内流程与示例。原页可读：图1a包含动作集、提示词、模型加载、模型响应、解析、提取数据和后处理；图1b示例输出依次为NEWSOLUTION、ADD NH₄Cl (20 mL, 1 M)、SETTEMPERATURE 80 °C、ADD zeolite (1 g)、STIR during 2 h。已补读，非原文件缺项；遗漏会使仅凭文字无法核对动作顺序及参数映射。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "图3图注的SEM公式在文字提取中乱码，原页可读为SEM = σ/√n，σ为总体标准差，n = 7个LLM。已纠正；该式说明误差线是跨模型均值标准误，不是标准差。文字提取还遗漏图2动作清单及图3流程示例，已据原图核对并补入笔记，不属于原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "图4图注SD公式在文字提取中出现“/C0 /C22”等乱码；原页可读为SD = √[(1/n)Σᵢ₌₁ⁿ(xᵢ−x̄)²]，n = 5次独立运行。已纠正，分母为n而非n−1。提取文字未保留柱状图内容；已核对图4a沸石优势及图4b中RXN有机合成流程优于本文流程的方向，避免将结果误解为全领域最优。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "文字提取仅保留图5图注，遗漏动作标签、图例与横轴。原页已核对，横轴为Relative Amount (%)，显示−100至100的刻度，并以0为参考线；四种流程存在动作数量的正负偏差。已补读，不能将该图误作非负的检出率或准确率，也不能从数量偏差直接判断动作内容正确性。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "文字提取未保留图6的坐标、散点及边缘分布。原页已核对：横轴BLEU Similarity，纵轴Levenshtein Similarity；本文流程为蓝色点群，有机模型为两种绿色点群，SAC模型为橙色参考标记。图注明确SAC模型的图形面积不具代表性，不能据此推断其分布或误差范围；未从图中补造精确数值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "式(1)至式(3)已据原页核对。提取文字中的式(3)出现“/C0”“/C1”等乱码，原页清楚显示F-score = 2·Precision·Recall/(Precision+Recall)；式(1)、式(2)分别为TP/(TP+FP)、TP/(TP+FN)。公式完整，无原文件缺项；已纠正，避免误读F-score运算符。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "提取文字仅保留图7图注，未保留图内步骤及流程标签。已据原图补读三步：分析标准提示下的模型响应；构建或复用解析器，必要时添加后处理；优化提示、模型参数并比较多个LLM。遗漏尤其会掩盖步骤2允许复用解析器且后处理按需添加的条件，不影响页面可读性。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "代码可用性段落的提取文字将归档DOI后的上标参考文献号44拼入链接，形成10.5281/zenodo.2207942044。原页清楚显示DOI为10.5281/zenodo.22079420，其后为上标44，且与P12参考文献44一致。已纠正；影响代码归档定位，不影响实验数值。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "原页已核实参考文献40仅为“Kleene, S. C. et al. Representation of events in nerve nets and finite automata.”，随后直接进入文献41；缺少年份、出版来源及页码或其他定位信息。该缺项影响对P9正则表达式相关引文的追溯，不构成实验公式缺失，也不影响其余页面识读；未自行补写书目信息。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -1645,7 +2604,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《Towards understanding and monitorability of reasoning LLMs》，暂未提供可用摘要，请查看原文。",
+      "summary": "这篇社论讨论推理型大语言模型的思维链能否作为可靠的解释与安全监测依据。作者强调，可读的推理词元不等于内部计算的忠实呈现，并转述“词元之上的状态”（SoT）视角，将词元视为计算状态的承载媒介。[P1] 文章借助白板记忆清空类比和既有研究说明问题，主张加强安全测试、保护可监测性。它适合作为概念辨析材料，而非经过实验验证的监测方法论文。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -1685,11 +2644,336 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议作为理解思维链解释边界的背景材料阅读，尤其适合审视智能运维中以模型自述替代可靠性证据的做法；但本文是社论，不宜作为新算法或实验成果重点推荐。[P1]",
+      "deep_read": {
+        "problem": "本文关注推理文本的可理解性与内部计算的忠实性之间的落差：模型能逐步输出自然语言，并不意味着这些文字准确解释答案如何产生。作者进一步追问，当安全检查依赖此类文本时，可监测性是否可靠，避免将流畅叙述误当作机制透明。[P1]",
+        "method": "本文采用社论式论述，而非提出并验证监测算法。文章回顾思维链的发展，引用既有调查与安全讨论，并转述白板类比：解题者每10秒失去记忆，只能逐次留下一个词。该类比用于说明文本可能承担状态传递功能，不是实验设计。[P1]",
+        "innovation": "本文介绍的概念视角是SoT：把词元看作计算状态的承载媒介，而不是直接按语言叙事解释。需明确，这一视角在文中归于Levy等人的工作，不应认定为该社论原创算法。解读：其启发在于将解释问题转向状态如何形成、信息为何被外化。[P1]",
+        "findings": "文章援引约1,000篇预印本的调查，称25%的论文明确把CoT当作可解释性技术；这属于引用结果，并非本文新实验。作者最终主张加强安全测试，并在进一步提高推理能力之前关注保持可监测性；推理文字能否用于安全监测仍需研究。[P1]",
+        "limitations": "本文为单页社论，未提供自有实验、监测性能指标或可复现的验证流程，不能据此量化SoT视角的有效性。涉及模型发布与安全事件的陈述未作外部核验。现有阅读记录未报告[P1]存在原文件缺项；无公式和实验图表属于内容形态，不是文件缺陷。",
+        "connection": "解读：对智能运维与可靠性研究，本文提示应区分模型生成的故障解释与独立可验证的诊断依据，不能仅因说明连贯就认定处置可靠。对结构设计，其联系主要是审查模型建议的证据链，而非提供结构计算方法；这些应用联系均非本文验证结果。[P1]",
+        "next_steps": "建议：若将本文观点迁移到运维研究，可分别记录任务结果、推理文本和外部可核验的运行证据，比较解释可信度与实际诊断正确性是否一致，并观察监测是否依赖特定措辞。该方案是后续研究设想，不是作者已经实施或证明有效的实验。[P1]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "理解推理型大语言模型及其可监测性",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s42256-026-01333-6.pdf"
+      ],
+      "analyzed_at": "2026-11-14T20:51:28.131494+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "lead": "推理大模型写出的中间步骤，究竟是内部计算的解释，还是帮助计算继续进行的文本载体？这篇社论提醒我们：**可读的推理不等于忠实的解释**，模型甚至可能在输出无关推理文本时完成实际任务。文章的价值不在于提出新的监控算法，而在于重新划清能力、解释与可监控性的边界：读懂一段思维链，与可靠识别模型正在做什么，是两项不能互相替代的任务。",
+        "basis": "full_text",
+        "sections": [
+          {
+            "id": "context",
+            "title": "当思维链成为解释，安全判断可能错在哪里",
+            "paragraphs": [
+              "思维链生成要求模型先输出中间步骤，再给出答案。社论介绍，这一方法最初是一种提示技术，约自2024年起被纳入前沿模型训练；但生成了推理文本，并不意味着模型同时交出了内部计算的准确说明。研究问题因此不是文字是否流畅，而是文字与实际计算之间究竟存在怎样的对应关系。",
+              "这种区别已经影响研究实践。社论转述的一项调查覆盖约1,000篇预印本，其中25%的论文作者明确把CoT作为可解释性技术，涉及临床决策等高风险领域。这个比例反映的是文献中的使用方式，不是解释忠实度；本站认为，它提示我们应把“便于人读”与“足以支撑安全判断”分别审查。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从语言叙事转向计算状态：SoT改变了观察对象",
+            "paragraphs": [
+              "社论介绍了Levy等人提出的“State over Tokens”（SoT）视角：token不仅可以组成语言叙事，也可能承载模型的计算状态。沿着这一视角，研究者需要追问中间文本在计算中起什么作用，而不只是判断它是否像人类的解题说明。这是理解推理文本的研究框架，并非本文已经实现并验证的监控方法。",
+              "文章进一步指出，输出文本可能只是计算状态的不完整外显，其中词语的含义也未必等同于读者赋予它们的含义。因此，不能仅凭语义连贯性推断内部过程透明，更不能把状态载体直接当成完整解释。作为社论，本文没有给出新的模型训练流程、损失函数或数学公式，其方法贡献主要是澄清问题与提出研究视角。"
+            ]
+          },
+          {
+            "id": "validation",
+            "title": "两类转述证据：文献调查与短任务观察",
+            "paragraphs": [
+              "本文不是报告新实验的实证论文，主要证据包括文献调查和系统卡中的观察。调查的独立统计单位是预印本，约1,000篇不能解释为模型运行次数、实物试件或增强样本；原文也没有交代检索式、纳入标准与标注一致性。这里没有仿真与实物对照，训练测试划分同样未报告。",
+              "另一项证据来自日期为3 September 2026的GPT-6 Astra系统卡。社论称，该模型比此前GPT模型更能控制CoT输出，在短任务中可以生成完全无关的推理文本，同时解决实际任务。原文没有提供任务数量、成功率、正式分组、具体基线版本或消融实验，因此这是一项定性观察，不能据此计算监控性能或比较提升幅度。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "可读性不足以担保忠实性，也不等于监控毫无价值",
+            "paragraphs": [
+              "两类证据回答的是不同问题：调查说明CoT如何被研究者使用，系统卡观察则提示推理文本可能与任务求解脱耦。前者不能证明模型解释不忠实的发生率，后者也不能证明所有模型、所有任务都存在同样程度的脱耦。本文支持的是对直接等同关系保持警惕，而不是给出普适的失效概率。",
+              "文章最终主张加强安全测试，并在继续提升推理能力前重视保留可监控性。本站判断，下一步应把“文本能否预测行为”与“文本是否忠实反映计算”拆成可检验的问题，避免用答案正确替代解释可靠。本文尚未给出可复现的监控协议，也没有证明CoT完全不可用于监控；其结论边界正是仍需研究如何使用、以及能否使用这些文本。"
+            ]
+          }
+        ],
+        "experiments": [
+          {
+            "name": "预印本中将CoT用作可解释性技术的文献调查，属于社论转述，并非本文新增实验。",
+            "data": "约1,000篇预印本，参考文献指向Barez等人的预印本；具体数据库、检索式与纳入标准未报告。",
+            "samples": "约1,000篇预印本，统计单位为文献，不是模型独立运行次数、增强数据条数或物理试件。",
+            "groups": "原文未报告。",
+            "split": "原文未报告。",
+            "baselines": "原文未报告。",
+            "metrics": "明确把CoT作为可解释性技术的论文占比，单位为%；具体编码规则与标注一致性未报告。",
+            "results": "25%的论文作者明确将CoT当作可解释性技术，包括临床决策等高风险领域；该数值不是忠实度指标。",
+            "limitations": "原文未报告。"
+          },
+          {
+            "name": "GPT-6 Astra对CoT输出的控制观察，属于社论转述系统卡，不是独立复现实验。",
+            "data": "来源为日期为3 September 2026的GPT-6 Astra系统卡；具体任务数据名称与来源未报告。",
+            "samples": "原文未报告。",
+            "groups": "观察涉及短任务条件；正式实验分组、各组任务配置及运行次数未报告。",
+            "split": "原文未报告。",
+            "baselines": "定性比较对象为此前GPT模型；具体模型名称、版本及统一比较条件未报告。",
+            "metrics": "原文未报告。",
+            "results": "社论称其更能控制CoT输出，并可在短任务中输出完全无关的推理文本同时解决任务；未给出定量结果。",
+            "limitations": "原文未报告。"
+          }
+        ],
+        "routes": [
+          {
+            "title": "用受控状态任务检验推理文本与行为的脱耦",
+            "direction_id": "direction_7a61b97a",
+            "gap": "社论给出了短任务中的脱耦观察，却缺少任务规模、干预协议和定量指标，尚不能区分文本变化、任务难度与实际求解过程各自的作用。",
+            "mechanism": "拟构造状态更新和多跳检索任务，在固定输入下分别保留、替换或扰动中间文本，检验文本变化是否引起可重复的答案变化，而非仅评判其语义是否合理。",
+            "innovation": "拟借鉴已检索文献《Reasoning Primitives》的状态追踪问题设置，将任务状态可核验性与文本干预结合；候选创新是同时评估状态承载与语义可读性，二者关系仍待验证。",
+            "design": "建议设计300个独立生成的任务实例，按任务模板隔离开发集与测试集；设置原始、无关文本和状态错误文本条件。数据需自行生成并公开，重复采样不计作新增独立实例。",
+            "comparison": "拟比较仅看最终答案、仅看推理文本和同时看输入与文本的监控器；消融拟分别移除状态标注和干预条件，并控制模型版本、输出预算及采样设置。",
+            "criterion": "拟预注册答案准确率、异常检出率及固定误报率下的召回率，按独立实例估计不确定性；只有跨模板测试仍能区分状态错误与无关措辞，才支持机制假设。",
+            "risk": "文本替换可能造成分布外输入，使结果反映扰动敏感性而非忠实性。拟加入等义改写和长度匹配对照；若接口无法回填中间文本，则退回受控提示设计并收窄因果结论。"
+          },
+          {
+            "title": "把步骤可读性与行为影响分开校准监控器",
+            "direction_id": "direction_7a61b97a",
+            "gap": "原文指出词语含义可能偏离人类理解，且推理文本只是不完整外显；因此，仅凭文本读起来是否合理，还不足以判断某一步对答案或安全行为是否重要。",
+            "mechanism": "拟通过保留或移除推理步骤后的重复续写，估计该步骤对最终答案的影响，再与文本判读分数比较，检验监控器是否把语言合理性误当成行为重要性。",
+            "innovation": "拟借鉴已检索文献《Legibility is Not Interpretability》摘要中的步骤影响估计思路，探索加入拒判机制的监控方案；候选创新是将不确定性校准与步骤筛查组合，而非预设文本能够完整解释计算。",
+            "design": "建议设计200道答案可程序核验的公开或自行生成任务，按任务来源隔离开发与测试。拟收集每题多条轨迹及步骤干预续写，全部属于计算实验，同题轨迹不视为独立题目。",
+            "comparison": "拟比较文本合理性评分器、步骤影响估计器及二者组合；消融拟移除不确定性门控和任务输入，并在相同续写预算下比较，避免额外计算量成为隐含优势。",
+            "criterion": "拟以步骤重要性排序、风险检出率、校准误差及拒判覆盖率共同评价；成功条件拟设为独立测试来源上改善风险检出且不增加误报，并报告计算成本与置信区间。",
+            "risk": "步骤删除可能破坏上下文，重复续写也可能成本过高。拟采用等长占位与语义保持改写核查稳健性；若影响估计噪声过大，则减少任务跨度并输出不确定区间，不强行生成步骤标签。"
+          }
+        ],
+        "diagrams": [
+          {
+            "kind": "study",
+            "title": "社论如何划分推理文本与监控证据",
+            "description": "图示概括社论的论证结构：SoT提供理解视角，两类转述证据共同指向可监控性仍需验证，而非展示已实现的监控系统。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "生成中间推理文本",
+                "detail": "CoT在最终回答前生成若干中间步骤。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "状态载体视角",
+                "detail": "SoT将token视为承载计算状态的媒介，而非仅是语言叙事。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "文献使用方式调查",
+                "detail": "约1,000篇预印本中，25%明确把CoT作为可解释性技术。"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "短任务脱耦观察",
+                "detail": "社论转述模型可输出无关推理文本，同时完成实际任务。"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "解释与监控边界",
+                "detail": "文本可能是不完整外显，不能直接等同内部计算解释。"
+              },
+              {
+                "id": "f",
+                "stage": 4,
+                "label": "加强可监控性研究",
+                "detail": "如何生成推理文本，以及能否用于安全监控，仍需研究。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "重新理解"
+              },
+              {
+                "from": "b",
+                "to": "e",
+                "label": "提出解释边界"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "提示误用风险"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "提示文本脱耦"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "形成研究议程"
+              }
+            ]
+          },
+          {
+            "kind": "proposal",
+            "title": "拟议路线：受控状态任务与文本干预",
+            "description": "对应第一条后续路线，所有节点均为待实施设计，用于检验文本变化与行为变化的关系，不表示已有实验结果。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "生成独立状态任务",
+                "detail": "拟生成可程序核验的任务，按模板隔离开发与测试。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "采集原始推理轨迹",
+                "detail": "拟固定模型版本、输出预算与采样设置。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "设置文本干预",
+                "detail": "拟比较原始、无关文本与状态错误文本，并加入等义对照。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "比较监控输入",
+                "detail": "拟比较答案、推理文本及输入与文本联合监控。"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "独立测试与消融",
+                "detail": "拟评估准确率、误报与召回，并检验状态标注的作用。"
+              },
+              {
+                "id": "f",
+                "stage": 5,
+                "label": "核查分布外风险",
+                "detail": "拟依据等义和长度匹配对照，限制因果解释范围。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "拟采集"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "拟构造干预"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "拟输入监控器"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "拟统一评测"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "拟核查解释"
+              },
+              {
+                "from": "f",
+                "to": "c",
+                "label": "必要时修订干预"
+              }
+            ]
+          }
+        ],
+        "figure_groups": [],
+        "related": {
+          "status": "ok",
+          "checked_at": "2026-11-14T21:46:01.674617+00:00",
+          "papers": [
+            {
+              "title": "Reasoning Primitives in Hybrid and Non-Hybrid LLMs: Do Architectural Differences Yield Advantages in State-Tracking and Recall?",
+              "url": "https://doi.org/10.48550/arxiv.2604.21454",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            },
+            {
+              "title": "Trace as State: Reasoning Traces as Conditional States for Long-Context Transformers",
+              "url": "https://doi.org/10.48550/arxiv.2609.02702",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            },
+            {
+              "title": "Quantifying the Necessity of Chain of Thought through Opaque Serial Depth",
+              "url": "https://doi.org/10.48550/arxiv.2603.09786",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            },
+            {
+              "title": "Legibility is Not Interpretability: Comparing Judged and Actual Importance in Chain-Of-Thought Reasoning",
+              "url": "https://doi.org/10.48550/arxiv.2609.04194",
+              "year": 2026,
+              "basis": "abstract",
+              "preprint": true
+            }
+          ]
+        }
+      },
+      "article_updated_at": "2026-11-14T21:48:12.524631+00:00",
+      "article_profile": "0136547b284a76cf80bc47553dcaf0849ffd0625b17967e38a396ab24042b480",
+      "analysis_references": {
+        "problem": [
+          "P1"
+        ],
+        "method": [
+          "P1"
+        ],
+        "innovation": [
+          "P1"
+        ],
+        "findings": [
+          "P1"
+        ],
+        "limitations": [
+          "P1"
+        ],
+        "connection": [
+          "P1"
+        ],
+        "next_steps": [
+          "P1"
+        ]
+      },
+      "analysis_material_version": "b13a51a6f48f93a157161d1347dd4807afd31d70383fb799061b32221fc49b52",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "df7212f42218",
+        "state": "published",
+        "updated_at": "2026-11-14T21:48:12.528657+00:00",
+        "basis": "full_text",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "",
+        "total": 1,
+        "covered": 1,
+        "pdf_available": true,
+        "issues": []
+      }
     }
   ],
   "source_status": {
@@ -2651,13 +3935,13 @@
     "unavailable": 45
   },
   "analysis_status": {
-    "ready_core": 2,
+    "ready_core": 5,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 4
+    "pending": 1
   },
   "edition": {
     "id": "42559341101",

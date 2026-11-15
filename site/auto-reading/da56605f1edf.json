@@ -1,0 +1,141 @@
+{
+  "paper_id": "da56605f1edf",
+  "fingerprint": "a3908927287ea8f2aaf53e93dcae30d8e4113497e359f6d8274ad25959598c02",
+  "analysis": {
+    "title_zh": "免训练、可扩展领域的大语言模型标准化制备流程自动提取方法",
+    "summary": "化学制备文献包含丰富的操作知识，但非结构化叙述难以保留动作顺序与参数关系。本文以显式动作集、两轮提取和规则后处理构建xlmExLab流程，无需额外训练模型。[P2][P10]沸石测试取得0.89的动作序列相似度，跨领域表现具有竞争力，但有机合成仍落后于RXN专用流程。[P6][P7]其阅读价值在于展示领域知识如何转为可执行抽取约束，而非证明通用模型可以替代专家设计。",
+    "recommendation": "推荐作为领域流程知识抽取的方法参考，重点阅读动作集设计、分层评价和后处理偏差；不宜将其视为智能运维或结构可靠性方法已经验证的证据。[P3][P5][P9]",
+    "deep_read": {
+      "problem": "论文关注制备文字如何转成保留顺序、条件与物质关系的动作序列。普通表格难容纳不同流程的可变操作，专用模型又受训练领域和动作词表限制。[P2][P7]研究目标因此不是孤立识别实体，而是降低新领域构建完整流程抽取器的训练与标注负担。",
+      "method": "xlmExLab将动作定义写入提示，先提取有序操作及上下文，再识别相关物质、用量和浓度，以解析器及Python类统一输出。[P10]沸石数据分为75条优化流程和110条测试流程；作者据多模型错误设计后处理，再筛选模型、解码参数与提示。[P4][P6]",
+      "innovation": "方法特点是把领域适配主要放在动作模式和解析规则，而非额外微调模型。专家据实际输出合并、增删操作，并结合动作参数依赖补全序列。[P3][P5]解读：其贡献更接近可组合、可替换模型的工程框架，资料不足以支持其首次提出所有组成技术的判断。",
+      "findings": "沸石测试中，动作序列相似度、动作内容及化学信息F-score分别为0.89、0.84、0.85，各带±0.01。[P6]作者报告后处理三项相对改善为9.5%、15.0%、6.6%。[P5]有机合成比较中RXN三项均更好，说明跨域适应性并不等于领域内全面领先。[P7]",
+      "limitations": "免训练仍依赖专家规则和参考标注；带时长的温度动作转成结晶会过预测，且P11的Wait规则与P5表述需澄清。SAC原训练测试划分不明。[P5][P9][P11]原文件P12文献40缺年份、出版来源等信息，影响相关引文追溯；这不是公式缺失，不能据此否定实验。\n原文核对：[P12] 原页已核实参考文献40仅为“Kleene, S. C. et al. Representation of events in nerve nets and finite automata.”，随后直接进入文献41；缺少年份、出版来源及页码或其他定位信息。该缺项影响对P9正则表达式相关引文的追溯，不构成实验公式缺失，也不影响其余页面识读；未自行补写书目信息。",
+      "connection": "解读：显式动作、参数约束及序列评价可启发运维工单结构化、结构制造记录和可靠性过程追溯。[P2][P9]但论文验证对象是三个化学领域，没有设备故障预测、结构优化或失效概率实验；与这些研究方向的联系属于数据组织方法迁移，而非直接成果证据。",
+      "next_steps": "建议先选择少量运维或制造记录，定义动作、关键参数与依赖关系，以独立测试集比较直接提取和规则后处理，分别报告顺序、内容及实体误差。[P9][P10]尤其应审计默认值和强制动作转换，并核验归档代码与提示；这些是迁移研究建议，尚非本文完成的验证。"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://www.nature.com/articles/s41467-026-78605-7_reference.pdf"
+    ],
+    "analyzed_at": "2026-11-14T20:44:02.448816+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "给定方向仅显示未释义的topic标签，无法确认具体匹配；若按智能运维、结构设计与可靠性理解，本文仅有间接的方法迁移价值，故不判为直接切合。全文笔记提供明确框架、独立沸石测试及跨域比较，足以支持重点阅读其抽取方法，但不支持宣称目标方向应用已验证。",
+    "evidence": "In xlmExLab, extraction pipelines can be\ncreated end-to-end and used in a plug and go way, facilitating both\ntheir creation and reuse."
+  },
+  "material": {
+    "version": "98f8ddab9ea8ae0d98c8eb3eafcf34ff52da7e6bb539ac055edfbe2babf85398",
+    "total": 12,
+    "covered": 12,
+    "references": {
+      "problem": [
+        "P2",
+        "P7"
+      ],
+      "method": [
+        "P4",
+        "P6",
+        "P10"
+      ],
+      "innovation": [
+        "P3",
+        "P5"
+      ],
+      "findings": [
+        "P5",
+        "P6",
+        "P7"
+      ],
+      "limitations": [
+        "P5",
+        "P9",
+        "P11",
+        "P12"
+      ],
+      "connection": [
+        "P2",
+        "P9"
+      ],
+      "next_steps": [
+        "P9",
+        "P10",
+        "P11"
+      ]
+    },
+    "excerpt": "In xlmExLab, extraction pipelines can be\ncreated end-to-end and used in a plug and go way, facilitating both\ntheir creation and reuse.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P1",
+        "detail": "所给文字遗漏原页明确显示的“Published online: 29 October 2026”，已据原页补正为2026年10月29日。属于出版元数据提取遗漏，不影响方法和性能结论。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P3",
+        "detail": "所给文字保留图1图注，但未提取图内流程与示例。原页可读：图1a包含动作集、提示词、模型加载、模型响应、解析、提取数据和后处理；图1b示例输出依次为NEWSOLUTION、ADD NH₄Cl (20 mL, 1 M)、SETTEMPERATURE 80 °C、ADD zeolite (1 g)、STIR during 2 h。已补读，非原文件缺项；遗漏会使仅凭文字无法核对动作顺序及参数映射。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P4",
+        "detail": "图3图注的SEM公式在文字提取中乱码，原页可读为SEM = σ/√n，σ为总体标准差，n = 7个LLM。已纠正；该式说明误差线是跨模型均值标准误，不是标准差。文字提取还遗漏图2动作清单及图3流程示例，已据原图核对并补入笔记，不属于原文件缺项。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P6",
+        "detail": "图4图注SD公式在文字提取中出现“/C0 /C22”等乱码；原页可读为SD = √[(1/n)Σᵢ₌₁ⁿ(xᵢ−x̄)²]，n = 5次独立运行。已纠正，分母为n而非n−1。提取文字未保留柱状图内容；已核对图4a沸石优势及图4b中RXN有机合成流程优于本文流程的方向，避免将结果误解为全领域最优。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P7",
+        "detail": "文字提取仅保留图5图注，遗漏动作标签、图例与横轴。原页已核对，横轴为Relative Amount (%)，显示−100至100的刻度，并以0为参考线；四种流程存在动作数量的正负偏差。已补读，不能将该图误作非负的检出率或准确率，也不能从数量偏差直接判断动作内容正确性。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P8",
+        "detail": "文字提取未保留图6的坐标、散点及边缘分布。原页已核对：横轴BLEU Similarity，纵轴Levenshtein Similarity；本文流程为蓝色点群，有机模型为两种绿色点群，SAC模型为橙色参考标记。图注明确SAC模型的图形面积不具代表性，不能据此推断其分布或误差范围；未从图中补造精确数值。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P9",
+        "detail": "式(1)至式(3)已据原页核对。提取文字中的式(3)出现“/C0”“/C1”等乱码，原页清楚显示F-score = 2·Precision·Recall/(Precision+Recall)；式(1)、式(2)分别为TP/(TP+FP)、TP/(TP+FN)。公式完整，无原文件缺项；已纠正，避免误读F-score运算符。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P10",
+        "detail": "提取文字仅保留图7图注，未保留图内步骤及流程标签。已据原图补读三步：分析标准提示下的模型响应；构建或复用解析器，必要时添加后处理；优化提示、模型参数并比较多个LLM。遗漏尤其会掩盖步骤2允许复用解析器且后处理按需添加的条件，不影响页面可读性。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P11",
+        "detail": "代码可用性段落的提取文字将归档DOI后的上标参考文献号44拼入链接，形成10.5281/zenodo.2207942044。原页清楚显示DOI为10.5281/zenodo.22079420，其后为上标44，且与P12参考文献44一致。已纠正；影响代码归档定位，不影响实验数值。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P12",
+        "detail": "原页已核实参考文献40仅为“Kleene, S. C. et al. Representation of events in nerve nets and finite automata.”，随后直接进入文献41；缺少年份、出版来源及页码或其他定位信息。该缺项影响对P9正则表达式相关引文的追溯，不构成实验公式缺失，也不影响其余页面识读；未自行补写书目信息。"
+      }
+    ]
+  }
+}
