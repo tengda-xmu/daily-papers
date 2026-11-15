@@ -1,0 +1,124 @@
+{
+  "paper_id": "023030a1438c",
+  "state": "published",
+  "updated_at": "2026-11-15T15:33:35.281895+00:00",
+  "basis": "full_text",
+  "article_state": "pending",
+  "article_stage": "",
+  "reason": "",
+  "total": 24,
+  "covered": 24,
+  "pdf_available": true,
+  "issues": [
+    {
+      "kind": "extraction_error",
+      "page": "P1",
+      "detail": "原页日期栏清楚列出“Published online: 23 April 2026”，提供的文字提取遗漏该行，现据原页补正。此项影响出版元数据完整性，不影响摘要及诊断流程结论；不是原文件缺项。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P5",
+      "detail": "NEJM分析第(3)点原页写作“DxDirector-7B achieves accuracy—a 5.9% absolute improvement”，accuracy之后缺少具体准确率数值。该数值在同页前文及P6图3b另有明确报告38.4%，但不能据此补写该处原文。缺项影响该句完整性，不影响其他现有结果的识读。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P5",
+      "detail": "Baselines段原页列出“Meditron-176B”，但同页结果段及P6图3均标作“MedFound-176B”。原文模型名称不一致，影响176B基线身份的明确对应；不能当作文字提取错误直接统一名称。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P6",
+      "detail": "图3a图例原页明确标注“Centre: mean accuracy (n=50,000)”，而P4及P5称RareArena实际评估采用22,901例。原文件存在样本量口径不一致，未说明50,000是否另有所指；影响图3a准确率与置信区间对应样本规模的解释，不能自行改为22,901。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P7",
+      "detail": "图4a原页图例标注“n=50,000”，但本批P8明确RareArena分析基于22,901例，前批数据集说明也为22,901例。原文未解释口径差异，影响RareArena操作次数及置信区间对应样本规模的判断；不自行更改图例。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P8",
+      "detail": "ClinicalBench科室分析原页报告肿瘤科提升“Δ = 30.93%”；但P10图6肿瘤科DxDirector为69.78%，最高所示基线为39.43%，两者相差30.35个百分点。正文与图中数值不一致，影响该科室优势幅度；无法据本批判定哪一处应修订。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P9",
+      "detail": "图5a原页图例标注“n=50,000”，与P8所述RareArena的22,901例不一致，未说明是否采用不同样本范围。影响有效操作比例及其置信区间的样本口径解释，不影响现有柱值识读。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P12",
+      "detail": "图8图注明确评分范围为0—10，但原页多个子图纵轴扩展至17.5或20，皮肤科子图则采用不同范围。属于原图评分范围与坐标展示不统一，并非提取错误；不能据轴上限理解为实际评分超过10，跨科室箱体高度也不宜直接比较。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P12",
+      "detail": "图8c内分泌科横轴原页标注GPT-4o、o3-mini、DxDirector各n=15，而Deepseek-V3、Deepseek-R1、o1-preview各n=12。图注称n为独立临床病例数，但本批未交代不同模型缺少3例的原因及处理方式，影响同病例比较和显著性结果的解释；不能自行补齐样本。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P12",
+      "detail": "USMLE正文称参数规模“approximately one-tenth”，同时列出7B对70B及176B。7/70为10%，7/176约为3.98%，不能将对MedFound-176B的比例也统一表述为约十分之一。影响参数效率表述，不影响图10a的准确率数值。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P16",
+      "detail": "页末概率记号的文字提取将集合隶属符号∈误作“2”，并将条件概率前缀中的下标t−1提取为“t/C0 1”。原页可读为C_i∈C及M(c_t|c_1,c_2,…,c_{t−1};θ)。已按原页纠正，涉及下一词元预测的条件定义；完整损失目标尚在后续页，不能补造。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P17",
+      "detail": "式(1)文字提取中的“/C0”、集合关系“2”等为提取乱码；原页可识别负号、∈及前缀下标t−1。已按原页识读负对数似然结构，但保留原式自身的目标词元下标问题，不将其擅改。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P17",
+      "detail": "式(1)原页在对t=1至n求和时，概率目标写作c_i，条件前缀却为c_1,…,c_{t−1}；与前页定义的预测目标c_t不一致。影响逐词元损失的严格索引解释，不能未经说明将原式c_i直接改为c_t。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P18",
+      "detail": "式(2)—(3)原页分别明确使用R_i∈Q及R_i∉Q，文本提取误为“2Q”“=2Q”，并损坏负号及前缀下标；式(5)的集合括号和有序配对结构也被乱码替代。现据原页纠正：两项损失监督互补词元集合，偏好对满足r_t^m>r_t^n。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P18",
+      "detail": "数据构建段首次列举步骤1至t−1的历史时，原页写作(d₁,q₁,a₁)、(d₁,q₂,a₂)、…、(d_t,q_{t−1},a_{t−1})，思考项下标与步骤不一致；同页后文X_t则使用(d₂,q₂,a₂)及(d_{t−1},q_{t−1},a_{t−1})。影响历史输入的严格记号解释，不影响其逐步采样流程的识读。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P18",
+      "detail": "式(4)正确答案奖励为10/γ，正文仅定义γ为请求医生协助次数，本页未规定γ=0时的奖励或保证γ≥1。若允许零次请求，将出现除零未定义；影响该边界情况下奖励与偏好对的构建，不能自行添加平滑项或默认次数。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P19",
+      "detail": "式(6)提取文本含“/C0”“/C24”等乱码，原页可读为负期望、每个偏好集合的1/|P_t|平均，以及log σ作用于两个β加权对数概率比之差。已核对高奖励d_t^m与低奖励d_t^n的顺序；乱码不是原文公式缺失。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P19",
+      "detail": "式(7)提取中的“/C1382”应按原页识读为右方括号后接∈，即h_text=H^L[T,:]∈ℝ^d；式(8)中的“q>”实际为向量转置q_i^⊤，分母包含正样本指数项及j≠i的负样本指数项。已纠正表示维度及对比损失结构的提取错误。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P20",
+      "detail": "风险判断记号在文字提取中写为“SafetyScoret 2f Green, Redg”，原页明确为SafetyScore_t∈{Green,Red}。已恢复下标、集合隶属符号和花括号；不涉及规则缺项或风险结果数值变更。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P21",
+      "detail": "页末文字提取将“0.9945¹⁰”连排为“0.994510”；原页10为上标，表示十次乘方，原文近似结果为94.63%。已纠正，影响多轮信息提取准确率估算的理解，不是原文件缺项。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P21",
+      "detail": "基线第4项原页写“Meditron-176B”，而前批结果图及正文使用“MedFound-176B”。该命名不一致在原页确实存在，影响176B基线身份对应；不应作为提取错误直接统一名称。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P21",
+      "detail": "Statistical information统一写bootstrap为1000次、准确率比较top-3基线，但前批图3—5图注明确NEJM使用200次重采样，图10图注则比较top-4基线。原文方法总述未注明这些例外，影响统计流程的复现口径；不能自行统一为同一设置。"
+    }
+  ]
+}
