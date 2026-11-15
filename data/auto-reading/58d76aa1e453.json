@@ -1,0 +1,97 @@
+{
+  "paper_id": "58d76aa1e453",
+  "fingerprint": "f959bd0a7da6ea0c9d2d2d5fb45290c512b8b5f9954b409db806c8a2ba3ac4f5",
+  "analysis": {
+    "title_zh": "人类类比引导通过激活跨领域知识提升大语言模型表现",
+    "summary": "论文以流化催化裂化的历史创新为案例，结合限时语料检索、类比提示与内部激活干预，研究模型为何能整合跨领域知识。作者报告粮仓类比使方案成功率从10%升至100%，强干预则同时破坏任务成功和回答连贯性。[P3–P7] 解读：固定上下文的比较设计值得借鉴，但全面生成退化、预训练泄漏未排除及跨模型结果口径冲突，限制了选择性表征消融的因果解释。[P6、P9] 本文更适合作为实验设计与证据审查案例，而非成熟工程创新能力的证明。",
+    "recommendation": "建议有条件重点阅读：固定检索证据后比较类比引导与激活干预的方法具有借鉴价值，但应同时审查输出退化和结果口径矛盾，不能直接采信普遍必要条件的结论。[P3、P6、P9]",
+    "deep_read": {
+      "problem": "论文追问复杂技术方案来自模型自主综合，还是需要人工指出跨领域联系，并考察内部语义表征是否限制提示效果。[P2] 作者选择固定床向流化循环转变的历史案例，以已知技术答案提供评价参照。解读：核心是知识利用条件，而非直接验证模型能够自主发明。",
+      "method": "作者以Qwen-2.5-7B运行250次试验，固定查询检索相同的十个语料片段，比较最小提示、粮仓类比及不同强度的激活干预。[P3、P10] 干预向量由各六个正负样例的平均激活差构成；回答由两名评分者独立分类，另检查时代错置术语。",
+      "innovation": "作者提出将历史反事实、限时RAG与表征工程结合，分别观察外部引导和内部干预对跨域综合的影响。[P2、P9] 解读：值得关注的是固定信息输入后分析知识利用变化，并以概念编码辅助结果评价；现有资料不足以确认该组合具有领域首创性。",
+      "findings": "作者报告类比引导将FCC分类成功率由2/20提升至20/20，斯托克斯定律利用由0/20升至18/20。[P4、P5] α=2时成功16/20，α≥4.5时成功与有效回答均为零；四类提示在固定强干预下合计0/80成功。[P6、P7] 这些是任务评价结果，并非工程实测性能。",
+      "limitations": "解读：强干预同时摧毁语言连贯性，不能据此证明仅移除目标概念；限时RAG也未排除预训练泄漏。[P6] P9新增Qwen概念保持66.6%的结果，与P10完全抑制口径未对齐，新增样本数不足。核对记录未确认原文件公式缺项；补充代码和原始数据未提供，不能声称复现。",
+      "connection": "解读：对智能运维、结构设计和可靠性研究，价值主要在专家知识如何激活模型已有证据，而非直接提供诊断或优化算法。[P8] 可借鉴人类建立类比、模型细化方案、仿真和试验核验的职责划分；论文没有在这些目标任务中验证收益，迁移效果仍待检验。",
+      "next_steps": "建议先统一P9跨模型补充结果与主要试验的指标、样本及干预条件，再进行复现。加入随机方向、非目标概念及匹配语言退化程度的对照，以区分特异干预和一般损伤。[P6、P9] 工程迁移时还应独立核验计算、风险与可实施性，不以文本成功代替可靠性证据。[P8]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://www.nature.com/articles/s41467-026-70873-7.pdf"
+    ],
+    "analyzed_at": "2026-11-15T16:13:58.980855+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "当前研究方向仅以标签编码给出，无法确认其具体含义；若参照智能运维、结构设计与可靠性，本文仅有间接方法联系，尚非直接切合。固定检索上下文并比较引导与内部干预具有明确阅读价值，资料足以支持这一有条件推荐，但不足以确认作者的强因果解释及工程泛化。",
+    "evidence": "A ﬁxed semantic query\nprovides identical RAG context across all conditions, so guidance cannot\nchange what documents the model receives"
+  },
+  "material": {
+    "version": "0eb2354d6e521466769831088a1d4475679aa81525ee0dbd1285dc5a7a7ad1e1",
+    "total": 11,
+    "covered": 11,
+    "references": {
+      "problem": [
+        "P2"
+      ],
+      "method": [
+        "P3",
+        "P10"
+      ],
+      "innovation": [
+        "P2",
+        "P9"
+      ],
+      "findings": [
+        "P4",
+        "P5",
+        "P6",
+        "P7"
+      ],
+      "limitations": [
+        "P6",
+        "P9",
+        "P10"
+      ],
+      "connection": [
+        "P8"
+      ],
+      "next_steps": [
+        "P6",
+        "P8",
+        "P9"
+      ]
+    },
+    "excerpt": "A ﬁxed semantic query\nprovides identical RAG context across all conditions, so guidance cannot\nchange what documents the model receives",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P1",
+        "detail": "原页左侧日期栏清楚显示“Published online: 03 April 2026”，所给文字提取遗漏该出版日期，现据原页补正。不涉及公式、图表或实验结论。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P3",
+        "detail": "所给文字提取保留图1图注，但遗漏图内流程节点与标注。已从原图核对嵌入、检索、提示组装、层18/26干预及响应分类流程；公式h_modified=h_original−α·v可读，无公式占位或缺项。遗漏影响架构细节呈现，不改变本页表1的250次试验设计。"
+      }
+    ]
+  }
+}
