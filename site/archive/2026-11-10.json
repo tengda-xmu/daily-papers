@@ -481,8 +481,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "restricted",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -601,7 +601,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《Grading scale impact on LLM-as-a-judge: human-LLM alignment is highest on 0–5 grading scale》，暂未提供可用摘要，请查看原文。",
+      "summary": "本文研究评分范围是否改变大模型裁判与人类的一致性，比较允许小数的0–5、0–10和0–100连续评分。六个基准的结果显示，0–5在人机汇总绝对一致性上最佳，但部分任务存在例外；较高的组内可靠性也可能掩盖任务差异。[P2–P5] 阅读重点是完全交叉设计、ICC与归一化绝对误差的互补使用，而非直接照搬0–5。样本代表性和图间数值不一致限制了结论外推。[P6–P7]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -645,11 +645,134 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议作为评估协议设计的方法论文重点阅读，尤其关注分任务诊断和绝对一致性指标；不宜将其视为智能运维或结构设计的直接应用证据。[P3–P8]",
+      "deep_read": {
+        "problem": "论文追问：改变评分范围后，LLM是否仍表达相同判断，又在哪种范围下最接近人类？已有评价常依赖相关性，却可能忽略评分偏移。作者将评分范围从提示细节提升为待检验变量，并明确研究连续范围而非离散Likert选项数量。[P1–P2]",
+        "method": "六个LLM在三种范围下评价六基准共5,497条；人机比较采用150条、12名人类与六个模型的完全交叉设计。跨范围分数先缩放至[0,1]，再计算绝对一致性ICC；人机共识比较同时报告nMAE，以区分校准差异和平均误差。[P2、P8]",
+        "innovation": "主要贡献是系统检验评分范围对人机绝对一致性的影响，而不是提出新模型。研究结合跨范围自一致性、组内可靠性和人机对齐，并下钻至基准、模型及性别群体，揭示汇总可靠性可能遮蔽局部失配。其价值在评估设计，不在证明评分机制。[P3–P6]",
+        "findings": "汇总人机ICC在0–5、0–10、0–100下分别为0.853、0.805、0.840，对应nMAE为0.111、0.122、0.115。作者的平均最优结论有数据支持，但STS-B在0–100、SummEval在0–10的ICC最高，不能推广为逐任务最优。[P4–P5]",
+        "limitations": "人类仅为研究生，每基准25条，连续评分结果不能直接外推至离散量表。[P6] 原文件缺项包括P2作者名“(author?)”占位，影响文献归属；P7图8与P5图4的SummEval数值不一致且缺少口径解释，影响该诊断实例，不能推定正确值。0–5优势机制仍未确立。\n原文核对：[P2] 原页左栏可清楚核实“(author?)”后接参考文献5，属于作者名称未填的编辑占位，而非文字提取错误。缺项影响该处跨尺度Pearson相关研究的作者归属识别；参考文献编号仍在，不影响本批实验设计及结果的识读。未发现公式占位。；[P7] 图8上排标注SummEval，ICC=0.582、nMAE=0.100；但P5图4的SummEval三尺度ICC依次为0.517、0.570、0.470，nMAE为0.085、0.078、0.092。图8这两个数值反而与图4中TruthfulQA的0–5结果相同。已从两张原图核实差异；本批缺少说明其是否采用不同数据或计算口径的文字，不能判定哪处标签或数值需更正，也不能据此确认SummEval的具体诊断数值。",
+        "connection": "解读：对智能运维中的故障解释、维修建议或风险报告评价，本研究提示不能只比较平均分或排名，还应检查专家与模型的绝对一致性及任务差异。结构设计与可靠性研究可借鉴其评价协议，但本文没有工程数据，不能据此声称提升安全性或设计性能。[P3–P8]",
+        "next_steps": "建议：在目标工程任务中先固定评价准则，再交叉比较评分范围，邀请不同经验的领域专家评分，同时报告ICC、nMAE和分任务结果。扩大样本并区分连续评分与离散选项；另需核实图8口径。以上是迁移研究建议，不是论文已经验证的应用成果。[P5–P8]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "评分范围如何影响大模型裁判：0–5范围的人机平均对齐最佳",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s44387-026-00153-8_reference.pdf"
+      ],
+      "analyzed_at": "2026-11-15T01:10:50.125385+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P2",
+          "P8"
+        ],
+        "innovation": [
+          "P3",
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "findings": [
+          "P4",
+          "P5"
+        ],
+        "limitations": [
+          "P2",
+          "P5",
+          "P6",
+          "P7"
+        ],
+        "connection": [
+          "P3",
+          "P4",
+          "P5",
+          "P6",
+          "P7",
+          "P8"
+        ],
+        "next_steps": [
+          "P5",
+          "P6",
+          "P7",
+          "P8"
+        ]
+      },
+      "analysis_material_version": "a58a8cb1f60d057bff7656061cbd370a085fd0c26a520ce2561e3fe268a29eba",
+      "analysis_issues": [
+        {
+          "kind": "source_defect",
+          "page": "P2",
+          "detail": "原页左栏可清楚核实“(author?)”后接参考文献5，属于作者名称未填的编辑占位，而非文字提取错误。缺项影响该处跨尺度Pearson相关研究的作者归属识别；参考文献编号仍在，不影响本批实验设计及结果的识读。未发现公式占位。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "公式(1)、(2)原页完整清楚。文字提取将等号显示为“¼”、减号显示为“/C0”，并打散公式(2)的分式。已按原页纠正：Y_ij=μ+α_i+β_j+ε_ij；ICC(A,1)=(MS_I−MS_E)/[MS_I+(k−1)MS_E+(k/n)(MS_R−MS_E)]。这是提取错误，不是原文件缺失，不影响公式识读。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P7",
+          "detail": "图8上排标注SummEval，ICC=0.582、nMAE=0.100；但P5图4的SummEval三尺度ICC依次为0.517、0.570、0.470，nMAE为0.085、0.078、0.092。图8这两个数值反而与图4中TruthfulQA的0–5结果相同。已从两张原图核实差异；本批缺少说明其是否采用不同数据或计算口径的文字，不能判定哪处标签或数值需更正，也不能据此确认SummEval的具体诊断数值。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "公式(3)—(5)原页完整。文字提取中的“¼”“/C0”“/C1”及“/C12”等分别破坏了等号、减号、乘号和绝对值符号，均已据原页纠正。公式(3)分母为MS_I+(1/n)(MS_R−MS_E)；公式(4)为两组均值之差的绝对值平均；公式(5)再除以评分范围R。原文件没有公式缺项，纠正后可准确识别可靠性与误差指标。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "提供的文字在收稿、接收日期之后遗漏了原页清晰可见的“Published online: 08 September 2026”。已补正在线发表日期为2026年9月8日。该遗漏仅影响出版元数据，不影响实验结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "496ef5be9244",
+        "state": "published",
+        "updated_at": "2026-11-15T01:10:50.159622+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 10,
+        "covered": 10,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "source_defect",
+            "page": "P2",
+            "detail": "原页左栏可清楚核实“(author?)”后接参考文献5，属于作者名称未填的编辑占位，而非文字提取错误。缺项影响该处跨尺度Pearson相关研究的作者归属识别；参考文献编号仍在，不影响本批实验设计及结果的识读。未发现公式占位。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "公式(1)、(2)原页完整清楚。文字提取将等号显示为“¼”、减号显示为“/C0”，并打散公式(2)的分式。已按原页纠正：Y_ij=μ+α_i+β_j+ε_ij；ICC(A,1)=(MS_I−MS_E)/[MS_I+(k−1)MS_E+(k/n)(MS_R−MS_E)]。这是提取错误，不是原文件缺失，不影响公式识读。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P7",
+            "detail": "图8上排标注SummEval，ICC=0.582、nMAE=0.100；但P5图4的SummEval三尺度ICC依次为0.517、0.570、0.470，nMAE为0.085、0.078、0.092。图8这两个数值反而与图4中TruthfulQA的0–5结果相同。已从两张原图核实差异；本批缺少说明其是否采用不同数据或计算口径的文字，不能判定哪处标签或数值需更正，也不能据此确认SummEval的具体诊断数值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "公式(3)—(5)原页完整。文字提取中的“¼”“/C0”“/C1”及“/C12”等分别破坏了等号、减号、乘号和绝对值符号，均已据原页纠正。公式(3)分母为MS_I+(1/n)(MS_R−MS_E)；公式(4)为两组均值之差的绝对值平均；公式(5)再除以评分范围R。原文件没有公式缺项，纠正后可准确识别可靠性与误差指标。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "提供的文字在收稿、接收日期之后遗漏了原页清晰可见的“Published online: 08 September 2026”。已补正在线发表日期为2026年9月8日。该遗漏仅影响出版元数据，不影响实验结论。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -1201,8 +1324,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "restricted",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -1321,7 +1444,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《Grading scale impact on LLM-as-a-judge: human-LLM alignment is highest on 0–5 grading scale》，暂未提供可用摘要，请查看原文。",
+      "summary": "本文研究评分范围是否改变大模型裁判与人类的一致性，比较允许小数的0–5、0–10和0–100连续评分。六个基准的结果显示，0–5在人机汇总绝对一致性上最佳，但部分任务存在例外；较高的组内可靠性也可能掩盖任务差异。[P2–P5] 阅读重点是完全交叉设计、ICC与归一化绝对误差的互补使用，而非直接照搬0–5。样本代表性和图间数值不一致限制了结论外推。[P6–P7]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -1365,11 +1488,134 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议作为评估协议设计的方法论文重点阅读，尤其关注分任务诊断和绝对一致性指标；不宜将其视为智能运维或结构设计的直接应用证据。[P3–P8]",
+      "deep_read": {
+        "problem": "论文追问：改变评分范围后，LLM是否仍表达相同判断，又在哪种范围下最接近人类？已有评价常依赖相关性，却可能忽略评分偏移。作者将评分范围从提示细节提升为待检验变量，并明确研究连续范围而非离散Likert选项数量。[P1–P2]",
+        "method": "六个LLM在三种范围下评价六基准共5,497条；人机比较采用150条、12名人类与六个模型的完全交叉设计。跨范围分数先缩放至[0,1]，再计算绝对一致性ICC；人机共识比较同时报告nMAE，以区分校准差异和平均误差。[P2、P8]",
+        "innovation": "主要贡献是系统检验评分范围对人机绝对一致性的影响，而不是提出新模型。研究结合跨范围自一致性、组内可靠性和人机对齐，并下钻至基准、模型及性别群体，揭示汇总可靠性可能遮蔽局部失配。其价值在评估设计，不在证明评分机制。[P3–P6]",
+        "findings": "汇总人机ICC在0–5、0–10、0–100下分别为0.853、0.805、0.840，对应nMAE为0.111、0.122、0.115。作者的平均最优结论有数据支持，但STS-B在0–100、SummEval在0–10的ICC最高，不能推广为逐任务最优。[P4–P5]",
+        "limitations": "人类仅为研究生，每基准25条，连续评分结果不能直接外推至离散量表。[P6] 原文件缺项包括P2作者名“(author?)”占位，影响文献归属；P7图8与P5图4的SummEval数值不一致且缺少口径解释，影响该诊断实例，不能推定正确值。0–5优势机制仍未确立。\n原文核对：[P2] 原页左栏可清楚核实“(author?)”后接参考文献5，属于作者名称未填的编辑占位，而非文字提取错误。缺项影响该处跨尺度Pearson相关研究的作者归属识别；参考文献编号仍在，不影响本批实验设计及结果的识读。未发现公式占位。；[P7] 图8上排标注SummEval，ICC=0.582、nMAE=0.100；但P5图4的SummEval三尺度ICC依次为0.517、0.570、0.470，nMAE为0.085、0.078、0.092。图8这两个数值反而与图4中TruthfulQA的0–5结果相同。已从两张原图核实差异；本批缺少说明其是否采用不同数据或计算口径的文字，不能判定哪处标签或数值需更正，也不能据此确认SummEval的具体诊断数值。",
+        "connection": "解读：对智能运维中的故障解释、维修建议或风险报告评价，本研究提示不能只比较平均分或排名，还应检查专家与模型的绝对一致性及任务差异。结构设计与可靠性研究可借鉴其评价协议，但本文没有工程数据，不能据此声称提升安全性或设计性能。[P3–P8]",
+        "next_steps": "建议：在目标工程任务中先固定评价准则，再交叉比较评分范围，邀请不同经验的领域专家评分，同时报告ICC、nMAE和分任务结果。扩大样本并区分连续评分与离散选项；另需核实图8口径。以上是迁移研究建议，不是论文已经验证的应用成果。[P5–P8]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "评分范围如何影响大模型裁判：0–5范围的人机平均对齐最佳",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s44387-026-00153-8_reference.pdf"
+      ],
+      "analyzed_at": "2026-11-15T01:10:50.125385+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P2",
+          "P8"
+        ],
+        "innovation": [
+          "P3",
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "findings": [
+          "P4",
+          "P5"
+        ],
+        "limitations": [
+          "P2",
+          "P5",
+          "P6",
+          "P7"
+        ],
+        "connection": [
+          "P3",
+          "P4",
+          "P5",
+          "P6",
+          "P7",
+          "P8"
+        ],
+        "next_steps": [
+          "P5",
+          "P6",
+          "P7",
+          "P8"
+        ]
+      },
+      "analysis_material_version": "a58a8cb1f60d057bff7656061cbd370a085fd0c26a520ce2561e3fe268a29eba",
+      "analysis_issues": [
+        {
+          "kind": "source_defect",
+          "page": "P2",
+          "detail": "原页左栏可清楚核实“(author?)”后接参考文献5，属于作者名称未填的编辑占位，而非文字提取错误。缺项影响该处跨尺度Pearson相关研究的作者归属识别；参考文献编号仍在，不影响本批实验设计及结果的识读。未发现公式占位。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "公式(1)、(2)原页完整清楚。文字提取将等号显示为“¼”、减号显示为“/C0”，并打散公式(2)的分式。已按原页纠正：Y_ij=μ+α_i+β_j+ε_ij；ICC(A,1)=(MS_I−MS_E)/[MS_I+(k−1)MS_E+(k/n)(MS_R−MS_E)]。这是提取错误，不是原文件缺失，不影响公式识读。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P7",
+          "detail": "图8上排标注SummEval，ICC=0.582、nMAE=0.100；但P5图4的SummEval三尺度ICC依次为0.517、0.570、0.470，nMAE为0.085、0.078、0.092。图8这两个数值反而与图4中TruthfulQA的0–5结果相同。已从两张原图核实差异；本批缺少说明其是否采用不同数据或计算口径的文字，不能判定哪处标签或数值需更正，也不能据此确认SummEval的具体诊断数值。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "公式(3)—(5)原页完整。文字提取中的“¼”“/C0”“/C1”及“/C12”等分别破坏了等号、减号、乘号和绝对值符号，均已据原页纠正。公式(3)分母为MS_I+(1/n)(MS_R−MS_E)；公式(4)为两组均值之差的绝对值平均；公式(5)再除以评分范围R。原文件没有公式缺项，纠正后可准确识别可靠性与误差指标。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "提供的文字在收稿、接收日期之后遗漏了原页清晰可见的“Published online: 08 September 2026”。已补正在线发表日期为2026年9月8日。该遗漏仅影响出版元数据，不影响实验结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "496ef5be9244",
+        "state": "published",
+        "updated_at": "2026-11-15T01:10:50.159622+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 10,
+        "covered": 10,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "source_defect",
+            "page": "P2",
+            "detail": "原页左栏可清楚核实“(author?)”后接参考文献5，属于作者名称未填的编辑占位，而非文字提取错误。缺项影响该处跨尺度Pearson相关研究的作者归属识别；参考文献编号仍在，不影响本批实验设计及结果的识读。未发现公式占位。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "公式(1)、(2)原页完整清楚。文字提取将等号显示为“¼”、减号显示为“/C0”，并打散公式(2)的分式。已按原页纠正：Y_ij=μ+α_i+β_j+ε_ij；ICC(A,1)=(MS_I−MS_E)/[MS_I+(k−1)MS_E+(k/n)(MS_R−MS_E)]。这是提取错误，不是原文件缺失，不影响公式识读。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P7",
+            "detail": "图8上排标注SummEval，ICC=0.582、nMAE=0.100；但P5图4的SummEval三尺度ICC依次为0.517、0.570、0.470，nMAE为0.085、0.078、0.092。图8这两个数值反而与图4中TruthfulQA的0–5结果相同。已从两张原图核实差异；本批缺少说明其是否采用不同数据或计算口径的文字，不能判定哪处标签或数值需更正，也不能据此确认SummEval的具体诊断数值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "公式(3)—(5)原页完整。文字提取中的“¼”“/C0”“/C1”及“/C12”等分别破坏了等号、减号、乘号和绝对值符号，均已据原页纠正。公式(3)分母为MS_I+(1/n)(MS_R−MS_E)；公式(4)为两组均值之差的绝对值平均；公式(5)再除以评分范围R。原文件没有公式缺项，纠正后可准确识别可靠性与误差指标。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "提供的文字在收稿、接收日期之后遗漏了原页清晰可见的“Published online: 08 September 2026”。已补正在线发表日期为2026年9月8日。该遗漏仅影响出版元数据，不影响实验结论。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -2381,13 +2627,13 @@
     "unavailable": 45
   },
   "analysis_status": {
-    "ready_core": 2,
+    "ready_core": 3,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 4
+    "pending": 3
   },
   "edition": {
     "id": "42715686090",
