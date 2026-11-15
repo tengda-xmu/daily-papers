@@ -4283,7 +4283,7 @@
       "reading_status": {
         "paper_id": "6f5b8b363622",
         "state": "failed",
-        "updated_at": "2026-11-14T01:56:14.848184+00:00",
+        "updated_at": "2026-11-15T04:38:43.517351+00:00",
         "basis": "full_text",
         "article_state": "complete",
         "article_stage": "",
@@ -7579,8 +7579,8 @@
         "article_state": "complete",
         "article_stage": "",
         "reason": "restricted",
-        "total": 1,
-        "covered": 1,
+        "total": 0,
+        "covered": 0,
         "pdf_available": false,
         "issues": []
       }
@@ -10159,7 +10159,7 @@
       "reading_status": {
         "paper_id": "bff62d107e4c",
         "state": "failed",
-        "updated_at": "2026-11-14T02:05:07.839277+00:00",
+        "updated_at": "2026-11-15T07:23:46.315913+00:00",
         "basis": "full_text",
         "article_state": "complete",
         "article_stage": "",
@@ -11483,7 +11483,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《Grading scale impact on LLM-as-a-judge: human-LLM alignment is highest on 0–5 grading scale》，暂未提供可用摘要，请查看原文。",
+      "summary": "本文研究评分范围是否改变大模型裁判与人类的一致性，比较允许小数的0–5、0–10和0–100连续评分。六个基准的结果显示，0–5在人机汇总绝对一致性上最佳，但部分任务存在例外；较高的组内可靠性也可能掩盖任务差异。[P2–P5] 阅读重点是完全交叉设计、ICC与归一化绝对误差的互补使用，而非直接照搬0–5。样本代表性和图间数值不一致限制了结论外推。[P6–P7]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -11607,10 +11607,133 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {}
+      "recommendation": "建议作为评估协议设计的方法论文重点阅读，尤其关注分任务诊断和绝对一致性指标；不宜将其视为智能运维或结构设计的直接应用证据。[P3–P8]",
+      "deep_read": {
+        "problem": "论文追问：改变评分范围后，LLM是否仍表达相同判断，又在哪种范围下最接近人类？已有评价常依赖相关性，却可能忽略评分偏移。作者将评分范围从提示细节提升为待检验变量，并明确研究连续范围而非离散Likert选项数量。[P1–P2]",
+        "method": "六个LLM在三种范围下评价六基准共5,497条；人机比较采用150条、12名人类与六个模型的完全交叉设计。跨范围分数先缩放至[0,1]，再计算绝对一致性ICC；人机共识比较同时报告nMAE，以区分校准差异和平均误差。[P2、P8]",
+        "innovation": "主要贡献是系统检验评分范围对人机绝对一致性的影响，而不是提出新模型。研究结合跨范围自一致性、组内可靠性和人机对齐，并下钻至基准、模型及性别群体，揭示汇总可靠性可能遮蔽局部失配。其价值在评估设计，不在证明评分机制。[P3–P6]",
+        "findings": "汇总人机ICC在0–5、0–10、0–100下分别为0.853、0.805、0.840，对应nMAE为0.111、0.122、0.115。作者的平均最优结论有数据支持，但STS-B在0–100、SummEval在0–10的ICC最高，不能推广为逐任务最优。[P4–P5]",
+        "limitations": "人类仅为研究生，每基准25条，连续评分结果不能直接外推至离散量表。[P6] 原文件缺项包括P2作者名“(author?)”占位，影响文献归属；P7图8与P5图4的SummEval数值不一致且缺少口径解释，影响该诊断实例，不能推定正确值。0–5优势机制仍未确立。\n原文核对：[P2] 原页左栏可清楚核实“(author?)”后接参考文献5，属于作者名称未填的编辑占位，而非文字提取错误。缺项影响该处跨尺度Pearson相关研究的作者归属识别；参考文献编号仍在，不影响本批实验设计及结果的识读。未发现公式占位。；[P7] 图8上排标注SummEval，ICC=0.582、nMAE=0.100；但P5图4的SummEval三尺度ICC依次为0.517、0.570、0.470，nMAE为0.085、0.078、0.092。图8这两个数值反而与图4中TruthfulQA的0–5结果相同。已从两张原图核实差异；本批缺少说明其是否采用不同数据或计算口径的文字，不能判定哪处标签或数值需更正，也不能据此确认SummEval的具体诊断数值。",
+        "connection": "解读：对智能运维中的故障解释、维修建议或风险报告评价，本研究提示不能只比较平均分或排名，还应检查专家与模型的绝对一致性及任务差异。结构设计与可靠性研究可借鉴其评价协议，但本文没有工程数据，不能据此声称提升安全性或设计性能。[P3–P8]",
+        "next_steps": "建议：在目标工程任务中先固定评价准则，再交叉比较评分范围，邀请不同经验的领域专家评分，同时报告ICC、nMAE和分任务结果。扩大样本并区分连续评分与离散选项；另需核实图8口径。以上是迁移研究建议，不是论文已经验证的应用成果。[P5–P8]"
+      },
+      "title_zh": "评分范围如何影响大模型裁判：0–5范围的人机平均对齐最佳",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s44387-026-00153-8_reference.pdf"
+      ],
+      "analyzed_at": "2026-11-15T01:10:50.125385+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P2",
+          "P8"
+        ],
+        "innovation": [
+          "P3",
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "findings": [
+          "P4",
+          "P5"
+        ],
+        "limitations": [
+          "P2",
+          "P5",
+          "P6",
+          "P7"
+        ],
+        "connection": [
+          "P3",
+          "P4",
+          "P5",
+          "P6",
+          "P7",
+          "P8"
+        ],
+        "next_steps": [
+          "P5",
+          "P6",
+          "P7",
+          "P8"
+        ]
+      },
+      "analysis_material_version": "a58a8cb1f60d057bff7656061cbd370a085fd0c26a520ce2561e3fe268a29eba",
+      "analysis_issues": [
+        {
+          "kind": "source_defect",
+          "page": "P2",
+          "detail": "原页左栏可清楚核实“(author?)”后接参考文献5，属于作者名称未填的编辑占位，而非文字提取错误。缺项影响该处跨尺度Pearson相关研究的作者归属识别；参考文献编号仍在，不影响本批实验设计及结果的识读。未发现公式占位。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "公式(1)、(2)原页完整清楚。文字提取将等号显示为“¼”、减号显示为“/C0”，并打散公式(2)的分式。已按原页纠正：Y_ij=μ+α_i+β_j+ε_ij；ICC(A,1)=(MS_I−MS_E)/[MS_I+(k−1)MS_E+(k/n)(MS_R−MS_E)]。这是提取错误，不是原文件缺失，不影响公式识读。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P7",
+          "detail": "图8上排标注SummEval，ICC=0.582、nMAE=0.100；但P5图4的SummEval三尺度ICC依次为0.517、0.570、0.470，nMAE为0.085、0.078、0.092。图8这两个数值反而与图4中TruthfulQA的0–5结果相同。已从两张原图核实差异；本批缺少说明其是否采用不同数据或计算口径的文字，不能判定哪处标签或数值需更正，也不能据此确认SummEval的具体诊断数值。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "公式(3)—(5)原页完整。文字提取中的“¼”“/C0”“/C1”及“/C12”等分别破坏了等号、减号、乘号和绝对值符号，均已据原页纠正。公式(3)分母为MS_I+(1/n)(MS_R−MS_E)；公式(4)为两组均值之差的绝对值平均；公式(5)再除以评分范围R。原文件没有公式缺项，纠正后可准确识别可靠性与误差指标。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "提供的文字在收稿、接收日期之后遗漏了原页清晰可见的“Published online: 08 September 2026”。已补正在线发表日期为2026年9月8日。该遗漏仅影响出版元数据，不影响实验结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "496ef5be9244",
+        "state": "published",
+        "updated_at": "2026-11-15T01:10:50.159622+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 10,
+        "covered": 10,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "source_defect",
+            "page": "P2",
+            "detail": "原页左栏可清楚核实“(author?)”后接参考文献5，属于作者名称未填的编辑占位，而非文字提取错误。缺项影响该处跨尺度Pearson相关研究的作者归属识别；参考文献编号仍在，不影响本批实验设计及结果的识读。未发现公式占位。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "公式(1)、(2)原页完整清楚。文字提取将等号显示为“¼”、减号显示为“/C0”，并打散公式(2)的分式。已按原页纠正：Y_ij=μ+α_i+β_j+ε_ij；ICC(A,1)=(MS_I−MS_E)/[MS_I+(k−1)MS_E+(k/n)(MS_R−MS_E)]。这是提取错误，不是原文件缺失，不影响公式识读。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P7",
+            "detail": "图8上排标注SummEval，ICC=0.582、nMAE=0.100；但P5图4的SummEval三尺度ICC依次为0.517、0.570、0.470，nMAE为0.085、0.078、0.092。图8这两个数值反而与图4中TruthfulQA的0–5结果相同。已从两张原图核实差异；本批缺少说明其是否采用不同数据或计算口径的文字，不能判定哪处标签或数值需更正，也不能据此确认SummEval的具体诊断数值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "公式(3)—(5)原页完整。文字提取中的“¼”“/C0”“/C1”及“/C12”等分别破坏了等号、减号、乘号和绝对值符号，均已据原页纠正。公式(3)分母为MS_I+(1/n)(MS_R−MS_E)；公式(4)为两组均值之差的绝对值平均；公式(5)再除以评分范围R。原文件没有公式缺项，纠正后可准确识别可靠性与误差指标。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "提供的文字在收稿、接收日期之后遗漏了原页清晰可见的“Published online: 08 September 2026”。已补正在线发表日期为2026年9月8日。该遗漏仅影响出版元数据，不影响实验结论。"
+          }
+        ]
+      }
     },
     {
       "source": "OpenAlex",
@@ -11881,7 +12004,7 @@
       "reading_status": {
         "paper_id": "709bdb82c0b5",
         "state": "failed",
-        "updated_at": "2026-11-14T01:57:08.034157+00:00",
+        "updated_at": "2026-11-15T05:10:37.286672+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -13393,7 +13516,7 @@
       "reading_status": {
         "paper_id": "a1515ce3849b",
         "state": "failed",
-        "updated_at": "2026-11-14T01:58:57.140701+00:00",
+        "updated_at": "2026-11-15T05:22:16.977866+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -16793,7 +16916,7 @@
       "reading_status": {
         "paper_id": "3683b73cdb01",
         "state": "failed",
-        "updated_at": "2026-11-14T02:17:21.993251+00:00",
+        "updated_at": "2026-11-15T08:42:12.127944+00:00",
         "basis": "full_text",
         "article_state": "complete",
         "article_stage": "",
@@ -22002,7 +22125,7 @@
       "reading_status": {
         "paper_id": "f56c0785a483",
         "state": "failed",
-        "updated_at": "2026-11-14T02:17:01.790215+00:00",
+        "updated_at": "2026-11-15T08:30:58.588891+00:00",
         "basis": "full_text",
         "article_state": "complete",
         "article_stage": "",
@@ -22382,7 +22505,7 @@
       "reading_status": {
         "paper_id": "9170f18af989",
         "state": "failed",
-        "updated_at": "2026-11-14T01:55:12.669243+00:00",
+        "updated_at": "2026-11-15T04:36:50.108500+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -26093,7 +26216,7 @@
       "reading_status": {
         "paper_id": "c6e1f2105665",
         "state": "failed",
-        "updated_at": "2026-11-14T02:13:05.108269+00:00",
+        "updated_at": "2026-11-15T07:55:02.121995+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -32603,7 +32726,7 @@
       "reading_status": {
         "paper_id": "c8e9f96f8b55",
         "state": "failed",
-        "updated_at": "2026-11-14T02:04:49.546481+00:00",
+        "updated_at": "2026-11-15T07:12:35.419606+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -35408,7 +35531,7 @@
       "reading_status": {
         "paper_id": "f2bb62d504b9",
         "state": "failed",
-        "updated_at": "2026-11-14T02:16:23.063554+00:00",
+        "updated_at": "2026-11-15T08:07:20.095777+00:00",
         "basis": "full_text",
         "article_state": "complete",
         "article_stage": "",
@@ -69913,11 +70036,11 @@
       "reading_status": {
         "paper_id": "1172e7a5c357",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T01:55:57.831746+00:00",
+        "updated_at": "2026-11-15T04:37:32.134806+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -234708,7 +234831,7 @@
       "reading_status": {
         "paper_id": "9f42a1c20a27",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-14T02:17:59.539920+00:00",
+        "updated_at": "2026-11-15T09:03:50.833534+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
@@ -235132,11 +235255,11 @@
       "reading_status": {
         "paper_id": "b27b9fe90708",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-14T01:49:05.615343+00:00",
+        "updated_at": "2026-11-15T04:31:13.546972+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -236943,11 +237066,11 @@
       "reading_status": {
         "paper_id": "aa5b02d7b25f",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-14T01:37:39.551406+00:00",
+        "updated_at": "2026-11-15T03:43:58.400506+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -237963,7 +238086,7 @@
       "reading_status": {
         "paper_id": "7e68d3c44915",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-14T02:39:05.572562+00:00",
+        "updated_at": "2026-11-15T09:27:25.100222+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
@@ -242470,11 +242593,11 @@
       "reading_status": {
         "paper_id": "0b71b4d17bb7",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-14T01:54:42.030496+00:00",
+        "updated_at": "2026-11-15T04:36:23.685044+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -251327,7 +251450,7 @@
       "reading_status": {
         "paper_id": "1994412852e5",
         "state": "failed",
-        "updated_at": "2026-11-14T01:52:06.269397+00:00",
+        "updated_at": "2026-11-15T04:34:38.620965+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -259203,7 +259326,7 @@
       "reading_status": {
         "paper_id": "5f759a434d00",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T02:11:58.642086+00:00",
+        "updated_at": "2026-11-15T07:53:49.290735+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -259388,11 +259511,11 @@
       "reading_status": {
         "paper_id": "846009a34c58",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T01:56:33.270986+00:00",
+        "updated_at": "2026-11-15T04:49:42.724029+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -259576,11 +259699,11 @@
       "reading_status": {
         "paper_id": "f61abfb865f5",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T01:56:51.230013+00:00",
+        "updated_at": "2026-11-15T05:00:27.725027+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -259766,11 +259889,11 @@
       "reading_status": {
         "paper_id": "eb62449238c8",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T01:53:34.651872+00:00",
+        "updated_at": "2026-11-15T04:35:15.026144+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -259953,11 +260076,11 @@
       "reading_status": {
         "paper_id": "f93c5ebdceed",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T01:53:57.173218+00:00",
+        "updated_at": "2026-11-15T04:35:37.178304+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -261014,11 +261137,11 @@
       "reading_status": {
         "paper_id": "0c71ddc40ad2",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T01:48:20.523092+00:00",
+        "updated_at": "2026-11-15T04:30:32.459272+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -261173,11 +261296,11 @@
       "reading_status": {
         "paper_id": "30719925104a",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T01:49:40.125453+00:00",
+        "updated_at": "2026-11-15T04:31:44.512049+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -261391,11 +261514,11 @@
       "reading_status": {
         "paper_id": "edfba5029949",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T01:50:07.307116+00:00",
+        "updated_at": "2026-11-15T04:32:07.316869+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -261548,11 +261671,11 @@
       "reading_status": {
         "paper_id": "5c61f4d246bb",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T01:50:37.347077+00:00",
+        "updated_at": "2026-11-15T04:32:29.959877+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -261756,11 +261879,11 @@
       "reading_status": {
         "paper_id": "3aec7bac69f8",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T02:02:18.385443+00:00",
+        "updated_at": "2026-11-15T06:51:18.817494+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -262951,11 +263074,11 @@
       "reading_status": {
         "paper_id": "5c21d3266109",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T02:02:50.871586+00:00",
+        "updated_at": "2026-11-15T07:01:43.858740+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -263104,11 +263227,11 @@
       "reading_status": {
         "paper_id": "565888b08f8a",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T01:59:43.402295+00:00",
+        "updated_at": "2026-11-15T05:34:09.817304+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -263259,11 +263382,11 @@
       "reading_status": {
         "paper_id": "0e496acb319d",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T02:05:58.976435+00:00",
+        "updated_at": "2026-11-15T07:46:03.740105+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -263286,7 +263409,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "本文聚焦《Introduction to Scientific Machine Learning》，暂未提供可用摘要，请查看原文。",
+      "summary": "本章摘要围绕科学机器学习的基础概念展开，涉及因果关系的数学表述、偶然不确定性与认知不确定性的区分，以及不确定性传播和模型校准问题的定义。[摘要] 解读：其价值更接近工程学习的概念入口，而非已获验证的新算法报告。当前仅有摘要，无法核实具体公式、案例或实验，也不能确认其与生成式设计的直接联系，适合作为背景阅读候选，而非直接认定为重点成果。",
       "raw_metadata": {
         "source": "Crossref",
         "source_id": "10.1142/9789819832491_0001",
@@ -263388,24 +263511,90 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "建议作为科学机器学习基础概念的补充读物；若目标是寻找生成式设计的新方法或验证结果，当前摘要不足以支持重点推荐。[摘要]",
+      "deep_read": {
+        "problem": "摘要列出的核心问题包括如何界定科学机器学习，以及如何表述因果关系、不确定性传播和模型校准。[摘要] 解读：这些内容旨在建立概念框架，而非明确提出某个工程性能瓶颈；资料未给出研究对象、应用边界或待检验假设。",
+        "method": "作者称将“explain the mathematics of causality”，但没有展示数学表达、推导路线或实现步骤。[摘要] 解读：目前只能确认其包含数学讲解，不能据此认定采用了特定因果模型、学习架构、求解算法或实验验证流程。",
+        "innovation": "摘要没有提出原创性声明，也没有与既有教材、理论或算法比较。[摘要] 解读：将多个基础议题纳入同一导论可以体现教学组织方式，但不能直接等同于科研创新；是否存在新的概念联系或推导，需要更完整的原文才能判断。",
+        "findings": "摘要明确提到区分“aleatory and epistemic uncertainty”，即偶然不确定性与认知不确定性。[摘要] 这说明其覆盖不确定性的分类，但没有提供分类标准、示例或实证结果，不能将这一教学内容表述为作者发现的新规律。",
+        "limitations": "当前资料仅为一段摘要，未提供公式、数据、实验设置、评价指标或适用条件，因而无法核验内容深度。[摘要] 这些属于可用资料的限制，不是已经证实的作品缺陷；也不能据此断言其方法存在精度、效率或泛化问题。",
+        "connection": "解读：不确定性传播和模型校准可作为连接结构设计与可靠性研究的概念入口，因果问题也可能启发智能运维中的故障解释。[摘要] 但摘要没有讨论这些应用，更未涉及生成式设计，因此上述联系仅是阅读视角，不是作者结论。",
+        "next_steps": "建议后续取得相关正文后，优先核对传播问题的输入输出、校准所需观测及参数定义，再判断能否服务生成式设计。[摘要] 建议将“概念讲解是否清楚”与“是否提供可迁移算法”分开评价，避免把基础知识覆盖直接当作方法贡献。"
+      },
       "title_zh": "科学机器学习导论",
       "reading_status": {
         "paper_id": "fed0a147e220",
-        "state": "missing_evidence",
-        "updated_at": "2026-11-14T02:11:40.892933+00:00",
-        "basis": "missing",
-        "article_state": "pending",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-15T07:52:53.706986+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
         "article_stage": "",
         "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
         "issues": []
-      }
+      },
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1142/9789819832491_0001"
+      ],
+      "analyzed_at": "2026-11-15T07:51:13.905064+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "科学机器学习如何界定，因果性、不确定性与模型校准又涉及哪些基本问题？这篇导论的阅读价值在于梳理概念入口，而非提供可直接复用的算法或性能结论。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从科学机器学习的定义进入",
+            "paragraphs": [
+              "摘要以定义科学机器学习开篇，并将因果性的数学表述、不确定性的区分、不确定性传播和模型校准纳入讨论。就当前资料而言，适合把它作为概念导读，而不是某项具体工程应用的研究报告。摘要没有展开这些概念的定义，也未说明它们之间的完整论证关系。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "以定义、解释和辨析组织内容",
+            "paragraphs": [
+              "作者明确介绍的工作包括：定义科学机器学习，解释因果性的数学，区分偶然不确定性与认知不确定性，以及定义不确定性传播问题和模型校准问题。这些属于概念层面的讲解；仅凭摘要，不能进一步指定作者采用了何种数学框架、计算算法或实验流程。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要交代的是概念覆盖，而非实验发现",
+            "paragraphs": [
+              "摘要能够确认的内容，是作者对上述主题进行了定义、解释或区分。其中，不确定性的类型、不确定性传播与模型校准被分别提出，阅读时值得注意它们各自的问题边界。摘要没有报告定量结果、方法优劣或应用效果，因此不能把这些概念性内容改写成模型精度或可靠性提升的证据。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "应用对象与验证范围仍无法判断",
+            "paragraphs": [
+              "本次解读仅依据所提供的完整摘要，没有可用原图。摘要未交代是否涉及样本或数据集、具体应用对象、比较方法及验证范围，也未给出公式与推导细节。这些信息缺口意味着当前无法评价其工程适用性，但不等于原文没有讨论或验证相关内容。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：先厘清问题，再考虑工程迁移",
+            "paragraphs": [
+              "阅读启发：面向结构设计、可靠性或智能运维，后续阅读可先关注作者如何区分两类不确定性，以及如何分别界定传播与校准问题，再判断这些表述能否帮助澄清自身研究问题。当前摘要不足以证明其已覆盖上述应用，更不能据此推断某种工程改进效果。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-15T07:52:53.703984+00:00",
+      "article_profile": "e1a9047bba3c070fd0a71f58324b896689f601459ab67bde099f66eda8944c00",
+      "analysis_references": {},
+      "analysis_material_version": "f076e00ca3102cb020520c9e84803169116074cbfff1355d665ff1c928feffe5",
+      "analysis_issues": []
     },
     {
       "source": "OpenAlex",
@@ -263608,11 +263797,11 @@
       "reading_status": {
         "paper_id": "b972c8c0d15c",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T01:54:24.053015+00:00",
+        "updated_at": "2026-11-15T04:36:05.887052+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -263805,7 +263994,7 @@
       "reading_status": {
         "paper_id": "a71884573e77",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T02:12:24.370705+00:00",
+        "updated_at": "2026-11-15T07:54:18.071959+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -264074,11 +264263,11 @@
       "reading_status": {
         "paper_id": "de48174471ad",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T02:00:08.810477+00:00",
+        "updated_at": "2026-11-15T05:45:31.897150+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -264306,7 +264495,7 @@
       "reading_status": {
         "paper_id": "240ccabb1146",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T02:15:42.949516+00:00",
+        "updated_at": "2026-11-15T07:55:43.581220+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -265521,11 +265710,11 @@
       "reading_status": {
         "paper_id": "d9ffbd0de9d3",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-14T01:50:54.194637+00:00",
+        "updated_at": "2026-11-15T04:33:33.638185+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -267034,11 +267223,11 @@
       "reading_status": {
         "paper_id": "e1a150bc890d",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T02:00:30.896940+00:00",
+        "updated_at": "2026-11-15T05:56:11.153911+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -267225,7 +267414,7 @@
       "reading_status": {
         "paper_id": "664553b0f6bb",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T02:12:46.719193+00:00",
+        "updated_at": "2026-11-15T07:54:40.150033+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -268429,11 +268618,11 @@
       "reading_status": {
         "paper_id": "15a5bbb570e3",
         "state": "failed",
-        "updated_at": "2026-11-14T01:40:39.445583+00:00",
+        "updated_at": "2026-11-15T04:29:33.551190+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -270641,7 +270830,7 @@
       "reading_status": {
         "paper_id": "aa68a4a89b0e",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T02:16:03.200035+00:00",
+        "updated_at": "2026-11-15T07:56:06.035541+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -274353,7 +274542,7 @@
       "reading_status": {
         "paper_id": "7bd20081a999",
         "state": "failed",
-        "updated_at": "2026-11-14T01:41:08.552664+00:00",
+        "updated_at": "2026-11-15T04:29:52.039497+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
@@ -274513,11 +274702,11 @@
       "reading_status": {
         "paper_id": "e9418af77808",
         "state": "failed",
-        "updated_at": "2026-11-14T01:41:27.642196+00:00",
+        "updated_at": "2026-11-15T04:30:08.991806+00:00",
         "basis": "abstract",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -275164,7 +275353,7 @@
       "reading_status": {
         "paper_id": "205a9f36689d",
         "state": "failed",
-        "updated_at": "2026-11-14T01:39:54.119600+00:00",
+        "updated_at": "2026-11-15T04:28:41.981601+00:00",
         "basis": "full_text",
         "article_state": "complete",
         "article_stage": "",
@@ -276888,7 +277077,7 @@
       "reading_status": {
         "paper_id": "657dbd8572e8",
         "state": "failed",
-        "updated_at": "2026-11-14T01:40:20.052176+00:00",
+        "updated_at": "2026-11-15T04:29:13.914838+00:00",
         "basis": "full_text",
         "article_state": "complete",
         "article_stage": "",
@@ -281076,7 +281265,7 @@
       "reading_status": {
         "paper_id": "d552f4215ad9",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T02:08:08.453207+00:00",
+        "updated_at": "2026-11-15T07:48:58.161798+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -281253,7 +281442,7 @@
       "reading_status": {
         "paper_id": "97ae87f75cf9",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T02:10:36.540951+00:00",
+        "updated_at": "2026-11-15T07:49:22.755654+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -281442,7 +281631,7 @@
       "reading_status": {
         "paper_id": "a013143718c4",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T02:10:54.776489+00:00",
+        "updated_at": "2026-11-15T07:49:43.101465+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -281628,7 +281817,7 @@
       "reading_status": {
         "paper_id": "884dc58e05e9",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T02:06:13.719886+00:00",
+        "updated_at": "2026-11-15T07:46:27.959120+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -281780,7 +281969,7 @@
       "reading_status": {
         "paper_id": "d8b5dc20c71e",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T02:07:02.457325+00:00",
+        "updated_at": "2026-11-15T07:47:32.431994+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -281934,7 +282123,7 @@
       "reading_status": {
         "paper_id": "60a117ea5303",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T02:07:15.835029+00:00",
+        "updated_at": "2026-11-15T07:47:55.928475+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -282142,7 +282331,7 @@
       "reading_status": {
         "paper_id": "fc1d5e869a2a",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T01:51:20.370706+00:00",
+        "updated_at": "2026-11-15T04:33:56.795441+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -289855,11 +290044,11 @@
       "reading_status": {
         "paper_id": "7e5b17470977",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-14T01:51:39.581529+00:00",
+        "updated_at": "2026-11-15T04:34:18.726994+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -293884,11 +294073,11 @@
       "reading_status": {
         "paper_id": "9aeec1365697",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T02:01:31.845424+00:00",
+        "updated_at": "2026-11-15T06:28:58.543799+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -294058,11 +294247,11 @@
       "reading_status": {
         "paper_id": "bade6e590a5e",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T02:01:50.255728+00:00",
+        "updated_at": "2026-11-15T06:39:58.958737+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "network",
+        "reason": "restricted",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -294246,7 +294435,7 @@
       "reading_status": {
         "paper_id": "7574c80175f8",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T02:06:31.760161+00:00",
+        "updated_at": "2026-11-15T07:46:50.068701+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -300411,7 +300600,7 @@
       "reading_status": {
         "paper_id": "72fb0744c384",
         "state": "failed",
-        "updated_at": "2026-11-14T02:16:42.673753+00:00",
+        "updated_at": "2026-11-15T08:19:32.637249+00:00",
         "basis": "full_text",
         "article_state": "complete",
         "article_stage": "",
@@ -301976,7 +302165,7 @@
       "reading_status": {
         "paper_id": "abf0865db466",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T02:11:15.082556+00:00",
+        "updated_at": "2026-11-15T07:50:05.167107+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -304365,7 +304554,7 @@
       "reading_status": {
         "paper_id": "0da00754456e",
         "state": "failed",
-        "updated_at": "2026-11-14T02:20:06.723687+00:00",
+        "updated_at": "2026-11-15T09:15:53.138981+00:00",
         "basis": "full_text",
         "article_state": "complete",
         "article_stage": "",
@@ -307377,7 +307566,7 @@
       "reading_status": {
         "paper_id": "21c8f639c597",
         "state": "failed",
-        "updated_at": "2026-11-14T02:07:31.477895+00:00",
+        "updated_at": "2026-11-15T07:48:17.498133+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -308443,7 +308632,7 @@
       "reading_status": {
         "paper_id": "c0cf7585af24",
         "state": "failed",
-        "updated_at": "2026-11-14T02:00:49.082194+00:00",
+        "updated_at": "2026-11-15T06:06:29.994127+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -310526,11 +310715,11 @@
       "reading_status": {
         "paper_id": "93948bc47be6",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-14T01:37:11.458896+00:00",
+        "updated_at": "2026-11-15T03:33:00.004093+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -311642,7 +311831,7 @@
       "reading_status": {
         "paper_id": "464700d767e8",
         "state": "failed",
-        "updated_at": "2026-11-14T02:05:29.385113+00:00",
+        "updated_at": "2026-11-15T07:34:53.827189+00:00",
         "basis": "full_text",
         "article_state": "failed",
         "article_stage": "writing",
@@ -311797,7 +311986,7 @@
       "reading_status": {
         "paper_id": "438f7c66205e",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T02:01:09.617177+00:00",
+        "updated_at": "2026-11-15T06:17:32.082587+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -311948,7 +312137,7 @@
       "reading_status": {
         "paper_id": "bc2a1ce81aff",
         "state": "missing_evidence",
-        "updated_at": "2026-11-14T02:06:46.571780+00:00",
+        "updated_at": "2026-11-15T07:47:13.324544+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -315476,11 +315665,11 @@
       "reading_status": {
         "paper_id": "fa4d221fff1e",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-14T01:38:11.165555+00:00",
+        "updated_at": "2026-11-15T03:54:59.837570+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -315883,11 +316072,11 @@
       "reading_status": {
         "paper_id": "0bdf5a69af83",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-14T01:38:36.010710+00:00",
+        "updated_at": "2026-11-15T04:05:49.316660+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -316202,11 +316391,11 @@
       "reading_status": {
         "paper_id": "bc88401e69c3",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-14T01:39:03.561683+00:00",
+        "updated_at": "2026-11-15T04:16:38.961419+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -317335,11 +317524,11 @@
       "reading_status": {
         "paper_id": "720b6cef44ee",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-14T01:39:28.626328+00:00",
+        "updated_at": "2026-11-15T04:28:04.875215+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -318060,11 +318249,11 @@
       "reading_status": {
         "paper_id": "7c51821504c7",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-14T01:48:40.176482+00:00",
+        "updated_at": "2026-11-15T04:30:51.008163+00:00",
         "basis": "abstract",
         "article_state": "failed",
         "article_stage": "writing",
-        "reason": "network",
+        "reason": "not_found",
         "total": 0,
         "covered": 0,
         "pdf_available": false,
@@ -332161,7 +332350,7 @@
       "reading_status": {
         "paper_id": "ca3b95f43cb0",
         "state": "failed",
-        "updated_at": "2026-11-14T02:17:42.878635+00:00",
+        "updated_at": "2026-11-15T08:53:08.535502+00:00",
         "basis": "full_text",
         "article_state": "failed",
         "article_stage": "writing",
