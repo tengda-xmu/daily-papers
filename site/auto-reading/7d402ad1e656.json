@@ -1,0 +1,124 @@
+{
+  "paper_id": "7d402ad1e656",
+  "fingerprint": "6d0b66229c4b1debc6ddaf91e7c4a33a99a38eccf0c249eefd053a4b0f9f71e0",
+  "analysis": {
+    "title_zh": "通用尺度赋予人工智能评估解释力与预测力",
+    "summary": "传统基准平均准确率难以揭示模型为何失败，也难以预测新任务表现。本文以18项需求尺度和特殊维度UG统一描述任务，再提取模型能力画像、训练实例级成功预测器。研究覆盖15个LLM、20个基准和16,108个实例，需求特征在分布外预测中总体优于两类基线。[P2][P26][P27] 解读：其价值在于连接任务诊断与部署决策，而非提供安全保证；高等级外推、标注偏差及领域适用性仍须审慎检验。",
+    "recommendation": "推荐作为智能运维中模型评测、任务路由与可靠性预警的方法参考，重点阅读需求标注、主导切片及分布外对照；并非直接研究结构设计的论文。[P13][P15][P26][P27]",
+    "deep_read": {
+      "problem": "论文针对平均成绩混合题目难度、知识要求与额外干扰的问题：相同领域标签下的基准可能测量不同能力，因而产生矛盾判断。作者指出聚合结果会形成“highly confounded results”。核心问题是如何同时解释实例失败并预测未见任务，而不随模型总体更替反复改变尺度。[P1][P7][P16]",
+      "method": "作者用DeLeAn规程标注18项需求及UG，形成19维实例表示；通过主导切片保留其他需求不高于目标等级的题目，拟合逻辑斯蒂特征曲线并估计能力。预测部分另以需求向量训练随机森林，与GloVe随机森林和微调LLaMA比较区分力及校准，不能将能力曲线与预测器混为一谈。[P8][P13][P15]",
+      "innovation": "方法特色是把任务需求与系统能力放入统一、可解释的测量空间，并分离知识、基本能力及体量等额外因素。新系统画像只使用该系统结果，不依赖其他受测模型。解读：这是区别于相对排名的重要设计；但比率尺度及跨维度可通约性仍包含经验设定，不能称为已充分校准的定律。[P11][P12][P28]",
+      "findings": "任务分布外条件下，需求法加权AUROC为0.811，高于嵌入法0.740及微调法0.786；基准分布外对应为0.747、0.480、0.676。分布内需求法AUROC略低于微调法，但ECE更低。结果支持总体预测优势，而非每个模型、每项指标均领先。[P25][P26][P27]",
+      "limitations": "作者承认高等级题稀缺、模态覆盖有限；筛题可能偏倚，超过5的能力依赖外推。[P9][P14][P15] 原文件缺项包括P29通讯作者空白、日期占位，影响责任与版本追溯；P30七项研究设计栏未填，影响表单完整性，不代表正文缺失方法。无依据声称缺失公式已获验证。[P29][P30]\n原文核对：[P29] Reporting Summary页首Corresponding author(s)栏未填写，Last updated by author(s)仍保留YYYY-MM-DD占位。无公式或图号涉及；缺少通讯作者及表单更新日期，影响报告摘要的责任归属与版本追溯，不影响扩展数据表3—5现有结果的识读。；[P30] Reporting Summary的Behavioural & social sciences study design部分，Research sample、Sampling strategy、Data collection、Timing、Data exclusions、Non-participation和Randomization七栏保留模板提示，未填研究专属说明或逐栏注明不适用。无公式或图号涉及；影响本表对样本、抽样、时间与排除流程的独立报告完整性，不能据此断言论文其他部分也缺少这些方法信息。",
+      "connection": "解读：与智能运维最直接的联系是按查询需求选择模型、提前拒答或转交人工，而非仅按平均排名部署。对结构设计与可靠性研究，可借鉴任务分层和混杂因素识别，但论文未直接验证工程故障或结构安全场景；需求相关性也不能自动成为失败原因的因果证据。[P16][P17][P19]",
+      "next_steps": "建议先在运维日志诊断或设计审查中建立领域需求规程，由独立专家检验标注，再按整类任务留出测试路由和拒答效果。应同时记录误拒、漏拒、成本与人工接管收益，补充高需求实例，并评估标注成本及外推敏感性；这些属于迁移研究方案，不是作者已完成的实验。[P15][P17][P23]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://www.nature.com/articles/s41586-026-10303-2.pdf"
+    ],
+    "analyzed_at": "2026-11-15T16:29:49.115834+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": true,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "按智能运维、结构设计与可靠性这一方向背景判断，论文切合AI系统可靠性评估和运维决策，但与结构设计仅有方法迁移联系。资料提供明确的标注流程、对照基线和分布外结果，足以支持重点阅读；不足以确认工程部署收益或安全保证。[P13][P26][P27]",
+    "evidence": "Each assessor can be trained specifically for each \nLLM, without relying on the features of the LLM."
+  },
+  "material": {
+    "version": "e0931d252ac61dcfcfb94dfba3ff9cc267900b300e1d1a30c3b2fff4870a7f7b",
+    "total": 31,
+    "covered": 31,
+    "references": {
+      "problem": [
+        "P1",
+        "P7",
+        "P16"
+      ],
+      "method": [
+        "P8",
+        "P13",
+        "P15"
+      ],
+      "innovation": [
+        "P11",
+        "P12",
+        "P28"
+      ],
+      "findings": [
+        "P25",
+        "P26",
+        "P27"
+      ],
+      "limitations": [
+        "P9",
+        "P14",
+        "P15",
+        "P29",
+        "P30"
+      ],
+      "connection": [
+        "P16",
+        "P17",
+        "P19"
+      ],
+      "next_steps": [
+        "P15",
+        "P17",
+        "P23"
+      ]
+    },
+    "excerpt": "Each assessor can be trained specifically for each \nLLM, without relying on the features of the LLM.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P21",
+      "P22",
+      "P23",
+      "P24",
+      "P25",
+      "P26",
+      "P27",
+      "P28",
+      "P29",
+      "P30",
+      "P31"
+    ],
+    "issues": [
+      {
+        "kind": "source_defect",
+        "page": "P29",
+        "detail": "Reporting Summary页首Corresponding author(s)栏未填写，Last updated by author(s)仍保留YYYY-MM-DD占位。无公式或图号涉及；缺少通讯作者及表单更新日期，影响报告摘要的责任归属与版本追溯，不影响扩展数据表3—5现有结果的识读。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P30",
+        "detail": "Reporting Summary的Behavioural & social sciences study design部分，Research sample、Sampling strategy、Data collection、Timing、Data exclusions、Non-participation和Randomization七栏保留模板提示，未填研究专属说明或逐栏注明不适用。无公式或图号涉及；影响本表对样本、抽样、时间与排除流程的独立报告完整性，不能据此断言论文其他部分也缺少这些方法信息。"
+      }
+    ]
+  }
+}

@@ -20,7 +20,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《State media control shapes LLM behaviour by influencing training data》，暂未提供可用摘要，请查看原文。",
+      "summary": "这份摘要关注国家媒体管控如何经由信息环境与训练数据影响大语言模型输出。摘要称，媒体管控会改变模型训练数据，并显著影响输出；媒体管控较严的国家，在使用其本国语言提示模型时，会获得更有利的评价。[摘要] 解读：材料提示，模型评价可能受到训练语料所处信息环境的影响。但当前仅有摘要，未交代模型、国家样本、评价指标和检验方法，尚不能判断效应大小、普遍性及因果识别强度。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -60,11 +60,143 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议作为训练数据偏差与多语言模型可靠性的线索阅读：摘要提出了明确的媒体管控与模型评价关联，但是否值得重点跟进，仍需核对研究方法及其与本人研究方向的实际联系。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是国家媒体管控能否通过信息环境改变大语言模型训练数据，并进一步影响模型对国家的评价。摘要使用“through its impact on the information environment”描述这一联系。[摘要] 解读：关注点不仅是模型输出偏差，也包括偏差可能来自怎样的信息生产条件。",
+        "method": "摘要给出了媒体管控、信息环境、训练数据与模型输出之间的解释链条，但没有说明具体研究设计。可核对表述仅为“alter the training data”。[摘要] 因此，无法确认作者是否直接分析训练语料、如何测量媒体管控，以及采用何种比较或统计方法。",
+        "innovation": "解读：材料值得关注的视角，是把国家层面的媒体管控与本国语言下的模型评价联系起来，而不是孤立讨论输出偏差。[摘要] 但摘要没有介绍既有研究、方法对照或作者的创新声明，不能据此认定其首次发现该现象，或提出了新的算法与评测体系。",
+        "findings": "摘要明确表示，媒体管控较严的国家，在以其本国语言提示模型时会得到更有利的评价，原文为“rated more favourably by LLMs”。[摘要] 这一发现具有特定语言条件；材料未给出效应量、国家数量、模型范围或不确定性，不能扩展为所有语言和模型的普遍规律。",
+        "limitations": "当前能够确认的是资料披露不足，而不是研究本身存在特定缺陷。摘要没有提供训练数据来源、提示词设计、评价基准与稳健性检验。[摘要] 因而尚不能判断其他因素是否得到控制，也不能验证“substantial effect”对应的实际幅度；这些均需进一步查证。",
+        "connection": "解读：与可靠性研究的潜在联系，在于模型输出可能受到训练信息环境及提示语言的共同影响。[摘要] 若模型用于智能运维中的知识问答或辅助决策，这可作为审查数据来源的启示，但摘要没有相关应用实验，也未提供与结构设计直接相关的证据。",
+        "next_steps": "建议：后续先核对研究对象、媒体管控指标、训练数据证据及多语言提示的可比性，再评估结论是否适用于目标模型。若考虑迁移到智能运维，可设计相同问题的跨语言输出比较，并用独立领域依据核验答案；这属于研究建议，并非摘要报告的方法或成果。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "国家媒体管控如何通过训练数据塑造大语言模型行为",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/d41586-026-01486-9"
+      ],
+      "analyzed_at": "2026-11-15T15:03:56.713110+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "大语言模型对一个国家的评价，可能不仅取决于提问内容，还受到训练数据所处信息环境的影响。这份摘要关注媒体控制如何影响模型输出，提醒读者留意本国语言回答背后的信息来源。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "模型评价背后的信息环境",
+            "paragraphs": [
+              "大语言模型的训练数据并非脱离现实的信息集合。摘要指出，国家对媒体的控制会影响信息环境，进而改变模型的训练数据。研究因此将关注点放在模型之外：塑造信息供给的因素，也可能影响模型如何描述和评价国家。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "摘要交代了影响链条，但未展开研究方法",
+            "paragraphs": [
+              "摘要明确描述了“媒体控制影响信息环境，信息环境改变训练数据，进而影响模型输出”的关系，并报告了使用相关国家本国语言提问时的评价现象。不过，摘要没有说明如何测量媒体控制、识别训练数据变化或组织模型提问，因此不能据此还原具体实验流程。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "本国语言回答中的更有利评价",
+            "paragraphs": [
+              "摘要报告，媒体控制对训练数据的影响会明显作用于大语言模型的输出：媒体控制更严格的国家，在以其本国语言提问时，会获得模型更有利的评价。",
+              "这一发现将信息环境与模型评价联系起来。需要保留的限定是，摘要突出的是媒体控制较严格国家及本国语言提问这一情境；它没有提供足以概括所有国家、所有语言或所有模型表现的结果。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "样本、比较基准与验证范围仍待核对",
+            "paragraphs": [
+              "仅凭摘要，无法判断研究覆盖哪些国家、语言和模型，也无法确认提示词、评价指标、样本规模及训练数据的识别方式。“更有利”的具体比较基准与效应大小同样未在摘要中展开，不能自行补入数值或统计结论。",
+              "摘要也不足以判断研究如何区分媒体控制与其他因素的影响，以及结论经过了哪些验证。这些属于当前资料无法回答的问题，不代表论文没有开展相应分析。本解读仅依据所给摘要，不声称已经阅读全文。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注回答语言，也追问信息来源",
+            "paragraphs": [
+              "阅读启发：理解模型对国家的评价时，可以同时追问“用什么语言提问”与“模型可能接触了怎样的信息环境”。进一步阅读时，值得重点核对语言间的比较方式、评价标准和训练数据证据，而不宜直接将本国语言回答视为更客观或更失真。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的信息环境影响关系",
+            "description": "仅概括摘要明确陈述的影响链条与输出情境，不表示论文的具体实验流程，也不是论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "国家对媒体的控制",
+                "detail": "摘要关注媒体控制对信息环境的影响。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "信息环境",
+                "detail": "媒体控制通过信息环境影响模型训练数据。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "大语言模型训练数据",
+                "detail": "摘要指出训练数据的变化会影响模型输出。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "本国语言提问下的模型评价",
+                "detail": "摘要报告，媒体控制较严格的国家获得更有利的评价。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "影响信息环境"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "改变训练数据"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "影响模型输出"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-15T15:05:21.021359+00:00",
+      "article_profile": "b0f18c005acc2bce34b1b690407d34f2884204f2747b04b906a5428f64372758",
+      "analysis_references": {},
+      "analysis_material_version": "de5678ecf4c072100d559cee3b36ec7b135e11eb95c11e053d3d9a4ee4ecc6e4",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "4240f85da0a9",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-15T15:05:21.021359+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -87,7 +219,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《Lyapunov-guided cooperative games enable stable constraint fusion in LLM-based multi-agent autonomous systems》，暂未提供可用摘要，请查看原文。",
+      "summary": "本文针对多智能体调整自身约束时引发他者偏差、导致协作振荡的问题，将约束融合转化为动态收敛设计。框架结合Lyapunov度量、合作优化、预测解码与概率纠偏，在nuScenes上使用Llama3:8B验证，总体约束满足率由0.713升至0.763。[P1–P6]解读：其价值在于控制理论与生成过程的接口设计，而非已证明的稳定性；多处图文错配和统计呈现问题要求谨慎采信。[P6–P10]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -132,11 +264,285 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议作为多智能体约束协调的方法启发重点阅读，优先核对概率干预和消融表；不宜直接作为严格稳定性或工程安全保证的依据。[P6][P10–P11]",
+      "deep_read": {
+        "problem": "作者关注约束随交互动态传播的问题：规划调整会改变安全和舒适评价，局部修正又可能触发新的违反。原文称系统可能“oscillate among multiple local solutions”。研究目标因此不是单轮规则检查，而是在维持生成质量的同时引导联合状态趋向可行域。[P1–P2][P6]",
+        "method": "框架先用Lyapunov函数整合个体偏差、智能体冲突和Pareto偏差，再以有限时域合作优化选择控制。指数惩罚重加权token概率，随后按约束维度纠正残余偏差；声誉、奖励和责任分配反馈更新权重，形成逐token闭环。[P8–P12]",
+        "innovation": "作者的方法贡献是把静态约束评估改写为动态收敛设计，并将连续控制输入映射为离散生成概率干预。解读：值得关注的是统一状态度量与可执行解码接口的组合，而非新稳定性定理；正文明确只搜索近似Pareto改进方向，不能等同于求得完整最优解集。[P2][P10]",
+        "findings": "表2显示总体约束满足率从LLM-ASSIST的0.713升至0.763，约为7.0%的相对提升。表3中完整框架的3秒碰撞率为0.312%、L2误差为0.702米，均优于两个消融版本。解读：这些结果支持模块组合的经验价值，但表1不支持所有时域、所有基线均占优。[P4][P6]",
+        "limitations": "无正式稳定性证明，仅验证四智能体驾驶场景。[P6]原件缺项包括：P4降幅不符；P5比例解释与时域图示不足；P7图注错配、稳态对应不明；P8–P10图号图注错配及颜色定义冲突；P12数据定位、P13文献定位不全。影响量化核验与复现；补充材料未提供，不得视为已验证。\n原文核对：[P4] 表1与正文的 ST-P3 平均L2误差降幅不一致。按表中三时域数值，GPT-Driver 均值为(0.1837+0.407+0.7549)/3，本方法为(0.1612+0.3796+0.7016)/3，相对下降约7.67%，并非正文的7.1%。原页两处均清晰；影响降幅的准确数值，不改变本方法平均误差较低的方向。；[P5] 图2右下比例图标注0.770、0.855、0.850、1.000、1.000，图注却称数值≥1表示本方法达到或超过最佳基线。前两项分别对应表1中本方法/VAD的3 s碰撞率及L2误差，属于越小越好的指标；最后的总体约束满足率比例1.000也不能表示0.763相对LLM-ASSIST的0.713。缺少一致的基线和指标方向说明，不能按图注统一解释优势。；[P5] 图2图注称顶行比较两平台1 s、2 s、3 s结果，但原图 UniAD 两面板标题明确为“Collision Rate (3s)”和“L2 Error (3s)”，仅展示3 s。缺少图注所称的 UniAD 1 s、2 s图示，相关数值须以表1为准。；[P7] 图3图注与实际附图不匹配。实际图题为“Ablation Study and Stability Analysis”，内容为V(x)曲线、收敛步数箱线图及消融柱状图；图注却描述自动驾驶约束交互、编号(1)至(6)机制和S1至Sn状态演化。缺少与实际稳定性图相配的图注，阴影带及箱线图统计含义未获该图注解释。；[P7] 图3左上V(x)曲线与P4报告的稳态值不完全一致：Full曲线接近0.038，但Game-only与Projection-only末端未落在图中标注0.057、0.089的对应水平参考线上，尤其Projection-only仍明显高于0.089。缺少曲线与所报稳态值关系的解释；可观察到Full较低、较平滑，但不能据该图确认全部稳态数值。；[P8] 图4图注与原图内容不匹配。原图为道路场景、S1至Sn状态演化、LLM智能体及监测—投影—输出迁移闭环；图注却描述四个智能体的天气、交通、舒适、能耗约束及彩色椭球交集，这些内容实际见本批P9图6。图4缺少与实际图面对应的正确图注，影响模块及图号对应关系，但不妨碍读取图中文字。；[P8] 公式(8)后正文将逐token记录的V(x)轨迹指向图6；经核对P9原图，图6实际为多维约束可行域示意，没有V(x)轨迹。该交叉引用不能提供正文所称的稳定性实验图证，不能据图6核实下降趋势。；[P9] 图5颜色含义不一致：图内图例写“color depth indicating constraint satisfaction degree”，图注却写“color depth indicating confidence levels”。缺少两者是否等同的说明，无法唯一确定节点颜色编码的是约束满足度还是置信度。；[P9] 图6图注声称展示Full、Game-only、Projection-only的V(x)生成步轨迹，实际附图标题为“Multi-dimensional Constraint Feasible Domain Modeling”，展示四类约束及向量场，没有三种消融轨迹或生成步坐标。缺少与实际图面对应的正确图注，不能用此图支持近单调下降或振荡结论。；[P10] 预测解码段落以“as in Fig. 6”指引生成协调机制，但本批图6实际为多维约束可行域示意；与该段描述直接对应的前瞻预测解码树位于图5。图号引用不匹配，影响方法图文定位，不代表解码公式缺失。；[P12] Data availability原页将nuScenes dataset与GPT-Driver dataset均链接到https://www.nuscenes.org/，未提供可区分的GPT-Driver数据文件、版本或专用入口。缺少精确数据定位，影响复现实验所需数据的可追溯性；仅据本页不能判定数据实际不可获得。；[P13] 参考文献42的PlanAgent条目在原页仅给出https://doi.org/10.1109/TCDS，缺少完整文章级DOI后缀，也未列卷页或文章号。该条目的精确定位信息不完整，影响基线文献追溯，不直接改变本文实验数值或结论；未访问链接核验。",
+        "connection": "解读：对智能运维，可借鉴多个诊断与调度智能体之间的约束传播监测；对结构设计，可类比性能、成本和可制造性的协调；对可靠性研究，可关注偏差累积与纠偏闭环。但这些均是迁移联系，论文没有相应领域实验，也未证明概率干预能够保障工程安全。[P6][P10–P12]",
+        "next_steps": "建议先取得补充说明，核对偏差函数、动态惩罚、Shapley责任分配和声誉更新的实现，再复算表1降幅并校正图文对应。随后分别消融预测、投影和激励模块，记录逐token偏差及推理开销；跨领域应用前，应检验约束冲突与不可行状态下的行为。[P4–P13]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "Lyapunov引导的合作博弈实现大语言模型多智能体系统的稳定约束融合",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s44387-026-00110-5.pdf"
+      ],
+      "analyzed_at": "2026-11-15T15:13:36.711075+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P6"
+        ],
+        "method": [
+          "P8",
+          "P9",
+          "P10",
+          "P11",
+          "P12"
+        ],
+        "innovation": [
+          "P2",
+          "P10"
+        ],
+        "findings": [
+          "P4",
+          "P6"
+        ],
+        "limitations": [
+          "P4",
+          "P5",
+          "P6",
+          "P7",
+          "P8",
+          "P9",
+          "P10",
+          "P12",
+          "P13"
+        ],
+        "connection": [
+          "P6",
+          "P10",
+          "P11",
+          "P12"
+        ],
+        "next_steps": [
+          "P4",
+          "P5",
+          "P6",
+          "P7",
+          "P8",
+          "P9",
+          "P10",
+          "P11",
+          "P12",
+          "P13"
+        ]
+      },
+      "analysis_material_version": "f1e859949b0a2fe6ac92a0a3548d1543b67deeb1c51d0fb6c8be214c61fcffbd",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "约束参数段的文字提取存在字符分隔及公式编码错误，如“σ2_v ¼ 12:5”。已核对原页，正确读法为 v_max = 70 km/h、σ_v² = 12.5 (km/h)²、d_min = 5 m。该处为行内参数而非编号公式；纠正影响实验约束阈值的理解，不改变作者报告的性能结论。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P4",
+          "detail": "表1与正文的 ST-P3 平均L2误差降幅不一致。按表中三时域数值，GPT-Driver 均值为(0.1837+0.407+0.7549)/3，本方法为(0.1612+0.3796+0.7016)/3，相对下降约7.67%，并非正文的7.1%。原页两处均清晰；影响降幅的准确数值，不改变本方法平均误差较低的方向。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P5",
+          "detail": "图2右下比例图标注0.770、0.855、0.850、1.000、1.000，图注却称数值≥1表示本方法达到或超过最佳基线。前两项分别对应表1中本方法/VAD的3 s碰撞率及L2误差，属于越小越好的指标；最后的总体约束满足率比例1.000也不能表示0.763相对LLM-ASSIST的0.713。缺少一致的基线和指标方向说明，不能按图注统一解释优势。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P5",
+          "detail": "图2图注称顶行比较两平台1 s、2 s、3 s结果，但原图 UniAD 两面板标题明确为“Collision Rate (3s)”和“L2 Error (3s)”，仅展示3 s。缺少图注所称的 UniAD 1 s、2 s图示，相关数值须以表1为准。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "公式(1)至(5)的提取文本含“¼”“/C138”“/C0”等编码错误。原页可辨认，分别应恢复为等号、转置符号T及减号等；公式(4)的约束项为−λψ_multi(S_t)，并非缺失公式。纠正涉及状态向量和优化目标的准确读取，不补造原文未定义的函数细节。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P7",
+          "detail": "图3图注与实际附图不匹配。实际图题为“Ablation Study and Stability Analysis”，内容为V(x)曲线、收敛步数箱线图及消融柱状图；图注却描述自动驾驶约束交互、编号(1)至(6)机制和S1至Sn状态演化。缺少与实际稳定性图相配的图注，阴影带及箱线图统计含义未获该图注解释。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P7",
+          "detail": "图3左上V(x)曲线与P4报告的稳态值不完全一致：Full曲线接近0.038，但Game-only与Projection-only末端未落在图中标注0.057、0.089的对应水平参考线上，尤其Projection-only仍明显高于0.089。缺少曲线与所报稳态值关系的解释；可观察到Full较低、较平滑，但不能据该图确认全部稳态数值。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P8",
+          "detail": "图4图注与原图内容不匹配。原图为道路场景、S1至Sn状态演化、LLM智能体及监测—投影—输出迁移闭环；图注却描述四个智能体的天气、交通、舒适、能耗约束及彩色椭球交集，这些内容实际见本批P9图6。图4缺少与实际图面对应的正确图注，影响模块及图号对应关系，但不妨碍读取图中文字。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P8",
+          "detail": "公式(8)后正文将逐token记录的V(x)轨迹指向图6；经核对P9原图，图6实际为多维约束可行域示意，没有V(x)轨迹。该交叉引用不能提供正文所称的稳定性实验图证，不能据图6核实下降趋势。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "图4文字提取出现大段乱码，如“/TOZ 9ZGZK”，原图可读为“Init State”，其余框内文字可识别为状态演化、前瞻路径选择、约束监测及闭环控制说明。公式(7)至(11)中的乱码运算符也已依原页恢复为加号、减号、乘号及不等号；不存在可见公式占位缺项。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P9",
+          "detail": "图5颜色含义不一致：图内图例写“color depth indicating constraint satisfaction degree”，图注却写“color depth indicating confidence levels”。缺少两者是否等同的说明，无法唯一确定节点颜色编码的是约束满足度还是置信度。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P9",
+          "detail": "图6图注声称展示Full、Game-only、Projection-only的V(x)生成步轨迹，实际附图标题为“Multi-dimensional Constraint Feasible Domain Modeling”，展示四类约束及向量场，没有三种消融轨迹或生成步坐标。缺少与实际图面对应的正确图注，不能用此图支持近单调下降或振荡结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "图5、图6内部文本被提取为乱码，原图可清楚读取PATH候选、平均序列评分，以及雾天30 km/h和舒适性加速度小于3 m/s²等说明。公式(12)完整可见，提取中的“/C1”应为μ与Deviation(x)之间的乘号；不应将这些提取乱码判作原文件缺字。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P10",
+          "detail": "预测解码段落以“as in Fig. 6”指引生成协调机制，但本批图6实际为多维约束可行域示意；与该段描述直接对应的前瞻预测解码树位于图5。图号引用不匹配，影响方法图文定位，不代表解码公式缺失。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P10",
+          "detail": "公式(13)至(20)的提取含星号、负号、集合符号及根号编码错误。原页可确认(18)指数为−β_iΦ_i(u_i)，分母为Z_i；(20)根号覆盖单智能体三类加权平方项与两两合作偏差平方项的总和。均为提取问题，不是原公式缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P11",
+          "detail": "公式(21)至(27)的提取包含“/C1”“/C0”“/C138”等编码错误，原页均可辨认。公式(21)指数为−λ_type,i·d^pred_type,i；公式(26)依次减去η^t_coop,i·e^t_coop,i和IncentiveAdjustment^t_i；公式(27)在社会福利基础上减去个体成本总和、加上联盟收益总和。未见公式占位或缺项，纠正影响惩罚方向及优化目标的准确理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P12",
+          "detail": "所给文字提取遗漏原页接受日期下方的“Published online: 08 May 2026”。原图该行清晰，已补充识读为2026年5月8日在线发表；影响文献日期信息完整性，不影响方法或实验结论。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P12",
+          "detail": "Data availability原页将nuScenes dataset与GPT-Driver dataset均链接到https://www.nuscenes.org/，未提供可区分的GPT-Driver数据文件、版本或专用入口。缺少精确数据定位，影响复现实验所需数据的可追溯性；仅据本页不能判定数据实际不可获得。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P13",
+          "detail": "参考文献42的PlanAgent条目在原页仅给出https://doi.org/10.1109/TCDS，缺少完整文章级DOI后缀，也未列卷页或文章号。该条目的精确定位信息不完整，影响基线文献追溯，不直接改变本文实验数值或结论；未访问链接核验。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "66aab42c3a26",
+        "state": "published",
+        "updated_at": "2026-11-15T15:13:36.732179+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 13,
+        "covered": 13,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "约束参数段的文字提取存在字符分隔及公式编码错误，如“σ2_v ¼ 12:5”。已核对原页，正确读法为 v_max = 70 km/h、σ_v² = 12.5 (km/h)²、d_min = 5 m。该处为行内参数而非编号公式；纠正影响实验约束阈值的理解，不改变作者报告的性能结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P4",
+            "detail": "表1与正文的 ST-P3 平均L2误差降幅不一致。按表中三时域数值，GPT-Driver 均值为(0.1837+0.407+0.7549)/3，本方法为(0.1612+0.3796+0.7016)/3，相对下降约7.67%，并非正文的7.1%。原页两处均清晰；影响降幅的准确数值，不改变本方法平均误差较低的方向。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P5",
+            "detail": "图2右下比例图标注0.770、0.855、0.850、1.000、1.000，图注却称数值≥1表示本方法达到或超过最佳基线。前两项分别对应表1中本方法/VAD的3 s碰撞率及L2误差，属于越小越好的指标；最后的总体约束满足率比例1.000也不能表示0.763相对LLM-ASSIST的0.713。缺少一致的基线和指标方向说明，不能按图注统一解释优势。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P5",
+            "detail": "图2图注称顶行比较两平台1 s、2 s、3 s结果，但原图 UniAD 两面板标题明确为“Collision Rate (3s)”和“L2 Error (3s)”，仅展示3 s。缺少图注所称的 UniAD 1 s、2 s图示，相关数值须以表1为准。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "公式(1)至(5)的提取文本含“¼”“/C138”“/C0”等编码错误。原页可辨认，分别应恢复为等号、转置符号T及减号等；公式(4)的约束项为−λψ_multi(S_t)，并非缺失公式。纠正涉及状态向量和优化目标的准确读取，不补造原文未定义的函数细节。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P7",
+            "detail": "图3图注与实际附图不匹配。实际图题为“Ablation Study and Stability Analysis”，内容为V(x)曲线、收敛步数箱线图及消融柱状图；图注却描述自动驾驶约束交互、编号(1)至(6)机制和S1至Sn状态演化。缺少与实际稳定性图相配的图注，阴影带及箱线图统计含义未获该图注解释。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P7",
+            "detail": "图3左上V(x)曲线与P4报告的稳态值不完全一致：Full曲线接近0.038，但Game-only与Projection-only末端未落在图中标注0.057、0.089的对应水平参考线上，尤其Projection-only仍明显高于0.089。缺少曲线与所报稳态值关系的解释；可观察到Full较低、较平滑，但不能据该图确认全部稳态数值。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "图4图注与原图内容不匹配。原图为道路场景、S1至Sn状态演化、LLM智能体及监测—投影—输出迁移闭环；图注却描述四个智能体的天气、交通、舒适、能耗约束及彩色椭球交集，这些内容实际见本批P9图6。图4缺少与实际图面对应的正确图注，影响模块及图号对应关系，但不妨碍读取图中文字。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "公式(8)后正文将逐token记录的V(x)轨迹指向图6；经核对P9原图，图6实际为多维约束可行域示意，没有V(x)轨迹。该交叉引用不能提供正文所称的稳定性实验图证，不能据图6核实下降趋势。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "图4文字提取出现大段乱码，如“/TOZ 9ZGZK”，原图可读为“Init State”，其余框内文字可识别为状态演化、前瞻路径选择、约束监测及闭环控制说明。公式(7)至(11)中的乱码运算符也已依原页恢复为加号、减号、乘号及不等号；不存在可见公式占位缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P9",
+            "detail": "图5颜色含义不一致：图内图例写“color depth indicating constraint satisfaction degree”，图注却写“color depth indicating confidence levels”。缺少两者是否等同的说明，无法唯一确定节点颜色编码的是约束满足度还是置信度。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P9",
+            "detail": "图6图注声称展示Full、Game-only、Projection-only的V(x)生成步轨迹，实际附图标题为“Multi-dimensional Constraint Feasible Domain Modeling”，展示四类约束及向量场，没有三种消融轨迹或生成步坐标。缺少与实际图面对应的正确图注，不能用此图支持近单调下降或振荡结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "图5、图6内部文本被提取为乱码，原图可清楚读取PATH候选、平均序列评分，以及雾天30 km/h和舒适性加速度小于3 m/s²等说明。公式(12)完整可见，提取中的“/C1”应为μ与Deviation(x)之间的乘号；不应将这些提取乱码判作原文件缺字。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P10",
+            "detail": "预测解码段落以“as in Fig. 6”指引生成协调机制，但本批图6实际为多维约束可行域示意；与该段描述直接对应的前瞻预测解码树位于图5。图号引用不匹配，影响方法图文定位，不代表解码公式缺失。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "公式(13)至(20)的提取含星号、负号、集合符号及根号编码错误。原页可确认(18)指数为−β_iΦ_i(u_i)，分母为Z_i；(20)根号覆盖单智能体三类加权平方项与两两合作偏差平方项的总和。均为提取问题，不是原公式缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "公式(21)至(27)的提取包含“/C1”“/C0”“/C138”等编码错误，原页均可辨认。公式(21)指数为−λ_type,i·d^pred_type,i；公式(26)依次减去η^t_coop,i·e^t_coop,i和IncentiveAdjustment^t_i；公式(27)在社会福利基础上减去个体成本总和、加上联盟收益总和。未见公式占位或缺项，纠正影响惩罚方向及优化目标的准确理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "所给文字提取遗漏原页接受日期下方的“Published online: 08 May 2026”。原图该行清晰，已补充识读为2026年5月8日在线发表；影响文献日期信息完整性，不影响方法或实验结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "Data availability原页将nuScenes dataset与GPT-Driver dataset均链接到https://www.nuscenes.org/，未提供可区分的GPT-Driver数据文件、版本或专用入口。缺少精确数据定位，影响复现实验所需数据的可追溯性；仅据本页不能判定数据实际不可获得。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P13",
+            "detail": "参考文献42的PlanAgent条目在原页仅给出https://doi.org/10.1109/TCDS，缺少完整文章级DOI后缀，也未列卷页或文章号。该条目的精确定位信息不完整，影响基线文献追溯，不直接改变本文实验数值或结论；未访问链接核验。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -166,7 +572,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《Hyper-RAG: combating LLM hallucinations using hypergraph-driven retrieval-augmented generation》，暂未提供可用摘要，请查看原文。",
+      "summary": "Hyper-RAG研究知识表示能否改善检索增强生成：将实体、成对关系与多实体高阶关系组织为超图，结合向量检索、关联扩展及原始语料辅助回答。[P12–P13] 六种模型和跨领域评估显示性能改善，消融与专家评估进一步支持高阶知识的价值。[P3、P5、P10] 但选择式评估增益不等于事实准确率提升，且原文存在统计表述不一致、跨块抽取困难及图表公式被预处理删除等限制。[P7、P11、P13]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -210,11 +616,130 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐重点阅读知识抽取、双路检索及专家核验部分，可为多实体故障知识组织提供方法借鉴；但不能直接视为智能运维可靠性已获验证。[P10–P13]",
+      "deep_read": {
+        "problem": "论文关注专业问答中外部知识检索不完整导致的幻觉：传统图仅以成对边表达关系，可能遗漏多个实体共同参与的知识。[P2–P3] 作者希望改善复杂问题所需信息的覆盖，而不只是提高回答的流畅性。解读：其核心问题是知识表示与检索的适配，不是证明模型内部幻觉被彻底消除。",
+        "method": "离线利用LLM从语料块抽取实体、低阶及高阶关系，合并重复描述并建立超图知识库。在线分别提取实体关键词和关系关键词，检索顶点或超边，再扩展关联信息；根据上下文预算排序，并补充对应原始语料。[P12–P13] 公式(1)–(7)描述了这一流程。",
+        "innovation": "主要方法贡献是将超越成对的多实体关系显式纳入RAG知识表示，并通过顶点与超边两类入口组织检索。[P12–P13] Hyper-RAG-Lite仅检索节点，但保留高阶关系构建的知识基础。[P11] 解读：创新集中在外部知识组织及利用方式，不能据此宣称首创超图或提出了新的基础语言模型。",
+        "findings": "表1中完整知识组合得分84.16，高于仅原始语料的78.56和仅高阶关系的81.55。[P5] 九数据集选择式评估相较LightRAG平均提升35.5%，并非准确率直接增加35.5%。[P8] 专家评估另报告正确性提升7.1%、完整性提升17.8%，为回答质量改善提供补充证据。[P9–P10]",
+        "limitations": "作者承认高阶抽取增加建库步骤，跨块关系仍需后处理。[P11] 预处理删除图像与公式，限制信息保留。[P13] 图6的KMR降幅及显著性表述不一致，影响数值解释。[P7] 未记录原文件公式缺项；补充材料未提供，无法核查全部统计协议。[P16]",
+        "connection": "解读：多设备、工况、症状和处置之间的联合关系，可类比超图中的多实体知识，适合探索智能运维问答中的证据检索。[P12–P13] 但论文没有运维故障诊断、结构优化或寿命预测实验；对结构设计与可靠性研究的意义属于方法迁移，而非已有工程有效性证据。",
+        "next_steps": "建议：以运维手册与历史故障记录建立小规模专家标注集，在同一语料、模型和检索预算下比较文本RAG、图RAG与超图RAG。分别测量知识遗漏、错误回答、检索延迟及建库成本；另设置跨文档故障链和公式图表保留实验，检验论文跨块抽取及纯文本预处理限制。[P11、P13–P14]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "Hyper-RAG：利用超图驱动检索增强生成缓解大语言模型幻觉",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41467-026-71411-1.pdf"
+      ],
+      "analyzed_at": "2026-11-15T15:18:59.543673+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P12",
+          "P13"
+        ],
+        "innovation": [
+          "P11",
+          "P12",
+          "P13"
+        ],
+        "findings": [
+          "P5",
+          "P8",
+          "P9",
+          "P10"
+        ],
+        "limitations": [
+          "P7",
+          "P11",
+          "P13",
+          "P16"
+        ],
+        "connection": [
+          "P12",
+          "P13"
+        ],
+        "next_steps": [
+          "P11",
+          "P13",
+          "P14"
+        ]
+      },
+      "analysis_material_version": "ab1d90589070f997e2f4afc78ebd6804cb14ca6fef0f0817b698d96ee01d0390",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "原页明确载有“Published online: 27 April 2026”，文字提取遗漏；作者姓名中的异常空格也可由原页纠正，如Hao Hu、Shiquan Liu、Junchang Li、Yue Gao。不影响摘要中的方法及性能结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "图1(b)中心文字被提取为乱码，原页可辨为“Correlations Among Entities”；纵向标签为“Cardinality”，横向标签为“Correlation Pattern”。图中组合数标注在文字提取中发生错序，并非原文件缺失公式；该图用于说明成对与超越成对关系的基数分布，不是定量实验结果。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "表1文字提取将D、低阶关系、高阶关系三列与勾叉符号连排，容易造成列错配。原页已核清八行组合依次为：全不使用、仅低阶、仅高阶、低阶加高阶、仅D、D加低阶、D加高阶、三者全用；对应Overall依次为73.65、81.08、81.55、83.02、78.56、82.60、83.79、84.16。原表没有缺项，组合消融结论可正常读取。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P12",
+          "detail": "表2提取中的“/C0/C1”为括号编码错误。原页四行可读为response=LLM(P_q(q))、response=LLM(P_q(q,D))、response=LLM(P_q(q,RAG(q,D,V,E_low)))及response=LLM(P_q(q,RAG(q,D,V,E_low,E_high)))。公式本体没有缺项，不影响增强策略的结构比较。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P13",
+          "detail": "公式(1)–(7)中的集合括号、属于符号及分组括号在提取中出现f/g、2和/C26等乱码。原页已核清：(6)为V_rel={ψ_ret(x_i,V)|x_i∈X_ent}、E_more={e|v∈e且v∈V_rel}；(7)为E_rel={ψ_ret(x_i,E)|x_i∈X_cor}、V_more={v|v∈e且e∈E_rel}。两式分别描述顶点到超边、超边到顶点的扩展，原文件没有缺失公式。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "5616ef1f1b8c",
+        "state": "published",
+        "updated_at": "2026-11-15T15:18:59.564167+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 16,
+        "covered": 16,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页明确载有“Published online: 27 April 2026”，文字提取遗漏；作者姓名中的异常空格也可由原页纠正，如Hao Hu、Shiquan Liu、Junchang Li、Yue Gao。不影响摘要中的方法及性能结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "图1(b)中心文字被提取为乱码，原页可辨为“Correlations Among Entities”；纵向标签为“Cardinality”，横向标签为“Correlation Pattern”。图中组合数标注在文字提取中发生错序，并非原文件缺失公式；该图用于说明成对与超越成对关系的基数分布，不是定量实验结果。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "表1文字提取将D、低阶关系、高阶关系三列与勾叉符号连排，容易造成列错配。原页已核清八行组合依次为：全不使用、仅低阶、仅高阶、低阶加高阶、仅D、D加低阶、D加高阶、三者全用；对应Overall依次为73.65、81.08、81.55、83.02、78.56、82.60、83.79、84.16。原表没有缺项，组合消融结论可正常读取。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "表2提取中的“/C0/C1”为括号编码错误。原页四行可读为response=LLM(P_q(q))、response=LLM(P_q(q,D))、response=LLM(P_q(q,RAG(q,D,V,E_low)))及response=LLM(P_q(q,RAG(q,D,V,E_low,E_high)))。公式本体没有缺项，不影响增强策略的结构比较。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "公式(1)–(7)中的集合括号、属于符号及分组括号在提取中出现f/g、2和/C26等乱码。原页已核清：(6)为V_rel={ψ_ret(x_i,V)|x_i∈X_ent}、E_more={e|v∈e且v∈V_rel}；(7)为E_rel={ψ_ret(x_i,E)|x_i∈X_cor}、V_more={v|v∈e且e∈E_rel}。两式分别描述顶点到超边、超边到顶点的扩展，原文件没有缺失公式。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -239,7 +764,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Abstract Clinical diagnosis in the real world often begins with ambiguous patient complaints that require iterative reasoning and testing. While large language models (LLMs) increasingly assist with specific medical queries, they currently lack the ability to autonomously drive this entire diagnostic workflow, limiting their potential to significantly alleviate physician workload. Here we present DxDirector-7B, an agentic LLM designed to navigate the full diagnostic process through advanced slow thinking capabilities. Unlike existing assistants, our model autonomously determines optimal diagno…",
+      "summary": "论文将医学大模型从回答既定问题的助手，转为从模糊主诉出发、主动规划检查与推理的诊断协调者。DxDirector-7B通过医学预训练、分步指令训练和策略偏好优化，同时追求诊断正确与减少医生介入，并结合文献检索、高危升级和步骤追溯。公开数据集结果显示其准确率与操作请求效率具有优势，但真实病例主要在代理复现场景中评估。解读：值得借鉴的是成本约束下的序贯决策方法，而非将代理判定的替代比例理解为临床替代证明。[P4][P8][P18—P20]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -284,11 +809,309 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议作为人机协同决策与低成本检查规划的方法型论文重点阅读，优先研究步骤级偏好优化及风险升级；不宜作为已验证临床替代能力的证据。",
+      "deep_read": {
+        "problem": "真实诊断从模糊主诉开始，需要不断选择检查、补充信息并修正判断，而完整病例输入的问答评测省略了这一过程。作者研究模型能否主动驱动诊断，只在必要操作时请求医生帮助，并保留医生最终决定权。解读：核心问题是信息不完备下的序贯决策，而非单次疾病分类。[P1—P3]",
+        "method": "模型先进行医学继续预训练，再利用10,178条合成指令数据学习分步诊断。训练以损失掩码交替监督思考问题与知识回答；随后每步采样三个候选，按最终正确性和医生请求次数赋奖，用DPO优化思考偏好。系统另接段落检索与高危监督代理，支持证据引用和人工接管。[P17—P20]",
+        "innovation": "解读：主要方法贡献是把每步待解决的问题定义为策略，将诊断结果与人工介入成本共同用于偏好排序，而非仅训练最终答案。推理和知识调用的分离监督、步骤编号及责任来源标记共同形成可审计流程；不能据此声称DPO、检索或慢思考本身是本文首创。[P18—P19]",
+        "findings": "图3报告模型在RareArena、NEJM和ClinicalBench的准确率分别为36.23%、38.40%、63.46%；图4对应操作请求数为2.72、3.15、2.68。USMLE总体准确率为50.88%。作者据此认为小模型可兼顾准确性与介入效率；这些操作次数并非直接测得的医生工时。[P6—P7][P14]",
+        "limitations": "单院代理评估限制泛化。[P5]缺准确率、[P18]式(4)缺零请求规则，影响完整性及奖励边界；[P17—P18]索引有误。[P5][P21]基线名、[P6—P9]样本量、[P8]增幅、[P12]评分轴、样本数及参数比例、[P21]统计口径不一，影响比较复现；均未补造。\n原文核对：[P5] NEJM分析第(3)点原页写作“DxDirector-7B achieves accuracy—a 5.9% absolute improvement”，accuracy之后缺少具体准确率数值。该数值在同页前文及P6图3b另有明确报告38.4%，但不能据此补写该处原文。缺项影响该句完整性，不影响其他现有结果的识读。；[P5] Baselines段原页列出“Meditron-176B”，但同页结果段及P6图3均标作“MedFound-176B”。原文模型名称不一致，影响176B基线身份的明确对应；不能当作文字提取错误直接统一名称。；[P6] 图3a图例原页明确标注“Centre: mean accuracy (n=50,000)”，而P4及P5称RareArena实际评估采用22,901例。原文件存在样本量口径不一致，未说明50,000是否另有所指；影响图3a准确率与置信区间对应样本规模的解释，不能自行改为22,901。；[P7] 图4a原页图例标注“n=50,000”，但本批P8明确RareArena分析基于22,901例，前批数据集说明也为22,901例。原文未解释口径差异，影响RareArena操作次数及置信区间对应样本规模的判断；不自行更改图例。；[P8] ClinicalBench科室分析原页报告肿瘤科提升“Δ = 30.93%”；但P10图6肿瘤科DxDirector为69.78%，最高所示基线为39.43%，两者相差30.35个百分点。正文与图中数值不一致，影响该科室优势幅度；无法据本批判定哪一处应修订。；[P9] 图5a原页图例标注“n=50,000”，与P8所述RareArena的22,901例不一致，未说明是否采用不同样本范围。影响有效操作比例及其置信区间的样本口径解释，不影响现有柱值识读。；[P12] 图8图注明确评分范围为0—10，但原页多个子图纵轴扩展至17.5或20，皮肤科子图则采用不同范围。属于原图评分范围与坐标展示不统一，并非提取错误；不能据轴上限理解为实际评分超过10，跨科室箱体高度也不宜直接比较。；[P12] 图8c内分泌科横轴原页标注GPT-4o、o3-mini、DxDirector各n=15，而Deepseek-V3、Deepseek-R1、o1-preview各n=12。图注称n为独立临床病例数，但本批未交代不同模型缺少3例的原因及处理方式，影响同病例比较和显著性结果的解释；不能自行补齐样本。；[P12] USMLE正文称参数规模“approximately one-tenth”，同时列出7B对70B及176B。7/70为10%，7/176约为3.98%，不能将对MedFound-176B的比例也统一表述为约十分之一。影响参数效率表述，不影响图10a的准确率数值。；[P17] 式(1)原页在对t=1至n求和时，概率目标写作c_i，条件前缀却为c_1,…,c_{t−1}；与前页定义的预测目标c_t不一致。影响逐词元损失的严格索引解释，不能未经说明将原式c_i直接改为c_t。；[P18] 数据构建段首次列举步骤1至t−1的历史时，原页写作(d₁,q₁,a₁)、(d₁,q₂,a₂)、…、(d_t,q_{t−1},a_{t−1})，思考项下标与步骤不一致；同页后文X_t则使用(d₂,q₂,a₂)及(d_{t−1},q_{t−1},a_{t−1})。影响历史输入的严格记号解释，不影响其逐步采样流程的识读。；[P18] 式(4)正确答案奖励为10/γ，正文仅定义γ为请求医生协助次数，本页未规定γ=0时的奖励或保证γ≥1。若允许零次请求，将出现除零未定义；影响该边界情况下奖励与偏好对的构建，不能自行添加平滑项或默认次数。；[P21] 基线第4项原页写“Meditron-176B”，而前批结果图及正文使用“MedFound-176B”。该命名不一致在原页确实存在，影响176B基线身份对应；不应作为提取错误直接统一名称。；[P21] Statistical information统一写bootstrap为1000次、准确率比较top-3基线，但前批图3—5图注明确NEJM使用200次重采样，图10图注则比较top-4基线。原文方法总述未注明这些例外，影响统计流程的复现口径；不能自行统一为同一设置。",
+        "connection": "解读：与智能运维的联系是从异常描述出发，主动选择日志查询、检测或专家升级，并用结果正确性与人工成本共同评价策略；与可靠性研究的联系是风险门控和审计链。论文没有结构设计实验，也未验证设备故障诊断迁移，不能将医学指标直接当作工程收益。[P18][P20]",
+        "next_steps": "建议先复现偏好数据构建，明确零请求、同奖励和错误答案的处理，再检验合成思考是否泄露未来信息。迁移运维时，应分别测量故障定位准确率、实际工时、漏升级率与恢复代价，并加入独立专家盲评及跨场景测试；这些均为研究建议，不是作者已完成的实验。[P17—P21]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "DxDirector：驱动全流程临床诊断的智能体大语言模型",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41467-026-71928-5.pdf"
+      ],
+      "analyzed_at": "2026-11-15T15:33:35.231230+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P17",
+          "P18",
+          "P19",
+          "P20"
+        ],
+        "innovation": [
+          "P18",
+          "P19"
+        ],
+        "findings": [
+          "P6",
+          "P7",
+          "P14"
+        ],
+        "limitations": [
+          "P5",
+          "P6",
+          "P7",
+          "P8",
+          "P9",
+          "P12",
+          "P16",
+          "P17",
+          "P18",
+          "P21"
+        ],
+        "connection": [
+          "P18",
+          "P20"
+        ],
+        "next_steps": [
+          "P17",
+          "P18",
+          "P19",
+          "P20",
+          "P21"
+        ]
+      },
+      "analysis_material_version": "fa4630a47ee88e452cf0a5a13abdc72bc8a83d4d1938930bf77ea93489a4c410",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "原页日期栏清楚列出“Published online: 23 April 2026”，提供的文字提取遗漏该行，现据原页补正。此项影响出版元数据完整性，不影响摘要及诊断流程结论；不是原文件缺项。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P5",
+          "detail": "NEJM分析第(3)点原页写作“DxDirector-7B achieves accuracy—a 5.9% absolute improvement”，accuracy之后缺少具体准确率数值。该数值在同页前文及P6图3b另有明确报告38.4%，但不能据此补写该处原文。缺项影响该句完整性，不影响其他现有结果的识读。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P5",
+          "detail": "Baselines段原页列出“Meditron-176B”，但同页结果段及P6图3均标作“MedFound-176B”。原文模型名称不一致，影响176B基线身份的明确对应；不能当作文字提取错误直接统一名称。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P6",
+          "detail": "图3a图例原页明确标注“Centre: mean accuracy (n=50,000)”，而P4及P5称RareArena实际评估采用22,901例。原文件存在样本量口径不一致，未说明50,000是否另有所指；影响图3a准确率与置信区间对应样本规模的解释，不能自行改为22,901。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P7",
+          "detail": "图4a原页图例标注“n=50,000”，但本批P8明确RareArena分析基于22,901例，前批数据集说明也为22,901例。原文未解释口径差异，影响RareArena操作次数及置信区间对应样本规模的判断；不自行更改图例。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P8",
+          "detail": "ClinicalBench科室分析原页报告肿瘤科提升“Δ = 30.93%”；但P10图6肿瘤科DxDirector为69.78%，最高所示基线为39.43%，两者相差30.35个百分点。正文与图中数值不一致，影响该科室优势幅度；无法据本批判定哪一处应修订。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P9",
+          "detail": "图5a原页图例标注“n=50,000”，与P8所述RareArena的22,901例不一致，未说明是否采用不同样本范围。影响有效操作比例及其置信区间的样本口径解释，不影响现有柱值识读。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P12",
+          "detail": "图8图注明确评分范围为0—10，但原页多个子图纵轴扩展至17.5或20，皮肤科子图则采用不同范围。属于原图评分范围与坐标展示不统一，并非提取错误；不能据轴上限理解为实际评分超过10，跨科室箱体高度也不宜直接比较。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P12",
+          "detail": "图8c内分泌科横轴原页标注GPT-4o、o3-mini、DxDirector各n=15，而Deepseek-V3、Deepseek-R1、o1-preview各n=12。图注称n为独立临床病例数，但本批未交代不同模型缺少3例的原因及处理方式，影响同病例比较和显著性结果的解释；不能自行补齐样本。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P12",
+          "detail": "USMLE正文称参数规模“approximately one-tenth”，同时列出7B对70B及176B。7/70为10%，7/176约为3.98%，不能将对MedFound-176B的比例也统一表述为约十分之一。影响参数效率表述，不影响图10a的准确率数值。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P16",
+          "detail": "页末概率记号的文字提取将集合隶属符号∈误作“2”，并将条件概率前缀中的下标t−1提取为“t/C0 1”。原页可读为C_i∈C及M(c_t|c_1,c_2,…,c_{t−1};θ)。已按原页纠正，涉及下一词元预测的条件定义；完整损失目标尚在后续页，不能补造。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P17",
+          "detail": "式(1)文字提取中的“/C0”、集合关系“2”等为提取乱码；原页可识别负号、∈及前缀下标t−1。已按原页识读负对数似然结构，但保留原式自身的目标词元下标问题，不将其擅改。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P17",
+          "detail": "式(1)原页在对t=1至n求和时，概率目标写作c_i，条件前缀却为c_1,…,c_{t−1}；与前页定义的预测目标c_t不一致。影响逐词元损失的严格索引解释，不能未经说明将原式c_i直接改为c_t。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P18",
+          "detail": "式(2)—(3)原页分别明确使用R_i∈Q及R_i∉Q，文本提取误为“2Q”“=2Q”，并损坏负号及前缀下标；式(5)的集合括号和有序配对结构也被乱码替代。现据原页纠正：两项损失监督互补词元集合，偏好对满足r_t^m>r_t^n。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P18",
+          "detail": "数据构建段首次列举步骤1至t−1的历史时，原页写作(d₁,q₁,a₁)、(d₁,q₂,a₂)、…、(d_t,q_{t−1},a_{t−1})，思考项下标与步骤不一致；同页后文X_t则使用(d₂,q₂,a₂)及(d_{t−1},q_{t−1},a_{t−1})。影响历史输入的严格记号解释，不影响其逐步采样流程的识读。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P18",
+          "detail": "式(4)正确答案奖励为10/γ，正文仅定义γ为请求医生协助次数，本页未规定γ=0时的奖励或保证γ≥1。若允许零次请求，将出现除零未定义；影响该边界情况下奖励与偏好对的构建，不能自行添加平滑项或默认次数。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P19",
+          "detail": "式(6)提取文本含“/C0”“/C24”等乱码，原页可读为负期望、每个偏好集合的1/|P_t|平均，以及log σ作用于两个β加权对数概率比之差。已核对高奖励d_t^m与低奖励d_t^n的顺序；乱码不是原文公式缺失。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P19",
+          "detail": "式(7)提取中的“/C1382”应按原页识读为右方括号后接∈，即h_text=H^L[T,:]∈ℝ^d；式(8)中的“q>”实际为向量转置q_i^⊤，分母包含正样本指数项及j≠i的负样本指数项。已纠正表示维度及对比损失结构的提取错误。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P20",
+          "detail": "风险判断记号在文字提取中写为“SafetyScoret 2f Green, Redg”，原页明确为SafetyScore_t∈{Green,Red}。已恢复下标、集合隶属符号和花括号；不涉及规则缺项或风险结果数值变更。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P21",
+          "detail": "页末文字提取将“0.9945¹⁰”连排为“0.994510”；原页10为上标，表示十次乘方，原文近似结果为94.63%。已纠正，影响多轮信息提取准确率估算的理解，不是原文件缺项。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P21",
+          "detail": "基线第4项原页写“Meditron-176B”，而前批结果图及正文使用“MedFound-176B”。该命名不一致在原页确实存在，影响176B基线身份对应；不应作为提取错误直接统一名称。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P21",
+          "detail": "Statistical information统一写bootstrap为1000次、准确率比较top-3基线，但前批图3—5图注明确NEJM使用200次重采样，图10图注则比较top-4基线。原文方法总述未注明这些例外，影响统计流程的复现口径；不能自行统一为同一设置。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "023030a1438c",
+        "state": "published",
+        "updated_at": "2026-11-15T15:33:35.281895+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 24,
+        "covered": 24,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页日期栏清楚列出“Published online: 23 April 2026”，提供的文字提取遗漏该行，现据原页补正。此项影响出版元数据完整性，不影响摘要及诊断流程结论；不是原文件缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P5",
+            "detail": "NEJM分析第(3)点原页写作“DxDirector-7B achieves accuracy—a 5.9% absolute improvement”，accuracy之后缺少具体准确率数值。该数值在同页前文及P6图3b另有明确报告38.4%，但不能据此补写该处原文。缺项影响该句完整性，不影响其他现有结果的识读。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P5",
+            "detail": "Baselines段原页列出“Meditron-176B”，但同页结果段及P6图3均标作“MedFound-176B”。原文模型名称不一致，影响176B基线身份的明确对应；不能当作文字提取错误直接统一名称。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P6",
+            "detail": "图3a图例原页明确标注“Centre: mean accuracy (n=50,000)”，而P4及P5称RareArena实际评估采用22,901例。原文件存在样本量口径不一致，未说明50,000是否另有所指；影响图3a准确率与置信区间对应样本规模的解释，不能自行改为22,901。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P7",
+            "detail": "图4a原页图例标注“n=50,000”，但本批P8明确RareArena分析基于22,901例，前批数据集说明也为22,901例。原文未解释口径差异，影响RareArena操作次数及置信区间对应样本规模的判断；不自行更改图例。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "ClinicalBench科室分析原页报告肿瘤科提升“Δ = 30.93%”；但P10图6肿瘤科DxDirector为69.78%，最高所示基线为39.43%，两者相差30.35个百分点。正文与图中数值不一致，影响该科室优势幅度；无法据本批判定哪一处应修订。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P9",
+            "detail": "图5a原页图例标注“n=50,000”，与P8所述RareArena的22,901例不一致，未说明是否采用不同样本范围。影响有效操作比例及其置信区间的样本口径解释，不影响现有柱值识读。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "图8图注明确评分范围为0—10，但原页多个子图纵轴扩展至17.5或20，皮肤科子图则采用不同范围。属于原图评分范围与坐标展示不统一，并非提取错误；不能据轴上限理解为实际评分超过10，跨科室箱体高度也不宜直接比较。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "图8c内分泌科横轴原页标注GPT-4o、o3-mini、DxDirector各n=15，而Deepseek-V3、Deepseek-R1、o1-preview各n=12。图注称n为独立临床病例数，但本批未交代不同模型缺少3例的原因及处理方式，影响同病例比较和显著性结果的解释；不能自行补齐样本。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "USMLE正文称参数规模“approximately one-tenth”，同时列出7B对70B及176B。7/70为10%，7/176约为3.98%，不能将对MedFound-176B的比例也统一表述为约十分之一。影响参数效率表述，不影响图10a的准确率数值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P16",
+            "detail": "页末概率记号的文字提取将集合隶属符号∈误作“2”，并将条件概率前缀中的下标t−1提取为“t/C0 1”。原页可读为C_i∈C及M(c_t|c_1,c_2,…,c_{t−1};θ)。已按原页纠正，涉及下一词元预测的条件定义；完整损失目标尚在后续页，不能补造。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P17",
+            "detail": "式(1)文字提取中的“/C0”、集合关系“2”等为提取乱码；原页可识别负号、∈及前缀下标t−1。已按原页识读负对数似然结构，但保留原式自身的目标词元下标问题，不将其擅改。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P17",
+            "detail": "式(1)原页在对t=1至n求和时，概率目标写作c_i，条件前缀却为c_1,…,c_{t−1}；与前页定义的预测目标c_t不一致。影响逐词元损失的严格索引解释，不能未经说明将原式c_i直接改为c_t。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P18",
+            "detail": "式(2)—(3)原页分别明确使用R_i∈Q及R_i∉Q，文本提取误为“2Q”“=2Q”，并损坏负号及前缀下标；式(5)的集合括号和有序配对结构也被乱码替代。现据原页纠正：两项损失监督互补词元集合，偏好对满足r_t^m>r_t^n。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P18",
+            "detail": "数据构建段首次列举步骤1至t−1的历史时，原页写作(d₁,q₁,a₁)、(d₁,q₂,a₂)、…、(d_t,q_{t−1},a_{t−1})，思考项下标与步骤不一致；同页后文X_t则使用(d₂,q₂,a₂)及(d_{t−1},q_{t−1},a_{t−1})。影响历史输入的严格记号解释，不影响其逐步采样流程的识读。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P18",
+            "detail": "式(4)正确答案奖励为10/γ，正文仅定义γ为请求医生协助次数，本页未规定γ=0时的奖励或保证γ≥1。若允许零次请求，将出现除零未定义；影响该边界情况下奖励与偏好对的构建，不能自行添加平滑项或默认次数。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P19",
+            "detail": "式(6)提取文本含“/C0”“/C24”等乱码，原页可读为负期望、每个偏好集合的1/|P_t|平均，以及log σ作用于两个β加权对数概率比之差。已核对高奖励d_t^m与低奖励d_t^n的顺序；乱码不是原文公式缺失。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P19",
+            "detail": "式(7)提取中的“/C1382”应按原页识读为右方括号后接∈，即h_text=H^L[T,:]∈ℝ^d；式(8)中的“q>”实际为向量转置q_i^⊤，分母包含正样本指数项及j≠i的负样本指数项。已纠正表示维度及对比损失结构的提取错误。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P20",
+            "detail": "风险判断记号在文字提取中写为“SafetyScoret 2f Green, Redg”，原页明确为SafetyScore_t∈{Green,Red}。已恢复下标、集合隶属符号和花括号；不涉及规则缺项或风险结果数值变更。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P21",
+            "detail": "页末文字提取将“0.9945¹⁰”连排为“0.994510”；原页10为上标，表示十次乘方，原文近似结果为94.63%。已纠正，影响多轮信息提取准确率估算的理解，不是原文件缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P21",
+            "detail": "基线第4项原页写“Meditron-176B”，而前批结果图及正文使用“MedFound-176B”。该命名不一致在原页确实存在，影响176B基线身份对应；不应作为提取错误直接统一名称。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P21",
+            "detail": "Statistical information统一写bootstrap为1000次、准确率比较top-3基线，但前批图3—5图注明确NEJM使用200次重采样，图10图注则比较top-4基线。原文方法总述未注明这些例外，影响统计流程的复现口径；不能自行统一为同一设置。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -318,7 +1141,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《Competing Biases underlie Overconfidence and Underconfidence in LLMs》，暂未提供可用摘要，请查看原文。",
+      "summary": "本文研究大语言模型为何既坚持初始答案，又容易被反对建议动摇。作者通过两阶段实验操纵答案可见性、建议方向和准确率，并以校准置信度及贝叶斯理想观察者分析更新行为。结果支持选择支持偏差与反对信息过度加权两种机制，且在多模型、多任务中出现。[P2–P8] 阅读时须注意不足自信针对初始选项，P12公式还存在影响复现的原文问题。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -362,11 +1185,205 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议重点阅读其隐藏答案对照、建议权重分析及贝叶斯比较方法；适合作为可靠决策评估的方法参考，但不能直接作为智能运维或结构设计的应用证据。",
+      "deep_read": {
+        "problem": "研究问题不是模型能否给出置信度，而是置信度能否支持合理改答：为何模型一方面坚持先前选择，另一方面又对反对建议异常敏感？作者区分答案自身的强化作用与外部证据的更新作用，避免将两种现象笼统归为迎合或确认偏差。[P1、P9]",
+        "method": "两阶段任务交叉操纵初始答案显示或隐藏、相同或相反或中性建议及建议准确率。建议模型实际不存在，内容由条件设定。作者用温度缩放后的选项概率追踪初始所选答案，再通过两阶段回归与贝叶斯理想观察者比较信心更新。[P2、P10–P12]",
+        "innovation": "解读：方法亮点是利用无记忆查询构建隐藏初始答案的对照，使答案可见性的作用与再次提示的影响可以区分。作者还结合他者归属、全上下文信息及多轮实验检验替代解释，把行为改答和置信度变化纳入同一分析框架，而非只报告最终准确率。[P7–P10]",
+        "findings": "Gemma 3 12B在答案显示和隐藏条件下平均改答率为13.1%与34.0%。作者报告反对建议的实际更新与贝叶斯更新比值为2.17，相同建议为1.29，多模型呈相近定性模式。这里的信心下降针对初始所选选项，不能直接解释为最终答案不足自信。[P2、P5–P6]",
+        "limitations": "原文缺项：P12校正比值公式重复Shown均值，缺少正文对应的Hidden项；OUCS公式缺少与正文相反符号约定的转换说明，影响比值复现与正负解释，不能声称已验证相关实现。完整实验代码未公开，补充材料未提供，自由回答场景仍待检验。[P9、P12–P13]\n原文核对：[P12] 未编号Corrected Ratio公式的两个均值项在原页均写为“Nothing Shown Update”，相减将抵消；而紧邻正文要求用Shown–Neutral均值减Hidden–Neutral均值。公式缺少与正文对应的Hidden条件项，影响选择支持偏差校正及校正后过度加权比值的复现。原式清晰可读，不能自行替换为推定正确公式，也不能据此判断实际代码采用了哪种实现。；[P12] OUCS段的未编号公式原页写为MCS=Σ_m(|B_m|/N)(conf_m−obs_m)，并定义conf_m为理想观察者置信度、obs_m为实际置信度。因此实际高于理想值时公式为负，与此前图2及正文将过度自信记为正的约定相反；原页缺少两种符号约定之间的转换说明。影响OUCS正负号解释及复现，不影响页面识读，不自行交换相减顺序。",
+        "connection": "解读：对智能运维与可靠性研究，本文提示应分别评估历史诊断可见性导致的坚持，以及反对证据导致的过度更新，而不只检查一次作答的校准度。其与结构设计的联系仅是决策评估方法可借鉴，资料没有工程故障、结构优化或服役可靠性验证。[P9–P12]",
+        "next_steps": "建议：在故障诊断任务中设置历史结论显示或隐藏、证据支持或反对及来源可靠度条件，同时记录改答、校准与正确性。先核对P12公式和公开实现，再预注册指标及零更新分母处理规则；最后测试真实多轮、自由回答是否保留同类偏差，不预设迁移成立。[P9–P13]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "大语言模型过度自信与不足自信背后的竞争性偏差",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s42256-026-01217-9.pdf"
+      ],
+      "analyzed_at": "2026-11-15T15:47:12.880509+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P9"
+        ],
+        "method": [
+          "P2",
+          "P10",
+          "P11",
+          "P12"
+        ],
+        "innovation": [
+          "P7",
+          "P8",
+          "P9",
+          "P10"
+        ],
+        "findings": [
+          "P2",
+          "P5",
+          "P6"
+        ],
+        "limitations": [
+          "P9",
+          "P12",
+          "P13"
+        ],
+        "connection": [
+          "P9",
+          "P10",
+          "P11",
+          "P12"
+        ],
+        "next_steps": [
+          "P9",
+          "P10",
+          "P11",
+          "P12",
+          "P13"
+        ]
+      },
+      "analysis_material_version": "1e82134fff0ee4a8c2400e504ad967b48af0cc00bdddeaf6629d4c33bc5171b5",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "文字提取的双栏顺序错置：Results段落被提前，导致“demonstrating sensitivity to advice”后错误接入左栏开头“(Fig. 1; Methods)”。已据原页恢复：左栏承接P1介绍两阶段范式，右栏为Results；右栏末句应接P4开头“quality despite the choice-supportive bias”。图1及图注可读，无公式缺项；该错误影响正文逻辑衔接，不改变已报告数值。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "图5 SimpleQA右侧面板纵轴被文字提取为“Confidence map”；原页可清楚核实为“Confidence gap”，已纠正。无缺项。该轴按图注表示对初始所选选项的最终置信度减初始置信度；误读会影响指标含义，但不改变图中柱形及作者关于相反建议过度加权的结论。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P12",
+          "detail": "未编号Corrected Ratio公式的两个均值项在原页均写为“Nothing Shown Update”，相减将抵消；而紧邻正文要求用Shown–Neutral均值减Hidden–Neutral均值。公式缺少与正文对应的Hidden条件项，影响选择支持偏差校正及校正后过度加权比值的复现。原式清晰可读，不能自行替换为推定正确公式，也不能据此判断实际代码采用了哪种实现。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P12",
+          "detail": "OUCS段的未编号公式原页写为MCS=Σ_m(|B_m|/N)(conf_m−obs_m)，并定义conf_m为理想观察者置信度、obs_m为实际置信度。因此实际高于理想值时公式为负，与此前图2及正文将过度自信记为正的约定相反；原页缺少两种符号约定之间的转换说明。影响OUCS正负号解释及复现，不影响页面识读，不自行交换相减顺序。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "提供的[P15]文字为空，但原页Reporting Summary内容完整可读，已据截图补读统计勾选表、Software and code及Data栏目。缺失属于文字提取遗漏，不是原文件缺项；主要影响统计报告与代码、数据可复现性信息的获取，无新增实验公式或结果图。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P16",
+          "detail": "提供的文字提取为空，原页报告表清晰可读，已从截图识读人类参与者、研究领域选择及研究设计栏目。遗漏的是模板文字与未勾选状态，无公式或图号；不影响论文偏差结论，但不能将空白栏目解释为作者已报告的研究方法。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P17",
+          "detail": "提供的文字提取为空，已从原页识读行为与社会科学、生态环境及野外工作表格。无公式或图号；提取遗漏会掩盖栏目仅含模板提示、野外工作Yes/No均未勾选的状态，不构成原文件缺项的证据。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P18",
+          "detail": "提供的文字提取为空，已核对原页材料、系统和方法清单及各模板栏目。无公式或图号；清单选框均未勾选，不能把提取缺失误解为相关实验已开展或已明确标为不适用。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P19",
+          "detail": "提供的文字提取为空，已据原页补读动物、临床及双重用途栏目。无公式或图号；尤其确认Hazards五项均勾选No，而Experiments of concern各项均未勾选。遗漏影响风险声明的准确识别，不影响页面可读性。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P20",
+          "detail": "提供的文字提取为空，原页表格及模板文字可读，已据截图补读Plants、ChIP-seq和Flow Cytometry栏目及未勾选状态。无公式或图号；遗漏影响报告表状态识别，不影响论文实验结论，不能认定原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P21",
+          "detail": "提供的文字提取为空，已从原页识读门控策略及MRI设计、采集、预处理、统计建模栏目。无公式或实验图号；相关确认框和分析类型选框均未勾选，提取遗漏不能被解释为作者明确采用或排除了这些方法。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P22",
+          "detail": "提供的文字提取为空，已从原页补读Models & analysis清单、未勾选状态及三个模板说明栏。无公式或图号；遗漏的是报告模板内容，而非实际模型结果，未发现需要补造的参数或结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "7b7a15d4684b",
+        "state": "published",
+        "updated_at": "2026-11-15T15:47:12.895176+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 22,
+        "covered": 22,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "文字提取的双栏顺序错置：Results段落被提前，导致“demonstrating sensitivity to advice”后错误接入左栏开头“(Fig. 1; Methods)”。已据原页恢复：左栏承接P1介绍两阶段范式，右栏为Results；右栏末句应接P4开头“quality despite the choice-supportive bias”。图1及图注可读，无公式缺项；该错误影响正文逻辑衔接，不改变已报告数值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "图5 SimpleQA右侧面板纵轴被文字提取为“Confidence map”；原页可清楚核实为“Confidence gap”，已纠正。无缺项。该轴按图注表示对初始所选选项的最终置信度减初始置信度；误读会影响指标含义，但不改变图中柱形及作者关于相反建议过度加权的结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "未编号Corrected Ratio公式的两个均值项在原页均写为“Nothing Shown Update”，相减将抵消；而紧邻正文要求用Shown–Neutral均值减Hidden–Neutral均值。公式缺少与正文对应的Hidden条件项，影响选择支持偏差校正及校正后过度加权比值的复现。原式清晰可读，不能自行替换为推定正确公式，也不能据此判断实际代码采用了哪种实现。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "OUCS段的未编号公式原页写为MCS=Σ_m(|B_m|/N)(conf_m−obs_m)，并定义conf_m为理想观察者置信度、obs_m为实际置信度。因此实际高于理想值时公式为负，与此前图2及正文将过度自信记为正的约定相反；原页缺少两种符号约定之间的转换说明。影响OUCS正负号解释及复现，不影响页面识读，不自行交换相减顺序。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "提供的[P15]文字为空，但原页Reporting Summary内容完整可读，已据截图补读统计勾选表、Software and code及Data栏目。缺失属于文字提取遗漏，不是原文件缺项；主要影响统计报告与代码、数据可复现性信息的获取，无新增实验公式或结果图。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P16",
+            "detail": "提供的文字提取为空，原页报告表清晰可读，已从截图识读人类参与者、研究领域选择及研究设计栏目。遗漏的是模板文字与未勾选状态，无公式或图号；不影响论文偏差结论，但不能将空白栏目解释为作者已报告的研究方法。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P17",
+            "detail": "提供的文字提取为空，已从原页识读行为与社会科学、生态环境及野外工作表格。无公式或图号；提取遗漏会掩盖栏目仅含模板提示、野外工作Yes/No均未勾选的状态，不构成原文件缺项的证据。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P18",
+            "detail": "提供的文字提取为空，已核对原页材料、系统和方法清单及各模板栏目。无公式或图号；清单选框均未勾选，不能把提取缺失误解为相关实验已开展或已明确标为不适用。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P19",
+            "detail": "提供的文字提取为空，已据原页补读动物、临床及双重用途栏目。无公式或图号；尤其确认Hazards五项均勾选No，而Experiments of concern各项均未勾选。遗漏影响风险声明的准确识别，不影响页面可读性。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P20",
+            "detail": "提供的文字提取为空，原页表格及模板文字可读，已据截图补读Plants、ChIP-seq和Flow Cytometry栏目及未勾选状态。无公式或图号；遗漏影响报告表状态识别，不影响论文实验结论，不能认定原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P21",
+            "detail": "提供的文字提取为空，已从原页识读门控策略及MRI设计、采集、预处理、统计建模栏目。无公式或实验图号；相关确认框和分析类型选框均未勾选，提取遗漏不能被解释为作者明确采用或排除了这些方法。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P22",
+            "detail": "提供的文字提取为空，已从原页补读Models & analysis清单、未勾选状态及三个模板说明栏。无公式或图号；遗漏的是报告模板内容，而非实际模型结果，未发现需要补造的参数或结论。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -395,7 +1412,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《LaMGen: LLM-based 3D molecular generation for multi-target drug design》，暂未提供可用摘要，请查看原文。",
+      "summary": "LaMGen研究如何仅凭多个蛋白序列生成兼顾结合需求与构象合理性的分子。框架利用GEOM预训练、MTD2025微调，将蛋白嵌入与离散扭转角表示结合。[P4]作者报告生成速度为0.44秒/分子，快于DualDiff，并通过构象比较和回顾性案例展示骨架重现及类似物探索能力。[P5–P12]解读：其价值主要在条件生成与计算筛选方法，不应将对接优势视为实验药效；原文统计口径和流程衔接仍有疑点。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -439,11 +1456,220 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议作为多条件生成与物理合理性评价的方法参考重点阅读，尤其关注构象表示、迁移评价和多目标筛选；并非智能运维或工程结构可靠性的直接应用论文。",
+      "deep_read": {
+        "problem": "多靶点设计要求同一分子兼容多个结合位点，同时满足药物性质要求，数据稀缺与组合复杂性使单靶点生成方法难以直接迁移。[P1–P2]作者关注低序列相似度靶点组合及缺乏蛋白结构时的生成能力，核心问题不是单项评分最优，而是多种约束能否协调满足。",
+        "method": "模型先学习SMILES与扭转构象映射，再以MTD2025进行多靶点适配。[P4]ESM-C编码蛋白序列，12层解码器自回归生成分子；随机因果掩码改变预测起点，两条蛋白—配体注意力分支以权重融合。[P14–P15]低能构象提供结构先验，但并非真实结合姿态。",
+        "innovation": "作者的特色是把序列条件、旋转感知构象token与多靶点生成统一，并构建含双、三靶点关联的MTD2025。[P3–P4]解读：贡献更应理解为表示、数据和生成流程的整合；公式仅显式给出两分支加权，直接跨蛋白交互及输出对齐方式仍需进一步澄清。[P15]",
+        "findings": "图2报告LaMGen与DualDiff生成耗时为0.44与12.30秒/分子，QED为0.557与0.505。[P5]表1显示微调后总体成功率由4.84%升至8.46%，高于AIxFuse的5.40%。[P10]作者还展示已知骨架重现，但这些计算结果不能直接证明候选药效。",
+        "limitations": "原文缺项及冲突包括：P6的TPSA单位缺平方、图2C比例口径矛盾；P9图4符号和图型说明不符；P12图6样本数200/500冲突，LSD1基准−9/−11冲突；P14两套构象流程衔接缺失。分别影响量纲、统计解释、增益判断与复现，不能擅补；计算评价亦不能替代药效实验。\n原文核对：[P6] 正文承接TPSA讨论时，原页将面积范围写为“60–140 Å”，未显示平方上标；这是原页单位标示缺项，而非文字提取漏字。影响TPSA范围的量纲表达，不影响页面其余内容识读；不据此改写作者数值。；[P6] 图2C图注与正文及P5图形存在统计口径冲突：图注把中、右图定义为一个靶点低于阈值、另一个高于阈值的互斥类别；但在−9阈值，双靶点、中图、右图分别为12.29%、52.93%、40.71%，合计超过100%。正文则将后两者描述为各单靶点低于阈值的比例。原页可清楚核实该冲突，影响单靶点选择性及双靶点比例的解释，不能擅自确定哪一处应改。；[P9] 图4图注与原图表达不完全一致：A图注称左半圆显示平均Vina分数“absolute value”，但扇形标注保留负号；B图注称“box plots”并定义箱体及须线，实际绘制为小提琴形分布并叠加内部标记，未清楚展示所述标准箱须结构。影响分数符号及分布摘要标记的解释，不影响已显示数值的识读。；[P12] 图6样本数量存在原文内部冲突：本页正文及P10筛选说明写前500个生成分子，本页图6图注却写“top 200 model-generated molecules”。原页两处均可读清，无法确定实际绘图数量；影响三靶点分布的样本范围解释，不应擅自统一。；[P12] Gen.4929的LSD1比较基准不一致：本页正文写亲和力从−9.0改善到−11.1，但P11图5C明确标注参考36的D(LSD1)=−11.0，Gen.4929为−11.1。影响改善幅度的结论；按图为0.1而非正文所述2.1，资料不足以判定哪项原始数值正确。；[P14] 数据构象流程的衔接说明不足：P13至P14页首称CREST搜索、每分子保留5个构象后用LiTEN-FF优化；P14数据预处理却称RDKit生成100个构象、优化后取单个最低能构象。原页均可读，但未说明两者分别适用于哪个阶段或如何衔接，影响构象训练样本与扭转角提取流程的复现，不能擅自合并。",
+        "connection": "解读：与智能运维、结构设计和可靠性研究的联系属于方法迁移，而非直接成果。[P4、P15]多蛋白条件可类比多工况约束，构象先验可类比物理可行域，生成后多指标检查可启发设计筛选；但论文没有故障预测、工程载荷或失效概率证据，不能据此宣称工程有效。",
+        "next_steps": "建议先澄清构象数据流程、注意力分支对齐及统计口径，再独立评价全部生成样本，避免仅看筛选后的优胜者。[P10、P14–P15]进一步以独立能量计算和实验测定检验构象与活性；若迁移到工程设计，应新增多工况可行率及不确定性评价，而不是照搬对接指标。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "LaMGen：基于大语言模型的多靶点药物三维分子生成",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41467-026-71737-w.pdf"
+      ],
+      "analyzed_at": "2026-11-15T15:58:51.713981+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P4",
+          "P14",
+          "P15"
+        ],
+        "innovation": [
+          "P3",
+          "P4",
+          "P15"
+        ],
+        "findings": [
+          "P5",
+          "P10",
+          "P11"
+        ],
+        "limitations": [
+          "P6",
+          "P9",
+          "P12",
+          "P14"
+        ],
+        "connection": [
+          "P4",
+          "P15"
+        ],
+        "next_steps": [
+          "P10",
+          "P14",
+          "P15"
+        ]
+      },
+      "analysis_material_version": "0f5c122cee019cf5a2f51a2ff10c8c927c9dc0017232716e6b5ce2eb661a10a8",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "对照原页可补正文字提取遗漏：日期栏另有“Published online: 11 April 2026”。这是书目信息遗漏，不影响模型、数据或性能结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "文字提取将页底正文排在图1之前，并打散图内标签。原页顺序为图1A–D、图注、接续P2的正文；已按原页核对。图1A以440,000+、280,000+概括关联数量，正文给出约446,000、283,000，二者不构成缺项或矛盾。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "图2A–C的大部分图中文字和数值未被文字提取保留，且提取顺序将页底正文置于图前。已核对原页：图2A含双靶点Vina径向柱图及模型性质表，图2B含性质与对接分数箱线图，图2C含阈值比例柱图；相关主要数值已在笔记补录，不属于原文件缺项。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P6",
+          "detail": "正文承接TPSA讨论时，原页将面积范围写为“60–140 Å”，未显示平方上标；这是原页单位标示缺项，而非文字提取漏字。影响TPSA范围的量纲表达，不影响页面其余内容识读；不据此改写作者数值。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P6",
+          "detail": "图2C图注与正文及P5图形存在统计口径冲突：图注把中、右图定义为一个靶点低于阈值、另一个高于阈值的互斥类别；但在−9阈值，双靶点、中图、右图分别为12.29%、52.93%、40.71%，合计超过100%。正文则将后两者描述为各单靶点低于阈值的比例。原页可清楚核实该冲突，影响单靶点选择性及双靶点比例的解释，不能擅自确定哪一处应改。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "图3的图形、图例及部分统计标注未被文字提取完整保留，且正文与图的版面顺序被打散。已对照原页识读A–D：C为三种优化参照下的RMSD分布，D包含两靶点对接RMSD及原子数分布，不应把提取出的坐标文字当作连续正文。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "图4A提取数值与模型标签错位、粘连，图4B主要数值缺失。按原页纠正：JNK3中LaMGen/LaMGen-FT为−10.39/−10.62，GSK3β中为−10.82/−11.04；图4B的主要性质标值已在笔记补录。影响模型比较，非原文件缺项。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P9",
+          "detail": "图4图注与原图表达不完全一致：A图注称左半圆显示平均Vina分数“absolute value”，但扇形标注保留负号；B图注称“box plots”并定义箱体及须线，实际绘制为小提琴形分布并叠加内部标记，未清楚展示所述标准箱须结构。影响分数符号及分布摘要标记的解释，不影响已显示数值的识读。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P11",
+          "detail": "图5C文字提取打散了分子、相似度及对接标签的对应关系。按原页纠正：Gen.2635对参考35的相似度为0.44，LSD1/HDAC6分数为−11.7/−8.4；Gen.4929对参考36的相似度为0.46，分数为−11.1/−8.5。影响类似物与参考分子的比较，原图内容完整。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P12",
+          "detail": "图6样本数量存在原文内部冲突：本页正文及P10筛选说明写前500个生成分子，本页图6图注却写“top 200 model-generated molecules”。原页两处均可读清，无法确定实际绘图数量；影响三靶点分布的样本范围解释，不应擅自统一。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P12",
+          "detail": "Gen.4929的LSD1比较基准不一致：本页正文写亲和力从−9.0改善到−11.1，但P11图5C明确标注参考36的D(LSD1)=−11.0，Gen.4929为−11.1。影响改善幅度的结论；按图为0.1而非正文所述2.1，资料不足以判定哪项原始数值正确。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P14",
+          "detail": "公式(1)的负号及求和符号在文字提取中损坏为“/C0 Xn”等字符；原页清楚显示L = −Σ(i=1至n) log p(x_i | x_<i)。公式(2)的分式和根号也被打散，原页为softmax(QK^T/√d_k)V。已据原图纠正，原文件公式完整，不影响负对数似然目标及缩放点积注意力的解释。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P14",
+          "detail": "数据构象流程的衔接说明不足：P13至P14页首称CREST搜索、每分子保留5个构象后用LiTEN-FF优化；P14数据预处理却称RDKit生成100个构象、优化后取单个最低能构象。原页均可读，但未说明两者分别适用于哪个阶段或如何衔接，影响构象训练样本与扭转角提取流程的复现，不能擅自合并。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "TriCoupleAttention的拼接符号、转置、根号及权重范围在文字提取中被损坏为“/C2/C3”“/C0/C1”等。已按原页核实：X₁=[P₁;L]、X₂=[P₂;L]；公式(3)、(4)为各分支缩放点积注意力，公式(5)为A=αA₁+(1−α)A₂，α∈[0,1]。原页公式完整，无缺失项；纠正后可明确分支计算和融合规则。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "dd90730f3a36",
+        "state": "published",
+        "updated_at": "2026-11-15T15:58:51.743275+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 17,
+        "covered": 17,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "对照原页可补正文字提取遗漏：日期栏另有“Published online: 11 April 2026”。这是书目信息遗漏，不影响模型、数据或性能结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "文字提取将页底正文排在图1之前，并打散图内标签。原页顺序为图1A–D、图注、接续P2的正文；已按原页核对。图1A以440,000+、280,000+概括关联数量，正文给出约446,000、283,000，二者不构成缺项或矛盾。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "图2A–C的大部分图中文字和数值未被文字提取保留，且提取顺序将页底正文置于图前。已核对原页：图2A含双靶点Vina径向柱图及模型性质表，图2B含性质与对接分数箱线图，图2C含阈值比例柱图；相关主要数值已在笔记补录，不属于原文件缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P6",
+            "detail": "正文承接TPSA讨论时，原页将面积范围写为“60–140 Å”，未显示平方上标；这是原页单位标示缺项，而非文字提取漏字。影响TPSA范围的量纲表达，不影响页面其余内容识读；不据此改写作者数值。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P6",
+            "detail": "图2C图注与正文及P5图形存在统计口径冲突：图注把中、右图定义为一个靶点低于阈值、另一个高于阈值的互斥类别；但在−9阈值，双靶点、中图、右图分别为12.29%、52.93%、40.71%，合计超过100%。正文则将后两者描述为各单靶点低于阈值的比例。原页可清楚核实该冲突，影响单靶点选择性及双靶点比例的解释，不能擅自确定哪一处应改。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "图3的图形、图例及部分统计标注未被文字提取完整保留，且正文与图的版面顺序被打散。已对照原页识读A–D：C为三种优化参照下的RMSD分布，D包含两靶点对接RMSD及原子数分布，不应把提取出的坐标文字当作连续正文。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "图4A提取数值与模型标签错位、粘连，图4B主要数值缺失。按原页纠正：JNK3中LaMGen/LaMGen-FT为−10.39/−10.62，GSK3β中为−10.82/−11.04；图4B的主要性质标值已在笔记补录。影响模型比较，非原文件缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P9",
+            "detail": "图4图注与原图表达不完全一致：A图注称左半圆显示平均Vina分数“absolute value”，但扇形标注保留负号；B图注称“box plots”并定义箱体及须线，实际绘制为小提琴形分布并叠加内部标记，未清楚展示所述标准箱须结构。影响分数符号及分布摘要标记的解释，不影响已显示数值的识读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "图5C文字提取打散了分子、相似度及对接标签的对应关系。按原页纠正：Gen.2635对参考35的相似度为0.44，LSD1/HDAC6分数为−11.7/−8.4；Gen.4929对参考36的相似度为0.46，分数为−11.1/−8.5。影响类似物与参考分子的比较，原图内容完整。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "图6样本数量存在原文内部冲突：本页正文及P10筛选说明写前500个生成分子，本页图6图注却写“top 200 model-generated molecules”。原页两处均可读清，无法确定实际绘图数量；影响三靶点分布的样本范围解释，不应擅自统一。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "Gen.4929的LSD1比较基准不一致：本页正文写亲和力从−9.0改善到−11.1，但P11图5C明确标注参考36的D(LSD1)=−11.0，Gen.4929为−11.1。影响改善幅度的结论；按图为0.1而非正文所述2.1，资料不足以判定哪项原始数值正确。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "公式(1)的负号及求和符号在文字提取中损坏为“/C0 Xn”等字符；原页清楚显示L = −Σ(i=1至n) log p(x_i | x_<i)。公式(2)的分式和根号也被打散，原页为softmax(QK^T/√d_k)V。已据原图纠正，原文件公式完整，不影响负对数似然目标及缩放点积注意力的解释。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P14",
+            "detail": "数据构象流程的衔接说明不足：P13至P14页首称CREST搜索、每分子保留5个构象后用LiTEN-FF优化；P14数据预处理却称RDKit生成100个构象、优化后取单个最低能构象。原页均可读，但未说明两者分别适用于哪个阶段或如何衔接，影响构象训练样本与扭转角提取流程的复现，不能擅自合并。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "TriCoupleAttention的拼接符号、转置、根号及权重范围在文字提取中被损坏为“/C2/C3”“/C0/C1”等。已按原页核实：X₁=[P₁;L]、X₂=[P₂;L]；公式(3)、(4)为各分支缩放点积注意力，公式(5)为A=αA₁+(1−α)A₂，α∈[0,1]。原页公式完整，无缺失项；纠正后可明确分支计算和融合规则。"
+          }
+        ]
+      }
     }
   ],
   "extended": [],
@@ -464,7 +1690,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《State media control shapes LLM behaviour by influencing training data》，暂未提供可用摘要，请查看原文。",
+      "summary": "这份摘要关注国家媒体管控如何经由信息环境与训练数据影响大语言模型输出。摘要称，媒体管控会改变模型训练数据，并显著影响输出；媒体管控较严的国家，在使用其本国语言提示模型时，会获得更有利的评价。[摘要] 解读：材料提示，模型评价可能受到训练语料所处信息环境的影响。但当前仅有摘要，未交代模型、国家样本、评价指标和检验方法，尚不能判断效应大小、普遍性及因果识别强度。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -504,11 +1730,143 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议作为训练数据偏差与多语言模型可靠性的线索阅读：摘要提出了明确的媒体管控与模型评价关联，但是否值得重点跟进，仍需核对研究方法及其与本人研究方向的实际联系。[摘要]",
+      "deep_read": {
+        "problem": "研究问题是国家媒体管控能否通过信息环境改变大语言模型训练数据，并进一步影响模型对国家的评价。摘要使用“through its impact on the information environment”描述这一联系。[摘要] 解读：关注点不仅是模型输出偏差，也包括偏差可能来自怎样的信息生产条件。",
+        "method": "摘要给出了媒体管控、信息环境、训练数据与模型输出之间的解释链条，但没有说明具体研究设计。可核对表述仅为“alter the training data”。[摘要] 因此，无法确认作者是否直接分析训练语料、如何测量媒体管控，以及采用何种比较或统计方法。",
+        "innovation": "解读：材料值得关注的视角，是把国家层面的媒体管控与本国语言下的模型评价联系起来，而不是孤立讨论输出偏差。[摘要] 但摘要没有介绍既有研究、方法对照或作者的创新声明，不能据此认定其首次发现该现象，或提出了新的算法与评测体系。",
+        "findings": "摘要明确表示，媒体管控较严的国家，在以其本国语言提示模型时会得到更有利的评价，原文为“rated more favourably by LLMs”。[摘要] 这一发现具有特定语言条件；材料未给出效应量、国家数量、模型范围或不确定性，不能扩展为所有语言和模型的普遍规律。",
+        "limitations": "当前能够确认的是资料披露不足，而不是研究本身存在特定缺陷。摘要没有提供训练数据来源、提示词设计、评价基准与稳健性检验。[摘要] 因而尚不能判断其他因素是否得到控制，也不能验证“substantial effect”对应的实际幅度；这些均需进一步查证。",
+        "connection": "解读：与可靠性研究的潜在联系，在于模型输出可能受到训练信息环境及提示语言的共同影响。[摘要] 若模型用于智能运维中的知识问答或辅助决策，这可作为审查数据来源的启示，但摘要没有相关应用实验，也未提供与结构设计直接相关的证据。",
+        "next_steps": "建议：后续先核对研究对象、媒体管控指标、训练数据证据及多语言提示的可比性，再评估结论是否适用于目标模型。若考虑迁移到智能运维，可设计相同问题的跨语言输出比较，并用独立领域依据核验答案；这属于研究建议，并非摘要报告的方法或成果。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "国家媒体管控如何通过训练数据塑造大语言模型行为",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.1038/d41586-026-01486-9"
+      ],
+      "analyzed_at": "2026-11-15T15:03:56.713110+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "大语言模型对一个国家的评价，可能不仅取决于提问内容，还受到训练数据所处信息环境的影响。这份摘要关注媒体控制如何影响模型输出，提醒读者留意本国语言回答背后的信息来源。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "模型评价背后的信息环境",
+            "paragraphs": [
+              "大语言模型的训练数据并非脱离现实的信息集合。摘要指出，国家对媒体的控制会影响信息环境，进而改变模型的训练数据。研究因此将关注点放在模型之外：塑造信息供给的因素，也可能影响模型如何描述和评价国家。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "摘要交代了影响链条，但未展开研究方法",
+            "paragraphs": [
+              "摘要明确描述了“媒体控制影响信息环境，信息环境改变训练数据，进而影响模型输出”的关系，并报告了使用相关国家本国语言提问时的评价现象。不过，摘要没有说明如何测量媒体控制、识别训练数据变化或组织模型提问，因此不能据此还原具体实验流程。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "本国语言回答中的更有利评价",
+            "paragraphs": [
+              "摘要报告，媒体控制对训练数据的影响会明显作用于大语言模型的输出：媒体控制更严格的国家，在以其本国语言提问时，会获得模型更有利的评价。",
+              "这一发现将信息环境与模型评价联系起来。需要保留的限定是，摘要突出的是媒体控制较严格国家及本国语言提问这一情境；它没有提供足以概括所有国家、所有语言或所有模型表现的结果。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "样本、比较基准与验证范围仍待核对",
+            "paragraphs": [
+              "仅凭摘要，无法判断研究覆盖哪些国家、语言和模型，也无法确认提示词、评价指标、样本规模及训练数据的识别方式。“更有利”的具体比较基准与效应大小同样未在摘要中展开，不能自行补入数值或统计结论。",
+              "摘要也不足以判断研究如何区分媒体控制与其他因素的影响，以及结论经过了哪些验证。这些属于当前资料无法回答的问题，不代表论文没有开展相应分析。本解读仅依据所给摘要，不声称已经阅读全文。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注回答语言，也追问信息来源",
+            "paragraphs": [
+              "阅读启发：理解模型对国家的评价时，可以同时追问“用什么语言提问”与“模型可能接触了怎样的信息环境”。进一步阅读时，值得重点核对语言间的比较方式、评价标准和训练数据证据，而不宜直接将本国语言回答视为更客观或更失真。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的信息环境影响关系",
+            "description": "仅概括摘要明确陈述的影响链条与输出情境，不表示论文的具体实验流程，也不是论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "国家对媒体的控制",
+                "detail": "摘要关注媒体控制对信息环境的影响。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "信息环境",
+                "detail": "媒体控制通过信息环境影响模型训练数据。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "大语言模型训练数据",
+                "detail": "摘要指出训练数据的变化会影响模型输出。"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "本国语言提问下的模型评价",
+                "detail": "摘要报告，媒体控制较严格的国家获得更有利的评价。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "影响信息环境"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "改变训练数据"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "影响模型输出"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-15T15:05:21.021359+00:00",
+      "article_profile": "b0f18c005acc2bce34b1b690407d34f2884204f2747b04b906a5428f64372758",
+      "analysis_references": {},
+      "analysis_material_version": "de5678ecf4c072100d559cee3b36ec7b135e11eb95c11e053d3d9a4ee4ecc6e4",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "4240f85da0a9",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-15T15:05:21.021359+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -531,7 +1889,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《Lyapunov-guided cooperative games enable stable constraint fusion in LLM-based multi-agent autonomous systems》，暂未提供可用摘要，请查看原文。",
+      "summary": "本文针对多智能体调整自身约束时引发他者偏差、导致协作振荡的问题，将约束融合转化为动态收敛设计。框架结合Lyapunov度量、合作优化、预测解码与概率纠偏，在nuScenes上使用Llama3:8B验证，总体约束满足率由0.713升至0.763。[P1–P6]解读：其价值在于控制理论与生成过程的接口设计，而非已证明的稳定性；多处图文错配和统计呈现问题要求谨慎采信。[P6–P10]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -576,11 +1934,285 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议作为多智能体约束协调的方法启发重点阅读，优先核对概率干预和消融表；不宜直接作为严格稳定性或工程安全保证的依据。[P6][P10–P11]",
+      "deep_read": {
+        "problem": "作者关注约束随交互动态传播的问题：规划调整会改变安全和舒适评价，局部修正又可能触发新的违反。原文称系统可能“oscillate among multiple local solutions”。研究目标因此不是单轮规则检查，而是在维持生成质量的同时引导联合状态趋向可行域。[P1–P2][P6]",
+        "method": "框架先用Lyapunov函数整合个体偏差、智能体冲突和Pareto偏差，再以有限时域合作优化选择控制。指数惩罚重加权token概率，随后按约束维度纠正残余偏差；声誉、奖励和责任分配反馈更新权重，形成逐token闭环。[P8–P12]",
+        "innovation": "作者的方法贡献是把静态约束评估改写为动态收敛设计，并将连续控制输入映射为离散生成概率干预。解读：值得关注的是统一状态度量与可执行解码接口的组合，而非新稳定性定理；正文明确只搜索近似Pareto改进方向，不能等同于求得完整最优解集。[P2][P10]",
+        "findings": "表2显示总体约束满足率从LLM-ASSIST的0.713升至0.763，约为7.0%的相对提升。表3中完整框架的3秒碰撞率为0.312%、L2误差为0.702米，均优于两个消融版本。解读：这些结果支持模块组合的经验价值，但表1不支持所有时域、所有基线均占优。[P4][P6]",
+        "limitations": "无正式稳定性证明，仅验证四智能体驾驶场景。[P6]原件缺项包括：P4降幅不符；P5比例解释与时域图示不足；P7图注错配、稳态对应不明；P8–P10图号图注错配及颜色定义冲突；P12数据定位、P13文献定位不全。影响量化核验与复现；补充材料未提供，不得视为已验证。\n原文核对：[P4] 表1与正文的 ST-P3 平均L2误差降幅不一致。按表中三时域数值，GPT-Driver 均值为(0.1837+0.407+0.7549)/3，本方法为(0.1612+0.3796+0.7016)/3，相对下降约7.67%，并非正文的7.1%。原页两处均清晰；影响降幅的准确数值，不改变本方法平均误差较低的方向。；[P5] 图2右下比例图标注0.770、0.855、0.850、1.000、1.000，图注却称数值≥1表示本方法达到或超过最佳基线。前两项分别对应表1中本方法/VAD的3 s碰撞率及L2误差，属于越小越好的指标；最后的总体约束满足率比例1.000也不能表示0.763相对LLM-ASSIST的0.713。缺少一致的基线和指标方向说明，不能按图注统一解释优势。；[P5] 图2图注称顶行比较两平台1 s、2 s、3 s结果，但原图 UniAD 两面板标题明确为“Collision Rate (3s)”和“L2 Error (3s)”，仅展示3 s。缺少图注所称的 UniAD 1 s、2 s图示，相关数值须以表1为准。；[P7] 图3图注与实际附图不匹配。实际图题为“Ablation Study and Stability Analysis”，内容为V(x)曲线、收敛步数箱线图及消融柱状图；图注却描述自动驾驶约束交互、编号(1)至(6)机制和S1至Sn状态演化。缺少与实际稳定性图相配的图注，阴影带及箱线图统计含义未获该图注解释。；[P7] 图3左上V(x)曲线与P4报告的稳态值不完全一致：Full曲线接近0.038，但Game-only与Projection-only末端未落在图中标注0.057、0.089的对应水平参考线上，尤其Projection-only仍明显高于0.089。缺少曲线与所报稳态值关系的解释；可观察到Full较低、较平滑，但不能据该图确认全部稳态数值。；[P8] 图4图注与原图内容不匹配。原图为道路场景、S1至Sn状态演化、LLM智能体及监测—投影—输出迁移闭环；图注却描述四个智能体的天气、交通、舒适、能耗约束及彩色椭球交集，这些内容实际见本批P9图6。图4缺少与实际图面对应的正确图注，影响模块及图号对应关系，但不妨碍读取图中文字。；[P8] 公式(8)后正文将逐token记录的V(x)轨迹指向图6；经核对P9原图，图6实际为多维约束可行域示意，没有V(x)轨迹。该交叉引用不能提供正文所称的稳定性实验图证，不能据图6核实下降趋势。；[P9] 图5颜色含义不一致：图内图例写“color depth indicating constraint satisfaction degree”，图注却写“color depth indicating confidence levels”。缺少两者是否等同的说明，无法唯一确定节点颜色编码的是约束满足度还是置信度。；[P9] 图6图注声称展示Full、Game-only、Projection-only的V(x)生成步轨迹，实际附图标题为“Multi-dimensional Constraint Feasible Domain Modeling”，展示四类约束及向量场，没有三种消融轨迹或生成步坐标。缺少与实际图面对应的正确图注，不能用此图支持近单调下降或振荡结论。；[P10] 预测解码段落以“as in Fig. 6”指引生成协调机制，但本批图6实际为多维约束可行域示意；与该段描述直接对应的前瞻预测解码树位于图5。图号引用不匹配，影响方法图文定位，不代表解码公式缺失。；[P12] Data availability原页将nuScenes dataset与GPT-Driver dataset均链接到https://www.nuscenes.org/，未提供可区分的GPT-Driver数据文件、版本或专用入口。缺少精确数据定位，影响复现实验所需数据的可追溯性；仅据本页不能判定数据实际不可获得。；[P13] 参考文献42的PlanAgent条目在原页仅给出https://doi.org/10.1109/TCDS，缺少完整文章级DOI后缀，也未列卷页或文章号。该条目的精确定位信息不完整，影响基线文献追溯，不直接改变本文实验数值或结论；未访问链接核验。",
+        "connection": "解读：对智能运维，可借鉴多个诊断与调度智能体之间的约束传播监测；对结构设计，可类比性能、成本和可制造性的协调；对可靠性研究，可关注偏差累积与纠偏闭环。但这些均是迁移联系，论文没有相应领域实验，也未证明概率干预能够保障工程安全。[P6][P10–P12]",
+        "next_steps": "建议先取得补充说明，核对偏差函数、动态惩罚、Shapley责任分配和声誉更新的实现，再复算表1降幅并校正图文对应。随后分别消融预测、投影和激励模块，记录逐token偏差及推理开销；跨领域应用前，应检验约束冲突与不可行状态下的行为。[P4–P13]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "Lyapunov引导的合作博弈实现大语言模型多智能体系统的稳定约束融合",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s44387-026-00110-5.pdf"
+      ],
+      "analyzed_at": "2026-11-15T15:13:36.711075+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P6"
+        ],
+        "method": [
+          "P8",
+          "P9",
+          "P10",
+          "P11",
+          "P12"
+        ],
+        "innovation": [
+          "P2",
+          "P10"
+        ],
+        "findings": [
+          "P4",
+          "P6"
+        ],
+        "limitations": [
+          "P4",
+          "P5",
+          "P6",
+          "P7",
+          "P8",
+          "P9",
+          "P10",
+          "P12",
+          "P13"
+        ],
+        "connection": [
+          "P6",
+          "P10",
+          "P11",
+          "P12"
+        ],
+        "next_steps": [
+          "P4",
+          "P5",
+          "P6",
+          "P7",
+          "P8",
+          "P9",
+          "P10",
+          "P11",
+          "P12",
+          "P13"
+        ]
+      },
+      "analysis_material_version": "f1e859949b0a2fe6ac92a0a3548d1543b67deeb1c51d0fb6c8be214c61fcffbd",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "约束参数段的文字提取存在字符分隔及公式编码错误，如“σ2_v ¼ 12:5”。已核对原页，正确读法为 v_max = 70 km/h、σ_v² = 12.5 (km/h)²、d_min = 5 m。该处为行内参数而非编号公式；纠正影响实验约束阈值的理解，不改变作者报告的性能结论。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P4",
+          "detail": "表1与正文的 ST-P3 平均L2误差降幅不一致。按表中三时域数值，GPT-Driver 均值为(0.1837+0.407+0.7549)/3，本方法为(0.1612+0.3796+0.7016)/3，相对下降约7.67%，并非正文的7.1%。原页两处均清晰；影响降幅的准确数值，不改变本方法平均误差较低的方向。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P5",
+          "detail": "图2右下比例图标注0.770、0.855、0.850、1.000、1.000，图注却称数值≥1表示本方法达到或超过最佳基线。前两项分别对应表1中本方法/VAD的3 s碰撞率及L2误差，属于越小越好的指标；最后的总体约束满足率比例1.000也不能表示0.763相对LLM-ASSIST的0.713。缺少一致的基线和指标方向说明，不能按图注统一解释优势。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P5",
+          "detail": "图2图注称顶行比较两平台1 s、2 s、3 s结果，但原图 UniAD 两面板标题明确为“Collision Rate (3s)”和“L2 Error (3s)”，仅展示3 s。缺少图注所称的 UniAD 1 s、2 s图示，相关数值须以表1为准。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "公式(1)至(5)的提取文本含“¼”“/C138”“/C0”等编码错误。原页可辨认，分别应恢复为等号、转置符号T及减号等；公式(4)的约束项为−λψ_multi(S_t)，并非缺失公式。纠正涉及状态向量和优化目标的准确读取，不补造原文未定义的函数细节。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P7",
+          "detail": "图3图注与实际附图不匹配。实际图题为“Ablation Study and Stability Analysis”，内容为V(x)曲线、收敛步数箱线图及消融柱状图；图注却描述自动驾驶约束交互、编号(1)至(6)机制和S1至Sn状态演化。缺少与实际稳定性图相配的图注，阴影带及箱线图统计含义未获该图注解释。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P7",
+          "detail": "图3左上V(x)曲线与P4报告的稳态值不完全一致：Full曲线接近0.038，但Game-only与Projection-only末端未落在图中标注0.057、0.089的对应水平参考线上，尤其Projection-only仍明显高于0.089。缺少曲线与所报稳态值关系的解释；可观察到Full较低、较平滑，但不能据该图确认全部稳态数值。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P8",
+          "detail": "图4图注与原图内容不匹配。原图为道路场景、S1至Sn状态演化、LLM智能体及监测—投影—输出迁移闭环；图注却描述四个智能体的天气、交通、舒适、能耗约束及彩色椭球交集，这些内容实际见本批P9图6。图4缺少与实际图面对应的正确图注，影响模块及图号对应关系，但不妨碍读取图中文字。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P8",
+          "detail": "公式(8)后正文将逐token记录的V(x)轨迹指向图6；经核对P9原图，图6实际为多维约束可行域示意，没有V(x)轨迹。该交叉引用不能提供正文所称的稳定性实验图证，不能据图6核实下降趋势。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "图4文字提取出现大段乱码，如“/TOZ 9ZGZK”，原图可读为“Init State”，其余框内文字可识别为状态演化、前瞻路径选择、约束监测及闭环控制说明。公式(7)至(11)中的乱码运算符也已依原页恢复为加号、减号、乘号及不等号；不存在可见公式占位缺项。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P9",
+          "detail": "图5颜色含义不一致：图内图例写“color depth indicating constraint satisfaction degree”，图注却写“color depth indicating confidence levels”。缺少两者是否等同的说明，无法唯一确定节点颜色编码的是约束满足度还是置信度。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P9",
+          "detail": "图6图注声称展示Full、Game-only、Projection-only的V(x)生成步轨迹，实际附图标题为“Multi-dimensional Constraint Feasible Domain Modeling”，展示四类约束及向量场，没有三种消融轨迹或生成步坐标。缺少与实际图面对应的正确图注，不能用此图支持近单调下降或振荡结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "图5、图6内部文本被提取为乱码，原图可清楚读取PATH候选、平均序列评分，以及雾天30 km/h和舒适性加速度小于3 m/s²等说明。公式(12)完整可见，提取中的“/C1”应为μ与Deviation(x)之间的乘号；不应将这些提取乱码判作原文件缺字。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P10",
+          "detail": "预测解码段落以“as in Fig. 6”指引生成协调机制，但本批图6实际为多维约束可行域示意；与该段描述直接对应的前瞻预测解码树位于图5。图号引用不匹配，影响方法图文定位，不代表解码公式缺失。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P10",
+          "detail": "公式(13)至(20)的提取含星号、负号、集合符号及根号编码错误。原页可确认(18)指数为−β_iΦ_i(u_i)，分母为Z_i；(20)根号覆盖单智能体三类加权平方项与两两合作偏差平方项的总和。均为提取问题，不是原公式缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P11",
+          "detail": "公式(21)至(27)的提取包含“/C1”“/C0”“/C138”等编码错误，原页均可辨认。公式(21)指数为−λ_type,i·d^pred_type,i；公式(26)依次减去η^t_coop,i·e^t_coop,i和IncentiveAdjustment^t_i；公式(27)在社会福利基础上减去个体成本总和、加上联盟收益总和。未见公式占位或缺项，纠正影响惩罚方向及优化目标的准确理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P12",
+          "detail": "所给文字提取遗漏原页接受日期下方的“Published online: 08 May 2026”。原图该行清晰，已补充识读为2026年5月8日在线发表；影响文献日期信息完整性，不影响方法或实验结论。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P12",
+          "detail": "Data availability原页将nuScenes dataset与GPT-Driver dataset均链接到https://www.nuscenes.org/，未提供可区分的GPT-Driver数据文件、版本或专用入口。缺少精确数据定位，影响复现实验所需数据的可追溯性；仅据本页不能判定数据实际不可获得。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P13",
+          "detail": "参考文献42的PlanAgent条目在原页仅给出https://doi.org/10.1109/TCDS，缺少完整文章级DOI后缀，也未列卷页或文章号。该条目的精确定位信息不完整，影响基线文献追溯，不直接改变本文实验数值或结论；未访问链接核验。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "66aab42c3a26",
+        "state": "published",
+        "updated_at": "2026-11-15T15:13:36.732179+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 13,
+        "covered": 13,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "约束参数段的文字提取存在字符分隔及公式编码错误，如“σ2_v ¼ 12:5”。已核对原页，正确读法为 v_max = 70 km/h、σ_v² = 12.5 (km/h)²、d_min = 5 m。该处为行内参数而非编号公式；纠正影响实验约束阈值的理解，不改变作者报告的性能结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P4",
+            "detail": "表1与正文的 ST-P3 平均L2误差降幅不一致。按表中三时域数值，GPT-Driver 均值为(0.1837+0.407+0.7549)/3，本方法为(0.1612+0.3796+0.7016)/3，相对下降约7.67%，并非正文的7.1%。原页两处均清晰；影响降幅的准确数值，不改变本方法平均误差较低的方向。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P5",
+            "detail": "图2右下比例图标注0.770、0.855、0.850、1.000、1.000，图注却称数值≥1表示本方法达到或超过最佳基线。前两项分别对应表1中本方法/VAD的3 s碰撞率及L2误差，属于越小越好的指标；最后的总体约束满足率比例1.000也不能表示0.763相对LLM-ASSIST的0.713。缺少一致的基线和指标方向说明，不能按图注统一解释优势。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P5",
+            "detail": "图2图注称顶行比较两平台1 s、2 s、3 s结果，但原图 UniAD 两面板标题明确为“Collision Rate (3s)”和“L2 Error (3s)”，仅展示3 s。缺少图注所称的 UniAD 1 s、2 s图示，相关数值须以表1为准。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "公式(1)至(5)的提取文本含“¼”“/C138”“/C0”等编码错误。原页可辨认，分别应恢复为等号、转置符号T及减号等；公式(4)的约束项为−λψ_multi(S_t)，并非缺失公式。纠正涉及状态向量和优化目标的准确读取，不补造原文未定义的函数细节。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P7",
+            "detail": "图3图注与实际附图不匹配。实际图题为“Ablation Study and Stability Analysis”，内容为V(x)曲线、收敛步数箱线图及消融柱状图；图注却描述自动驾驶约束交互、编号(1)至(6)机制和S1至Sn状态演化。缺少与实际稳定性图相配的图注，阴影带及箱线图统计含义未获该图注解释。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P7",
+            "detail": "图3左上V(x)曲线与P4报告的稳态值不完全一致：Full曲线接近0.038，但Game-only与Projection-only末端未落在图中标注0.057、0.089的对应水平参考线上，尤其Projection-only仍明显高于0.089。缺少曲线与所报稳态值关系的解释；可观察到Full较低、较平滑，但不能据该图确认全部稳态数值。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "图4图注与原图内容不匹配。原图为道路场景、S1至Sn状态演化、LLM智能体及监测—投影—输出迁移闭环；图注却描述四个智能体的天气、交通、舒适、能耗约束及彩色椭球交集，这些内容实际见本批P9图6。图4缺少与实际图面对应的正确图注，影响模块及图号对应关系，但不妨碍读取图中文字。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "公式(8)后正文将逐token记录的V(x)轨迹指向图6；经核对P9原图，图6实际为多维约束可行域示意，没有V(x)轨迹。该交叉引用不能提供正文所称的稳定性实验图证，不能据图6核实下降趋势。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "图4文字提取出现大段乱码，如“/TOZ 9ZGZK”，原图可读为“Init State”，其余框内文字可识别为状态演化、前瞻路径选择、约束监测及闭环控制说明。公式(7)至(11)中的乱码运算符也已依原页恢复为加号、减号、乘号及不等号；不存在可见公式占位缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P9",
+            "detail": "图5颜色含义不一致：图内图例写“color depth indicating constraint satisfaction degree”，图注却写“color depth indicating confidence levels”。缺少两者是否等同的说明，无法唯一确定节点颜色编码的是约束满足度还是置信度。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P9",
+            "detail": "图6图注声称展示Full、Game-only、Projection-only的V(x)生成步轨迹，实际附图标题为“Multi-dimensional Constraint Feasible Domain Modeling”，展示四类约束及向量场，没有三种消融轨迹或生成步坐标。缺少与实际图面对应的正确图注，不能用此图支持近单调下降或振荡结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "图5、图6内部文本被提取为乱码，原图可清楚读取PATH候选、平均序列评分，以及雾天30 km/h和舒适性加速度小于3 m/s²等说明。公式(12)完整可见，提取中的“/C1”应为μ与Deviation(x)之间的乘号；不应将这些提取乱码判作原文件缺字。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P10",
+            "detail": "预测解码段落以“as in Fig. 6”指引生成协调机制，但本批图6实际为多维约束可行域示意；与该段描述直接对应的前瞻预测解码树位于图5。图号引用不匹配，影响方法图文定位，不代表解码公式缺失。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "公式(13)至(20)的提取含星号、负号、集合符号及根号编码错误。原页可确认(18)指数为−β_iΦ_i(u_i)，分母为Z_i；(20)根号覆盖单智能体三类加权平方项与两两合作偏差平方项的总和。均为提取问题，不是原公式缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "公式(21)至(27)的提取包含“/C1”“/C0”“/C138”等编码错误，原页均可辨认。公式(21)指数为−λ_type,i·d^pred_type,i；公式(26)依次减去η^t_coop,i·e^t_coop,i和IncentiveAdjustment^t_i；公式(27)在社会福利基础上减去个体成本总和、加上联盟收益总和。未见公式占位或缺项，纠正影响惩罚方向及优化目标的准确理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "所给文字提取遗漏原页接受日期下方的“Published online: 08 May 2026”。原图该行清晰，已补充识读为2026年5月8日在线发表；影响文献日期信息完整性，不影响方法或实验结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "Data availability原页将nuScenes dataset与GPT-Driver dataset均链接到https://www.nuscenes.org/，未提供可区分的GPT-Driver数据文件、版本或专用入口。缺少精确数据定位，影响复现实验所需数据的可追溯性；仅据本页不能判定数据实际不可获得。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P13",
+            "detail": "参考文献42的PlanAgent条目在原页仅给出https://doi.org/10.1109/TCDS，缺少完整文章级DOI后缀，也未列卷页或文章号。该条目的精确定位信息不完整，影响基线文献追溯，不直接改变本文实验数值或结论；未访问链接核验。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -610,7 +2242,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《Hyper-RAG: combating LLM hallucinations using hypergraph-driven retrieval-augmented generation》，暂未提供可用摘要，请查看原文。",
+      "summary": "Hyper-RAG研究知识表示能否改善检索增强生成：将实体、成对关系与多实体高阶关系组织为超图，结合向量检索、关联扩展及原始语料辅助回答。[P12–P13] 六种模型和跨领域评估显示性能改善，消融与专家评估进一步支持高阶知识的价值。[P3、P5、P10] 但选择式评估增益不等于事实准确率提升，且原文存在统计表述不一致、跨块抽取困难及图表公式被预处理删除等限制。[P7、P11、P13]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -654,11 +2286,130 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐重点阅读知识抽取、双路检索及专家核验部分，可为多实体故障知识组织提供方法借鉴；但不能直接视为智能运维可靠性已获验证。[P10–P13]",
+      "deep_read": {
+        "problem": "论文关注专业问答中外部知识检索不完整导致的幻觉：传统图仅以成对边表达关系，可能遗漏多个实体共同参与的知识。[P2–P3] 作者希望改善复杂问题所需信息的覆盖，而不只是提高回答的流畅性。解读：其核心问题是知识表示与检索的适配，不是证明模型内部幻觉被彻底消除。",
+        "method": "离线利用LLM从语料块抽取实体、低阶及高阶关系，合并重复描述并建立超图知识库。在线分别提取实体关键词和关系关键词，检索顶点或超边，再扩展关联信息；根据上下文预算排序，并补充对应原始语料。[P12–P13] 公式(1)–(7)描述了这一流程。",
+        "innovation": "主要方法贡献是将超越成对的多实体关系显式纳入RAG知识表示，并通过顶点与超边两类入口组织检索。[P12–P13] Hyper-RAG-Lite仅检索节点，但保留高阶关系构建的知识基础。[P11] 解读：创新集中在外部知识组织及利用方式，不能据此宣称首创超图或提出了新的基础语言模型。",
+        "findings": "表1中完整知识组合得分84.16，高于仅原始语料的78.56和仅高阶关系的81.55。[P5] 九数据集选择式评估相较LightRAG平均提升35.5%，并非准确率直接增加35.5%。[P8] 专家评估另报告正确性提升7.1%、完整性提升17.8%，为回答质量改善提供补充证据。[P9–P10]",
+        "limitations": "作者承认高阶抽取增加建库步骤，跨块关系仍需后处理。[P11] 预处理删除图像与公式，限制信息保留。[P13] 图6的KMR降幅及显著性表述不一致，影响数值解释。[P7] 未记录原文件公式缺项；补充材料未提供，无法核查全部统计协议。[P16]",
+        "connection": "解读：多设备、工况、症状和处置之间的联合关系，可类比超图中的多实体知识，适合探索智能运维问答中的证据检索。[P12–P13] 但论文没有运维故障诊断、结构优化或寿命预测实验；对结构设计与可靠性研究的意义属于方法迁移，而非已有工程有效性证据。",
+        "next_steps": "建议：以运维手册与历史故障记录建立小规模专家标注集，在同一语料、模型和检索预算下比较文本RAG、图RAG与超图RAG。分别测量知识遗漏、错误回答、检索延迟及建库成本；另设置跨文档故障链和公式图表保留实验，检验论文跨块抽取及纯文本预处理限制。[P11、P13–P14]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "Hyper-RAG：利用超图驱动检索增强生成缓解大语言模型幻觉",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41467-026-71411-1.pdf"
+      ],
+      "analyzed_at": "2026-11-15T15:18:59.543673+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P12",
+          "P13"
+        ],
+        "innovation": [
+          "P11",
+          "P12",
+          "P13"
+        ],
+        "findings": [
+          "P5",
+          "P8",
+          "P9",
+          "P10"
+        ],
+        "limitations": [
+          "P7",
+          "P11",
+          "P13",
+          "P16"
+        ],
+        "connection": [
+          "P12",
+          "P13"
+        ],
+        "next_steps": [
+          "P11",
+          "P13",
+          "P14"
+        ]
+      },
+      "analysis_material_version": "ab1d90589070f997e2f4afc78ebd6804cb14ca6fef0f0817b698d96ee01d0390",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "原页明确载有“Published online: 27 April 2026”，文字提取遗漏；作者姓名中的异常空格也可由原页纠正，如Hao Hu、Shiquan Liu、Junchang Li、Yue Gao。不影响摘要中的方法及性能结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "图1(b)中心文字被提取为乱码，原页可辨为“Correlations Among Entities”；纵向标签为“Cardinality”，横向标签为“Correlation Pattern”。图中组合数标注在文字提取中发生错序，并非原文件缺失公式；该图用于说明成对与超越成对关系的基数分布，不是定量实验结果。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "表1文字提取将D、低阶关系、高阶关系三列与勾叉符号连排，容易造成列错配。原页已核清八行组合依次为：全不使用、仅低阶、仅高阶、低阶加高阶、仅D、D加低阶、D加高阶、三者全用；对应Overall依次为73.65、81.08、81.55、83.02、78.56、82.60、83.79、84.16。原表没有缺项，组合消融结论可正常读取。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P12",
+          "detail": "表2提取中的“/C0/C1”为括号编码错误。原页四行可读为response=LLM(P_q(q))、response=LLM(P_q(q,D))、response=LLM(P_q(q,RAG(q,D,V,E_low)))及response=LLM(P_q(q,RAG(q,D,V,E_low,E_high)))。公式本体没有缺项，不影响增强策略的结构比较。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P13",
+          "detail": "公式(1)–(7)中的集合括号、属于符号及分组括号在提取中出现f/g、2和/C26等乱码。原页已核清：(6)为V_rel={ψ_ret(x_i,V)|x_i∈X_ent}、E_more={e|v∈e且v∈V_rel}；(7)为E_rel={ψ_ret(x_i,E)|x_i∈X_cor}、V_more={v|v∈e且e∈E_rel}。两式分别描述顶点到超边、超边到顶点的扩展，原文件没有缺失公式。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "5616ef1f1b8c",
+        "state": "published",
+        "updated_at": "2026-11-15T15:18:59.564167+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 16,
+        "covered": 16,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页明确载有“Published online: 27 April 2026”，文字提取遗漏；作者姓名中的异常空格也可由原页纠正，如Hao Hu、Shiquan Liu、Junchang Li、Yue Gao。不影响摘要中的方法及性能结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "图1(b)中心文字被提取为乱码，原页可辨为“Correlations Among Entities”；纵向标签为“Cardinality”，横向标签为“Correlation Pattern”。图中组合数标注在文字提取中发生错序，并非原文件缺失公式；该图用于说明成对与超越成对关系的基数分布，不是定量实验结果。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "表1文字提取将D、低阶关系、高阶关系三列与勾叉符号连排，容易造成列错配。原页已核清八行组合依次为：全不使用、仅低阶、仅高阶、低阶加高阶、仅D、D加低阶、D加高阶、三者全用；对应Overall依次为73.65、81.08、81.55、83.02、78.56、82.60、83.79、84.16。原表没有缺项，组合消融结论可正常读取。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "表2提取中的“/C0/C1”为括号编码错误。原页四行可读为response=LLM(P_q(q))、response=LLM(P_q(q,D))、response=LLM(P_q(q,RAG(q,D,V,E_low)))及response=LLM(P_q(q,RAG(q,D,V,E_low,E_high)))。公式本体没有缺项，不影响增强策略的结构比较。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "公式(1)–(7)中的集合括号、属于符号及分组括号在提取中出现f/g、2和/C26等乱码。原页已核清：(6)为V_rel={ψ_ret(x_i,V)|x_i∈X_ent}、E_more={e|v∈e且v∈V_rel}；(7)为E_rel={ψ_ret(x_i,E)|x_i∈X_cor}、V_more={v|v∈e且e∈E_rel}。两式分别描述顶点到超边、超边到顶点的扩展，原文件没有缺失公式。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -683,7 +2434,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Abstract Clinical diagnosis in the real world often begins with ambiguous patient complaints that require iterative reasoning and testing. While large language models (LLMs) increasingly assist with specific medical queries, they currently lack the ability to autonomously drive this entire diagnostic workflow, limiting their potential to significantly alleviate physician workload. Here we present DxDirector-7B, an agentic LLM designed to navigate the full diagnostic process through advanced slow thinking capabilities. Unlike existing assistants, our model autonomously determines optimal diagno…",
+      "summary": "论文将医学大模型从回答既定问题的助手，转为从模糊主诉出发、主动规划检查与推理的诊断协调者。DxDirector-7B通过医学预训练、分步指令训练和策略偏好优化，同时追求诊断正确与减少医生介入，并结合文献检索、高危升级和步骤追溯。公开数据集结果显示其准确率与操作请求效率具有优势，但真实病例主要在代理复现场景中评估。解读：值得借鉴的是成本约束下的序贯决策方法，而非将代理判定的替代比例理解为临床替代证明。[P4][P8][P18—P20]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -728,11 +2479,309 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议作为人机协同决策与低成本检查规划的方法型论文重点阅读，优先研究步骤级偏好优化及风险升级；不宜作为已验证临床替代能力的证据。",
+      "deep_read": {
+        "problem": "真实诊断从模糊主诉开始，需要不断选择检查、补充信息并修正判断，而完整病例输入的问答评测省略了这一过程。作者研究模型能否主动驱动诊断，只在必要操作时请求医生帮助，并保留医生最终决定权。解读：核心问题是信息不完备下的序贯决策，而非单次疾病分类。[P1—P3]",
+        "method": "模型先进行医学继续预训练，再利用10,178条合成指令数据学习分步诊断。训练以损失掩码交替监督思考问题与知识回答；随后每步采样三个候选，按最终正确性和医生请求次数赋奖，用DPO优化思考偏好。系统另接段落检索与高危监督代理，支持证据引用和人工接管。[P17—P20]",
+        "innovation": "解读：主要方法贡献是把每步待解决的问题定义为策略，将诊断结果与人工介入成本共同用于偏好排序，而非仅训练最终答案。推理和知识调用的分离监督、步骤编号及责任来源标记共同形成可审计流程；不能据此声称DPO、检索或慢思考本身是本文首创。[P18—P19]",
+        "findings": "图3报告模型在RareArena、NEJM和ClinicalBench的准确率分别为36.23%、38.40%、63.46%；图4对应操作请求数为2.72、3.15、2.68。USMLE总体准确率为50.88%。作者据此认为小模型可兼顾准确性与介入效率；这些操作次数并非直接测得的医生工时。[P6—P7][P14]",
+        "limitations": "单院代理评估限制泛化。[P5]缺准确率、[P18]式(4)缺零请求规则，影响完整性及奖励边界；[P17—P18]索引有误。[P5][P21]基线名、[P6—P9]样本量、[P8]增幅、[P12]评分轴、样本数及参数比例、[P21]统计口径不一，影响比较复现；均未补造。\n原文核对：[P5] NEJM分析第(3)点原页写作“DxDirector-7B achieves accuracy—a 5.9% absolute improvement”，accuracy之后缺少具体准确率数值。该数值在同页前文及P6图3b另有明确报告38.4%，但不能据此补写该处原文。缺项影响该句完整性，不影响其他现有结果的识读。；[P5] Baselines段原页列出“Meditron-176B”，但同页结果段及P6图3均标作“MedFound-176B”。原文模型名称不一致，影响176B基线身份的明确对应；不能当作文字提取错误直接统一名称。；[P6] 图3a图例原页明确标注“Centre: mean accuracy (n=50,000)”，而P4及P5称RareArena实际评估采用22,901例。原文件存在样本量口径不一致，未说明50,000是否另有所指；影响图3a准确率与置信区间对应样本规模的解释，不能自行改为22,901。；[P7] 图4a原页图例标注“n=50,000”，但本批P8明确RareArena分析基于22,901例，前批数据集说明也为22,901例。原文未解释口径差异，影响RareArena操作次数及置信区间对应样本规模的判断；不自行更改图例。；[P8] ClinicalBench科室分析原页报告肿瘤科提升“Δ = 30.93%”；但P10图6肿瘤科DxDirector为69.78%，最高所示基线为39.43%，两者相差30.35个百分点。正文与图中数值不一致，影响该科室优势幅度；无法据本批判定哪一处应修订。；[P9] 图5a原页图例标注“n=50,000”，与P8所述RareArena的22,901例不一致，未说明是否采用不同样本范围。影响有效操作比例及其置信区间的样本口径解释，不影响现有柱值识读。；[P12] 图8图注明确评分范围为0—10，但原页多个子图纵轴扩展至17.5或20，皮肤科子图则采用不同范围。属于原图评分范围与坐标展示不统一，并非提取错误；不能据轴上限理解为实际评分超过10，跨科室箱体高度也不宜直接比较。；[P12] 图8c内分泌科横轴原页标注GPT-4o、o3-mini、DxDirector各n=15，而Deepseek-V3、Deepseek-R1、o1-preview各n=12。图注称n为独立临床病例数，但本批未交代不同模型缺少3例的原因及处理方式，影响同病例比较和显著性结果的解释；不能自行补齐样本。；[P12] USMLE正文称参数规模“approximately one-tenth”，同时列出7B对70B及176B。7/70为10%，7/176约为3.98%，不能将对MedFound-176B的比例也统一表述为约十分之一。影响参数效率表述，不影响图10a的准确率数值。；[P17] 式(1)原页在对t=1至n求和时，概率目标写作c_i，条件前缀却为c_1,…,c_{t−1}；与前页定义的预测目标c_t不一致。影响逐词元损失的严格索引解释，不能未经说明将原式c_i直接改为c_t。；[P18] 数据构建段首次列举步骤1至t−1的历史时，原页写作(d₁,q₁,a₁)、(d₁,q₂,a₂)、…、(d_t,q_{t−1},a_{t−1})，思考项下标与步骤不一致；同页后文X_t则使用(d₂,q₂,a₂)及(d_{t−1},q_{t−1},a_{t−1})。影响历史输入的严格记号解释，不影响其逐步采样流程的识读。；[P18] 式(4)正确答案奖励为10/γ，正文仅定义γ为请求医生协助次数，本页未规定γ=0时的奖励或保证γ≥1。若允许零次请求，将出现除零未定义；影响该边界情况下奖励与偏好对的构建，不能自行添加平滑项或默认次数。；[P21] 基线第4项原页写“Meditron-176B”，而前批结果图及正文使用“MedFound-176B”。该命名不一致在原页确实存在，影响176B基线身份对应；不应作为提取错误直接统一名称。；[P21] Statistical information统一写bootstrap为1000次、准确率比较top-3基线，但前批图3—5图注明确NEJM使用200次重采样，图10图注则比较top-4基线。原文方法总述未注明这些例外，影响统计流程的复现口径；不能自行统一为同一设置。",
+        "connection": "解读：与智能运维的联系是从异常描述出发，主动选择日志查询、检测或专家升级，并用结果正确性与人工成本共同评价策略；与可靠性研究的联系是风险门控和审计链。论文没有结构设计实验，也未验证设备故障诊断迁移，不能将医学指标直接当作工程收益。[P18][P20]",
+        "next_steps": "建议先复现偏好数据构建，明确零请求、同奖励和错误答案的处理，再检验合成思考是否泄露未来信息。迁移运维时，应分别测量故障定位准确率、实际工时、漏升级率与恢复代价，并加入独立专家盲评及跨场景测试；这些均为研究建议，不是作者已完成的实验。[P17—P21]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "DxDirector：驱动全流程临床诊断的智能体大语言模型",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41467-026-71928-5.pdf"
+      ],
+      "analyzed_at": "2026-11-15T15:33:35.231230+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P17",
+          "P18",
+          "P19",
+          "P20"
+        ],
+        "innovation": [
+          "P18",
+          "P19"
+        ],
+        "findings": [
+          "P6",
+          "P7",
+          "P14"
+        ],
+        "limitations": [
+          "P5",
+          "P6",
+          "P7",
+          "P8",
+          "P9",
+          "P12",
+          "P16",
+          "P17",
+          "P18",
+          "P21"
+        ],
+        "connection": [
+          "P18",
+          "P20"
+        ],
+        "next_steps": [
+          "P17",
+          "P18",
+          "P19",
+          "P20",
+          "P21"
+        ]
+      },
+      "analysis_material_version": "fa4630a47ee88e452cf0a5a13abdc72bc8a83d4d1938930bf77ea93489a4c410",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "原页日期栏清楚列出“Published online: 23 April 2026”，提供的文字提取遗漏该行，现据原页补正。此项影响出版元数据完整性，不影响摘要及诊断流程结论；不是原文件缺项。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P5",
+          "detail": "NEJM分析第(3)点原页写作“DxDirector-7B achieves accuracy—a 5.9% absolute improvement”，accuracy之后缺少具体准确率数值。该数值在同页前文及P6图3b另有明确报告38.4%，但不能据此补写该处原文。缺项影响该句完整性，不影响其他现有结果的识读。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P5",
+          "detail": "Baselines段原页列出“Meditron-176B”，但同页结果段及P6图3均标作“MedFound-176B”。原文模型名称不一致，影响176B基线身份的明确对应；不能当作文字提取错误直接统一名称。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P6",
+          "detail": "图3a图例原页明确标注“Centre: mean accuracy (n=50,000)”，而P4及P5称RareArena实际评估采用22,901例。原文件存在样本量口径不一致，未说明50,000是否另有所指；影响图3a准确率与置信区间对应样本规模的解释，不能自行改为22,901。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P7",
+          "detail": "图4a原页图例标注“n=50,000”，但本批P8明确RareArena分析基于22,901例，前批数据集说明也为22,901例。原文未解释口径差异，影响RareArena操作次数及置信区间对应样本规模的判断；不自行更改图例。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P8",
+          "detail": "ClinicalBench科室分析原页报告肿瘤科提升“Δ = 30.93%”；但P10图6肿瘤科DxDirector为69.78%，最高所示基线为39.43%，两者相差30.35个百分点。正文与图中数值不一致，影响该科室优势幅度；无法据本批判定哪一处应修订。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P9",
+          "detail": "图5a原页图例标注“n=50,000”，与P8所述RareArena的22,901例不一致，未说明是否采用不同样本范围。影响有效操作比例及其置信区间的样本口径解释，不影响现有柱值识读。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P12",
+          "detail": "图8图注明确评分范围为0—10，但原页多个子图纵轴扩展至17.5或20，皮肤科子图则采用不同范围。属于原图评分范围与坐标展示不统一，并非提取错误；不能据轴上限理解为实际评分超过10，跨科室箱体高度也不宜直接比较。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P12",
+          "detail": "图8c内分泌科横轴原页标注GPT-4o、o3-mini、DxDirector各n=15，而Deepseek-V3、Deepseek-R1、o1-preview各n=12。图注称n为独立临床病例数，但本批未交代不同模型缺少3例的原因及处理方式，影响同病例比较和显著性结果的解释；不能自行补齐样本。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P12",
+          "detail": "USMLE正文称参数规模“approximately one-tenth”，同时列出7B对70B及176B。7/70为10%，7/176约为3.98%，不能将对MedFound-176B的比例也统一表述为约十分之一。影响参数效率表述，不影响图10a的准确率数值。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P16",
+          "detail": "页末概率记号的文字提取将集合隶属符号∈误作“2”，并将条件概率前缀中的下标t−1提取为“t/C0 1”。原页可读为C_i∈C及M(c_t|c_1,c_2,…,c_{t−1};θ)。已按原页纠正，涉及下一词元预测的条件定义；完整损失目标尚在后续页，不能补造。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P17",
+          "detail": "式(1)文字提取中的“/C0”、集合关系“2”等为提取乱码；原页可识别负号、∈及前缀下标t−1。已按原页识读负对数似然结构，但保留原式自身的目标词元下标问题，不将其擅改。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P17",
+          "detail": "式(1)原页在对t=1至n求和时，概率目标写作c_i，条件前缀却为c_1,…,c_{t−1}；与前页定义的预测目标c_t不一致。影响逐词元损失的严格索引解释，不能未经说明将原式c_i直接改为c_t。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P18",
+          "detail": "式(2)—(3)原页分别明确使用R_i∈Q及R_i∉Q，文本提取误为“2Q”“=2Q”，并损坏负号及前缀下标；式(5)的集合括号和有序配对结构也被乱码替代。现据原页纠正：两项损失监督互补词元集合，偏好对满足r_t^m>r_t^n。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P18",
+          "detail": "数据构建段首次列举步骤1至t−1的历史时，原页写作(d₁,q₁,a₁)、(d₁,q₂,a₂)、…、(d_t,q_{t−1},a_{t−1})，思考项下标与步骤不一致；同页后文X_t则使用(d₂,q₂,a₂)及(d_{t−1},q_{t−1},a_{t−1})。影响历史输入的严格记号解释，不影响其逐步采样流程的识读。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P18",
+          "detail": "式(4)正确答案奖励为10/γ，正文仅定义γ为请求医生协助次数，本页未规定γ=0时的奖励或保证γ≥1。若允许零次请求，将出现除零未定义；影响该边界情况下奖励与偏好对的构建，不能自行添加平滑项或默认次数。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P19",
+          "detail": "式(6)提取文本含“/C0”“/C24”等乱码，原页可读为负期望、每个偏好集合的1/|P_t|平均，以及log σ作用于两个β加权对数概率比之差。已核对高奖励d_t^m与低奖励d_t^n的顺序；乱码不是原文公式缺失。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P19",
+          "detail": "式(7)提取中的“/C1382”应按原页识读为右方括号后接∈，即h_text=H^L[T,:]∈ℝ^d；式(8)中的“q>”实际为向量转置q_i^⊤，分母包含正样本指数项及j≠i的负样本指数项。已纠正表示维度及对比损失结构的提取错误。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P20",
+          "detail": "风险判断记号在文字提取中写为“SafetyScoret 2f Green, Redg”，原页明确为SafetyScore_t∈{Green,Red}。已恢复下标、集合隶属符号和花括号；不涉及规则缺项或风险结果数值变更。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P21",
+          "detail": "页末文字提取将“0.9945¹⁰”连排为“0.994510”；原页10为上标，表示十次乘方，原文近似结果为94.63%。已纠正，影响多轮信息提取准确率估算的理解，不是原文件缺项。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P21",
+          "detail": "基线第4项原页写“Meditron-176B”，而前批结果图及正文使用“MedFound-176B”。该命名不一致在原页确实存在，影响176B基线身份对应；不应作为提取错误直接统一名称。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P21",
+          "detail": "Statistical information统一写bootstrap为1000次、准确率比较top-3基线，但前批图3—5图注明确NEJM使用200次重采样，图10图注则比较top-4基线。原文方法总述未注明这些例外，影响统计流程的复现口径；不能自行统一为同一设置。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "023030a1438c",
+        "state": "published",
+        "updated_at": "2026-11-15T15:33:35.281895+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 24,
+        "covered": 24,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页日期栏清楚列出“Published online: 23 April 2026”，提供的文字提取遗漏该行，现据原页补正。此项影响出版元数据完整性，不影响摘要及诊断流程结论；不是原文件缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P5",
+            "detail": "NEJM分析第(3)点原页写作“DxDirector-7B achieves accuracy—a 5.9% absolute improvement”，accuracy之后缺少具体准确率数值。该数值在同页前文及P6图3b另有明确报告38.4%，但不能据此补写该处原文。缺项影响该句完整性，不影响其他现有结果的识读。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P5",
+            "detail": "Baselines段原页列出“Meditron-176B”，但同页结果段及P6图3均标作“MedFound-176B”。原文模型名称不一致，影响176B基线身份的明确对应；不能当作文字提取错误直接统一名称。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P6",
+            "detail": "图3a图例原页明确标注“Centre: mean accuracy (n=50,000)”，而P4及P5称RareArena实际评估采用22,901例。原文件存在样本量口径不一致，未说明50,000是否另有所指；影响图3a准确率与置信区间对应样本规模的解释，不能自行改为22,901。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P7",
+            "detail": "图4a原页图例标注“n=50,000”，但本批P8明确RareArena分析基于22,901例，前批数据集说明也为22,901例。原文未解释口径差异，影响RareArena操作次数及置信区间对应样本规模的判断；不自行更改图例。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "ClinicalBench科室分析原页报告肿瘤科提升“Δ = 30.93%”；但P10图6肿瘤科DxDirector为69.78%，最高所示基线为39.43%，两者相差30.35个百分点。正文与图中数值不一致，影响该科室优势幅度；无法据本批判定哪一处应修订。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P9",
+            "detail": "图5a原页图例标注“n=50,000”，与P8所述RareArena的22,901例不一致，未说明是否采用不同样本范围。影响有效操作比例及其置信区间的样本口径解释，不影响现有柱值识读。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "图8图注明确评分范围为0—10，但原页多个子图纵轴扩展至17.5或20，皮肤科子图则采用不同范围。属于原图评分范围与坐标展示不统一，并非提取错误；不能据轴上限理解为实际评分超过10，跨科室箱体高度也不宜直接比较。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "图8c内分泌科横轴原页标注GPT-4o、o3-mini、DxDirector各n=15，而Deepseek-V3、Deepseek-R1、o1-preview各n=12。图注称n为独立临床病例数，但本批未交代不同模型缺少3例的原因及处理方式，影响同病例比较和显著性结果的解释；不能自行补齐样本。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "USMLE正文称参数规模“approximately one-tenth”，同时列出7B对70B及176B。7/70为10%，7/176约为3.98%，不能将对MedFound-176B的比例也统一表述为约十分之一。影响参数效率表述，不影响图10a的准确率数值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P16",
+            "detail": "页末概率记号的文字提取将集合隶属符号∈误作“2”，并将条件概率前缀中的下标t−1提取为“t/C0 1”。原页可读为C_i∈C及M(c_t|c_1,c_2,…,c_{t−1};θ)。已按原页纠正，涉及下一词元预测的条件定义；完整损失目标尚在后续页，不能补造。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P17",
+            "detail": "式(1)文字提取中的“/C0”、集合关系“2”等为提取乱码；原页可识别负号、∈及前缀下标t−1。已按原页识读负对数似然结构，但保留原式自身的目标词元下标问题，不将其擅改。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P17",
+            "detail": "式(1)原页在对t=1至n求和时，概率目标写作c_i，条件前缀却为c_1,…,c_{t−1}；与前页定义的预测目标c_t不一致。影响逐词元损失的严格索引解释，不能未经说明将原式c_i直接改为c_t。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P18",
+            "detail": "式(2)—(3)原页分别明确使用R_i∈Q及R_i∉Q，文本提取误为“2Q”“=2Q”，并损坏负号及前缀下标；式(5)的集合括号和有序配对结构也被乱码替代。现据原页纠正：两项损失监督互补词元集合，偏好对满足r_t^m>r_t^n。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P18",
+            "detail": "数据构建段首次列举步骤1至t−1的历史时，原页写作(d₁,q₁,a₁)、(d₁,q₂,a₂)、…、(d_t,q_{t−1},a_{t−1})，思考项下标与步骤不一致；同页后文X_t则使用(d₂,q₂,a₂)及(d_{t−1},q_{t−1},a_{t−1})。影响历史输入的严格记号解释，不影响其逐步采样流程的识读。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P18",
+            "detail": "式(4)正确答案奖励为10/γ，正文仅定义γ为请求医生协助次数，本页未规定γ=0时的奖励或保证γ≥1。若允许零次请求，将出现除零未定义；影响该边界情况下奖励与偏好对的构建，不能自行添加平滑项或默认次数。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P19",
+            "detail": "式(6)提取文本含“/C0”“/C24”等乱码，原页可读为负期望、每个偏好集合的1/|P_t|平均，以及log σ作用于两个β加权对数概率比之差。已核对高奖励d_t^m与低奖励d_t^n的顺序；乱码不是原文公式缺失。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P19",
+            "detail": "式(7)提取中的“/C1382”应按原页识读为右方括号后接∈，即h_text=H^L[T,:]∈ℝ^d；式(8)中的“q>”实际为向量转置q_i^⊤，分母包含正样本指数项及j≠i的负样本指数项。已纠正表示维度及对比损失结构的提取错误。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P20",
+            "detail": "风险判断记号在文字提取中写为“SafetyScoret 2f Green, Redg”，原页明确为SafetyScore_t∈{Green,Red}。已恢复下标、集合隶属符号和花括号；不涉及规则缺项或风险结果数值变更。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P21",
+            "detail": "页末文字提取将“0.9945¹⁰”连排为“0.994510”；原页10为上标，表示十次乘方，原文近似结果为94.63%。已纠正，影响多轮信息提取准确率估算的理解，不是原文件缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P21",
+            "detail": "基线第4项原页写“Meditron-176B”，而前批结果图及正文使用“MedFound-176B”。该命名不一致在原页确实存在，影响176B基线身份对应；不应作为提取错误直接统一名称。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P21",
+            "detail": "Statistical information统一写bootstrap为1000次、准确率比较top-3基线，但前批图3—5图注明确NEJM使用200次重采样，图10图注则比较top-4基线。原文方法总述未注明这些例外，影响统计流程的复现口径；不能自行统一为同一设置。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -762,7 +2811,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《Competing Biases underlie Overconfidence and Underconfidence in LLMs》，暂未提供可用摘要，请查看原文。",
+      "summary": "本文研究大语言模型为何既坚持初始答案，又容易被反对建议动摇。作者通过两阶段实验操纵答案可见性、建议方向和准确率，并以校准置信度及贝叶斯理想观察者分析更新行为。结果支持选择支持偏差与反对信息过度加权两种机制，且在多模型、多任务中出现。[P2–P8] 阅读时须注意不足自信针对初始选项，P12公式还存在影响复现的原文问题。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -806,11 +2855,205 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议重点阅读其隐藏答案对照、建议权重分析及贝叶斯比较方法；适合作为可靠决策评估的方法参考，但不能直接作为智能运维或结构设计的应用证据。",
+      "deep_read": {
+        "problem": "研究问题不是模型能否给出置信度，而是置信度能否支持合理改答：为何模型一方面坚持先前选择，另一方面又对反对建议异常敏感？作者区分答案自身的强化作用与外部证据的更新作用，避免将两种现象笼统归为迎合或确认偏差。[P1、P9]",
+        "method": "两阶段任务交叉操纵初始答案显示或隐藏、相同或相反或中性建议及建议准确率。建议模型实际不存在，内容由条件设定。作者用温度缩放后的选项概率追踪初始所选答案，再通过两阶段回归与贝叶斯理想观察者比较信心更新。[P2、P10–P12]",
+        "innovation": "解读：方法亮点是利用无记忆查询构建隐藏初始答案的对照，使答案可见性的作用与再次提示的影响可以区分。作者还结合他者归属、全上下文信息及多轮实验检验替代解释，把行为改答和置信度变化纳入同一分析框架，而非只报告最终准确率。[P7–P10]",
+        "findings": "Gemma 3 12B在答案显示和隐藏条件下平均改答率为13.1%与34.0%。作者报告反对建议的实际更新与贝叶斯更新比值为2.17，相同建议为1.29，多模型呈相近定性模式。这里的信心下降针对初始所选选项，不能直接解释为最终答案不足自信。[P2、P5–P6]",
+        "limitations": "原文缺项：P12校正比值公式重复Shown均值，缺少正文对应的Hidden项；OUCS公式缺少与正文相反符号约定的转换说明，影响比值复现与正负解释，不能声称已验证相关实现。完整实验代码未公开，补充材料未提供，自由回答场景仍待检验。[P9、P12–P13]\n原文核对：[P12] 未编号Corrected Ratio公式的两个均值项在原页均写为“Nothing Shown Update”，相减将抵消；而紧邻正文要求用Shown–Neutral均值减Hidden–Neutral均值。公式缺少与正文对应的Hidden条件项，影响选择支持偏差校正及校正后过度加权比值的复现。原式清晰可读，不能自行替换为推定正确公式，也不能据此判断实际代码采用了哪种实现。；[P12] OUCS段的未编号公式原页写为MCS=Σ_m(|B_m|/N)(conf_m−obs_m)，并定义conf_m为理想观察者置信度、obs_m为实际置信度。因此实际高于理想值时公式为负，与此前图2及正文将过度自信记为正的约定相反；原页缺少两种符号约定之间的转换说明。影响OUCS正负号解释及复现，不影响页面识读，不自行交换相减顺序。",
+        "connection": "解读：对智能运维与可靠性研究，本文提示应分别评估历史诊断可见性导致的坚持，以及反对证据导致的过度更新，而不只检查一次作答的校准度。其与结构设计的联系仅是决策评估方法可借鉴，资料没有工程故障、结构优化或服役可靠性验证。[P9–P12]",
+        "next_steps": "建议：在故障诊断任务中设置历史结论显示或隐藏、证据支持或反对及来源可靠度条件，同时记录改答、校准与正确性。先核对P12公式和公开实现，再预注册指标及零更新分母处理规则；最后测试真实多轮、自由回答是否保留同类偏差，不预设迁移成立。[P9–P13]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "大语言模型过度自信与不足自信背后的竞争性偏差",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s42256-026-01217-9.pdf"
+      ],
+      "analyzed_at": "2026-11-15T15:47:12.880509+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P9"
+        ],
+        "method": [
+          "P2",
+          "P10",
+          "P11",
+          "P12"
+        ],
+        "innovation": [
+          "P7",
+          "P8",
+          "P9",
+          "P10"
+        ],
+        "findings": [
+          "P2",
+          "P5",
+          "P6"
+        ],
+        "limitations": [
+          "P9",
+          "P12",
+          "P13"
+        ],
+        "connection": [
+          "P9",
+          "P10",
+          "P11",
+          "P12"
+        ],
+        "next_steps": [
+          "P9",
+          "P10",
+          "P11",
+          "P12",
+          "P13"
+        ]
+      },
+      "analysis_material_version": "1e82134fff0ee4a8c2400e504ad967b48af0cc00bdddeaf6629d4c33bc5171b5",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "文字提取的双栏顺序错置：Results段落被提前，导致“demonstrating sensitivity to advice”后错误接入左栏开头“(Fig. 1; Methods)”。已据原页恢复：左栏承接P1介绍两阶段范式，右栏为Results；右栏末句应接P4开头“quality despite the choice-supportive bias”。图1及图注可读，无公式缺项；该错误影响正文逻辑衔接，不改变已报告数值。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "图5 SimpleQA右侧面板纵轴被文字提取为“Confidence map”；原页可清楚核实为“Confidence gap”，已纠正。无缺项。该轴按图注表示对初始所选选项的最终置信度减初始置信度；误读会影响指标含义，但不改变图中柱形及作者关于相反建议过度加权的结论。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P12",
+          "detail": "未编号Corrected Ratio公式的两个均值项在原页均写为“Nothing Shown Update”，相减将抵消；而紧邻正文要求用Shown–Neutral均值减Hidden–Neutral均值。公式缺少与正文对应的Hidden条件项，影响选择支持偏差校正及校正后过度加权比值的复现。原式清晰可读，不能自行替换为推定正确公式，也不能据此判断实际代码采用了哪种实现。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P12",
+          "detail": "OUCS段的未编号公式原页写为MCS=Σ_m(|B_m|/N)(conf_m−obs_m)，并定义conf_m为理想观察者置信度、obs_m为实际置信度。因此实际高于理想值时公式为负，与此前图2及正文将过度自信记为正的约定相反；原页缺少两种符号约定之间的转换说明。影响OUCS正负号解释及复现，不影响页面识读，不自行交换相减顺序。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "提供的[P15]文字为空，但原页Reporting Summary内容完整可读，已据截图补读统计勾选表、Software and code及Data栏目。缺失属于文字提取遗漏，不是原文件缺项；主要影响统计报告与代码、数据可复现性信息的获取，无新增实验公式或结果图。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P16",
+          "detail": "提供的文字提取为空，原页报告表清晰可读，已从截图识读人类参与者、研究领域选择及研究设计栏目。遗漏的是模板文字与未勾选状态，无公式或图号；不影响论文偏差结论，但不能将空白栏目解释为作者已报告的研究方法。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P17",
+          "detail": "提供的文字提取为空，已从原页识读行为与社会科学、生态环境及野外工作表格。无公式或图号；提取遗漏会掩盖栏目仅含模板提示、野外工作Yes/No均未勾选的状态，不构成原文件缺项的证据。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P18",
+          "detail": "提供的文字提取为空，已核对原页材料、系统和方法清单及各模板栏目。无公式或图号；清单选框均未勾选，不能把提取缺失误解为相关实验已开展或已明确标为不适用。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P19",
+          "detail": "提供的文字提取为空，已据原页补读动物、临床及双重用途栏目。无公式或图号；尤其确认Hazards五项均勾选No，而Experiments of concern各项均未勾选。遗漏影响风险声明的准确识别，不影响页面可读性。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P20",
+          "detail": "提供的文字提取为空，原页表格及模板文字可读，已据截图补读Plants、ChIP-seq和Flow Cytometry栏目及未勾选状态。无公式或图号；遗漏影响报告表状态识别，不影响论文实验结论，不能认定原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P21",
+          "detail": "提供的文字提取为空，已从原页识读门控策略及MRI设计、采集、预处理、统计建模栏目。无公式或实验图号；相关确认框和分析类型选框均未勾选，提取遗漏不能被解释为作者明确采用或排除了这些方法。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P22",
+          "detail": "提供的文字提取为空，已从原页补读Models & analysis清单、未勾选状态及三个模板说明栏。无公式或图号；遗漏的是报告模板内容，而非实际模型结果，未发现需要补造的参数或结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "7b7a15d4684b",
+        "state": "published",
+        "updated_at": "2026-11-15T15:47:12.895176+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 22,
+        "covered": 22,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "文字提取的双栏顺序错置：Results段落被提前，导致“demonstrating sensitivity to advice”后错误接入左栏开头“(Fig. 1; Methods)”。已据原页恢复：左栏承接P1介绍两阶段范式，右栏为Results；右栏末句应接P4开头“quality despite the choice-supportive bias”。图1及图注可读，无公式缺项；该错误影响正文逻辑衔接，不改变已报告数值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "图5 SimpleQA右侧面板纵轴被文字提取为“Confidence map”；原页可清楚核实为“Confidence gap”，已纠正。无缺项。该轴按图注表示对初始所选选项的最终置信度减初始置信度；误读会影响指标含义，但不改变图中柱形及作者关于相反建议过度加权的结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "未编号Corrected Ratio公式的两个均值项在原页均写为“Nothing Shown Update”，相减将抵消；而紧邻正文要求用Shown–Neutral均值减Hidden–Neutral均值。公式缺少与正文对应的Hidden条件项，影响选择支持偏差校正及校正后过度加权比值的复现。原式清晰可读，不能自行替换为推定正确公式，也不能据此判断实际代码采用了哪种实现。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "OUCS段的未编号公式原页写为MCS=Σ_m(|B_m|/N)(conf_m−obs_m)，并定义conf_m为理想观察者置信度、obs_m为实际置信度。因此实际高于理想值时公式为负，与此前图2及正文将过度自信记为正的约定相反；原页缺少两种符号约定之间的转换说明。影响OUCS正负号解释及复现，不影响页面识读，不自行交换相减顺序。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "提供的[P15]文字为空，但原页Reporting Summary内容完整可读，已据截图补读统计勾选表、Software and code及Data栏目。缺失属于文字提取遗漏，不是原文件缺项；主要影响统计报告与代码、数据可复现性信息的获取，无新增实验公式或结果图。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P16",
+            "detail": "提供的文字提取为空，原页报告表清晰可读，已从截图识读人类参与者、研究领域选择及研究设计栏目。遗漏的是模板文字与未勾选状态，无公式或图号；不影响论文偏差结论，但不能将空白栏目解释为作者已报告的研究方法。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P17",
+            "detail": "提供的文字提取为空，已从原页识读行为与社会科学、生态环境及野外工作表格。无公式或图号；提取遗漏会掩盖栏目仅含模板提示、野外工作Yes/No均未勾选的状态，不构成原文件缺项的证据。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P18",
+            "detail": "提供的文字提取为空，已核对原页材料、系统和方法清单及各模板栏目。无公式或图号；清单选框均未勾选，不能把提取缺失误解为相关实验已开展或已明确标为不适用。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P19",
+            "detail": "提供的文字提取为空，已据原页补读动物、临床及双重用途栏目。无公式或图号；尤其确认Hazards五项均勾选No，而Experiments of concern各项均未勾选。遗漏影响风险声明的准确识别，不影响页面可读性。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P20",
+            "detail": "提供的文字提取为空，原页表格及模板文字可读，已据截图补读Plants、ChIP-seq和Flow Cytometry栏目及未勾选状态。无公式或图号；遗漏影响报告表状态识别，不影响论文实验结论，不能认定原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P21",
+            "detail": "提供的文字提取为空，已从原页识读门控策略及MRI设计、采集、预处理、统计建模栏目。无公式或实验图号；相关确认框和分析类型选框均未勾选，提取遗漏不能被解释为作者明确采用或排除了这些方法。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P22",
+            "detail": "提供的文字提取为空，已从原页补读Models & analysis清单、未勾选状态及三个模板说明栏。无公式或图号；遗漏的是报告模板内容，而非实际模型结果，未发现需要补造的参数或结论。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -839,7 +3082,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《LaMGen: LLM-based 3D molecular generation for multi-target drug design》，暂未提供可用摘要，请查看原文。",
+      "summary": "LaMGen研究如何仅凭多个蛋白序列生成兼顾结合需求与构象合理性的分子。框架利用GEOM预训练、MTD2025微调，将蛋白嵌入与离散扭转角表示结合。[P4]作者报告生成速度为0.44秒/分子，快于DualDiff，并通过构象比较和回顾性案例展示骨架重现及类似物探索能力。[P5–P12]解读：其价值主要在条件生成与计算筛选方法，不应将对接优势视为实验药效；原文统计口径和流程衔接仍有疑点。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -883,11 +3126,220 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议作为多条件生成与物理合理性评价的方法参考重点阅读，尤其关注构象表示、迁移评价和多目标筛选；并非智能运维或工程结构可靠性的直接应用论文。",
+      "deep_read": {
+        "problem": "多靶点设计要求同一分子兼容多个结合位点，同时满足药物性质要求，数据稀缺与组合复杂性使单靶点生成方法难以直接迁移。[P1–P2]作者关注低序列相似度靶点组合及缺乏蛋白结构时的生成能力，核心问题不是单项评分最优，而是多种约束能否协调满足。",
+        "method": "模型先学习SMILES与扭转构象映射，再以MTD2025进行多靶点适配。[P4]ESM-C编码蛋白序列，12层解码器自回归生成分子；随机因果掩码改变预测起点，两条蛋白—配体注意力分支以权重融合。[P14–P15]低能构象提供结构先验，但并非真实结合姿态。",
+        "innovation": "作者的特色是把序列条件、旋转感知构象token与多靶点生成统一，并构建含双、三靶点关联的MTD2025。[P3–P4]解读：贡献更应理解为表示、数据和生成流程的整合；公式仅显式给出两分支加权，直接跨蛋白交互及输出对齐方式仍需进一步澄清。[P15]",
+        "findings": "图2报告LaMGen与DualDiff生成耗时为0.44与12.30秒/分子，QED为0.557与0.505。[P5]表1显示微调后总体成功率由4.84%升至8.46%，高于AIxFuse的5.40%。[P10]作者还展示已知骨架重现，但这些计算结果不能直接证明候选药效。",
+        "limitations": "原文缺项及冲突包括：P6的TPSA单位缺平方、图2C比例口径矛盾；P9图4符号和图型说明不符；P12图6样本数200/500冲突，LSD1基准−9/−11冲突；P14两套构象流程衔接缺失。分别影响量纲、统计解释、增益判断与复现，不能擅补；计算评价亦不能替代药效实验。\n原文核对：[P6] 正文承接TPSA讨论时，原页将面积范围写为“60–140 Å”，未显示平方上标；这是原页单位标示缺项，而非文字提取漏字。影响TPSA范围的量纲表达，不影响页面其余内容识读；不据此改写作者数值。；[P6] 图2C图注与正文及P5图形存在统计口径冲突：图注把中、右图定义为一个靶点低于阈值、另一个高于阈值的互斥类别；但在−9阈值，双靶点、中图、右图分别为12.29%、52.93%、40.71%，合计超过100%。正文则将后两者描述为各单靶点低于阈值的比例。原页可清楚核实该冲突，影响单靶点选择性及双靶点比例的解释，不能擅自确定哪一处应改。；[P9] 图4图注与原图表达不完全一致：A图注称左半圆显示平均Vina分数“absolute value”，但扇形标注保留负号；B图注称“box plots”并定义箱体及须线，实际绘制为小提琴形分布并叠加内部标记，未清楚展示所述标准箱须结构。影响分数符号及分布摘要标记的解释，不影响已显示数值的识读。；[P12] 图6样本数量存在原文内部冲突：本页正文及P10筛选说明写前500个生成分子，本页图6图注却写“top 200 model-generated molecules”。原页两处均可读清，无法确定实际绘图数量；影响三靶点分布的样本范围解释，不应擅自统一。；[P12] Gen.4929的LSD1比较基准不一致：本页正文写亲和力从−9.0改善到−11.1，但P11图5C明确标注参考36的D(LSD1)=−11.0，Gen.4929为−11.1。影响改善幅度的结论；按图为0.1而非正文所述2.1，资料不足以判定哪项原始数值正确。；[P14] 数据构象流程的衔接说明不足：P13至P14页首称CREST搜索、每分子保留5个构象后用LiTEN-FF优化；P14数据预处理却称RDKit生成100个构象、优化后取单个最低能构象。原页均可读，但未说明两者分别适用于哪个阶段或如何衔接，影响构象训练样本与扭转角提取流程的复现，不能擅自合并。",
+        "connection": "解读：与智能运维、结构设计和可靠性研究的联系属于方法迁移，而非直接成果。[P4、P15]多蛋白条件可类比多工况约束，构象先验可类比物理可行域，生成后多指标检查可启发设计筛选；但论文没有故障预测、工程载荷或失效概率证据，不能据此宣称工程有效。",
+        "next_steps": "建议先澄清构象数据流程、注意力分支对齐及统计口径，再独立评价全部生成样本，避免仅看筛选后的优胜者。[P10、P14–P15]进一步以独立能量计算和实验测定检验构象与活性；若迁移到工程设计，应新增多工况可行率及不确定性评价，而不是照搬对接指标。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "LaMGen：基于大语言模型的多靶点药物三维分子生成",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41467-026-71737-w.pdf"
+      ],
+      "analyzed_at": "2026-11-15T15:58:51.713981+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P4",
+          "P14",
+          "P15"
+        ],
+        "innovation": [
+          "P3",
+          "P4",
+          "P15"
+        ],
+        "findings": [
+          "P5",
+          "P10",
+          "P11"
+        ],
+        "limitations": [
+          "P6",
+          "P9",
+          "P12",
+          "P14"
+        ],
+        "connection": [
+          "P4",
+          "P15"
+        ],
+        "next_steps": [
+          "P10",
+          "P14",
+          "P15"
+        ]
+      },
+      "analysis_material_version": "0f5c122cee019cf5a2f51a2ff10c8c927c9dc0017232716e6b5ce2eb661a10a8",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "对照原页可补正文字提取遗漏：日期栏另有“Published online: 11 April 2026”。这是书目信息遗漏，不影响模型、数据或性能结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "文字提取将页底正文排在图1之前，并打散图内标签。原页顺序为图1A–D、图注、接续P2的正文；已按原页核对。图1A以440,000+、280,000+概括关联数量，正文给出约446,000、283,000，二者不构成缺项或矛盾。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "图2A–C的大部分图中文字和数值未被文字提取保留，且提取顺序将页底正文置于图前。已核对原页：图2A含双靶点Vina径向柱图及模型性质表，图2B含性质与对接分数箱线图，图2C含阈值比例柱图；相关主要数值已在笔记补录，不属于原文件缺项。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P6",
+          "detail": "正文承接TPSA讨论时，原页将面积范围写为“60–140 Å”，未显示平方上标；这是原页单位标示缺项，而非文字提取漏字。影响TPSA范围的量纲表达，不影响页面其余内容识读；不据此改写作者数值。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P6",
+          "detail": "图2C图注与正文及P5图形存在统计口径冲突：图注把中、右图定义为一个靶点低于阈值、另一个高于阈值的互斥类别；但在−9阈值，双靶点、中图、右图分别为12.29%、52.93%、40.71%，合计超过100%。正文则将后两者描述为各单靶点低于阈值的比例。原页可清楚核实该冲突，影响单靶点选择性及双靶点比例的解释，不能擅自确定哪一处应改。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "图3的图形、图例及部分统计标注未被文字提取完整保留，且正文与图的版面顺序被打散。已对照原页识读A–D：C为三种优化参照下的RMSD分布，D包含两靶点对接RMSD及原子数分布，不应把提取出的坐标文字当作连续正文。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "图4A提取数值与模型标签错位、粘连，图4B主要数值缺失。按原页纠正：JNK3中LaMGen/LaMGen-FT为−10.39/−10.62，GSK3β中为−10.82/−11.04；图4B的主要性质标值已在笔记补录。影响模型比较，非原文件缺项。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P9",
+          "detail": "图4图注与原图表达不完全一致：A图注称左半圆显示平均Vina分数“absolute value”，但扇形标注保留负号；B图注称“box plots”并定义箱体及须线，实际绘制为小提琴形分布并叠加内部标记，未清楚展示所述标准箱须结构。影响分数符号及分布摘要标记的解释，不影响已显示数值的识读。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P11",
+          "detail": "图5C文字提取打散了分子、相似度及对接标签的对应关系。按原页纠正：Gen.2635对参考35的相似度为0.44，LSD1/HDAC6分数为−11.7/−8.4；Gen.4929对参考36的相似度为0.46，分数为−11.1/−8.5。影响类似物与参考分子的比较，原图内容完整。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P12",
+          "detail": "图6样本数量存在原文内部冲突：本页正文及P10筛选说明写前500个生成分子，本页图6图注却写“top 200 model-generated molecules”。原页两处均可读清，无法确定实际绘图数量；影响三靶点分布的样本范围解释，不应擅自统一。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P12",
+          "detail": "Gen.4929的LSD1比较基准不一致：本页正文写亲和力从−9.0改善到−11.1，但P11图5C明确标注参考36的D(LSD1)=−11.0，Gen.4929为−11.1。影响改善幅度的结论；按图为0.1而非正文所述2.1，资料不足以判定哪项原始数值正确。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P14",
+          "detail": "公式(1)的负号及求和符号在文字提取中损坏为“/C0 Xn”等字符；原页清楚显示L = −Σ(i=1至n) log p(x_i | x_<i)。公式(2)的分式和根号也被打散，原页为softmax(QK^T/√d_k)V。已据原图纠正，原文件公式完整，不影响负对数似然目标及缩放点积注意力的解释。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P14",
+          "detail": "数据构象流程的衔接说明不足：P13至P14页首称CREST搜索、每分子保留5个构象后用LiTEN-FF优化；P14数据预处理却称RDKit生成100个构象、优化后取单个最低能构象。原页均可读，但未说明两者分别适用于哪个阶段或如何衔接，影响构象训练样本与扭转角提取流程的复现，不能擅自合并。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "TriCoupleAttention的拼接符号、转置、根号及权重范围在文字提取中被损坏为“/C2/C3”“/C0/C1”等。已按原页核实：X₁=[P₁;L]、X₂=[P₂;L]；公式(3)、(4)为各分支缩放点积注意力，公式(5)为A=αA₁+(1−α)A₂，α∈[0,1]。原页公式完整，无缺失项；纠正后可明确分支计算和融合规则。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "dd90730f3a36",
+        "state": "published",
+        "updated_at": "2026-11-15T15:58:51.743275+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 17,
+        "covered": 17,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "对照原页可补正文字提取遗漏：日期栏另有“Published online: 11 April 2026”。这是书目信息遗漏，不影响模型、数据或性能结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "文字提取将页底正文排在图1之前，并打散图内标签。原页顺序为图1A–D、图注、接续P2的正文；已按原页核对。图1A以440,000+、280,000+概括关联数量，正文给出约446,000、283,000，二者不构成缺项或矛盾。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "图2A–C的大部分图中文字和数值未被文字提取保留，且提取顺序将页底正文置于图前。已核对原页：图2A含双靶点Vina径向柱图及模型性质表，图2B含性质与对接分数箱线图，图2C含阈值比例柱图；相关主要数值已在笔记补录，不属于原文件缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P6",
+            "detail": "正文承接TPSA讨论时，原页将面积范围写为“60–140 Å”，未显示平方上标；这是原页单位标示缺项，而非文字提取漏字。影响TPSA范围的量纲表达，不影响页面其余内容识读；不据此改写作者数值。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P6",
+            "detail": "图2C图注与正文及P5图形存在统计口径冲突：图注把中、右图定义为一个靶点低于阈值、另一个高于阈值的互斥类别；但在−9阈值，双靶点、中图、右图分别为12.29%、52.93%、40.71%，合计超过100%。正文则将后两者描述为各单靶点低于阈值的比例。原页可清楚核实该冲突，影响单靶点选择性及双靶点比例的解释，不能擅自确定哪一处应改。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "图3的图形、图例及部分统计标注未被文字提取完整保留，且正文与图的版面顺序被打散。已对照原页识读A–D：C为三种优化参照下的RMSD分布，D包含两靶点对接RMSD及原子数分布，不应把提取出的坐标文字当作连续正文。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "图4A提取数值与模型标签错位、粘连，图4B主要数值缺失。按原页纠正：JNK3中LaMGen/LaMGen-FT为−10.39/−10.62，GSK3β中为−10.82/−11.04；图4B的主要性质标值已在笔记补录。影响模型比较，非原文件缺项。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P9",
+            "detail": "图4图注与原图表达不完全一致：A图注称左半圆显示平均Vina分数“absolute value”，但扇形标注保留负号；B图注称“box plots”并定义箱体及须线，实际绘制为小提琴形分布并叠加内部标记，未清楚展示所述标准箱须结构。影响分数符号及分布摘要标记的解释，不影响已显示数值的识读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "图5C文字提取打散了分子、相似度及对接标签的对应关系。按原页纠正：Gen.2635对参考35的相似度为0.44，LSD1/HDAC6分数为−11.7/−8.4；Gen.4929对参考36的相似度为0.46，分数为−11.1/−8.5。影响类似物与参考分子的比较，原图内容完整。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "图6样本数量存在原文内部冲突：本页正文及P10筛选说明写前500个生成分子，本页图6图注却写“top 200 model-generated molecules”。原页两处均可读清，无法确定实际绘图数量；影响三靶点分布的样本范围解释，不应擅自统一。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P12",
+            "detail": "Gen.4929的LSD1比较基准不一致：本页正文写亲和力从−9.0改善到−11.1，但P11图5C明确标注参考36的D(LSD1)=−11.0，Gen.4929为−11.1。影响改善幅度的结论；按图为0.1而非正文所述2.1，资料不足以判定哪项原始数值正确。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "公式(1)的负号及求和符号在文字提取中损坏为“/C0 Xn”等字符；原页清楚显示L = −Σ(i=1至n) log p(x_i | x_<i)。公式(2)的分式和根号也被打散，原页为softmax(QK^T/√d_k)V。已据原图纠正，原文件公式完整，不影响负对数似然目标及缩放点积注意力的解释。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P14",
+            "detail": "数据构象流程的衔接说明不足：P13至P14页首称CREST搜索、每分子保留5个构象后用LiTEN-FF优化；P14数据预处理却称RDKit生成100个构象、优化后取单个最低能构象。原页均可读，但未说明两者分别适用于哪个阶段或如何衔接，影响构象训练样本与扭转角提取流程的复现，不能擅自合并。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "TriCoupleAttention的拼接符号、转置、根号及权重范围在文字提取中被损坏为“/C2/C3”“/C0/C1”等。已按原页核实：X₁=[P₁;L]、X₂=[P₂;L]；公式(3)、(4)为各分支缩放点积注意力，公式(5)为A=αA₁+(1−α)A₂，α∈[0,1]。原页公式完整，无缺失项；纠正后可明确分支计算和融合规则。"
+          }
+        ]
+      }
     }
   ],
   "source_status": {
@@ -1849,13 +4301,13 @@
     "unavailable": 45
   },
   "analysis_status": {
-    "ready_core": 0,
+    "ready_core": 6,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 6
+    "pending": 0
   },
   "edition": {
     "id": "43103070006",

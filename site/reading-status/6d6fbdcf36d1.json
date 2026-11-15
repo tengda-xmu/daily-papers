@@ -1,0 +1,44 @@
+{
+  "paper_id": "6d6fbdcf36d1",
+  "state": "failed",
+  "updated_at": "2026-11-15T18:29:01.808240+00:00",
+  "basis": "full_text",
+  "article_state": "pending",
+  "article_stage": "",
+  "reason": "",
+  "total": 13,
+  "covered": 12,
+  "pdf_available": true,
+  "issues": [
+    {
+      "kind": "extraction_error",
+      "page": "P1",
+      "detail": "原页作者名清楚显示为Qi Yang，文字提取中的“Q iY a n g”是字符间距错误；原页另列Published online: 02 March 2026，所附提取文本遗漏此出版信息。不影响摘要中的性能结论。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P4",
+      "detail": "图3的坐标轴、图例和任务标签在文字提取中顺序混乱。原页可核实图3b依次为Starting material、Reaction product、Reagent catalyst、Solvent、Temperature、Time、Yield percent、Yield other；图3d另含Total。应按原图对应数值，不能按提取文本的排列配对。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P4",
+      "detail": "图3a图注原文列出“TP, TN, FP, FN”，但原图堆叠类别及共享图例仅标示TP、FN、FP，没有单列TN。此为原页图注与图示的不一致；无法据此恢复或推定TN数值，不影响已显示比例和图3d所标F1值的识读。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P7",
+      "detail": "表1的FN、FP行在提取文本中发生数字粘连或错位。按Reactants、Reactant amount、Products、Product amount、Solvents、Temperature、Time、Yield、Total列序，原页FN为2、2、0、2、0、2、1、3、12；FP为1、3、0、0、0、1、1、0、6。原页无此缺项；纠正后总体Precision=0.9918、Recall=0.9838、F1=0.9878与计数一致，避免错误解读各任务漏报及误报。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P8",
+      "detail": "图6右上LLM Text Mining表的Product amounts行，volume102article24_1_1列存在原图文字截断：可见内容从“g (13.0 mmol), 325 mg (1.67…”开始，首项g前的质量数值未显示，末项括号内单位及结尾也未完整显示。放大图可确认这是表格中现有文字的裁切，不是本次识别模糊。不能恢复缺失质量或补全末项，影响该示例产物用量的完整核验，不妨碍其余页面内容识读。"
+    },
+    {
+      "kind": "unreadable",
+      "page": "P10",
+      "detail": "图8左侧Output框中的示例回答在本次放大图中仍模糊，无法可靠识别完整步骤、用量及条件，所附文字提取亦未恢复该内容。受影响的是示例回答与检索资料的一致性核验；其余图示、图注和正文已读清。无法确认原文件缺项，因此不标为source_defect，不补写模糊文字。"
+    }
+  ]
+}

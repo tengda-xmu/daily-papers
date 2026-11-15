@@ -26,7 +26,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "本文聚焦《AI-guided human-in-the-loop inverse design of high performance engineering structures》，暂未提供可用摘要，请查看原文。",
+      "summary": "论文提出HiTopAI，以AI推荐局部修改区域，缓解人在环拓扑优化反复试选的瓶颈。模型用合成偏好训练U-Net，识别最长构件或最复杂节点，再由设计者确认区域、调整最小特征尺寸并重新优化。L形支架示例报告屈曲载荷提高约39%，但伴随柔顺度增加。研究展示了几何偏好推荐的可行性，尚未证实真实用户效率优势，且筛选计数、早停集合及性能数值存在口径矛盾。[P3—P9、P15]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -68,11 +68,147 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议重点阅读其分割推荐与人工决策的接口设计、合成标签构建及性能权衡，而非将其视为已验证的自主可靠性优化工具。[P8—P15]",
+      "deep_read": {
+        "problem": "经典拓扑优化将用户置于设置问题和事后评价的位置，难以纳入未显式建模的制造要求或设计偏好。HiTop虽允许局部修改，仍依赖人工反复寻找干预区域。本文聚焦减少区域试选，而非用学习模型替代有限元求解或完整优化问题。[P2—P3]",
+        "method": "HiTopAI先运行50次最小柔顺度优化，再用U-Net分割候选区域。标签来自骨架图中的最长边或最高连接度节点，取选择区域内实体像素。预测经第90百分位阈值、最大连通簇和包围椭圆处理，用户调整局部尺寸后重新优化。[P11、P13—P15]",
+        "innovation": "解读：贡献主要在交互流程整合，而非提出新的U-Net或力学目标。系统将偏好区域预测接入HiTop，同时保留用户拒绝和修改建议的权力。单构件标注训练后出现双候选分割值得关注，但尚不能据此认定模型理解了工程力学。[P7—P8、P10]",
+        "findings": "表1报告HiTopAI耗时6分钟，基线5分钟，屈曲载荷提高39.39%、柔顺度增加3.92%；正文则报告柔顺度增加10%，口径未统一。最长构件及复杂节点平均IOU为0.58、0.45；节点示例连接数由6减至5，最小夹角增大。[P5—P6]",
+        "limitations": "原文缺项为一致说明缺失：P11筛选不等号与文字相反，P13两阶段剩余计数不衔接，影响数据复现；P15早停使用测试集或验证集的说法矛盾，影响独立性判断。未见缺失公式。合成标签有噪声，真实用户效率优势仍待验证。[P8—P9]\n原文核对：[P11] Skeletonization段末原页确实写有“2≤ distinct features”，但同段此前明确剔除“fewer than three segments”，并以2个区域和5个区域作对照。两处筛选条件方向不一致，原文缺少一致的条件说明，影响对约6000个样本剔除规则的复现；不能把该不等号当作提取错误静默改正。；[P13] 图9相关筛选正文计数缺少一致交代：此前P11第一阶段已由30,000个剔除约6000个、剩约24,000个；本页第二阶段又称剔除约6000个后剩24,000个。原页文字确实如此，无法据此确定两阶段实际保留数及其与109,722对增强样本的关系，不补造中间样本量。；[P15] 训练段先明确早停基于“test loss”，随后称验证集用于早停且测试集全程不参与训练调参，原页缺少对这一矛盾的澄清。受影响的是测试独立性和评估流程的可复现判断；不能擅自认定前一句只是笔误或认定实际使用了测试集。",
+        "connection": "解读：该工作与结构设计直接相关，为难以完整表达的工程判断提供交互入口。对可靠性研究，可借鉴候选区域推荐与独立物理校核分工，但屈曲载荷提升不是失效概率降低。智能运维关联仅属潜在迁移，论文未验证监测、诊断或维修决策。[P5、P8—P10]",
+        "next_steps": "建议先核清筛选数量、早停集合及柔顺度差异，并按原始拓扑分组划分增强数据，避免同源变体干扰评估。随后开展真实设计者对照试验，分别记录试选次数、总耗时和力学结果；再评估偏好微调与三维扩展，不将作者展望当作已有成果。[P9—P10、P15]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "人工智能引导的人在环高性能工程结构逆向设计",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s44172-026-00818-x_reference.pdf"
+      ],
+      "analyzed_at": "2026-11-15T14:20:38.384958+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P11",
+          "P13",
+          "P14",
+          "P15"
+        ],
+        "innovation": [
+          "P7",
+          "P8",
+          "P10"
+        ],
+        "findings": [
+          "P5",
+          "P6"
+        ],
+        "limitations": [
+          "P8",
+          "P9",
+          "P11",
+          "P13",
+          "P15"
+        ],
+        "connection": [
+          "P5",
+          "P8",
+          "P9",
+          "P10"
+        ],
+        "next_steps": [
+          "P4",
+          "P6",
+          "P9",
+          "P10",
+          "P11",
+          "P13",
+          "P15"
+        ]
+      },
+      "analysis_material_version": "3f48f791d068e61a94c0fe650367355ad3b4794ed9a286511a3f3bc70cea3796",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P10",
+          "detail": "公式(1)的文本提取将转置及数学字符扁平化为“UT KU”“cðxÞ”等；原页已核实目标为c(x)=UᵀKU，静力平衡为KU=F，设计变量界限为0≤x≤1。公式完整可读，并非原文件缺项；应按转置二次型理解柔顺度，不能把UT当作独立变量。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P11",
+          "detail": "公式(2)—(6)的提取出现“/C22x”“/C0”和求和下标“12Ne”等乱码。原页可辨：物理密度为x̄，滤波变量为x̃；公式(3)、权重及公式(6)中的相应运算为减号；公式(5)两处求和均遍历i∈Nₑ。已按原页区分变量及运算，原文件公式并未缺失。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P11",
+          "detail": "Skeletonization段末原页确实写有“2≤ distinct features”，但同段此前明确剔除“fewer than three segments”，并以2个区域和5个区域作对照。两处筛选条件方向不一致，原文缺少一致的条件说明，影响对约6000个样本剔除规则的复现；不能把该不等号当作提取错误静默改正。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P13",
+          "detail": "图9相关筛选正文计数缺少一致交代：此前P11第一阶段已由30,000个剔除约6000个、剩约24,000个；本页第二阶段又称剔除约6000个后剩24,000个。原页文字确实如此，无法据此确定两阶段实际保留数及其与109,722对增强样本的关系，不补造中间样本量。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P15",
+          "detail": "训练段先明确早停基于“test loss”，随后称验证集用于早停且测试集全程不参与训练调参，原页缺少对这一矛盾的澄清。受影响的是测试独立性和评估流程的可复现判断；不能擅自认定前一句只是笔误或认定实际使用了测试集。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "出版信息的文字提取遗漏原页清晰可见的“Published online: 10 November 2026”。已补充识读；该遗漏影响出版日期记录，不影响方法、图表或实验结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "569c7744a249",
+        "state": "published",
+        "updated_at": "2026-11-15T14:20:38.394402+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 17,
+        "covered": 17,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "公式(1)的文本提取将转置及数学字符扁平化为“UT KU”“cðxÞ”等；原页已核实目标为c(x)=UᵀKU，静力平衡为KU=F，设计变量界限为0≤x≤1。公式完整可读，并非原文件缺项；应按转置二次型理解柔顺度，不能把UT当作独立变量。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "公式(2)—(6)的提取出现“/C22x”“/C0”和求和下标“12Ne”等乱码。原页可辨：物理密度为x̄，滤波变量为x̃；公式(3)、权重及公式(6)中的相应运算为减号；公式(5)两处求和均遍历i∈Nₑ。已按原页区分变量及运算，原文件公式并未缺失。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P11",
+            "detail": "Skeletonization段末原页确实写有“2≤ distinct features”，但同段此前明确剔除“fewer than three segments”，并以2个区域和5个区域作对照。两处筛选条件方向不一致，原文缺少一致的条件说明，影响对约6000个样本剔除规则的复现；不能把该不等号当作提取错误静默改正。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P13",
+            "detail": "图9相关筛选正文计数缺少一致交代：此前P11第一阶段已由30,000个剔除约6000个、剩约24,000个；本页第二阶段又称剔除约6000个后剩24,000个。原页文字确实如此，无法据此确定两阶段实际保留数及其与109,722对增强样本的关系，不补造中间样本量。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P15",
+            "detail": "训练段先明确早停基于“test loss”，随后称验证集用于早停且测试集全程不参与训练调参，原页缺少对这一矛盾的澄清。受影响的是测试独立性和评估流程的可复现判断；不能擅自认定前一句只是笔误或认定实际使用了测试集。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "出版信息的文字提取遗漏原页清晰可见的“Published online: 10 November 2026”。已补充识读；该遗漏影响出版日期记录，不影响方法、图表或实验结论。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -144,7 +280,20 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "c4ffd2752128",
+        "state": "failed",
+        "updated_at": "2026-11-15T18:23:51.333611+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 165,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -168,7 +317,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《Recognising and mitigating LLM Pollution in online behavioural research》，暂未提供可用摘要，请查看原文。",
+      "summary": "在线行为实验通常将回答视为人类认知与行为的证据，但参与者使用大语言模型可能动摇这一前提。本文是一篇评论文章，区分部分模型中介、完全模型委托及模型溢出，并讨论三者如何影响样本真实性与研究效度。[P1—P3] 作者整理研究者、平台和共同体层面的预防与事后检测措施，同时强调绕过风险、隐私成本及检测诱发的行为反应。[P4—P6] 其价值在于概念梳理和研究设计警示，而非提供已获系统验证的检测算法。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -212,11 +361,140 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐作为人机混合数据质量与实验效度的方法论参考，重点阅读图1、表1及讨论；不宜将其作为工程检测算法或干预效果的实证依据。[P2、P5—P6]",
+      "deep_read": {
+        "problem": "论文追问：当在线实验回答受到模型辅助或代理接管时，研究还能否有效测量人类行为？污染不一定来自恶意作弊，翻译、润色和节省精力也可能改变测量对象。作者强调，这既是来源识别问题，也是研究结论究竟描述谁的认识论问题。[P1、P4]",
+        "method": "作者以评论文章形式，综合实验室观察、既有研究和概念区分构建分析框架，而非报告完整的对照实验。图1组织污染类型与相互作用，表1按实施方式、责任主体、目的、适用变体和风险整理措施，使概念分析连接到具体研究设计。[P1—P5]",
+        "innovation": "本文的概念贡献是把直接使用模型与间接行为变化纳入同一框架：部分中介和完全委托形成自动化连续谱，溢出则包含预期、残留与规范变化。解读：其特色不是新增检测器，而是说明没有直接调用模型的参与者也可能受污染环境影响。[P2—P3]",
+        "findings": "作者试点观察到45%的参与者发生复制或粘贴，但这只是潜在模型参与的线索，不能当作确证使用率。作者综合论证模型参与可能压低回答差异、改变处理效应，且限制委托的措施可能强化溢出；这些论点不等同于本文完成了统一因果验证。[P1—P3]",
+        "limitations": "本文属于概念性评论，表1未提供措施间的定量效果比较，不能据此确定最优方案。补充材料未提供，技术测试细节仍缺少可核对依据；代理绕过与模型更新也限制防护的持续性。逐页记录未发现已确认的原文件缺项，提取错误不属原文缺陷。[P4—P7]",
+        "connection": "解读：对智能运维与可靠性研究，本文可启发审查专家判断、人工标注及反馈数据是否混入模型辅助，并关注筛查对真实人员行为的影响。但论文没有研究设备退化、故障诊断或结构设计，不能把概念迁移视为这些领域已获得验证的方法成果。[P4—P6]",
+        "next_steps": "建议：在依赖人工判断的研究中，预先界定允许的模型辅助范围，并比较不同来源数据的分布与结论稳健性；对检测措施同时记录误排、参与体验和行为反馈。这是可迁移的研究设想；作者直接提出的后续任务则包括污染追踪、措施评估及溢出测量。[P6]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "识别与缓解在线行为研究中的大语言模型污染",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41467-026-74621-9.pdf"
+      ],
+      "analyzed_at": "2026-11-15T14:33:28.746657+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P4"
+        ],
+        "method": [
+          "P1",
+          "P2",
+          "P3",
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P3"
+        ],
+        "findings": [
+          "P1",
+          "P2",
+          "P3"
+        ],
+        "limitations": [
+          "P4",
+          "P5",
+          "P6",
+          "P7"
+        ],
+        "connection": [
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "next_steps": [
+          "P6"
+        ]
+      },
+      "analysis_material_version": "0495dd7b5b208e8a30186f615629a960508e7c5d96c658d22c68def386cb8e06",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "原页已核清：提取文字中的“Dele-gation,a n dLLM Spillover”应按排版还原为“Delegation, and LLM Spillover”；章节标题中的异常逐字空格亦为提取错误。不涉及公式或图号，不改变三类污染的定义及结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "图1图注已与原页核对：提供的文字提取末尾附有“Illustration by H. Jahani.”，但上传原页图注以“their threat to research validity and inference.”结束，未见该署名。该附加文字不作为本批原页证据，不影响图1的分类及相互强化结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "正文文字提取中的“N os i n g l e”已据原页还原为“No single”，“participant’sb r o w s e ri s”还原为“participant’s browser is”。不涉及公式或图表缺项，不影响对措施权衡及蜜罐检测机制的理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "表1表头提取为“Responsib ility”，原页为“Responsibility”；表格横置但各单元格均可识读，已按行列核对责任主体、预防或事后检测目的、适用污染变体及风险，未发现缺项，不影响表1结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "讨论正文提取中的“s a f e g u a r d s .E v e nw h e ni n t e n t i o n sa r eb e n i g n”已据原页还原为“safeguards. Even when intentions are benign”。无公式或图表缺项，不影响作者关于善意使用仍可能造成系统性扭曲的论点。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "参考文献18中提取的“model ’si nfluence”和“Preprint athttps”已据原页分别核清为“model’s influence”和“Preprint at https”；附加信息中的“Supplementary informationThe”等亦为标题与正文粘连。无公式、图表或实质内容缺项，不影响作者贡献、利益冲突及补充材料说明的理解。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "fc33aa3f6354",
+        "state": "published",
+        "updated_at": "2026-11-15T14:33:28.770299+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 7,
+        "covered": 7,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页已核清：提取文字中的“Dele-gation,a n dLLM Spillover”应按排版还原为“Delegation, and LLM Spillover”；章节标题中的异常逐字空格亦为提取错误。不涉及公式或图号，不改变三类污染的定义及结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "图1图注已与原页核对：提供的文字提取末尾附有“Illustration by H. Jahani.”，但上传原页图注以“their threat to research validity and inference.”结束，未见该署名。该附加文字不作为本批原页证据，不影响图1的分类及相互强化结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "正文文字提取中的“N os i n g l e”已据原页还原为“No single”，“participant’sb r o w s e ri s”还原为“participant’s browser is”。不涉及公式或图表缺项，不影响对措施权衡及蜜罐检测机制的理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "表1表头提取为“Responsib ility”，原页为“Responsibility”；表格横置但各单元格均可识读，已按行列核对责任主体、预防或事后检测目的、适用污染变体及风险，未发现缺项，不影响表1结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "讨论正文提取中的“s a f e g u a r d s .E v e nw h e ni n t e n t i o n sa r eb e n i g n”已据原页还原为“safeguards. Even when intentions are benign”。无公式或图表缺项，不影响作者关于善意使用仍可能造成系统性扭曲的论点。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "参考文献18中提取的“model ’si nfluence”和“Preprint athttps”已据原页分别核清为“model’s influence”和“Preprint at https”；附加信息中的“Supplementary informationThe”等亦为标题与正文粘连。无公式、图表或实质内容缺项，不影响作者贡献、利益冲突及补充材料说明的理解。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -288,7 +566,36 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "f90e4fccac53",
+        "state": "failed",
+        "updated_at": "2026-11-15T18:25:34.245428+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 14,
+        "covered": 13,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "unreadable",
+            "page": "P2",
+            "detail": "图1放大后，中央策略说明、主体界面、完整图注与正文均可读，但商品卡片中的部分规格、价格附注、评分数字及包装细字仍模糊，无法逐项可靠核对。影响商品级信息的完整识读，不影响理解正文概念及图1作为购物示例的用途；无法据此确认具体商品属性、价格或预算合规。没有依据认定原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "未编号BHS公式及logistic函数的减号被提取为“/C0”等乱码。原页已读清并纠正为BHS = 1 − σ(0.002α + 0.1β + 0.08ϵ + 0.9ξ + 0.05ν − 0.1γ − 0.02(δ − β))，σ(x)=1/(1+e^(−x))。原文件公式完整；该纠正关系到营养成分惩罚方向及BHS的计算，不能将乱码视为原文缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "日期区域的文字提取遗漏“Published online: 23 June 2026”；原页清晰可见，已补核为2026年6月23日在线发表。不影响行为效应、BHS公式或统计结论，仅影响出版信息完整性。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -363,7 +670,51 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "d249b03373e4",
+        "state": "failed",
+        "updated_at": "2026-11-15T18:26:24.481575+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 9,
+        "covered": 7,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "图1原页可清楚识读，提取文本中的“Unve/g425ed”“Run/g415me”“Conﬁden/g415ality”等为字形提取错误，分别应为“Unvetted”“Runtime”“Confidentiality”。已按原图核对七项挑战及问题、后果，不影响分类结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P2",
+            "detail": "图1原图 C7 右栏写“Hao et al. [67]”，同页图注却写“Hao et al. 72”。已核实原页存在引用编号不一致；影响 C7 既有研究覆盖的文献定位，不影响图中将其标为部分覆盖的陈述。本批没有参考文献表，无法判断哪个编号正确。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "C3 正文提取为“Unforutnately”，原页实际为“Unfortunately”，已纠正；不影响关于缺乏共同身份认证与信任管理权威的论述。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P4",
+            "detail": "本页阅读结果未通过校验，待补读。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P5",
+            "detail": "本页阅读结果未通过校验，待补读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "出版信息提取漏掉原页清楚显示的“Published online: 13 June 2026”，已补识为在线发表日期2026年6月13日。此处不涉及公式或图表，不影响安全对策与结论，但影响论文出版信息的完整记录。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -388,7 +739,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Abstract Recent progress in large language models (LLMs) has leveraged their in-context learning (ICL) abilities to enable quick adaptation to unseen biomedical NLP tasks. By incorporating only a few input-output examples into prompts, LLMs can rapidly perform these new tasks. While the impact of these demonstrations on LLM performance has been extensively studied, most existing approaches prioritize representativeness over diversity when selecting examples from large corpora. To address this gap, we propose Dual-Div , a diversity-enhanced data-efficient framework for demonstration selection i…",
+      "summary": "Dual-Div研究如何在有限标注与提示预算下选择有效的生物医学示例，以两阶段检索和排序兼顾语义覆盖与多样性。[P2][P7]作者在实体识别、关系抽取和文本分类上比较两种大模型与三种检索器，发现早期候选多样性尤其重要，示例数量通常以3—5个较优。[P3][P5]解读：该工作适合借鉴案例选择方法，但理论保证及复现仍需审慎核查，原文存在统计报告和公式缺项。[P3][P7][P8]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -432,11 +783,157 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议作为预算约束示例检索的方法参考重点阅读，尤其关注两阶段消融与少数类评价；不宜直接作为智能运维或可靠性应用已经有效的证据。[P3][P7]",
+      "deep_read": {
+        "problem": "生物医学文本标注昂贵且类别不均衡，仅按语义相似度选示例容易重复覆盖常见模式。作者关注有限预算下如何同时保留代表性与内部差异，并避免总体准确率掩盖少数类表现；DDI仅979/5,761条测试查询含目标关系，体现了评价难点。[P1][P2]",
+        "method": "方法先用检索器生成向量，以设施选址函数衡量覆盖、以归一化相似度矩阵的对数行列式衡量多样性，再通过加权目标和lazy greedy选候选。第二阶段依据查询的条件增益进行模块化排序；必要时只标注候选，LLM仅负责最终推理。[P6][P7][P8]",
+        "innovation": "作者将多样性显式纳入检索与条件排序两个阶段，并通过阶段消融区分作用来源。解读：贡献重点是示例选择流程及目标组合，而非提出新的DPP或次模理论；去除向量范数影响的设计还尝试减轻词频对选择的干扰，其效果不能外推为消除全部语义偏差。[P2][P7]",
+        "findings": "BGE-Large下，Dual-Div在两种LLM、三项任务上的macro-F1均为表内最高，但准确率并非全面领先。作者报告18项macro-F1比较全部优于Div-S3，其中11项显著；通常3—5个示例较优，但DDI排列稳定性存在例外，不能概括为所有配置均更鲁棒。[P3][P5]",
+        "limitations": "原文缺项：[P3]表1缺均值差、精确p值，且一项区间与星号冲突，限制统计复核；[P7]式(5)及式(7)后文字缺det，影响概率与多样性表达；[P8]式(12)缺求和范围界定，影响复现。解读：λ存在性论证仍需核查，相关理论保证未获独立验证，补充算法亦未提供。\n原文核对：[P3] 表1图像确认：标题称Diff行报告“mean difference with 95% CI and paired t-test p-value”，但实际仅列置信区间和部分显著性星号，没有单独列出均值差及精确p值。不能由此补写缺失统计量；影响对提升幅度和统计显著性的完整复核，不影响读取已有性能数值。；[P3] 表1中Llama 3.1的DDI准确率差异区间为[−0.0019, 0.0208]，原页同时标有*，表注定义为p<0.05。该95%置信区间包含0，与同一双侧配对t检验下的显著性标记存在不一致；本批无法确定区间或星号何者有误，影响该项显著性判断。；[P7] 式(5)原页实际显示P(S)=(L_S)/(L+I)，分子、分母均缺少det或其他行列式记号；紧接正文却用Σ_{S⊆V}det(L_S)=det(L+I)解释归一化。缺项影响DPP概率公式的直接使用；不补写原式，页面其余内容可读。；[P7] 式(7)之后的解释文字将多样性因子写成log(W_S)，缺少det，与式(7)、式(8)清楚显示的log det(W_S)不一致。影响该处文字表达的数学含义，不能将矩阵对数与对数行列式混同；完整定义以原页式(8)为依据。；[P8] 式(12)原页第二行写作Σ_{x_i∈T}f({x_i}∪Q)−f(Q)，未用括号将−f(Q)纳入每个求和项，也未写出相应的|T|因子。按当前排版，其与第一行Σ_{x_i∈T}f({x_i}|Q)及式(11)并不一般等价。缺少求和范围界定影响排序目标的准确复现，尤其原约束为|T|≤k；不替作者补写公式。",
+        "connection": "解读：其覆盖与非冗余联合选择思路，可对应智能运维中有限预算的故障案例检索，macro-F1也提示关注稀有故障。结构设计与可靠性研究可借鉴预算建模，但论文没有工程系统实验，也未验证故障风险、失效概率或设计安全性，关联属于方法迁移而非直接成果。[P2][P7]",
+        "next_steps": "建议先核实原文公式与统计冲突，并取得补充算法，再复现两阶段消融。面向运维迁移时，应比较仅相似度、仅覆盖及联合目标，在同等标注与提示预算下评价少数故障召回、macro-F1和检索成本；同时检验λ、示例顺序及候选规模的影响，避免直接照搬经验预算。[P3][P5][P8]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "数据高效的生物医学上下文学习：多样性增强的次模优化视角",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s44387-026-00123-0.pdf"
+      ],
+      "analyzed_at": "2026-11-15T14:56:26.516450+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P6",
+          "P7",
+          "P8"
+        ],
+        "innovation": [
+          "P2",
+          "P7"
+        ],
+        "findings": [
+          "P3",
+          "P5"
+        ],
+        "limitations": [
+          "P3",
+          "P7",
+          "P8"
+        ],
+        "connection": [
+          "P2",
+          "P7"
+        ],
+        "next_steps": [
+          "P3",
+          "P5",
+          "P8"
+        ]
+      },
+      "analysis_material_version": "fcac15ca503a31378399d23fb063e7da75e9236662cc42d3c8b9986306b5ce1e",
+      "analysis_issues": [
+        {
+          "kind": "source_defect",
+          "page": "P3",
+          "detail": "表1图像确认：标题称Diff行报告“mean difference with 95% CI and paired t-test p-value”，但实际仅列置信区间和部分显著性星号，没有单独列出均值差及精确p值。不能由此补写缺失统计量；影响对提升幅度和统计显著性的完整复核，不影响读取已有性能数值。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P3",
+          "detail": "表1中Llama 3.1的DDI准确率差异区间为[−0.0019, 0.0208]，原页同时标有*，表注定义为p<0.05。该95%置信区间包含0，与同一双侧配对t检验下的显著性标记存在不一致；本批无法确定区间或星号何者有误，影响该项显著性判断。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P7",
+          "detail": "式(5)原页实际显示P(S)=(L_S)/(L+I)，分子、分母均缺少det或其他行列式记号；紧接正文却用Σ_{S⊆V}det(L_S)=det(L+I)解释归一化。缺项影响DPP概率公式的直接使用；不补写原式，页面其余内容可读。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P7",
+          "detail": "式(7)之后的解释文字将多样性因子写成log(W_S)，缺少det，与式(7)、式(8)清楚显示的log det(W_S)不一致。影响该处文字表达的数学含义，不能将矩阵对数与对数行列式混同；完整定义以原页式(8)为依据。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "式(2)、式(3)及相关正文中的/C3、/C18，式(6)—(10)中的/C22等为提取乱码；原页可辨认为星号、子集符号及归一化向量上横线等数学记号。已按图像识读S*、T*、S⊆V、T⊆S*及归一化向量，避免误解两阶段可行域与余弦相似度定义。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P8",
+          "detail": "式(12)原页第二行写作Σ_{x_i∈T}f({x_i}∪Q)−f(Q)，未用括号将−f(Q)纳入每个求和项，也未写出相应的|T|因子。按当前排版，其与第一行Σ_{x_i∈T}f({x_i}|Q)及式(11)并不一般等价。缺少求和范围界定影响排序目标的准确复现，尤其原约束为|T|≤k；不替作者补写公式。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "出版日期行在文字资料中遗漏；原页Received与Accepted之后清楚写有“Published online: 11 June 2026”。已按图像补充识读，影响出版时间记录，不影响方法或实验结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "证明段及式(12)中的/C22、/C0、/C18、/C3等为提取乱码。原页可辨认为归一化向量记号、减号、子集符号和星号；一般成本约束的近似因子清楚为1−1/√e。已按原页识读，避免误解残差推导、候选可行域和近似保证数值。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "511a95a971ac",
+        "state": "published",
+        "updated_at": "2026-11-15T14:56:26.540041+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 10,
+        "covered": 10,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "source_defect",
+            "page": "P3",
+            "detail": "表1图像确认：标题称Diff行报告“mean difference with 95% CI and paired t-test p-value”，但实际仅列置信区间和部分显著性星号，没有单独列出均值差及精确p值。不能由此补写缺失统计量；影响对提升幅度和统计显著性的完整复核，不影响读取已有性能数值。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P3",
+            "detail": "表1中Llama 3.1的DDI准确率差异区间为[−0.0019, 0.0208]，原页同时标有*，表注定义为p<0.05。该95%置信区间包含0，与同一双侧配对t检验下的显著性标记存在不一致；本批无法确定区间或星号何者有误，影响该项显著性判断。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P7",
+            "detail": "式(5)原页实际显示P(S)=(L_S)/(L+I)，分子、分母均缺少det或其他行列式记号；紧接正文却用Σ_{S⊆V}det(L_S)=det(L+I)解释归一化。缺项影响DPP概率公式的直接使用；不补写原式，页面其余内容可读。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P7",
+            "detail": "式(7)之后的解释文字将多样性因子写成log(W_S)，缺少det，与式(7)、式(8)清楚显示的log det(W_S)不一致。影响该处文字表达的数学含义，不能将矩阵对数与对数行列式混同；完整定义以原页式(8)为依据。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "式(2)、式(3)及相关正文中的/C3、/C18，式(6)—(10)中的/C22等为提取乱码；原页可辨认为星号、子集符号及归一化向量上横线等数学记号。已按图像识读S*、T*、S⊆V、T⊆S*及归一化向量，避免误解两阶段可行域与余弦相似度定义。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "式(12)原页第二行写作Σ_{x_i∈T}f({x_i}∪Q)−f(Q)，未用括号将−f(Q)纳入每个求和项，也未写出相应的|T|因子。按当前排版，其与第一行Σ_{x_i∈T}f({x_i}|Q)及式(11)并不一般等价。缺少求和范围界定影响排序目标的准确复现，尤其原约束为|T|≤k；不替作者补写公式。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "出版日期行在文字资料中遗漏；原页Received与Accepted之后清楚写有“Published online: 11 June 2026”。已按图像补充识读，影响出版时间记录，不影响方法或实验结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "证明段及式(12)中的/C22、/C0、/C18、/C3等为提取乱码。原页可辨认为归一化向量记号、减号、子集符号和星号；一般成本约束的近似因子清楚为1−1/√e。已按原页识读，避免误解残差推导、候选可行域和近似保证数值。"
+          }
+        ]
+      }
     }
   ],
   "extended": [],
@@ -463,7 +960,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "本文聚焦《AI-guided human-in-the-loop inverse design of high performance engineering structures》，暂未提供可用摘要，请查看原文。",
+      "summary": "论文提出HiTopAI，以AI推荐局部修改区域，缓解人在环拓扑优化反复试选的瓶颈。模型用合成偏好训练U-Net，识别最长构件或最复杂节点，再由设计者确认区域、调整最小特征尺寸并重新优化。L形支架示例报告屈曲载荷提高约39%，但伴随柔顺度增加。研究展示了几何偏好推荐的可行性，尚未证实真实用户效率优势，且筛选计数、早停集合及性能数值存在口径矛盾。[P3—P9、P15]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -505,11 +1002,147 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "generative_design"
+      "recommendation": "建议重点阅读其分割推荐与人工决策的接口设计、合成标签构建及性能权衡，而非将其视为已验证的自主可靠性优化工具。[P8—P15]",
+      "deep_read": {
+        "problem": "经典拓扑优化将用户置于设置问题和事后评价的位置，难以纳入未显式建模的制造要求或设计偏好。HiTop虽允许局部修改，仍依赖人工反复寻找干预区域。本文聚焦减少区域试选，而非用学习模型替代有限元求解或完整优化问题。[P2—P3]",
+        "method": "HiTopAI先运行50次最小柔顺度优化，再用U-Net分割候选区域。标签来自骨架图中的最长边或最高连接度节点，取选择区域内实体像素。预测经第90百分位阈值、最大连通簇和包围椭圆处理，用户调整局部尺寸后重新优化。[P11、P13—P15]",
+        "innovation": "解读：贡献主要在交互流程整合，而非提出新的U-Net或力学目标。系统将偏好区域预测接入HiTop，同时保留用户拒绝和修改建议的权力。单构件标注训练后出现双候选分割值得关注，但尚不能据此认定模型理解了工程力学。[P7—P8、P10]",
+        "findings": "表1报告HiTopAI耗时6分钟，基线5分钟，屈曲载荷提高39.39%、柔顺度增加3.92%；正文则报告柔顺度增加10%，口径未统一。最长构件及复杂节点平均IOU为0.58、0.45；节点示例连接数由6减至5，最小夹角增大。[P5—P6]",
+        "limitations": "原文缺项为一致说明缺失：P11筛选不等号与文字相反，P13两阶段剩余计数不衔接，影响数据复现；P15早停使用测试集或验证集的说法矛盾，影响独立性判断。未见缺失公式。合成标签有噪声，真实用户效率优势仍待验证。[P8—P9]\n原文核对：[P11] Skeletonization段末原页确实写有“2≤ distinct features”，但同段此前明确剔除“fewer than three segments”，并以2个区域和5个区域作对照。两处筛选条件方向不一致，原文缺少一致的条件说明，影响对约6000个样本剔除规则的复现；不能把该不等号当作提取错误静默改正。；[P13] 图9相关筛选正文计数缺少一致交代：此前P11第一阶段已由30,000个剔除约6000个、剩约24,000个；本页第二阶段又称剔除约6000个后剩24,000个。原页文字确实如此，无法据此确定两阶段实际保留数及其与109,722对增强样本的关系，不补造中间样本量。；[P15] 训练段先明确早停基于“test loss”，随后称验证集用于早停且测试集全程不参与训练调参，原页缺少对这一矛盾的澄清。受影响的是测试独立性和评估流程的可复现判断；不能擅自认定前一句只是笔误或认定实际使用了测试集。",
+        "connection": "解读：该工作与结构设计直接相关，为难以完整表达的工程判断提供交互入口。对可靠性研究，可借鉴候选区域推荐与独立物理校核分工，但屈曲载荷提升不是失效概率降低。智能运维关联仅属潜在迁移，论文未验证监测、诊断或维修决策。[P5、P8—P10]",
+        "next_steps": "建议先核清筛选数量、早停集合及柔顺度差异，并按原始拓扑分组划分增强数据，避免同源变体干扰评估。随后开展真实设计者对照试验，分别记录试选次数、总耗时和力学结果；再评估偏好微调与三维扩展，不将作者展望当作已有成果。[P9—P10、P15]"
+      },
+      "recommended_direction": "generative_design",
+      "title_zh": "人工智能引导的人在环高性能工程结构逆向设计",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s44172-026-00818-x_reference.pdf"
+      ],
+      "analyzed_at": "2026-11-15T14:20:38.384958+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P11",
+          "P13",
+          "P14",
+          "P15"
+        ],
+        "innovation": [
+          "P7",
+          "P8",
+          "P10"
+        ],
+        "findings": [
+          "P5",
+          "P6"
+        ],
+        "limitations": [
+          "P8",
+          "P9",
+          "P11",
+          "P13",
+          "P15"
+        ],
+        "connection": [
+          "P5",
+          "P8",
+          "P9",
+          "P10"
+        ],
+        "next_steps": [
+          "P4",
+          "P6",
+          "P9",
+          "P10",
+          "P11",
+          "P13",
+          "P15"
+        ]
+      },
+      "analysis_material_version": "3f48f791d068e61a94c0fe650367355ad3b4794ed9a286511a3f3bc70cea3796",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P10",
+          "detail": "公式(1)的文本提取将转置及数学字符扁平化为“UT KU”“cðxÞ”等；原页已核实目标为c(x)=UᵀKU，静力平衡为KU=F，设计变量界限为0≤x≤1。公式完整可读，并非原文件缺项；应按转置二次型理解柔顺度，不能把UT当作独立变量。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P11",
+          "detail": "公式(2)—(6)的提取出现“/C22x”“/C0”和求和下标“12Ne”等乱码。原页可辨：物理密度为x̄，滤波变量为x̃；公式(3)、权重及公式(6)中的相应运算为减号；公式(5)两处求和均遍历i∈Nₑ。已按原页区分变量及运算，原文件公式并未缺失。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P11",
+          "detail": "Skeletonization段末原页确实写有“2≤ distinct features”，但同段此前明确剔除“fewer than three segments”，并以2个区域和5个区域作对照。两处筛选条件方向不一致，原文缺少一致的条件说明，影响对约6000个样本剔除规则的复现；不能把该不等号当作提取错误静默改正。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P13",
+          "detail": "图9相关筛选正文计数缺少一致交代：此前P11第一阶段已由30,000个剔除约6000个、剩约24,000个；本页第二阶段又称剔除约6000个后剩24,000个。原页文字确实如此，无法据此确定两阶段实际保留数及其与109,722对增强样本的关系，不补造中间样本量。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P15",
+          "detail": "训练段先明确早停基于“test loss”，随后称验证集用于早停且测试集全程不参与训练调参，原页缺少对这一矛盾的澄清。受影响的是测试独立性和评估流程的可复现判断；不能擅自认定前一句只是笔误或认定实际使用了测试集。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "出版信息的文字提取遗漏原页清晰可见的“Published online: 10 November 2026”。已补充识读；该遗漏影响出版日期记录，不影响方法、图表或实验结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "569c7744a249",
+        "state": "published",
+        "updated_at": "2026-11-15T14:20:38.394402+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 17,
+        "covered": 17,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "公式(1)的文本提取将转置及数学字符扁平化为“UT KU”“cðxÞ”等；原页已核实目标为c(x)=UᵀKU，静力平衡为KU=F，设计变量界限为0≤x≤1。公式完整可读，并非原文件缺项；应按转置二次型理解柔顺度，不能把UT当作独立变量。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P11",
+            "detail": "公式(2)—(6)的提取出现“/C22x”“/C0”和求和下标“12Ne”等乱码。原页可辨：物理密度为x̄，滤波变量为x̃；公式(3)、权重及公式(6)中的相应运算为减号；公式(5)两处求和均遍历i∈Nₑ。已按原页区分变量及运算，原文件公式并未缺失。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P11",
+            "detail": "Skeletonization段末原页确实写有“2≤ distinct features”，但同段此前明确剔除“fewer than three segments”，并以2个区域和5个区域作对照。两处筛选条件方向不一致，原文缺少一致的条件说明，影响对约6000个样本剔除规则的复现；不能把该不等号当作提取错误静默改正。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P13",
+            "detail": "图9相关筛选正文计数缺少一致交代：此前P11第一阶段已由30,000个剔除约6000个、剩约24,000个；本页第二阶段又称剔除约6000个后剩24,000个。原页文字确实如此，无法据此确定两阶段实际保留数及其与109,722对增强样本的关系，不补造中间样本量。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P15",
+            "detail": "训练段先明确早停基于“test loss”，随后称验证集用于早停且测试集全程不参与训练调参，原页缺少对这一矛盾的澄清。受影响的是测试独立性和评估流程的可复现判断；不能擅自认定前一句只是笔误或认定实际使用了测试集。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "出版信息的文字提取遗漏原页清晰可见的“Published online: 10 November 2026”。已补充识读；该遗漏影响出版日期记录，不影响方法、图表或实验结论。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -581,7 +1214,20 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "c4ffd2752128",
+        "state": "failed",
+        "updated_at": "2026-11-15T18:23:51.333611+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 165,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -605,7 +1251,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《Recognising and mitigating LLM Pollution in online behavioural research》，暂未提供可用摘要，请查看原文。",
+      "summary": "在线行为实验通常将回答视为人类认知与行为的证据，但参与者使用大语言模型可能动摇这一前提。本文是一篇评论文章，区分部分模型中介、完全模型委托及模型溢出，并讨论三者如何影响样本真实性与研究效度。[P1—P3] 作者整理研究者、平台和共同体层面的预防与事后检测措施，同时强调绕过风险、隐私成本及检测诱发的行为反应。[P4—P6] 其价值在于概念梳理和研究设计警示，而非提供已获系统验证的检测算法。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -649,11 +1295,140 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐作为人机混合数据质量与实验效度的方法论参考，重点阅读图1、表1及讨论；不宜将其作为工程检测算法或干预效果的实证依据。[P2、P5—P6]",
+      "deep_read": {
+        "problem": "论文追问：当在线实验回答受到模型辅助或代理接管时，研究还能否有效测量人类行为？污染不一定来自恶意作弊，翻译、润色和节省精力也可能改变测量对象。作者强调，这既是来源识别问题，也是研究结论究竟描述谁的认识论问题。[P1、P4]",
+        "method": "作者以评论文章形式，综合实验室观察、既有研究和概念区分构建分析框架，而非报告完整的对照实验。图1组织污染类型与相互作用，表1按实施方式、责任主体、目的、适用变体和风险整理措施，使概念分析连接到具体研究设计。[P1—P5]",
+        "innovation": "本文的概念贡献是把直接使用模型与间接行为变化纳入同一框架：部分中介和完全委托形成自动化连续谱，溢出则包含预期、残留与规范变化。解读：其特色不是新增检测器，而是说明没有直接调用模型的参与者也可能受污染环境影响。[P2—P3]",
+        "findings": "作者试点观察到45%的参与者发生复制或粘贴，但这只是潜在模型参与的线索，不能当作确证使用率。作者综合论证模型参与可能压低回答差异、改变处理效应，且限制委托的措施可能强化溢出；这些论点不等同于本文完成了统一因果验证。[P1—P3]",
+        "limitations": "本文属于概念性评论，表1未提供措施间的定量效果比较，不能据此确定最优方案。补充材料未提供，技术测试细节仍缺少可核对依据；代理绕过与模型更新也限制防护的持续性。逐页记录未发现已确认的原文件缺项，提取错误不属原文缺陷。[P4—P7]",
+        "connection": "解读：对智能运维与可靠性研究，本文可启发审查专家判断、人工标注及反馈数据是否混入模型辅助，并关注筛查对真实人员行为的影响。但论文没有研究设备退化、故障诊断或结构设计，不能把概念迁移视为这些领域已获得验证的方法成果。[P4—P6]",
+        "next_steps": "建议：在依赖人工判断的研究中，预先界定允许的模型辅助范围，并比较不同来源数据的分布与结论稳健性；对检测措施同时记录误排、参与体验和行为反馈。这是可迁移的研究设想；作者直接提出的后续任务则包括污染追踪、措施评估及溢出测量。[P6]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "识别与缓解在线行为研究中的大语言模型污染",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41467-026-74621-9.pdf"
+      ],
+      "analyzed_at": "2026-11-15T14:33:28.746657+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P4"
+        ],
+        "method": [
+          "P1",
+          "P2",
+          "P3",
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P3"
+        ],
+        "findings": [
+          "P1",
+          "P2",
+          "P3"
+        ],
+        "limitations": [
+          "P4",
+          "P5",
+          "P6",
+          "P7"
+        ],
+        "connection": [
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "next_steps": [
+          "P6"
+        ]
+      },
+      "analysis_material_version": "0495dd7b5b208e8a30186f615629a960508e7c5d96c658d22c68def386cb8e06",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "原页已核清：提取文字中的“Dele-gation,a n dLLM Spillover”应按排版还原为“Delegation, and LLM Spillover”；章节标题中的异常逐字空格亦为提取错误。不涉及公式或图号，不改变三类污染的定义及结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "图1图注已与原页核对：提供的文字提取末尾附有“Illustration by H. Jahani.”，但上传原页图注以“their threat to research validity and inference.”结束，未见该署名。该附加文字不作为本批原页证据，不影响图1的分类及相互强化结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "正文文字提取中的“N os i n g l e”已据原页还原为“No single”，“participant’sb r o w s e ri s”还原为“participant’s browser is”。不涉及公式或图表缺项，不影响对措施权衡及蜜罐检测机制的理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "表1表头提取为“Responsib ility”，原页为“Responsibility”；表格横置但各单元格均可识读，已按行列核对责任主体、预防或事后检测目的、适用污染变体及风险，未发现缺项，不影响表1结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "讨论正文提取中的“s a f e g u a r d s .E v e nw h e ni n t e n t i o n sa r eb e n i g n”已据原页还原为“safeguards. Even when intentions are benign”。无公式或图表缺项，不影响作者关于善意使用仍可能造成系统性扭曲的论点。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "参考文献18中提取的“model ’si nfluence”和“Preprint athttps”已据原页分别核清为“model’s influence”和“Preprint at https”；附加信息中的“Supplementary informationThe”等亦为标题与正文粘连。无公式、图表或实质内容缺项，不影响作者贡献、利益冲突及补充材料说明的理解。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "fc33aa3f6354",
+        "state": "published",
+        "updated_at": "2026-11-15T14:33:28.770299+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 7,
+        "covered": 7,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页已核清：提取文字中的“Dele-gation,a n dLLM Spillover”应按排版还原为“Delegation, and LLM Spillover”；章节标题中的异常逐字空格亦为提取错误。不涉及公式或图号，不改变三类污染的定义及结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "图1图注已与原页核对：提供的文字提取末尾附有“Illustration by H. Jahani.”，但上传原页图注以“their threat to research validity and inference.”结束，未见该署名。该附加文字不作为本批原页证据，不影响图1的分类及相互强化结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "正文文字提取中的“N os i n g l e”已据原页还原为“No single”，“participant’sb r o w s e ri s”还原为“participant’s browser is”。不涉及公式或图表缺项，不影响对措施权衡及蜜罐检测机制的理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "表1表头提取为“Responsib ility”，原页为“Responsibility”；表格横置但各单元格均可识读，已按行列核对责任主体、预防或事后检测目的、适用污染变体及风险，未发现缺项，不影响表1结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "讨论正文提取中的“s a f e g u a r d s .E v e nw h e ni n t e n t i o n sa r eb e n i g n”已据原页还原为“safeguards. Even when intentions are benign”。无公式或图表缺项，不影响作者关于善意使用仍可能造成系统性扭曲的论点。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "参考文献18中提取的“model ’si nfluence”和“Preprint athttps”已据原页分别核清为“model’s influence”和“Preprint at https”；附加信息中的“Supplementary informationThe”等亦为标题与正文粘连。无公式、图表或实质内容缺项，不影响作者贡献、利益冲突及补充材料说明的理解。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -725,7 +1500,36 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "f90e4fccac53",
+        "state": "failed",
+        "updated_at": "2026-11-15T18:25:34.245428+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 14,
+        "covered": 13,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "unreadable",
+            "page": "P2",
+            "detail": "图1放大后，中央策略说明、主体界面、完整图注与正文均可读，但商品卡片中的部分规格、价格附注、评分数字及包装细字仍模糊，无法逐项可靠核对。影响商品级信息的完整识读，不影响理解正文概念及图1作为购物示例的用途；无法据此确认具体商品属性、价格或预算合规。没有依据认定原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "未编号BHS公式及logistic函数的减号被提取为“/C0”等乱码。原页已读清并纠正为BHS = 1 − σ(0.002α + 0.1β + 0.08ϵ + 0.9ξ + 0.05ν − 0.1γ − 0.02(δ − β))，σ(x)=1/(1+e^(−x))。原文件公式完整；该纠正关系到营养成分惩罚方向及BHS的计算，不能将乱码视为原文缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "日期区域的文字提取遗漏“Published online: 23 June 2026”；原页清晰可见，已补核为2026年6月23日在线发表。不影响行为效应、BHS公式或统计结论，仅影响出版信息完整性。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -800,7 +1604,51 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "d249b03373e4",
+        "state": "failed",
+        "updated_at": "2026-11-15T18:26:24.481575+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 9,
+        "covered": 7,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "图1原页可清楚识读，提取文本中的“Unve/g425ed”“Run/g415me”“Conﬁden/g415ality”等为字形提取错误，分别应为“Unvetted”“Runtime”“Confidentiality”。已按原图核对七项挑战及问题、后果，不影响分类结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P2",
+            "detail": "图1原图 C7 右栏写“Hao et al. [67]”，同页图注却写“Hao et al. 72”。已核实原页存在引用编号不一致；影响 C7 既有研究覆盖的文献定位，不影响图中将其标为部分覆盖的陈述。本批没有参考文献表，无法判断哪个编号正确。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "C3 正文提取为“Unforutnately”，原页实际为“Unfortunately”，已纠正；不影响关于缺乏共同身份认证与信任管理权威的论述。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P4",
+            "detail": "本页阅读结果未通过校验，待补读。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P5",
+            "detail": "本页阅读结果未通过校验，待补读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "出版信息提取漏掉原页清楚显示的“Published online: 13 June 2026”，已补识为在线发表日期2026年6月13日。此处不涉及公式或图表，不影响安全对策与结论，但影响论文出版信息的完整记录。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -825,7 +1673,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Abstract Recent progress in large language models (LLMs) has leveraged their in-context learning (ICL) abilities to enable quick adaptation to unseen biomedical NLP tasks. By incorporating only a few input-output examples into prompts, LLMs can rapidly perform these new tasks. While the impact of these demonstrations on LLM performance has been extensively studied, most existing approaches prioritize representativeness over diversity when selecting examples from large corpora. To address this gap, we propose Dual-Div , a diversity-enhanced data-efficient framework for demonstration selection i…",
+      "summary": "Dual-Div研究如何在有限标注与提示预算下选择有效的生物医学示例，以两阶段检索和排序兼顾语义覆盖与多样性。[P2][P7]作者在实体识别、关系抽取和文本分类上比较两种大模型与三种检索器，发现早期候选多样性尤其重要，示例数量通常以3—5个较优。[P3][P5]解读：该工作适合借鉴案例选择方法，但理论保证及复现仍需审慎核查，原文存在统计报告和公式缺项。[P3][P7][P8]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -869,11 +1717,157 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议作为预算约束示例检索的方法参考重点阅读，尤其关注两阶段消融与少数类评价；不宜直接作为智能运维或可靠性应用已经有效的证据。[P3][P7]",
+      "deep_read": {
+        "problem": "生物医学文本标注昂贵且类别不均衡，仅按语义相似度选示例容易重复覆盖常见模式。作者关注有限预算下如何同时保留代表性与内部差异，并避免总体准确率掩盖少数类表现；DDI仅979/5,761条测试查询含目标关系，体现了评价难点。[P1][P2]",
+        "method": "方法先用检索器生成向量，以设施选址函数衡量覆盖、以归一化相似度矩阵的对数行列式衡量多样性，再通过加权目标和lazy greedy选候选。第二阶段依据查询的条件增益进行模块化排序；必要时只标注候选，LLM仅负责最终推理。[P6][P7][P8]",
+        "innovation": "作者将多样性显式纳入检索与条件排序两个阶段，并通过阶段消融区分作用来源。解读：贡献重点是示例选择流程及目标组合，而非提出新的DPP或次模理论；去除向量范数影响的设计还尝试减轻词频对选择的干扰，其效果不能外推为消除全部语义偏差。[P2][P7]",
+        "findings": "BGE-Large下，Dual-Div在两种LLM、三项任务上的macro-F1均为表内最高，但准确率并非全面领先。作者报告18项macro-F1比较全部优于Div-S3，其中11项显著；通常3—5个示例较优，但DDI排列稳定性存在例外，不能概括为所有配置均更鲁棒。[P3][P5]",
+        "limitations": "原文缺项：[P3]表1缺均值差、精确p值，且一项区间与星号冲突，限制统计复核；[P7]式(5)及式(7)后文字缺det，影响概率与多样性表达；[P8]式(12)缺求和范围界定，影响复现。解读：λ存在性论证仍需核查，相关理论保证未获独立验证，补充算法亦未提供。\n原文核对：[P3] 表1图像确认：标题称Diff行报告“mean difference with 95% CI and paired t-test p-value”，但实际仅列置信区间和部分显著性星号，没有单独列出均值差及精确p值。不能由此补写缺失统计量；影响对提升幅度和统计显著性的完整复核，不影响读取已有性能数值。；[P3] 表1中Llama 3.1的DDI准确率差异区间为[−0.0019, 0.0208]，原页同时标有*，表注定义为p<0.05。该95%置信区间包含0，与同一双侧配对t检验下的显著性标记存在不一致；本批无法确定区间或星号何者有误，影响该项显著性判断。；[P7] 式(5)原页实际显示P(S)=(L_S)/(L+I)，分子、分母均缺少det或其他行列式记号；紧接正文却用Σ_{S⊆V}det(L_S)=det(L+I)解释归一化。缺项影响DPP概率公式的直接使用；不补写原式，页面其余内容可读。；[P7] 式(7)之后的解释文字将多样性因子写成log(W_S)，缺少det，与式(7)、式(8)清楚显示的log det(W_S)不一致。影响该处文字表达的数学含义，不能将矩阵对数与对数行列式混同；完整定义以原页式(8)为依据。；[P8] 式(12)原页第二行写作Σ_{x_i∈T}f({x_i}∪Q)−f(Q)，未用括号将−f(Q)纳入每个求和项，也未写出相应的|T|因子。按当前排版，其与第一行Σ_{x_i∈T}f({x_i}|Q)及式(11)并不一般等价。缺少求和范围界定影响排序目标的准确复现，尤其原约束为|T|≤k；不替作者补写公式。",
+        "connection": "解读：其覆盖与非冗余联合选择思路，可对应智能运维中有限预算的故障案例检索，macro-F1也提示关注稀有故障。结构设计与可靠性研究可借鉴预算建模，但论文没有工程系统实验，也未验证故障风险、失效概率或设计安全性，关联属于方法迁移而非直接成果。[P2][P7]",
+        "next_steps": "建议先核实原文公式与统计冲突，并取得补充算法，再复现两阶段消融。面向运维迁移时，应比较仅相似度、仅覆盖及联合目标，在同等标注与提示预算下评价少数故障召回、macro-F1和检索成本；同时检验λ、示例顺序及候选规模的影响，避免直接照搬经验预算。[P3][P5][P8]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "数据高效的生物医学上下文学习：多样性增强的次模优化视角",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s44387-026-00123-0.pdf"
+      ],
+      "analyzed_at": "2026-11-15T14:56:26.516450+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P6",
+          "P7",
+          "P8"
+        ],
+        "innovation": [
+          "P2",
+          "P7"
+        ],
+        "findings": [
+          "P3",
+          "P5"
+        ],
+        "limitations": [
+          "P3",
+          "P7",
+          "P8"
+        ],
+        "connection": [
+          "P2",
+          "P7"
+        ],
+        "next_steps": [
+          "P3",
+          "P5",
+          "P8"
+        ]
+      },
+      "analysis_material_version": "fcac15ca503a31378399d23fb063e7da75e9236662cc42d3c8b9986306b5ce1e",
+      "analysis_issues": [
+        {
+          "kind": "source_defect",
+          "page": "P3",
+          "detail": "表1图像确认：标题称Diff行报告“mean difference with 95% CI and paired t-test p-value”，但实际仅列置信区间和部分显著性星号，没有单独列出均值差及精确p值。不能由此补写缺失统计量；影响对提升幅度和统计显著性的完整复核，不影响读取已有性能数值。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P3",
+          "detail": "表1中Llama 3.1的DDI准确率差异区间为[−0.0019, 0.0208]，原页同时标有*，表注定义为p<0.05。该95%置信区间包含0，与同一双侧配对t检验下的显著性标记存在不一致；本批无法确定区间或星号何者有误，影响该项显著性判断。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P7",
+          "detail": "式(5)原页实际显示P(S)=(L_S)/(L+I)，分子、分母均缺少det或其他行列式记号；紧接正文却用Σ_{S⊆V}det(L_S)=det(L+I)解释归一化。缺项影响DPP概率公式的直接使用；不补写原式，页面其余内容可读。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P7",
+          "detail": "式(7)之后的解释文字将多样性因子写成log(W_S)，缺少det，与式(7)、式(8)清楚显示的log det(W_S)不一致。影响该处文字表达的数学含义，不能将矩阵对数与对数行列式混同；完整定义以原页式(8)为依据。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "式(2)、式(3)及相关正文中的/C3、/C18，式(6)—(10)中的/C22等为提取乱码；原页可辨认为星号、子集符号及归一化向量上横线等数学记号。已按图像识读S*、T*、S⊆V、T⊆S*及归一化向量，避免误解两阶段可行域与余弦相似度定义。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P8",
+          "detail": "式(12)原页第二行写作Σ_{x_i∈T}f({x_i}∪Q)−f(Q)，未用括号将−f(Q)纳入每个求和项，也未写出相应的|T|因子。按当前排版，其与第一行Σ_{x_i∈T}f({x_i}|Q)及式(11)并不一般等价。缺少求和范围界定影响排序目标的准确复现，尤其原约束为|T|≤k；不替作者补写公式。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "出版日期行在文字资料中遗漏；原页Received与Accepted之后清楚写有“Published online: 11 June 2026”。已按图像补充识读，影响出版时间记录，不影响方法或实验结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "证明段及式(12)中的/C22、/C0、/C18、/C3等为提取乱码。原页可辨认为归一化向量记号、减号、子集符号和星号；一般成本约束的近似因子清楚为1−1/√e。已按原页识读，避免误解残差推导、候选可行域和近似保证数值。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "511a95a971ac",
+        "state": "published",
+        "updated_at": "2026-11-15T14:56:26.540041+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 10,
+        "covered": 10,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "source_defect",
+            "page": "P3",
+            "detail": "表1图像确认：标题称Diff行报告“mean difference with 95% CI and paired t-test p-value”，但实际仅列置信区间和部分显著性星号，没有单独列出均值差及精确p值。不能由此补写缺失统计量；影响对提升幅度和统计显著性的完整复核，不影响读取已有性能数值。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P3",
+            "detail": "表1中Llama 3.1的DDI准确率差异区间为[−0.0019, 0.0208]，原页同时标有*，表注定义为p<0.05。该95%置信区间包含0，与同一双侧配对t检验下的显著性标记存在不一致；本批无法确定区间或星号何者有误，影响该项显著性判断。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P7",
+            "detail": "式(5)原页实际显示P(S)=(L_S)/(L+I)，分子、分母均缺少det或其他行列式记号；紧接正文却用Σ_{S⊆V}det(L_S)=det(L+I)解释归一化。缺项影响DPP概率公式的直接使用；不补写原式，页面其余内容可读。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P7",
+            "detail": "式(7)之后的解释文字将多样性因子写成log(W_S)，缺少det，与式(7)、式(8)清楚显示的log det(W_S)不一致。影响该处文字表达的数学含义，不能将矩阵对数与对数行列式混同；完整定义以原页式(8)为依据。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "式(2)、式(3)及相关正文中的/C3、/C18，式(6)—(10)中的/C22等为提取乱码；原页可辨认为星号、子集符号及归一化向量上横线等数学记号。已按图像识读S*、T*、S⊆V、T⊆S*及归一化向量，避免误解两阶段可行域与余弦相似度定义。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "式(12)原页第二行写作Σ_{x_i∈T}f({x_i}∪Q)−f(Q)，未用括号将−f(Q)纳入每个求和项，也未写出相应的|T|因子。按当前排版，其与第一行Σ_{x_i∈T}f({x_i}|Q)及式(11)并不一般等价。缺少求和范围界定影响排序目标的准确复现，尤其原约束为|T|≤k；不替作者补写公式。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "出版日期行在文字资料中遗漏；原页Received与Accepted之后清楚写有“Published online: 11 June 2026”。已按图像补充识读，影响出版时间记录，不影响方法或实验结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "证明段及式(12)中的/C22、/C0、/C18、/C3等为提取乱码。原页可辨认为归一化向量记号、减号、子集符号和星号；一般成本约束的近似因子清楚为1−1/√e。已按原页识读，避免误解残差推导、候选可行域和近似保证数值。"
+          }
+        ]
+      }
     }
   ],
   "source_status": {
@@ -1835,13 +2829,13 @@
     "unavailable": 45
   },
   "analysis_status": {
-    "ready_core": 0,
+    "ready_core": 3,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 6
+    "pending": 3
   },
   "edition": {
     "id": "42893366811",

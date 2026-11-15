@@ -23,7 +23,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《Human analogical guidance amplifies LLM performance through cross-domain knowledge activation》，暂未提供可用摘要，请查看原文。",
+      "summary": "论文以流化催化裂化的历史创新为案例，结合限时语料检索、类比提示与内部激活干预，研究模型为何能整合跨领域知识。作者报告粮仓类比使方案成功率从10%升至100%，强干预则同时破坏任务成功和回答连贯性。[P3–P7] 解读：固定上下文的比较设计值得借鉴，但全面生成退化、预训练泄漏未排除及跨模型结果口径冲突，限制了选择性表征消融的因果解释。[P6、P9] 本文更适合作为实验设计与证据审查案例，而非成熟工程创新能力的证明。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -67,11 +67,96 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议有条件重点阅读：固定检索证据后比较类比引导与激活干预的方法具有借鉴价值，但应同时审查输出退化和结果口径矛盾，不能直接采信普遍必要条件的结论。[P3、P6、P9]",
+      "deep_read": {
+        "problem": "论文追问复杂技术方案来自模型自主综合，还是需要人工指出跨领域联系，并考察内部语义表征是否限制提示效果。[P2] 作者选择固定床向流化循环转变的历史案例，以已知技术答案提供评价参照。解读：核心是知识利用条件，而非直接验证模型能够自主发明。",
+        "method": "作者以Qwen-2.5-7B运行250次试验，固定查询检索相同的十个语料片段，比较最小提示、粮仓类比及不同强度的激活干预。[P3、P10] 干预向量由各六个正负样例的平均激活差构成；回答由两名评分者独立分类，另检查时代错置术语。",
+        "innovation": "作者提出将历史反事实、限时RAG与表征工程结合，分别观察外部引导和内部干预对跨域综合的影响。[P2、P9] 解读：值得关注的是固定信息输入后分析知识利用变化，并以概念编码辅助结果评价；现有资料不足以确认该组合具有领域首创性。",
+        "findings": "作者报告类比引导将FCC分类成功率由2/20提升至20/20，斯托克斯定律利用由0/20升至18/20。[P4、P5] α=2时成功16/20，α≥4.5时成功与有效回答均为零；四类提示在固定强干预下合计0/80成功。[P6、P7] 这些是任务评价结果，并非工程实测性能。",
+        "limitations": "解读：强干预同时摧毁语言连贯性，不能据此证明仅移除目标概念；限时RAG也未排除预训练泄漏。[P6] P9新增Qwen概念保持66.6%的结果，与P10完全抑制口径未对齐，新增样本数不足。核对记录未确认原文件公式缺项；补充代码和原始数据未提供，不能声称复现。",
+        "connection": "解读：对智能运维、结构设计和可靠性研究，价值主要在专家知识如何激活模型已有证据，而非直接提供诊断或优化算法。[P8] 可借鉴人类建立类比、模型细化方案、仿真和试验核验的职责划分；论文没有在这些目标任务中验证收益，迁移效果仍待检验。",
+        "next_steps": "建议先统一P9跨模型补充结果与主要试验的指标、样本及干预条件，再进行复现。加入随机方向、非目标概念及匹配语言退化程度的对照，以区分特异干预和一般损伤。[P6、P9] 工程迁移时还应独立核验计算、风险与可实施性，不以文本成功代替可靠性证据。[P8]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "人类类比引导通过激活跨领域知识提升大语言模型表现",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41467-026-70873-7.pdf"
+      ],
+      "analyzed_at": "2026-11-15T16:13:58.980855+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2"
+        ],
+        "method": [
+          "P3",
+          "P10"
+        ],
+        "innovation": [
+          "P2",
+          "P9"
+        ],
+        "findings": [
+          "P4",
+          "P5",
+          "P6",
+          "P7"
+        ],
+        "limitations": [
+          "P6",
+          "P9",
+          "P10"
+        ],
+        "connection": [
+          "P8"
+        ],
+        "next_steps": [
+          "P6",
+          "P8",
+          "P9"
+        ]
+      },
+      "analysis_material_version": "0eb2354d6e521466769831088a1d4475679aa81525ee0dbd1285dc5a7a7ad1e1",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "原页左侧日期栏清楚显示“Published online: 03 April 2026”，所给文字提取遗漏该出版日期，现据原页补正。不涉及公式、图表或实验结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "所给文字提取保留图1图注，但遗漏图内流程节点与标注。已从原图核对嵌入、检索、提示组装、层18/26干预及响应分类流程；公式h_modified=h_original−α·v可读，无公式占位或缺项。遗漏影响架构细节呈现，不改变本页表1的250次试验设计。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "58d76aa1e453",
+        "state": "published",
+        "updated_at": "2026-11-15T16:13:59.002748+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 11,
+        "covered": 11,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页左侧日期栏清楚显示“Published online: 03 April 2026”，所给文字提取遗漏该出版日期，现据原页补正。不涉及公式、图表或实验结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "所给文字提取保留图1图注，但遗漏图内流程节点与标注。已从原图核对嵌入、检索、提示组装、层18/26干预及响应分类流程；公式h_modified=h_original−α·v可读，无公式占位或缺项。遗漏影响架构细节呈现，不改变本页表1的250次试验设计。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -116,7 +201,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Abstract Ensuring safe and effective use of artificial intelligence (AI) requires understanding and anticipating its performance on new tasks, from advanced scientific challenges to transformed workplace activities 1–3 . So far, benchmarking has guided progress in AI but has offered limited explanatory and predictive power for general-purpose AI systems 4–8 , attributed to limited transferability across specific tasks 9–11 . Here we introduce general scales for AI evaluation that elicit demand profiles explaining what capabilities common AI benchmarks truly measure, extract ability profiles qu…",
+      "summary": "传统基准平均准确率难以揭示模型为何失败，也难以预测新任务表现。本文以18项需求尺度和特殊维度UG统一描述任务，再提取模型能力画像、训练实例级成功预测器。研究覆盖15个LLM、20个基准和16,108个实例，需求特征在分布外预测中总体优于两类基线。[P2][P26][P27] 解读：其价值在于连接任务诊断与部署决策，而非提供安全保证；高等级外推、标注偏差及领域适用性仍须审慎检验。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -160,11 +245,103 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐作为智能运维中模型评测、任务路由与可靠性预警的方法参考，重点阅读需求标注、主导切片及分布外对照；并非直接研究结构设计的论文。[P13][P15][P26][P27]",
+      "deep_read": {
+        "problem": "论文针对平均成绩混合题目难度、知识要求与额外干扰的问题：相同领域标签下的基准可能测量不同能力，因而产生矛盾判断。作者指出聚合结果会形成“highly confounded results”。核心问题是如何同时解释实例失败并预测未见任务，而不随模型总体更替反复改变尺度。[P1][P7][P16]",
+        "method": "作者用DeLeAn规程标注18项需求及UG，形成19维实例表示；通过主导切片保留其他需求不高于目标等级的题目，拟合逻辑斯蒂特征曲线并估计能力。预测部分另以需求向量训练随机森林，与GloVe随机森林和微调LLaMA比较区分力及校准，不能将能力曲线与预测器混为一谈。[P8][P13][P15]",
+        "innovation": "方法特色是把任务需求与系统能力放入统一、可解释的测量空间，并分离知识、基本能力及体量等额外因素。新系统画像只使用该系统结果，不依赖其他受测模型。解读：这是区别于相对排名的重要设计；但比率尺度及跨维度可通约性仍包含经验设定，不能称为已充分校准的定律。[P11][P12][P28]",
+        "findings": "任务分布外条件下，需求法加权AUROC为0.811，高于嵌入法0.740及微调法0.786；基准分布外对应为0.747、0.480、0.676。分布内需求法AUROC略低于微调法，但ECE更低。结果支持总体预测优势，而非每个模型、每项指标均领先。[P25][P26][P27]",
+        "limitations": "作者承认高等级题稀缺、模态覆盖有限；筛题可能偏倚，超过5的能力依赖外推。[P9][P14][P15] 原文件缺项包括P29通讯作者空白、日期占位，影响责任与版本追溯；P30七项研究设计栏未填，影响表单完整性，不代表正文缺失方法。无依据声称缺失公式已获验证。[P29][P30]\n原文核对：[P29] Reporting Summary页首Corresponding author(s)栏未填写，Last updated by author(s)仍保留YYYY-MM-DD占位。无公式或图号涉及；缺少通讯作者及表单更新日期，影响报告摘要的责任归属与版本追溯，不影响扩展数据表3—5现有结果的识读。；[P30] Reporting Summary的Behavioural & social sciences study design部分，Research sample、Sampling strategy、Data collection、Timing、Data exclusions、Non-participation和Randomization七栏保留模板提示，未填研究专属说明或逐栏注明不适用。无公式或图号涉及；影响本表对样本、抽样、时间与排除流程的独立报告完整性，不能据此断言论文其他部分也缺少这些方法信息。",
+        "connection": "解读：与智能运维最直接的联系是按查询需求选择模型、提前拒答或转交人工，而非仅按平均排名部署。对结构设计与可靠性研究，可借鉴任务分层和混杂因素识别，但论文未直接验证工程故障或结构安全场景；需求相关性也不能自动成为失败原因的因果证据。[P16][P17][P19]",
+        "next_steps": "建议先在运维日志诊断或设计审查中建立领域需求规程，由独立专家检验标注，再按整类任务留出测试路由和拒答效果。应同时记录误拒、漏拒、成本与人工接管收益，补充高需求实例，并评估标注成本及外推敏感性；这些属于迁移研究方案，不是作者已完成的实验。[P15][P17][P23]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "通用尺度赋予人工智能评估解释力与预测力",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41586-026-10303-2.pdf"
+      ],
+      "analyzed_at": "2026-11-15T16:29:49.115834+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P7",
+          "P16"
+        ],
+        "method": [
+          "P8",
+          "P13",
+          "P15"
+        ],
+        "innovation": [
+          "P11",
+          "P12",
+          "P28"
+        ],
+        "findings": [
+          "P25",
+          "P26",
+          "P27"
+        ],
+        "limitations": [
+          "P9",
+          "P14",
+          "P15",
+          "P29",
+          "P30"
+        ],
+        "connection": [
+          "P16",
+          "P17",
+          "P19"
+        ],
+        "next_steps": [
+          "P15",
+          "P17",
+          "P23"
+        ]
+      },
+      "analysis_material_version": "e0931d252ac61dcfcfb94dfba3ff9cc267900b300e1d1a30c3b2fff4870a7f7b",
+      "analysis_issues": [
+        {
+          "kind": "source_defect",
+          "page": "P29",
+          "detail": "Reporting Summary页首Corresponding author(s)栏未填写，Last updated by author(s)仍保留YYYY-MM-DD占位。无公式或图号涉及；缺少通讯作者及表单更新日期，影响报告摘要的责任归属与版本追溯，不影响扩展数据表3—5现有结果的识读。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P30",
+          "detail": "Reporting Summary的Behavioural & social sciences study design部分，Research sample、Sampling strategy、Data collection、Timing、Data exclusions、Non-participation和Randomization七栏保留模板提示，未填研究专属说明或逐栏注明不适用。无公式或图号涉及；影响本表对样本、抽样、时间与排除流程的独立报告完整性，不能据此断言论文其他部分也缺少这些方法信息。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "7d402ad1e656",
+        "state": "published",
+        "updated_at": "2026-11-15T16:29:49.155977+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 31,
+        "covered": 31,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "source_defect",
+            "page": "P29",
+            "detail": "Reporting Summary页首Corresponding author(s)栏未填写，Last updated by author(s)仍保留YYYY-MM-DD占位。无公式或图号涉及；缺少通讯作者及表单更新日期，影响报告摘要的责任归属与版本追溯，不影响扩展数据表3—5现有结果的识读。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P30",
+            "detail": "Reporting Summary的Behavioural & social sciences study design部分，Research sample、Sampling strategy、Data collection、Timing、Data exclusions、Non-participation和Randomization七栏保留模板提示，未填研究专属说明或逐栏注明不适用。无公式或图号涉及；影响本表对样本、抽样、时间与排除流程的独立报告完整性，不能据此断言论文其他部分也缺少这些方法信息。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -205,7 +382,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《Empowering AI data scientists using a multi-agent LLM framework with self-evolving capabilities for autonomous, tool-aware biomedical data analyses》，暂未提供可用摘要，请查看原文。",
+      "summary": "本文提出BioMedAgent，面向生物医学分析中特殊工具使用困难、多步骤推理复杂的问题，通过交互探索与记忆检索学习工具使用，并将工具串联为可执行工作流。用户可使用自然语言发起任务。摘要报告，该框架在包含327项任务的BioMed-AQA基准上取得77%的成功率，并在外部BixBench数据集上展示泛化能力，还应用于跨组学分析、机器学习建模和病理图像分割。当前仅有摘要，尚不能核验实验细节及结论适用边界。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -250,11 +427,133 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议作为工具调用与多智能体科研自动化的方法参考重点阅读，尤其关注交互探索、记忆检索与工作流生成的实现；但不能仅凭摘要确认其适合尚未明确的目标研究方向。[摘要；解读]",
+      "deep_read": {
+        "problem": "论文针对生物医学数据分析中的两项障碍：专业工具难以使用，以及分析过程需要多步骤推理。原文以“specialized tools and multistep reasoning”概括这一瓶颈，目标是让缺少计算专业知识的用户也能通过自然语言发起分析任务，而非仅获取文字问答。[摘要]",
+        "method": "BioMedAgent被描述为具有自进化能力的大语言模型多智能体框架，通过“interactive exploration and memory retrieval algorithms”学习多种生物信息学工具，并连接为可执行工作流。摘要未交代智能体分工、记忆更新机制或探索反馈形式，因此不能据此还原具体算法。[摘要]",
+        "innovation": "解读：值得关注的是将工具学习、交互探索、记忆检索和工作流串联放在同一框架内，而非只让模型生成分析建议。作者同时发布BioMed-AQA作为评测载体。不过，摘要没有与已有架构进行机制层面的比较，尚不能确认各模块的新颖性及其独立贡献。[摘要]",
+        "findings": "摘要报告，BioMedAgent在包含327项生物医学数据任务的BioMed-AQA基准上取得77%的成功率，并优于其他大语言模型智能体；另称其能泛化至BixBench。应用覆盖跨组学、机器学习建模和病理分割，但摘要未提供这些应用各自的定量结果。[摘要]",
+        "limitations": "当前证据局限于摘要，而非已核对全文：成功率的判定标准、比较对象、重复实验、统计不确定性与失败案例均未说明。原文称外部泛化稳健，但没有列出对应数值。因此只能接受这些内容为作者报告，不能进一步确认复现性、安全性或实际部署可靠性。[摘要；解读]",
+        "connection": "解读：其工具编排与多步骤任务执行机制，可作为智能运维中诊断、调用分析工具及组织处理流程的方法参照；但摘要没有运维、结构设计或可靠性研究的直接实验。输入仅含方向标签，未给出方向定义，因此无法确认它与用户目标研究方向的实际契合程度。[摘要；解读]",
+        "next_steps": "建议：后续获取全文时，优先核对任务划分、成功判据、基线配置，以及探索和记忆模块的消融结果。若考虑迁移至智能运维，应另设工具调用正确性、故障定位效果和失败恢复测试。这些是待验证的研究建议，不是摘要已经证明的能力或作者明确提出的结论。[摘要；建议]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "面向自主生物医学数据分析的自进化多智能体大语言模型框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41551-026-01634-6"
+      ],
+      "analyzed_at": "2026-11-15T16:41:28.115347+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "生物医学数据分析的自动化，难点不仅是理解问题，还在于调用专业工具并完成多步推理。BioMedAgent尝试把工具学习与工作流执行连接起来，为观察大语言模型如何承担科研分析任务提供了一个具体案例。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从理解任务到调用专业工具的障碍",
+            "paragraphs": [
+              "大语言模型智能体能够自动处理复杂任务，辅助科学数据探索，但生物医学分析涉及专业工具和多步推理，仍然构成应用障碍。本文针对的是这两类困难：智能体不仅需要知道要分析什么，还需要学会使用工具，并把多个操作连接成可执行的分析流程。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "通过交互探索与记忆检索组织分析流程",
+            "paragraphs": [
+              "作者提出BioMedAgent，一个具有自演化能力的大语言模型多智能体框架。摘要明确介绍的核心方法是交互式探索与记忆检索算法：框架借此学习使用不同的生物信息学工具，并将它们串联为可执行工作流。",
+              "在使用入口上，生物医学用户可以通过自然语言发起任务，而不必具备计算专业知识。这里描述的是任务发起方式；摘要没有进一步交代多智能体的角色分工、记忆如何更新，以及自演化能力的具体实现机制。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "基准成功率与跨类型分析能力",
+            "paragraphs": [
+              "作者在新发布的BioMed-AQA基准上开展评估，该基准包含327项生物医学数据任务。摘要报告BioMedAgent的成功率为77%，超过其他大语言模型智能体，并在外部BixBench数据集上表现出稳健的泛化能力；摘要未给出后者的具体成绩。",
+              "除基准评估外，摘要还报告该框架能够自主完成跨组学分析、机器学习建模和病理图像分割。这些任务展示了其处理不同分析需求的能力，但向其他科学领域扩展仍被表述为潜力，而非已经完成的跨领域验证。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "成功率之外，摘要尚不能回答什么",
+            "paragraphs": [
+              "仅凭摘要，尚无法判断任务构成、底层数据样本规模、成功判定标准、比较智能体的配置，以及结果的统计不确定性。327项任务不能直接理解为327个独立生物学样本，也不足以单独说明各类任务上的表现是否均衡。",
+              "摘要同样不足以判断外部验证覆盖了哪些工具与数据条件，以及自主分析案例的结果如何核验。这些是当前材料的信息边界，不代表论文没有开展相关工作；本文解读仅依据所提供的完整摘要。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注工具学习如何支撑多步执行",
+            "paragraphs": [
+              "阅读启发：值得进一步追问的是，交互探索和记忆检索分别如何帮助工具使用，以及这种帮助能否延续到较长的分析流程。对于同样依赖复杂工具集成与多步推理的其他科研领域，可优先关注全文中的工具适配、失败案例和验证边界，而不宜直接套用生物医学基准上的成功率。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的BioMedAgent分析流程",
+            "description": "仅概括自然语言发起任务、工具学习与工作流执行的关系，并非论文原图，不表示摘要未披露的内部架构。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "自然语言发起任务",
+                "detail": "生物医学用户通过自然语言提出分析任务，无需具备计算专业知识。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "学习使用生物信息学工具",
+                "detail": "框架通过交互式探索与记忆检索算法，学习使用不同工具。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "串联为可执行工作流",
+                "detail": "将工具连接起来，执行跨组学分析、机器学习建模或病理图像分割等任务。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "框架处理分析任务"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "串联工具并执行"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-15T16:42:56.405216+00:00",
+      "article_profile": "1ed608e960cd4b6ffe62a597aa66a52bb32a333dfc08aa6cac4302b90fddc529",
+      "analysis_references": {},
+      "analysis_material_version": "8d2227a40b9e9453e7321f2a12728635599ceb347bace4f2221ff11d37b34090",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "4ff256586cbd",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-15T16:42:56.408280+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -324,7 +623,20 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "7c4c6c80d343",
+        "state": "missing_evidence",
+        "updated_at": "2026-11-15T16:51:10.637744+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -395,7 +707,51 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "6d6fbdcf36d1",
+        "state": "failed",
+        "updated_at": "2026-11-15T18:29:01.808240+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 13,
+        "covered": 12,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页作者名清楚显示为Qi Yang，文字提取中的“Q iY a n g”是字符间距错误；原页另列Published online: 02 March 2026，所附提取文本遗漏此出版信息。不影响摘要中的性能结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "图3的坐标轴、图例和任务标签在文字提取中顺序混乱。原页可核实图3b依次为Starting material、Reaction product、Reagent catalyst、Solvent、Temperature、Time、Yield percent、Yield other；图3d另含Total。应按原图对应数值，不能按提取文本的排列配对。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P4",
+            "detail": "图3a图注原文列出“TP, TN, FP, FN”，但原图堆叠类别及共享图例仅标示TP、FN、FP，没有单列TN。此为原页图注与图示的不一致；无法据此恢复或推定TN数值，不影响已显示比例和图3d所标F1值的识读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "表1的FN、FP行在提取文本中发生数字粘连或错位。按Reactants、Reactant amount、Products、Product amount、Solvents、Temperature、Time、Yield、Total列序，原页FN为2、2、0、2、0、2、1、3、12；FP为1、3、0、0、0、1、1、0、6。原页无此缺项；纠正后总体Precision=0.9918、Recall=0.9838、F1=0.9878与计数一致，避免错误解读各任务漏报及误报。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "图6右上LLM Text Mining表的Product amounts行，volume102article24_1_1列存在原图文字截断：可见内容从“g (13.0 mmol), 325 mg (1.67…”开始，首项g前的质量数值未显示，末项括号内单位及结尾也未完整显示。放大图可确认这是表格中现有文字的裁切，不是本次识别模糊。不能恢复缺失质量或补全末项，影响该示例产物用量的完整核验，不妨碍其余页面内容识读。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P10",
+            "detail": "图8左侧Output框中的示例回答在本次放大图中仍模糊，无法可靠识别完整步骤、用量及条件，所附文字提取亦未恢复该内容。受影响的是示例回答与检索资料的一致性核验；其余图示、图注和正文已读清。无法确认原文件缺项，因此不标为source_defect，不补写模糊文字。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -420,7 +776,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Abstract Large language models (LLMs) excel at generating empathic responses in text-based conversations. But, how reliably do they judge the nuances of empathic communication? Here we investigate this question by comparing how experts, crowdworkers and LLMs annotate empathic communication across four evaluative frameworks drawn from psychology, natural language processing and communications applied to 200 real-world conversations where one speaker shares a personal problem and the other offers support. Drawing on 3,150 expert annotations, 2,844 crowd annotations and 3,150 LLM annotations, we…",
+      "summary": "本文研究的不是模型能否表达共情，而是能否可靠评价共情交流。作者在四种框架、200段英语对话上比较专家、众包和三个大语言模型，以专家间一致性校准模型表现。专家—模型加权κ中位数为0.60，但可靠性随评价维度的清晰度而变化；传统F1还会受到量表和阈值影响。文章的主要价值是建立有条件的评审基准，而非证明模型拥有共情能力或能够安全替代专业人员。[P1][P4][P6][P8]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -464,11 +820,237 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐作为自动评审与主观标注的方法论文重点阅读，尤其关注专家一致性基准、指标敏感性及提示消融；并非智能运维或结构可靠性的直接应用论文。[P6][P8][P20]",
+      "deep_read": {
+        "problem": "生成令人感到被理解的回复，不代表能够准确评价回复中的共情细节。本文关注专家、众包与模型如何判断共情交流，而非模型是否具有人格层面的共情特质。核心难题是评价对象具有情境性和主观性，专家标签本身也可能存在合理分歧。[P1][P2][P9]",
+        "method": "作者从四个数据集各抽取50段对话，围绕21个子维度收集三位专家、众包与模型标注。模型提示结合评价框架和三个专家示例；分析采用二次加权Cohen κ及Krippendorff α，并以专家评分中位数作参照，另用F1和定性分歧分析对照解释。[P9][P10][P25]",
+        "innovation": "本文的方法贡献是把框架可靠性、专家间一致性和模型—专家一致性联系起来，而非默认存在唯一正确标签。同时引入包含六个子维度的Lend an Ear框架，并通过多重共线性检查识别评价维度冗余。解读：创新重点在评价设计，而非模型架构。[P2][P8][P17]",
+        "findings": "专家间加权κ中位数为0.58，专家—模型为0.60，后者在21项中的15项超过参考阈值。可观察的提问与建议行为较易获得一致判断，意图推断则较难。众包在18项上平均评分高于专家；提示组合和CoT的收益并非所有维度都一致。[P4][P5][P7][P20][P22]",
+        "limitations": "样本仅含200段英语陌生人对话，长期关系及情感密集互动尚未验证；专家仅三位，且未进行标准化迭代编码训练。P7众包一致性范围与P5表2存在数值不一致。当前记录未确认原文件缺项，已纠正的提取遗漏不应算作缺失公式或实验。[P8][P9][P25]",
+        "connection": "解读：与智能运维、结构设计及可靠性研究的联系在评价方法，而非共情任务本身。对于诊断解释、维修建议或设计审查，可先衡量专家彼此的一致性，再解释模型评分，并检查维度冗余与阈值敏感性；本文没有提供这些工程场景的验证证据。[P6][P8][P17]",
+        "next_steps": "建议选择具体工程评审任务，邀请独立领域专家制定可观察判据，预先约定错误容忍度与人工复核条件。分别比较框架提示、示例提示及CoT，报告分维度一致性和置信区间，再测试跨场景迁移；不要直接沿用本文0.58阈值作为通用合格线。[P8][P10][P20][P22]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "大语言模型何时能够可靠评判共情交流",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s42256-025-01169-6.pdf"
+      ],
+      "analyzed_at": "2026-11-15T17:00:11.763272+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P9"
+        ],
+        "method": [
+          "P9",
+          "P10",
+          "P25"
+        ],
+        "innovation": [
+          "P2",
+          "P8",
+          "P17"
+        ],
+        "findings": [
+          "P4",
+          "P5",
+          "P7",
+          "P20",
+          "P22"
+        ],
+        "limitations": [
+          "P5",
+          "P7",
+          "P8",
+          "P9",
+          "P25"
+        ],
+        "connection": [
+          "P6",
+          "P8",
+          "P17"
+        ],
+        "next_steps": [
+          "P4",
+          "P8",
+          "P10",
+          "P20",
+          "P22"
+        ]
+      },
+      "analysis_material_version": "cc301d80f87149bed1edc161849a994d4fe152a1ae7795bcc5ffc3a32ba4fd64",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "图1下部的框架、量表及逐项标注问题在所附文字提取中遗漏，已从原页读清并补核：Empathetic Dialogues为5点Likert、3项；EPITOME为3点、3项；Perceived Empathy为7点Likert、9项；Lend an Ear为5点Likert、6项，共21项。原页内容完整，并非原文件缺项；该遗漏影响对评价维度、量表及图1比较对象的理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "图3的文字提取将分面、κw/F1轴标签及图例顺序打乱，未保留完整图形关系。已从原页核实：a为EPITOME，b为Perceived Empathy，c为Empathetic Dialogues，d为Lend an Ear；每组由上至下为κw、多分类F1、二分类F1均值及范围。紫、蓝、红分别代表专家中位标注与专家1、LLM、众包的比较。该提取错误影响不同指标和标注配对的对应关系，不属于原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "“Conversational contexts across datasets”段落的主题搜索范围在文字提取中显示为“2 3 = 8”和“2 6 = 64”，上标关系丢失。原页已读清，正确为2³=8至2⁶=64，表示按二次幂搜索主题数；最终选取16个主题。此处无独立公式编号，原文件并未缺项，错误影响主题搜索方法的理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P14",
+          "detail": "扩展数据图1的文字提取仅保留图注，遗漏图形、坐标轴及图例。已从原页核实纵轴为二次加权Cohen κ，横轴为四种共情评价框架，三种点色表示三组专家配对。遗漏影响对专家配对差异及框架内分布的理解；原页图形完整，并非源文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "扩展数据图2的文字提取仅保留图注，遗漏21个子维度的点估计、置信区间、框架配色和背景分区图形。已从原页核对这些内容；纵轴为Krippendorff α，误差线为95%置信区间。遗漏影响对子维度排序、估计不确定性及可靠性分级的理解，未从无数值标签的点位推造精确数值。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P16",
+          "detail": "扩展数据图3的文字提取仅保留图注，遗漏子维度标签、点估计、置信区间及框架图例。已从原页读清并核对。遗漏影响对三个LLM间一致性的维度差异及不确定性的理解；原图完整，无缺失公式，未推造无标签点位的精确数值。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P17",
+          "detail": "扩展数据图4的文字提取遗漏四组VIF柱状图及子维度标签。已从原页核实Empathetic Dialogues三项均超过10，Perceived Empathy八项超过10而practical低于10；EPITOME各项低于4。遗漏影响冗余维度的定位，不属于原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P18",
+          "detail": "扩展数据图5的文字提取遗漏四个框架的评分散点分布、均值及置信区间图形。原页已读清，LLM均值并非在每个框架都位于专家与众包之间，尤其Empathetic Dialogues和Lend an Ear中低于专家。遗漏会使读者无法核查图注概括的适用范围；未擅自修改作者图注。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P19",
+          "detail": "扩展数据图6的文字提取遗漏自评、众包、专家三组评分分布及颜色对应关系。已从原页核实量表为1–7，三组各300条标注，黑点和误差线表示均值及95%置信区间。遗漏影响对高端评分聚集及组间分布差异的理解；原图完整。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P20",
+          "detail": "扩展数据表1的文字提取仅保留标题和表注，遗漏21个子维度、四种提示条件的κw数值及显著性标记。已从原页核对，例如explorations四列依次为0.32、0.54、0.30、0.76。遗漏影响提示策略效果及逐项优劣的判断；原表完整，并非源文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P21",
+          "detail": "扩展数据表2的文字提取遗漏16个主题及总体、四数据集的百分比矩阵。已从原页读清并核对主题与列的对应关系。遗漏影响样本场景覆盖及数据集差异的理解；表中横线按原样保留其无数值状态，不擅自补写为测量结果。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P22",
+          "detail": "扩展数据表3的文字提取遗漏专家参照列及三模型的Fewshot、CoT六列数值。已从原页核对全部行列；例如Gemini的explorations为0.80和0.89，GPT-4o为0.88和0.64。遗漏影响对模型差异及CoT收益是否一致的判断，原页不存在表格缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P23",
+          "detail": "本页文字资料为空，但原图中的Reporting Summary正文、统计复选框、数据收集及代码声明均可读。已核实贝叶斯分析与层级复杂设计勾选n/a，其余所列统计项目勾选Confirmed。提取遗漏影响对报告规范和复现声明的核查，不是原文件空白或页面不可读。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P24",
+          "detail": "提供的文字资料为空，原页Reporting Summary第2页的研究说明、人口特征、伦理声明及复选框均可识读，已核对补充。遗漏影响对参与者构成、性别分析范围及研究伦理的理解；本页无编号公式或图，原文件并非空白。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P25",
+          "detail": "提供的文字资料为空，原页Reporting Summary第3页的抽样、收集时间、排除、未完成参与者及随机分配信息已读清。三个已发表数据集采用分层随机抽样，Lend an Ear采用随机抽样；34人开始但未完成，每人随机分配5段对话。遗漏影响方法复核。Plants栏为不适用项目的模板提示，不认定为源文件缺项。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "8c07f1e0b5ec",
+        "state": "published",
+        "updated_at": "2026-11-15T17:00:11.779041+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 25,
+        "covered": 25,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "图1下部的框架、量表及逐项标注问题在所附文字提取中遗漏，已从原页读清并补核：Empathetic Dialogues为5点Likert、3项；EPITOME为3点、3项；Perceived Empathy为7点Likert、9项；Lend an Ear为5点Likert、6项，共21项。原页内容完整，并非原文件缺项；该遗漏影响对评价维度、量表及图1比较对象的理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "图3的文字提取将分面、κw/F1轴标签及图例顺序打乱，未保留完整图形关系。已从原页核实：a为EPITOME，b为Perceived Empathy，c为Empathetic Dialogues，d为Lend an Ear；每组由上至下为κw、多分类F1、二分类F1均值及范围。紫、蓝、红分别代表专家中位标注与专家1、LLM、众包的比较。该提取错误影响不同指标和标注配对的对应关系，不属于原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "“Conversational contexts across datasets”段落的主题搜索范围在文字提取中显示为“2 3 = 8”和“2 6 = 64”，上标关系丢失。原页已读清，正确为2³=8至2⁶=64，表示按二次幂搜索主题数；最终选取16个主题。此处无独立公式编号，原文件并未缺项，错误影响主题搜索方法的理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "扩展数据图1的文字提取仅保留图注，遗漏图形、坐标轴及图例。已从原页核实纵轴为二次加权Cohen κ，横轴为四种共情评价框架，三种点色表示三组专家配对。遗漏影响对专家配对差异及框架内分布的理解；原页图形完整，并非源文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "扩展数据图2的文字提取仅保留图注，遗漏21个子维度的点估计、置信区间、框架配色和背景分区图形。已从原页核对这些内容；纵轴为Krippendorff α，误差线为95%置信区间。遗漏影响对子维度排序、估计不确定性及可靠性分级的理解，未从无数值标签的点位推造精确数值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P16",
+            "detail": "扩展数据图3的文字提取仅保留图注，遗漏子维度标签、点估计、置信区间及框架图例。已从原页读清并核对。遗漏影响对三个LLM间一致性的维度差异及不确定性的理解；原图完整，无缺失公式，未推造无标签点位的精确数值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P17",
+            "detail": "扩展数据图4的文字提取遗漏四组VIF柱状图及子维度标签。已从原页核实Empathetic Dialogues三项均超过10，Perceived Empathy八项超过10而practical低于10；EPITOME各项低于4。遗漏影响冗余维度的定位，不属于原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P18",
+            "detail": "扩展数据图5的文字提取遗漏四个框架的评分散点分布、均值及置信区间图形。原页已读清，LLM均值并非在每个框架都位于专家与众包之间，尤其Empathetic Dialogues和Lend an Ear中低于专家。遗漏会使读者无法核查图注概括的适用范围；未擅自修改作者图注。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P19",
+            "detail": "扩展数据图6的文字提取遗漏自评、众包、专家三组评分分布及颜色对应关系。已从原页核实量表为1–7，三组各300条标注，黑点和误差线表示均值及95%置信区间。遗漏影响对高端评分聚集及组间分布差异的理解；原图完整。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P20",
+            "detail": "扩展数据表1的文字提取仅保留标题和表注，遗漏21个子维度、四种提示条件的κw数值及显著性标记。已从原页核对，例如explorations四列依次为0.32、0.54、0.30、0.76。遗漏影响提示策略效果及逐项优劣的判断；原表完整，并非源文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P21",
+            "detail": "扩展数据表2的文字提取遗漏16个主题及总体、四数据集的百分比矩阵。已从原页读清并核对主题与列的对应关系。遗漏影响样本场景覆盖及数据集差异的理解；表中横线按原样保留其无数值状态，不擅自补写为测量结果。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P22",
+            "detail": "扩展数据表3的文字提取遗漏专家参照列及三模型的Fewshot、CoT六列数值。已从原页核对全部行列；例如Gemini的explorations为0.80和0.89，GPT-4o为0.88和0.64。遗漏影响对模型差异及CoT收益是否一致的判断，原页不存在表格缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P23",
+            "detail": "本页文字资料为空，但原图中的Reporting Summary正文、统计复选框、数据收集及代码声明均可读。已核实贝叶斯分析与层级复杂设计勾选n/a，其余所列统计项目勾选Confirmed。提取遗漏影响对报告规范和复现声明的核查，不是原文件空白或页面不可读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P24",
+            "detail": "提供的文字资料为空，原页Reporting Summary第2页的研究说明、人口特征、伦理声明及复选框均可识读，已核对补充。遗漏影响对参与者构成、性别分析范围及研究伦理的理解；本页无编号公式或图，原文件并非空白。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P25",
+            "detail": "提供的文字资料为空，原页Reporting Summary第3页的抽样、收集时间、排除、未完成参与者及随机分配信息已读清。三个已发表数据集采用分层随机抽样，Lend an Ear采用随机抽样；34人开始但未完成，每人随机分配5段对话。遗漏影响方法复核。Plants栏为不适用项目的模板提示，不认定为源文件缺项。"
+          }
+        ]
+      }
     }
   ],
   "extended": [],
@@ -492,7 +1074,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《Human analogical guidance amplifies LLM performance through cross-domain knowledge activation》，暂未提供可用摘要，请查看原文。",
+      "summary": "论文以流化催化裂化的历史创新为案例，结合限时语料检索、类比提示与内部激活干预，研究模型为何能整合跨领域知识。作者报告粮仓类比使方案成功率从10%升至100%，强干预则同时破坏任务成功和回答连贯性。[P3–P7] 解读：固定上下文的比较设计值得借鉴，但全面生成退化、预训练泄漏未排除及跨模型结果口径冲突，限制了选择性表征消融的因果解释。[P6、P9] 本文更适合作为实验设计与证据审查案例，而非成熟工程创新能力的证明。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -536,11 +1118,96 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议有条件重点阅读：固定检索证据后比较类比引导与激活干预的方法具有借鉴价值，但应同时审查输出退化和结果口径矛盾，不能直接采信普遍必要条件的结论。[P3、P6、P9]",
+      "deep_read": {
+        "problem": "论文追问复杂技术方案来自模型自主综合，还是需要人工指出跨领域联系，并考察内部语义表征是否限制提示效果。[P2] 作者选择固定床向流化循环转变的历史案例，以已知技术答案提供评价参照。解读：核心是知识利用条件，而非直接验证模型能够自主发明。",
+        "method": "作者以Qwen-2.5-7B运行250次试验，固定查询检索相同的十个语料片段，比较最小提示、粮仓类比及不同强度的激活干预。[P3、P10] 干预向量由各六个正负样例的平均激活差构成；回答由两名评分者独立分类，另检查时代错置术语。",
+        "innovation": "作者提出将历史反事实、限时RAG与表征工程结合，分别观察外部引导和内部干预对跨域综合的影响。[P2、P9] 解读：值得关注的是固定信息输入后分析知识利用变化，并以概念编码辅助结果评价；现有资料不足以确认该组合具有领域首创性。",
+        "findings": "作者报告类比引导将FCC分类成功率由2/20提升至20/20，斯托克斯定律利用由0/20升至18/20。[P4、P5] α=2时成功16/20，α≥4.5时成功与有效回答均为零；四类提示在固定强干预下合计0/80成功。[P6、P7] 这些是任务评价结果，并非工程实测性能。",
+        "limitations": "解读：强干预同时摧毁语言连贯性，不能据此证明仅移除目标概念；限时RAG也未排除预训练泄漏。[P6] P9新增Qwen概念保持66.6%的结果，与P10完全抑制口径未对齐，新增样本数不足。核对记录未确认原文件公式缺项；补充代码和原始数据未提供，不能声称复现。",
+        "connection": "解读：对智能运维、结构设计和可靠性研究，价值主要在专家知识如何激活模型已有证据，而非直接提供诊断或优化算法。[P8] 可借鉴人类建立类比、模型细化方案、仿真和试验核验的职责划分；论文没有在这些目标任务中验证收益，迁移效果仍待检验。",
+        "next_steps": "建议先统一P9跨模型补充结果与主要试验的指标、样本及干预条件，再进行复现。加入随机方向、非目标概念及匹配语言退化程度的对照，以区分特异干预和一般损伤。[P6、P9] 工程迁移时还应独立核验计算、风险与可实施性，不以文本成功代替可靠性证据。[P8]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "人类类比引导通过激活跨领域知识提升大语言模型表现",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41467-026-70873-7.pdf"
+      ],
+      "analyzed_at": "2026-11-15T16:13:58.980855+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P2"
+        ],
+        "method": [
+          "P3",
+          "P10"
+        ],
+        "innovation": [
+          "P2",
+          "P9"
+        ],
+        "findings": [
+          "P4",
+          "P5",
+          "P6",
+          "P7"
+        ],
+        "limitations": [
+          "P6",
+          "P9",
+          "P10"
+        ],
+        "connection": [
+          "P8"
+        ],
+        "next_steps": [
+          "P6",
+          "P8",
+          "P9"
+        ]
+      },
+      "analysis_material_version": "0eb2354d6e521466769831088a1d4475679aa81525ee0dbd1285dc5a7a7ad1e1",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "原页左侧日期栏清楚显示“Published online: 03 April 2026”，所给文字提取遗漏该出版日期，现据原页补正。不涉及公式、图表或实验结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "所给文字提取保留图1图注，但遗漏图内流程节点与标注。已从原图核对嵌入、检索、提示组装、层18/26干预及响应分类流程；公式h_modified=h_original−α·v可读，无公式占位或缺项。遗漏影响架构细节呈现，不改变本页表1的250次试验设计。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "58d76aa1e453",
+        "state": "published",
+        "updated_at": "2026-11-15T16:13:59.002748+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 11,
+        "covered": 11,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页左侧日期栏清楚显示“Published online: 03 April 2026”，所给文字提取遗漏该出版日期，现据原页补正。不涉及公式、图表或实验结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "所给文字提取保留图1图注，但遗漏图内流程节点与标注。已从原图核对嵌入、检索、提示组装、层18/26干预及响应分类流程；公式h_modified=h_original−α·v可读，无公式占位或缺项。遗漏影响架构细节呈现，不改变本页表1的250次试验设计。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -585,7 +1252,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Abstract Ensuring safe and effective use of artificial intelligence (AI) requires understanding and anticipating its performance on new tasks, from advanced scientific challenges to transformed workplace activities 1–3 . So far, benchmarking has guided progress in AI but has offered limited explanatory and predictive power for general-purpose AI systems 4–8 , attributed to limited transferability across specific tasks 9–11 . Here we introduce general scales for AI evaluation that elicit demand profiles explaining what capabilities common AI benchmarks truly measure, extract ability profiles qu…",
+      "summary": "传统基准平均准确率难以揭示模型为何失败，也难以预测新任务表现。本文以18项需求尺度和特殊维度UG统一描述任务，再提取模型能力画像、训练实例级成功预测器。研究覆盖15个LLM、20个基准和16,108个实例，需求特征在分布外预测中总体优于两类基线。[P2][P26][P27] 解读：其价值在于连接任务诊断与部署决策，而非提供安全保证；高等级外推、标注偏差及领域适用性仍须审慎检验。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -629,11 +1296,103 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐作为智能运维中模型评测、任务路由与可靠性预警的方法参考，重点阅读需求标注、主导切片及分布外对照；并非直接研究结构设计的论文。[P13][P15][P26][P27]",
+      "deep_read": {
+        "problem": "论文针对平均成绩混合题目难度、知识要求与额外干扰的问题：相同领域标签下的基准可能测量不同能力，因而产生矛盾判断。作者指出聚合结果会形成“highly confounded results”。核心问题是如何同时解释实例失败并预测未见任务，而不随模型总体更替反复改变尺度。[P1][P7][P16]",
+        "method": "作者用DeLeAn规程标注18项需求及UG，形成19维实例表示；通过主导切片保留其他需求不高于目标等级的题目，拟合逻辑斯蒂特征曲线并估计能力。预测部分另以需求向量训练随机森林，与GloVe随机森林和微调LLaMA比较区分力及校准，不能将能力曲线与预测器混为一谈。[P8][P13][P15]",
+        "innovation": "方法特色是把任务需求与系统能力放入统一、可解释的测量空间，并分离知识、基本能力及体量等额外因素。新系统画像只使用该系统结果，不依赖其他受测模型。解读：这是区别于相对排名的重要设计；但比率尺度及跨维度可通约性仍包含经验设定，不能称为已充分校准的定律。[P11][P12][P28]",
+        "findings": "任务分布外条件下，需求法加权AUROC为0.811，高于嵌入法0.740及微调法0.786；基准分布外对应为0.747、0.480、0.676。分布内需求法AUROC略低于微调法，但ECE更低。结果支持总体预测优势，而非每个模型、每项指标均领先。[P25][P26][P27]",
+        "limitations": "作者承认高等级题稀缺、模态覆盖有限；筛题可能偏倚，超过5的能力依赖外推。[P9][P14][P15] 原文件缺项包括P29通讯作者空白、日期占位，影响责任与版本追溯；P30七项研究设计栏未填，影响表单完整性，不代表正文缺失方法。无依据声称缺失公式已获验证。[P29][P30]\n原文核对：[P29] Reporting Summary页首Corresponding author(s)栏未填写，Last updated by author(s)仍保留YYYY-MM-DD占位。无公式或图号涉及；缺少通讯作者及表单更新日期，影响报告摘要的责任归属与版本追溯，不影响扩展数据表3—5现有结果的识读。；[P30] Reporting Summary的Behavioural & social sciences study design部分，Research sample、Sampling strategy、Data collection、Timing、Data exclusions、Non-participation和Randomization七栏保留模板提示，未填研究专属说明或逐栏注明不适用。无公式或图号涉及；影响本表对样本、抽样、时间与排除流程的独立报告完整性，不能据此断言论文其他部分也缺少这些方法信息。",
+        "connection": "解读：与智能运维最直接的联系是按查询需求选择模型、提前拒答或转交人工，而非仅按平均排名部署。对结构设计与可靠性研究，可借鉴任务分层和混杂因素识别，但论文未直接验证工程故障或结构安全场景；需求相关性也不能自动成为失败原因的因果证据。[P16][P17][P19]",
+        "next_steps": "建议先在运维日志诊断或设计审查中建立领域需求规程，由独立专家检验标注，再按整类任务留出测试路由和拒答效果。应同时记录误拒、漏拒、成本与人工接管收益，补充高需求实例，并评估标注成本及外推敏感性；这些属于迁移研究方案，不是作者已完成的实验。[P15][P17][P23]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "通用尺度赋予人工智能评估解释力与预测力",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41586-026-10303-2.pdf"
+      ],
+      "analyzed_at": "2026-11-15T16:29:49.115834+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P7",
+          "P16"
+        ],
+        "method": [
+          "P8",
+          "P13",
+          "P15"
+        ],
+        "innovation": [
+          "P11",
+          "P12",
+          "P28"
+        ],
+        "findings": [
+          "P25",
+          "P26",
+          "P27"
+        ],
+        "limitations": [
+          "P9",
+          "P14",
+          "P15",
+          "P29",
+          "P30"
+        ],
+        "connection": [
+          "P16",
+          "P17",
+          "P19"
+        ],
+        "next_steps": [
+          "P15",
+          "P17",
+          "P23"
+        ]
+      },
+      "analysis_material_version": "e0931d252ac61dcfcfb94dfba3ff9cc267900b300e1d1a30c3b2fff4870a7f7b",
+      "analysis_issues": [
+        {
+          "kind": "source_defect",
+          "page": "P29",
+          "detail": "Reporting Summary页首Corresponding author(s)栏未填写，Last updated by author(s)仍保留YYYY-MM-DD占位。无公式或图号涉及；缺少通讯作者及表单更新日期，影响报告摘要的责任归属与版本追溯，不影响扩展数据表3—5现有结果的识读。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P30",
+          "detail": "Reporting Summary的Behavioural & social sciences study design部分，Research sample、Sampling strategy、Data collection、Timing、Data exclusions、Non-participation和Randomization七栏保留模板提示，未填研究专属说明或逐栏注明不适用。无公式或图号涉及；影响本表对样本、抽样、时间与排除流程的独立报告完整性，不能据此断言论文其他部分也缺少这些方法信息。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "7d402ad1e656",
+        "state": "published",
+        "updated_at": "2026-11-15T16:29:49.155977+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 31,
+        "covered": 31,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "source_defect",
+            "page": "P29",
+            "detail": "Reporting Summary页首Corresponding author(s)栏未填写，Last updated by author(s)仍保留YYYY-MM-DD占位。无公式或图号涉及；缺少通讯作者及表单更新日期，影响报告摘要的责任归属与版本追溯，不影响扩展数据表3—5现有结果的识读。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P30",
+            "detail": "Reporting Summary的Behavioural & social sciences study design部分，Research sample、Sampling strategy、Data collection、Timing、Data exclusions、Non-participation和Randomization七栏保留模板提示，未填研究专属说明或逐栏注明不适用。无公式或图号涉及；影响本表对样本、抽样、时间与排除流程的独立报告完整性，不能据此断言论文其他部分也缺少这些方法信息。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -674,7 +1433,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《Empowering AI data scientists using a multi-agent LLM framework with self-evolving capabilities for autonomous, tool-aware biomedical data analyses》，暂未提供可用摘要，请查看原文。",
+      "summary": "本文提出BioMedAgent，面向生物医学分析中特殊工具使用困难、多步骤推理复杂的问题，通过交互探索与记忆检索学习工具使用，并将工具串联为可执行工作流。用户可使用自然语言发起任务。摘要报告，该框架在包含327项任务的BioMed-AQA基准上取得77%的成功率，并在外部BixBench数据集上展示泛化能力，还应用于跨组学分析、机器学习建模和病理图像分割。当前仅有摘要，尚不能核验实验细节及结论适用边界。[摘要]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -719,11 +1478,133 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议作为工具调用与多智能体科研自动化的方法参考重点阅读，尤其关注交互探索、记忆检索与工作流生成的实现；但不能仅凭摘要确认其适合尚未明确的目标研究方向。[摘要；解读]",
+      "deep_read": {
+        "problem": "论文针对生物医学数据分析中的两项障碍：专业工具难以使用，以及分析过程需要多步骤推理。原文以“specialized tools and multistep reasoning”概括这一瓶颈，目标是让缺少计算专业知识的用户也能通过自然语言发起分析任务，而非仅获取文字问答。[摘要]",
+        "method": "BioMedAgent被描述为具有自进化能力的大语言模型多智能体框架，通过“interactive exploration and memory retrieval algorithms”学习多种生物信息学工具，并连接为可执行工作流。摘要未交代智能体分工、记忆更新机制或探索反馈形式，因此不能据此还原具体算法。[摘要]",
+        "innovation": "解读：值得关注的是将工具学习、交互探索、记忆检索和工作流串联放在同一框架内，而非只让模型生成分析建议。作者同时发布BioMed-AQA作为评测载体。不过，摘要没有与已有架构进行机制层面的比较，尚不能确认各模块的新颖性及其独立贡献。[摘要]",
+        "findings": "摘要报告，BioMedAgent在包含327项生物医学数据任务的BioMed-AQA基准上取得77%的成功率，并优于其他大语言模型智能体；另称其能泛化至BixBench。应用覆盖跨组学、机器学习建模和病理分割，但摘要未提供这些应用各自的定量结果。[摘要]",
+        "limitations": "当前证据局限于摘要，而非已核对全文：成功率的判定标准、比较对象、重复实验、统计不确定性与失败案例均未说明。原文称外部泛化稳健，但没有列出对应数值。因此只能接受这些内容为作者报告，不能进一步确认复现性、安全性或实际部署可靠性。[摘要；解读]",
+        "connection": "解读：其工具编排与多步骤任务执行机制，可作为智能运维中诊断、调用分析工具及组织处理流程的方法参照；但摘要没有运维、结构设计或可靠性研究的直接实验。输入仅含方向标签，未给出方向定义，因此无法确认它与用户目标研究方向的实际契合程度。[摘要；解读]",
+        "next_steps": "建议：后续获取全文时，优先核对任务划分、成功判据、基线配置，以及探索和记忆模块的消融结果。若考虑迁移至智能运维，应另设工具调用正确性、故障定位效果和失败恢复测试。这些是待验证的研究建议，不是摘要已经证明的能力或作者明确提出的结论。[摘要；建议]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "面向自主生物医学数据分析的自进化多智能体大语言模型框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41551-026-01634-6"
+      ],
+      "analyzed_at": "2026-11-15T16:41:28.115347+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "生物医学数据分析的自动化，难点不仅是理解问题，还在于调用专业工具并完成多步推理。BioMedAgent尝试把工具学习与工作流执行连接起来，为观察大语言模型如何承担科研分析任务提供了一个具体案例。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从理解任务到调用专业工具的障碍",
+            "paragraphs": [
+              "大语言模型智能体能够自动处理复杂任务，辅助科学数据探索，但生物医学分析涉及专业工具和多步推理，仍然构成应用障碍。本文针对的是这两类困难：智能体不仅需要知道要分析什么，还需要学会使用工具，并把多个操作连接成可执行的分析流程。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "通过交互探索与记忆检索组织分析流程",
+            "paragraphs": [
+              "作者提出BioMedAgent，一个具有自演化能力的大语言模型多智能体框架。摘要明确介绍的核心方法是交互式探索与记忆检索算法：框架借此学习使用不同的生物信息学工具，并将它们串联为可执行工作流。",
+              "在使用入口上，生物医学用户可以通过自然语言发起任务，而不必具备计算专业知识。这里描述的是任务发起方式；摘要没有进一步交代多智能体的角色分工、记忆如何更新，以及自演化能力的具体实现机制。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "基准成功率与跨类型分析能力",
+            "paragraphs": [
+              "作者在新发布的BioMed-AQA基准上开展评估，该基准包含327项生物医学数据任务。摘要报告BioMedAgent的成功率为77%，超过其他大语言模型智能体，并在外部BixBench数据集上表现出稳健的泛化能力；摘要未给出后者的具体成绩。",
+              "除基准评估外，摘要还报告该框架能够自主完成跨组学分析、机器学习建模和病理图像分割。这些任务展示了其处理不同分析需求的能力，但向其他科学领域扩展仍被表述为潜力，而非已经完成的跨领域验证。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "成功率之外，摘要尚不能回答什么",
+            "paragraphs": [
+              "仅凭摘要，尚无法判断任务构成、底层数据样本规模、成功判定标准、比较智能体的配置，以及结果的统计不确定性。327项任务不能直接理解为327个独立生物学样本，也不足以单独说明各类任务上的表现是否均衡。",
+              "摘要同样不足以判断外部验证覆盖了哪些工具与数据条件，以及自主分析案例的结果如何核验。这些是当前材料的信息边界，不代表论文没有开展相关工作；本文解读仅依据所提供的完整摘要。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注工具学习如何支撑多步执行",
+            "paragraphs": [
+              "阅读启发：值得进一步追问的是，交互探索和记忆检索分别如何帮助工具使用，以及这种帮助能否延续到较长的分析流程。对于同样依赖复杂工具集成与多步推理的其他科研领域，可优先关注全文中的工具适配、失败案例和验证边界，而不宜直接套用生物医学基准上的成功率。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的BioMedAgent分析流程",
+            "description": "仅概括自然语言发起任务、工具学习与工作流执行的关系，并非论文原图，不表示摘要未披露的内部架构。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "自然语言发起任务",
+                "detail": "生物医学用户通过自然语言提出分析任务，无需具备计算专业知识。"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "学习使用生物信息学工具",
+                "detail": "框架通过交互式探索与记忆检索算法，学习使用不同工具。"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "串联为可执行工作流",
+                "detail": "将工具连接起来，执行跨组学分析、机器学习建模或病理图像分割等任务。"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "框架处理分析任务"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "串联工具并执行"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-15T16:42:56.405216+00:00",
+      "article_profile": "1ed608e960cd4b6ffe62a597aa66a52bb32a333dfc08aa6cac4302b90fddc529",
+      "analysis_references": {},
+      "analysis_material_version": "8d2227a40b9e9453e7321f2a12728635599ceb347bace4f2221ff11d37b34090",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "4ff256586cbd",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-15T16:42:56.408280+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -793,7 +1674,20 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "7c4c6c80d343",
+        "state": "missing_evidence",
+        "updated_at": "2026-11-15T16:51:10.637744+00:00",
+        "basis": "missing",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "Crossref",
@@ -864,7 +1758,51 @@
       "method": "原文未提供摘要，基于标题生成",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "6d6fbdcf36d1",
+        "state": "failed",
+        "updated_at": "2026-11-15T18:29:01.808240+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 13,
+        "covered": 12,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "原页作者名清楚显示为Qi Yang，文字提取中的“Q iY a n g”是字符间距错误；原页另列Published online: 02 March 2026，所附提取文本遗漏此出版信息。不影响摘要中的性能结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "图3的坐标轴、图例和任务标签在文字提取中顺序混乱。原页可核实图3b依次为Starting material、Reaction product、Reagent catalyst、Solvent、Temperature、Time、Yield percent、Yield other；图3d另含Total。应按原图对应数值，不能按提取文本的排列配对。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P4",
+            "detail": "图3a图注原文列出“TP, TN, FP, FN”，但原图堆叠类别及共享图例仅标示TP、FN、FP，没有单列TN。此为原页图注与图示的不一致；无法据此恢复或推定TN数值，不影响已显示比例和图3d所标F1值的识读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "表1的FN、FP行在提取文本中发生数字粘连或错位。按Reactants、Reactant amount、Products、Product amount、Solvents、Temperature、Time、Yield、Total列序，原页FN为2、2、0、2、0、2、1、3、12；FP为1、3、0、0、0、1、1、0、6。原页无此缺项；纠正后总体Precision=0.9918、Recall=0.9838、F1=0.9878与计数一致，避免错误解读各任务漏报及误报。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P8",
+            "detail": "图6右上LLM Text Mining表的Product amounts行，volume102article24_1_1列存在原图文字截断：可见内容从“g (13.0 mmol), 325 mg (1.67…”开始，首项g前的质量数值未显示，末项括号内单位及结尾也未完整显示。放大图可确认这是表格中现有文字的裁切，不是本次识别模糊。不能恢复缺失质量或补全末项，影响该示例产物用量的完整核验，不妨碍其余页面内容识读。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P10",
+            "detail": "图8左侧Output框中的示例回答在本次放大图中仍模糊，无法可靠识别完整步骤、用量及条件，所附文字提取亦未恢复该内容。受影响的是示例回答与检索资料的一致性核验；其余图示、图注和正文已读清。无法确认原文件缺项，因此不标为source_defect，不补写模糊文字。"
+          }
+        ]
+      }
     },
     {
       "source": "Crossref",
@@ -889,7 +1827,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Abstract Large language models (LLMs) excel at generating empathic responses in text-based conversations. But, how reliably do they judge the nuances of empathic communication? Here we investigate this question by comparing how experts, crowdworkers and LLMs annotate empathic communication across four evaluative frameworks drawn from psychology, natural language processing and communications applied to 200 real-world conversations where one speaker shares a personal problem and the other offers support. Drawing on 3,150 expert annotations, 2,844 crowd annotations and 3,150 LLM annotations, we…",
+      "summary": "本文研究的不是模型能否表达共情，而是能否可靠评价共情交流。作者在四种框架、200段英语对话上比较专家、众包和三个大语言模型，以专家间一致性校准模型表现。专家—模型加权κ中位数为0.60，但可靠性随评价维度的清晰度而变化；传统F1还会受到量表和阈值影响。文章的主要价值是建立有条件的评审基准，而非证明模型拥有共情能力或能够安全替代专业人员。[P1][P4][P6][P8]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -933,11 +1871,237 @@
       "focus_tags": [
         "大模型"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐作为自动评审与主观标注的方法论文重点阅读，尤其关注专家一致性基准、指标敏感性及提示消融；并非智能运维或结构可靠性的直接应用论文。[P6][P8][P20]",
+      "deep_read": {
+        "problem": "生成令人感到被理解的回复，不代表能够准确评价回复中的共情细节。本文关注专家、众包与模型如何判断共情交流，而非模型是否具有人格层面的共情特质。核心难题是评价对象具有情境性和主观性，专家标签本身也可能存在合理分歧。[P1][P2][P9]",
+        "method": "作者从四个数据集各抽取50段对话，围绕21个子维度收集三位专家、众包与模型标注。模型提示结合评价框架和三个专家示例；分析采用二次加权Cohen κ及Krippendorff α，并以专家评分中位数作参照，另用F1和定性分歧分析对照解释。[P9][P10][P25]",
+        "innovation": "本文的方法贡献是把框架可靠性、专家间一致性和模型—专家一致性联系起来，而非默认存在唯一正确标签。同时引入包含六个子维度的Lend an Ear框架，并通过多重共线性检查识别评价维度冗余。解读：创新重点在评价设计，而非模型架构。[P2][P8][P17]",
+        "findings": "专家间加权κ中位数为0.58，专家—模型为0.60，后者在21项中的15项超过参考阈值。可观察的提问与建议行为较易获得一致判断，意图推断则较难。众包在18项上平均评分高于专家；提示组合和CoT的收益并非所有维度都一致。[P4][P5][P7][P20][P22]",
+        "limitations": "样本仅含200段英语陌生人对话，长期关系及情感密集互动尚未验证；专家仅三位，且未进行标准化迭代编码训练。P7众包一致性范围与P5表2存在数值不一致。当前记录未确认原文件缺项，已纠正的提取遗漏不应算作缺失公式或实验。[P8][P9][P25]",
+        "connection": "解读：与智能运维、结构设计及可靠性研究的联系在评价方法，而非共情任务本身。对于诊断解释、维修建议或设计审查，可先衡量专家彼此的一致性，再解释模型评分，并检查维度冗余与阈值敏感性；本文没有提供这些工程场景的验证证据。[P6][P8][P17]",
+        "next_steps": "建议选择具体工程评审任务，邀请独立领域专家制定可观察判据，预先约定错误容忍度与人工复核条件。分别比较框架提示、示例提示及CoT，报告分维度一致性和置信区间，再测试跨场景迁移；不要直接沿用本文0.58阈值作为通用合格线。[P8][P10][P20][P22]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "大语言模型何时能够可靠评判共情交流",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s42256-025-01169-6.pdf"
+      ],
+      "analyzed_at": "2026-11-15T17:00:11.763272+00:00",
+      "llm_model": "gpt-6.1-sol",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P9"
+        ],
+        "method": [
+          "P9",
+          "P10",
+          "P25"
+        ],
+        "innovation": [
+          "P2",
+          "P8",
+          "P17"
+        ],
+        "findings": [
+          "P4",
+          "P5",
+          "P7",
+          "P20",
+          "P22"
+        ],
+        "limitations": [
+          "P5",
+          "P7",
+          "P8",
+          "P9",
+          "P25"
+        ],
+        "connection": [
+          "P6",
+          "P8",
+          "P17"
+        ],
+        "next_steps": [
+          "P4",
+          "P8",
+          "P10",
+          "P20",
+          "P22"
+        ]
+      },
+      "analysis_material_version": "cc301d80f87149bed1edc161849a994d4fe152a1ae7795bcc5ffc3a32ba4fd64",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "图1下部的框架、量表及逐项标注问题在所附文字提取中遗漏，已从原页读清并补核：Empathetic Dialogues为5点Likert、3项；EPITOME为3点、3项；Perceived Empathy为7点Likert、9项；Lend an Ear为5点Likert、6项，共21项。原页内容完整，并非原文件缺项；该遗漏影响对评价维度、量表及图1比较对象的理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "图3的文字提取将分面、κw/F1轴标签及图例顺序打乱，未保留完整图形关系。已从原页核实：a为EPITOME，b为Perceived Empathy，c为Empathetic Dialogues，d为Lend an Ear；每组由上至下为κw、多分类F1、二分类F1均值及范围。紫、蓝、红分别代表专家中位标注与专家1、LLM、众包的比较。该提取错误影响不同指标和标注配对的对应关系，不属于原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "“Conversational contexts across datasets”段落的主题搜索范围在文字提取中显示为“2 3 = 8”和“2 6 = 64”，上标关系丢失。原页已读清，正确为2³=8至2⁶=64，表示按二次幂搜索主题数；最终选取16个主题。此处无独立公式编号，原文件并未缺项，错误影响主题搜索方法的理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P14",
+          "detail": "扩展数据图1的文字提取仅保留图注，遗漏图形、坐标轴及图例。已从原页核实纵轴为二次加权Cohen κ，横轴为四种共情评价框架，三种点色表示三组专家配对。遗漏影响对专家配对差异及框架内分布的理解；原页图形完整，并非源文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "扩展数据图2的文字提取仅保留图注，遗漏21个子维度的点估计、置信区间、框架配色和背景分区图形。已从原页核对这些内容；纵轴为Krippendorff α，误差线为95%置信区间。遗漏影响对子维度排序、估计不确定性及可靠性分级的理解，未从无数值标签的点位推造精确数值。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P16",
+          "detail": "扩展数据图3的文字提取仅保留图注，遗漏子维度标签、点估计、置信区间及框架图例。已从原页读清并核对。遗漏影响对三个LLM间一致性的维度差异及不确定性的理解；原图完整，无缺失公式，未推造无标签点位的精确数值。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P17",
+          "detail": "扩展数据图4的文字提取遗漏四组VIF柱状图及子维度标签。已从原页核实Empathetic Dialogues三项均超过10，Perceived Empathy八项超过10而practical低于10；EPITOME各项低于4。遗漏影响冗余维度的定位，不属于原文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P18",
+          "detail": "扩展数据图5的文字提取遗漏四个框架的评分散点分布、均值及置信区间图形。原页已读清，LLM均值并非在每个框架都位于专家与众包之间，尤其Empathetic Dialogues和Lend an Ear中低于专家。遗漏会使读者无法核查图注概括的适用范围；未擅自修改作者图注。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P19",
+          "detail": "扩展数据图6的文字提取遗漏自评、众包、专家三组评分分布及颜色对应关系。已从原页核实量表为1–7，三组各300条标注，黑点和误差线表示均值及95%置信区间。遗漏影响对高端评分聚集及组间分布差异的理解；原图完整。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P20",
+          "detail": "扩展数据表1的文字提取仅保留标题和表注，遗漏21个子维度、四种提示条件的κw数值及显著性标记。已从原页核对，例如explorations四列依次为0.32、0.54、0.30、0.76。遗漏影响提示策略效果及逐项优劣的判断；原表完整，并非源文件缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P21",
+          "detail": "扩展数据表2的文字提取遗漏16个主题及总体、四数据集的百分比矩阵。已从原页读清并核对主题与列的对应关系。遗漏影响样本场景覆盖及数据集差异的理解；表中横线按原样保留其无数值状态，不擅自补写为测量结果。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P22",
+          "detail": "扩展数据表3的文字提取遗漏专家参照列及三模型的Fewshot、CoT六列数值。已从原页核对全部行列；例如Gemini的explorations为0.80和0.89，GPT-4o为0.88和0.64。遗漏影响对模型差异及CoT收益是否一致的判断，原页不存在表格缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P23",
+          "detail": "本页文字资料为空，但原图中的Reporting Summary正文、统计复选框、数据收集及代码声明均可读。已核实贝叶斯分析与层级复杂设计勾选n/a，其余所列统计项目勾选Confirmed。提取遗漏影响对报告规范和复现声明的核查，不是原文件空白或页面不可读。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P24",
+          "detail": "提供的文字资料为空，原页Reporting Summary第2页的研究说明、人口特征、伦理声明及复选框均可识读，已核对补充。遗漏影响对参与者构成、性别分析范围及研究伦理的理解；本页无编号公式或图，原文件并非空白。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P25",
+          "detail": "提供的文字资料为空，原页Reporting Summary第3页的抽样、收集时间、排除、未完成参与者及随机分配信息已读清。三个已发表数据集采用分层随机抽样，Lend an Ear采用随机抽样；34人开始但未完成，每人随机分配5段对话。遗漏影响方法复核。Plants栏为不适用项目的模板提示，不认定为源文件缺项。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "8c07f1e0b5ec",
+        "state": "published",
+        "updated_at": "2026-11-15T17:00:11.779041+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 25,
+        "covered": 25,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "图1下部的框架、量表及逐项标注问题在所附文字提取中遗漏，已从原页读清并补核：Empathetic Dialogues为5点Likert、3项；EPITOME为3点、3项；Perceived Empathy为7点Likert、9项；Lend an Ear为5点Likert、6项，共21项。原页内容完整，并非原文件缺项；该遗漏影响对评价维度、量表及图1比较对象的理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "图3的文字提取将分面、κw/F1轴标签及图例顺序打乱，未保留完整图形关系。已从原页核实：a为EPITOME，b为Perceived Empathy，c为Empathetic Dialogues，d为Lend an Ear；每组由上至下为κw、多分类F1、二分类F1均值及范围。紫、蓝、红分别代表专家中位标注与专家1、LLM、众包的比较。该提取错误影响不同指标和标注配对的对应关系，不属于原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "“Conversational contexts across datasets”段落的主题搜索范围在文字提取中显示为“2 3 = 8”和“2 6 = 64”，上标关系丢失。原页已读清，正确为2³=8至2⁶=64，表示按二次幂搜索主题数；最终选取16个主题。此处无独立公式编号，原文件并未缺项，错误影响主题搜索方法的理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "扩展数据图1的文字提取仅保留图注，遗漏图形、坐标轴及图例。已从原页核实纵轴为二次加权Cohen κ，横轴为四种共情评价框架，三种点色表示三组专家配对。遗漏影响对专家配对差异及框架内分布的理解；原页图形完整，并非源文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "扩展数据图2的文字提取仅保留图注，遗漏21个子维度的点估计、置信区间、框架配色和背景分区图形。已从原页核对这些内容；纵轴为Krippendorff α，误差线为95%置信区间。遗漏影响对子维度排序、估计不确定性及可靠性分级的理解，未从无数值标签的点位推造精确数值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P16",
+            "detail": "扩展数据图3的文字提取仅保留图注，遗漏子维度标签、点估计、置信区间及框架图例。已从原页读清并核对。遗漏影响对三个LLM间一致性的维度差异及不确定性的理解；原图完整，无缺失公式，未推造无标签点位的精确数值。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P17",
+            "detail": "扩展数据图4的文字提取遗漏四组VIF柱状图及子维度标签。已从原页核实Empathetic Dialogues三项均超过10，Perceived Empathy八项超过10而practical低于10；EPITOME各项低于4。遗漏影响冗余维度的定位，不属于原文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P18",
+            "detail": "扩展数据图5的文字提取遗漏四个框架的评分散点分布、均值及置信区间图形。原页已读清，LLM均值并非在每个框架都位于专家与众包之间，尤其Empathetic Dialogues和Lend an Ear中低于专家。遗漏会使读者无法核查图注概括的适用范围；未擅自修改作者图注。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P19",
+            "detail": "扩展数据图6的文字提取遗漏自评、众包、专家三组评分分布及颜色对应关系。已从原页核实量表为1–7，三组各300条标注，黑点和误差线表示均值及95%置信区间。遗漏影响对高端评分聚集及组间分布差异的理解；原图完整。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P20",
+            "detail": "扩展数据表1的文字提取仅保留标题和表注，遗漏21个子维度、四种提示条件的κw数值及显著性标记。已从原页核对，例如explorations四列依次为0.32、0.54、0.30、0.76。遗漏影响提示策略效果及逐项优劣的判断；原表完整，并非源文件缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P21",
+            "detail": "扩展数据表2的文字提取遗漏16个主题及总体、四数据集的百分比矩阵。已从原页读清并核对主题与列的对应关系。遗漏影响样本场景覆盖及数据集差异的理解；表中横线按原样保留其无数值状态，不擅自补写为测量结果。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P22",
+            "detail": "扩展数据表3的文字提取遗漏专家参照列及三模型的Fewshot、CoT六列数值。已从原页核对全部行列；例如Gemini的explorations为0.80和0.89，GPT-4o为0.88和0.64。遗漏影响对模型差异及CoT收益是否一致的判断，原页不存在表格缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P23",
+            "detail": "本页文字资料为空，但原图中的Reporting Summary正文、统计复选框、数据收集及代码声明均可读。已核实贝叶斯分析与层级复杂设计勾选n/a，其余所列统计项目勾选Confirmed。提取遗漏影响对报告规范和复现声明的核查，不是原文件空白或页面不可读。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P24",
+            "detail": "提供的文字资料为空，原页Reporting Summary第2页的研究说明、人口特征、伦理声明及复选框均可识读，已核对补充。遗漏影响对参与者构成、性别分析范围及研究伦理的理解；本页无编号公式或图，原文件并非空白。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P25",
+            "detail": "提供的文字资料为空，原页Reporting Summary第3页的抽样、收集时间、排除、未完成参与者及随机分配信息已读清。三个已发表数据集采用分层随机抽样，Lend an Ear采用随机抽样；34人开始但未完成，每人随机分配5段对话。遗漏影响方法复核。Plants栏为不适用项目的模板提示，不认定为源文件缺项。"
+          }
+        ]
+      }
     }
   ],
   "source_status": {
@@ -1939,13 +3103,13 @@
     "unavailable": 46
   },
   "analysis_status": {
-    "ready_core": 0,
+    "ready_core": 4,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 6
+    "pending": 2
   },
   "edition": {
     "id": "43302450731",

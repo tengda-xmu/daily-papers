@@ -1,0 +1,226 @@
+{
+  "paper_id": "79fbd5430007",
+  "fingerprint": "c2fe1768ad21e52e7571ed4a9c135cea9ccd7f91783c5ab52b00820282a82fa0",
+  "analysis": {
+    "title_zh": "为何痛苦：识别情绪支持对话中负面想法的认知驱动因素",
+    "summary": "同一事件为何让不同人产生不同痛苦？论文将问题转化为从情绪支持对话识别显著认知评价，构建996条人工标注的AppraiSal，并提出贝叶斯逆向规划框架PRISM，以候选心理状态、话语似然和逐轮更新辅助判断。实验显示其改善多种模型的识别能力，但仍落后于人类。下游人工偏好提供初步支持，而非临床疗效证据。本文适合作为可解释推断的方法参考，阅读时须同时关注合成数据偏差及公式、表格和提示模板的不一致。[P4–P10]",
+    "recommendation": "建议作为概率推断与多智能体证据整合的跨领域方法论文选读，而非智能运维或结构可靠性的直接成果；优先阅读方法、重复实验和消融，并结合缺项记录审慎判断可复现性。[P4–P6][P23–P26]",
+    "deep_read": {
+      "problem": "论文研究负面情绪背后哪些认知评价真正显著，而非仅识别情绪或枚举所有评价。事件是否阻碍目标、后果是否不可预测等解释通常隐含于对话，需要结合人格及事前信念、愿望和意图推断。作者强调模型仍落后于人类，问题核心是情境化心理状态识别，而非通用安慰生成。[P1–P4][P9]",
+      "method": "AppraiSal以事件和人格为基础生成并修订对话，再由人工选择五个显著维度。PRISM维护BDI和评价候选池，以逐词对数概率估计条件似然，用归一化熵定义轮次信息量，累计证据后交由judge裁决。附录展示评分模板，但部分输入与正文模型的对应关系未交代完整。[P3–P6][P19][P41–P43]",
+      "innovation": "作者的贡献是将显著评价识别单独建成基准，并把候选心理状态修订、贝叶斯逆向规划及轮次信息量结合用于对话推断。解读：其价值在于选择需要重点解释的认知维度，而非机械覆盖全部标签；这属于已有理论与推断组件的任务化整合，不能概括为首次提出多智能体或贝叶斯推断。[P2][P5][P15]",
+      "findings": "三次运行中，Qwen3-4B的Precision@1由0.721升至0.863；作者报告相关改进具有统计显著性。人工总体偏好中，显著性引导对普通回复胜、平、负为50%、12%、38%。但并非所有标签改善，后果不可预测性对应样本的平均F1变化为−0.050；识别增益与支持效果须分开解释。[P8][P22–P25]",
+      "limitations": "合成场景、固定五维及西方标注池限制外推，临床安全未证实。原页缺项包括：P20预测帽号缺失，指标字面含义失真；P33所称第四指标未列；P41评分占位值未给；P42人格与BDI输入、P43候选筛选及概率传入未交代，影响复现。不能补造缺项或声称已验证受影响结论。[P10][P16][P20][P33][P41–P43]\n原文核对：[P7] 原页Models段写Gemma3采用“7B and 27B”，但P6表2明确列Gemma3-4B及Gemma3-27B；属于原文型号信息不一致，并非文字提取错误。未缺公式，但小型号实验对象无法仅凭本批唯一确定。；[P7] 原页称PRISM使Qwen3-4B在“across all metrics”超过gpt-oss-120B；P6表2却显示其Precision@3为0.688<0.694、Precision@4为0.641<0.652、Precision@5为0.616<0.617、Jaccard为0.469<0.477。属于原文结论与表格不一致，无公式缺项；不能沿用全面超过的结论。；[P8] 表3(b)面板标题为“Saliency-Guided vs. Exhaustive”，正文也按显著性引导胜出解释；原页图注却写“Exhaustive versus Saliency-Guided”，比较方向相反。数字均可读且无缺项，但胜/负归属存在原文内部冲突，应保留面板、图注及正文的差异。；[P9] 表4原页“w/o Cumulative Probs”的Precision@4为0.649，完整模型为0.660，但所标下降为−0.016；按展示主数值相减应为−0.011。这是原表内部数值不一致，并非提取错误；无公式缺项。它影响该指标消融降幅的准确引用，但不改变该消融指标低于完整模型的方向性结论。；[P20] J.2的Precision@k公式在原页写为|{a_i}_{i=1}^k∩A|/k，预测元素缺少帽号；前文已将a_i定义为真值元素，因此照字面计算会恒为1，不符合“top-k predicted appraisals”的文字定义。末段又写Â={a_i}_{i=1}^5，同样缺少预测元素帽号。根据上下文应区分预测与真值元素，但此处仅指出原页符号缺项，不据此重算论文实验结果。；[P24] 表A10自一致性区的增益标注与原页主数值不一致：GPT-Mini的Precision@3为0.657，相对基线0.650应增加0.007，却标−0.007；Precision@4为0.632，相对0.622应增加0.010，却标−0.010。Qwen3.5-MoE的Precision@3为0.648，相对0.637应增加0.011，却标+0.003。无公式缺项；影响这些单项增益的方向或幅度引用，应区分原表主数值与增益标注。；[P25] 表A11的Qwen3-32B逐轮自一致性Precision@4为0.651，普通自一致性为0.646，但原页标注变化−0.005；按主数值应为+0.005。无公式缺项，属于原表增益符号错误，影响该单项变化方向的引用，不妨碍识读其余数据。；[P26] 表A13完整Qwen3-32B行Precision@1为85.07，而本批P25表A11的普通自一致性值为0.772，非可直接替代的对照；与此前主结果表A10中PRISM的0.820相比，85.07换算后为0.8507，也不一致。原页没有交代这一差异的实验条件或数值来源，不能静默将其改成82.0。无公式缺项，影响该消融基准与主实验的直接对应。；[P33] 图A13在本页结束，实际只列3个指标及3个输出评分对象，而其起始说明写“four metrics”。第四指标在完整图中未出现，属于原页数量说明与现有指标不一致；不能补造第四指标。影响评委提示的准确复现，不妨碍读取现有3项。；[P34] 图A14的JSON示例采用“I believe”“I wish”“I intend”，与P33同图Formatting Constraints规定的“I believed”“I wished”“I intended”冲突。无公式缺项；影响首轮BDI输出时态与事件前语义的规范一致性，不能静默改写原模板。；[P35] 图A16在第一个“### RESPONSE”后重复系统指令，重复的输入及输出约束续至P36，原页已核实，并非提取错误。无公式缺项；影响评分提示究竟采用单段还是重复段的复现判断，无法仅据页面确定实际实现。；[P36] 首轮认知评价采样提示先要求每组“sorted in order of salience”，随后要求5个维度“in alphabetical order”，同一候选列表存在排序约束冲突。无公式缺项；影响候选顺序、评分序列及显著性排名的复现，不能擅自选定其中一种规则。；[P38] 图A17原页图注写“Prompt for cognitive appraisals revision after the first turn”，但该跨页模板标题为“Cognitive Appraisals Sampling (First Turn)”，内容是生成num_hypothesis组初始候选，而非修订现有候选。无公式缺项，属于图注与模板用途不一致；影响首轮采样与后续修订提示的准确对应，应保留原文差异。；[P41] 图A19中other_cause定义为“someone other than the character themselves”，未包含图A17、A18定义中的“chance”。这是原页标签定义范围不一致，而非提取错误；影响随机因素致因情境的候选生成与评分一致性。无公式缺项，不能擅自统一两种定义。；[P41] 图A19在RESPONSE后印有“output_template_all_tokens: |”，随后即结束并给出图注，未展示该字段具体内容。该占位字段的用途或填充方式未交代，影响评分模板的完整复现；不能补造其值，也不能据此断定实际代码缺失。；[P42] 图A20完整提示只显式列dialogue_history与cogapp，未展示正文话语似然条件中的独立人格P和BDI B输入槽。可能通过其他字段传入，但原页未说明；影响提示与条件概率模型的直接对应，不能据此断言实际实现完全未使用人格或BDI。；[P43] 图A21完整模板固定接收4组候选H1—H4，且未展示独立的后验密度输入；正文描述则为h=8的候选池及向judge提供评价维度与后验密度。原页未交代由8组到4组的筛选或概率传入方式，影响完整工作流复现，但不能据此推造筛选规则或断定实际运行配置。",
+      "connection": "解读：若研究方向为智能运维、结构设计和可靠性，本文只有方法层联系，未研究设备、结构或故障。可借鉴根据观测生成竞争性解释、逐步积累证据及为结论绑定引文的流程；但认知评价不是工程失效机制，语言似然也不等于故障概率，迁移需要重新定义状态与验证标准。[P4–P6][P42–P43]",
+      "next_steps": "建议先核对信息量乘法是否真正改变候选间权重，再明确候选池到judge的筛选过程及完整输入。随后比较可变标签数、分级显著性与固定五维标注，加入真实复杂对话和跨文化样本。工程迁移时应使用有真实故障标签的数据，检验概率校准、证据追溯及人工监督，而非直接套用心理标签。[P6][P10][P16][P43]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.722.pdf"
+    ],
+    "analyzed_at": "2026-11-15T17:56:14.434453+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "未提供topic_tags对应的方向定义；按资料中明确讨论的智能运维、结构设计与可靠性方向判断，本文不直接切合。其候选心理状态推断、重复实验和组件消融具有明确方法阅读价值，现有资料足以支持跨领域选读，但不足以证明工程迁移有效或临床可用。",
+    "evidence": "Given an ESC trajectory and the help-seeker’s persona, PRISM\nperforms hypothesis-driven Bayesian inverse planning over latent pre-event BDI and appraisal states."
+  },
+  "material": {
+    "version": "5e7e9929cb4857410e1f509f63aa69759836e6bc14ba59fd3db917281682575a",
+    "total": 44,
+    "covered": 44,
+    "references": {
+      "problem": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P9"
+      ],
+      "method": [
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P19",
+        "P41",
+        "P42",
+        "P43"
+      ],
+      "innovation": [
+        "P2",
+        "P5",
+        "P15"
+      ],
+      "findings": [
+        "P8",
+        "P22",
+        "P23",
+        "P24",
+        "P25"
+      ],
+      "limitations": [
+        "P10",
+        "P16",
+        "P20",
+        "P33",
+        "P41",
+        "P42",
+        "P43"
+      ],
+      "connection": [
+        "P4",
+        "P5",
+        "P6",
+        "P42",
+        "P43"
+      ],
+      "next_steps": [
+        "P6",
+        "P10",
+        "P16",
+        "P43"
+      ]
+    },
+    "excerpt": "Given an ESC trajectory and the help-seeker’s persona, PRISM\nperforms hypothesis-driven Bayesian inverse planning over latent pre-event BDI and appraisal states.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P21",
+      "P22",
+      "P23",
+      "P24",
+      "P25",
+      "P26",
+      "P27",
+      "P28",
+      "P29",
+      "P30",
+      "P31",
+      "P32",
+      "P33",
+      "P34",
+      "P35",
+      "P36",
+      "P37",
+      "P38",
+      "P39",
+      "P40",
+      "P41",
+      "P42",
+      "P43",
+      "P44"
+    ],
+    "issues": [
+      {
+        "kind": "source_defect",
+        "page": "P7",
+        "detail": "原页Models段写Gemma3采用“7B and 27B”，但P6表2明确列Gemma3-4B及Gemma3-27B；属于原文型号信息不一致，并非文字提取错误。未缺公式，但小型号实验对象无法仅凭本批唯一确定。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P7",
+        "detail": "原页称PRISM使Qwen3-4B在“across all metrics”超过gpt-oss-120B；P6表2却显示其Precision@3为0.688<0.694、Precision@4为0.641<0.652、Precision@5为0.616<0.617、Jaccard为0.469<0.477。属于原文结论与表格不一致，无公式缺项；不能沿用全面超过的结论。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P8",
+        "detail": "表3(b)面板标题为“Saliency-Guided vs. Exhaustive”，正文也按显著性引导胜出解释；原页图注却写“Exhaustive versus Saliency-Guided”，比较方向相反。数字均可读且无缺项，但胜/负归属存在原文内部冲突，应保留面板、图注及正文的差异。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P9",
+        "detail": "表4原页“w/o Cumulative Probs”的Precision@4为0.649，完整模型为0.660，但所标下降为−0.016；按展示主数值相减应为−0.011。这是原表内部数值不一致，并非提取错误；无公式缺项。它影响该指标消融降幅的准确引用，但不改变该消融指标低于完整模型的方向性结论。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P20",
+        "detail": "J.2的Precision@k公式在原页写为|{a_i}_{i=1}^k∩A|/k，预测元素缺少帽号；前文已将a_i定义为真值元素，因此照字面计算会恒为1，不符合“top-k predicted appraisals”的文字定义。末段又写Â={a_i}_{i=1}^5，同样缺少预测元素帽号。根据上下文应区分预测与真值元素，但此处仅指出原页符号缺项，不据此重算论文实验结果。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P24",
+        "detail": "表A10自一致性区的增益标注与原页主数值不一致：GPT-Mini的Precision@3为0.657，相对基线0.650应增加0.007，却标−0.007；Precision@4为0.632，相对0.622应增加0.010，却标−0.010。Qwen3.5-MoE的Precision@3为0.648，相对0.637应增加0.011，却标+0.003。无公式缺项；影响这些单项增益的方向或幅度引用，应区分原表主数值与增益标注。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P25",
+        "detail": "表A11的Qwen3-32B逐轮自一致性Precision@4为0.651，普通自一致性为0.646，但原页标注变化−0.005；按主数值应为+0.005。无公式缺项，属于原表增益符号错误，影响该单项变化方向的引用，不妨碍识读其余数据。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P26",
+        "detail": "表A13完整Qwen3-32B行Precision@1为85.07，而本批P25表A11的普通自一致性值为0.772，非可直接替代的对照；与此前主结果表A10中PRISM的0.820相比，85.07换算后为0.8507，也不一致。原页没有交代这一差异的实验条件或数值来源，不能静默将其改成82.0。无公式缺项，影响该消融基准与主实验的直接对应。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P33",
+        "detail": "图A13在本页结束，实际只列3个指标及3个输出评分对象，而其起始说明写“four metrics”。第四指标在完整图中未出现，属于原页数量说明与现有指标不一致；不能补造第四指标。影响评委提示的准确复现，不妨碍读取现有3项。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P34",
+        "detail": "图A14的JSON示例采用“I believe”“I wish”“I intend”，与P33同图Formatting Constraints规定的“I believed”“I wished”“I intended”冲突。无公式缺项；影响首轮BDI输出时态与事件前语义的规范一致性，不能静默改写原模板。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P35",
+        "detail": "图A16在第一个“### RESPONSE”后重复系统指令，重复的输入及输出约束续至P36，原页已核实，并非提取错误。无公式缺项；影响评分提示究竟采用单段还是重复段的复现判断，无法仅据页面确定实际实现。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P36",
+        "detail": "首轮认知评价采样提示先要求每组“sorted in order of salience”，随后要求5个维度“in alphabetical order”，同一候选列表存在排序约束冲突。无公式缺项；影响候选顺序、评分序列及显著性排名的复现，不能擅自选定其中一种规则。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P38",
+        "detail": "图A17原页图注写“Prompt for cognitive appraisals revision after the first turn”，但该跨页模板标题为“Cognitive Appraisals Sampling (First Turn)”，内容是生成num_hypothesis组初始候选，而非修订现有候选。无公式缺项，属于图注与模板用途不一致；影响首轮采样与后续修订提示的准确对应，应保留原文差异。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P41",
+        "detail": "图A19中other_cause定义为“someone other than the character themselves”，未包含图A17、A18定义中的“chance”。这是原页标签定义范围不一致，而非提取错误；影响随机因素致因情境的候选生成与评分一致性。无公式缺项，不能擅自统一两种定义。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P41",
+        "detail": "图A19在RESPONSE后印有“output_template_all_tokens: |”，随后即结束并给出图注，未展示该字段具体内容。该占位字段的用途或填充方式未交代，影响评分模板的完整复现；不能补造其值，也不能据此断定实际代码缺失。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P42",
+        "detail": "图A20完整提示只显式列dialogue_history与cogapp，未展示正文话语似然条件中的独立人格P和BDI B输入槽。可能通过其他字段传入，但原页未说明；影响提示与条件概率模型的直接对应，不能据此断言实际实现完全未使用人格或BDI。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P43",
+        "detail": "图A21完整模板固定接收4组候选H1—H4，且未展示独立的后验密度输入；正文描述则为h=8的候选池及向judge提供评价维度与后验密度。原页未交代由8组到4组的筛选或概率传入方式，影响完整工作流复现，但不能据此推造筛选规则或断定实际运行配置。"
+      }
+    ]
+  }
+}

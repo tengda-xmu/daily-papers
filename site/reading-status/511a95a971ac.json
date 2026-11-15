@@ -1,0 +1,54 @@
+{
+  "paper_id": "511a95a971ac",
+  "state": "published",
+  "updated_at": "2026-11-15T14:56:26.540041+00:00",
+  "basis": "full_text",
+  "article_state": "failed",
+  "article_stage": "facts",
+  "reason": "",
+  "total": 10,
+  "covered": 10,
+  "pdf_available": true,
+  "issues": [
+    {
+      "kind": "source_defect",
+      "page": "P3",
+      "detail": "表1图像确认：标题称Diff行报告“mean difference with 95% CI and paired t-test p-value”，但实际仅列置信区间和部分显著性星号，没有单独列出均值差及精确p值。不能由此补写缺失统计量；影响对提升幅度和统计显著性的完整复核，不影响读取已有性能数值。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P3",
+      "detail": "表1中Llama 3.1的DDI准确率差异区间为[−0.0019, 0.0208]，原页同时标有*，表注定义为p<0.05。该95%置信区间包含0，与同一双侧配对t检验下的显著性标记存在不一致；本批无法确定区间或星号何者有误，影响该项显著性判断。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P7",
+      "detail": "式(5)原页实际显示P(S)=(L_S)/(L+I)，分子、分母均缺少det或其他行列式记号；紧接正文却用Σ_{S⊆V}det(L_S)=det(L+I)解释归一化。缺项影响DPP概率公式的直接使用；不补写原式，页面其余内容可读。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P7",
+      "detail": "式(7)之后的解释文字将多样性因子写成log(W_S)，缺少det，与式(7)、式(8)清楚显示的log det(W_S)不一致。影响该处文字表达的数学含义，不能将矩阵对数与对数行列式混同；完整定义以原页式(8)为依据。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P7",
+      "detail": "式(2)、式(3)及相关正文中的/C3、/C18，式(6)—(10)中的/C22等为提取乱码；原页可辨认为星号、子集符号及归一化向量上横线等数学记号。已按图像识读S*、T*、S⊆V、T⊆S*及归一化向量，避免误解两阶段可行域与余弦相似度定义。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P8",
+      "detail": "式(12)原页第二行写作Σ_{x_i∈T}f({x_i}∪Q)−f(Q)，未用括号将−f(Q)纳入每个求和项，也未写出相应的|T|因子。按当前排版，其与第一行Σ_{x_i∈T}f({x_i}|Q)及式(11)并不一般等价。缺少求和范围界定影响排序目标的准确复现，尤其原约束为|T|≤k；不替作者补写公式。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P8",
+      "detail": "出版日期行在文字资料中遗漏；原页Received与Accepted之后清楚写有“Published online: 11 June 2026”。已按图像补充识读，影响出版时间记录，不影响方法或实验结论。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P8",
+      "detail": "证明段及式(12)中的/C22、/C0、/C18、/C3等为提取乱码。原页可辨认为归一化向量记号、减号、子集符号和星号；一般成本约束的近似因子清楚为1−1/√e。已按原页识读，避免误解残差推导、候选可行域和近似保证数值。"
+    }
+  ]
+}

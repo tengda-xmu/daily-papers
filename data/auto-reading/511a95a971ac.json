@@ -1,0 +1,127 @@
+{
+  "paper_id": "511a95a971ac",
+  "fingerprint": "d0abb67876e9337c977a01943f04184fa4ffcae5ef0fcf5b129ccbc4481826ac",
+  "analysis": {
+    "title_zh": "数据高效的生物医学上下文学习：多样性增强的次模优化视角",
+    "summary": "Dual-Div研究如何在有限标注与提示预算下选择有效的生物医学示例，以两阶段检索和排序兼顾语义覆盖与多样性。[P2][P7]作者在实体识别、关系抽取和文本分类上比较两种大模型与三种检索器，发现早期候选多样性尤其重要，示例数量通常以3—5个较优。[P3][P5]解读：该工作适合借鉴案例选择方法，但理论保证及复现仍需审慎核查，原文存在统计报告和公式缺项。[P3][P7][P8]",
+    "recommendation": "建议作为预算约束示例检索的方法参考重点阅读，尤其关注两阶段消融与少数类评价；不宜直接作为智能运维或可靠性应用已经有效的证据。[P3][P7]",
+    "deep_read": {
+      "problem": "生物医学文本标注昂贵且类别不均衡，仅按语义相似度选示例容易重复覆盖常见模式。作者关注有限预算下如何同时保留代表性与内部差异，并避免总体准确率掩盖少数类表现；DDI仅979/5,761条测试查询含目标关系，体现了评价难点。[P1][P2]",
+      "method": "方法先用检索器生成向量，以设施选址函数衡量覆盖、以归一化相似度矩阵的对数行列式衡量多样性，再通过加权目标和lazy greedy选候选。第二阶段依据查询的条件增益进行模块化排序；必要时只标注候选，LLM仅负责最终推理。[P6][P7][P8]",
+      "innovation": "作者将多样性显式纳入检索与条件排序两个阶段，并通过阶段消融区分作用来源。解读：贡献重点是示例选择流程及目标组合，而非提出新的DPP或次模理论；去除向量范数影响的设计还尝试减轻词频对选择的干扰，其效果不能外推为消除全部语义偏差。[P2][P7]",
+      "findings": "BGE-Large下，Dual-Div在两种LLM、三项任务上的macro-F1均为表内最高，但准确率并非全面领先。作者报告18项macro-F1比较全部优于Div-S3，其中11项显著；通常3—5个示例较优，但DDI排列稳定性存在例外，不能概括为所有配置均更鲁棒。[P3][P5]",
+      "limitations": "原文缺项：[P3]表1缺均值差、精确p值，且一项区间与星号冲突，限制统计复核；[P7]式(5)及式(7)后文字缺det，影响概率与多样性表达；[P8]式(12)缺求和范围界定，影响复现。解读：λ存在性论证仍需核查，相关理论保证未获独立验证，补充算法亦未提供。\n原文核对：[P3] 表1图像确认：标题称Diff行报告“mean difference with 95% CI and paired t-test p-value”，但实际仅列置信区间和部分显著性星号，没有单独列出均值差及精确p值。不能由此补写缺失统计量；影响对提升幅度和统计显著性的完整复核，不影响读取已有性能数值。；[P3] 表1中Llama 3.1的DDI准确率差异区间为[−0.0019, 0.0208]，原页同时标有*，表注定义为p<0.05。该95%置信区间包含0，与同一双侧配对t检验下的显著性标记存在不一致；本批无法确定区间或星号何者有误，影响该项显著性判断。；[P7] 式(5)原页实际显示P(S)=(L_S)/(L+I)，分子、分母均缺少det或其他行列式记号；紧接正文却用Σ_{S⊆V}det(L_S)=det(L+I)解释归一化。缺项影响DPP概率公式的直接使用；不补写原式，页面其余内容可读。；[P7] 式(7)之后的解释文字将多样性因子写成log(W_S)，缺少det，与式(7)、式(8)清楚显示的log det(W_S)不一致。影响该处文字表达的数学含义，不能将矩阵对数与对数行列式混同；完整定义以原页式(8)为依据。；[P8] 式(12)原页第二行写作Σ_{x_i∈T}f({x_i}∪Q)−f(Q)，未用括号将−f(Q)纳入每个求和项，也未写出相应的|T|因子。按当前排版，其与第一行Σ_{x_i∈T}f({x_i}|Q)及式(11)并不一般等价。缺少求和范围界定影响排序目标的准确复现，尤其原约束为|T|≤k；不替作者补写公式。",
+      "connection": "解读：其覆盖与非冗余联合选择思路，可对应智能运维中有限预算的故障案例检索，macro-F1也提示关注稀有故障。结构设计与可靠性研究可借鉴预算建模，但论文没有工程系统实验，也未验证故障风险、失效概率或设计安全性，关联属于方法迁移而非直接成果。[P2][P7]",
+      "next_steps": "建议先核实原文公式与统计冲突，并取得补充算法，再复现两阶段消融。面向运维迁移时，应比较仅相似度、仅覆盖及联合目标，在同等标注与提示预算下评价少数故障召回、macro-F1和检索成本；同时检验λ、示例顺序及候选规模的影响，避免直接照搬经验预算。[P3][P5][P8]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://www.nature.com/articles/s44387-026-00123-0.pdf"
+    ],
+    "analyzed_at": "2026-11-15T14:56:26.516450+00:00",
+    "llm_model": "gpt-6.1-sol"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "资料明确支持其具有两阶段示例选择方法及多任务比较，值得作为方法论文阅读。但给定方向仅有未解释的标签，无法确认严格匹配；即使按智能运维、结构设计和可靠性理解，也只有间接迁移价值。现有证据足以支持方法参考价值，不足以认可工程有效性或全部理论保证。[P2][P3][P8]",
+    "evidence": "Dual-Div operates in two stages (Fig. 1), i.e., demonstration retrieval and\nranking. In theﬁrst stage, we recall a limited set of candidate examples from\na large (often unlabeled) corpus, followed by annotation if necessary."
+  },
+  "material": {
+    "version": "fcac15ca503a31378399d23fb063e7da75e9236662cc42d3c8b9986306b5ce1e",
+    "total": 10,
+    "covered": 10,
+    "references": {
+      "problem": [
+        "P1",
+        "P2"
+      ],
+      "method": [
+        "P6",
+        "P7",
+        "P8"
+      ],
+      "innovation": [
+        "P2",
+        "P7"
+      ],
+      "findings": [
+        "P3",
+        "P5"
+      ],
+      "limitations": [
+        "P3",
+        "P7",
+        "P8"
+      ],
+      "connection": [
+        "P2",
+        "P7"
+      ],
+      "next_steps": [
+        "P3",
+        "P5",
+        "P8"
+      ]
+    },
+    "excerpt": "Dual-Div operates in two stages (Fig. 1), i.e., demonstration retrieval and\nranking. In theﬁrst stage, we recall a limited set of candidate examples from\na large (often unlabeled) corpus, followed by annotation if necessary.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10"
+    ],
+    "issues": [
+      {
+        "kind": "source_defect",
+        "page": "P3",
+        "detail": "表1图像确认：标题称Diff行报告“mean difference with 95% CI and paired t-test p-value”，但实际仅列置信区间和部分显著性星号，没有单独列出均值差及精确p值。不能由此补写缺失统计量；影响对提升幅度和统计显著性的完整复核，不影响读取已有性能数值。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P3",
+        "detail": "表1中Llama 3.1的DDI准确率差异区间为[−0.0019, 0.0208]，原页同时标有*，表注定义为p<0.05。该95%置信区间包含0，与同一双侧配对t检验下的显著性标记存在不一致；本批无法确定区间或星号何者有误，影响该项显著性判断。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P7",
+        "detail": "式(5)原页实际显示P(S)=(L_S)/(L+I)，分子、分母均缺少det或其他行列式记号；紧接正文却用Σ_{S⊆V}det(L_S)=det(L+I)解释归一化。缺项影响DPP概率公式的直接使用；不补写原式，页面其余内容可读。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P7",
+        "detail": "式(7)之后的解释文字将多样性因子写成log(W_S)，缺少det，与式(7)、式(8)清楚显示的log det(W_S)不一致。影响该处文字表达的数学含义，不能将矩阵对数与对数行列式混同；完整定义以原页式(8)为依据。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P7",
+        "detail": "式(2)、式(3)及相关正文中的/C3、/C18，式(6)—(10)中的/C22等为提取乱码；原页可辨认为星号、子集符号及归一化向量上横线等数学记号。已按图像识读S*、T*、S⊆V、T⊆S*及归一化向量，避免误解两阶段可行域与余弦相似度定义。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P8",
+        "detail": "式(12)原页第二行写作Σ_{x_i∈T}f({x_i}∪Q)−f(Q)，未用括号将−f(Q)纳入每个求和项，也未写出相应的|T|因子。按当前排版，其与第一行Σ_{x_i∈T}f({x_i}|Q)及式(11)并不一般等价。缺少求和范围界定影响排序目标的准确复现，尤其原约束为|T|≤k；不替作者补写公式。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P8",
+        "detail": "出版日期行在文字资料中遗漏；原页Received与Accepted之后清楚写有“Published online: 11 June 2026”。已按图像补充识读，影响出版时间记录，不影响方法或实验结论。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P8",
+        "detail": "证明段及式(12)中的/C22、/C0、/C18、/C3等为提取乱码。原页可辨认为归一化向量记号、减号、子集符号和星号；一般成本约束的近似因子清楚为1−1/√e。已按原页识读，避免误解残差推导、候选可行域和近似保证数值。"
+      }
+    ]
+  }
+}

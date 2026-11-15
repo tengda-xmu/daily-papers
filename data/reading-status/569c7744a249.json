@@ -1,0 +1,44 @@
+{
+  "paper_id": "569c7744a249",
+  "state": "published",
+  "updated_at": "2026-11-15T14:20:38.394402+00:00",
+  "basis": "full_text",
+  "article_state": "failed",
+  "article_stage": "facts",
+  "reason": "",
+  "total": 17,
+  "covered": 17,
+  "pdf_available": true,
+  "issues": [
+    {
+      "kind": "extraction_error",
+      "page": "P10",
+      "detail": "公式(1)的文本提取将转置及数学字符扁平化为“UT KU”“cðxÞ”等；原页已核实目标为c(x)=UᵀKU，静力平衡为KU=F，设计变量界限为0≤x≤1。公式完整可读，并非原文件缺项；应按转置二次型理解柔顺度，不能把UT当作独立变量。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P11",
+      "detail": "公式(2)—(6)的提取出现“/C22x”“/C0”和求和下标“12Ne”等乱码。原页可辨：物理密度为x̄，滤波变量为x̃；公式(3)、权重及公式(6)中的相应运算为减号；公式(5)两处求和均遍历i∈Nₑ。已按原页区分变量及运算，原文件公式并未缺失。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P11",
+      "detail": "Skeletonization段末原页确实写有“2≤ distinct features”，但同段此前明确剔除“fewer than three segments”，并以2个区域和5个区域作对照。两处筛选条件方向不一致，原文缺少一致的条件说明，影响对约6000个样本剔除规则的复现；不能把该不等号当作提取错误静默改正。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P13",
+      "detail": "图9相关筛选正文计数缺少一致交代：此前P11第一阶段已由30,000个剔除约6000个、剩约24,000个；本页第二阶段又称剔除约6000个后剩24,000个。原页文字确实如此，无法据此确定两阶段实际保留数及其与109,722对增强样本的关系，不补造中间样本量。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P15",
+      "detail": "训练段先明确早停基于“test loss”，随后称验证集用于早停且测试集全程不参与训练调参，原页缺少对这一矛盾的澄清。受影响的是测试独立性和评估流程的可复现判断；不能擅自认定前一句只是笔误或认定实际使用了测试集。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P15",
+      "detail": "出版信息的文字提取遗漏原页清晰可见的“Published online: 10 November 2026”。已补充识读；该遗漏影响出版日期记录，不影响方法、图表或实验结论。"
+    }
+  ]
+}
