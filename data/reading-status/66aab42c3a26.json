@@ -1,0 +1,109 @@
+{
+  "paper_id": "66aab42c3a26",
+  "state": "published",
+  "updated_at": "2026-11-15T15:13:36.732179+00:00",
+  "basis": "full_text",
+  "article_state": "pending",
+  "article_stage": "",
+  "reason": "",
+  "total": 13,
+  "covered": 13,
+  "pdf_available": true,
+  "issues": [
+    {
+      "kind": "extraction_error",
+      "page": "P3",
+      "detail": "约束参数段的文字提取存在字符分隔及公式编码错误，如“σ2_v ¼ 12:5”。已核对原页，正确读法为 v_max = 70 km/h、σ_v² = 12.5 (km/h)²、d_min = 5 m。该处为行内参数而非编号公式；纠正影响实验约束阈值的理解，不改变作者报告的性能结论。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P4",
+      "detail": "表1与正文的 ST-P3 平均L2误差降幅不一致。按表中三时域数值，GPT-Driver 均值为(0.1837+0.407+0.7549)/3，本方法为(0.1612+0.3796+0.7016)/3，相对下降约7.67%，并非正文的7.1%。原页两处均清晰；影响降幅的准确数值，不改变本方法平均误差较低的方向。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P5",
+      "detail": "图2右下比例图标注0.770、0.855、0.850、1.000、1.000，图注却称数值≥1表示本方法达到或超过最佳基线。前两项分别对应表1中本方法/VAD的3 s碰撞率及L2误差，属于越小越好的指标；最后的总体约束满足率比例1.000也不能表示0.763相对LLM-ASSIST的0.713。缺少一致的基线和指标方向说明，不能按图注统一解释优势。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P5",
+      "detail": "图2图注称顶行比较两平台1 s、2 s、3 s结果，但原图 UniAD 两面板标题明确为“Collision Rate (3s)”和“L2 Error (3s)”，仅展示3 s。缺少图注所称的 UniAD 1 s、2 s图示，相关数值须以表1为准。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P6",
+      "detail": "公式(1)至(5)的提取文本含“¼”“/C138”“/C0”等编码错误。原页可辨认，分别应恢复为等号、转置符号T及减号等；公式(4)的约束项为−λψ_multi(S_t)，并非缺失公式。纠正涉及状态向量和优化目标的准确读取，不补造原文未定义的函数细节。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P7",
+      "detail": "图3图注与实际附图不匹配。实际图题为“Ablation Study and Stability Analysis”，内容为V(x)曲线、收敛步数箱线图及消融柱状图；图注却描述自动驾驶约束交互、编号(1)至(6)机制和S1至Sn状态演化。缺少与实际稳定性图相配的图注，阴影带及箱线图统计含义未获该图注解释。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P7",
+      "detail": "图3左上V(x)曲线与P4报告的稳态值不完全一致：Full曲线接近0.038，但Game-only与Projection-only末端未落在图中标注0.057、0.089的对应水平参考线上，尤其Projection-only仍明显高于0.089。缺少曲线与所报稳态值关系的解释；可观察到Full较低、较平滑，但不能据该图确认全部稳态数值。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P8",
+      "detail": "图4图注与原图内容不匹配。原图为道路场景、S1至Sn状态演化、LLM智能体及监测—投影—输出迁移闭环；图注却描述四个智能体的天气、交通、舒适、能耗约束及彩色椭球交集，这些内容实际见本批P9图6。图4缺少与实际图面对应的正确图注，影响模块及图号对应关系，但不妨碍读取图中文字。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P8",
+      "detail": "公式(8)后正文将逐token记录的V(x)轨迹指向图6；经核对P9原图，图6实际为多维约束可行域示意，没有V(x)轨迹。该交叉引用不能提供正文所称的稳定性实验图证，不能据图6核实下降趋势。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P8",
+      "detail": "图4文字提取出现大段乱码，如“/TOZ 9ZGZK”，原图可读为“Init State”，其余框内文字可识别为状态演化、前瞻路径选择、约束监测及闭环控制说明。公式(7)至(11)中的乱码运算符也已依原页恢复为加号、减号、乘号及不等号；不存在可见公式占位缺项。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P9",
+      "detail": "图5颜色含义不一致：图内图例写“color depth indicating constraint satisfaction degree”，图注却写“color depth indicating confidence levels”。缺少两者是否等同的说明，无法唯一确定节点颜色编码的是约束满足度还是置信度。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P9",
+      "detail": "图6图注声称展示Full、Game-only、Projection-only的V(x)生成步轨迹，实际附图标题为“Multi-dimensional Constraint Feasible Domain Modeling”，展示四类约束及向量场，没有三种消融轨迹或生成步坐标。缺少与实际图面对应的正确图注，不能用此图支持近单调下降或振荡结论。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P9",
+      "detail": "图5、图6内部文本被提取为乱码，原图可清楚读取PATH候选、平均序列评分，以及雾天30 km/h和舒适性加速度小于3 m/s²等说明。公式(12)完整可见，提取中的“/C1”应为μ与Deviation(x)之间的乘号；不应将这些提取乱码判作原文件缺字。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P10",
+      "detail": "预测解码段落以“as in Fig. 6”指引生成协调机制，但本批图6实际为多维约束可行域示意；与该段描述直接对应的前瞻预测解码树位于图5。图号引用不匹配，影响方法图文定位，不代表解码公式缺失。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P10",
+      "detail": "公式(13)至(20)的提取含星号、负号、集合符号及根号编码错误。原页可确认(18)指数为−β_iΦ_i(u_i)，分母为Z_i；(20)根号覆盖单智能体三类加权平方项与两两合作偏差平方项的总和。均为提取问题，不是原公式缺项。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P11",
+      "detail": "公式(21)至(27)的提取包含“/C1”“/C0”“/C138”等编码错误，原页均可辨认。公式(21)指数为−λ_type,i·d^pred_type,i；公式(26)依次减去η^t_coop,i·e^t_coop,i和IncentiveAdjustment^t_i；公式(27)在社会福利基础上减去个体成本总和、加上联盟收益总和。未见公式占位或缺项，纠正影响惩罚方向及优化目标的准确理解。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P12",
+      "detail": "所给文字提取遗漏原页接受日期下方的“Published online: 08 May 2026”。原图该行清晰，已补充识读为2026年5月8日在线发表；影响文献日期信息完整性，不影响方法或实验结论。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P12",
+      "detail": "Data availability原页将nuScenes dataset与GPT-Driver dataset均链接到https://www.nuscenes.org/，未提供可区分的GPT-Driver数据文件、版本或专用入口。缺少精确数据定位，影响复现实验所需数据的可追溯性；仅据本页不能判定数据实际不可获得。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P13",
+      "detail": "参考文献42的PlanAgent条目在原页仅给出https://doi.org/10.1109/TCDS，缺少完整文章级DOI后缀，也未列卷页或文章号。该条目的精确定位信息不完整，影响基线文献追溯，不直接改变本文实验数值或结论；未访问链接核验。"
+    }
+  ]
+}
