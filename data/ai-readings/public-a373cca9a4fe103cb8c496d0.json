@@ -1,0 +1,18 @@
+{
+  "id": "public-a373cca9a4fe103cb8c496d0",
+  "content_version": "543e71d5e69073a847f61b149281fc0a2bbfdec02c01cfc7c456984458905d44",
+  "analysis": {
+    "title_zh": "LangSmith 新增追踪数据访问控制，保护敏感输入与输出",
+    "summary": "【官方公告节选】LangSmith 新增三类追踪数据访问控制：限制敏感输入与输出的可见性，同时保留运行树、延迟及成本等信息供工程师调试；按用户组设置数据访问权限和工作区成员资格；利用追踪中根运行的元数据制定追踪级可见性策略。适用于涉及敏感客户信息的生产智能体调试与权限治理。所给资料为截断节选，未提供具体配置流程或效果验证数据。",
+    "application": "建议：【科研迁移建议，非官方验证效果】可考虑将这些控制用于含敏感数据的智能运维或可靠性研究，按研究团队划分访问权限，并评估隐藏输入输出后是否仍能完成故障定位。【官方说明】公告称工程师可在不查看敏感输入输出的情况下使用运行树、延迟和成本等追踪信息调试；节选未提供实验验证或量化效果。",
+    "requirements": "使用条件见官方文档",
+    "steps": [],
+    "evidence": [
+      "Control input and output access: engineers can debug with run trees, performance statistics like latency and cost, and other trace data without seeing sensitive inputs and outputs",
+      "Manage access by user groups: organize users into groups within LangSmith and set data access and workspace membership on a group-by-group basis",
+      "Create trace-level policies: use root run metadata on your traces to determine which users can see them"
+    ],
+    "basis_url": "https://www.langchain.com/blog/protect-sensitive-data-in-your-traces-new-controls-in-langsmith"
+  },
+  "analyzed_at": "2026-11-17T22:00:54.001482+00:00"
+}
