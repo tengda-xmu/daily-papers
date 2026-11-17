@@ -1,15 +1,64 @@
 {
   "paper_id": "4ff256586cbd",
-  "state": "retry",
-  "updated_at": "2026-11-17T01:26:54.822412+00:00",
+  "state": "published",
+  "updated_at": "2026-11-17T02:49:11.444649+00:00",
   "basis": "full_text",
-  "article_state": "complete",
-  "article_stage": "",
+  "article_state": "failed",
+  "article_stage": "facts",
   "reason": "",
-  "error_code": "codex_connection",
-  "next_retry_at": "2026-11-17T01:31:54.822412+00:00",
   "total": 29,
-  "covered": 0,
+  "covered": 29,
   "pdf_available": true,
-  "issues": []
+  "issues": [
+    {
+      "kind": "extraction_error",
+      "page": "P1",
+      "detail": "文字资料写作“Published online: xx xx xxxx”，但上传截图1原页明确为“Published online: 30 March 2026”。已据原页纠正，不属于原文件日期缺项，不影响框架或性能结论。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P2",
+      "detail": "文字提取先列右栏 Results，再列左栏引言，颠倒双栏阅读顺序。原页应先阅读左栏承接P1的“novel biomarkers”，再阅读右栏 Results；已按原页恢复逻辑，无正文缺项。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P3",
+      "detail": "图1中的“Workflow”被提取为“Work/f.shortlow”，分别影响记忆示例和人工标注答案标签；上传截图3可核实均为“Workflow”。图注“L TU”应连读为“LTU”。这些属于文字提取错误，不是工作流内容或公式缺失，不影响图示机制与基准组成结论。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P5",
+      "detail": "图2a的文字提取将表格拆为分散列块，破坏模型、底层LLM与数值的对应关系。已按上传截图2逐行恢复：GPT-4omini的MR三轮总体/O/P/M/S/V为0.77/0.94/0.78/0.90/0.59/0.65；DeepSeek v3两轮为0.77/0.96/0.67/0.98/0.53/0.63；MCQ为0.76/0.82/0.94/横线/0.59/横线。原表无缺项，横线不能解释为零。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P5",
+      "detail": "图2c横轴提取为“0–5 5”等错序文字；原图可读刻度依次为−5、0、5、10、15、20。−5是密度图坐标刻度，不表示观察到负数规划步数，不影响图例报告的各类平均步数。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P8",
+      "detail": "图4a记忆示例中的“work/f.shortlow”在上传截图2为“workflow”，已纠正为工作流字段；并非原文件缺少工作流。修正不改变语义检索、记忆复用及更新机制的结论。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P9",
+      "detail": "文字提取将图5a三项比较的显著性符号连为“*****”；原图分别为开放题***、允许拒答MCQ *、不允许拒答MCQ *，对应图注三项P值。图5b按列提取的符号须按原图逐行配对，不能把连续符号当作单一比较结果；无原页缺项。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P10",
+      "detail": "图6a、c中的“/f.shortind”“insu/f_f.shorticient”“Scienti/f.shortic”“signi/f.shorticantly”“work/f.shortlow”在原图分别为“find”“insufficient”“Scientific”“significantly”“workflow”。已据上传截图4纠正，均非原文件内容缺项，不影响工作流或作者结论。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P10",
+      "detail": "图6d表格被提取为分散列块；原图列顺序为Cell type、Baseline、BioMedAgent、Absolute Dice gain、Remaining gap closed。例如总体行为0.816、0.823、+0.86%、+29.90%，梭形细胞行为0.824、0.842、+2.18%、+88.70%。已恢复对应关系；百分比忠实保留，不用三位小数Dice反推改写。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P14",
+      "detail": "参考文献12的提取文字以“(2021.”结尾，上传截图2原页为“(2021).”，已核实并纠正右括号遗漏。属于提取错误，不是原文件缺项，不影响记忆更新方法或研究结论。"
+    }
+  ]
 }

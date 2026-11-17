@@ -382,7 +382,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文提出BioMedAgent，面向生物医学分析中特殊工具使用困难、多步骤推理复杂的问题，通过交互探索与记忆检索学习工具使用，并将工具串联为可执行工作流。用户可使用自然语言发起任务。摘要报告，该框架在包含327项任务的BioMed-AQA基准上取得77%的成功率，并在外部BixBench数据集上展示泛化能力，还应用于跨组学分析、机器学习建模和病理图像分割。当前仅有摘要，尚不能核验实验细节及结论适用边界。[摘要]",
+      "summary": "BioMedAgent面向专业工具调用困难、分析步骤复杂且经验难以复用的问题，将需求理解、规划、编程与执行组织为多智能体协作流程，并以交互探索修复错误、记忆检索复用成功经验。[P2、P13] 作者在327项生物医学任务上报告77%成功率，并提供未见题及外部基准评价。[P5、P20] 解读：其主要阅读价值是工具感知编排与经验更新的系统设计，而非新的生物医学算法；幻觉、工具可靠性及缺少重复评价仍限制可信部署。[P11、P28]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -429,24 +429,24 @@
       ],
       "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "建议作为工具调用与多智能体科研自动化的方法参考重点阅读，尤其关注交互探索、记忆检索与工作流生成的实现；但不能仅凭摘要确认其适合尚未明确的目标研究方向。[摘要；解读]",
+      "recommendation": "推荐作为科研分析代理的方法型论文重点阅读，尤其关注两轮工具检索、失败反馈及记忆剪枝；但不应将生物医学基准成绩直接视为智能运维或结构设计的应用证据。[P13–P14]",
       "deep_read": {
-        "problem": "论文针对生物医学数据分析中的两项障碍：专业工具难以使用，以及分析过程需要多步骤推理。原文以“specialized tools and multistep reasoning”概括这一瓶颈，目标是让缺少计算专业知识的用户也能通过自然语言发起分析任务，而非仅获取文字问答。[摘要]",
-        "method": "BioMedAgent被描述为具有自进化能力的大语言模型多智能体框架，通过“interactive exploration and memory retrieval algorithms”学习多种生物信息学工具，并连接为可执行工作流。摘要未交代智能体分工、记忆更新机制或探索反馈形式，因此不能据此还原具体算法。[摘要]",
-        "innovation": "解读：值得关注的是将工具学习、交互探索、记忆检索和工作流串联放在同一框架内，而非只让模型生成分析建议。作者同时发布BioMed-AQA作为评测载体。不过，摘要没有与已有架构进行机制层面的比较，尚不能确认各模块的新颖性及其独立贡献。[摘要]",
-        "findings": "摘要报告，BioMedAgent在包含327项生物医学数据任务的BioMed-AQA基准上取得77%的成功率，并优于其他大语言模型智能体；另称其能泛化至BixBench。应用覆盖跨组学、机器学习建模和病理分割，但摘要未提供这些应用各自的定量结果。[摘要]",
-        "limitations": "当前证据局限于摘要，而非已核对全文：成功率的判定标准、比较对象、重复实验、统计不确定性与失败案例均未说明。原文称外部泛化稳健，但没有列出对应数值。因此只能接受这些内容为作者报告，不能进一步确认复现性、安全性或实际部署可靠性。[摘要；解读]",
-        "connection": "解读：其工具编排与多步骤任务执行机制，可作为智能运维中诊断、调用分析工具及组织处理流程的方法参照；但摘要没有运维、结构设计或可靠性研究的直接实验。输入仅含方向标签，未给出方向定义，因此无法确认它与用户目标研究方向的实际契合程度。[摘要；解读]",
-        "next_steps": "建议：后续获取全文时，优先核对任务划分、成功判据、基线配置，以及探索和记忆模块的消融结果。若考虑迁移至智能运维，应另设工具调用正确性、故障定位效果和失败恢复测试。这些是待验证的研究建议，不是摘要已经证明的能力或作者明确提出的结论。[摘要；建议]"
+        "problem": "生物医学分析需要组合专业软件、处理异构数据并执行多步推理，普通代码生成或固定工作流难以同时满足灵活性与可用性。作者希望让缺乏计算训练的研究者用自然语言启动完整分析，并解决既有代理难以复用历史经验的问题。[P1–P2]",
+        "method": "框架以规划、编码、执行三阶段协作，工具管理器依据文档和依赖进行两轮检索，结合本地工具与自定义代码。交互探索通过单元测试反馈修复错误；记忆检索复用工具、工作流及代码，轮间采用累积或遗忘策略更新。[P2、P13–P14]",
+        "innovation": "解读：创新主要是把工具感知、协作探索与经验更新整合为可执行系统，而非证明某个组件首次出现。规划记忆用占位符抽象工作流，编码记忆按步骤目标匹配；IMF保留相似问题中步骤较少的路径，形成具体的记忆压缩规则。[P13–P14]",
+        "findings": "作者报告交互探索使成功率由28%升至52%，三轮记忆学习后达到77%。仅用已见题学习时，未见题成功率由0.520升至0.694。外部BixBench开放题准确率为49%，基线为37%，但其底层模型采用GPT-4.1，须区别于内部评价。[P5–P6、P12、P20]",
+        "limitations": "作者承认幻觉、专业工具可靠性及有限学习轮次的约束，报告表还声明未做重复评价。核对记录未确认原文件缺项；P10–P11未给出剩余差距改善的公式及上限，故不能独立复算29.9%。P4的超过90%表述与P类78%也须区分。[P4、P11、P28]",
+        "connection": "解读：对智能运维与可靠性研究，可借鉴依赖感知工具编排、失败重试、逐步骤状态追踪和未见任务测试。结构设计流程也可能复用此类组织方式，但论文未进行这些领域的实验；代码成功运行不能替代工程约束校验或安全性证明。[P13、P20–P24]",
+        "next_steps": "建议：迁移时先建立带真实约束和里程碑的领域基准，固定底层模型与工具权限，分别消融探索、检索和遗忘策略。进一步进行多次独立运行，报告成功率波动、成本及错误传播，并验证步骤缩短是否牺牲必要检查，避免将压缩记忆等同于提高可靠性。[P14、P28]"
       },
       "recommended_direction": "direction_7a61b97a",
-      "title_zh": "面向自主生物医学数据分析的自进化多智能体大语言模型框架",
-      "analysis_basis": "abstract",
+      "title_zh": "以具备自进化能力的多智能体大语言模型框架赋能自主生物医学数据分析",
+      "analysis_basis": "full_text",
       "analysis_kind": "model",
       "analysis_sources": [
-        "https://www.nature.com/articles/s41551-026-01634-6"
+        "https://doi.org/10.1038/s41551-026-01634-6"
       ],
-      "analyzed_at": "2026-11-15T16:41:28.115347+00:00",
+      "analyzed_at": "2026-11-17T02:49:11.408771+00:00",
       "llm_model": "gpt-6.1-sol",
       "article": {
         "version": 3,
@@ -538,21 +538,161 @@
       },
       "article_updated_at": "2026-11-15T16:42:56.405216+00:00",
       "article_profile": "1ed608e960cd4b6ffe62a597aa66a52bb32a333dfc08aa6cac4302b90fddc529",
-      "analysis_references": {},
-      "analysis_material_version": "8d2227a40b9e9453e7321f2a12728635599ceb347bace4f2221ff11d37b34090",
-      "analysis_issues": [],
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P2",
+          "P13",
+          "P14"
+        ],
+        "innovation": [
+          "P13",
+          "P14"
+        ],
+        "findings": [
+          "P5",
+          "P6",
+          "P12",
+          "P20"
+        ],
+        "limitations": [
+          "P4",
+          "P10",
+          "P11",
+          "P28"
+        ],
+        "connection": [
+          "P13",
+          "P20",
+          "P21",
+          "P22",
+          "P23",
+          "P24"
+        ],
+        "next_steps": [
+          "P14",
+          "P28"
+        ]
+      },
+      "analysis_material_version": "7c5c8075719de7abc891edc7a75a3167d81105d2a5978f9da5031151fbe12d0a",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "文字资料写作“Published online: xx xx xxxx”，但上传截图1原页明确为“Published online: 30 March 2026”。已据原页纠正，不属于原文件日期缺项，不影响框架或性能结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "文字提取先列右栏 Results，再列左栏引言，颠倒双栏阅读顺序。原页应先阅读左栏承接P1的“novel biomarkers”，再阅读右栏 Results；已按原页恢复逻辑，无正文缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "图1中的“Workflow”被提取为“Work/f.shortlow”，分别影响记忆示例和人工标注答案标签；上传截图3可核实均为“Workflow”。图注“L TU”应连读为“LTU”。这些属于文字提取错误，不是工作流内容或公式缺失，不影响图示机制与基准组成结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "图2a的文字提取将表格拆为分散列块，破坏模型、底层LLM与数值的对应关系。已按上传截图2逐行恢复：GPT-4omini的MR三轮总体/O/P/M/S/V为0.77/0.94/0.78/0.90/0.59/0.65；DeepSeek v3两轮为0.77/0.96/0.67/0.98/0.53/0.63；MCQ为0.76/0.82/0.94/横线/0.59/横线。原表无缺项，横线不能解释为零。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "图2c横轴提取为“0–5 5”等错序文字；原图可读刻度依次为−5、0、5、10、15、20。−5是密度图坐标刻度，不表示观察到负数规划步数，不影响图例报告的各类平均步数。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "图4a记忆示例中的“work/f.shortlow”在上传截图2为“workflow”，已纠正为工作流字段；并非原文件缺少工作流。修正不改变语义检索、记忆复用及更新机制的结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "文字提取将图5a三项比较的显著性符号连为“*****”；原图分别为开放题***、允许拒答MCQ *、不允许拒答MCQ *，对应图注三项P值。图5b按列提取的符号须按原图逐行配对，不能把连续符号当作单一比较结果；无原页缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P10",
+          "detail": "图6a、c中的“/f.shortind”“insu/f_f.shorticient”“Scienti/f.shortic”“signi/f.shorticantly”“work/f.shortlow”在原图分别为“find”“insufficient”“Scientific”“significantly”“workflow”。已据上传截图4纠正，均非原文件内容缺项，不影响工作流或作者结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P10",
+          "detail": "图6d表格被提取为分散列块；原图列顺序为Cell type、Baseline、BioMedAgent、Absolute Dice gain、Remaining gap closed。例如总体行为0.816、0.823、+0.86%、+29.90%，梭形细胞行为0.824、0.842、+2.18%、+88.70%。已恢复对应关系；百分比忠实保留，不用三位小数Dice反推改写。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P14",
+          "detail": "参考文献12的提取文字以“(2021.”结尾，上传截图2原页为“(2021).”，已核实并纠正右括号遗漏。属于提取错误，不是原文件缺项，不影响记忆更新方法或研究结论。"
+        }
+      ],
       "reading_status": {
         "paper_id": "4ff256586cbd",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-11-15T16:42:56.408280+00:00",
-        "basis": "abstract",
-        "article_state": "complete",
-        "article_stage": "",
-        "reason": "not_found",
-        "total": 0,
-        "covered": 0,
-        "pdf_available": false,
-        "issues": []
+        "state": "published",
+        "updated_at": "2026-11-17T02:49:11.444649+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 29,
+        "covered": 29,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "文字资料写作“Published online: xx xx xxxx”，但上传截图1原页明确为“Published online: 30 March 2026”。已据原页纠正，不属于原文件日期缺项，不影响框架或性能结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "文字提取先列右栏 Results，再列左栏引言，颠倒双栏阅读顺序。原页应先阅读左栏承接P1的“novel biomarkers”，再阅读右栏 Results；已按原页恢复逻辑，无正文缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "图1中的“Workflow”被提取为“Work/f.shortlow”，分别影响记忆示例和人工标注答案标签；上传截图3可核实均为“Workflow”。图注“L TU”应连读为“LTU”。这些属于文字提取错误，不是工作流内容或公式缺失，不影响图示机制与基准组成结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "图2a的文字提取将表格拆为分散列块，破坏模型、底层LLM与数值的对应关系。已按上传截图2逐行恢复：GPT-4omini的MR三轮总体/O/P/M/S/V为0.77/0.94/0.78/0.90/0.59/0.65；DeepSeek v3两轮为0.77/0.96/0.67/0.98/0.53/0.63；MCQ为0.76/0.82/0.94/横线/0.59/横线。原表无缺项，横线不能解释为零。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "图2c横轴提取为“0–5 5”等错序文字；原图可读刻度依次为−5、0、5、10、15、20。−5是密度图坐标刻度，不表示观察到负数规划步数，不影响图例报告的各类平均步数。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "图4a记忆示例中的“work/f.shortlow”在上传截图2为“workflow”，已纠正为工作流字段；并非原文件缺少工作流。修正不改变语义检索、记忆复用及更新机制的结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "文字提取将图5a三项比较的显著性符号连为“*****”；原图分别为开放题***、允许拒答MCQ *、不允许拒答MCQ *，对应图注三项P值。图5b按列提取的符号须按原图逐行配对，不能把连续符号当作单一比较结果；无原页缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "图6a、c中的“/f.shortind”“insu/f_f.shorticient”“Scienti/f.shortic”“signi/f.shorticantly”“work/f.shortlow”在原图分别为“find”“insufficient”“Scientific”“significantly”“workflow”。已据上传截图4纠正，均非原文件内容缺项，不影响工作流或作者结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "图6d表格被提取为分散列块；原图列顺序为Cell type、Baseline、BioMedAgent、Absolute Dice gain、Remaining gap closed。例如总体行为0.816、0.823、+0.86%、+29.90%，梭形细胞行为0.824、0.842、+2.18%、+88.70%。已恢复对应关系；百分比忠实保留，不用三位小数Dice反推改写。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "参考文献12的提取文字以“(2021.”结尾，上传截图2原页为“(2021).”，已核实并纠正右括号遗漏。属于提取错误，不是原文件缺项，不影响记忆更新方法或研究结论。"
+          }
+        ]
       }
     },
     {
@@ -626,15 +766,15 @@
       "recommended_direction": "direction_7a61b97a",
       "reading_status": {
         "paper_id": "7c4c6c80d343",
-        "state": "missing_evidence",
-        "updated_at": "2026-11-15T16:51:10.637744+00:00",
-        "basis": "missing",
+        "state": "failed",
+        "updated_at": "2026-11-17T03:48:28.838603+00:00",
+        "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
-        "total": 0,
+        "reason": "",
+        "total": 3,
         "covered": 0,
-        "pdf_available": false,
+        "pdf_available": true,
         "issues": []
       }
     },
@@ -711,7 +851,7 @@
       "reading_status": {
         "paper_id": "6d6fbdcf36d1",
         "state": "failed",
-        "updated_at": "2026-11-15T18:29:01.808240+00:00",
+        "updated_at": "2026-11-17T01:57:42.861005+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -1433,7 +1573,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文提出BioMedAgent，面向生物医学分析中特殊工具使用困难、多步骤推理复杂的问题，通过交互探索与记忆检索学习工具使用，并将工具串联为可执行工作流。用户可使用自然语言发起任务。摘要报告，该框架在包含327项任务的BioMed-AQA基准上取得77%的成功率，并在外部BixBench数据集上展示泛化能力，还应用于跨组学分析、机器学习建模和病理图像分割。当前仅有摘要，尚不能核验实验细节及结论适用边界。[摘要]",
+      "summary": "BioMedAgent面向专业工具调用困难、分析步骤复杂且经验难以复用的问题，将需求理解、规划、编程与执行组织为多智能体协作流程，并以交互探索修复错误、记忆检索复用成功经验。[P2、P13] 作者在327项生物医学任务上报告77%成功率，并提供未见题及外部基准评价。[P5、P20] 解读：其主要阅读价值是工具感知编排与经验更新的系统设计，而非新的生物医学算法；幻觉、工具可靠性及缺少重复评价仍限制可信部署。[P11、P28]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -1480,24 +1620,24 @@
       ],
       "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "建议作为工具调用与多智能体科研自动化的方法参考重点阅读，尤其关注交互探索、记忆检索与工作流生成的实现；但不能仅凭摘要确认其适合尚未明确的目标研究方向。[摘要；解读]",
+      "recommendation": "推荐作为科研分析代理的方法型论文重点阅读，尤其关注两轮工具检索、失败反馈及记忆剪枝；但不应将生物医学基准成绩直接视为智能运维或结构设计的应用证据。[P13–P14]",
       "deep_read": {
-        "problem": "论文针对生物医学数据分析中的两项障碍：专业工具难以使用，以及分析过程需要多步骤推理。原文以“specialized tools and multistep reasoning”概括这一瓶颈，目标是让缺少计算专业知识的用户也能通过自然语言发起分析任务，而非仅获取文字问答。[摘要]",
-        "method": "BioMedAgent被描述为具有自进化能力的大语言模型多智能体框架，通过“interactive exploration and memory retrieval algorithms”学习多种生物信息学工具，并连接为可执行工作流。摘要未交代智能体分工、记忆更新机制或探索反馈形式，因此不能据此还原具体算法。[摘要]",
-        "innovation": "解读：值得关注的是将工具学习、交互探索、记忆检索和工作流串联放在同一框架内，而非只让模型生成分析建议。作者同时发布BioMed-AQA作为评测载体。不过，摘要没有与已有架构进行机制层面的比较，尚不能确认各模块的新颖性及其独立贡献。[摘要]",
-        "findings": "摘要报告，BioMedAgent在包含327项生物医学数据任务的BioMed-AQA基准上取得77%的成功率，并优于其他大语言模型智能体；另称其能泛化至BixBench。应用覆盖跨组学、机器学习建模和病理分割，但摘要未提供这些应用各自的定量结果。[摘要]",
-        "limitations": "当前证据局限于摘要，而非已核对全文：成功率的判定标准、比较对象、重复实验、统计不确定性与失败案例均未说明。原文称外部泛化稳健，但没有列出对应数值。因此只能接受这些内容为作者报告，不能进一步确认复现性、安全性或实际部署可靠性。[摘要；解读]",
-        "connection": "解读：其工具编排与多步骤任务执行机制，可作为智能运维中诊断、调用分析工具及组织处理流程的方法参照；但摘要没有运维、结构设计或可靠性研究的直接实验。输入仅含方向标签，未给出方向定义，因此无法确认它与用户目标研究方向的实际契合程度。[摘要；解读]",
-        "next_steps": "建议：后续获取全文时，优先核对任务划分、成功判据、基线配置，以及探索和记忆模块的消融结果。若考虑迁移至智能运维，应另设工具调用正确性、故障定位效果和失败恢复测试。这些是待验证的研究建议，不是摘要已经证明的能力或作者明确提出的结论。[摘要；建议]"
+        "problem": "生物医学分析需要组合专业软件、处理异构数据并执行多步推理，普通代码生成或固定工作流难以同时满足灵活性与可用性。作者希望让缺乏计算训练的研究者用自然语言启动完整分析，并解决既有代理难以复用历史经验的问题。[P1–P2]",
+        "method": "框架以规划、编码、执行三阶段协作，工具管理器依据文档和依赖进行两轮检索，结合本地工具与自定义代码。交互探索通过单元测试反馈修复错误；记忆检索复用工具、工作流及代码，轮间采用累积或遗忘策略更新。[P2、P13–P14]",
+        "innovation": "解读：创新主要是把工具感知、协作探索与经验更新整合为可执行系统，而非证明某个组件首次出现。规划记忆用占位符抽象工作流，编码记忆按步骤目标匹配；IMF保留相似问题中步骤较少的路径，形成具体的记忆压缩规则。[P13–P14]",
+        "findings": "作者报告交互探索使成功率由28%升至52%，三轮记忆学习后达到77%。仅用已见题学习时，未见题成功率由0.520升至0.694。外部BixBench开放题准确率为49%，基线为37%，但其底层模型采用GPT-4.1，须区别于内部评价。[P5–P6、P12、P20]",
+        "limitations": "作者承认幻觉、专业工具可靠性及有限学习轮次的约束，报告表还声明未做重复评价。核对记录未确认原文件缺项；P10–P11未给出剩余差距改善的公式及上限，故不能独立复算29.9%。P4的超过90%表述与P类78%也须区分。[P4、P11、P28]",
+        "connection": "解读：对智能运维与可靠性研究，可借鉴依赖感知工具编排、失败重试、逐步骤状态追踪和未见任务测试。结构设计流程也可能复用此类组织方式，但论文未进行这些领域的实验；代码成功运行不能替代工程约束校验或安全性证明。[P13、P20–P24]",
+        "next_steps": "建议：迁移时先建立带真实约束和里程碑的领域基准，固定底层模型与工具权限，分别消融探索、检索和遗忘策略。进一步进行多次独立运行，报告成功率波动、成本及错误传播，并验证步骤缩短是否牺牲必要检查，避免将压缩记忆等同于提高可靠性。[P14、P28]"
       },
       "recommended_direction": "direction_7a61b97a",
-      "title_zh": "面向自主生物医学数据分析的自进化多智能体大语言模型框架",
-      "analysis_basis": "abstract",
+      "title_zh": "以具备自进化能力的多智能体大语言模型框架赋能自主生物医学数据分析",
+      "analysis_basis": "full_text",
       "analysis_kind": "model",
       "analysis_sources": [
-        "https://www.nature.com/articles/s41551-026-01634-6"
+        "https://doi.org/10.1038/s41551-026-01634-6"
       ],
-      "analyzed_at": "2026-11-15T16:41:28.115347+00:00",
+      "analyzed_at": "2026-11-17T02:49:11.408771+00:00",
       "llm_model": "gpt-6.1-sol",
       "article": {
         "version": 3,
@@ -1589,21 +1729,161 @@
       },
       "article_updated_at": "2026-11-15T16:42:56.405216+00:00",
       "article_profile": "1ed608e960cd4b6ffe62a597aa66a52bb32a333dfc08aa6cac4302b90fddc529",
-      "analysis_references": {},
-      "analysis_material_version": "8d2227a40b9e9453e7321f2a12728635599ceb347bace4f2221ff11d37b34090",
-      "analysis_issues": [],
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P2",
+          "P13",
+          "P14"
+        ],
+        "innovation": [
+          "P13",
+          "P14"
+        ],
+        "findings": [
+          "P5",
+          "P6",
+          "P12",
+          "P20"
+        ],
+        "limitations": [
+          "P4",
+          "P10",
+          "P11",
+          "P28"
+        ],
+        "connection": [
+          "P13",
+          "P20",
+          "P21",
+          "P22",
+          "P23",
+          "P24"
+        ],
+        "next_steps": [
+          "P14",
+          "P28"
+        ]
+      },
+      "analysis_material_version": "7c5c8075719de7abc891edc7a75a3167d81105d2a5978f9da5031151fbe12d0a",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "文字资料写作“Published online: xx xx xxxx”，但上传截图1原页明确为“Published online: 30 March 2026”。已据原页纠正，不属于原文件日期缺项，不影响框架或性能结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "文字提取先列右栏 Results，再列左栏引言，颠倒双栏阅读顺序。原页应先阅读左栏承接P1的“novel biomarkers”，再阅读右栏 Results；已按原页恢复逻辑，无正文缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P3",
+          "detail": "图1中的“Workflow”被提取为“Work/f.shortlow”，分别影响记忆示例和人工标注答案标签；上传截图3可核实均为“Workflow”。图注“L TU”应连读为“LTU”。这些属于文字提取错误，不是工作流内容或公式缺失，不影响图示机制与基准组成结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "图2a的文字提取将表格拆为分散列块，破坏模型、底层LLM与数值的对应关系。已按上传截图2逐行恢复：GPT-4omini的MR三轮总体/O/P/M/S/V为0.77/0.94/0.78/0.90/0.59/0.65；DeepSeek v3两轮为0.77/0.96/0.67/0.98/0.53/0.63；MCQ为0.76/0.82/0.94/横线/0.59/横线。原表无缺项，横线不能解释为零。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "图2c横轴提取为“0–5 5”等错序文字；原图可读刻度依次为−5、0、5、10、15、20。−5是密度图坐标刻度，不表示观察到负数规划步数，不影响图例报告的各类平均步数。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "图4a记忆示例中的“work/f.shortlow”在上传截图2为“workflow”，已纠正为工作流字段；并非原文件缺少工作流。修正不改变语义检索、记忆复用及更新机制的结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "文字提取将图5a三项比较的显著性符号连为“*****”；原图分别为开放题***、允许拒答MCQ *、不允许拒答MCQ *，对应图注三项P值。图5b按列提取的符号须按原图逐行配对，不能把连续符号当作单一比较结果；无原页缺项。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P10",
+          "detail": "图6a、c中的“/f.shortind”“insu/f_f.shorticient”“Scienti/f.shortic”“signi/f.shorticantly”“work/f.shortlow”在原图分别为“find”“insufficient”“Scientific”“significantly”“workflow”。已据上传截图4纠正，均非原文件内容缺项，不影响工作流或作者结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P10",
+          "detail": "图6d表格被提取为分散列块；原图列顺序为Cell type、Baseline、BioMedAgent、Absolute Dice gain、Remaining gap closed。例如总体行为0.816、0.823、+0.86%、+29.90%，梭形细胞行为0.824、0.842、+2.18%、+88.70%。已恢复对应关系；百分比忠实保留，不用三位小数Dice反推改写。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P14",
+          "detail": "参考文献12的提取文字以“(2021.”结尾，上传截图2原页为“(2021).”，已核实并纠正右括号遗漏。属于提取错误，不是原文件缺项，不影响记忆更新方法或研究结论。"
+        }
+      ],
       "reading_status": {
         "paper_id": "4ff256586cbd",
-        "state": "awaiting_fulltext",
-        "updated_at": "2026-11-15T16:42:56.408280+00:00",
-        "basis": "abstract",
-        "article_state": "complete",
-        "article_stage": "",
-        "reason": "not_found",
-        "total": 0,
-        "covered": 0,
-        "pdf_available": false,
-        "issues": []
+        "state": "published",
+        "updated_at": "2026-11-17T02:49:11.444649+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 29,
+        "covered": 29,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "文字资料写作“Published online: xx xx xxxx”，但上传截图1原页明确为“Published online: 30 March 2026”。已据原页纠正，不属于原文件日期缺项，不影响框架或性能结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "文字提取先列右栏 Results，再列左栏引言，颠倒双栏阅读顺序。原页应先阅读左栏承接P1的“novel biomarkers”，再阅读右栏 Results；已按原页恢复逻辑，无正文缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "图1中的“Workflow”被提取为“Work/f.shortlow”，分别影响记忆示例和人工标注答案标签；上传截图3可核实均为“Workflow”。图注“L TU”应连读为“LTU”。这些属于文字提取错误，不是工作流内容或公式缺失，不影响图示机制与基准组成结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "图2a的文字提取将表格拆为分散列块，破坏模型、底层LLM与数值的对应关系。已按上传截图2逐行恢复：GPT-4omini的MR三轮总体/O/P/M/S/V为0.77/0.94/0.78/0.90/0.59/0.65；DeepSeek v3两轮为0.77/0.96/0.67/0.98/0.53/0.63；MCQ为0.76/0.82/0.94/横线/0.59/横线。原表无缺项，横线不能解释为零。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "图2c横轴提取为“0–5 5”等错序文字；原图可读刻度依次为−5、0、5、10、15、20。−5是密度图坐标刻度，不表示观察到负数规划步数，不影响图例报告的各类平均步数。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "图4a记忆示例中的“work/f.shortlow”在上传截图2为“workflow”，已纠正为工作流字段；并非原文件缺少工作流。修正不改变语义检索、记忆复用及更新机制的结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "文字提取将图5a三项比较的显著性符号连为“*****”；原图分别为开放题***、允许拒答MCQ *、不允许拒答MCQ *，对应图注三项P值。图5b按列提取的符号须按原图逐行配对，不能把连续符号当作单一比较结果；无原页缺项。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "图6a、c中的“/f.shortind”“insu/f_f.shorticient”“Scienti/f.shortic”“signi/f.shorticantly”“work/f.shortlow”在原图分别为“find”“insufficient”“Scientific”“significantly”“workflow”。已据上传截图4纠正，均非原文件内容缺项，不影响工作流或作者结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "图6d表格被提取为分散列块；原图列顺序为Cell type、Baseline、BioMedAgent、Absolute Dice gain、Remaining gap closed。例如总体行为0.816、0.823、+0.86%、+29.90%，梭形细胞行为0.824、0.842、+2.18%、+88.70%。已恢复对应关系；百分比忠实保留，不用三位小数Dice反推改写。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "参考文献12的提取文字以“(2021.”结尾，上传截图2原页为“(2021).”，已核实并纠正右括号遗漏。属于提取错误，不是原文件缺项，不影响记忆更新方法或研究结论。"
+          }
+        ]
       }
     },
     {
@@ -1677,15 +1957,15 @@
       "recommended_direction": "direction_7a61b97a",
       "reading_status": {
         "paper_id": "7c4c6c80d343",
-        "state": "missing_evidence",
-        "updated_at": "2026-11-15T16:51:10.637744+00:00",
-        "basis": "missing",
+        "state": "failed",
+        "updated_at": "2026-11-17T03:48:28.838603+00:00",
+        "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
-        "reason": "not_found",
-        "total": 0,
+        "reason": "",
+        "total": 3,
         "covered": 0,
-        "pdf_available": false,
+        "pdf_available": true,
         "issues": []
       }
     },
@@ -1762,7 +2042,7 @@
       "reading_status": {
         "paper_id": "6d6fbdcf36d1",
         "state": "failed",
-        "updated_at": "2026-11-15T18:29:01.808240+00:00",
+        "updated_at": "2026-11-17T01:57:42.861005+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
