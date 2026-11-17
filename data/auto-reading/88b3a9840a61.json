@@ -3,86 +3,38 @@
   "fingerprint": "e09c942cb5db27cf95b29e5a5616ff306e929b3046e3da287fd6edf75947f6f5",
   "analysis": {
     "title_zh": "Panoramic：面向开放无线接入网部署的跨层测量平台",
-    "summary": "Open RAN部署涉及无线接入网、5G核心网、Kubernetes及服务器等多源遥测，但各源使用不同标识，难以直接关联。所给摘要指出，现有工具分散采集数据，跨层查询需要人工重建拓扑，部分指标甚至无法确定所属组件或部署。本文以跨层测量平台为主题，但当前摘要未提供平台实现、评估方法或实验结果。因此，可将其作为智能运维数据关联问题的阅读线索，尚不能确认技术贡献与实际收益。[摘要]",
-    "recommendation": "建议作为智能运维中多源遥测关联与资源身份映射问题的候选文献；当前资料仅充分说明问题，宜补充方法和评估内容后再决定是否重点精读。[摘要]",
+    "summary": "Open RAN不同层采用不同标识体系，跨层排障因而需要反复手工重建拓扑。Panoramic从部署配置建立标识映射，在指标采集入库时附加共享标签，同时保留原有KPI语义，并按运行状态启用临时标识。平台面向跨层故障诊断、机器学习数据导出及受权限约束的语言模型代理操作。[摘要]解读：其价值在于补齐智能运维的数据关联基础，而非证明新的诊断算法有效；当前仅有摘要，尚不能判断实际性能。",
+    "recommendation": "建议重点阅读其配置驱动的标识映射、共享标签和受限代理接口设计，这些机制直接关联智能运维的数据治理与安全执行；但须获取全文后核查诊断收益和运行开销，不能将摘要中的功能陈述视为实验验证。[摘要]",
     "deep_read": {
-      "problem": "核心问题是跨层遥测缺乏统一身份关联：无线接入网使用cell-ID和PCI，Kubernetes使用namespace和pod，交换机使用port和VLAN。摘要明确指出，不同标识之间没有“common mapping”，使跨源事件定位依赖人工重建拓扑。[摘要]",
-      "method": "当前资料只交代现有工具分源采集及标识不统一的背景，没有说明Panoramic如何采集、存储或关联数据。不能据题名推定其采用知识图谱、统一标识符或时间同步方案，也无法核对系统架构、查询接口与部署要求。[摘要]",
-      "innovation": "解读：潜在创新空间在于把分散遥测转化为可跨层关联的观测信息，并解决指标缺少归属标识的问题。但这些只是摘要揭示的需求，尚非已证实的作者贡献；当前资料不足以判断平台相对既有工具的新颖性和技术边界。[摘要]",
-      "findings": "摘要提供的问题性描述是：关联DU事件、主机CPU突增或交换机端口错误时，每次查询均需人工重建拓扑；单一来源中的指标也可能缺少组件或部署归属信息。这些不是平台效果评估，资料未报告关联准确率、查询耗时或运维改善结果。[摘要]",
-      "limitations": "当前可确认的是资料范围受限，而非论文已证实存在某种技术缺陷。提供的摘要没有实验设置、基线对照、部署规模和资源开销，因而无法判断平台有效性及适用范围；不能将这些未提供的信息直接表述为作者未开展相关工作。[摘要]",
-      "connection": "解读：该问题与智能运维中的告警关联和故障定位直接相关，因为跨层分析首先需要确定指标对应哪个组件及部署。它也可为可靠性分析提供数据组织方面的启发，但摘要没有故障预测或可靠性验证，对结构设计研究的直接关联尚无证据。[摘要]",
-      "next_steps": "建议：后续阅读优先核对身份映射如何建立和更新、缺失标识如何处理，以及拓扑变化时关联是否保持正确。若迁移至智能运维研究，可设计跨层故障定位任务，对比人工关联与平台辅助流程；这些属于研究建议，不是作者已报告的方法或结果。"
+      "problem": "论文针对跨层遥测无法直接关联的问题：RAN、Kubernetes与交换机分别采用小区、命名空间、端口等标识，现有工具缺少共同映射，单源指标也可能不足以确定归属。摘要以“manual topology reconstruction”说明每次查询都需人工重建拓扑的负担。[摘要]",
+      "method": "平台从部署配置构建缺失的标识映射，并在指标摄取时附加共享标签；各源采集器保留原有KPI语义，使跨层测量能够关联。稳定部署标识持续启用，RNTI、pod名称等临时标识仅在RAN运行时启用，摘要将此描述为保持日常监控轻量的机制。[摘要]",
+      "innovation": "解读：值得关注的设计组合，是把部署配置中的关联关系前移到指标摄取阶段，以共享标签连接异构身份体系，同时保留各数据源的指标语义。这不同于查询时重新拼接拓扑；但摘要没有充分的相关工作比较，不能据此认定其首创性或相对现有平台的领先程度。[摘要]",
+      "findings": "摘要报告平台支持跨层故障诊断、机器学习数据集导出，以及语言模型代理诊断并执行获批操作；接口受到基于角色的访问控制约束，原文为“role-based access control (RBAC)”。这些是作者陈述的功能，摘要未提供准确率、时延或故障定位改善的实验结果。[摘要]",
+      "limitations": "当前材料未说明部署规模、采集开销、映射正确性的检验方法，也未报告配置变化后的关联维护效果。解读：这些信息缺失限制了对平台可扩展性与长期可靠性的判断，并不等于平台已存在相关缺陷；摘要中的轻量化表述也尚无量化证据可核对。[摘要]",
+      "connection": "解读：该工作与智能运维的联系直接，跨层共享标识可为故障证据关联和训练数据组织提供基础；与可靠性研究的联系主要在可观测性和受控操作，而不是已证实提升系统可靠性。摘要未涉及结构设计问题，不宜把通信部署拓扑关联直接等同于工程结构设计方法。[摘要]",
+      "next_steps": "建议：取得全文后，优先核查映射构建规则、动态部署下的更新机制及标签成本，再确认故障诊断是否具有对照实验。可迁移研究可比较人工拓扑关联与共享标签关联的定位效率，并测试获批操作和RBAC约束是否有效；这些是后续研究建议，不是作者已完成的实验。[摘要]"
     },
     "analysis_status": "ready",
     "analysis_basis": "abstract",
     "analysis_kind": "model",
     "analysis_sources": [
-      "https://doi.org/10.1145/3842655.3844894"
+      "https://www.semanticscholar.org/paper/694e79068a2edead4b2bd8c1d0670288d36822c1"
     ],
-    "analyzed_at": "2026-11-04T02:48:42.123792+00:00",
-    "llm_model": "gpt-6.1-sol",
-    "article": {
-      "version": 3,
-      "basis": "abstract",
-      "lead": "Open RAN 的跨层诊断，难点不只是收集指标，更是确认不同指标究竟对应哪个组件、哪套部署。Panoramic 所关注的标识关联问题，提示我们：拥有多源遥测数据，并不等于能够直接开展跨层分析。",
-      "sections": [
-        {
-          "id": "context",
-          "title": "数据来自多个层次，却使用不同标识",
-          "paragraphs": [
-            "Open RAN 部署的遥测来源包括无线接入网、核心网、Kubernetes、服务器、前传交换机和无线单元。这些来源描述对象的方式并不统一：无线接入网使用 cell-ID 和 PCI，Kubernetes 使用 namespace 和 pod，交换机则使用端口和 VLAN。对于运维人员而言，这些数据虽然都与部署有关，却不能仅凭各自的标识直接建立对应关系。"
-          ]
-        },
-        {
-          "id": "method",
-          "title": "标识映射是理解方法的关键入口",
-          "paragraphs": [
-            "理解这项工作的技术方法，需要先区分“分别采集数据”与“建立跨源对应关系”。当前给出的摘要证据说明，既有工具分别采集这些来源，却没有提供标识之间的共同映射；这界定了平台需要处理的问题，但不足以据此复原 Panoramic 的具体实现、采集流程或查询机制。"
-          ]
-        },
-        {
-          "id": "findings",
-          "title": "跨层关联困难，也存在于单一数据源内部",
-          "paragraphs": [
-            "摘要的问题描述指出，要把分布式单元（DU）事件与主机 CPU 峰值或交换机端口错误联系起来，现有方式需要为每次查询手动重建拓扑关系。困难还不止于不同来源之间：即使在单一来源内部，指标携带的标识也未必足以确定其所属组件或部署。这是摘要明确提出的问题判断，不能替代平台效果的实验结论。"
-          ]
-        },
-        {
-          "id": "limitations",
-          "title": "问题描述不能替代性能与诊断验证",
-          "paragraphs": [
-            "这里能够对应的摘要内容主要界定了标识不统一及其带来的关联负担，无法据此判断实验样本、部署规模、比较工具、故障类型或验证范围，也不能量化诊断效率与资源开销。上述信息无法从当前证据确定，并不意味着论文没有开展相关实验；对平台有效性的判断仍需相应方法和结果支持。"
-          ]
-        },
-        {
-          "id": "inspiration",
-          "title": "阅读启发：先追问指标能否可靠归属",
-          "paragraphs": [
-            "阅读启发：面向智能运维，与其先讨论使用何种分析模型，不妨先追问输入指标能否可靠归属到组件与部署。进一步阅读时，值得关注不同层次的标识如何建立对应，以及单源指标信息不足时如何避免错误关联。只有把数据对应关系讲清楚，才有依据讨论后续诊断能力，而不能从多源数据的存在直接推导诊断效果。"
-          ]
-        }
-      ],
-      "experiments": [],
-      "routes": [],
-      "diagrams": [],
-      "figure_groups": []
-    },
-    "article_updated_at": "2026-11-10T02:31:43.996097+00:00",
-    "article_profile": "b472ba6531db2b300d1bf45796938001a1395c815111e0e3a7d1fc37f4b60224"
+    "analyzed_at": "2026-11-17T02:19:26.985698+00:00",
+    "llm_model": "gpt-6.1-sol"
   },
   "evaluation": {
     "direction_fit": true,
-    "research_value": false,
-    "evidence_sufficient": false,
-    "reason": "所给摘要明确涉及多源遥测、标识映射和跨层事件关联，切合智能运维方向；但未提供平台具体方法或验证成果，尚不足以支持重点阅读价值的肯定判断。research_value为false表示当前证据未达到确认门槛，并非否定论文价值。[摘要]",
-    "evidence": "Existing tools collect these sources separately and provide no common mapping between their identifiers"
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "摘要明确提出配置驱动的标识映射与摄取时标签附加方法，并说明跨层诊断和受控代理操作用途，足以支持其契合智能运维且值得进一步阅读的判断；但这些证据不足以确认性能优势、创新领先性或实际可靠性收益。[摘要]",
+    "evidence": "We present Panoramic, a measurement platform that addresses this gap and builds the missing mapping from the deployment configuration and attaches it to metrics at the time of ingestion."
   },
   "material": {
-    "version": "90e130628c82580179bc616323650214e617c8b5880b8007e4bacf501ea17345",
+    "version": "4ac933334681c4577c964c6ca1bfb33c2a09820d4a376431103f035e5634c90a",
     "total": 1,
     "covered": 1,
     "references": {},
-    "excerpt": "Existing tools collect these sources separately and provide no common mapping between their identifiers"
+    "excerpt": "We present Panoramic, a measurement platform that addresses this gap and builds the missing mapping from the deployment configuration and attaches it to metrics at the time of ingestion."
   }
 }
