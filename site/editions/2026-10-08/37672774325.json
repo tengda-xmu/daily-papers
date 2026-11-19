@@ -1906,7 +1906,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "本文聚焦《Machine-learning driven differentiable concurrent multiscale topology optimization framework for truss structures》，暂未提供可用摘要，请查看原文。",
+      "summary": "本文针对桁架晶格并发多尺度拓扑优化中离散连接难以纳入梯度优化、边界兼容难保证及均匀化计算耗时等问题，提出机器学习驱动框架：用拓扑解码器在预验证数据库中进行可微选择，以GCN预测等效弹性性质，并结合多材料SIMP与梯度优化。作者报告预测器总体拟合较好，算例展示边界连接控制和多晶格设计潜力；同时指出优化收敛振荡、耗时及部分预测分量泛化较弱等问题。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -1945,27 +1945,90 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "若研究关注桁架晶格生成设计与梯度式多尺度优化，建议重点阅读其BCP解码、GCN预测及制造约束处理，同时审慎评估收敛和泛化局限。",
+      "deep_read": {
+        "problem": "桁架晶格拓扑的连接模式离散，传统参数化设计可调特征有限，生成模型又难严格保障内部连通和相邻晶格边界兼容；自由材料优化变量规模大，也会增加计算复杂度、收敛困难和数值不稳定风险。作者据此聚焦设计自由度与优化效率之间的矛盾。[S2][S3][S5]",
+        "method": "框架以邻接矩阵和节点坐标表示桁架晶格，先用自演化采样构建拓扑数据库；拓扑解码器拆分边界与内部潜变量，并以可微近似完成拓扑选择，GCN预测等效弹性性质。随后把两网络接入多材料SIMP式MSTO，以伴随法、自动微分和MMA更新宏观及微观设计变量。[S11][S15][S29][S52][S67][S75]",
+        "innovation": "作者的主要设计是将拓扑选择限制在预验证数据库中，同时用共享边界变量控制BCP、用内部变量保留拓扑差异；损失函数兼顾性质映射单调性与拓扑访问均匀性。另提出优化前拓扑预筛选、优化后节点坐标调整的两阶段可制造性控制，而非直接把复杂制造约束导数并入主优化环。[S37][S43][S102][S126]",
+        "findings": "作者报告解码器训练中嵌入与性质的秩相关增强、拓扑访问趋于均匀；GCN九个性质分量的训练集R²高于0.98，验证集多数高于0.93。算例称边界节点在杆件模型中实现完全匹配，增加晶格类型时部分案例柔度下降；预测误差及结构结果仍需结合原图表审慎理解。[S47][S48][S57][S88][S89]",
+        "limitations": "作者报告所提MSTO收敛振荡较强、耗时未优于传统方法，且预测器对D23、D44等分量验证表现较弱，存在潜在过拟合；导弹舱算例收敛更不稳定。坐标后处理不保证总能同时满足制造约束和保持弹性张量接近。S105、S140转录内容中断，但现有资料不能确认这是原文件缺项，故不将其认定为已核实缺陷。[S58][S83][S84][S94][S129][S105][S140]",
+        "connection": "解读：框架把图结构学习、可微设计变量和有限元结构优化串联，可为结构设计中的晶格选型与宏微观协同提供方法参考。对智能运维，可关注预测器误差与结构响应之间的关系；对可靠性研究，本文明确提出载荷、材料和制造不确定性仍待纳入，不能视为已解决。[S52][S60][S108]",
+        "next_steps": "建议：复核完整图表与公式后，开展跨结构、跨晶格库的基准比较，并报告优化时间、收敛稳定性及预测误差对最终柔度的敏感性；进一步检验制造后处理的可行率和性能偏差。可将载荷、材料与制造不确定性纳入鲁棒或可靠性优化，并验证在真实接头与有限杆径条件下的边界连接。[S58][S88][S108][S129]"
+      },
       "recommended_direction": "generative_design",
       "reading_status": {
         "paper_id": "565888b08f8a",
-        "state": "retry",
-        "updated_at": "2026-11-18T12:19:20.026199+00:00",
+        "state": "published",
+        "updated_at": "2026-11-19T00:57:27.238306+00:00",
         "basis": "full_text",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "facts",
         "reason": "",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-11-18T13:19:20.026199+00:00",
         "total": 140,
-        "covered": 0,
+        "covered": 140,
         "pdf_available": false,
         "issues": []
       },
-      "title_zh": "机器学习驱动的桁架结构可微并发多尺度拓扑优化框架"
+      "title_zh": "面向桁架结构的机器学习可微并发多尺度拓扑优化框架",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://api.elsevier.com/content/article/PII:S0045782526004081?httpAccept=text/xml"
+      ],
+      "analyzed_at": "2026-11-19T00:57:27.191657+00:00",
+      "llm_model": "gpt-6-luna",
+      "analysis_references": {
+        "problem": [
+          "S2",
+          "S3",
+          "S5"
+        ],
+        "method": [
+          "S11",
+          "S15",
+          "S29",
+          "S52",
+          "S67",
+          "S75"
+        ],
+        "innovation": [
+          "S37",
+          "S43",
+          "S102",
+          "S126"
+        ],
+        "findings": [
+          "S47",
+          "S48",
+          "S57",
+          "S88",
+          "S89"
+        ],
+        "limitations": [
+          "S58",
+          "S83",
+          "S84",
+          "S94",
+          "S129",
+          "S105",
+          "S140"
+        ],
+        "connection": [
+          "S52",
+          "S60",
+          "S108"
+        ],
+        "next_steps": [
+          "S58",
+          "S88",
+          "S108",
+          "S129"
+        ]
+      },
+      "analysis_material_version": "8f6cb8d1a92fe2eef633acef9972cc0eb392ed94b169b722c2c324d80db464bd",
+      "analysis_issues": []
     }
   ],
   "extended": [
@@ -2379,7 +2442,7 @@
       "reading_status": {
         "paper_id": "de48174471ad",
         "state": "missing_evidence",
-        "updated_at": "2026-11-18T05:46:47.808104+00:00",
+        "updated_at": "2026-11-19T05:48:02.060497+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -3168,7 +3231,7 @@
       "reading_status": {
         "paper_id": "e1a150bc890d",
         "state": "missing_evidence",
-        "updated_at": "2026-11-18T05:57:25.615243+00:00",
+        "updated_at": "2026-11-19T06:00:40.863351+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -5084,7 +5147,7 @@
       "topic_tags": [
         "generative_design"
       ],
-      "summary": "本文聚焦《Machine-learning driven differentiable concurrent multiscale topology optimization framework for truss structures》，暂未提供可用摘要，请查看原文。",
+      "summary": "本文针对桁架晶格并发多尺度拓扑优化中离散连接难以纳入梯度优化、边界兼容难保证及均匀化计算耗时等问题，提出机器学习驱动框架：用拓扑解码器在预验证数据库中进行可微选择，以GCN预测等效弹性性质，并结合多材料SIMP与梯度优化。作者报告预测器总体拟合较好，算例展示边界连接控制和多晶格设计潜力；同时指出优化收敛振荡、耗时及部分预测分量泛化较弱等问题。",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "",
@@ -5123,27 +5186,90 @@
         "generative_design"
       ],
       "focus_tags": [],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
+      "recommendation": "若研究关注桁架晶格生成设计与梯度式多尺度优化，建议重点阅读其BCP解码、GCN预测及制造约束处理，同时审慎评估收敛和泛化局限。",
+      "deep_read": {
+        "problem": "桁架晶格拓扑的连接模式离散，传统参数化设计可调特征有限，生成模型又难严格保障内部连通和相邻晶格边界兼容；自由材料优化变量规模大，也会增加计算复杂度、收敛困难和数值不稳定风险。作者据此聚焦设计自由度与优化效率之间的矛盾。[S2][S3][S5]",
+        "method": "框架以邻接矩阵和节点坐标表示桁架晶格，先用自演化采样构建拓扑数据库；拓扑解码器拆分边界与内部潜变量，并以可微近似完成拓扑选择，GCN预测等效弹性性质。随后把两网络接入多材料SIMP式MSTO，以伴随法、自动微分和MMA更新宏观及微观设计变量。[S11][S15][S29][S52][S67][S75]",
+        "innovation": "作者的主要设计是将拓扑选择限制在预验证数据库中，同时用共享边界变量控制BCP、用内部变量保留拓扑差异；损失函数兼顾性质映射单调性与拓扑访问均匀性。另提出优化前拓扑预筛选、优化后节点坐标调整的两阶段可制造性控制，而非直接把复杂制造约束导数并入主优化环。[S37][S43][S102][S126]",
+        "findings": "作者报告解码器训练中嵌入与性质的秩相关增强、拓扑访问趋于均匀；GCN九个性质分量的训练集R²高于0.98，验证集多数高于0.93。算例称边界节点在杆件模型中实现完全匹配，增加晶格类型时部分案例柔度下降；预测误差及结构结果仍需结合原图表审慎理解。[S47][S48][S57][S88][S89]",
+        "limitations": "作者报告所提MSTO收敛振荡较强、耗时未优于传统方法，且预测器对D23、D44等分量验证表现较弱，存在潜在过拟合；导弹舱算例收敛更不稳定。坐标后处理不保证总能同时满足制造约束和保持弹性张量接近。S105、S140转录内容中断，但现有资料不能确认这是原文件缺项，故不将其认定为已核实缺陷。[S58][S83][S84][S94][S129][S105][S140]",
+        "connection": "解读：框架把图结构学习、可微设计变量和有限元结构优化串联，可为结构设计中的晶格选型与宏微观协同提供方法参考。对智能运维，可关注预测器误差与结构响应之间的关系；对可靠性研究，本文明确提出载荷、材料和制造不确定性仍待纳入，不能视为已解决。[S52][S60][S108]",
+        "next_steps": "建议：复核完整图表与公式后，开展跨结构、跨晶格库的基准比较，并报告优化时间、收敛稳定性及预测误差对最终柔度的敏感性；进一步检验制造后处理的可行率和性能偏差。可将载荷、材料与制造不确定性纳入鲁棒或可靠性优化，并验证在真实接头与有限杆径条件下的边界连接。[S58][S88][S108][S129]"
+      },
       "recommended_direction": "generative_design",
       "reading_status": {
         "paper_id": "565888b08f8a",
-        "state": "retry",
-        "updated_at": "2026-11-18T12:19:20.026199+00:00",
+        "state": "published",
+        "updated_at": "2026-11-19T00:57:27.238306+00:00",
         "basis": "full_text",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "facts",
         "reason": "",
-        "error_code": "codex_connection",
-        "next_retry_at": "2026-11-18T13:19:20.026199+00:00",
         "total": 140,
-        "covered": 0,
+        "covered": 140,
         "pdf_available": false,
         "issues": []
       },
-      "title_zh": "机器学习驱动的桁架结构可微并发多尺度拓扑优化框架"
+      "title_zh": "面向桁架结构的机器学习可微并发多尺度拓扑优化框架",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://api.elsevier.com/content/article/PII:S0045782526004081?httpAccept=text/xml"
+      ],
+      "analyzed_at": "2026-11-19T00:57:27.191657+00:00",
+      "llm_model": "gpt-6-luna",
+      "analysis_references": {
+        "problem": [
+          "S2",
+          "S3",
+          "S5"
+        ],
+        "method": [
+          "S11",
+          "S15",
+          "S29",
+          "S52",
+          "S67",
+          "S75"
+        ],
+        "innovation": [
+          "S37",
+          "S43",
+          "S102",
+          "S126"
+        ],
+        "findings": [
+          "S47",
+          "S48",
+          "S57",
+          "S88",
+          "S89"
+        ],
+        "limitations": [
+          "S58",
+          "S83",
+          "S84",
+          "S94",
+          "S129",
+          "S105",
+          "S140"
+        ],
+        "connection": [
+          "S52",
+          "S60",
+          "S108"
+        ],
+        "next_steps": [
+          "S58",
+          "S88",
+          "S108",
+          "S129"
+        ]
+      },
+      "analysis_material_version": "8f6cb8d1a92fe2eef633acef9972cc0eb392ed94b169b722c2c324d80db464bd",
+      "analysis_issues": []
     },
     {
       "source": "OpenAlex",
@@ -5555,7 +5681,7 @@
       "reading_status": {
         "paper_id": "de48174471ad",
         "state": "missing_evidence",
-        "updated_at": "2026-11-18T05:46:47.808104+00:00",
+        "updated_at": "2026-11-19T05:48:02.060497+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -6344,7 +6470,7 @@
       "reading_status": {
         "paper_id": "e1a150bc890d",
         "state": "missing_evidence",
-        "updated_at": "2026-11-18T05:57:25.615243+00:00",
+        "updated_at": "2026-11-19T06:00:40.863351+00:00",
         "basis": "missing",
         "article_state": "pending",
         "article_stage": "",
@@ -6995,13 +7121,13 @@
     "unavailable": 11
   },
   "analysis_status": {
-    "ready_core": 4,
+    "ready_core": 5,
     "target_core": 5,
     "ready_extended": 3,
     "target_extended": 5,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 3
+    "pending": 2
   },
   "edition": {
     "id": "37672774325",
