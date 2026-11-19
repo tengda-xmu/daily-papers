@@ -1,0 +1,18 @@
+{
+  "id": "public-ec56b5eff9affb1c339e466c",
+  "content_version": "05026aadf5fe1bb6d53714a797757a58ee2eea1beee1d892949f71265bd1fac4",
+  "analysis": {
+    "title_zh": "180B 参数、32GB RAM：使用 Transformers 将 MoE 推理推至极限",
+    "summary": "这篇 Hugging Face 官方博客介绍作者尝试在本地运行更大的模型，并提出将 MoE 专家直接从 SSD 流式读取的方案。公告称，该方法在 token 生成方面与 Strata 的差距在 6% 以内，指向在内存有限设备上运行大型 MoE 模型的任务。作者提及使用 32GB 统一内存的 MacBook M5 和搭载两张 RTX 4090 的 Windows 11 台式机；但所给资料仅含文章开头，未展示具体实现步骤、完整测试条件或比较细节。",
+    "application": "建议：科研迁移建议是将 SSD 流式加载 MoE 专家作为有限内存本地推理的候选方向，并在目标硬件与任务上独立评测；官方已验证效果仅能据所给公告表述为 token 生成方面“与 Strata 的差距在 6% 以内”，资料未提供足以复核该结果的完整测试条件，不应推广为普遍性能保证。",
+    "requirements": "使用条件见官方文档",
+    "steps": [],
+    "evidence": [
+      "Streaming MoE experts directly from SSD gets within 6% of Strata on token generation.",
+      "At home I have a PC with two RTX 4090s",
+      "for work I have a MacBook M5 with 32G of unified memory."
+    ],
+    "basis_url": "https://huggingface.co/blog/moe-expert-streaming"
+  },
+  "analyzed_at": "2026-11-19T00:19:54.624666+00:00"
+}
