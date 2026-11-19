@@ -3,139 +3,38 @@
   "fingerprint": "e09c942cb5db27cf95b29e5a5616ff306e929b3046e3da287fd6edf75947f6f5",
   "analysis": {
     "title_zh": "Panoramic：面向开放无线接入网部署的跨层测量平台",
-    "summary": "Open RAN不同层采用不同标识体系，跨层排障因而需要反复手工重建拓扑。Panoramic从部署配置建立标识映射，在指标采集入库时附加共享标签，同时保留原有KPI语义，并按运行状态启用临时标识。平台面向跨层故障诊断、机器学习数据导出及受权限约束的语言模型代理操作。[摘要]解读：其价值在于补齐智能运维的数据关联基础，而非证明新的诊断算法有效；当前仅有摘要，尚不能判断实际性能。",
-    "recommendation": "建议重点阅读其配置驱动的标识映射、共享标签和受限代理接口设计，这些机制直接关联智能运维的数据治理与安全执行；但须获取全文后核查诊断收益和运行开销，不能将摘要中的功能陈述视为实验验证。[摘要]",
+    "summary": "【摘要】所给资料指出，开放无线接入网部署会从无线接入网、5G核心网、Kubernetes、服务器、前传交换机和无线单元产生遥测数据，但各来源采用不同标识模型。现有工具分别采集这些数据，缺少统一标识映射，跨层关联事件需要针对每次查询手动重建拓扑；单一来源的指标也可能缺少归属标识。资料未介绍平台的具体方法或实验结果。",
+    "recommendation": "建议关注智能运维中跨层故障关联与遥测数据治理的读者阅读：所给资料明确描述了标识不统一和拓扑重建的实际障碍，但是否值得重点阅读仍需核对平台方法与验证结果。[摘要]",
     "deep_read": {
-      "problem": "论文针对跨层遥测无法直接关联的问题：RAN、Kubernetes与交换机分别采用小区、命名空间、端口等标识，现有工具缺少共同映射，单源指标也可能不足以确定归属。摘要以“manual topology reconstruction”说明每次查询都需人工重建拓扑的负担。[摘要]",
-      "method": "平台从部署配置构建缺失的标识映射，并在指标摄取时附加共享标签；各源采集器保留原有KPI语义，使跨层测量能够关联。稳定部署标识持续启用，RNTI、pod名称等临时标识仅在RAN运行时启用，摘要将此描述为保持日常监控轻量的机制。[摘要]",
-      "innovation": "解读：值得关注的设计组合，是把部署配置中的关联关系前移到指标摄取阶段，以共享标签连接异构身份体系，同时保留各数据源的指标语义。这不同于查询时重新拼接拓扑；但摘要没有充分的相关工作比较，不能据此认定其首创性或相对现有平台的领先程度。[摘要]",
-      "findings": "摘要报告平台支持跨层故障诊断、机器学习数据集导出，以及语言模型代理诊断并执行获批操作；接口受到基于角色的访问控制约束，原文为“role-based access control (RBAC)”。这些是作者陈述的功能，摘要未提供准确率、时延或故障定位改善的实验结果。[摘要]",
-      "limitations": "当前材料未说明部署规模、采集开销、映射正确性的检验方法，也未报告配置变化后的关联维护效果。解读：这些信息缺失限制了对平台可扩展性与长期可靠性的判断，并不等于平台已存在相关缺陷；摘要中的轻量化表述也尚无量化证据可核对。[摘要]",
-      "connection": "解读：该工作与智能运维的联系直接，跨层共享标识可为故障证据关联和训练数据组织提供基础；与可靠性研究的联系主要在可观测性和受控操作，而不是已证实提升系统可靠性。摘要未涉及结构设计问题，不宜把通信部署拓扑关联直接等同于工程结构设计方法。[摘要]",
-      "next_steps": "建议：取得全文后，优先核查映射构建规则、动态部署下的更新机制及标签成本，再确认故障诊断是否具有对照实验。可迁移研究可比较人工拓扑关联与共享标签关联的定位效率，并测试获批操作和RBAC约束是否有效；这些是后续研究建议，不是作者已完成的实验。[摘要]"
+      "problem": "【摘要】论文资料聚焦开放无线接入网的跨层遥测关联难题：不同数据来源使用不同标识模型，现有工具又“collect these sources separately”，导致跨来源事件关联缺乏共同映射，还需针对每次查询手动重建拓扑。",
+      "method": "【摘要】所给摘录仅描述了测量与关联面临的问题，没有说明Panoramic如何采集数据、建立标识映射或重建拓扑，也未给出算法、系统架构和部署流程。因此，无法据此复原作者的技术方案或判断其实现成本。",
+      "innovation": "【摘要】标题将Panoramic称为跨层测量平台，但摘录没有介绍其具体设计，也没有与已有平台进行技术比较。【解读】跨层标识映射是值得核查的设计方向；目前不能将某种映射机制或性能优势认定为论文创新。",
+      "findings": "【摘要】资料指出，将DU事件与主机CPU峰值或交换机端口错误关联时，需要“manual topology reconstruction for every query”。这是一项关于现有工作方式的陈述；摘录未提供Panoramic的实验结果、性能数字或效果验证。",
+      "limitations": "【摘要】当前可见内容只是摘要级问题描述，缺少具体实现、实验设置、比较对象和结果，因此无法评估平台的准确性、扩展性及适用范围。【解读】这些是现有资料的证据限制，不应直接视为作者报告的平台缺陷。",
+      "connection": "【摘要】资料将无线接入网、计算资源与网络设备的遥测关联置于同一问题中，并以DU事件、CPU峰值和端口错误为例。【解读】这与智能运维中的跨层告警关联和故障定位有关；资料未建立其与结构设计或可靠性定量分析的直接联系。",
+      "next_steps": "【建议】后续应查阅论文中关于数据采集、跨域标识映射和拓扑维护的具体描述，再核对评价指标、实验场景及比较对象；也可检查单源指标缺少归属标识时如何处理。现有摘录不足以确认这些问题是否已被解决。"
     },
     "analysis_status": "ready",
     "analysis_basis": "abstract",
     "analysis_kind": "model",
     "analysis_sources": [
-      "https://www.semanticscholar.org/paper/694e79068a2edead4b2bd8c1d0670288d36822c1"
+      "https://doi.org/10.1145/3842655.3844894"
     ],
-    "analyzed_at": "2026-11-17T02:19:26.985698+00:00",
-    "llm_model": "gpt-6.1-sol",
-    "article": {
-      "version": 3,
-      "basis": "abstract",
-      "lead": "Open RAN 的运维难点不只是采集指标，还在于识别不同层的指标究竟对应哪个组件。Panoramic 从部署配置建立标识映射，让跨层遥测能够关联，为理解故障诊断与受约束的语言模型智能体运维提供了具体切入点。",
-      "sections": [
-        {
-          "id": "context",
-          "title": "指标已采集，组件身份却难以对齐",
-          "paragraphs": [
-            "Open RAN 的遥测来自无线接入网、5G 核心网、Kubernetes、服务器、前传交换机和无线单元，但各自采用不同的身份标识：RAN 使用 cell-ID 和 PCI，Kubernetes 使用 namespace 和 pod，交换机则使用端口和 VLAN。",
-            "摘要指出，现有工具分别采集这些数据，却缺少标识之间的共同映射。因此，要关联分布式单元（DU）事件、主机 CPU 突增与交换机端口错误，每次查询都需要人工重建拓扑。即便只看单一来源，指标携带的标识也未必足以确定其所属组件或部署。"
-          ]
-        },
-        {
-          "id": "method",
-          "title": "在指标摄取时补入共同身份",
-          "paragraphs": [
-            "Panoramic 从部署配置中建立缺失的标识映射，并在指标摄取时将其附加到指标上。面向不同数据源的采集器保留原有关键绩效指标（KPI）语义，同时加入共享标签，使不同层的测量数据能够关联。",
-            "标识的启用也有所区分：稳定的部署标识始终启用；RNTI、pod 名称等临时运行标识仅在 RAN 运行时启用。摘要将这一安排描述为保持常规监控轻量化的方式，但未给出开销测量。"
-          ]
-        },
-        {
-          "id": "findings",
-          "title": "报告的是跨层关联能力，而非量化收益",
-          "paragraphs": [
-            "摘要报告的平台能力包括跨层故障诊断、面向机器学习应用的数据集导出，以及受约束的智能体操作。这里的主要成果是让分散的遥测具备共同标识，而不是报告某个诊断模型的准确率提升。",
-            "在智能体操作中，语言模型智能体可诊断故障，并通过受基于角色的访问控制（RBAC）约束的接口执行获准动作。**诊断与动作执行存在权限边界**，不能将其理解为不受限制的自主运维，也不能据此认定修复效果已经得到验证。"
-          ]
-        },
-        {
-          "id": "limitations",
-          "title": "部署规模、对照与验证范围仍待查阅",
-          "paragraphs": [
-            "仅凭本次摘要，无法判断测试部署规模、故障样本数量与类型、比较基线及验证范围；也无法量化跨层关联的完整性、监控开销或智能体诊断与执行的可靠性。这些属于摘要未报告的信息，不能据此断言论文没有开展相关评估。"
-          ]
-        },
-        {
-          "id": "inspiration",
-          "title": "阅读启发：先看数据关联，再看智能体权限",
-          "paragraphs": [
-            "阅读启发：对于 AI 智能运维，本文值得关注的不只是接入语言模型，还包括诊断之前的数据身份对齐。进一步阅读时，可重点核对部署变化如何影响映射、临时标识的启用边界，以及 RBAC 如何界定获准动作；这些问题直接关系到摘要所述能力的适用范围。"
-          ]
-        }
-      ],
-      "experiments": [],
-      "routes": [],
-      "diagrams": [
-        {
-          "kind": "study",
-          "basis": "abstract",
-          "title": "依据摘要整理的跨层指标关联过程",
-          "description": "概括部署配置、标识映射与指标关联的关系，仅为摘要示意，不是论文原图，也不表示已量化验证的效果。",
-          "nodes": [
-            {
-              "id": "a",
-              "stage": 0,
-              "label": "部署配置",
-              "detail": "作为建立不同来源标识映射的依据。"
-            },
-            {
-              "id": "b",
-              "stage": 1,
-              "label": "建立标识映射",
-              "detail": "补充不同遥测来源之间缺失的共同映射。"
-            },
-            {
-              "id": "c",
-              "stage": 2,
-              "label": "摄取时附加共享标签",
-              "detail": "面向各数据源的采集器保留原有 KPI 语义，同时添加共享标签。"
-            },
-            {
-              "id": "d",
-              "stage": 3,
-              "label": "关联不同层的测量",
-              "detail": "使来自不同层的指标能够通过共享标签进行关联。"
-            }
-          ],
-          "edges": [
-            {
-              "from": "a",
-              "to": "b",
-              "label": "据此建立"
-            },
-            {
-              "from": "b",
-              "to": "c",
-              "label": "摄取时附加"
-            },
-            {
-              "from": "c",
-              "to": "d",
-              "label": "共享标签支持关联"
-            }
-          ]
-        }
-      ],
-      "figure_groups": []
-    },
-    "article_updated_at": "2026-11-17T02:21:29.688311+00:00",
-    "article_profile": "14fdf8936336c8f403a740b127f25c80f71e08a1f3f27a11742b065b504f3584"
+    "analyzed_at": "2026-11-19T02:36:28.204580+00:00",
+    "llm_model": "gpt-6.1-terra"
   },
   "evaluation": {
     "direction_fit": true,
-    "research_value": true,
-    "evidence_sufficient": true,
-    "reason": "摘要明确提出配置驱动的标识映射与摄取时标签附加方法，并说明跨层诊断和受控代理操作用途，足以支持其契合智能运维且值得进一步阅读的判断；但这些证据不足以确认性能优势、创新领先性或实际可靠性收益。[摘要]",
-    "evidence": "We present Panoramic, a measurement platform that addresses this gap and builds the missing mapping from the deployment configuration and attaches it to metrics at the time of ingestion."
+    "research_value": false,
+    "evidence_sufficient": false,
+    "reason": "【解读】跨层遥测与事件关联切合智能运维方向，但当前资料只有问题描述，没有平台方法和验证结果，不能确认存在值得重点阅读的明确方法或成果；research_value 为 false 表示现阶段无法确认，并非否定论文价值。[摘要]",
+    "evidence": "Existing tools collect these sources separately and provide no common mapping between their identifiers, so correlating a DU event with a host CPU spike or a switch-port error requires manual topology reconstruction for every query."
   },
   "material": {
-    "version": "4ac933334681c4577c964c6ca1bfb33c2a09820d4a376431103f035e5634c90a",
+    "version": "90e130628c82580179bc616323650214e617c8b5880b8007e4bacf501ea17345",
     "total": 1,
     "covered": 1,
     "references": {},
-    "excerpt": "We present Panoramic, a measurement platform that addresses this gap and builds the missing mapping from the deployment configuration and attaches it to metrics at the time of ingestion."
+    "excerpt": "Existing tools collect these sources separately and provide no common mapping between their identifiers, so correlating a DU event with a host CPU spike or a switch-port error requires manual topology reconstruction for every query."
   }
 }
