@@ -1,18 +1,18 @@
 {
   "id": "public-8ec21efa2c62273428cb36f4",
-  "content_version": "b563ad412905e92e679918ce62b50c17fe830ec56a63e3cef4bf7d8adba14720",
+  "content_version": "c3e8ba48a287a892888bb444cb59c0b7452fde686ef55313f54dcee07bf26423",
   "analysis": {
-    "title_zh": "Hugging Face 与 OpenRouter 携手，让开放权重模型更易运行",
-    "summary": "公告称，Hugging Face 与 OpenRouter 合作，使 Hugging Face Hub 上由服务提供商托管的开放权重模型可通过 Hugging Face token 和同一 API 调用。OpenRouter 根据各提供商的实时测量结果，在 80 多家提供商间为每次请求选择路由。公告还提到正在切换 Inference Providers，但所给原文在此处截断，具体切换内容及后续操作未提供。适用于希望通过统一接口调用可用开放权重模型的任务。",
-    "application": "建议：科研迁移方面，可评估将模型调用接入统一 API，并关注路由选择对复现实验、延迟和服务可用性的影响；这些是研究建议，并非公告验证的效果。官方已说明合作与路由方式，但所给内容未提供性能测试或具体效果数据。",
-    "requirements": "使用条件见官方文档",
+    "title_zh": "Hugging Face 与 OpenRouter 合作，简化开放权重模型的运行",
+    "summary": "Hugging Face 宣布与 OpenRouter 合作：对于 Hugging Face Hub 上有服务提供商支持的开放权重模型，用户可通过同一 API，使用 Hugging Face token 发起调用。OpenRouter 根据各服务提供商的实时测量结果路由请求，并为每次请求选择提供商。这一变化适用于通过统一接口调用受支持的开放权重模型；所给公告末尾截断，无法据此完整判断 Inference Providers 的后续调整内容。",
+    "application": "建议：科研中可考虑用统一接口组织受支持开放权重模型的调用与对比，但模型覆盖范围、成本及实验可复现性仍需自行核实。官方在所给内容中说明了请求路由机制，未提供可量化的科研性能验证结果。",
+    "requirements": "需使用 Hugging Face token；模型须位于 Hugging Face Hub 且有服务提供商提供服务。其他使用条件见官方文档。",
     "steps": [],
     "evidence": [
-      "Together, every open-weight model on the Hub that a provider serves can be called with your Hugging Face token, through the same API",
-      "routing each request across 80+ providers based on live measurements of each one.",
-      "Today, we are switching Inference Providers from our own c"
+      "Hugging Face and OpenRouter are teaming up to make open-weight models easy to run.",
+      "OpenRouter serves those models at scale, routing each request across 80+ providers based on live measurements of each one.",
+      "every open-weight model on the Hub that a provider serves can be called with your Hugging Face token, through the same API, with the best provider picked for each request."
     ],
     "basis_url": "https://huggingface.co/blog/openrouter"
   },
-  "analyzed_at": "2026-11-19T00:19:32.833125+00:00"
+  "analyzed_at": "2026-11-21T01:36:52.110683+00:00"
 }
