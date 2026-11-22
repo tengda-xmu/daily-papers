@@ -1,18 +1,18 @@
 {
   "id": "public-ec56b5eff9affb1c339e466c",
-  "content_version": "8790ae32570ca6b6cf1243d37d28af51026824dfa467df28ca2c862c152fdae5",
+  "content_version": "9511687a1ab2d0423a2460465b0c183964f2bd529fc19c2527b359818f5a974a",
   "analysis": {
-    "title_zh": "1800亿参数、32GB 内存：使用 Transformers 挑战 MoE 推理极限",
-    "summary": "文章介绍了一种本地运行大型混合专家（MoE）模型的推理思路：直接从 SSD 流式加载专家，以降低对内存容量的依赖。作者称，在令牌生成方面，该方法与 Strata 的差距在 6% 以内。文章背景是作者希望减少对在线模型的依赖，并尝试在个人设备上运行更大的模型。所给摘录未说明具体测试配置、模型结果或完整实现方法，适用于关注本地大模型推理与资源受限部署的读者。",
-    "application": "建议：科研上可将专家流式加载作为资源受限设备上部署大模型的研究方向，进一步考察存储访问与推理效率的关系；这是迁移设想，并非原文已验证的科研结论。原文仅报告作者所述的令牌生成对比，未提供足够细节支持对其他任务或设备效果的判断。",
-    "requirements": "使用条件见官方文档。",
+    "title_zh": "1800亿参数、32GB 内存：使用 Transformers 将 MoE 推理推向极限",
+    "summary": "文章介绍了一种面向本地大模型推理的思路：从 SSD 直接流式加载 MoE 专家。作者称，在 token 生成方面，该方法与 Strata 的差距在 6% 以内；给定摘录未说明测试模型、比较指标及实验配置的完整细节。作者希望减少对在线模型的依赖，并提到一台配备 32G 统一内存的 MacBook M5，但摘录不足以确认完整实现方法或具体适用范围。",
+    "application": "建议：科研迁移方面，可将专家流式加载作为研究资源受限设备上 MoE 本地推理的思路，并进一步考察存储访问与生成性能的关系。原文报告的是作者所述与 Strata 在 token 生成方面的比较，不能据此认定其他设备或任务已有同等效果。",
+    "requirements": "使用条件见官方文档",
     "steps": [],
     "evidence": [
-      "180B Parameters, 32GB of RAM: Pushing MoE Inference to the Limit with Transformers",
       "Streaming MoE experts directly from SSD gets within 6% of Strata on token generation.",
-      "I've been trying to rely less on online models and run bigger ones locally."
+      "I've been trying to rely less on online models and run bigger ones locally.",
+      "for work I have a MacBook M5 with 32G of unified memory."
     ],
     "basis_url": "https://huggingface.co/blog/moe-expert-streaming"
   },
-  "analyzed_at": "2026-11-21T01:13:34.405419+00:00"
+  "analyzed_at": "2026-11-22T03:13:52.199888+00:00"
 }
