@@ -1,18 +1,19 @@
 {
   "id": "public-ec56b5eff9affb1c339e466c",
-  "content_version": "6c43a506882469a8be2c4b0667cd0873ff3c654d224b29e313cf5e0d313bb615",
+  "content_version": "92e2993cf379bd67bd2e70db2c2d4b6194f33019bc73c3d0d5202bc596b6cac5",
   "analysis": {
-    "title_zh": "1800亿参数、32GB内存：使用 Transformers 挑战 MoE 推理极限",
-    "summary": "本文讨论从 SSD 直接流式加载混合专家模型（MoE）的专家，以便在本地运行更大的模型。作者称，该方式的词元生成表现与 Strata 相差在 6% 以内；给定摘录未说明完整测试方法或该差距的具体计算方式。作者还介绍了自己的桌面电脑和笔记本配置，这些是实验背景，不应视为通用使用条件。",
-    "application": "建议：科研迁移方面，可考虑探索专家流式加载对本地大模型推理的适用性，并针对实际硬件和任务独立评估。原文报告的是作者与 Strata 的词元生成比较，不能据此认定其他任务或硬件上已有同等效果。",
-    "requirements": "使用条件见官方文档",
+    "title_zh": "1800亿参数、32GB 内存：使用 Transformers 将 MoE 推理推向极限",
+    "summary": "所给资料介绍了一种将混合专家模型（MoE）的专家从 SSD 直接流式加载的推理思路，面向在本地设备上运行较大模型的任务。作者称，该方法在词元生成方面与 Strata 的差距在 6% 以内，并介绍了自己使用的双 RTX 4090 台式机和 32G 统一内存的 MacBook M5。摘录未说明完整实验配置、比较指标或具体操作方法。",
+    "application": "建议：科研上可探索专家流式加载对本地模型推理及资源调度的适用性；这是迁移建议，并非资料中已验证的科研效果。资料仅给出作者报告的与 Strata 的词元生成差距，不能据此推断其他任务或设备上的性能。",
+    "requirements": "使用条件见官方文档。原文提到的设备是作者的个人配置，不能认定为使用条件。",
     "steps": [],
     "evidence": [
       "Streaming MoE experts directly from SSD gets within 6% of Strata on token generation.",
       "I've been trying to rely less on online models and run bigger ones locally.",
+      "At home I have a PC with two RTX 4090s",
       "for work I have a MacBook M5 with 32G of unified memory."
     ],
     "basis_url": "https://huggingface.co/blog/moe-expert-streaming"
   },
-  "analyzed_at": "2026-11-24T15:15:39.610794+00:00"
+  "analyzed_at": "2026-11-24T15:55:18.615651+00:00"
 }
