@@ -73,7 +73,7 @@
       "reading_status": {
         "paper_id": "0e496acb319d",
         "state": "failed",
-        "updated_at": "2026-11-22T03:15:02.473770+00:00",
+        "updated_at": "2026-11-24T15:52:03.816393+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -320,7 +320,7 @@
       "reading_status": {
         "paper_id": "c8e9f96f8b55",
         "state": "failed",
-        "updated_at": "2026-11-22T03:39:23.852174+00:00",
+        "updated_at": "2026-11-24T16:20:42.035239+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -422,7 +422,7 @@
       "reading_status": {
         "paper_id": "e777d468cee7",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-24T15:25:09.527385+00:00",
+        "updated_at": "2026-11-25T15:25:44.424695+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -642,7 +642,7 @@
       "reading_status": {
         "paper_id": "926b00e39b2b",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-22T03:18:30.771902+00:00",
+        "updated_at": "2026-11-24T15:55:46.829114+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -863,7 +863,7 @@
       "reading_status": {
         "paper_id": "0e633438a2da",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-24T15:29:00.291028+00:00",
+        "updated_at": "2026-11-25T15:31:07.891967+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -1081,7 +1081,7 @@
       "reading_status": {
         "paper_id": "e09d9ccb18ad",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-24T15:26:48.956987+00:00",
+        "updated_at": "2026-11-25T15:27:13.183384+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -1264,7 +1264,7 @@
       "reading_status": {
         "paper_id": "f669445800e6",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-24T15:28:39.968243+00:00",
+        "updated_at": "2026-11-25T15:30:08.581220+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -1472,7 +1472,7 @@
       "reading_status": {
         "paper_id": "1bb556bb038f",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-24T15:30:51.198674+00:00",
+        "updated_at": "2026-11-25T15:31:34.162481+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -1614,7 +1614,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "这是一项支持未测试合金多轴疲劳寿命预测研究的数据与代码发布，当前仅作摘要级解读。[摘要]资料提供材料域映射审计、逐试验预测、逐域保形覆盖率及复现配置，并同时包含留一材料与随机划分结果。解读：其阅读价值在于考察跨材料泛化的评估方式和结果可追溯性，而非已有证据证明某种模型更优。摘要未报告预测误差、覆盖率数值或模型排名，原始疲劳测量数据需另行获取。",
+      "summary": "【摘要】该资料介绍多轴疲劳寿命预测研究配套的代码、逐测试预测和不确定性区间。修订稿分析在每折训练和评分中剔除15条缺陷记录，剩余1152次测试，并修正部分材料参数。新增分析包括逐折嵌套调参、弹性子集、塑性修正特征和深度模型留一来源外验证等；外部验证预测了数据集之外五种合金的328次已发表测试。摘要未给出预测精度或模型优劣，因此无法判断其性能表现。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7214450962",
@@ -1660,38 +1660,38 @@
       "focus_tags": [],
       "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "建议作为疲劳可靠性研究的基准复现资料重点阅读，尤其关注跨材料验证、数据审计和不确定性评估；但当前不能据此推荐某个模型或认定其工程预测精度。",
+      "recommendation": "建议从疲劳可靠性与跨材料泛化验证角度阅读：资料明确提供留一材料外基准及外部预测设计，但应结合论文和配套结果核查性能，不能仅凭摘要认定模型有效。",
       "deep_read": {
-        "problem": "研究针对未测试合金的多轴疲劳寿命预测，摘要中的“untested alloys”明确了应用对象。[摘要]解读：关键问题是模型能否从已有材料推广到未参与训练的材料，而不只是预测同一数据集合中的留出样本。当前资料未说明载荷范围、输入变量和寿命定义。",
-        "method": "发布内容同时包括留一材料与随机划分的逐试验预测，并提供逐域保形覆盖率、种子评分和网络超参数。[摘要]原文以“LOMO”标识留一材料设置。解读：这些输出支持检查不同划分方式下的表现差异，但摘要未给出模型清单、训练流程或区间构造细节。",
-        "innovation": "资料的明确特色是把材料映射审计与预测结果、代码和配置共同发布，原文称映射为“audited mapping”。[摘要]解读：这种组织方式有助于追查材料域定义及复现过程，但不能据此确认方法原创性；摘要没有提供与既有基准的比较或新算法说明。",
-        "findings": "摘要报告将40个名义合金牌号映射为41个材料条件域，并标出审计发现的12条物理不一致记录，原文称其为“physically inconsistent records”。[摘要]这些是可确认的数据审计信息，不是模型性能结论；资料没有报告误差、覆盖率或模型排名。",
-        "limitations": "当前仅有摘要，缺少模型表现及其统计比较，无法判断跨材料预测是否达到工程可用水平。[摘要]原文说明疲劳测量数据“are not redistributed here”，因此发布包本身不含这些原始测量。资料也未说明异常记录如何处理，不能把这些缺失推定为全文缺陷。",
-        "connection": "与疲劳可靠性方向的联系直接体现在寿命预测和“uncertainty intervals”。[摘要]解读：逐材料域覆盖率可为讨论预测区间在不同材料上的适用性提供入口；结构设计或智能运维可关注其迁移验证思路，但摘要未展示安全系数、在线监测或维护决策应用。",
-        "next_steps": "建议先获取所指原始数据，以发布的校验信息确认版本，再复现材料域划分及两类验证结果。[摘要]原文提到“1170 source files”的校验。建议重点核对异常记录处置、逐域误差及覆盖率差异；这是后续研究安排，并非作者已验证的结论。"
+        "problem": "【摘要】研究围绕未测试合金的多轴疲劳寿命预测，采用“leave-one-material-out”机器学习基准，并设置数据集之外合金的外部验证。解读：其关注点涉及模型面对未见材料时的预测能力；摘要没有说明具体工程工况或失效判据。",
+        "method": "【摘要】修订稿分析在每折训练和评分中删除15条缺陷记录，剩余1152次测试；新增逐折嵌套调参、弹性子集、塑性修正特征及加载频率等分析，并对深度模型开展留一来源外分析。摘要未说明各模型结构和具体调参方案。",
+        "innovation": "【摘要】资料列出了逐折嵌套调参、深度模型留一来源外分析，以及对已发表GRU结果的分解。解读：这些安排有助于从不同角度检查评估过程，但摘要未提供与既有研究的系统比较，不能据此认定某项方法具有首创性。",
+        "findings": "【摘要】资料报告，外部验证对数据集之外五种合金的328次已发表测试进行了预测，并提供逐测试预测和不确定性区间。摘要未报告预测误差、区间覆盖率或模型排序，因此不能判断外部验证效果，也不能断言预测可靠。",
+        "limitations": "【摘要】原始疲劳测量数据及五种外部合金的数据均未随该记录再分发，外部预测文件仅包含预测值。解读：复核时需另行获取所列数据来源；现有摘要也缺少性能结果和区间评估，无法据此评价预测质量。",
+        "connection": "【摘要】研究对象是多轴疲劳寿命，并以留一材料外基准和外部合金预测开展分析。解读：这与结构设计中的材料疲劳可靠性评估相关，也可为智能运维关注的寿命预测提供参考；摘要未涉及实际运维部署或结构设计验证。",
+        "next_steps": "【建议】后续可核对论文及配套预测文件，区分留一材料外与外部验证结果，检查误差、不同合金表现和不确定性区间的评价方式；复现时再按所列来源获取未再分发的数据。上述工作是阅读建议，并非摘要已报告的结论。"
       },
       "recommended_direction": "fatigue_reliability",
-      "title_zh": "多轴疲劳寿命机器学习预测的经审计留一材料基准：代码、预测与不确定性区间",
+      "title_zh": "面向多轴疲劳寿命预测的机器学习模型留一材料外审计基准",
       "analysis_basis": "abstract",
       "analysis_kind": "model",
       "analysis_sources": [
         "https://doi.org/10.5281/zenodo.22973712"
       ],
-      "analyzed_at": "2026-10-14T13:24:17.765951+00:00",
-      "llm_model": "gpt-6.1-sol",
+      "analyzed_at": "2026-11-25T15:32:26.212891+00:00",
+      "llm_model": "gpt-6.1-terra",
       "analysis_references": {},
-      "analysis_material_version": "59eca1e22e8e3034389f6b60cb54958625824b5581350e54601f682c8233dbaa",
+      "analysis_material_version": "95ec0ce3974bd1cf3cea66a31e6865f909a742443aba686a19b214fe1c61bb3c",
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "0385ae69f947",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-24T15:31:12.392190+00:00",
+        "updated_at": "2026-11-25T15:32:26.231614+00:00",
         "basis": "abstract",
-        "article_state": "complete",
-        "article_stage": "",
+        "article_state": "retry",
+        "article_stage": "writing",
         "reason": "not_found",
-        "total": 0,
-        "covered": 0,
+        "total": 1,
+        "covered": 1,
         "pdf_available": false,
         "issues": []
       },
@@ -1876,7 +1876,7 @@
       "reading_status": {
         "paper_id": "3e66cc5fc310",
         "state": "failed",
-        "updated_at": "2026-11-22T06:57:49.333716+00:00",
+        "updated_at": "2026-11-24T16:57:28.466315+00:00",
         "basis": "full_text",
         "article_state": "complete",
         "article_stage": "",
@@ -2071,7 +2071,7 @@
       "reading_status": {
         "paper_id": "0e496acb319d",
         "state": "failed",
-        "updated_at": "2026-11-22T03:15:02.473770+00:00",
+        "updated_at": "2026-11-24T15:52:03.816393+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -2318,7 +2318,7 @@
       "reading_status": {
         "paper_id": "c8e9f96f8b55",
         "state": "failed",
-        "updated_at": "2026-11-22T03:39:23.852174+00:00",
+        "updated_at": "2026-11-24T16:20:42.035239+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
@@ -2420,7 +2420,7 @@
       "reading_status": {
         "paper_id": "e777d468cee7",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-24T15:25:09.527385+00:00",
+        "updated_at": "2026-11-25T15:25:44.424695+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -2640,7 +2640,7 @@
       "reading_status": {
         "paper_id": "926b00e39b2b",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-22T03:18:30.771902+00:00",
+        "updated_at": "2026-11-24T15:55:46.829114+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -2861,7 +2861,7 @@
       "reading_status": {
         "paper_id": "0e633438a2da",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-24T15:29:00.291028+00:00",
+        "updated_at": "2026-11-25T15:31:07.891967+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -3077,7 +3077,7 @@
       "reading_status": {
         "paper_id": "e09d9ccb18ad",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-24T15:26:48.956987+00:00",
+        "updated_at": "2026-11-25T15:27:13.183384+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -3260,7 +3260,7 @@
       "reading_status": {
         "paper_id": "f669445800e6",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-24T15:28:39.968243+00:00",
+        "updated_at": "2026-11-25T15:30:08.581220+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -3468,7 +3468,7 @@
       "reading_status": {
         "paper_id": "1bb556bb038f",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-24T15:30:51.198674+00:00",
+        "updated_at": "2026-11-25T15:31:34.162481+00:00",
         "basis": "abstract",
         "article_state": "complete",
         "article_stage": "",
@@ -3610,7 +3610,7 @@
       "topic_tags": [
         "fatigue_reliability"
       ],
-      "summary": "这是一项支持未测试合金多轴疲劳寿命预测研究的数据与代码发布，当前仅作摘要级解读。[摘要]资料提供材料域映射审计、逐试验预测、逐域保形覆盖率及复现配置，并同时包含留一材料与随机划分结果。解读：其阅读价值在于考察跨材料泛化的评估方式和结果可追溯性，而非已有证据证明某种模型更优。摘要未报告预测误差、覆盖率数值或模型排名，原始疲劳测量数据需另行获取。",
+      "summary": "【摘要】该资料介绍多轴疲劳寿命预测研究配套的代码、逐测试预测和不确定性区间。修订稿分析在每折训练和评分中剔除15条缺陷记录，剩余1152次测试，并修正部分材料参数。新增分析包括逐折嵌套调参、弹性子集、塑性修正特征和深度模型留一来源外验证等；外部验证预测了数据集之外五种合金的328次已发表测试。摘要未给出预测精度或模型优劣，因此无法判断其性能表现。",
       "raw_metadata": {
         "provider": "OpenAlex",
         "id": "https://openalex.org/W7214450962",
@@ -3656,38 +3656,38 @@
       "focus_tags": [],
       "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "建议作为疲劳可靠性研究的基准复现资料重点阅读，尤其关注跨材料验证、数据审计和不确定性评估；但当前不能据此推荐某个模型或认定其工程预测精度。",
+      "recommendation": "建议从疲劳可靠性与跨材料泛化验证角度阅读：资料明确提供留一材料外基准及外部预测设计，但应结合论文和配套结果核查性能，不能仅凭摘要认定模型有效。",
       "deep_read": {
-        "problem": "研究针对未测试合金的多轴疲劳寿命预测，摘要中的“untested alloys”明确了应用对象。[摘要]解读：关键问题是模型能否从已有材料推广到未参与训练的材料，而不只是预测同一数据集合中的留出样本。当前资料未说明载荷范围、输入变量和寿命定义。",
-        "method": "发布内容同时包括留一材料与随机划分的逐试验预测，并提供逐域保形覆盖率、种子评分和网络超参数。[摘要]原文以“LOMO”标识留一材料设置。解读：这些输出支持检查不同划分方式下的表现差异，但摘要未给出模型清单、训练流程或区间构造细节。",
-        "innovation": "资料的明确特色是把材料映射审计与预测结果、代码和配置共同发布，原文称映射为“audited mapping”。[摘要]解读：这种组织方式有助于追查材料域定义及复现过程，但不能据此确认方法原创性；摘要没有提供与既有基准的比较或新算法说明。",
-        "findings": "摘要报告将40个名义合金牌号映射为41个材料条件域，并标出审计发现的12条物理不一致记录，原文称其为“physically inconsistent records”。[摘要]这些是可确认的数据审计信息，不是模型性能结论；资料没有报告误差、覆盖率或模型排名。",
-        "limitations": "当前仅有摘要，缺少模型表现及其统计比较，无法判断跨材料预测是否达到工程可用水平。[摘要]原文说明疲劳测量数据“are not redistributed here”，因此发布包本身不含这些原始测量。资料也未说明异常记录如何处理，不能把这些缺失推定为全文缺陷。",
-        "connection": "与疲劳可靠性方向的联系直接体现在寿命预测和“uncertainty intervals”。[摘要]解读：逐材料域覆盖率可为讨论预测区间在不同材料上的适用性提供入口；结构设计或智能运维可关注其迁移验证思路，但摘要未展示安全系数、在线监测或维护决策应用。",
-        "next_steps": "建议先获取所指原始数据，以发布的校验信息确认版本，再复现材料域划分及两类验证结果。[摘要]原文提到“1170 source files”的校验。建议重点核对异常记录处置、逐域误差及覆盖率差异；这是后续研究安排，并非作者已验证的结论。"
+        "problem": "【摘要】研究围绕未测试合金的多轴疲劳寿命预测，采用“leave-one-material-out”机器学习基准，并设置数据集之外合金的外部验证。解读：其关注点涉及模型面对未见材料时的预测能力；摘要没有说明具体工程工况或失效判据。",
+        "method": "【摘要】修订稿分析在每折训练和评分中删除15条缺陷记录，剩余1152次测试；新增逐折嵌套调参、弹性子集、塑性修正特征及加载频率等分析，并对深度模型开展留一来源外分析。摘要未说明各模型结构和具体调参方案。",
+        "innovation": "【摘要】资料列出了逐折嵌套调参、深度模型留一来源外分析，以及对已发表GRU结果的分解。解读：这些安排有助于从不同角度检查评估过程，但摘要未提供与既有研究的系统比较，不能据此认定某项方法具有首创性。",
+        "findings": "【摘要】资料报告，外部验证对数据集之外五种合金的328次已发表测试进行了预测，并提供逐测试预测和不确定性区间。摘要未报告预测误差、区间覆盖率或模型排序，因此不能判断外部验证效果，也不能断言预测可靠。",
+        "limitations": "【摘要】原始疲劳测量数据及五种外部合金的数据均未随该记录再分发，外部预测文件仅包含预测值。解读：复核时需另行获取所列数据来源；现有摘要也缺少性能结果和区间评估，无法据此评价预测质量。",
+        "connection": "【摘要】研究对象是多轴疲劳寿命，并以留一材料外基准和外部合金预测开展分析。解读：这与结构设计中的材料疲劳可靠性评估相关，也可为智能运维关注的寿命预测提供参考；摘要未涉及实际运维部署或结构设计验证。",
+        "next_steps": "【建议】后续可核对论文及配套预测文件，区分留一材料外与外部验证结果，检查误差、不同合金表现和不确定性区间的评价方式；复现时再按所列来源获取未再分发的数据。上述工作是阅读建议，并非摘要已报告的结论。"
       },
       "recommended_direction": "fatigue_reliability",
-      "title_zh": "多轴疲劳寿命机器学习预测的经审计留一材料基准：代码、预测与不确定性区间",
+      "title_zh": "面向多轴疲劳寿命预测的机器学习模型留一材料外审计基准",
       "analysis_basis": "abstract",
       "analysis_kind": "model",
       "analysis_sources": [
         "https://doi.org/10.5281/zenodo.22973712"
       ],
-      "analyzed_at": "2026-10-14T13:24:17.765951+00:00",
-      "llm_model": "gpt-6.1-sol",
+      "analyzed_at": "2026-11-25T15:32:26.212891+00:00",
+      "llm_model": "gpt-6.1-terra",
       "analysis_references": {},
-      "analysis_material_version": "59eca1e22e8e3034389f6b60cb54958625824b5581350e54601f682c8233dbaa",
+      "analysis_material_version": "95ec0ce3974bd1cf3cea66a31e6865f909a742443aba686a19b214fe1c61bb3c",
       "analysis_issues": [],
       "reading_status": {
         "paper_id": "0385ae69f947",
         "state": "awaiting_fulltext",
-        "updated_at": "2026-11-24T15:31:12.392190+00:00",
+        "updated_at": "2026-11-25T15:32:26.231614+00:00",
         "basis": "abstract",
-        "article_state": "complete",
-        "article_stage": "",
+        "article_state": "retry",
+        "article_stage": "writing",
         "reason": "not_found",
-        "total": 0,
-        "covered": 0,
+        "total": 1,
+        "covered": 1,
         "pdf_available": false,
         "issues": []
       },
@@ -3872,7 +3872,7 @@
       "reading_status": {
         "paper_id": "3e66cc5fc310",
         "state": "failed",
-        "updated_at": "2026-11-22T06:57:49.333716+00:00",
+        "updated_at": "2026-11-24T16:57:28.466315+00:00",
         "basis": "full_text",
         "article_state": "complete",
         "article_stage": "",
