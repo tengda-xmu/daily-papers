@@ -1,0 +1,127 @@
+{
+  "paper_id": "bcb1149d5391",
+  "fingerprint": "18a63663561d2eb53f6a4327df7bc4e14e4aeb26bc735063f6e411985d2bc90f",
+  "analysis": {
+    "title_zh": "SABER-Math：数学信息检索自动化重排序基准",
+    "summary": "论文针对数学检索中相关题目稀少、表面相似不等于解法相似的问题，构建自动化重排序基准。作者从约283K道题目及解答中，以本体主题和解答摘要筛选候选，再通过大语言模型成对判断、瑞士制比赛和Bradley–Terry模型生成连续相关性评分。实验表明推理训练模型表现较强，但符号密集领域仍有挑战；去重实验也为基准结果的下游关联提供了证据。[P2][P6][P8][P9]",
+    "recommendation": "建议关注领域检索、自动基准构建和LLM裁判的读者重点阅读；若目标是智能运维、结构设计或可靠性的直接工程应用，本文更适合作为可迁移的评测方法参考，而非现成解决方案。[P2][P10]",
+    "deep_read": {
+      "problem": "数学问题可能措辞和符号不同，却共享解法；反之，公式相似也不保证推理相近。作者认为专家标注成本高，狭窄的相关性定义还可能惩罚有用文档，因此需要可扩展、细粒度且能独立评价检索器的基准。[P2][P3]",
+      "method": "作者从约283K道题目—解答对出发，利用数学本体主题相似度和解答摘要的词汇重叠筛选候选。1000个查询各配150个候选，经20轮瑞士制成对判断和Bradley–Terry模型得到连续评分，再以nDCG@10评价重排序。[P2][P5][P6][P7]",
+      "innovation": "作者将主题相关和解法相关作为互补的候选发现信号，而非直接作为最终标签；再用成对偏好聚合形成细粒度评分。该设计旨在减少单一相关性定义对其他有效联系的排斥，并以瑞士制降低比较成本。[P2][P6][P21]",
+      "findings": "主设置中，ReasonReranker-Qwen3-32B-Rewrite的总体nDCG@10为0.741；作者报告推理训练模型表现较强，但符号密集领域仍较困难。基准分数与全池去重任务中重复项排名取负后的Spearman相关系数为0.96。[P8][P9]",
+      "limitations": "语料主要来自高中、奥赛及大学初级题目，且任务是预选候选集重排序，不能直接代表开放式全库检索；LLM处理也可能引入噪声。[P10] 原文件P9图2后句子缺少“inherited from”后的来源对象，无法确定偏好继承自何处，不应补写。\n原文核对：[P9] 图2后的正文以“the preferences may be inherited from.”结束，原页缺少from后的来源对象；因此无法确定作者认为同一模型家族的偏好继承自何处，不应补写。",
+      "connection": "解读：该论文没有直接研究智能运维、结构设计或可靠性，但其区分表面相似与方法相似的思路，可用于思考故障案例、设计方案或失效机理检索的相关性定义。跨领域效果尚无本文证据，不能视为作者结论。[P2][P10]",
+      "next_steps": "建议：若迁移至工程领域，可先定义故障机理或设计约束相关性，再比较主题筛选与案例处理过程筛选，并由领域专家独立核验成对标签。还应另测全库首阶段召回、跨设备泛化及部署成本；这些均为研究设想，而非论文已验证结果。[P6][P10][P20]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.2500.pdf"
+    ],
+    "analyzed_at": "2026-11-26T00:27:03.857934+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": true,
+    "reason": "论文对数学信息检索基准构建有明确方法及结果，值得相关研究者阅读；但给定标签未说明具体方向，资料也未显示其直接研究智能运维、结构设计或可靠性，因此不将工程方向适配判为肯定。证据足以支持这一谨慎判断及其检索方法价值。",
+    "evidence": "Finally, we rank the candidates per query using an\nLLM-as-a-judge in a 20-round Swiss tournament based on a Bradley-Terry model"
+  },
+  "material": {
+    "version": "c955c1902b194facc2a8625a2c804c5a588ea4b4a32e6601695f886358403bb5",
+    "total": 34,
+    "covered": 34,
+    "references": {
+      "problem": [
+        "P2",
+        "P3"
+      ],
+      "method": [
+        "P2",
+        "P5",
+        "P6",
+        "P7"
+      ],
+      "innovation": [
+        "P2",
+        "P6",
+        "P21"
+      ],
+      "findings": [
+        "P8",
+        "P9"
+      ],
+      "limitations": [
+        "P9",
+        "P10"
+      ],
+      "connection": [
+        "P2",
+        "P10"
+      ],
+      "next_steps": [
+        "P6",
+        "P10",
+        "P20"
+      ]
+    },
+    "excerpt": "Finally, we rank the candidates per query using an\nLLM-as-a-judge in a 20-round Swiss tournament based on a Bradley-Terry model",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P21",
+      "P22",
+      "P23",
+      "P24",
+      "P25",
+      "P26",
+      "P27",
+      "P28",
+      "P29",
+      "P30",
+      "P31",
+      "P32",
+      "P33",
+      "P34"
+    ],
+    "issues": [
+      {
+        "kind": "source_defect",
+        "page": "P9",
+        "detail": "图2后的正文以“the preferences may be inherited from.”结束，原页缺少from后的来源对象；因此无法确定作者认为同一模型家族的偏好继承自何处，不应补写。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P21",
+        "detail": "图6坐标轴和图例的文字提取为/uni编码；原图可读为横轴Sorted rank、纵轴Cumulative Proportion，图例为Topic-only、Summary-only和Both。纠正后可判断双信号组曲线上升最快。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P25",
+        "detail": "表8中Rank1-32B的Type被文字提取为“R TC”；原页为“RTC”。该修正影响系统类型标记的准确转录，不改变其两种设置下的分数。"
+      }
+    ]
+  }
+}
