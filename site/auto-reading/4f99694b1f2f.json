@@ -1,0 +1,40 @@
+{
+  "paper_id": "4f99694b1f2f",
+  "fingerprint": "e17814f3031a031a19608f7f562d38159188ffd65db451bd9be0daae6d25f4c8",
+  "analysis": {
+    "title_zh": "ReproRepo：利用 GitHub 仓库问题规模化评估研究复现",
+    "summary": "【摘要】论文针对现有大语言模型智能体复现评估依赖大量人工整理与评价、难以扩展的问题，提出 ReproRepo 框架，利用人类提出的 GitHub issues 作为真实复现障碍的自然监督。作者基于主要会议的 1,149 篇近期机器学习论文评估四种前沿模型—智能体配置。最佳配置在约 90% 的论文中发现至少一个与人工报告障碍语义相关的问题，但准确定位仍可能不足。上述结论仅依据摘要。[摘要]",
+    "recommendation": "【解读】如果关注论文代码复现、仓库问题挖掘或智能体评估，该文值得进一步阅读：摘要提供了明确的框架、评估对象和结果，同时提示语义相关不等同于准确定位。[摘要]",
+    "deep_read": {
+      "problem": "【摘要】论文关注如何规模化评估大语言模型智能体对科研结果复现的辅助能力。现有基准虽已开展此类评估，但数据整理和评价依赖大量人工工作，因而难以扩展；作者将论文与发布代码中的真实复现障碍作为评估对象。[摘要]",
+      "method": "【摘要】ReproRepo 利用人类提出的 GitHub issues，为真实复现障碍提供自然形成的监督信号。作者基于主要会议的 1,149 篇近期机器学习论文实例化该框架，并评估四种前沿模型—智能体配置；摘要未说明具体匹配或评分流程。[摘要]",
+      "innovation": "【摘要】所提出的框架将人类报告的仓库问题用于复现评估，旨在降低对大规模人工数据整理和评价的依赖，并支持可复用、可扩展的评估。【解读】其价值在于利用已有问题记录，但仅凭摘要无法判断相对既有工作的完整创新边界。[摘要]",
+      "findings": "【摘要】研究中表现最好的配置 Codex with GPT-5.5，在约 90% 的研究论文中至少找出一个与人类报告障碍语义相关的问题。分析还指出，智能体擅长发现可见故障和识别正确语义区域，但准确定位仍可能不足；摘要未给出其他配置的具体结果。[摘要]",
+      "limitations": "【摘要】作者明确指出智能体在障碍的准确定位方面仍可能不足。摘要报告的是与人工问题语义相关的发现，并未说明每项发现均准确定位，也未交代数据筛选、问题覆盖范围及评估误差等细节；因此无法据此判断这些方面的具体影响。[摘要]",
+      "connection": "【解读】利用仓库中人类报告的问题评估智能体，可为智能运维中的真实故障发现与评测提供类比；语义区域识别和准确定位之间的差别，也值得可靠性研究关注。但摘要的直接研究对象是机器学习论文的代码复现，未涉及结构设计应用。[摘要]",
+      "next_steps": "【建议】后续阅读可重点核对 issues 与论文仓库的关联方式、语义相关的判定标准，以及准确定位不足的具体表现，再评估框架能否迁移到运维故障审计。还可比较不执行代码与执行代码时的评估设置；摘要未提供这类比较结果。[摘要]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.2423/"
+    ],
+    "analyzed_at": "2026-11-26T05:47:18.556381+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "摘要明确提出了利用人类报告的 GitHub issues 评估复现障碍的框架，并报告了智能体评估结果，因此有进一步阅读价值。但资料仅给出不含方向描述的标签，无法核实是否切合指定研究方向；direction_fit 的 false 表示证据不足，不能视为已证实不切合。[摘要]",
+    "evidence": "We introduce ReproRepo, a scalable framework for reproducibility evaluation that leverages human-raised GitHub issues as naturally occurring supervision on realistic reproduction blockers."
+  },
+  "material": {
+    "version": "40f74492bb237beb418bed4ad657e8aca3979eb2fea2ec12a7a086e82102aed2",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "We introduce ReproRepo, a scalable framework for reproducibility evaluation that leverages human-raised GitHub issues as naturally occurring supervision on realistic reproduction blockers."
+  }
+}

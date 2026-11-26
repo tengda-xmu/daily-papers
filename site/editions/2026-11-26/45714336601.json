@@ -27,7 +27,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "As agentic AI systems tackle more complex mathematical tasks, they increasingly rely on information retrieval (IR) to search problem databases, theorem libraries, and educational resources. However, choosing the right retriever remains difficult, as it is infeasible to isolate its effect on downstream performance. On the other hand, existing retrieval-specific benchmarks often fail to capture fine-grained mathematical relevance, penalizing systems that retrieve useful documents. We address this gap with SABER-Math, the first fully automated reranking benchmark for mathematical IR, built withou…",
+      "summary": "论文针对数学检索中相关题目稀少、表面相似不等于解法相似的问题，构建自动化重排序基准。作者从约283K道题目及解答中，以本体主题和解答摘要筛选候选，再通过大语言模型成对判断、瑞士制比赛和Bradley–Terry模型生成连续相关性评分。实验表明推理训练模型表现较强，但符号密集领域仍有挑战；去重实验也为基准结果的下游关联提供了证据。[P2][P6][P8][P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -86,11 +86,108 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注领域检索、自动基准构建和LLM裁判的读者重点阅读；若目标是智能运维、结构设计或可靠性的直接工程应用，本文更适合作为可迁移的评测方法参考，而非现成解决方案。[P2][P10]",
+      "deep_read": {
+        "problem": "数学问题可能措辞和符号不同，却共享解法；反之，公式相似也不保证推理相近。作者认为专家标注成本高，狭窄的相关性定义还可能惩罚有用文档，因此需要可扩展、细粒度且能独立评价检索器的基准。[P2][P3]",
+        "method": "作者从约283K道题目—解答对出发，利用数学本体主题相似度和解答摘要的词汇重叠筛选候选。1000个查询各配150个候选，经20轮瑞士制成对判断和Bradley–Terry模型得到连续评分，再以nDCG@10评价重排序。[P2][P5][P6][P7]",
+        "innovation": "作者将主题相关和解法相关作为互补的候选发现信号，而非直接作为最终标签；再用成对偏好聚合形成细粒度评分。该设计旨在减少单一相关性定义对其他有效联系的排斥，并以瑞士制降低比较成本。[P2][P6][P21]",
+        "findings": "主设置中，ReasonReranker-Qwen3-32B-Rewrite的总体nDCG@10为0.741；作者报告推理训练模型表现较强，但符号密集领域仍较困难。基准分数与全池去重任务中重复项排名取负后的Spearman相关系数为0.96。[P8][P9]",
+        "limitations": "语料主要来自高中、奥赛及大学初级题目，且任务是预选候选集重排序，不能直接代表开放式全库检索；LLM处理也可能引入噪声。[P10] 原文件P9图2后句子缺少“inherited from”后的来源对象，无法确定偏好继承自何处，不应补写。\n原文核对：[P9] 图2后的正文以“the preferences may be inherited from.”结束，原页缺少from后的来源对象；因此无法确定作者认为同一模型家族的偏好继承自何处，不应补写。",
+        "connection": "解读：该论文没有直接研究智能运维、结构设计或可靠性，但其区分表面相似与方法相似的思路，可用于思考故障案例、设计方案或失效机理检索的相关性定义。跨领域效果尚无本文证据，不能视为作者结论。[P2][P10]",
+        "next_steps": "建议：若迁移至工程领域，可先定义故障机理或设计约束相关性，再比较主题筛选与案例处理过程筛选，并由领域专家独立核验成对标签。还应另测全库首阶段召回、跨设备泛化及部署成本；这些均为研究设想，而非论文已验证结果。[P6][P10][P20]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SABER-Math：数学信息检索自动化重排序基准",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.2500.pdf"
+      ],
+      "analyzed_at": "2026-11-26T00:27:03.857934+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P2",
+          "P5",
+          "P6",
+          "P7"
+        ],
+        "innovation": [
+          "P2",
+          "P6",
+          "P21"
+        ],
+        "findings": [
+          "P8",
+          "P9"
+        ],
+        "limitations": [
+          "P9",
+          "P10"
+        ],
+        "connection": [
+          "P2",
+          "P10"
+        ],
+        "next_steps": [
+          "P6",
+          "P10",
+          "P20"
+        ]
+      },
+      "analysis_material_version": "c955c1902b194facc2a8625a2c804c5a588ea4b4a32e6601695f886358403bb5",
+      "analysis_issues": [
+        {
+          "kind": "source_defect",
+          "page": "P9",
+          "detail": "图2后的正文以“the preferences may be inherited from.”结束，原页缺少from后的来源对象；因此无法确定作者认为同一模型家族的偏好继承自何处，不应补写。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P21",
+          "detail": "图6坐标轴和图例的文字提取为/uni编码；原图可读为横轴Sorted rank、纵轴Cumulative Proportion，图例为Topic-only、Summary-only和Both。纠正后可判断双信号组曲线上升最快。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P25",
+          "detail": "表8中Rank1-32B的Type被文字提取为“R TC”；原页为“RTC”。该修正影响系统类型标记的准确转录，不改变其两种设置下的分数。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "bcb1149d5391",
+        "state": "published",
+        "updated_at": "2026-11-26T00:27:03.887006+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 34,
+        "covered": 34,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "source_defect",
+            "page": "P9",
+            "detail": "图2后的正文以“the preferences may be inherited from.”结束，原页缺少from后的来源对象；因此无法确定作者认为同一模型家族的偏好继承自何处，不应补写。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P21",
+            "detail": "图6坐标轴和图例的文字提取为/uni编码；原图可读为横轴Sorted rank、纵轴Cumulative Proportion，图例为Topic-only、Summary-only和Both。纠正后可判断双信号组曲线上升最快。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P25",
+            "detail": "表8中Rank1-32B的Type被文字提取为“R TC”；原页为“RTC”。该修正影响系统类型标记的准确转录，不改变其两种设置下的分数。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -112,7 +209,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "When serving LLM agents in production, the KV cache grows over turns, and mainstream serving engines (e.g., vLLM) rely on least recently used (LRU) eviction to manage memory pressure. While LRU is well-understood for OS pages and single-turn LLM serving, its behavior on agent workloads remains underexplored. We present an inverted age-importance phenomenon in agent workflows, where the oldest KV blocks (system prompts, tool outputs) are the most persistently attended, while the .newest blocks (chain-of-thought reasoning) decay fastest. As a result, recency-based eviction systematically discard…",
+      "summary": "论文研究多轮智能体推理中，按最近使用情况驱逐键值缓存可能误删持续重要的系统提示和工具输出的问题。作者测量不同语义角色的注意力衰减，提出免训练的 RoleKV，通过角色标注、生命周期阈值和优先级评分决定缓存块去留，并在 vLLM 与 LMCache 中评估。实验报告了抢占、PCIe 流量和延迟收益，但收益依赖内存压力及工作负载；部分排序与最优性论证仍需审慎核对。[P1][P5][P10][P14]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -171,11 +268,79 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注智能体推理服务与缓存调度的读者重点阅读：论文同时提供角色级测量、可部署策略和系统实验，但应结合实验配置筛选及理论论证中的疑点判断其可迁移性。[P5][P16]",
+      "deep_read": {
+        "problem": "多轮智能体不断累积系统提示、任务指令、推理和工具结果，缓存块的复用价值并不只由新旧决定。作者发现较早的系统和工具内容可能持续受到关注，而较新的推理内容衰减较快；基于近期性的驱逐因此可能造成重复预填充或数据搬运。[P1][P2]",
+        "method": "RoleKV 首先依据模板标记为缓存块分配语义角色，再用探测得到的角色衰减常数确定生命周期阈值。超过阈值的候选块按衰减、角色权重和动作预测增益组成的分数排序，低分优先驱逐；系统块受保护，策略在系统层管理块的位置。[P4][P5]",
+        "innovation": "作者将跨轮次角色注意力动态引入缓存保留决策，而非仅以块年龄或步骤位置作为代理信号；同时采用确定性标注器和按工作负载校准的衰减曲线。解读：其主要贡献在系统策略与实测信号的结合，并非改变模型注意力计算或提出新的模型训练方法。[P2][P4][P5]",
+        "findings": "作者报告 WebArena 紧预算下抢占减少64.3%；GAIA 的 Llama-70B、100轮配置下，GPU 命中率为52.1%，相对 LRU 加速1.41倍。三个模型的 LMCache 平均 PCIe 流量分别下降18.2%、22.5%和26.4%；这些结果属于不同配置，不能合并为同一实验。[P7][P18]",
+        "limitations": "收益集中在特定内存压力范围，短轨迹未评估无共享前缀情形；新模板需要标记词表，新工作负载可能需要重新探测。解读：最优排序证明包含初始注意力幅度，而实际评分未显式包含该项，且正文与部分表格存在数值不一致，结论需谨慎使用。[P5][P10][P14][P16][P17]",
+        "connection": "解读：对智能运维中的多智能体服务，本文可作为缓存资源管理和推理成本监测的参考：将请求内容类型与复用行为关联，再观察命中率、抢占和传输流量。论文针对的是大模型服务系统，并未直接验证其对物理结构设计或工程可靠性分析的效果。[P2][P7][P18]",
+        "next_steps": "建议在目标运维工作负载上先测量角色注意力与复用周期，再对无共享前缀、不同并发和预算开展受控比较；同时分别核对输出一致性及端到端成本。建议复核评分中初始幅度和动作增益对理论排序的影响，并检查模板标记变化带来的误分类风险。[P10][P14][P21][P22]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "RoleKV：面向大语言模型智能体上下文年龄与重要性倒置的角色感知键值缓存管理",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1982.pdf"
+      ],
+      "analyzed_at": "2026-11-26T01:47:16.013316+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P4",
+          "P5"
+        ],
+        "findings": [
+          "P7",
+          "P18"
+        ],
+        "limitations": [
+          "P5",
+          "P10",
+          "P14",
+          "P16",
+          "P17"
+        ],
+        "connection": [
+          "P2",
+          "P7",
+          "P18"
+        ],
+        "next_steps": [
+          "P10",
+          "P14",
+          "P21",
+          "P22"
+        ]
+      },
+      "analysis_material_version": "f92979a6c70a2dd1dd8af6e3174989c447cbc433c448f25d73b72b291c4b89e5",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "fcaa7a7ea833",
+        "state": "published",
+        "updated_at": "2026-11-26T01:47:16.031132+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 22,
+        "covered": 22,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -261,7 +426,27 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "c86de885b3cf",
+        "state": "retry",
+        "updated_at": "2026-11-26T05:49:20.905895+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "next_retry_at": "2026-11-26T05:59:20.905895+00:00",
+        "total": 19,
+        "covered": 19,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "图 3 的 Refine 框中文字提取为“retrained neighbor”，原页为“retained neighbor”，即使用保留的邻居信息，而非重新训练邻居；这关系到对 SAC 更新步骤的理解。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -285,7 +470,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "While large language models (LLMs) have advanced the development of general-purpose agents, robust generalization to unseen tasks remains challenging. Two common approaches are supervised fine-tuning and training-free memory-augmented generation using retrieved experience; yet both have limitations: fine-tuning often fails to extrapolate to new tasks, while experience retrieval often underperforms compared to supervised baselines. In this work, we combine these approaches and study how retrieval-augmented LLM agents can learn to use retrieved trajectories in-context. First, we establish a stro…",
+      "summary": "论文研究如何让大语言模型智能体利用历史交互轨迹适应未见任务。作者将经验检索纳入 LoRA 微调，并在两个文本交互环境中比较纯微调、推理时检索和检索增强微调。[P4][P5][P8] 结果显示，该方法通常改善困难任务泛化，但收益取决于经验相关性；利用自身失败经验在不同环境中的效果并不一致。[P8][P9] 研究主要依赖固定只读经验库，向长期动态记忆及其他应用场景的推广仍需验证。[P10]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -344,11 +529,78 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注智能体经验复用和任务迁移的读者重点阅读：论文提供了可比较的检索与微调基线、经验质量压力测试以及配对统计分析，但不宜直接将结果外推到工业场景。[P8][P29][P31]",
+      "deep_read": {
+        "problem": "论文关注智能体在同一环境中面对训练未见任务时的泛化问题。作者认为，按既有任务组内部划分的测试集可能仍接近训练分布，难以充分考察跨任务迁移；纯参数微调也可能过度适应已见任务。[P4][P5][P8]",
+        "method": "作者将完整交互轨迹序列化为多轮聊天，以嵌入点积检索相关轨迹并构造系统提示中的记忆块；EXPRAG-LoRA 在微调和推理时均使用检索上下文。主要微调实验采用静态检索和 K=2。[P4][P7][P16]",
+        "innovation": "论文的重点不是设计新的记忆控制器，而是结合完整轨迹的只读情景检索与检索增强微调，考察策略是否学会在上下文中使用经验。作者还分别测试稀疏、错配、强模型生成和自身经验，以区分经验质量的影响。[P3][P7][P31]",
+        "findings": "在匹配索引下，Ministral 的 ALFWorld hard 成功率从无检索 LoRA 的34.4%升至 EXPRAG-LoRA 的88.5%；配对分析报告提升54.1个百分点。[P8][P30] 自身失败经验可帮助 ALFWorld 的第二次尝试，但 ScienceWorld 中表现下降。[P9]",
+        "limitations": "主要实验依赖脚本专家轨迹和固定只读记忆，自身经验仅复用紧邻的上一次尝试；经验不匹配可能削弱表现，长期动态记忆的效果未知。[P10] 仅比较一种嵌入模型。[P16] 阅读笔记未报告经原页核实的原文件缺项，不能推定存在缺失公式。",
+        "connection": "解读：经验轨迹检索、失败案例复用及跨任务评估可为智能运维中的历史处置案例辅助决策提供方法参照，但本文实验仅涉及文本交互环境，没有直接验证设备诊断或现场运维。对结构设计与工程可靠性的直接适用性，现有资料也未提供证据。[P5][P9]",
+        "next_steps": "建议先在目标领域构建带结果标签的案例库，区分训练任务与未见任务，并比较无检索、仅推理检索和检索增强微调；进一步控制案例相关性与覆盖度，检验失败经验是否有益。还应评估动态更新、决策风险及计算成本，而非假定论文结论直接迁移。[P8][P10][P31][P39]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "检索增强大语言模型智能体：学习从经验中学习",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.57.pdf"
+      ],
+      "analyzed_at": "2026-11-26T03:28:50.058210+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P4",
+          "P5",
+          "P8"
+        ],
+        "method": [
+          "P4",
+          "P7",
+          "P16"
+        ],
+        "innovation": [
+          "P3",
+          "P7",
+          "P31"
+        ],
+        "findings": [
+          "P8",
+          "P9",
+          "P30"
+        ],
+        "limitations": [
+          "P10",
+          "P16"
+        ],
+        "connection": [
+          "P5",
+          "P9"
+        ],
+        "next_steps": [
+          "P8",
+          "P10",
+          "P31",
+          "P39"
+        ]
+      },
+      "analysis_material_version": "9a0372dc59731c90028d0d76db794e7dad62c4ab840806a99a434bafe8c02747",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "acef255db17f",
+        "state": "published",
+        "updated_at": "2026-11-26T03:28:50.089409+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 39,
+        "covered": 39,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -376,7 +628,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Efficiency is increasingly important for Large Language Model (LLM)-based multi-agent systems (MAS), as larger models and more agents introduce substantial execution costs. Recent methods aim to make MAS cheaper by pruning agents, removing communication edges, or searching for compact structures. However, we argue that existing evaluations may overestimate their true ability to improve MAS efficiency. Reported gains are often measured under method-specific prompts and starting topologies, making them difficult to attribute to the proposed structural changes. Moreover, many reported successes a…",
+      "summary": "论文关注大语言模型多智能体系统的效率评估是否可靠。作者统一模型、智能体注册表与运行时，在38个受控单元中比较五种压缩方法，并引入同预算随机剪枝和单智能体参照。实验显示，收益随任务和初始拓扑变化；部分成本下降来自图坍塌或工具路径被关闭，边传递成本下降也未必意味着提示词成本下降。作者因此主张同时检查功能路径、结构变化及实际成本，并注意评估范围和统计不确定性。[P1][P5–P10]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -435,11 +687,84 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注多智能体评估与结构优化的读者阅读：本文不仅比较准确率和成本，还提供随机剪枝对照、结构指纹及失败案例，适合检查效率收益的归因是否可靠。[P7][P9][P35]",
+      "deep_read": {
+        "problem": "作者质疑既有多智能体效率评估的有效性：不同方法常使用各自的提示词、智能体与初始拓扑，观察到的收益难以归因于结构优化。即使统一设置，若单智能体或随机剪枝已能保持性能，剪枝成功也不足以证明找到更好的协作结构。[P1–P2]",
+        "method": "框架将系统表示为拓扑、智能体分配、模型配置和方法超参数；拓扑进一步拆成空间边、时间边与节点激活掩码。作者固定骨干、角色和执行引擎，以星形六智能体两轮系统为锚点，逐轴改变拓扑、规模、深度或工具访问，并比较优化前后指标。[P3–P6]",
+        "innovation": "本文的主要贡献是评估设计而非提出新的剪枝算法：以统一输入输出契约和逐来源消息过滤控制执行条件，再通过同结构预算随机剪枝、单智能体基线和结构指纹检验收益来源。解读：这一组合使成本变化能与关键路径、节点轮次和角色变化一起分析。[P3–P5][P7][P9]",
+        "findings": "作者发现方法表现依赖任务与起始拓扑。20个主网格单元中，优化方法与匹配随机剪枝相对原系统的平均准确率变化分别为−0.77和−0.44个百分点；DAGP分别为+1.29和+0.08个百分点。部分大幅节省来自图坍塌，附加决策节点也可能使提示词成本上升。[P7][P9][P30]",
+        "limitations": "研究限于重构既有系统，使用4B–8B开源权重模型及英语任务，未覆盖长时规划和交互环境；重复运行分析仅涉及一个任务族，成本采用空白分词代理，Wikipedia调用未计入工具调用数。[P10][P20–P21] 本批笔记未报告经原页核实的原文件缺项；HotpotQA正文与表41图注的评分口径存在不一致。[P33][P36]",
+        "connection": "解读：对智能运维多智能体系统，论文的控制变量和匹配随机剪枝思路可用于检验协作是否真正优于简化流程；对结构设计与可靠性研究，关键路径被切断、工具节点被停用等案例提示应同时观察功能保持和成本。但论文未直接验证这些工业场景。[P8–P9][P29–P30]",
+        "next_steps": "建议在目标运维任务中先建立单智能体、未压缩系统及同预算随机剪枝基线，再比较关键诊断链路保留率、工具可用性、任务效果与端到端成本；对随机剪枝和模型运行重复采样并报告不确定性。这是迁移设想，并非论文已完成的实验。[P9–P10][P26]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "重新审视多智能体系统效率方法的评估",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.798.pdf"
+      ],
+      "analyzed_at": "2026-11-26T04:48:42.268809+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "innovation": [
+          "P3",
+          "P4",
+          "P5",
+          "P7",
+          "P9"
+        ],
+        "findings": [
+          "P7",
+          "P9",
+          "P30"
+        ],
+        "limitations": [
+          "P10",
+          "P20",
+          "P21",
+          "P33",
+          "P36"
+        ],
+        "connection": [
+          "P8",
+          "P9",
+          "P29",
+          "P30"
+        ],
+        "next_steps": [
+          "P9",
+          "P10",
+          "P26"
+        ]
+      },
+      "analysis_material_version": "21a550c05b87e5295fd25b348325bc6105ce730e59798a6a8571b8e28877f3e2",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "fe2bea8e398c",
+        "state": "published",
+        "updated_at": "2026-11-26T04:48:42.319913+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 36,
+        "covered": 36,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -466,7 +791,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Reproducing research results from papers and released code is central to scientific progress. Existing works have introduced benchmarks to evaluate whether LLM agents can assist with reproducibility, but they are difficult to scale due to their reliance on substantial manual effort for data curation and evaluation. We introduce ReproRepo, a scalable framework for reproducibility evaluation that leverages human-raised GitHub issues as naturally occurring supervision on realistic reproduction blockers. We instantiate ReproRepo on 1,149 recent machine learning papers from major conferences and ev…",
+      "summary": "【摘要】论文针对现有大语言模型智能体复现评估依赖大量人工整理与评价、难以扩展的问题，提出 ReproRepo 框架，利用人类提出的 GitHub issues 作为真实复现障碍的自然监督。作者基于主要会议的 1,149 篇近期机器学习论文评估四种前沿模型—智能体配置。最佳配置在约 90% 的论文中发现至少一个与人工报告障碍语义相关的问题，但准确定位仍可能不足。上述结论仅依据摘要。[摘要]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -525,11 +850,43 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "【解读】如果关注论文代码复现、仓库问题挖掘或智能体评估，该文值得进一步阅读：摘要提供了明确的框架、评估对象和结果，同时提示语义相关不等同于准确定位。[摘要]",
+      "deep_read": {
+        "problem": "【摘要】论文关注如何规模化评估大语言模型智能体对科研结果复现的辅助能力。现有基准虽已开展此类评估，但数据整理和评价依赖大量人工工作，因而难以扩展；作者将论文与发布代码中的真实复现障碍作为评估对象。[摘要]",
+        "method": "【摘要】ReproRepo 利用人类提出的 GitHub issues，为真实复现障碍提供自然形成的监督信号。作者基于主要会议的 1,149 篇近期机器学习论文实例化该框架，并评估四种前沿模型—智能体配置；摘要未说明具体匹配或评分流程。[摘要]",
+        "innovation": "【摘要】所提出的框架将人类报告的仓库问题用于复现评估，旨在降低对大规模人工数据整理和评价的依赖，并支持可复用、可扩展的评估。【解读】其价值在于利用已有问题记录，但仅凭摘要无法判断相对既有工作的完整创新边界。[摘要]",
+        "findings": "【摘要】研究中表现最好的配置 Codex with GPT-5.5，在约 90% 的研究论文中至少找出一个与人类报告障碍语义相关的问题。分析还指出，智能体擅长发现可见故障和识别正确语义区域，但准确定位仍可能不足；摘要未给出其他配置的具体结果。[摘要]",
+        "limitations": "【摘要】作者明确指出智能体在障碍的准确定位方面仍可能不足。摘要报告的是与人工问题语义相关的发现，并未说明每项发现均准确定位，也未交代数据筛选、问题覆盖范围及评估误差等细节；因此无法据此判断这些方面的具体影响。[摘要]",
+        "connection": "【解读】利用仓库中人类报告的问题评估智能体，可为智能运维中的真实故障发现与评测提供类比；语义区域识别和准确定位之间的差别，也值得可靠性研究关注。但摘要的直接研究对象是机器学习论文的代码复现，未涉及结构设计应用。[摘要]",
+        "next_steps": "【建议】后续阅读可重点核对 issues 与论文仓库的关联方式、语义相关的判定标准，以及准确定位不足的具体表现，再评估框架能否迁移到运维故障审计。还可比较不执行代码与执行代码时的评估设置；摘要未提供这类比较结果。[摘要]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "ReproRepo：利用 GitHub 仓库问题规模化评估研究复现",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.2423/"
+      ],
+      "analyzed_at": "2026-11-26T05:47:18.556381+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {},
+      "analysis_material_version": "40f74492bb237beb418bed4ad657e8aca3979eb2fea2ec12a7a086e82102aed2",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "4f99694b1f2f",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-26T05:47:18.566122+00:00",
+        "basis": "abstract",
+        "article_state": "failed",
+        "article_stage": "writing",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "extended": [],
@@ -557,7 +914,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "As agentic AI systems tackle more complex mathematical tasks, they increasingly rely on information retrieval (IR) to search problem databases, theorem libraries, and educational resources. However, choosing the right retriever remains difficult, as it is infeasible to isolate its effect on downstream performance. On the other hand, existing retrieval-specific benchmarks often fail to capture fine-grained mathematical relevance, penalizing systems that retrieve useful documents. We address this gap with SABER-Math, the first fully automated reranking benchmark for mathematical IR, built withou…",
+      "summary": "论文针对数学检索中相关题目稀少、表面相似不等于解法相似的问题，构建自动化重排序基准。作者从约283K道题目及解答中，以本体主题和解答摘要筛选候选，再通过大语言模型成对判断、瑞士制比赛和Bradley–Terry模型生成连续相关性评分。实验表明推理训练模型表现较强，但符号密集领域仍有挑战；去重实验也为基准结果的下游关联提供了证据。[P2][P6][P8][P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -616,11 +973,108 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注领域检索、自动基准构建和LLM裁判的读者重点阅读；若目标是智能运维、结构设计或可靠性的直接工程应用，本文更适合作为可迁移的评测方法参考，而非现成解决方案。[P2][P10]",
+      "deep_read": {
+        "problem": "数学问题可能措辞和符号不同，却共享解法；反之，公式相似也不保证推理相近。作者认为专家标注成本高，狭窄的相关性定义还可能惩罚有用文档，因此需要可扩展、细粒度且能独立评价检索器的基准。[P2][P3]",
+        "method": "作者从约283K道题目—解答对出发，利用数学本体主题相似度和解答摘要的词汇重叠筛选候选。1000个查询各配150个候选，经20轮瑞士制成对判断和Bradley–Terry模型得到连续评分，再以nDCG@10评价重排序。[P2][P5][P6][P7]",
+        "innovation": "作者将主题相关和解法相关作为互补的候选发现信号，而非直接作为最终标签；再用成对偏好聚合形成细粒度评分。该设计旨在减少单一相关性定义对其他有效联系的排斥，并以瑞士制降低比较成本。[P2][P6][P21]",
+        "findings": "主设置中，ReasonReranker-Qwen3-32B-Rewrite的总体nDCG@10为0.741；作者报告推理训练模型表现较强，但符号密集领域仍较困难。基准分数与全池去重任务中重复项排名取负后的Spearman相关系数为0.96。[P8][P9]",
+        "limitations": "语料主要来自高中、奥赛及大学初级题目，且任务是预选候选集重排序，不能直接代表开放式全库检索；LLM处理也可能引入噪声。[P10] 原文件P9图2后句子缺少“inherited from”后的来源对象，无法确定偏好继承自何处，不应补写。\n原文核对：[P9] 图2后的正文以“the preferences may be inherited from.”结束，原页缺少from后的来源对象；因此无法确定作者认为同一模型家族的偏好继承自何处，不应补写。",
+        "connection": "解读：该论文没有直接研究智能运维、结构设计或可靠性，但其区分表面相似与方法相似的思路，可用于思考故障案例、设计方案或失效机理检索的相关性定义。跨领域效果尚无本文证据，不能视为作者结论。[P2][P10]",
+        "next_steps": "建议：若迁移至工程领域，可先定义故障机理或设计约束相关性，再比较主题筛选与案例处理过程筛选，并由领域专家独立核验成对标签。还应另测全库首阶段召回、跨设备泛化及部署成本；这些均为研究设想，而非论文已验证结果。[P6][P10][P20]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SABER-Math：数学信息检索自动化重排序基准",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.2500.pdf"
+      ],
+      "analyzed_at": "2026-11-26T00:27:03.857934+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P2",
+          "P5",
+          "P6",
+          "P7"
+        ],
+        "innovation": [
+          "P2",
+          "P6",
+          "P21"
+        ],
+        "findings": [
+          "P8",
+          "P9"
+        ],
+        "limitations": [
+          "P9",
+          "P10"
+        ],
+        "connection": [
+          "P2",
+          "P10"
+        ],
+        "next_steps": [
+          "P6",
+          "P10",
+          "P20"
+        ]
+      },
+      "analysis_material_version": "c955c1902b194facc2a8625a2c804c5a588ea4b4a32e6601695f886358403bb5",
+      "analysis_issues": [
+        {
+          "kind": "source_defect",
+          "page": "P9",
+          "detail": "图2后的正文以“the preferences may be inherited from.”结束，原页缺少from后的来源对象；因此无法确定作者认为同一模型家族的偏好继承自何处，不应补写。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P21",
+          "detail": "图6坐标轴和图例的文字提取为/uni编码；原图可读为横轴Sorted rank、纵轴Cumulative Proportion，图例为Topic-only、Summary-only和Both。纠正后可判断双信号组曲线上升最快。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P25",
+          "detail": "表8中Rank1-32B的Type被文字提取为“R TC”；原页为“RTC”。该修正影响系统类型标记的准确转录，不改变其两种设置下的分数。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "bcb1149d5391",
+        "state": "published",
+        "updated_at": "2026-11-26T00:27:03.887006+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 34,
+        "covered": 34,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "source_defect",
+            "page": "P9",
+            "detail": "图2后的正文以“the preferences may be inherited from.”结束，原页缺少from后的来源对象；因此无法确定作者认为同一模型家族的偏好继承自何处，不应补写。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P21",
+            "detail": "图6坐标轴和图例的文字提取为/uni编码；原图可读为横轴Sorted rank、纵轴Cumulative Proportion，图例为Topic-only、Summary-only和Both。纠正后可判断双信号组曲线上升最快。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P25",
+            "detail": "表8中Rank1-32B的Type被文字提取为“R TC”；原页为“RTC”。该修正影响系统类型标记的准确转录，不改变其两种设置下的分数。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -642,7 +1096,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "When serving LLM agents in production, the KV cache grows over turns, and mainstream serving engines (e.g., vLLM) rely on least recently used (LRU) eviction to manage memory pressure. While LRU is well-understood for OS pages and single-turn LLM serving, its behavior on agent workloads remains underexplored. We present an inverted age-importance phenomenon in agent workflows, where the oldest KV blocks (system prompts, tool outputs) are the most persistently attended, while the .newest blocks (chain-of-thought reasoning) decay fastest. As a result, recency-based eviction systematically discard…",
+      "summary": "论文研究多轮智能体推理中，按最近使用情况驱逐键值缓存可能误删持续重要的系统提示和工具输出的问题。作者测量不同语义角色的注意力衰减，提出免训练的 RoleKV，通过角色标注、生命周期阈值和优先级评分决定缓存块去留，并在 vLLM 与 LMCache 中评估。实验报告了抢占、PCIe 流量和延迟收益，但收益依赖内存压力及工作负载；部分排序与最优性论证仍需审慎核对。[P1][P5][P10][P14]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -701,11 +1155,79 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注智能体推理服务与缓存调度的读者重点阅读：论文同时提供角色级测量、可部署策略和系统实验，但应结合实验配置筛选及理论论证中的疑点判断其可迁移性。[P5][P16]",
+      "deep_read": {
+        "problem": "多轮智能体不断累积系统提示、任务指令、推理和工具结果，缓存块的复用价值并不只由新旧决定。作者发现较早的系统和工具内容可能持续受到关注，而较新的推理内容衰减较快；基于近期性的驱逐因此可能造成重复预填充或数据搬运。[P1][P2]",
+        "method": "RoleKV 首先依据模板标记为缓存块分配语义角色，再用探测得到的角色衰减常数确定生命周期阈值。超过阈值的候选块按衰减、角色权重和动作预测增益组成的分数排序，低分优先驱逐；系统块受保护，策略在系统层管理块的位置。[P4][P5]",
+        "innovation": "作者将跨轮次角色注意力动态引入缓存保留决策，而非仅以块年龄或步骤位置作为代理信号；同时采用确定性标注器和按工作负载校准的衰减曲线。解读：其主要贡献在系统策略与实测信号的结合，并非改变模型注意力计算或提出新的模型训练方法。[P2][P4][P5]",
+        "findings": "作者报告 WebArena 紧预算下抢占减少64.3%；GAIA 的 Llama-70B、100轮配置下，GPU 命中率为52.1%，相对 LRU 加速1.41倍。三个模型的 LMCache 平均 PCIe 流量分别下降18.2%、22.5%和26.4%；这些结果属于不同配置，不能合并为同一实验。[P7][P18]",
+        "limitations": "收益集中在特定内存压力范围，短轨迹未评估无共享前缀情形；新模板需要标记词表，新工作负载可能需要重新探测。解读：最优排序证明包含初始注意力幅度，而实际评分未显式包含该项，且正文与部分表格存在数值不一致，结论需谨慎使用。[P5][P10][P14][P16][P17]",
+        "connection": "解读：对智能运维中的多智能体服务，本文可作为缓存资源管理和推理成本监测的参考：将请求内容类型与复用行为关联，再观察命中率、抢占和传输流量。论文针对的是大模型服务系统，并未直接验证其对物理结构设计或工程可靠性分析的效果。[P2][P7][P18]",
+        "next_steps": "建议在目标运维工作负载上先测量角色注意力与复用周期，再对无共享前缀、不同并发和预算开展受控比较；同时分别核对输出一致性及端到端成本。建议复核评分中初始幅度和动作增益对理论排序的影响，并检查模板标记变化带来的误分类风险。[P10][P14][P21][P22]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "RoleKV：面向大语言模型智能体上下文年龄与重要性倒置的角色感知键值缓存管理",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1982.pdf"
+      ],
+      "analyzed_at": "2026-11-26T01:47:16.013316+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P4",
+          "P5"
+        ],
+        "findings": [
+          "P7",
+          "P18"
+        ],
+        "limitations": [
+          "P5",
+          "P10",
+          "P14",
+          "P16",
+          "P17"
+        ],
+        "connection": [
+          "P2",
+          "P7",
+          "P18"
+        ],
+        "next_steps": [
+          "P10",
+          "P14",
+          "P21",
+          "P22"
+        ]
+      },
+      "analysis_material_version": "f92979a6c70a2dd1dd8af6e3174989c447cbc433c448f25d73b72b291c4b89e5",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "fcaa7a7ea833",
+        "state": "published",
+        "updated_at": "2026-11-26T01:47:16.031132+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 22,
+        "covered": 22,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -791,7 +1313,27 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "c86de885b3cf",
+        "state": "retry",
+        "updated_at": "2026-11-26T05:49:20.905895+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "next_retry_at": "2026-11-26T05:59:20.905895+00:00",
+        "total": 19,
+        "covered": 19,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "图 3 的 Refine 框中文字提取为“retrained neighbor”，原页为“retained neighbor”，即使用保留的邻居信息，而非重新训练邻居；这关系到对 SAC 更新步骤的理解。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -815,7 +1357,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "While large language models (LLMs) have advanced the development of general-purpose agents, robust generalization to unseen tasks remains challenging. Two common approaches are supervised fine-tuning and training-free memory-augmented generation using retrieved experience; yet both have limitations: fine-tuning often fails to extrapolate to new tasks, while experience retrieval often underperforms compared to supervised baselines. In this work, we combine these approaches and study how retrieval-augmented LLM agents can learn to use retrieved trajectories in-context. First, we establish a stro…",
+      "summary": "论文研究如何让大语言模型智能体利用历史交互轨迹适应未见任务。作者将经验检索纳入 LoRA 微调，并在两个文本交互环境中比较纯微调、推理时检索和检索增强微调。[P4][P5][P8] 结果显示，该方法通常改善困难任务泛化，但收益取决于经验相关性；利用自身失败经验在不同环境中的效果并不一致。[P8][P9] 研究主要依赖固定只读经验库，向长期动态记忆及其他应用场景的推广仍需验证。[P10]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -874,11 +1416,78 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注智能体经验复用和任务迁移的读者重点阅读：论文提供了可比较的检索与微调基线、经验质量压力测试以及配对统计分析，但不宜直接将结果外推到工业场景。[P8][P29][P31]",
+      "deep_read": {
+        "problem": "论文关注智能体在同一环境中面对训练未见任务时的泛化问题。作者认为，按既有任务组内部划分的测试集可能仍接近训练分布，难以充分考察跨任务迁移；纯参数微调也可能过度适应已见任务。[P4][P5][P8]",
+        "method": "作者将完整交互轨迹序列化为多轮聊天，以嵌入点积检索相关轨迹并构造系统提示中的记忆块；EXPRAG-LoRA 在微调和推理时均使用检索上下文。主要微调实验采用静态检索和 K=2。[P4][P7][P16]",
+        "innovation": "论文的重点不是设计新的记忆控制器，而是结合完整轨迹的只读情景检索与检索增强微调，考察策略是否学会在上下文中使用经验。作者还分别测试稀疏、错配、强模型生成和自身经验，以区分经验质量的影响。[P3][P7][P31]",
+        "findings": "在匹配索引下，Ministral 的 ALFWorld hard 成功率从无检索 LoRA 的34.4%升至 EXPRAG-LoRA 的88.5%；配对分析报告提升54.1个百分点。[P8][P30] 自身失败经验可帮助 ALFWorld 的第二次尝试，但 ScienceWorld 中表现下降。[P9]",
+        "limitations": "主要实验依赖脚本专家轨迹和固定只读记忆，自身经验仅复用紧邻的上一次尝试；经验不匹配可能削弱表现，长期动态记忆的效果未知。[P10] 仅比较一种嵌入模型。[P16] 阅读笔记未报告经原页核实的原文件缺项，不能推定存在缺失公式。",
+        "connection": "解读：经验轨迹检索、失败案例复用及跨任务评估可为智能运维中的历史处置案例辅助决策提供方法参照，但本文实验仅涉及文本交互环境，没有直接验证设备诊断或现场运维。对结构设计与工程可靠性的直接适用性，现有资料也未提供证据。[P5][P9]",
+        "next_steps": "建议先在目标领域构建带结果标签的案例库，区分训练任务与未见任务，并比较无检索、仅推理检索和检索增强微调；进一步控制案例相关性与覆盖度，检验失败经验是否有益。还应评估动态更新、决策风险及计算成本，而非假定论文结论直接迁移。[P8][P10][P31][P39]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "检索增强大语言模型智能体：学习从经验中学习",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.57.pdf"
+      ],
+      "analyzed_at": "2026-11-26T03:28:50.058210+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P4",
+          "P5",
+          "P8"
+        ],
+        "method": [
+          "P4",
+          "P7",
+          "P16"
+        ],
+        "innovation": [
+          "P3",
+          "P7",
+          "P31"
+        ],
+        "findings": [
+          "P8",
+          "P9",
+          "P30"
+        ],
+        "limitations": [
+          "P10",
+          "P16"
+        ],
+        "connection": [
+          "P5",
+          "P9"
+        ],
+        "next_steps": [
+          "P8",
+          "P10",
+          "P31",
+          "P39"
+        ]
+      },
+      "analysis_material_version": "9a0372dc59731c90028d0d76db794e7dad62c4ab840806a99a434bafe8c02747",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "acef255db17f",
+        "state": "published",
+        "updated_at": "2026-11-26T03:28:50.089409+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 39,
+        "covered": 39,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -906,7 +1515,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Efficiency is increasingly important for Large Language Model (LLM)-based multi-agent systems (MAS), as larger models and more agents introduce substantial execution costs. Recent methods aim to make MAS cheaper by pruning agents, removing communication edges, or searching for compact structures. However, we argue that existing evaluations may overestimate their true ability to improve MAS efficiency. Reported gains are often measured under method-specific prompts and starting topologies, making them difficult to attribute to the proposed structural changes. Moreover, many reported successes a…",
+      "summary": "论文关注大语言模型多智能体系统的效率评估是否可靠。作者统一模型、智能体注册表与运行时，在38个受控单元中比较五种压缩方法，并引入同预算随机剪枝和单智能体参照。实验显示，收益随任务和初始拓扑变化；部分成本下降来自图坍塌或工具路径被关闭，边传递成本下降也未必意味着提示词成本下降。作者因此主张同时检查功能路径、结构变化及实际成本，并注意评估范围和统计不确定性。[P1][P5–P10]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -965,11 +1574,84 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注多智能体评估与结构优化的读者阅读：本文不仅比较准确率和成本，还提供随机剪枝对照、结构指纹及失败案例，适合检查效率收益的归因是否可靠。[P7][P9][P35]",
+      "deep_read": {
+        "problem": "作者质疑既有多智能体效率评估的有效性：不同方法常使用各自的提示词、智能体与初始拓扑，观察到的收益难以归因于结构优化。即使统一设置，若单智能体或随机剪枝已能保持性能，剪枝成功也不足以证明找到更好的协作结构。[P1–P2]",
+        "method": "框架将系统表示为拓扑、智能体分配、模型配置和方法超参数；拓扑进一步拆成空间边、时间边与节点激活掩码。作者固定骨干、角色和执行引擎，以星形六智能体两轮系统为锚点，逐轴改变拓扑、规模、深度或工具访问，并比较优化前后指标。[P3–P6]",
+        "innovation": "本文的主要贡献是评估设计而非提出新的剪枝算法：以统一输入输出契约和逐来源消息过滤控制执行条件，再通过同结构预算随机剪枝、单智能体基线和结构指纹检验收益来源。解读：这一组合使成本变化能与关键路径、节点轮次和角色变化一起分析。[P3–P5][P7][P9]",
+        "findings": "作者发现方法表现依赖任务与起始拓扑。20个主网格单元中，优化方法与匹配随机剪枝相对原系统的平均准确率变化分别为−0.77和−0.44个百分点；DAGP分别为+1.29和+0.08个百分点。部分大幅节省来自图坍塌，附加决策节点也可能使提示词成本上升。[P7][P9][P30]",
+        "limitations": "研究限于重构既有系统，使用4B–8B开源权重模型及英语任务，未覆盖长时规划和交互环境；重复运行分析仅涉及一个任务族，成本采用空白分词代理，Wikipedia调用未计入工具调用数。[P10][P20–P21] 本批笔记未报告经原页核实的原文件缺项；HotpotQA正文与表41图注的评分口径存在不一致。[P33][P36]",
+        "connection": "解读：对智能运维多智能体系统，论文的控制变量和匹配随机剪枝思路可用于检验协作是否真正优于简化流程；对结构设计与可靠性研究，关键路径被切断、工具节点被停用等案例提示应同时观察功能保持和成本。但论文未直接验证这些工业场景。[P8–P9][P29–P30]",
+        "next_steps": "建议在目标运维任务中先建立单智能体、未压缩系统及同预算随机剪枝基线，再比较关键诊断链路保留率、工具可用性、任务效果与端到端成本；对随机剪枝和模型运行重复采样并报告不确定性。这是迁移设想，并非论文已完成的实验。[P9–P10][P26]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "重新审视多智能体系统效率方法的评估",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.798.pdf"
+      ],
+      "analyzed_at": "2026-11-26T04:48:42.268809+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "innovation": [
+          "P3",
+          "P4",
+          "P5",
+          "P7",
+          "P9"
+        ],
+        "findings": [
+          "P7",
+          "P9",
+          "P30"
+        ],
+        "limitations": [
+          "P10",
+          "P20",
+          "P21",
+          "P33",
+          "P36"
+        ],
+        "connection": [
+          "P8",
+          "P9",
+          "P29",
+          "P30"
+        ],
+        "next_steps": [
+          "P9",
+          "P10",
+          "P26"
+        ]
+      },
+      "analysis_material_version": "21a550c05b87e5295fd25b348325bc6105ce730e59798a6a8571b8e28877f3e2",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "fe2bea8e398c",
+        "state": "published",
+        "updated_at": "2026-11-26T04:48:42.319913+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 36,
+        "covered": 36,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -996,7 +1678,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Reproducing research results from papers and released code is central to scientific progress. Existing works have introduced benchmarks to evaluate whether LLM agents can assist with reproducibility, but they are difficult to scale due to their reliance on substantial manual effort for data curation and evaluation. We introduce ReproRepo, a scalable framework for reproducibility evaluation that leverages human-raised GitHub issues as naturally occurring supervision on realistic reproduction blockers. We instantiate ReproRepo on 1,149 recent machine learning papers from major conferences and ev…",
+      "summary": "【摘要】论文针对现有大语言模型智能体复现评估依赖大量人工整理与评价、难以扩展的问题，提出 ReproRepo 框架，利用人类提出的 GitHub issues 作为真实复现障碍的自然监督。作者基于主要会议的 1,149 篇近期机器学习论文评估四种前沿模型—智能体配置。最佳配置在约 90% 的论文中发现至少一个与人工报告障碍语义相关的问题，但准确定位仍可能不足。上述结论仅依据摘要。[摘要]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -1055,11 +1737,43 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "【解读】如果关注论文代码复现、仓库问题挖掘或智能体评估，该文值得进一步阅读：摘要提供了明确的框架、评估对象和结果，同时提示语义相关不等同于准确定位。[摘要]",
+      "deep_read": {
+        "problem": "【摘要】论文关注如何规模化评估大语言模型智能体对科研结果复现的辅助能力。现有基准虽已开展此类评估，但数据整理和评价依赖大量人工工作，因而难以扩展；作者将论文与发布代码中的真实复现障碍作为评估对象。[摘要]",
+        "method": "【摘要】ReproRepo 利用人类提出的 GitHub issues，为真实复现障碍提供自然形成的监督信号。作者基于主要会议的 1,149 篇近期机器学习论文实例化该框架，并评估四种前沿模型—智能体配置；摘要未说明具体匹配或评分流程。[摘要]",
+        "innovation": "【摘要】所提出的框架将人类报告的仓库问题用于复现评估，旨在降低对大规模人工数据整理和评价的依赖，并支持可复用、可扩展的评估。【解读】其价值在于利用已有问题记录，但仅凭摘要无法判断相对既有工作的完整创新边界。[摘要]",
+        "findings": "【摘要】研究中表现最好的配置 Codex with GPT-5.5，在约 90% 的研究论文中至少找出一个与人类报告障碍语义相关的问题。分析还指出，智能体擅长发现可见故障和识别正确语义区域，但准确定位仍可能不足；摘要未给出其他配置的具体结果。[摘要]",
+        "limitations": "【摘要】作者明确指出智能体在障碍的准确定位方面仍可能不足。摘要报告的是与人工问题语义相关的发现，并未说明每项发现均准确定位，也未交代数据筛选、问题覆盖范围及评估误差等细节；因此无法据此判断这些方面的具体影响。[摘要]",
+        "connection": "【解读】利用仓库中人类报告的问题评估智能体，可为智能运维中的真实故障发现与评测提供类比；语义区域识别和准确定位之间的差别，也值得可靠性研究关注。但摘要的直接研究对象是机器学习论文的代码复现，未涉及结构设计应用。[摘要]",
+        "next_steps": "【建议】后续阅读可重点核对 issues 与论文仓库的关联方式、语义相关的判定标准，以及准确定位不足的具体表现，再评估框架能否迁移到运维故障审计。还可比较不执行代码与执行代码时的评估设置；摘要未提供这类比较结果。[摘要]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "ReproRepo：利用 GitHub 仓库问题规模化评估研究复现",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.2423/"
+      ],
+      "analyzed_at": "2026-11-26T05:47:18.556381+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {},
+      "analysis_material_version": "40f74492bb237beb418bed4ad657e8aca3979eb2fea2ec12a7a086e82102aed2",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "4f99694b1f2f",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-26T05:47:18.566122+00:00",
+        "basis": "abstract",
+        "article_state": "failed",
+        "article_stage": "writing",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "source_status": {
@@ -1941,13 +2655,13 @@
     "unavailable": 46
   },
   "analysis_status": {
-    "ready_core": 0,
+    "ready_core": 5,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 6
+    "pending": 1
   },
   "edition": {
     "id": "45714336601",
