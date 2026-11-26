@@ -1,0 +1,118 @@
+{
+  "paper_id": "acef255db17f",
+  "fingerprint": "5a4e65ce6bbdba6a6e67d290a9d6bdb758c971a7d427edc41fd15f1e5baac37c",
+  "analysis": {
+    "title_zh": "检索增强大语言模型智能体：学习从经验中学习",
+    "summary": "论文研究如何让大语言模型智能体利用历史交互轨迹适应未见任务。作者将经验检索纳入 LoRA 微调，并在两个文本交互环境中比较纯微调、推理时检索和检索增强微调。[P4][P5][P8] 结果显示，该方法通常改善困难任务泛化，但收益取决于经验相关性；利用自身失败经验在不同环境中的效果并不一致。[P8][P9] 研究主要依赖固定只读经验库，向长期动态记忆及其他应用场景的推广仍需验证。[P10]",
+    "recommendation": "建议关注智能体经验复用和任务迁移的读者重点阅读：论文提供了可比较的检索与微调基线、经验质量压力测试以及配对统计分析，但不宜直接将结果外推到工业场景。[P8][P29][P31]",
+    "deep_read": {
+      "problem": "论文关注智能体在同一环境中面对训练未见任务时的泛化问题。作者认为，按既有任务组内部划分的测试集可能仍接近训练分布，难以充分考察跨任务迁移；纯参数微调也可能过度适应已见任务。[P4][P5][P8]",
+      "method": "作者将完整交互轨迹序列化为多轮聊天，以嵌入点积检索相关轨迹并构造系统提示中的记忆块；EXPRAG-LoRA 在微调和推理时均使用检索上下文。主要微调实验采用静态检索和 K=2。[P4][P7][P16]",
+      "innovation": "论文的重点不是设计新的记忆控制器，而是结合完整轨迹的只读情景检索与检索增强微调，考察策略是否学会在上下文中使用经验。作者还分别测试稀疏、错配、强模型生成和自身经验，以区分经验质量的影响。[P3][P7][P31]",
+      "findings": "在匹配索引下，Ministral 的 ALFWorld hard 成功率从无检索 LoRA 的34.4%升至 EXPRAG-LoRA 的88.5%；配对分析报告提升54.1个百分点。[P8][P30] 自身失败经验可帮助 ALFWorld 的第二次尝试，但 ScienceWorld 中表现下降。[P9]",
+      "limitations": "主要实验依赖脚本专家轨迹和固定只读记忆，自身经验仅复用紧邻的上一次尝试；经验不匹配可能削弱表现，长期动态记忆的效果未知。[P10] 仅比较一种嵌入模型。[P16] 阅读笔记未报告经原页核实的原文件缺项，不能推定存在缺失公式。",
+      "connection": "解读：经验轨迹检索、失败案例复用及跨任务评估可为智能运维中的历史处置案例辅助决策提供方法参照，但本文实验仅涉及文本交互环境，没有直接验证设备诊断或现场运维。对结构设计与工程可靠性的直接适用性，现有资料也未提供证据。[P5][P9]",
+      "next_steps": "建议先在目标领域构建带结果标签的案例库，区分训练任务与未见任务，并比较无检索、仅推理检索和检索增强微调；进一步控制案例相关性与覆盖度，检验失败经验是否有益。还应评估动态更新、决策风险及计算成本，而非假定论文结论直接迁移。[P8][P10][P31][P39]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.57.pdf"
+    ],
+    "analyzed_at": "2026-11-26T03:28:50.058210+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "论文有明确的轨迹检索、检索增强微调方法及多条件评估，具有研究参考价值；但所给研究方向仅为未解释的标签编码，无法判断是否切合该方向，因此证据不足以支持方向匹配的肯定判断。",
+    "evidence": "By contrast, our stress tests keep the trained policy and inference pipeline fixed and examine\nwhether a retrieval-trained agent can directly use raw trajectories from sparse expert banks, stronger\nteachers, or its own previous attempts, without additional test-time optimization or memory synthesis."
+  },
+  "material": {
+    "version": "9a0372dc59731c90028d0d76db794e7dad62c4ab840806a99a434bafe8c02747",
+    "total": 39,
+    "covered": 39,
+    "references": {
+      "problem": [
+        "P4",
+        "P5",
+        "P8"
+      ],
+      "method": [
+        "P4",
+        "P7",
+        "P16"
+      ],
+      "innovation": [
+        "P3",
+        "P7",
+        "P31"
+      ],
+      "findings": [
+        "P8",
+        "P9",
+        "P30"
+      ],
+      "limitations": [
+        "P10",
+        "P16"
+      ],
+      "connection": [
+        "P5",
+        "P9"
+      ],
+      "next_steps": [
+        "P8",
+        "P10",
+        "P31",
+        "P39"
+      ]
+    },
+    "excerpt": "By contrast, our stress tests keep the trained policy and inference pipeline fixed and examine\nwhether a retrieval-trained agent can directly use raw trajectories from sparse expert banks, stronger\nteachers, or its own previous attempts, without additional test-time optimization or memory synthesis.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P21",
+      "P22",
+      "P23",
+      "P24",
+      "P25",
+      "P26",
+      "P27",
+      "P28",
+      "P29",
+      "P30",
+      "P31",
+      "P32",
+      "P33",
+      "P34",
+      "P35",
+      "P36",
+      "P37",
+      "P38",
+      "P39"
+    ],
+    "issues": []
+  }
+}
