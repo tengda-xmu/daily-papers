@@ -1,0 +1,20 @@
+{
+  "id": "public-df3be113c8aed13fbadf7f5f",
+  "content_version": "6b03a2324905f8bb4177749de8c3efca6a018fbcc709d6f9caf56c19c499c1ad",
+  "analysis": {
+    "title_zh": "在一块 RTX PRO 6000 上优化 Inkling 2 Mini 推理",
+    "summary": "文章介绍近期推出的 Inkling 2 Mini 及其单卡推理主题。该模型采用循环混合专家架构，约有 260 亿总参数，每个 token 激活 30 亿参数，支持多模态输入和 100 万 token 上下文。文章称其适合编码、工具使用和推理，并报告了基准表现；但所给内容在架构介绍处截断，未展示具体推理优化方法或实测结果。",
+    "application": "建议：科研中可探索将其用于代码辅助、工具调用或长上下文资料分析，并结合实际任务验证效果。这些是迁移建议；原文报告的是模型的基准表现，没有提供上述科研场景的实测结果。",
+    "requirements": "使用条件见官方文档。",
+    "steps": [],
+    "evidence": [
+      "Hill-climbing Inkling 2 Mini inference on one RTX PRO 6000",
+      "With ~26B total parameters (3B active per token), multimodal inputs, and a 1M-token context window",
+      "across 32 of 48 benchmarks against models like Gemma 4 31B and Qwen3.8-27B",
+      "making it a strong open option for coding, tool use, and reasoning on modest hardware",
+      "Inkling 2 Mini is a looped Mixture-of-Experts (MoE) model"
+    ],
+    "basis_url": "https://huggingface.co/blog/inkling-2-mini-inference-hillclimb"
+  },
+  "analyzed_at": "2026-11-26T00:09:35.317899+00:00"
+}

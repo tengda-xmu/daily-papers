@@ -1,11 +1,11 @@
 {
   "id": "public-824c03b970f1dc58cad67633",
-  "content_version": "0b62354fd89c2e3d0a5fd25a396e20baf1314a001aaf8d4e7a67680e9e4394bb",
+  "content_version": "044c4f8563121cbf3df9ccc31bfff5f889d8954a56dd6f296e87a675b44ded19",
   "analysis": {
-    "title_zh": "Inkling 2 Mini：面向本地配置的多模态模型",
-    "summary": "Inkling 2 Mini 是新的循环 Transformer 多模态混合专家模型，总物理参数约 26B，每个 token 激活约 3B 参数。部分层循环执行三次，以提升模型容量；模型支持 1M token 上下文，接受图像和文本输入，适用于需要处理较长上下文及图文输入的任务。官方以混合精度格式提供模型，并包含 DSpark 草稿模型；所给资料未提供具体性能数据。",
-    "application": "建议：科研中可探索其在长文档与图像联合分析等任务中的适用性，并在具体场景下独立验证。资料称 DSpark 可加速，但未提供具体测试结果；上述科研方向属于迁移建议，并非官方已验证效果。",
-    "requirements": "使用条件见官方文档。",
+    "title_zh": "Inkling 2 Mini：面向本地环境的多模态模型",
+    "summary": "Inkling 2 Mini 是一款循环 Transformer 多模态混合专家模型，总物理参数约 260 亿，每个 token 激活 30 亿参数。部分层循环访问三次，以增加模型容量；模型支持 100 万 token 上下文，接受图像和文本输入，适用于长上下文及图文联合分析任务。模型采用混合精度专家权重，并包含 DSpark drafter，以较小内存开销进一步加速；所给资料未提供具体性能数据。[S1]",
+    "application": "建议：科研中可探索将其用于长篇技术资料与设备图像的联合分析，但需自行验证准确性、资源消耗及实际效果。原文仅称 DSpark drafter 可进一步加速，未给出具体测试结果；上述科研用途属于迁移设想，并非官方已验证效果。[S1]",
+    "requirements": "原文说明模型以混合精度格式提供，专家权重使用 NVFP4 和 MXFP8；未明确具体版本、账号、API、费用或部署条件，使用条件见官方文档。[S1]",
     "steps": [],
     "evidence": [
       "Inkling 2 Mini is a new looped transformer model.",
@@ -16,5 +16,5 @@
     ],
     "basis_url": "https://huggingface.co/blog/inkling2mini"
   },
-  "analyzed_at": "2026-11-24T15:53:07.807916+00:00"
+  "analyzed_at": "2026-11-26T00:11:10.594788+00:00"
 }
