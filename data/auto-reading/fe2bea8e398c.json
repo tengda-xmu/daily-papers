@@ -1,0 +1,121 @@
+{
+  "paper_id": "fe2bea8e398c",
+  "fingerprint": "75faaa5a3ec04ad5170e23af81a9d7b3015a105cf0b2fe4f2e5b236998b5879d",
+  "analysis": {
+    "title_zh": "重新审视多智能体系统效率方法的评估",
+    "summary": "论文关注大语言模型多智能体系统的效率评估是否可靠。作者统一模型、智能体注册表与运行时，在38个受控单元中比较五种压缩方法，并引入同预算随机剪枝和单智能体参照。实验显示，收益随任务和初始拓扑变化；部分成本下降来自图坍塌或工具路径被关闭，边传递成本下降也未必意味着提示词成本下降。作者因此主张同时检查功能路径、结构变化及实际成本，并注意评估范围和统计不确定性。[P1][P5–P10]",
+    "recommendation": "推荐关注多智能体评估与结构优化的读者阅读：本文不仅比较准确率和成本，还提供随机剪枝对照、结构指纹及失败案例，适合检查效率收益的归因是否可靠。[P7][P9][P35]",
+    "deep_read": {
+      "problem": "作者质疑既有多智能体效率评估的有效性：不同方法常使用各自的提示词、智能体与初始拓扑，观察到的收益难以归因于结构优化。即使统一设置，若单智能体或随机剪枝已能保持性能，剪枝成功也不足以证明找到更好的协作结构。[P1–P2]",
+      "method": "框架将系统表示为拓扑、智能体分配、模型配置和方法超参数；拓扑进一步拆成空间边、时间边与节点激活掩码。作者固定骨干、角色和执行引擎，以星形六智能体两轮系统为锚点，逐轴改变拓扑、规模、深度或工具访问，并比较优化前后指标。[P3–P6]",
+      "innovation": "本文的主要贡献是评估设计而非提出新的剪枝算法：以统一输入输出契约和逐来源消息过滤控制执行条件，再通过同结构预算随机剪枝、单智能体基线和结构指纹检验收益来源。解读：这一组合使成本变化能与关键路径、节点轮次和角色变化一起分析。[P3–P5][P7][P9]",
+      "findings": "作者发现方法表现依赖任务与起始拓扑。20个主网格单元中，优化方法与匹配随机剪枝相对原系统的平均准确率变化分别为−0.77和−0.44个百分点；DAGP分别为+1.29和+0.08个百分点。部分大幅节省来自图坍塌，附加决策节点也可能使提示词成本上升。[P7][P9][P30]",
+      "limitations": "研究限于重构既有系统，使用4B–8B开源权重模型及英语任务，未覆盖长时规划和交互环境；重复运行分析仅涉及一个任务族，成本采用空白分词代理，Wikipedia调用未计入工具调用数。[P10][P20–P21] 本批笔记未报告经原页核实的原文件缺项；HotpotQA正文与表41图注的评分口径存在不一致。[P33][P36]",
+      "connection": "解读：对智能运维多智能体系统，论文的控制变量和匹配随机剪枝思路可用于检验协作是否真正优于简化流程；对结构设计与可靠性研究，关键路径被切断、工具节点被停用等案例提示应同时观察功能保持和成本。但论文未直接验证这些工业场景。[P8–P9][P29–P30]",
+      "next_steps": "建议在目标运维任务中先建立单智能体、未压缩系统及同预算随机剪枝基线，再比较关键诊断链路保留率、工具可用性、任务效果与端到端成本；对随机剪枝和模型运行重复采样并报告不确定性。这是迁移设想，并非论文已完成的实验。[P9–P10][P26]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.798.pdf"
+    ],
+    "analyzed_at": "2026-11-26T04:48:42.268809+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "论文针对多智能体效率评估提出明确的受控基准、随机对照和结构分析，具有方法阅读价值。但资料只给出不透明的方向标签，未解释指定研究方向，因而无法可靠确认方向契合度；这里的false表示证据不足，而非已证实不契合。",
+    "evidence": "To rethink the evaluation of MAS efficiency\nmethods, we build a controlled and MAS-\ndemanding benchmark covering representative\nmethods of this kind."
+  },
+  "material": {
+    "version": "21a550c05b87e5295fd25b348325bc6105ce730e59798a6a8571b8e28877f3e2",
+    "total": 36,
+    "covered": 36,
+    "references": {
+      "problem": [
+        "P1",
+        "P2"
+      ],
+      "method": [
+        "P3",
+        "P4",
+        "P5",
+        "P6"
+      ],
+      "innovation": [
+        "P3",
+        "P4",
+        "P5",
+        "P7",
+        "P9"
+      ],
+      "findings": [
+        "P7",
+        "P9",
+        "P30"
+      ],
+      "limitations": [
+        "P10",
+        "P20",
+        "P21",
+        "P33",
+        "P36"
+      ],
+      "connection": [
+        "P8",
+        "P9",
+        "P29",
+        "P30"
+      ],
+      "next_steps": [
+        "P9",
+        "P10",
+        "P26"
+      ]
+    },
+    "excerpt": "To rethink the evaluation of MAS efficiency\nmethods, we build a controlled and MAS-\ndemanding benchmark covering representative\nmethods of this kind.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P21",
+      "P22",
+      "P23",
+      "P24",
+      "P25",
+      "P26",
+      "P27",
+      "P28",
+      "P29",
+      "P30",
+      "P31",
+      "P32",
+      "P33",
+      "P34",
+      "P35",
+      "P36"
+    ],
+    "issues": []
+  }
+}
