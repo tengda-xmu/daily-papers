@@ -1,0 +1,40 @@
+{
+  "paper_id": "e6471c118dc7",
+  "fingerprint": "1bda2aefd04ae6ee41adc6f76c5bf9cfd983ab350249e5f931b4eed810f66534",
+  "analysis": {
+    "title_zh": "SMADE-IE：面向零样本信息抽取的证据驱动辩论稀疏多智能体框架",
+    "summary": "【摘要】论文研究大语言模型在零样本信息抽取中如何兼顾预测质量与推理效率。SMADE-IE依据样本复杂度和相关类型，在全局抽取与类型中心抽取之间自适应选择，并通过证据驱动的多智能体辩论解决跨类型冲突。摘要报告了九个基准上的平均Partial F1提升，以及相对CrossAgentIE的令牌消耗下降；具体实验设置和结果细节仍需查阅全文。[摘要]",
+    "recommendation": "若关注零样本信息抽取、多智能体协作或推理令牌成本，建议重点阅读：摘要同时给出了模式选择、冲突处理方法及基准结果；但给定研究方向未作具体说明，暂不能确认方向匹配。[摘要]",
+    "deep_read": {
+      "problem": "【摘要】论文关注大语言模型零样本信息抽取中的质量与效率问题。摘要指出，单体提示容易遗漏提及、产生边界错误和类型混淆；逐类型提示可能产生重叠或冲突预测，多智能体辩论则可能引入冗余交互和较高令牌开销。[摘要]",
+      "method": "【摘要】方法包含自适应模式选择与证据驱动辩论：前者根据样本复杂度和相关类型，为简单输入选择轻量全局抽取模式，为含糊输入选择类型中心模式；后者结合Toulmin式论证、外部证据评分、基于Beta的置信度更新和提前停止。[摘要]",
+      "innovation": "【摘要】作者提出稀疏、证据驱动的多智能体框架，将按输入选择抽取模式与跨类型冲突辩论结合。解读：这一设计试图避免对所有输入采用同等复杂的处理流程。摘要未提供完整实现或消融证据，无法进一步核定各组件的独立贡献。[摘要]",
+      "findings": "【摘要】作者报告，九个基准覆盖NER、RE和JERE，相比最强基线，三类任务的平均Partial F1分别提高11.37、3.83和14.46个点；相比CrossAgentIE，DocRED和CrossRE的令牌消耗分别降低85.1%和80.1%。具体基线及统计细节未在摘要中说明。[摘要]",
+      "limitations": "【摘要】当前资料仅为摘要，未交代数据划分、基线配置、显著性检验、消融结果或失败案例，也未说明外部证据的来源和获取成本。因此无法判断结果的稳健性及完整成本；这些是现有资料的证据缺口，不应直接视为作者证实的方法缺陷。[摘要]",
+      "connection": "【解读】该方法与智能运维的潜在联系在于，可探索从运维文本中抽取实体及关系，并在类型冲突时引入证据判断；模式选择也可能有助于控制处理成本。但摘要未报告运维场景、结构设计或可靠性研究中的应用，不能据此断言其适用或有效。[摘要]",
+      "next_steps": "【建议】进一步阅读全文时，可优先核对复杂度判定、外部证据来源、辩论停止条件及各组件消融，并检查不同任务与数据集上的逐项结果。若拟迁移至运维文本，还应另行评估领域类型定义、抽取错误和端到端成本；摘要尚未提供这些验证。[摘要]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://arxiv.org/abs/2606.04691"
+    ],
+    "analyzed_at": "2026-11-27T11:08:08.984516+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "摘要给出了明确的模式选择、证据驱动辩论方法和基准结果，因此具有进一步阅读价值；但给定资料仅含不透明的方向标签，未说明研究方向的具体内容，无法核实方向匹配，故不能判定现有证据足以支持完整评价。[摘要]",
+    "evidence": "An Adaptive Mode Selector routes simple inputs to a lightweight Global Extraction Mode and ambiguous inputs to a Type-Centric Extraction Mode based on sample complexity and relevant types."
+  },
+  "material": {
+    "version": "919353127f03394ca6c003c60bab92d0de1f527f6e7e40d97f5aee956acf9b14",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "An Adaptive Mode Selector routes simple inputs to a lightweight Global Extraction Mode and ambiguous inputs to a Type-Centric Extraction Mode based on sample complexity and relevant types."
+  }
+}
