@@ -27,7 +27,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Multi-agent systems built from large language models are deployed widely, yet how much performance is lost when two LLMs must coordinate rather than act alone remains unclear. We formulate the collaboration tax as the team-decentralisation loss of a two-player cooperative game with private information, with two propositions characterising its sign and its equivalence to a max-superadditivity violation. We operationalise this definition on 32 solo-tractable tasks grouped by source of grounding friction and measure it on 11 models from 7 providers. The tax is structured along two no-exception ax…",
+      "summary": "论文研究两个大语言模型智能体各持私有信息时，协作表现相对完整信息单体的损失，并将其定义为协作税。作者在三类共32项任务和11个模型上测量差距，结合对话分析提出信息溯源、询问、整合和重新推导四阶段机制。联合提示干预缩小了部分差距，但未达到单体基准。研究主要使用双智能体合成任务，向真实工作负载和更多智能体的推广仍需验证。[P2][P7][P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -86,11 +86,81 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注多智能体协调与可靠性评估的读者重点阅读：论文同时提供单体对照、失效分解和干预消融，可作为设计协作评测的参考，但真实应用适用性尚未得到验证。[P4][P7][P9]",
+      "deep_read": {
+        "problem": "论文关注两个智能体各持部分信息时，为何协作可能不如拥有完整信息的单体，以及差距如何随任务和模型变化。作者将较强成员的完整信息单体期望得分与双智能体协作期望得分之差定义为协作税，试图区分协调成本和单体求解能力。[P2][P11]",
+        "method": "作者构造空间、关系和约束满足三类共32项任务，比较完整信息单体、同构及异构协作，并用单体接收两个部分视图的控制分解差距。实验结合连续评分、对话阶段标注、按任务分组的预测以及提示条款消融。[P4][P6][P7][P20]",
+        "innovation": "作者把协作差距置于私有信息合作博弈框架，建立正协作税与违反最大超可加性的对应关系，并将失败描述组织为溯源、询问、整合和重新推导四阶段。其贡献还包括用阶段针对性提示及留一消融检验不同任务的瓶颈。[P6][P7][P12]",
+        "findings": "作者报告任务类别上的协作税排序为Spatial高于Relational高于CSP；四阶段联合提示使总体同构分数提高0.079±0.031，收回原协作税的38.3%±14.1%，但未达到单体基准。异构实验中，六种配置的差距整体偏向较强成员而非中点。[P5][P7][P8]",
+        "limitations": "实验仅研究双智能体，任务是合成谜题，不能直接代表真实部署；异构分析仅有三种配对，家族效应尚不可识别。两项任务未达到单体可解目标，结果属探索性；专家人数表述及critic结论也存在文内不一致。提供的逐页笔记未报告原文件缺项。[P8][P9][P14][P21][P22]",
+        "connection": "解读：对于智能运维中的故障分诊，多智能体可能分别掌握日志、配置和处置记录，可借鉴四阶段检查信息出处、主动补问、合并证据及复核结论。论文并未验证实际运维效果；非结构化任务还需要人工标注或专用验证器。[P17][P19]",
+        "next_steps": "建议在真实或经过脱敏的运维工单上设置完整信息单体、分视图单体和双智能体对照，记录诊断质量、证据引用及复核成本；再逐项消融四种提示。应另行检验结果能否推广到更多智能体，不把合成任务的排序预设为现场结论。[P7][P9][P17][P20]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "协作税：大语言模型多智能体系统为协调付出多少代价",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.2031.pdf"
+      ],
+      "analyzed_at": "2026-11-27T09:18:05.177727+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P11"
+        ],
+        "method": [
+          "P4",
+          "P6",
+          "P7",
+          "P20"
+        ],
+        "innovation": [
+          "P6",
+          "P7",
+          "P12"
+        ],
+        "findings": [
+          "P5",
+          "P7",
+          "P8"
+        ],
+        "limitations": [
+          "P8",
+          "P9",
+          "P14",
+          "P21",
+          "P22"
+        ],
+        "connection": [
+          "P17",
+          "P19"
+        ],
+        "next_steps": [
+          "P7",
+          "P9",
+          "P17",
+          "P20"
+        ]
+      },
+      "analysis_material_version": "35f1dd07609bc74d97e94e14ed4e8b31c113889adae278a8f8c196a1f7daea24",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "6e25c83d887c",
+        "state": "published",
+        "updated_at": "2026-11-27T09:18:05.210411+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 24,
+        "covered": 24,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -112,7 +182,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Are tool-calling LLM agents equally safe throughout a conversation? We discover they are not: agents are most vulnerable at the very start of a session and become substantially safer after a few regular agentic tasks—a phenomenon we term the cold-start safety gap. To study this systematically, we introduce Safety Over Depth for Agents (SODA), a benchmark that controls how many regular agentic tasks the agent completes before encountering a safety threat, supporting up to 20 preceding tasks. Evaluating 7 models from 4 families, safety improves by 9–52% as the number of preceding regular agentic…",
+      "summary": "论文研究工具调用智能体在会话不同阶段面对有害请求时的安全性。作者构建SODA，控制威胁出现前完成的常规任务数，并比较不同模型、历史内容和预热方式。[P3][P5] 七个模型在完成20项任务后的安全率均高于会话开始时；完整交互预热在外部基准上也显示安全收益。[P4][P22] 不过，部分模型的效用下降，开源模型上的结果也不能直接推广到所有部署系统。[P9][P23]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -171,11 +241,104 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注智能体工具调用安全、上下文影响及安全与效用权衡的读者阅读：论文提供深度控制基准、消融和外部评估，但部署结论需结合具体模型验证。",
+      "deep_read": {
+        "problem": "论文追问：有害请求在会话中出现的位置，是否会改变工具调用智能体的安全性。传统孤立任务评测相当于从会话开始即呈现威胁，而实际智能体可能先处理一系列普通任务；作者因此将会话起始时的脆弱性称为冷启动安全差距。[P1][P3]",
+        "method": "作者构建SODA，在16个工具环境中设置80个场景和400项威胁，每项威胁分别在八个会话深度测试，共3200个案例；深度指威胁前完成的常规任务数。实验覆盖七个模型，使用三个随机种子，并结合历史消融、表征分析及外部安全和效用基准。[P3][P5][P6]",
+        "innovation": "方法上的特点是将威胁注入位置作为受控变量，在同一组威胁上比较不同常规交互深度；同时分别替换任务请求和智能体响应，分析历史组成的作用。作者还将完整交互预热与拒绝示例、安全提示和安全微调进行比较，而非仅报告单一防护方法。[P3][P5][P24][P25][P27]",
+        "findings": "七个模型在D=20相对D=0的安全率提高8.9至52.1个百分点；作者认为常规任务请求是主要驱动，而自身响应对保持效用重要。[P4][P5][P7] 解读：部分相邻深度的安全率下降，且空响应在个别外部测试中降低安全率，不能概括为所有预热均逐点有效。[P4][P22]",
+        "limitations": "作者仅测试开源模型，原因包括API成本、隐藏状态不可得及外部护栏带来的混淆；闭源部署系统能否复现仍缺证据。[P9] 表征迁移与安全行为相关，但不能单独证明因果机制；部分模型预热后效用下降。[P19][P23] 核对记录未列出原文件缺项。[P1][P2]",
+        "connection": "解读：论文与智能运维中的可靠性研究具有方法联系：云基础设施、代码和数据库环境均涉及工具操作及潜在破坏，可借鉴按会话阶段评估安全风险。[P13][P14] 但论文未直接验证工业运维系统，也未研究结构设计，不能将其结果视为这些领域的实证结论。",
+        "next_steps": "建议在具体运维智能体中复现不同会话深度的风险评估，同时记录任务成功率、误拒绝和安全事件；比较完整预热与仅前置请求的成本及效果，并测试闭源模型和外部护栏的影响。上述均为可迁移研究设想，不能视为论文已经完成的实验。[P7][P9][P25]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "大语言模型智能体的冷启动安全差距",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1973.pdf"
+      ],
+      "analyzed_at": "2026-11-27T09:30:02.823171+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P3"
+        ],
+        "method": [
+          "P3",
+          "P5",
+          "P6"
+        ],
+        "innovation": [
+          "P3",
+          "P5",
+          "P24",
+          "P25",
+          "P27"
+        ],
+        "findings": [
+          "P4",
+          "P5",
+          "P7",
+          "P22"
+        ],
+        "limitations": [
+          "P1",
+          "P2",
+          "P9",
+          "P19",
+          "P23"
+        ],
+        "connection": [
+          "P13",
+          "P14"
+        ],
+        "next_steps": [
+          "P7",
+          "P9",
+          "P25"
+        ]
+      },
+      "analysis_material_version": "2aca55880ed7f7152023a1781442b70418a2aaac491c74fc74e6fe1ff3e883b8",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "摘要代码链接的文字提取将组织名拆成“T rustworthy-ML-Lab”；原页显示为“Trustworthy-ML-Lab”。不影响论文的安全性结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "图1 D部分的提取文字未正确保留方案与预算标签的对应关系：原图中Option 1为Minimum budget的完整交互预热；Option 2为Zero budget的仅前置任务请求。该区别影响对两种部署方案及效用代价的理解。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "17d0a66170b8",
+        "state": "published",
+        "updated_at": "2026-11-27T09:30:02.840266+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 27,
+        "covered": 27,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "摘要代码链接的文字提取将组织名拆成“T rustworthy-ML-Lab”；原页显示为“Trustworthy-ML-Lab”。不影响论文的安全性结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "图1 D部分的提取文字未正确保留方案与预算标签的对应关系：原图中Option 1为Minimum budget的完整交互预热；Option 2为Zero budget的仅前置任务请求。该区别影响对两种部署方案及效用代价的理解。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -201,7 +364,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Long-horizon LLM agents typically choose from an environment-enumerated list of grounded actions (Planning with Actions, PwA). While this interface reduces formatting risk, scaling the list increases screening load and can bottleneck planning. We study Planning with Schemas (PwS), which replaces action enumeration with a small set of action templates that the agent instantiates into executable actions. We introduce a cognitive-bandwidth perspective of this trade-off and quantify screening vs. instantiation pressure using context length proxy and failure actions proxy. Across four interactive e…",
+      "summary": "论文比较长时程智能体的两种动作接口：从环境列举的具体动作中选择，或将紧凑模式实例化为命令。作者在四个文本环境及受控干扰实验中发现，长列表可能增加筛选负担，而模式接口引入实例化困难；相对优势随环境和模型变化。研究以提示长度及失败动作作为压力代理，并强调这些指标并非内部负荷的直接测量，实验结论也不能直接推广到真实部署。[P1][P5][P7][P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -260,11 +423,75 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注长时程智能体接口设计与可靠性评估的读者重点阅读：论文同时给出跨环境比较、受控压力测试和失败轨迹分析，但对具体研究方向的匹配尚待确认。[P5][P7][P9]",
+      "deep_read": {
+        "problem": "长时程智能体面对不断增长的动作空间时，需要在可直接选择的具体动作列表与需要自行生成参数的动作模式之间取舍。论文追问何时列表筛选负担超过模式实例化负担，以及这一转折如何依赖模型能力。[P1][P2]",
+        "method": "作者在四个文本环境比较两种接口，每个环境抽取100项任务，每次最多交互30步；用提示词长度和无效、重复动作近似不同压力，并在 ALFWorld 注入干扰动作，观察列表扩大后的性能变化。[P4][P5][P7]",
+        "innovation": "论文将动作表示作为可扩展性变量，用认知带宽视角描述筛选与实例化之间的负担转移，并结合固定环境下的干扰注入分析转折。解读：其贡献主要是接口权衡的实验框架，而非证明存在可直接测量的认知容量。[P2][P3][P7]",
+        "findings": "作者观察到经验转折位于 ALFWorld 与 SciWorld 之间，但不同模型并非一致：GPT-4.1 的 PwS−PwA 差值分别为 -45.0 和 18.9。干扰增多时 PwA 成功率总体下降，部分模型却未在测试范围内交叉。[P4][P5][P8]",
+        "limitations": "研究仅覆盖四个文本模拟器和现成模型的推理评估，不能直接证明开放世界适用性；上下文长度与失败动作只是负荷代理。多轮工具训练的作用仍是相关性假设。所提供阅读笔记未记录已核实的原文件缺项。[P8][P9]",
+        "connection": "解读：若将智能运维中的工具调用视为动作选择，论文提示需要同时评估候选命令筛选和参数实例化错误，这与操作可靠性有关。但现有证据来自文本模拟器，未验证工业运维、结构设计或实际设备安全效果。[P1][P9]",
+        "next_steps": "建议在目标运维场景构建受控任务，比较候选命令列表与参数化工具模式，分别记录任务成功、无效调用和重复操作；再测试不同列表规模与权限约束。迁移前应补充人工审核和监测，不能假定模拟器转折点适用。[P7][P9]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "认知带宽瓶颈：长时程智能体从动作规划转向模式规划",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.755.pdf"
+      ],
+      "analyzed_at": "2026-11-27T09:35:20.875770+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P4",
+          "P5",
+          "P7"
+        ],
+        "innovation": [
+          "P2",
+          "P3",
+          "P7"
+        ],
+        "findings": [
+          "P4",
+          "P5",
+          "P8"
+        ],
+        "limitations": [
+          "P8",
+          "P9"
+        ],
+        "connection": [
+          "P1",
+          "P9"
+        ],
+        "next_steps": [
+          "P7",
+          "P9"
+        ]
+      },
+      "analysis_material_version": "4fb8c8a6d70878fd7c4afccbd4842cced162d186260fb8aefbccb1e8e6430723",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "469c7c0642b4",
+        "state": "published",
+        "updated_at": "2026-11-27T09:35:20.901304+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 18,
+        "covered": 18,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -348,7 +575,20 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "33865e1a111f",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:23:03.317950+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 22,
+        "covered": 22,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -373,7 +613,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Presupposing the boundaries of bias is itself a form of bias. We study closed-loop bias governance for Dutch government documents, where a system must detect biased language, ground decisions in legal and contextual evidence, rewrite problematic sentences when intervention is warranted, and verify that the rewrite mitigates harm without distorting meaning. Existing methods face three challenges: (i) discriminative classifiers capture surface regularities but lack normative grounding; (ii) zero-shot LLMs often adopt generic viewpoints and over-flag ambiguous administrative language; and (iii) f…",
+      "summary": "论文针对荷兰政府文件中偏见类别可能不断变化、误报和改写失真的问题，提出闭环治理框架 MARS-Gov。系统结合规范证据检索、动态陪审员、风险路由、最小改写与复核，并以检测、缓解、语义保真和过度干预指标评价。作者报告其在 DGDB 和留一类别实验中取得较好结果，但跨司法辖区应用仍依赖本地规范资源，且需要人工参与。[P2][P6][P8][P9][P10]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -432,11 +672,88 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "适合关注开放集识别、多智能体证据审查与干预后验证的读者重点阅读；但资料未解释给定方向标签，不能据此认定与指定研究方向直接匹配。",
+      "deep_read": {
+        "problem": "政府文件中的偏见可能表现为隐含框架而非明显冒犯；固定分类体系还可能遗漏新出现的受影响群体。作者将问题扩展为闭环治理：不仅判断句子是否有偏，还要给出规范依据，并避免改写改变行政事实。[P2][P3]",
+        "method": "系统先检索法律和行政材料并生成中立摘要，由 Scout 识别群体，固定及动态陪审员分别提交报告。规则门控放行低风险句或升级至 Judge；判为有偏时进行最小改写，再用同一检测标准验证。[P4][P5][P15]",
+        "innovation": "作者将开放集目标发现与立场专门化审查结合：未覆盖群体可获得临时动态陪审员，多个新立场可分别审查，“第十陪审员”并非数量上限。同时将证据、路由、裁决及改写验证分开，形成可检查的决策轨迹。[P3][P4][P5]",
+        "findings": "作者报告 Gemini 配置在 DGDB 上 F1 为 0.880、过度治理率为 2.5%；留一类别实验中加入 Scout 后平均 F1 从 0.807 升至 0.875。移除规范证据模块后 F1 降至 0.824，显示所测配置对该模块有依赖。[P7][P8]",
+        "limitations": "作者指出框架依赖领域规范资源，跨司法辖区需要本地法律和政策材料，多代理推理成本也限制实时应用；BGS 不能代替分项诊断。解读：留一类别实验仍基于已有九类，不能证明覆盖所有真实新群体。核对记录未列出原文件缺项。[P8][P9]",
+        "connection": "解读：其证据留痕、异常升级和干预后复核流程，可为智能运维中的告警处置与审计提供流程设计参考；但论文处理的是行政语言偏见，资料没有结构设计或工程可靠性实验，不能直接外推其效果。[P3][P5][P10]",
+        "next_steps": "建议在实际目标场景构建经领域专家审核的本地证据库，以真实未见类别测试开放集发现，并分别评估误报、漏报、干预有效性和人工审查成本。对迁移效果应另做实验，不能把上述设想视为作者已验证的结论。[P6][P8][P9]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "“第十陪审员”：面向官僚偏见检测的开放集立场筛查",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.547.pdf"
+      ],
+      "analyzed_at": "2026-11-27T09:48:12.649047+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P4",
+          "P5",
+          "P15"
+        ],
+        "innovation": [
+          "P3",
+          "P4",
+          "P5"
+        ],
+        "findings": [
+          "P7",
+          "P8"
+        ],
+        "limitations": [
+          "P8",
+          "P9"
+        ],
+        "connection": [
+          "P3",
+          "P5",
+          "P10"
+        ],
+        "next_steps": [
+          "P6",
+          "P8",
+          "P9"
+        ]
+      },
+      "analysis_material_version": "3cc1b191aecd00bd52f6dc1a1151a49e2a877f290644ca4c145b1a8cd2cf5adb",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P14",
+          "detail": "案例 T3 的收入门槛原页为 €32.500 per jaar，文字提取误作 C32.500；应为每年 32,500 欧元。该错误影响对中性资格条件的金额识读，不改变作者判为无偏的结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "6ac309aa0d72",
+        "state": "published",
+        "updated_at": "2026-11-27T09:48:12.676483+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 19,
+        "covered": 19,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "案例 T3 的收入门槛原页为 €32.500 per jaar，文字提取误作 C32.500；应为每年 32,500 欧元。该错误影响对中性资格条件的金额识读，不改变作者判为无偏的结论。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -461,7 +778,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Reinforcement learning with verifiable rewards (RLVR) directly optimizes verifier-defined outcomes for multi-turn tool-use agents, yet its trajectory-level credit assignment conflates heterogeneous per-turn outcomes into a single reward signal. On-policy distillation provides dense per-token supervision but uses a teacher-defined token-level objective and can be prone to gradient concentration collapse. We introduce CrEST, a hierarchical credit assignment framework that anchors each sampled token’s scalar advantage sign to verified rewards while incorporating dense magnitude signals from a pri…",
+      "summary": "论文研究多轮工具调用训练中的信用分配：轨迹级奖励可能混合各轮成败，而自蒸馏虽提供稠密信号，却可能依赖教师目标并出现梯度集中。CREST以逐轮验证奖励确定采样token优势的符号，再通过方向门和基于惊讶度的熵门调节自教师信号幅度。[P1][P4][P5]作者报告其在两个基准上的聚合结果优于所比较方法，但实验仅覆盖两个模型规模，且每种方法只有一个训练种子。[P6][P7][P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -520,11 +837,111 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注智能体强化学习、可验证奖励与自蒸馏结合的读者重点阅读：论文同时给出分层方法、性质证明、消融及训练成本，可用于比较信用分配收益与适用条件。[P7][P12][P14]",
+      "deep_read": {
+        "problem": "多轮多步工具调用中，同一会话的不同轮次可能有不同结果；把单一轨迹奖励分配给所有token，会模糊各轮贡献。在线策略自蒸馏虽提供逐token信号，但其优化目标由教师决定，还可能出现梯度集中。论文因此寻求同时保留验证奖励目标与稠密信用信号的方法。[P1][P2]",
+        "method": "CREST先对同一轮次的组内验证奖励计算相对优势，再将其乘以token级幅度因子。自教师以真实工具调用结果为特权上下文；方向门筛选教师与验证器符号一致的信号，熵门以学生惊讶度调节影响强度，从而细化轮内更新。[P4][P5][P14]",
+        "innovation": "作者将信用分配分为轮间与轮内两层，并把自教师限制为优势幅度调制器，而非让其决定采样token的强化或抑制符号。与论文比较的RLSD相比，CREST增加独立逐轮信用和不确定性门控；其性质证明还区分了局部符号保持与聚合梯度方向。[P3][P12][P13]",
+        "findings": "表2中，CREST在4B和8B模型上的BFCL平均准确率分别为52.00%和50.00%，WildToolBench会话准确率分别为7.03%和9.38%。4B消融中，仅轮间、仅轮内及组合方法的BFCL平均准确率分别为47.88%、48.75%和52.00%，支持作者关于两层互补的结论。[P6][P7]",
+        "limitations": "评估仅覆盖两个多轮工具基准和4B、8B模型；逐轮语义对齐及局部验证假设限制了向其他会话结构的直接推广。每种方法仅用一个训练种子，惊讶度代理重要性也是启发式。逐页核对记录未报告原文件缺项；P4、P5、P12所列为已纠正的提取错误。[P6][P7][P9][P12]",
+        "connection": "解读：对智能运维中多轮诊断与工具调用的研究，逐轮验证和局部信用分配可作为设计参考；但资料没有提供运维场景实验，也不能证明部署可靠性。论文关注智能体训练，并未直接研究结构设计或实体结构可靠性，迁移前需确认能否获得逐轮验证信号。[P6][P9][P12]",
+        "next_steps": "建议先构造具有可核验中间结果的多轮运维任务，再比较轨迹级奖励、逐轮奖励和完整CREST，并使用多个训练种子评估波动。还应测试轮次不对齐或仅有终局反馈时的方法适用性，同时报告准确率、计算成本及敏感工具调用风险；这些均是研究设想，非论文实验结论。[P6][P7][P9][P14]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "教导幅度而非方向：面向多轮多步大语言模型智能体的验证器锚定信用分配",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.2634.pdf"
+      ],
+      "analyzed_at": "2026-11-27T09:59:30.005002+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P4",
+          "P5",
+          "P14"
+        ],
+        "innovation": [
+          "P3",
+          "P12",
+          "P13"
+        ],
+        "findings": [
+          "P6",
+          "P7"
+        ],
+        "limitations": [
+          "P6",
+          "P7",
+          "P9",
+          "P12"
+        ],
+        "connection": [
+          "P6",
+          "P9",
+          "P12"
+        ],
+        "next_steps": [
+          "P6",
+          "P7",
+          "P9",
+          "P14"
+        ]
+      },
+      "analysis_material_version": "52c7858d55b23ff2b6963c7db97e0c44e043497e18604c22be676b3f0ea2cbc6",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "式(2)的文字提取混入 /bracehtip... 字符串；原页为两个下方括号，分别标注 inter-turn: which turn? 和 intra-turn: which token?。公式为 A_t=A^[turn]_[t]·ϕ_t；该修正不改变轮间优势决定符号、轮内因子调节幅度的解释。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "式(10)文字提取混入 /bracehtip... 字符串；原页是对 λ·g_t^dir·m_t^ent 的下方括号，标注 safety & focus。公式为 λ_t^eff=clip(λ·g_t^dir·m_t^ent,0,λ)，不影响对组合门及幅度上界的理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P12",
+          "detail": "式(13)的文字提取混入 /bracehtip... 字符串；原页两个下括号分别标明 λ_t^eff≥0 和 w_t−1≥0。正确关系为 ϕ_t=1+λ_t^eff(w_t−1)≥1>0，支撑逐token优势符号保持的证明。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "b345cb80a812",
+        "state": "published",
+        "updated_at": "2026-11-27T09:59:30.017487+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 15,
+        "covered": 15,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "式(2)的文字提取混入 /bracehtip... 字符串；原页为两个下方括号，分别标注 inter-turn: which turn? 和 intra-turn: which token?。公式为 A_t=A^[turn]_[t]·ϕ_t；该修正不改变轮间优势决定符号、轮内因子调节幅度的解释。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "式(10)文字提取混入 /bracehtip... 字符串；原页是对 λ·g_t^dir·m_t^ent 的下方括号，标注 safety & focus。公式为 λ_t^eff=clip(λ·g_t^dir·m_t^ent,0,λ)，不影响对组合门及幅度上界的理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "式(13)的文字提取混入 /bracehtip... 字符串；原页两个下括号分别标明 λ_t^eff≥0 和 w_t−1≥0。正确关系为 ϕ_t=1+λ_t^eff(w_t−1)≥1>0，支撑逐token优势符号保持的证明。"
+          }
+        ]
+      }
     }
   ],
   "extended": [],
@@ -552,7 +969,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Multi-agent systems built from large language models are deployed widely, yet how much performance is lost when two LLMs must coordinate rather than act alone remains unclear. We formulate the collaboration tax as the team-decentralisation loss of a two-player cooperative game with private information, with two propositions characterising its sign and its equivalence to a max-superadditivity violation. We operationalise this definition on 32 solo-tractable tasks grouped by source of grounding friction and measure it on 11 models from 7 providers. The tax is structured along two no-exception ax…",
+      "summary": "论文研究两个大语言模型智能体各持私有信息时，协作表现相对完整信息单体的损失，并将其定义为协作税。作者在三类共32项任务和11个模型上测量差距，结合对话分析提出信息溯源、询问、整合和重新推导四阶段机制。联合提示干预缩小了部分差距，但未达到单体基准。研究主要使用双智能体合成任务，向真实工作负载和更多智能体的推广仍需验证。[P2][P7][P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -611,11 +1028,81 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注多智能体协调与可靠性评估的读者重点阅读：论文同时提供单体对照、失效分解和干预消融，可作为设计协作评测的参考，但真实应用适用性尚未得到验证。[P4][P7][P9]",
+      "deep_read": {
+        "problem": "论文关注两个智能体各持部分信息时，为何协作可能不如拥有完整信息的单体，以及差距如何随任务和模型变化。作者将较强成员的完整信息单体期望得分与双智能体协作期望得分之差定义为协作税，试图区分协调成本和单体求解能力。[P2][P11]",
+        "method": "作者构造空间、关系和约束满足三类共32项任务，比较完整信息单体、同构及异构协作，并用单体接收两个部分视图的控制分解差距。实验结合连续评分、对话阶段标注、按任务分组的预测以及提示条款消融。[P4][P6][P7][P20]",
+        "innovation": "作者把协作差距置于私有信息合作博弈框架，建立正协作税与违反最大超可加性的对应关系，并将失败描述组织为溯源、询问、整合和重新推导四阶段。其贡献还包括用阶段针对性提示及留一消融检验不同任务的瓶颈。[P6][P7][P12]",
+        "findings": "作者报告任务类别上的协作税排序为Spatial高于Relational高于CSP；四阶段联合提示使总体同构分数提高0.079±0.031，收回原协作税的38.3%±14.1%，但未达到单体基准。异构实验中，六种配置的差距整体偏向较强成员而非中点。[P5][P7][P8]",
+        "limitations": "实验仅研究双智能体，任务是合成谜题，不能直接代表真实部署；异构分析仅有三种配对，家族效应尚不可识别。两项任务未达到单体可解目标，结果属探索性；专家人数表述及critic结论也存在文内不一致。提供的逐页笔记未报告原文件缺项。[P8][P9][P14][P21][P22]",
+        "connection": "解读：对于智能运维中的故障分诊，多智能体可能分别掌握日志、配置和处置记录，可借鉴四阶段检查信息出处、主动补问、合并证据及复核结论。论文并未验证实际运维效果；非结构化任务还需要人工标注或专用验证器。[P17][P19]",
+        "next_steps": "建议在真实或经过脱敏的运维工单上设置完整信息单体、分视图单体和双智能体对照，记录诊断质量、证据引用及复核成本；再逐项消融四种提示。应另行检验结果能否推广到更多智能体，不把合成任务的排序预设为现场结论。[P7][P9][P17][P20]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "协作税：大语言模型多智能体系统为协调付出多少代价",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.2031.pdf"
+      ],
+      "analyzed_at": "2026-11-27T09:18:05.177727+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P11"
+        ],
+        "method": [
+          "P4",
+          "P6",
+          "P7",
+          "P20"
+        ],
+        "innovation": [
+          "P6",
+          "P7",
+          "P12"
+        ],
+        "findings": [
+          "P5",
+          "P7",
+          "P8"
+        ],
+        "limitations": [
+          "P8",
+          "P9",
+          "P14",
+          "P21",
+          "P22"
+        ],
+        "connection": [
+          "P17",
+          "P19"
+        ],
+        "next_steps": [
+          "P7",
+          "P9",
+          "P17",
+          "P20"
+        ]
+      },
+      "analysis_material_version": "35f1dd07609bc74d97e94e14ed4e8b31c113889adae278a8f8c196a1f7daea24",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "6e25c83d887c",
+        "state": "published",
+        "updated_at": "2026-11-27T09:18:05.210411+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 24,
+        "covered": 24,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -637,7 +1124,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Are tool-calling LLM agents equally safe throughout a conversation? We discover they are not: agents are most vulnerable at the very start of a session and become substantially safer after a few regular agentic tasks—a phenomenon we term the cold-start safety gap. To study this systematically, we introduce Safety Over Depth for Agents (SODA), a benchmark that controls how many regular agentic tasks the agent completes before encountering a safety threat, supporting up to 20 preceding tasks. Evaluating 7 models from 4 families, safety improves by 9–52% as the number of preceding regular agentic…",
+      "summary": "论文研究工具调用智能体在会话不同阶段面对有害请求时的安全性。作者构建SODA，控制威胁出现前完成的常规任务数，并比较不同模型、历史内容和预热方式。[P3][P5] 七个模型在完成20项任务后的安全率均高于会话开始时；完整交互预热在外部基准上也显示安全收益。[P4][P22] 不过，部分模型的效用下降，开源模型上的结果也不能直接推广到所有部署系统。[P9][P23]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -696,11 +1183,104 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注智能体工具调用安全、上下文影响及安全与效用权衡的读者阅读：论文提供深度控制基准、消融和外部评估，但部署结论需结合具体模型验证。",
+      "deep_read": {
+        "problem": "论文追问：有害请求在会话中出现的位置，是否会改变工具调用智能体的安全性。传统孤立任务评测相当于从会话开始即呈现威胁，而实际智能体可能先处理一系列普通任务；作者因此将会话起始时的脆弱性称为冷启动安全差距。[P1][P3]",
+        "method": "作者构建SODA，在16个工具环境中设置80个场景和400项威胁，每项威胁分别在八个会话深度测试，共3200个案例；深度指威胁前完成的常规任务数。实验覆盖七个模型，使用三个随机种子，并结合历史消融、表征分析及外部安全和效用基准。[P3][P5][P6]",
+        "innovation": "方法上的特点是将威胁注入位置作为受控变量，在同一组威胁上比较不同常规交互深度；同时分别替换任务请求和智能体响应，分析历史组成的作用。作者还将完整交互预热与拒绝示例、安全提示和安全微调进行比较，而非仅报告单一防护方法。[P3][P5][P24][P25][P27]",
+        "findings": "七个模型在D=20相对D=0的安全率提高8.9至52.1个百分点；作者认为常规任务请求是主要驱动，而自身响应对保持效用重要。[P4][P5][P7] 解读：部分相邻深度的安全率下降，且空响应在个别外部测试中降低安全率，不能概括为所有预热均逐点有效。[P4][P22]",
+        "limitations": "作者仅测试开源模型，原因包括API成本、隐藏状态不可得及外部护栏带来的混淆；闭源部署系统能否复现仍缺证据。[P9] 表征迁移与安全行为相关，但不能单独证明因果机制；部分模型预热后效用下降。[P19][P23] 核对记录未列出原文件缺项。[P1][P2]",
+        "connection": "解读：论文与智能运维中的可靠性研究具有方法联系：云基础设施、代码和数据库环境均涉及工具操作及潜在破坏，可借鉴按会话阶段评估安全风险。[P13][P14] 但论文未直接验证工业运维系统，也未研究结构设计，不能将其结果视为这些领域的实证结论。",
+        "next_steps": "建议在具体运维智能体中复现不同会话深度的风险评估，同时记录任务成功率、误拒绝和安全事件；比较完整预热与仅前置请求的成本及效果，并测试闭源模型和外部护栏的影响。上述均为可迁移研究设想，不能视为论文已经完成的实验。[P7][P9][P25]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "大语言模型智能体的冷启动安全差距",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1973.pdf"
+      ],
+      "analyzed_at": "2026-11-27T09:30:02.823171+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P3"
+        ],
+        "method": [
+          "P3",
+          "P5",
+          "P6"
+        ],
+        "innovation": [
+          "P3",
+          "P5",
+          "P24",
+          "P25",
+          "P27"
+        ],
+        "findings": [
+          "P4",
+          "P5",
+          "P7",
+          "P22"
+        ],
+        "limitations": [
+          "P1",
+          "P2",
+          "P9",
+          "P19",
+          "P23"
+        ],
+        "connection": [
+          "P13",
+          "P14"
+        ],
+        "next_steps": [
+          "P7",
+          "P9",
+          "P25"
+        ]
+      },
+      "analysis_material_version": "2aca55880ed7f7152023a1781442b70418a2aaac491c74fc74e6fe1ff3e883b8",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "摘要代码链接的文字提取将组织名拆成“T rustworthy-ML-Lab”；原页显示为“Trustworthy-ML-Lab”。不影响论文的安全性结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "图1 D部分的提取文字未正确保留方案与预算标签的对应关系：原图中Option 1为Minimum budget的完整交互预热；Option 2为Zero budget的仅前置任务请求。该区别影响对两种部署方案及效用代价的理解。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "17d0a66170b8",
+        "state": "published",
+        "updated_at": "2026-11-27T09:30:02.840266+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 27,
+        "covered": 27,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "摘要代码链接的文字提取将组织名拆成“T rustworthy-ML-Lab”；原页显示为“Trustworthy-ML-Lab”。不影响论文的安全性结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "图1 D部分的提取文字未正确保留方案与预算标签的对应关系：原图中Option 1为Minimum budget的完整交互预热；Option 2为Zero budget的仅前置任务请求。该区别影响对两种部署方案及效用代价的理解。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -726,7 +1306,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Long-horizon LLM agents typically choose from an environment-enumerated list of grounded actions (Planning with Actions, PwA). While this interface reduces formatting risk, scaling the list increases screening load and can bottleneck planning. We study Planning with Schemas (PwS), which replaces action enumeration with a small set of action templates that the agent instantiates into executable actions. We introduce a cognitive-bandwidth perspective of this trade-off and quantify screening vs. instantiation pressure using context length proxy and failure actions proxy. Across four interactive e…",
+      "summary": "论文比较长时程智能体的两种动作接口：从环境列举的具体动作中选择，或将紧凑模式实例化为命令。作者在四个文本环境及受控干扰实验中发现，长列表可能增加筛选负担，而模式接口引入实例化困难；相对优势随环境和模型变化。研究以提示长度及失败动作作为压力代理，并强调这些指标并非内部负荷的直接测量，实验结论也不能直接推广到真实部署。[P1][P5][P7][P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -785,11 +1365,75 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注长时程智能体接口设计与可靠性评估的读者重点阅读：论文同时给出跨环境比较、受控压力测试和失败轨迹分析，但对具体研究方向的匹配尚待确认。[P5][P7][P9]",
+      "deep_read": {
+        "problem": "长时程智能体面对不断增长的动作空间时，需要在可直接选择的具体动作列表与需要自行生成参数的动作模式之间取舍。论文追问何时列表筛选负担超过模式实例化负担，以及这一转折如何依赖模型能力。[P1][P2]",
+        "method": "作者在四个文本环境比较两种接口，每个环境抽取100项任务，每次最多交互30步；用提示词长度和无效、重复动作近似不同压力，并在 ALFWorld 注入干扰动作，观察列表扩大后的性能变化。[P4][P5][P7]",
+        "innovation": "论文将动作表示作为可扩展性变量，用认知带宽视角描述筛选与实例化之间的负担转移，并结合固定环境下的干扰注入分析转折。解读：其贡献主要是接口权衡的实验框架，而非证明存在可直接测量的认知容量。[P2][P3][P7]",
+        "findings": "作者观察到经验转折位于 ALFWorld 与 SciWorld 之间，但不同模型并非一致：GPT-4.1 的 PwS−PwA 差值分别为 -45.0 和 18.9。干扰增多时 PwA 成功率总体下降，部分模型却未在测试范围内交叉。[P4][P5][P8]",
+        "limitations": "研究仅覆盖四个文本模拟器和现成模型的推理评估，不能直接证明开放世界适用性；上下文长度与失败动作只是负荷代理。多轮工具训练的作用仍是相关性假设。所提供阅读笔记未记录已核实的原文件缺项。[P8][P9]",
+        "connection": "解读：若将智能运维中的工具调用视为动作选择，论文提示需要同时评估候选命令筛选和参数实例化错误，这与操作可靠性有关。但现有证据来自文本模拟器，未验证工业运维、结构设计或实际设备安全效果。[P1][P9]",
+        "next_steps": "建议在目标运维场景构建受控任务，比较候选命令列表与参数化工具模式，分别记录任务成功、无效调用和重复操作；再测试不同列表规模与权限约束。迁移前应补充人工审核和监测，不能假定模拟器转折点适用。[P7][P9]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "认知带宽瓶颈：长时程智能体从动作规划转向模式规划",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.755.pdf"
+      ],
+      "analyzed_at": "2026-11-27T09:35:20.875770+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P4",
+          "P5",
+          "P7"
+        ],
+        "innovation": [
+          "P2",
+          "P3",
+          "P7"
+        ],
+        "findings": [
+          "P4",
+          "P5",
+          "P8"
+        ],
+        "limitations": [
+          "P8",
+          "P9"
+        ],
+        "connection": [
+          "P1",
+          "P9"
+        ],
+        "next_steps": [
+          "P7",
+          "P9"
+        ]
+      },
+      "analysis_material_version": "4fb8c8a6d70878fd7c4afccbd4842cced162d186260fb8aefbccb1e8e6430723",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "469c7c0642b4",
+        "state": "published",
+        "updated_at": "2026-11-27T09:35:20.901304+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 18,
+        "covered": 18,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -873,7 +1517,20 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "33865e1a111f",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:23:03.317950+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 22,
+        "covered": 22,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -898,7 +1555,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Presupposing the boundaries of bias is itself a form of bias. We study closed-loop bias governance for Dutch government documents, where a system must detect biased language, ground decisions in legal and contextual evidence, rewrite problematic sentences when intervention is warranted, and verify that the rewrite mitigates harm without distorting meaning. Existing methods face three challenges: (i) discriminative classifiers capture surface regularities but lack normative grounding; (ii) zero-shot LLMs often adopt generic viewpoints and over-flag ambiguous administrative language; and (iii) f…",
+      "summary": "论文针对荷兰政府文件中偏见类别可能不断变化、误报和改写失真的问题，提出闭环治理框架 MARS-Gov。系统结合规范证据检索、动态陪审员、风险路由、最小改写与复核，并以检测、缓解、语义保真和过度干预指标评价。作者报告其在 DGDB 和留一类别实验中取得较好结果，但跨司法辖区应用仍依赖本地规范资源，且需要人工参与。[P2][P6][P8][P9][P10]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -957,11 +1614,88 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "适合关注开放集识别、多智能体证据审查与干预后验证的读者重点阅读；但资料未解释给定方向标签，不能据此认定与指定研究方向直接匹配。",
+      "deep_read": {
+        "problem": "政府文件中的偏见可能表现为隐含框架而非明显冒犯；固定分类体系还可能遗漏新出现的受影响群体。作者将问题扩展为闭环治理：不仅判断句子是否有偏，还要给出规范依据，并避免改写改变行政事实。[P2][P3]",
+        "method": "系统先检索法律和行政材料并生成中立摘要，由 Scout 识别群体，固定及动态陪审员分别提交报告。规则门控放行低风险句或升级至 Judge；判为有偏时进行最小改写，再用同一检测标准验证。[P4][P5][P15]",
+        "innovation": "作者将开放集目标发现与立场专门化审查结合：未覆盖群体可获得临时动态陪审员，多个新立场可分别审查，“第十陪审员”并非数量上限。同时将证据、路由、裁决及改写验证分开，形成可检查的决策轨迹。[P3][P4][P5]",
+        "findings": "作者报告 Gemini 配置在 DGDB 上 F1 为 0.880、过度治理率为 2.5%；留一类别实验中加入 Scout 后平均 F1 从 0.807 升至 0.875。移除规范证据模块后 F1 降至 0.824，显示所测配置对该模块有依赖。[P7][P8]",
+        "limitations": "作者指出框架依赖领域规范资源，跨司法辖区需要本地法律和政策材料，多代理推理成本也限制实时应用；BGS 不能代替分项诊断。解读：留一类别实验仍基于已有九类，不能证明覆盖所有真实新群体。核对记录未列出原文件缺项。[P8][P9]",
+        "connection": "解读：其证据留痕、异常升级和干预后复核流程，可为智能运维中的告警处置与审计提供流程设计参考；但论文处理的是行政语言偏见，资料没有结构设计或工程可靠性实验，不能直接外推其效果。[P3][P5][P10]",
+        "next_steps": "建议在实际目标场景构建经领域专家审核的本地证据库，以真实未见类别测试开放集发现，并分别评估误报、漏报、干预有效性和人工审查成本。对迁移效果应另做实验，不能把上述设想视为作者已验证的结论。[P6][P8][P9]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "“第十陪审员”：面向官僚偏见检测的开放集立场筛查",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.547.pdf"
+      ],
+      "analyzed_at": "2026-11-27T09:48:12.649047+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P4",
+          "P5",
+          "P15"
+        ],
+        "innovation": [
+          "P3",
+          "P4",
+          "P5"
+        ],
+        "findings": [
+          "P7",
+          "P8"
+        ],
+        "limitations": [
+          "P8",
+          "P9"
+        ],
+        "connection": [
+          "P3",
+          "P5",
+          "P10"
+        ],
+        "next_steps": [
+          "P6",
+          "P8",
+          "P9"
+        ]
+      },
+      "analysis_material_version": "3cc1b191aecd00bd52f6dc1a1151a49e2a877f290644ca4c145b1a8cd2cf5adb",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P14",
+          "detail": "案例 T3 的收入门槛原页为 €32.500 per jaar，文字提取误作 C32.500；应为每年 32,500 欧元。该错误影响对中性资格条件的金额识读，不改变作者判为无偏的结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "6ac309aa0d72",
+        "state": "published",
+        "updated_at": "2026-11-27T09:48:12.676483+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 19,
+        "covered": 19,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "案例 T3 的收入门槛原页为 €32.500 per jaar，文字提取误作 C32.500；应为每年 32,500 欧元。该错误影响对中性资格条件的金额识读，不改变作者判为无偏的结论。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -986,7 +1720,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Reinforcement learning with verifiable rewards (RLVR) directly optimizes verifier-defined outcomes for multi-turn tool-use agents, yet its trajectory-level credit assignment conflates heterogeneous per-turn outcomes into a single reward signal. On-policy distillation provides dense per-token supervision but uses a teacher-defined token-level objective and can be prone to gradient concentration collapse. We introduce CrEST, a hierarchical credit assignment framework that anchors each sampled token’s scalar advantage sign to verified rewards while incorporating dense magnitude signals from a pri…",
+      "summary": "论文研究多轮工具调用训练中的信用分配：轨迹级奖励可能混合各轮成败，而自蒸馏虽提供稠密信号，却可能依赖教师目标并出现梯度集中。CREST以逐轮验证奖励确定采样token优势的符号，再通过方向门和基于惊讶度的熵门调节自教师信号幅度。[P1][P4][P5]作者报告其在两个基准上的聚合结果优于所比较方法，但实验仅覆盖两个模型规模，且每种方法只有一个训练种子。[P6][P7][P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -1045,11 +1779,111 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注智能体强化学习、可验证奖励与自蒸馏结合的读者重点阅读：论文同时给出分层方法、性质证明、消融及训练成本，可用于比较信用分配收益与适用条件。[P7][P12][P14]",
+      "deep_read": {
+        "problem": "多轮多步工具调用中，同一会话的不同轮次可能有不同结果；把单一轨迹奖励分配给所有token，会模糊各轮贡献。在线策略自蒸馏虽提供逐token信号，但其优化目标由教师决定，还可能出现梯度集中。论文因此寻求同时保留验证奖励目标与稠密信用信号的方法。[P1][P2]",
+        "method": "CREST先对同一轮次的组内验证奖励计算相对优势，再将其乘以token级幅度因子。自教师以真实工具调用结果为特权上下文；方向门筛选教师与验证器符号一致的信号，熵门以学生惊讶度调节影响强度，从而细化轮内更新。[P4][P5][P14]",
+        "innovation": "作者将信用分配分为轮间与轮内两层，并把自教师限制为优势幅度调制器，而非让其决定采样token的强化或抑制符号。与论文比较的RLSD相比，CREST增加独立逐轮信用和不确定性门控；其性质证明还区分了局部符号保持与聚合梯度方向。[P3][P12][P13]",
+        "findings": "表2中，CREST在4B和8B模型上的BFCL平均准确率分别为52.00%和50.00%，WildToolBench会话准确率分别为7.03%和9.38%。4B消融中，仅轮间、仅轮内及组合方法的BFCL平均准确率分别为47.88%、48.75%和52.00%，支持作者关于两层互补的结论。[P6][P7]",
+        "limitations": "评估仅覆盖两个多轮工具基准和4B、8B模型；逐轮语义对齐及局部验证假设限制了向其他会话结构的直接推广。每种方法仅用一个训练种子，惊讶度代理重要性也是启发式。逐页核对记录未报告原文件缺项；P4、P5、P12所列为已纠正的提取错误。[P6][P7][P9][P12]",
+        "connection": "解读：对智能运维中多轮诊断与工具调用的研究，逐轮验证和局部信用分配可作为设计参考；但资料没有提供运维场景实验，也不能证明部署可靠性。论文关注智能体训练，并未直接研究结构设计或实体结构可靠性，迁移前需确认能否获得逐轮验证信号。[P6][P9][P12]",
+        "next_steps": "建议先构造具有可核验中间结果的多轮运维任务，再比较轨迹级奖励、逐轮奖励和完整CREST，并使用多个训练种子评估波动。还应测试轮次不对齐或仅有终局反馈时的方法适用性，同时报告准确率、计算成本及敏感工具调用风险；这些均是研究设想，非论文实验结论。[P6][P7][P9][P14]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "教导幅度而非方向：面向多轮多步大语言模型智能体的验证器锚定信用分配",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.2634.pdf"
+      ],
+      "analyzed_at": "2026-11-27T09:59:30.005002+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P4",
+          "P5",
+          "P14"
+        ],
+        "innovation": [
+          "P3",
+          "P12",
+          "P13"
+        ],
+        "findings": [
+          "P6",
+          "P7"
+        ],
+        "limitations": [
+          "P6",
+          "P7",
+          "P9",
+          "P12"
+        ],
+        "connection": [
+          "P6",
+          "P9",
+          "P12"
+        ],
+        "next_steps": [
+          "P6",
+          "P7",
+          "P9",
+          "P14"
+        ]
+      },
+      "analysis_material_version": "52c7858d55b23ff2b6963c7db97e0c44e043497e18604c22be676b3f0ea2cbc6",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "式(2)的文字提取混入 /bracehtip... 字符串；原页为两个下方括号，分别标注 inter-turn: which turn? 和 intra-turn: which token?。公式为 A_t=A^[turn]_[t]·ϕ_t；该修正不改变轮间优势决定符号、轮内因子调节幅度的解释。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "式(10)文字提取混入 /bracehtip... 字符串；原页是对 λ·g_t^dir·m_t^ent 的下方括号，标注 safety & focus。公式为 λ_t^eff=clip(λ·g_t^dir·m_t^ent,0,λ)，不影响对组合门及幅度上界的理解。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P12",
+          "detail": "式(13)的文字提取混入 /bracehtip... 字符串；原页两个下括号分别标明 λ_t^eff≥0 和 w_t−1≥0。正确关系为 ϕ_t=1+λ_t^eff(w_t−1)≥1>0，支撑逐token优势符号保持的证明。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "b345cb80a812",
+        "state": "published",
+        "updated_at": "2026-11-27T09:59:30.017487+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 15,
+        "covered": 15,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "式(2)的文字提取混入 /bracehtip... 字符串；原页为两个下方括号，分别标注 inter-turn: which turn? 和 intra-turn: which token?。公式为 A_t=A^[turn]_[t]·ϕ_t；该修正不改变轮间优势决定符号、轮内因子调节幅度的解释。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "式(10)文字提取混入 /bracehtip... 字符串；原页是对 λ·g_t^dir·m_t^ent 的下方括号，标注 safety & focus。公式为 λ_t^eff=clip(λ·g_t^dir·m_t^ent,0,λ)，不影响对组合门及幅度上界的理解。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "式(13)的文字提取混入 /bracehtip... 字符串；原页两个下括号分别标明 λ_t^eff≥0 和 w_t−1≥0。正确关系为 ϕ_t=1+λ_t^eff(w_t−1)≥1>0，支撑逐token优势符号保持的证明。"
+          }
+        ]
+      }
     }
   ],
   "source_status": {
@@ -1951,13 +2785,13 @@
     "unavailable": 46
   },
   "analysis_status": {
-    "ready_core": 0,
+    "ready_core": 5,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 6
+    "pending": 1
   },
   "edition": {
     "id": "44815760155",

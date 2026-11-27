@@ -1,0 +1,40 @@
+{
+  "paper_id": "85b6c432e2b1",
+  "fingerprint": "9ebbdf8a4feac5b31bf30d0a8ccd1bd49afa3feb7c7663500f183f5edb665207",
+  "analysis": {
+    "title_zh": "TOUCAN：基于真实MCP环境合成150万条工具智能体数据",
+    "summary": "【摘要】论文针对开源工具智能体训练数据在多样性、真实性和复杂性方面的不足，提出包含150万条轨迹的Toucan数据集。数据来自近500个真实世界模型上下文协议（MCP）环境，生成过程包括多模型查询生成、质量筛选、教师模型轨迹生成及规则与模型验证。摘要称，使用该数据微调的模型在BFCL V3和MCP-Universe Bench上取得有竞争力的结果，但未提供具体分数、对比对象和实验细节，尚无法独立评估效果。",
+    "recommendation": "【摘要】建议关注工具调用、智能体训练数据合成与评测的读者阅读：论文同时涉及真实工具执行、数据质量控制和基准测试，但应在获得全文后核查实验设置与开放许可细节。",
+    "deep_read": {
+      "problem": "【摘要】论文关注开源社区缺少高质量、宽松许可的工具智能体训练数据。摘要指出，现有数据集在多样性、真实性和复杂性方面受限，尤其缺少充分覆盖多工具与多轮交互的数据，进而限制相关智能体的发展。",
+      "method": "【摘要】流程先使用五个不同模型生成工具使用查询，再进行基于模型的质量筛选；随后借助三个教师模型和两个智能体框架生成轨迹，并结合规则与模型验证输出。摘要还提到三个扩展，但未说明其具体实现。",
+      "innovation": "【摘要】论文提出从近500个真实世界MCP环境合成工具调用轨迹，并强调生成过程包含真实工具执行；同时通过三个扩展增加任务多样性、模拟多轮对话。解读：其与既有工作的具体差异及新颖性边界仍需阅读全文核实。",
+      "findings": "【摘要】作者称，使用Toucan微调的模型在BFCL V3基准上优于更大的闭源模型，并在MCP-Universe Bench上建立新的帕累托最优结果。摘要未给出具体分数、模型名称或帕累托权衡指标，因此无法比较提升幅度。",
+      "limitations": "【摘要】当前资料仅为摘要，未展示数据许可条款、数据划分、基线模型、评测数值和消融实验，也未说明三个扩展的实现细节。解读：这些是现有资料的证据缺口，不能直接认定为论文方法本身的局限。",
+      "connection": "【摘要】论文研究多工具、多轮交互及真实工具执行，可为工具智能体的数据构造提供参考。解读：若智能运维涉及跨工具任务，其流程可能具有借鉴价值；摘要未涉及结构设计或可靠性研究，也未证明运维场景效果。",
+      "next_steps": "建议获得全文后，优先核查MCP环境覆盖范围、许可、任务与轨迹的验证标准，以及两个基准的模型和指标；再评估数据是否适用于目标场景。针对运维迁移的有效性和安全性，应另行设计实验，不能由摘要结论推定。"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.809/"
+    ],
+    "analyzed_at": "2026-11-27T14:23:06.834333+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "摘要明确给出了真实MCP环境中的轨迹合成流程及基准结果主张，因而具有进一步阅读价值；但资料仅提供未解释的方向标签，没有具体研究方向，无法判断方向契合度。direction_fit为false表示目前无法确认，并非证明不契合；摘要也不足以独立核实实验效果。",
+    "evidence": "Our pipeline first produces a broad spectrum of tool-use queries using five distinct models, applies model-based quality filtering, and then generates agentic trajectories with three teacher models using two agentic frameworks."
+  },
+  "material": {
+    "version": "da2edb94619a3fc47c5eb158ad0ad072727c4ab1ee7ab9cbcb1be967e4cec982",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "Our pipeline first produces a broad spectrum of tool-use queries using five distinct models, applies model-based quality filtering, and then generates agentic trajectories with three teacher models using two agentic frameworks."
+  }
+}

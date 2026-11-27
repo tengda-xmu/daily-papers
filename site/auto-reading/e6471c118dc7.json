@@ -1,0 +1,142 @@
+{
+  "paper_id": "e6471c118dc7",
+  "fingerprint": "1bda2aefd04ae6ee41adc6f76c5bf9cfd983ab350249e5f931b4eed810f66534",
+  "analysis": {
+    "title_zh": "SMADE-IE：面向零样本信息抽取的证据驱动辩论稀疏多智能体框架",
+    "summary": "【摘要】论文研究大语言模型在零样本信息抽取中如何兼顾预测质量与推理效率。SMADE-IE依据样本复杂度和相关类型，在全局抽取与类型中心抽取之间自适应选择，并通过证据驱动的多智能体辩论解决跨类型冲突。摘要报告了九个基准上的平均Partial F1提升，以及相对CrossAgentIE的令牌消耗下降；具体实验设置和结果细节仍需查阅全文。[摘要]",
+    "recommendation": "若关注零样本信息抽取、多智能体协作或推理令牌成本，建议重点阅读：摘要同时给出了模式选择、冲突处理方法及基准结果；但给定研究方向未作具体说明，暂不能确认方向匹配。[摘要]",
+    "deep_read": {
+      "problem": "【摘要】论文关注大语言模型零样本信息抽取中的质量与效率问题。摘要指出，单体提示容易遗漏提及、产生边界错误和类型混淆；逐类型提示可能产生重叠或冲突预测，多智能体辩论则可能引入冗余交互和较高令牌开销。[摘要]",
+      "method": "【摘要】方法包含自适应模式选择与证据驱动辩论：前者根据样本复杂度和相关类型，为简单输入选择轻量全局抽取模式，为含糊输入选择类型中心模式；后者结合Toulmin式论证、外部证据评分、基于Beta的置信度更新和提前停止。[摘要]",
+      "innovation": "【摘要】作者提出稀疏、证据驱动的多智能体框架，将按输入选择抽取模式与跨类型冲突辩论结合。解读：这一设计试图避免对所有输入采用同等复杂的处理流程。摘要未提供完整实现或消融证据，无法进一步核定各组件的独立贡献。[摘要]",
+      "findings": "【摘要】作者报告，九个基准覆盖NER、RE和JERE，相比最强基线，三类任务的平均Partial F1分别提高11.37、3.83和14.46个点；相比CrossAgentIE，DocRED和CrossRE的令牌消耗分别降低85.1%和80.1%。具体基线及统计细节未在摘要中说明。[摘要]",
+      "limitations": "【摘要】当前资料仅为摘要，未交代数据划分、基线配置、显著性检验、消融结果或失败案例，也未说明外部证据的来源和获取成本。因此无法判断结果的稳健性及完整成本；这些是现有资料的证据缺口，不应直接视为作者证实的方法缺陷。[摘要]",
+      "connection": "【解读】该方法与智能运维的潜在联系在于，可探索从运维文本中抽取实体及关系，并在类型冲突时引入证据判断；模式选择也可能有助于控制处理成本。但摘要未报告运维场景、结构设计或可靠性研究中的应用，不能据此断言其适用或有效。[摘要]",
+      "next_steps": "【建议】进一步阅读全文时，可优先核对复杂度判定、外部证据来源、辩论停止条件及各组件消融，并检查不同任务与数据集上的逐项结果。若拟迁移至运维文本，还应另行评估领域类型定义、抽取错误和端到端成本；摘要尚未提供这些验证。[摘要]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://arxiv.org/abs/2606.04691"
+    ],
+    "analyzed_at": "2026-11-27T11:08:08.984516+00:00",
+    "llm_model": "gpt-6.1-terra",
+    "article": {
+      "version": 3,
+      "basis": "abstract",
+      "lead": "零样本信息抽取需要在适应新领域的同时兼顾准确性与推理开销。SMADE-IE 尝试按输入复杂度选择抽取模式，并用证据驱动辩论处理跨类型冲突。",
+      "sections": [
+        {
+          "id": "context",
+          "title": "抽取得越细，冲突与开销也可能增加",
+          "paragraphs": [
+            "大语言模型支持在不进行任务专门训练的情况下，将信息抽取适配到新的模式和领域。但如何组织提示与协作，会影响抽取质量和资源消耗。",
+            "摘要指出，整体提示虽然高效，却容易遗漏实体提及、出现边界错误或混淆类型；逐类型提示更聚焦，但不同类型的预测可能重叠或冲突。多智能体辩论有助于解决冲突，却可能引入无关上下文、冗余交互和较高的 token 开销。"
+          ]
+        },
+        {
+          "id": "method",
+          "title": "按复杂度选择模式，用证据处理冲突",
+          "paragraphs": [
+            "SMADE-IE 是一个稀疏、证据驱动的多智能体框架。其自适应模式选择器依据样本复杂度和相关类型，将简单输入交给轻量的全局抽取模式，将存在歧义的输入交给以类型为中心的抽取模式。",
+            "针对跨类型冲突，框架使用证据驱动辩论模块，结合图尔敏式论证、外部证据评分、基于 Beta 的置信度更新和提前停止。摘要没有展开这些环节的具体实现。"
+          ]
+        },
+        {
+          "id": "findings",
+          "title": "三个任务类别的抽取表现与 token 消耗",
+          "paragraphs": [
+            "摘要报告，在涵盖命名实体识别（NER）、关系抽取（RE）和联合实体关系抽取（JERE）的九个基准上，相比最强基线，SMADE-IE 的平均 Partial F1 分别提高 11.37、3.83 和 14.46 个点。",
+            "推理效率方面，与多智能体基线 CrossAgentIE 相比，SMADE-IE 在 DocRED 和 CrossRE 上的 token 消耗分别降低 85.1% 和 80.1%。这些结果对应摘要报告的比较范围，不宜直接外推到所有任务或数据集。"
+          ]
+        },
+        {
+          "id": "limitations",
+          "title": "摘要尚不足以判断哪些细节",
+          "paragraphs": [
+            "摘要未说明各基准的样本规模、数据构成、最强基线的具体身份及各项结果的波动，因此仅凭摘要无法判断比较覆盖范围和结果稳定性。",
+            "摘要也未交代模式选择、证据评分和提前停止各自对结果的贡献，或框架在其他领域的验证范围；这些是当前资料无法判断的问题，并不意味着论文没有开展相关分析。"
+          ]
+        },
+        {
+          "id": "inspiration",
+          "title": "阅读启发：关注路由与证据的作用",
+          "paragraphs": [
+            "阅读启发：这项工作提示，评估大模型多智能体抽取时，可以同时关注抽取表现、冲突处理和 token 消耗。进一步阅读时，可留意复杂度如何判定、外部证据如何参与评分，以及不同抽取模式下的结果如何比较。"
+          ]
+        }
+      ],
+      "experiments": [],
+      "routes": [],
+      "diagrams": [
+        {
+          "kind": "study",
+          "basis": "abstract",
+          "title": "依据摘要整理的自适应抽取模式",
+          "description": "仅概括摘要明确陈述的模式选择关系，不限定辩论模块与某一种抽取模式的连接。",
+          "nodes": [
+            {
+              "id": "a",
+              "stage": 0,
+              "label": "输入样本",
+              "detail": "依据样本复杂度和相关类型进行选择"
+            },
+            {
+              "id": "b",
+              "stage": 1,
+              "label": "自适应模式选择器",
+              "detail": "为输入选择抽取模式"
+            },
+            {
+              "id": "c",
+              "stage": 2,
+              "label": "全局抽取模式",
+              "detail": "轻量模式，处理简单输入"
+            },
+            {
+              "id": "d",
+              "stage": 2,
+              "label": "以类型为中心的抽取",
+              "detail": "处理存在歧义的输入"
+            }
+          ],
+          "edges": [
+            {
+              "from": "a",
+              "to": "b",
+              "label": "选择模式"
+            },
+            {
+              "from": "b",
+              "to": "c",
+              "label": "简单输入"
+            },
+            {
+              "from": "b",
+              "to": "d",
+              "label": "存在歧义的输入"
+            }
+          ]
+        }
+      ],
+      "figure_groups": []
+    },
+    "article_updated_at": "2026-11-27T11:34:59.536123+00:00",
+    "article_profile": "2eb457b474249d427960db56cd8e5962371125f928994feb31d93a0b737e729d"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "摘要给出了明确的模式选择、证据驱动辩论方法和基准结果，因此具有进一步阅读价值；但给定资料仅含不透明的方向标签，未说明研究方向的具体内容，无法核实方向匹配，故不能判定现有证据足以支持完整评价。[摘要]",
+    "evidence": "An Adaptive Mode Selector routes simple inputs to a lightweight Global Extraction Mode and ambiguous inputs to a Type-Centric Extraction Mode based on sample complexity and relevant types."
+  },
+  "material": {
+    "version": "919353127f03394ca6c003c60bab92d0de1f527f6e7e40d97f5aee956acf9b14",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "An Adaptive Mode Selector routes simple inputs to a lightweight Global Extraction Mode and ambiguous inputs to a Type-Centric Extraction Mode based on sample complexity and relevant types."
+  }
+}

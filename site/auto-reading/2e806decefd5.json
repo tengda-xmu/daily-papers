@@ -1,0 +1,123 @@
+{
+  "paper_id": "2e806decefd5",
+  "fingerprint": "6bca5908f1771a7d4722f7bdd7668da308e0ce6c2bd7612f639ff44a9e60e056",
+  "analysis": {
+    "title_zh": "SpIDER：面向软件问题定位的空间结构感知稠密嵌入检索",
+    "summary": "论文研究如何在大型代码库中，为问题报告找出需要修改的函数。SpIDER先进行稠密语义检索，再从高排名函数出发探索代码图邻域，经语义门控和大语言模型筛选后，以新候选替换低排名结果，保持检索预算不变。作者构建多语言基准，并报告函数级召回率提升，同时分析调用边带来的额外成本、筛选误差及初始候选池的覆盖上限。[P2][P7][P8][P10]",
+    "recommendation": "建议关注代码检索、软件故障定位与智能体辅助开发的读者重点阅读：论文同时提供可审计的图扩展流程、固定预算交换分析、多语言实验及成本对照，但迁移至其他工程场景前应验证图质量和候选池覆盖。[P2][P6][P8][P10]",
+    "deep_read": {
+      "problem": "论文针对软件问题定位中的函数级检索：问题描述与代码语义可能相关，但仅按嵌入相似度排序会遗漏分数略低、却与高排名函数结构相邻的待修改代码。作者还指出，既有评估偏重Python，跨语言表现和细粒度定位有待研究。[P2][P3]",
+      "method": "方法先以双模编码器按余弦相似度检索，再选取前C个函数作为种子，沿代码图边探索d跳邻域；候选须进入语义top-N池，再由大语言模型筛选。被接纳的新邻居替换未受保护的低排名结果，以控制最终检索预算。[P4][P5]",
+      "innovation": "作者将语义排序、图邻域探索和模型判断结合，并为扩展候选保留相对于种子的结构依据；同时构建覆盖四种语言的SpIDER-Bench。理论部分把固定预算下的召回变化写成纳入与淘汰真值的交换，并指出局部性本身不足以保证收益。[P2][P5][P6]",
+      "findings": "以SweRank为基线，作者报告跨表2的语言和数据集，Recall@20至少相对提升13%；SWE-PolyBench Python从0.42升至0.49。包含边与调用边联用时该值为0.60，但平均每实例消耗110.1K tokens，明显高于仅用包含边的12.9K。[P7][P8]",
+      "limitations": "仅用仓库主要语言构图，top-500池外的真值无法恢复；调用边比较只在SWE-PolyBench开展，筛选也可能误删或挤掉真值。[P10][P34] 原文件P5两处集合定义缺少花括号，影响公式严格表达，不能据此声称缺失公式及受影响结论已获验证。[P5]\n原文核对：[P5] 种子选择公式 C_Q := v∈S_C(Q) 及第二阶段筛选公式 U_Q := u∈Ĉ_Q | L(u)=1 ∪ C_Q 在原页均未显示用于集合构造的花括号。正文分别说明前者是 top-C 种子集合、后者保留获选候选和全部种子；符号不完整影响公式的严格表达，但不妨碍理解文字描述，未补造原式。",
+      "connection": "解读：该研究与智能运维中的软件故障定位有方法层面的联系：可将告警或工单作为查询，结合系统依赖关系查找待检查单元。但论文证据来自代码问题定位，未验证设备故障、结构设计或实体系统可靠性场景，不能直接外推效果。[P2][P10]",
+      "next_steps": "建议先在目标运维数据上构建可追溯的依赖图，分别测量初始候选覆盖、图可达性、筛选误删和错误淘汰；再以相同候选预算比较词法、语义和图扩展方法，并联合报告召回、时延与模型成本。这些是迁移设想，不是论文实验结论。[P6][P32][P36]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.1938.pdf"
+    ],
+    "analyzed_at": "2026-11-27T10:31:52.772638+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "论文有明确的图感知检索方法、多语言结果和成本分析，值得软件问题定位研究者阅读；但给定方向仅有无法解释的标签，缺少具体研究方向描述，因此不能确认方向契合度，当前证据不足以支持全部判断。",
+    "evidence": "Figure 1: SpIDER workflow.SpIDER augments standard dense embedding retrieval with graph-aware spatial\nexploration and LLM-based reasoning to improve function-level code localization under a fixed retrieval (K)."
+  },
+  "material": {
+    "version": "2cc08d30b781bc47953e17b28fba0ad4a8a7cdd3bf7d793117194c888420bd3d",
+    "total": 36,
+    "covered": 36,
+    "references": {
+      "problem": [
+        "P2",
+        "P3"
+      ],
+      "method": [
+        "P4",
+        "P5"
+      ],
+      "innovation": [
+        "P2",
+        "P5",
+        "P6"
+      ],
+      "findings": [
+        "P7",
+        "P8"
+      ],
+      "limitations": [
+        "P5",
+        "P10",
+        "P34"
+      ],
+      "connection": [
+        "P2",
+        "P10"
+      ],
+      "next_steps": [
+        "P6",
+        "P32",
+        "P36"
+      ]
+    },
+    "excerpt": "Figure 1: SpIDER workflow.SpIDER augments standard dense embedding retrieval with graph-aware spatial\nexploration and LLM-based reasoning to improve function-level code localization under a fixed retrieval (K).",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P21",
+      "P22",
+      "P23",
+      "P24",
+      "P25",
+      "P26",
+      "P27",
+      "P28",
+      "P29",
+      "P30",
+      "P31",
+      "P32",
+      "P33",
+      "P34",
+      "P35",
+      "P36"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P2",
+        "detail": "正文文字提取将“reside near the”“with marginally lower”和“for function-level”中的部分词语连写；原页可读，已按正常词间空格理解，不影响作者关于语义检索可能遗漏相关候选及函数级定位的结论。"
+      },
+      {
+        "kind": "source_defect",
+        "page": "P5",
+        "detail": "种子选择公式 C_Q := v∈S_C(Q) 及第二阶段筛选公式 U_Q := u∈Ĉ_Q | L(u)=1 ∪ C_Q 在原页均未显示用于集合构造的花括号。正文分别说明前者是 top-C 种子集合、后者保留获选候选和全部种子；符号不完整影响公式的严格表达，但不妨碍理解文字描述，未补造原式。"
+      }
+    ]
+  }
+}

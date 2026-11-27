@@ -158,7 +158,7 @@
         "state": "published",
         "updated_at": "2026-11-26T23:48:15.759119+00:00",
         "basis": "full_text",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "facts",
         "reason": "",
         "total": 19,
@@ -260,13 +260,12 @@
       "recommended_direction": "direction_7a61b97a",
       "reading_status": {
         "paper_id": "6a75d1610157",
-        "state": "retry",
-        "updated_at": "2026-11-26T23:54:14.923316+00:00",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:18:45.226052+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
         "reason": "",
-        "next_retry_at": "2026-11-26T23:59:14.923316+00:00",
         "total": 12,
         "covered": 12,
         "pdf_available": true,
@@ -417,8 +416,8 @@
         "state": "published",
         "updated_at": "2026-11-26T23:57:00.791897+00:00",
         "basis": "full_text",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "facts",
         "reason": "",
         "total": 21,
         "covered": 21,
@@ -447,7 +446,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Editable diagram generation from natural language requires structural correctness and visual readability. Text-to-image models produce rasters with no editable objects. LLM code-generation approaches yield editable output but face three challenges: unreliable geometry from token-by-token coordinate emission, shallow verification that checks code rather than the rendered image, and dependence on task-specific fine-tuning. We present VISTA, a training-free pipeline that assigns each subproblem to the appropriate component: an LLM extracts semantic structure, a deterministic algorithm computes al…",
+      "summary": "【摘要】论文研究如何从自然语言生成结构正确、视觉清晰且可编辑的图表。VISTA 将语义结构提取、几何计算和渲染结果检查分别交给语言模型、确定性算法和视觉语言模型，并通过局部修复改进图表。作者构建了包含 150 条提示的基准，与八个基线比较，报告 VISTA 在所有成对比较中具有最高可读性。[摘要]当前仅有摘要，无法核查具体实验过程及其他评价结果。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -506,11 +505,43 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "【解读】如果关注自然语言生成可编辑图表，值得重点阅读其任务拆分与渲染后检查方法；但给定研究方向仅有不透明的标签，无法确认它与目标方向是否切合。",
+      "deep_read": {
+        "problem": "【摘要】论文关注从自然语言生成兼具结构正确性和视觉可读性的可编辑图表。摘要指出，文本生成图像模型产生的栅格图没有可编辑对象；代码生成方法虽可编辑，却面临几何不可靠、验证较浅及依赖任务专用微调的问题。[摘要]",
+        "method": "【摘要】VISTA 是免训练流程：语言模型提取语义结构，确定性算法计算全部几何信息，视觉语言模型结合图表渲染结果与源代码进行检查，并提出局部修复。摘要未说明几何算法、检查提示或修复执行的具体实现。[摘要]",
+        "innovation": "【摘要】作者将不同子问题分配给不同组件，并让视觉语言模型同时检查渲染图表和源代码。[摘要]【解读】这一组合针对摘要列出的几何生成与验证问题；但仅凭摘要，无法判断各组件或组合方式相对已有工作的技术新颖程度。",
+        "findings": "【摘要】作者从仅有 PNG 的参考图构建包含 150 条提示的基准，并与包括 Codex、Claude Code 和一个经过微调的多智能体系统在内的八个基线比较；摘要报告 VISTA 在所有成对比较中可读性最高。[摘要]具体评分和其他指标未在摘要中给出。",
+        "limitations": "【摘要】当前资料只有摘要，没有提供基准的具体组成、可读性评价流程或结构正确性的结果，因此无法核查结论的适用范围。[摘要]【解读】这些是现有资料的证据限制，不能直接视为作者已证实的方法缺陷或实验局限。",
+        "connection": "【解读】若研究涉及智能运维或结构设计中的示意图表达，可关注该方法如何把语义、几何与视觉检查分开处理。但摘要未报告这些领域的应用，也未评估工程结构可靠性；给定方向标签未释义，不能据此认定论文与目标方向直接相关。[摘要]",
+        "next_steps": "【建议】可在取得论文全文后，优先核查基准构造、成对比较的评价者与判据，以及局部修复的具体流程；再根据自身任务判断是否需要测试图表可编辑性和结构正确性。上述内容是后续阅读与研究建议，不是摘要报告的作者结论。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "VISTA：面向结构的免训练自然语言可编辑图表生成",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.2403/"
+      ],
+      "analyzed_at": "2026-11-27T13:34:30.517546+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {},
+      "analysis_material_version": "ba0b63d34aa1b7c0d2a2a28de9c5563f0eab0af9c12817cb4fa677705af2ba62",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "a366c01ef5c9",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T13:34:30.519564+00:00",
+        "basis": "abstract",
+        "article_state": "failed",
+        "article_stage": "writing",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -536,7 +567,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Video editing has become essential in digital media creation, yet existing automated systems are restricted to short segment processing and domain-specific tasks. They face two critical limitations: i) inability to handle diverse video comprehension and editing operations, and ii) lack of long-video understanding for coherent narrative creation. We propose VideoAgent, an all-in-one agentic framework addressing these challenges through two key innovations. First, we develop automated video shot creation with shot planning agents for coherent narratives and cross-modal retrieval for aligned visu…",
+      "summary": "【摘要】论文针对自动视频系统难以同时处理多样理解与编辑任务、缺乏长视频叙事理解的问题，提出一体化智能体框架 VideoAgent。该框架通过镜头规划与跨模态检索生成视频镜头，并利用多智能体编排构建编辑流程。摘要报告了基准测试、公开数据集和人工评价结果，但未提供实验细节，相关结论仍需结合全文核查。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -595,11 +626,156 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "【摘要】【解读】如果研究关注视频理解、编辑智能体或多工具协作，本文值得进一步阅读；其镜头规划与编辑流程编排提供了明确的方法线索，但当前未给出研究方向的具体内容，无法确认方向匹配。",
+      "deep_read": {
+        "problem": "【摘要】论文指出，现有自动化视频系统受限于短片段处理和特定领域任务，并面临两项挑战：难以处理多样的视频理解与编辑操作，以及缺少对长视频的理解，因而难以创建连贯叙事。",
+        "method": "【摘要】VideoAgent 使用镜头规划智能体进行自动镜头创建，并通过跨模态检索匹配视觉内容；其多智能体编排框架整合三十多个专用编辑智能体，以意图解析筛选工具，再通过文本梯度图优化组装复杂编辑流程。",
+        "innovation": "【摘要】作者提出两项关键创新：将镜头规划与跨模态检索结合，用于生成连贯叙事；以及构建整合多个专用编辑智能体的编排框架。【解读】这些是作者在摘要中的创新主张，其相对既有工作的独创性尚需查阅全文核实。",
+        "findings": "【摘要】作者报告，在新提出的 VideoEdit 基准和公开数据集上的实验显示，该框架优于现有多模态大语言模型和智能体系统；编排成功率为 87%—95%，API 成本降低 60%。六类视频的人工评价评分比人工制作视频低 4%。",
+        "limitations": "【摘要】【解读】摘要未说明实验样本规模、具体对比系统、评价标准或成本计算口径，也未详述失败案例，因此无法判断结果的统计可靠性与适用边界。上述是当前资料的证据缺口，不应直接认定为论文自身的全部局限。",
+        "connection": "【摘要】【解读】意图解析、专用智能体协作和复杂流程组装，与智能运维中的任务分解及工具编排存在形式上的联系；但摘要研究对象是视频理解与编辑，未提供结构设计或可靠性研究中的应用及有效性证据。",
+        "next_steps": "【建议】若能获取全文，可优先核查 VideoEdit 的任务构成、对比方法、成功率定义、API 成本口径及人工评价程序，并关注长视频测试与失败案例。若考虑迁移至智能运维，还需另行验证工具调用安全性和复杂流程的可靠性。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "VideoAgent：视频理解与编辑一体化框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.949/"
+      ],
+      "analyzed_at": "2026-11-27T13:36:32.867727+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "如何让自动视频系统既能处理多样的编辑操作，又能理解长视频并形成连贯叙事？VideoAgent 尝试把镜头创作与多智能体编排结合起来，为理解复杂视频编辑任务提供了一个观察视角。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从短片段处理走向连贯叙事",
+            "paragraphs": [
+              "视频编辑已成为数字媒体创作的重要环节，但摘要指出，现有自动化系统往往局限于短片段处理和特定领域任务。面对多样的视频理解与编辑操作，以及需要长视频理解的连贯叙事创作，这些系统仍有局限。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "镜头创作与编辑智能体编排",
+            "paragraphs": [
+              "VideoAgent 是一个一体化智能体框架。摘要描述了自动视频镜头创作：镜头规划智能体用于形成连贯叙事，跨模态检索用于获取与之对齐的视觉内容。",
+              "框架还集成了三十多个专业编辑智能体。意图解析用于筛选相关工具，文本梯度图优化则用于组装复杂编辑流水线；摘要没有进一步说明这两个环节之间的执行顺序。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "编排成功率与人工评价结果",
+            "paragraphs": [
+              "摘要称，作者在新提出的 VideoEdit 基准和公开数据集上开展实验，结果显示 VideoAgent 优于现有多模态大语言模型和智能体系统。报告的编排成功率为 87-95%，API 成本降低了 60%。",
+              "覆盖六类视频的人工评价显示，生成内容的质量接近人类水平，评分仅比人类创作的视频低 4%。这些是摘要对评价结果的概括，具体评分方式和比较条件仍需查阅论文。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不能回答的验证细节",
+            "paragraphs": [
+              "摘要没有报告样本规模、视频时长分布、具体比较系统及 API 成本的计算条件，因此仅凭摘要难以判断结果适用的任务范围，也不能独立核对不同系统之间的比较。",
+              "人工评价的参与者、评分标准和各类别表现，以及长视频理解与叙事连贯性的具体验证方式，摘要同样没有交代。这些信息未出现在摘要中，并不意味着论文没有开展相关分析。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注多模态工具如何协作",
+            "paragraphs": [
+              "阅读启发：对于关注多模态大语言模型与智能体的读者，可以进一步阅读镜头规划、跨模态检索和编辑工具编排各自承担什么角色，以及它们如何共同服务于视频创作。",
+              "建议同时查看基准任务、比较条件和人工评价细节，以理解摘要中的成功率、成本与质量指标分别衡量了什么，以及结论能够覆盖哪些场景。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的编辑智能体编排示意",
+            "description": "仅概括摘要明确描述的多智能体编排环节，不表示意图解析与图优化之间存在直接依赖或先后顺序。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "多智能体编排框架",
+                "detail": "集成三十多个专业编辑智能体"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "意图解析",
+                "detail": "筛选相关工具"
+              },
+              {
+                "id": "c",
+                "stage": 1,
+                "label": "文本梯度图优化",
+                "detail": "组装复杂编辑流水线"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "相关工具",
+                "detail": "意图解析筛选的工具"
+              },
+              {
+                "id": "e",
+                "stage": 2,
+                "label": "复杂编辑流水线",
+                "detail": "通过文本梯度图优化组装"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "包含"
+              },
+              {
+                "from": "a",
+                "to": "c",
+                "label": "包含"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "筛选"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "组装"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-27T13:44:10.424888+00:00",
+      "article_profile": "7009856f111d4cacbaebaa13d659f48a33fe15df15f2bc8e3433b32f9bf3d2a4",
+      "analysis_references": {},
+      "analysis_material_version": "8879aa3a6dc308a9429e28d62a05e1772c7f5c8737c195241430f9353e1fd269",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "1fd0ac39303b",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T13:44:10.424888+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -631,7 +807,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "The software supply chain has become an increasingly exposed attack surface because of its reliance on intricate yet fragile dependencies. Existing defenses such as GitHub Dependabot often raise many false alerts because their coarse-grained matching cannot determine whether a vulnerable dependency is actually exploitable. Security analysts typically spend substantial time assessing vulnerability exploitability case by case. Recent LLM agents have emerged as promising candidates for this task given their advanced capabilities in coding and cybersecurity, yet no existing benchmark evaluates the…",
+      "summary": "【摘要】论文研究大语言模型智能体能否判断上游依赖中的已知漏洞是否影响下游项目。作者提出 VEX-Bench，收集 75 个由安全专家标注的 GitHub 真实案例，覆盖 Python、Java 和 Go，并在三种智能体运行框架下评测九个模型。摘要报告，部分模型的二元漏洞状态分类 F1 约为 80%，但细粒度理由分类仍更具挑战。当前仅依据摘要，无法核查数据划分、标注细节及完整实验结果。[摘要]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -690,11 +866,156 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注软件供应链安全或智能体安全评测的读者阅读：该研究提供真实案例基准，并区分状态判断与理由识别，可作为研究漏洞告警研判能力的参考。[摘要] 但给定资料未解释研究方向标签，不能确认与用户具体方向的契合程度。",
+      "deep_read": {
+        "problem": "【摘要】现有依赖漏洞告警可能因粗粒度匹配产生大量误报，安全分析人员需要逐案判断漏洞是否真正可利用。论文关注的关键问题是：上游依赖中的已知漏洞，是否能在具体下游项目中被利用，而不是发现未知漏洞。[摘要]",
+        "method": "【摘要】作者提出 VEX-Bench，从 GitHub 挖掘 75 个真实案例，由安全专家标注，覆盖 Python、Java 和 Go；评测涉及九个模型和三种智能体运行框架。摘要未交代案例筛选、标注流程及评测实现细节，暂无法判断其具体设计。[摘要]",
+        "innovation": "【摘要】论文将评测重点放在跨仓库推理：判断已知上游漏洞在下游项目中的可利用性，并考察细粒度理由分类。摘要称该基准为这一任务上的首个基准；【解读】这一首创性主张尚不能仅凭所给摘要独立核实。[摘要]",
+        "findings": "【摘要】GPT-5.5 和 Claude Opus 4.6 在二元漏洞状态分类上的 F1 约为 80%；在细粒度理由分类上，仅 GPT-5.5 的 macro-F1 超过 70%。作者据此指出，从二元判断走向具体可利用性理由识别仍有挑战。[摘要]",
+        "limitations": "【摘要】可见证据限于 75 个案例、三种语言及所报告的模型和框架；摘要没有提供数据划分、各类别分布、标注一致性或误差分析。【解读】因此暂不能判断结果对其他语言、项目或真实运维流程的适用程度，也不能将未报告事项视为实验缺陷。[摘要]",
+        "connection": "【解读】该任务与智能运维中的依赖漏洞告警分诊、可靠性风险识别存在联系：系统不仅要判断风险状态，还需给出可供核查的理由。摘要并未研究结构设计，也未报告部署后的人力节省或可靠性收益，不能直接推断实际效果。[摘要]",
+        "next_steps": "【建议】若将其用于研究，可先查阅完整论文与公开数据，核对案例构成、标注标准及评测流程，再分析智能体的判断理由能否被安全人员复核。进一步研究可考察不同项目环境下的告警分诊表现；这些是研究设想，并非作者已验证的结论。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "VEX-Bench：评测大语言模型智能体对软件供应链漏洞可利用性的判断能力",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.2615/"
+      ],
+      "analyzed_at": "2026-11-27T13:38:49.562852+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "上游依赖存在已知漏洞，并不等于下游项目一定可以被攻击。VEX-Bench 将这一判断转化为大语言模型智能体的评测任务，帮助读者理解：给出风险结论与解释风险原因，可能是难度不同的两件事。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从依赖漏洞告警到下游可利用性",
+            "paragraphs": [
+              "软件供应链依赖复杂而脆弱，攻击面随之扩大。摘要指出，GitHub Dependabot 等现有防御工具的粗粒度匹配难以判断漏洞依赖是否真的可被利用，因此常产生大量误报；安全分析人员则需要逐案花费大量时间进行评估。",
+              "这一问题不同于侧重发现和利用未知漏洞的零日漏洞评测：供应链安全关注的是上游依赖中的已知漏洞如何影响下游项目。智能体不仅要识别漏洞，还需要跨仓库推理，判断它在具体下游项目中是否可被利用。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "用真实案例评估跨仓库判断",
+            "paragraphs": [
+              "作者提出 VEX-Bench，评估大语言模型智能体对软件供应链漏洞可利用性的判断能力。基准包含从 GitHub 挖掘、由安全专家标注的 75 个真实案例，覆盖 Python、Java 和 Go。",
+              "研究在三种智能体运行框架下评估了九个模型，报告了二元漏洞状态分类与细粒度理由分类的表现。摘要未进一步说明案例构建、标注细则或各运行框架的具体配置。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "判断漏洞状态，仍难解释具体原因",
+            "paragraphs": [
+              "在二元漏洞状态分类中，GPT-5.5 和 Claude Opus 4.6 的 F1 均达到约 80%；但在细粒度理由分类中，只有 GPT-5.5 的 macro-F1 超过 70%。",
+              "这组结果表明，在所报告的评测中，从判断漏洞状态走向识别细粒度可利用性原因仍有挑战。摘要没有提供全部模型的逐项结果，因此不能据此推断其他模型之间的完整排序。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不足以界定的评测范围",
+            "paragraphs": [
+              "摘要给出了案例总数、来源和语言覆盖范围，但未说明案例在各语言或漏洞类型之间的分布，也未交代专家标注的一致性。仅凭这些信息，难以判断样本对更广泛软件项目的代表性。",
+              "摘要也未详细报告模型与运行框架之间的逐项比较、具体评测设置，以及基准之外的验证范围。因此，所列分数应理解为摘要报告的基准结果，而非已经证明智能体在所有实际场景中的表现。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：把结论与理由分开审视",
+            "paragraphs": [
+              "阅读启发：关注大语言模型智能体用于安全分析时，不妨同时追问它是否判断对了漏洞状态，以及给出的可利用性理由是否准确。进一步阅读时，可留意原文如何定义细粒度理由、组织跨仓库信息，并比较不同运行框架下的结果。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的基准构建与评估",
+            "description": "仅概括摘要明确陈述的案例来源、标注及评估环节，不表示未报告的实验配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "GitHub 真实案例",
+                "detail": "从 GitHub 挖掘软件供应链漏洞案例"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "安全专家标注",
+                "detail": "由安全专家为案例提供标注"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "VEX-Bench",
+                "detail": "用于评估智能体的漏洞可利用性判断"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "模型与运行框架评估",
+                "detail": "在智能体运行框架下评估模型"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "状态与理由分类",
+                "detail": "报告二元漏洞状态和细粒度理由分类表现"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "案例标注"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "构成基准"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "开展评估"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "报告分类表现"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-27T13:40:51.242177+00:00",
+      "article_profile": "ff24d674b12a3cb95f4caa8951c00deda3f0bed43d738c5db1283812299adb7e",
+      "analysis_references": {},
+      "analysis_material_version": "2822522b4894ae8a14af2a01118f2a4cb9774ada7742a16c7dad2ffdd72ea8c8",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "8a09e096f8e0",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T13:40:51.242177+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "extended": [],
@@ -853,7 +1174,7 @@
         "state": "published",
         "updated_at": "2026-11-26T23:48:15.759119+00:00",
         "basis": "full_text",
-        "article_state": "retry",
+        "article_state": "failed",
         "article_stage": "facts",
         "reason": "",
         "total": 19,
@@ -955,13 +1276,12 @@
       "recommended_direction": "direction_7a61b97a",
       "reading_status": {
         "paper_id": "6a75d1610157",
-        "state": "retry",
-        "updated_at": "2026-11-26T23:54:14.923316+00:00",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:18:45.226052+00:00",
         "basis": "full_text",
         "article_state": "pending",
         "article_stage": "",
         "reason": "",
-        "next_retry_at": "2026-11-26T23:59:14.923316+00:00",
         "total": 12,
         "covered": 12,
         "pdf_available": true,
@@ -1112,8 +1432,8 @@
         "state": "published",
         "updated_at": "2026-11-26T23:57:00.791897+00:00",
         "basis": "full_text",
-        "article_state": "pending",
-        "article_stage": "",
+        "article_state": "failed",
+        "article_stage": "facts",
         "reason": "",
         "total": 21,
         "covered": 21,
@@ -1142,7 +1462,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Editable diagram generation from natural language requires structural correctness and visual readability. Text-to-image models produce rasters with no editable objects. LLM code-generation approaches yield editable output but face three challenges: unreliable geometry from token-by-token coordinate emission, shallow verification that checks code rather than the rendered image, and dependence on task-specific fine-tuning. We present VISTA, a training-free pipeline that assigns each subproblem to the appropriate component: an LLM extracts semantic structure, a deterministic algorithm computes al…",
+      "summary": "【摘要】论文研究如何从自然语言生成结构正确、视觉清晰且可编辑的图表。VISTA 将语义结构提取、几何计算和渲染结果检查分别交给语言模型、确定性算法和视觉语言模型，并通过局部修复改进图表。作者构建了包含 150 条提示的基准，与八个基线比较，报告 VISTA 在所有成对比较中具有最高可读性。[摘要]当前仅有摘要，无法核查具体实验过程及其他评价结果。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -1201,11 +1521,43 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "【解读】如果关注自然语言生成可编辑图表，值得重点阅读其任务拆分与渲染后检查方法；但给定研究方向仅有不透明的标签，无法确认它与目标方向是否切合。",
+      "deep_read": {
+        "problem": "【摘要】论文关注从自然语言生成兼具结构正确性和视觉可读性的可编辑图表。摘要指出，文本生成图像模型产生的栅格图没有可编辑对象；代码生成方法虽可编辑，却面临几何不可靠、验证较浅及依赖任务专用微调的问题。[摘要]",
+        "method": "【摘要】VISTA 是免训练流程：语言模型提取语义结构，确定性算法计算全部几何信息，视觉语言模型结合图表渲染结果与源代码进行检查，并提出局部修复。摘要未说明几何算法、检查提示或修复执行的具体实现。[摘要]",
+        "innovation": "【摘要】作者将不同子问题分配给不同组件，并让视觉语言模型同时检查渲染图表和源代码。[摘要]【解读】这一组合针对摘要列出的几何生成与验证问题；但仅凭摘要，无法判断各组件或组合方式相对已有工作的技术新颖程度。",
+        "findings": "【摘要】作者从仅有 PNG 的参考图构建包含 150 条提示的基准，并与包括 Codex、Claude Code 和一个经过微调的多智能体系统在内的八个基线比较；摘要报告 VISTA 在所有成对比较中可读性最高。[摘要]具体评分和其他指标未在摘要中给出。",
+        "limitations": "【摘要】当前资料只有摘要，没有提供基准的具体组成、可读性评价流程或结构正确性的结果，因此无法核查结论的适用范围。[摘要]【解读】这些是现有资料的证据限制，不能直接视为作者已证实的方法缺陷或实验局限。",
+        "connection": "【解读】若研究涉及智能运维或结构设计中的示意图表达，可关注该方法如何把语义、几何与视觉检查分开处理。但摘要未报告这些领域的应用，也未评估工程结构可靠性；给定方向标签未释义，不能据此认定论文与目标方向直接相关。[摘要]",
+        "next_steps": "【建议】可在取得论文全文后，优先核查基准构造、成对比较的评价者与判据，以及局部修复的具体流程；再根据自身任务判断是否需要测试图表可编辑性和结构正确性。上述内容是后续阅读与研究建议，不是摘要报告的作者结论。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "VISTA：面向结构的免训练自然语言可编辑图表生成",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.2403/"
+      ],
+      "analyzed_at": "2026-11-27T13:34:30.517546+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {},
+      "analysis_material_version": "ba0b63d34aa1b7c0d2a2a28de9c5563f0eab0af9c12817cb4fa677705af2ba62",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "a366c01ef5c9",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T13:34:30.519564+00:00",
+        "basis": "abstract",
+        "article_state": "failed",
+        "article_stage": "writing",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -1231,7 +1583,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Video editing has become essential in digital media creation, yet existing automated systems are restricted to short segment processing and domain-specific tasks. They face two critical limitations: i) inability to handle diverse video comprehension and editing operations, and ii) lack of long-video understanding for coherent narrative creation. We propose VideoAgent, an all-in-one agentic framework addressing these challenges through two key innovations. First, we develop automated video shot creation with shot planning agents for coherent narratives and cross-modal retrieval for aligned visu…",
+      "summary": "【摘要】论文针对自动视频系统难以同时处理多样理解与编辑任务、缺乏长视频叙事理解的问题，提出一体化智能体框架 VideoAgent。该框架通过镜头规划与跨模态检索生成视频镜头，并利用多智能体编排构建编辑流程。摘要报告了基准测试、公开数据集和人工评价结果，但未提供实验细节，相关结论仍需结合全文核查。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -1290,11 +1642,156 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "【摘要】【解读】如果研究关注视频理解、编辑智能体或多工具协作，本文值得进一步阅读；其镜头规划与编辑流程编排提供了明确的方法线索，但当前未给出研究方向的具体内容，无法确认方向匹配。",
+      "deep_read": {
+        "problem": "【摘要】论文指出，现有自动化视频系统受限于短片段处理和特定领域任务，并面临两项挑战：难以处理多样的视频理解与编辑操作，以及缺少对长视频的理解，因而难以创建连贯叙事。",
+        "method": "【摘要】VideoAgent 使用镜头规划智能体进行自动镜头创建，并通过跨模态检索匹配视觉内容；其多智能体编排框架整合三十多个专用编辑智能体，以意图解析筛选工具，再通过文本梯度图优化组装复杂编辑流程。",
+        "innovation": "【摘要】作者提出两项关键创新：将镜头规划与跨模态检索结合，用于生成连贯叙事；以及构建整合多个专用编辑智能体的编排框架。【解读】这些是作者在摘要中的创新主张，其相对既有工作的独创性尚需查阅全文核实。",
+        "findings": "【摘要】作者报告，在新提出的 VideoEdit 基准和公开数据集上的实验显示，该框架优于现有多模态大语言模型和智能体系统；编排成功率为 87%—95%，API 成本降低 60%。六类视频的人工评价评分比人工制作视频低 4%。",
+        "limitations": "【摘要】【解读】摘要未说明实验样本规模、具体对比系统、评价标准或成本计算口径，也未详述失败案例，因此无法判断结果的统计可靠性与适用边界。上述是当前资料的证据缺口，不应直接认定为论文自身的全部局限。",
+        "connection": "【摘要】【解读】意图解析、专用智能体协作和复杂流程组装，与智能运维中的任务分解及工具编排存在形式上的联系；但摘要研究对象是视频理解与编辑，未提供结构设计或可靠性研究中的应用及有效性证据。",
+        "next_steps": "【建议】若能获取全文，可优先核查 VideoEdit 的任务构成、对比方法、成功率定义、API 成本口径及人工评价程序，并关注长视频测试与失败案例。若考虑迁移至智能运维，还需另行验证工具调用安全性和复杂流程的可靠性。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "VideoAgent：视频理解与编辑一体化框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.949/"
+      ],
+      "analyzed_at": "2026-11-27T13:36:32.867727+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "如何让自动视频系统既能处理多样的编辑操作，又能理解长视频并形成连贯叙事？VideoAgent 尝试把镜头创作与多智能体编排结合起来，为理解复杂视频编辑任务提供了一个观察视角。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从短片段处理走向连贯叙事",
+            "paragraphs": [
+              "视频编辑已成为数字媒体创作的重要环节，但摘要指出，现有自动化系统往往局限于短片段处理和特定领域任务。面对多样的视频理解与编辑操作，以及需要长视频理解的连贯叙事创作，这些系统仍有局限。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "镜头创作与编辑智能体编排",
+            "paragraphs": [
+              "VideoAgent 是一个一体化智能体框架。摘要描述了自动视频镜头创作：镜头规划智能体用于形成连贯叙事，跨模态检索用于获取与之对齐的视觉内容。",
+              "框架还集成了三十多个专业编辑智能体。意图解析用于筛选相关工具，文本梯度图优化则用于组装复杂编辑流水线；摘要没有进一步说明这两个环节之间的执行顺序。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "编排成功率与人工评价结果",
+            "paragraphs": [
+              "摘要称，作者在新提出的 VideoEdit 基准和公开数据集上开展实验，结果显示 VideoAgent 优于现有多模态大语言模型和智能体系统。报告的编排成功率为 87-95%，API 成本降低了 60%。",
+              "覆盖六类视频的人工评价显示，生成内容的质量接近人类水平，评分仅比人类创作的视频低 4%。这些是摘要对评价结果的概括，具体评分方式和比较条件仍需查阅论文。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不能回答的验证细节",
+            "paragraphs": [
+              "摘要没有报告样本规模、视频时长分布、具体比较系统及 API 成本的计算条件，因此仅凭摘要难以判断结果适用的任务范围，也不能独立核对不同系统之间的比较。",
+              "人工评价的参与者、评分标准和各类别表现，以及长视频理解与叙事连贯性的具体验证方式，摘要同样没有交代。这些信息未出现在摘要中，并不意味着论文没有开展相关分析。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注多模态工具如何协作",
+            "paragraphs": [
+              "阅读启发：对于关注多模态大语言模型与智能体的读者，可以进一步阅读镜头规划、跨模态检索和编辑工具编排各自承担什么角色，以及它们如何共同服务于视频创作。",
+              "建议同时查看基准任务、比较条件和人工评价细节，以理解摘要中的成功率、成本与质量指标分别衡量了什么，以及结论能够覆盖哪些场景。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的编辑智能体编排示意",
+            "description": "仅概括摘要明确描述的多智能体编排环节，不表示意图解析与图优化之间存在直接依赖或先后顺序。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "多智能体编排框架",
+                "detail": "集成三十多个专业编辑智能体"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "意图解析",
+                "detail": "筛选相关工具"
+              },
+              {
+                "id": "c",
+                "stage": 1,
+                "label": "文本梯度图优化",
+                "detail": "组装复杂编辑流水线"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "相关工具",
+                "detail": "意图解析筛选的工具"
+              },
+              {
+                "id": "e",
+                "stage": 2,
+                "label": "复杂编辑流水线",
+                "detail": "通过文本梯度图优化组装"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "包含"
+              },
+              {
+                "from": "a",
+                "to": "c",
+                "label": "包含"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "筛选"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "组装"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-27T13:44:10.424888+00:00",
+      "article_profile": "7009856f111d4cacbaebaa13d659f48a33fe15df15f2bc8e3433b32f9bf3d2a4",
+      "analysis_references": {},
+      "analysis_material_version": "8879aa3a6dc308a9429e28d62a05e1772c7f5c8737c195241430f9353e1fd269",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "1fd0ac39303b",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T13:44:10.424888+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -1326,7 +1823,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "The software supply chain has become an increasingly exposed attack surface because of its reliance on intricate yet fragile dependencies. Existing defenses such as GitHub Dependabot often raise many false alerts because their coarse-grained matching cannot determine whether a vulnerable dependency is actually exploitable. Security analysts typically spend substantial time assessing vulnerability exploitability case by case. Recent LLM agents have emerged as promising candidates for this task given their advanced capabilities in coding and cybersecurity, yet no existing benchmark evaluates the…",
+      "summary": "【摘要】论文研究大语言模型智能体能否判断上游依赖中的已知漏洞是否影响下游项目。作者提出 VEX-Bench，收集 75 个由安全专家标注的 GitHub 真实案例，覆盖 Python、Java 和 Go，并在三种智能体运行框架下评测九个模型。摘要报告，部分模型的二元漏洞状态分类 F1 约为 80%，但细粒度理由分类仍更具挑战。当前仅依据摘要，无法核查数据划分、标注细节及完整实验结果。[摘要]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -1385,11 +1882,156 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注软件供应链安全或智能体安全评测的读者阅读：该研究提供真实案例基准，并区分状态判断与理由识别，可作为研究漏洞告警研判能力的参考。[摘要] 但给定资料未解释研究方向标签，不能确认与用户具体方向的契合程度。",
+      "deep_read": {
+        "problem": "【摘要】现有依赖漏洞告警可能因粗粒度匹配产生大量误报，安全分析人员需要逐案判断漏洞是否真正可利用。论文关注的关键问题是：上游依赖中的已知漏洞，是否能在具体下游项目中被利用，而不是发现未知漏洞。[摘要]",
+        "method": "【摘要】作者提出 VEX-Bench，从 GitHub 挖掘 75 个真实案例，由安全专家标注，覆盖 Python、Java 和 Go；评测涉及九个模型和三种智能体运行框架。摘要未交代案例筛选、标注流程及评测实现细节，暂无法判断其具体设计。[摘要]",
+        "innovation": "【摘要】论文将评测重点放在跨仓库推理：判断已知上游漏洞在下游项目中的可利用性，并考察细粒度理由分类。摘要称该基准为这一任务上的首个基准；【解读】这一首创性主张尚不能仅凭所给摘要独立核实。[摘要]",
+        "findings": "【摘要】GPT-5.5 和 Claude Opus 4.6 在二元漏洞状态分类上的 F1 约为 80%；在细粒度理由分类上，仅 GPT-5.5 的 macro-F1 超过 70%。作者据此指出，从二元判断走向具体可利用性理由识别仍有挑战。[摘要]",
+        "limitations": "【摘要】可见证据限于 75 个案例、三种语言及所报告的模型和框架；摘要没有提供数据划分、各类别分布、标注一致性或误差分析。【解读】因此暂不能判断结果对其他语言、项目或真实运维流程的适用程度，也不能将未报告事项视为实验缺陷。[摘要]",
+        "connection": "【解读】该任务与智能运维中的依赖漏洞告警分诊、可靠性风险识别存在联系：系统不仅要判断风险状态，还需给出可供核查的理由。摘要并未研究结构设计，也未报告部署后的人力节省或可靠性收益，不能直接推断实际效果。[摘要]",
+        "next_steps": "【建议】若将其用于研究，可先查阅完整论文与公开数据，核对案例构成、标注标准及评测流程，再分析智能体的判断理由能否被安全人员复核。进一步研究可考察不同项目环境下的告警分诊表现；这些是研究设想，并非作者已验证的结论。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "VEX-Bench：评测大语言模型智能体对软件供应链漏洞可利用性的判断能力",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.2615/"
+      ],
+      "analyzed_at": "2026-11-27T13:38:49.562852+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "上游依赖存在已知漏洞，并不等于下游项目一定可以被攻击。VEX-Bench 将这一判断转化为大语言模型智能体的评测任务，帮助读者理解：给出风险结论与解释风险原因，可能是难度不同的两件事。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从依赖漏洞告警到下游可利用性",
+            "paragraphs": [
+              "软件供应链依赖复杂而脆弱，攻击面随之扩大。摘要指出，GitHub Dependabot 等现有防御工具的粗粒度匹配难以判断漏洞依赖是否真的可被利用，因此常产生大量误报；安全分析人员则需要逐案花费大量时间进行评估。",
+              "这一问题不同于侧重发现和利用未知漏洞的零日漏洞评测：供应链安全关注的是上游依赖中的已知漏洞如何影响下游项目。智能体不仅要识别漏洞，还需要跨仓库推理，判断它在具体下游项目中是否可被利用。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "用真实案例评估跨仓库判断",
+            "paragraphs": [
+              "作者提出 VEX-Bench，评估大语言模型智能体对软件供应链漏洞可利用性的判断能力。基准包含从 GitHub 挖掘、由安全专家标注的 75 个真实案例，覆盖 Python、Java 和 Go。",
+              "研究在三种智能体运行框架下评估了九个模型，报告了二元漏洞状态分类与细粒度理由分类的表现。摘要未进一步说明案例构建、标注细则或各运行框架的具体配置。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "判断漏洞状态，仍难解释具体原因",
+            "paragraphs": [
+              "在二元漏洞状态分类中，GPT-5.5 和 Claude Opus 4.6 的 F1 均达到约 80%；但在细粒度理由分类中，只有 GPT-5.5 的 macro-F1 超过 70%。",
+              "这组结果表明，在所报告的评测中，从判断漏洞状态走向识别细粒度可利用性原因仍有挑战。摘要没有提供全部模型的逐项结果，因此不能据此推断其他模型之间的完整排序。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不足以界定的评测范围",
+            "paragraphs": [
+              "摘要给出了案例总数、来源和语言覆盖范围，但未说明案例在各语言或漏洞类型之间的分布，也未交代专家标注的一致性。仅凭这些信息，难以判断样本对更广泛软件项目的代表性。",
+              "摘要也未详细报告模型与运行框架之间的逐项比较、具体评测设置，以及基准之外的验证范围。因此，所列分数应理解为摘要报告的基准结果，而非已经证明智能体在所有实际场景中的表现。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：把结论与理由分开审视",
+            "paragraphs": [
+              "阅读启发：关注大语言模型智能体用于安全分析时，不妨同时追问它是否判断对了漏洞状态，以及给出的可利用性理由是否准确。进一步阅读时，可留意原文如何定义细粒度理由、组织跨仓库信息，并比较不同运行框架下的结果。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的基准构建与评估",
+            "description": "仅概括摘要明确陈述的案例来源、标注及评估环节，不表示未报告的实验配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "GitHub 真实案例",
+                "detail": "从 GitHub 挖掘软件供应链漏洞案例"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "安全专家标注",
+                "detail": "由安全专家为案例提供标注"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "VEX-Bench",
+                "detail": "用于评估智能体的漏洞可利用性判断"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "模型与运行框架评估",
+                "detail": "在智能体运行框架下评估模型"
+              },
+              {
+                "id": "e",
+                "stage": 4,
+                "label": "状态与理由分类",
+                "detail": "报告二元漏洞状态和细粒度理由分类表现"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "案例标注"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "构成基准"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "开展评估"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "报告分类表现"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-27T13:40:51.242177+00:00",
+      "article_profile": "ff24d674b12a3cb95f4caa8951c00deda3f0bed43d738c5db1283812299adb7e",
+      "analysis_references": {},
+      "analysis_material_version": "2822522b4894ae8a14af2a01118f2a4cb9774ada7742a16c7dad2ffdd72ea8c8",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "8a09e096f8e0",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T13:40:51.242177+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "source_status": {
@@ -2391,13 +3033,13 @@
     "unavailable": 46
   },
   "analysis_status": {
-    "ready_core": 2,
+    "ready_core": 5,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 4
+    "pending": 1
   },
   "edition": {
     "id": "43716690543",

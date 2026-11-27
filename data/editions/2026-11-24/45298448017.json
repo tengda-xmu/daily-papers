@@ -24,7 +24,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《LitMOF: An LLM Multi-Agent for Literature-Validated Metal-Organic Frameworks Database Correction and Expansion》，暂未提供可用摘要，请查看原文。",
+      "summary": "本文针对金属有机框架数据库中的结构错误及文献记录缺失，提出由大语言模型驱动的多智能体框架，以原始论文、数据库和晶体结构文件交叉核验并修复结构。[P1][P2] 作者构建了包含189,567个可计算结构的数据库，并单独整理8,771个已合成但未存档框架的信息。[P1][P7] 直接空气捕集计算筛选显示，结构修正会改变吸附预测和候选材料排序；该案例并非捕集性能的实验验证。[P8][P9]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -69,11 +69,105 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注材料数据库治理、文献与结构数据融合及科学智能体的读者重点阅读：论文同时提供可追踪的修正流程、人工核验和下游筛选案例，但无序修正与几何合理性仍有限制。[P4][P6][P8]",
+      "deep_read": {
+        "problem": "现有金属有机框架数据库中的结构错误可能传递至高通量筛选与机器学习；实验信息又分散在论文和晶体文件等来源中，人工逐一协调成本很高。另有部分材料虽在文献中报告，却未以完整CIF存档，因而难以进入结构数据库。[P1][P2]",
+        "method": "系统采用层级式计划—执行架构，由监督智能体协调数据库读取、论文读取、参考结构构建、检查编辑和可选模拟。检查阶段比较元素组成、配位环境与子图，识别键、氢和无序错误；无序候选再借助机器学习原子间势能筛选。[P2][P4][P5]",
+        "innovation": "论文将非结构化文献证据与结构化数据库、CIF图表示结合，不仅识别不一致，还尝试恢复可计算结构。对已合成但未存档的材料，系统记录母体及转化信息；仅在转化明确时生成模型CIF，并将其与实验结构数据库分开。[P3][P7]",
+        "findings": "作者报告键、氢和无序错误的修正率分别为91.5%、93.2%和33.7%；分层人工核验的1,000个结构中988个正确。[P6] 直接空气捕集筛选中，原始与修正结构共同识别46个候选，原始结构漏掉236个修正后候选，并产生146个修正后不再支持的候选。[P8]",
+        "limitations": "图连接正确不保证几何合理；为维持实验结构属性，作者排除部分需要重建或优化重原子位置的结构。[P6] 无序修正可能存在多个合理构型。[P9] 经典力场和蒙特卡洛的完整对比在未提供的补充材料中。[P10] 核对记录未报告原文件缺项；P9、P10公式乱码是已纠正的提取错误。",
+        "connection": "解读：多源证据核验与错误修复可为结构设计数据治理提供参考；图连接正确但几何不合理的情况，也提示可靠性评价应结合拓扑与几何。[P6] 将该流程用于智能运维或其他结构体系仍是类比，本论文资料未验证其迁移效果。",
+        "next_steps": "建议在后续研究中分别核查拓扑一致性、几何合理性与修正结果的来源，并对无序结构保留多个候选以评估结论敏感性。[P6][P9] 建议进一步结合补充材料及独立实验检验筛选结果；这些是研究设想，不是作者已证明的成果。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "LitMOF：用于文献验证的金属有机框架数据库修正与扩展的大语言模型多智能体系统",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41467-026-79242-w_reference.pdf"
+      ],
+      "analyzed_at": "2026-11-27T11:46:20.352527+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P2",
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P3",
+          "P7"
+        ],
+        "findings": [
+          "P6",
+          "P8"
+        ],
+        "limitations": [
+          "P6",
+          "P9",
+          "P10"
+        ],
+        "connection": [
+          "P6"
+        ],
+        "next_steps": [
+          "P6",
+          "P9"
+        ]
+      },
+      "analysis_material_version": "9af1a3407ad72d0b83352491bf540a37df5ef2212b56d6e3cbba35479169dc5f",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "文字提取遗漏原页出版日期“Published online: 23 November 2026”；[上传截图1]可辨认。该遗漏不影响本页摘要中的研究结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "公式（1）和（2）的文字提取出现“/C0”等乱码。原页可读：ΔU = U(MOF + gas) − U(MOF) − U(gas)；Qst = kBT − ⟨ΔU exp(−ΔU/(kBT))⟩ / ⟨exp(−ΔU/(kBT))⟩。不纠正会影响对相互作用能和吸附热计算的理解。[上传截图3]"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P10",
+          "detail": "公式（3）文字提取将负号、括号及系综平均符号误作“/C0”等乱码。原页为 K_H = ⟨exp(−ΔU/(k_B T))⟩/(k_B T)；公式（4）为 S_A/B = K_H^A/K_H^B。不纠正会影响 Henry 常数及选择性计算的理解。[上传截图1]"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "4dcb6c55ca3a",
+        "state": "published",
+        "updated_at": "2026-11-27T11:46:20.374283+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 12,
+        "covered": 12,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "文字提取遗漏原页出版日期“Published online: 23 November 2026”；[上传截图1]可辨认。该遗漏不影响本页摘要中的研究结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "公式（1）和（2）的文字提取出现“/C0”等乱码。原页可读：ΔU = U(MOF + gas) − U(MOF) − U(gas)；Qst = kBT − ⟨ΔU exp(−ΔU/(kBT))⟩ / ⟨exp(−ΔU/(kBT))⟩。不纠正会影响对相互作用能和吸附热计算的理解。[上传截图3]"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "公式（3）文字提取将负号、括号及系综平均符号误作“/C0”等乱码。原页为 K_H = ⟨exp(−ΔU/(k_B T))⟩/(k_B T)；公式（4）为 S_A/B = K_H^A/K_H^B。不纠正会影响 Henry 常数及选择性计算的理解。[上传截图1]"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -101,7 +195,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Retrieval-augmented LLM agents increasingly rely on curated skill banks: collections of reusable textual principles that guide decision making on complex tasks. Existing approaches typically expand these banks in an append-only fashion, continuously adding new skills without removing redundant, outdated, or harmful ones, resulting in inefficient and poorly curated repositories. In this paper, we formulate skill bank curation as a constrained multi-objective problem: a desirable bank must be useful for the agent, diverse in its content, and provide good coverage of the query distribution. To th…",
+      "summary": "论文研究如何避免智能体技能库只增不减，提出免训练的 SkillBrew，将效用、多样性和覆盖率纳入全库优化。方法通过反事实回放诊断技能，在支持集生成候选编辑，再于查询集进行帕累托选择。[P3][P5] 三个基准的结果显示其相对基线有提升，并分析了跨模型迁移和整理成本。[P7][P13] 作者同时指出，智能体冻结、回放开销及相对静态的任务分布限制了适用范围。[P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -160,11 +254,75 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注智能体程序性知识管理的读者重点阅读：论文不仅给出技能增删改和全库选择流程，还提供消融、迁移及成本分析；但实际部署到其他领域仍需验证。[P5][P8][P13]",
+      "deep_read": {
+        "problem": "现有技能库可能持续追加冗余、过时或有害知识，单技能评分也难以反映全库结构。[P1][P2] 作者关注如何在有限检索容量下兼顾技能效用、多样性与任务覆盖；同时，技能共同检索使贡献归因困难，而轨迹回放和开放式编辑又使直接优化代价高昂。[P2][P5]",
+        "method": "SkillBrew 先依据无检索轨迹初始化技能库，再在支持集上蒸馏新增候选，并以逐技能留一回放提出保留、重写或删除判定。[P5][P15] 外层在查询集评估候选库，保留不修改当前库的选项，并在效用容差内利用多样性和覆盖率选择下一轮技能库。[P5]",
+        "innovation": "作者将整理对象从孤立技能扩展至整个技能库，把效用作为优先约束，并用多样性和覆盖率描述库的组织质量。[P3][P4] 双层候选生成与帕累托验证结合了反事实诊断、空操作候选和可控效用容差；这些是论文提出的组合设计，不意味着各组成技术单独首次出现。[P5]",
+        "findings": "在冻结的 Qwen2.5-7B-Instruct 工作模型上，SkillBrew 的 ALFWorld 平均成功率为59.0%，WebShop 成功率为38.4%。[P7] 消融中，ALFWorld 仅用效用目标为45.8%，三目标联合为59.0%；跨模型技能库均优于无库 ReAct，但各模型使用自身整理的库时表现最佳。[P8]",
+        "limitations": "作者指出，实验冻结智能体，未探索其与技能库共同适应；反复轨迹运行和留一回放仍有扩展成本，且方法假设任务分布相对静态。[P9] 对比也未涵盖联合更新智能体与技能库的训练型方法。[P6] 所提供的逐页笔记未报告经原页核实的文件缺项，不能据此推造缺失公式。",
+        "connection": "解读：技能适用条件、反事实诊断和全库去冗余可为智能运维知识库提供组织思路，例如区分有效操作规程与占用检索位置的条目。[P4][P16] 但论文实验是家庭任务、购物和科学环境，资料未提供真实运维、结构设计或可靠性场景的直接验证。[P6]",
+        "next_steps": "建议先在可回放的运维任务中构建带适用条件的操作技能，比较只追加与增删改结合的策略，并分别报告任务成功、覆盖和整理开销。[P9][P13] 再检验跨模型复用、动态工况及错误操作风险；这些是迁移研究设想，不能视为作者已经完成的实验。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SkillBrew：面向大语言模型智能体技能库的多目标整理",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.626.pdf"
+      ],
+      "analyzed_at": "2026-11-27T11:52:51.821421+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P5"
+        ],
+        "method": [
+          "P5",
+          "P15"
+        ],
+        "innovation": [
+          "P3",
+          "P4",
+          "P5"
+        ],
+        "findings": [
+          "P7",
+          "P8"
+        ],
+        "limitations": [
+          "P6",
+          "P9"
+        ],
+        "connection": [
+          "P4",
+          "P6",
+          "P16"
+        ],
+        "next_steps": [
+          "P9",
+          "P13"
+        ]
+      },
+      "analysis_material_version": "fb5b1333b28f860c0e9e433c4de3f6b8d1a2f99d947d939b63caa96da5ca6363",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "8cb229ca83fe",
+        "state": "published",
+        "updated_at": "2026-11-27T11:52:51.856444+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 19,
+        "covered": 19,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -195,7 +353,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Long-horizon LLM agents can benefit from reusable skills, yet existing skill-based methods often rely on external skill generators during training or persistent skill retrieval at inference, increasing engineering complexity, context length, and deployment latency. We propose Self-Internalizing Reinforcement learning with Intrinsic skills (SIRI), a three-phase framework that enables agents to discover, validate, and internalize skills without external skill generators or inference-time skill banks. SIRI first warms up the policy with GiGPO to acquire basic interaction ability and collect succe…",
+      "summary": "本文研究如何让长时程大语言模型智能体自行发现并吸收可复用技能，避免推理时依赖技能库。SIRI先预热策略，再从成功的无技能轨迹中挖掘候选技能，通过配对轨迹检验效用，最后按动作优势选择性蒸馏。[P5][P6] 两个智能体基准上的实验显示，相比GiGPO，方法提升了总体表现；作者同时承认尚无专门优化技能挖掘的训练信号。[P7][P10]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -254,11 +412,87 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注长时程智能体强化学习、经验复用与低依赖部署的研究者阅读，重点参考配对效用验证和动作级选择性蒸馏；向智能运维迁移仍需领域验证。",
+      "deep_read": {
+        "problem": "长时程智能体需要在部分可观测环境中持续行动，而训练中的外部技能构建模块以及推理时的技能检索会增加系统复杂度。[P2][P3] 论文关注两个关联问题：如何从自身经验发现可靠技能，以及如何避免将无用的技能引导文本一并内化。",
+        "method": "SIRI先用GiGPO预热，再由冻结策略从成功的无技能轨迹提取候选技能，以技能增强组与基线组的回报差更新技能效用。[P5] 内化阶段仅在组级效用为正时，对可执行动作词元按正优势加权蒸馏；训练后丢弃技能库。[P6]",
+        "innovation": "论文的主要方法组合是把自主技能生成、在线配对效用验证和动作级选择性内化串联起来：技能先作为待验证假设，而非默认可信的监督；教师与学生共享策略但使用不同上下文。[P5][P6] 其目标是在训练期利用技能、在推理期去除检索依赖。",
+        "findings": "以Qwen2.5-7B-Instruct为基础时，SIRI在ALFWorld上的总体成功率为0.930，WebShop得分和成功率为0.899、0.813。[P7] 消融中，无内化且无技能推理的成功率为0.719；完整方法为0.813。小模型及不同优化算法实验也显示收益。[P8]",
+        "limitations": "作者指出，当前没有专门优化自技能挖掘的显式训练信号。[P10] 评审分数与任务成功率的相关性不能单独证明因果；附录运行步数与曲线横轴的含义也需核对。[P12] 本批核对记录未报告原文件缺项；P15循环语句的提取错误已纠正。",
+        "connection": "解读：对智能运维，成功处置轨迹可类比为候选操作技能，配对验证与选择性内化可作为降低运行期检索依赖的研究思路。[P5][P6] 但论文实验是家居任务和购物任务，当前资料没有结构设计或工程可靠性场景的直接验证。",
+        "next_steps": "建议在可控运维仿真中先定义安全约束和成功指标，再比较有无技能、内化前后及不同随机种子的表现；同时检查错误技能对关键动作的影响。[P5][P12] 可另研究显式技能挖掘信号，但这些均是迁移设想，而非论文已验证结果。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SIRI：利用内在技能自内化强化学习训练大语言模型智能体",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.192.pdf"
+      ],
+      "analyzed_at": "2026-11-27T11:56:24.882448+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P5",
+          "P6"
+        ],
+        "innovation": [
+          "P5",
+          "P6"
+        ],
+        "findings": [
+          "P7",
+          "P8"
+        ],
+        "limitations": [
+          "P10",
+          "P12",
+          "P15"
+        ],
+        "connection": [
+          "P5",
+          "P6",
+          "P7"
+        ],
+        "next_steps": [
+          "P5",
+          "P10",
+          "P12"
+        ]
+      },
+      "analysis_material_version": "92f9c6a9602b6ef36955ae43544ce5d85c1518116263f158d621adc35a0a2443",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "算法1第4行的文字提取将“for k = 1 to K do”连写成“fork = 1 to K do”；原页为训练迭代循环，纠正后不改变算法结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "872fba40a307",
+        "state": "published",
+        "updated_at": "2026-11-27T11:56:24.917020+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 15,
+        "covered": 15,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "算法1第4行的文字提取将“for k = 1 to K do”连写成“fork = 1 to K do”；原页为训练迭代循环，纠正后不改变算法结论。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -282,7 +516,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "LLM agents solve repository-level coding tasks through multi-turn tool use, but utilize half their budget on locating faults before editing. Dedicated localization frameworks have emerged, yet are still evaluated as file retrieval rather than actionable diagnosis, producing locations without the diagnostic context a repair agent needs. We introduce SHERLOC (Structured Hypothesis-driven Exploration and Reasoning for Localization), a training-free framework pairing a reasoning LLM with compact repository tools and self-recovery, without fine-tuning or multi-agent orchestration. SHERLOC reaches s…",
+      "summary": "论文研究代码修复代理如何从仓库中定位故障，并为后续修复提供可操作的诊断上下文。SHERLOC结合单个推理模型、仓库工具和自恢复机制，输出代码位置及根因、解决思路等结构化信息。实验显示其文件级定位表现较强，诊断注入平均降低搜索成本，但收益随修复模型和诊断质量变化；质量过滤结果依赖真实补丁，属于回顾性分析。[P2][P3][P8]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -341,11 +575,73 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注智能代理故障定位与诊断交接的读者重点阅读：论文同时考察定位准确率、下游修复和计算成本，并通过负迁移案例展示诊断质量的重要性。[P8][P26]",
+      "deep_read": {
+        "problem": "仓库级修复代理不仅要找到需要修改的文件，还要判断故障根因和可行修复方向。作者指出，仅给出路径缺少下游修复所需的诊断上下文；所研究代理在首次补丁前平均用18.5轮定位，占总交互的48%。[P1]",
+        "method": "SHERLOC先过滤仓库视图，再由单个推理模型通过文件查看、字面搜索、仓库树和导入关系工具迭代探索，最多交互20轮。系统通过循环检测、上下文截断和最终轮提示恢复，并输出位置及五字段诊断。[P2][P5]",
+        "innovation": "论文将定位结果组织为位置解释、根因、解决思路、依赖和测试影响，而非仅返回文件排名；同时用行区间上的覆盖召回、精确率和平均紧致度补充文件级评价，以覆盖不局限于函数或类的编辑目标。[P2][P4]",
+        "findings": "Qwen3-235B在Lite取得84.33±0.72% accuracy@1，在Verified取得81.27±1.16% recall@1。未过滤诊断的十个下游设置中有五个经校正后显著改善；MiniMax/OpenHands则显著下降，说明迁移并非总是正向。[P6][P26]",
+        "limitations": "公开仓库的预训练熟悉度未被完全排除，向私有或未见仓库及其他语言的推广仍待验证。QF使用真实补丁评审，不能直接部署；无补丁验证器尚未验证筛选后的修复效果。所给笔记未报告经原页核实的原文件缺项。[P9][P10]",
+        "connection": "解读：该研究与智能运维中的故障定位和诊断交接在问题形式上相似，均需连接故障位置、原因假设和处置方向；但论文验证对象是软件仓库修复，不能据此认定其已适用于设备运维、结构设计或工程可靠性场景。[P1][P2][P9]",
+        "next_steps": "建议在可证明未见过的代码仓库上重复实验，并对无真实补丁验证器开展实际下游修复测试，同时统计误诊带来的负迁移和完整流程成本。若迁移到工程运维，应另建领域数据和安全验证流程，不能直接沿用代码基准结论。[P9][P10][P26]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SHERLOC：面向代码修复代理的结构化诊断定位",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.711.pdf"
+      ],
+      "analyzed_at": "2026-11-27T12:07:42.300552+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1"
+        ],
+        "method": [
+          "P2",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P4"
+        ],
+        "findings": [
+          "P6",
+          "P26"
+        ],
+        "limitations": [
+          "P9",
+          "P10"
+        ],
+        "connection": [
+          "P1",
+          "P2",
+          "P9"
+        ],
+        "next_steps": [
+          "P9",
+          "P10",
+          "P26"
+        ]
+      },
+      "analysis_material_version": "c6f2a5dfbb00ad024d2fe9014ec178d6a28906309499528ce7d7bb5f2c9de6cc",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "680bccd44088",
+        "state": "published",
+        "updated_at": "2026-11-27T12:07:42.362415+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 29,
+        "covered": 29,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -438,7 +734,26 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "9398bf850609",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:33:06.341959+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 16,
+        "covered": 15,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "unreadable",
+            "page": "P8",
+            "detail": "图3内嵌示例图的部分坐标、图例及注释在细读图中仍过小或重叠，无法完整辨认，因而不能逐项核对图像是否支持对应问题；图注及表2、表3可读。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -524,7 +839,31 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "d9126bb4a0fe",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:34:38.112077+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 25,
+        "covered": 25,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "softmax 采样公式的文本提取未保留分数结构；原页为 P_t(i)=exp(f_i/τ−β ln(1+c_i))/∑_{j∈C_t} exp(f_j/τ−β ln(1+c_j))。分母是对合格档案节点的归一化，影响对重写父节点选择概率的理解。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P23",
+            "detail": "表17第一组 CoT、Single、Fixed、MAD 结果上方缺少模型名称；第二组明确标为 GPT-4o-mini。该缺项影响第一组逐项结果的模型归属核验，不能仅凭本表确认其名称。"
+          }
+        ]
+      }
     }
   ],
   "extended": [],
@@ -549,7 +888,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "本文聚焦《LitMOF: An LLM Multi-Agent for Literature-Validated Metal-Organic Frameworks Database Correction and Expansion》，暂未提供可用摘要，请查看原文。",
+      "summary": "本文针对金属有机框架数据库中的结构错误及文献记录缺失，提出由大语言模型驱动的多智能体框架，以原始论文、数据库和晶体结构文件交叉核验并修复结构。[P1][P2] 作者构建了包含189,567个可计算结构的数据库，并单独整理8,771个已合成但未存档框架的信息。[P1][P7] 直接空气捕集计算筛选显示，结构修正会改变吸附预测和候选材料排序；该案例并非捕集性能的实验验证。[P8][P9]",
       "raw_metadata": {
         "provider": "Crossref",
         "publisher": "Springer Science and Business Media LLC",
@@ -594,11 +933,105 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "原文未提供摘要，基于标题生成",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注材料数据库治理、文献与结构数据融合及科学智能体的读者重点阅读：论文同时提供可追踪的修正流程、人工核验和下游筛选案例，但无序修正与几何合理性仍有限制。[P4][P6][P8]",
+      "deep_read": {
+        "problem": "现有金属有机框架数据库中的结构错误可能传递至高通量筛选与机器学习；实验信息又分散在论文和晶体文件等来源中，人工逐一协调成本很高。另有部分材料虽在文献中报告，却未以完整CIF存档，因而难以进入结构数据库。[P1][P2]",
+        "method": "系统采用层级式计划—执行架构，由监督智能体协调数据库读取、论文读取、参考结构构建、检查编辑和可选模拟。检查阶段比较元素组成、配位环境与子图，识别键、氢和无序错误；无序候选再借助机器学习原子间势能筛选。[P2][P4][P5]",
+        "innovation": "论文将非结构化文献证据与结构化数据库、CIF图表示结合，不仅识别不一致，还尝试恢复可计算结构。对已合成但未存档的材料，系统记录母体及转化信息；仅在转化明确时生成模型CIF，并将其与实验结构数据库分开。[P3][P7]",
+        "findings": "作者报告键、氢和无序错误的修正率分别为91.5%、93.2%和33.7%；分层人工核验的1,000个结构中988个正确。[P6] 直接空气捕集筛选中，原始与修正结构共同识别46个候选，原始结构漏掉236个修正后候选，并产生146个修正后不再支持的候选。[P8]",
+        "limitations": "图连接正确不保证几何合理；为维持实验结构属性，作者排除部分需要重建或优化重原子位置的结构。[P6] 无序修正可能存在多个合理构型。[P9] 经典力场和蒙特卡洛的完整对比在未提供的补充材料中。[P10] 核对记录未报告原文件缺项；P9、P10公式乱码是已纠正的提取错误。",
+        "connection": "解读：多源证据核验与错误修复可为结构设计数据治理提供参考；图连接正确但几何不合理的情况，也提示可靠性评价应结合拓扑与几何。[P6] 将该流程用于智能运维或其他结构体系仍是类比，本论文资料未验证其迁移效果。",
+        "next_steps": "建议在后续研究中分别核查拓扑一致性、几何合理性与修正结果的来源，并对无序结构保留多个候选以评估结论敏感性。[P6][P9] 建议进一步结合补充材料及独立实验检验筛选结果；这些是研究设想，不是作者已证明的成果。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "LitMOF：用于文献验证的金属有机框架数据库修正与扩展的大语言模型多智能体系统",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://www.nature.com/articles/s41467-026-79242-w_reference.pdf"
+      ],
+      "analyzed_at": "2026-11-27T11:46:20.352527+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P2",
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P3",
+          "P7"
+        ],
+        "findings": [
+          "P6",
+          "P8"
+        ],
+        "limitations": [
+          "P6",
+          "P9",
+          "P10"
+        ],
+        "connection": [
+          "P6"
+        ],
+        "next_steps": [
+          "P6",
+          "P9"
+        ]
+      },
+      "analysis_material_version": "9af1a3407ad72d0b83352491bf540a37df5ef2212b56d6e3cbba35479169dc5f",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P1",
+          "detail": "文字提取遗漏原页出版日期“Published online: 23 November 2026”；[上传截图1]可辨认。该遗漏不影响本页摘要中的研究结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "公式（1）和（2）的文字提取出现“/C0”等乱码。原页可读：ΔU = U(MOF + gas) − U(MOF) − U(gas)；Qst = kBT − ⟨ΔU exp(−ΔU/(kBT))⟩ / ⟨exp(−ΔU/(kBT))⟩。不纠正会影响对相互作用能和吸附热计算的理解。[上传截图3]"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P10",
+          "detail": "公式（3）文字提取将负号、括号及系综平均符号误作“/C0”等乱码。原页为 K_H = ⟨exp(−ΔU/(k_B T))⟩/(k_B T)；公式（4）为 S_A/B = K_H^A/K_H^B。不纠正会影响 Henry 常数及选择性计算的理解。[上传截图1]"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "4dcb6c55ca3a",
+        "state": "published",
+        "updated_at": "2026-11-27T11:46:20.374283+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 12,
+        "covered": 12,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P1",
+            "detail": "文字提取遗漏原页出版日期“Published online: 23 November 2026”；[上传截图1]可辨认。该遗漏不影响本页摘要中的研究结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "公式（1）和（2）的文字提取出现“/C0”等乱码。原页可读：ΔU = U(MOF + gas) − U(MOF) − U(gas)；Qst = kBT − ⟨ΔU exp(−ΔU/(kBT))⟩ / ⟨exp(−ΔU/(kBT))⟩。不纠正会影响对相互作用能和吸附热计算的理解。[上传截图3]"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "公式（3）文字提取将负号、括号及系综平均符号误作“/C0”等乱码。原页为 K_H = ⟨exp(−ΔU/(k_B T))⟩/(k_B T)；公式（4）为 S_A/B = K_H^A/K_H^B。不纠正会影响 Henry 常数及选择性计算的理解。[上传截图1]"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -626,7 +1059,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Retrieval-augmented LLM agents increasingly rely on curated skill banks: collections of reusable textual principles that guide decision making on complex tasks. Existing approaches typically expand these banks in an append-only fashion, continuously adding new skills without removing redundant, outdated, or harmful ones, resulting in inefficient and poorly curated repositories. In this paper, we formulate skill bank curation as a constrained multi-objective problem: a desirable bank must be useful for the agent, diverse in its content, and provide good coverage of the query distribution. To th…",
+      "summary": "论文研究如何避免智能体技能库只增不减，提出免训练的 SkillBrew，将效用、多样性和覆盖率纳入全库优化。方法通过反事实回放诊断技能，在支持集生成候选编辑，再于查询集进行帕累托选择。[P3][P5] 三个基准的结果显示其相对基线有提升，并分析了跨模型迁移和整理成本。[P7][P13] 作者同时指出，智能体冻结、回放开销及相对静态的任务分布限制了适用范围。[P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -685,11 +1118,75 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注智能体程序性知识管理的读者重点阅读：论文不仅给出技能增删改和全库选择流程，还提供消融、迁移及成本分析；但实际部署到其他领域仍需验证。[P5][P8][P13]",
+      "deep_read": {
+        "problem": "现有技能库可能持续追加冗余、过时或有害知识，单技能评分也难以反映全库结构。[P1][P2] 作者关注如何在有限检索容量下兼顾技能效用、多样性与任务覆盖；同时，技能共同检索使贡献归因困难，而轨迹回放和开放式编辑又使直接优化代价高昂。[P2][P5]",
+        "method": "SkillBrew 先依据无检索轨迹初始化技能库，再在支持集上蒸馏新增候选，并以逐技能留一回放提出保留、重写或删除判定。[P5][P15] 外层在查询集评估候选库，保留不修改当前库的选项，并在效用容差内利用多样性和覆盖率选择下一轮技能库。[P5]",
+        "innovation": "作者将整理对象从孤立技能扩展至整个技能库，把效用作为优先约束，并用多样性和覆盖率描述库的组织质量。[P3][P4] 双层候选生成与帕累托验证结合了反事实诊断、空操作候选和可控效用容差；这些是论文提出的组合设计，不意味着各组成技术单独首次出现。[P5]",
+        "findings": "在冻结的 Qwen2.5-7B-Instruct 工作模型上，SkillBrew 的 ALFWorld 平均成功率为59.0%，WebShop 成功率为38.4%。[P7] 消融中，ALFWorld 仅用效用目标为45.8%，三目标联合为59.0%；跨模型技能库均优于无库 ReAct，但各模型使用自身整理的库时表现最佳。[P8]",
+        "limitations": "作者指出，实验冻结智能体，未探索其与技能库共同适应；反复轨迹运行和留一回放仍有扩展成本，且方法假设任务分布相对静态。[P9] 对比也未涵盖联合更新智能体与技能库的训练型方法。[P6] 所提供的逐页笔记未报告经原页核实的文件缺项，不能据此推造缺失公式。",
+        "connection": "解读：技能适用条件、反事实诊断和全库去冗余可为智能运维知识库提供组织思路，例如区分有效操作规程与占用检索位置的条目。[P4][P16] 但论文实验是家庭任务、购物和科学环境，资料未提供真实运维、结构设计或可靠性场景的直接验证。[P6]",
+        "next_steps": "建议先在可回放的运维任务中构建带适用条件的操作技能，比较只追加与增删改结合的策略，并分别报告任务成功、覆盖和整理开销。[P9][P13] 再检验跨模型复用、动态工况及错误操作风险；这些是迁移研究设想，不能视为作者已经完成的实验。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SkillBrew：面向大语言模型智能体技能库的多目标整理",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.626.pdf"
+      ],
+      "analyzed_at": "2026-11-27T11:52:51.821421+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P5"
+        ],
+        "method": [
+          "P5",
+          "P15"
+        ],
+        "innovation": [
+          "P3",
+          "P4",
+          "P5"
+        ],
+        "findings": [
+          "P7",
+          "P8"
+        ],
+        "limitations": [
+          "P6",
+          "P9"
+        ],
+        "connection": [
+          "P4",
+          "P6",
+          "P16"
+        ],
+        "next_steps": [
+          "P9",
+          "P13"
+        ]
+      },
+      "analysis_material_version": "fb5b1333b28f860c0e9e433c4de3f6b8d1a2f99d947d939b63caa96da5ca6363",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "8cb229ca83fe",
+        "state": "published",
+        "updated_at": "2026-11-27T11:52:51.856444+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 19,
+        "covered": 19,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -720,7 +1217,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Long-horizon LLM agents can benefit from reusable skills, yet existing skill-based methods often rely on external skill generators during training or persistent skill retrieval at inference, increasing engineering complexity, context length, and deployment latency. We propose Self-Internalizing Reinforcement learning with Intrinsic skills (SIRI), a three-phase framework that enables agents to discover, validate, and internalize skills without external skill generators or inference-time skill banks. SIRI first warms up the policy with GiGPO to acquire basic interaction ability and collect succe…",
+      "summary": "本文研究如何让长时程大语言模型智能体自行发现并吸收可复用技能，避免推理时依赖技能库。SIRI先预热策略，再从成功的无技能轨迹中挖掘候选技能，通过配对轨迹检验效用，最后按动作优势选择性蒸馏。[P5][P6] 两个智能体基准上的实验显示，相比GiGPO，方法提升了总体表现；作者同时承认尚无专门优化技能挖掘的训练信号。[P7][P10]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -779,11 +1276,87 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注长时程智能体强化学习、经验复用与低依赖部署的研究者阅读，重点参考配对效用验证和动作级选择性蒸馏；向智能运维迁移仍需领域验证。",
+      "deep_read": {
+        "problem": "长时程智能体需要在部分可观测环境中持续行动，而训练中的外部技能构建模块以及推理时的技能检索会增加系统复杂度。[P2][P3] 论文关注两个关联问题：如何从自身经验发现可靠技能，以及如何避免将无用的技能引导文本一并内化。",
+        "method": "SIRI先用GiGPO预热，再由冻结策略从成功的无技能轨迹提取候选技能，以技能增强组与基线组的回报差更新技能效用。[P5] 内化阶段仅在组级效用为正时，对可执行动作词元按正优势加权蒸馏；训练后丢弃技能库。[P6]",
+        "innovation": "论文的主要方法组合是把自主技能生成、在线配对效用验证和动作级选择性内化串联起来：技能先作为待验证假设，而非默认可信的监督；教师与学生共享策略但使用不同上下文。[P5][P6] 其目标是在训练期利用技能、在推理期去除检索依赖。",
+        "findings": "以Qwen2.5-7B-Instruct为基础时，SIRI在ALFWorld上的总体成功率为0.930，WebShop得分和成功率为0.899、0.813。[P7] 消融中，无内化且无技能推理的成功率为0.719；完整方法为0.813。小模型及不同优化算法实验也显示收益。[P8]",
+        "limitations": "作者指出，当前没有专门优化自技能挖掘的显式训练信号。[P10] 评审分数与任务成功率的相关性不能单独证明因果；附录运行步数与曲线横轴的含义也需核对。[P12] 本批核对记录未报告原文件缺项；P15循环语句的提取错误已纠正。",
+        "connection": "解读：对智能运维，成功处置轨迹可类比为候选操作技能，配对验证与选择性内化可作为降低运行期检索依赖的研究思路。[P5][P6] 但论文实验是家居任务和购物任务，当前资料没有结构设计或工程可靠性场景的直接验证。",
+        "next_steps": "建议在可控运维仿真中先定义安全约束和成功指标，再比较有无技能、内化前后及不同随机种子的表现；同时检查错误技能对关键动作的影响。[P5][P12] 可另研究显式技能挖掘信号，但这些均是迁移设想，而非论文已验证结果。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SIRI：利用内在技能自内化强化学习训练大语言模型智能体",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.192.pdf"
+      ],
+      "analyzed_at": "2026-11-27T11:56:24.882448+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P5",
+          "P6"
+        ],
+        "innovation": [
+          "P5",
+          "P6"
+        ],
+        "findings": [
+          "P7",
+          "P8"
+        ],
+        "limitations": [
+          "P10",
+          "P12",
+          "P15"
+        ],
+        "connection": [
+          "P5",
+          "P6",
+          "P7"
+        ],
+        "next_steps": [
+          "P5",
+          "P10",
+          "P12"
+        ]
+      },
+      "analysis_material_version": "92f9c6a9602b6ef36955ae43544ce5d85c1518116263f158d621adc35a0a2443",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P15",
+          "detail": "算法1第4行的文字提取将“for k = 1 to K do”连写成“fork = 1 to K do”；原页为训练迭代循环，纠正后不改变算法结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "872fba40a307",
+        "state": "published",
+        "updated_at": "2026-11-27T11:56:24.917020+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 15,
+        "covered": 15,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P15",
+            "detail": "算法1第4行的文字提取将“for k = 1 to K do”连写成“fork = 1 to K do”；原页为训练迭代循环，纠正后不改变算法结论。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -807,7 +1380,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "LLM agents solve repository-level coding tasks through multi-turn tool use, but utilize half their budget on locating faults before editing. Dedicated localization frameworks have emerged, yet are still evaluated as file retrieval rather than actionable diagnosis, producing locations without the diagnostic context a repair agent needs. We introduce SHERLOC (Structured Hypothesis-driven Exploration and Reasoning for Localization), a training-free framework pairing a reasoning LLM with compact repository tools and self-recovery, without fine-tuning or multi-agent orchestration. SHERLOC reaches s…",
+      "summary": "论文研究代码修复代理如何从仓库中定位故障，并为后续修复提供可操作的诊断上下文。SHERLOC结合单个推理模型、仓库工具和自恢复机制，输出代码位置及根因、解决思路等结构化信息。实验显示其文件级定位表现较强，诊断注入平均降低搜索成本，但收益随修复模型和诊断质量变化；质量过滤结果依赖真实补丁，属于回顾性分析。[P2][P3][P8]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -866,11 +1439,73 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注智能代理故障定位与诊断交接的读者重点阅读：论文同时考察定位准确率、下游修复和计算成本，并通过负迁移案例展示诊断质量的重要性。[P8][P26]",
+      "deep_read": {
+        "problem": "仓库级修复代理不仅要找到需要修改的文件，还要判断故障根因和可行修复方向。作者指出，仅给出路径缺少下游修复所需的诊断上下文；所研究代理在首次补丁前平均用18.5轮定位，占总交互的48%。[P1]",
+        "method": "SHERLOC先过滤仓库视图，再由单个推理模型通过文件查看、字面搜索、仓库树和导入关系工具迭代探索，最多交互20轮。系统通过循环检测、上下文截断和最终轮提示恢复，并输出位置及五字段诊断。[P2][P5]",
+        "innovation": "论文将定位结果组织为位置解释、根因、解决思路、依赖和测试影响，而非仅返回文件排名；同时用行区间上的覆盖召回、精确率和平均紧致度补充文件级评价，以覆盖不局限于函数或类的编辑目标。[P2][P4]",
+        "findings": "Qwen3-235B在Lite取得84.33±0.72% accuracy@1，在Verified取得81.27±1.16% recall@1。未过滤诊断的十个下游设置中有五个经校正后显著改善；MiniMax/OpenHands则显著下降，说明迁移并非总是正向。[P6][P26]",
+        "limitations": "公开仓库的预训练熟悉度未被完全排除，向私有或未见仓库及其他语言的推广仍待验证。QF使用真实补丁评审，不能直接部署；无补丁验证器尚未验证筛选后的修复效果。所给笔记未报告经原页核实的原文件缺项。[P9][P10]",
+        "connection": "解读：该研究与智能运维中的故障定位和诊断交接在问题形式上相似，均需连接故障位置、原因假设和处置方向；但论文验证对象是软件仓库修复，不能据此认定其已适用于设备运维、结构设计或工程可靠性场景。[P1][P2][P9]",
+        "next_steps": "建议在可证明未见过的代码仓库上重复实验，并对无真实补丁验证器开展实际下游修复测试，同时统计误诊带来的负迁移和完整流程成本。若迁移到工程运维，应另建领域数据和安全验证流程，不能直接沿用代码基准结论。[P9][P10][P26]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SHERLOC：面向代码修复代理的结构化诊断定位",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.711.pdf"
+      ],
+      "analyzed_at": "2026-11-27T12:07:42.300552+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1"
+        ],
+        "method": [
+          "P2",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P4"
+        ],
+        "findings": [
+          "P6",
+          "P26"
+        ],
+        "limitations": [
+          "P9",
+          "P10"
+        ],
+        "connection": [
+          "P1",
+          "P2",
+          "P9"
+        ],
+        "next_steps": [
+          "P9",
+          "P10",
+          "P26"
+        ]
+      },
+      "analysis_material_version": "c6f2a5dfbb00ad024d2fe9014ec178d6a28906309499528ce7d7bb5f2c9de6cc",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "680bccd44088",
+        "state": "published",
+        "updated_at": "2026-11-27T12:07:42.362415+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 29,
+        "covered": 29,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -963,7 +1598,26 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "9398bf850609",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:33:06.341959+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 16,
+        "covered": 15,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "unreadable",
+            "page": "P8",
+            "detail": "图3内嵌示例图的部分坐标、图例及注释在细读图中仍过小或重叠，无法完整辨认，因而不能逐项核对图像是否支持对应问题；图注及表2、表3可读。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -1049,7 +1703,31 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "d9126bb4a0fe",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:34:38.112077+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 25,
+        "covered": 25,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "softmax 采样公式的文本提取未保留分数结构；原页为 P_t(i)=exp(f_i/τ−β ln(1+c_i))/∑_{j∈C_t} exp(f_j/τ−β ln(1+c_j))。分母是对合格档案节点的归一化，影响对重写父节点选择概率的理解。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P23",
+            "detail": "表17第一组 CoT、Single、Fixed、MAD 结果上方缺少模型名称；第二组明确标为 GPT-4o-mini。该缺项影响第一组逐项结果的模型归属核验，不能仅凭本表确认其名称。"
+          }
+        ]
+      }
     }
   ],
   "source_status": {
@@ -1931,13 +2609,13 @@
     "unavailable": 44
   },
   "analysis_status": {
-    "ready_core": 0,
+    "ready_core": 4,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 6
+    "pending": 2
   },
   "edition": {
     "id": "45298448017",

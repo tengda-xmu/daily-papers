@@ -138,7 +138,20 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "fc01cf0565e1",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:25:01.963554+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 96,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -161,7 +174,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "LLM-based agentic systems are increasingly combined with CoT reasoning to solve tasks that require accurate reasoning, external knowledge, and multi-step deliberation. Yet, explicit CoT incurs substantial generation overhead, while implicit CoT, which replaces textual rationales with compact continuous tokens, does not naturally support the explicit communication interface required for agentic tool-use. We propose TAC-CoT, a tool-empowered adaptive implicit CoT framework that replaces explicit reasoning traces with compact latent reasoning segments while retaining textual tokens only for tool…",
+      "summary": "本文研究如何在降低语言模型推理开销的同时保留工具调用能力。TAC-CoT 将连续的隐式推理片段与显式工具调用、观察和答案交错，并按查询动态决定片段数量。[P2][P3] 作者通过轨迹重建和蒸馏训练模型，在数学及问答基准上报告了相对显式思维链的性能与效率提升。[P4][P6] 其路由粒度、长交互表现及跨领域应用仍需进一步评估。[P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -220,11 +233,96 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注智能体推理效率与工具调用协同的读者重点阅读：论文同时提供方法、受控比较、工具使用诊断和实测延迟，但应用到具体工程领域前仍需验证。[P3][P7][P8][P14]",
+      "deep_read": {
+        "problem": "显式思维链需要持续生成自然语言，推理轨迹增长会带来较高开销；已有隐式思维链通常将推理压缩为连续 token，却不便在中间输出可执行工具调用或接收观察。论文关注如何同时保留紧凑推理和智能体交互接口。[P1][P2]",
+        "method": "方法将每段显式推理替换为固定长度的连续思维片段，保留工具调用、观察与答案的文本形式；片段末尾根据路由分数选择调用工具或回答。训练结合推理片段重建、显式输出监督和答案边界隐藏状态蒸馏。[P3][P4]",
+        "innovation": "论文将隐式推理与显式工具交互交错，而非要求整个推理过程在单个连续 token 块内完成；每段长度固定，总段数则随工具交互动态变化。解读：其关键贡献是把可执行接口和查询自适应预算纳入同一推理流程。[P2][P3]",
+        "findings": "作者报告，相比 Explicit-CoT，跨骨干模型平均数学准确率提高 5.8 个百分点，问答提高 2.4 个百分点；多工具场景可解决胜率为 58.6%，具有统计显著性。单张 L40S 上数学和问答平均墙钟时间分别加速 2.3 倍和 2.4 倍。[P6][P7][P8]",
+        "limitations": "作者指出路由仅在片段而非 token 层级进行，较长交互跨度仍待评估；问答轨迹的精确匹配过滤可能排除不同表述的正确答案。[P9][P12] 本批核对记录未列出原文件缺项，仅记录两处已纠正的提取错误，因此没有可报告的缺失公式及其影响。",
+        "connection": "解读：对智能运维而言，隐式推理与显式工具调用交错的模式可作为组织检索、诊断和计算工具链的参考；对可靠性研究，推理成本与错误累积的联合评估也有借鉴意义。但现有证据来自数学、问答和工具基准，不能证明工程场景效果。[P5][P7]",
+        "next_steps": "建议在具体工程任务中建立可审计的工具轨迹，对照显式推理方法，分别测量任务正确率、工具调用质量、端到端延迟和长交互表现；同时检查答案过滤对训练样本的影响。这些是迁移研究设想，不是论文已验证的结论。[P8][P9][P12]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "TAC-CoT：通过交错显式词元实现工具赋能的隐式思维链",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1436.pdf"
+      ],
+      "analyzed_at": "2026-11-27T10:07:42.759400+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P3",
+          "P4"
+        ],
+        "innovation": [
+          "P2",
+          "P3"
+        ],
+        "findings": [
+          "P6",
+          "P7",
+          "P8"
+        ],
+        "limitations": [
+          "P9",
+          "P12"
+        ],
+        "connection": [
+          "P5",
+          "P7"
+        ],
+        "next_steps": [
+          "P8",
+          "P9",
+          "P12"
+        ]
+      },
+      "analysis_material_version": "5168fa41e35c361ec18e4580a249faca6a2e428d10dae6a0e0542f32a48389ec",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "表2图注中的 bootstrap 采样次数被提取为“105”，原页为 10⁵ 次；这是显著性检验的采样次数，纠正后不改变表中性能结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "图5中偏移量为 −2 时的差值被提取为“0.8”，原页为 −0.8；该组 TAC-CoT 相对 Explicit-CoT 并非提高 0.8 个百分点，不改变作者关于过度推理区间退化较小的表述。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "1ef80315a994",
+        "state": "published",
+        "updated_at": "2026-11-27T10:07:42.776601+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 20,
+        "covered": 20,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "表2图注中的 bootstrap 采样次数被提取为“105”，原页为 10⁵ 次；这是显著性检验的采样次数，纠正后不改变表中性能结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "图5中偏移量为 −2 时的差值被提取为“0.8”，原页为 −0.8；该组 TAC-CoT 相对 Explicit-CoT 并非提高 0.8 个百分点，不改变作者关于过度推理区间退化较小的表述。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -312,7 +410,36 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "6c4312c49fcc",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:26:18.587972+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 29,
+        "covered": 29,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "算法及正文中智能体编号原图为上标，例如Agent^a和Agent^(a+1)，文字提取易误作下标；正文流水线说明中的“steps + 1”应为“step s + 1”。这影响对相邻智能体及相邻推理步骤并发关系的准确表述，不改变作者的流水线结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "图3及正文的四位扰动模式在文字提取中丢失：空方块表示干净步骤，实心方块表示受扰步骤；尾部扰动依次为□□□■、□□■■、□■■■，头部扰动依次为■□□□、■■□□、■■■□。原图可读，修正后可准确对应头尾扰动与准确率差异。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "图4横轴及纵轴刻度的上标在文字提取中丢失，例如“21”应为2^1，而非21；其余刻度依次表示2的幂。该错误会影响对智能体数A、步骤数S及加速和准确率关系的理解。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -403,7 +530,26 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "cd49686ac4d8",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:27:49.452913+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 26,
+        "covered": 26,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "算法1第5、6行文字提取各多出一个“for”；原图中两行分别为速度预测和嵌入更新，均处于第4行的循环内，并非额外嵌套循环。该错误会影响对流匹配采样过程的理解。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -428,7 +574,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Retrieving code functions, classes or files relevant to a user query, bug report or feature request from large codebases is a fundamental challenge for Large Language Model (LLM)-based coding agents. Agentic approaches typically employ sparse methods like BM25 or dense embedding strategies to identify semantically relevant units. While dense embedding approaches can outperform BM25 by large margins, both ignore the graph-structured characteristics of the codebase. To address this, we propose SpIDER (Spatially Informed Dense Embedding Retrieval), a dense retrieval approach that integrates LLM-b…",
+      "summary": "论文研究如何在大型代码库中，为问题报告找出需要修改的函数。SpIDER先进行稠密语义检索，再从高排名函数出发探索代码图邻域，经语义门控和大语言模型筛选后，以新候选替换低排名结果，保持检索预算不变。作者构建多语言基准，并报告函数级召回率提升，同时分析调用边带来的额外成本、筛选误差及初始候选池的覆盖上限。[P2][P7][P8][P10]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -487,11 +633,97 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注代码检索、软件故障定位与智能体辅助开发的读者重点阅读：论文同时提供可审计的图扩展流程、固定预算交换分析、多语言实验及成本对照，但迁移至其他工程场景前应验证图质量和候选池覆盖。[P2][P6][P8][P10]",
+      "deep_read": {
+        "problem": "论文针对软件问题定位中的函数级检索：问题描述与代码语义可能相关，但仅按嵌入相似度排序会遗漏分数略低、却与高排名函数结构相邻的待修改代码。作者还指出，既有评估偏重Python，跨语言表现和细粒度定位有待研究。[P2][P3]",
+        "method": "方法先以双模编码器按余弦相似度检索，再选取前C个函数作为种子，沿代码图边探索d跳邻域；候选须进入语义top-N池，再由大语言模型筛选。被接纳的新邻居替换未受保护的低排名结果，以控制最终检索预算。[P4][P5]",
+        "innovation": "作者将语义排序、图邻域探索和模型判断结合，并为扩展候选保留相对于种子的结构依据；同时构建覆盖四种语言的SpIDER-Bench。理论部分把固定预算下的召回变化写成纳入与淘汰真值的交换，并指出局部性本身不足以保证收益。[P2][P5][P6]",
+        "findings": "以SweRank为基线，作者报告跨表2的语言和数据集，Recall@20至少相对提升13%；SWE-PolyBench Python从0.42升至0.49。包含边与调用边联用时该值为0.60，但平均每实例消耗110.1K tokens，明显高于仅用包含边的12.9K。[P7][P8]",
+        "limitations": "仅用仓库主要语言构图，top-500池外的真值无法恢复；调用边比较只在SWE-PolyBench开展，筛选也可能误删或挤掉真值。[P10][P34] 原文件P5两处集合定义缺少花括号，影响公式严格表达，不能据此声称缺失公式及受影响结论已获验证。[P5]\n原文核对：[P5] 种子选择公式 C_Q := v∈S_C(Q) 及第二阶段筛选公式 U_Q := u∈Ĉ_Q | L(u)=1 ∪ C_Q 在原页均未显示用于集合构造的花括号。正文分别说明前者是 top-C 种子集合、后者保留获选候选和全部种子；符号不完整影响公式的严格表达，但不妨碍理解文字描述，未补造原式。",
+        "connection": "解读：该研究与智能运维中的软件故障定位有方法层面的联系：可将告警或工单作为查询，结合系统依赖关系查找待检查单元。但论文证据来自代码问题定位，未验证设备故障、结构设计或实体系统可靠性场景，不能直接外推效果。[P2][P10]",
+        "next_steps": "建议先在目标运维数据上构建可追溯的依赖图，分别测量初始候选覆盖、图可达性、筛选误删和错误淘汰；再以相同候选预算比较词法、语义和图扩展方法，并联合报告召回、时延与模型成本。这些是迁移设想，不是论文实验结论。[P6][P32][P36]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SpIDER：面向软件问题定位的空间结构感知稠密嵌入检索",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1938.pdf"
+      ],
+      "analyzed_at": "2026-11-27T10:31:52.772638+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P5",
+          "P6"
+        ],
+        "findings": [
+          "P7",
+          "P8"
+        ],
+        "limitations": [
+          "P5",
+          "P10",
+          "P34"
+        ],
+        "connection": [
+          "P2",
+          "P10"
+        ],
+        "next_steps": [
+          "P6",
+          "P32",
+          "P36"
+        ]
+      },
+      "analysis_material_version": "2cc08d30b781bc47953e17b28fba0ad4a8a7cdd3bf7d793117194c888420bd3d",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "正文文字提取将“reside near the”“with marginally lower”和“for function-level”中的部分词语连写；原页可读，已按正常词间空格理解，不影响作者关于语义检索可能遗漏相关候选及函数级定位的结论。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P5",
+          "detail": "种子选择公式 C_Q := v∈S_C(Q) 及第二阶段筛选公式 U_Q := u∈Ĉ_Q | L(u)=1 ∪ C_Q 在原页均未显示用于集合构造的花括号。正文分别说明前者是 top-C 种子集合、后者保留获选候选和全部种子；符号不完整影响公式的严格表达，但不妨碍理解文字描述，未补造原式。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "2e806decefd5",
+        "state": "published",
+        "updated_at": "2026-11-27T10:31:52.813438+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 36,
+        "covered": 36,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "正文文字提取将“reside near the”“with marginally lower”和“for function-level”中的部分词语连写；原页可读，已按正常词间空格理解，不影响作者关于语义检索可能遗漏相关候选及函数级定位的结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P5",
+            "detail": "种子选择公式 C_Q := v∈S_C(Q) 及第二阶段筛选公式 U_Q := u∈Ĉ_Q | L(u)=1 ∪ C_Q 在原页均未显示用于集合构造的花括号。正文分别说明前者是 top-C 种子集合、后者保留获选候选和全部种子；符号不完整影响公式的严格表达，但不妨碍理解文字描述，未补造原式。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -519,7 +751,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "As large language models (LLMs) are increasingly deployed in real-world applications, alignment is no longer governed by a single universal notion of safety or helpfulness, but instead by provider- or application-specific model specifications. These specifications are typically long, structured, and frequently updated, yet existing alignment pipelines lack a systematic mechanism to operationalize them as training signals. In this paper, we propose specification-grounded alignment, a new alignment paradigm that treats provider-authored model specifications as the primary alignment target rather…",
+      "summary": "论文研究如何将冗长、可能更新的模型规范转化为大语言模型训练信号。SpecAlign通过规则标注、受约束的规范采样和多智能体对抗交互生成偏好数据，并利用规则优先级处理冲突。三个模型在十套规范上的平均规则遵循分数均有所提高，附加安全测试则存在局部退化。方法仍受源规范质量、规则子集近似和长期部署评估不足的限制；原文部分模板还有排版缺项。[P2][P3][P7][P9][P19]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -578,11 +810,131 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注大模型规范对齐、合成偏好数据与边界测试的读者重点阅读；若目标是智能运维或结构可靠性，应把它作为方法参考，而非已有领域验证。",
+      "deep_read": {
+        "problem": "论文针对模型规范冗长、结构复杂且随部署政策更新的情况，讨论如何把明确的行为要求转换为可维护的训练信号。作者指出，现有流程在细粒度规则控制、忠实多样的数据生成和规则交互边界探索方面存在困难。[P1][P2]",
+        "method": "框架先标注规则的方向、阶段、领域和语义族，再抽取8–13条规则并按优先级排序。规划者结合经验池指导攻击者，防御者响应后由判别器评估，成功案例形成偏好三元组；训练细节还包括SFT预热与DPO。[P3][P4][P16]",
+        "innovation": "作者将提供方编写的模型规范作为主要对齐目标，而非仅作为辅助提示；方法组合结构化规则标注、受约束采样和对抗合成，以覆盖规则冲突及边界。解读：贡献主要在这一规范到训练数据的系统化组合，不宜据此断言各组件均为首次提出。[P1][P2][P3]",
+        "findings": "表2中，三个模型的平均RCS分别由0.73、0.89、0.83升至0.80、0.93、0.92；消融显示完整框架优于移除单个组件的变体。附加测试并非全面改善：Mistral规范1的JailBreakBench由0.28升至0.32，该指标越低越好。[P7][P8][P19]",
+        "limitations": "规范质量、规则子集近似及长期行为漂移限制结论。[P9]原文缺项：P27策略类型字段无值，影响模板复现；P34评分区间缺分隔符，影响评分复现；P44行内公式起始符缺反斜杠，影响格式复现。均不能据此补写缺项或验证其相关结论。\n原文核对：[P27] 规划者策略生成提示模板中的JSON示例写为“\"strategy_type\": ,”，字段值缺失，因此示例本身不是完整有效的JSON；这影响对该字段预期格式的复现，但不影响识读其余模板。；[P34] 规范遵循评分模板的三个中间档在原页分别印为“0.70.9”“0.40.6”“0.10.3”，数值之间缺少范围分隔符。其描述可识读，但精确区间写法存在缺项，影响评分标准的严格复现；不补造原文。；[P44] 表9 Formats第3条的行内LaTeX示例原页印为“( ... \\)”，起始括号前缺少反斜杠；该缺项影响行内数学格式要求的准确复现，不影响其余条目的阅读。",
+        "connection": "解读：规则优先级、对抗样本和人工核验可为智能运维中的规程遵循与异常边界测试提供思路，也可启发可靠性研究中的规则冲突分析。但论文实验针对语言模型对齐，资料未显示其在设备运维、结构设计或工程可靠性中的实证验证。[P3][P5][P9]",
+        "next_steps": "建议先选取可追溯的领域规程，建立规则冲突与人工复核流程，再比较完整规程和抽样子集在边界案例上的表现；同时记录失败尝试成本，开展长期漂移测试。以上是迁移研究设想，而非作者已验证的工程效果。[P9][P17][P19]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SpecAlign：通过合成数据高效实现规范约束的大语言模型对齐",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1134.pdf"
+      ],
+      "analyzed_at": "2026-11-27T10:39:34.707884+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P16"
+        ],
+        "innovation": [
+          "P1",
+          "P2",
+          "P3"
+        ],
+        "findings": [
+          "P7",
+          "P8",
+          "P19"
+        ],
+        "limitations": [
+          "P9",
+          "P27",
+          "P34",
+          "P44"
+        ],
+        "connection": [
+          "P3",
+          "P5",
+          "P9"
+        ],
+        "next_steps": [
+          "P9",
+          "P17",
+          "P19"
+        ]
+      },
+      "analysis_material_version": "f457cfcc59f8cadcd5a7559eee95b68961dc197c6e3847cd4b7b55d897ed910b",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "图3和图4的文字提取混入并重复了多个子图的坐标轴与标签。原页显示图3有4个子图、图4有3个子图；应按各自图注对应，避免将不同实验的数值和坐标误配。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P17",
+          "detail": "图6文字提取将三个子图的坐标轴重复混排。原图依次为(a)提示长度、(b)响应长度、(c)正负响应长度差；混排会导致对长度分布的误判。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P27",
+          "detail": "规划者策略生成提示模板中的JSON示例写为“\"strategy_type\": ,”，字段值缺失，因此示例本身不是完整有效的JSON；这影响对该字段预期格式的复现，但不影响识读其余模板。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P34",
+          "detail": "规范遵循评分模板的三个中间档在原页分别印为“0.70.9”“0.40.6”“0.10.3”，数值之间缺少范围分隔符。其描述可识读，但精确区间写法存在缺项，影响评分标准的严格复现；不补造原文。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P44",
+          "detail": "表9 Formats第3条的行内LaTeX示例原页印为“( ... \\)”，起始括号前缺少反斜杠；该缺项影响行内数学格式要求的准确复现，不影响其余条目的阅读。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "e2bd955c3f68",
+        "state": "published",
+        "updated_at": "2026-11-27T10:39:34.739150+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 44,
+        "covered": 44,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "图3和图4的文字提取混入并重复了多个子图的坐标轴与标签。原页显示图3有4个子图、图4有3个子图；应按各自图注对应，避免将不同实验的数值和坐标误配。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P17",
+            "detail": "图6文字提取将三个子图的坐标轴重复混排。原图依次为(a)提示长度、(b)响应长度、(c)正负响应长度差；混排会导致对长度分布的误判。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P27",
+            "detail": "规划者策略生成提示模板中的JSON示例写为“\"strategy_type\": ,”，字段值缺失，因此示例本身不是完整有效的JSON；这影响对该字段预期格式的复现，但不影响识读其余模板。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P34",
+            "detail": "规范遵循评分模板的三个中间档在原页分别印为“0.70.9”“0.40.6”“0.10.3”，数值之间缺少范围分隔符。其描述可识读，但精确区间写法存在缺项，影响评分标准的严格复现；不补造原文。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P44",
+            "detail": "表9 Formats第3条的行内LaTeX示例原页印为“( ... \\)”，起始括号前缺少反斜杠；该缺项影响行内数学格式要求的准确复现，不影响其余条目的阅读。"
+          }
+        ]
+      }
     }
   ],
   "extended": [],
@@ -721,7 +1073,20 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "ai_maintenance"
+      "recommended_direction": "ai_maintenance",
+      "reading_status": {
+        "paper_id": "fc01cf0565e1",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:25:01.963554+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 96,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -744,7 +1109,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "LLM-based agentic systems are increasingly combined with CoT reasoning to solve tasks that require accurate reasoning, external knowledge, and multi-step deliberation. Yet, explicit CoT incurs substantial generation overhead, while implicit CoT, which replaces textual rationales with compact continuous tokens, does not naturally support the explicit communication interface required for agentic tool-use. We propose TAC-CoT, a tool-empowered adaptive implicit CoT framework that replaces explicit reasoning traces with compact latent reasoning segments while retaining textual tokens only for tool…",
+      "summary": "本文研究如何在降低语言模型推理开销的同时保留工具调用能力。TAC-CoT 将连续的隐式推理片段与显式工具调用、观察和答案交错，并按查询动态决定片段数量。[P2][P3] 作者通过轨迹重建和蒸馏训练模型，在数学及问答基准上报告了相对显式思维链的性能与效率提升。[P4][P6] 其路由粒度、长交互表现及跨领域应用仍需进一步评估。[P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -803,11 +1168,96 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注智能体推理效率与工具调用协同的读者重点阅读：论文同时提供方法、受控比较、工具使用诊断和实测延迟，但应用到具体工程领域前仍需验证。[P3][P7][P8][P14]",
+      "deep_read": {
+        "problem": "显式思维链需要持续生成自然语言，推理轨迹增长会带来较高开销；已有隐式思维链通常将推理压缩为连续 token，却不便在中间输出可执行工具调用或接收观察。论文关注如何同时保留紧凑推理和智能体交互接口。[P1][P2]",
+        "method": "方法将每段显式推理替换为固定长度的连续思维片段，保留工具调用、观察与答案的文本形式；片段末尾根据路由分数选择调用工具或回答。训练结合推理片段重建、显式输出监督和答案边界隐藏状态蒸馏。[P3][P4]",
+        "innovation": "论文将隐式推理与显式工具交互交错，而非要求整个推理过程在单个连续 token 块内完成；每段长度固定，总段数则随工具交互动态变化。解读：其关键贡献是把可执行接口和查询自适应预算纳入同一推理流程。[P2][P3]",
+        "findings": "作者报告，相比 Explicit-CoT，跨骨干模型平均数学准确率提高 5.8 个百分点，问答提高 2.4 个百分点；多工具场景可解决胜率为 58.6%，具有统计显著性。单张 L40S 上数学和问答平均墙钟时间分别加速 2.3 倍和 2.4 倍。[P6][P7][P8]",
+        "limitations": "作者指出路由仅在片段而非 token 层级进行，较长交互跨度仍待评估；问答轨迹的精确匹配过滤可能排除不同表述的正确答案。[P9][P12] 本批核对记录未列出原文件缺项，仅记录两处已纠正的提取错误，因此没有可报告的缺失公式及其影响。",
+        "connection": "解读：对智能运维而言，隐式推理与显式工具调用交错的模式可作为组织检索、诊断和计算工具链的参考；对可靠性研究，推理成本与错误累积的联合评估也有借鉴意义。但现有证据来自数学、问答和工具基准，不能证明工程场景效果。[P5][P7]",
+        "next_steps": "建议在具体工程任务中建立可审计的工具轨迹，对照显式推理方法，分别测量任务正确率、工具调用质量、端到端延迟和长交互表现；同时检查答案过滤对训练样本的影响。这些是迁移研究设想，不是论文已验证的结论。[P8][P9][P12]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "TAC-CoT：通过交错显式词元实现工具赋能的隐式思维链",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1436.pdf"
+      ],
+      "analyzed_at": "2026-11-27T10:07:42.759400+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P3",
+          "P4"
+        ],
+        "innovation": [
+          "P2",
+          "P3"
+        ],
+        "findings": [
+          "P6",
+          "P7",
+          "P8"
+        ],
+        "limitations": [
+          "P9",
+          "P12"
+        ],
+        "connection": [
+          "P5",
+          "P7"
+        ],
+        "next_steps": [
+          "P8",
+          "P9",
+          "P12"
+        ]
+      },
+      "analysis_material_version": "5168fa41e35c361ec18e4580a249faca6a2e428d10dae6a0e0542f32a48389ec",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P5",
+          "detail": "表2图注中的 bootstrap 采样次数被提取为“105”，原页为 10⁵ 次；这是显著性检验的采样次数，纠正后不改变表中性能结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "图5中偏移量为 −2 时的差值被提取为“0.8”，原页为 −0.8；该组 TAC-CoT 相对 Explicit-CoT 并非提高 0.8 个百分点，不改变作者关于过度推理区间退化较小的表述。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "1ef80315a994",
+        "state": "published",
+        "updated_at": "2026-11-27T10:07:42.776601+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 20,
+        "covered": 20,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "表2图注中的 bootstrap 采样次数被提取为“105”，原页为 10⁵ 次；这是显著性检验的采样次数，纠正后不改变表中性能结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "图5中偏移量为 −2 时的差值被提取为“0.8”，原页为 −0.8；该组 TAC-CoT 相对 Explicit-CoT 并非提高 0.8 个百分点，不改变作者关于过度推理区间退化较小的表述。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -895,7 +1345,36 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "6c4312c49fcc",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:26:18.587972+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 29,
+        "covered": 29,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P3",
+            "detail": "算法及正文中智能体编号原图为上标，例如Agent^a和Agent^(a+1)，文字提取易误作下标；正文流水线说明中的“steps + 1”应为“step s + 1”。这影响对相邻智能体及相邻推理步骤并发关系的准确表述，不改变作者的流水线结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "图3及正文的四位扰动模式在文字提取中丢失：空方块表示干净步骤，实心方块表示受扰步骤；尾部扰动依次为□□□■、□□■■、□■■■，头部扰动依次为■□□□、■■□□、■■■□。原图可读，修正后可准确对应头尾扰动与准确率差异。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "图4横轴及纵轴刻度的上标在文字提取中丢失，例如“21”应为2^1，而非21；其余刻度依次表示2的幂。该错误会影响对智能体数A、步骤数S及加速和准确率关系的理解。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -986,7 +1465,26 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "cd49686ac4d8",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:27:49.452913+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 26,
+        "covered": 26,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "算法1第5、6行文字提取各多出一个“for”；原图中两行分别为速度预测和嵌入更新，均处于第4行的循环内，并非额外嵌套循环。该错误会影响对流匹配采样过程的理解。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -1011,7 +1509,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Retrieving code functions, classes or files relevant to a user query, bug report or feature request from large codebases is a fundamental challenge for Large Language Model (LLM)-based coding agents. Agentic approaches typically employ sparse methods like BM25 or dense embedding strategies to identify semantically relevant units. While dense embedding approaches can outperform BM25 by large margins, both ignore the graph-structured characteristics of the codebase. To address this, we propose SpIDER (Spatially Informed Dense Embedding Retrieval), a dense retrieval approach that integrates LLM-b…",
+      "summary": "论文研究如何在大型代码库中，为问题报告找出需要修改的函数。SpIDER先进行稠密语义检索，再从高排名函数出发探索代码图邻域，经语义门控和大语言模型筛选后，以新候选替换低排名结果，保持检索预算不变。作者构建多语言基准，并报告函数级召回率提升，同时分析调用边带来的额外成本、筛选误差及初始候选池的覆盖上限。[P2][P7][P8][P10]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -1070,11 +1568,97 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注代码检索、软件故障定位与智能体辅助开发的读者重点阅读：论文同时提供可审计的图扩展流程、固定预算交换分析、多语言实验及成本对照，但迁移至其他工程场景前应验证图质量和候选池覆盖。[P2][P6][P8][P10]",
+      "deep_read": {
+        "problem": "论文针对软件问题定位中的函数级检索：问题描述与代码语义可能相关，但仅按嵌入相似度排序会遗漏分数略低、却与高排名函数结构相邻的待修改代码。作者还指出，既有评估偏重Python，跨语言表现和细粒度定位有待研究。[P2][P3]",
+        "method": "方法先以双模编码器按余弦相似度检索，再选取前C个函数作为种子，沿代码图边探索d跳邻域；候选须进入语义top-N池，再由大语言模型筛选。被接纳的新邻居替换未受保护的低排名结果，以控制最终检索预算。[P4][P5]",
+        "innovation": "作者将语义排序、图邻域探索和模型判断结合，并为扩展候选保留相对于种子的结构依据；同时构建覆盖四种语言的SpIDER-Bench。理论部分把固定预算下的召回变化写成纳入与淘汰真值的交换，并指出局部性本身不足以保证收益。[P2][P5][P6]",
+        "findings": "以SweRank为基线，作者报告跨表2的语言和数据集，Recall@20至少相对提升13%；SWE-PolyBench Python从0.42升至0.49。包含边与调用边联用时该值为0.60，但平均每实例消耗110.1K tokens，明显高于仅用包含边的12.9K。[P7][P8]",
+        "limitations": "仅用仓库主要语言构图，top-500池外的真值无法恢复；调用边比较只在SWE-PolyBench开展，筛选也可能误删或挤掉真值。[P10][P34] 原文件P5两处集合定义缺少花括号，影响公式严格表达，不能据此声称缺失公式及受影响结论已获验证。[P5]\n原文核对：[P5] 种子选择公式 C_Q := v∈S_C(Q) 及第二阶段筛选公式 U_Q := u∈Ĉ_Q | L(u)=1 ∪ C_Q 在原页均未显示用于集合构造的花括号。正文分别说明前者是 top-C 种子集合、后者保留获选候选和全部种子；符号不完整影响公式的严格表达，但不妨碍理解文字描述，未补造原式。",
+        "connection": "解读：该研究与智能运维中的软件故障定位有方法层面的联系：可将告警或工单作为查询，结合系统依赖关系查找待检查单元。但论文证据来自代码问题定位，未验证设备故障、结构设计或实体系统可靠性场景，不能直接外推效果。[P2][P10]",
+        "next_steps": "建议先在目标运维数据上构建可追溯的依赖图，分别测量初始候选覆盖、图可达性、筛选误删和错误淘汰；再以相同候选预算比较词法、语义和图扩展方法，并联合报告召回、时延与模型成本。这些是迁移设想，不是论文实验结论。[P6][P32][P36]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SpIDER：面向软件问题定位的空间结构感知稠密嵌入检索",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1938.pdf"
+      ],
+      "analyzed_at": "2026-11-27T10:31:52.772638+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P5",
+          "P6"
+        ],
+        "findings": [
+          "P7",
+          "P8"
+        ],
+        "limitations": [
+          "P5",
+          "P10",
+          "P34"
+        ],
+        "connection": [
+          "P2",
+          "P10"
+        ],
+        "next_steps": [
+          "P6",
+          "P32",
+          "P36"
+        ]
+      },
+      "analysis_material_version": "2cc08d30b781bc47953e17b28fba0ad4a8a7cdd3bf7d793117194c888420bd3d",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P2",
+          "detail": "正文文字提取将“reside near the”“with marginally lower”和“for function-level”中的部分词语连写；原页可读，已按正常词间空格理解，不影响作者关于语义检索可能遗漏相关候选及函数级定位的结论。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P5",
+          "detail": "种子选择公式 C_Q := v∈S_C(Q) 及第二阶段筛选公式 U_Q := u∈Ĉ_Q | L(u)=1 ∪ C_Q 在原页均未显示用于集合构造的花括号。正文分别说明前者是 top-C 种子集合、后者保留获选候选和全部种子；符号不完整影响公式的严格表达，但不妨碍理解文字描述，未补造原式。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "2e806decefd5",
+        "state": "published",
+        "updated_at": "2026-11-27T10:31:52.813438+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 36,
+        "covered": 36,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "正文文字提取将“reside near the”“with marginally lower”和“for function-level”中的部分词语连写；原页可读，已按正常词间空格理解，不影响作者关于语义检索可能遗漏相关候选及函数级定位的结论。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P5",
+            "detail": "种子选择公式 C_Q := v∈S_C(Q) 及第二阶段筛选公式 U_Q := u∈Ĉ_Q | L(u)=1 ∪ C_Q 在原页均未显示用于集合构造的花括号。正文分别说明前者是 top-C 种子集合、后者保留获选候选和全部种子；符号不完整影响公式的严格表达，但不妨碍理解文字描述，未补造原式。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -1102,7 +1686,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "As large language models (LLMs) are increasingly deployed in real-world applications, alignment is no longer governed by a single universal notion of safety or helpfulness, but instead by provider- or application-specific model specifications. These specifications are typically long, structured, and frequently updated, yet existing alignment pipelines lack a systematic mechanism to operationalize them as training signals. In this paper, we propose specification-grounded alignment, a new alignment paradigm that treats provider-authored model specifications as the primary alignment target rather…",
+      "summary": "论文研究如何将冗长、可能更新的模型规范转化为大语言模型训练信号。SpecAlign通过规则标注、受约束的规范采样和多智能体对抗交互生成偏好数据，并利用规则优先级处理冲突。三个模型在十套规范上的平均规则遵循分数均有所提高，附加安全测试则存在局部退化。方法仍受源规范质量、规则子集近似和长期部署评估不足的限制；原文部分模板还有排版缺项。[P2][P3][P7][P9][P19]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -1161,11 +1745,131 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注大模型规范对齐、合成偏好数据与边界测试的读者重点阅读；若目标是智能运维或结构可靠性，应把它作为方法参考，而非已有领域验证。",
+      "deep_read": {
+        "problem": "论文针对模型规范冗长、结构复杂且随部署政策更新的情况，讨论如何把明确的行为要求转换为可维护的训练信号。作者指出，现有流程在细粒度规则控制、忠实多样的数据生成和规则交互边界探索方面存在困难。[P1][P2]",
+        "method": "框架先标注规则的方向、阶段、领域和语义族，再抽取8–13条规则并按优先级排序。规划者结合经验池指导攻击者，防御者响应后由判别器评估，成功案例形成偏好三元组；训练细节还包括SFT预热与DPO。[P3][P4][P16]",
+        "innovation": "作者将提供方编写的模型规范作为主要对齐目标，而非仅作为辅助提示；方法组合结构化规则标注、受约束采样和对抗合成，以覆盖规则冲突及边界。解读：贡献主要在这一规范到训练数据的系统化组合，不宜据此断言各组件均为首次提出。[P1][P2][P3]",
+        "findings": "表2中，三个模型的平均RCS分别由0.73、0.89、0.83升至0.80、0.93、0.92；消融显示完整框架优于移除单个组件的变体。附加测试并非全面改善：Mistral规范1的JailBreakBench由0.28升至0.32，该指标越低越好。[P7][P8][P19]",
+        "limitations": "规范质量、规则子集近似及长期行为漂移限制结论。[P9]原文缺项：P27策略类型字段无值，影响模板复现；P34评分区间缺分隔符，影响评分复现；P44行内公式起始符缺反斜杠，影响格式复现。均不能据此补写缺项或验证其相关结论。\n原文核对：[P27] 规划者策略生成提示模板中的JSON示例写为“\"strategy_type\": ,”，字段值缺失，因此示例本身不是完整有效的JSON；这影响对该字段预期格式的复现，但不影响识读其余模板。；[P34] 规范遵循评分模板的三个中间档在原页分别印为“0.70.9”“0.40.6”“0.10.3”，数值之间缺少范围分隔符。其描述可识读，但精确区间写法存在缺项，影响评分标准的严格复现；不补造原文。；[P44] 表9 Formats第3条的行内LaTeX示例原页印为“( ... \\)”，起始括号前缺少反斜杠；该缺项影响行内数学格式要求的准确复现，不影响其余条目的阅读。",
+        "connection": "解读：规则优先级、对抗样本和人工核验可为智能运维中的规程遵循与异常边界测试提供思路，也可启发可靠性研究中的规则冲突分析。但论文实验针对语言模型对齐，资料未显示其在设备运维、结构设计或工程可靠性中的实证验证。[P3][P5][P9]",
+        "next_steps": "建议先选取可追溯的领域规程，建立规则冲突与人工复核流程，再比较完整规程和抽样子集在边界案例上的表现；同时记录失败尝试成本，开展长期漂移测试。以上是迁移研究设想，而非作者已验证的工程效果。[P9][P17][P19]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SpecAlign：通过合成数据高效实现规范约束的大语言模型对齐",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1134.pdf"
+      ],
+      "analyzed_at": "2026-11-27T10:39:34.707884+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P16"
+        ],
+        "innovation": [
+          "P1",
+          "P2",
+          "P3"
+        ],
+        "findings": [
+          "P7",
+          "P8",
+          "P19"
+        ],
+        "limitations": [
+          "P9",
+          "P27",
+          "P34",
+          "P44"
+        ],
+        "connection": [
+          "P3",
+          "P5",
+          "P9"
+        ],
+        "next_steps": [
+          "P9",
+          "P17",
+          "P19"
+        ]
+      },
+      "analysis_material_version": "f457cfcc59f8cadcd5a7559eee95b68961dc197c6e3847cd4b7b55d897ed910b",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P6",
+          "detail": "图3和图4的文字提取混入并重复了多个子图的坐标轴与标签。原页显示图3有4个子图、图4有3个子图；应按各自图注对应，避免将不同实验的数值和坐标误配。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P17",
+          "detail": "图6文字提取将三个子图的坐标轴重复混排。原图依次为(a)提示长度、(b)响应长度、(c)正负响应长度差；混排会导致对长度分布的误判。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P27",
+          "detail": "规划者策略生成提示模板中的JSON示例写为“\"strategy_type\": ,”，字段值缺失，因此示例本身不是完整有效的JSON；这影响对该字段预期格式的复现，但不影响识读其余模板。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P34",
+          "detail": "规范遵循评分模板的三个中间档在原页分别印为“0.70.9”“0.40.6”“0.10.3”，数值之间缺少范围分隔符。其描述可识读，但精确区间写法存在缺项，影响评分标准的严格复现；不补造原文。"
+        },
+        {
+          "kind": "source_defect",
+          "page": "P44",
+          "detail": "表9 Formats第3条的行内LaTeX示例原页印为“( ... \\)”，起始括号前缺少反斜杠；该缺项影响行内数学格式要求的准确复现，不影响其余条目的阅读。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "e2bd955c3f68",
+        "state": "published",
+        "updated_at": "2026-11-27T10:39:34.739150+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 44,
+        "covered": 44,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "图3和图4的文字提取混入并重复了多个子图的坐标轴与标签。原页显示图3有4个子图、图4有3个子图；应按各自图注对应，避免将不同实验的数值和坐标误配。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P17",
+            "detail": "图6文字提取将三个子图的坐标轴重复混排。原图依次为(a)提示长度、(b)响应长度、(c)正负响应长度差；混排会导致对长度分布的误判。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P27",
+            "detail": "规划者策略生成提示模板中的JSON示例写为“\"strategy_type\": ,”，字段值缺失，因此示例本身不是完整有效的JSON；这影响对该字段预期格式的复现，但不影响识读其余模板。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P34",
+            "detail": "规范遵循评分模板的三个中间档在原页分别印为“0.70.9”“0.40.6”“0.10.3”，数值之间缺少范围分隔符。其描述可识读，但精确区间写法存在缺项，影响评分标准的严格复现；不补造原文。"
+          },
+          {
+            "kind": "source_defect",
+            "page": "P44",
+            "detail": "表9 Formats第3条的行内LaTeX示例原页印为“( ... \\)”，起始括号前缺少反斜杠；该缺项影响行内数学格式要求的准确复现，不影响其余条目的阅读。"
+          }
+        ]
+      }
     }
   ],
   "source_status": {
@@ -2067,13 +2771,13 @@
     "unavailable": 46
   },
   "analysis_status": {
-    "ready_core": 0,
+    "ready_core": 3,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 6
+    "pending": 3
   },
   "edition": {
     "id": "44943591415",

@@ -1,0 +1,40 @@
+{
+  "paper_id": "a366c01ef5c9",
+  "fingerprint": "557d4a050d255786292c31d62335f6beea487509ebd3af42d6439a8285a8d478",
+  "analysis": {
+    "title_zh": "VISTA：面向结构的免训练自然语言可编辑图表生成",
+    "summary": "【摘要】论文研究如何从自然语言生成结构正确、视觉清晰且可编辑的图表。VISTA 将语义结构提取、几何计算和渲染结果检查分别交给语言模型、确定性算法和视觉语言模型，并通过局部修复改进图表。作者构建了包含 150 条提示的基准，与八个基线比较，报告 VISTA 在所有成对比较中具有最高可读性。[摘要]当前仅有摘要，无法核查具体实验过程及其他评价结果。",
+    "recommendation": "【解读】如果关注自然语言生成可编辑图表，值得重点阅读其任务拆分与渲染后检查方法；但给定研究方向仅有不透明的标签，无法确认它与目标方向是否切合。",
+    "deep_read": {
+      "problem": "【摘要】论文关注从自然语言生成兼具结构正确性和视觉可读性的可编辑图表。摘要指出，文本生成图像模型产生的栅格图没有可编辑对象；代码生成方法虽可编辑，却面临几何不可靠、验证较浅及依赖任务专用微调的问题。[摘要]",
+      "method": "【摘要】VISTA 是免训练流程：语言模型提取语义结构，确定性算法计算全部几何信息，视觉语言模型结合图表渲染结果与源代码进行检查，并提出局部修复。摘要未说明几何算法、检查提示或修复执行的具体实现。[摘要]",
+      "innovation": "【摘要】作者将不同子问题分配给不同组件，并让视觉语言模型同时检查渲染图表和源代码。[摘要]【解读】这一组合针对摘要列出的几何生成与验证问题；但仅凭摘要，无法判断各组件或组合方式相对已有工作的技术新颖程度。",
+      "findings": "【摘要】作者从仅有 PNG 的参考图构建包含 150 条提示的基准，并与包括 Codex、Claude Code 和一个经过微调的多智能体系统在内的八个基线比较；摘要报告 VISTA 在所有成对比较中可读性最高。[摘要]具体评分和其他指标未在摘要中给出。",
+      "limitations": "【摘要】当前资料只有摘要，没有提供基准的具体组成、可读性评价流程或结构正确性的结果，因此无法核查结论的适用范围。[摘要]【解读】这些是现有资料的证据限制，不能直接视为作者已证实的方法缺陷或实验局限。",
+      "connection": "【解读】若研究涉及智能运维或结构设计中的示意图表达，可关注该方法如何把语义、几何与视觉检查分开处理。但摘要未报告这些领域的应用，也未评估工程结构可靠性；给定方向标签未释义，不能据此认定论文与目标方向直接相关。[摘要]",
+      "next_steps": "【建议】可在取得论文全文后，优先核查基准构造、成对比较的评价者与判据，以及局部修复的具体流程；再根据自身任务判断是否需要测试图表可编辑性和结构正确性。上述内容是后续阅读与研究建议，不是摘要报告的作者结论。"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.2403/"
+    ],
+    "analyzed_at": "2026-11-27T13:34:30.517546+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "摘要明确描述了免训练流程及可读性比较结果，支持将其作为可编辑图表生成方法阅读；但给定研究方向只有未释义标签，无法判断方向契合度。摘要也不足以核查完整实验，因此当前证据不足以支持全部判断，方向不匹配并非已被证实。",
+    "evidence": "We present VISTA, a training-free pipeline that assigns each subproblem to the appropriate component: an LLM extracts semantic structure, a deterministic algorithm computes all geometry, and a VLM inspects the rendered diagram jointly with its source and issues localized repairs."
+  },
+  "material": {
+    "version": "ba0b63d34aa1b7c0d2a2a28de9c5563f0eab0af9c12817cb4fa677705af2ba62",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "We present VISTA, a training-free pipeline that assigns each subproblem to the appropriate component: an LLM extracts semantic structure, a deterministic algorithm computes all geometry, and a VLM inspects the rendered diagram jointly with its source and issues localized repairs."
+  }
+}

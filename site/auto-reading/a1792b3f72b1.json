@@ -1,0 +1,105 @@
+{
+  "paper_id": "a1792b3f72b1",
+  "fingerprint": "fe702dd27805d44b2ba1279e47d7a6ae7c05ecfb5d4ceb82c7ffa426a263c797",
+  "analysis": {
+    "title_zh": "SecOPD：通过在策略蒸馏缓解自适应提示注入",
+    "summary": "本文研究智能体处理外部数据时的间接提示注入防御。作者提出SecOPD：学生模型在受攻击输入下生成回答，冻结的初始化教师使用对应的干净输入逐词元评分，以细粒度信号更新学生。[P4][P5] 在所评估的SEP PISmith攻击中，其攻击成功率为9.0%，对比Meta-SecAlign的94.0%；AgentDojo结果显示一定的工具调用场景迁移能力。[P7] 方法仍依赖可信输入边界，且不能保证抵御未来攻击。[P8][P9]",
+    "recommendation": "建议关注大模型智能体安全和防御训练的读者精读：论文同时提供词元级训练机制、自适应攻击对比及安全—效用权衡，并披露了评估条件与适用边界。",
+    "deep_read": {
+      "problem": "论文关注良性用户任务依赖不可信外部数据时，攻击者如何通过数据中的指令改变模型行为。作者认为，序列级反馈难以区分同一回答中完成用户任务与服从注入的不同片段，因此可能限制防御微调对混合回答的学习。[P2][P3]",
+      "method": "SecOPD为同一任务构造干净输入和受攻击输入，让学生在后者上采样回答，冻结的初始化教师则在前者下评价相同生成前缀和词元。教师与学生的词元对数概率之差形成停止梯度的优势信号，用于更新学生适配器。[P4][P5]",
+      "innovation": "作者将原用于效用提升的在策略蒸馏用于提示注入防御，以干净上下文中的初始化模型提供跨上下文词元反馈，而非给整条回答分配统一安全标签。训练无需外部安全评判器或任务专用奖励模型；这不同于实验中用于评价的评判器。[P3][P5]",
+      "findings": "在分别训练攻击者的SEP PISmith评估中，SecOPD攻击成功率为9.0%，Meta-SecAlign为94.0%，GRPO为61.2%。AgentDojo中三者分别为4.7%、5.5%和0.7%；SecOPD七项任务平均效用为88.1%，与未防御模型相同。[P6][P7]",
+      "limitations": "方法仅针对用户指令良性而外部数据恶意的间接注入，并假设可信边界明确；未来攻击仍可能突破防御。[P8][P9] 评判规则可能压低阳性结果，基线注入分布及部分评估上下文长度亦不完全相同。[P13][P14][P15] 核对记录未报告原文件缺项。",
+      "connection": "解读：该工作与智能运维中使用大模型读取日志、文档或工具返回信息的场景具有方法关联：外部内容可能同时承载任务数据和不可信指令。但论文未提供智能运维、结构设计或工程可靠性场景的实证结果，不能直接推断其部署效果。[P3][P7]",
+      "next_steps": "建议在目标智能体场景中构造配对干净与受攻击输入，并针对各防御分别评估自适应攻击，同时报告正常任务成功率和受攻击任务成功率。还应控制基线训练分布与上下文长度，并审核评判器漏判；这些是研究建议，不是作者已完成的验证。[P6][P13][P14][P15]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.1102.pdf"
+    ],
+    "analyzed_at": "2026-11-27T12:33:54.875121+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "论文提出了明确的词元级防御训练方法，并提供自适应攻击与效用对比，具有重点阅读价值；但资料中的研究方向仅为未解释的标签，无法可靠判断是否切合该方向，因此方向适配性及其证据充分性均不作肯定判断。",
+    "evidence": "SecOPD follows\nthis model-level direction, but changes the training\nsignal: rather than assigning one feedback signal\nto each complete response, it provides token-level\nfeedback from clean inputs."
+  },
+  "material": {
+    "version": "a13ca11df756c41858a586e0e9d18778e6f325725c213112a8329600f6556981",
+    "total": 16,
+    "covered": 16,
+    "references": {
+      "problem": [
+        "P2",
+        "P3"
+      ],
+      "method": [
+        "P4",
+        "P5"
+      ],
+      "innovation": [
+        "P3",
+        "P5"
+      ],
+      "findings": [
+        "P6",
+        "P7"
+      ],
+      "limitations": [
+        "P8",
+        "P9",
+        "P13",
+        "P14",
+        "P15"
+      ],
+      "connection": [
+        "P3",
+        "P7"
+      ],
+      "next_steps": [
+        "P6",
+        "P13",
+        "P14",
+        "P15"
+      ]
+    },
+    "excerpt": "SecOPD follows\nthis model-level direction, but changes the training\nsignal: rather than assigning one feedback signal\nto each complete response, it provides token-level\nfeedback from clean inputs.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P7",
+        "detail": "图3文字提取重复了坐标轴及图例；原页只有一幅散点图，横轴为Attack Success Rate (%)，纵轴为Utility (%)。不影响作者关于安全性与效用权衡的结论。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P10",
+        "detail": "参考文献中机构名被提取为“OW ASP”；原页为“OWASP GenAI Security Project”，对应标题中的“OWASP”亦无空格。不影响论文方法或实验结论。"
+      }
+    ]
+  }
+}

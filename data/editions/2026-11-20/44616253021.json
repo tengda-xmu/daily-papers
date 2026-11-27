@@ -24,7 +24,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "This paper presents BodySync AI, a multimodal calorie-tracking prototype that combines optical character recognition (OCR), object detection, pose estimation, and an agentic large language model (LLM). The system supports two tasks: extracting nutritional values from photographs of food-packaging labels, and analyzing body proportions from full-body images. Nutrition extraction uses a classical image-processing front end (perspective correction, denoising, illumination normalization, and contrast enhancement) followed by EasyOCR and rulebased parsing of calories, fat, carbohydrates, and protei…",
+      "summary": "【摘要级导读】论文介绍一套多模态热量追踪原型，将食品包装营养标签提取与全身图像中的身体比例分析结合，并通过自然语言接口调用相关工具。标签提取采用图像预处理、EasyOCR和规则解析；作者另对营养标签检测器开展14组受控训练实验，报告最佳配置在验证集上的检测指标。身体类型估计目前基于姿态关键点和规则，相关评估及学习型身体成分模型仍属未来工作。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "55af2e078f96c484bfbe04c62d990c222d95c648",
@@ -67,11 +67,194 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "【解读】如果关注OCR、视觉检测与大语言模型工具调用的系统集成，可重点阅读其原型设计和检测实验；若关注结构设计、可靠性或智能运维，当前摘要未显示直接应用，应谨慎推荐。[摘要]",
+      "deep_read": {
+        "problem": "【论文摘要】研究面向热量追踪原型中的两项任务：从食品包装照片提取营养数值，以及从全身图像分析身体比例；摘要概括为“extracting nutritional values”和“analyzing body proportions”。其应用场景并非摘要中所述的结构设计或运维场景。[摘要]",
+        "method": "【论文摘要】营养提取先进行透视校正、去噪、光照归一化及对比度增强，再用EasyOCR和规则解析营养项；身体分析使用MediaPipe Pose关键点计算比例指标。Groq托管的Llama 3.1 8B智能体通过自然语言接口调用这些组件。[摘要]",
+        "innovation": "【解读】摘要呈现的系统特点是将营养标签识别、姿态比例计算与智能体工具调用结合，并对标签检测训练配置开展受控研究；但摘要未提供与既有系统的比较，不能据此断言上述组合或各组件具有首创性，也不能判断相对技术优势。[摘要]",
+        "findings": "【论文摘要】作者报告，营养标签检测器的最佳配置在验证集上达到mAP@50为0.904、mAP@50-95为0.727，依据是“on the validation split”。摘要未报告营养数值提取或身体类型估计的准确率，也未给出系统整体效果指标。[摘要]",
+        "limitations": "【论文摘要与解读】作者将系统称为“prototype”，身体类型估计是“baseline rule-based”方法，并将有关评估与学习型身体成分模型列为未来工作。【解读】摘要未说明检测之外任务的定量表现，因而不足以评估整个系统的实际使用可靠性。[摘要]",
+        "connection": "【解读】该研究没有在摘要中直接讨论智能运维、结构设计或可靠性研究。其视觉前处理、检测与自然语言工具接口的组合，可作为跨任务系统集成的参考，但不能据此认定方法已适用于工业设备、工程结构或可靠性评估。[摘要]",
+        "next_steps": "【建议】若考虑迁移，可先明确目标场景及输入数据，再分别验证图像预处理、检测、规则解析和智能体调用的表现，并检查各环节错误对最终结果的影响。这些是面向后续研究的建议，而非论文已完成的实验或已证实的结论。[摘要]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "BodySync AI：用于营养标签提取与基于姿态的身体分析的多模态智能体系统",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.66879/jmla.2026.83"
+      ],
+      "analyzed_at": "2026-11-27T15:01:24.057534+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "如何让一个系统同时读取食品营养标签、分析身体比例，并通过自然语言提供访问入口？BodySync AI 将图像处理与大语言模型智能体组合成原型，为理解多模态工具如何协同提供了一个具体案例。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从食品标签到身体比例的两个任务",
+            "paragraphs": [
+              "BodySync AI 是一个多模态卡路里追踪原型，结合光学字符识别、目标检测、姿态估计和智能体式大语言模型。系统面向两类输入：食品包装标签照片与全身图像，分别用于提取营养数值和分析身体比例。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "识别、检测与姿态工具如何组合",
+            "paragraphs": [
+              "营养信息提取先进行透视校正、去噪、光照归一化和对比度增强，再使用 EasyOCR 和基于规则的解析，提取卡路里、脂肪、碳水化合物及蛋白质信息。",
+              "与此同时，研究者使用 Open Food Facts Nutrition Table Detection 数据集训练 YOLOv8n 营养标签检测器，通过 14 次受控运行研究训练轮数、学习率、优化器、批量大小和输入分辨率的影响。",
+              "身体分析使用 MediaPipe Pose 关键点计算归一化肩宽、臀宽、躯干长度和肩臀比，并据此进行基于规则的基线体型估计。由 Groq 托管的 Llama 3.1 8B 智能体则通过自然语言界面，将这些组件作为工具提供。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "检测器在验证集上的报告结果",
+            "paragraphs": [
+              "摘要报告，最佳检测器配置在验证集上的 mAP@50 为 0.904，mAP@50-95 为 0.727。这是营养标签检测器的结果，不能直接代表营养数值提取、体型估计或整个系统的准确程度。",
+              "作者介绍了已构建的系统并报告检测器实验；摘要同时将相关评估和基于学习的身体成分模型列为未来工作，而非已完成成果。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不能回答哪些验证问题",
+            "paragraphs": [
+              "摘要未报告数据集的样本规模、验证集构成，也未给出不同配置的逐项比较结果，因此仅凭摘要无法判断结果对不同标签、拍摄条件或人群的适用范围。",
+              "摘要也未给出营养提取和身体分析的具体评估指标，无法据此判断两项任务及自然语言交互的实际表现；这并不意味着论文一定没有开展相关分析。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注智能体与工具的验证边界",
+            "paragraphs": [
+              "阅读启发：这个原型值得从“智能体如何调用专门工具”与“各工具的结果如何验证”两个层面理解。进一步阅读时，可关注检测器配置之间的比较，以及营养提取、身体分析和系统整体评估的具体范围。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的双任务与智能体工具示意",
+            "description": "仅概括摘要明确描述的输入、处理与工具关系，不表示未报告的调用顺序或实验结果。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "食品标签照片",
+                "detail": "营养信息提取的图像输入"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "图像预处理",
+                "detail": "透视校正、去噪、光照归一化和对比度增强"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "识别与规则解析",
+                "detail": "使用 EasyOCR 提取并解析营养数值"
+              },
+              {
+                "id": "d",
+                "stage": 0,
+                "label": "全身图像",
+                "detail": "身体比例分析的图像输入"
+              },
+              {
+                "id": "e",
+                "stage": 1,
+                "label": "姿态关键点与比例",
+                "detail": "使用 MediaPipe Pose 计算身体比例"
+              },
+              {
+                "id": "f",
+                "stage": 2,
+                "label": "规则体型估计",
+                "detail": "将身体比例用于基线体型估计"
+              },
+              {
+                "id": "g",
+                "stage": 3,
+                "label": "自然语言智能体",
+                "detail": "将系统组件作为工具提供"
+              },
+              {
+                "id": "h",
+                "stage": 2,
+                "label": "标签检测器",
+                "detail": "并行训练 YOLOv8n 营养标签检测器"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "输入"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "预处理后识别"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "提取关键点"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "比例用于估计"
+              },
+              {
+                "from": "a",
+                "to": "h",
+                "label": "标签检测"
+              },
+              {
+                "from": "c",
+                "to": "g",
+                "label": "作为工具提供"
+              },
+              {
+                "from": "f",
+                "to": "g",
+                "label": "作为工具提供"
+              },
+              {
+                "from": "h",
+                "to": "g",
+                "label": "作为工具提供"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-27T15:02:47.222038+00:00",
+      "article_profile": "fa4e771fd17df212a95c10efe89d05b69aac7b871c5caabf4d94b77f2ec3e137",
+      "analysis_references": {},
+      "analysis_material_version": "50d776c2db93b5f112e011af99ad027a3e2cf1089bfd6fc47467247b8dc36d3c",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "5dfe47090c05",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T15:02:47.222039+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -98,7 +281,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Temporal knowledge graph question answering (TKGQA) aims to answer time-sensitive questions by leveraging temporal knowledge bases. While Large Language Models (LLMs) demonstrate significant potential in TKGQA, current prompting strategies constrain their efficacy in two primary ways. First, they are prone to reasoning hallucinations under complex temporal constraints. Second, static prompting limits model autonomy and generalization, as it lacks optimization through dynamic interaction with temporal knowledge graph (TKG) environments. To address these limitations, we propose TKG-Thinker, a no…",
+      "summary": "论文研究复杂时间约束下的时序知识图谱问答，针对静态检索和推理幻觉，提出自主规划、调用时间检索工具的智能体。方法先用筛选后的教师轨迹进行监督微调，再以格式、检索和答案奖励开展在线强化学习。作者报告其在两个基准上总体优于对比方法，并通过消融和跨域测试分析组件作用。案例展示了动态核验，但部分轨迹存在推理不一致，奖励对中间过程的评估也有限。[P1][P5][P7][P9][P18]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -157,11 +340,78 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注知识图谱问答、工具调用和智能体训练的读者重点阅读：论文同时提供时间动作设计、奖励机制、消融实验和跨域结果。但研究方向标签未解释，不能据此确认与指定方向直接匹配。[P5][P7][P14]",
+      "deep_read": {
+        "problem": "论文关注时序知识图谱问答中实体关系与时间约束的联合推理。作者指出，现有方法可能在问题分解时忽略前后或先后条件，产生推理幻觉；静态、人工设计的工作流也限制了模型通过环境交互检查和修正证据的能力。[P1][P2]",
+        "method": "方法将知识图谱作为动态环境，先使用经过格式和答案正确性过滤的教师轨迹进行监督微调，为规划与工具调用提供初始化；再通过在线强化学习优化策略。动作包括思考、规划、时间检索和回答，奖励结合格式、检索覆盖及最终答案正确性。[P3][P4][P5]",
+        "innovation": "作者的方法特点是将时序问答组织为规划、思考、工具调用和观察交替进行的决策过程，并把严格早于、严格晚于和区间查询等时间操作显式纳入动作空间。监督冷启动与多维奖励共同服务于这一交互流程；其首创性仍以作者自身表述为限。[P2][P5]",
+        "findings": "作者报告，相对最强基线，两个主基准的总体 Hits@1 分别提高 7.60 和 7.30 个百分点。MULTITQ 消融中，完整模型为 0.855，移除监督微调、规划或替换时间检索器后分别降至 0.591、0.796 和 0.458；跨域表格中的最佳总体结果也高于所列基线。[P6][P7][P14]",
+        "limitations": "作者指出奖励主要依靠二元指标和规则，难以细致评估中间推理，现有基准的推理跳数也有限。解读：案例中还出现无关思考及事件方向、时间条件不一致，正确答案不等于全过程可靠。本批笔记未记录经原页核实的原文件缺项，不能据此补造缺失公式或其影响。[P9][P18][P19][P20]",
+        "connection": "解读：时间约束检索、证据追踪与多步规划可为智能运维中的事件关联或历史状态查询提供方法参照；时间对齐也可能启发可靠性记录分析。但本文实验是通用时序知识图谱问答，资料未提供结构设计或工业运维验证，不能直接推断实际应用效果。[P5][P6][P14]",
+        "next_steps": "建议先构建具有明确时间戳、事件方向和可追溯证据的领域问答集，再比较纯语义检索与时间约束检索，并单独评估中间步骤的逻辑一致性。对于长链任务，可设置更复杂多跳和开放世界测试；这些是迁移研究设想，而非论文已验证的成果。[P7][P9][P19]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "TKG-Thinker：通过智能体强化学习实现时序知识图谱动态推理",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.152/"
+      ],
+      "analyzed_at": "2026-11-27T15:05:52.097963+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P5"
+        ],
+        "findings": [
+          "P6",
+          "P7",
+          "P14"
+        ],
+        "limitations": [
+          "P9",
+          "P18",
+          "P19",
+          "P20"
+        ],
+        "connection": [
+          "P5",
+          "P6",
+          "P14"
+        ],
+        "next_steps": [
+          "P7",
+          "P9",
+          "P19"
+        ]
+      },
+      "analysis_material_version": "a94885baedad4d648c82a58cc03153e80d581957f28e1b2a83c918b3b9d241bd",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "aa618d14a711",
+        "state": "published",
+        "updated_at": "2026-11-27T15:05:52.116399+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 22,
+        "covered": 22,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -187,7 +437,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Query-centric cross-document event timeline extraction aims to construct event timelines from multiple documents under diverse query focuses. The task is very challenging due to the heterogeneous event modeling and reasoning requirements arising from both the intrinsic complexity of cross-document timeline construction and the diversity of query focuses. In this paper, we propose TimelineAgent, an LLM-based multi-agent framework featuring a multi-stage reasoning workflow, where heterogeneous event features are organized into reusable skills and orchestrated through a goal-oriented protocol. To…",
+      "summary": "论文研究如何根据实体、方面或种子事件查询，从多篇文档抽取并组织事件时间线。作者提出 TimelineAgent，将候选事件识别、相关性匹配、时间锚定、资格过滤及跨文档共指等步骤交由多阶段智能体处理，并以原子技能库和目标导向协议组织推理。[P2][P4] 在构建的三类查询基准上，DeepSeek-V3 版本的 F1 分别为37.9、42.9和33.1；结果显示任务仍具挑战，推理成本也值得关注。[P7][P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -246,11 +496,97 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注复杂信息抽取、多智能体任务分解和事件时间线构建的读者重点阅读：论文同时提供技能编排、基准构造、消融和错误传播分析，但跨领域迁移效果仍需验证。[P5][P8][P21]",
+      "deep_read": {
+        "problem": "论文提出查询中心跨文档事件时间线抽取任务 QUEST：从文档集合中筛选与查询有关的事件，确定其时间并合并共指提及。实体、方面和种子事件查询关注的信息不同，因而需要同时处理语义、论元、因果和时间等异构特征。[P1][P2][P3]",
+        "method": "TimelineAgent 依次进行句子过滤、候选事件检测、查询相关性匹配、时间锚定、资格过滤和跨文档事件共指。各阶段调用句法、语义、论元、事实性、时间及因果原子技能；编排协议根据推理子步骤和查询类型选择技能组合与配置。[P4][P5]",
+        "innovation": "作者的主要设计是把任务无关的事件特征建模与查询、阶段相关的推理解耦：原子技能以受约束提示模块实现，返回结构化中间结果；目标导向协议再按需要组合技能。作者还基于已有数据和新增标注构建覆盖三类查询的评测基准。[P2][P6][P18]",
+        "findings": "DeepSeek-V3 版在实体、方面和种子事件查询上的 F1 分别为37.9、42.9和33.1。去除技能与协议或合并为单阶段均使性能下降；用金标准替换检测、匹配及过滤后，三类 F1 分别升至67.6、69.8和71.4，表明前期事件选择值得重视。[P7][P8]",
+        "limitations": "整体性能仍约为30%—40% F1，完整推理约需10小时且受批处理配置影响；大规模 SFT 在方面查询上也超过 Qwen3-32B 版框架0.6 F1。[P7][P8][P9] 当前逐页核对记录未报告原文件缺项；P7数值粘连和P9公式层级错误均为已纠正的提取错误，并非原文件缺项。",
+        "connection": "解读：跨文档事件筛选、时间锚定与共指合并可为智能运维中的事故记录梳理提供方法参照，事实性过滤也有助于区分已发生事件与否定表述。[P4][P25] 但本资料未展示运维、结构设计或可靠性数据上的实验，不能据此认定实际迁移效果。",
+        "next_steps": "建议以运维日志和故障报告构建带时间、设备实体及事件共指标注的小规模基准，分别评估事件选择、时间锚定和最终时间线，并记录推理耗时。作者另提出细粒度技能编排、大小模型混合及人机协作标注作为未来方向，这些方案在资料中尚未验证。[P8][P9]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "TimelineAgent：基于大语言模型的多文档查询中心事件时间线抽取框架",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.2328/"
+      ],
+      "analyzed_at": "2026-11-27T15:24:43.695036+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P6",
+          "P18"
+        ],
+        "findings": [
+          "P7",
+          "P8"
+        ],
+        "limitations": [
+          "P7",
+          "P8",
+          "P9"
+        ],
+        "connection": [
+          "P4",
+          "P25"
+        ],
+        "next_steps": [
+          "P8",
+          "P9"
+        ]
+      },
+      "analysis_material_version": "83f3a374a37d99606c6a10ad97128ca8fe35144898a41a82fb43c6b2034c79d4",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "表3的 DeepSeek-V3／TimelineAgent 行在文字提取中将多个数值粘连；原页依次为实体 P/R/F1：37.2/38.6/37.9，方面：45.8/40.3/42.9，种子事件：27.8/40.9/33.1。纠正后可正确比较各查询设置的性能，不改变作者所述的主要结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "计算效率段落的平均推理执行次数公式在文字提取中丢失分式层级；原页为 [2+(2+2+3)/3+2+2+2]/5≈2.1×。该修正保留了作者关于相对标准多阶段 ICL 的执行次数估计，不改变结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "661b97531d1e",
+        "state": "published",
+        "updated_at": "2026-11-27T15:24:43.732639+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 25,
+        "covered": 25,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "表3的 DeepSeek-V3／TimelineAgent 行在文字提取中将多个数值粘连；原页依次为实体 P/R/F1：37.2/38.6/37.9，方面：45.8/40.3/42.9，种子事件：27.8/40.9/33.1。纠正后可正确比较各查询设置的性能，不改变作者所述的主要结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "计算效率段落的平均推理执行次数公式在文字提取中丢失分式层级；原页为 [2+(2+2+3)/3+2+2+2]/5≈2.1×。该修正保留了作者关于相对标准多阶段 ICL 的执行次数估计，不改变结论。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -337,7 +673,26 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "2d7d4bb0f12f",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:38:35.336209+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 24,
+        "covered": 24,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "页首门正则化公式的文字提取遗漏 α 上方的横线；原页为 L_gate_reg=\\bar{α}_r^{non-comp}。该项用于鼓励非竞争关系槽的速度趋近于零；遗漏横线会改变公式符号，不影响辨认作者对其作用的文字说明。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -366,7 +721,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Recent advances in autonomous LLM agents demonstrate their ability to improve performance through iterative interaction with the environment. We define this paradigm as Test-Time Improvement (TTI). However, the mechanisms under how and why TTI succeed or fail remain poorly understood, and existing evaluation metrics fail to capture their task optimization efficiency, behavior adaptation after erroneous actions, and the specific utility of working memory. To address these gaps, we propose Test-time Improvement Diagnostic Evaluation (TIDE), a lightweight, agent-agnostic and environment-agnostic…",
+      "summary": "论文研究如何评估大语言模型智能体在环境交互中的测试时改进，而不只看最终任务是否成功。作者提出 TIDE，以成功率曲线面积衡量优化效率，以循环比例识别重复行动，以有无历史记忆的性能差衡量记忆效用。跨环境实验显示，相同最终成功率可能对应不同时间效率，高循环比例与低效率相关，累积记忆也可能降低表现。框架主要针对单智能体，其迁移仍需考虑任务状态定义与环境特征。[P2][P3][P5][P6][P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -425,11 +780,135 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注智能体评估与交互可靠性的读者重点阅读：论文给出可操作的轨迹诊断指标、消融方案和跨环境结果，有助于超越单一成功率分析失败过程；但与具体工程方向的契合度仍需结合实际任务判断。[P2][P5][P6][P9]",
+      "deep_read": {
+        "problem": "作者关注智能体如何通过多轮交互改进，以及改进为何停滞或退化。最终成功率把快速成功与长时间探索后的成功压缩为同一结果，交互轮数也难区分纠错和重复失败；累积记忆究竟有益还是有害同样需要单独评估。[P1][P2]",
+        "method": "TIDE 将诊断拆为三个指标：AUV 对累计成功率曲线作归一化梯形求和；LR 统计连续重复循环中的行动占比；MI 比较保留与移除历史记忆时的 AUV。前两者使用轨迹，MI 额外需要记忆移除消融，GUI 状态比较则采用截图嵌入。[P2][P3][P5][P6][P8]",
+        "innovation": "作者将测试时改进作为交互驱动的多维过程，联合考察效率、行为适应与记忆效用，而非仅以终局成功率排序。附录进一步把 AUV 表示为随时间衰减的边际增益加权和，说明相同最终成功率下提前完成任务会提高该指标。[P2][P12][P13]",
+        "findings": "在 AlfWorld，Gemini 2.5 Pro 与 DeepSeek-V3.2 最终成功率均为0.807，AUV 却分别为0.629和0.590。作者发现高 LR 与低 AUV 相关，但低 LR 不保证高 AUV；FrozenLake 的记忆消融中，多个模型使用累积记忆后性能下降。[P3][P5][P6]",
+        "limitations": "作者指出研究主要针对单智能体；不可逆动态领域中，LR 未必严格表示次优行为。GUI 状态判定依赖相似度阈值，跨任务解释需谨慎。逐页核对记录未报告原文件缺项；P13、P14 记录的是已纠正的提取伪影，不应视为缺失公式。[P8][P9][P13][P14][P18]",
+        "connection": "解读：若研究智能运维智能体，可借鉴轨迹效率、重复操作与历史信息效用三个维度，补充最终任务成功率；但论文实验未直接验证运维场景。对于结构设计与工程可靠性，本资料没有直接实验，不能据此认定指标已适用或能改善系统可靠性。[P2][P5][P9]",
+        "next_steps": "建议先在目标任务中定义可观测状态、动作等价关系及成功时限，再以轨迹计算 AUV 和 LR，并用受控记忆移除实验估计 MI。对不可逆操作应设计领域专用循环判据，并人工检查高循环案例；这些是迁移设想，不是作者已验证的工程效果。[P5][P6][P9][P20]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "TIDE：基于轨迹的大语言模型智能体测试时改进诊断评估",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.639/"
+      ],
+      "analyzed_at": "2026-11-27T15:44:40.860329+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P2",
+          "P3",
+          "P5",
+          "P6",
+          "P8"
+        ],
+        "innovation": [
+          "P2",
+          "P12",
+          "P13"
+        ],
+        "findings": [
+          "P3",
+          "P5",
+          "P6"
+        ],
+        "limitations": [
+          "P8",
+          "P9",
+          "P13",
+          "P14",
+          "P18"
+        ],
+        "connection": [
+          "P2",
+          "P5",
+          "P9"
+        ],
+        "next_steps": [
+          "P5",
+          "P6",
+          "P9",
+          "P20"
+        ]
+      },
+      "analysis_material_version": "47379c2e4447cf598ef1e98dd9aa495bd9118ed19591b73ef3cc9475433ff85c",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P13",
+          "detail": "公式（10）中的 /bracehtip... 是下方大括号的文字提取伪影，并非原公式内容；原页标注分别为 contribution at t=k 和 contribution at t>k，权重结果为 w(k)=t_max−k−0.5。受影响的是 AUV 对较早增益赋予更高权重的解释。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P14",
+          "detail": "公式（18）中的 /bracehtip... 是下方大括号的文字提取伪影；原页用大括号将括号内的单任务加权和标记为 Z^(i)。这关系到后续无偏性、方差及一致性证明。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P23",
+          "detail": "代码2中若干方法名被提取为带空格的字符序列；原页分别为 _prepare_step_history、_initialize_trajectory 和 _run_stepwise_episode_batch。错误影响对任务运行框架接口的准确识别，不影响实验结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P24",
+          "detail": "代码3、代码4中，原页的 get_next_step_parallel、instruction_prompt、user_assistant_format 和 user_assistant_format_part 在提取文本中被拆成带空格的字符序列。错误影响接口及提示格式名称的准确识别，不影响实验结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P25",
+          "detail": "代码5中属性名被提取为“ins truction _text”；原页为 instruction_text。该错误影响环境接口名称的准确识别，不影响论文实验结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "ed9024d69f05",
+        "state": "published",
+        "updated_at": "2026-11-27T15:44:40.893294+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 25,
+        "covered": 25,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "公式（10）中的 /bracehtip... 是下方大括号的文字提取伪影，并非原公式内容；原页标注分别为 contribution at t=k 和 contribution at t>k，权重结果为 w(k)=t_max−k−0.5。受影响的是 AUV 对较早增益赋予更高权重的解释。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "公式（18）中的 /bracehtip... 是下方大括号的文字提取伪影；原页用大括号将括号内的单任务加权和标记为 Z^(i)。这关系到后续无偏性、方差及一致性证明。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P23",
+            "detail": "代码2中若干方法名被提取为带空格的字符序列；原页分别为 _prepare_step_history、_initialize_trajectory 和 _run_stepwise_episode_batch。错误影响对任务运行框架接口的准确识别，不影响实验结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P24",
+            "detail": "代码3、代码4中，原页的 get_next_step_parallel、instruction_prompt、user_assistant_format 和 user_assistant_format_part 在提取文本中被拆成带空格的字符序列。错误影响接口及提示格式名称的准确识别，不影响实验结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P25",
+            "detail": "代码5中属性名被提取为“ins truction _text”；原页为 instruction_text。该错误影响环境接口名称的准确识别，不影响论文实验结论。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -513,7 +992,36 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "d8fc409bd573",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:21:35.177327+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 21,
+        "covered": 21,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "表2的 FM1、FM4 行中，文字提取把相邻列数字分别连成“180 0”和“150 0”。原页四列依次为 M3 r1 的 D1、D2 及 GDP r1 的 D1、D2：FM1 为 23、18、0、0；FM4 为 11、15、0、0。纠正后支持作者关于所选样本中两类高优先级模式计数降至零的结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "表3文字提取将相邻数字连在一起。原页中 D1 的 Pilot、Δ 与 D2 的 Pilot、Δ 分列；例如 M3 r0 依次为 0.896、−0.001、0.891、+0.005。各差值均在 ±0.005 内的作者结论不变。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "表5文字提取将部分相邻列连写，例如“M3-GDP r10.813 85.6%499”。原页该行依次为 M3-GDP、r1、GT-HYB 0.813、覆盖率 85.6%、N=499；纠正列界后不改变专家对齐结果。"
+          }
+        ]
+      }
     }
   ],
   "extended": [],
@@ -538,7 +1046,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "This paper presents BodySync AI, a multimodal calorie-tracking prototype that combines optical character recognition (OCR), object detection, pose estimation, and an agentic large language model (LLM). The system supports two tasks: extracting nutritional values from photographs of food-packaging labels, and analyzing body proportions from full-body images. Nutrition extraction uses a classical image-processing front end (perspective correction, denoising, illumination normalization, and contrast enhancement) followed by EasyOCR and rulebased parsing of calories, fat, carbohydrates, and protei…",
+      "summary": "【摘要级导读】论文介绍一套多模态热量追踪原型，将食品包装营养标签提取与全身图像中的身体比例分析结合，并通过自然语言接口调用相关工具。标签提取采用图像预处理、EasyOCR和规则解析；作者另对营养标签检测器开展14组受控训练实验，报告最佳配置在验证集上的检测指标。身体类型估计目前基于姿态关键点和规则，相关评估及学习型身体成分模型仍属未来工作。[摘要]",
       "raw_metadata": {
         "provider": "Semantic Scholar",
         "paperId": "55af2e078f96c484bfbe04c62d990c222d95c648",
@@ -581,11 +1089,194 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "【解读】如果关注OCR、视觉检测与大语言模型工具调用的系统集成，可重点阅读其原型设计和检测实验；若关注结构设计、可靠性或智能运维，当前摘要未显示直接应用，应谨慎推荐。[摘要]",
+      "deep_read": {
+        "problem": "【论文摘要】研究面向热量追踪原型中的两项任务：从食品包装照片提取营养数值，以及从全身图像分析身体比例；摘要概括为“extracting nutritional values”和“analyzing body proportions”。其应用场景并非摘要中所述的结构设计或运维场景。[摘要]",
+        "method": "【论文摘要】营养提取先进行透视校正、去噪、光照归一化及对比度增强，再用EasyOCR和规则解析营养项；身体分析使用MediaPipe Pose关键点计算比例指标。Groq托管的Llama 3.1 8B智能体通过自然语言接口调用这些组件。[摘要]",
+        "innovation": "【解读】摘要呈现的系统特点是将营养标签识别、姿态比例计算与智能体工具调用结合，并对标签检测训练配置开展受控研究；但摘要未提供与既有系统的比较，不能据此断言上述组合或各组件具有首创性，也不能判断相对技术优势。[摘要]",
+        "findings": "【论文摘要】作者报告，营养标签检测器的最佳配置在验证集上达到mAP@50为0.904、mAP@50-95为0.727，依据是“on the validation split”。摘要未报告营养数值提取或身体类型估计的准确率，也未给出系统整体效果指标。[摘要]",
+        "limitations": "【论文摘要与解读】作者将系统称为“prototype”，身体类型估计是“baseline rule-based”方法，并将有关评估与学习型身体成分模型列为未来工作。【解读】摘要未说明检测之外任务的定量表现，因而不足以评估整个系统的实际使用可靠性。[摘要]",
+        "connection": "【解读】该研究没有在摘要中直接讨论智能运维、结构设计或可靠性研究。其视觉前处理、检测与自然语言工具接口的组合，可作为跨任务系统集成的参考，但不能据此认定方法已适用于工业设备、工程结构或可靠性评估。[摘要]",
+        "next_steps": "【建议】若考虑迁移，可先明确目标场景及输入数据，再分别验证图像预处理、检测、规则解析和智能体调用的表现，并检查各环节错误对最终结果的影响。这些是面向后续研究的建议，而非论文已完成的实验或已证实的结论。[摘要]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "BodySync AI：用于营养标签提取与基于姿态的身体分析的多模态智能体系统",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://doi.org/10.66879/jmla.2026.83"
+      ],
+      "analyzed_at": "2026-11-27T15:01:24.057534+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "如何让一个系统同时读取食品营养标签、分析身体比例，并通过自然语言提供访问入口？BodySync AI 将图像处理与大语言模型智能体组合成原型，为理解多模态工具如何协同提供了一个具体案例。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "从食品标签到身体比例的两个任务",
+            "paragraphs": [
+              "BodySync AI 是一个多模态卡路里追踪原型，结合光学字符识别、目标检测、姿态估计和智能体式大语言模型。系统面向两类输入：食品包装标签照片与全身图像，分别用于提取营养数值和分析身体比例。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "识别、检测与姿态工具如何组合",
+            "paragraphs": [
+              "营养信息提取先进行透视校正、去噪、光照归一化和对比度增强，再使用 EasyOCR 和基于规则的解析，提取卡路里、脂肪、碳水化合物及蛋白质信息。",
+              "与此同时，研究者使用 Open Food Facts Nutrition Table Detection 数据集训练 YOLOv8n 营养标签检测器，通过 14 次受控运行研究训练轮数、学习率、优化器、批量大小和输入分辨率的影响。",
+              "身体分析使用 MediaPipe Pose 关键点计算归一化肩宽、臀宽、躯干长度和肩臀比，并据此进行基于规则的基线体型估计。由 Groq 托管的 Llama 3.1 8B 智能体则通过自然语言界面，将这些组件作为工具提供。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "检测器在验证集上的报告结果",
+            "paragraphs": [
+              "摘要报告，最佳检测器配置在验证集上的 mAP@50 为 0.904，mAP@50-95 为 0.727。这是营养标签检测器的结果，不能直接代表营养数值提取、体型估计或整个系统的准确程度。",
+              "作者介绍了已构建的系统并报告检测器实验；摘要同时将相关评估和基于学习的身体成分模型列为未来工作，而非已完成成果。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不能回答哪些验证问题",
+            "paragraphs": [
+              "摘要未报告数据集的样本规模、验证集构成，也未给出不同配置的逐项比较结果，因此仅凭摘要无法判断结果对不同标签、拍摄条件或人群的适用范围。",
+              "摘要也未给出营养提取和身体分析的具体评估指标，无法据此判断两项任务及自然语言交互的实际表现；这并不意味着论文一定没有开展相关分析。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注智能体与工具的验证边界",
+            "paragraphs": [
+              "阅读启发：这个原型值得从“智能体如何调用专门工具”与“各工具的结果如何验证”两个层面理解。进一步阅读时，可关注检测器配置之间的比较，以及营养提取、身体分析和系统整体评估的具体范围。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的双任务与智能体工具示意",
+            "description": "仅概括摘要明确描述的输入、处理与工具关系，不表示未报告的调用顺序或实验结果。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "食品标签照片",
+                "detail": "营养信息提取的图像输入"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "图像预处理",
+                "detail": "透视校正、去噪、光照归一化和对比度增强"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "识别与规则解析",
+                "detail": "使用 EasyOCR 提取并解析营养数值"
+              },
+              {
+                "id": "d",
+                "stage": 0,
+                "label": "全身图像",
+                "detail": "身体比例分析的图像输入"
+              },
+              {
+                "id": "e",
+                "stage": 1,
+                "label": "姿态关键点与比例",
+                "detail": "使用 MediaPipe Pose 计算身体比例"
+              },
+              {
+                "id": "f",
+                "stage": 2,
+                "label": "规则体型估计",
+                "detail": "将身体比例用于基线体型估计"
+              },
+              {
+                "id": "g",
+                "stage": 3,
+                "label": "自然语言智能体",
+                "detail": "将系统组件作为工具提供"
+              },
+              {
+                "id": "h",
+                "stage": 2,
+                "label": "标签检测器",
+                "detail": "并行训练 YOLOv8n 营养标签检测器"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "输入"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "预处理后识别"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "提取关键点"
+              },
+              {
+                "from": "e",
+                "to": "f",
+                "label": "比例用于估计"
+              },
+              {
+                "from": "a",
+                "to": "h",
+                "label": "标签检测"
+              },
+              {
+                "from": "c",
+                "to": "g",
+                "label": "作为工具提供"
+              },
+              {
+                "from": "f",
+                "to": "g",
+                "label": "作为工具提供"
+              },
+              {
+                "from": "h",
+                "to": "g",
+                "label": "作为工具提供"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-27T15:02:47.222038+00:00",
+      "article_profile": "fa4e771fd17df212a95c10efe89d05b69aac7b871c5caabf4d94b77f2ec3e137",
+      "analysis_references": {},
+      "analysis_material_version": "50d776c2db93b5f112e011af99ad027a3e2cf1089bfd6fc47467247b8dc36d3c",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "5dfe47090c05",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T15:02:47.222039+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -612,7 +1303,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Temporal knowledge graph question answering (TKGQA) aims to answer time-sensitive questions by leveraging temporal knowledge bases. While Large Language Models (LLMs) demonstrate significant potential in TKGQA, current prompting strategies constrain their efficacy in two primary ways. First, they are prone to reasoning hallucinations under complex temporal constraints. Second, static prompting limits model autonomy and generalization, as it lacks optimization through dynamic interaction with temporal knowledge graph (TKG) environments. To address these limitations, we propose TKG-Thinker, a no…",
+      "summary": "论文研究复杂时间约束下的时序知识图谱问答，针对静态检索和推理幻觉，提出自主规划、调用时间检索工具的智能体。方法先用筛选后的教师轨迹进行监督微调，再以格式、检索和答案奖励开展在线强化学习。作者报告其在两个基准上总体优于对比方法，并通过消融和跨域测试分析组件作用。案例展示了动态核验，但部分轨迹存在推理不一致，奖励对中间过程的评估也有限。[P1][P5][P7][P9][P18]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -671,11 +1362,78 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注知识图谱问答、工具调用和智能体训练的读者重点阅读：论文同时提供时间动作设计、奖励机制、消融实验和跨域结果。但研究方向标签未解释，不能据此确认与指定方向直接匹配。[P5][P7][P14]",
+      "deep_read": {
+        "problem": "论文关注时序知识图谱问答中实体关系与时间约束的联合推理。作者指出，现有方法可能在问题分解时忽略前后或先后条件，产生推理幻觉；静态、人工设计的工作流也限制了模型通过环境交互检查和修正证据的能力。[P1][P2]",
+        "method": "方法将知识图谱作为动态环境，先使用经过格式和答案正确性过滤的教师轨迹进行监督微调，为规划与工具调用提供初始化；再通过在线强化学习优化策略。动作包括思考、规划、时间检索和回答，奖励结合格式、检索覆盖及最终答案正确性。[P3][P4][P5]",
+        "innovation": "作者的方法特点是将时序问答组织为规划、思考、工具调用和观察交替进行的决策过程，并把严格早于、严格晚于和区间查询等时间操作显式纳入动作空间。监督冷启动与多维奖励共同服务于这一交互流程；其首创性仍以作者自身表述为限。[P2][P5]",
+        "findings": "作者报告，相对最强基线，两个主基准的总体 Hits@1 分别提高 7.60 和 7.30 个百分点。MULTITQ 消融中，完整模型为 0.855，移除监督微调、规划或替换时间检索器后分别降至 0.591、0.796 和 0.458；跨域表格中的最佳总体结果也高于所列基线。[P6][P7][P14]",
+        "limitations": "作者指出奖励主要依靠二元指标和规则，难以细致评估中间推理，现有基准的推理跳数也有限。解读：案例中还出现无关思考及事件方向、时间条件不一致，正确答案不等于全过程可靠。本批笔记未记录经原页核实的原文件缺项，不能据此补造缺失公式或其影响。[P9][P18][P19][P20]",
+        "connection": "解读：时间约束检索、证据追踪与多步规划可为智能运维中的事件关联或历史状态查询提供方法参照；时间对齐也可能启发可靠性记录分析。但本文实验是通用时序知识图谱问答，资料未提供结构设计或工业运维验证，不能直接推断实际应用效果。[P5][P6][P14]",
+        "next_steps": "建议先构建具有明确时间戳、事件方向和可追溯证据的领域问答集，再比较纯语义检索与时间约束检索，并单独评估中间步骤的逻辑一致性。对于长链任务，可设置更复杂多跳和开放世界测试；这些是迁移研究设想，而非论文已验证的成果。[P7][P9][P19]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "TKG-Thinker：通过智能体强化学习实现时序知识图谱动态推理",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.152/"
+      ],
+      "analyzed_at": "2026-11-27T15:05:52.097963+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P5"
+        ],
+        "findings": [
+          "P6",
+          "P7",
+          "P14"
+        ],
+        "limitations": [
+          "P9",
+          "P18",
+          "P19",
+          "P20"
+        ],
+        "connection": [
+          "P5",
+          "P6",
+          "P14"
+        ],
+        "next_steps": [
+          "P7",
+          "P9",
+          "P19"
+        ]
+      },
+      "analysis_material_version": "a94885baedad4d648c82a58cc03153e80d581957f28e1b2a83c918b3b9d241bd",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "aa618d14a711",
+        "state": "published",
+        "updated_at": "2026-11-27T15:05:52.116399+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 22,
+        "covered": 22,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -701,7 +1459,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Query-centric cross-document event timeline extraction aims to construct event timelines from multiple documents under diverse query focuses. The task is very challenging due to the heterogeneous event modeling and reasoning requirements arising from both the intrinsic complexity of cross-document timeline construction and the diversity of query focuses. In this paper, we propose TimelineAgent, an LLM-based multi-agent framework featuring a multi-stage reasoning workflow, where heterogeneous event features are organized into reusable skills and orchestrated through a goal-oriented protocol. To…",
+      "summary": "论文研究如何根据实体、方面或种子事件查询，从多篇文档抽取并组织事件时间线。作者提出 TimelineAgent，将候选事件识别、相关性匹配、时间锚定、资格过滤及跨文档共指等步骤交由多阶段智能体处理，并以原子技能库和目标导向协议组织推理。[P2][P4] 在构建的三类查询基准上，DeepSeek-V3 版本的 F1 分别为37.9、42.9和33.1；结果显示任务仍具挑战，推理成本也值得关注。[P7][P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -760,11 +1518,97 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注复杂信息抽取、多智能体任务分解和事件时间线构建的读者重点阅读：论文同时提供技能编排、基准构造、消融和错误传播分析，但跨领域迁移效果仍需验证。[P5][P8][P21]",
+      "deep_read": {
+        "problem": "论文提出查询中心跨文档事件时间线抽取任务 QUEST：从文档集合中筛选与查询有关的事件，确定其时间并合并共指提及。实体、方面和种子事件查询关注的信息不同，因而需要同时处理语义、论元、因果和时间等异构特征。[P1][P2][P3]",
+        "method": "TimelineAgent 依次进行句子过滤、候选事件检测、查询相关性匹配、时间锚定、资格过滤和跨文档事件共指。各阶段调用句法、语义、论元、事实性、时间及因果原子技能；编排协议根据推理子步骤和查询类型选择技能组合与配置。[P4][P5]",
+        "innovation": "作者的主要设计是把任务无关的事件特征建模与查询、阶段相关的推理解耦：原子技能以受约束提示模块实现，返回结构化中间结果；目标导向协议再按需要组合技能。作者还基于已有数据和新增标注构建覆盖三类查询的评测基准。[P2][P6][P18]",
+        "findings": "DeepSeek-V3 版在实体、方面和种子事件查询上的 F1 分别为37.9、42.9和33.1。去除技能与协议或合并为单阶段均使性能下降；用金标准替换检测、匹配及过滤后，三类 F1 分别升至67.6、69.8和71.4，表明前期事件选择值得重视。[P7][P8]",
+        "limitations": "整体性能仍约为30%—40% F1，完整推理约需10小时且受批处理配置影响；大规模 SFT 在方面查询上也超过 Qwen3-32B 版框架0.6 F1。[P7][P8][P9] 当前逐页核对记录未报告原文件缺项；P7数值粘连和P9公式层级错误均为已纠正的提取错误，并非原文件缺项。",
+        "connection": "解读：跨文档事件筛选、时间锚定与共指合并可为智能运维中的事故记录梳理提供方法参照，事实性过滤也有助于区分已发生事件与否定表述。[P4][P25] 但本资料未展示运维、结构设计或可靠性数据上的实验，不能据此认定实际迁移效果。",
+        "next_steps": "建议以运维日志和故障报告构建带时间、设备实体及事件共指标注的小规模基准，分别评估事件选择、时间锚定和最终时间线，并记录推理耗时。作者另提出细粒度技能编排、大小模型混合及人机协作标注作为未来方向，这些方案在资料中尚未验证。[P8][P9]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "TimelineAgent：基于大语言模型的多文档查询中心事件时间线抽取框架",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.2328/"
+      ],
+      "analyzed_at": "2026-11-27T15:24:43.695036+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P6",
+          "P18"
+        ],
+        "findings": [
+          "P7",
+          "P8"
+        ],
+        "limitations": [
+          "P7",
+          "P8",
+          "P9"
+        ],
+        "connection": [
+          "P4",
+          "P25"
+        ],
+        "next_steps": [
+          "P8",
+          "P9"
+        ]
+      },
+      "analysis_material_version": "83f3a374a37d99606c6a10ad97128ca8fe35144898a41a82fb43c6b2034c79d4",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "表3的 DeepSeek-V3／TimelineAgent 行在文字提取中将多个数值粘连；原页依次为实体 P/R/F1：37.2/38.6/37.9，方面：45.8/40.3/42.9，种子事件：27.8/40.9/33.1。纠正后可正确比较各查询设置的性能，不改变作者所述的主要结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P9",
+          "detail": "计算效率段落的平均推理执行次数公式在文字提取中丢失分式层级；原页为 [2+(2+2+3)/3+2+2+2]/5≈2.1×。该修正保留了作者关于相对标准多阶段 ICL 的执行次数估计，不改变结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "661b97531d1e",
+        "state": "published",
+        "updated_at": "2026-11-27T15:24:43.732639+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 25,
+        "covered": 25,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "表3的 DeepSeek-V3／TimelineAgent 行在文字提取中将多个数值粘连；原页依次为实体 P/R/F1：37.2/38.6/37.9，方面：45.8/40.3/42.9，种子事件：27.8/40.9/33.1。纠正后可正确比较各查询设置的性能，不改变作者所述的主要结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P9",
+            "detail": "计算效率段落的平均推理执行次数公式在文字提取中丢失分式层级；原页为 [2+(2+2+3)/3+2+2+2]/5≈2.1×。该修正保留了作者关于相对标准多阶段 ICL 的执行次数估计，不改变结论。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -851,7 +1695,26 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "2d7d4bb0f12f",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:38:35.336209+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 24,
+        "covered": 24,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "页首门正则化公式的文字提取遗漏 α 上方的横线；原页为 L_gate_reg=\\bar{α}_r^{non-comp}。该项用于鼓励非竞争关系槽的速度趋近于零；遗漏横线会改变公式符号，不影响辨认作者对其作用的文字说明。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -880,7 +1743,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Recent advances in autonomous LLM agents demonstrate their ability to improve performance through iterative interaction with the environment. We define this paradigm as Test-Time Improvement (TTI). However, the mechanisms under how and why TTI succeed or fail remain poorly understood, and existing evaluation metrics fail to capture their task optimization efficiency, behavior adaptation after erroneous actions, and the specific utility of working memory. To address these gaps, we propose Test-time Improvement Diagnostic Evaluation (TIDE), a lightweight, agent-agnostic and environment-agnostic…",
+      "summary": "论文研究如何评估大语言模型智能体在环境交互中的测试时改进，而不只看最终任务是否成功。作者提出 TIDE，以成功率曲线面积衡量优化效率，以循环比例识别重复行动，以有无历史记忆的性能差衡量记忆效用。跨环境实验显示，相同最终成功率可能对应不同时间效率，高循环比例与低效率相关，累积记忆也可能降低表现。框架主要针对单智能体，其迁移仍需考虑任务状态定义与环境特征。[P2][P3][P5][P6][P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -939,11 +1802,135 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注智能体评估与交互可靠性的读者重点阅读：论文给出可操作的轨迹诊断指标、消融方案和跨环境结果，有助于超越单一成功率分析失败过程；但与具体工程方向的契合度仍需结合实际任务判断。[P2][P5][P6][P9]",
+      "deep_read": {
+        "problem": "作者关注智能体如何通过多轮交互改进，以及改进为何停滞或退化。最终成功率把快速成功与长时间探索后的成功压缩为同一结果，交互轮数也难区分纠错和重复失败；累积记忆究竟有益还是有害同样需要单独评估。[P1][P2]",
+        "method": "TIDE 将诊断拆为三个指标：AUV 对累计成功率曲线作归一化梯形求和；LR 统计连续重复循环中的行动占比；MI 比较保留与移除历史记忆时的 AUV。前两者使用轨迹，MI 额外需要记忆移除消融，GUI 状态比较则采用截图嵌入。[P2][P3][P5][P6][P8]",
+        "innovation": "作者将测试时改进作为交互驱动的多维过程，联合考察效率、行为适应与记忆效用，而非仅以终局成功率排序。附录进一步把 AUV 表示为随时间衰减的边际增益加权和，说明相同最终成功率下提前完成任务会提高该指标。[P2][P12][P13]",
+        "findings": "在 AlfWorld，Gemini 2.5 Pro 与 DeepSeek-V3.2 最终成功率均为0.807，AUV 却分别为0.629和0.590。作者发现高 LR 与低 AUV 相关，但低 LR 不保证高 AUV；FrozenLake 的记忆消融中，多个模型使用累积记忆后性能下降。[P3][P5][P6]",
+        "limitations": "作者指出研究主要针对单智能体；不可逆动态领域中，LR 未必严格表示次优行为。GUI 状态判定依赖相似度阈值，跨任务解释需谨慎。逐页核对记录未报告原文件缺项；P13、P14 记录的是已纠正的提取伪影，不应视为缺失公式。[P8][P9][P13][P14][P18]",
+        "connection": "解读：若研究智能运维智能体，可借鉴轨迹效率、重复操作与历史信息效用三个维度，补充最终任务成功率；但论文实验未直接验证运维场景。对于结构设计与工程可靠性，本资料没有直接实验，不能据此认定指标已适用或能改善系统可靠性。[P2][P5][P9]",
+        "next_steps": "建议先在目标任务中定义可观测状态、动作等价关系及成功时限，再以轨迹计算 AUV 和 LR，并用受控记忆移除实验估计 MI。对不可逆操作应设计领域专用循环判据，并人工检查高循环案例；这些是迁移设想，不是作者已验证的工程效果。[P5][P6][P9][P20]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "TIDE：基于轨迹的大语言模型智能体测试时改进诊断评估",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.639/"
+      ],
+      "analyzed_at": "2026-11-27T15:44:40.860329+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P2",
+          "P3",
+          "P5",
+          "P6",
+          "P8"
+        ],
+        "innovation": [
+          "P2",
+          "P12",
+          "P13"
+        ],
+        "findings": [
+          "P3",
+          "P5",
+          "P6"
+        ],
+        "limitations": [
+          "P8",
+          "P9",
+          "P13",
+          "P14",
+          "P18"
+        ],
+        "connection": [
+          "P2",
+          "P5",
+          "P9"
+        ],
+        "next_steps": [
+          "P5",
+          "P6",
+          "P9",
+          "P20"
+        ]
+      },
+      "analysis_material_version": "47379c2e4447cf598ef1e98dd9aa495bd9118ed19591b73ef3cc9475433ff85c",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P13",
+          "detail": "公式（10）中的 /bracehtip... 是下方大括号的文字提取伪影，并非原公式内容；原页标注分别为 contribution at t=k 和 contribution at t>k，权重结果为 w(k)=t_max−k−0.5。受影响的是 AUV 对较早增益赋予更高权重的解释。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P14",
+          "detail": "公式（18）中的 /bracehtip... 是下方大括号的文字提取伪影；原页用大括号将括号内的单任务加权和标记为 Z^(i)。这关系到后续无偏性、方差及一致性证明。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P23",
+          "detail": "代码2中若干方法名被提取为带空格的字符序列；原页分别为 _prepare_step_history、_initialize_trajectory 和 _run_stepwise_episode_batch。错误影响对任务运行框架接口的准确识别，不影响实验结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P24",
+          "detail": "代码3、代码4中，原页的 get_next_step_parallel、instruction_prompt、user_assistant_format 和 user_assistant_format_part 在提取文本中被拆成带空格的字符序列。错误影响接口及提示格式名称的准确识别，不影响实验结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P25",
+          "detail": "代码5中属性名被提取为“ins truction _text”；原页为 instruction_text。该错误影响环境接口名称的准确识别，不影响论文实验结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "ed9024d69f05",
+        "state": "published",
+        "updated_at": "2026-11-27T15:44:40.893294+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 25,
+        "covered": 25,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "公式（10）中的 /bracehtip... 是下方大括号的文字提取伪影，并非原公式内容；原页标注分别为 contribution at t=k 和 contribution at t>k，权重结果为 w(k)=t_max−k−0.5。受影响的是 AUV 对较早增益赋予更高权重的解释。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "公式（18）中的 /bracehtip... 是下方大括号的文字提取伪影；原页用大括号将括号内的单任务加权和标记为 Z^(i)。这关系到后续无偏性、方差及一致性证明。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P23",
+            "detail": "代码2中若干方法名被提取为带空格的字符序列；原页分别为 _prepare_step_history、_initialize_trajectory 和 _run_stepwise_episode_batch。错误影响对任务运行框架接口的准确识别，不影响实验结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P24",
+            "detail": "代码3、代码4中，原页的 get_next_step_parallel、instruction_prompt、user_assistant_format 和 user_assistant_format_part 在提取文本中被拆成带空格的字符序列。错误影响接口及提示格式名称的准确识别，不影响实验结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P25",
+            "detail": "代码5中属性名被提取为“ins truction _text”；原页为 instruction_text。该错误影响环境接口名称的准确识别，不影响论文实验结论。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -1027,7 +2014,36 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "d8fc409bd573",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:21:35.177327+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 21,
+        "covered": 21,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "表2的 FM1、FM4 行中，文字提取把相邻列数字分别连成“180 0”和“150 0”。原页四列依次为 M3 r1 的 D1、D2 及 GDP r1 的 D1、D2：FM1 为 23、18、0、0；FM4 为 11、15、0、0。纠正后支持作者关于所选样本中两类高优先级模式计数降至零的结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P12",
+            "detail": "表3文字提取将相邻数字连在一起。原页中 D1 的 Pilot、Δ 与 D2 的 Pilot、Δ 分列；例如 M3 r0 依次为 0.896、−0.001、0.891、+0.005。各差值均在 ±0.005 内的作者结论不变。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P13",
+            "detail": "表5文字提取将部分相邻列连写，例如“M3-GDP r10.813 85.6%499”。原页该行依次为 M3-GDP、r1、GT-HYB 0.813、覆盖率 85.6%、N=499；纠正列界后不改变专家对齐结果。"
+          }
+        ]
+      }
     }
   ],
   "source_status": {
@@ -1949,13 +2965,13 @@
     "unavailable": 46
   },
   "analysis_status": {
-    "ready_core": 0,
+    "ready_core": 4,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 6
+    "pending": 2
   },
   "edition": {
     "id": "44616253021",

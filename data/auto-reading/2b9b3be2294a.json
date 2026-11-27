@@ -1,0 +1,115 @@
+{
+  "paper_id": "2b9b3be2294a",
+  "fingerprint": "0d075faec6ec40117f976a2a9623b55d7c004d3e118e82fc576688b14c24960d",
+  "analysis": {
+    "title_zh": "SafeRx-Agent：知识支撑的安全可解释用药推荐多智能体框架",
+    "summary": "本文研究重症患者的细粒度药物集合推荐，将预测粒度设为ATC-L4，并以多专科智能体结合临床知识生成候选，再通过全局评议和安全验证形成可追溯结果。[P2][P4]作者在MIMIC-III和MIMIC-IV上报告了预测与安全性结果，并通过消融和集合大小匹配分析各模块作用。[P5][P6][P18]结论受限于安全知识覆盖、回顾性评估和未建模剂量等因素，不能直接视为临床安全性证明。[P10]",
+    "recommendation": "推荐关注知识支撑的多智能体决策、安全约束与可追溯性研究者重点阅读方法、匹配对照和局限性部分；但当前资料未说明具体研究方向，无法确认方向匹配。",
+    "deep_read": {
+      "problem": "论文针对电子病历用药推荐中的两类问题：传统方法主要预测结构化药物代码，推理时证据支撑有限；大模型虽能利用临床上下文，却可能缺乏安全核验。作者还指出，粗粒度药物分类会掩盖亚组差异并高估已记录的相互作用风险。[P1][P2]",
+      "method": "系统根据诊断信息将患者路由至相关专科专家及常开支持治疗专家，各专家结合病历摘要、既往就诊理由和MEDI适应证生成ATC-L4候选；全局评议合并去重，再由安全矩阵检索风险并结合患者背景裁定保留或移除。[P3][P4][P5]",
+      "innovation": "作者提出细粒度ATC-L4药物集合预测，并将专科分工、适应证知识、跨专家评议和可追溯安全核验组合为统一流程。解读：其可借鉴之处是把风险检索与受限裁定分开，而不是要求模型在开放生成时自行承担全部安全判断。[P2][P4][P5]",
+      "findings": "在MIMIC-IV的Gemma3设置下，过滤前完整方法F1为0.388，调用次数匹配的通用代理为0.335。[P9]逐病例集合大小匹配时，VERIFY的DDI-B为0.3695，最强删除控制为0.5479；作者据此认为安全收益不只来自减少预测数量。[P18]",
+      "limitations": "安全资源未覆盖的关系默认未被标记，验证与评估共用资源；研究未建模剂量、途径、频率和疗程，且仅作回顾性离线评估。[P10]监督基线和免训练方法的测试范围不同，不宜作配对比较。[P7]逐页核对记录未报告已核实的原文件缺项。",
+      "connection": "解读：面向智能运维或可靠性研究，专科路由可类比按故障领域分派分析模块，证据检索与受限裁定可类比告警核验和处置审查；药物安全指标与临床数据本身不能直接证明这些工程场景有效。本文也未直接研究结构设计。[P3][P5]",
+      "next_steps": "建议先在同一病例集合上开展更严格的基线配对，再引入独立药师或医生盲审，检验风险标记和保留、移除决定的临床正确性；进一步补充前瞻验证及剂量等信息。[P7][P10][P17]建议核查专家激活人数与案例图注中的不一致。[P19][P20][P21][P23]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.1003.pdf"
+    ],
+    "analyzed_at": "2026-11-27T12:54:12.851807+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "论文具有明确的知识支撑多智能体方法，以及消融和安全对照，值得研究可靠决策流程者阅读；但资料只给出无法解释的方向标签，没有给出具体研究方向，因此无法判断方向契合度。此处false表示方向判断证据不足，不代表已证实不匹配。",
+    "evidence": "SafeRx-Agent routes each\npatient case to specialty-aware medication agents\nthat generate fine-grained ATC-L4 medication can-\ndidates grounded in patient context, ICD and ATC\ntaxonomies, and medication indication evidence."
+  },
+  "material": {
+    "version": "5f83a9819481e9eff063b02dbc93b01093eb38e21de89c2de8321c8f9a916dc0",
+    "total": 29,
+    "covered": 29,
+    "references": {
+      "problem": [
+        "P1",
+        "P2"
+      ],
+      "method": [
+        "P3",
+        "P4",
+        "P5"
+      ],
+      "innovation": [
+        "P2",
+        "P4",
+        "P5"
+      ],
+      "findings": [
+        "P9",
+        "P18"
+      ],
+      "limitations": [
+        "P7",
+        "P10"
+      ],
+      "connection": [
+        "P3",
+        "P5"
+      ],
+      "next_steps": [
+        "P7",
+        "P10",
+        "P17",
+        "P19",
+        "P20",
+        "P21",
+        "P23"
+      ]
+    },
+    "excerpt": "SafeRx-Agent routes each\npatient case to specialty-aware medication agents\nthat generate fine-grained ATC-L4 medication can-\ndidates grounded in patient context, ICD and ATC\ntaxonomies, and medication indication evidence.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P21",
+      "P22",
+      "P23",
+      "P24",
+      "P25",
+      "P26",
+      "P27",
+      "P28",
+      "P29"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P4",
+        "detail": "图1文字提取遗漏了专家选择范围 N ∈ {1, 2, 3, 4} 和结构化证据公式 E = E^DDI ∪ E^Contra；已据清晰原图补正。该遗漏影响对路由数量及两类安全证据汇合方式的理解，不改变图注所述两阶段核验结论。"
+      }
+    ]
+  }
+}

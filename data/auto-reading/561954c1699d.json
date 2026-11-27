@@ -1,0 +1,105 @@
+{
+  "paper_id": "561954c1699d",
+  "fingerprint": "54cdbdf2633e69307b34e73fc72206065f31382df769fcd02b40dc06181ad3c2",
+  "analysis": {
+    "title_zh": "SkillMe：面向重复性个人工作流的智能体技能演化",
+    "summary": "论文研究通用智能体技能为何难以适配重复工作流中的具体工具、文件与故障。SkillMe 由 Publisher 从成功轨迹归纳技能，Executor 在匹配任务中按需使用并提供证据化反馈，再经归因决定修订或澄清。[P2][P5] 在71项技能需求任务上，八个执行器总体均分由62.9升至88.6；演化技能的重复执行波动也低于静态技能。[P6] 但主要结果采用最佳轮次，且真实用户和长期工作流尚待验证。[P9]",
+    "recommendation": "建议关注智能体工作流和可追溯知识维护的读者重点阅读：论文同时给出技能生命周期、反馈归因、基线比较与成本分析，但其对具体研究方向的契合度仍需结合方向定义判断。[P5][P6][P9]",
+    "deep_read": {
+      "problem": "论文关注重复个人工作流中技能的情境适配：通用指导即使与任务语义相关，也可能不符合本地工具、文件格式或故障模式。作者要解决的是如何将多次执行转化为技能改进证据，而非仅追求跨任务迁移。[P1][P2]",
+      "method": "Publisher 从成功执行轨迹归纳并验证初始技能；匹配任务出现时，技能作为临时工作区文件供 Executor 按需读取。执行后收集分类反馈与轨迹，依据证据区分技能冲突和执行误用，再修订技能或记录澄清。[P4][P5]",
+      "innovation": "作者的方法特点是将任务范围内的技能作为持续维护对象，并把正文、执行条件、反馈记忆、证据映射、验证及修订历史组织在一起。解读：其关键不只是生成技能，而是让具体反馈与后续修改保持可追溯关系。[P3][P13][P14]",
+      "findings": "在71项技能需求任务上，八个执行器总体均分从62.9升至88.6。21项核心任务比较中，演化技能均分为84.0、静态技能为81.7，波动指标分别为1.2和2.0；但多数执行器的均分提升未达统计显著。[P6]",
+      "limitations": "实验模拟稳定工作流，尚未验证真实用户与私有长期场景；主实验使用精确任务身份匹配，最佳轮次汇总也偏乐观。[P9] 盲化路由未验证请求改写或多技能仲裁。[P17] 核对记录未报告原文件缺项；P8图4检查符号的提取错误已纠正。",
+      "connection": "解读：证据归因、环境条件记录和修订历史可为智能运维中的重复故障处置流程提供研究类比；验证清单也可启发可靠性流程管理。但论文未在智能运维、结构设计或工程可靠性场景直接验证，不能将其效果直接外推。[P3][P5][P9]",
+      "next_steps": "建议在真实长期工作流中比较精确与近似技能匹配，记录检索错误、多技能冲突及人工干预；同时报告各轮分布而非仅最佳轮次。还可审计反馈证据缺失导致的漏修，并分别测量技能调用与更新的成本和风险。[P9][P17][P20]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.564.pdf"
+    ],
+    "analyzed_at": "2026-11-27T11:37:59.099425+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "论文具有明确的技能演化方法与对照实验，值得研究智能体工作流的读者关注；但资料仅给出方向标签而未解释具体研究方向，无法可靠判断方向契合度，因此证据充分性不能判为真。方向契合度的 false 表示当前无法确认，并非证明不相关。",
+    "evidence": "Condition 8-Executor mean\nNo skill 79.6\nPublic generic skill 91.6\nTask-speciﬁc R0 92.4\nEvolved SkillMe 95.1"
+  },
+  "material": {
+    "version": "ac195298f6e8605a0a0139376dcc2108625e8f67a1ac1e6bacb65f810740b9ec",
+    "total": 23,
+    "covered": 23,
+    "references": {
+      "problem": [
+        "P1",
+        "P2"
+      ],
+      "method": [
+        "P4",
+        "P5"
+      ],
+      "innovation": [
+        "P3",
+        "P13",
+        "P14"
+      ],
+      "findings": [
+        "P6"
+      ],
+      "limitations": [
+        "P8",
+        "P9",
+        "P17"
+      ],
+      "connection": [
+        "P3",
+        "P5",
+        "P9"
+      ],
+      "next_steps": [
+        "P9",
+        "P17",
+        "P20"
+      ]
+    },
+    "excerpt": "Condition 8-Executor mean\nNo skill 79.6\nPublic generic skill 91.6\nTask-speciﬁc R0 92.4\nEvolved SkillMe 95.1",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P21",
+      "P22",
+      "P23"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P8",
+        "detail": "图4文字提取将检查结果的勾号和叉号误识别为控制字符。原图中无技能与通用技能均为 list 通过、read/draft/report 失败；初始技能为 list、read、report 通过，draft 部分通过；演化技能四项均通过。该纠正影响对各条件具体执行结果的理解，不改变图中报告的平均分。"
+      }
+    ]
+  }
+}

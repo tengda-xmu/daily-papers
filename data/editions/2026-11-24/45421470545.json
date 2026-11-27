@@ -90,7 +90,26 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "3ca461d59410",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:36:17.736665+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 24,
+        "covered": 24,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "source_defect",
+            "page": "P23",
+            "detail": "图8的输出 JSON 示例存在语法缺项：problem_diagnosis 后缺少逗号，updated_plan 内的对象在数组结束前缺少闭合花括号。原图仍可识读策略说明，但示例不能直接作为有效 JSON 使用；这不影响对三种策略文字含义的理解。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -113,7 +132,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Prompt injection is listed as the #1 threat to AI agents. When an agent accesses external data from websites, files, or emails, an attacker may inject a prompt into the data, saying, \"Ignore all prior instructions and perform <an attacker’s task>.\" To prevent arbitrary manipulation of agents, defenders try to train secure LLMs, which, however, still suffer from near 100% attack success rates (ASRs) against adaptive prompt injections. We note that this is because existing defensive fine-tuning recipes rely on sequence-level feedback signals (in DPO or GRPO). Treating an entire output equally pr…",
+      "summary": "本文研究智能体处理外部数据时的间接提示注入防御。作者提出SecOPD：学生模型在受攻击输入下生成回答，冻结的初始化教师使用对应的干净输入逐词元评分，以细粒度信号更新学生。[P4][P5] 在所评估的SEP PISmith攻击中，其攻击成功率为9.0%，对比Meta-SecAlign的94.0%；AgentDojo结果显示一定的工具调用场景迁移能力。[P7] 方法仍依赖可信输入边界，且不能保证抵御未来攻击。[P8][P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -172,11 +191,99 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注大模型智能体安全和防御训练的读者精读：论文同时提供词元级训练机制、自适应攻击对比及安全—效用权衡，并披露了评估条件与适用边界。",
+      "deep_read": {
+        "problem": "论文关注良性用户任务依赖不可信外部数据时，攻击者如何通过数据中的指令改变模型行为。作者认为，序列级反馈难以区分同一回答中完成用户任务与服从注入的不同片段，因此可能限制防御微调对混合回答的学习。[P2][P3]",
+        "method": "SecOPD为同一任务构造干净输入和受攻击输入，让学生在后者上采样回答，冻结的初始化教师则在前者下评价相同生成前缀和词元。教师与学生的词元对数概率之差形成停止梯度的优势信号，用于更新学生适配器。[P4][P5]",
+        "innovation": "作者将原用于效用提升的在策略蒸馏用于提示注入防御，以干净上下文中的初始化模型提供跨上下文词元反馈，而非给整条回答分配统一安全标签。训练无需外部安全评判器或任务专用奖励模型；这不同于实验中用于评价的评判器。[P3][P5]",
+        "findings": "在分别训练攻击者的SEP PISmith评估中，SecOPD攻击成功率为9.0%，Meta-SecAlign为94.0%，GRPO为61.2%。AgentDojo中三者分别为4.7%、5.5%和0.7%；SecOPD七项任务平均效用为88.1%，与未防御模型相同。[P6][P7]",
+        "limitations": "方法仅针对用户指令良性而外部数据恶意的间接注入，并假设可信边界明确；未来攻击仍可能突破防御。[P8][P9] 评判规则可能压低阳性结果，基线注入分布及部分评估上下文长度亦不完全相同。[P13][P14][P15] 核对记录未报告原文件缺项。",
+        "connection": "解读：该工作与智能运维中使用大模型读取日志、文档或工具返回信息的场景具有方法关联：外部内容可能同时承载任务数据和不可信指令。但论文未提供智能运维、结构设计或工程可靠性场景的实证结果，不能直接推断其部署效果。[P3][P7]",
+        "next_steps": "建议在目标智能体场景中构造配对干净与受攻击输入，并针对各防御分别评估自适应攻击，同时报告正常任务成功率和受攻击任务成功率。还应控制基线训练分布与上下文长度，并审核评判器漏判；这些是研究建议，不是作者已完成的验证。[P6][P13][P14][P15]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SecOPD：通过在策略蒸馏缓解自适应提示注入",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1102.pdf"
+      ],
+      "analyzed_at": "2026-11-27T12:33:54.875121+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P3",
+          "P5"
+        ],
+        "findings": [
+          "P6",
+          "P7"
+        ],
+        "limitations": [
+          "P8",
+          "P9",
+          "P13",
+          "P14",
+          "P15"
+        ],
+        "connection": [
+          "P3",
+          "P7"
+        ],
+        "next_steps": [
+          "P6",
+          "P13",
+          "P14",
+          "P15"
+        ]
+      },
+      "analysis_material_version": "a13ca11df756c41858a586e0e9d18778e6f325725c213112a8329600f6556981",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "图3文字提取重复了坐标轴及图例；原页只有一幅散点图，横轴为Attack Success Rate (%)，纵轴为Utility (%)。不影响作者关于安全性与效用权衡的结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P10",
+          "detail": "参考文献中机构名被提取为“OW ASP”；原页为“OWASP GenAI Security Project”，对应标题中的“OWASP”亦无空格。不影响论文方法或实验结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "a1792b3f72b1",
+        "state": "published",
+        "updated_at": "2026-11-27T12:33:54.883163+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 16,
+        "covered": 16,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "图3文字提取重复了坐标轴及图例；原页只有一幅散点图，横轴为Attack Success Rate (%)，纵轴为Utility (%)。不影响作者关于安全性与效用权衡的结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "参考文献中机构名被提取为“OW ASP”；原页为“OWASP GenAI Security Project”，对应标题中的“OWASP”亦无空格。不影响论文方法或实验结论。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -201,7 +308,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Agentic reward models enhance large language model (LLM) evaluation by incorporating external tool-use capabilities. However, their training is heavily constrained by coarse-grained outcome supervision and the high cost of process-level annotations. To address these challenges, we propose SEAR (Self-judging agentic reward models), a novel training framework that enables agentic reward models to self-judge their own judging processes. SEAR introduces a dual-role adversarial co-evolution framework, where the model alternates between a judger and a self-judger within a single generation process:…",
+      "summary": "论文针对具备外部工具使用能力的智能体奖励模型，讨论结果监督粒度粗、过程标注成本高的问题。作者提出 SEAR，让同一模型在单次生成中交替充当评判者和自评者，通过双角色对抗式协同演化改进评判过程，并使模型无需依赖外部人工标注即可自我演化。摘要称，该方法在多个基准上持续提升了奖励模型的可靠性，但未提供具体实验数据。[摘要]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -260,11 +367,148 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "若关注大语言模型评估、工具使用或低标注成本训练，建议阅读：摘要明确提出双角色训练框架及可靠性提升结果；但其具体实现和效果仍需查阅全文核实。[摘要]",
+      "deep_read": {
+        "problem": "论文关注智能体奖励模型的训练瓶颈：这类模型利用外部工具增强大语言模型评估，但训练受到“coarse-grained outcome supervision”和过程级标注高成本的约束。[摘要]摘要未说明这些约束在各任务中的具体影响，也未量化标注成本。",
+        "method": "SEAR 构建双角色对抗式协同演化框架：模型在单次生成过程中交替充当评判者与自评者。前者优化推理轨迹以提高自评分数，后者学习给出有批判性和区分度的评价。[摘要]摘要未交代具体优化算法、训练数据或工具配置。",
+        "innovation": "作者提出让智能体奖励模型“self-judge their own judging processes”，将对评判过程的自我评价纳入训练，并在同一生成过程中交替执行两个角色。[摘要]解读：这一设计区别于仅描述最终结果的监督；其相对已有方法的具体新颖性仍需全文证据。",
+        "findings": "摘要报告，“Extensive experiments”显示 SEAR 在多种基准上持续提高智能体奖励模型的可靠性。[摘要]但摘要没有给出基准名称、对照方法、可靠性指标或结果数值，因此无法判断提升幅度、统计稳健性及适用边界。",
+        "limitations": "当前资料仅为摘要，无法核验实验设置、训练成本、对照公平性与失败案例，也不能据此认定作者报告了哪些方法局限。[摘要]解读：自评得分是否可靠、双角色是否形成有效制衡，是需要进一步检查的问题，而非摘要已证实的缺陷。",
+        "connection": "论文直接涉及大语言模型评估及评判可靠性。[摘要]解读：若将智能体用于运维决策，其评判过程的可靠性可能具有参考价值；但摘要未涉及智能运维、结构设计或工程可靠性应用，不能据此声称方法已在这些领域得到验证。",
+        "next_steps": "建议查阅全文，先核对双角色的训练目标、交替机制和无需外部人工标注的具体条件，再检查基准、对照及可靠性指标。若计划迁移到工程场景，建议另行设计针对领域任务与工具调用的验证；这些均为研究建议，并非作者结论。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SEAR：自我评判的智能体奖励模型",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.893/"
+      ],
+      "analyzed_at": "2026-11-27T12:39:16.089773+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "智能体奖励模型借助外部工具辅助大语言模型评估，却面临训练监督粗糙、过程标注成本高的问题。SEAR尝试让模型评价自己的判断过程，为理解这类模型如何自我演进提供了一个视角。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "当评估模型也需要审视自己的判断",
+            "paragraphs": [
+              "智能体奖励模型通过引入外部工具使用能力，增强对大语言模型的评估。但摘要指出，这类模型的训练受到粗粒度结果监督的限制，而过程级标注又需要较高成本。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "判断者与自我判断者的对抗协同演进",
+            "paragraphs": [
+              "SEAR提出双角色对抗协同演进框架，让模型在单次生成过程中交替扮演判断者和自我判断者，从而对自身的判断过程进行评价。",
+              "判断者的优化目标是生成更严谨、能够获得更高自我判断分数的推理轨迹；自我判断者则学习提供具有批判性和区分度的评价。摘要同时称，该框架使智能体奖励模型能够不依赖外部人工标注而自我演进。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要报告：多个基准上的可靠性提升",
+            "paragraphs": [
+              "摘要报告，广泛实验表明，SEAR在多种基准上持续提升了智能体奖励模型的可靠性。这一结果支持作者对框架有效性的整体判断，但摘要没有给出具体提升幅度或各基准的结果。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "仅凭摘要尚无法核验的范围",
+            "paragraphs": [
+              "摘要未说明训练和评估样本的构成与规模，也未列出具体比较对象、基准名称及可靠性的衡量方式。因此，目前无法判断比较是否覆盖不同类型的方法，也无法细分结论的验证范围。",
+              "摘要同样未展开双角色训练的具体实现和实验配置。这些信息需要进一步查阅论文；摘要未报告，并不意味着论文没有开展相关分析。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注自我评价如何发挥作用",
+            "paragraphs": [
+              "阅读启发：对于关注大语言模型评估的读者，可进一步了解判断者与自我判断者如何交替、评价如何作用于推理轨迹，以及论文如何衡量可靠性。这些问题有助于理解摘要所报告的提升适用到什么范围。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的双角色协同示意",
+            "description": "仅概括摘要明确陈述的角色和优化关系，不表达未报告的具体训练配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "单次生成过程",
+                "detail": "模型在同一生成过程中交替扮演两种角色"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "判断者",
+                "detail": "生成判断所需的推理轨迹"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "自我判断者",
+                "detail": "学习提供批判性和有区分度的评价"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "判断者优化目标",
+                "detail": "生成更严谨且自我判断分数更高的推理轨迹"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "扮演判断者"
+              },
+              {
+                "from": "a",
+                "to": "c",
+                "label": "交替扮演"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "评价判断过程"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "提供自我判断"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-27T12:40:23.984955+00:00",
+      "article_profile": "623073d5de7543df20a10713c6d061ee2e5140604a98d1898028c6281d99e88d",
+      "analysis_references": {},
+      "analysis_material_version": "0f41bea00e475d67384dc8b6de3e00b333c01c92bf24c3c2a2abbcebc6623cf3",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "cef7b5052fb4",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T12:40:23.985937+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -348,7 +592,20 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "082e758f47b5",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:37:17.467088+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 15,
+        "covered": 15,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -370,7 +627,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "LLM agents act on real-world environments through tool calls, and a single misjudged action can cause irreversible harm. The standard safeguard is a guard model that labels each proposed action as safe or unsafe, but this binary view conflates two distinct decisions: whether the action is harmful in itself, and whether it is appropriate given the user’s context. It also operates at the granularity of action categories rather than individual instances, producing routine interruptions that erode autonomy and train users to wave through the most consequential alerts. We reframe the problem as a p…",
+      "summary": "论文研究大模型智能体工具调用中的安全审查，区分直接执行、请求人工确认和拒绝三种决策。作者基于自托管服务轨迹、用户画像记忆及外部基准构造逐步标注数据，微调轻量守卫，并用阈值调整执行与确认的权衡。同分布、留出服务和记忆消融实验显示了方法潜力，但案例也暴露错误授权与错误升级；阈值校准和跨领域泛化仍是部署限制。[P2][P5][P8][P26]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -429,11 +686,103 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注智能体安全、人机协同或智能运维审批的读者重点阅读：论文同时给出可调路由规则、双向错误指标、独立阈值选择检查和失败案例，适合研究安全与自主性的权衡。[P5][P7][P17][P26]",
+      "deep_read": {
+        "problem": "论文针对工具调用审查中的二元安全判断提出问题：同一操作是否适当可能取决于任务、历史和用户意图，既不能一概执行，也不一定必须拒绝。过多确认还可能削弱自主性；研究目标是识别何时应交由人确认。[P1][P2]",
+        "method": "守卫接收用户记忆、任务、应用领域、历史轨迹和候选行动，输出三类决策。作者用服务轨迹及外部基准构造逐步监督数据，采用LoRA微调；推理时先保留原始概率最高的拒绝，再通过阈值区分执行与询问。[P3][P4][P5]",
+        "innovation": "作者将逐实例审查组织为执行、询问和拒绝三路由，并结合用户画像标注与事后可调阈值。阈值只移动执行和询问的边界，不覆盖原始拒绝决策；同一模型因此可适配不同监督偏好，无须针对每种阈值重新训练。[P2][P5][P6]",
+        "findings": "同分布测试的诊断平衡点准确率为91.02%，拒绝召回率为92.68%；该阈值来自测试集扫描。另行在开发集选定阈值后，同分布准确率为91.09%，Mailu分布外准确率为84.85%。记忆训练消融显示，移除相关样本会降低记忆增强测试表现。[P7][P17][P18]",
+        "limitations": "作者指出阈值依赖人工设定，其他智能体领域未直接评估；案例还出现误执行和把应拒绝操作误判为询问。图3输出框与图注的令牌写法不一致，图8的记忆条数范围也不完全一致。逐页核对记录未报告经原页确认的原文件缺项。[P4][P10][P20][P26][P27]",
+        "connection": "解读：对智能运维而言，逐步骤检查、区分未核实授权与明确禁止行为，以及分别统计过度询问和不足询问，可用于设计人机审批边界。论文主要验证企业办公服务，不直接证明其适用于结构设计或实际工业设施的可靠性保障。[P6][P10][P14]",
+        "next_steps": "建议在目标运维环境中构造包含权限变更、不可逆操作及过期授权的测试集，独立选定阈值，并分别评估误执行、误升级和拒绝误判。还应测量人工确认负担及端到端安全效果；这些是可迁移研究设想，不是论文已验证结论。[P9][P17][P26][P27]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "安全哨兵：通过执行—询问—拒绝路由实现上下文感知的人类干预",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.724.pdf"
+      ],
+      "analyzed_at": "2026-11-27T12:49:07.211109+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P5",
+          "P6"
+        ],
+        "findings": [
+          "P7",
+          "P17",
+          "P18"
+        ],
+        "limitations": [
+          "P4",
+          "P10",
+          "P20",
+          "P26",
+          "P27"
+        ],
+        "connection": [
+          "P6",
+          "P10",
+          "P14"
+        ],
+        "next_steps": [
+          "P9",
+          "P17",
+          "P26",
+          "P27"
+        ]
+      },
+      "analysis_material_version": "3be37716d9ed0d4f632b6d2da45349c6ff13622b9a43bdd15a375e3ce8c3dac9",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "表1文字提取将相邻数值粘连：DeepSeek-V3的RR、OAR、UAR分别为61.03、3.70、57.79；Safety Sentry分别为92.68、5.05、4.96，单位均为%。纠正后可正确比较安全召回和两类方向性错误。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "表2中Ministral-3B的OAR和UAR被提取为粘连的“39.741.96”；原表分别为39.74%和1.96%。纠正后不影响Safety Sentry在该表准确率最高的结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "7aabf19980e2",
+        "state": "published",
+        "updated_at": "2026-11-27T12:49:07.243959+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 27,
+        "covered": 27,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "表1文字提取将相邻数值粘连：DeepSeek-V3的RR、OAR、UAR分别为61.03、3.70、57.79；Safety Sentry分别为92.68、5.05、4.96，单位均为%。纠正后可正确比较安全召回和两类方向性错误。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "表2中Ministral-3B的OAR和UAR被提取为粘连的“39.741.96”；原表分别为39.74%和1.96%。纠正后不影响Safety Sentry在该表准确率最高的结论。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -462,7 +811,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Medication recommendation predicts medications for patient visits, but existing methods still face two key challenges. At the model level, traditional drug recommendation methods only predict structured drug codes with limited evidence grounding, while LLM agents can use richer clinical context but may lack safety verification and traceability. At the task level, existing benchmarks often use broad medication categories, which ignore subgroup-level safety differences and can lead to risk overestimation. We introduce the first fine-grained medication recommendation setting based on fourth-level…",
+      "summary": "本文研究重症患者的细粒度药物集合推荐，将预测粒度设为ATC-L4，并以多专科智能体结合临床知识生成候选，再通过全局评议和安全验证形成可追溯结果。[P2][P4]作者在MIMIC-III和MIMIC-IV上报告了预测与安全性结果，并通过消融和集合大小匹配分析各模块作用。[P5][P6][P18]结论受限于安全知识覆盖、回顾性评估和未建模剂量等因素，不能直接视为临床安全性证明。[P10]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -521,11 +870,91 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注知识支撑的多智能体决策、安全约束与可追溯性研究者重点阅读方法、匹配对照和局限性部分；但当前资料未说明具体研究方向，无法确认方向匹配。",
+      "deep_read": {
+        "problem": "论文针对电子病历用药推荐中的两类问题：传统方法主要预测结构化药物代码，推理时证据支撑有限；大模型虽能利用临床上下文，却可能缺乏安全核验。作者还指出，粗粒度药物分类会掩盖亚组差异并高估已记录的相互作用风险。[P1][P2]",
+        "method": "系统根据诊断信息将患者路由至相关专科专家及常开支持治疗专家，各专家结合病历摘要、既往就诊理由和MEDI适应证生成ATC-L4候选；全局评议合并去重，再由安全矩阵检索风险并结合患者背景裁定保留或移除。[P3][P4][P5]",
+        "innovation": "作者提出细粒度ATC-L4药物集合预测，并将专科分工、适应证知识、跨专家评议和可追溯安全核验组合为统一流程。解读：其可借鉴之处是把风险检索与受限裁定分开，而不是要求模型在开放生成时自行承担全部安全判断。[P2][P4][P5]",
+        "findings": "在MIMIC-IV的Gemma3设置下，过滤前完整方法F1为0.388，调用次数匹配的通用代理为0.335。[P9]逐病例集合大小匹配时，VERIFY的DDI-B为0.3695，最强删除控制为0.5479；作者据此认为安全收益不只来自减少预测数量。[P18]",
+        "limitations": "安全资源未覆盖的关系默认未被标记，验证与评估共用资源；研究未建模剂量、途径、频率和疗程，且仅作回顾性离线评估。[P10]监督基线和免训练方法的测试范围不同，不宜作配对比较。[P7]逐页核对记录未报告已核实的原文件缺项。",
+        "connection": "解读：面向智能运维或可靠性研究，专科路由可类比按故障领域分派分析模块，证据检索与受限裁定可类比告警核验和处置审查；药物安全指标与临床数据本身不能直接证明这些工程场景有效。本文也未直接研究结构设计。[P3][P5]",
+        "next_steps": "建议先在同一病例集合上开展更严格的基线配对，再引入独立药师或医生盲审，检验风险标记和保留、移除决定的临床正确性；进一步补充前瞻验证及剂量等信息。[P7][P10][P17]建议核查专家激活人数与案例图注中的不一致。[P19][P20][P21][P23]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SafeRx-Agent：知识支撑的安全可解释用药推荐多智能体框架",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1003.pdf"
+      ],
+      "analyzed_at": "2026-11-27T12:54:12.851807+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P4",
+          "P5"
+        ],
+        "findings": [
+          "P9",
+          "P18"
+        ],
+        "limitations": [
+          "P7",
+          "P10"
+        ],
+        "connection": [
+          "P3",
+          "P5"
+        ],
+        "next_steps": [
+          "P7",
+          "P10",
+          "P17",
+          "P19",
+          "P20",
+          "P21",
+          "P23"
+        ]
+      },
+      "analysis_material_version": "5f83a9819481e9eff063b02dbc93b01093eb38e21de89c2de8321c8f9a916dc0",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "图1文字提取遗漏了专家选择范围 N ∈ {1, 2, 3, 4} 和结构化证据公式 E = E^DDI ∪ E^Contra；已据清晰原图补正。该遗漏影响对路由数量及两类安全证据汇合方式的理解，不改变图注所述两阶段核验结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "2b9b3be2294a",
+        "state": "published",
+        "updated_at": "2026-11-27T12:54:12.884605+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 29,
+        "covered": 29,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "图1文字提取遗漏了专家选择范围 N ∈ {1, 2, 3, 4} 和结构化证据公式 E = E^DDI ∪ E^Contra；已据清晰原图补正。该遗漏影响对路由数量及两类安全证据汇合方式的理解，不改变图注所述两阶段核验结论。"
+          }
+        ]
+      }
     }
   ],
   "extended": [],
@@ -616,7 +1045,26 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "3ca461d59410",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:36:17.736665+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 24,
+        "covered": 24,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "source_defect",
+            "page": "P23",
+            "detail": "图8的输出 JSON 示例存在语法缺项：problem_diagnosis 后缺少逗号，updated_plan 内的对象在数组结束前缺少闭合花括号。原图仍可识读策略说明，但示例不能直接作为有效 JSON 使用；这不影响对三种策略文字含义的理解。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -639,7 +1087,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Prompt injection is listed as the #1 threat to AI agents. When an agent accesses external data from websites, files, or emails, an attacker may inject a prompt into the data, saying, \"Ignore all prior instructions and perform <an attacker’s task>.\" To prevent arbitrary manipulation of agents, defenders try to train secure LLMs, which, however, still suffer from near 100% attack success rates (ASRs) against adaptive prompt injections. We note that this is because existing defensive fine-tuning recipes rely on sequence-level feedback signals (in DPO or GRPO). Treating an entire output equally pr…",
+      "summary": "本文研究智能体处理外部数据时的间接提示注入防御。作者提出SecOPD：学生模型在受攻击输入下生成回答，冻结的初始化教师使用对应的干净输入逐词元评分，以细粒度信号更新学生。[P4][P5] 在所评估的SEP PISmith攻击中，其攻击成功率为9.0%，对比Meta-SecAlign的94.0%；AgentDojo结果显示一定的工具调用场景迁移能力。[P7] 方法仍依赖可信输入边界，且不能保证抵御未来攻击。[P8][P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -698,11 +1146,99 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注大模型智能体安全和防御训练的读者精读：论文同时提供词元级训练机制、自适应攻击对比及安全—效用权衡，并披露了评估条件与适用边界。",
+      "deep_read": {
+        "problem": "论文关注良性用户任务依赖不可信外部数据时，攻击者如何通过数据中的指令改变模型行为。作者认为，序列级反馈难以区分同一回答中完成用户任务与服从注入的不同片段，因此可能限制防御微调对混合回答的学习。[P2][P3]",
+        "method": "SecOPD为同一任务构造干净输入和受攻击输入，让学生在后者上采样回答，冻结的初始化教师则在前者下评价相同生成前缀和词元。教师与学生的词元对数概率之差形成停止梯度的优势信号，用于更新学生适配器。[P4][P5]",
+        "innovation": "作者将原用于效用提升的在策略蒸馏用于提示注入防御，以干净上下文中的初始化模型提供跨上下文词元反馈，而非给整条回答分配统一安全标签。训练无需外部安全评判器或任务专用奖励模型；这不同于实验中用于评价的评判器。[P3][P5]",
+        "findings": "在分别训练攻击者的SEP PISmith评估中，SecOPD攻击成功率为9.0%，Meta-SecAlign为94.0%，GRPO为61.2%。AgentDojo中三者分别为4.7%、5.5%和0.7%；SecOPD七项任务平均效用为88.1%，与未防御模型相同。[P6][P7]",
+        "limitations": "方法仅针对用户指令良性而外部数据恶意的间接注入，并假设可信边界明确；未来攻击仍可能突破防御。[P8][P9] 评判规则可能压低阳性结果，基线注入分布及部分评估上下文长度亦不完全相同。[P13][P14][P15] 核对记录未报告原文件缺项。",
+        "connection": "解读：该工作与智能运维中使用大模型读取日志、文档或工具返回信息的场景具有方法关联：外部内容可能同时承载任务数据和不可信指令。但论文未提供智能运维、结构设计或工程可靠性场景的实证结果，不能直接推断其部署效果。[P3][P7]",
+        "next_steps": "建议在目标智能体场景中构造配对干净与受攻击输入，并针对各防御分别评估自适应攻击，同时报告正常任务成功率和受攻击任务成功率。还应控制基线训练分布与上下文长度，并审核评判器漏判；这些是研究建议，不是作者已完成的验证。[P6][P13][P14][P15]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SecOPD：通过在策略蒸馏缓解自适应提示注入",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1102.pdf"
+      ],
+      "analyzed_at": "2026-11-27T12:33:54.875121+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P2",
+          "P3"
+        ],
+        "method": [
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P3",
+          "P5"
+        ],
+        "findings": [
+          "P6",
+          "P7"
+        ],
+        "limitations": [
+          "P8",
+          "P9",
+          "P13",
+          "P14",
+          "P15"
+        ],
+        "connection": [
+          "P3",
+          "P7"
+        ],
+        "next_steps": [
+          "P6",
+          "P13",
+          "P14",
+          "P15"
+        ]
+      },
+      "analysis_material_version": "a13ca11df756c41858a586e0e9d18778e6f325725c213112a8329600f6556981",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "图3文字提取重复了坐标轴及图例；原页只有一幅散点图，横轴为Attack Success Rate (%)，纵轴为Utility (%)。不影响作者关于安全性与效用权衡的结论。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P10",
+          "detail": "参考文献中机构名被提取为“OW ASP”；原页为“OWASP GenAI Security Project”，对应标题中的“OWASP”亦无空格。不影响论文方法或实验结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "a1792b3f72b1",
+        "state": "published",
+        "updated_at": "2026-11-27T12:33:54.883163+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 16,
+        "covered": 16,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "图3文字提取重复了坐标轴及图例；原页只有一幅散点图，横轴为Attack Success Rate (%)，纵轴为Utility (%)。不影响作者关于安全性与效用权衡的结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P10",
+            "detail": "参考文献中机构名被提取为“OW ASP”；原页为“OWASP GenAI Security Project”，对应标题中的“OWASP”亦无空格。不影响论文方法或实验结论。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -727,7 +1263,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Agentic reward models enhance large language model (LLM) evaluation by incorporating external tool-use capabilities. However, their training is heavily constrained by coarse-grained outcome supervision and the high cost of process-level annotations. To address these challenges, we propose SEAR (Self-judging agentic reward models), a novel training framework that enables agentic reward models to self-judge their own judging processes. SEAR introduces a dual-role adversarial co-evolution framework, where the model alternates between a judger and a self-judger within a single generation process:…",
+      "summary": "论文针对具备外部工具使用能力的智能体奖励模型，讨论结果监督粒度粗、过程标注成本高的问题。作者提出 SEAR，让同一模型在单次生成中交替充当评判者和自评者，通过双角色对抗式协同演化改进评判过程，并使模型无需依赖外部人工标注即可自我演化。摘要称，该方法在多个基准上持续提升了奖励模型的可靠性，但未提供具体实验数据。[摘要]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -786,11 +1322,148 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "若关注大语言模型评估、工具使用或低标注成本训练，建议阅读：摘要明确提出双角色训练框架及可靠性提升结果；但其具体实现和效果仍需查阅全文核实。[摘要]",
+      "deep_read": {
+        "problem": "论文关注智能体奖励模型的训练瓶颈：这类模型利用外部工具增强大语言模型评估，但训练受到“coarse-grained outcome supervision”和过程级标注高成本的约束。[摘要]摘要未说明这些约束在各任务中的具体影响，也未量化标注成本。",
+        "method": "SEAR 构建双角色对抗式协同演化框架：模型在单次生成过程中交替充当评判者与自评者。前者优化推理轨迹以提高自评分数，后者学习给出有批判性和区分度的评价。[摘要]摘要未交代具体优化算法、训练数据或工具配置。",
+        "innovation": "作者提出让智能体奖励模型“self-judge their own judging processes”，将对评判过程的自我评价纳入训练，并在同一生成过程中交替执行两个角色。[摘要]解读：这一设计区别于仅描述最终结果的监督；其相对已有方法的具体新颖性仍需全文证据。",
+        "findings": "摘要报告，“Extensive experiments”显示 SEAR 在多种基准上持续提高智能体奖励模型的可靠性。[摘要]但摘要没有给出基准名称、对照方法、可靠性指标或结果数值，因此无法判断提升幅度、统计稳健性及适用边界。",
+        "limitations": "当前资料仅为摘要，无法核验实验设置、训练成本、对照公平性与失败案例，也不能据此认定作者报告了哪些方法局限。[摘要]解读：自评得分是否可靠、双角色是否形成有效制衡，是需要进一步检查的问题，而非摘要已证实的缺陷。",
+        "connection": "论文直接涉及大语言模型评估及评判可靠性。[摘要]解读：若将智能体用于运维决策，其评判过程的可靠性可能具有参考价值；但摘要未涉及智能运维、结构设计或工程可靠性应用，不能据此声称方法已在这些领域得到验证。",
+        "next_steps": "建议查阅全文，先核对双角色的训练目标、交替机制和无需外部人工标注的具体条件，再检查基准、对照及可靠性指标。若计划迁移到工程场景，建议另行设计针对领域任务与工具调用的验证；这些均为研究建议，并非作者结论。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SEAR：自我评判的智能体奖励模型",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.893/"
+      ],
+      "analyzed_at": "2026-11-27T12:39:16.089773+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "智能体奖励模型借助外部工具辅助大语言模型评估，却面临训练监督粗糙、过程标注成本高的问题。SEAR尝试让模型评价自己的判断过程，为理解这类模型如何自我演进提供了一个视角。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "当评估模型也需要审视自己的判断",
+            "paragraphs": [
+              "智能体奖励模型通过引入外部工具使用能力，增强对大语言模型的评估。但摘要指出，这类模型的训练受到粗粒度结果监督的限制，而过程级标注又需要较高成本。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "判断者与自我判断者的对抗协同演进",
+            "paragraphs": [
+              "SEAR提出双角色对抗协同演进框架，让模型在单次生成过程中交替扮演判断者和自我判断者，从而对自身的判断过程进行评价。",
+              "判断者的优化目标是生成更严谨、能够获得更高自我判断分数的推理轨迹；自我判断者则学习提供具有批判性和区分度的评价。摘要同时称，该框架使智能体奖励模型能够不依赖外部人工标注而自我演进。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要报告：多个基准上的可靠性提升",
+            "paragraphs": [
+              "摘要报告，广泛实验表明，SEAR在多种基准上持续提升了智能体奖励模型的可靠性。这一结果支持作者对框架有效性的整体判断，但摘要没有给出具体提升幅度或各基准的结果。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "仅凭摘要尚无法核验的范围",
+            "paragraphs": [
+              "摘要未说明训练和评估样本的构成与规模，也未列出具体比较对象、基准名称及可靠性的衡量方式。因此，目前无法判断比较是否覆盖不同类型的方法，也无法细分结论的验证范围。",
+              "摘要同样未展开双角色训练的具体实现和实验配置。这些信息需要进一步查阅论文；摘要未报告，并不意味着论文没有开展相关分析。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注自我评价如何发挥作用",
+            "paragraphs": [
+              "阅读启发：对于关注大语言模型评估的读者，可进一步了解判断者与自我判断者如何交替、评价如何作用于推理轨迹，以及论文如何衡量可靠性。这些问题有助于理解摘要所报告的提升适用到什么范围。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的双角色协同示意",
+            "description": "仅概括摘要明确陈述的角色和优化关系，不表达未报告的具体训练配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "单次生成过程",
+                "detail": "模型在同一生成过程中交替扮演两种角色"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "判断者",
+                "detail": "生成判断所需的推理轨迹"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "自我判断者",
+                "detail": "学习提供批判性和有区分度的评价"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "判断者优化目标",
+                "detail": "生成更严谨且自我判断分数更高的推理轨迹"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "扮演判断者"
+              },
+              {
+                "from": "a",
+                "to": "c",
+                "label": "交替扮演"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "评价判断过程"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "提供自我判断"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-27T12:40:23.984955+00:00",
+      "article_profile": "623073d5de7543df20a10713c6d061ee2e5140604a98d1898028c6281d99e88d",
+      "analysis_references": {},
+      "analysis_material_version": "0f41bea00e475d67384dc8b6de3e00b333c01c92bf24c3c2a2abbcebc6623cf3",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "cef7b5052fb4",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T12:40:23.985937+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -874,7 +1547,20 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "082e758f47b5",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:37:17.467088+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 15,
+        "covered": 15,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -896,7 +1582,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "LLM agents act on real-world environments through tool calls, and a single misjudged action can cause irreversible harm. The standard safeguard is a guard model that labels each proposed action as safe or unsafe, but this binary view conflates two distinct decisions: whether the action is harmful in itself, and whether it is appropriate given the user’s context. It also operates at the granularity of action categories rather than individual instances, producing routine interruptions that erode autonomy and train users to wave through the most consequential alerts. We reframe the problem as a p…",
+      "summary": "论文研究大模型智能体工具调用中的安全审查，区分直接执行、请求人工确认和拒绝三种决策。作者基于自托管服务轨迹、用户画像记忆及外部基准构造逐步标注数据，微调轻量守卫，并用阈值调整执行与确认的权衡。同分布、留出服务和记忆消融实验显示了方法潜力，但案例也暴露错误授权与错误升级；阈值校准和跨领域泛化仍是部署限制。[P2][P5][P8][P26]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -955,11 +1641,103 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注智能体安全、人机协同或智能运维审批的读者重点阅读：论文同时给出可调路由规则、双向错误指标、独立阈值选择检查和失败案例，适合研究安全与自主性的权衡。[P5][P7][P17][P26]",
+      "deep_read": {
+        "problem": "论文针对工具调用审查中的二元安全判断提出问题：同一操作是否适当可能取决于任务、历史和用户意图，既不能一概执行，也不一定必须拒绝。过多确认还可能削弱自主性；研究目标是识别何时应交由人确认。[P1][P2]",
+        "method": "守卫接收用户记忆、任务、应用领域、历史轨迹和候选行动，输出三类决策。作者用服务轨迹及外部基准构造逐步监督数据，采用LoRA微调；推理时先保留原始概率最高的拒绝，再通过阈值区分执行与询问。[P3][P4][P5]",
+        "innovation": "作者将逐实例审查组织为执行、询问和拒绝三路由，并结合用户画像标注与事后可调阈值。阈值只移动执行和询问的边界，不覆盖原始拒绝决策；同一模型因此可适配不同监督偏好，无须针对每种阈值重新训练。[P2][P5][P6]",
+        "findings": "同分布测试的诊断平衡点准确率为91.02%，拒绝召回率为92.68%；该阈值来自测试集扫描。另行在开发集选定阈值后，同分布准确率为91.09%，Mailu分布外准确率为84.85%。记忆训练消融显示，移除相关样本会降低记忆增强测试表现。[P7][P17][P18]",
+        "limitations": "作者指出阈值依赖人工设定，其他智能体领域未直接评估；案例还出现误执行和把应拒绝操作误判为询问。图3输出框与图注的令牌写法不一致，图8的记忆条数范围也不完全一致。逐页核对记录未报告经原页确认的原文件缺项。[P4][P10][P20][P26][P27]",
+        "connection": "解读：对智能运维而言，逐步骤检查、区分未核实授权与明确禁止行为，以及分别统计过度询问和不足询问，可用于设计人机审批边界。论文主要验证企业办公服务，不直接证明其适用于结构设计或实际工业设施的可靠性保障。[P6][P10][P14]",
+        "next_steps": "建议在目标运维环境中构造包含权限变更、不可逆操作及过期授权的测试集，独立选定阈值，并分别评估误执行、误升级和拒绝误判。还应测量人工确认负担及端到端安全效果；这些是可迁移研究设想，不是论文已验证结论。[P9][P17][P26][P27]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "安全哨兵：通过执行—询问—拒绝路由实现上下文感知的人类干预",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.724.pdf"
+      ],
+      "analyzed_at": "2026-11-27T12:49:07.211109+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P5",
+          "P6"
+        ],
+        "findings": [
+          "P7",
+          "P17",
+          "P18"
+        ],
+        "limitations": [
+          "P4",
+          "P10",
+          "P20",
+          "P26",
+          "P27"
+        ],
+        "connection": [
+          "P6",
+          "P10",
+          "P14"
+        ],
+        "next_steps": [
+          "P9",
+          "P17",
+          "P26",
+          "P27"
+        ]
+      },
+      "analysis_material_version": "3be37716d9ed0d4f632b6d2da45349c6ff13622b9a43bdd15a375e3ce8c3dac9",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P7",
+          "detail": "表1文字提取将相邻数值粘连：DeepSeek-V3的RR、OAR、UAR分别为61.03、3.70、57.79；Safety Sentry分别为92.68、5.05、4.96，单位均为%。纠正后可正确比较安全召回和两类方向性错误。"
+        },
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "表2中Ministral-3B的OAR和UAR被提取为粘连的“39.741.96”；原表分别为39.74%和1.96%。纠正后不影响Safety Sentry在该表准确率最高的结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "7aabf19980e2",
+        "state": "published",
+        "updated_at": "2026-11-27T12:49:07.243959+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 27,
+        "covered": 27,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P7",
+            "detail": "表1文字提取将相邻数值粘连：DeepSeek-V3的RR、OAR、UAR分别为61.03、3.70、57.79；Safety Sentry分别为92.68、5.05、4.96，单位均为%。纠正后可正确比较安全召回和两类方向性错误。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "表2中Ministral-3B的OAR和UAR被提取为粘连的“39.741.96”；原表分别为39.74%和1.96%。纠正后不影响Safety Sentry在该表准确率最高的结论。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -988,7 +1766,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Medication recommendation predicts medications for patient visits, but existing methods still face two key challenges. At the model level, traditional drug recommendation methods only predict structured drug codes with limited evidence grounding, while LLM agents can use richer clinical context but may lack safety verification and traceability. At the task level, existing benchmarks often use broad medication categories, which ignore subgroup-level safety differences and can lead to risk overestimation. We introduce the first fine-grained medication recommendation setting based on fourth-level…",
+      "summary": "本文研究重症患者的细粒度药物集合推荐，将预测粒度设为ATC-L4，并以多专科智能体结合临床知识生成候选，再通过全局评议和安全验证形成可追溯结果。[P2][P4]作者在MIMIC-III和MIMIC-IV上报告了预测与安全性结果，并通过消融和集合大小匹配分析各模块作用。[P5][P6][P18]结论受限于安全知识覆盖、回顾性评估和未建模剂量等因素，不能直接视为临床安全性证明。[P10]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -1047,11 +1825,91 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注知识支撑的多智能体决策、安全约束与可追溯性研究者重点阅读方法、匹配对照和局限性部分；但当前资料未说明具体研究方向，无法确认方向匹配。",
+      "deep_read": {
+        "problem": "论文针对电子病历用药推荐中的两类问题：传统方法主要预测结构化药物代码，推理时证据支撑有限；大模型虽能利用临床上下文，却可能缺乏安全核验。作者还指出，粗粒度药物分类会掩盖亚组差异并高估已记录的相互作用风险。[P1][P2]",
+        "method": "系统根据诊断信息将患者路由至相关专科专家及常开支持治疗专家，各专家结合病历摘要、既往就诊理由和MEDI适应证生成ATC-L4候选；全局评议合并去重，再由安全矩阵检索风险并结合患者背景裁定保留或移除。[P3][P4][P5]",
+        "innovation": "作者提出细粒度ATC-L4药物集合预测，并将专科分工、适应证知识、跨专家评议和可追溯安全核验组合为统一流程。解读：其可借鉴之处是把风险检索与受限裁定分开，而不是要求模型在开放生成时自行承担全部安全判断。[P2][P4][P5]",
+        "findings": "在MIMIC-IV的Gemma3设置下，过滤前完整方法F1为0.388，调用次数匹配的通用代理为0.335。[P9]逐病例集合大小匹配时，VERIFY的DDI-B为0.3695，最强删除控制为0.5479；作者据此认为安全收益不只来自减少预测数量。[P18]",
+        "limitations": "安全资源未覆盖的关系默认未被标记，验证与评估共用资源；研究未建模剂量、途径、频率和疗程，且仅作回顾性离线评估。[P10]监督基线和免训练方法的测试范围不同，不宜作配对比较。[P7]逐页核对记录未报告已核实的原文件缺项。",
+        "connection": "解读：面向智能运维或可靠性研究，专科路由可类比按故障领域分派分析模块，证据检索与受限裁定可类比告警核验和处置审查；药物安全指标与临床数据本身不能直接证明这些工程场景有效。本文也未直接研究结构设计。[P3][P5]",
+        "next_steps": "建议先在同一病例集合上开展更严格的基线配对，再引入独立药师或医生盲审，检验风险标记和保留、移除决定的临床正确性；进一步补充前瞻验证及剂量等信息。[P7][P10][P17]建议核查专家激活人数与案例图注中的不一致。[P19][P20][P21][P23]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SafeRx-Agent：知识支撑的安全可解释用药推荐多智能体框架",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1003.pdf"
+      ],
+      "analyzed_at": "2026-11-27T12:54:12.851807+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P4",
+          "P5"
+        ],
+        "findings": [
+          "P9",
+          "P18"
+        ],
+        "limitations": [
+          "P7",
+          "P10"
+        ],
+        "connection": [
+          "P3",
+          "P5"
+        ],
+        "next_steps": [
+          "P7",
+          "P10",
+          "P17",
+          "P19",
+          "P20",
+          "P21",
+          "P23"
+        ]
+      },
+      "analysis_material_version": "5f83a9819481e9eff063b02dbc93b01093eb38e21de89c2de8321c8f9a916dc0",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P4",
+          "detail": "图1文字提取遗漏了专家选择范围 N ∈ {1, 2, 3, 4} 和结构化证据公式 E = E^DDI ∪ E^Contra；已据清晰原图补正。该遗漏影响对路由数量及两类安全证据汇合方式的理解，不改变图注所述两阶段核验结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "2b9b3be2294a",
+        "state": "published",
+        "updated_at": "2026-11-27T12:54:12.884605+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 29,
+        "covered": 29,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P4",
+            "detail": "图1文字提取遗漏了专家选择范围 N ∈ {1, 2, 3, 4} 和结构化证据公式 E = E^DDI ∪ E^Contra；已据清晰原图补正。该遗漏影响对路由数量及两类安全证据汇合方式的理解，不改变图注所述两阶段核验结论。"
+          }
+        ]
+      }
     }
   ],
   "source_status": {
@@ -1933,13 +2791,13 @@
     "unavailable": 44
   },
   "analysis_status": {
-    "ready_core": 0,
+    "ready_core": 4,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 6
+    "pending": 2
   },
   "edition": {
     "id": "45421470545",

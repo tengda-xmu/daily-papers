@@ -31,7 +31,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Multi-agent LLM systems delegate through natural language, creating trust boundaries that single-agent safety hierarchies were not designed to preserve. We identify provenance erasure as a multi-agent safety failure mechanism: even in the minimal two-agent case, delegation strips trust metadata—98% of format markers, 100% of authority entities, and 44% of source attribution across 460 pairs—while often preserving the actionable payload. This lossy transform enables Trust Cascade, amplifying system-channel attacks from 0% to 33–63% cascade ASR across eight open-weight models; a delegation-as-us…",
+      "summary": "【论文摘要】论文研究大语言模型多智能体系统在自然语言委派中面临的信任边界问题。作者提出“来源信息抹除”机制：委派可能丢失信任元数据，却保留可执行内容，从而引发信任级联。摘要报告了双智能体数据、八个开源权重模型上的攻击结果，以及零推理来源诊断方法 TBA 的检测结果。作者据此提出结合委派门控与来源审计；实验细节及其适用边界仍需全文核对。[摘要]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -90,11 +90,147 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "【论文摘要】推荐关注多智能体安全与智能运维代理的读者阅读：摘要同时给出了边界失效机制、对照实验和诊断方法，具有明确的问题与方法线索；但当前未提供具体研究方向，方向匹配度尚不能确认。[摘要]",
+      "deep_read": {
+        "problem": "【论文摘要】论文关注多智能体通过自然语言委派任务时，单智能体安全层级能否维持跨代理的信任边界。摘要指出委派会丢失“trust metadata”，而可执行载荷往往被保留，使原有信任信息无法随任务可靠传递。[摘要]",
+        "method": "【论文摘要】作者分析最小双智能体场景中的委派信息变化，并在八个开源权重模型上评估级联攻击；同时设置“delegation-as-user”对照，以区分通道信任升级与内容改写的作用。摘要还提出零推理来源诊断方法 TBA。[摘要]",
+        "innovation": "【论文摘要】论文将“provenance erasure”作为多智能体安全失效机制，并把信任级联与委派边界联系起来；针对这一边界，作者提出来源诊断工具。解读：其特点在于把委派过程中的信任信息流失作为分析对象。[摘要]",
+        "findings": "【论文摘要】在 460 对数据中，委派丢失了 98% 的格式标记、100% 的权威实体及 44% 的来源归属；系统通道攻击的级联攻击成功率从 0% 增至 33–63%。TBA 在四个领域的条件检测率为 86–100%，误报率为 0%。[摘要]",
+        "limitations": "【论文摘要】摘要称更强模型可中断不同级联阶段，但不能消除边界问题。摘要未交代数据构成、攻击与检测的具体判定方式，也未详述四个领域或闭源评估结果，因此尚不能判断方法的普适性与实际部署成本。[摘要]",
+        "connection": "【论文摘要】研究直接涉及代理间委派与来源审计，可为智能运维中多代理任务交接的信任管理提供参考。解读：其边界失效视角也可启发可靠性研究；摘要未涉及结构设计，不能据此认定存在直接应用。[摘要]",
+        "next_steps": "建议阅读全文后核对攻击场景、对照设置、检测条件及误报统计口径，再判断结果能否迁移到目标系统。建议针对智能运维代理的任务交接，研究来源信息保留与委派门控；这些是后续设想，并非摘要报告的实验。[摘要]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "来源信息抹除引发的信任级联：多智能体委派如何破坏单智能体安全机制",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1005/"
+      ],
+      "analyzed_at": "2026-11-27T13:58:23.460842+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "多智能体通过自然语言委派任务时，信息来源与权限可能在传递中丢失。本文从委派边界切入，揭示这种损失如何放大安全攻击，并讨论来源审计的价值。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "任务委派为何形成新的信任边界",
+            "paragraphs": [
+              "单智能体安全层级并非为保护多智能体之间的信任边界而设计。任务经自然语言转交时，接收方看到的内容可能保留了可执行的指令，却不再完整携带其来源和权限信息。",
+              "摘要将这一机制称为**来源擦除**：问题不只是内容发生改写，还在于内容跨越委派边界后，原有的信任信息可能不再可见。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从双智能体委派到边界审计",
+            "paragraphs": [
+              "研究考察了最简双智能体委派中的信任元数据损失，并通过将委派内容作为用户消息的对照，区分通道信任升级与内容重新表述的作用。",
+              "针对委派边界处的失效，作者提出信任边界审计器（TBA），将其作为无需推理的来源诊断方法。摘要没有展开该审计器的具体实现。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "来源擦除与信任级联的报告结果",
+            "paragraphs": [
+              "在 460 对数据中，委派过程剥离了 98% 的格式标记、100% 的权威实体和 44% 的来源归属，同时往往保留可执行的载荷。摘要据此指出，有损传递使“信任级联”成为可能。",
+              "在八个开放权重模型上，系统通道攻击从 0% 放大至 33–63% 的级联攻击成功率。将委派内容作为用户消息的对照表明，关键作用来自通道信任升级，而非内容重新表述。",
+              "TBA 在四个领域取得 86–100% 的条件检测率，误报率为 0%。训练、规模和闭源评估还显示，更强模型能够中断级联的不同阶段，但并未消除边界问题。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不能界定的评估范围",
+            "paragraphs": [
+              "摘要没有说明数据对的具体构成、各领域的样本分布，也未完整列出比较对象、模型及评估条件。因此，不能仅凭摘要判断结果对其他任务、系统或攻击形式的适用范围。",
+              "摘要同样未交代 TBA 的详细实现、条件检测率的具体条件及独立验证范围；这些信息需要查阅论文后才能判断，而不能据此认定论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注信息如何跨越委派边界",
+            "paragraphs": [
+              "对于大语言模型多智能体系统，阅读启发是同时关注消息内容与其来源、权限在委派中的变化。进一步阅读时，可重点核对用户消息对照如何设置，以及 TBA 在什么条件下作出检测。",
+              "摘要提出将委派门控与来源审计结合起来，但没有报告二者结合后的具体验证效果。理解这一建议的适用边界，还需要查看论文中的评估细节。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的委派风险与审计示意",
+            "description": "仅概括摘要明确描述的委派失效关系与审计方向，不代表论文原图或具体实现。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "自然语言任务委派",
+                "detail": "多智能体之间通过自然语言转交任务"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "来源信息擦除",
+                "detail": "信任元数据可能丢失，而可执行载荷往往保留"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "信任级联",
+                "detail": "有损传递使系统通道攻击得以放大"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "来源审计",
+                "detail": "TBA 针对委派边界提供无需推理的来源诊断"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "跨边界传递"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "使级联成为可能"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "针对边界失效"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-27T13:59:45.305576+00:00",
+      "article_profile": "68dbfe446c565ff8a2549ee8d89e125bc1d8258ecc18d589ad5a93412c80ecaa",
+      "analysis_references": {},
+      "analysis_material_version": "33c4e3d741bc8398c47c45d819eb08e33c7b1cecea1bf18668e8d62373c65bc4",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "b043295cb826",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T13:59:45.313327+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -119,7 +255,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Personalized large language models adapt responses to users’ preferences and social attributes, but can introduce substantial universal truth inconsistencies across social groups, where some groups systematically receive less accurate responses on objective tasks. Existing alignment methods either ignore personalization or mainly focus on subjective preference alignment, largely overlooking fairness and consistency in universal truths. To address this gap, we study Truth-Invariant Alignment (TIA), an alignment problem for personalized LLMs that aims to ensure universal truths remain consistent…",
+      "summary": "【摘要】论文关注个性化大语言模型在客观任务中可能因用户社会群体不同而产生的准确性差异。作者提出真理不变对齐问题，目标是在保留个性化的同时，使普遍真理跨群体保持一致；并提出离线多智能体强化学习框架 TriAlign，通过公平性感知目标和显式不一致性惩罚，联合优化准确性、跨群体一致性与个性化。摘要称，该方法在多个基准上的三项目标平衡优于强基线，但未提供具体数值或实验细节。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -178,11 +314,145 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注个性化大模型公平性与多目标对齐的读者阅读：论文明确提出了跨群体真理一致性问题及相应方法，但目前只能依据摘要判断，尚需全文核查实验与适用范围。",
+      "deep_read": {
+        "problem": "【摘要】论文指出，个性化模型适应用户偏好和社会属性时，可能在客观任务上对某些群体系统性地给出较不准确的回答。作者因此提出真理不变对齐问题，要求普遍真理跨群体保持一致，同时保留个性化。",
+        "method": "【摘要】TriAlign 被描述为用于真理不变对齐的离线多智能体强化学习框架，其中每个社会群体被建模为一个智能体。框架通过公平性感知目标和显式不一致性惩罚联合优化多个目标；摘要未说明训练数据、交互机制或目标函数公式。",
+        "innovation": "【摘要】作者将跨社会群体的普遍真理一致性与个性化共同纳入对齐问题，并称 TriAlign 是该问题的首个离线多智能体强化学习框架。解读：其创新主张依赖作者对已有研究的界定，仅凭摘要无法独立核实首创性。",
+        "findings": "【摘要】作者称，在多个不同基准上，TriAlign 相比强基线实现了准确性、一致性和个性化之间更好的平衡，并缩小群体间真理差异，同时提高客观任务表现和个性化质量。摘要未给出基准名称、具体数值或统计显著性。",
+        "limitations": "【摘要】当前材料未报告数据来源、群体划分、评价指标、基线细节及具体结果，因此无法判断结论的效应大小、稳健性与适用边界。解读：这些是摘要证据的不足，并非作者已经证实的模型缺陷或论文局限。",
+        "connection": "【摘要】论文直接涉及个性化大模型的跨群体公平性和回答一致性。解读：若智能运维系统采用面向不同用户的语言模型，其客观信息一致性可能值得借鉴该问题设定；现有资料未提供结构设计或可靠性领域的直接应用证据。",
+        "next_steps": "建议获取全文后，先核查真理不变对齐的形式化定义、群体建模方式及惩罚项，再检查基准、对照方法和三项目标的具体指标。建议进一步考察不同群体与任务条件下的权衡；这些是阅读和研究建议，不是作者结论。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "TriAlign：面向个性化大语言模型对齐的普遍真理一致性",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.2640/"
+      ],
+      "analyzed_at": "2026-11-27T14:01:27.478519+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "个性化大语言模型在适应不同用户时，能否对客观问题保持准确且跨群体一致的回答？TriAlign 将这一问题与个性化质量共同纳入对齐目标，为理解模型中的群体间事实差异提供了一个视角。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "个性化回答为何需要关注事实一致性",
+            "paragraphs": [
+              "个性化大语言模型会根据用户偏好和社会属性调整回答，但在客观任务中，不同社会群体收到的回答可能出现明显的事实不一致，部分群体还可能系统性地得到准确度更低的回答。",
+              "摘要指出，现有对齐方法有的忽略个性化，有的主要关注主观偏好对齐，而普遍事实的公平性和一致性在很大程度上被忽视。如何保留个性化，同时避免客观事实随群体而改变，是本文关注的问题。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "TriAlign：把三个目标放在一起优化",
+            "paragraphs": [
+              "作者研究了**事实不变对齐**（Truth-Invariant Alignment，TIA）：在保留个性化的同时，使普遍事实在不同社会群体之间保持一致。",
+              "为此，作者提出离线多智能体强化学习框架 TriAlign，将每个社会群体建模为相互交互的智能体。框架通过考虑公平性的目标函数和显式的不一致性惩罚，联合优化普遍事实准确性、跨群体事实一致性与个性化。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要报告：事实表现与个性化的共同改善",
+            "paragraphs": [
+              "摘要报告，在多个不同基准上的实验中，相比强基线，TriAlign 在普遍事实准确性、跨群体一致性和个性化三个目标之间取得了更好的平衡。",
+              "具体而言，作者称该方法缩小了社会群体之间的普遍事实差异，同时改善了客观任务表现与个性化质量。摘要未给出具体指标或改善幅度，因此这里不能判断变化的大小。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "仅凭摘要还无法判断哪些边界",
+            "paragraphs": [
+              "摘要没有说明涉及哪些具体社会群体、样本规模和基准任务，也未列出强基线的名称及比较细节，因此难以判断结论覆盖了哪些人群与任务。",
+              "摘要也没有提供各项指标、统计不确定性或验证设置的细节。以上是当前摘要资料的限制，并不意味着论文没有开展相关分析；跨场景的适用范围仍需结合论文中的完整实验核对。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：辨别事实一致与个性化的边界",
+            "paragraphs": [
+              "阅读启发：评估个性化大模型时，可同时关注回答是否符合用户偏好，以及不同群体面对客观问题时得到的事实是否一致、准确。进一步阅读论文时，值得留意作者如何界定普遍事实，以及如何衡量这三个目标之间的平衡。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的 TriAlign 对齐思路",
+            "description": "仅概括摘要明确陈述的群体建模、对齐设计与联合优化关系，不代表论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "社会群体",
+                "detail": "将每个社会群体建模为智能体"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "离线多智能体强化学习",
+                "detail": "TriAlign 中的群体智能体相互交互"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "公平性与不一致性",
+                "detail": "采用考虑公平性的目标函数和显式不一致性惩罚"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "联合优化三个目标",
+                "detail": "普遍事实准确性、跨群体事实一致性与个性化"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "建模为智能体"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "采用对齐设计"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "联合优化"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-27T14:02:48.733102+00:00",
+      "article_profile": "c63308bcc4ec319258116b3d8ad2edeef2871e43dd5684f5eecfb3ea78601dec",
+      "analysis_references": {},
+      "analysis_material_version": "9c60a31ad47b6282cb3bb0f87472c0a763ca81dc62e7bd58a6a7f1c63f602153",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "cd9e8cd994f3",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T14:02:48.733103+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -206,7 +476,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "LLM agents increasingly operate through multi-turn tool use and environment interaction, where safety risks often emerge from intermediate steps long before they surface in the final outcome. Reactive auditing is therefore insufficient: post-hoc diagnosis frequently misses the chance to flag risks while they are unfolding. We propose TRACES, a representation-based proactive auditor that learns prefix-level trajectory risk states from the hidden representations of an observer LLM. TRACES induces latent mechanism features from step representations and models their temporal evolution to estimate…",
+      "summary": "【摘要】多轮工具调用和环境交互中的安全风险可能在最终结果出现前形成，事后审计因而可能错失预警时机。论文提出 TRACES，从观察者大语言模型的隐藏表征学习轨迹前缀风险状态，利用潜在机制特征及其时间演化判断部分轨迹是否趋向不安全行为。该方法以轨迹级弱监督训练，生成密集的前缀级风险估计。摘要称其在多个智能体安全基准上改善了完整轨迹预测与主动风险区分；具体数据和实验细节未提供。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -265,11 +535,157 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "【解读】若关注智能体运行过程中的风险监测，而非仅检查最终输出，本文的前缀级风险估计和弱监督设定值得阅读；但由于未给出具体研究方向，无法确认其是否切题。",
+      "deep_read": {
+        "problem": "【摘要】论文关注多轮智能体在工具使用和环境交互中出现的安全风险。原文指出，风险可能在最终结果显现前的中间步骤产生，事后诊断“misses the chance to flag risks while they are unfolding”。因此，研究目标是更早识别正在发展的风险。",
+        "method": "【摘要】TRACES 使用观察者大语言模型的隐藏表征，从步骤表征中提取潜在机制特征，并建模其随时间的演化，以估计部分轨迹是否趋向不安全行为。训练采用轨迹级弱监督，同时输出密集的前缀级风险估计；摘要未说明具体模型结构和训练细节。",
+        "innovation": "【解读】相较于摘要所批评的事后审计，本文的值得关注之处是把审计对象扩展到未完成的轨迹前缀，并尝试用轨迹级弱监督获得前缀级估计，以避免逐步骤风险标注的成本与歧义。摘要未提供充分的对比方法细节，无法独立核实新颖性程度。",
+        "findings": "【摘要】作者称，在多个智能体安全基准上，TRACES 改善了完整轨迹安全预测和主动风险区分。摘要还称，分析结果提示这些风险状态可帮助训练更安全的智能体。摘要未给出基准名称、对照方法、指标数值或统计结果，无法判断提升幅度和稳健性。",
+        "limitations": "【解读】当前仅有摘要，无法核查方法的适用边界、风险状态的可解释性、误报漏报情况及额外计算成本，也无法判断弱监督标签对结果的影响。这些是现有资料尚未回答的问题，并非论文已证实的缺陷；作者是否报告其他局限也不得而知。",
+        "connection": "【解读】若将多轮智能体看作持续执行任务的系统，轨迹前缀风险估计可与智能运维中的过程监测及可靠性研究中的早期风险识别形成概念联系。但摘要讨论的是智能体安全审计，未展示结构设计或工业运维应用，不能据此认定已有跨领域验证。",
+        "next_steps": "【建议】阅读全文时，可优先核对轨迹级标签如何生成、潜在机制特征怎样学习，以及前缀预警相对完整轨迹预测的评价方式；再检查各基准、对照方法和误报漏报结果。若考虑迁移至运维场景，还需另行验证环境差异和部署成本，摘要不足以支持直接应用。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "TRACES：基于轨迹状态建模的多轮大语言模型智能体主动安全审计",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.723/"
+      ],
+      "analyzed_at": "2026-11-27T14:04:05.092006+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "大语言模型智能体在多轮调用工具、与环境交互时，风险可能早在最终结果出现之前就已形成。TRACES 尝试识别执行过程中的风险变化，为理解智能体的主动安全审计提供了一种思路。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "安全风险为何需要在轨迹中识别",
+            "paragraphs": [
+              "智能体的行为不是一次性输出，而可能由多轮工具调用和环境交互组成。摘要指出，危险信号常常出现在中间步骤，等到最终结果显现后再进行事后诊断，可能已经错过风险发展过程中的提示时机。",
+              "这一问题的关注点因此从“最终是否安全”，扩展到“尚未完成的行为轨迹是否正在偏离安全方向”。及早识别并不等同于已经阻止风险，但可以为主动审计提供判断依据。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从观察者表征学习轨迹风险状态",
+            "paragraphs": [
+              "TRACES 是一种基于表征的主动审计器。它利用观察者大语言模型的隐藏表征学习轨迹前缀的风险状态：从各步骤的表征中归纳潜在机制特征，再对这些特征随时间的演化进行建模，以估计部分轨迹是否正在趋向不安全行为。",
+              "逐步标注风险可能带来成本与判断歧义。为绕开这一困难，TRACES 使用轨迹级弱监督进行训练，同时输出密集的前缀级风险估计。摘要没有展开观察者模型或训练过程的具体配置。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "轨迹预测与主动风险辨别的摘要结果",
+            "paragraphs": [
+              "摘要报告，在多个智能体安全基准上，TRACES 同时改善了完整轨迹的安全预测和主动风险辨别。这说明作者考察的不只是执行结束后的判断，也包括风险尚在发展时的辨别能力；但摘要未给出具体提升幅度。",
+              "作者的分析还表明，这些风险状态可能有助于训练更安全的智能体。这是一项值得关注的潜在用途，但摘要将其表述为分析所支持的可能性，不能据此认定它已经在所有长程任务中得到验证。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不足以判断的验证范围",
+            "paragraphs": [
+              "摘要没有说明各基准的样本规模、任务构成和具体比较对象，也没有提供性能指标、结果数值或不确定性信息。因此，仅凭当前资料无法判断改善的幅度、适用边界或相对不同审计方法的表现。",
+              "对于更安全智能体的训练，摘要也未交代具体训练设置与验证范围。这里的缺失仅指摘要未报告，并不意味着论文没有进行相关实验或讨论。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注风险状态如何支撑早期判断",
+            "paragraphs": [
+              "阅读启发：关注大语言模型智能体安全的读者，可进一步查阅论文如何定义轨迹前缀和风险状态，以及弱轨迹级监督如何支撑过程中的风险估计。这有助于理解其主动审计结论的适用条件。",
+              "建议同时留意基准、比较对象与更安全智能体的验证设置，区分风险辨别的实证结果和下游训练用途的分析性判断。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的轨迹风险估计过程",
+            "description": "示意图仅概括摘要明确描述的表征建模和弱监督关系，并非论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "观察者模型隐藏表征",
+                "detail": "使用观察者大语言模型的隐藏表征"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "潜在机制特征",
+                "detail": "从步骤表征中归纳潜在机制特征"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "时间演化建模",
+                "detail": "对潜在机制特征的时间演化进行建模"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "前缀级风险估计",
+                "detail": "估计部分轨迹是否趋向不安全行为"
+              },
+              {
+                "id": "e",
+                "stage": 0,
+                "label": "轨迹级弱监督",
+                "detail": "以轨迹级弱监督训练审计器"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "归纳特征"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "建模演化"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "估计风险"
+              },
+              {
+                "from": "e",
+                "to": "d",
+                "label": "弱监督训练"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-27T14:05:24.382735+00:00",
+      "article_profile": "0dd4d2673fd90cc32383f8bc6a836da90cbe92553948204d7dff969aec6992a2",
+      "analysis_references": {},
+      "analysis_material_version": "e18defe42286526878c0b57eaf2ea94aade55d268d9b41ec7790d0f3e84ceac9",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "b291aa51f98f",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T14:05:24.382735+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -293,7 +709,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Large language model (LLM) agents increasingly act through files, tools, memory, retrieved content, and other agents, which can trigger safety failures during execution. Existing benchmarks mostly focus on endpoint outcome evaluation or model-assisted moderation of pre-constructed trajectories, leaving limited evidence about where risks enter and how they propagate. To address this issue, we introduce TraceProbe, an execution-based benchmark for agent safety diagnosis. TraceProbe places agents in executable sandbox scenarios, scores endpoint and latent rule violations based on normalized trace…",
+      "summary": "【摘要】TraceProbe 面向大语言模型智能体执行过程中的安全失效，针对现有评测较少说明风险进入位置及传播方式的问题，在可执行沙箱中评估智能体行为。该基准利用规范化轨迹和结构化证据评分，并通过重放工具操作定位步骤级风险。摘要报告，155 个场景覆盖三类风险来源；12 个模型的平均攻击成功率为 0.347。终点安全的运行仍可能包含不安全中间操作，实际执行路径也可能偏离场景预设的危害。[摘要]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -352,11 +768,157 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "【摘要】推荐关注智能体安全评测和执行轨迹诊断的读者阅读：该工作不仅评价最终结果，还尝试定位中间步骤的风险；但当前缺少研究方向标签的具体含义，无法确认与给定方向的契合度。[摘要]",
+      "deep_read": {
+        "problem": "【摘要】论文关注大语言模型智能体通过文件、工具、记忆、检索内容及其他智能体行动时出现的安全失效。摘要指出，现有基准多关注终点结果，或借助模型审核预先构造的轨迹，因此对于风险从何处进入、如何传播的证据有限。[摘要]",
+        "method": "【摘要】TraceProbe 将智能体置于可执行沙箱场景，依据规范化轨迹和结构化证据，对终点及潜在规则违反进行评分；随后重放记录的工具操作，定位步骤级风险。摘要未说明评分细则、轨迹规范化方法或重放的具体实现。[摘要]",
+        "innovation": "【摘要】该工作的特点是将真实执行、规则违反评分和工具操作重放结合，用于诊断智能体安全问题，而非只检查最终结果。解读：其侧重点是让评测能够追问失效位置和干预位置；仅凭摘要不足以判断各技术组件相对于既有工作的独创程度。[摘要]",
+        "findings": "【摘要】基准包含 155 个场景，覆盖非对抗性失效、内部权威受损和外部攻击三类风险来源。12 个当代大语言模型的平均攻击成功率为 0.347，内部权威受损情形下的残余风险尤其突出；摘要未给出各模型或各类别的具体数值。[摘要]",
+        "limitations": "【摘要】现有资料仅为摘要，未提供场景构造细节、模型名单、统计不确定性或评分可靠性证据，也未报告不同类别的具体结果。解读：这些资料缺口限制了对基准覆盖范围和结果稳健性的判断，但不能据此断言论文存在相应方法缺陷。[摘要]",
+        "connection": "【摘要】论文强调定位风险发生位置和可能的干预位置。解读：这一思路可供研究智能运维中的工具调用审计与故障追踪参考；但摘要没有讨论智能运维、结构设计或可靠性工程的实际应用，不能将其视为作者已验证的跨领域结论。[摘要]",
+        "next_steps": "建议：在获取全文后，优先核查场景与规则的构造方式、步骤级定位的判定标准，以及工具操作重放是否能够稳定复现风险；再查看终点安全但中间不安全的具体案例。若考虑迁移到运维场景，还需另行验证其适用性。[摘要]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "TraceProbe：基于执行的智能体安全失效诊断基准",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1233/"
+      ],
+      "analyzed_at": "2026-11-27T14:06:57.236004+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "大语言模型智能体的最终输出看似安全，执行过程中却可能出现风险。TraceProbe尝试通过可执行场景与轨迹分析，让安全评估进一步回答风险发生在哪里。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "只看最终结果，可能漏掉执行风险",
+            "paragraphs": [
+              "大语言模型智能体正越来越多地通过文件、工具、记忆、检索内容及其他智能体采取行动。这些交互使安全问题不再只关乎最后给出的答案，也可能出现在执行过程之中。",
+              "摘要指出，现有基准主要关注终点结果评估，或借助模型审查预先构建的轨迹；对于风险从哪里进入、又如何传播，能够提供的证据仍然有限。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "在沙箱中执行，并回放工具动作",
+            "paragraphs": [
+              "TraceProbe是一个基于执行的智能体安全诊断基准。它将智能体置于可执行的沙箱场景中，依据规范化轨迹和结构化证据，对终点及潜在的规则违反情况评分，并回放记录的工具动作，以定位步骤层面的风险。",
+              "该基准包含155个场景，覆盖三类风险来源：非对抗性失误、内部权威受损和外部攻击。这一分类把并非由外部攻击直接引起的风险也纳入了评估视野。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "终点安全不等于过程安全",
+            "paragraphs": [
+              "在12个当代大语言模型上，摘要报告的平均攻击成功率（ASR）为0.347。作者据此认为仍存在显著残余风险，尤其是在内部权威受损的情况下。",
+              "分析还发现，终点安全的运行可能包含不安全的中间动作；智能体的实际执行路径，也可能与测试场景预期的危险不同。因此，仅凭最终结果不一定能说明执行过程中发生了什么。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不能说明的评估范围",
+            "paragraphs": [
+              "摘要给出了场景与模型数量，但未交代场景的具体构成、模型选择细节及各类场景的分布，也不足以判断这些样本能在多大程度上代表实际应用。",
+              "摘要未说明与其他基准的具体比较结果，也未详细报告评分、风险定位及跨场景使用的验证范围。这些信息需要进一步查阅论文，不能据此断言相关工作没有开展。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：从结果追问风险位置",
+            "paragraphs": [
+              "阅读启发：对于使用工具或检索内容的大模型智能体，安全评估除了关注最终是否达成攻击目标，也值得追问中间发生了什么、风险出现在哪里，以及何处可能设置干预。",
+              "进一步阅读时，可留意规范化轨迹、结构化证据与工具动作回放如何共同支持诊断，并核对这些诊断结论的适用范围。摘要提出的是更具操作性的评估方向，并未证明具体干预已经有效。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的执行与诊断过程",
+            "description": "示意图仅概括摘要明确陈述的评估环节，并非论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "可执行沙箱场景",
+                "detail": "将智能体置于场景中执行"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "轨迹与结构化证据",
+                "detail": "依据规范化轨迹和结构化证据评分"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "规则违反评分",
+                "detail": "评估终点及潜在规则违反情况"
+              },
+              {
+                "id": "d",
+                "stage": 1,
+                "label": "记录的工具动作",
+                "detail": "对记录的工具动作进行回放"
+              },
+              {
+                "id": "e",
+                "stage": 2,
+                "label": "步骤层面风险定位",
+                "detail": "通过工具动作回放定位风险"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "执行与取证"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "依据证据评分"
+              },
+              {
+                "from": "a",
+                "to": "d",
+                "label": "记录工具动作"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "回放定位"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-27T14:15:00.888756+00:00",
+      "article_profile": "811825cc859fe6e38c702642648e135b95a072ee309f4c910e4e3255fde67fd9",
+      "analysis_references": {},
+      "analysis_material_version": "b2874afd24a7082c242422ee430b66dad98970fbe5983d90f4422ce69221c285",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "1c8768f06c92",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T14:15:00.891543+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -386,7 +948,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Group-Relative Policy Optimization (GRPO) is widely used to post-train LLM agents, but its trajectory-level advantage is ill-suited to long-horizon credit assignment. Reward-homogeneous rollout groups yield zero advantage; otherwise, one scalar uniformly scales every token, obscuring which decisions determine the outcome. We propose **TRACE-GRPO** (**T**eacher-**R**efined **A**dvantage **C**redit **E**stimation for GRPO), which converts teacher-LLM feedback into hierarchical credit. Teacher scores provide a sample-level fallback for zero-variance groups, reweight trajectory advantage at the tu…",
+      "summary": "【论文摘要】本文针对 GRPO 在长时程智能体任务中难以定位关键决策的问题，提出 TRACE-GRPO，利用教师语言模型反馈，在样本、轮次和词元三个层级分配训练信用，并以 CAPA 复用轨迹 KV 缓存以降低相关前向计算开销。在摘要报告的两个环境中，该方法优于所比较的智能体强化学习基线；具体实验设置和结果适用范围仍需查阅全文。[摘要]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -445,11 +1007,164 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注长时程智能体强化学习、信用分配或训练效率的读者阅读：摘要同时给出了分层信用机制、计算优化和实验比较，但具体研究方向未提供，不能确认个性化匹配程度。[摘要]",
+      "deep_read": {
+        "problem": "【论文摘要】研究问题是 GRPO 的轨迹级优势不适合长时程信用分配：奖励同质的 rollout 组产生零优势，而其他情况下单一标量统一缩放所有词元，使决定结果的具体决策难以辨识。摘要原文称其会“obscuring which decisions determine the outcome”。[摘要]",
+        "method": "【论文摘要】TRACE-GRPO 将教师模型反馈转为分层信用：教师评分为零方差组提供样本级回退，在轮次级重加权轨迹优势，再利用教师评议条件下策略对数概率的变化，将轮次信用重新分配到词元级；该方法无需词元级标注或学习型评论器。[摘要]",
+        "innovation": "【论文摘要】作者提出的设计包括教师反馈驱动的三个信用分配层级，以及复用轨迹 KV 缓存的 Critique-Aware Paged Attention（CAPA）。摘要称前者提供“dense training-time credit”；但摘要未充分说明与各类已有方法的差异，不能仅凭此断定创新程度。[摘要]",
+        "findings": "【论文摘要】使用 Qwen2.5-7B-Instruct 时，TRACE-GRPO 在 ALFWorld 和 ScienceWorld 的成功率分别为 96.3% 和 73.4%，优于文中所比较的强智能体强化学习基线。摘要还称三个信用层级带来累积收益，且与教师成功样本上的监督微调比较显示收益不止来自模仿。[摘要]",
+        "limitations": "【论文摘要】当前仅有摘要，未提供完整实验配置、基线明细或结果不确定性，因此无法核验具体比较过程，也不能判断结果在其他模型与环境中的普遍性。摘要未明确报告方法局限；以上是资料范围的限制，而非声称作者已证实的缺陷。[摘要]",
+        "connection": "【解读】分层信用分配关注长任务中哪些决策影响最终结果，概念上可供智能运维多步骤决策的归因研究参考；但摘要实验对象是 ALFWorld 和 ScienceWorld，并未报告智能运维、结构设计或可靠性场景的验证，不能直接推定迁移效果。[摘要]",
+        "next_steps": "【建议】若研究涉及智能运维，可先查阅全文核对教师反馈生成方式、基线和计算成本的统计口径，再考虑在具有可验证任务结果的运维流程中评估信用分配。对结构设计或可靠性应用，还应另行检验反馈可信度与安全约束；这些均非论文已报告结论。[摘要]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "TRACE-GRPO：面向长时程智能体强化学习的教师精炼优势信用估计",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1522/"
+      ],
+      "analyzed_at": "2026-11-27T14:09:05.636338+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "长程任务中的大语言模型智能体，如何判断哪些决策真正影响了最终结果？TRACE-GRPO 尝试利用教师模型反馈细化训练时的信用分配，为理解智能体强化学习提供了一个视角。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "长程轨迹中的信用分配难题",
+            "paragraphs": [
+              "组相对策略优化（GRPO）广泛用于大语言模型智能体的后训练，但摘要指出，轨迹级优势信号并不适合长程信用分配：当一组采样轨迹的奖励相同时，优势为零；否则，同一个标量会统一缩放轨迹中所有 token，难以区分哪些决策决定了结果。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "将教师反馈转化为分层信用",
+            "paragraphs": [
+              "TRACE-GRPO 将教师大语言模型的反馈转化为分层信用。对于奖励方差为零的组，教师评分提供样本级的备用信号；在轮次级，教师评分重新加权轨迹优势；在 token 级，方法利用教师批评下策略对数概率的变化，将轮次信用重新分配给 token。",
+              "摘要称，这种设计无需 token 级标注或学习得到的评论器，就能提供训练时的密集信用信号。作者还提出批评感知分页注意力（CAPA），通过复用轨迹 KV 缓存，降低以教师批评为条件的独立前向计算开销。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "任务成功率与计算开销",
+            "paragraphs": [
+              "摘要报告，使用 Qwen2.5-7B-Instruct 时，TRACE-GRPO 在 ALFWorld 和 ScienceWorld 上分别达到 96.3% 和 73.4% 的成功率，优于较强的智能体强化学习基线。消融结果显示，样本、轮次和 token 三个信用层级带来了累积收益。",
+              "与在教师生成的成功轨迹上进行监督微调的比较表明，批评引导的策略优化带来了超出模仿的收益。摘要还称，CAPA 将独立的批评条件前向计算从约为普通 GRPO 一步的 2 倍，降至约为一个训练步骤的 5%。这一数字针对所述独立前向计算，不应直接理解为整体训练耗时的降幅。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不能回答的验证范围",
+            "paragraphs": [
+              "摘要没有给出样本规模、具体基线名单、各层级的单独收益或结果波动，因此仅凭摘要无法判断比较的完整范围与统计稳定性。摘要也没有说明该方法在其他模型、任务或更广泛场景中的验证范围；这不等于论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：细看教师反馈如何作用",
+            "paragraphs": [
+              "阅读启发：对于关注大语言模型智能体的读者，可进一步查阅论文中教师评分、批评与各层级信用分配的具体关系，以及与监督微调的比较设置，从而理解结果在何种条件下支持“超出模仿”的判断。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的分层信用分配示意",
+            "description": "仅概括摘要明确陈述的教师反馈、分层信用和训练环节，不代表论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "教师模型反馈",
+                "detail": "教师评分与教师批评为信用分配提供信息"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "样本级备用信号",
+                "detail": "教师评分为零方差组提供备用信号"
+              },
+              {
+                "id": "c",
+                "stage": 1,
+                "label": "轮次级信用",
+                "detail": "教师评分在轮次级重新加权轨迹优势"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "token 级信用",
+                "detail": "利用教师批评下的策略对数概率变化重新分配轮次信用"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "训练时密集信用",
+                "detail": "分层信用为策略优化提供训练信号"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "教师评分"
+              },
+              {
+                "from": "a",
+                "to": "c",
+                "label": "教师评分"
+              },
+              {
+                "from": "a",
+                "to": "d",
+                "label": "教师批评"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "重新分配"
+              },
+              {
+                "from": "b",
+                "to": "e",
+                "label": "提供信用"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "提供信用"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-27T14:10:24.300385+00:00",
+      "article_profile": "e56ff3e2b1f1b2dcb3f343ff230ae298cbee9e84dcc9d753d55d3d66ec6ea894",
+      "analysis_references": {},
+      "analysis_material_version": "79e552a94d3d5055e87dfe447ab989aebb89d2d4b4d90b5a48e2f2f580a22651",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "b53b1b3a8f87",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T14:10:24.300386+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -471,7 +1186,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "The use of LLMs to complete online surveys impacts the validity of survey-based research, but detecting such usage remains under-explored. We introduce an initial benchmark dataset, namely ASURRE, for AI-assisted survey participation to capture usage strategies ranging from full generation and revision to persona-grounded agentic completion. Controlled by these strategies, LLM-assisted survey responses are generated using multiple LLMs on three real-world surveys in different disciplines, paired with genuine human responses. Our evaluation of existing machine-generated text (MGT) detectors sho…",
+      "summary": "【摘要】论文关注大语言模型辅助填写在线调查对研究有效性的影响，提出覆盖多种使用策略的基准数据集 ASURRE，并将生成回答与真实人类回答配对。评估显示，模仿完整受访者的角色设定智能体使现有检测器表现接近随机，但其行为仍留下可辨识痕迹。作者据此采用无需训练的少样本线索聚合方法，在智能体场景下的平均 AUROC 比最佳现有检测器高 0.14。[摘要]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -530,11 +1245,156 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "【本站解读】建议关注调查数据质量、机器生成文本检测和智能体行为识别的读者阅读：摘要同时提供了基准构建思路、检测难点及可量化的改进结果，但具体实验细节仍需核对全文。[摘要]",
+      "deep_read": {
+        "problem": "【摘要】论文研究在线调查中大语言模型辅助作答的检测问题。摘要指出此类使用会影响调查研究的有效性，而检测仍“under-explored”。重点不仅是识别机器生成文字，也包括识别模仿受访者参与过程的智能体行为。[摘要]",
+        "method": "【摘要】作者构建 ASURRE 基准，覆盖完整生成、修订及基于角色设定的智能体作答等策略；使用多个大语言模型在不同学科的三项真实调查上生成回答，并与真实人类回答配对，再评估现有检测器及行为线索聚合方法。[摘要]",
+        "innovation": "【摘要】论文提出覆盖多种辅助作答策略的初步基准，并利用受访者层面的行为线索开展检测；聚合方法具有“few-shot, training-free”特点。【本站解读】其相对于既有研究的完整新颖性边界，摘要不足以确认。[摘要]",
+        "findings": "【摘要】简单使用人工智能较易被现有检测器发现，而模仿完整受访者的智能体使检测性能接近随机。行为线索聚合方法在智能体场景下的平均 AUROC 比最佳现有检测器提高 0.14；摘要未给出各场景的具体结果。[摘要]",
+        "limitations": "【摘要】单个行为线索可被针对性提示规避，说明线索本身并非可靠的固定判据；作者也将 ASURRE 称为“initial benchmark”。【本站解读】摘要未报告样本规模、统计显著性或跨场景泛化细节，不能据此判断这些方面的表现。[摘要]",
+        "connection": "【本站解读】论文以行为线索补充文本检测的思路，可能启发可靠性研究中的异常行为识别；但在线调查作答与工程系统运行之间存在场景差异。当前资料未展示其在智能运维、结构设计或工程可靠性任务中的应用证据。[摘要]",
+        "next_steps": "【建议】如需评估该方法的可迁移性，可先查阅全文中的行为线索定义、数据划分及各智能体场景结果，再考察针对性提示下的稳健性。若用于工程场景，还应单独验证数据条件和误报风险；这些均为研究建议，而非作者已证实的结论。[摘要]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "面向在线调查中人工智能辅助回答的检测",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.370/"
+      ],
+      "analyzed_at": "2026-11-27T14:12:10.957456+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "大语言模型参与填写在线问卷，可能影响调查研究的有效性，但如何识别这种参与仍缺乏充分研究。本文通过一个初步基准考察不同使用策略，也提示读者：识别单段生成文本与识别模拟完整受访者的智能体，并不是同一个难题。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "当大模型成为问卷填写者",
+            "paragraphs": [
+              "在线问卷依赖受访者的回答开展研究，而大语言模型可以参与生成或修改回答。随着参与方式从直接生成扩展到模拟受访者，调查数据中人类作答与模型辅助作答的区分也变得值得关注。",
+              "论文聚焦 AI 辅助参与问卷的识别问题，提出初步基准数据集 ASURRE。它覆盖从完整生成、修改到基于人物设定的智能体填写等策略，为比较不同参与方式下的检测表现提供材料。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从参与策略构建 ASURRE 基准",
+            "paragraphs": [
+              "研究使用多个大语言模型，在不同学科的三个真实问卷上，按照不同使用策略生成模型辅助回答，并与真实人类回答配对。摘要将这些材料用于评估现有机器生成文本检测器。",
+              "除文本检测外，研究还关注智能体填写留下的受访者层面行为线索，并采用一种简单的少样本、无需训练的聚合器整合这些线索。摘要没有展开聚合器的具体实现。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "模拟完整受访者让检测更难",
+            "paragraphs": [
+              "摘要报告，直接使用 AI 的方式较容易被现有检测器识别；但当基于人物设定的智能体试图模仿完整受访者时，检测器表现趋近于随机水平。这个对比说明，检测效果会随模型参与策略而变化。",
+              "研究同时发现，智能体填写不能完全复制受访者层面的行为，仍会留下有辨识度的行为痕迹。单个线索可以通过针对性提示被绕过，但在智能体设置下，线索聚合器的平均 AUROC 比表现最好的现有检测器提高了 +0.14。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚未交代的样本与验证边界",
+            "paragraphs": [
+              "摘要没有给出人类受访者和回答的具体样本量、各模型及问卷的详细构成，也未列明受试检测器和行为线索的完整清单，因此无法仅凭摘要判断比较是否覆盖了所有相关场景。",
+              "摘要也未说明结果在其他问卷、人群或模型上的验证范围，以及聚合器在不同条件下的具体表现。这些是当前资料的阅读边界，不能据此认定论文没有开展相关分析。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：从文本转向作答行为",
+            "paragraphs": [
+              "阅读启发：对于关注大语言模型的读者，可以进一步查阅论文如何定义受访者层面的行为线索，以及这些线索与文本检测结果如何互补；同时留意针对性提示为何能够绕过单个线索。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的基准与检测过程",
+            "description": "仅概括摘要明确陈述的研究环节，不表达未报告的实验配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "真实问卷与参与策略",
+                "detail": "不同学科的真实问卷，以及从生成、修改到智能体填写的策略"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "生成模型辅助回答",
+                "detail": "使用多个大语言模型，按参与策略生成问卷回答"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "与人类回答配对",
+                "detail": "模型辅助回答与真实人类回答配对，构成基准材料"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "评估现有文本检测器",
+                "detail": "考察不同 AI 参与策略下的检测表现"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "聚合行为线索",
+                "detail": "使用少样本、无需训练的聚合器整合行为线索"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "按策略生成"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "配对"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "评估检测"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "考察行为"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-27T14:13:35.087714+00:00",
+      "article_profile": "f2b37ea7c2cb887696d08e0088d1db508e06e079b97e616432f34fe7adadb6f7",
+      "analysis_references": {},
+      "analysis_material_version": "282bd07d74af105692d580e2ad3b68cb7e44ac7bb0fe41fa4e6f9597c4c184ca",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "a88fa24509bb",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T14:13:35.089722+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "extended": [],
@@ -566,7 +1426,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Multi-agent LLM systems delegate through natural language, creating trust boundaries that single-agent safety hierarchies were not designed to preserve. We identify provenance erasure as a multi-agent safety failure mechanism: even in the minimal two-agent case, delegation strips trust metadata—98% of format markers, 100% of authority entities, and 44% of source attribution across 460 pairs—while often preserving the actionable payload. This lossy transform enables Trust Cascade, amplifying system-channel attacks from 0% to 33–63% cascade ASR across eight open-weight models; a delegation-as-us…",
+      "summary": "【论文摘要】论文研究大语言模型多智能体系统在自然语言委派中面临的信任边界问题。作者提出“来源信息抹除”机制：委派可能丢失信任元数据，却保留可执行内容，从而引发信任级联。摘要报告了双智能体数据、八个开源权重模型上的攻击结果，以及零推理来源诊断方法 TBA 的检测结果。作者据此提出结合委派门控与来源审计；实验细节及其适用边界仍需全文核对。[摘要]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -625,11 +1485,147 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "【论文摘要】推荐关注多智能体安全与智能运维代理的读者阅读：摘要同时给出了边界失效机制、对照实验和诊断方法，具有明确的问题与方法线索；但当前未提供具体研究方向，方向匹配度尚不能确认。[摘要]",
+      "deep_read": {
+        "problem": "【论文摘要】论文关注多智能体通过自然语言委派任务时，单智能体安全层级能否维持跨代理的信任边界。摘要指出委派会丢失“trust metadata”，而可执行载荷往往被保留，使原有信任信息无法随任务可靠传递。[摘要]",
+        "method": "【论文摘要】作者分析最小双智能体场景中的委派信息变化，并在八个开源权重模型上评估级联攻击；同时设置“delegation-as-user”对照，以区分通道信任升级与内容改写的作用。摘要还提出零推理来源诊断方法 TBA。[摘要]",
+        "innovation": "【论文摘要】论文将“provenance erasure”作为多智能体安全失效机制，并把信任级联与委派边界联系起来；针对这一边界，作者提出来源诊断工具。解读：其特点在于把委派过程中的信任信息流失作为分析对象。[摘要]",
+        "findings": "【论文摘要】在 460 对数据中，委派丢失了 98% 的格式标记、100% 的权威实体及 44% 的来源归属；系统通道攻击的级联攻击成功率从 0% 增至 33–63%。TBA 在四个领域的条件检测率为 86–100%，误报率为 0%。[摘要]",
+        "limitations": "【论文摘要】摘要称更强模型可中断不同级联阶段，但不能消除边界问题。摘要未交代数据构成、攻击与检测的具体判定方式，也未详述四个领域或闭源评估结果，因此尚不能判断方法的普适性与实际部署成本。[摘要]",
+        "connection": "【论文摘要】研究直接涉及代理间委派与来源审计，可为智能运维中多代理任务交接的信任管理提供参考。解读：其边界失效视角也可启发可靠性研究；摘要未涉及结构设计，不能据此认定存在直接应用。[摘要]",
+        "next_steps": "建议阅读全文后核对攻击场景、对照设置、检测条件及误报统计口径，再判断结果能否迁移到目标系统。建议针对智能运维代理的任务交接，研究来源信息保留与委派门控；这些是后续设想，并非摘要报告的实验。[摘要]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "来源信息抹除引发的信任级联：多智能体委派如何破坏单智能体安全机制",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1005/"
+      ],
+      "analyzed_at": "2026-11-27T13:58:23.460842+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "多智能体通过自然语言委派任务时，信息来源与权限可能在传递中丢失。本文从委派边界切入，揭示这种损失如何放大安全攻击，并讨论来源审计的价值。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "任务委派为何形成新的信任边界",
+            "paragraphs": [
+              "单智能体安全层级并非为保护多智能体之间的信任边界而设计。任务经自然语言转交时，接收方看到的内容可能保留了可执行的指令，却不再完整携带其来源和权限信息。",
+              "摘要将这一机制称为**来源擦除**：问题不只是内容发生改写，还在于内容跨越委派边界后，原有的信任信息可能不再可见。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从双智能体委派到边界审计",
+            "paragraphs": [
+              "研究考察了最简双智能体委派中的信任元数据损失，并通过将委派内容作为用户消息的对照，区分通道信任升级与内容重新表述的作用。",
+              "针对委派边界处的失效，作者提出信任边界审计器（TBA），将其作为无需推理的来源诊断方法。摘要没有展开该审计器的具体实现。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "来源擦除与信任级联的报告结果",
+            "paragraphs": [
+              "在 460 对数据中，委派过程剥离了 98% 的格式标记、100% 的权威实体和 44% 的来源归属，同时往往保留可执行的载荷。摘要据此指出，有损传递使“信任级联”成为可能。",
+              "在八个开放权重模型上，系统通道攻击从 0% 放大至 33–63% 的级联攻击成功率。将委派内容作为用户消息的对照表明，关键作用来自通道信任升级，而非内容重新表述。",
+              "TBA 在四个领域取得 86–100% 的条件检测率，误报率为 0%。训练、规模和闭源评估还显示，更强模型能够中断级联的不同阶段，但并未消除边界问题。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不能界定的评估范围",
+            "paragraphs": [
+              "摘要没有说明数据对的具体构成、各领域的样本分布，也未完整列出比较对象、模型及评估条件。因此，不能仅凭摘要判断结果对其他任务、系统或攻击形式的适用范围。",
+              "摘要同样未交代 TBA 的详细实现、条件检测率的具体条件及独立验证范围；这些信息需要查阅论文后才能判断，而不能据此认定论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注信息如何跨越委派边界",
+            "paragraphs": [
+              "对于大语言模型多智能体系统，阅读启发是同时关注消息内容与其来源、权限在委派中的变化。进一步阅读时，可重点核对用户消息对照如何设置，以及 TBA 在什么条件下作出检测。",
+              "摘要提出将委派门控与来源审计结合起来，但没有报告二者结合后的具体验证效果。理解这一建议的适用边界，还需要查看论文中的评估细节。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的委派风险与审计示意",
+            "description": "仅概括摘要明确描述的委派失效关系与审计方向，不代表论文原图或具体实现。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "自然语言任务委派",
+                "detail": "多智能体之间通过自然语言转交任务"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "来源信息擦除",
+                "detail": "信任元数据可能丢失，而可执行载荷往往保留"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "信任级联",
+                "detail": "有损传递使系统通道攻击得以放大"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "来源审计",
+                "detail": "TBA 针对委派边界提供无需推理的来源诊断"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "跨边界传递"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "使级联成为可能"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "针对边界失效"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-27T13:59:45.305576+00:00",
+      "article_profile": "68dbfe446c565ff8a2549ee8d89e125bc1d8258ecc18d589ad5a93412c80ecaa",
+      "analysis_references": {},
+      "analysis_material_version": "33c4e3d741bc8398c47c45d819eb08e33c7b1cecea1bf18668e8d62373c65bc4",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "b043295cb826",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T13:59:45.313327+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -654,7 +1650,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Personalized large language models adapt responses to users’ preferences and social attributes, but can introduce substantial universal truth inconsistencies across social groups, where some groups systematically receive less accurate responses on objective tasks. Existing alignment methods either ignore personalization or mainly focus on subjective preference alignment, largely overlooking fairness and consistency in universal truths. To address this gap, we study Truth-Invariant Alignment (TIA), an alignment problem for personalized LLMs that aims to ensure universal truths remain consistent…",
+      "summary": "【摘要】论文关注个性化大语言模型在客观任务中可能因用户社会群体不同而产生的准确性差异。作者提出真理不变对齐问题，目标是在保留个性化的同时，使普遍真理跨群体保持一致；并提出离线多智能体强化学习框架 TriAlign，通过公平性感知目标和显式不一致性惩罚，联合优化准确性、跨群体一致性与个性化。摘要称，该方法在多个基准上的三项目标平衡优于强基线，但未提供具体数值或实验细节。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -713,11 +1709,145 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注个性化大模型公平性与多目标对齐的读者阅读：论文明确提出了跨群体真理一致性问题及相应方法，但目前只能依据摘要判断，尚需全文核查实验与适用范围。",
+      "deep_read": {
+        "problem": "【摘要】论文指出，个性化模型适应用户偏好和社会属性时，可能在客观任务上对某些群体系统性地给出较不准确的回答。作者因此提出真理不变对齐问题，要求普遍真理跨群体保持一致，同时保留个性化。",
+        "method": "【摘要】TriAlign 被描述为用于真理不变对齐的离线多智能体强化学习框架，其中每个社会群体被建模为一个智能体。框架通过公平性感知目标和显式不一致性惩罚联合优化多个目标；摘要未说明训练数据、交互机制或目标函数公式。",
+        "innovation": "【摘要】作者将跨社会群体的普遍真理一致性与个性化共同纳入对齐问题，并称 TriAlign 是该问题的首个离线多智能体强化学习框架。解读：其创新主张依赖作者对已有研究的界定，仅凭摘要无法独立核实首创性。",
+        "findings": "【摘要】作者称，在多个不同基准上，TriAlign 相比强基线实现了准确性、一致性和个性化之间更好的平衡，并缩小群体间真理差异，同时提高客观任务表现和个性化质量。摘要未给出基准名称、具体数值或统计显著性。",
+        "limitations": "【摘要】当前材料未报告数据来源、群体划分、评价指标、基线细节及具体结果，因此无法判断结论的效应大小、稳健性与适用边界。解读：这些是摘要证据的不足，并非作者已经证实的模型缺陷或论文局限。",
+        "connection": "【摘要】论文直接涉及个性化大模型的跨群体公平性和回答一致性。解读：若智能运维系统采用面向不同用户的语言模型，其客观信息一致性可能值得借鉴该问题设定；现有资料未提供结构设计或可靠性领域的直接应用证据。",
+        "next_steps": "建议获取全文后，先核查真理不变对齐的形式化定义、群体建模方式及惩罚项，再检查基准、对照方法和三项目标的具体指标。建议进一步考察不同群体与任务条件下的权衡；这些是阅读和研究建议，不是作者结论。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "TriAlign：面向个性化大语言模型对齐的普遍真理一致性",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.2640/"
+      ],
+      "analyzed_at": "2026-11-27T14:01:27.478519+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "个性化大语言模型在适应不同用户时，能否对客观问题保持准确且跨群体一致的回答？TriAlign 将这一问题与个性化质量共同纳入对齐目标，为理解模型中的群体间事实差异提供了一个视角。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "个性化回答为何需要关注事实一致性",
+            "paragraphs": [
+              "个性化大语言模型会根据用户偏好和社会属性调整回答，但在客观任务中，不同社会群体收到的回答可能出现明显的事实不一致，部分群体还可能系统性地得到准确度更低的回答。",
+              "摘要指出，现有对齐方法有的忽略个性化，有的主要关注主观偏好对齐，而普遍事实的公平性和一致性在很大程度上被忽视。如何保留个性化，同时避免客观事实随群体而改变，是本文关注的问题。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "TriAlign：把三个目标放在一起优化",
+            "paragraphs": [
+              "作者研究了**事实不变对齐**（Truth-Invariant Alignment，TIA）：在保留个性化的同时，使普遍事实在不同社会群体之间保持一致。",
+              "为此，作者提出离线多智能体强化学习框架 TriAlign，将每个社会群体建模为相互交互的智能体。框架通过考虑公平性的目标函数和显式的不一致性惩罚，联合优化普遍事实准确性、跨群体事实一致性与个性化。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "摘要报告：事实表现与个性化的共同改善",
+            "paragraphs": [
+              "摘要报告，在多个不同基准上的实验中，相比强基线，TriAlign 在普遍事实准确性、跨群体一致性和个性化三个目标之间取得了更好的平衡。",
+              "具体而言，作者称该方法缩小了社会群体之间的普遍事实差异，同时改善了客观任务表现与个性化质量。摘要未给出具体指标或改善幅度，因此这里不能判断变化的大小。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "仅凭摘要还无法判断哪些边界",
+            "paragraphs": [
+              "摘要没有说明涉及哪些具体社会群体、样本规模和基准任务，也未列出强基线的名称及比较细节，因此难以判断结论覆盖了哪些人群与任务。",
+              "摘要也没有提供各项指标、统计不确定性或验证设置的细节。以上是当前摘要资料的限制，并不意味着论文没有开展相关分析；跨场景的适用范围仍需结合论文中的完整实验核对。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：辨别事实一致与个性化的边界",
+            "paragraphs": [
+              "阅读启发：评估个性化大模型时，可同时关注回答是否符合用户偏好，以及不同群体面对客观问题时得到的事实是否一致、准确。进一步阅读论文时，值得留意作者如何界定普遍事实，以及如何衡量这三个目标之间的平衡。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的 TriAlign 对齐思路",
+            "description": "仅概括摘要明确陈述的群体建模、对齐设计与联合优化关系，不代表论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "社会群体",
+                "detail": "将每个社会群体建模为智能体"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "离线多智能体强化学习",
+                "detail": "TriAlign 中的群体智能体相互交互"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "公平性与不一致性",
+                "detail": "采用考虑公平性的目标函数和显式不一致性惩罚"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "联合优化三个目标",
+                "detail": "普遍事实准确性、跨群体事实一致性与个性化"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "建模为智能体"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "采用对齐设计"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "联合优化"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-27T14:02:48.733102+00:00",
+      "article_profile": "c63308bcc4ec319258116b3d8ad2edeef2871e43dd5684f5eecfb3ea78601dec",
+      "analysis_references": {},
+      "analysis_material_version": "9c60a31ad47b6282cb3bb0f87472c0a763ca81dc62e7bd58a6a7f1c63f602153",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "cd9e8cd994f3",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T14:02:48.733103+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -741,7 +1871,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "LLM agents increasingly operate through multi-turn tool use and environment interaction, where safety risks often emerge from intermediate steps long before they surface in the final outcome. Reactive auditing is therefore insufficient: post-hoc diagnosis frequently misses the chance to flag risks while they are unfolding. We propose TRACES, a representation-based proactive auditor that learns prefix-level trajectory risk states from the hidden representations of an observer LLM. TRACES induces latent mechanism features from step representations and models their temporal evolution to estimate…",
+      "summary": "【摘要】多轮工具调用和环境交互中的安全风险可能在最终结果出现前形成，事后审计因而可能错失预警时机。论文提出 TRACES，从观察者大语言模型的隐藏表征学习轨迹前缀风险状态，利用潜在机制特征及其时间演化判断部分轨迹是否趋向不安全行为。该方法以轨迹级弱监督训练，生成密集的前缀级风险估计。摘要称其在多个智能体安全基准上改善了完整轨迹预测与主动风险区分；具体数据和实验细节未提供。",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -800,11 +1930,157 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "【解读】若关注智能体运行过程中的风险监测，而非仅检查最终输出，本文的前缀级风险估计和弱监督设定值得阅读；但由于未给出具体研究方向，无法确认其是否切题。",
+      "deep_read": {
+        "problem": "【摘要】论文关注多轮智能体在工具使用和环境交互中出现的安全风险。原文指出，风险可能在最终结果显现前的中间步骤产生，事后诊断“misses the chance to flag risks while they are unfolding”。因此，研究目标是更早识别正在发展的风险。",
+        "method": "【摘要】TRACES 使用观察者大语言模型的隐藏表征，从步骤表征中提取潜在机制特征，并建模其随时间的演化，以估计部分轨迹是否趋向不安全行为。训练采用轨迹级弱监督，同时输出密集的前缀级风险估计；摘要未说明具体模型结构和训练细节。",
+        "innovation": "【解读】相较于摘要所批评的事后审计，本文的值得关注之处是把审计对象扩展到未完成的轨迹前缀，并尝试用轨迹级弱监督获得前缀级估计，以避免逐步骤风险标注的成本与歧义。摘要未提供充分的对比方法细节，无法独立核实新颖性程度。",
+        "findings": "【摘要】作者称，在多个智能体安全基准上，TRACES 改善了完整轨迹安全预测和主动风险区分。摘要还称，分析结果提示这些风险状态可帮助训练更安全的智能体。摘要未给出基准名称、对照方法、指标数值或统计结果，无法判断提升幅度和稳健性。",
+        "limitations": "【解读】当前仅有摘要，无法核查方法的适用边界、风险状态的可解释性、误报漏报情况及额外计算成本，也无法判断弱监督标签对结果的影响。这些是现有资料尚未回答的问题，并非论文已证实的缺陷；作者是否报告其他局限也不得而知。",
+        "connection": "【解读】若将多轮智能体看作持续执行任务的系统，轨迹前缀风险估计可与智能运维中的过程监测及可靠性研究中的早期风险识别形成概念联系。但摘要讨论的是智能体安全审计，未展示结构设计或工业运维应用，不能据此认定已有跨领域验证。",
+        "next_steps": "【建议】阅读全文时，可优先核对轨迹级标签如何生成、潜在机制特征怎样学习，以及前缀预警相对完整轨迹预测的评价方式；再检查各基准、对照方法和误报漏报结果。若考虑迁移至运维场景，还需另行验证环境差异和部署成本，摘要不足以支持直接应用。"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "TRACES：基于轨迹状态建模的多轮大语言模型智能体主动安全审计",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.723/"
+      ],
+      "analyzed_at": "2026-11-27T14:04:05.092006+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "大语言模型智能体在多轮调用工具、与环境交互时，风险可能早在最终结果出现之前就已形成。TRACES 尝试识别执行过程中的风险变化，为理解智能体的主动安全审计提供了一种思路。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "安全风险为何需要在轨迹中识别",
+            "paragraphs": [
+              "智能体的行为不是一次性输出，而可能由多轮工具调用和环境交互组成。摘要指出，危险信号常常出现在中间步骤，等到最终结果显现后再进行事后诊断，可能已经错过风险发展过程中的提示时机。",
+              "这一问题的关注点因此从“最终是否安全”，扩展到“尚未完成的行为轨迹是否正在偏离安全方向”。及早识别并不等同于已经阻止风险，但可以为主动审计提供判断依据。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从观察者表征学习轨迹风险状态",
+            "paragraphs": [
+              "TRACES 是一种基于表征的主动审计器。它利用观察者大语言模型的隐藏表征学习轨迹前缀的风险状态：从各步骤的表征中归纳潜在机制特征，再对这些特征随时间的演化进行建模，以估计部分轨迹是否正在趋向不安全行为。",
+              "逐步标注风险可能带来成本与判断歧义。为绕开这一困难，TRACES 使用轨迹级弱监督进行训练，同时输出密集的前缀级风险估计。摘要没有展开观察者模型或训练过程的具体配置。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "轨迹预测与主动风险辨别的摘要结果",
+            "paragraphs": [
+              "摘要报告，在多个智能体安全基准上，TRACES 同时改善了完整轨迹的安全预测和主动风险辨别。这说明作者考察的不只是执行结束后的判断，也包括风险尚在发展时的辨别能力；但摘要未给出具体提升幅度。",
+              "作者的分析还表明，这些风险状态可能有助于训练更安全的智能体。这是一项值得关注的潜在用途，但摘要将其表述为分析所支持的可能性，不能据此认定它已经在所有长程任务中得到验证。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不足以判断的验证范围",
+            "paragraphs": [
+              "摘要没有说明各基准的样本规模、任务构成和具体比较对象，也没有提供性能指标、结果数值或不确定性信息。因此，仅凭当前资料无法判断改善的幅度、适用边界或相对不同审计方法的表现。",
+              "对于更安全智能体的训练，摘要也未交代具体训练设置与验证范围。这里的缺失仅指摘要未报告，并不意味着论文没有进行相关实验或讨论。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注风险状态如何支撑早期判断",
+            "paragraphs": [
+              "阅读启发：关注大语言模型智能体安全的读者，可进一步查阅论文如何定义轨迹前缀和风险状态，以及弱轨迹级监督如何支撑过程中的风险估计。这有助于理解其主动审计结论的适用条件。",
+              "建议同时留意基准、比较对象与更安全智能体的验证设置，区分风险辨别的实证结果和下游训练用途的分析性判断。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的轨迹风险估计过程",
+            "description": "示意图仅概括摘要明确描述的表征建模和弱监督关系，并非论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "观察者模型隐藏表征",
+                "detail": "使用观察者大语言模型的隐藏表征"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "潜在机制特征",
+                "detail": "从步骤表征中归纳潜在机制特征"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "时间演化建模",
+                "detail": "对潜在机制特征的时间演化进行建模"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "前缀级风险估计",
+                "detail": "估计部分轨迹是否趋向不安全行为"
+              },
+              {
+                "id": "e",
+                "stage": 0,
+                "label": "轨迹级弱监督",
+                "detail": "以轨迹级弱监督训练审计器"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "归纳特征"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "建模演化"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "估计风险"
+              },
+              {
+                "from": "e",
+                "to": "d",
+                "label": "弱监督训练"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-27T14:05:24.382735+00:00",
+      "article_profile": "0dd4d2673fd90cc32383f8bc6a836da90cbe92553948204d7dff969aec6992a2",
+      "analysis_references": {},
+      "analysis_material_version": "e18defe42286526878c0b57eaf2ea94aade55d268d9b41ec7790d0f3e84ceac9",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "b291aa51f98f",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T14:05:24.382735+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -828,7 +2104,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Large language model (LLM) agents increasingly act through files, tools, memory, retrieved content, and other agents, which can trigger safety failures during execution. Existing benchmarks mostly focus on endpoint outcome evaluation or model-assisted moderation of pre-constructed trajectories, leaving limited evidence about where risks enter and how they propagate. To address this issue, we introduce TraceProbe, an execution-based benchmark for agent safety diagnosis. TraceProbe places agents in executable sandbox scenarios, scores endpoint and latent rule violations based on normalized trace…",
+      "summary": "【摘要】TraceProbe 面向大语言模型智能体执行过程中的安全失效，针对现有评测较少说明风险进入位置及传播方式的问题，在可执行沙箱中评估智能体行为。该基准利用规范化轨迹和结构化证据评分，并通过重放工具操作定位步骤级风险。摘要报告，155 个场景覆盖三类风险来源；12 个模型的平均攻击成功率为 0.347。终点安全的运行仍可能包含不安全中间操作，实际执行路径也可能偏离场景预设的危害。[摘要]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -887,11 +2163,157 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "【摘要】推荐关注智能体安全评测和执行轨迹诊断的读者阅读：该工作不仅评价最终结果，还尝试定位中间步骤的风险；但当前缺少研究方向标签的具体含义，无法确认与给定方向的契合度。[摘要]",
+      "deep_read": {
+        "problem": "【摘要】论文关注大语言模型智能体通过文件、工具、记忆、检索内容及其他智能体行动时出现的安全失效。摘要指出，现有基准多关注终点结果，或借助模型审核预先构造的轨迹，因此对于风险从何处进入、如何传播的证据有限。[摘要]",
+        "method": "【摘要】TraceProbe 将智能体置于可执行沙箱场景，依据规范化轨迹和结构化证据，对终点及潜在规则违反进行评分；随后重放记录的工具操作，定位步骤级风险。摘要未说明评分细则、轨迹规范化方法或重放的具体实现。[摘要]",
+        "innovation": "【摘要】该工作的特点是将真实执行、规则违反评分和工具操作重放结合，用于诊断智能体安全问题，而非只检查最终结果。解读：其侧重点是让评测能够追问失效位置和干预位置；仅凭摘要不足以判断各技术组件相对于既有工作的独创程度。[摘要]",
+        "findings": "【摘要】基准包含 155 个场景，覆盖非对抗性失效、内部权威受损和外部攻击三类风险来源。12 个当代大语言模型的平均攻击成功率为 0.347，内部权威受损情形下的残余风险尤其突出；摘要未给出各模型或各类别的具体数值。[摘要]",
+        "limitations": "【摘要】现有资料仅为摘要，未提供场景构造细节、模型名单、统计不确定性或评分可靠性证据，也未报告不同类别的具体结果。解读：这些资料缺口限制了对基准覆盖范围和结果稳健性的判断，但不能据此断言论文存在相应方法缺陷。[摘要]",
+        "connection": "【摘要】论文强调定位风险发生位置和可能的干预位置。解读：这一思路可供研究智能运维中的工具调用审计与故障追踪参考；但摘要没有讨论智能运维、结构设计或可靠性工程的实际应用，不能将其视为作者已验证的跨领域结论。[摘要]",
+        "next_steps": "建议：在获取全文后，优先核查场景与规则的构造方式、步骤级定位的判定标准，以及工具操作重放是否能够稳定复现风险；再查看终点安全但中间不安全的具体案例。若考虑迁移到运维场景，还需另行验证其适用性。[摘要]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "TraceProbe：基于执行的智能体安全失效诊断基准",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1233/"
+      ],
+      "analyzed_at": "2026-11-27T14:06:57.236004+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "大语言模型智能体的最终输出看似安全，执行过程中却可能出现风险。TraceProbe尝试通过可执行场景与轨迹分析，让安全评估进一步回答风险发生在哪里。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "只看最终结果，可能漏掉执行风险",
+            "paragraphs": [
+              "大语言模型智能体正越来越多地通过文件、工具、记忆、检索内容及其他智能体采取行动。这些交互使安全问题不再只关乎最后给出的答案，也可能出现在执行过程之中。",
+              "摘要指出，现有基准主要关注终点结果评估，或借助模型审查预先构建的轨迹；对于风险从哪里进入、又如何传播，能够提供的证据仍然有限。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "在沙箱中执行，并回放工具动作",
+            "paragraphs": [
+              "TraceProbe是一个基于执行的智能体安全诊断基准。它将智能体置于可执行的沙箱场景中，依据规范化轨迹和结构化证据，对终点及潜在的规则违反情况评分，并回放记录的工具动作，以定位步骤层面的风险。",
+              "该基准包含155个场景，覆盖三类风险来源：非对抗性失误、内部权威受损和外部攻击。这一分类把并非由外部攻击直接引起的风险也纳入了评估视野。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "终点安全不等于过程安全",
+            "paragraphs": [
+              "在12个当代大语言模型上，摘要报告的平均攻击成功率（ASR）为0.347。作者据此认为仍存在显著残余风险，尤其是在内部权威受损的情况下。",
+              "分析还发现，终点安全的运行可能包含不安全的中间动作；智能体的实际执行路径，也可能与测试场景预期的危险不同。因此，仅凭最终结果不一定能说明执行过程中发生了什么。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不能说明的评估范围",
+            "paragraphs": [
+              "摘要给出了场景与模型数量，但未交代场景的具体构成、模型选择细节及各类场景的分布，也不足以判断这些样本能在多大程度上代表实际应用。",
+              "摘要未说明与其他基准的具体比较结果，也未详细报告评分、风险定位及跨场景使用的验证范围。这些信息需要进一步查阅论文，不能据此断言相关工作没有开展。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：从结果追问风险位置",
+            "paragraphs": [
+              "阅读启发：对于使用工具或检索内容的大模型智能体，安全评估除了关注最终是否达成攻击目标，也值得追问中间发生了什么、风险出现在哪里，以及何处可能设置干预。",
+              "进一步阅读时，可留意规范化轨迹、结构化证据与工具动作回放如何共同支持诊断，并核对这些诊断结论的适用范围。摘要提出的是更具操作性的评估方向，并未证明具体干预已经有效。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的执行与诊断过程",
+            "description": "示意图仅概括摘要明确陈述的评估环节，并非论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "可执行沙箱场景",
+                "detail": "将智能体置于场景中执行"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "轨迹与结构化证据",
+                "detail": "依据规范化轨迹和结构化证据评分"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "规则违反评分",
+                "detail": "评估终点及潜在规则违反情况"
+              },
+              {
+                "id": "d",
+                "stage": 1,
+                "label": "记录的工具动作",
+                "detail": "对记录的工具动作进行回放"
+              },
+              {
+                "id": "e",
+                "stage": 2,
+                "label": "步骤层面风险定位",
+                "detail": "通过工具动作回放定位风险"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "执行与取证"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "依据证据评分"
+              },
+              {
+                "from": "a",
+                "to": "d",
+                "label": "记录工具动作"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "回放定位"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-27T14:15:00.888756+00:00",
+      "article_profile": "811825cc859fe6e38c702642648e135b95a072ee309f4c910e4e3255fde67fd9",
+      "analysis_references": {},
+      "analysis_material_version": "b2874afd24a7082c242422ee430b66dad98970fbe5983d90f4422ce69221c285",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "1c8768f06c92",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T14:15:00.891543+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -921,7 +2343,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Group-Relative Policy Optimization (GRPO) is widely used to post-train LLM agents, but its trajectory-level advantage is ill-suited to long-horizon credit assignment. Reward-homogeneous rollout groups yield zero advantage; otherwise, one scalar uniformly scales every token, obscuring which decisions determine the outcome. We propose **TRACE-GRPO** (**T**eacher-**R**efined **A**dvantage **C**redit **E**stimation for GRPO), which converts teacher-LLM feedback into hierarchical credit. Teacher scores provide a sample-level fallback for zero-variance groups, reweight trajectory advantage at the tu…",
+      "summary": "【论文摘要】本文针对 GRPO 在长时程智能体任务中难以定位关键决策的问题，提出 TRACE-GRPO，利用教师语言模型反馈，在样本、轮次和词元三个层级分配训练信用，并以 CAPA 复用轨迹 KV 缓存以降低相关前向计算开销。在摘要报告的两个环境中，该方法优于所比较的智能体强化学习基线；具体实验设置和结果适用范围仍需查阅全文。[摘要]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -980,11 +2402,164 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注长时程智能体强化学习、信用分配或训练效率的读者阅读：摘要同时给出了分层信用机制、计算优化和实验比较，但具体研究方向未提供，不能确认个性化匹配程度。[摘要]",
+      "deep_read": {
+        "problem": "【论文摘要】研究问题是 GRPO 的轨迹级优势不适合长时程信用分配：奖励同质的 rollout 组产生零优势，而其他情况下单一标量统一缩放所有词元，使决定结果的具体决策难以辨识。摘要原文称其会“obscuring which decisions determine the outcome”。[摘要]",
+        "method": "【论文摘要】TRACE-GRPO 将教师模型反馈转为分层信用：教师评分为零方差组提供样本级回退，在轮次级重加权轨迹优势，再利用教师评议条件下策略对数概率的变化，将轮次信用重新分配到词元级；该方法无需词元级标注或学习型评论器。[摘要]",
+        "innovation": "【论文摘要】作者提出的设计包括教师反馈驱动的三个信用分配层级，以及复用轨迹 KV 缓存的 Critique-Aware Paged Attention（CAPA）。摘要称前者提供“dense training-time credit”；但摘要未充分说明与各类已有方法的差异，不能仅凭此断定创新程度。[摘要]",
+        "findings": "【论文摘要】使用 Qwen2.5-7B-Instruct 时，TRACE-GRPO 在 ALFWorld 和 ScienceWorld 的成功率分别为 96.3% 和 73.4%，优于文中所比较的强智能体强化学习基线。摘要还称三个信用层级带来累积收益，且与教师成功样本上的监督微调比较显示收益不止来自模仿。[摘要]",
+        "limitations": "【论文摘要】当前仅有摘要，未提供完整实验配置、基线明细或结果不确定性，因此无法核验具体比较过程，也不能判断结果在其他模型与环境中的普遍性。摘要未明确报告方法局限；以上是资料范围的限制，而非声称作者已证实的缺陷。[摘要]",
+        "connection": "【解读】分层信用分配关注长任务中哪些决策影响最终结果，概念上可供智能运维多步骤决策的归因研究参考；但摘要实验对象是 ALFWorld 和 ScienceWorld，并未报告智能运维、结构设计或可靠性场景的验证，不能直接推定迁移效果。[摘要]",
+        "next_steps": "【建议】若研究涉及智能运维，可先查阅全文核对教师反馈生成方式、基线和计算成本的统计口径，再考虑在具有可验证任务结果的运维流程中评估信用分配。对结构设计或可靠性应用，还应另行检验反馈可信度与安全约束；这些均非论文已报告结论。[摘要]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "TRACE-GRPO：面向长时程智能体强化学习的教师精炼优势信用估计",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1522/"
+      ],
+      "analyzed_at": "2026-11-27T14:09:05.636338+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "长程任务中的大语言模型智能体，如何判断哪些决策真正影响了最终结果？TRACE-GRPO 尝试利用教师模型反馈细化训练时的信用分配，为理解智能体强化学习提供了一个视角。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "长程轨迹中的信用分配难题",
+            "paragraphs": [
+              "组相对策略优化（GRPO）广泛用于大语言模型智能体的后训练，但摘要指出，轨迹级优势信号并不适合长程信用分配：当一组采样轨迹的奖励相同时，优势为零；否则，同一个标量会统一缩放轨迹中所有 token，难以区分哪些决策决定了结果。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "将教师反馈转化为分层信用",
+            "paragraphs": [
+              "TRACE-GRPO 将教师大语言模型的反馈转化为分层信用。对于奖励方差为零的组，教师评分提供样本级的备用信号；在轮次级，教师评分重新加权轨迹优势；在 token 级，方法利用教师批评下策略对数概率的变化，将轮次信用重新分配给 token。",
+              "摘要称，这种设计无需 token 级标注或学习得到的评论器，就能提供训练时的密集信用信号。作者还提出批评感知分页注意力（CAPA），通过复用轨迹 KV 缓存，降低以教师批评为条件的独立前向计算开销。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "任务成功率与计算开销",
+            "paragraphs": [
+              "摘要报告，使用 Qwen2.5-7B-Instruct 时，TRACE-GRPO 在 ALFWorld 和 ScienceWorld 上分别达到 96.3% 和 73.4% 的成功率，优于较强的智能体强化学习基线。消融结果显示，样本、轮次和 token 三个信用层级带来了累积收益。",
+              "与在教师生成的成功轨迹上进行监督微调的比较表明，批评引导的策略优化带来了超出模仿的收益。摘要还称，CAPA 将独立的批评条件前向计算从约为普通 GRPO 一步的 2 倍，降至约为一个训练步骤的 5%。这一数字针对所述独立前向计算，不应直接理解为整体训练耗时的降幅。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不能回答的验证范围",
+            "paragraphs": [
+              "摘要没有给出样本规模、具体基线名单、各层级的单独收益或结果波动，因此仅凭摘要无法判断比较的完整范围与统计稳定性。摘要也没有说明该方法在其他模型、任务或更广泛场景中的验证范围；这不等于论文没有开展相关工作。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：细看教师反馈如何作用",
+            "paragraphs": [
+              "阅读启发：对于关注大语言模型智能体的读者，可进一步查阅论文中教师评分、批评与各层级信用分配的具体关系，以及与监督微调的比较设置，从而理解结果在何种条件下支持“超出模仿”的判断。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的分层信用分配示意",
+            "description": "仅概括摘要明确陈述的教师反馈、分层信用和训练环节，不代表论文原图。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "教师模型反馈",
+                "detail": "教师评分与教师批评为信用分配提供信息"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "样本级备用信号",
+                "detail": "教师评分为零方差组提供备用信号"
+              },
+              {
+                "id": "c",
+                "stage": 1,
+                "label": "轮次级信用",
+                "detail": "教师评分在轮次级重新加权轨迹优势"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "token 级信用",
+                "detail": "利用教师批评下的策略对数概率变化重新分配轮次信用"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "训练时密集信用",
+                "detail": "分层信用为策略优化提供训练信号"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "教师评分"
+              },
+              {
+                "from": "a",
+                "to": "c",
+                "label": "教师评分"
+              },
+              {
+                "from": "a",
+                "to": "d",
+                "label": "教师批评"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "重新分配"
+              },
+              {
+                "from": "b",
+                "to": "e",
+                "label": "提供信用"
+              },
+              {
+                "from": "d",
+                "to": "e",
+                "label": "提供信用"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-27T14:10:24.300385+00:00",
+      "article_profile": "e56ff3e2b1f1b2dcb3f343ff230ae298cbee9e84dcc9d753d55d3d66ec6ea894",
+      "analysis_references": {},
+      "analysis_material_version": "79e552a94d3d5055e87dfe447ab989aebb89d2d4b4d90b5a48e2f2f580a22651",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "b53b1b3a8f87",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T14:10:24.300386+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -1006,7 +2581,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "The use of LLMs to complete online surveys impacts the validity of survey-based research, but detecting such usage remains under-explored. We introduce an initial benchmark dataset, namely ASURRE, for AI-assisted survey participation to capture usage strategies ranging from full generation and revision to persona-grounded agentic completion. Controlled by these strategies, LLM-assisted survey responses are generated using multiple LLMs on three real-world surveys in different disciplines, paired with genuine human responses. Our evaluation of existing machine-generated text (MGT) detectors sho…",
+      "summary": "【摘要】论文关注大语言模型辅助填写在线调查对研究有效性的影响，提出覆盖多种使用策略的基准数据集 ASURRE，并将生成回答与真实人类回答配对。评估显示，模仿完整受访者的角色设定智能体使现有检测器表现接近随机，但其行为仍留下可辨识痕迹。作者据此采用无需训练的少样本线索聚合方法，在智能体场景下的平均 AUROC 比最佳现有检测器高 0.14。[摘要]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -1065,11 +2640,156 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "【本站解读】建议关注调查数据质量、机器生成文本检测和智能体行为识别的读者阅读：摘要同时提供了基准构建思路、检测难点及可量化的改进结果，但具体实验细节仍需核对全文。[摘要]",
+      "deep_read": {
+        "problem": "【摘要】论文研究在线调查中大语言模型辅助作答的检测问题。摘要指出此类使用会影响调查研究的有效性，而检测仍“under-explored”。重点不仅是识别机器生成文字，也包括识别模仿受访者参与过程的智能体行为。[摘要]",
+        "method": "【摘要】作者构建 ASURRE 基准，覆盖完整生成、修订及基于角色设定的智能体作答等策略；使用多个大语言模型在不同学科的三项真实调查上生成回答，并与真实人类回答配对，再评估现有检测器及行为线索聚合方法。[摘要]",
+        "innovation": "【摘要】论文提出覆盖多种辅助作答策略的初步基准，并利用受访者层面的行为线索开展检测；聚合方法具有“few-shot, training-free”特点。【本站解读】其相对于既有研究的完整新颖性边界，摘要不足以确认。[摘要]",
+        "findings": "【摘要】简单使用人工智能较易被现有检测器发现，而模仿完整受访者的智能体使检测性能接近随机。行为线索聚合方法在智能体场景下的平均 AUROC 比最佳现有检测器提高 0.14；摘要未给出各场景的具体结果。[摘要]",
+        "limitations": "【摘要】单个行为线索可被针对性提示规避，说明线索本身并非可靠的固定判据；作者也将 ASURRE 称为“initial benchmark”。【本站解读】摘要未报告样本规模、统计显著性或跨场景泛化细节，不能据此判断这些方面的表现。[摘要]",
+        "connection": "【本站解读】论文以行为线索补充文本检测的思路，可能启发可靠性研究中的异常行为识别；但在线调查作答与工程系统运行之间存在场景差异。当前资料未展示其在智能运维、结构设计或工程可靠性任务中的应用证据。[摘要]",
+        "next_steps": "【建议】如需评估该方法的可迁移性，可先查阅全文中的行为线索定义、数据划分及各智能体场景结果，再考察针对性提示下的稳健性。若用于工程场景，还应单独验证数据条件和误报风险；这些均为研究建议，而非作者已证实的结论。[摘要]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "面向在线调查中人工智能辅助回答的检测",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.370/"
+      ],
+      "analyzed_at": "2026-11-27T14:12:10.957456+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "大语言模型参与填写在线问卷，可能影响调查研究的有效性，但如何识别这种参与仍缺乏充分研究。本文通过一个初步基准考察不同使用策略，也提示读者：识别单段生成文本与识别模拟完整受访者的智能体，并不是同一个难题。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "当大模型成为问卷填写者",
+            "paragraphs": [
+              "在线问卷依赖受访者的回答开展研究，而大语言模型可以参与生成或修改回答。随着参与方式从直接生成扩展到模拟受访者，调查数据中人类作答与模型辅助作答的区分也变得值得关注。",
+              "论文聚焦 AI 辅助参与问卷的识别问题，提出初步基准数据集 ASURRE。它覆盖从完整生成、修改到基于人物设定的智能体填写等策略，为比较不同参与方式下的检测表现提供材料。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "从参与策略构建 ASURRE 基准",
+            "paragraphs": [
+              "研究使用多个大语言模型，在不同学科的三个真实问卷上，按照不同使用策略生成模型辅助回答，并与真实人类回答配对。摘要将这些材料用于评估现有机器生成文本检测器。",
+              "除文本检测外，研究还关注智能体填写留下的受访者层面行为线索，并采用一种简单的少样本、无需训练的聚合器整合这些线索。摘要没有展开聚合器的具体实现。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "模拟完整受访者让检测更难",
+            "paragraphs": [
+              "摘要报告，直接使用 AI 的方式较容易被现有检测器识别；但当基于人物设定的智能体试图模仿完整受访者时，检测器表现趋近于随机水平。这个对比说明，检测效果会随模型参与策略而变化。",
+              "研究同时发现，智能体填写不能完全复制受访者层面的行为，仍会留下有辨识度的行为痕迹。单个线索可以通过针对性提示被绕过，但在智能体设置下，线索聚合器的平均 AUROC 比表现最好的现有检测器提高了 +0.14。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚未交代的样本与验证边界",
+            "paragraphs": [
+              "摘要没有给出人类受访者和回答的具体样本量、各模型及问卷的详细构成，也未列明受试检测器和行为线索的完整清单，因此无法仅凭摘要判断比较是否覆盖了所有相关场景。",
+              "摘要也未说明结果在其他问卷、人群或模型上的验证范围，以及聚合器在不同条件下的具体表现。这些是当前资料的阅读边界，不能据此认定论文没有开展相关分析。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：从文本转向作答行为",
+            "paragraphs": [
+              "阅读启发：对于关注大语言模型的读者，可以进一步查阅论文如何定义受访者层面的行为线索，以及这些线索与文本检测结果如何互补；同时留意针对性提示为何能够绕过单个线索。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的基准与检测过程",
+            "description": "仅概括摘要明确陈述的研究环节，不表达未报告的实验配置。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "真实问卷与参与策略",
+                "detail": "不同学科的真实问卷，以及从生成、修改到智能体填写的策略"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "生成模型辅助回答",
+                "detail": "使用多个大语言模型，按参与策略生成问卷回答"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "与人类回答配对",
+                "detail": "模型辅助回答与真实人类回答配对，构成基准材料"
+              },
+              {
+                "id": "d",
+                "stage": 3,
+                "label": "评估现有文本检测器",
+                "detail": "考察不同 AI 参与策略下的检测表现"
+              },
+              {
+                "id": "e",
+                "stage": 3,
+                "label": "聚合行为线索",
+                "detail": "使用少样本、无需训练的聚合器整合行为线索"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "按策略生成"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "配对"
+              },
+              {
+                "from": "c",
+                "to": "d",
+                "label": "评估检测"
+              },
+              {
+                "from": "c",
+                "to": "e",
+                "label": "考察行为"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-27T14:13:35.087714+00:00",
+      "article_profile": "f2b37ea7c2cb887696d08e0088d1db508e06e079b97e616432f34fe7adadb6f7",
+      "analysis_references": {},
+      "analysis_material_version": "282bd07d74af105692d580e2ad3b68cb7e44ac7bb0fe41fa4e6f9597c4c184ca",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "a88fa24509bb",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T14:13:35.089722+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "network",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     }
   ],
   "source_status": {
@@ -2051,13 +3771,13 @@
     "unavailable": 46
   },
   "analysis_status": {
-    "ready_core": 0,
+    "ready_core": 6,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 6
+    "pending": 0
   },
   "edition": {
     "id": "44180567060",

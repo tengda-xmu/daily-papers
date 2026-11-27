@@ -1,0 +1,111 @@
+{
+  "paper_id": "b345cb80a812",
+  "fingerprint": "1da8b76386cce9f3997b25b5a66ebd1f7c6c5ac6cc05c1157bf30f1abb41f807",
+  "analysis": {
+    "title_zh": "教导幅度而非方向：面向多轮多步大语言模型智能体的验证器锚定信用分配",
+    "summary": "论文研究多轮工具调用训练中的信用分配：轨迹级奖励可能混合各轮成败，而自蒸馏虽提供稠密信号，却可能依赖教师目标并出现梯度集中。CREST以逐轮验证奖励确定采样token优势的符号，再通过方向门和基于惊讶度的熵门调节自教师信号幅度。[P1][P4][P5]作者报告其在两个基准上的聚合结果优于所比较方法，但实验仅覆盖两个模型规模，且每种方法只有一个训练种子。[P6][P7][P9]",
+    "recommendation": "建议关注智能体强化学习、可验证奖励与自蒸馏结合的读者重点阅读：论文同时给出分层方法、性质证明、消融及训练成本，可用于比较信用分配收益与适用条件。[P7][P12][P14]",
+    "deep_read": {
+      "problem": "多轮多步工具调用中，同一会话的不同轮次可能有不同结果；把单一轨迹奖励分配给所有token，会模糊各轮贡献。在线策略自蒸馏虽提供逐token信号，但其优化目标由教师决定，还可能出现梯度集中。论文因此寻求同时保留验证奖励目标与稠密信用信号的方法。[P1][P2]",
+      "method": "CREST先对同一轮次的组内验证奖励计算相对优势，再将其乘以token级幅度因子。自教师以真实工具调用结果为特权上下文；方向门筛选教师与验证器符号一致的信号，熵门以学生惊讶度调节影响强度，从而细化轮内更新。[P4][P5][P14]",
+      "innovation": "作者将信用分配分为轮间与轮内两层，并把自教师限制为优势幅度调制器，而非让其决定采样token的强化或抑制符号。与论文比较的RLSD相比，CREST增加独立逐轮信用和不确定性门控；其性质证明还区分了局部符号保持与聚合梯度方向。[P3][P12][P13]",
+      "findings": "表2中，CREST在4B和8B模型上的BFCL平均准确率分别为52.00%和50.00%，WildToolBench会话准确率分别为7.03%和9.38%。4B消融中，仅轮间、仅轮内及组合方法的BFCL平均准确率分别为47.88%、48.75%和52.00%，支持作者关于两层互补的结论。[P6][P7]",
+      "limitations": "评估仅覆盖两个多轮工具基准和4B、8B模型；逐轮语义对齐及局部验证假设限制了向其他会话结构的直接推广。每种方法仅用一个训练种子，惊讶度代理重要性也是启发式。逐页核对记录未报告原文件缺项；P4、P5、P12所列为已纠正的提取错误。[P6][P7][P9][P12]",
+      "connection": "解读：对智能运维中多轮诊断与工具调用的研究，逐轮验证和局部信用分配可作为设计参考；但资料没有提供运维场景实验，也不能证明部署可靠性。论文关注智能体训练，并未直接研究结构设计或实体结构可靠性，迁移前需确认能否获得逐轮验证信号。[P6][P9][P12]",
+      "next_steps": "建议先构造具有可核验中间结果的多轮运维任务，再比较轨迹级奖励、逐轮奖励和完整CREST，并使用多个训练种子评估波动。还应测试轮次不对齐或仅有终局反馈时的方法适用性，同时报告准确率、计算成本及敏感工具调用风险；这些均是研究设想，非论文实验结论。[P6][P7][P9][P14]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.2634.pdf"
+    ],
+    "analyzed_at": "2026-11-27T09:59:30.005002+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "论文提出了明确的分层信用分配方法，并提供基准结果和消融，具有进一步阅读价值；但给定标签未解释具体研究方向，无法充分判断方向契合度。下方原文仅支持其方法设计，不能补足方向信息。",
+    "evidence": "At =A turn\n[t] ×ϕ t combines a verifier-derived scalar sign with teacher-modulated magnitude."
+  },
+  "material": {
+    "version": "52c7858d55b23ff2b6963c7db97e0c44e043497e18604c22be676b3f0ea2cbc6",
+    "total": 15,
+    "covered": 15,
+    "references": {
+      "problem": [
+        "P1",
+        "P2"
+      ],
+      "method": [
+        "P4",
+        "P5",
+        "P14"
+      ],
+      "innovation": [
+        "P3",
+        "P12",
+        "P13"
+      ],
+      "findings": [
+        "P6",
+        "P7"
+      ],
+      "limitations": [
+        "P6",
+        "P7",
+        "P9",
+        "P12"
+      ],
+      "connection": [
+        "P6",
+        "P9",
+        "P12"
+      ],
+      "next_steps": [
+        "P6",
+        "P7",
+        "P9",
+        "P14"
+      ]
+    },
+    "excerpt": "At =A turn\n[t] ×ϕ t combines a verifier-derived scalar sign with teacher-modulated magnitude.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P4",
+        "detail": "式(2)的文字提取混入 /bracehtip... 字符串；原页为两个下方括号，分别标注 inter-turn: which turn? 和 intra-turn: which token?。公式为 A_t=A^[turn]_[t]·ϕ_t；该修正不改变轮间优势决定符号、轮内因子调节幅度的解释。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P5",
+        "detail": "式(10)文字提取混入 /bracehtip... 字符串；原页是对 λ·g_t^dir·m_t^ent 的下方括号，标注 safety & focus。公式为 λ_t^eff=clip(λ·g_t^dir·m_t^ent,0,λ)，不影响对组合门及幅度上界的理解。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P12",
+        "detail": "式(13)的文字提取混入 /bracehtip... 字符串；原页两个下括号分别标明 λ_t^eff≥0 和 w_t−1≥0。正确关系为 ϕ_t=1+λ_t^eff(w_t−1)≥1>0，支撑逐token优势符号保持的证明。"
+      }
+    ]
+  }
+}

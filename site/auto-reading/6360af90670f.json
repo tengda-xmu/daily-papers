@@ -1,0 +1,105 @@
+{
+  "paper_id": "6360af90670f",
+  "fingerprint": "1df074445d7ce89b4ab89b6118bc51c05c7983862d49a53fdf1697a0ea2e70d8",
+  "analysis": {
+    "title_zh": "SocialCritic：基于优势抑制背书的多智能体对话事实依据约束",
+    "summary": "本文研究多智能体对话中无证据主张被其他智能体接受并影响后续决策的问题，将其界定为可干预的背书边界。作者提出滚动时域控制器，利用任务、规范和认知可靠性评论器对候选序列评分，并定向修复风险片段。四个基准的实验显示，相比SAFE-Dialogue，该方法提高可操作准确率并降低背书率，但其效果仍受模拟器接口、自动标注偏差和隐含背书检测能力限制。[P1][P4][P6][P8]",
+    "recommendation": "推荐关注多智能体可靠性与安全控制的研究者阅读：论文同时提供级联指标、组件消融、跨基准迁移和运行成本比较，可用于分析错误如何跨智能体传播。[P6][P7][P15]",
+    "deep_read": {
+      "problem": "多智能体对话中的风险不只在于某个模型生成无依据主张，还在于其他智能体将其采纳，并据此作出后续行动。作者将注入、跨说话者背书和传播区分为不同事件，研究初始错误进入上下文后仍可干预的控制边界。[P1][P3]",
+      "method": "控制器生成候选行动序列，由分别训练的任务、规范和认知可靠性评论器进行评分，再对选中序列中的风险片段定向修复并重新评分。默认设置为K=8、H=4、最多修复两次；系统仅执行最佳序列的首个动作，再根据新状态规划。[P2][P4]",
+      "innovation": "作者将跨说话者采纳定义为轨迹级控制目标，而非仅统计无支持内容的初始生成；同时把任务进展、规范和认知支持分解为独立信号，并将片段级反馈用于执行前修复。其评估还区分有伙伴推演和仅使用当前状态的控制情形。[P3][P4][P11]",
+      "findings": "在692个测试情节和10个生成种子下，相比SAFE-Dialogue，目标完成率提高6.93个百分点，AA提高7.93个百分点；去除认知评论器后背书率由1.73%升至6.5%。留一基准迁移时，各目标的AA优势为5.2至6.7个百分点。[P5][P6][P15]",
+      "limitations": "完整H=4控制依赖模拟器和伙伴策略接口，隐含背书较难检测，自动化标注可能带来偏差，且实验不是现实用户对话。[P8][P9] 原文件P2图1部分彩色框标签被裁切或遮挡；图注和正文仍说明流程，不影响主要方法结论的识读。[P2]\n原文核对：[P2] 图1中若干彩色方框内的标签文字被框边裁切或遮挡，例如注入、背书和传播框的第二行；图注及周围正文仍说明完整流程，因此不影响识读作者的主要方法结论。",
+      "connection": "解读：若将多智能体用于智能运维，错误诊断被另一智能体采纳并触发工单或操作，可类比论文的注入—背书—传播链；任务、规范与证据支持的分解也可启发可靠性评估。但论文没有提供运维或结构设计场景的直接验证。[P2][P8]",
+      "next_steps": "建议在目标应用中构造包含错误主张、跨角色采纳和后续行动的轨迹，分别记录各阶段分母，并比较有无前瞻推演的成本与收益。建议增加人工审核和隐含背书测试，同时核查论文正文与表22的规范违规率不一致问题；这些均非作者已验证成果。[P5][P15][P18][P19]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.59.pdf"
+    ],
+    "analyzed_at": "2026-11-27T10:50:44.259996+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "论文对多智能体可靠性有明确方法、对照实验和迁移结果，值得重点阅读；但给定的研究方向仅有不可解释的标签代码，缺少方向名称或定义，因此无法确认方向匹配，综合证据充分性判为否。",
+    "evidence": "We evaluate\n692 test episodes over 10 generation seeds on three\npublic benchmarks and one controlled conflicting-\ninformation benchmark."
+  },
+  "material": {
+    "version": "7b5e388914b6b5fe764a12d0cbaa62f3d3449615df36431e73fb170644e42aee",
+    "total": 21,
+    "covered": 21,
+    "references": {
+      "problem": [
+        "P1",
+        "P3"
+      ],
+      "method": [
+        "P2",
+        "P4"
+      ],
+      "innovation": [
+        "P3",
+        "P4",
+        "P11"
+      ],
+      "findings": [
+        "P5",
+        "P6",
+        "P15"
+      ],
+      "limitations": [
+        "P2",
+        "P8",
+        "P9"
+      ],
+      "connection": [
+        "P2",
+        "P8"
+      ],
+      "next_steps": [
+        "P5",
+        "P15",
+        "P18",
+        "P19"
+      ]
+    },
+    "excerpt": "We evaluate\n692 test episodes over 10 generation seeds on three\npublic benchmarks and one controlled conflicting-\ninformation benchmark.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P21"
+    ],
+    "issues": [
+      {
+        "kind": "source_defect",
+        "page": "P2",
+        "detail": "图1中若干彩色方框内的标签文字被框边裁切或遮挡，例如注入、背书和传播框的第二行；图注及周围正文仍说明完整流程，因此不影响识读作者的主要方法结论。"
+      }
+    ]
+  }
+}

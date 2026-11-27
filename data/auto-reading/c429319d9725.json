@@ -1,0 +1,106 @@
+{
+  "paper_id": "c429319d9725",
+  "fingerprint": "55899de8386b9d8c0928b92fd9b92cd6d8b6ab287ddd1368f958e9ff53d45b97",
+  "analysis": {
+    "title_zh": "什么样的智能体记忆有助于可靠处理不可回答问题？",
+    "summary": "本文研究智能体记忆能否帮助大语言模型可靠处理不可回答问题。作者在统一的检索增强框架下比较多种记忆方法、数据集和模型，并区分决策指导与交互轨迹的作用。结果显示，记忆收益并不普遍，跨数据集迁移尤其脆弱；程序型记忆和可复用行为指导通常较有价值，但提高拒答或澄清率也可能降低可回答问题的准确率。[P1][P3][P5][P7]",
+    "recommendation": "推荐关注智能体可靠性和记忆评估的读者阅读：论文同时比较迁移、记忆表示与正确回答和谨慎响应的权衡，并提供受控消融及标准差，便于判断收益的适用范围。[P5][P14]",
+    "deep_read": {
+      "problem": "论文关注智能体面对错误前提、信息缺失或歧义时，如何决定继续检索、澄清或拒答。作者提出两个问题：现有记忆方法在同分布及迁移条件下是否可靠，以及哪些记忆内容和经验来源更有用。[P1][P2]",
+      "method": "作者在统一的Wikipedia交互环境中比较四种记忆方法，三个数据集各使用400条测试样本，并以准确率Acc和可接受率AR计算联合分数JS。检索预算最多两条记忆，主实验结果取三次独立运行的平均值。[P3][P4][P11]",
+      "innovation": "论文的分析特点不是提出新的记忆架构，而是在统一流程下比较记忆表示，并将作用操作性地区分为决策指导与轨迹塑造，再考察跨数据集、跨模型复用及成功和失败经验的作用。作者明确称这一分解并非严格因果隔离。[P4][P6][P7]",
+      "findings": "记忆的收益依赖模型和数据集：DeepSeek在KUQ上使用MemEvolve的JS高于无记忆，而Qwen上的对应结果反而降低。作者认为决策指导比单独轨迹塑造更稳定；程序型记忆通常有效，但提高AR也可能伴随Acc下降。[P4][P5][P7][P8]",
+      "limitations": "实验固定于Wikipedia工具环境，未覆盖全部记忆设计，也未显式优化AR与Acc的权衡；GPT-5.5仅运行一次。正文表6与附录表18的部分组合数值和排序不一致，影响对组合优劣的判断。核对记录未报告原文件缺项。[P8][P9][P11][P18]",
+      "connection": "解读：对智能运维问答而言，论文提示应同时考察证据不足时的谨慎响应和证据充足时的正确回答，避免单纯提高拒答率。其跨数据集迁移结果也提醒读者关注场景变化；现有资料未提供结构设计或运维场景实证。[P5][P6][P9]",
+      "next_steps": "建议在目标运维场景构建可回答与不可回答样本，分别评估正确回答、澄清和拒答，并测试跨设备或工况的记忆迁移。可比较流程型与规则型指导，同时核查组合表格差异；这些是迁移设想，并非论文已验证成果。[P5][P8][P18]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.1886.pdf"
+    ],
+    "analyzed_at": "2026-11-26T23:48:15.730273+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "论文有明确的智能体记忆研究问题、受控比较和可靠性发现，值得相关领域读者重点阅读；但提供的研究方向仅有无法解释的标签，无法核实其具体含义，因此不能确认方向匹配。",
+    "evidence": "ties make memory particularly relevant to agentic\nUAQ handling, where reliability depends on both\ninformation acquisition and behavioral regulation."
+  },
+  "material": {
+    "version": "1bff9a289adec566ac5928109d8dd2532f8219174d5998acc74f68c70d67aa89",
+    "total": 19,
+    "covered": 19,
+    "references": {
+      "problem": [
+        "P1",
+        "P2"
+      ],
+      "method": [
+        "P3",
+        "P4",
+        "P11"
+      ],
+      "innovation": [
+        "P4",
+        "P6",
+        "P7"
+      ],
+      "findings": [
+        "P4",
+        "P5",
+        "P7",
+        "P8"
+      ],
+      "limitations": [
+        "P8",
+        "P9",
+        "P11",
+        "P18"
+      ],
+      "connection": [
+        "P5",
+        "P6",
+        "P9"
+      ],
+      "next_steps": [
+        "P5",
+        "P8",
+        "P18"
+      ]
+    },
+    "excerpt": "ties make memory particularly relevant to agentic\nUAQ handling, where reliability depends on both\ninformation acquisition and behavioral regulation.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18",
+      "P19"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P12",
+        "detail": "附录A.2基线方法名称被提取为“A WM”，原页为“AWM”；无公式或图表缺项，不影响该方法采用工作流式程序记忆的结论。"
+      }
+    ]
+  }
+}

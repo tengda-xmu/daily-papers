@@ -1,0 +1,94 @@
+{
+  "paper_id": "469c7c0642b4",
+  "fingerprint": "a79467827af19c55e646be22c69dd773cdb53e9b5edc7ef7192fc211e26048b9",
+  "analysis": {
+    "title_zh": "认知带宽瓶颈：长时程智能体从动作规划转向模式规划",
+    "summary": "论文比较长时程智能体的两种动作接口：从环境列举的具体动作中选择，或将紧凑模式实例化为命令。作者在四个文本环境及受控干扰实验中发现，长列表可能增加筛选负担，而模式接口引入实例化困难；相对优势随环境和模型变化。研究以提示长度及失败动作作为压力代理，并强调这些指标并非内部负荷的直接测量，实验结论也不能直接推广到真实部署。[P1][P5][P7][P9]",
+    "recommendation": "建议关注长时程智能体接口设计与可靠性评估的读者重点阅读：论文同时给出跨环境比较、受控压力测试和失败轨迹分析，但对具体研究方向的匹配尚待确认。[P5][P7][P9]",
+    "deep_read": {
+      "problem": "长时程智能体面对不断增长的动作空间时，需要在可直接选择的具体动作列表与需要自行生成参数的动作模式之间取舍。论文追问何时列表筛选负担超过模式实例化负担，以及这一转折如何依赖模型能力。[P1][P2]",
+      "method": "作者在四个文本环境比较两种接口，每个环境抽取100项任务，每次最多交互30步；用提示词长度和无效、重复动作近似不同压力，并在 ALFWorld 注入干扰动作，观察列表扩大后的性能变化。[P4][P5][P7]",
+      "innovation": "论文将动作表示作为可扩展性变量，用认知带宽视角描述筛选与实例化之间的负担转移，并结合固定环境下的干扰注入分析转折。解读：其贡献主要是接口权衡的实验框架，而非证明存在可直接测量的认知容量。[P2][P3][P7]",
+      "findings": "作者观察到经验转折位于 ALFWorld 与 SciWorld 之间，但不同模型并非一致：GPT-4.1 的 PwS−PwA 差值分别为 -45.0 和 18.9。干扰增多时 PwA 成功率总体下降，部分模型却未在测试范围内交叉。[P4][P5][P8]",
+      "limitations": "研究仅覆盖四个文本模拟器和现成模型的推理评估，不能直接证明开放世界适用性；上下文长度与失败动作只是负荷代理。多轮工具训练的作用仍是相关性假设。所提供阅读笔记未记录已核实的原文件缺项。[P8][P9]",
+      "connection": "解读：若将智能运维中的工具调用视为动作选择，论文提示需要同时评估候选命令筛选和参数实例化错误，这与操作可靠性有关。但现有证据来自文本模拟器，未验证工业运维、结构设计或实际设备安全效果。[P1][P9]",
+      "next_steps": "建议在目标运维场景构建受控任务，比较候选命令列表与参数化工具模式，分别记录任务成功、无效调用和重复操作；再测试不同列表规模与权限约束。迁移前应补充人工审核和监测，不能假定模拟器转折点适用。[P7][P9]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.755.pdf"
+    ],
+    "analyzed_at": "2026-11-27T09:35:20.875770+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "论文提出明确的接口比较方法，并有受控实验和跨环境结果，具有阅读价值；但资料仅给出方向标签代码，未解释具体研究方向，无法可靠判断方向契合度，因此不能认为证据足以支持全部判断。",
+    "evidence": "Figure 4(B) shows that PwA success rate generally\ndeclines ask increases, even though the task seman-\ntics and the set of valid actions remain unchanged."
+  },
+  "material": {
+    "version": "4fb8c8a6d70878fd7c4afccbd4842cced162d186260fb8aefbccb1e8e6430723",
+    "total": 18,
+    "covered": 18,
+    "references": {
+      "problem": [
+        "P1",
+        "P2"
+      ],
+      "method": [
+        "P4",
+        "P5",
+        "P7"
+      ],
+      "innovation": [
+        "P2",
+        "P3",
+        "P7"
+      ],
+      "findings": [
+        "P4",
+        "P5",
+        "P8"
+      ],
+      "limitations": [
+        "P8",
+        "P9"
+      ],
+      "connection": [
+        "P1",
+        "P9"
+      ],
+      "next_steps": [
+        "P7",
+        "P9"
+      ]
+    },
+    "excerpt": "Figure 4(B) shows that PwA success rate generally\ndeclines ask increases, even though the task seman-\ntics and the set of valid actions remain unchanged.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18"
+    ],
+    "issues": []
+  }
+}

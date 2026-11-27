@@ -1,0 +1,39 @@
+{
+  "paper_id": "e2bd955c3f68",
+  "state": "published",
+  "updated_at": "2026-11-27T10:39:34.739150+00:00",
+  "basis": "full_text",
+  "article_state": "failed",
+  "article_stage": "facts",
+  "reason": "",
+  "total": 44,
+  "covered": 44,
+  "pdf_available": true,
+  "issues": [
+    {
+      "kind": "extraction_error",
+      "page": "P6",
+      "detail": "图3和图4的文字提取混入并重复了多个子图的坐标轴与标签。原页显示图3有4个子图、图4有3个子图；应按各自图注对应，避免将不同实验的数值和坐标误配。"
+    },
+    {
+      "kind": "extraction_error",
+      "page": "P17",
+      "detail": "图6文字提取将三个子图的坐标轴重复混排。原图依次为(a)提示长度、(b)响应长度、(c)正负响应长度差；混排会导致对长度分布的误判。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P27",
+      "detail": "规划者策略生成提示模板中的JSON示例写为“\"strategy_type\": ,”，字段值缺失，因此示例本身不是完整有效的JSON；这影响对该字段预期格式的复现，但不影响识读其余模板。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P34",
+      "detail": "规范遵循评分模板的三个中间档在原页分别印为“0.70.9”“0.40.6”“0.10.3”，数值之间缺少范围分隔符。其描述可识读，但精确区间写法存在缺项，影响评分标准的严格复现；不补造原文。"
+    },
+    {
+      "kind": "source_defect",
+      "page": "P44",
+      "detail": "表9 Formats第3条的行内LaTeX示例原页印为“( ... \\)”，起始括号前缺少反斜杠；该缺项影响行内数学格式要求的准确复现，不影响其余条目的阅读。"
+    }
+  ]
+}

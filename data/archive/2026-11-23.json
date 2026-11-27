@@ -25,7 +25,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "In online meeting delegation, LLM agents fail to recognize when to speak. With no structured way to track stances, coverage, and floor, they miss the moments where they should contribute. Prompt-only delegates stay silent on 51.4% of the absent participant’s talking opportunities on the AMI corpus. We present CAPA (Collaborative Agent Predictive Architecture), an architecture for online meeting delegation. A Perceiver updates the meeting state from each observed turn. A Predictor forecasts how the conversation will continue. A Controller decides whether to speak and which proposition to surfac…",
+      "summary": "本文研究大语言模型如何代表缺席者参与多人会议，重点解决何时发言以及表达什么观点。作者提出维护显式会议状态的 CAPA 架构，通过感知、行动和再校准持续跟踪对话，并以参与者实际提出的想法单元评估代理。在 137 场 AMI 会议上，CAPA 的未尝试率低于纯文本基线，但未获信用的尝试增多；跨语料测试、模型差异和响应延迟也提示部署仍需谨慎。[P1][P2][P7][P9][P13]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -84,11 +84,79 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "适合关注多智能体情境感知、主动干预决策和状态反馈机制的读者重点阅读；若研究方向限定为结构设计或可靠性工程，则主要具有方法迁移参考价值，而非直接领域证据。[P2][P9]",
+      "deep_read": {
+        "problem": "论文关注缺席参与者的在线会议代理：系统不仅要模仿个人表达，还须在多人对话中判断发言机会与应表达的具体观点。纯提示基线容易错过隐含交接，并因缺少对立场、已覆盖内容和发言权的持续跟踪而保持沉默。[P1][P2]",
+        "method": "CAPA 将会议代理建模为部分可观测的序贯决策，维护参与者画像、会议简报及动态状态。Perceiver 更新状态，Controller 先选择动作和命题，Generator 再表达；预测与双评审依据后续观察为状态再校准提供反馈。[P3][P4][P5]",
+        "innovation": "作者的主要设计是把反馈导向持续会议状态，而非仅改写已生成的话语，并把策略选择与语言实现分离。评估以真实参与者的想法单元为锚，分别考察是否、何时以及贡献了什么，同时限制代理接触未来信息。[P2][P3][P6]",
+        "findings": "在 137 场 AMI 会议上，CAPA 的宽松召回为 52.2%，纯文本基线为 26.1%；未尝试率分别为 2.5% 和 51.4%，但 CAPA 的未获信用尝试更高。消融显示状态与再校准关联不同表现，作者认为前者影响参与决策，后者细化内容选择。[P7][P8][P15]",
+        "limitations": "主要评估依赖 AMI 场景会议，ICSI 检查仅含 47 个情节，且性能和安全—覆盖权衡随底层模型变化；GPT-4o 实测响应路径平均 21.14 秒。实时部署还需所有在场者持续明确同意。本批阅读笔记未记录经原页核实的原文件缺项。[P9][P12][P13][P18]",
+        "connection": "解读：显式状态、干预阈值和可追踪反馈可为智能运维中的告警介入或专家协作提供方法类比；但会议发言与设备故障处置的后果和证据结构不同，现有资料没有验证其在结构设计或可靠性工程中的有效性。[P2][P9]",
+        "next_steps": "建议先在目标运维流程中定义可观察状态、人工授权边界及干预时机，再构造严格时间隔离的历史回放，分别评估漏报、误干预与建议依据；同时测试延迟和不同模型的稳定性。上述迁移方案是研究建议，并非论文已完成的实验。[P5][P6][P13][P18]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "替我发言：赋予大语言模型参与会议的情境感知能力",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1377.pdf"
+      ],
+      "analyzed_at": "2026-11-27T10:44:53.307039+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P3",
+          "P6"
+        ],
+        "findings": [
+          "P7",
+          "P8",
+          "P15"
+        ],
+        "limitations": [
+          "P9",
+          "P12",
+          "P13",
+          "P18"
+        ],
+        "connection": [
+          "P2",
+          "P9"
+        ],
+        "next_steps": [
+          "P5",
+          "P6",
+          "P13",
+          "P18"
+        ]
+      },
+      "analysis_material_version": "ea6e12f2844b40d97340266b7a22c1470ff995fbe0d336edc25b4b1f1c29c6b1",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "8fc5df719406",
+        "state": "published",
+        "updated_at": "2026-11-27T10:44:53.349178+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 27,
+        "covered": 27,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -109,7 +177,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "In multi-agent dialogue, a hallucination crosses an operational control boundary when another agent accepts it and downstream decisions inherit the error. We formalize this cross-speaker transition as unsupported endorsement and introduce SocialCritic, a learned receding-horizon controller that ranks and repairs candidate action sequences with separately trained utility, norm, and epistemic advantage critics. Across 692 test episodes spanning LIGHT, DealOrNoDeal, SOTOPIA, and template-family-held-out Persuasion-Conflict over 10 generation seeds, SocialCritic exceeds SAFE-Dialogue by 6.9 points…",
+      "summary": "本文研究多智能体对话中无证据主张被其他智能体接受并影响后续决策的问题，将其界定为可干预的背书边界。作者提出滚动时域控制器，利用任务、规范和认知可靠性评论器对候选序列评分，并定向修复风险片段。四个基准的实验显示，相比SAFE-Dialogue，该方法提高可操作准确率并降低背书率，但其效果仍受模拟器接口、自动标注偏差和隐含背书检测能力限制。[P1][P4][P6][P8]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -168,11 +236,89 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注多智能体可靠性与安全控制的研究者阅读：论文同时提供级联指标、组件消融、跨基准迁移和运行成本比较，可用于分析错误如何跨智能体传播。[P6][P7][P15]",
+      "deep_read": {
+        "problem": "多智能体对话中的风险不只在于某个模型生成无依据主张，还在于其他智能体将其采纳，并据此作出后续行动。作者将注入、跨说话者背书和传播区分为不同事件，研究初始错误进入上下文后仍可干预的控制边界。[P1][P3]",
+        "method": "控制器生成候选行动序列，由分别训练的任务、规范和认知可靠性评论器进行评分，再对选中序列中的风险片段定向修复并重新评分。默认设置为K=8、H=4、最多修复两次；系统仅执行最佳序列的首个动作，再根据新状态规划。[P2][P4]",
+        "innovation": "作者将跨说话者采纳定义为轨迹级控制目标，而非仅统计无支持内容的初始生成；同时把任务进展、规范和认知支持分解为独立信号，并将片段级反馈用于执行前修复。其评估还区分有伙伴推演和仅使用当前状态的控制情形。[P3][P4][P11]",
+        "findings": "在692个测试情节和10个生成种子下，相比SAFE-Dialogue，目标完成率提高6.93个百分点，AA提高7.93个百分点；去除认知评论器后背书率由1.73%升至6.5%。留一基准迁移时，各目标的AA优势为5.2至6.7个百分点。[P5][P6][P15]",
+        "limitations": "完整H=4控制依赖模拟器和伙伴策略接口，隐含背书较难检测，自动化标注可能带来偏差，且实验不是现实用户对话。[P8][P9] 原文件P2图1部分彩色框标签被裁切或遮挡；图注和正文仍说明流程，不影响主要方法结论的识读。[P2]\n原文核对：[P2] 图1中若干彩色方框内的标签文字被框边裁切或遮挡，例如注入、背书和传播框的第二行；图注及周围正文仍说明完整流程，因此不影响识读作者的主要方法结论。",
+        "connection": "解读：若将多智能体用于智能运维，错误诊断被另一智能体采纳并触发工单或操作，可类比论文的注入—背书—传播链；任务、规范与证据支持的分解也可启发可靠性评估。但论文没有提供运维或结构设计场景的直接验证。[P2][P8]",
+        "next_steps": "建议在目标应用中构造包含错误主张、跨角色采纳和后续行动的轨迹，分别记录各阶段分母，并比较有无前瞻推演的成本与收益。建议增加人工审核和隐含背书测试，同时核查论文正文与表22的规范违规率不一致问题；这些均非作者已验证成果。[P5][P15][P18][P19]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SocialCritic：基于优势抑制背书的多智能体对话事实依据约束",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.59.pdf"
+      ],
+      "analyzed_at": "2026-11-27T10:50:44.259996+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P3"
+        ],
+        "method": [
+          "P2",
+          "P4"
+        ],
+        "innovation": [
+          "P3",
+          "P4",
+          "P11"
+        ],
+        "findings": [
+          "P5",
+          "P6",
+          "P15"
+        ],
+        "limitations": [
+          "P2",
+          "P8",
+          "P9"
+        ],
+        "connection": [
+          "P2",
+          "P8"
+        ],
+        "next_steps": [
+          "P5",
+          "P15",
+          "P18",
+          "P19"
+        ]
+      },
+      "analysis_material_version": "7b5e388914b6b5fe764a12d0cbaa62f3d3449615df36431e73fb170644e42aee",
+      "analysis_issues": [
+        {
+          "kind": "source_defect",
+          "page": "P2",
+          "detail": "图1中若干彩色方框内的标签文字被框边裁切或遮挡，例如注入、背书和传播框的第二行；图注及周围正文仍说明完整流程，因此不影响识读作者的主要方法结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "6360af90670f",
+        "state": "published",
+        "updated_at": "2026-11-27T10:50:44.292072+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 21,
+        "covered": 21,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "source_defect",
+            "page": "P2",
+            "detail": "图1中若干彩色方框内的标签文字被框边裁切或遮挡，例如注入、背书和传播框的第二行；图注及周围正文仍说明完整流程，因此不影响识读作者的主要方法结论。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -196,7 +342,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Zero-shot information extraction (IE) with large language models (LLMs) enables adaptation to new schemas and domains without task-specific training. Existing methods mainly follow three paradigms. Monolithic prompting is efficient but prone to missed mentions, boundary errors, and type confusion. Each-type prompting improves type-level focus but may produce overlapping or conflicting predictions, while multi-agent debate can resolve such conflicts at the cost of irrelevant context, redundant interactions, and high token overhead. To address these issues, we propose SMADE-IE, a sparse and evid…",
+      "summary": "【摘要】论文研究大语言模型在零样本信息抽取中如何兼顾预测质量与推理效率。SMADE-IE依据样本复杂度和相关类型，在全局抽取与类型中心抽取之间自适应选择，并通过证据驱动的多智能体辩论解决跨类型冲突。摘要报告了九个基准上的平均Partial F1提升，以及相对CrossAgentIE的令牌消耗下降；具体实验设置和结果细节仍需查阅全文。[摘要]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -255,11 +401,145 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "若关注零样本信息抽取、多智能体协作或推理令牌成本，建议重点阅读：摘要同时给出了模式选择、冲突处理方法及基准结果；但给定研究方向未作具体说明，暂不能确认方向匹配。[摘要]",
+      "deep_read": {
+        "problem": "【摘要】论文关注大语言模型零样本信息抽取中的质量与效率问题。摘要指出，单体提示容易遗漏提及、产生边界错误和类型混淆；逐类型提示可能产生重叠或冲突预测，多智能体辩论则可能引入冗余交互和较高令牌开销。[摘要]",
+        "method": "【摘要】方法包含自适应模式选择与证据驱动辩论：前者根据样本复杂度和相关类型，为简单输入选择轻量全局抽取模式，为含糊输入选择类型中心模式；后者结合Toulmin式论证、外部证据评分、基于Beta的置信度更新和提前停止。[摘要]",
+        "innovation": "【摘要】作者提出稀疏、证据驱动的多智能体框架，将按输入选择抽取模式与跨类型冲突辩论结合。解读：这一设计试图避免对所有输入采用同等复杂的处理流程。摘要未提供完整实现或消融证据，无法进一步核定各组件的独立贡献。[摘要]",
+        "findings": "【摘要】作者报告，九个基准覆盖NER、RE和JERE，相比最强基线，三类任务的平均Partial F1分别提高11.37、3.83和14.46个点；相比CrossAgentIE，DocRED和CrossRE的令牌消耗分别降低85.1%和80.1%。具体基线及统计细节未在摘要中说明。[摘要]",
+        "limitations": "【摘要】当前资料仅为摘要，未交代数据划分、基线配置、显著性检验、消融结果或失败案例，也未说明外部证据的来源和获取成本。因此无法判断结果的稳健性及完整成本；这些是现有资料的证据缺口，不应直接视为作者证实的方法缺陷。[摘要]",
+        "connection": "【解读】该方法与智能运维的潜在联系在于，可探索从运维文本中抽取实体及关系，并在类型冲突时引入证据判断；模式选择也可能有助于控制处理成本。但摘要未报告运维场景、结构设计或可靠性研究中的应用，不能据此断言其适用或有效。[摘要]",
+        "next_steps": "【建议】进一步阅读全文时，可优先核对复杂度判定、外部证据来源、辩论停止条件及各组件消融，并检查不同任务与数据集上的逐项结果。若拟迁移至运维文本，还应另行评估领域类型定义、抽取错误和端到端成本；摘要尚未提供这些验证。[摘要]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SMADE-IE：面向零样本信息抽取的证据驱动辩论稀疏多智能体框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://arxiv.org/abs/2606.04691"
+      ],
+      "analyzed_at": "2026-11-27T11:08:08.984516+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "零样本信息抽取需要在适应新领域的同时兼顾准确性与推理开销。SMADE-IE 尝试按输入复杂度选择抽取模式，并用证据驱动辩论处理跨类型冲突。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "抽取得越细，冲突与开销也可能增加",
+            "paragraphs": [
+              "大语言模型支持在不进行任务专门训练的情况下，将信息抽取适配到新的模式和领域。但如何组织提示与协作，会影响抽取质量和资源消耗。",
+              "摘要指出，整体提示虽然高效，却容易遗漏实体提及、出现边界错误或混淆类型；逐类型提示更聚焦，但不同类型的预测可能重叠或冲突。多智能体辩论有助于解决冲突，却可能引入无关上下文、冗余交互和较高的 token 开销。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "按复杂度选择模式，用证据处理冲突",
+            "paragraphs": [
+              "SMADE-IE 是一个稀疏、证据驱动的多智能体框架。其自适应模式选择器依据样本复杂度和相关类型，将简单输入交给轻量的全局抽取模式，将存在歧义的输入交给以类型为中心的抽取模式。",
+              "针对跨类型冲突，框架使用证据驱动辩论模块，结合图尔敏式论证、外部证据评分、基于 Beta 的置信度更新和提前停止。摘要没有展开这些环节的具体实现。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "三个任务类别的抽取表现与 token 消耗",
+            "paragraphs": [
+              "摘要报告，在涵盖命名实体识别（NER）、关系抽取（RE）和联合实体关系抽取（JERE）的九个基准上，相比最强基线，SMADE-IE 的平均 Partial F1 分别提高 11.37、3.83 和 14.46 个点。",
+              "推理效率方面，与多智能体基线 CrossAgentIE 相比，SMADE-IE 在 DocRED 和 CrossRE 上的 token 消耗分别降低 85.1% 和 80.1%。这些结果对应摘要报告的比较范围，不宜直接外推到所有任务或数据集。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不足以判断哪些细节",
+            "paragraphs": [
+              "摘要未说明各基准的样本规模、数据构成、最强基线的具体身份及各项结果的波动，因此仅凭摘要无法判断比较覆盖范围和结果稳定性。",
+              "摘要也未交代模式选择、证据评分和提前停止各自对结果的贡献，或框架在其他领域的验证范围；这些是当前资料无法判断的问题，并不意味着论文没有开展相关分析。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注路由与证据的作用",
+            "paragraphs": [
+              "阅读启发：这项工作提示，评估大模型多智能体抽取时，可以同时关注抽取表现、冲突处理和 token 消耗。进一步阅读时，可留意复杂度如何判定、外部证据如何参与评分，以及不同抽取模式下的结果如何比较。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的自适应抽取模式",
+            "description": "仅概括摘要明确陈述的模式选择关系，不限定辩论模块与某一种抽取模式的连接。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "输入样本",
+                "detail": "依据样本复杂度和相关类型进行选择"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "自适应模式选择器",
+                "detail": "为输入选择抽取模式"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "全局抽取模式",
+                "detail": "轻量模式，处理简单输入"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "以类型为中心的抽取",
+                "detail": "处理存在歧义的输入"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "选择模式"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "简单输入"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "存在歧义的输入"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-27T11:34:59.536123+00:00",
+      "article_profile": "2eb457b474249d427960db56cd8e5962371125f928994feb31d93a0b737e729d",
+      "analysis_references": {},
+      "analysis_material_version": "919353127f03394ca6c003c60bab92d0de1f527f6e7e40d97f5aee956acf9b14",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "e6471c118dc7",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T11:34:59.538124+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -348,7 +628,26 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "cba585bd1d14",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:30:17.336402+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 62,
+        "covered": 61,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "unreadable",
+            "page": "P16",
+            "detail": "图10左侧依赖词云中部分最小字号的命令、环境变量和MCP名称在细读截图中仍无法可靠逐字辨认；较大词项、右侧百分比、图注及正文可读。受影响的是词云完整词项的核对，不影响作者对运行环境分布的主要结论。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -373,7 +672,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Skills help LLM agents reuse procedural knowledge in recurring workflows, but broad transferability alone does not guarantee workflow fit: a reusable skill may be semantically relevant yet fail under local tools, files, formats, and failure modes. We propose SkillMe, a workflow-situated skill evolution framework that adapts agent skills through repeated use in matched workflow recurrences. A Publisher induces and validates an initial skill from a successful execution, while Executors use the skill in agent-native sessions and provide trace-grounded feedback. SkillMe activates the matched skill…",
+      "summary": "论文研究通用智能体技能为何难以适配重复工作流中的具体工具、文件与故障。SkillMe 由 Publisher 从成功轨迹归纳技能，Executor 在匹配任务中按需使用并提供证据化反馈，再经归因决定修订或澄清。[P2][P5] 在71项技能需求任务上，八个执行器总体均分由62.9升至88.6；演化技能的重复执行波动也低于静态技能。[P6] 但主要结果采用最佳轮次，且真实用户和长期工作流尚待验证。[P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -432,11 +731,87 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注智能体工作流和可追溯知识维护的读者重点阅读：论文同时给出技能生命周期、反馈归因、基线比较与成本分析，但其对具体研究方向的契合度仍需结合方向定义判断。[P5][P6][P9]",
+      "deep_read": {
+        "problem": "论文关注重复个人工作流中技能的情境适配：通用指导即使与任务语义相关，也可能不符合本地工具、文件格式或故障模式。作者要解决的是如何将多次执行转化为技能改进证据，而非仅追求跨任务迁移。[P1][P2]",
+        "method": "Publisher 从成功执行轨迹归纳并验证初始技能；匹配任务出现时，技能作为临时工作区文件供 Executor 按需读取。执行后收集分类反馈与轨迹，依据证据区分技能冲突和执行误用，再修订技能或记录澄清。[P4][P5]",
+        "innovation": "作者的方法特点是将任务范围内的技能作为持续维护对象，并把正文、执行条件、反馈记忆、证据映射、验证及修订历史组织在一起。解读：其关键不只是生成技能，而是让具体反馈与后续修改保持可追溯关系。[P3][P13][P14]",
+        "findings": "在71项技能需求任务上，八个执行器总体均分从62.9升至88.6。21项核心任务比较中，演化技能均分为84.0、静态技能为81.7，波动指标分别为1.2和2.0；但多数执行器的均分提升未达统计显著。[P6]",
+        "limitations": "实验模拟稳定工作流，尚未验证真实用户与私有长期场景；主实验使用精确任务身份匹配，最佳轮次汇总也偏乐观。[P9] 盲化路由未验证请求改写或多技能仲裁。[P17] 核对记录未报告原文件缺项；P8图4检查符号的提取错误已纠正。",
+        "connection": "解读：证据归因、环境条件记录和修订历史可为智能运维中的重复故障处置流程提供研究类比；验证清单也可启发可靠性流程管理。但论文未在智能运维、结构设计或工程可靠性场景直接验证，不能将其效果直接外推。[P3][P5][P9]",
+        "next_steps": "建议在真实长期工作流中比较精确与近似技能匹配，记录检索错误、多技能冲突及人工干预；同时报告各轮分布而非仅最佳轮次。还可审计反馈证据缺失导致的漏修，并分别测量技能调用与更新的成本和风险。[P9][P17][P20]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SkillMe：面向重复性个人工作流的智能体技能演化",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.564.pdf"
+      ],
+      "analyzed_at": "2026-11-27T11:37:59.099425+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P3",
+          "P13",
+          "P14"
+        ],
+        "findings": [
+          "P6"
+        ],
+        "limitations": [
+          "P8",
+          "P9",
+          "P17"
+        ],
+        "connection": [
+          "P3",
+          "P5",
+          "P9"
+        ],
+        "next_steps": [
+          "P9",
+          "P17",
+          "P20"
+        ]
+      },
+      "analysis_material_version": "ac195298f6e8605a0a0139376dcc2108625e8f67a1ac1e6bacb65f810740b9ec",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "图4文字提取将检查结果的勾号和叉号误识别为控制字符。原图中无技能与通用技能均为 list 通过、read/draft/report 失败；初始技能为 list、read、report 通过，draft 部分通过；演化技能四项均通过。该纠正影响对各条件具体执行结果的理解，不改变图中报告的平均分。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "561954c1699d",
+        "state": "published",
+        "updated_at": "2026-11-27T11:37:59.127983+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 23,
+        "covered": 23,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "图4文字提取将检查结果的勾号和叉号误识别为控制字符。原图中无技能与通用技能均为 list 通过、read/draft/report 失败；初始技能为 list、read、report 通过，draft 部分通过；演化技能四项均通过。该纠正影响对各条件具体执行结果的理解，不改变图中报告的平均分。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -524,7 +899,51 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "17fec98b2ee4",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:31:40.009925+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 25,
+        "covered": 24,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "术语段落的一致性指标原页为 Pass^k，文字提取为 Passk；应保留上标 k，以免误读指标记号，不改变该页关于一致性的定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "评价指标及其公式中的 Pass^k、Pass^5 和 Pass^1 在文字提取中丢失了上标格式；原页可辨。应保留上标，以正确区分不同重复次数的指标及 RC 定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "表1图注中的 RC=Pass^5/Pass@1 以及正文中的 Pass^k 在文字提取中丢失上标格式；原页可辨。纠正后不改变表中数值和比较结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "B.4 一致性指标及 AUC 公式中的 Pass^1、Pass^5 和 Pass_i^k 上标在文字提取中丢失；原页可辨。纠正后，AUC 为 k=1 至5的每任务 Pass_i^k 等权平均，不改变统计方法结论。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P16",
+            "detail": "图7完整政策文档缩微示例及工程模板中的部分极小文字仍无法可靠逐字识别；主要层级和图注可读，但无法完整核对缩微示例内容，不影响识别作者关于任务自适应加载深度的总体结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P16",
+            "detail": "表3和表4中的 Pass^5、Pass^k 等上标在文字提取中丢失。原页显示表3差值为 Δ=Pass^5−Pass@1，表4的 AUC 对应 k=1 至5的 Pass^k 曲线；纠正格式不改变表格数值。"
+          }
+        ]
+      }
     }
   ],
   "extended": [],
@@ -550,7 +969,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "In online meeting delegation, LLM agents fail to recognize when to speak. With no structured way to track stances, coverage, and floor, they miss the moments where they should contribute. Prompt-only delegates stay silent on 51.4% of the absent participant’s talking opportunities on the AMI corpus. We present CAPA (Collaborative Agent Predictive Architecture), an architecture for online meeting delegation. A Perceiver updates the meeting state from each observed turn. A Predictor forecasts how the conversation will continue. A Controller decides whether to speak and which proposition to surfac…",
+      "summary": "本文研究大语言模型如何代表缺席者参与多人会议，重点解决何时发言以及表达什么观点。作者提出维护显式会议状态的 CAPA 架构，通过感知、行动和再校准持续跟踪对话，并以参与者实际提出的想法单元评估代理。在 137 场 AMI 会议上，CAPA 的未尝试率低于纯文本基线，但未获信用的尝试增多；跨语料测试、模型差异和响应延迟也提示部署仍需谨慎。[P1][P2][P7][P9][P13]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -609,11 +1028,79 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "适合关注多智能体情境感知、主动干预决策和状态反馈机制的读者重点阅读；若研究方向限定为结构设计或可靠性工程，则主要具有方法迁移参考价值，而非直接领域证据。[P2][P9]",
+      "deep_read": {
+        "problem": "论文关注缺席参与者的在线会议代理：系统不仅要模仿个人表达，还须在多人对话中判断发言机会与应表达的具体观点。纯提示基线容易错过隐含交接，并因缺少对立场、已覆盖内容和发言权的持续跟踪而保持沉默。[P1][P2]",
+        "method": "CAPA 将会议代理建模为部分可观测的序贯决策，维护参与者画像、会议简报及动态状态。Perceiver 更新状态，Controller 先选择动作和命题，Generator 再表达；预测与双评审依据后续观察为状态再校准提供反馈。[P3][P4][P5]",
+        "innovation": "作者的主要设计是把反馈导向持续会议状态，而非仅改写已生成的话语，并把策略选择与语言实现分离。评估以真实参与者的想法单元为锚，分别考察是否、何时以及贡献了什么，同时限制代理接触未来信息。[P2][P3][P6]",
+        "findings": "在 137 场 AMI 会议上，CAPA 的宽松召回为 52.2%，纯文本基线为 26.1%；未尝试率分别为 2.5% 和 51.4%，但 CAPA 的未获信用尝试更高。消融显示状态与再校准关联不同表现，作者认为前者影响参与决策，后者细化内容选择。[P7][P8][P15]",
+        "limitations": "主要评估依赖 AMI 场景会议，ICSI 检查仅含 47 个情节，且性能和安全—覆盖权衡随底层模型变化；GPT-4o 实测响应路径平均 21.14 秒。实时部署还需所有在场者持续明确同意。本批阅读笔记未记录经原页核实的原文件缺项。[P9][P12][P13][P18]",
+        "connection": "解读：显式状态、干预阈值和可追踪反馈可为智能运维中的告警介入或专家协作提供方法类比；但会议发言与设备故障处置的后果和证据结构不同，现有资料没有验证其在结构设计或可靠性工程中的有效性。[P2][P9]",
+        "next_steps": "建议先在目标运维流程中定义可观察状态、人工授权边界及干预时机，再构造严格时间隔离的历史回放，分别评估漏报、误干预与建议依据；同时测试延迟和不同模型的稳定性。上述迁移方案是研究建议，并非论文已完成的实验。[P5][P6][P13][P18]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "替我发言：赋予大语言模型参与会议的情境感知能力",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.1377.pdf"
+      ],
+      "analyzed_at": "2026-11-27T10:44:53.307039+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P3",
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P2",
+          "P3",
+          "P6"
+        ],
+        "findings": [
+          "P7",
+          "P8",
+          "P15"
+        ],
+        "limitations": [
+          "P9",
+          "P12",
+          "P13",
+          "P18"
+        ],
+        "connection": [
+          "P2",
+          "P9"
+        ],
+        "next_steps": [
+          "P5",
+          "P6",
+          "P13",
+          "P18"
+        ]
+      },
+      "analysis_material_version": "ea6e12f2844b40d97340266b7a22c1470ff995fbe0d336edc25b4b1f1c29c6b1",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "8fc5df719406",
+        "state": "published",
+        "updated_at": "2026-11-27T10:44:53.349178+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 27,
+        "covered": 27,
+        "pdf_available": true,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -634,7 +1121,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "In multi-agent dialogue, a hallucination crosses an operational control boundary when another agent accepts it and downstream decisions inherit the error. We formalize this cross-speaker transition as unsupported endorsement and introduce SocialCritic, a learned receding-horizon controller that ranks and repairs candidate action sequences with separately trained utility, norm, and epistemic advantage critics. Across 692 test episodes spanning LIGHT, DealOrNoDeal, SOTOPIA, and template-family-held-out Persuasion-Conflict over 10 generation seeds, SocialCritic exceeds SAFE-Dialogue by 6.9 points…",
+      "summary": "本文研究多智能体对话中无证据主张被其他智能体接受并影响后续决策的问题，将其界定为可干预的背书边界。作者提出滚动时域控制器，利用任务、规范和认知可靠性评论器对候选序列评分，并定向修复风险片段。四个基准的实验显示，相比SAFE-Dialogue，该方法提高可操作准确率并降低背书率，但其效果仍受模拟器接口、自动标注偏差和隐含背书检测能力限制。[P1][P4][P6][P8]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -693,11 +1180,89 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "推荐关注多智能体可靠性与安全控制的研究者阅读：论文同时提供级联指标、组件消融、跨基准迁移和运行成本比较，可用于分析错误如何跨智能体传播。[P6][P7][P15]",
+      "deep_read": {
+        "problem": "多智能体对话中的风险不只在于某个模型生成无依据主张，还在于其他智能体将其采纳，并据此作出后续行动。作者将注入、跨说话者背书和传播区分为不同事件，研究初始错误进入上下文后仍可干预的控制边界。[P1][P3]",
+        "method": "控制器生成候选行动序列，由分别训练的任务、规范和认知可靠性评论器进行评分，再对选中序列中的风险片段定向修复并重新评分。默认设置为K=8、H=4、最多修复两次；系统仅执行最佳序列的首个动作，再根据新状态规划。[P2][P4]",
+        "innovation": "作者将跨说话者采纳定义为轨迹级控制目标，而非仅统计无支持内容的初始生成；同时把任务进展、规范和认知支持分解为独立信号，并将片段级反馈用于执行前修复。其评估还区分有伙伴推演和仅使用当前状态的控制情形。[P3][P4][P11]",
+        "findings": "在692个测试情节和10个生成种子下，相比SAFE-Dialogue，目标完成率提高6.93个百分点，AA提高7.93个百分点；去除认知评论器后背书率由1.73%升至6.5%。留一基准迁移时，各目标的AA优势为5.2至6.7个百分点。[P5][P6][P15]",
+        "limitations": "完整H=4控制依赖模拟器和伙伴策略接口，隐含背书较难检测，自动化标注可能带来偏差，且实验不是现实用户对话。[P8][P9] 原文件P2图1部分彩色框标签被裁切或遮挡；图注和正文仍说明流程，不影响主要方法结论的识读。[P2]\n原文核对：[P2] 图1中若干彩色方框内的标签文字被框边裁切或遮挡，例如注入、背书和传播框的第二行；图注及周围正文仍说明完整流程，因此不影响识读作者的主要方法结论。",
+        "connection": "解读：若将多智能体用于智能运维，错误诊断被另一智能体采纳并触发工单或操作，可类比论文的注入—背书—传播链；任务、规范与证据支持的分解也可启发可靠性评估。但论文没有提供运维或结构设计场景的直接验证。[P2][P8]",
+        "next_steps": "建议在目标应用中构造包含错误主张、跨角色采纳和后续行动的轨迹，分别记录各阶段分母，并比较有无前瞻推演的成本与收益。建议增加人工审核和隐含背书测试，同时核查论文正文与表22的规范违规率不一致问题；这些均非作者已验证成果。[P5][P15][P18][P19]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SocialCritic：基于优势抑制背书的多智能体对话事实依据约束",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.59.pdf"
+      ],
+      "analyzed_at": "2026-11-27T10:50:44.259996+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P3"
+        ],
+        "method": [
+          "P2",
+          "P4"
+        ],
+        "innovation": [
+          "P3",
+          "P4",
+          "P11"
+        ],
+        "findings": [
+          "P5",
+          "P6",
+          "P15"
+        ],
+        "limitations": [
+          "P2",
+          "P8",
+          "P9"
+        ],
+        "connection": [
+          "P2",
+          "P8"
+        ],
+        "next_steps": [
+          "P5",
+          "P15",
+          "P18",
+          "P19"
+        ]
+      },
+      "analysis_material_version": "7b5e388914b6b5fe764a12d0cbaa62f3d3449615df36431e73fb170644e42aee",
+      "analysis_issues": [
+        {
+          "kind": "source_defect",
+          "page": "P2",
+          "detail": "图1中若干彩色方框内的标签文字被框边裁切或遮挡，例如注入、背书和传播框的第二行；图注及周围正文仍说明完整流程，因此不影响识读作者的主要方法结论。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "6360af90670f",
+        "state": "published",
+        "updated_at": "2026-11-27T10:50:44.292072+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 21,
+        "covered": 21,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "source_defect",
+            "page": "P2",
+            "detail": "图1中若干彩色方框内的标签文字被框边裁切或遮挡，例如注入、背书和传播框的第二行；图注及周围正文仍说明完整流程，因此不影响识读作者的主要方法结论。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -721,7 +1286,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Zero-shot information extraction (IE) with large language models (LLMs) enables adaptation to new schemas and domains without task-specific training. Existing methods mainly follow three paradigms. Monolithic prompting is efficient but prone to missed mentions, boundary errors, and type confusion. Each-type prompting improves type-level focus but may produce overlapping or conflicting predictions, while multi-agent debate can resolve such conflicts at the cost of irrelevant context, redundant interactions, and high token overhead. To address these issues, we propose SMADE-IE, a sparse and evid…",
+      "summary": "【摘要】论文研究大语言模型在零样本信息抽取中如何兼顾预测质量与推理效率。SMADE-IE依据样本复杂度和相关类型，在全局抽取与类型中心抽取之间自适应选择，并通过证据驱动的多智能体辩论解决跨类型冲突。摘要报告了九个基准上的平均Partial F1提升，以及相对CrossAgentIE的令牌消耗下降；具体实验设置和结果细节仍需查阅全文。[摘要]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -780,11 +1345,145 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "若关注零样本信息抽取、多智能体协作或推理令牌成本，建议重点阅读：摘要同时给出了模式选择、冲突处理方法及基准结果；但给定研究方向未作具体说明，暂不能确认方向匹配。[摘要]",
+      "deep_read": {
+        "problem": "【摘要】论文关注大语言模型零样本信息抽取中的质量与效率问题。摘要指出，单体提示容易遗漏提及、产生边界错误和类型混淆；逐类型提示可能产生重叠或冲突预测，多智能体辩论则可能引入冗余交互和较高令牌开销。[摘要]",
+        "method": "【摘要】方法包含自适应模式选择与证据驱动辩论：前者根据样本复杂度和相关类型，为简单输入选择轻量全局抽取模式，为含糊输入选择类型中心模式；后者结合Toulmin式论证、外部证据评分、基于Beta的置信度更新和提前停止。[摘要]",
+        "innovation": "【摘要】作者提出稀疏、证据驱动的多智能体框架，将按输入选择抽取模式与跨类型冲突辩论结合。解读：这一设计试图避免对所有输入采用同等复杂的处理流程。摘要未提供完整实现或消融证据，无法进一步核定各组件的独立贡献。[摘要]",
+        "findings": "【摘要】作者报告，九个基准覆盖NER、RE和JERE，相比最强基线，三类任务的平均Partial F1分别提高11.37、3.83和14.46个点；相比CrossAgentIE，DocRED和CrossRE的令牌消耗分别降低85.1%和80.1%。具体基线及统计细节未在摘要中说明。[摘要]",
+        "limitations": "【摘要】当前资料仅为摘要，未交代数据划分、基线配置、显著性检验、消融结果或失败案例，也未说明外部证据的来源和获取成本。因此无法判断结果的稳健性及完整成本；这些是现有资料的证据缺口，不应直接视为作者证实的方法缺陷。[摘要]",
+        "connection": "【解读】该方法与智能运维的潜在联系在于，可探索从运维文本中抽取实体及关系，并在类型冲突时引入证据判断；模式选择也可能有助于控制处理成本。但摘要未报告运维场景、结构设计或可靠性研究中的应用，不能据此断言其适用或有效。[摘要]",
+        "next_steps": "【建议】进一步阅读全文时，可优先核对复杂度判定、外部证据来源、辩论停止条件及各组件消融，并检查不同任务与数据集上的逐项结果。若拟迁移至运维文本，还应另行评估领域类型定义、抽取错误和端到端成本；摘要尚未提供这些验证。[摘要]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SMADE-IE：面向零样本信息抽取的证据驱动辩论稀疏多智能体框架",
+      "analysis_basis": "abstract",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://arxiv.org/abs/2606.04691"
+      ],
+      "analyzed_at": "2026-11-27T11:08:08.984516+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "article": {
+        "version": 3,
+        "basis": "abstract",
+        "lead": "零样本信息抽取需要在适应新领域的同时兼顾准确性与推理开销。SMADE-IE 尝试按输入复杂度选择抽取模式，并用证据驱动辩论处理跨类型冲突。",
+        "sections": [
+          {
+            "id": "context",
+            "title": "抽取得越细，冲突与开销也可能增加",
+            "paragraphs": [
+              "大语言模型支持在不进行任务专门训练的情况下，将信息抽取适配到新的模式和领域。但如何组织提示与协作，会影响抽取质量和资源消耗。",
+              "摘要指出，整体提示虽然高效，却容易遗漏实体提及、出现边界错误或混淆类型；逐类型提示更聚焦，但不同类型的预测可能重叠或冲突。多智能体辩论有助于解决冲突，却可能引入无关上下文、冗余交互和较高的 token 开销。"
+            ]
+          },
+          {
+            "id": "method",
+            "title": "按复杂度选择模式，用证据处理冲突",
+            "paragraphs": [
+              "SMADE-IE 是一个稀疏、证据驱动的多智能体框架。其自适应模式选择器依据样本复杂度和相关类型，将简单输入交给轻量的全局抽取模式，将存在歧义的输入交给以类型为中心的抽取模式。",
+              "针对跨类型冲突，框架使用证据驱动辩论模块，结合图尔敏式论证、外部证据评分、基于 Beta 的置信度更新和提前停止。摘要没有展开这些环节的具体实现。"
+            ]
+          },
+          {
+            "id": "findings",
+            "title": "三个任务类别的抽取表现与 token 消耗",
+            "paragraphs": [
+              "摘要报告，在涵盖命名实体识别（NER）、关系抽取（RE）和联合实体关系抽取（JERE）的九个基准上，相比最强基线，SMADE-IE 的平均 Partial F1 分别提高 11.37、3.83 和 14.46 个点。",
+              "推理效率方面，与多智能体基线 CrossAgentIE 相比，SMADE-IE 在 DocRED 和 CrossRE 上的 token 消耗分别降低 85.1% 和 80.1%。这些结果对应摘要报告的比较范围，不宜直接外推到所有任务或数据集。"
+            ]
+          },
+          {
+            "id": "limitations",
+            "title": "摘要尚不足以判断哪些细节",
+            "paragraphs": [
+              "摘要未说明各基准的样本规模、数据构成、最强基线的具体身份及各项结果的波动，因此仅凭摘要无法判断比较覆盖范围和结果稳定性。",
+              "摘要也未交代模式选择、证据评分和提前停止各自对结果的贡献，或框架在其他领域的验证范围；这些是当前资料无法判断的问题，并不意味着论文没有开展相关分析。"
+            ]
+          },
+          {
+            "id": "inspiration",
+            "title": "阅读启发：关注路由与证据的作用",
+            "paragraphs": [
+              "阅读启发：这项工作提示，评估大模型多智能体抽取时，可以同时关注抽取表现、冲突处理和 token 消耗。进一步阅读时，可留意复杂度如何判定、外部证据如何参与评分，以及不同抽取模式下的结果如何比较。"
+            ]
+          }
+        ],
+        "experiments": [],
+        "routes": [],
+        "diagrams": [
+          {
+            "kind": "study",
+            "basis": "abstract",
+            "title": "依据摘要整理的自适应抽取模式",
+            "description": "仅概括摘要明确陈述的模式选择关系，不限定辩论模块与某一种抽取模式的连接。",
+            "nodes": [
+              {
+                "id": "a",
+                "stage": 0,
+                "label": "输入样本",
+                "detail": "依据样本复杂度和相关类型进行选择"
+              },
+              {
+                "id": "b",
+                "stage": 1,
+                "label": "自适应模式选择器",
+                "detail": "为输入选择抽取模式"
+              },
+              {
+                "id": "c",
+                "stage": 2,
+                "label": "全局抽取模式",
+                "detail": "轻量模式，处理简单输入"
+              },
+              {
+                "id": "d",
+                "stage": 2,
+                "label": "以类型为中心的抽取",
+                "detail": "处理存在歧义的输入"
+              }
+            ],
+            "edges": [
+              {
+                "from": "a",
+                "to": "b",
+                "label": "选择模式"
+              },
+              {
+                "from": "b",
+                "to": "c",
+                "label": "简单输入"
+              },
+              {
+                "from": "b",
+                "to": "d",
+                "label": "存在歧义的输入"
+              }
+            ]
+          }
+        ],
+        "figure_groups": []
+      },
+      "article_updated_at": "2026-11-27T11:34:59.536123+00:00",
+      "article_profile": "2eb457b474249d427960db56cd8e5962371125f928994feb31d93a0b737e729d",
+      "analysis_references": {},
+      "analysis_material_version": "919353127f03394ca6c003c60bab92d0de1f527f6e7e40d97f5aee956acf9b14",
+      "analysis_issues": [],
+      "reading_status": {
+        "paper_id": "e6471c118dc7",
+        "state": "awaiting_fulltext",
+        "updated_at": "2026-11-27T11:34:59.538124+00:00",
+        "basis": "abstract",
+        "article_state": "complete",
+        "article_stage": "",
+        "reason": "not_found",
+        "total": 0,
+        "covered": 0,
+        "pdf_available": false,
+        "issues": []
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -873,7 +1572,26 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "cba585bd1d14",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:30:17.336402+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 62,
+        "covered": 61,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "unreadable",
+            "page": "P16",
+            "detail": "图10左侧依赖词云中部分最小字号的命令、环境变量和MCP名称在细读截图中仍无法可靠逐字辨认；较大词项、右侧百分比、图注及正文可读。受影响的是词云完整词项的核对，不影响作者对运行环境分布的主要结论。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -898,7 +1616,7 @@
       "topic_tags": [
         "direction_7a61b97a"
       ],
-      "summary": "Skills help LLM agents reuse procedural knowledge in recurring workflows, but broad transferability alone does not guarantee workflow fit: a reusable skill may be semantically relevant yet fail under local tools, files, formats, and failure modes. We propose SkillMe, a workflow-situated skill evolution framework that adapts agent skills through repeated use in matched workflow recurrences. A Publisher induces and validates an initial skill from a successful execution, while Executors use the skill in agent-native sessions and provide trace-grounded feedback. SkillMe activates the matched skill…",
+      "summary": "论文研究通用智能体技能为何难以适配重复工作流中的具体工具、文件与故障。SkillMe 由 Publisher 从成功轨迹归纳技能，Executor 在匹配任务中按需使用并提供证据化反馈，再经归因决定修订或澄清。[P2][P5] 在71项技能需求任务上，八个执行器总体均分由62.9升至88.6；演化技能的重复执行波动也低于静态技能。[P6] 但主要结果采用最佳轮次，且真实用户和长期工作流尚待验证。[P9]",
       "raw_metadata": {
         "conference": {
           "id": "emnlp",
@@ -957,11 +1675,87 @@
         "大模型",
         "智能体"
       ],
-      "analysis_status": "pending",
+      "analysis_status": "ready",
       "method": "基于原文摘要的规则摘要",
-      "recommendation": "",
-      "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommendation": "建议关注智能体工作流和可追溯知识维护的读者重点阅读：论文同时给出技能生命周期、反馈归因、基线比较与成本分析，但其对具体研究方向的契合度仍需结合方向定义判断。[P5][P6][P9]",
+      "deep_read": {
+        "problem": "论文关注重复个人工作流中技能的情境适配：通用指导即使与任务语义相关，也可能不符合本地工具、文件格式或故障模式。作者要解决的是如何将多次执行转化为技能改进证据，而非仅追求跨任务迁移。[P1][P2]",
+        "method": "Publisher 从成功执行轨迹归纳并验证初始技能；匹配任务出现时，技能作为临时工作区文件供 Executor 按需读取。执行后收集分类反馈与轨迹，依据证据区分技能冲突和执行误用，再修订技能或记录澄清。[P4][P5]",
+        "innovation": "作者的方法特点是将任务范围内的技能作为持续维护对象，并把正文、执行条件、反馈记忆、证据映射、验证及修订历史组织在一起。解读：其关键不只是生成技能，而是让具体反馈与后续修改保持可追溯关系。[P3][P13][P14]",
+        "findings": "在71项技能需求任务上，八个执行器总体均分从62.9升至88.6。21项核心任务比较中，演化技能均分为84.0、静态技能为81.7，波动指标分别为1.2和2.0；但多数执行器的均分提升未达统计显著。[P6]",
+        "limitations": "实验模拟稳定工作流，尚未验证真实用户与私有长期场景；主实验使用精确任务身份匹配，最佳轮次汇总也偏乐观。[P9] 盲化路由未验证请求改写或多技能仲裁。[P17] 核对记录未报告原文件缺项；P8图4检查符号的提取错误已纠正。",
+        "connection": "解读：证据归因、环境条件记录和修订历史可为智能运维中的重复故障处置流程提供研究类比；验证清单也可启发可靠性流程管理。但论文未在智能运维、结构设计或工程可靠性场景直接验证，不能将其效果直接外推。[P3][P5][P9]",
+        "next_steps": "建议在真实长期工作流中比较精确与近似技能匹配，记录检索错误、多技能冲突及人工干预；同时报告各轮分布而非仅最佳轮次。还可审计反馈证据缺失导致的漏修，并分别测量技能调用与更新的成本和风险。[P9][P17][P20]"
+      },
+      "recommended_direction": "direction_7a61b97a",
+      "title_zh": "SkillMe：面向重复性个人工作流的智能体技能演化",
+      "analysis_basis": "full_text",
+      "analysis_kind": "model",
+      "analysis_sources": [
+        "https://aclanthology.org/2026.emnlp-main.564.pdf"
+      ],
+      "analyzed_at": "2026-11-27T11:37:59.099425+00:00",
+      "llm_model": "gpt-6.1-terra",
+      "analysis_references": {
+        "problem": [
+          "P1",
+          "P2"
+        ],
+        "method": [
+          "P4",
+          "P5"
+        ],
+        "innovation": [
+          "P3",
+          "P13",
+          "P14"
+        ],
+        "findings": [
+          "P6"
+        ],
+        "limitations": [
+          "P8",
+          "P9",
+          "P17"
+        ],
+        "connection": [
+          "P3",
+          "P5",
+          "P9"
+        ],
+        "next_steps": [
+          "P9",
+          "P17",
+          "P20"
+        ]
+      },
+      "analysis_material_version": "ac195298f6e8605a0a0139376dcc2108625e8f67a1ac1e6bacb65f810740b9ec",
+      "analysis_issues": [
+        {
+          "kind": "extraction_error",
+          "page": "P8",
+          "detail": "图4文字提取将检查结果的勾号和叉号误识别为控制字符。原图中无技能与通用技能均为 list 通过、read/draft/report 失败；初始技能为 list、read、report 通过，draft 部分通过；演化技能四项均通过。该纠正影响对各条件具体执行结果的理解，不改变图中报告的平均分。"
+        }
+      ],
+      "reading_status": {
+        "paper_id": "561954c1699d",
+        "state": "published",
+        "updated_at": "2026-11-27T11:37:59.127983+00:00",
+        "basis": "full_text",
+        "article_state": "failed",
+        "article_stage": "facts",
+        "reason": "",
+        "total": 23,
+        "covered": 23,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P8",
+            "detail": "图4文字提取将检查结果的勾号和叉号误识别为控制字符。原图中无技能与通用技能均为 list 通过、read/draft/report 失败；初始技能为 list、read、report 通过，draft 部分通过；演化技能四项均通过。该纠正影响对各条件具体执行结果的理解，不改变图中报告的平均分。"
+          }
+        ]
+      }
     },
     {
       "source": "AI 顶会论文",
@@ -1049,7 +1843,51 @@
       "method": "基于原文摘要的规则摘要",
       "recommendation": "",
       "deep_read": {},
-      "recommended_direction": "direction_7a61b97a"
+      "recommended_direction": "direction_7a61b97a",
+      "reading_status": {
+        "paper_id": "17fec98b2ee4",
+        "state": "failed",
+        "updated_at": "2026-11-27T16:31:40.009925+00:00",
+        "basis": "full_text",
+        "article_state": "pending",
+        "article_stage": "",
+        "reason": "",
+        "total": 25,
+        "covered": 24,
+        "pdf_available": true,
+        "issues": [
+          {
+            "kind": "extraction_error",
+            "page": "P2",
+            "detail": "术语段落的一致性指标原页为 Pass^k，文字提取为 Passk；应保留上标 k，以免误读指标记号，不改变该页关于一致性的定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P5",
+            "detail": "评价指标及其公式中的 Pass^k、Pass^5 和 Pass^1 在文字提取中丢失了上标格式；原页可辨。应保留上标，以正确区分不同重复次数的指标及 RC 定义。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P6",
+            "detail": "表1图注中的 RC=Pass^5/Pass@1 以及正文中的 Pass^k 在文字提取中丢失上标格式；原页可辨。纠正后不改变表中数值和比较结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P14",
+            "detail": "B.4 一致性指标及 AUC 公式中的 Pass^1、Pass^5 和 Pass_i^k 上标在文字提取中丢失；原页可辨。纠正后，AUC 为 k=1 至5的每任务 Pass_i^k 等权平均，不改变统计方法结论。"
+          },
+          {
+            "kind": "unreadable",
+            "page": "P16",
+            "detail": "图7完整政策文档缩微示例及工程模板中的部分极小文字仍无法可靠逐字识别；主要层级和图注可读，但无法完整核对缩微示例内容，不影响识别作者关于任务自适应加载深度的总体结论。"
+          },
+          {
+            "kind": "extraction_error",
+            "page": "P16",
+            "detail": "表3和表4中的 Pass^5、Pass^k 等上标在文字提取中丢失。原页显示表3差值为 Δ=Pass^5−Pass@1，表4的 AUC 对应 k=1 至5的 Pass^k 曲线；纠正格式不改变表格数值。"
+          }
+        ]
+      }
     }
   ],
   "source_status": {
@@ -1931,13 +2769,13 @@
     "unavailable": 46
   },
   "analysis_status": {
-    "ready_core": 0,
+    "ready_core": 4,
     "target_core": 6,
     "ready_extended": 0,
     "target_extended": 0,
     "llm_configured": false,
     "llm_attempts": 0,
-    "pending": 6
+    "pending": 2
   },
   "edition": {
     "id": "45064824657",
