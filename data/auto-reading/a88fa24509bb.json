@@ -1,0 +1,40 @@
+{
+  "paper_id": "a88fa24509bb",
+  "fingerprint": "c7ad7468424ac1640ad4d0be1ea653b95354d8de41a81ecb5d0193b468ad8103",
+  "analysis": {
+    "title_zh": "面向在线调查中人工智能辅助回答的检测",
+    "summary": "【摘要】论文关注大语言模型辅助填写在线调查对研究有效性的影响，提出覆盖多种使用策略的基准数据集 ASURRE，并将生成回答与真实人类回答配对。评估显示，模仿完整受访者的角色设定智能体使现有检测器表现接近随机，但其行为仍留下可辨识痕迹。作者据此采用无需训练的少样本线索聚合方法，在智能体场景下的平均 AUROC 比最佳现有检测器高 0.14。[摘要]",
+    "recommendation": "【本站解读】建议关注调查数据质量、机器生成文本检测和智能体行为识别的读者阅读：摘要同时提供了基准构建思路、检测难点及可量化的改进结果，但具体实验细节仍需核对全文。[摘要]",
+    "deep_read": {
+      "problem": "【摘要】论文研究在线调查中大语言模型辅助作答的检测问题。摘要指出此类使用会影响调查研究的有效性，而检测仍“under-explored”。重点不仅是识别机器生成文字，也包括识别模仿受访者参与过程的智能体行为。[摘要]",
+      "method": "【摘要】作者构建 ASURRE 基准，覆盖完整生成、修订及基于角色设定的智能体作答等策略；使用多个大语言模型在不同学科的三项真实调查上生成回答，并与真实人类回答配对，再评估现有检测器及行为线索聚合方法。[摘要]",
+      "innovation": "【摘要】论文提出覆盖多种辅助作答策略的初步基准，并利用受访者层面的行为线索开展检测；聚合方法具有“few-shot, training-free”特点。【本站解读】其相对于既有研究的完整新颖性边界，摘要不足以确认。[摘要]",
+      "findings": "【摘要】简单使用人工智能较易被现有检测器发现，而模仿完整受访者的智能体使检测性能接近随机。行为线索聚合方法在智能体场景下的平均 AUROC 比最佳现有检测器提高 0.14；摘要未给出各场景的具体结果。[摘要]",
+      "limitations": "【摘要】单个行为线索可被针对性提示规避，说明线索本身并非可靠的固定判据；作者也将 ASURRE 称为“initial benchmark”。【本站解读】摘要未报告样本规模、统计显著性或跨场景泛化细节，不能据此判断这些方面的表现。[摘要]",
+      "connection": "【本站解读】论文以行为线索补充文本检测的思路，可能启发可靠性研究中的异常行为识别；但在线调查作答与工程系统运行之间存在场景差异。当前资料未展示其在智能运维、结构设计或工程可靠性任务中的应用证据。[摘要]",
+      "next_steps": "【建议】如需评估该方法的可迁移性，可先查阅全文中的行为线索定义、数据划分及各智能体场景结果，再考察针对性提示下的稳健性。若用于工程场景，还应单独验证数据条件和误报风险；这些均为研究建议，而非作者已证实的结论。[摘要]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.370/"
+    ],
+    "analyzed_at": "2026-11-27T14:12:10.957456+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "摘要明确提出调查作答基准，并报告行为线索聚合方法相对现有检测器的量化改进，因此具有进一步阅读价值。但资料仅给出无法释义的方向标签，未提供具体研究方向，不能确认方向切合；也无法充分评估实验可靠性与工程场景适用性。",
+    "evidence": "While individual cues can be circumvented by targeted prompting, a simple few-shot, training-free aggregator over these cues improves mean AUROC by +0.14 over the best existing detector across agentic settings."
+  },
+  "material": {
+    "version": "282bd07d74af105692d580e2ad3b68cb7e44ac7bb0fe41fa4e6f9597c4c184ca",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "While individual cues can be circumvented by targeted prompting, a simple few-shot, training-free aggregator over these cues improves mean AUROC by +0.14 over the best existing detector across agentic settings."
+  }
+}
