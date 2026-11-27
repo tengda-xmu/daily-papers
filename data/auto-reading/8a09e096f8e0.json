@@ -1,0 +1,40 @@
+{
+  "paper_id": "8a09e096f8e0",
+  "fingerprint": "01bc92c7ea9347cf194316709069962cd9fcd92d2de035e10fc190ed5f6fa438",
+  "analysis": {
+    "title_zh": "VEX-Bench：评测大语言模型智能体对软件供应链漏洞可利用性的判断能力",
+    "summary": "【摘要】论文研究大语言模型智能体能否判断上游依赖中的已知漏洞是否影响下游项目。作者提出 VEX-Bench，收集 75 个由安全专家标注的 GitHub 真实案例，覆盖 Python、Java 和 Go，并在三种智能体运行框架下评测九个模型。摘要报告，部分模型的二元漏洞状态分类 F1 约为 80%，但细粒度理由分类仍更具挑战。当前仅依据摘要，无法核查数据划分、标注细节及完整实验结果。[摘要]",
+    "recommendation": "推荐关注软件供应链安全或智能体安全评测的读者阅读：该研究提供真实案例基准，并区分状态判断与理由识别，可作为研究漏洞告警研判能力的参考。[摘要] 但给定资料未解释研究方向标签，不能确认与用户具体方向的契合程度。",
+    "deep_read": {
+      "problem": "【摘要】现有依赖漏洞告警可能因粗粒度匹配产生大量误报，安全分析人员需要逐案判断漏洞是否真正可利用。论文关注的关键问题是：上游依赖中的已知漏洞，是否能在具体下游项目中被利用，而不是发现未知漏洞。[摘要]",
+      "method": "【摘要】作者提出 VEX-Bench，从 GitHub 挖掘 75 个真实案例，由安全专家标注，覆盖 Python、Java 和 Go；评测涉及九个模型和三种智能体运行框架。摘要未交代案例筛选、标注流程及评测实现细节，暂无法判断其具体设计。[摘要]",
+      "innovation": "【摘要】论文将评测重点放在跨仓库推理：判断已知上游漏洞在下游项目中的可利用性，并考察细粒度理由分类。摘要称该基准为这一任务上的首个基准；【解读】这一首创性主张尚不能仅凭所给摘要独立核实。[摘要]",
+      "findings": "【摘要】GPT-5.5 和 Claude Opus 4.6 在二元漏洞状态分类上的 F1 约为 80%；在细粒度理由分类上，仅 GPT-5.5 的 macro-F1 超过 70%。作者据此指出，从二元判断走向具体可利用性理由识别仍有挑战。[摘要]",
+      "limitations": "【摘要】可见证据限于 75 个案例、三种语言及所报告的模型和框架；摘要没有提供数据划分、各类别分布、标注一致性或误差分析。【解读】因此暂不能判断结果对其他语言、项目或真实运维流程的适用程度，也不能将未报告事项视为实验缺陷。[摘要]",
+      "connection": "【解读】该任务与智能运维中的依赖漏洞告警分诊、可靠性风险识别存在联系：系统不仅要判断风险状态，还需给出可供核查的理由。摘要并未研究结构设计，也未报告部署后的人力节省或可靠性收益，不能直接推断实际效果。[摘要]",
+      "next_steps": "【建议】若将其用于研究，可先查阅完整论文与公开数据，核对案例构成、标注标准及评测流程，再分析智能体的判断理由能否被安全人员复核。进一步研究可考察不同项目环境下的告警分诊表现；这些是研究设想，并非作者已验证的结论。"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.2615/"
+    ],
+    "analyzed_at": "2026-11-27T13:38:49.562852+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "摘要明确给出真实案例基准、模型评测和分类结果，表明其有值得进一步阅读的方法与成果。但所给方向仅有未解释的标签，无法判断是否切合用户的具体研究方向；因此方向契合度不能肯定，当前证据也不足以支持完整判断。",
+    "evidence": "To address this gap, we introduce VEX-Bench, the first benchmark for evaluating LLM agents’ ability to assess the exploitability of software supply chain vulnerabilities."
+  },
+  "material": {
+    "version": "2822522b4894ae8a14af2a01118f2a4cb9774ada7742a16c7dad2ffdd72ea8c8",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "To address this gap, we introduce VEX-Bench, the first benchmark for evaluating LLM agents’ ability to assess the exploitability of software supply chain vulnerabilities."
+  }
+}
