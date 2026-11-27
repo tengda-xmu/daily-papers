@@ -1,0 +1,106 @@
+{
+  "paper_id": "1ef80315a994",
+  "fingerprint": "28e8dac715cca42d878e74de94a07978d8a0bd4e77eae4ca8ed2204d58d86ae4",
+  "analysis": {
+    "title_zh": "TAC-CoT：通过交错显式词元实现工具赋能的隐式思维链",
+    "summary": "本文研究如何在降低语言模型推理开销的同时保留工具调用能力。TAC-CoT 将连续的隐式推理片段与显式工具调用、观察和答案交错，并按查询动态决定片段数量。[P2][P3] 作者通过轨迹重建和蒸馏训练模型，在数学及问答基准上报告了相对显式思维链的性能与效率提升。[P4][P6] 其路由粒度、长交互表现及跨领域应用仍需进一步评估。[P9]",
+    "recommendation": "推荐关注智能体推理效率与工具调用协同的读者重点阅读：论文同时提供方法、受控比较、工具使用诊断和实测延迟，但应用到具体工程领域前仍需验证。[P3][P7][P8][P14]",
+    "deep_read": {
+      "problem": "显式思维链需要持续生成自然语言，推理轨迹增长会带来较高开销；已有隐式思维链通常将推理压缩为连续 token，却不便在中间输出可执行工具调用或接收观察。论文关注如何同时保留紧凑推理和智能体交互接口。[P1][P2]",
+      "method": "方法将每段显式推理替换为固定长度的连续思维片段，保留工具调用、观察与答案的文本形式；片段末尾根据路由分数选择调用工具或回答。训练结合推理片段重建、显式输出监督和答案边界隐藏状态蒸馏。[P3][P4]",
+      "innovation": "论文将隐式推理与显式工具交互交错，而非要求整个推理过程在单个连续 token 块内完成；每段长度固定，总段数则随工具交互动态变化。解读：其关键贡献是把可执行接口和查询自适应预算纳入同一推理流程。[P2][P3]",
+      "findings": "作者报告，相比 Explicit-CoT，跨骨干模型平均数学准确率提高 5.8 个百分点，问答提高 2.4 个百分点；多工具场景可解决胜率为 58.6%，具有统计显著性。单张 L40S 上数学和问答平均墙钟时间分别加速 2.3 倍和 2.4 倍。[P6][P7][P8]",
+      "limitations": "作者指出路由仅在片段而非 token 层级进行，较长交互跨度仍待评估；问答轨迹的精确匹配过滤可能排除不同表述的正确答案。[P9][P12] 本批核对记录未列出原文件缺项，仅记录两处已纠正的提取错误，因此没有可报告的缺失公式及其影响。",
+      "connection": "解读：对智能运维而言，隐式推理与显式工具调用交错的模式可作为组织检索、诊断和计算工具链的参考；对可靠性研究，推理成本与错误累积的联合评估也有借鉴意义。但现有证据来自数学、问答和工具基准，不能证明工程场景效果。[P5][P7]",
+      "next_steps": "建议在具体工程任务中建立可审计的工具轨迹，对照显式推理方法，分别测量任务正确率、工具调用质量、端到端延迟和长交互表现；同时检查答案过滤对训练样本的影响。这些是迁移研究设想，不是论文已验证的结论。[P8][P9][P12]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.1436.pdf"
+    ],
+    "analyzed_at": "2026-11-27T10:07:42.759400+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "论文有明确的工具交错隐式推理方法，并提供受控比较与效率结果，具有进一步阅读价值。但所给研究方向只有未释义的标签，无法判断是否切合；因此方向适配判断的证据不足，不能将其视作明确不匹配。",
+    "evidence": "The key idea of TAC-COT is to jointly leverage\nimplicit reasoning tokens and textual tokens for\ntool-use trajectories."
+  },
+  "material": {
+    "version": "5168fa41e35c361ec18e4580a249faca6a2e428d10dae6a0e0542f32a48389ec",
+    "total": 20,
+    "covered": 20,
+    "references": {
+      "problem": [
+        "P1",
+        "P2"
+      ],
+      "method": [
+        "P3",
+        "P4"
+      ],
+      "innovation": [
+        "P2",
+        "P3"
+      ],
+      "findings": [
+        "P6",
+        "P7",
+        "P8"
+      ],
+      "limitations": [
+        "P9",
+        "P12"
+      ],
+      "connection": [
+        "P5",
+        "P7"
+      ],
+      "next_steps": [
+        "P8",
+        "P9",
+        "P12"
+      ]
+    },
+    "excerpt": "The key idea of TAC-COT is to jointly leverage\nimplicit reasoning tokens and textual tokens for\ntool-use trajectories.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18",
+      "P19",
+      "P20"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P5",
+        "detail": "表2图注中的 bootstrap 采样次数被提取为“105”，原页为 10⁵ 次；这是显著性检验的采样次数，纠正后不改变表中性能结论。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P7",
+        "detail": "图5中偏移量为 −2 时的差值被提取为“0.8”，原页为 −0.8；该组 TAC-CoT 相对 Explicit-CoT 并非提高 0.8 个百分点，不改变作者关于过度推理区间退化较小的表述。"
+      }
+    ]
+  }
+}
