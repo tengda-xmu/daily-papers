@@ -1,0 +1,135 @@
+{
+  "paper_id": "ed9024d69f05",
+  "fingerprint": "7e9a01137ca572163ea5e34633e5a2686f92135a6c83c18bf9ca4c44480872b0",
+  "analysis": {
+    "title_zh": "TIDE：基于轨迹的大语言模型智能体测试时改进诊断评估",
+    "summary": "论文研究如何评估大语言模型智能体在环境交互中的测试时改进，而不只看最终任务是否成功。作者提出 TIDE，以成功率曲线面积衡量优化效率，以循环比例识别重复行动，以有无历史记忆的性能差衡量记忆效用。跨环境实验显示，相同最终成功率可能对应不同时间效率，高循环比例与低效率相关，累积记忆也可能降低表现。框架主要针对单智能体，其迁移仍需考虑任务状态定义与环境特征。[P2][P3][P5][P6][P9]",
+    "recommendation": "推荐关注智能体评估与交互可靠性的读者重点阅读：论文给出可操作的轨迹诊断指标、消融方案和跨环境结果，有助于超越单一成功率分析失败过程；但与具体工程方向的契合度仍需结合实际任务判断。[P2][P5][P6][P9]",
+    "deep_read": {
+      "problem": "作者关注智能体如何通过多轮交互改进，以及改进为何停滞或退化。最终成功率把快速成功与长时间探索后的成功压缩为同一结果，交互轮数也难区分纠错和重复失败；累积记忆究竟有益还是有害同样需要单独评估。[P1][P2]",
+      "method": "TIDE 将诊断拆为三个指标：AUV 对累计成功率曲线作归一化梯形求和；LR 统计连续重复循环中的行动占比；MI 比较保留与移除历史记忆时的 AUV。前两者使用轨迹，MI 额外需要记忆移除消融，GUI 状态比较则采用截图嵌入。[P2][P3][P5][P6][P8]",
+      "innovation": "作者将测试时改进作为交互驱动的多维过程，联合考察效率、行为适应与记忆效用，而非仅以终局成功率排序。附录进一步把 AUV 表示为随时间衰减的边际增益加权和，说明相同最终成功率下提前完成任务会提高该指标。[P2][P12][P13]",
+      "findings": "在 AlfWorld，Gemini 2.5 Pro 与 DeepSeek-V3.2 最终成功率均为0.807，AUV 却分别为0.629和0.590。作者发现高 LR 与低 AUV 相关，但低 LR 不保证高 AUV；FrozenLake 的记忆消融中，多个模型使用累积记忆后性能下降。[P3][P5][P6]",
+      "limitations": "作者指出研究主要针对单智能体；不可逆动态领域中，LR 未必严格表示次优行为。GUI 状态判定依赖相似度阈值，跨任务解释需谨慎。逐页核对记录未报告原文件缺项；P13、P14 记录的是已纠正的提取伪影，不应视为缺失公式。[P8][P9][P13][P14][P18]",
+      "connection": "解读：若研究智能运维智能体，可借鉴轨迹效率、重复操作与历史信息效用三个维度，补充最终任务成功率；但论文实验未直接验证运维场景。对于结构设计与工程可靠性，本资料没有直接实验，不能据此认定指标已适用或能改善系统可靠性。[P2][P5][P9]",
+      "next_steps": "建议先在目标任务中定义可观测状态、动作等价关系及成功时限，再以轨迹计算 AUV 和 LR，并用受控记忆移除实验估计 MI。对不可逆操作应设计领域专用循环判据，并人工检查高循环案例；这些是迁移设想，不是作者已验证的工程效果。[P5][P6][P9][P20]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.639/"
+    ],
+    "analyzed_at": "2026-11-27T15:44:40.860329+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "论文对智能体轨迹评估有明确方法和实验，值得相关读者重点阅读；但提供的方向仅为不含含义的标签，无法可靠判断是否切合指定研究方向，因此方向判断及其充分性不能肯定。",
+    "evidence": "Figure 1: Overview of our trajectory-based diagnostic evaluation framework. (a) An agent completes tasks through\nmulti-turn interaction. (b) Interaction trajectories are collected for diagnostic analysis."
+  },
+  "material": {
+    "version": "47379c2e4447cf598ef1e98dd9aa495bd9118ed19591b73ef3cc9475433ff85c",
+    "total": 25,
+    "covered": 25,
+    "references": {
+      "problem": [
+        "P1",
+        "P2"
+      ],
+      "method": [
+        "P2",
+        "P3",
+        "P5",
+        "P6",
+        "P8"
+      ],
+      "innovation": [
+        "P2",
+        "P12",
+        "P13"
+      ],
+      "findings": [
+        "P3",
+        "P5",
+        "P6"
+      ],
+      "limitations": [
+        "P8",
+        "P9",
+        "P13",
+        "P14",
+        "P18"
+      ],
+      "connection": [
+        "P2",
+        "P5",
+        "P9"
+      ],
+      "next_steps": [
+        "P5",
+        "P6",
+        "P9",
+        "P20"
+      ]
+    },
+    "excerpt": "Figure 1: Overview of our trajectory-based diagnostic evaluation framework. (a) An agent completes tasks through\nmulti-turn interaction. (b) Interaction trajectories are collected for diagnostic analysis.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P21",
+      "P22",
+      "P23",
+      "P24",
+      "P25"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P13",
+        "detail": "公式（10）中的 /bracehtip... 是下方大括号的文字提取伪影，并非原公式内容；原页标注分别为 contribution at t=k 和 contribution at t>k，权重结果为 w(k)=t_max−k−0.5。受影响的是 AUV 对较早增益赋予更高权重的解释。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P14",
+        "detail": "公式（18）中的 /bracehtip... 是下方大括号的文字提取伪影；原页用大括号将括号内的单任务加权和标记为 Z^(i)。这关系到后续无偏性、方差及一致性证明。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P23",
+        "detail": "代码2中若干方法名被提取为带空格的字符序列；原页分别为 _prepare_step_history、_initialize_trajectory 和 _run_stepwise_episode_batch。错误影响对任务运行框架接口的准确识别，不影响实验结论。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P24",
+        "detail": "代码3、代码4中，原页的 get_next_step_parallel、instruction_prompt、user_assistant_format 和 user_assistant_format_part 在提取文本中被拆成带空格的字符序列。错误影响接口及提示格式名称的准确识别，不影响实验结论。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P25",
+        "detail": "代码5中属性名被提取为“ins truction _text”；原页为 instruction_text。该错误影响环境接口名称的准确识别，不影响论文实验结论。"
+      }
+    ]
+  }
+}
