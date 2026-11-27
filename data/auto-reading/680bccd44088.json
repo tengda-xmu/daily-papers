@@ -1,0 +1,103 @@
+{
+  "paper_id": "680bccd44088",
+  "fingerprint": "863487cd1f4ad0e9d2e9bc1d160cd2bd633d68e712a69bf543fc90a496a5b410",
+  "analysis": {
+    "title_zh": "SHERLOC：面向代码修复代理的结构化诊断定位",
+    "summary": "论文研究代码修复代理如何从仓库中定位故障，并为后续修复提供可操作的诊断上下文。SHERLOC结合单个推理模型、仓库工具和自恢复机制，输出代码位置及根因、解决思路等结构化信息。实验显示其文件级定位表现较强，诊断注入平均降低搜索成本，但收益随修复模型和诊断质量变化；质量过滤结果依赖真实补丁，属于回顾性分析。[P2][P3][P8]",
+    "recommendation": "推荐关注智能代理故障定位与诊断交接的读者重点阅读：论文同时考察定位准确率、下游修复和计算成本，并通过负迁移案例展示诊断质量的重要性。[P8][P26]",
+    "deep_read": {
+      "problem": "仓库级修复代理不仅要找到需要修改的文件，还要判断故障根因和可行修复方向。作者指出，仅给出路径缺少下游修复所需的诊断上下文；所研究代理在首次补丁前平均用18.5轮定位，占总交互的48%。[P1]",
+      "method": "SHERLOC先过滤仓库视图，再由单个推理模型通过文件查看、字面搜索、仓库树和导入关系工具迭代探索，最多交互20轮。系统通过循环检测、上下文截断和最终轮提示恢复，并输出位置及五字段诊断。[P2][P5]",
+      "innovation": "论文将定位结果组织为位置解释、根因、解决思路、依赖和测试影响，而非仅返回文件排名；同时用行区间上的覆盖召回、精确率和平均紧致度补充文件级评价，以覆盖不局限于函数或类的编辑目标。[P2][P4]",
+      "findings": "Qwen3-235B在Lite取得84.33±0.72% accuracy@1，在Verified取得81.27±1.16% recall@1。未过滤诊断的十个下游设置中有五个经校正后显著改善；MiniMax/OpenHands则显著下降，说明迁移并非总是正向。[P6][P26]",
+      "limitations": "公开仓库的预训练熟悉度未被完全排除，向私有或未见仓库及其他语言的推广仍待验证。QF使用真实补丁评审，不能直接部署；无补丁验证器尚未验证筛选后的修复效果。所给笔记未报告经原页核实的原文件缺项。[P9][P10]",
+      "connection": "解读：该研究与智能运维中的故障定位和诊断交接在问题形式上相似，均需连接故障位置、原因假设和处置方向；但论文验证对象是软件仓库修复，不能据此认定其已适用于设备运维、结构设计或工程可靠性场景。[P1][P2][P9]",
+      "next_steps": "建议在可证明未见过的代码仓库上重复实验，并对无真实补丁验证器开展实际下游修复测试，同时统计误诊带来的负迁移和完整流程成本。若迁移到工程运维，应另建领域数据和安全验证流程，不能直接沿用代码基准结论。[P9][P10][P26]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.711.pdf"
+    ],
+    "analyzed_at": "2026-11-27T12:07:42.300552+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "论文有明确的结构化代码诊断方法、定位结果和配对下游实验，值得关注智能代理故障定位的读者阅读；但资料仅给出不含释义的方向标签，无法确认指定研究方向，因此不能充分判断方向契合度。",
+    "evidence": "SHERLOC\ninstead frames localization as active repository rea-\nsoning yielding structured findings."
+  },
+  "material": {
+    "version": "c6f2a5dfbb00ad024d2fe9014ec178d6a28906309499528ce7d7bb5f2c9de6cc",
+    "total": 29,
+    "covered": 29,
+    "references": {
+      "problem": [
+        "P1"
+      ],
+      "method": [
+        "P2",
+        "P5"
+      ],
+      "innovation": [
+        "P2",
+        "P4"
+      ],
+      "findings": [
+        "P6",
+        "P26"
+      ],
+      "limitations": [
+        "P9",
+        "P10"
+      ],
+      "connection": [
+        "P1",
+        "P2",
+        "P9"
+      ],
+      "next_steps": [
+        "P9",
+        "P10",
+        "P26"
+      ]
+    },
+    "excerpt": "SHERLOC\ninstead frames localization as active repository rea-\nsoning yielding structured findings.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P21",
+      "P22",
+      "P23",
+      "P24",
+      "P25",
+      "P26",
+      "P27",
+      "P28",
+      "P29"
+    ],
+    "issues": []
+  }
+}
