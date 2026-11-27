@@ -1,0 +1,40 @@
+{
+  "paper_id": "e2accf1af327",
+  "fingerprint": "c10f2708d4a22911512e2bba5aadb9deb5b3bcca2ac957b5ffdadfac7852e932",
+  "analysis": {
+    "title_zh": "有效性并非可见性：智能体记忆的生命周期有限状态机",
+    "summary": "论文关注大语言模型智能体的长期记忆：事实是否仍然有效，与它是否应针对某个查询被展示，是两个不同问题。作者提出免训练的检索侧方法 MemFSM，用四状态有限状态机追踪事实的替代和过期情况，并由意图感知路由器决定可见性；同时提出标注事实状态并配对不同查询意图的 ValidMem 基准。摘要称该方法在多种记忆基准和模型骨干上改善了性能，但未提供具体结果。[摘要]",
+    "recommendation": "建议关注智能体长期记忆、事实更新和历史信息检索的读者阅读：摘要明确提出了区分有效性与可见性的方法及配套评测基准；但给定研究方向未具体说明，无法确认其方向契合度。[摘要]",
+    "deep_read": {
+      "problem": "【论文摘要】长期记忆需要分别回答事实“whether the fact is still true”和是否应针对查询呈现。被新事实替代的旧事实，对当前意图查询应隐藏，对历史意图查询却可能应展示；将两类决策合并为单一分数会造成结构性问题。[摘要]",
+      "method": "【论文摘要】MemFSM 是“a training-free retrieval-side layer”：有效性轴上的四状态有限状态机追踪事实是否被替代和是否过期；可见性轴上的意图感知路由器依据事实状态及查询意图，决定展示还是隐藏事实。摘要未说明状态转移细节。[摘要]",
+      "innovation": "【论文摘要】作者的方法设计将事实有效性与查询条件下的可见性解耦，而非用单一标量合并两种判断。作者还提出 ValidMem：为事实同时标注替代与过期情况，并为每个记忆库配对当前意图和历史意图查询；摘要不足以判断相对既有工作的完整新颖性。[摘要]",
+      "findings": "【论文摘要】作者称解耦两种维度后，MemFSM 在“heterogeneous memory benchmarks”和不同大语言模型骨干上改善了性能。摘要没有给出具体指标、提升幅度或对照结果，因此目前只能确认作者报告了改善，不能核验改善的大小或稳定性。[摘要]",
+      "limitations": "【解读】当前仅有摘要，缺少状态转移规则、路由器实现、基准构成和量化结果，无法评估方法的适用边界、成本或误判情况。这些是现有资料的证据缺口，不应直接当作作者已验证的模型缺陷或论文自行承认的局限。[摘要]",
+      "connection": "【解读】如果智能运维系统需要同时回答设备当前状态与历史状态，区分事实是否仍有效和是否应被检索，可能具有参考价值。但摘要没有报告运维应用，也没有涉及结构设计或可靠性实验，不能据此认定该方法在这些领域有效。[摘要]",
+      "next_steps": "【建议】后续可先核查论文中的状态定义、转移条件与路由方式，再查看 ValidMem 的标注和查询构造，以及各基准的具体对照结果。若考虑迁移至智能运维，可进一步设计当前与历史状态查询并评估误检、漏检；这些均非摘要报告的实验。[摘要]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.260/"
+    ],
+    "analyzed_at": "2026-11-27T13:42:55.632974+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "摘要提供了明确的免训练方法和配套基准，具有进一步阅读价值；但给定研究方向仅有无法解释的标签，不能判断方向是否契合。现有摘要也缺少量化结果，因此整体判断的证据尚不充分；方向契合项为 false 表示无法确认，并非已证实不契合。[摘要]",
+    "evidence": "To address this problem, we propose MemFSM, a training-free retrieval-side layer that separates validity from visibility through a memory-lifecycle finite-state machine."
+  },
+  "material": {
+    "version": "3b050d75f70c0e8bde73d18fbe346156e903f15be4ce8f1effd46428202a7166",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "To address this problem, we propose MemFSM, a training-free retrieval-side layer that separates validity from visibility through a memory-lifecycle finite-state machine."
+  }
+}
