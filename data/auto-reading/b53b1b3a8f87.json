@@ -1,0 +1,40 @@
+{
+  "paper_id": "b53b1b3a8f87",
+  "fingerprint": "697389cee2ddd82ab5a5386eb24f33a976876cec0e5a00461d01118741c193da",
+  "analysis": {
+    "title_zh": "TRACE-GRPO：面向长时程智能体强化学习的教师精炼优势信用估计",
+    "summary": "【论文摘要】本文针对 GRPO 在长时程智能体任务中难以定位关键决策的问题，提出 TRACE-GRPO，利用教师语言模型反馈，在样本、轮次和词元三个层级分配训练信用，并以 CAPA 复用轨迹 KV 缓存以降低相关前向计算开销。在摘要报告的两个环境中，该方法优于所比较的智能体强化学习基线；具体实验设置和结果适用范围仍需查阅全文。[摘要]",
+    "recommendation": "推荐关注长时程智能体强化学习、信用分配或训练效率的读者阅读：摘要同时给出了分层信用机制、计算优化和实验比较，但具体研究方向未提供，不能确认个性化匹配程度。[摘要]",
+    "deep_read": {
+      "problem": "【论文摘要】研究问题是 GRPO 的轨迹级优势不适合长时程信用分配：奖励同质的 rollout 组产生零优势，而其他情况下单一标量统一缩放所有词元，使决定结果的具体决策难以辨识。摘要原文称其会“obscuring which decisions determine the outcome”。[摘要]",
+      "method": "【论文摘要】TRACE-GRPO 将教师模型反馈转为分层信用：教师评分为零方差组提供样本级回退，在轮次级重加权轨迹优势，再利用教师评议条件下策略对数概率的变化，将轮次信用重新分配到词元级；该方法无需词元级标注或学习型评论器。[摘要]",
+      "innovation": "【论文摘要】作者提出的设计包括教师反馈驱动的三个信用分配层级，以及复用轨迹 KV 缓存的 Critique-Aware Paged Attention（CAPA）。摘要称前者提供“dense training-time credit”；但摘要未充分说明与各类已有方法的差异，不能仅凭此断定创新程度。[摘要]",
+      "findings": "【论文摘要】使用 Qwen2.5-7B-Instruct 时，TRACE-GRPO 在 ALFWorld 和 ScienceWorld 的成功率分别为 96.3% 和 73.4%，优于文中所比较的强智能体强化学习基线。摘要还称三个信用层级带来累积收益，且与教师成功样本上的监督微调比较显示收益不止来自模仿。[摘要]",
+      "limitations": "【论文摘要】当前仅有摘要，未提供完整实验配置、基线明细或结果不确定性，因此无法核验具体比较过程，也不能判断结果在其他模型与环境中的普遍性。摘要未明确报告方法局限；以上是资料范围的限制，而非声称作者已证实的缺陷。[摘要]",
+      "connection": "【解读】分层信用分配关注长任务中哪些决策影响最终结果，概念上可供智能运维多步骤决策的归因研究参考；但摘要实验对象是 ALFWorld 和 ScienceWorld，并未报告智能运维、结构设计或可靠性场景的验证，不能直接推定迁移效果。[摘要]",
+      "next_steps": "【建议】若研究涉及智能运维，可先查阅全文核对教师反馈生成方式、基线和计算成本的统计口径，再考虑在具有可验证任务结果的运维流程中评估信用分配。对结构设计或可靠性应用，还应另行检验反馈可信度与安全约束；这些均非论文已报告结论。[摘要]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.1522/"
+    ],
+    "analyzed_at": "2026-11-27T14:09:05.636338+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "摘要明确提出分层信用分配和 CAPA，并报告环境结果与消融，足以说明存在值得进一步阅读的方法和初步成果；但资料仅给出方向标签，未说明其具体含义，无法判断是否切合给定研究方向，也无法仅凭摘要充分核验实验细节。[摘要]",
+    "evidence": "Teacher scores provide a sample-level fallback for zero-variance groups, reweight trajectory advantage at the turn level, and redistribute turn credit at the token level using the policy’s log-probability shift under a teacher critique."
+  },
+  "material": {
+    "version": "79e552a94d3d5055e87dfe447ab989aebb89d2d4b4d90b5a48e2f2f580a22651",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "Teacher scores provide a sample-level fallback for zero-variance groups, reweight trajectory advantage at the turn level, and redistribute turn credit at the token level using the policy’s log-probability shift under a teacher critique."
+  }
+}
