@@ -1,0 +1,40 @@
+{
+  "paper_id": "1c8768f06c92",
+  "fingerprint": "46a439d5233b6dbab289bbaa458161a4f3d249712173732047a2b4f403cc244f",
+  "analysis": {
+    "title_zh": "TraceProbe：基于执行的智能体安全失效诊断基准",
+    "summary": "【摘要】TraceProbe 面向大语言模型智能体执行过程中的安全失效，针对现有评测较少说明风险进入位置及传播方式的问题，在可执行沙箱中评估智能体行为。该基准利用规范化轨迹和结构化证据评分，并通过重放工具操作定位步骤级风险。摘要报告，155 个场景覆盖三类风险来源；12 个模型的平均攻击成功率为 0.347。终点安全的运行仍可能包含不安全中间操作，实际执行路径也可能偏离场景预设的危害。[摘要]",
+    "recommendation": "【摘要】推荐关注智能体安全评测和执行轨迹诊断的读者阅读：该工作不仅评价最终结果，还尝试定位中间步骤的风险；但当前缺少研究方向标签的具体含义，无法确认与给定方向的契合度。[摘要]",
+    "deep_read": {
+      "problem": "【摘要】论文关注大语言模型智能体通过文件、工具、记忆、检索内容及其他智能体行动时出现的安全失效。摘要指出，现有基准多关注终点结果，或借助模型审核预先构造的轨迹，因此对于风险从何处进入、如何传播的证据有限。[摘要]",
+      "method": "【摘要】TraceProbe 将智能体置于可执行沙箱场景，依据规范化轨迹和结构化证据，对终点及潜在规则违反进行评分；随后重放记录的工具操作，定位步骤级风险。摘要未说明评分细则、轨迹规范化方法或重放的具体实现。[摘要]",
+      "innovation": "【摘要】该工作的特点是将真实执行、规则违反评分和工具操作重放结合，用于诊断智能体安全问题，而非只检查最终结果。解读：其侧重点是让评测能够追问失效位置和干预位置；仅凭摘要不足以判断各技术组件相对于既有工作的独创程度。[摘要]",
+      "findings": "【摘要】基准包含 155 个场景，覆盖非对抗性失效、内部权威受损和外部攻击三类风险来源。12 个当代大语言模型的平均攻击成功率为 0.347，内部权威受损情形下的残余风险尤其突出；摘要未给出各模型或各类别的具体数值。[摘要]",
+      "limitations": "【摘要】现有资料仅为摘要，未提供场景构造细节、模型名单、统计不确定性或评分可靠性证据，也未报告不同类别的具体结果。解读：这些资料缺口限制了对基准覆盖范围和结果稳健性的判断，但不能据此断言论文存在相应方法缺陷。[摘要]",
+      "connection": "【摘要】论文强调定位风险发生位置和可能的干预位置。解读：这一思路可供研究智能运维中的工具调用审计与故障追踪参考；但摘要没有讨论智能运维、结构设计或可靠性工程的实际应用，不能将其视为作者已验证的跨领域结论。[摘要]",
+      "next_steps": "建议：在获取全文后，优先核查场景与规则的构造方式、步骤级定位的判定标准，以及工具操作重放是否能够稳定复现风险；再查看终点安全但中间不安全的具体案例。若考虑迁移到运维场景，还需另行验证其适用性。[摘要]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.1233/"
+    ],
+    "analyzed_at": "2026-11-27T14:06:57.236004+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "【摘要】资料明确给出可执行沙箱、轨迹评分和工具操作重放等方法，具有进一步阅读价值；但给定研究方向只有未解释的标签，无法核实是否契合，因此 direction_fit 暂记为 false，并非已证实不契合。当前证据不足以支持完整的方向判断。[摘要]",
+    "evidence": "TraceProbe places agents in executable sandbox scenarios, scores endpoint and latent rule violations based on normalized traces and structured evidence, and replays recorded tool actions for step-level risk localization."
+  },
+  "material": {
+    "version": "b2874afd24a7082c242422ee430b66dad98970fbe5983d90f4422ce69221c285",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "TraceProbe places agents in executable sandbox scenarios, scores endpoint and latent rule violations based on normalized traces and structured evidence, and replays recorded tool actions for step-level risk localization."
+  }
+}
