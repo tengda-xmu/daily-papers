@@ -1,0 +1,40 @@
+{
+  "paper_id": "e612fd46d011",
+  "fingerprint": "09a43375a13bac8ed00c956b5cba13621bd0b7ea6e916cfef66b20181e74895a",
+  "analysis": {
+    "title_zh": "面向大语言模型智能体的统一上下文演化",
+    "summary": "【摘要】论文研究大语言模型智能体如何跨任务保留并改进交互经验。摘要指出，每次任务开始时使用固定上下文，任务结束后发现的有用策略随之流失。作者提出无梯度框架 UCE，将经验组织为记忆、策略、工作流和技能四类单元，并根据使用结果评分、剪枝及调度生成预算。摘要报告，该方法在 ALFWorld 和 WebShop 上均提高了指标，且更换智能体推理骨干后仍有效，无需重新训练模型。当前仅有摘要，尚不能核查实验细节。[摘要]",
+    "recommendation": "建议关注智能体跨任务经验积累、检索和维护的读者优先阅读：摘要同时给出了框架机制和两项基准结果；但具体适用条件与实验可信度仍需通过全文核查。[摘要]",
+    "deep_read": {
+      "problem": "【摘要】论文关注智能体完成多步交互任务后，如何避免有用经验随任务结束而流失。摘要称每次任务均从“the same fixed context”开始；现有方法还存在仅限当前任务学习，或把经验汇入单一无类型存储的问题。[摘要]",
+      "method": "【摘要】UCE 将轨迹经验生成四类可演化上下文单元：记忆、策略、工作流和技能；决策时检索单元，根据反复使用的结果评分，并剪除不再有价值的单元。调度模块将每轮生成预算分配给库中较薄弱的类型。[摘要]",
+      "innovation": "【摘要】作者提出的组织方式是将经验划分为互补类型，并把生成、检索、使用结果评分、剪枝和预算调度纳入统一框架。解读：其值得关注之处在于经验库的持续维护，而非仅保存历史记录；摘要不足以核实各组件相对既有工作的独创程度。[摘要]",
+      "findings": "【摘要】作者报告，ALFWorld 成功率从 75.4% 升至 96.3%，WebShop 任务得分从 45.1% 升至 61.3%；更换智能体推理骨干后仍有效，且无需重新训练模型。摘要未交代具体对照设置和结果波动，不能据此判断统计稳健性。[摘要]",
+      "limitations": "【摘要】当前资料仅说明使用两个交互基准，未提供任务细节、实验设置、消融结果或计算开销，也未说明经验评分和剪枝的具体实现。上述是摘要层面的证据缺口，不应直接视为作者承认的方法缺陷或实验失败。[摘要]",
+      "connection": "【解读】四类经验库及其使用反馈机制，可为智能运维中的跨任务知识积累提供思路，例如区分历史记忆与操作工作流。但摘要研究的是交互基准，并未展示其在运维、结构设计或可靠性场景中的验证，不能直接推断应用效果。[摘要]",
+      "next_steps": "【建议】若要评估实际迁移价值，可先查阅全文，核对两项基准的对照方法、各组件贡献及使用成本，再结合目标任务设计验证。对于运维应用，可进一步考察经验更新和剪枝是否影响关键操作的可追溯性；这些均非摘要报告的结论。[摘要]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.2188/"
+    ],
+    "analyzed_at": "2026-11-27T13:52:30.791265+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "摘要明确给出了经验单元分类、动态维护方法及两项基准结果，具有进一步阅读价值；但本次资料未解释研究方向标签的具体含义，无法判断方向匹配，因此 direction_fit 保守设为 false，且证据不足以支持完整的方向匹配判断。[摘要]",
+    "evidence": "UCE decomposes experience into four complementary types (Memory, Strategy, Workflow, and Skill), each generated from trajectories under type-specific conditions, retrieved at decision time, scored through repeated usage outcomes, and pruned when no longer valuable."
+  },
+  "material": {
+    "version": "324ee70915b3040e284bbc49ca6a8b3ba35895e679998d2fac55689c1fb9c9d1",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "UCE decomposes experience into four complementary types (Memory, Strategy, Workflow, and Skill), each generated from trajectories under type-specific conditions, retrieved at decision time, scored through repeated usage outcomes, and pruned when no longer valuable."
+  }
+}
