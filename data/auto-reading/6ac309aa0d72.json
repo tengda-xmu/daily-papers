@@ -1,0 +1,102 @@
+{
+  "paper_id": "6ac309aa0d72",
+  "fingerprint": "c4f9a3a5eccb5041353df0502ac0fcfe785b543131c929acecdd0e8a24507f4d",
+  "analysis": {
+    "title_zh": "“第十陪审员”：面向官僚偏见检测的开放集立场筛查",
+    "summary": "论文针对荷兰政府文件中偏见类别可能不断变化、误报和改写失真的问题，提出闭环治理框架 MARS-Gov。系统结合规范证据检索、动态陪审员、风险路由、最小改写与复核，并以检测、缓解、语义保真和过度干预指标评价。作者报告其在 DGDB 和留一类别实验中取得较好结果，但跨司法辖区应用仍依赖本地规范资源，且需要人工参与。[P2][P6][P8][P9][P10]",
+    "recommendation": "适合关注开放集识别、多智能体证据审查与干预后验证的读者重点阅读；但资料未解释给定方向标签，不能据此认定与指定研究方向直接匹配。",
+    "deep_read": {
+      "problem": "政府文件中的偏见可能表现为隐含框架而非明显冒犯；固定分类体系还可能遗漏新出现的受影响群体。作者将问题扩展为闭环治理：不仅判断句子是否有偏，还要给出规范依据，并避免改写改变行政事实。[P2][P3]",
+      "method": "系统先检索法律和行政材料并生成中立摘要，由 Scout 识别群体，固定及动态陪审员分别提交报告。规则门控放行低风险句或升级至 Judge；判为有偏时进行最小改写，再用同一检测标准验证。[P4][P5][P15]",
+      "innovation": "作者将开放集目标发现与立场专门化审查结合：未覆盖群体可获得临时动态陪审员，多个新立场可分别审查，“第十陪审员”并非数量上限。同时将证据、路由、裁决及改写验证分开，形成可检查的决策轨迹。[P3][P4][P5]",
+      "findings": "作者报告 Gemini 配置在 DGDB 上 F1 为 0.880、过度治理率为 2.5%；留一类别实验中加入 Scout 后平均 F1 从 0.807 升至 0.875。移除规范证据模块后 F1 降至 0.824，显示所测配置对该模块有依赖。[P7][P8]",
+      "limitations": "作者指出框架依赖领域规范资源，跨司法辖区需要本地法律和政策材料，多代理推理成本也限制实时应用；BGS 不能代替分项诊断。解读：留一类别实验仍基于已有九类，不能证明覆盖所有真实新群体。核对记录未列出原文件缺项。[P8][P9]",
+      "connection": "解读：其证据留痕、异常升级和干预后复核流程，可为智能运维中的告警处置与审计提供流程设计参考；但论文处理的是行政语言偏见，资料没有结构设计或工程可靠性实验，不能直接外推其效果。[P3][P5][P10]",
+      "next_steps": "建议在实际目标场景构建经领域专家审核的本地证据库，以真实未见类别测试开放集发现，并分别评估误报、漏报、干预有效性和人工审查成本。对迁移效果应另做实验，不能把上述设想视为作者已验证的结论。[P6][P8][P9]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.547.pdf"
+    ],
+    "analyzed_at": "2026-11-27T09:48:12.649047+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "论文具有明确的开放集多代理方法和对照实验，值得研究相关治理流程；但提供的研究方向仅为未解释的标签，无法判断是否切合指定方向。因此方向匹配暂不肯定，且当前证据不足以完成这一匹配判断。",
+    "evidence": "The framework retrieves normative evidence, gathers juror risk reports, routes\nonly risky cases to a Judge, and verifies any minimal rewrite."
+  },
+  "material": {
+    "version": "3cc1b191aecd00bd52f6dc1a1151a49e2a877f290644ca4c145b1a8cd2cf5adb",
+    "total": 19,
+    "covered": 19,
+    "references": {
+      "problem": [
+        "P2",
+        "P3"
+      ],
+      "method": [
+        "P4",
+        "P5",
+        "P15"
+      ],
+      "innovation": [
+        "P3",
+        "P4",
+        "P5"
+      ],
+      "findings": [
+        "P7",
+        "P8"
+      ],
+      "limitations": [
+        "P8",
+        "P9"
+      ],
+      "connection": [
+        "P3",
+        "P5",
+        "P10"
+      ],
+      "next_steps": [
+        "P6",
+        "P8",
+        "P9"
+      ]
+    },
+    "excerpt": "The framework retrieves normative evidence, gathers juror risk reports, routes\nonly risky cases to a Judge, and verifies any minimal rewrite.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18",
+      "P19"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P14",
+        "detail": "案例 T3 的收入门槛原页为 €32.500 per jaar，文字提取误作 C32.500；应为每年 32,500 欧元。该错误影响对中性资格条件的金额识读，不改变作者判为无偏的结论。"
+      }
+    ]
+  }
+}
