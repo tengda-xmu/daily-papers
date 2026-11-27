@@ -1,0 +1,40 @@
+{
+  "paper_id": "43cd656d0082",
+  "fingerprint": "69bff3e2093a794e762c9401067a46afd74fc723935bc8661844ff4e13939e56",
+  "analysis": {
+    "title_zh": "TokenCliff：多轮大语言模型智能体输出词元预算敏感性基准",
+    "summary": "【摘要】论文针对现有智能体基准通常采用单一固定或宽裕预算的问题，提出 TokenCliff，用于衡量多轮智能体在不同单次任务输出词元预算下的表现。基准包含660个确定性任务，并提出预算弹性和悬崖指数两项指标。对10个模型、五档预算的评估显示，相邻预算下准确率最多下降32个百分点；峰值表现或模型规模较大也不必然意味着更强的预算弹性。当前仅能依据摘要判断，无法核查任务细节与实验过程。",
+    "recommendation": "【摘要】如果研究关注多轮智能体部署成本或预算约束评测，建议重点阅读：论文同时提供跨预算稳健性和相邻预算骤降指标，但其与给定研究方向的契合度因方向未说明而无法确认。",
+    "deep_read": {
+      "problem": "【摘要】论文关注输出词元预算作为大语言模型智能体部署约束时，性能会如何随预算变化。摘要指出，现有基准通常只在“single fixed or generous budget”下评估，因此难以据此观察不同预算水平之间的性能变化。",
+      "method": "【摘要】TokenCliff 在单次任务的多个输出词元预算下评测多轮智能体，包含660个确定性任务，覆盖文件操作、数据转换、工具使用和规划，并设组合式多步划分。评估涉及10个模型、五档预算，共33,000个任务回合。",
+      "innovation": "【摘要】论文提出预算弹性和悬崖指数：前者衡量跨预算水平的稳健性，后者捕捉相邻预算间最明显的性能下降。解读：两项指标分别关注整体变化与局部突降；摘要未提供公式，也不足以核实其相对既有指标的新颖程度。",
+      "findings": "【摘要】评估显示，相邻预算之间准确率最多下降32个百分点；峰值表现或更大的模型规模，不一定意味着更强的预算弹性。摘要还报告，所评估的多轮场景比单次生成诊断更敏感，但未给出各模型或领域的分项结果。",
+      "limitations": "【摘要】当前资料只有摘要，未提供预算弹性和悬崖指数的计算公式、各领域分项结果或单次生成诊断的具体设计，因此无法核查指标计算及比较条件。解读：这些是当前证据的限制，不能直接认定为论文作者承认的方法缺陷。",
+      "connection": "【摘要】任务覆盖工具使用和规划，与依赖智能体执行多步操作的应用存在方法层面的联系。解读：若智能运维流程使用多轮智能体，预算敏感性可能是部署评测维度；摘要未涉及结构设计或可靠性工程案例，也未说明给定方向的具体内容。",
+      "next_steps": "【建议】获取全文后，优先核查两项指标的公式、预算分配方式、任务成功判定标准，以及多轮与单次生成诊断的可比条件。若用于具体应用，可再考察相关任务在预算变化下的表现；这些均为研究建议，并非摘要报告的结论。"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.410/"
+    ],
+    "analyzed_at": "2026-11-27T14:46:36.626587+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "摘要提供了明确的基准设计、指标和实验发现，支持认为该工作具有阅读价值；但所给方向仅有未解释的标签，无法判断是否契合。因此 direction_fit 为保守标记，并非确认不契合，现有资料不足以支持完整方向匹配判断。",
+    "evidence": "We propose two budget-sensitivity metrics: Budget Elasticity, which captures robustness across budget levels, and the Cliff Index, which captures the sharpest adjacent-budget performance drop."
+  },
+  "material": {
+    "version": "930cdc1e3b20f03ae680c22163b1bc5a0eff7940c152fe2a42d6d7af4f1e9d85",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "We propose two budget-sensitivity metrics: Budget Elasticity, which captures robustness across budget levels, and the Cliff Index, which captures the sharpest adjacent-budget performance drop."
+  }
+}
