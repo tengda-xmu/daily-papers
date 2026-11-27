@@ -1,0 +1,40 @@
+{
+  "paper_id": "cef7b5052fb4",
+  "fingerprint": "f4be0b9840df726f2ef37889441db342f112e2835e7becc5a692cd2e805506a3",
+  "analysis": {
+    "title_zh": "SEAR：自我评判的智能体奖励模型",
+    "summary": "论文针对具备外部工具使用能力的智能体奖励模型，讨论结果监督粒度粗、过程标注成本高的问题。作者提出 SEAR，让同一模型在单次生成中交替充当评判者和自评者，通过双角色对抗式协同演化改进评判过程，并使模型无需依赖外部人工标注即可自我演化。摘要称，该方法在多个基准上持续提升了奖励模型的可靠性，但未提供具体实验数据。[摘要]",
+    "recommendation": "若关注大语言模型评估、工具使用或低标注成本训练，建议阅读：摘要明确提出双角色训练框架及可靠性提升结果；但其具体实现和效果仍需查阅全文核实。[摘要]",
+    "deep_read": {
+      "problem": "论文关注智能体奖励模型的训练瓶颈：这类模型利用外部工具增强大语言模型评估，但训练受到“coarse-grained outcome supervision”和过程级标注高成本的约束。[摘要]摘要未说明这些约束在各任务中的具体影响，也未量化标注成本。",
+      "method": "SEAR 构建双角色对抗式协同演化框架：模型在单次生成过程中交替充当评判者与自评者。前者优化推理轨迹以提高自评分数，后者学习给出有批判性和区分度的评价。[摘要]摘要未交代具体优化算法、训练数据或工具配置。",
+      "innovation": "作者提出让智能体奖励模型“self-judge their own judging processes”，将对评判过程的自我评价纳入训练，并在同一生成过程中交替执行两个角色。[摘要]解读：这一设计区别于仅描述最终结果的监督；其相对已有方法的具体新颖性仍需全文证据。",
+      "findings": "摘要报告，“Extensive experiments”显示 SEAR 在多种基准上持续提高智能体奖励模型的可靠性。[摘要]但摘要没有给出基准名称、对照方法、可靠性指标或结果数值，因此无法判断提升幅度、统计稳健性及适用边界。",
+      "limitations": "当前资料仅为摘要，无法核验实验设置、训练成本、对照公平性与失败案例，也不能据此认定作者报告了哪些方法局限。[摘要]解读：自评得分是否可靠、双角色是否形成有效制衡，是需要进一步检查的问题，而非摘要已证实的缺陷。",
+      "connection": "论文直接涉及大语言模型评估及评判可靠性。[摘要]解读：若将智能体用于运维决策，其评判过程的可靠性可能具有参考价值；但摘要未涉及智能运维、结构设计或工程可靠性应用，不能据此声称方法已在这些领域得到验证。",
+      "next_steps": "建议查阅全文，先核对双角色的训练目标、交替机制和无需外部人工标注的具体条件，再检查基准、对照及可靠性指标。若计划迁移到工程场景，建议另行设计针对领域任务与工具调用的验证；这些均为研究建议，并非作者结论。"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.893/"
+    ],
+    "analyzed_at": "2026-11-27T12:39:16.089773+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "资料仅给出无法解释具体含义的方向标签，不能确认论文切合给定研究方向，因此 direction_fit 不作肯定判断。摘要明确描述了双角色训练方法和可靠性提升的总体结果，具有进一步阅读价值；但缺少方向定义和具体实验数据，当前证据不足以完整支持上述判断。[摘要]",
+    "evidence": "SEAR introduces a dual-role adversarial co-evolution framework, where the model alternates between a judger and a self-judger within a single generation process"
+  },
+  "material": {
+    "version": "0f41bea00e475d67384dc8b6de3e00b333c01c92bf24c3c2a2abbcebc6623cf3",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "SEAR introduces a dual-role adversarial co-evolution framework, where the model alternates between a judger and a self-judger within a single generation process"
+  }
+}
