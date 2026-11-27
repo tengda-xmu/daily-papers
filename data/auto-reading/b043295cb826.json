@@ -1,0 +1,40 @@
+{
+  "paper_id": "b043295cb826",
+  "fingerprint": "19310b1aadfc0759ab1f24d1a95fafbd58ebc521233531498137bf9ea3a1d00f",
+  "analysis": {
+    "title_zh": "来源信息抹除引发的信任级联：多智能体委派如何破坏单智能体安全机制",
+    "summary": "【论文摘要】论文研究大语言模型多智能体系统在自然语言委派中面临的信任边界问题。作者提出“来源信息抹除”机制：委派可能丢失信任元数据，却保留可执行内容，从而引发信任级联。摘要报告了双智能体数据、八个开源权重模型上的攻击结果，以及零推理来源诊断方法 TBA 的检测结果。作者据此提出结合委派门控与来源审计；实验细节及其适用边界仍需全文核对。[摘要]",
+    "recommendation": "【论文摘要】推荐关注多智能体安全与智能运维代理的读者阅读：摘要同时给出了边界失效机制、对照实验和诊断方法，具有明确的问题与方法线索；但当前未提供具体研究方向，方向匹配度尚不能确认。[摘要]",
+    "deep_read": {
+      "problem": "【论文摘要】论文关注多智能体通过自然语言委派任务时，单智能体安全层级能否维持跨代理的信任边界。摘要指出委派会丢失“trust metadata”，而可执行载荷往往被保留，使原有信任信息无法随任务可靠传递。[摘要]",
+      "method": "【论文摘要】作者分析最小双智能体场景中的委派信息变化，并在八个开源权重模型上评估级联攻击；同时设置“delegation-as-user”对照，以区分通道信任升级与内容改写的作用。摘要还提出零推理来源诊断方法 TBA。[摘要]",
+      "innovation": "【论文摘要】论文将“provenance erasure”作为多智能体安全失效机制，并把信任级联与委派边界联系起来；针对这一边界，作者提出来源诊断工具。解读：其特点在于把委派过程中的信任信息流失作为分析对象。[摘要]",
+      "findings": "【论文摘要】在 460 对数据中，委派丢失了 98% 的格式标记、100% 的权威实体及 44% 的来源归属；系统通道攻击的级联攻击成功率从 0% 增至 33–63%。TBA 在四个领域的条件检测率为 86–100%，误报率为 0%。[摘要]",
+      "limitations": "【论文摘要】摘要称更强模型可中断不同级联阶段，但不能消除边界问题。摘要未交代数据构成、攻击与检测的具体判定方式，也未详述四个领域或闭源评估结果，因此尚不能判断方法的普适性与实际部署成本。[摘要]",
+      "connection": "【论文摘要】研究直接涉及代理间委派与来源审计，可为智能运维中多代理任务交接的信任管理提供参考。解读：其边界失效视角也可启发可靠性研究；摘要未涉及结构设计，不能据此认定存在直接应用。[摘要]",
+      "next_steps": "建议阅读全文后核对攻击场景、对照设置、检测条件及误报统计口径，再判断结果能否迁移到目标系统。建议针对智能运维代理的任务交接，研究来源信息保留与委派门控；这些是后续设想，并非摘要报告的实验。[摘要]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "abstract",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.1005/"
+    ],
+    "analyzed_at": "2026-11-27T13:58:23.460842+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "摘要明确提出信任边界失效机制、对照实验及来源诊断方法，具有进一步阅读价值；但本次资料只提供方向标签，未说明给定研究方向的具体内容，因此无法核实方向匹配度，也不足以充分支持全部判断。",
+    "evidence": "Because the failure occurs at the delegation boundary, we propose the Trust Boundary Auditor (TBA), a zero-inference provenance diagnostic achieving 86–100% conditional detection with 0% false positives across four domains."
+  },
+  "material": {
+    "version": "33c4e3d741bc8398c47c45d819eb08e33c7b1cecea1bf18668e8d62373c65bc4",
+    "total": 1,
+    "covered": 1,
+    "references": {},
+    "excerpt": "Because the failure occurs at the delegation boundary, we propose the Trust Boundary Auditor (TBA), a zero-inference provenance diagnostic achieving 86–100% conditional detection with 0% false positives across four domains."
+  }
+}
