@@ -1,0 +1,102 @@
+{
+  "paper_id": "4dcb6c55ca3a",
+  "fingerprint": "e6106107d4fa1f2ae0437f305b1994bf56d10a66c3ad78614381497d149bdd62",
+  "analysis": {
+    "title_zh": "LitMOF：用于文献验证的金属有机框架数据库修正与扩展的大语言模型多智能体系统",
+    "summary": "本文针对金属有机框架数据库中的结构错误及文献记录缺失，提出由大语言模型驱动的多智能体框架，以原始论文、数据库和晶体结构文件交叉核验并修复结构。[P1][P2] 作者构建了包含189,567个可计算结构的数据库，并单独整理8,771个已合成但未存档框架的信息。[P1][P7] 直接空气捕集计算筛选显示，结构修正会改变吸附预测和候选材料排序；该案例并非捕集性能的实验验证。[P8][P9]",
+    "recommendation": "推荐关注材料数据库治理、文献与结构数据融合及科学智能体的读者重点阅读：论文同时提供可追踪的修正流程、人工核验和下游筛选案例，但无序修正与几何合理性仍有限制。[P4][P6][P8]",
+    "deep_read": {
+      "problem": "现有金属有机框架数据库中的结构错误可能传递至高通量筛选与机器学习；实验信息又分散在论文和晶体文件等来源中，人工逐一协调成本很高。另有部分材料虽在文献中报告，却未以完整CIF存档，因而难以进入结构数据库。[P1][P2]",
+      "method": "系统采用层级式计划—执行架构，由监督智能体协调数据库读取、论文读取、参考结构构建、检查编辑和可选模拟。检查阶段比较元素组成、配位环境与子图，识别键、氢和无序错误；无序候选再借助机器学习原子间势能筛选。[P2][P4][P5]",
+      "innovation": "论文将非结构化文献证据与结构化数据库、CIF图表示结合，不仅识别不一致，还尝试恢复可计算结构。对已合成但未存档的材料，系统记录母体及转化信息；仅在转化明确时生成模型CIF，并将其与实验结构数据库分开。[P3][P7]",
+      "findings": "作者报告键、氢和无序错误的修正率分别为91.5%、93.2%和33.7%；分层人工核验的1,000个结构中988个正确。[P6] 直接空气捕集筛选中，原始与修正结构共同识别46个候选，原始结构漏掉236个修正后候选，并产生146个修正后不再支持的候选。[P8]",
+      "limitations": "图连接正确不保证几何合理；为维持实验结构属性，作者排除部分需要重建或优化重原子位置的结构。[P6] 无序修正可能存在多个合理构型。[P9] 经典力场和蒙特卡洛的完整对比在未提供的补充材料中。[P10] 核对记录未报告原文件缺项；P9、P10公式乱码是已纠正的提取错误。",
+      "connection": "解读：多源证据核验与错误修复可为结构设计数据治理提供参考；图连接正确但几何不合理的情况，也提示可靠性评价应结合拓扑与几何。[P6] 将该流程用于智能运维或其他结构体系仍是类比，本论文资料未验证其迁移效果。",
+      "next_steps": "建议在后续研究中分别核查拓扑一致性、几何合理性与修正结果的来源，并对无序结构保留多个候选以评估结论敏感性。[P6][P9] 建议进一步结合补充材料及独立实验检验筛选结果；这些是研究设想，不是作者已证明的成果。"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://www.nature.com/articles/s41467-026-79242-w_reference.pdf"
+    ],
+    "analyzed_at": "2026-11-27T11:46:20.352527+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "论文具有明确的多智能体结构修正方法、人工核验及下游筛选成果，值得重点阅读；但给定方向仅有未解释的标签，无法判断是否切合该方向。因此方向匹配暂记为false，证据充分性亦记为false，而非认定论文必然不相关。",
+    "evidence": "These errors propagate through high-throughput screening and machine-\nlearning workﬂows, limiting the reliability of data-driven materials discovery."
+  },
+  "material": {
+    "version": "9af1a3407ad72d0b83352491bf540a37df5ef2212b56d6e3cbba35479169dc5f",
+    "total": 12,
+    "covered": 12,
+    "references": {
+      "problem": [
+        "P1",
+        "P2"
+      ],
+      "method": [
+        "P2",
+        "P4",
+        "P5"
+      ],
+      "innovation": [
+        "P3",
+        "P7"
+      ],
+      "findings": [
+        "P6",
+        "P8"
+      ],
+      "limitations": [
+        "P6",
+        "P9",
+        "P10"
+      ],
+      "connection": [
+        "P6"
+      ],
+      "next_steps": [
+        "P6",
+        "P9"
+      ]
+    },
+    "excerpt": "These errors propagate through high-throughput screening and machine-\nlearning workﬂows, limiting the reliability of data-driven materials discovery.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P1",
+        "detail": "文字提取遗漏原页出版日期“Published online: 23 November 2026”；[上传截图1]可辨认。该遗漏不影响本页摘要中的研究结论。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P9",
+        "detail": "公式（1）和（2）的文字提取出现“/C0”等乱码。原页可读：ΔU = U(MOF + gas) − U(MOF) − U(gas)；Qst = kBT − ⟨ΔU exp(−ΔU/(kBT))⟩ / ⟨exp(−ΔU/(kBT))⟩。不纠正会影响对相互作用能和吸附热计算的理解。[上传截图3]"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P10",
+        "detail": "公式（3）文字提取将负号、括号及系综平均符号误作“/C0”等乱码。原页为 K_H = ⟨exp(−ΔU/(k_B T))⟩/(k_B T)；公式（4）为 S_A/B = K_H^A/K_H^B。不纠正会影响 Henry 常数及选择性计算的理解。[上传截图1]"
+      }
+    ]
+  }
+}
