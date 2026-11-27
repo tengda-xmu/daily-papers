@@ -1,0 +1,112 @@
+{
+  "paper_id": "661b97531d1e",
+  "fingerprint": "2b98934b38d49d931d9a0c67a13cb7e137714d5fc15f989bf160591d82f9887f",
+  "analysis": {
+    "title_zh": "TimelineAgent：基于大语言模型的多文档查询中心事件时间线抽取框架",
+    "summary": "论文研究如何根据实体、方面或种子事件查询，从多篇文档抽取并组织事件时间线。作者提出 TimelineAgent，将候选事件识别、相关性匹配、时间锚定、资格过滤及跨文档共指等步骤交由多阶段智能体处理，并以原子技能库和目标导向协议组织推理。[P2][P4] 在构建的三类查询基准上，DeepSeek-V3 版本的 F1 分别为37.9、42.9和33.1；结果显示任务仍具挑战，推理成本也值得关注。[P7][P9]",
+    "recommendation": "推荐关注复杂信息抽取、多智能体任务分解和事件时间线构建的读者重点阅读：论文同时提供技能编排、基准构造、消融和错误传播分析，但跨领域迁移效果仍需验证。[P5][P8][P21]",
+    "deep_read": {
+      "problem": "论文提出查询中心跨文档事件时间线抽取任务 QUEST：从文档集合中筛选与查询有关的事件，确定其时间并合并共指提及。实体、方面和种子事件查询关注的信息不同，因而需要同时处理语义、论元、因果和时间等异构特征。[P1][P2][P3]",
+      "method": "TimelineAgent 依次进行句子过滤、候选事件检测、查询相关性匹配、时间锚定、资格过滤和跨文档事件共指。各阶段调用句法、语义、论元、事实性、时间及因果原子技能；编排协议根据推理子步骤和查询类型选择技能组合与配置。[P4][P5]",
+      "innovation": "作者的主要设计是把任务无关的事件特征建模与查询、阶段相关的推理解耦：原子技能以受约束提示模块实现，返回结构化中间结果；目标导向协议再按需要组合技能。作者还基于已有数据和新增标注构建覆盖三类查询的评测基准。[P2][P6][P18]",
+      "findings": "DeepSeek-V3 版在实体、方面和种子事件查询上的 F1 分别为37.9、42.9和33.1。去除技能与协议或合并为单阶段均使性能下降；用金标准替换检测、匹配及过滤后，三类 F1 分别升至67.6、69.8和71.4，表明前期事件选择值得重视。[P7][P8]",
+      "limitations": "整体性能仍约为30%—40% F1，完整推理约需10小时且受批处理配置影响；大规模 SFT 在方面查询上也超过 Qwen3-32B 版框架0.6 F1。[P7][P8][P9] 当前逐页核对记录未报告原文件缺项；P7数值粘连和P9公式层级错误均为已纠正的提取错误，并非原文件缺项。",
+      "connection": "解读：跨文档事件筛选、时间锚定与共指合并可为智能运维中的事故记录梳理提供方法参照，事实性过滤也有助于区分已发生事件与否定表述。[P4][P25] 但本资料未展示运维、结构设计或可靠性数据上的实验，不能据此认定实际迁移效果。",
+      "next_steps": "建议以运维日志和故障报告构建带时间、设备实体及事件共指标注的小规模基准，分别评估事件选择、时间锚定和最终时间线，并记录推理耗时。作者另提出细粒度技能编排、大小模型混合及人机协作标注作为未来方向，这些方案在资料中尚未验证。[P8][P9]"
+    },
+    "analysis_status": "ready",
+    "analysis_basis": "full_text",
+    "analysis_kind": "model",
+    "analysis_sources": [
+      "https://aclanthology.org/2026.emnlp-main.2328/"
+    ],
+    "analyzed_at": "2026-11-27T15:24:43.695036+00:00",
+    "llm_model": "gpt-6.1-terra"
+  },
+  "evaluation": {
+    "direction_fit": false,
+    "research_value": true,
+    "evidence_sufficient": false,
+    "reason": "论文针对多文档事件时间线提出了明确框架，并提供基准、消融及错误传播结果，具有研究阅读价值。但给定标签未说明具体研究方向，无法确认方向匹配；当前证据足以支持方法价值判断，不足以支持方向匹配判断，因此不作肯定评价。",
+    "evidence": "All atomic skills are implemented as constrained\nprompting modules with structured inputs, config-\nurations, and standardized outputs."
+  },
+  "material": {
+    "version": "83f3a374a37d99606c6a10ad97128ca8fe35144898a41a82fb43c6b2034c79d4",
+    "total": 25,
+    "covered": 25,
+    "references": {
+      "problem": [
+        "P1",
+        "P2",
+        "P3"
+      ],
+      "method": [
+        "P4",
+        "P5"
+      ],
+      "innovation": [
+        "P2",
+        "P6",
+        "P18"
+      ],
+      "findings": [
+        "P7",
+        "P8"
+      ],
+      "limitations": [
+        "P7",
+        "P8",
+        "P9"
+      ],
+      "connection": [
+        "P4",
+        "P25"
+      ],
+      "next_steps": [
+        "P8",
+        "P9"
+      ]
+    },
+    "excerpt": "All atomic skills are implemented as constrained\nprompting modules with structured inputs, config-\nurations, and standardized outputs.",
+    "reader_version": 2,
+    "covered_labels": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P21",
+      "P22",
+      "P23",
+      "P24",
+      "P25"
+    ],
+    "issues": [
+      {
+        "kind": "extraction_error",
+        "page": "P7",
+        "detail": "表3的 DeepSeek-V3／TimelineAgent 行在文字提取中将多个数值粘连；原页依次为实体 P/R/F1：37.2/38.6/37.9，方面：45.8/40.3/42.9，种子事件：27.8/40.9/33.1。纠正后可正确比较各查询设置的性能，不改变作者所述的主要结论。"
+      },
+      {
+        "kind": "extraction_error",
+        "page": "P9",
+        "detail": "计算效率段落的平均推理执行次数公式在文字提取中丢失分式层级；原页为 [2+(2+2+3)/3+2+2+2]/5≈2.1×。该修正保留了作者关于相对标准多阶段 ICL 的执行次数估计，不改变结论。"
+      }
+    ]
+  }
+}
